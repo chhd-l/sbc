@@ -14,7 +14,6 @@ export default class Spec extends React.Component<any, any> {
   props: {
     relaxProps?: {
       specSingleFlag: boolean;
-      addSkUProduct: any;
       goods: any;
       editSpecSingleFlag: Function;
       goodsList: any;
@@ -32,7 +31,6 @@ export default class Spec extends React.Component<any, any> {
 
   static relaxProps = {
     goods: 'goods',
-    addSkUProduct: 'addSkUProduct',
     goodsList: 'goodsList',
     // 是否为单规格
     specSingleFlag: 'specSingleFlag',
@@ -313,26 +311,8 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods, goodsId, goodsList, onProductselectSku, addSkUProduct } = this.props.relaxProps;
-    const { setFieldsValue } = this.props.form;
+    const { editSpecValues, goodsSpecs, updateSpecForm, goods } = this.props.relaxProps;
 
-
-    /* console.log(goodsId,5555)
-     console.log(goodsList.toJS(),6666);
-     console.log(specId,77777);
-     if (goodsId == undefined) {
-       if ( goodsList.toJS().length == 0 ) {
-         let a = []
-         onProductselectSku(a)
-       }else {
-         if (addSkUProduct.length>0) {
-           console.log()
-           //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-           let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-           onProductselectSku(b)
-         }
-       }
-     }*/
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');
@@ -351,21 +331,6 @@ class SpecForm extends React.Component<any, any> {
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
-    /*if (value.length == 1) {
-      let goods = Map({
-        subscriptionStatus: fromJS(1),
-      });
-      editGoodsItem(goods);
-      setFieldsValue({ subscriptionStatus: 1 })
-      //setFieldsValue({ subscriptionStatus: 0 });
-    }
-     else {
-      let goods1 = Map({
-        subscriptionStatus: 111
-      });
-      editGoodsItem(goods1);
-      setFieldsValue({ subscriptionStatus: 1 })
-    }*/
   };
 
   /**
@@ -382,22 +347,10 @@ class SpecForm extends React.Component<any, any> {
   };
 
   _deleteSpec = (specId: number) => {
-    const { deleteSpec, goodsSpecs, updateSpecForm, goodsId, goodsList, addSkUProduct, onProductselectSku } = this.props.relaxProps;
+    const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
       message.error(RCi18n({id:"Product.Keep1SpecificationItem"}));
       return;
-    }
-    if (goodsId == undefined) {
-      if ( goodsList.toJS().length == 0 ) {
-        let a = []
-        onProductselectSku(a)
-      }else {
-        if (addSkUProduct.length>0) {
-          //let b = goodsList.toJS().filter((item, i)=>item.goodsInfoNo == addSkUProduct.map(o=>{ return o.pid}))
-          let b = addSkUProduct.filter(i => goodsList.toJS().some(j => j.goodsInfoNo === i.pid))
-          onProductselectSku(b)
-        }
-      }
     }
     updateSpecForm(this.props.form);
     deleteSpec(specId);

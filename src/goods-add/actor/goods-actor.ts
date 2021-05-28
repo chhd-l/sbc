@@ -82,9 +82,21 @@ export default class GoodsActor extends Actor {
         autoShip: {},
         club: {}
       },
-      goodsDescriptionDetailList: []
+      goodsDescriptionDetailList: [],
+      subSkuSelectdRows: []
     };
   }
+
+  /**
+   * 存储sub-sku弹框里选择的行
+   * @param state 
+   * @param dataList 
+   * @returns 
+   */
+   @Action('goodsActor: setSubSkuSelectdRows')
+   setSubSkuSelectdRows(state, selectdRows: IList) {
+     return state.set('subSkuSelectdRows', selectdRows);
+   }
 
   /**
    * 初始化分类

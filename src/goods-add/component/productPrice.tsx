@@ -63,7 +63,6 @@ export default class ProductPrice extends React.Component<any, any> {
       spuMarketPrice: number;
       priceOpt: number;
       getGoodsId: any;
-      addSkUProduct: any;
       selectedBasePrice: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
@@ -97,7 +96,6 @@ export default class ProductPrice extends React.Component<any, any> {
     baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
-    addSkUProduct: 'addSkUProduct',
     selectedBasePrice: 'selectedBasePrice',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
@@ -165,15 +163,7 @@ class SkuForm extends React.Component<any, any> {
   }
 
   render() {
-    const {
-      goodsList,
-      addSkUProduct,
-      onProductselectSku,
-      goods,
-      goodsSpecs,
-      baseSpecId
-    } = this.props.relaxProps;
-    // const {  } = this.state
+    const { goodsList } = this.props.relaxProps;
 
     const columns = this._getColumns();
     return (
@@ -193,22 +183,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const {
-      goodsSpecs,
-      selectedBasePrice,
-      goodsList,
-      stockChecked,
-      addSkUProduct,
-      marketPriceChecked,
-      modalVisible,
-      clickImg,
-      removeImg,
-      specSingleFlag,
-      spuMarketPrice,
-      priceOpt,
-      goods,
-      baseSpecId
-    } = this.props.relaxProps;
+    const { goodsSpecs, selectedBasePrice, specSingleFlag, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -264,7 +239,6 @@ class SkuForm extends React.Component<any, any> {
       title: <FormattedMessage id='product.SKU' />,
       key: 'goodsInfoNo' + 'index',
       render: (rowInfo) => {
-        //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
         return (
           <Row>
             <Col span={12}>
@@ -651,12 +625,7 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
-    const {
-      editGoodsItem,
-      synchValue,
-      updateBasePrice,
-      addSkUProduct
-    } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;

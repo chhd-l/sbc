@@ -54,6 +54,10 @@ export default {
        'Order.payload':'Payload',
        'Order.request':'Request',
        'Order.response':'Response',
+       'Order.isInstallment': 'Is Installment',
+       'Order.installmentFee': 'Installment fee',
+       'Order.installmentNumber': 'Installment number',
+       'Order.paymentSurcharge': 'Payment surcharge'
     },
     Subscription: {},
     Appointment: {

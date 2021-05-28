@@ -152,7 +152,7 @@ class ListView extends React.Component<any, any> {
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="Order.consumerName" />
                       </th>
-                      <th style={{ width: '10%' }}>
+                      <th style={{ width: '18%' }}>
                         <FormattedMessage id="Order.amount" />
                       </th>
                       <th style={{ width: '10%' }}>
@@ -201,7 +201,15 @@ class ListView extends React.Component<any, any> {
             />
           </Modal>
           {orderAuditModalVisible ? (
-            <Modal maskClosable={false} title={<FormattedMessage id="Order.previewThisOrder" />} visible={orderAuditModalVisible} okText={<FormattedMessage id="Order.OK" />} onOk={() => this._handleAuditOK()} okButtonProps={{ loading: btnLoading }} onCancel={() => this._handleAuditCancel()}>
+            <Modal
+              maskClosable={false}
+              title={<FormattedMessage id="Order.previewThisOrder" />}
+              visible={orderAuditModalVisible}
+              okText={<FormattedMessage id="Order.OK" />}
+              onOk={() => this._handleAuditOK()}
+              okButtonProps={{ loading: btnLoading }}
+              onCancel={() => this._handleAuditCancel()}
+            >
               <h3>
                 <strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong>
               </h3>
@@ -252,6 +260,7 @@ class ListView extends React.Component<any, any> {
         const id = v.get('id');
         // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
+        const installmentPrice = tradePrice.installmentPrice;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
           v
@@ -493,9 +502,10 @@ class ListView extends React.Component<any, any> {
                         {v.getIn(['buyer', 'name'])}
                       </p>
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '18%' }}>
                       {/* Amount */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
+                      {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>

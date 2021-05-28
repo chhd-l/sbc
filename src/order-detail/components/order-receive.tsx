@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
 import { Table, Tooltip, Menu, Popover, Row, Col, Card, Button } from 'antd';
-import { noop, Const, util, getOrderStatusValue } from 'qmkit';
+import { noop, Const, util, getOrderStatusValue, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
@@ -39,14 +39,14 @@ export default class OrderReceive extends React.Component<any, any> {
   state: {
     showRemark: boolean;
     idx: number;
-  }
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       showRemark: false,
       idx: 0
-    }
+    };
   }
 
   static relaxProps = {
@@ -116,7 +116,9 @@ export default class OrderReceive extends React.Component<any, any> {
       dataIndex: 'remark',
       key: 'operation',
       render: (text, record, index) => (
-        <Button style={{marginLeft: 5}} size="small" onClick={() => this.showPaymentRemark(index)}><FormattedMessage id="Order.more" /></Button>
+        <Button style={{ marginLeft: 5 }} size="small" onClick={() => this.showPaymentRemark(index)}>
+          <FormattedMessage id="Order.more" />
+        </Button>
       )
     }
   ];
@@ -139,6 +141,8 @@ export default class OrderReceive extends React.Component<any, any> {
     const { showRemark, idx } = this.state;
     var payLogs = paymentInfo && paymentInfo.get('payPaymentLogsVOList') ? paymentInfo.get('payPaymentLogsVOList') : [];
     const id = detail.get('id');
+    const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
+    const installmentPrice = tradePrice.installmentPrice;
 
     return (
       <div style={styles.container}>
@@ -151,7 +155,9 @@ export default class OrderReceive extends React.Component<any, any> {
                 </label>
               </Col>
               <Col span={6} style={{ textAlign: 'right' }}>
-                <label style={{ color: '#339966' }}><FormattedMessage id={getOrderStatusValue('PaymentStatus', detail.getIn(['tradeState', 'payState']))} /></label>
+                <label style={{ color: '#339966' }}>
+                  <FormattedMessage id={getOrderStatusValue('PaymentStatus', detail.getIn(['tradeState', 'payState']))} />
+                </label>
               </Col>
             </Row>
           </div>
@@ -161,36 +167,53 @@ export default class OrderReceive extends React.Component<any, any> {
           <Table columns={this.receiveColumns} dataSource={payLogs} pagination={false} bordered rowKey={(_record, index) => index.toString()} />
         </div>
 
-        <PaymentRemark
-          visible={showRemark}
-          requestPayload={payLogs[idx] ? payLogs[idx]['requestPayload'] : null}
-          responsePayload={payLogs[idx] ? payLogs[idx]['responsePayload'] : null}
-          onClose={this.closePaymnetRemark}
-        />
+        <PaymentRemark visible={showRemark} requestPayload={payLogs[idx] ? payLogs[idx]['requestPayload'] : null} responsePayload={payLogs[idx] ? payLogs[idx]['responsePayload'] : null} onClose={this.closePaymnetRemark} />
 
         <Row>
-          <Col span={12} className="headBox" style={{ height: 200, marginTop: 10 }}>
+          <Col span={16} className="headBox" style={{ height: 200, marginTop: 10 }}>
             <h4>
               <FormattedMessage id="Order.paymentDetails" />
             </h4>
-            <p>
-              {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.get('holderName')}
-            </p>
-            <p>
-              {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
-            </p>
-            <p>
-              {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}
-            </p>
-            <p>
-              {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.get('lastFourDigits')}
-            </p>
-            <p>
-              {<FormattedMessage id="paymentId" />}: {paymentInfo.get('chargeId')}
-            </p>
-            <p>
-              {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.get('phone')}
-            </p>
+            <Row>
+              <Col span={12}>
+                <p>
+                  {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.get('holderName')}
+                </p>
+                <p>
+                  {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
+                </p>
+                <p>
+                  {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}
+                </p>
+                <p>
+                  {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.get('lastFourDigits')}
+                </p>
+                <p>
+                  {<FormattedMessage id="paymentId" />}: {paymentInfo.get('chargeId')}
+                </p>
+                <p>
+                  {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.get('phone')}
+                </p>
+              </Col>
+              <Col span={12}>
+                <p>
+                  {<FormattedMessage id="Order.isInstallment" />}: {installmentPrice ? (window as any).RCi18n({ id: 'Prescriber.Yes' }) : (window as any).RCi18n({ id: 'Prescriber.No' })}
+                </p>
+                {installmentPrice ? (
+                  <>
+                    <p>
+                      {<FormattedMessage id="Order.installmentFee" />}: {installmentPrice.additionalFee}
+                    </p>
+                    <p>
+                      {<FormattedMessage id="Order.installmentNumber" />}: {installmentPrice.installmentNumber}
+                    </p>
+                    <p>
+                      {<FormattedMessage id="Order.paymentSurcharge" />}: {installmentPrice.totalPrice}
+                    </p>
+                  </>
+                ) : null}
+              </Col>
+            </Row>
           </Col>
         </Row>
       </div>

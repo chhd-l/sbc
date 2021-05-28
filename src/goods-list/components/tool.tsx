@@ -121,7 +121,7 @@ class Tool extends React.Component<any, any> {
             </a>
           </AuthWrapper>
         </Menu.Item>
-        {/* <Menu.Item>
+        <Menu.Item>
           <AuthWrapper functionName="f_goods_sync">
             <a
               onClick={() => {
@@ -131,7 +131,7 @@ class Tool extends React.Component<any, any> {
               <FormattedMessage id="Product.SynchronizeImage" />
             </a>
           </AuthWrapper>
-        </Menu.Item> */}
+        </Menu.Item>
         {/* <Menu.Item>
           <AuthWrapper functionName="f_goods_temp_set">
             <a

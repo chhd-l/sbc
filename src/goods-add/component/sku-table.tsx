@@ -315,18 +315,18 @@ class SkuForm extends React.Component<any, any> {
                       {record.goodsInfoBundleRels &&
                       record.goodsInfoBundleRels.map((item, index) => {
                         return (
-                          <div className="space-between-align" key={item.subGoodsInfoNo} style={{ paddingLeft: 5 }}>
+                          <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>
                                 <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.subGoodsInfoNo}</span>
                                 <InputNumber
                                   style={{ width: '60px', height: '28px', textAlign: 'center' }}
                                   defaultValue={item.bundleNum}
-                                  key={item.subGoodsInfoNo}
+                                  key={item.subGoodsInfoId}
                                   min={1}
-                                  onChange={(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e, rowIndex, item.subGoodsInfoNo)}
+                                  onChange={(e) => this._editGoodsItem(rowInfo.id, 'goodsInfoBundleRels', e, rowIndex, item.subGoodsInfoId)}
                                   onFocus={() => this.onfocus()}
                                   onBlur={() => this.onblur()}
                                 />
-                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(record, item.subGoodsInfoNo)}></a>
+                                <a style={{ paddingLeft: 5 }} className="iconfont iconDelete" onClick={() => this.onDel(record, item.subGoodsInfoId)}></a>
                               </div>
                         );
                       })}
@@ -677,7 +677,7 @@ class SkuForm extends React.Component<any, any> {
   /**
    * 修改商品属性
    */
-  _editGoodsItem = (id: string, key: string, e: any, rowIndex?: number, subGoodsInfoNo?: any) => {
+  _editGoodsItem = (id: string, key: string, e: any, rowIndex?: number, subGoodsInfoId?: any) => {
     const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
@@ -689,7 +689,7 @@ class SkuForm extends React.Component<any, any> {
       if(rowIndex !== undefined) {
         let curRow = goodsList.toJS()[rowIndex];
         curRow.goodsInfoBundleRels?.forEach(item => {
-          if(item.subGoodsInfoNo === subGoodsInfoNo) {
+          if(item.subGoodsInfoId === subGoodsInfoId) {
             item.bundleNum = e;
           }
         })
@@ -796,9 +796,9 @@ class SkuForm extends React.Component<any, any> {
     }
   };
 
-  onDel = (row, subGoodsInfoNo) => {
+  onDel = (row, subGoodsInfoId) => {
     const { editGoodsItem } = this.props.relaxProps;
-    let goodsInfoBundleRels = row.goodsInfoBundleRels.filter(item => item.subGoodsInfoNo !== subGoodsInfoNo);
+    let goodsInfoBundleRels = row.goodsInfoBundleRels.filter(item => item.subGoodsInfoId !== subGoodsInfoId);
     row.goodsInfoBundleRels = goodsInfoBundleRels;
     this._calculatePrice(row);
     editGoodsItem(row.id, 'goodsInfoBundleRels', goodsInfoBundleRels);

@@ -26,6 +26,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
       onFormFieldChange: Function;
       editGoodsItem: Function;
       goodsList: IList;
+      setSubSkuSelectdRows: Function;
 
     };
     showModal: Function;
@@ -57,13 +58,13 @@ class ProductTooltipSKU extends React.Component<any, any> {
     initCateList: 'initCateList',
     goodsList: 'goodsList',
     onFormFieldChange: noop,
-    editGoodsItem: noop
+    editGoodsItem: noop,
+    setSubSkuSelectdRows: noop
 
   };
   constructor(props) {
     super(props);
     this.state = {
-      selectedRowKeys: [],
       selectedRows: []
     };
   }
@@ -73,12 +74,14 @@ class ProductTooltipSKU extends React.Component<any, any> {
   };
 
   init = () => {
-    const { goodsList } = this.props.relaxProps;
+    const { goodsList, setSubSkuSelectdRows } = this.props.relaxProps;
 
     let curGoodsItem = goodsList.toJS().find(item => item.id === this.props.id);
     let goodsInfoBundleRels = curGoodsItem.goodsInfoBundleRels || [];
-    let selectedRowKeys = goodsInfoBundleRels.map(item => item.subGoodsInfoId);
-    this.setState({ selectedRows: goodsInfoBundleRels, selectedRowKeys });
+    setSubSkuSelectdRows(goodsInfoBundleRels);
+    this.setState({
+      selectedRows: goodsInfoBundleRels
+    });
   };
 
   row2Bundle = (selectedRows) => {
@@ -107,10 +110,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     const { goodsList, editGoodsItem } = this.props.relaxProps;
 
     let goodsInfoBundleRels = this.row2Bundle(selectedRows);
-    goodsInfoBundleRels = _.uniqBy(goodsInfoBundleRels, 'subGoodsInfoNo');
 
     let curGoodsItem = goodsList.toJS().filter(item => item.id === this.props.id)[0];
-    editGoodsItem(curGoodsItem.id, 'goodsInfoBundleRels', goodsInfoBundleRels);
     if (goodsInfoBundleRels.length <= 10) {
       if (goodsInfoBundleRels.length !== 0) {
         // 设置Market Price
@@ -129,6 +130,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         editGoodsItem(curGoodsItem.id, 'stock', Math.min(...stockArr));
       }
       this.props.showModal({ type: 0 }, this.props.pid);
+      editGoodsItem(curGoodsItem.id, 'goodsInfoBundleRels', goodsInfoBundleRels);
     } else {
       message.info('Maximum 10 products!');
     }
@@ -146,7 +148,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
 
   render() {
     const { visible, skuLimit, showValidGood, searchParams } = this.props;
-    const { selectedRowKeys, selectedRows } = this.state;
+    const { selectedRows } = this.state;
 
 
     return (
@@ -156,7 +158,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
           <div>
             Choose goods&nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedRowKeys.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedRows.length}</span> items have been selected
             </small>
           </div>
         }
@@ -183,8 +185,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
             visible={visible}
             skuLimit={skuLimit}
             isScroll={false}
-            selectedRowKeys={selectedRowKeys}
-            selectedRows={selectedRows}
+            // selectedRows={selectedRows}
             rowChangeBackFun={this.rowChangeBackFun}
             searchParams={searchParams}
           />
@@ -200,9 +201,8 @@ class ProductTooltipSKU extends React.Component<any, any> {
     return tempList;
   };
 
-  rowChangeBackFun = (selectedRowKeys, selectedRows) => {
+  rowChangeBackFun = (selectedRows) => {
     this.setState({
-      selectedRowKeys,
       selectedRows
     });
   };

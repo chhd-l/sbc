@@ -47,6 +47,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
       likeGoodsNo: string;
       storeCategoryIds: IList;
       goodsCateId: string;
+      subSkuSelectdRows: IList;
     };
   };
 
@@ -58,7 +59,8 @@ export default class ProductGridSKU extends React.Component<any, any> {
     likeGoodsNo: 'likeGoodsNo',
     // 商品分类
     storeCategoryIds: 'storeCategoryIds',
-    goodsCateId: 'goodsCateId'
+    goodsCateId: 'goodsCateId',
+    subSkuSelectdRows: 'subSkuSelectdRows'
   };
 
   componentDidMount() {
@@ -67,28 +69,27 @@ export default class ProductGridSKU extends React.Component<any, any> {
     this.init(searchParams ? searchParams : {});
     let pid = addSkUProduct.filter((item) => item.pid == this.props.pid);
     this.setState({
-      goodsNo: pid,
-      selectedRows: this.props.selectedRows
+      goodsNo: pid
     });
   }
-  static getDerivedStateFromProps(props, state) {
-    // 当传入的值发生变化的时候，更新state
-    if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
-      return {
-        oldSelectedRowKeys: props.selectedRowKeys.concat(),
-        selectedRowKeys: props.selectedRowKeys.concat(),
-        prevPropSelectedRowKeys: props.selectedRowKeys.concat(),
-        selectedRows: props.selectedRows.concat()
-      };
-    }
-    if (JSON.stringify(props.searchParams) !== JSON.stringify(state.searchParams)) {
-      return {
-        searchParams: props.searchParams
-      };
-    }
+  // static getDerivedStateFromProps(props, state) {
+  //   // 当传入的值发生变化的时候，更新state
+  //   if (JSON.stringify(props.selectedRowKeys) !== JSON.stringify(state.prevPropSelectedRowKeys)) {
+  //     return {
+  //       oldSelectedRowKeys: props.selectedRowKeys.concat(),
+  //       selectedRowKeys: props.selectedRowKeys.concat(),
+  //       prevPropSelectedRowKeys: props.selectedRowKeys.concat(),
+  //       selectedRows: props.selectedRows.concat()
+  //     };
+  //   }
+  //   if (JSON.stringify(props.searchParams) !== JSON.stringify(state.searchParams)) {
+  //     return {
+  //       searchParams: props.searchParams
+  //     };
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
   componentDidUpdate(prevProps) {
     // 典型用法（不要忘记比较 props）：
@@ -139,6 +140,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
             selectedRowKeys: selectedRowKeys,
             onChange: (selectedRowKeys, selectedTableRows) => {
               let { selectedRows } = this.state;
+              let {subSkuSelectdRows} = this.props.relaxProps;
               selectedRows = selectedRows.concat(selectedTableRows);
               selectedRows = this.arrayFilter(selectedRowKeys, selectedRows);
               this.setState({
@@ -146,7 +148,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
                 selectedRowKeys
               });
 
-              rowChangeBackFun(selectedRowKeys, selectedRows);
+              rowChangeBackFun(subSkuSelectdRows.concat(selectedRows));
             },
             // getCheckboxProps(record) {
             //   let a = [];
@@ -196,7 +198,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
   }
 
   _pageSearch = ({ pageNum, pageSize }) => {
-    const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsNo, storeCategoryIds, goodsCateId, subSkuSelectdRows } = this.props.relaxProps;
     let from = {
       goodsName: likeGoodsName,
       goodsInfoNo: likeGoodsNo,
@@ -204,7 +206,11 @@ export default class ProductGridSKU extends React.Component<any, any> {
       goodsCateId: goodsCateId
     };
     // const params = this.state.searchParams;
-    this.init({ ...from, pageNum, pageSize });
+    this.init({ 
+      ...from, 
+      pageNum, 
+      pageSize
+    });
     this.setState({
       pageNum,
       pageSize,
@@ -213,12 +219,14 @@ export default class ProductGridSKU extends React.Component<any, any> {
   };
 
   init = async (params) => {
+    let {subSkuSelectdRows} = this.props.relaxProps;
     if (!params.pageNum) {
       params.pageNum = 0;
     }
     if (!params.pageSize) {
       params.pageSize = 10;
     }
+    params.selectedGoodIds = subSkuSelectdRows.map(item => item.subGoodsInfoId);
     // params.goodsName = "Baby"
     this.setState({
       loading: true

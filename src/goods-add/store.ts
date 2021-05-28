@@ -294,6 +294,40 @@ export default class AppStore extends Store {
   };
 
   /**
+   * 存储sub-sku弹框里选择的行
+   * @param selectdRows 
+   */
+  setSubSkuSelectdRows = (selectdRows) => {
+    this.dispatch('goodsActor: setSubSkuSelectdRows', selectdRows);
+  }
+
+  /**
+   * 将弹框里选择的数据转化为 goodsInfoBundleRels 里的数据模型
+   * @param selectedRows 
+   * @returns 
+   */
+  row2Bundle = (selectedRows) => {
+    if (Array.isArray(selectedRows)) {
+      return selectedRows.map((item) => {
+        return {
+          subGoodsInfoId: item.subGoodsInfoId || item.goodsInfoId,
+          bundleNum: item.bundleNum || 1,
+          subStock: item.subStock || item.stock,
+          stock: item.stock,
+          saleableFlag: item.saleableFlag,
+          marketPrice: item.marketPrice,
+          subMarketPrice: item.subMarketPrice,
+          subScriptionPrice: item.subScriptionPrice,
+          goodsInfoNo: item.goodsInfoNo,
+          subGoodsInfoNo: item.subGoodsInfoNo || item.goodsInfoNo
+        };
+      })
+    } else {
+      return [];
+    }
+  }
+
+  /**
    *  编辑时获取商品详情，转换数据
    */
   _getGoodsDetail = async (resource) => {

@@ -3,7 +3,7 @@ import es_ES from './en-US';
  * 多语言俄语
  */
 export default {
-  // ...es_ES,
+  ...es_ES,
   "Public.Overview": "Обзор",
   "Public.WelcometoROYALCANIN": "Добро пожаловать в Royal Canin",
   "Public.storeportal": "Магазин",

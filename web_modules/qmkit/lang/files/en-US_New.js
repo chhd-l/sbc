@@ -763,6 +763,16 @@ export default {
         "Order.refundableAmountTips": "The remaining refundable amount of this order is: ",
         "Order.refundableAmountTips2": "The refund amount should not be greater than the refundable amount. Please modify it.",
         "Order.Cat&Dog": "Cat & Dog",
+        "Order.Unshipped": "Unshipped",
+        "Order.Allshipped": "All shipped",
+        "Order.Research": "Research",
+        "Order.Batchoperation": "Batch operation",
+        "Order.Clientname": "Client name",
+        "Order.Clientaccounts": "Client accounts",
+        "Order.Recipientscell": "Recipient's cell",
+
+
+
 
     },
     Subscription: {

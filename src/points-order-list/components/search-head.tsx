@@ -173,10 +173,10 @@ export default class SearchHead extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
-                <Option value="NOT_YET_SHIPPED">Unshipped</Option>
-                <Option value="PART_SHIPPED">Partially shipped</Option>
-                <Option value="SHIPPED">All shipped</Option>
+                <Option value=""><FormattedMessage id="Order.All" /></Option>
+                <Option value="NOT_YET_SHIPPED"><FormattedMessage id="Order.Unshipped" /></Option>
+                <Option value="PART_SHIPPED"><FormattedMessage id="Order.PartiallyShipped" /></Option>
+                <Option value="SHIPPED"><FormattedMessage id="Order.Allshipped" /></Option>
               </SelectGroup>
             </FormItem>
            
@@ -246,7 +246,7 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                Research
+                <FormattedMessage id="Order.Research" />
               </Button>
               </p>
             </FormItem>
@@ -263,7 +263,7 @@ export default class SearchHead extends Component<any, any> {
                 }
               >
                 <Button>
-                  Batch operation <Icon type="down" />
+                <FormattedMessage id="Order.Batchoperation" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -292,8 +292,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">Client name</Option>
-        <Option value="buyerAccount">Client accounts</Option>
+        <Option value="buyerName"><FormattedMessage id="Order.Clientname" /></Option>
+        <Option value="buyerAccount"><FormattedMessage id="Order.Clientaccounts" /></Option>
       </Select>
     );
   };
@@ -310,8 +310,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">Product name</Option>
-        <Option value="skuNo">SKU code</Option>
+        <Option value="skuName"><FormattedMessage id="Order.Productname" /></Option>
+        <Option value="skuNo"><FormattedMessage id="Order.SKUcode" /></Option>
       </Select>
     );
   };
@@ -328,8 +328,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 110 }}
       >
-        <Option value="consigneeName">Recipient</Option>
-        <Option value="consigneePhone">Recipient's cell</Option>
+        <Option value="consigneeName"><FormattedMessage id="Order.recipient" /></Option>
+        <Option value="consigneePhone"><FormattedMessage id="Order.Recipientscell" /></Option>
       </Select>
     );
   };

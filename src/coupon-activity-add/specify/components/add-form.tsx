@@ -142,7 +142,6 @@ export default class SpecifyAddForm extends React.Component<any, any> {
                 { required: true, message: <FormattedMessage id="Marketing.PleaseSelectTheDeliveryTime" /> },
                 {
                   validator: (_rule, value, callback) => {
-                    debugger
                     if (value && moment().add(-5, 'minutes').second(0).unix() > moment(value).unix()) {
                       callback(<FormattedMessage id="Marketing.TheDeliveryTime" />);
                     } else if (value && moment().add('months', 3).unix() < moment(value).minute(0).second(0).unix()) {

@@ -42,16 +42,19 @@ export default class MarketingRule extends React.Component<any, any> {
   render() {
     const { fullReductionLevelList, fullDiscountLevelList, subType, marketingType } = this.props.relaxProps;
     const list = marketingType == 1 ? fullDiscountLevelList : fullReductionLevelList;
+
     return (
       <div>
         {list.toJS().map((level) => (
           <div key={Math.random()}>
             <GreyBg>
               <Row>
-                <Col span={24}>
+                <Col span={4}>
                   <span>
                     <FormattedMessage id="Marketing.Rules" />:
                   </span>
+                </Col>
+                <Col span={18}>
                   {subType === 0 ? ( // full amount reduction
                     <span className="rule-span">
                       <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

@@ -144,7 +144,7 @@ export default class Task extends React.Component<any, any> {
                           <FormattedMessage id="task.GoldenMoment" />
                         </p>
                       }
-                      style={{ width: 197, maxWidth: 197 }}
+                      style={{ width: 194, maxWidth: 194 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -176,7 +176,7 @@ export default class Task extends React.Component<any, any> {
                           <FormattedMessage id="task.TaskStatus" />
                         </p>
                       }
-                      style={{ width: 195 }}
+                      style={{ width: 194 }}
                       onChange={(value) => {
                         this.onFormChange({
                           field: 'status',
@@ -207,7 +207,7 @@ export default class Task extends React.Component<any, any> {
                           <FormattedMessage id="task.Priority" />
                         </p>
                       }
-                      style={{ width: 195 }}
+                      style={{ width: 194 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -301,6 +301,7 @@ export default class Task extends React.Component<any, any> {
                       });
                     }}
                     value={taskForm.dueTimeStart && taskForm.dueTimeEnd ? [moment(taskForm.dueTimeStart), moment(taskForm.dueTimeEnd)] : null}
+                    style={{ width: 360 }}
                   />
                 </Col>
               </Row>

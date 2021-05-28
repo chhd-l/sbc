@@ -173,7 +173,6 @@ export default class SearchHead extends Component<any, any> {
               <Col span="8" id="range-picker-width-mx">
                 <FormItem>
                   <RangePicker
-                    // style={{ width: '294px' }}
                     getCalendarContainer={() => document.getElementById('page-content')}
                     defaultValue={[search.beginTime, search.endTime]}
                     value={[search.beginTime, search.endTime]}

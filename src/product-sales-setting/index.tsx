@@ -220,8 +220,7 @@ class ProductSearchSetting extends Component<any, any> {
                             <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionFrequencyId')}>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
-                         </div>
-
+                           </div>
                           </div>
                         </Option>
                         ))}
@@ -246,7 +245,7 @@ class ProductSearchSetting extends Component<any, any> {
               }
               style={{ marginBottom: 0 }}
             >
-              <Row>
+              <Row gutter={20}>
                 <Col span={6}>
                   <Form.Item>
 
@@ -280,7 +279,6 @@ class ProductSearchSetting extends Component<any, any> {
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                           </div>
-
                             </div>
                           </Option>
                         ))}
@@ -288,7 +286,7 @@ class ProductSearchSetting extends Component<any, any> {
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                  <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
+                <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
                   <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>

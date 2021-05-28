@@ -235,7 +235,7 @@ class ProductFinderList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Pet type</p>}
-                    style={{ width: 195 }}
+                    style={{ width: 203 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({

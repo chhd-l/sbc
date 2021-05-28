@@ -4,7 +4,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import moment from 'moment';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 import '../../index.css';
 import styled from 'styled-components';
 
@@ -38,13 +38,28 @@ const SUB_TYPE = {
   10: 'Order reach',
   11: 'Order reach',
 };
-
+const PROMOTION_TYPE = {
+  0:  RCi18n({
+    id: 'Marketing.NormalPromotion'
+  }),
+  1:  RCi18n({
+    id: 'Marketing.SubscriptionPromotion'
+  }),
+  2:
+    RCi18n({
+      id: 'Marketing.Club'
+    }),
+  3: RCi18n({
+    id: 'Marketing.Singlepurchase'
+  })
+}
 @withRouter
 @Relax
 class MarketingDes extends React.Component<any, any> {
   props: {
     intl;
     relaxProps?: {
+      promotionType: any;
       marketingName: any;
       publicStatus: any;
       beginTime: any;
@@ -57,6 +72,7 @@ class MarketingDes extends React.Component<any, any> {
   };
 
   static relaxProps = {
+    promotionType: 'promotionType',
     marketingName: 'marketingName',
     beginTime: 'beginTime',
     endTime: 'endTime',
@@ -68,22 +84,38 @@ class MarketingDes extends React.Component<any, any> {
   };
 
   render() {
-    const { marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel } = this.props.relaxProps;
+    const { promotionType, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel } = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
+            <span>
+              <FormattedMessage id="Marketing.PromotionType" />:
+            </span>
+          </Col>
+          <Col span={18}>
+            {
+              PROMOTION_TYPE[promotionType]
+            }
+          </Col>
+        </Row>
+        <Row>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.PromotionName" />:
             </span>
+          </Col>
+          <Col span={18}>
             {marketingName}
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.PromotionCode" />:
             </span>
+          </Col>
+          <Col span={18}>
             {promotionCode}
             <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={publicStatus === '1'} disabled={true}>
               <FormattedMessage id="Marketing.Public" />
@@ -91,20 +123,24 @@ class MarketingDes extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
+          <Col span={4}>
             <span>
               <FormattedMessage id="Marketing.StartAndEndTime" />:
             </span>
+          </Col>
+          <Col span={18}>
             {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~ {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
         {subType === 6 || subType === 7 ? null : (
           <Row>
-            <Col span={24}>
+            <Col span={4}>
               <span>
                 {MAK_TYPE[marketingType]}
                 <FormattedMessage id="Marketing.Type" />:
               </span>
+            </Col>
+            <Col span={18}>
               {SUB_TYPE[subType]}&nbsp;&nbsp;
               {marketingType === 3 && marketingFreeShippingLevel  ?
                 <>

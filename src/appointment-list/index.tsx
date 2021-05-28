@@ -319,7 +319,7 @@ export default class AppointmentList extends React.Component<any, any> {
                   <SelectGroup
                     defaultValue={searchForm.status}
                     label={<p style={styles.label}>{<FormattedMessage id="Appointment.Status" />}</p>}
-                    style={{ width: 80 }}
+                    style={{ width: 194 }}
                     onChange={(value) => {
                       value = value || undefined;
                       this.onSearchFormFieldChange('status', value);

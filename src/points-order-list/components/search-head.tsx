@@ -21,7 +21,7 @@ import {
 } from 'qmkit';
 import { IList } from 'typings/globalType';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -162,7 +162,7 @@ export default class SearchHead extends Component<any, any> {
                 }
                 defaultValue=""
                 label="Delivery status"
-                style={{width: 130}}
+                style={{width: 190}}
                 onChange={(value) => {
                   this.setState({
                     tradeState: {
@@ -173,14 +173,16 @@ export default class SearchHead extends Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
-                <Option value="NOT_YET_SHIPPED">Unshipped</Option>
-                <Option value="PART_SHIPPED">Partially shipped</Option>
-                <Option value="SHIPPED">All shipped</Option>
+                <Option value=""><FormattedMessage id="Order.All" /></Option>
+                <Option value="NOT_YET_SHIPPED"><FormattedMessage id="Order.Unshipped" /></Option>
+                <Option value="PART_SHIPPED"><FormattedMessage id="Order.PartiallyShipped" /></Option>
+                <Option value="SHIPPED"><FormattedMessage id="Order.Allshipped" /></Option>
               </SelectGroup>
             </FormItem>
+           
             <FormItem>
               <RangePicker
+                style={{width: 295}}
                 getCalendarContainer={() =>
                   document.getElementById('page-content')
                 }
@@ -195,8 +197,10 @@ export default class SearchHead extends Component<any, any> {
                 }}
               />
             </FormItem>
+            <br></br>
             <FormItem>
-              <Button
+             <p style={{ textAlign: 'center' }}> <Button
+                
                 type="primary"
                 htmlType="submit"
                 shape="round"
@@ -242,13 +246,15 @@ export default class SearchHead extends Component<any, any> {
                   onSearch(params);
                 }}
               >
-                Research
+                <FormattedMessage id="Order.Research" />
               </Button>
+              </p>
             </FormItem>
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
+            <div style={{ paddingBottom: '16px' }} 
+             className="ant-form-inline filter-content">
               <Dropdown
                 overlay={menu}
                 placement="bottomLeft"
@@ -257,7 +263,7 @@ export default class SearchHead extends Component<any, any> {
                 }
               >
                 <Button>
-                  Batch operation <Icon type="down" />
+                <FormattedMessage id="Order.Batchoperation" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -286,8 +292,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: 100 }}
       >
-        <Option value="buyerName">Client name</Option>
-        <Option value="buyerAccount">Client accounts</Option>
+        <Option value="buyerName"><FormattedMessage id="Order.Clientname" /></Option>
+        <Option value="buyerAccount"><FormattedMessage id="Order.Clientaccounts" /></Option>
       </Select>
     );
   };
@@ -304,8 +310,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName">Product name</Option>
-        <Option value="skuNo">SKU code</Option>
+        <Option value="skuName"><FormattedMessage id="Order.Productname" /></Option>
+        <Option value="skuNo"><FormattedMessage id="Order.SKUcode" /></Option>
       </Select>
     );
   };
@@ -320,10 +326,10 @@ export default class SearchHead extends Component<any, any> {
           })
         }
         value={this.state.receiverSelect}
-        style={{ width: 100 }}
+        style={{ width: 110 }}
       >
-        <Option value="consigneeName">Recipient</Option>
-        <Option value="consigneePhone">Recipient's cell</Option>
+        <Option value="consigneeName"><FormattedMessage id="Order.recipient" /></Option>
+        <Option value="consigneePhone"><FormattedMessage id="Order.Recipientscell" /></Option>
       </Select>
     );
   };

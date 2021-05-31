@@ -3412,7 +3412,7 @@ export default {
   'Setting.SaveSettings': 'Save settings',
   'Setting.ChooseALogisticsCompany': 'Choose a logistics company',
   'Setting.LogisticsCompanySettings': 'Logistics company settings',
-  'Setting.Manage': 'Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up.',
+  'Setting.Manage': 'Manage your commonly used carriers companies, easy to choose when ordering and shipping, up to 20 carriers companies can be set up.',
   'Setting.roleName': 'Role name',
   'Setting.permission': 'Permission',
   'Setting.setPermission': 'Set permission',

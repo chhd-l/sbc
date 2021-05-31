@@ -184,7 +184,7 @@ class Checkout extends React.Component<any, any> {
     const params = {
       customerId,
       customerName,
-      contactPhone,
+      phone: contactPhone,
       email,
       orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100).toFixed(2),
       payPspItemEnum: paymentMethod,

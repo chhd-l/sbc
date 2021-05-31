@@ -588,7 +588,9 @@ class FullDiscountForm extends React.Component<any, any> {
                       {
                         validator: (_rule, value, callback) => {
                           if (value) {
-                            if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                            if(value === '10' || value === 10) {
+                              callback();
+                            } else if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
                               callback(
                                 (window as any).RCi18n({
                                   id: 'Marketing.InputValueBetween',
@@ -641,7 +643,9 @@ class FullDiscountForm extends React.Component<any, any> {
                     {
                       validator: (_rule, value, callback) => {
                         if (value) {
-                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                          if(value === '10' || value === 10) {
+                            callback();
+                          } else if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
                             callback(
                               (window as any).RCi18n({
                                 id: 'Marketing.InputValueBetween'

@@ -245,8 +245,8 @@ export default {
   'Menu.User list':'User list',
   'Menu.Group managment':'Group managment',
   'Menu.Role permissions':'Role permissions',
-  'Menu.Logistics Settings':'Logistics Settings',
-  'Menu.Logistics Company Settings':'Logistics Company Settings',
+  // 'Menu.Logistics Settings':'Logistics Settings',
+  // 'Menu.Logistics Company Settings':'Logistics Company Settings',
   'Menu.Freight Template':'Freight Template',
   'Menu.Asset management':'Asset management',
   'Menu.Image asset':'Image asset',
@@ -277,6 +277,8 @@ export default {
   'Menu.Shipping Fee':'Shipping Fee',
   'Menu.NPS':'NPS',
   'Menu.Message setting':'Message setting',
+  'Menu.Logistics Settings':'Carriers Settings',
+  'Menu.Logistics Company Settings':'Carriers Company Settings',
 
 
 

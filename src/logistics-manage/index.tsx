@@ -38,7 +38,7 @@ export default class LogisticsManage extends React.Component<any, any> {
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
         <div className="container-search company-container">
-          <Headline title={<FormattedMessage id="Setting.LogisticsCompanySettings" />} />
+          <Headline title={<FormattedMessage id="Setting.CarriersCompanySettings" />} />
           <Alert message={<FormattedMessage id="Setting.Manage" />} type="info" showIcon />
           <AuthWrapper functionName="f_expressManage_1">
             {/*<CompanyChoose />*/}

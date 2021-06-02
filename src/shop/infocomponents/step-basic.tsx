@@ -232,11 +232,11 @@ export default class StepOneEdit extends React.Component<any, any> {
               </Col>
             </Row>
             <Row>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="prescriberMap" />}>
                   <Switch disabled={true} checked={storeInfo.get('prescriberMap') === '1' ? true : false} />
                 </FormItem>
-              </Col>
+              </Col> */}
               {/* <Col span={12}>
                 <FormItem
                   {...formItemLayout}
@@ -254,16 +254,16 @@ export default class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col> */}
 
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="onePageCheckout" />}>
                   <Switch disabled={true} checked={storeInfo.get('onePageCheckout') === '1' ? true : false} />
                 </FormItem>
-              </Col>
-              <Col span={12}>
+              </Col> */}
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label="City Select">
                   <Switch disabled={true} checked={storeInfo.get('citySelection') === 1 ? true : false} />
                 </FormItem>
-              </Col>
+              </Col> */}
             </Row>
           </Form>
         </div>

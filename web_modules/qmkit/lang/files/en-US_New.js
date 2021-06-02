@@ -2027,7 +2027,27 @@ export default {
         "Setting.Dictionary": "Dictionary",
         "SeSetting.Edittting.Keyword": "Keyword",
         "Setting.Edit": "Edit",
-        "Setting.Delete": "Delete"
+        "Setting.Delete": "Delete",
+        "Setting.orderDeliveryDateSettings": "Order delivery date settings",
+        "Setting.allowDeliveryOption":"Allow delivery option",
+        "Setting.homeDelivery":"Home Delivery",
+        "Setting.openCityCondition":"Open city condition",
+        "Setting.theRangeOfDaysForDelivery":"The range of days for delivery",
+        "Setting.cutOffTimesOfOneDayDelivery":"Cut-off times of One day delivery",
+        "Setting.openingHours":"Opening Hours",
+        "Setting.Monday":"Monday",
+        "Setting.Tuesday":"Tuesday",
+        "Setting.Wednesday":"Wednesday",
+        "Setting.Thursday":"Thursday",
+        "Setting.Friday":"Friday",
+        "Setting.Saturday":"Saturday",
+        "Setting.Sunday":"Sunday",
+        "Setting.timeSolt":"Time solt",
+        "Setting.closedHours":"Closed Hours",
+        "Setting.selectDay": "Select day",
+        "Setting.before": "Before",
+        "Setting.add": "Add"
+        
     },
     Menu: {
         "Menu.Appointment": "Appointment",
@@ -2048,6 +2068,7 @@ export default {
         "Menu.Shipping Fee": "Shipping Fee",
         "Menu.NPS": "NPS",
         "Menu.Message setting": "Message setting",
+        "Menu.Delivery date": "Delivery date"
     },
     Others: {
         "import": "Import",

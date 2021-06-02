@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Headline, BreadCrumb, Const } from 'qmkit';
 import { Row, Col, Form, Modal, message, Card, Tooltip, Switch, Input, Spin, Popconfirm } from 'antd';
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
+const homeImage = require('./image/home.png');
+const pickupImage = require('./image/pickup.png');
 
 const FormItem = Form.Item;
 
@@ -21,7 +24,8 @@ class ShippingFeeSetting extends Component<any, any> {
       shippingFeeVisible: false,
       shippingFeeList: [],
       selectShippingFee: {},
-      loading: false
+      shippingFeeLoading: false,
+      deliveryLoading: false
     };
     this.closeModel = this.closeModel.bind(this);
     this.enableShippingFee = this.enableShippingFee.bind(this);
@@ -33,7 +37,7 @@ class ShippingFeeSetting extends Component<any, any> {
   }
   getShippingFeeSetting() {
     this.setState({
-      loading: true
+      shippingfeeloading: true
     });
     webapi
       .GetShipSettingList()
@@ -56,19 +60,19 @@ class ShippingFeeSetting extends Component<any, any> {
           });
           this.setState({
             shippingFeeList: shippingFeeList,
-            loading: false
+            shippingfeeloading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
-            loading: false
+            shippingfeeloading: false
           });
         }
       })
       .catch(() => {
         message.error('Get data failed');
         this.setState({
-          loading: false
+          shippingfeeloading: false
         });
       });
   }
@@ -94,6 +98,7 @@ class ShippingFeeSetting extends Component<any, any> {
         message.error(err || 'Update Failed');
       });
   }
+  enableDelivery(id) {}
   saveShippingFee() {
     const { selectShippingFee } = this.state;
     this.props.form.validateFields((errs, values) => {
@@ -119,7 +124,7 @@ class ShippingFeeSetting extends Component<any, any> {
     });
   }
   render() {
-    const { shippingFeeList, shippingFeeVisible, loading } = this.state;
+    const { shippingFeeList, shippingFeeVisible, shippingfeeloading, deliveryLoading } = this.state;
     const { getFieldDecorator } = this.props.form;
     let header = this.state.selectShippingFee.header ? JSON.parse(this.state.selectShippingFee.header) : {};
     let domain = header.Domain;
@@ -128,71 +133,110 @@ class ShippingFeeSetting extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
-          <Headline title="Shipping fee calculation" />
-          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-            <Row style={{ marginBottom: 10 }}>
-              {shippingFeeList &&
-                shippingFeeList.map((item, index) => (
-                  <Col span={8} key={index}>
-                    {item.type === 'fgs' ? (
-                      <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                        <div style={{ textAlign: 'center', margin: '9px 0' }}>
-                          <h1
-                            style={{
-                              fontSize: 30,
-                              fontWeight: 'bold',
-                              color: '#e2001a'
-                            }}
-                          >
-                            FGS
-                          </h1>
-                          <p>Set up your own rule</p>
-                        </div>
-                        <div className="bar" style={{ float: 'right' }}>
-                          <div className="status">
-                            <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
-                              <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
-                            </Popconfirm>
+          <Row>
+            <Headline title="Delivery option selection" />
+            <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={deliveryLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Row style={{ marginBottom: 20 }}>
+                <Col span={8}>
+                  <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                    <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                      <img src={homeImage} alt="home" />
+                    </div>
+                    <strong style={{ float: 'left', fontSize: 12 }}>Home delivery</strong>
+                    <div className="bar" style={{ float: 'right' }}>
+                      <div className="status">
+                        <Popconfirm title={`Are you sure to enable this?`} onConfirm={() => this.enableDelivery(1)} okText="Yes" cancelText="No">
+                          <Switch size="small" checked={0 === 0 ? true : false} />
+                        </Popconfirm>
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+                <Col span={8}>
+                  <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                    <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                      <img src={pickupImage} alt="pickup" />
+                    </div>
+                    <strong style={{ float: 'left', fontSize: 12 }}>Pick up delivery</strong>
+                    <div className="bar" style={{ float: 'right' }}>
+                      <div className="status">
+                        <Popconfirm title={`Are you sure to enable this?`} onConfirm={() => this.enableDelivery(1)} okText="Yes" cancelText="No">
+                          <Switch size="small" checked={0 === 0 ? true : false} />
+                        </Popconfirm>
+                      </div>
+                    </div>
+                  </Card>
+                </Col>
+              </Row>
+            </Spin>
+          </Row>
+          <Row>
+            <Headline title="Shipping fee calculation" />
+            <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={shippingfeeloading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Row style={{ marginBottom: 20 }}>
+                {shippingFeeList &&
+                  shippingFeeList.map((item, index) => (
+                    <Col span={8} key={index}>
+                      {item.type === 'fgs' ? (
+                        <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                          <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                            <h1
+                              style={{
+                                fontSize: 30,
+                                fontWeight: 'bold',
+                                color: '#e2001a'
+                              }}
+                            >
+                              FGS
+                            </h1>
+                            <p>Set up your own rule</p>
                           </div>
-                        </div>
-                      </Card>
-                    ) : null}
+                          <div className="bar" style={{ float: 'right' }}>
+                            <div className="status">
+                              <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
+                                <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
+                              </Popconfirm>
+                            </div>
+                          </div>
+                        </Card>
+                      ) : null}
 
-                    {item.type === 'tempoline' ? (
-                      <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                        <div style={{ textAlign: 'center', margin: '20px 0' }}>
-                          <img src={item.imgUrl} style={{ width: '200px', height: '43px' }} />
-                        </div>
-                        <div className="bar" style={{ float: 'right' }}>
-                          <div className="status">
-                            <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
-                              <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
-                            </Popconfirm>
+                      {item.type === 'tempoline' ? (
+                        <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                          <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                            <img src={item.imgUrl} style={{ width: '200px', height: '43px' }} />
                           </div>
-                          <div>
-                            {item.closeFlag === 0 ? (
-                              <Tooltip placement="top" title="Edit">
-                                <a
-                                  style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
-                                  type="link"
-                                  onClick={() => {
-                                    this.setState({
-                                      shippingFeeVisible: true,
-                                      selectShippingFee: item
-                                    });
-                                  }}
-                                  className="iconfont iconEdit"
-                                ></a>
-                              </Tooltip>
-                            ) : null}
+                          <div className="bar" style={{ float: 'right' }}>
+                            <div className="status">
+                              <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
+                                <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
+                              </Popconfirm>
+                            </div>
+                            <div>
+                              {item.closeFlag === 0 ? (
+                                <Tooltip placement="top" title="Edit">
+                                  <a
+                                    style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
+                                    type="link"
+                                    onClick={() => {
+                                      this.setState({
+                                        shippingFeeVisible: true,
+                                        selectShippingFee: item
+                                      });
+                                    }}
+                                    className="iconfont iconEdit"
+                                  ></a>
+                                </Tooltip>
+                              ) : null}
+                            </div>
                           </div>
-                        </div>
-                      </Card>
-                    ) : null}
-                  </Col>
-                ))}
-            </Row>
-          </Spin>
+                        </Card>
+                      ) : null}
+                    </Col>
+                  ))}
+              </Row>
+            </Spin>
+          </Row>
           <Modal visible={shippingFeeVisible} title="Shipping API Setting" onOk={this.saveShippingFee} maskClosable={false} onCancel={() => this.closeModel()} okText="Submit">
             <Form>
               <FormItem {...formItemLayout} required={true} label="URL">

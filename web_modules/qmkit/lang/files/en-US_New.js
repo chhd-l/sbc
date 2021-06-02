@@ -775,11 +775,7 @@ export default {
         "Order.Batchoperation": "Batch operation",
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
-        "Order.Recipientscell": "Recipient's cell",
-
-
-
-
+        "Order.Recipientscell": "Recipient's cell"
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",

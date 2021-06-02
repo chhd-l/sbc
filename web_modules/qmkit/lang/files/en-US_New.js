@@ -98,6 +98,7 @@ export default {
         "Public.editor.uploadVideoError": "upload video error",
         "Public.editor.uploadVideoFailed": "upload video failed",
         "Public.editor.videoReturnResultsRrror": "upload video return results error",
+        "Public.exportTip": "The export report will show in the Analyze module/Export report."
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",

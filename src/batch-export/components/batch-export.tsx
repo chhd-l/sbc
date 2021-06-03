@@ -1,33 +1,41 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Button, Radio, Dropdown, Icon, DatePicker, Row, Col, Breadcrumb, message, Card } from 'antd';
-import { RCi18n } from 'qmkit';
+import { RCi18n, Const } from 'qmkit';
 import type { fieldDataType, labelDataType } from '../data.d';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
-const InputGroup = Input.Group;
 
 interface BatchExportProps {
   fieldData: fieldDataType[];
   selectData?: labelDataType[];
   form: any;
+  history: any;
+  title: string;
 }
 
 class BatchExport extends Component<BatchExportProps, any> {
+  constructor(props) {
+    super(props);
+    // 不要在这里调用 this.setState()
+    this.state = {
+      fieldKey: {},
+      selectKey: [],
+    };
+  }
 
-  state = {
-    fieldKey: {},
-    selectKey: [],
-  };
-
-  componentDidMount() {
-    let { fieldData } = this.props;
-    let { fieldKey } = this.state;
-    fieldData.forEach(item => {
-      fieldKey[item.key] = item.key;
-    })
-    this.setState({ fieldKey });
+  componentDidUpdate(prevProps) {
+    // 典型用法（不要忘记比较 props）：
+    if (this.props.title !== prevProps.title) {
+      let fieldKey = {};
+      this.props.fieldData.forEach(item => {
+        fieldKey[item.key] = item.key;
+      });
+      this.setState({
+        fieldKey
+      })
+    }
   }
 
   getLabel(label, idx) {
@@ -40,47 +48,85 @@ class BatchExport extends Component<BatchExportProps, any> {
             this.setState({
               fieldKey
             });
-            this.props.form.setFieldsValue({[idx]: ''});
+            this.props.form.setFieldsValue({ [idx]: '' });
           }}
           style={styles.leftLabel}
           defaultValue={label[0].value}
         >
           {label.map(item => {
+            let name = item.langKey ? RCi18n({ id: item.langKey }) : item.name;
             return (
-              <Option key={item.value} title={item.name} value={item.value}>
-                {item.name}
+              <Option key={item.value} title={name} value={item.value}>
+                {name}
               </Option>
             )
           })}
         </Select>)
     } else {
-      return label || ''
+      return <Input style={styles.leftLabel} title={label || ''} disabled defaultValue={label || ''} />
     }
   }
 
   getFields() {
-    let { fieldKey } = this.state;
-    const { fieldData } = this.props;
-    const { getFieldDecorator } = this.props.form;
+    const { fieldKey } = this.state;
+    const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
+    // const { getFieldDecorator, getFieldValue } = this.props.form;
     const children = fieldData.map(item => {
       let content = <Input style={styles.wrapper} />;
-      if(item.options) {
+      if (item.options) {
         let opts = item.options[fieldKey[item.key]] || [];
+        // 判断当前选项是否根据其它值联动
+        if (item.optionLink) {
+          let linkVal = getFieldValue(item.optionLink) || '';
+          if (linkVal === 'ContractProduct') {
+            opts = opts.filter((item) => item.value === 'SmartFeeder');
+          } else if (linkVal.indexOf('Club') > -1) {
+            opts = opts.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+          } else {
+            opts = []
+          }
+        }
         content = (
-          <Select style={styles.wrapper}>
+          <Select 
+            style={styles.wrapper} 
+            onChange={() => {
+              // 如果选择的值影响其他下拉框的选项，则将那个受影响的下拉框的值清空
+              if(item.valueLink){
+                this.props.form.setFieldsValue({ [item.valueLink]: '' });
+              }
+            }}
+          >
             {
               opts.map(opt => {
+                let name = opt.langKey ? RCi18n({ id: opt.langKey }) : opt.name;
                 return (
-                  <Option value={opt.value} title={opt.name} key={opt.value}>
-                    {opt.name}
+                  <Option value={opt.value} title={name} key={opt.value}>
+                    {name}
                   </Option>
                 )
               })
             }
           </Select>
-        )      
+        )
       }
-      return (
+
+      const component = item.type === 'rangePicker' ? (
+        <Col span={8} id="Range-picker-width" key={item.key}>
+          <FormItem>
+            {getFieldDecorator(item.key, {
+              rules: [
+                {
+                  required: false,
+                  message: '',
+                },
+              ],
+            })(<RangePicker
+              className="rang-picker-width"
+              style={styles.formItemStyle}
+            />)}
+          </FormItem>
+        </Col>
+      ) : (
         <Col span={8} key={item.key} >
           <Form.Item>
             <Input.Group compact style={styles.formItemStyle}>
@@ -95,8 +141,8 @@ class BatchExport extends Component<BatchExportProps, any> {
               })(content)}
             </Input.Group>
           </Form.Item>
-        </Col>
-      )
+        </Col>)
+      return component;
     });
     return (
       <Form className="batch_export_form">
@@ -109,17 +155,15 @@ class BatchExport extends Component<BatchExportProps, any> {
     const { selectData } = this.props;
     const { selectKey } = this.state;
     return (
-      <Row gutter={[16, 16]}>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {selectData.map(item => {
           return (
-            <Col span={3} key={item.value}>
-              <span onClick={() => this.btnSelect(item.value)} className={['select_style', selectKey.indexOf(item.value) > -1 ? 'active' : ''].join(' ')}>
-                {item.name}
-              </span>
-            </Col>
+            <span key={item.value} onClick={() => this.btnSelect(item.value)} className={['select_style', selectKey.indexOf(item.value) > -1 ? 'active' : ''].join(' ')}>
+              {item.name}
+            </span>
           )
         })}
-      </Row>
+      </div>
     )
   }
 
@@ -139,6 +183,21 @@ class BatchExport extends Component<BatchExportProps, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         let obj = {};
+        // 单独处理时间值
+        let timeArr = values.beginTime;
+        if (timeArr && timeArr.length) {
+          obj['beginTime'] = timeArr[0].format(Const.DAY_FORMAT);
+          obj['endTime'] = timeArr[1].format(Const.DAY_FORMAT);
+        }
+        delete fieldKey['beginTime'];
+
+        // 单独处理 Frequency
+        let cycleTypeId = values.cycleTypeId_autoship;
+        if(cycleTypeId) {
+          obj['cycleTypeId'] = cycleTypeId;
+        }
+        delete fieldKey['cycleTypeId_autoship'];
+
         for (let key in fieldKey) {
           obj[fieldKey[key]] = values[key] || '';
         }
@@ -148,22 +207,22 @@ class BatchExport extends Component<BatchExportProps, any> {
   }
 
   render() {
-    const { selectData } = this.props;
+    const { selectData, title } = this.props;
     return (
       <Card title={<span style={{ color: '#ff1f4e' }}>{RCi18n({ id: 'Public.exportTip' })}</span>} bordered={false}>
         <div style={contentStyle}>
           <div style={{ fontSize: 16, fontWeight: 'bold' }}>Export</div>
           <Radio.Group defaultValue={2}>
             <Radio style={radioStyle} value={1}>
-              All orders (The maximum period is six months)
+              All {title} (The maximum period is six months)
             </Radio>
             <Radio style={radioStyle} value={2}>
-              Search orders
+              Search {title}
             </Radio>
           </Radio.Group>
           <div style={fieldStyle}>{this.getFields()}</div>
         </div>
-        {selectData?.length && (
+        {!!selectData?.length && (
           <div style={contentStyle}>
             <div style={{ fontSize: 16, fontWeight: 'bold' }}>Objects</div>
             <Radio style={radioStyle} defaultChecked>Order</Radio>
@@ -171,7 +230,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           </div>
         )}
         <div>
-          <Button onClick={() => this.onExport()} style={{ marginRight: 30 }}>Cancel</Button>
+          <Button onClick={() => this.props.history.goBack()} style={{ marginRight: 30 }}>Cancel</Button>
           <Button type="primary" onClick={() => this.onExport()}>Export</Button>
         </div>
 
@@ -201,17 +260,10 @@ const contentStyle = {
 
 const styles = {
   formItemStyle: {
-    width: 335
-  },
-  label: {
-    width: 135,
-    textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.65)',
-    backgroundColor: '#fff',
-    cursor: 'text'
+    width: 370
   },
   leftLabel: {
-    width: 135,
+    width: 170,
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',

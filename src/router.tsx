@@ -5,7 +5,7 @@ const routes = [
   { path: '/', exact: true, asyncComponent: () => import('./home') },
   //异步导出
   {
-    path: '/batch-export',
+    path: '/batch-export/:from',
     exact: true,
     asyncComponent: () => import('./batch-export')
   },

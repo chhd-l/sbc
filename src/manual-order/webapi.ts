@@ -20,7 +20,7 @@ export function getCustomerDetails(filterParams = {}) {
 }
 
 export function getGoodsSKUS(filterParams) {
-  return Fetch<TResult>('/goods/skus', {
+  return Fetch<TResult>('/goods/valet/skus', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -100,6 +100,7 @@ export default class AddProductModal extends Component {
       goodsLists: this.state.goodsLists
     });
   }
+  //添加购物车
   async addCarts(row, index) {
     let total = (window as any).goodsCount[this.props.storeId];
     if (row.overCount === total || row.buyCount == row.stcok) {
@@ -124,9 +125,6 @@ export default class AddProductModal extends Component {
       }, 2000);
     }
   }
-  handleClick = e => {
-
-  };
   //选择checkbox
   onChangeCheckbox = (values, item) => {
     let _value = values.target.value
@@ -376,9 +374,9 @@ export default class AddProductModal extends Component {
          <a onClick={this.removeFilter}>Remove all Filters</a>
           </div>
         <div style={{ display: 'flex', marginTop: 20, alignItems: "flex-start" }}>
-          <p>selected：</p>
+          <p style={{marginTop:5}}>selected：</p>
           <div style={{ flex: 1, display: 'flex',flexWrap:'wrap' }}>
-            {selectedFilter.map((item, index) => (<div className="selected-item">
+            {selectedFilter.map((item, index) => (<div className="selected-item" key={item.id}>
               {item.attributeDetailNameEn} <span style={{ marginLeft: 15 }} onClick={(e) => this.handlerDeleteItem(e, index, item.id)}><Icon type="close-circle" theme="filled" /></span>
             </div>))}
 
@@ -387,9 +385,9 @@ export default class AddProductModal extends Component {
 
 
         <ul className="filter-list">
-          {filterList.map(item => (<li style={{ width: '20%' }}>
+          {filterList.map(item => (<li style={{ width: '20%' }} key={item.id}>
             <Dropdown overlay={this.menu(item.attributesValueList || [], checkboxValue)}
-              key={item.id}
+              
               onVisibleChange={(e) => this.handleVisibleChange(e, item)}
               visible={item.visibleDrop}
             >
@@ -416,6 +414,7 @@ export default class AddProductModal extends Component {
               total={total}
               pageSize={pageSize}
               onChange={(pageNum, pageSize) => {
+                console.log(pageNum, pageSize)
                 this.getGoodsSKUSList({ cateType, likeGoodsInfoNo, likeGoodsName, pageNum: pageNum - 1, pageSize, saleableFlag: 1, goodsAttributesValueRelVOList: paramsList });
               }}
             />

@@ -24,6 +24,9 @@ const FormItem = Form.Item;
         emailReminderId:null,
         emailReminderStatus:0,
         emailReminderValue:0,
+        emailPaymentId:null,
+        emailPaymentStatus:0,
+        emailpaymentValue:0,
       },
       loading:false,
     };
@@ -58,7 +61,10 @@ const FormItem = Form.Item;
             return item.configType === 'subscription_next_life_stage';
           });
           let emailReminderConfig = res.context.find((item) => {
-            return item.configType === 'subscription_create_order_error_number';
+            return item.configType === 'subscription_inventory_shortage_error_number';
+          });
+          let emailPaymentConfig = res.context.find((item) => {
+            return item.configType === 'subscription_payment_failure_error_number';
           });
           if (newOrderConfig) {
             settingForm.newOrdersId = newOrderConfig.id;
@@ -79,6 +85,11 @@ const FormItem = Form.Item;
             settingForm.emailReminderId = emailReminderConfig.id;
             settingForm.emailReminderStatus = emailReminderConfig.status;
             settingForm.emailReminderValue = emailReminderConfig.context;
+          }
+          if (emailPaymentConfig) {
+            settingForm.emailPaymentId = emailPaymentConfig.id;
+            settingForm.emailPaymentStatus = emailPaymentConfig.status;
+            settingForm.emailPaymentValue = emailPaymentConfig.context;
           }
           this.setState({
             settingForm,
@@ -115,6 +126,11 @@ const FormItem = Form.Item;
           context: settingForm.emailReminderValue,
           id: settingForm.emailReminderId,
           status: settingForm.emailReminderStatus ? 1 : 0
+        },
+        {
+          context: settingForm.emailPaymentValue,
+          id: settingForm.emailPaymentId,
+          status: settingForm.emailPaymentStatus ? 1 : 0
         }
       ]
     };
@@ -296,6 +312,42 @@ const FormItem = Form.Item;
                       />
                       <span style={{ marginLeft: 10 }}>
                         <FormattedMessage id="Subscription.EmailReminderIntervalsDesc" />
+                      </span>
+                    </div>
+                  </Col>
+                ) : null}
+              </Row>
+              <Row>
+                <Col span={1}>
+                  <Switch
+                    checkedChildren={<FormattedMessage id="Subscription.On" />}
+                    unCheckedChildren={<FormattedMessage id="Subscription.Off" />}
+                    checked={settingForm.emailPaymentStatus ? true : false}
+                    onChange={(value) =>
+                      this.settingFormChange({
+                        field: 'emailPaymentStatus',
+                        value: value
+                      })
+                    }
+                  />
+                </Col>
+                {settingForm.emailPaymentStatus ? (
+                  <Col span={20}>
+                    <div style={styles.inputStyle}>
+                      <InputNumber
+                        precision={0}
+                        min={0}
+                        max={9999}
+                        value={settingForm.emailPaymentValue}
+                        onChange={(value) =>
+                          this.settingFormChange({
+                            field: 'emailPaymentValue',
+                            value: value
+                          })
+                        }
+                      />
+                      <span style={{ marginLeft: 10 }}>
+                        <FormattedMessage id="Subscription.EmailPaymentIntervalsDesc" />
                       </span>
                     </div>
                   </Col>

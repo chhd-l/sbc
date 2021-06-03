@@ -54,7 +54,7 @@ export default class SearchHead extends React.Component<any, any> {
               onFormFieldChange('couponPurchaseType', value);
             }}
           >
-            <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option>
+            <Option value={null}><FormattedMessage id="Marketing.Alltype" /></Option>
             <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
             <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
             <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>

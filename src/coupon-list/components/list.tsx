@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Relax } from 'plume2';
-import { AuthWrapper, noop, history, cache } from 'qmkit';
+import { AuthWrapper, noop, history, cache, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Popconfirm, Table as DataGrid } from 'antd';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
+const PROMOTION_TYPE = {
+  0: RCi18n({id: 'Marketing.All'}),
+  1: RCi18n({id: 'Marketing.Autoship'}),
+  2: RCi18n({id: 'Marketing.Clubpromotion'}),
+  3: RCi18n({id: 'Marketing.Singlepurchase'})
+};
 @Relax
 export default class List extends React.Component<any, any> {
   props: {
@@ -52,7 +58,11 @@ export default class List extends React.Component<any, any> {
           }}
         >
           <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" />
-          <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.PromotionType" />} dataIndex="couponPurchaseType" key="couponPurchaseType" />
+          <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.PromotionType" />} dataIndex="couponPurchaseType" key="couponPurchaseType"
+                           render={(couponPurchaseType) => {
+                             return PROMOTION_TYPE[couponPurchaseType];
+                           }}
+          />
           <DataGrid.Column title={`Face value(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`} dataIndex="denominationStr" key="denominationStr" />
           <DataGrid.Column title={<FormattedMessage id="Marketing.ValidPerio" />} dataIndex="validity" key="validity" />
           {/* <DataGrid.Column

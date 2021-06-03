@@ -1022,11 +1022,13 @@ class FullDiscountForm extends React.Component<any, any> {
     this.onBeanChange({
       // publicStatus: 1,
       promotionType: e.target.value,
-      subType: e.target.value === 0 || e.target.value === 3? 2 : 7
+      subType: e.target.value === 0 || e.target.value === 3? 2 : 7,
+      isSuperimposeSubscription: 1
     });
     this.props.form.setFieldsValue({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 2 : 7
+      subType:  e.target.value === 0 || e.target.value === 3? 2 : 7,
+      isSuperimposeSubscription: 1
     })
     initDefualtLevelList()
   };

@@ -6,7 +6,7 @@ import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Appstore from './store';
 import CouponBasicInfo from './components/coupon-basic-info';
-
+import './index.less'
 @StoreProvider(Appstore, { debug: __DEV__ })
 export default class CouponInfo extends Component<any, any> {
   store: Appstore;

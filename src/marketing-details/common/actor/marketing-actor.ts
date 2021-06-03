@@ -36,8 +36,8 @@ export default class MarketingActor extends Actor {
       scopeType: null,
       storeCateIds: [],
       currentCategary: null,
-      currentAttribute: null
-
+      currentAttribute: null,
+      isSuperimposeSubscription: 1//未勾选
     };
   }
 

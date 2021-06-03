@@ -1008,11 +1008,13 @@ class FullReductionForm extends React.Component<any, any> {
     const { initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      isSuperimposeSubscription: 1
     });
     this.props.form.setFieldsValue({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      isSuperimposeSubscription: 1
     })
     initReductionDefualtLevelList()
   };

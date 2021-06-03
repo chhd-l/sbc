@@ -3,7 +3,7 @@ import { Relax, IMap } from 'plume2';
 import { cache, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-import { Form, Table } from 'antd';
+import { Checkbox, Col, Form, Row, Table } from 'antd';
 import { IList } from 'typings/globalType';
 import { Const, QMFloat } from 'qmkit';
 import styled from 'styled-components';
@@ -67,6 +67,14 @@ const columns = [
 const style = {
   marginLeft: 20
 }
+const checkboxStyle = {
+
+
+}
+const checkboxContainerStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+}
 const PROMOTION_TYPE = {
   0:  RCi18n({
     id: 'Marketing.All'
@@ -87,7 +95,6 @@ const PROMOTION_TYPE = {
 export default class CouponBasicInfo extends Component<any, any> {
   props: {
     relaxProps?: {
-      couponPurchaseType: any;
       // 优惠券分类
       couponCates: IList;
       // 优惠券信息
@@ -107,12 +114,12 @@ export default class CouponBasicInfo extends Component<any, any> {
     skuBrands: 'skuBrands',
     skuCates: 'skuCates',
     skus: 'skus',
-    couponPurchaseType: 'couponPurchaseType',
   };
 
   render() {
-    const { couponCates, coupon, skuBrands, skuCates, skus, couponPurchaseType } = this.props.relaxProps;
-    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc } = coupon.toJS();
+    const { couponCates, coupon, skuBrands, skuCates, skus } = this.props.relaxProps;
+    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription} = coupon.toJS();
+   debugger
     return (
       <FormDiv>
         <Form>
@@ -120,7 +127,16 @@ export default class CouponBasicInfo extends Component<any, any> {
             <div style={style}>{couponName}</div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType" />}>
-            <div style={style}>{PROMOTION_TYPE[couponPurchaseType]}</div>
+            <div style={checkboxContainerStyle}>{PROMOTION_TYPE[couponPurchaseType]}
+              {
+                couponPurchaseType === 0 &&
+                <Checkbox className="checkboxStyle"checked={isSuperimposeSubscription === 0} disabled={true}>
+                  <div >
+                    <FormattedMessage id="Marketing.Idontwanttocumulate" />
+                  </div>
+                </Checkbox>
+              }
+            </div>
           </FormItem>
           {/* <FormItem {...formItemLayout} label="Coupon classify">
             <div className="bubbleBox">

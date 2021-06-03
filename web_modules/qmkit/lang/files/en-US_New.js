@@ -55,7 +55,9 @@ export default {
        'Order.request':'Request',
        'Order.response':'Response',
     },
-    Subscription: {},
+    Subscription: {
+        'Subscription.EmailPaymentIntervalsDesc':'Attemtps between first and last emails due to payment issues',
+    },
     Appointment: {
         'Appointment.list':'Appointment list',
         'Appointment.No.':'Appointment no.',

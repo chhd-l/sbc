@@ -52,6 +52,7 @@ export default class List extends React.Component<any, any> {
           }}
         >
           <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" />
+          <DataGrid.Column className="max-td" title={<FormattedMessage id="Marketing.PromotionType" />} dataIndex="couponPurchaseType" key="couponPurchaseType" />
           <DataGrid.Column title={`Face value(${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)})`} dataIndex="denominationStr" key="denominationStr" />
           <DataGrid.Column title={<FormattedMessage id="Marketing.ValidPerio" />} dataIndex="validity" key="validity" />
           {/* <DataGrid.Column

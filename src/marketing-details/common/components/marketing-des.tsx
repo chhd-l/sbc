@@ -40,10 +40,10 @@ const SUB_TYPE = {
 };
 const PROMOTION_TYPE = {
   0:  RCi18n({
-    id: 'Marketing.NormalPromotion'
+    id: 'Marketing.All'
   }),
   1:  RCi18n({
-    id: 'Marketing.SubscriptionPromotion'
+    id: 'Marketing.Autoship'
   }),
   2:
     RCi18n({

@@ -109,6 +109,7 @@ class CouponInfoForm extends Component<any, any> {
       attributesList: any;
 
       attributeValueIds: any;
+      couponPurchaseType: any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -161,6 +162,7 @@ class CouponInfoForm extends Component<any, any> {
     storeCateIds: 'storeCateIds',
     attributesList: 'attributesList',
     attributeValueIds: 'attributeValueIds',
+    couponPurchaseType: 'couponPurchaseType',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -348,7 +350,8 @@ class CouponInfoForm extends Component<any, any> {
       couponPromotionType,
       couponDiscount,
       attributesList,
-      attributeValueIds
+      attributeValueIds,
+      couponPurchaseType
     } = this.props.relaxProps;
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
@@ -383,6 +386,24 @@ class CouponInfoForm extends Component<any, any> {
                 </RadioGroup>
               </>
             )}
+          </FormItem>
+          <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Radio.Group
+                onChange={(e) => {
+                  fieldsValue({
+                    field: 'couponPurchaseType',
+                    value: e.target.value
+                  });
+                }}
+                value={couponPurchaseType}>
+                <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+                <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
+                <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+                <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+              </Radio.Group>
+            </div>
           </FormItem>
           <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
           <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponName" />} required={true}>

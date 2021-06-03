@@ -63,7 +63,8 @@ export default class CouponInfoActor extends Actor {
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
       couponDiscount: null,
       attributesList: [],
-      attributeValueIds: null
+      attributeValueIds: null,
+      couponPurchaseType: 0
     };
   }
   /**

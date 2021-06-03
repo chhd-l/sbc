@@ -28,7 +28,8 @@ export default class CouponDetailActor extends Actor {
         // 优惠券说明
         couponDesc: '',
         // 优惠券类型 0通用券 1运费券 2店铺券
-        couponType: ''
+        couponType: '',
+        couponPurchaseType: 0
       },
       // 优惠券分类
       couponCates: [],

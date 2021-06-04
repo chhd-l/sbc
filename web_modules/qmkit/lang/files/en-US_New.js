@@ -59,7 +59,9 @@ export default {
        'Order.installmentNumber': 'Installment number',
        'Order.paymentSurcharge': 'Payment surcharge'
     },
-    Subscription: {},
+    Subscription: {
+        'Subscription.EmailPaymentIntervalsDesc':'Attemtps between first and last emails due to payment issues',
+    },
     Appointment: {
         'Appointment.list':'Appointment list',
         'Appointment.No.':'Appointment no.',

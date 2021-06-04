@@ -2046,7 +2046,8 @@ export default {
         "Setting.closedHours":"Closed Hours",
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",
-        "Setting.add": "Add"
+        "Setting.add": "Add",
+        "Setting.opertaor": "Opertaor"
         
     },
     Menu: {

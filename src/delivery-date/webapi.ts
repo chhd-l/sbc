@@ -7,6 +7,6 @@ type TResult = {
 };
 
 export function GetAllCities() {
-  return Fetch<TResult>('/system-city/query-all', {
+  return Fetch<TResult>('/systemRegion/findByStoreId', {
     method: 'GET'});
 }

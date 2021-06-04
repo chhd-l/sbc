@@ -33,20 +33,29 @@ const index = () => {
   });
   const [cities, setCities] = useState(deliveryForm.city);
   const [days] = useState([1, 2, 3, 4, 5]);
+  const [allSelectWeeks, setAllSelectWeeks] = useState([]);
 
   useEffect(() => {
     console.log(deliveryForm);
   }, [deliveryForm]);
+
+  useEffect(() => {
+    let newSelectWeeks = [];
+    deliveryForm.openDate.map((item) => {
+      newSelectWeeks.push(...item.weeks);
+    });
+    setAllSelectWeeks(newSelectWeeks);
+  }, [deliveryForm.openDate]);
 
   function getAllCities(isOpen) {
     if (isOpen) {
       webapi.GetAllCities().then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          const allCities = res.context.systemCityVO.map((x) => {
+          const allCities = res.context.systemRegions.map((x) => {
             return {
-              cityNo: x.cityFias,
-              cityName: x.cityName
+              cityNo: x.regionFias,
+              cityName: x.regionName
             };
           });
           setCities(allCities);
@@ -67,7 +76,7 @@ const index = () => {
   }
 
   function addOpenTable() {
-    const maxSort = Math.max(...deliveryForm.openDate.map(x=>[x.sort]))
+    const maxSort = Math.max(...deliveryForm.openDate.map((x) => [x.sort]));
     const newOpenDate = [
       ...deliveryForm.openDate,
       {
@@ -91,8 +100,20 @@ const index = () => {
     handleChange('openDate', newOpenDate);
   }
 
+  function editOpenTable(openTableItem) {
+    const newOpenDate = [];
+    deliveryForm.openDate.map((item) => {
+      if (item.sort === openTableItem.sort) {
+        newOpenDate.push(openTableItem);
+      } else {
+        newOpenDate.push(item);
+      }
+    });
+    handleChange('openDate', newOpenDate);
+  }
+
   function addCloseTable() {
-    const maxSort = Math.max(...deliveryForm.closeDate.map(x=>[x.sort]))
+    const maxSort = Math.max(...deliveryForm.closeDate.map((x) => [x.sort]));
     const newCloseDate = [
       ...deliveryForm.closeDate,
       {
@@ -124,7 +145,11 @@ const index = () => {
       <div className="container-search">
         <Headline title={<FormattedMessage id="Setting.orderDeliveryDateSettings" />} />
       </div>
-      <div className="container" id="deliveryDateSettings" style={{ height: '100vh', background: '#fff' }}>
+      <div
+        className="container"
+        id="deliveryDateSettings"
+        style={{ height: '100vh', background: '#fff' }}
+      >
         <Row>
           <Col span={4}>
             <p>
@@ -132,7 +157,10 @@ const index = () => {
             </p>
           </Col>
           <Col span={20}>
-            <Radio value={deliveryForm.deliveryOption} onChange={(e) => handleChange('deliveryOption', e.target.value)}>
+            <Radio
+              value={deliveryForm.deliveryOption}
+              onChange={(e) => handleChange('deliveryOption', e.target.value)}
+            >
               {<FormattedMessage id="Setting.homeDelivery" />}
             </Radio>
           </Col>
@@ -213,7 +241,13 @@ const index = () => {
         </Row>
         <Row>
           {deliveryForm.openDate.map((item, index) => (
-            <OpenTable openDate={item} key={index} handleChange={handleChange} deleteOpenTable={deleteOpenTable} />
+            <OpenTable
+              allSelectWeeks={allSelectWeeks}
+              openDate={item}
+              key={index}
+              editOpenTable={editOpenTable}
+              deleteOpenTable={deleteOpenTable}
+            />
           ))}
         </Row>
         <Row style={{ marginBottom: 0 }}>
@@ -230,7 +264,12 @@ const index = () => {
         </Row>
         <Row>
           {deliveryForm.closeDate.map((item, index) => (
-            <CloseTable closeDate={item} key={index} handleChange={handleChange} deleteCloseTable={deleteCloseTable}/>
+            <CloseTable
+              closeDate={item}
+              key={index}
+              handleChange={handleChange}
+              deleteCloseTable={deleteCloseTable}
+            />
           ))}
         </Row>
       </div>

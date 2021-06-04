@@ -3,10 +3,41 @@
     margin-bottom: 20px;
   }
   p {
-   font-weight: 700;
-   font-size: 13px;
+    font-weight: 700;
+    font-size: 13px;
   }
   p.center {
     margin-top: 7px;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 20px;
+    thead {
+      border: 1px solid rgb(232, 232, 232);
+      background: rgb(250, 250, 250);
+      th {
+        padding: 6px;
+        text-align: center;
+        font-size: 13px;
+      }
+    }
+    tbody {
+      td {
+        border: 1px solid rgb(232, 232, 232);
+        padding: 6px;
+        text-align: center;
+        font-size: 13px;
+        span {
+            display: inline-block;
+            padding: 0 2px;
+        }
+      }
+      .anticon-plus-square {
+        font-size: 20px;
+        margin-left: 7px;
+        vertical-align: middle;
+      }
+    }
   }
 }

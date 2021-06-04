@@ -6,11 +6,7 @@ type TResult = {
   context: any;
 };
 
-export function GetShipSettingList(filterParams = {}) {
-  return Fetch<TResult>('/ShipSetting/list', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
+export function GetAllCities() {
+  return Fetch<TResult>('/system-city/query-all', {
+    method: 'GET'});
 }

@@ -28,8 +28,12 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
         orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
         paymentWhen: 'None'
       },
       paymentCashForm: {
@@ -41,8 +45,12 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
         orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
         paymentWhen: 'None'
       },
       unlimitedForm: {
@@ -54,8 +62,12 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
       },
       pcashList: [],
       ponlineList: [],
@@ -77,10 +89,7 @@ class OrderSetting extends Component<any, any> {
     });
   };
 
-  paymentOnlineFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
-    }
+  paymentOnlineFormChange = ({ field, value }) => {   
     let data = this.state.paymentOnlineForm;
     data[field] = value;
     this.setState({
@@ -88,9 +97,6 @@ class OrderSetting extends Component<any, any> {
     });
   };
   paymentCashFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
-    }
     let data = this.state.paymentCashForm;
     data[field] = value;
     this.setState({
@@ -108,9 +114,6 @@ class OrderSetting extends Component<any, any> {
     });
   };
   unlimitedFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
-    }
     let data = this.state.unlimitedForm;
     data[field] = value;
     this.setState({
@@ -120,7 +123,7 @@ class OrderSetting extends Component<any, any> {
 
   getOrderSettingConfig = () => {
     this.setState({
-      loading:true
+      loading: true
     })
     webapi
       .getOrderSettingConfig()
@@ -131,6 +134,7 @@ class OrderSetting extends Component<any, any> {
           let pcashList = res.context.pcashList;
           let ponlineList = res.context.ponlineList;
           let unLimitedList = res.context.unLimitedList;
+
           ponlineList.map((item) => {
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {
@@ -156,11 +160,23 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticReviewValue = context.day;
             }
+            // 自动跳过物流信息采集
+            if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+              paymentOnlineForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAutomaticSkipValue = context.day;
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               paymentOnlineForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticConfirmationValue = context.day;
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              paymentOnlineForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAutomaticTriggerValue = context.day;
             }
           });
 
@@ -189,11 +205,23 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentCashForm.orderAutomaticReviewValue = context.day;
             }
+            // 自动跳过物流信息采集
+            if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+              paymentCashForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentCashForm.orderAutomaticSkipValue = context.day;
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               paymentCashForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentCashForm.orderAutomaticConfirmationValue = context.day;
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              paymentCashForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentCashForm.orderAutomaticTriggerValue = context.day;
             }
           });
 
@@ -222,11 +250,24 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               unlimitedForm.orderAutomaticReviewValue = context.day;
             }
+              // 自动跳过物流信息采集
+            if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+              unlimitedForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              unlimitedForm.orderAutomaticSkipValue = context.day;
+
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               unlimitedForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               unlimitedForm.orderAutomaticConfirmationValue = context.day;
+            }
+              //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              unlimitedForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              unlimitedForm.orderAutomaticTriggerValue = context.day;
             }
           });
 
@@ -237,20 +278,20 @@ class OrderSetting extends Component<any, any> {
             paymentOnlineForm,
             paymentCashForm,
             unlimitedForm,
-            loading:false
+            loading: false
           });
         }
-        else{
+        else {
           this.setState({
-            loading:false
+            loading: false
           })
         }
       })
       .catch((err) => {
         this.setState({
-          loading:false
+          loading: false
         })
-       });
+      });
   };
 
   updateOrderSettingConfig = () => {
@@ -288,11 +329,27 @@ class OrderSetting extends Component<any, any> {
         };
         item.context = JSON.stringify(context);
       }
+      // 自动跳过物流信息采集
+      if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+        item.status = +paymentOnlineForm.orderAutomaticSkipStatus;
+        let context = {
+          day: paymentOnlineForm.orderAutomaticSkipValue
+        };
+        item.context =JSON.stringify(context);
+      }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +paymentOnlineForm.orderAutomaticConfirmationStatus;
         let context = {
           day: paymentOnlineForm.orderAutomaticConfirmationValue
+        };
+        item.context = JSON.stringify(context);
+      }
+      //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +paymentOnlineForm.orderAutomaticTriggerStatus;
+        let context = {
+          day: paymentOnlineForm.orderAutomaticTriggerValue
         };
         item.context = JSON.stringify(context);
       }
@@ -331,11 +388,27 @@ class OrderSetting extends Component<any, any> {
         };
         item.context = JSON.stringify(context);
       }
+      // 自动跳过物流信息采集
+      if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+        item.status = +paymentCashForm.orderAutomaticSkipStatus;
+        let context = {
+          day: paymentCashForm.orderAutomaticSkipValue
+        };
+        item.context =JSON.stringify(context);
+      }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +paymentCashForm.orderAutomaticConfirmationStatus;
         let context = {
           day: paymentCashForm.orderAutomaticConfirmationValue
+        };
+        item.context = JSON.stringify(context);
+      }
+      //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +paymentCashForm.orderAutomaticTriggerStatus;
+        let context = {
+          day: paymentCashForm.orderAutomaticTriggerValue
         };
         item.context = JSON.stringify(context);
       }
@@ -374,11 +447,27 @@ class OrderSetting extends Component<any, any> {
         };
         item.context = JSON.stringify(context);
       }
+      // 自动跳过物流信息采集
+      if(item.configType ==='order_setting_refund_auto_fill_logic_info'){
+        item.status = +unlimitedForm.orderAutomaticSkipStatus;
+        let context = {
+          day: unlimitedForm.orderAutomaticSkipValue
+        };
+        item.context =JSON.stringify(context);
+      }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +unlimitedForm.orderAutomaticConfirmationStatus;
         let context = {
           day: unlimitedForm.orderAutomaticConfirmationValue
+        };
+        item.context = JSON.stringify(context);
+      }
+       //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +unlimitedForm.orderAutomaticTriggerStatus;
+        let context = {
+          day: unlimitedForm.orderAutomaticTriggerValue
         };
         item.context = JSON.stringify(context);
       }
@@ -390,32 +479,33 @@ class OrderSetting extends Component<any, any> {
       unLimitedList: unLimitedList
     };
     this.setState({
-      btnLoading:true
+      btnLoading: true
     })
     webapi
       .updateOrderSettingConfig(params)
       .then((data) => {
+
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           message.success(res.message || RCi18n({ id: 'Order.SaveSuccessful' }));
           this.setState({
-            btnLoading:false
+            btnLoading: false
           })
-        }else{
+        } else {
           this.setState({
-            btnLoading:false
+            btnLoading: false
           })
         }
       })
-      .catch((err) => { 
+      .catch((err) => {
         this.setState({
-          btnLoading:false
+          btnLoading: false
         })
       });
   };
 
   render() {
-    const { title, loading,btnLoading, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
+    const { title, loading, btnLoading, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
     const description = (
       <div>
         <p><FormattedMessage id="Order.Ordersution" /></p>
@@ -427,7 +517,7 @@ class OrderSetting extends Component<any, any> {
     );
 
     return (
-      <AuthWrapper functionName="f_order_setting_1"> 
+      <AuthWrapper functionName="f_order_setting_1">
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
 
           <BreadCrumb />
@@ -611,7 +701,7 @@ class OrderSetting extends Component<any, any> {
                               <div style={styles.inputStyle}>
                                 <InputNumber
                                   precision={0}
-                                  min={1}
+                                  min={0}
                                   max={9999}
                                   value={paymentOnlineForm.orderAutomaticReviewValue}
                                   onChange={(value) =>
@@ -627,7 +717,42 @@ class OrderSetting extends Component<any, any> {
                           ) : null}
                         </Row>
                       </FormItem>
-
+                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={paymentOnlineForm.orderAutomaticSkipStatus}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderAutomaticSkipStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
+                          {paymentOnlineForm.orderAutomaticSkipStatus ? (
+                            <Col span={20}>
+                              <div style={styles.inputStyle}>
+                                <InputNumber
+                                  precision={0}
+                                  min={0}
+                                  max={9999}
+                                  value={paymentOnlineForm.orderAutomaticSkipValue}
+                                  onChange={(value) =>
+                                    this.paymentOnlineFormChange({
+                                      field: 'orderAutomaticSkipValue',
+                                      value: value
+                                    })
+                                  }
+                                />
+                                <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                              </div>
+                            </Col>
+                          ) : null}
+                        </Row>
+                      </FormItem>
                       <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                         <Row>
                           <Col span={1}>
@@ -648,7 +773,7 @@ class OrderSetting extends Component<any, any> {
                               <div style={styles.inputStyle}>
                                 <InputNumber
                                   precision={0}
-                                  min={1}
+                                  min={0}
                                   max={9999}
                                   value={paymentOnlineForm.orderAutomaticConfirmationValue}
                                   onChange={(value) =>
@@ -662,6 +787,43 @@ class OrderSetting extends Component<any, any> {
                                   {' '}
                                   <FormattedMessage id="Order.AfterDaysAutomatically" />
                                 </span>
+                              </div>
+                            </Col>
+                          ) : null}
+                        </Row>
+                      </FormItem>
+
+                      <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={paymentOnlineForm.orderAutomaticTriggerStatus}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderAutomaticTriggerStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
+                          {paymentOnlineForm.orderAutomaticTriggerStatus ? (
+                            <Col span={20}>
+                              <div style={styles.inputStyle}>
+                                <InputNumber
+                                  precision={0}
+                                  min={0}
+                                  max={9999}
+                                  value={paymentOnlineForm.orderAutomaticTriggerValue}
+                                  onChange={(value) =>
+                                    this.paymentOnlineFormChange({
+                                      field: 'orderAutomaticTriggerValue',
+                                      value: value
+                                    })
+                                  }
+                                />
+                                <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
                               </div>
                             </Col>
                           ) : null}
@@ -802,7 +964,7 @@ class OrderSetting extends Component<any, any> {
                               <div style={styles.inputStyle}>
                                 <InputNumber
                                   precision={0}
-                                  min={1}
+                                  min={0}
                                   max={9999}
                                   value={paymentCashForm.orderAutomaticReviewValue}
                                   onChange={(value) =>
@@ -818,7 +980,42 @@ class OrderSetting extends Component<any, any> {
                           ) : null}
                         </Row>
                       </FormItem>
-
+                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={paymentCashForm.orderAutomaticSkipStatus}
+                              onChange={(value) =>
+                                this.paymentCashFormChange({
+                                  field: 'orderAutomaticSkipStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
+                          {paymentCashForm.orderAutomaticSkipStatus ? (
+                            <Col span={20}>
+                              <div style={styles.inputStyle}>
+                                <InputNumber
+                                  precision={0}
+                                  min={0}
+                                  max={9999}
+                                  value={paymentCashForm.orderAutomaticSkipValue}
+                                  onChange={(value) =>
+                                    this.paymentCashFormChange({
+                                      field: 'orderAutomaticSkipValue',
+                                      value: value
+                                    })
+                                  }
+                                />
+                                <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                              </div>
+                            </Col>
+                          ) : null}
+                        </Row>
+                      </FormItem>
                       <FormItem label={<FormattedMessage id="Order.AutomaticReceipt" />}>
                         <Row>
                           <Col span={1}>
@@ -839,7 +1036,7 @@ class OrderSetting extends Component<any, any> {
                               <div style={styles.inputStyle}>
                                 <InputNumber
                                   precision={0}
-                                  min={1}
+                                  min={0}
                                   max={9999}
                                   value={paymentCashForm.orderAutomaticConfirmationValue}
                                   onChange={(value) =>
@@ -853,6 +1050,42 @@ class OrderSetting extends Component<any, any> {
                                   {' '}
                                   <FormattedMessage id="Order.AfterTheMerchant" />
                                 </span>
+                              </div>
+                            </Col>
+                          ) : null}
+                        </Row>
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={paymentCashForm.orderAutomaticTriggerStatus}
+                              onChange={(value) =>
+                                this.paymentCashFormChange({
+                                  field: 'orderAutomaticTriggerStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
+                          {paymentCashForm.orderAutomaticTriggerStatus ? (
+                            <Col span={20}>
+                              <div style={styles.inputStyle}>
+                                <InputNumber
+                                  precision={0}
+                                  min={0}
+                                  max={9999}
+                                  value={paymentCashForm.orderAutomaticTriggerValue}
+                                  onChange={(value) =>
+                                    this.paymentCashFormChange({
+                                      field: 'orderAutomaticTriggerValue',
+                                      value: value
+                                    })
+                                  }
+                                />
+                                <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
                               </div>
                             </Col>
                           ) : null}
@@ -900,7 +1133,6 @@ class OrderSetting extends Component<any, any> {
                       ) : null}
                     </Row>
                   </FormItem>
-
                   <FormItem label={<FormattedMessage id="Order.Automatically" />}>
                     <Row>
                       <Col span={1}>
@@ -995,7 +1227,7 @@ class OrderSetting extends Component<any, any> {
                           <div style={styles.inputStyle}>
                             <InputNumber
                               precision={0}
-                              min={1}
+                              min={0}
                               max={9999}
                               value={unlimitedForm.orderAutomaticReviewValue}
                               onChange={(value) =>
@@ -1011,7 +1243,42 @@ class OrderSetting extends Component<any, any> {
                       ) : null}
                     </Row>
                   </FormItem>
-
+                  <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                    <Row>
+                      <Col span={1}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={unlimitedForm.orderAutomaticSkipStatus}
+                          onChange={(value) =>
+                            this.unlimitedFormChange({
+                              field: 'orderAutomaticSkipStatus',
+                              value: value
+                            })
+                          }
+                        />
+                      </Col>
+                      {unlimitedForm.orderAutomaticSkipStatus ? (
+                        <Col span={20}>
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={0}
+                              max={9999}
+                              value={unlimitedForm.orderAutomaticSkipValue}
+                              onChange={(value) =>
+                                this.unlimitedFormChange({
+                                  field: 'orderAutomaticSkipValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                          </div>
+                        </Col>
+                      ) : null}
+                    </Row>
+                  </FormItem>
                   <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                     <Row>
                       <Col span={1}>
@@ -1032,7 +1299,7 @@ class OrderSetting extends Component<any, any> {
                           <div style={styles.inputStyle}>
                             <InputNumber
                               precision={0}
-                              min={1}
+                              min={0}
                               max={9999}
                               value={unlimitedForm.orderAutomaticConfirmationValue}
                               onChange={(value) =>
@@ -1051,6 +1318,42 @@ class OrderSetting extends Component<any, any> {
                       ) : null}
                     </Row>
                   </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={unlimitedForm.orderAutomaticTriggerStatus}
+                              onChange={(value) =>
+                                this.unlimitedFormChange({
+                                  field: 'orderAutomaticTriggerStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
+                          {unlimitedForm.orderAutomaticTriggerStatus ? (
+                            <Col span={20}>
+                              <div style={styles.inputStyle}>
+                                <InputNumber
+                                  precision={0}
+                                  min={0}
+                                  max={9999}
+                                  value={unlimitedForm.orderAutomaticTriggerValue}
+                                  onChange={(value) =>
+                                    this.unlimitedFormChange({
+                                      field: 'orderAutomaticTriggerValue',
+                                      value: value
+                                    })
+                                  }
+                                />
+                                <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
+                              </div>
+                            </Col>
+                          ) : null}
+                        </Row>
+                      </FormItem>
                 </Form>
               </TabPane>
               <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">

@@ -48,7 +48,7 @@ export default {
   'task.Pleaseselectstarttime': 'Merci de sélectionner une date de début',
   'task.Pleaseselectduetime': 'Merci de sélectionner une date de fin',
   'task.Reminderbeforeduetime':"Alerte avant la date d'échéance",
-  'task.Pleaseinputpetowneraccountorname':'Please input pet owner account or name',
+  'task.Pleaseinputpetowneraccountorname':"Merci de rajouter un compte d'un possesseur ou un nom",
   'task.Tobeadd':'À rajouter',
   'task.AllActivity':'Toutes les activités',
   'task.AuditLog':"Journal d'audit",

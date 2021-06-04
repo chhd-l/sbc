@@ -57,7 +57,8 @@ export default {
        'Order.isInstallment': 'Is Installment',
        'Order.installmentFee': 'Installment fee',
        'Order.installmentNumber': 'Installment number',
-       'Order.paymentSurcharge': 'Payment surcharge'
+       'Order.paymentSurcharge': 'Payment surcharge',
+       'Order.region': 'Region'
     },
     Subscription: {
         'Subscription.EmailPaymentIntervalsDesc':'Attemtps between first and last emails due to payment issues',

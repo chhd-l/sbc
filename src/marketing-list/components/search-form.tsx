@@ -75,9 +75,9 @@ class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value=""><FormattedMessage id="Marketing.All" /></Option>
-                <Option value="0"><FormattedMessage id="Marketing.NormalPromotion" /></Option>
-                <Option value="1"><FormattedMessage id="Marketing.SubscriptionPromotion" /></Option>
+                <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
                 <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>
                 <Option value="3"><FormattedMessage id="Marketing.Singlepurchase" /></Option>
                 {/* <Option value="4">满金额赠</Option>

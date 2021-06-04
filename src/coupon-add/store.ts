@@ -60,7 +60,9 @@ export default class AppStore extends Store {
         segmentIds,
         couponPromotionType,
         couponDiscount,
-        attributeValueIds
+        attributeValueIds,
+        couponPurchaseType,
+        isSuperimposeSubscription
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -85,7 +87,9 @@ export default class AppStore extends Store {
         segmentIds,
         couponPromotionType,
         couponDiscount: couponDiscount * 10.0,
-        attributeValueIds
+        attributeValueIds,
+        couponPurchaseType,
+        isSuperimposeSubscription
       });
       this.dispatch('loading:end');
     }
@@ -221,7 +225,9 @@ export default class AppStore extends Store {
       chooseCateIds,
       couponDesc,
       chooseSkuIds,
-      attributeValueIds
+      attributeValueIds,
+      couponPurchaseType,
+      isSuperimposeSubscription
     } = this.state().toJS();
 
     let params = {
@@ -238,7 +244,9 @@ export default class AppStore extends Store {
       couponDesc,
       couponPromotionType,
       couponDiscount: couponDiscount / 10.0,
-      attributeValueIds
+      attributeValueIds,
+      couponPurchaseType,
+      isSuperimposeSubscription
     } as any;
 
     if (rangeDayType === 0) {

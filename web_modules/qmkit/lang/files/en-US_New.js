@@ -412,7 +412,7 @@ export default {
         "Product.Attributevalueisinput": "Attribute value' is input from other system, which can not be modified, but you can modify 'display name'. If you want to modify 'attribute value', you could contact us.",
         "Product.Repair index": "Repair index",
         "Product.Rebuild index": "Rebuild index",
-        "Product.Rebuild index": "Index operation",
+        "Product.Index operation": "Index operation",
         "Product.Description name": "Description name",
         "Product.Defaultautoshipfrequency": "Default autoship frequency",
         "Product.deletethisfrequency": "Are you sure you want to delete this frequency?",

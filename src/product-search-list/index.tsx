@@ -604,7 +604,7 @@ export default class ProductSearchList extends React.Component<any, any> {
                 </Button>
                 <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
                   <Button>
-                  <FormattedMessage id="Product.Rebuild index" />
+                  <FormattedMessage id="Product.Index operation" />
                     <Icon type="down" />
                   </Button>
                 </Dropdown>

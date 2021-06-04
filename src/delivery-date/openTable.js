@@ -5,6 +5,9 @@ import moment from 'moment';
 
 const format = 'HH:mm';
 const openTable = (props) => {
+  function weekCheck(){
+    props.openDate.weeks
+  }
   return (
     <table>
       <thead>

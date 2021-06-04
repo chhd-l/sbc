@@ -260,9 +260,8 @@ class ListView extends React.Component<any, any> {
         const id = v.get('id');
         // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        debugger
         const tradePriceObject = v.get('tradePrice') ? (v.get('tradePrice').toJS() as any) : {};
-        const installmentPrice= tradePriceObject.installmentPrice;
+        const installmentPrice = tradePriceObject.installmentPrice;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
           v
@@ -506,8 +505,10 @@ class ListView extends React.Component<any, any> {
                     </td>
                     <td style={{ width: '18%' }}>
                       {/* Amount */}
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
-                      {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null}
+                      {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
+                      {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null} */}
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(2) : tradePrice.toFixed(2)}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>

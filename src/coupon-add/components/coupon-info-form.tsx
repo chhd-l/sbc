@@ -802,7 +802,8 @@ class CouponInfoForm extends Component<any, any> {
                       callback();
                     }
                   }
-                ]
+                ],
+                initialValue: storeCateValues
               })(
                 <TreeSelect
                   id="storeCateIds"
@@ -851,7 +852,8 @@ class CouponInfoForm extends Component<any, any> {
                       callback();
                     }
                   }
-                ]
+                ],
+                initialValue: attributeDefaultValue
               })(
                 <TreeSelect
                   id="attributeValueIds"

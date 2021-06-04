@@ -776,7 +776,6 @@ class FullDiscountForm extends React.Component<any, any> {
         {marketingBean.get('scopeType') === 3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
             {getFieldDecorator('attributeValueIds', {
-              initialValue: attributeDefaultValue,
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -791,7 +790,8 @@ class FullDiscountForm extends React.Component<any, any> {
                     callback();
                   }
                 }
-              ]
+              ],
+              initialValue: attributeDefaultValue
             })(
               <TreeSelect
                 id="attributeValueIds"

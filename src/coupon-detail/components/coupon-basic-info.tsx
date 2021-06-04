@@ -27,7 +27,7 @@ const FormDiv = styled.div`
   }
 `;
 const FormItem = Form.Item;
-
+const { Column } = Table;
 const formItemLayout = {
   labelCol: {
     span: 3
@@ -119,7 +119,7 @@ export default class CouponBasicInfo extends Component<any, any> {
   render() {
     const { couponCates, coupon, skuBrands, skuCates, skus } = this.props.relaxProps;
     const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription} = coupon.toJS();
-   debugger
+
     return (
       <FormDiv>
         <Form>
@@ -157,7 +157,28 @@ export default class CouponBasicInfo extends Component<any, any> {
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
             <div style={style}>
-              {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
+              {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
+
+              {/*{*/}
+              {/*  scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :*/}
+              {/*    scopeType === 1 ?*/}
+              {/*      <Table dataSource={dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">*/}
+              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />*/}
+              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />*/}
+              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />*/}
+              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />*/}
+              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />*/}
+              {/*        <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />*/}
+              {/*      </Table> :  scopeType === 2 ? */}
+              {/*      currentCategary && currentCategary.map(item=> (*/}
+              {/*        <span className="more-left-span" key={item.storeCateId}>{item.get('cateName')}</span>*/}
+              {/*      ))*/}
+              {/*      :*/}
+              {/*      currentAttribute && currentAttribute.map(item=> (*/}
+              {/*        <span key={item.id} className="more-left-span" >{item.get('attributeName') || item.get('attributeDetailName')} </span>*/}
+              {/*      ))*/}
+              {/*}*/}
+
             </div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>

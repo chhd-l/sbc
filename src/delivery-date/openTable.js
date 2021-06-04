@@ -32,8 +32,7 @@ const openTable = (props) => {
         sort: maxSort + 1
       }
     ];
-    const newOpenDateItem = { ...props.openDate, times: newTime };
-    props.editOpenTable(newOpenDateItem);
+    changeTime(newTime);
   }
 
   function deleteTime(sort) {
@@ -43,9 +42,29 @@ const openTable = (props) => {
         newTime.push(item);
       }
     });
+    changeTime(newTime);
+  }
+  function timeChange(isStartTime, timeString, sort) {
+    var newTime = [];
+    props.openDate.times.map((item) => {
+      if (item.sort === sort) {
+        newTime.push({
+          startTime: isStartTime ? timeString : item.startTime,
+          endTime: !isStartTime ? timeString : item.endTime,
+          sort: item.sort
+        });
+      } else {
+        newTime.push(item);
+      }
+    });
+    changeTime(newTime);
+  }
+
+  function changeTime(newTime) {
     const newOpenDateItem = { ...props.openDate, times: newTime };
     props.editOpenTable(newOpenDateItem);
   }
+
   return (
     <table>
       <thead>
@@ -94,9 +113,17 @@ const openTable = (props) => {
           <td style={{ paddingTop: 0 }}>
             {props.openDate.times.map((time, index) => (
               <div key={index} className="time">
-                <TimePicker format={format} value={moment(time.startTime, format)} />
+                <TimePicker
+                  format={format}
+                  value={moment(time.startTime, format)}
+                  onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
+                />
                 <span>-</span>
-                <TimePicker format={format} value={moment(time.endTime, format)} />
+                <TimePicker
+                  format={format}
+                  value={moment(time.endTime, format)}
+                  onChange={(timeObject, timeString) => timeChange(false, timeString, time.sort)}
+                />
                 <Icon type="plus-square" onClick={() => addTime()} />
                 {props.openDate.times.length > 1 ? (
                   <Icon type="minus-square" onClick={() => deleteTime(time.sort)} />

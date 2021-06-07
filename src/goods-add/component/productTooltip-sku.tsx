@@ -95,7 +95,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
-          subScriptionPrice: item.subScriptionPrice,
+          subscriptionPrice: item.subscriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.subGoodsInfoNo || item.goodsInfoNo
         };
@@ -118,7 +118,7 @@ class ProductTooltipSKU extends React.Component<any, any> {
         let subscriptionPrice = 0;
         let stockArr = [];
         let marketPrice = goodsInfoBundleRels.reduce((sum, item) => {
-          subscriptionPrice += item.subScriptionPrice * item.bundleNum;
+          subscriptionPrice += item.subscriptionPrice * item.bundleNum;
           stockArr.push(Math.round(item.subStock / item.bundleNum));
           return sum + item.marketPrice * item.bundleNum;
         }, 0);

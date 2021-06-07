@@ -775,7 +775,13 @@ export default {
         "Order.Batchoperation": "Batch operation",
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
-        "Order.Recipientscell": "Recipient's cell"
+        "Order.Recipientscell": "Recipient's cell",
+        "Order.Automaticskip": "Automatic skip logistic information collection ",
+        "Order.AfterDaysLogistics": "After days, the logistic information collection will be automatically dismissed",
+        "Order.Automatictrigger": "Automatic trigger full amount refund ",
+        "Order.AfterDaysFullrefund": "After days, the full amount refund will be automatically triggered"
+
+
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",

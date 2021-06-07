@@ -59,10 +59,10 @@ export default class AddProductModal extends Component {
     });
     const { res } = await getGoodsSKUS(param);
     const { goodsInfoPage, goodsStoreGoodsFilterVOList, selectedFilter } = res.context;
-    let filterList = goodsStoreGoodsFilterVOList.map(item => {
+    let filterList =goodsStoreGoodsFilterVOList&&goodsStoreGoodsFilterVOList.map(item => {
       item.visibleDrop = false;
       return item;
-    })
+    })||[]
     let _selectedFilter = [].concat(selectedFilter || []).reduce((list, current) => {
       return list.concat(current?.attributesValueList ?? [])
     }, [])
@@ -385,7 +385,7 @@ export default class AddProductModal extends Component {
 
 
         <ul className="filter-list">
-          {filterList.map(item => (<li style={{ width: '20%' }} key={item.id}>
+          {filterList.map(item => (<li style={{ width: '19%' ,marginTop:10}} key={item.id}>
             <Dropdown overlay={this.menu(item.attributesValueList || [], checkboxValue)}
               
               onVisibleChange={(e) => this.handleVisibleChange(e, item)}

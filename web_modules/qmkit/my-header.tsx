@@ -40,7 +40,8 @@ export default class MyHeader extends React.Component {
       modalVisible: false,
       English: util.requireLocalSrc('sys/English.png'),
       Russian: util.requireLocalSrc('sys/Russian.png'),
-      Turkey: util.requireLocalSrc('sys/Turkey.png')
+      Turkey: util.requireLocalSrc('sys/Turkey.png'),
+      France: util.requireLocalSrc('sys/France.png')
     };
   }
 
@@ -91,7 +92,8 @@ export default class MyHeader extends React.Component {
     const aLanguage = [
       { name: 'English', value: 'en-US' },
       { name: 'Russian', value: 'ru' },
-      { name: 'Turkey', value: 'tr' }
+      { name: 'Turkey', value: 'tr' },
+      { name: 'France', value: 'fr' }
     ];
     return (
       <div style={{ position: 'relative', height: 640 }}>

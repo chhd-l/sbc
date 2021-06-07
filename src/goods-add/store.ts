@@ -317,7 +317,7 @@ export default class AppStore extends Store {
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
-          subScriptionPrice: item.subScriptionPrice,
+          subscriptionPrice: item.subscriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.subGoodsInfoNo || item.goodsInfoNo
         };

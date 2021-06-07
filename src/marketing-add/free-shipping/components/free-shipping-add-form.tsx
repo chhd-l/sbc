@@ -171,6 +171,21 @@ class FreeShippingAddForm extends React.Component<any, any> {
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+        <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
+        <FormItem {...formItemLayout} labelAlign="left">
+          <div className="ant-form-inline">
+            <Radio.Group onChange={e => {
+              this.onBeanChange({
+                promotionType: e.target.value,
+              });
+            }} value={marketingBean.get('promotionType')}>
+              <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+              <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
+              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+            </Radio.Group>
+          </div>
+        </FormItem>
         <div className="bold-title">Basic Setting</div>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {

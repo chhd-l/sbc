@@ -98,6 +98,12 @@ export default {
         "Public.editor.uploadVideoError": "upload video error",
         "Public.editor.uploadVideoFailed": "upload video failed",
         "Public.editor.videoReturnResultsRrror": "upload video return results error",
+        "Public.exportTip": "The export report will show in the Analyze module/Export report.",
+        "Public.Objects": "Objects",
+        "Public.orders": "orders",
+        "Public.subscriptions": "subscriptions",
+        "Public.maximumTip":"The maximum period is six months",
+        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email."
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",

@@ -3,6 +3,12 @@ import { LoginCallback } from '@okta/okta-react';
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
+  //异步导出
+  {
+    path: '/batch-export/:from',
+    exact: true,
+    asyncComponent: () => import('./batch-export')
+  },
   //订单列表
   {
     path: '/order-list',

@@ -151,6 +151,7 @@ class OrderDetailTab extends React.Component<any, any> {
           comment: string;
           entrance: string;
           apartment: string;
+          area: string;
         })
       : {};
 
@@ -181,6 +182,7 @@ class OrderDetailTab extends React.Component<any, any> {
           comment: string;
           entrance: string;
           apartment: string;
+          area: string;
         })
       : {};
 
@@ -614,6 +616,9 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.state" />: {consignee.province}
                   </p>
                   <p>
+                    <FormattedMessage id="Order.region" />: {consignee.area}
+                  </p>
+                  <p>
                     <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                   </p>
                 </Col>
@@ -719,6 +724,9 @@ class OrderDetailTab extends React.Component<any, any> {
                     <p>
                       <FormattedMessage id="Order.state" />: {invoice.province}
                     </p>
+                    <p>
+                    <FormattedMessage id="Order.region" />: {invoice.area}
+                  </p>
                     <p>
                       <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
                     </p>

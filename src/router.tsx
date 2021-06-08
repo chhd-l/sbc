@@ -496,6 +496,10 @@ const routes = [
     path: '/customer-statistics',
     asyncComponent: () => import('./customer-statistics')
   },
+  {
+    path: '/delivery-date',
+    asyncComponent: () => import('./delivery-date')
+  },
   //业务员统计
   {
     path: '/employee-statistics',

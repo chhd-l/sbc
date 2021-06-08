@@ -424,7 +424,7 @@ class TaskUpdate extends Component<any, any> {
                 ) : (
                   <Tooltip placement="top" title="Cancel">
                     <Button onClick={() => this.setState({ editable: false })}>
-                      <FormattedMessage id="Order.btnCancel" />
+                      <FormattedMessage id="task.Cancel" />
                     </Button>
                   </Tooltip>
                 )}

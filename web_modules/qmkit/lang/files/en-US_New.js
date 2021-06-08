@@ -114,6 +114,13 @@ export default {
         "Home.ManagePrescriber": "Manage Prescriber",
         "Home.units": "units",
         "Home.Week": "Week",
+        /*---------------------*/
+        "Home.BestPrescriber":"Best Prescriber",
+        "Home.UJ1&UJ2":"UJ1 & UJ2: Top 5 Prescriber",
+        "Home.UJ1":"UJ1: Top 5 Prescriber",
+        "Home.UJ2":"UJ2: Top 5 Prescriber",
+
+
     },
     Product: {
         'Product.Notification': 'Notification',

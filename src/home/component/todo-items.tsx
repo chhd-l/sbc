@@ -1,19 +1,21 @@
 import React from 'react';
-import { Relax } from 'plume2';
-import { Link } from 'react-router-dom';
+import {Relax} from 'plume2';
+import {Link} from 'react-router-dom';
 
-import { Spin } from 'antd';
+import {Spin} from 'antd';
 //import { fromJS } from 'immutable';
 
-import { AuthWrapper, cache, RCi18n, history, noop } from 'qmkit';
+import {AuthWrapper, cache, RCi18n, history, noop} from 'qmkit';
 /*import { IList } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';*/
+// import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
-import Funnel from 'web_modules/biz/funnel/funnel.tsx';
+// import Funnel from 'web_modules/biz/funnel/funnel.tsx';
+import Bar from 'web_modules/biz/bar/index.tsx';
 import BarLine from 'web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '../images/no-data.jpg';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
+
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -26,6 +28,7 @@ const countUpProps = {
   useGrouping: true,
   separator: ','
 };
+
 @Relax
 class TodoItems extends React.Component<any, any> {
   constructor(props) {
@@ -41,7 +44,10 @@ class TodoItems extends React.Component<any, any> {
       transactionTrendView: '',
       trafficTrendDashboardView: '',
       conversionFunnelDashboardView: '',
-      taskEmployeeStatisticsView: {}
+      taskEmployeeStatisticsView: {},
+      prescriberTradeTopView: '',
+      prescriberTradeAndItemTopView: '',
+      prescriberTradeItemTopView: '',
     };
   }
 
@@ -58,6 +64,9 @@ class TodoItems extends React.Component<any, any> {
       trafficTrendDashboardView: any;
       conversionFunnelDashboardView: any;
       cleanRedux: Function;
+      prescriberTradeTopView: any;
+      prescriberTradeAndItemTopView: any;
+      prescriberTradeItemTopView: any;
     };
   };
 
@@ -72,11 +81,14 @@ class TodoItems extends React.Component<any, any> {
     transactionTrendView: 'transactionTrendView',
     trafficTrendDashboardView: 'trafficTrendDashboardView',
     conversionFunnelDashboardView: 'conversionFunnelDashboardView',
+    prescriberTradeTopView: 'prescriberTradeTopView',
+    prescriberTradeAndItemTopView: 'prescriberTradeAndItemTopView',
+    prescriberTradeItemTopView: 'prescriberTradeItemTopView',
     cleanRedux: noop
   };
 
   componentWillUnmount() {
-    const { cleanRedux } = this.props.relaxProps;
+    const {cleanRedux} = this.props.relaxProps;
     cleanRedux();
     this.setState = (state, callback) => {
       return;
@@ -84,7 +96,8 @@ class TodoItems extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView } = nextProps.relaxProps;
+    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView,
+      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView} = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       tradeCustomerView !== prevState.tradeCustomerView ||
@@ -95,7 +108,10 @@ class TodoItems extends React.Component<any, any> {
       transactionTrendView !== prevState.transactionTrendView ||
       trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
       conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
-      taskEmployeeStatisticsView !== prevState.taskEmployeeStatisticsView
+      taskEmployeeStatisticsView !== prevState.taskEmployeeStatisticsView ||
+      prescriberTradeTopView !== prevState.prescriberTradeTopView ||
+      prescriberTradeAndItemTopView !== prevState.prescriberTradeAndItemTopView ||
+      prescriberTradeItemTopView !== prevState.prescriberTradeItemTopView
     ) {
       return {
         tradeCustomerView,
@@ -125,12 +141,13 @@ class TodoItems extends React.Component<any, any> {
       visible: false
     });
   };
+
   render() {
-    const { loading } = this.props.relaxProps;
-    const { tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView } = this.state;
+    const {loading} = this.props.relaxProps;
+    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, prescriberTradeTopView, prescriberTradeItemTopView, prescriberTradeAndItemTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView} = this.state;
     return (
       <div className="item">
-        <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{width: '90px', height: '90px'}} alt=""/>}>
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
               <div className="item-top-l-top">
@@ -143,7 +160,7 @@ class TodoItems extends React.Component<any, any> {
                       <span>{tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={tradeCustomerView.revenue} decimals={2} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      {tradeCustomerView && tradeCustomerView.revenueRate != null ? <img src={tradeCustomerView.revenueRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                       <span className={tradeCustomerView && tradeCustomerView.revenueRate != null ? (tradeCustomerView.revenueRate >= 0 ? 'green' : 'red') : ''}>
                         {tradeCustomerView && tradeCustomerView.revenue != null ? <CountUp end={Math.abs(tradeCustomerView.revenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
@@ -157,7 +174,7 @@ class TodoItems extends React.Component<any, any> {
                       <span>{tradeCustomerView && tradeCustomerView.averageBasket != null ? <CountUp end={tradeCustomerView.averageBasket} decimals={2} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <img src={tradeCustomerView.averageBasketRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                       <span className={tradeCustomerView && tradeCustomerView.averageBasketRate ? (tradeCustomerView.averageBasketRate >= 0 ? 'green' : 'red') : ''}>
                         {tradeCustomerView && tradeCustomerView.averageBasketRate != null ? <CountUp end={Math.abs(tradeCustomerView.averageBasketRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
@@ -170,7 +187,7 @@ class TodoItems extends React.Component<any, any> {
                       <span>{tradeCustomerView && tradeCustomerView.conversion != null ? <CountUp end={tradeCustomerView.conversion} {...countUpProps} /> : '--'}</span>
                     </div>
                     <div className="mode-per">
-                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      {tradeCustomerView && tradeCustomerView.conversionRate != null ? <img src={tradeCustomerView.conversionRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                       <span className={tradeCustomerView && tradeCustomerView.conversionRate != null ? (tradeCustomerView.conversionRate >= 0 ? 'green' : 'red') : ''}>
                         {tradeCustomerView && tradeCustomerView.conversionRate != null ? <CountUp end={Math.abs(tradeCustomerView.conversionRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
@@ -190,10 +207,10 @@ class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
               <div className="item-top-l-btm">
-                <div className="top-text"><FormattedMessage id="Home.Subscription" /></div>
+                <div className="top-text"><FormattedMessage id="Home.Subscription"/></div>
                 <div className="subscription space-between">
                   <div className="subscription-l">
-                    <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0} />
+                    <PieChart total="100" shelves={tradeCustomerView && tradeCustomerView.subscriptionRate != null ? tradeCustomerView.subscriptionRate : 0}/>
                   </div>
                   <div className="subscription-r flex-content">
                     <div className="subscription-content space-around">
@@ -201,7 +218,7 @@ class TodoItems extends React.Component<any, any> {
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionNumber != null ? <CountUp end={tradeCustomerView.subscriptionNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <img src={tradeCustomerView.subscriptionNumberRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? (tradeCustomerView.subscriptionNumberRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.subscriptionNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
@@ -213,7 +230,7 @@ class TodoItems extends React.Component<any, any> {
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.subscriptionRevenue != null ? <CountUp end={tradeCustomerView.subscriptionRevenue} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <img src={tradeCustomerView.subscriptionRevenueRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? (tradeCustomerView.subscriptionRevenueRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.subscriptionRevenueRate != null ? <CountUp end={Math.abs(tradeCustomerView.subscriptionRevenueRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
@@ -228,29 +245,29 @@ class TodoItems extends React.Component<any, any> {
             <div className="item-top-r flex-content">
               <div className="item-top-r-top flex-content">
                 <div className="item-top-r-top-l">
-                  <div className="top-text"><FormattedMessage id="Home.Consumer" /></div>
+                  <div className="top-text"><FormattedMessage id="Home.Consumer"/></div>
                   <div className="consumer flex-content">
                     <div className="consumer-top flex-start">
                       <div className="mode">
-                        <div className="mode-text"><FormattedMessage id="Home.Activeconsumers" /></div>
+                        <div className="mode-text"><FormattedMessage id="Home.Activeconsumers"/></div>
                         <div className="mode-num">
                           {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumers != null ? <CountUp end={tradeCustomerView.activeConsumers} {...countUpProps} /> : '--'}</span>
                         </div>
                         <div className="mode-per">
-                          {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <img src={tradeCustomerView.activeConsumersRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? (tradeCustomerView.activeConsumersRate >= 0 ? 'green' : 'red') : ''}>
                           {tradeCustomerView && tradeCustomerView.activeConsumersRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
                         </div>
                       </div>
                       <div className="mode">
-                        <div className="mode-text"><FormattedMessage id="Home.Activeconsumerrate" /></div>
+                        <div className="mode-text"><FormattedMessage id="Home.Activeconsumerrate"/></div>
                         <div className="mode-num">
                           <span>{tradeCustomerView && tradeCustomerView.activeConsumerRate != null ? <CountUp end={tradeCustomerView.activeConsumerRate} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</span>
                         </div>
                         <div className="mode-per">
-                          {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <img src={tradeCustomerView.activeConsumerRateRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? (tradeCustomerView.activeConsumerRateRate >= 0 ? 'green' : 'red') : ''}>
                           {tradeCustomerView && tradeCustomerView.activeConsumerRateRate != null ? <CountUp end={Math.abs(tradeCustomerView.activeConsumerRateRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                         </span>
@@ -259,7 +276,7 @@ class TodoItems extends React.Component<any, any> {
                     </div>
                     <div className="consumer-btm flex-content">
                       <div className="mode">
-                        <div className="mode-text"><FormattedMessage id="Home.Totalconsumers" /></div>
+                        <div className="mode-text"><FormattedMessage id="Home.Totalconsumers"/></div>
                         <div className="mode-num">
                           <span>{tradeCustomerView && tradeCustomerView.totalConsumers != null ? <CountUp end={tradeCustomerView.totalConsumers} {...countUpProps} /> : '--'}</span>
                         </div>
@@ -269,9 +286,9 @@ class TodoItems extends React.Component<any, any> {
                 </div>
                 <div className="item-top-r-top-r">
                   <div className="top-text space-between">
-                    <span><FormattedMessage id="Home.Task" /></span>
+                    <span><FormattedMessage id="Home.Task"/></span>
                     <span>
-                    <AuthWrapper functionName="f_petowner_task"><Link to="/tasks"><FormattedMessage id="Home.more" /> &gt;</Link></AuthWrapper>
+                    <AuthWrapper functionName="f_petowner_task"><Link to="/tasks"><FormattedMessage id="Home.more"/> &gt;</Link></AuthWrapper>
                   </span>
                   </div>
                   <div className="traffic ">
@@ -283,32 +300,32 @@ class TodoItems extends React.Component<any, any> {
                       alt=""
                     />
                   </div> */}
-                    <div className="traffic-r flex-content" style={{ width: '97%' }}>
-                      <div className="traffic-r-btm" style={{display: 'flex',alignItems: 'center',height:'100%' }}>
-                        <div className="mode" style={{textAlign:'center'}}>
-                          <div className="mode-text" >
-                          <FormattedMessage id="Home.ToDo" />
+                    <div className="traffic-r flex-content" style={{width: '97%'}}>
+                      <div className="traffic-r-btm" style={{display: 'flex', alignItems: 'center', height: '100%'}}>
+                        <div className="mode" style={{textAlign: 'center'}}>
+                          <div className="mode-text">
+                            <FormattedMessage id="Home.ToDo"/>
                           </div>
-                          <div className="mode-num" >
+                          <div className="mode-num">
                             <span> {<CountUp end={taskEmployeeStatisticsView?.toDoTaskCount ?? 0} {...countUpProps} />}</span>
                           </div>
                         </div>
-                        <div className="mode" style={{textAlign:'center',borderLeft:'1px solid #ccc',borderRight:'1px solid #ccc'}}>
-                          <div className="mode-text" >
-                          <FormattedMessage id="Home.OnGoing" />
+                        <div className="mode" style={{textAlign: 'center', borderLeft: '1px solid #ccc', borderRight: '1px solid #ccc'}}>
+                          <div className="mode-text">
+                            <FormattedMessage id="Home.OnGoing"/>
                           </div>
-                          <div className="mode-num num" >
+                          <div className="mode-num num">
                             {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
                             <span> {<CountUp end={taskEmployeeStatisticsView?.onGoingTaskCount ?? 0} {...countUpProps} />}</span>
                           </div>
                         </div>
-                        <div className="mode"  style={{textAlign:'center'}}>
-                          <div className="mode-text" >
-                          <FormattedMessage id="Home.Overdue" />
+                        <div className="mode" style={{textAlign: 'center'}}>
+                          <div className="mode-text">
+                            <FormattedMessage id="Home.Overdue"/>
                           </div>
-                          <div className="mode-num num" >
+                          <div className="mode-num num">
                             {/*<span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
-                            <span > {<CountUp style={{color:'#e2001a'}} end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
+                            <span> {<CountUp style={{color: '#e2001a'}} end={taskEmployeeStatisticsView?.overdueTaskCount ?? 0} {...countUpProps} />}</span>
                           </div>
                         </div>
                       </div>
@@ -348,7 +365,7 @@ class TodoItems extends React.Component<any, any> {
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <img src={tradeCustomerView.orderNumberRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.orderNumberRate != null ? (tradeCustomerView.orderNumberRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.orderNumberRate != null ? <CountUp end={Math.abs(tradeCustomerView.orderNumberRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
@@ -360,7 +377,7 @@ class TodoItems extends React.Component<any, any> {
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.salesVolume != null ? <CountUp end={tradeCustomerView.salesVolume} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <img src={tradeCustomerView.salesVolumeRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <img src={tradeCustomerView.salesVolumeRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? (tradeCustomerView.salesVolumeRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.salesVolumeRate != null ? <CountUp end={Math.abs(tradeCustomerView.salesVolumeRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
@@ -374,7 +391,7 @@ class TodoItems extends React.Component<any, any> {
                       <div className="num">
                         <div className="num-l">{tradeCustomerView && tradeCustomerView.unitsSold != null ? <CountUp end={tradeCustomerView.unitsSold} decimals={2} {...countUpProps} /> : '--'}</div>
                         <div className="num-r">
-                          {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <img src={tradeCustomerView.unitsSoldRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                          {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <img src={tradeCustomerView.unitsSoldRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                           <span className={tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? (tradeCustomerView.unitsSoldRate >= 0 ? 'green' : 'red') : ''}>
                             {tradeCustomerView && tradeCustomerView.unitsSoldRate != null ? <CountUp end={Math.abs(tradeCustomerView.unitsSoldRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                           </span>
@@ -383,9 +400,9 @@ class TodoItems extends React.Component<any, any> {
                     </div>
 
                     {/**
-                      * 不展示Retention rate
-                      * @author weili
-                      */}
+                     * 不展示Retention rate
+                     * @author weili
+                     */}
                     <div className="transaction-l space-around">
                       {/*<div className="text"><FormattedMessage id="Home.Retentionrate"/></div>*/}
                       {/*<div className="num">*/}
@@ -415,7 +432,7 @@ class TodoItems extends React.Component<any, any> {
                     <div className="mode-text"><FormattedMessage id="Home.Activeprescriberrates"/></div>
                     <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescriberRates != null ? <CountUp end={prescriberTopView.activePrescriberRates} suffix={'%'} decimals={2} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
-                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <img src={prescriberTopView.activePrescriberRatesRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                       <span className={prescriberTopView && tradeCustomerView.activePrescriberRatesRate != null ? (prescriberTopView.activePrescriberRatesRate >= 0 ? 'green' : 'red') : ''}>
                         {prescriberTopView && prescriberTopView.activePrescriberRatesRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescriberRatesRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
@@ -426,7 +443,7 @@ class TodoItems extends React.Component<any, any> {
                     <div className="mode-text"><FormattedMessage id="Home.Activeprescribers"/></div>
                     <div className="mode-num">{prescriberTopView && prescriberTopView.activePrescribers != null ? <CountUp end={prescriberTopView.activePrescribers} {...countUpProps} /> : '--'}</div>
                     <div className="mode-per">
-                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14" /> : ''}
+                      {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <img src={prescriberTopView.activePrescribersRate >= 0 ? icon1 : icon2} width="14" height="14"/> : ''}
                       <span className={prescriberTopView && tradeCustomerView.activePrescribersRate != null ? (prescriberTopView.activePrescribersRate >= 0 ? 'green' : 'red') : ''}>
                         {prescriberTopView && prescriberTopView.activePrescribersRate != null ? <CountUp end={Math.abs(prescriberTopView.activePrescribersRate)} decimals={2} suffix={'%'} {...countUpProps} /> : '--'}
                       </span>
@@ -453,8 +470,8 @@ class TodoItems extends React.Component<any, any> {
                         );
                       })
                     ) : (
-                      <span className="data-img" style={{ width: '100%', textAlign: 'right', float: 'right', paddingTop: '55px' }}>
-                        <img src={nodataImg} className="no-data-img" />
+                      <span className="data-img" style={{width: '100%', textAlign: 'right', float: 'right', paddingTop: '55px'}}>
+                        <img src={nodataImg} className="no-data-img"/>
                       </span>
                     )}
                   </div>
@@ -472,24 +489,24 @@ class TodoItems extends React.Component<any, any> {
               </div>
               {goodsInfoTopView && goodsInfoTopView.length === 0 ? (
                 <div className="data-img">
-                  <img src={nodataImg} className="no-data-img" />
+                  <img src={nodataImg} className="no-data-img"/>
                 </div>
               ) : (
                 <div className="seller space-between">
                   {goodsInfoTopView &&
-                    goodsInfoTopView.map((item, i) => {
-                      return (
-                        <div className="seller-pro flex-start" key={i}>
-                          <div className="text"><FormattedMessage id="Home.TOP"/> {i + 1}</div>
-                          <div className="seller-content flex-content-start">
-                            <img src={item.goodsInfoImg} alt="" />
-                            <div className="content-text1 font-line1">{item.goodsInfoName}</div>
-                            <div className="content-text2">{item.marketPrice + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</div>
-                            <div className="content-text3">{item.salesVolume } <FormattedMessage id="Home.units"/></div>
-                          </div>
+                  goodsInfoTopView.map((item, i) => {
+                    return (
+                      <div className="seller-pro flex-start" key={i}>
+                        <div className="text"><FormattedMessage id="Home.TOP"/> {i + 1}</div>
+                        <div className="seller-content flex-content-start">
+                          <img src={item.goodsInfoImg} alt=""/>
+                          <div className="content-text1 font-line1">{item.goodsInfoName}</div>
+                          <div className="content-text2">{item.marketPrice + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</div>
+                          <div className="content-text3">{item.salesVolume} <FormattedMessage id="Home.units"/></div>
                         </div>
-                      );
-                    })}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -501,15 +518,15 @@ class TodoItems extends React.Component<any, any> {
               {!prescriberTrendView ||
               ((!prescriberTrendView.weekNumList || prescriberTrendView.weekNumList.length === 0) && (!prescriberTrendView.reward || prescriberTrendView.reward.length === 0) && (!prescriberTrendView.activeRate || prescriberTrendView.activeRate.length === 0)) ? (
                 <div className="data-img">
-                  <img src={nodataImg} className="no-data-img" />
+                  <img src={nodataImg} className="no-data-img"/>
                 </div>
               ) : (
                 <div className="line">
                   {prescriberTrendView && (
                     <BarLine
-                      yName={{ y1: (window as any).RCi18n({id:'Home.Prescriberreward'}), y2: (window as any).RCi18n({id:'Home.Activerate'}) }}
-                      unit={{ unit1: '', unit2: '%' }}
-                      nameTextStyle={{ y1: [0, 0, 0, 42], y2: [0, 0, 0, 22] }}
+                      yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
+                      unit={{unit1: '', unit2: '%'}}
+                      nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                       data={{
                         x: prescriberTrendView.weekNumList,
                         y1: prescriberTrendView.reward,
@@ -530,15 +547,15 @@ class TodoItems extends React.Component<any, any> {
               {!transactionTrendView ||
               (transactionTrendView.weekNumList && transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList && transactionTrendView.transactionList.length === 0) ? (
                 <div className="data-img">
-                  <img src={nodataImg} className="no-data-img" />
+                  <img src={nodataImg} className="no-data-img"/>
                 </div>
               ) : (
                 <div className="line">
                   {transactionTrendView && (
                     <BarLine
-                      yName={{ y1: (window as any).RCi18n({id:'Home.Revenue'}), y2: (window as any).RCi18n({id:'Home.Transaction'}) }}
-                      unit={{ unit1: '', unit2: '' }}
-                      nameTextStyle={{ y1: [0, 52, 0, 0], y2: [0, 22, 0, 0] }}
+                      yName={{y1: (window as any).RCi18n({id: 'Home.Revenue'}), y2: (window as any).RCi18n({id: 'Home.Transaction'})}}
+                      unit={{unit1: '', unit2: ''}}
+                      nameTextStyle={{y1: [0, 52, 0, 0], y2: [0, 22, 0, 0]}}
                       data={{
                         x: transactionTrendView.weekNumList,
                         y1: transactionTrendView.revenueList,
@@ -548,6 +565,83 @@ class TodoItems extends React.Component<any, any> {
                   )}
                 </div>
               )}
+            </div>
+          </div>
+
+          <div className="item-best">
+
+            <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
+            <div className="item-best-main space-between">
+              <div className="main">
+                <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2"/></div>
+                {!prescriberTradeAndItemTopView ||
+                (!prescriberTradeAndItemTopView.prescriberTopViewItemList || prescriberTradeAndItemTopView.prescriberTopViewItemList.length === 0)
+                   ? (
+                  <div className="data-img">
+                    <img src={nodataImg} className="no-data-img"/>
+                  </div>
+                ) : (
+                  <div className="line">
+                    {prescriberTrendView && (
+                      <Bar
+                        yName={{y1: '', y2: ''}}
+                        unit={{unit1: '', unit2: '%'}}
+                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                        data={{
+                          x: prescriberTrendView.prescriberName,
+                          y1: transactionTrendView.num
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="main">
+                <div className="main-text"><FormattedMessage id="Home.UJ1"/></div>
+                {!prescriberTradeTopView ||
+                (!prescriberTradeTopView.prescriberTopViewItemList || prescriberTrendView.prescriberTopViewItemList.length === 0)? (
+                  <div className="data-img">
+                    <img src={nodataImg} className="no-data-img"/>
+                  </div>
+                ) : (
+                  <div className="line">
+                    {prescriberTrendView && (
+                      <Bar
+                        yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
+                        unit={{unit1: '', unit2: '%'}}
+                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                        data={{
+                          x: prescriberTrendView.prescriberName,
+                          y1: transactionTrendView.num
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="main">
+                <div className="main-text"><FormattedMessage id="Home.UJ2"/></div>
+                {!prescriberTradeItemTopView ||
+                (!prescriberTradeItemTopView.prescriberTopViewItemList || prescriberTradeItemTopView.prescriberTopViewItemList.length === 0) ? (
+                  <div className="data-img">
+                    <img src={nodataImg} className="no-data-img"/>
+                  </div>
+                ) : (
+                  <div className="line">
+                    {prescriberTrendView && (
+                      <Bar
+                        yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
+                        unit={{unit1: '', unit2: '%'}}
+                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                        data={{
+                          x: prescriberTrendView.prescriberName,
+                          y1: transactionTrendView.num
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </Spin>

@@ -7,10 +7,11 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import AddCompanyModal from './components/add-company-modal'
-import LogisticSettingModal from './components/ logistic-setting-modal'
+import LogisticSettingModal from './components/logistic-setting-modal'
 import CompanyChoose from './components/company-choose';
 import './index.less'
 import { fromJS } from 'immutable';
+// @ts-ignore
 import parcelLabImg from '../../web_modules/qmkit/images/icon/parcelLab-logo.png'
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class LogisticsManage extends React.Component<any, any> {

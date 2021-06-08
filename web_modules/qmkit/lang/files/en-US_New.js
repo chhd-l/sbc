@@ -2047,7 +2047,9 @@ export default {
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",
         "Setting.add": "Add",
-        "Setting.opertaor": "Opertaor"
+        "Setting.opertaor": "Opertaor",
+        "Setting.pleaseSelectCity": "Please select city",
+        "Setting.pleaseSelectTime": "Please select time",
         
     },
     Menu: {

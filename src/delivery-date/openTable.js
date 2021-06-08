@@ -117,12 +117,14 @@ const openTable = (props) => {
                   format={format}
                   value={moment(time.startTime, format)}
                   onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
+                  allowClear={false}
                 />
                 <span>-</span>
                 <TimePicker
                   format={format}
                   value={moment(time.endTime, format)}
                   onChange={(timeObject, timeString) => timeChange(false, timeString, time.sort)}
+                  allowClear={false}
                 />
                 <Icon type="plus-square" onClick={() => addTime()} />
                 {props.openDate.times.length > 1 ? (

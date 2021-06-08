@@ -4,6 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
 const closeTable = (props) => {
+  function dateChange(timeString) {
+    var newCloseDay = { ...props.closeDate, closeDay: timeString };
+    props.editCloseTable(newCloseDay);
+  }
+
+  function disabledDate(current) {
+    return current && props.allSelectDays.includes(moment(current).format("YYYY-MM-DD"));
+  }
+  
   return (
     <table>
       <thead>
@@ -19,10 +28,22 @@ const closeTable = (props) => {
       <tbody>
         <tr>
           <td>
-            <DatePicker value={props.closeDate && props.closeDate.closeDay ? moment(props.closeDate.closeDay) : null} />
+            <DatePicker
+              onChange={(time, timeString) => dateChange(timeString)}
+              value={
+                props.closeDate && props.closeDate.closeDay
+                  ? moment(props.closeDate.closeDay)
+                  : null
+              }
+              disabledDate={disabledDate}
+            />
           </td>
           <td>
-            <a type="link" className="iconfont iconDelete" onClick={() => props.deleteCloseTable(props.closeDate.sort)}></a>
+            <a
+              type="link"
+              className="iconfont iconDelete"
+              onClick={() => props.deleteCloseTable(props.closeDate.sort)}
+            ></a>
           </td>
         </tr>
       </tbody>

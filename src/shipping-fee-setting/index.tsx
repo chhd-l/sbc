@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { Headline, BreadCrumb, Const } from 'qmkit';
-import { Row, Col, Form, Modal, message, Card, Tooltip, Switch, Input, Spin, Popconfirm } from 'antd';
+import {
+  Row,
+  Col,
+  Form,
+  Modal,
+  message,
+  Card,
+  Tooltip,
+  Switch,
+  Input,
+  Spin,
+  Popconfirm
+} from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
-const homeImage = require('./image/home.png');
-const pickupImage = require('./image/pickup.png');
 
 const FormItem = Form.Item;
 
@@ -25,7 +35,9 @@ class ShippingFeeSetting extends Component<any, any> {
       shippingFeeList: [],
       selectShippingFee: {},
       shippingFeeLoading: false,
-      deliveryLoading: false
+      deliveryLoading: false,
+      deliveryOptions: [],
+      deliveryChecked: false
     };
     this.closeModel = this.closeModel.bind(this);
     this.enableShippingFee = this.enableShippingFee.bind(this);
@@ -34,6 +46,7 @@ class ShippingFeeSetting extends Component<any, any> {
   }
   componentDidMount() {
     this.getShippingFeeSetting();
+    this.getDeliveryOption();
   }
   getShippingFeeSetting() {
     this.setState({
@@ -77,6 +90,34 @@ class ShippingFeeSetting extends Component<any, any> {
       });
   }
 
+  getDeliveryOption() {
+    this.setState({
+      deliveryLoading: true
+    });
+    webapi
+      .getDeliveryOptions()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            deliveryOptions: res.context.configVOList,
+            deliveryLoading: false
+          });
+        } else {
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          this.setState({
+            deliveryLoading: false
+          });
+        }
+      })
+      .catch(() => {
+        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        this.setState({
+          deliveryLoading: false
+        });
+      });
+  }
+
   closeModel = () => {
     this.setState({
       shippingFeeVisible: false
@@ -98,7 +139,22 @@ class ShippingFeeSetting extends Component<any, any> {
         message.error(err || 'Update Failed');
       });
   }
-  enableDelivery(id) {}
+  enableDelivery(id) {
+    webapi
+      .editDeliveryOption(id, this.state.deliveryChecked ? 1 : 0)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          message.success('Operate successfully');
+          this.getDeliveryOption();
+        } else {
+          message.error(res.message || 'Update Failed');
+        }
+      })
+      .catch((err) => {
+        message.error(err || 'Update Failed');
+      });
+  }
   saveShippingFee() {
     const { selectShippingFee } = this.state;
     this.props.form.validateFields((errs, values) => {
@@ -124,55 +180,89 @@ class ShippingFeeSetting extends Component<any, any> {
     });
   }
   render() {
-    const { shippingFeeList, shippingFeeVisible, shippingfeeloading, deliveryLoading } = this.state;
+    const {
+      shippingFeeList,
+      shippingFeeVisible,
+      shippingfeeloading,
+      deliveryLoading,
+      deliveryOptions,
+      deliveryChecked
+    } = this.state;
     const { getFieldDecorator } = this.props.form;
-    let header = this.state.selectShippingFee.header ? JSON.parse(this.state.selectShippingFee.header) : {};
+    let header = this.state.selectShippingFee.header
+      ? JSON.parse(this.state.selectShippingFee.header)
+      : {};
     let domain = header.Domain;
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div className="container-search" style={{ height: '100vh', background: '#fff' }}>
+        <div className="container-search" style={{ minHeight: '100vh', background: '#fff' }}>
           <Row>
             <Headline title="Delivery option selection" />
-            <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={deliveryLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin
+              style={{ position: 'fixed', top: '30%', left: '100px' }}
+              spinning={deliveryLoading}
+              indicator={
+                <img
+                  className="spinner"
+                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                  style={{ width: '90px', height: '90px' }}
+                  alt=""
+                />
+              }
+            >
               <Row style={{ marginBottom: 20 }}>
-                <Col span={8}>
-                  <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                    <div style={{ textAlign: 'center', margin: '9px 0' }}>
-                      <img src={homeImage} alt="home" />
-                    </div>
-                    <strong style={{ float: 'left', fontSize: 12 }}>Home delivery</strong>
-                    <div className="bar" style={{ float: 'right' }}>
-                      <div className="status">
-                        <Popconfirm title={`Are you sure to enable this?`} onConfirm={() => this.enableDelivery(1)} okText="Yes" cancelText="No">
-                          <Switch size="small" checked={0 === 0 ? true : false} />
-                        </Popconfirm>
+                {deliveryOptions.map((item) => (
+                  <Col span={8}>
+                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                      <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                        <img src={item.context ? JSON.parse(item.context).img : ''} alt="home" />
                       </div>
-                    </div>
-                  </Card>
-                </Col>
-                <Col span={8}>
-                  <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                    <div style={{ textAlign: 'center', margin: '9px 0' }}>
-                      <img src={pickupImage} alt="pickup" />
-                    </div>
-                    <strong style={{ float: 'left', fontSize: 12 }}>Pick up delivery</strong>
-                    <div className="bar" style={{ float: 'right' }}>
-                      <div className="status">
-                        <Popconfirm title={`Are you sure to enable this?`} onConfirm={() => this.enableDelivery(1)} okText="Yes" cancelText="No">
-                          <Switch size="small" checked={0 === 0 ? true : false} />
-                        </Popconfirm>
+                      <strong style={{ float: 'left', fontSize: 12 }}>{item.configName}</strong>
+                      <div className="bar" style={{ float: 'right' }}>
+                        <div className="status">
+                          <Popconfirm
+                            placement="topLeft"
+                            title={`Are you sure to ${
+                              item.status === 1 ? 'disbale' : 'enable'
+                            } this?`}
+                            onConfirm={() => this.enableDelivery(item.id)}
+                            okText="Yes"
+                            cancelText="No"
+                          >
+                            <Switch
+                              size="small"
+                              checked={item.status === 1 ? true : false}
+                              onChange={(checked) => {
+                                this.setState({
+                                  deliveryChecked: checked
+                                });
+                              }}
+                            />
+                          </Popconfirm>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </Col>
+                    </Card>
+                  </Col>
+                ))}
               </Row>
             </Spin>
           </Row>
           <Row>
             <Headline title="Shipping fee calculation" />
-            <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={shippingfeeloading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin
+              style={{ position: 'fixed', top: '30%', left: '100px' }}
+              spinning={shippingfeeloading}
+              indicator={
+                <img
+                  className="spinner"
+                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                  style={{ width: '90px', height: '90px' }}
+                  alt=""
+                />
+              }
+            >
               <Row style={{ marginBottom: 20 }}>
                 {shippingFeeList &&
                   shippingFeeList.map((item, index) => (
@@ -193,8 +283,19 @@ class ShippingFeeSetting extends Component<any, any> {
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
                             <div className="status">
-                              <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
-                                <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Popconfirm
+                                placement="topLeft"
+                                disabled={item.closeFlag === 0}
+                                title={`Are you sure to enable this?`}
+                                onConfirm={() => this.enableShippingFee(item.id)}
+                                okText="Yes"
+                                cancelText="No"
+                              >
+                                <Switch
+                                  size="small"
+                                  disabled={item.closeFlag === 0}
+                                  checked={item.closeFlag === 0 ? true : false}
+                                />
                               </Popconfirm>
                             </div>
                           </div>
@@ -208,15 +309,31 @@ class ShippingFeeSetting extends Component<any, any> {
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
                             <div className="status">
-                              <Popconfirm disabled={item.closeFlag === 0} title={`Are you sure to enable this?`} onConfirm={() => this.enableShippingFee(item.id)} okText="Yes" cancelText="No">
-                                <Switch size="small" disabled={item.closeFlag === 0} checked={item.closeFlag === 0 ? true : false} />
+                              <Popconfirm
+                                placement="topLeft"
+                                disabled={item.closeFlag === 0}
+                                title={`Are you sure to enable this?`}
+                                onConfirm={() => this.enableShippingFee(item.id)}
+                                okText="Yes"
+                                cancelText="No"
+                              >
+                                <Switch
+                                  size="small"
+                                  disabled={item.closeFlag === 0}
+                                  checked={item.closeFlag === 0 ? true : false}
+                                />
                               </Popconfirm>
                             </div>
                             <div>
                               {item.closeFlag === 0 ? (
                                 <Tooltip placement="top" title="Edit">
                                   <a
-                                    style={{ color: 'red', position: 'absolute', top: 10, right: 10 }}
+                                    style={{
+                                      color: 'red',
+                                      position: 'absolute',
+                                      top: 10,
+                                      right: 10
+                                    }}
                                     type="link"
                                     onClick={() => {
                                       this.setState({
@@ -237,7 +354,14 @@ class ShippingFeeSetting extends Component<any, any> {
               </Row>
             </Spin>
           </Row>
-          <Modal visible={shippingFeeVisible} title="Shipping API Setting" onOk={this.saveShippingFee} maskClosable={false} onCancel={() => this.closeModel()} okText="Submit">
+          <Modal
+            visible={shippingFeeVisible}
+            title="Shipping API Setting"
+            onOk={this.saveShippingFee}
+            maskClosable={false}
+            onCancel={() => this.closeModel()}
+            okText="Submit"
+          >
             <Form>
               <FormItem {...formItemLayout} required={true} label="URL">
                 {getFieldDecorator('url', {

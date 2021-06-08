@@ -588,8 +588,8 @@ class TodoItems extends React.Component<any, any> {
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberName,
-                          y1: transactionTrendView.num
+                          x: prescriberTrendView.prescriberNameList,
+                          y1: transactionTrendView.numList
                         }}
                       />
                     )}
@@ -611,8 +611,8 @@ class TodoItems extends React.Component<any, any> {
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberName,
-                          y1: transactionTrendView.num
+                          x: prescriberTrendView.prescriberNameList,
+                          y1: transactionTrendView.numList
                         }}
                       />
                     )}
@@ -634,8 +634,8 @@ class TodoItems extends React.Component<any, any> {
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberName,
-                          y1: transactionTrendView.num
+                          x: prescriberTrendView.prescriberNameList,
+                          y1: transactionTrendView.numList
                         }}
                       />
                     )}

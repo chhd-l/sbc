@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, Radio, Dropdown, Icon, DatePicker, Row, Col, Breadcrumb, message, Card } from 'antd';
+import { Form, Input, Select, Button, Radio, Modal, Icon, DatePicker, Row, Col, Breadcrumb, message, Card } from 'antd';
 import { RCi18n, Const } from 'qmkit';
 import type { fieldDataType, labelDataType } from '../data.d';
+import { batchExportMain } from '../webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -13,6 +14,7 @@ interface BatchExportProps {
   form: any;
   history: any;
   title: string;
+  exportType: number;
 }
 
 class BatchExport extends Component<BatchExportProps, any> {
@@ -22,6 +24,8 @@ class BatchExport extends Component<BatchExportProps, any> {
     this.state = {
       fieldKey: {},
       selectKey: [],
+      exportField: 'search',
+      loading: false
     };
   }
 
@@ -87,11 +91,11 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
         }
         content = (
-          <Select 
-            style={styles.wrapper} 
+          <Select
+            style={styles.wrapper}
             onChange={() => {
               // 如果选择的值影响其他下拉框的选项，则将那个受影响的下拉框的值清空
-              if(item.valueLink){
+              if (item.valueLink) {
                 this.props.form.setFieldsValue({ [item.valueLink]: '' });
               }
             }}
@@ -179,29 +183,60 @@ class BatchExport extends Component<BatchExportProps, any> {
   }
 
   onExport() {
-    let { fieldKey, selectKey } = this.state;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        let obj = {};
-        // 单独处理时间值
-        let timeArr = values.beginTime;
-        if (timeArr && timeArr.length) {
-          obj['beginTime'] = timeArr[0].format(Const.DAY_FORMAT);
-          obj['endTime'] = timeArr[1].format(Const.DAY_FORMAT);
-        }
-        delete fieldKey['beginTime'];
+    this.setState({
+      loading: true
+    });
+    let { fieldKey, selectKey, exportField } = this.state;
+    let { exportType, form } = this.props;
+    let params = {
+      "module": exportType,
+      "pickColums": selectKey,
+      "tradeExportRequest": {}
+    };
+    if (exportField === 'search') {
+      form.validateFields((err, values) => {
+        if (!err) {
+          let obj = {};
+          // 单独处理时间值
+          let timeArr = values.beginTime;
+          if (timeArr && timeArr.length) {
+            obj['beginTime'] = timeArr[0].format(Const.DAY_FORMAT);
+            obj['endTime'] = timeArr[1].format(Const.DAY_FORMAT);
+          }
+          delete fieldKey['beginTime'];
 
-        // 单独处理 Frequency
-        let cycleTypeId = values.cycleTypeId_autoship;
-        if(cycleTypeId) {
-          obj['cycleTypeId'] = cycleTypeId;
-        }
-        delete fieldKey['cycleTypeId_autoship'];
+          // 单独处理 Frequency
+          let cycleTypeId = values.cycleTypeId_autoship;
+          if (cycleTypeId) {
+            obj['cycleTypeId'] = cycleTypeId;
+          }
+          delete fieldKey['cycleTypeId_autoship'];
 
-        for (let key in fieldKey) {
-          obj[fieldKey[key]] = values[key] || '';
+          for (let key in fieldKey) {
+            if (key === 'orderType') {// orderType要默认赋值
+              obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
+            } else {
+              obj[fieldKey[key]] = values[key] || '';
+            }
+          }
+
+          params.tradeExportRequest = obj;
         }
-        console.log(obj);
+      });
+    }
+
+    batchExportMain(params).then(({res}) => {
+      this.setState({
+        loading: false
+      });
+      if(res.code === 'K-000000') {
+        Modal.success({
+          content: RCi18n({ id: 'Public.exportConfirmTip' }),
+          okText: RCi18n({ id: 'Order.btnConfirm' }),
+          onOk: () => {
+            this.props.history.goBack();
+          }
+        });
       }
     });
   }
@@ -211,27 +246,29 @@ class BatchExport extends Component<BatchExportProps, any> {
     return (
       <Card title={<span style={{ color: '#ff1f4e' }}>{RCi18n({ id: 'Public.exportTip' })}</span>} bordered={false}>
         <div style={contentStyle}>
-          <div style={{ fontSize: 16, fontWeight: 'bold' }}>Export</div>
-          <Radio.Group defaultValue={2}>
-            <Radio style={radioStyle} value={1}>
-              All {title} (The maximum period is six months)
+          <div style={{ fontSize: 16, fontWeight: 'bold' }}>{RCi18n({ id: 'Public.Export' })}</div>
+          <Radio.Group defaultValue="search" onChange={e => this.setState({ exportField: e.target.value })}>
+            <Radio style={radioStyle} value="all">
+              {RCi18n({ id: 'Order.all' })} {title} ({RCi18n({ id: 'Public.maximumTip' })})
             </Radio>
-            <Radio style={radioStyle} value={2}>
-              Search {title}
+            <Radio style={radioStyle} value="search">
+              {RCi18n({ id: 'Product.Search' })} {title}
             </Radio>
           </Radio.Group>
           <div style={fieldStyle}>{this.getFields()}</div>
         </div>
         {!!selectData?.length && (
           <div style={contentStyle}>
-            <div style={{ fontSize: 16, fontWeight: 'bold' }}>Objects</div>
-            <Radio style={radioStyle} defaultChecked>Order</Radio>
+            <div style={{ fontSize: 16, fontWeight: 'bold' }}>{RCi18n({ id: 'Public.Objects' })}</div>
+            <Radio style={radioStyle} defaultChecked>
+              {RCi18n({ id: 'Menu.Order' })}
+            </Radio>
             <div style={fieldStyle}>{this.getSelects()}</div>
           </div>
         )}
         <div>
-          <Button onClick={() => this.props.history.goBack()} style={{ marginRight: 30 }}>Cancel</Button>
-          <Button type="primary" onClick={() => this.onExport()}>Export</Button>
+          <Button onClick={() => this.props.history.goBack()} style={{ marginRight: 30 }}>{RCi18n({ id: 'Public.Cancel' })}</Button>
+          <Button type="primary" onClick={() => this.onExport()} loading={this.state.loading}>{RCi18n({ id: 'Public.Export' })}</Button>
         </div>
 
       </Card>

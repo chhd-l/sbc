@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, Radio, Modal, Icon, DatePicker, Row, Col, Breadcrumb, message, Card } from 'antd';
+import moment from 'moment';
+import { Form, Input, Select, Button, Radio, Modal, DatePicker, Row, Col, Card } from 'antd';
 import { RCi18n, Const } from 'qmkit';
 import type { fieldDataType, labelDataType } from '../data.d';
 import { batchExportMain } from '../webapi';
@@ -72,11 +73,11 @@ class BatchExport extends Component<BatchExportProps, any> {
   }
 
   getFields() {
-    const { fieldKey } = this.state;
+    const { fieldKey, exportField } = this.state;
     const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
     // const { getFieldDecorator, getFieldValue } = this.props.form;
     const children = fieldData.map(item => {
-      let content = <Input style={styles.wrapper} />;
+      let content = <Input style={styles.wrapper} disabled={exportField === 'all'}/>;
       if (item.options) {
         let opts = item.options[fieldKey[item.key]] || [];
         // 判断当前选项是否根据其它值联动
@@ -92,6 +93,7 @@ class BatchExport extends Component<BatchExportProps, any> {
         }
         content = (
           <Select
+            disabled={exportField === 'all'}
             style={styles.wrapper}
             onChange={() => {
               // 如果选择的值影响其他下拉框的选项，则将那个受影响的下拉框的值清空
@@ -125,6 +127,8 @@ class BatchExport extends Component<BatchExportProps, any> {
                 },
               ],
             })(<RangePicker
+              disabledDate={current => current && current > moment().endOf('day')}
+              disabled={exportField === 'all'}
               className="rang-picker-width"
               style={styles.formItemStyle}
             />)}
@@ -231,10 +235,18 @@ class BatchExport extends Component<BatchExportProps, any> {
       });
       if(res.code === 'K-000000') {
         Modal.success({
+          width: 550,
+          centered: true,
           content: RCi18n({ id: 'Public.exportConfirmTip' }),
           okText: RCi18n({ id: 'Order.btnConfirm' }),
+          icon: '',
           onOk: () => {
             this.props.history.goBack();
+          },
+          okButtonProps: {
+            style: {
+              marginRight: 200
+            }
           }
         });
       }

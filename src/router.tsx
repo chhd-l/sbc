@@ -862,6 +862,10 @@ const routes = [
     asyncComponent: () => import('./report-traffic')
   },
   {
+    path: '/export-report',
+    asyncComponent: () => import('./export-report')
+  },
+  {
     path: '/sales-category',
     asyncComponent: () => import('./sales-category')
   },

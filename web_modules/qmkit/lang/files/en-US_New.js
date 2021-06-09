@@ -1278,6 +1278,13 @@ export default {
         "Analysis.SalesOverview": "Sales Overview",
         "Analysis.Consumers": "Consumers",
         "Analysis.TransactionTrend": "Transaction trend",
+        "Analysis.ExportReport" :"Export report",
+        "Analysis.BatchID" :"Batch ID",
+        "Analysis.BatchTime":"Batch time",
+        "Analysis.FileName":"File name",
+        "Analysis.Fail":"Fail",
+        "Analysis.Success":"Success",
+        "Analysis.NotStarted":"Not started",
     },
     Marketing: {
         'Marketing.DiscountType': 'Discount type',
@@ -2048,6 +2055,7 @@ export default {
         "Menu.Shipping Fee": "Shipping Fee",
         "Menu.NPS": "NPS",
         "Menu.Message setting": "Message setting",
+        "Menu.Export report": "Export report"
     },
     Others: {
         "import": "Import",

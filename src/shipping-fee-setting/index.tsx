@@ -198,74 +198,77 @@ class ShippingFeeSetting extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search" style={{ minHeight: '100vh', background: '#fff' }}>
-          <Row>
-            <Headline title="Delivery option selection" />
-            <Spin
-              style={{ position: 'fixed', top: '30%', left: '100px' }}
-              spinning={deliveryLoading}
-              indicator={
-                <img
-                  className="spinner"
-                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                  style={{ width: '90px', height: '90px' }}
-                  alt=""
-                />
-              }
-            >
-              <Row style={{ marginBottom: 20 }}>
-                {deliveryOptions.map((item) => (
-                  <Col span={8}>
-                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
-                      <div style={{ textAlign: 'center', margin: '9px 0' }}>
-                        <img src={item.context ? JSON.parse(item.context).img : ''} alt="home" />
-                      </div>
-                      <strong style={{ float: 'left', fontSize: 12 }}>{item.configName}</strong>
-                      <div className="bar" style={{ float: 'right' }}>
-                        <div className="status">
-                          <Popconfirm
-                            placement="topLeft"
-                            title={`Are you sure to ${
-                              item.status === 1 ? 'disbale' : 'enable'
-                            } this?`}
-                            onConfirm={() => this.enableDelivery(item.id)}
-                            okText="Yes"
-                            cancelText="No"
-                          >
-                            <Switch
-                              size="small"
-                              checked={item.status === 1 ? true : false}
-                              onChange={(checked) => {
-                                this.setState({
-                                  deliveryChecked: checked
-                                });
-                              }}
-                            />
-                          </Popconfirm>
+          {deliveryOptions && deliveryOptions.length > 0 ? (
+            <Row>
+              <Headline title="Delivery option selection" />
+              <Spin
+                style={{ position: 'fixed', top: '30%', left: '100px' }}
+                spinning={deliveryLoading}
+                indicator={
+                  <img
+                    className="spinner"
+                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                    style={{ width: '90px', height: '90px' }}
+                    alt=""
+                  />
+                }
+              >
+                <Row style={{ marginBottom: 20 }}>
+                  {deliveryOptions.map((item) => (
+                    <Col span={8}>
+                      <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                        <div style={{ textAlign: 'center', margin: '9px 0' }}>
+                          <img src={item.context ? JSON.parse(item.context).img : ''} alt="home" />
                         </div>
-                      </div>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-            </Spin>
-          </Row>
-          <Row>
-            <Headline title="Shipping fee calculation" />
-            <Spin
-              style={{ position: 'fixed', top: '30%', left: '100px' }}
-              spinning={shippingfeeloading}
-              indicator={
-                <img
-                  className="spinner"
-                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                  style={{ width: '90px', height: '90px' }}
-                  alt=""
-                />
-              }
-            >
-              <Row style={{ marginBottom: 20 }}>
-                {shippingFeeList &&
-                  shippingFeeList.map((item, index) => (
+                        <strong style={{ float: 'left', fontSize: 12 }}>{item.configName}</strong>
+                        <div className="bar" style={{ float: 'right' }}>
+                          <div className="status">
+                            <Popconfirm
+                              placement="topLeft"
+                              title={`Are you sure to ${
+                                item.status === 1 ? 'disbale' : 'enable'
+                              } this?`}
+                              onConfirm={() => this.enableDelivery(item.id)}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <Switch
+                                size="small"
+                                checked={item.status === 1 ? true : false}
+                                onChange={(checked) => {
+                                  this.setState({
+                                    deliveryChecked: checked
+                                  });
+                                }}
+                              />
+                            </Popconfirm>
+                          </div>
+                        </div>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              </Spin>
+            </Row>
+          ) : null}
+
+          {shippingFeeList && shippingFeeList.length > 0 ? (
+            <Row>
+              <Headline title="Shipping fee calculation" />
+              <Spin
+                style={{ position: 'fixed', top: '30%', left: '100px' }}
+                spinning={shippingfeeloading}
+                indicator={
+                  <img
+                    className="spinner"
+                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                    style={{ width: '90px', height: '90px' }}
+                    alt=""
+                  />
+                }
+              >
+                <Row style={{ marginBottom: 20 }}>
+                  {shippingFeeList.map((item, index) => (
                     <Col span={8} key={index}>
                       {item.type === 'fgs' ? (
                         <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
@@ -351,9 +354,10 @@ class ShippingFeeSetting extends Component<any, any> {
                       ) : null}
                     </Col>
                   ))}
-              </Row>
-            </Spin>
-          </Row>
+                </Row>
+              </Spin>
+            </Row>
+          ) : null}
           <Modal
             visible={shippingFeeVisible}
             title="Shipping API Setting"

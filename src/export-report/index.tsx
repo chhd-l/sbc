@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as weapi from './webapi';
 import { BreadCrumb, cache, DataGrid, Headline, SelectGroup, Const } from 'qmkit';
-import { Button, Col, Form, Row, DatePicker, Icon, Select } from 'antd';
+import { Button, Col, Form, Row, DatePicker, Icon, Select, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -56,6 +56,10 @@ class ExportReport extends Component<any, any> {
       this.getData()
     })
   }
+
+  /**
+   * 获取数据
+   */
   async getData(){
     this.setState({
       loading:true
@@ -81,6 +85,11 @@ class ExportReport extends Component<any, any> {
       loading:false
     })
   }
+
+  /**
+   * 搜索
+   * @param e
+   */
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
@@ -93,6 +102,11 @@ class ExportReport extends Component<any, any> {
       }
     });
   };
+
+  /**
+   * 翻页
+   * @param pagination
+   */
   handleTableChange(pagination){
     const pager = { ...this.state.pagination };
     pager.pageNum = pagination.current - 1;
@@ -102,6 +116,11 @@ class ExportReport extends Component<any, any> {
       this.getData()
     })
   }
+
+  /**
+   * 下载
+   * @param url
+   */
   download = url => {
     const eleLink = document.createElement('a');
     eleLink.style.display = 'none';
@@ -186,15 +205,23 @@ class ExportReport extends Component<any, any> {
               return <span></span>
               break;
             case 2:
-              return <Icon type="loading" style={{...styles.icon,...styles.click}}/>
+              return (
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.InProcess" />}>
+                  <Icon type="loading" style={{...styles.icon,...styles.click}}/>
+                </Tooltip>
+              )
               break;
             case 3:
               return <span></span>
               break;
             case 4:
-              return <Icon type="cloud-download" style={styles.icon} onClick={()=>{
-                this.download(record.fileUrl)
-              }}/>
+              return  (
+                <Tooltip placement="top" title={<FormattedMessage id="Analysis.Down" />}>
+                  <Icon type="cloud-download" style={styles.icon} onClick={()=>{
+                    this.download(record.fileUrl)
+                  }}/>
+                </Tooltip>
+              )
               break;
           }
         }

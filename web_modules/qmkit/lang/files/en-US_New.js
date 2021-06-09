@@ -1285,6 +1285,7 @@ export default {
         "Analysis.Fail":"Fail",
         "Analysis.Success":"Success",
         "Analysis.NotStarted":"Not started",
+        "Analysis.Down":"Down"
     },
     Marketing: {
         'Marketing.DiscountType': 'Discount type',

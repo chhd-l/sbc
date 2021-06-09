@@ -47,7 +47,7 @@ class TaskUpdate extends Component<any, any> {
       taskCompleted: false,
       tabKey: '',
       task: {},
-      assignedUsers: [],
+      assignedUsers: [],  
       goldenMomentList: [],
       actionTypeList: [
         { name: <FormattedMessage id="task.Call" />, value: 'Call' },
@@ -96,6 +96,8 @@ class TaskUpdate extends Component<any, any> {
       .getGlodenMomentList()
       .then((data) => {
         const res = data.res;
+        console.log(res.context.sysDictionaryVOS);
+        
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
@@ -185,7 +187,9 @@ class TaskUpdate extends Component<any, any> {
     webapi
       .getEmployeesByKeyword(params)
       .then((data) => {
-        const res = data.res;
+        const res = data.res; 
+        console.log(res.context.employees);
+        
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             assignedUsers: res.context.employees,

@@ -44,7 +44,7 @@ class Line extends React.Component {
       grid: {
         left: '1%',
         right: '1%',
-        top: '8%',
+        top: '10%',
         bottom: '1%',
         containLabel: true
       },
@@ -57,11 +57,11 @@ class Line extends React.Component {
           axisLine: { show: false },
           axisLabel: {
             show: true,
+            interval:0,
             textStyle: {
               color: '#999',
               fontsize: '11'
             },
-            formatter: (window as any).RCi18n({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }

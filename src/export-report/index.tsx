@@ -38,11 +38,11 @@ class ExportReport extends Component<any, any> {
     this.state = {
       loading:false,
       dataSource: [],
-      pagination:{
-        pageSize:10,
-        pageNum:0,
-        total:0,
-      },
+
+      pageSize:10,
+      pageNum:0,
+      total:0,
+
       searchForm:{},
     };
   }
@@ -50,7 +50,6 @@ class ExportReport extends Component<any, any> {
     this.setState({
       searchForm:{},
       dataSource: [],
-      pageSize:10,
       pageNum:0,
     },()=>{
       this.getData()
@@ -64,8 +63,7 @@ class ExportReport extends Component<any, any> {
     this.setState({
       loading:true
     })
-    const pager = { ...this.state.pagination };
-    const { searchForm,pagination } = this.state
+    const { searchForm,pageSize,pageNum } = this.state
     let beginTime = '',endTime=''
     if (searchForm.time && searchForm.time.length > 0) {
       beginTime = searchForm.time[0].format(Const.DAY_FORMAT);
@@ -74,14 +72,13 @@ class ExportReport extends Component<any, any> {
     let result = await weapi.fetchAnalysisExportReport({
       beginTime,
       endTime,
-      pageSize:pagination.pageSzie,
-      pageNum:pagination.pageNum,
+      pageSize: pageSize,
+      pageNum: pageNum,
       module:searchForm.module ? parseInt(searchForm.module) : 0
     })
-    pager.total = result.res.context.tradeAsyncExportVOS.total
     this.setState({
       dataSource: result.res.context.tradeAsyncExportVOS.content,
-      pagination:pager,
+      total:result.res.context.tradeAsyncExportVOS.total,
       loading:false
     })
   }
@@ -95,7 +92,8 @@ class ExportReport extends Component<any, any> {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({
-          searchForm:values
+          searchForm:values,
+          pageNum:0,
         },()=>{
           this.getData()
         })
@@ -108,10 +106,8 @@ class ExportReport extends Component<any, any> {
    * @param pagination
    */
   handleTableChange(pagination){
-    const pager = { ...this.state.pagination };
-    pager.pageNum = pagination.current - 1;
     this.setState({
-      pagination:pager
+      pageNum:pagination.current - 1
     },()=>{
       this.getData()
     })
@@ -227,7 +223,7 @@ class ExportReport extends Component<any, any> {
         }
       },
     ];
-    const { loading,pagination,dataSource } = this.state
+    const { loading,pageNum,pageSize,total,dataSource } = this.state
     const { getFieldDecorator } = this.props.form;
     return(
       <div>
@@ -292,7 +288,11 @@ class ExportReport extends Component<any, any> {
                     onChange={(pagination, filters, sorter) =>
                       this.handleTableChange(pagination)
                     }
-                    pagination={pagination}
+                    pagination={{
+                      current:pageNum + 1,
+                      pageSize:pageSize,
+                      total:total
+                    }}
                     rowKey={record=>record.id}>
           </DataGrid>
         </div>

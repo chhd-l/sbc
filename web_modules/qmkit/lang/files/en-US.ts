@@ -1799,6 +1799,7 @@ export default {
   'task.Foodtransition(newlife-stage)':'Food transition (new life-stage)',
   'task.3daysbeforenextrefillorder':'3 days before next refill order',
   'task.By': 'By',
+  'task.All': 'All',
   
   /*-----------------------------  Subscription  ---------------------------------------*/
 

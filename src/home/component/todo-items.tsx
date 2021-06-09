@@ -576,7 +576,7 @@ class TodoItems extends React.Component<any, any> {
             <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
             <div className="item-best-main space-between">
               <div className="main">
-                <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2"/></div>
+                <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
                 {!prescriberTradeAndItemTopView ||
                 (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
                    ? (
@@ -587,7 +587,7 @@ class TodoItems extends React.Component<any, any> {
                   <div className="line">
                     {prescriberTradeAndItemTopView && (
                       <Bar
-                        yName={{y1: '', y2: ''}}
+                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
@@ -600,7 +600,7 @@ class TodoItems extends React.Component<any, any> {
                 )}
               </div>
               <div className="main">
-                <div className="main-text"><FormattedMessage id="Home.UJ1"/></div>
+                <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
                 {!prescriberTradeTopView ||
                 (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0)? (
                   <div className="data-img">
@@ -610,7 +610,7 @@ class TodoItems extends React.Component<any, any> {
                   <div className="line">
                     {prescriberTradeTopView && (
                       <Bar
-                        yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
+                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ1'})}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
@@ -623,7 +623,7 @@ class TodoItems extends React.Component<any, any> {
                 )}
               </div>
               <div className="main">
-                <div className="main-text"><FormattedMessage id="Home.UJ2"/></div>
+                <div className="main-text"><FormattedMessage id="Home.UJ2Prescriber"/></div>
                 {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
@@ -632,7 +632,7 @@ class TodoItems extends React.Component<any, any> {
                   <div className="line">
                     {prescriberTradeItemTopView && (
                       <Bar
-                        yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
+                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ2'})}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{

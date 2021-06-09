@@ -122,10 +122,12 @@ export default {
         "Home.Week": "Week",
         /*---------------------*/
         "Home.BestPrescriber":"Best Prescriber",
-        "Home.UJ1&UJ2":"UJ1 & UJ2: Top 5 Prescriber",
-        "Home.UJ1":"UJ1: Top 5 Prescriber",
-        "Home.UJ2":"UJ2: Top 5 Prescriber",
-
+        "Home.UJ1&UJ2Prescriber":"UJ1 & UJ2: Top 5 Prescriber",
+        "Home.UJ1Prescriber":"UJ1: Top 5 Prescriber",
+        "Home.UJ2Prescriber":"UJ2: Top 5 Prescriber",
+        "Home.UJ1&UJ2":"UJ1 & UJ2",
+        "Home.UJ1":"UJ1",
+        "Home.UJ2":"UJ2",
 
     },
     Product: {

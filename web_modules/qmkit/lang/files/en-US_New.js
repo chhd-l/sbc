@@ -1285,7 +1285,8 @@ export default {
         "Analysis.Fail":"Fail",
         "Analysis.Success":"Success",
         "Analysis.NotStarted":"Not started",
-        "Analysis.Down":"Down"
+        "Analysis.Down":"Down",
+        "Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically":"Please remind that the report will expire after 7 days automatically."
     },
     Marketing: {
         'Marketing.DiscountType': 'Discount type',

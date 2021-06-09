@@ -27,6 +27,10 @@ const styles = {
   },
   click: {
     cursor:'pointer',
+  },
+  tip:{
+    color: '#e2001a',
+    marginBottom: '10px',
   }
 } as any;
 
@@ -230,6 +234,9 @@ class ExportReport extends Component<any, any> {
         <BreadCrumb />
         <div className="container-search">
           <Headline title={<FormattedMessage id="Analysis.ExportReport" />} />
+          <div style={styles.tip}>
+            <FormattedMessage id="Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically" />
+          </div>
           <Form layout="inline" style={{ marginBottom: 20 }} onSubmit={this.handleSubmit}>
             <Row>
               <Col span={8}>

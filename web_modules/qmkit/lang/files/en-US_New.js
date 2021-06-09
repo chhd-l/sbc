@@ -1295,6 +1295,14 @@ export default {
         "Analysis.SalesOverview": "Sales Overview",
         "Analysis.Consumers": "Consumers",
         "Analysis.TransactionTrend": "Transaction trend",
+        "Analysis.ExportReport" :"Export report",
+        "Analysis.BatchID" :"Batch ID",
+        "Analysis.BatchTime":"Batch time",
+        "Analysis.FileName":"File name",
+        "Analysis.Fail":"Fail",
+        "Analysis.Success":"Success",
+        "Analysis.NotStarted":"Not started",
+        "Analysis.Down":"Down"
     },
     Marketing: {
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
@@ -2023,7 +2031,8 @@ export default {
         "Menu.Shipping Fee": "Shipping Fee",
         "Menu.NPS": "NPS",
         "Menu.Message setting": "Message setting",
-        "Menu.Delivery date": "Delivery date"
+        "Menu.Delivery date": "Delivery date",
+        "Menu.Export report": "Export report",
     },
     Others: {
         "import": "Import",

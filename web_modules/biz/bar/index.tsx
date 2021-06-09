@@ -30,10 +30,10 @@ class Line extends React.Component {
           let res = ""
           params&&params.map((item,index)=>{
             if(index == 0) {
-              res += '<div style=" "> '+ item.seriesName + "：" + item.value + "<br>"
+              res += '<div style=" "> '+ item.name + "：" + item.value + "<br>"
               '</div>';
             }else {
-              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value) +unit.unit2
+              res += '<div style=" "> '+ item.name + "：" + Number(item.value) +unit.unit2
               '</div>';
             }
           })
@@ -58,10 +58,18 @@ class Line extends React.Component {
           axisLabel: {
             show: true,
             interval:0,
+            rotate:10,
             textStyle: {
               color: '#999',
               fontsize: '11'
             },
+            formatter: function(value) {
+              var res = value;
+              if(res.length > 22) {
+                res = res.substring(0, 22) + "..";
+              }
+              return res;
+            }
           },
           data: data.x
         }

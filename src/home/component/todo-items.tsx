@@ -143,8 +143,11 @@ class TodoItems extends React.Component<any, any> {
   };
 
   render() {
-    const {loading} = this.props.relaxProps;
-    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, prescriberTradeTopView, prescriberTradeItemTopView, prescriberTradeAndItemTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView} = this.state;
+    const {loading , prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
+    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView} = this.state;
+    setTimeout(()=>{
+      console.log(this.props.relaxProps.prescriberTradeAndItemTopView,11111);
+    })
     return (
       <div className="item">
         <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{width: '90px', height: '90px'}} alt=""/>}>
@@ -575,21 +578,21 @@ class TodoItems extends React.Component<any, any> {
               <div className="main">
                 <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2"/></div>
                 {!prescriberTradeAndItemTopView ||
-                (!prescriberTradeAndItemTopView.prescriberTopViewItemList || prescriberTradeAndItemTopView.prescriberTopViewItemList.length === 0)
+                (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
                    ? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
                   <div className="line">
-                    {prescriberTrendView && (
+                    {prescriberTradeAndItemTopView && (
                       <Bar
                         yName={{y1: '', y2: ''}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberNameList,
-                          y1: transactionTrendView.numList
+                          x: prescriberTradeAndItemTopView.prescriberNameList,
+                          y1: prescriberTradeAndItemTopView.numList
                         }}
                       />
                     )}
@@ -599,20 +602,20 @@ class TodoItems extends React.Component<any, any> {
               <div className="main">
                 <div className="main-text"><FormattedMessage id="Home.UJ1"/></div>
                 {!prescriberTradeTopView ||
-                (!prescriberTradeTopView.prescriberTopViewItemList || prescriberTrendView.prescriberTopViewItemList.length === 0)? (
+                (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0)? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
                   <div className="line">
-                    {prescriberTrendView && (
+                    {prescriberTradeTopView && (
                       <Bar
                         yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberNameList,
-                          y1: transactionTrendView.numList
+                          x: prescriberTradeTopView.prescriberNameList,
+                          y1: prescriberTradeTopView.numList
                         }}
                       />
                     )}
@@ -621,21 +624,20 @@ class TodoItems extends React.Component<any, any> {
               </div>
               <div className="main">
                 <div className="main-text"><FormattedMessage id="Home.UJ2"/></div>
-                {!prescriberTradeItemTopView ||
-                (!prescriberTradeItemTopView.prescriberTopViewItemList || prescriberTradeItemTopView.prescriberTopViewItemList.length === 0) ? (
+                {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
                   <div className="line">
-                    {prescriberTrendView && (
+                    {prescriberTradeItemTopView && (
                       <Bar
                         yName={{y1: (window as any).RCi18n({id: 'Home.Prescriberreward'}), y2: (window as any).RCi18n({id: 'Home.Activerate'})}}
                         unit={{unit1: '', unit2: '%'}}
                         nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                         data={{
-                          x: prescriberTrendView.prescriberNameList,
-                          y1: transactionTrendView.numList
+                          x: prescriberTradeItemTopView.prescriberNameList,
+                          y1: prescriberTradeItemTopView.numList
                         }}
                       />
                     )}

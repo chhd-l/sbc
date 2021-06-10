@@ -152,6 +152,8 @@ class OrderDetailTab extends React.Component<any, any> {
           entrance: string;
           apartment: string;
           area: string;
+          timeSlot: string;
+          deliverDate: string;
         })
       : {};
 
@@ -545,7 +547,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           <Col span={12}>
-            <div className="headBox" style={{ height: 235 }}>
+            <div className="headBox" style={{ height: 250 }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
@@ -601,11 +603,22 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </p>
                 </Col>
                 <Col span={12}>
-                  <p>
+                <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.city}</div>}
+                  >
+                    <p className="overFlowtext">
                     <FormattedMessage id="Order.city" />: {consignee.city}
                   </p>
+                  </Tooltip>
                   <p>
                     <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
                   </p>
@@ -620,6 +633,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   </p>
                   <p>
                     <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.deliveryDate" />: {consignee.deliverDate}
                   </p>
                 </Col>
                 <Col span={24}>

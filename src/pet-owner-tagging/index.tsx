@@ -216,9 +216,12 @@ class PetOwnerTagging extends Component<any, any> {
     });
   };
   handleSubmit = () => {
+    /*
+    *如果tagging上面有绑定的人或者宠物，不能修改type 和 status
+    */
     const { taggingForm, isEdit, isDisable, currentEditTagging, updateDisableTip } = this.state;
-    if (isDisable && (currentEditTagging.segmentType !== taggingForm.taggingType || 
-      currentEditTagging.isPublished !==taggingForm.taggingStatus )) {
+    if (isDisable && (+currentEditTagging.segmentType !== +taggingForm.taggingType || 
+      +currentEditTagging.isPublished !== +taggingForm.taggingStatus )) {
       message.error(updateDisableTip);
       return;
     }
@@ -289,7 +292,7 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, pagination, taggingForm, modalName, visible, isSubmit, isDisable, updateDisableTip } = this.state;
+    const { loading, title, taggingList, pagination, taggingForm, modalName, visible } = this.state;
 
     const formItemLayout = {
       labelCol: {

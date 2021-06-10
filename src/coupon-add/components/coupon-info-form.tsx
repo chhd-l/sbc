@@ -660,13 +660,10 @@ class CouponInfoForm extends Component<any, any> {
                     {
                       validator: (_rule, value, callback) => {
                         if (value) {
-                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                            (window as any).RCi18n({
-                              id: 'Marketing.integerfrom1to99999'
-                            })
+                          if (!/^(?:[1-9][0-9]?)$/.test(value)) {
                             callback(
                               (window as any).RCi18n({
-                                id: 'Marketing.InputValueBetween'
+                                id: 'Marketing.InputValuefrom1to99'
                               })
                             );
                           }
@@ -677,7 +674,7 @@ class CouponInfoForm extends Component<any, any> {
                   ]
                 })(
                   <Input
-                    placeholder="0.1-9.9"
+                    placeholder="1-99"
                     maxLength={3}
                     value={couponDiscount}
                     onChange={async (e) => {
@@ -688,7 +685,7 @@ class CouponInfoForm extends Component<any, any> {
                     }}
                     style={{ width: 360 }}
                   />
-                )}
+                )} %
                 {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
               </Row>
             </FormItem>

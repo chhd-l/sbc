@@ -27,8 +27,8 @@ export default class AppStore extends Store {
       let shipping = {};
       if (res.context.marketingFreeShippingLevel) {
         shipping = {
-          shippingValue: res.context.marketingFreeShippingLevel.fullAmount ? res.context.marketingFreeShippingLevel.fullAmount : null,
-          shippingItemValue: res.context.marketingFreeShippingLevel.fullCount ? res.context.marketingFreeShippingLevel.fullCount : null
+          shippingValue: res.context.marketingFreeShippingLevel ? res.context.marketingFreeShippingLevel.fullAmount : null,
+          shippingItemValue: res.context.marketingFreeShippingLevel ? res.context.marketingFreeShippingLevel.fullCount : null
         };
       }
       this.dispatch('marketing:shippingBean', fromJS({ ...res.context, ...shipping }));

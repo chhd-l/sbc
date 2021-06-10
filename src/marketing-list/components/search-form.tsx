@@ -66,7 +66,7 @@ class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={<FormattedMessage id="Marketing.PromotionType" />}
                 // style={{ width: 170 }}
-                defaultValue="All"
+                defaultValue=""
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({

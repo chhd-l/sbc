@@ -605,10 +605,10 @@ class FullDiscountForm extends React.Component<any, any> {
                           if (value) {
                             if(value === '10' || value === 10) {
                               callback();
-                            } else if (!/^(?:0|[1-9][0-9]?|100)$/.test(value)) {
+                            } else if (!/^(?:[1-9][0-9]?)$/.test(value)) { // 0|[1-9][0-9]?|100
                               callback(
                                 (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom0to100',
+                                  id: 'Marketing.InputValuefrom1to99',
                                 })
                               );
                             }
@@ -623,12 +623,12 @@ class FullDiscountForm extends React.Component<any, any> {
                       style={{ width: 100 }}
                       title={
                         (window as any).RCi18n({
-                          id: 'Marketing.InputValuefrom0to100'
+                          id: 'Marketing.InputValuefrom1to99'
                         })
                       }
                       placeholder={
                         (window as any).RCi18n({
-                          id: 'Marketing.InputValuefrom0to100'
+                          id: 'Marketing.InputValuefrom1to99'
                         })
                       }
                       onChange={(e) => {
@@ -660,10 +660,10 @@ class FullDiscountForm extends React.Component<any, any> {
                         if (value) {
                           if(value === '10' || value === 10) {
                             callback();
-                          } else if (!/^(?:0|[1-9][0-9]?|100)$/.test(value)) {
+                          } else if (!/^(?:[1-9][0-9])$/.test(value)) {
                             callback(
                               (window as any).RCi18n({
-                                id: 'Marketing.InputValuefrom0to100'
+                                id: 'Marketing.InputValuefrom1to99'
                               })
                             );
                           }
@@ -678,12 +678,12 @@ class FullDiscountForm extends React.Component<any, any> {
                     style={{ width: 100 }}
                     title={
                       (window as any).RCi18n({
-                        id: 'Marketing.InputValuefrom0to100'
+                        id: 'Marketing.InputValuefrom1to99'
                       })
                     }
                     placeholder={
                       (window as any).RCi18n({
-                        id: 'Marketing.InputValuefrom0to100'
+                        id: 'Marketing.InputValuefrom1to99'
                       })
                     }
                     onChange={(e) => {

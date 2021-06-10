@@ -7,6 +7,7 @@ import { Checkbox, Col, Form, Row, Table } from 'antd';
 import { IList } from 'typings/globalType';
 import { Const, QMFloat } from 'qmkit';
 import styled from 'styled-components';
+import { fromJS } from 'immutable';
 const FormDiv = styled.div`
   h3 {
     font-size: 14px;
@@ -105,6 +106,9 @@ export default class CouponBasicInfo extends Component<any, any> {
       skuCates: IList;
       // 商品
       skus: IList;
+      goodsList: any;
+      currentCategary: any;
+      currentAttribute: any;
     };
   };
 
@@ -114,12 +118,39 @@ export default class CouponBasicInfo extends Component<any, any> {
     skuBrands: 'skuBrands',
     skuCates: 'skuCates',
     skus: 'skus',
+    goodsList: 'goodsList',
+    currentCategary: 'currentCategary',
+    currentAttribute: 'currentAttribute'
   };
 
   render() {
-    const { couponCates, coupon, skuBrands, skuCates, skus } = this.props.relaxProps;
-    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription} = coupon.toJS();
+    const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute } = this.props.relaxProps;
+    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
+      fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
+    } = coupon.toJS();
+    let dataSource = fromJS([])
+    // const goodsInfoPage = goodsList.goodsInfoPage.content
+    if (scopeType === 4) {
+      const cates = goodsList.get('cates')
+      const brands = goodsList.get('brands')
+      let array = []
+      scopeIds.map((scope) => {
+        if(goodsList.get('goodsInfoPage')) {
+          let goodInfo = fromJS(goodsList.get('goodsInfoPage').get('content')).find((s) => s.get('goodsInfoId') == scope);
+          if (goodInfo) {
+            const cId = goodInfo.get('cateId');
+            const cate = fromJS(cates || []).find((s) => s.get('cateId') === cId);
+            goodInfo = goodInfo.set('cateName', cate ? cate.get('cateName') : '-');
 
+            const bId = goodInfo.get('brandId');
+            const brand = fromJS(brands || []).find((s) => s.get('brandId') === bId);
+            goodInfo = goodInfo.set('brandName', brand ? brand.get('brandName') : '-');
+            array.push(goodInfo.toJS())
+          }
+        }
+      });
+      dataSource = fromJS(array).filter((goodsInfo) => goodsInfo);
+    }
     return (
       <FormDiv>
         <Form>
@@ -159,25 +190,25 @@ export default class CouponBasicInfo extends Component<any, any> {
             <div style={style}>
               {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
 
-              {/*{*/}
-              {/*  scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :*/}
-              {/*    scopeType === 1 ?*/}
-              {/*      <Table dataSource={dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">*/}
-              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />*/}
-              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />*/}
-              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />*/}
-              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />*/}
-              {/*        <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />*/}
-              {/*        <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />*/}
-              {/*      </Table> :  scopeType === 2 ? */}
-              {/*      currentCategary && currentCategary.map(item=> (*/}
-              {/*        <span className="more-left-span" key={item.storeCateId}>{item.get('cateName')}</span>*/}
-              {/*      ))*/}
-              {/*      :*/}
-              {/*      currentAttribute && currentAttribute.map(item=> (*/}
-              {/*        <span key={item.id} className="more-left-span" >{item.get('attributeName') || item.get('attributeDetailName')} </span>*/}
-              {/*      ))*/}
-              {/*}*/}
+              {
+                scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
+                  scopeType === 4 && dataSource.size > 0?
+                    <Table dataSource={ dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
+                      <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
+                      <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
+                    </Table> :  scopeType === 5 ?
+                    currentCategary && currentCategary.map(item=> (
+                      <span className="coupon-mgr10" key={item.storeCateId}>{item.get('cateName')}</span>
+                    ))
+                    :
+                    currentAttribute && currentAttribute.map(item=> (
+                      <span key={item.id} className="coupon-mgr10" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
+                    ))
+              }
 
             </div>
           </FormItem>

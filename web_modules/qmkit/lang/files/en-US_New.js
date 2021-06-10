@@ -1602,7 +1602,7 @@ export default {
         "Marketing.Idontwanttocumulate": "I don’t want to cumulate with default subscription discount",
         "Marketing.Alltype": "All type",
         "Marketing.percent": "%",
-        "Marketing.InputValuefrom0to100": "Input value is an integer from 0 to 100",
+        "Marketing.InputValuefrom1to99": "Input value is an integer from 1 to 99",
     },
     Content: {
         "Content.Prompt": "Prompt",

@@ -343,7 +343,17 @@ class ListView extends React.Component<any, any> {
                                   top: '20px'
                                 }}
                               >
-                                {v.get('subscribeId')}
+                                <Tooltip
+                                  overlayStyle={{
+                                    overflowY: 'auto'
+                                  }}
+                                  placement="bottomLeft"
+                                  title={<div> {v.get('subIdList') ? v.get('subIdList').toJS().join(',') : ''}</div>}
+                                >
+                                  <p className="overFlowtext" style={{ width: 600 }}>
+                                    {v.get('subIdList') ? v.get('subIdList').toJS().join(',') : ''}
+                                  </p>
+                                </Tooltip>
                               </span>
                             ) : (
                               ''

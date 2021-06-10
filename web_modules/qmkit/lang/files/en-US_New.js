@@ -776,6 +776,8 @@ export default {
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
         "Order.Recipientscell": "Recipient's cell",
+        "Order.timeSlot": "Time slot",
+        "Order.deliveryDate": "Delivery date",
 
 
 

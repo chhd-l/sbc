@@ -33,7 +33,7 @@ export default class Activity extends Component<any, any> {
             activities: res.context.taskLogList.reverse()
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {

@@ -101,11 +101,11 @@ class TaskUpdate extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
     const { id } = this.state;
     if (id) {
@@ -130,14 +130,14 @@ class TaskUpdate extends Component<any, any> {
               this.getPetOwnerSubscriptions(customerAccount);
             }
           } else {
-            message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+            message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
             this.setState({
               loading: false
             });
           }
         })
         .catch(() => {
-          message.error(<FormattedMessage id="Public.GetDataFailed" />);
+          message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             loading: false
           });
@@ -192,14 +192,14 @@ class TaskUpdate extends Component<any, any> {
             petAssistantLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             petAssistantLoading: false
           });
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
         this.setState({
           petAssistantLoading: false
         });
@@ -225,14 +225,14 @@ class TaskUpdate extends Component<any, any> {
             petOwnerLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             petOwnerLoading: false
           });
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
         this.setState({
           petOwnerLoading: false
         });
@@ -249,11 +249,11 @@ class TaskUpdate extends Component<any, any> {
             associatedPetList: res.context.context
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
   }
 
@@ -267,11 +267,11 @@ class TaskUpdate extends Component<any, any> {
             associatedOrderList: res.context.content
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
   }
 
@@ -285,11 +285,11 @@ class TaskUpdate extends Component<any, any> {
             associatedSubscriptionList: res.context.subscriptionResponses
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
-        message.error(<FormattedMessage id="Public.GetDataFailed" />);
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
   }
 
@@ -355,7 +355,7 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success((window as any).RCi18n({id:'Order.UpdateFailed'}));
+                message.success((window as any).RCi18n({id:'Content.OperateSuccessfully'}));
                 history.push({ pathname: '/tasks' });
               } else {
                 message.error(res.message || (window as any).RCi18n({id:'Order.AddFailed'}));
@@ -823,16 +823,17 @@ class TaskUpdate extends Component<any, any> {
                     <Col span={12}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociateSubscription"/>}>
                         {getFieldDecorator('subscriptionNumber', {
-                          initialValue: task.subscription
+                          initialValue: task.subscriptionNumber ? task.subscriptionNumber.split(',') : []
                         })(
                           editable ? (
                             <Select
+                              mode="multiple"
                               allowClear
                               disabled={taskCompleted}
                               onChange={(value) =>
                                 this.onChange({
                                   field: 'subscriptionNumber',
-                                  value: value
+                                  value: value ? (value as []).join(',') : ''
                                 })
                               }
                             >

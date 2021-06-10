@@ -791,6 +791,7 @@ export default {
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
         "Order.Recipientscell": "Recipient's cell",
+        "Order.moreFields": "More Fields",
         "Order.Automaticskip": "Automatic skip logistic information collection ",
         "Order.AfterDaysLogistics": "After days, the logistic information collection will be automatically dismissed",
         "Order.Automatictrigger": "Automatic trigger full amount refund ",
@@ -798,6 +799,7 @@ export default {
 	    'Order.region': 'Region',
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
+
 
 
     },

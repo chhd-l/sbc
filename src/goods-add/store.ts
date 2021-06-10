@@ -47,7 +47,8 @@ import {
   getSeo,
   editSeo,
   getCateList,
-  getDescriptionTab
+  getDescriptionTab,
+  getSubSkuStock
 } from './webapi';
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
@@ -317,7 +318,7 @@ export default class AppStore extends Store {
           saleableFlag: item.saleableFlag,
           marketPrice: item.marketPrice,
           subMarketPrice: item.subMarketPrice,
-          subScriptionPrice: item.subScriptionPrice,
+          subscriptionPrice: item.subscriptionPrice,
           goodsInfoNo: item.goodsInfoNo,
           subGoodsInfoNo: item.subGoodsInfoNo || item.goodsInfoNo
         };
@@ -1999,6 +2000,22 @@ export default class AppStore extends Store {
     }
     this.dispatch('goodsActor: tabChange', activeKey);
   };
+  getSubSkuStockByAPI() {
+    const goodsInfos = this.state().get('goodsList').toJS();
+    getSubSkuStock({
+      skuGoodsInfo: goodsInfos.map(item => {
+        return {
+          goodsInfoNo: item.goodsInfoNo,
+          subSkus: item.goodsInfoBundleRels.map(sub => ({subGoodsNum: sub.bundleNum, subSkuId: sub.subGoodsInfoId}))
+        }
+      })
+    }).then(({res}) => {
+      res.context?.skuGoodsInfo?.forEach(item => {
+        let curGood = goodsInfos.find(good => good.goodsInfoNo === item.goodsInfoNo);
+        this.editGoodsItem(curGood.id, 'stock', item.bundleNum);
+      })
+    });
+  };
   onTabChanges = (nextKey) => {
     if (nextKey === 'price') {
       if (!this._validMainForms()) {
@@ -2008,6 +2025,8 @@ export default class AppStore extends Store {
       if (!this._validMainForms() || !this._validPriceFormsNew()) {
         return;
       }
+      
+      this.getSubSkuStockByAPI();
     } else if (nextKey === 'related') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
         return;

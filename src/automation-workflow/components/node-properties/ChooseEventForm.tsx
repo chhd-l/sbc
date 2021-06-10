@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Input, TreeSelect } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
 const FormItem = Form.Item;
 
 export default class ChooseEventForm extends Component<any, any> {
@@ -49,12 +50,12 @@ export default class ChooseEventForm extends Component<any, any> {
         selectable: false,
         children: [
           {
-            title: '1st purchase for order confirmation (Club)',
+            title: RCi18n({id:'task.1stpurchasefororderconfirmation(Club)'}),
             value: '1stPurchaseForOrderConfirmation',
             key: '0-0-1'
           },
-          { title: 'After 1st delivery', value: 'after1stDelivery', key: '0-0-2' },
-          { title: 'After 4th delivery', value: 'After4thDelivery', key: '0-0-3' }
+          { title: RCi18n({id:'task.task.After1stdelivery'}), value: 'after1stDelivery', key: '0-0-2' },
+          { title: RCi18n({id:'task.After4thdelivery'}), value: 'After4thDelivery', key: '0-0-3' }
         ]
       },
       {
@@ -63,12 +64,12 @@ export default class ChooseEventForm extends Component<any, any> {
         key: '0-1',
         selectable: false,
         children: [
-          { title: '1st month of Subscription', value: '1stMonthOfSubscription', key: '0-1-1' },
-          { title: 'Half-year subscription', value: 'halfYearSubscription', key: '0-1-2' },
-          { title: '1-year subscription', value: '1YearSubscription', key: '0-1-3' },
-          { title: 'Subscription program cancelation by PO', value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
-          { title: 'Food transition (new life-stage)', value: 'foodTransition', key: '0-1-5' },
-          { title: '3 days before next refill order', value: '3DaysBeforeNextRefillOrder', key: '0-1-6' },
+          { title: RCi18n({id:'task.1stmonthofSubscription'}), value: '1stMonthOfSubscription', key: '0-1-1' },
+          { title: RCi18n({id:'task.Half-yearsubscription'}), value: 'halfYearSubscription', key: '0-1-2' },
+          { title: RCi18n({id:'task.1-yearsubscription'}), value: '1YearSubscription', key: '0-1-3' },
+          { title: RCi18n({id:'task.SubscriptionprogramcancelationbyPO'}), value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
+          { title: RCi18n({id:'task.Foodtransition(newlife-stage)'}), value: 'foodTransition', key: '0-1-5' },
+          { title: RCi18n({id:'task.3daysbeforenextrefillorder'}), value: '3DaysBeforeNextRefillOrder', key: '0-1-6' },
           { title: 'Create pet profile', value: 'createPetProfile', key: '0-1-7' }
         ]
       },

@@ -98,6 +98,12 @@ export default {
         "Public.editor.uploadVideoError": "upload video error",
         "Public.editor.uploadVideoFailed": "upload video failed",
         "Public.editor.videoReturnResultsRrror": "upload video return results error",
+        "Public.exportTip": "The export report will show in the Analyze module/Export report.",
+        "Public.Objects": "Objects",
+        "Public.orders": "orders",
+        "Public.subscriptions": "subscriptions",
+        "Public.maximumTip":"The maximum period is six months",
+        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email."
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -114,6 +120,15 @@ export default {
         "Home.ManagePrescriber": "Manage Prescriber",
         "Home.units": "units",
         "Home.Week": "Week",
+        /*---------------------*/
+        "Home.BestPrescriber":"Best Prescriber",
+        "Home.UJ1&UJ2Prescriber":"UJ1 & UJ2: Top 5 Prescriber",
+        "Home.UJ1Prescriber":"UJ1: Top 5 Prescriber",
+        "Home.UJ2Prescriber":"UJ2: Top 5 Prescriber",
+        "Home.UJ1&UJ2":"UJ1 & UJ2",
+        "Home.UJ1":"UJ1",
+        "Home.UJ2":"UJ2",
+
     },
     Product: {
         'Product.Notification': 'Notification',
@@ -775,7 +790,16 @@ export default {
         "Order.Batchoperation": "Batch operation",
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
-        "Order.Recipientscell": "Recipient's cell"
+        "Order.Recipientscell": "Recipient's cell",
+        "Order.Automaticskip": "Automatic skip logistic information collection ",
+        "Order.AfterDaysLogistics": "After days, the logistic information collection will be automatically dismissed",
+        "Order.Automatictrigger": "Automatic trigger full amount refund ",
+        "Order.AfterDaysFullrefund": "After days, the full amount refund will be automatically triggered",
+	    'Order.region': 'Region',
+        "Order.timeSlot": "Time slot",
+        "Order.deliveryDate": "Delivery date",
+
+
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",
@@ -823,6 +847,7 @@ export default {
         "Subscription.ReminderSwitchProductDesc": "Days before the next lifestage, an email will be sent to pet owners to recommend a new product",
         "Subscription.EmailReminderIntervals": "Email reminder intervals",
         "Subscription.EmailReminderIntervalsDesc": "Attempts between first and last emails due to inventory issues",
+        'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',
@@ -1274,6 +1299,15 @@ export default {
         "Analysis.SalesOverview": "Sales Overview",
         "Analysis.Consumers": "Consumers",
         "Analysis.TransactionTrend": "Transaction trend",
+        "Analysis.ExportReport" :"Export report",
+        "Analysis.BatchID" :"Batch ID",
+        "Analysis.BatchTime":"Batch time",
+        "Analysis.FileName":"File name",
+        "Analysis.Fail":"Fail",
+        "Analysis.Success":"Success",
+        "Analysis.NotStarted":"Not started",
+        "Analysis.Down":"Down",
+        "Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically":"Please remind that the report will expire after 7 days automatically."
     },
     Marketing: {
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
@@ -1958,6 +1992,30 @@ export default {
         "Setting.Edit": "Edit",
         "Setting.Delete": "Delete",
         'Setting.CarriersCompanySettings': 'Carriers company settings',
+        "Setting.Delete": "Delete",
+        "Setting.orderDeliveryDateSettings": "Order delivery date settings",
+        "Setting.allowDeliveryOption":"Allow delivery option",
+        "Setting.homeDelivery":"Home Delivery",
+        "Setting.openCityCondition":"Open city condition",
+        "Setting.theRangeOfDaysForDelivery":"The range of days for delivery",
+        "Setting.cutOffTimesOfOneDayDelivery":"Cut-off times of One day delivery",
+        "Setting.openingHours":"Opening Hours",
+        "Setting.Monday":"Monday",
+        "Setting.Tuesday":"Tuesday",
+        "Setting.Wednesday":"Wednesday",
+        "Setting.Thursday":"Thursday",
+        "Setting.Friday":"Friday",
+        "Setting.Saturday":"Saturday",
+        "Setting.Sunday":"Sunday",
+        "Setting.timeSolt":"Time solt",
+        "Setting.closedHours":"Closed Hours",
+        "Setting.selectDay": "Select day",
+        "Setting.before": "Before",
+        "Setting.add": "Add",
+        "Setting.opertaor": "Opertaor",
+        "Setting.pleaseSelectCity": "Please select city",
+        "Setting.pleaseSelectTime": "Please select time",
+        
     },
     Menu: {
         "Menu.Appointment": "Appointment",
@@ -1978,6 +2036,8 @@ export default {
         "Menu.Shipping Fee": "Shipping Fee",
         "Menu.NPS": "NPS",
         "Menu.Message setting": "Message setting",
+        "Menu.Delivery date": "Delivery date",
+        "Menu.Export report": "Export report",
     },
     Others: {
         "import": "Import",

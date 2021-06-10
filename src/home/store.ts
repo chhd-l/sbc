@@ -21,95 +21,6 @@ import { getEditProductResource, getPreEditProductResource } from '@/goods-add/w
 
 const SUCCESS = Modal.success;
 
-const dataBoardUi = {
-  f_trade_watch_1: [
-    {
-      label: 'Transaction Profile',
-      dataKey: 'tradeOview',
-      priority: 2,
-      onOff: true,
-      isOview: true
-    },
-    {
-      label: 'Transaction Reports',
-      dataKey: 'tradeReport',
-      priority: 6,
-      onOff: true
-    },
-    { label: 'Trading trend', dataKey: 'tradeTrends', priority: 9, onOff: true }
-  ],
-  f_flow_watch_1: [
-    {
-      label: 'Flow profile',
-      dataKey: 'trafficOview',
-      priority: 1,
-      onOff: true,
-      isOview: true
-    },
-    {
-      label: 'Flow Reports',
-      dataKey: 'trafficReport',
-      priority: 5,
-      onOff: true
-    },
-    {
-      label: 'Traffic trend',
-      dataKey: 'trafficTrends',
-      priority: 8,
-      onOff: true
-    }
-  ],
-  f_goods_watch_1: [
-    {
-      label: 'Commodity Profile',
-      dataKey: 'skuOview',
-      priority: 3,
-      onOff: true,
-      isOview: true
-    },
-    {
-      label: 'Product sales ranking',
-      dataKey: 'skuSaleRanking',
-      priority: 11,
-      onOff: true
-    }
-  ],
-  f_customer_watch_1: [
-    {
-      label: 'Customer Profile',
-      dataKey: 'customerOview',
-      priority: 4,
-      onOff: true,
-      isOview: true
-    },
-    {
-      label: 'Customer growth report',
-      dataKey: 'customerGrowthReport',
-      priority: 7,
-      onOff: true
-    },
-    {
-      label: 'Customer growth trend',
-      dataKey: 'customerGrowthTrends',
-      priority: 10,
-      onOff: true
-    },
-    {
-      label: 'Customer order ranking',
-      dataKey: 'customerOrderRanking',
-      priority: 12,
-      onOff: true
-    }
-  ],
-  f_employee_watch_1: [
-    {
-      label: '业务员业绩排行',
-      dataKey: 'employeeAchieve',
-      priority: 13,
-      onOff: true
-    }
-  ]
-};
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -137,6 +48,9 @@ export default class AppStore extends Store {
       this.dispatch('home:taskEmployeeStatisticsView', res.context?.taskEmployeeStatisticsView?.taskStatistics ?? {});
       this.dispatch('home:transactionTrendView', res.context ? res.context.transactionTrendView : []);
       this.dispatch('home:trafficTrendDashboardView', res.context ? res.context.trafficTrendDashboardView : []);
+      this.dispatch('home:prescriberTradeTopView', res.context ? res.context.prescriberTradeTopView : []);
+      this.dispatch('home:prescriberTradeItemTopView', res.context ? res.context.prescriberTradeItemTopView : []);
+      this.dispatch('home:prescriberTradeAndItemTopView', res.context ? res.context.prescriberTradeAndItemTopView : []);
       //this.dispatch('home:searchData', getListAll.context);
     } else {
       this.dispatch('loading:end');

@@ -340,14 +340,14 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+                message.success((window as any).RCi18n({id:'Content.OperateSuccessfully'}));
                 history.goBack();
               } else {
-                message.error(res.message || <FormattedMessage id="Order.UpdateFailed" />);
+                message.error(res.message || (window as any).RCi18n({id:'Order.UpdateFailed'}));
               }
             })
             .catch((err) => {
-              message.error(err || <FormattedMessage id="Order.UpdateFailed" />);
+              message.error(err || (window as any).RCi18n({id:'Order.UpdateFailed'}));
             });
         } else {
           webapi
@@ -355,14 +355,14 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success(<FormattedMessage id="Content.OperateSuccessfully" />);
+                message.success((window as any).RCi18n({id:'Order.UpdateFailed'}));
                 history.push({ pathname: '/tasks' });
               } else {
-                message.error(res.message || <FormattedMessage id="Order.AddFailed" />);
+                message.error(res.message || (window as any).RCi18n({id:'Order.AddFailed'}));
               }
             })
             .catch((err) => {
-              message.error(err || <FormattedMessage id="Order.AddFailed" />);
+              message.error(err || (window as any).RCi18n({id:'Order.AddFailed'}));
             });
         }
       }
@@ -424,7 +424,7 @@ class TaskUpdate extends Component<any, any> {
                 ) : (
                   <Tooltip placement="top" title="Cancel">
                     <Button onClick={() => this.setState({ editable: false })}>
-                      <FormattedMessage id="Order.btnCancel" />
+                      <FormattedMessage id="task.Cancel" />
                     </Button>
                   </Tooltip>
                 )}

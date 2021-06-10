@@ -78,7 +78,7 @@ class ExportReport extends Component<any, any> {
       endTime,
       pageSize: pageSize,
       pageNum: pageNum,
-      module:searchForm.module ? parseInt(searchForm.module) : 0
+      module:searchForm.module ? parseInt(searchForm.module) : ''
     })
     this.setState({
       dataSource: result.res.context.tradeAsyncExportVOS.content,
@@ -121,7 +121,7 @@ class ExportReport extends Component<any, any> {
    * 下载
    * @param url
    */
-  download = url => {
+  download = (url,name) => {
     const eleLink = document.createElement('a');
     eleLink.style.display = 'none';
     // eleLink.target = "_blank"
@@ -131,7 +131,26 @@ class ExportReport extends Component<any, any> {
     eleLink.click();
     document.body.removeChild(eleLink);
   };
+  SizeChange(limit){
+    let size = '';
+    if(limit < 0.1 * 1024){                            //小于0.1KB，则转化成B
+      size = limit.toFixed(2) + 'B'
+    }else if(limit < 0.1 * 1024 * 1024){            //小于0.1MB，则转化成KB
+      size = (limit/1024).toFixed(2) + 'KB'
+    }else if(limit < 0.1 * 1024 * 1024 * 1024){        //小于0.1GB，则转化成MB
+      size = (limit/(1024 * 1024)).toFixed(2) + 'MB'
+    }else{                                            //其他转化成GB
+      size = (limit/(1024 * 1024 * 1024)).toFixed(2) + 'GB'
+    }
 
+    let sizeStr = size + '';                        //转成字符串
+    let index = sizeStr.indexOf('.');                    //获取小数点处的索引
+    let dou = sizeStr.substr(index + 1 ,2)            //获取小数点后两位的值
+    if(dou == '00'){                                //判断后两位是否为00，如果是则删除00
+      return sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2)
+    }
+    return size;
+  }
   render() {
     const columns = [
       {
@@ -174,6 +193,12 @@ class ExportReport extends Component<any, any> {
         title: <FormattedMessage id="Setting.Size" />,
         dataIndex: 'fileSize',
         key:'fileSize',
+        render:fileSize => {
+          console.log(fileSize)
+          let size = ''
+          fileSize ? size = this.SizeChange(fileSize) : size = ''
+          return <span>{size}</span>
+        }
       },
       {
         title: <FormattedMessage id="Product.Status" />,
@@ -218,7 +243,7 @@ class ExportReport extends Component<any, any> {
               return  (
                 <Tooltip placement="top" title={<FormattedMessage id="Analysis.Down" />}>
                   <Icon type="cloud-download" style={styles.icon} onClick={()=>{
-                    this.download(record.fileUrl)
+                    this.download(record.fileUrl,record.fileName)
                   }}/>
                 </Tooltip>
               )

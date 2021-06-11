@@ -95,6 +95,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           <Select
             disabled={exportField === 'all'}
             style={styles.wrapper}
+            allowClear
             onChange={() => {
               // 如果选择的值影响其他下拉框的选项，则将那个受影响的下拉框的值清空
               if (item.valueLink) {

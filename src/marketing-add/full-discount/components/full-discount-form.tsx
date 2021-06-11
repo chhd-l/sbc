@@ -657,15 +657,21 @@ class FullDiscountForm extends React.Component<any, any> {
                     },
                     {
                       validator: (_rule, value, callback) => {
+                        let rule = marketingBean.get('promotionType') == 1 ? /^(?:[1-9][0-9])$/: /^(?:[1-9][0-9]?|100)$/
                         if (value) {
                           if(value === '10' || value === 10) {
                             callback();
-                          } else if (!/^(?:[1-9][0-9])$/.test(value)) {
+                          } else if (!rule.test(value)) {
+                            marketingBean.get('promotionType') == 1 ?
                             callback(
                               (window as any).RCi18n({
                                 id: 'Marketing.InputValuefrom1to99'
                               })
-                            );
+                            ): callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.InputValuefrom1to100'
+                              })
+                              )
                           }
                         }
                         callback();
@@ -677,14 +683,20 @@ class FullDiscountForm extends React.Component<any, any> {
                   <Input
                     style={{ width: 100 }}
                     title={
+                      marketingBean.get('promotionType') == 1?
                       (window as any).RCi18n({
                         id: 'Marketing.InputValuefrom1to99'
-                      })
+                      })  : (window as any).RCi18n({
+                          id: 'Marketing.InputValuefrom1to100'
+                        })
                     }
                     placeholder={
+                      marketingBean.get('promotionType') == 1 ?
                       (window as any).RCi18n({
                         id: 'Marketing.InputValuefrom1to99'
-                      })
+                      }) : (window as any).RCi18n({
+                          id: 'Marketing.InputValuefrom1to100'
+                        })
                     }
                     onChange={(e) => {
                       this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });

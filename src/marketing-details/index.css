@@ -5,8 +5,9 @@
 
 .rule-span {
   text-align: left !important;
-  width: 400px !important;
+  /*width: 400px !important;*/
   display: inline-block;
+  margin: 0!important;
 }
 
 .loading-spin {
@@ -43,4 +44,8 @@
 .Idontwanttocumulate {
   min-width: 30em;
   text-align: left;
+}
+
+.display-inline-block {
+  display: inline-block;
 }

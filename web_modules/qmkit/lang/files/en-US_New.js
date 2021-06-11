@@ -1639,6 +1639,7 @@ export default {
         "Marketing.Alltype": "All type",
         "Marketing.percent": "%",
         "Marketing.InputValuefrom1to99": "Input value is an integer from 1 to 99",
+        "Marketing.InputValuefrom1to100": "Input value is an integer from 1 to 100",
     },
     Content: {
         "Content.Prompt": "Prompt",

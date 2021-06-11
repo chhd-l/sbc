@@ -155,7 +155,7 @@ class OrderDetailTab extends React.Component<any, any> {
           apartment: string;
           area: string;
           timeSlot: string;
-          deliverDate: string;
+          deliveryDate: string;
         })
       : {};
 
@@ -690,7 +690,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.deliveryDate" />: {consignee.deliverDate}
+                    <FormattedMessage id="Order.deliveryDate" />: {consignee.deliveryDate}
                   </p>
                 </Col>
                 <Col span={24}>

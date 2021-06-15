@@ -359,7 +359,11 @@ const index = () => {
               </p>
             </Col>
             <Col span={2}>
-              <Button type="primary" onClick={() => addOpenTable()}>
+              <Button
+                type="primary"
+                onClick={() => addOpenTable()}
+                disabled={allSelectWeeks.length === 7}
+              >
                 <FormattedMessage id="Setting.add" />
               </Button>
             </Col>
@@ -399,7 +403,11 @@ const index = () => {
             ))}
           </Row>
           <Row>
-            <Button type="primary" onClick={() => SaveDeliveryDate()} disabled={!(cityOk && cutTimeOk)}>
+            <Button
+              type="primary"
+              onClick={() => SaveDeliveryDate()}
+              disabled={!(cityOk && cutTimeOk)}
+            >
               <FormattedMessage id="save" />
             </Button>
           </Row>

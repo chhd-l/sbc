@@ -12,3 +12,9 @@ export function fetchAnalysisExportReport(data) {
     body: JSON.stringify(data)
   });
 }
+
+export function fetchAnalysisReportsDown(id) {
+  return Fetch<TResult>('/digitalStrategy/async/export/'+id,{
+    method: 'GET',
+  });
+}

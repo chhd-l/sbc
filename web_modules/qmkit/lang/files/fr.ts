@@ -60,7 +60,7 @@ export default {
   'task.DueStarttime':"Date d'échéance de début",
   'task.DueEndtime':"Date d'échéance de fin",
   'task.AddNewTask':'Ajouter une tâche',
-  'task.AssociateSubscription':'Associer une Souscription',
+  'task.AssociateSubscription':'Souscription associée',
   'task.Taskcreation': "Création d'une tâche",
   'task.Taskedition':'Modifier la tâche',
   'task.Back':'Retour',
@@ -73,7 +73,25 @@ export default {
   'task.After4thdelivery':'Après la 4ème livraison',
   'task.Foodtransition(newlife-stage)':'Transition alimentaire (nouvelle étape de la vie)',
   'task.3daysbeforenextrefillorder':'3 jours avant la prochaine commande',
-  'task.By': 'By',
-  'task.All': 'Tout'
- 
+  'task.By': 'Le',
+  'task.All': 'Tout',
+  'task.Search': 'Recherche',
+
+
+
+
+
+
+
+
+
+   /*-----------------------------  Home  ----------------------------------------------*/
+   'Home.Task': 'Tâche',
+   'Home.ToDo': 'À faire',
+   'Home.OnGoing': 'En cours',
+   'Home.Overdue': 'Finalisé',
+   'Home.more':'Voir plus',
+   'Home.Reminder':'Alertes',
+   'Home.Todotask':'Tâches à faire',
+   'Home.Viewalltask':'Voir toutes les tâches',
 };

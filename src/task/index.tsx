@@ -324,7 +324,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="Order.search" />
+                        <FormattedMessage id="task.Search" />
                       </span>
                     </Button>
                   </FormItem>

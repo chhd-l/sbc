@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as weapi from './webapi';
-import { BreadCrumb, cache, DataGrid, Headline, SelectGroup, Const } from 'qmkit';
-import { Button, Col, Form, Row, DatePicker, Icon, Select, Tooltip } from 'antd';
+import { BreadCrumb, cache, DataGrid, Headline, SelectGroup, Const, util } from 'qmkit';
+import { Button, Col, Form, Row, DatePicker, Icon, Select, Tooltip, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -121,15 +121,31 @@ class ExportReport extends Component<any, any> {
    * 下载
    * @param url
    */
-  download = (url,name) => {
-    const eleLink = document.createElement('a');
-    eleLink.style.display = 'none';
-    // eleLink.target = "_blank"
-    eleLink.href = url;
-    // eleLink.href = record;
-    document.body.appendChild(eleLink);
-    eleLink.click();
-    document.body.removeChild(eleLink);
+  download =async (id) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // 参数加密
+        const base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          const result = JSON.stringify({
+            id,
+            token: token
+          });
+          const encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref = Const.HOST + `/digitalStrategy/async/export/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error('请登录');
+        }
+        resolve();
+      }, 500);
+    });
+    // 新窗口下载
+    // const exportHref = Const.HOST + `/digitalStrategy/async/export/${id}`;
+    // window.open(exportHref);
+    // await weapi.fetchAnalysisReportsDown(id)
   };
   SizeChange(limit){
     let size = '';
@@ -243,7 +259,7 @@ class ExportReport extends Component<any, any> {
               return  (
                 <Tooltip placement="top" title={<FormattedMessage id="Analysis.Down" />}>
                   <Icon type="cloud-download" style={styles.icon} onClick={()=>{
-                    this.download(record.fileUrl,record.fileName)
+                    this.download(record.id)
                   }}/>
                 </Tooltip>
               )

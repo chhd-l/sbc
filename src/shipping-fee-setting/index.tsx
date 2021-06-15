@@ -193,13 +193,15 @@ class ShippingFeeSetting extends Component<any, any> {
       ? JSON.parse(this.state.selectShippingFee.header)
       : {};
     let domain = header.Domain;
+    let activeDelivery = deliveryOptions.filter((x) => x.status === 1);
+    const disbaleDeliveryOption = activeDelivery && activeDelivery.length === 1;
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search" style={{ minHeight: '100vh', background: '#fff' }}>
           {deliveryOptions && deliveryOptions.length > 0 ? (
-            <Row>
+            <Row style={{ marginBottom: 20 }}>
               <Headline title="Delivery option selection" />
               <Spin
                 style={{ position: 'fixed', top: '30%', left: '100px' }}
@@ -228,11 +230,13 @@ class ShippingFeeSetting extends Component<any, any> {
                               title={`Are you sure to ${
                                 item.status === 1 ? 'disbale' : 'enable'
                               } this?`}
+                              disabled={disbaleDeliveryOption && item.status === 1}
                               onConfirm={() => this.enableDelivery(item.id)}
                               okText="Yes"
                               cancelText="No"
                             >
                               <Switch
+                                disabled={disbaleDeliveryOption && item.status === 1}
                                 size="small"
                                 checked={item.status === 1 ? true : false}
                                 onChange={(checked) => {

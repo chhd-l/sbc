@@ -436,7 +436,7 @@ export default {
         "Product.thedistributionactivity": "The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?",
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
         "Product.On/Off shelves": "On/Off shelves",
-
+        "Product.SynchronizeTips": "Please wait 5-10 minutes pariently.",
 
     },
 

@@ -341,6 +341,10 @@ export default {
   'Home.Rate': 'Rate',
   'Home.units': 'units',
   'Home.Week':'Week',
+  'Home.Reminder':'Reminder',
+  'Home.Todotask':'To Do Task',
+  'Home.Viewalltask':'View all task',
+
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",
@@ -1802,6 +1806,8 @@ export default {
   'task.3daysbeforenextrefillorder':'3 days before next refill order',
   'task.By': 'By',
   'task.All': 'All',
+  'task.Search': 'Search',
+
   
   /*-----------------------------  Subscription  ---------------------------------------*/
 

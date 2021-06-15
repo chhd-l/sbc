@@ -210,7 +210,6 @@ class ExportReport extends Component<any, any> {
         dataIndex: 'fileSize',
         key:'fileSize',
         render:fileSize => {
-          console.log(fileSize)
           let size = ''
           fileSize ? size = this.SizeChange(fileSize) : size = ''
           return <span>{size}</span>
@@ -256,13 +255,22 @@ class ExportReport extends Component<any, any> {
               return <span></span>
               break;
             case 4:
-              return  (
+              let docment = (
                 <Tooltip placement="top" title={<FormattedMessage id="Analysis.Down" />}>
                   <Icon type="cloud-download" style={styles.icon} onClick={()=>{
                     this.download(record.id)
                   }}/>
                 </Tooltip>
               )
+              let losetime = new Date(record.loseTime.replace(/-/g,'/'))
+              let now = new Date()
+              console.log(now.getTime())
+              console.log(losetime.getTime())
+              if(now.getTime() < losetime.getTime()){
+                return docment
+              }else {
+               return
+              }
               break;
           }
         }

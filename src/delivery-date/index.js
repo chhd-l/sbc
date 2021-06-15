@@ -49,6 +49,9 @@ const index = () => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           if (res.context && res.context.id && res.context.openDate) {
+            if (!res.context.closeDate) {
+              res.context.closeDate = [];
+            }
             setDeliveryFrom(res.context);
           }
           setCities(res.context.city);

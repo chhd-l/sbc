@@ -2018,6 +2018,7 @@ export default {
         "Setting.opertaor": "Opertaor",
         "Setting.pleaseSelectCity": "Please select city",
         "Setting.pleaseSelectTime": "Please select time",
+        "Setting.mustSelectOneOpenDay": "Please select at least one open date"
         
     },
     Menu: {

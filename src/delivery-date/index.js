@@ -141,7 +141,10 @@ const index = () => {
   }
 
   function addOpenTable() {
-    const maxSort = Math.max(...deliveryForm.openDate.map((x) => [x.sort]));
+    const maxSort =
+      deliveryForm.openDate && deliveryForm.openDate.length > 0
+        ? Math.max(...deliveryForm.openDate.map((x) => [x.sort]))
+        : 0;
     const newOpenDate = [
       ...deliveryForm.openDate,
       {
@@ -178,7 +181,10 @@ const index = () => {
   }
 
   function addCloseTable() {
-    const maxSort = Math.max(...deliveryForm.closeDate.map((x) => [x.sort]));
+    const maxSort =
+      deliveryForm.closeDate && deliveryForm.closeDate.length > 0
+        ? Math.max(...deliveryForm.closeDate.map((x) => [x.sort]))
+        : 0;
     const newCloseDate = [
       ...deliveryForm.closeDate,
       {
@@ -218,6 +224,10 @@ const index = () => {
   }
 
   function SaveDeliveryDate() {
+    if (allSelectWeeks.length === 0) {
+      message.info(window.RCi18n({ id: 'Setting.mustSelectOneOpenDay' }));
+      return;
+    }
     setLoading(true);
     webapi
       .SaveDeliveryDate(deliveryForm)

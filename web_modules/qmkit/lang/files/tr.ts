@@ -1328,6 +1328,7 @@ export default {
     'Order.October': 'Ekim',
     'Order.November': 'Kasım',
     'Order.December': 'Aralık',
+    'Order.tomorrow': 'Yarın...',
 
     "task.Completed": "Tamamlandı",
     "task.Email": "E-posta",

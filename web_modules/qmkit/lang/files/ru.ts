@@ -983,6 +983,7 @@ export default {
   'Order.Friday': 'Пятница',
   'Order.Saturday': 'Суббота',
   'Order.Sunday': 'Воскресенье',
+  'Order.tomorrow': 'завтра',
 
   // 月份
   'Order.January': 'Января',

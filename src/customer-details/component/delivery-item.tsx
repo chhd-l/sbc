@@ -30,7 +30,7 @@ interface Iprop extends FormComponentProps {
   backToDetail?: Function;
 }
 
-const FORM_FIELD_MAP = {
+export const FORM_FIELD_MAP = {
   'First name': 'firstName',
   'Last name': 'lastName',
   Country: 'countryId',

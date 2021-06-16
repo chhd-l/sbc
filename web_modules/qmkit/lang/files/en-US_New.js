@@ -103,7 +103,8 @@ export default {
         "Public.orders": "orders",
         "Public.subscriptions": "subscriptions",
         "Public.maximumTip":"The maximum period is six months",
-        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email."
+        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email.",
+        "Public.timeErrorTip":"The start time and end time should be within 6 months",
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -1110,6 +1111,10 @@ export default {
         "PetOwner.Keyword": "Keyword",
         "PetOwner.TaskStatus": "Task Status",
         "PetOwner.GoldenMoment": "GoldenMoment",
+        "PetOwner.AddressStreetTip": "Пожалуйста, укажите: Улица",
+        "PetOwner.AddressPostCodeTip": "Пожалуйста, укажите: Индекс",
+        "PetOwner.AddressHouseTip": "Пожалуйста, укажите: Дом",
+        "PetOwner.AddressCityTip": "Пожалуйста, укажите: Город",
         "PetOwner.DefaultPrescriberName": "Default prescriber name",
         "PetOwner.Activity": "Activity",
         "PetOwner.theCorrectPhone": "Please enter the correct phone",

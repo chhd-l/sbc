@@ -1704,6 +1704,30 @@ export default {
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.number':'Order number',
+  // 星期
+  'Order.Monday': 'Monday',
+  'Order.Tuesday': 'Tuesday',
+  'Order.Wednesday': 'Wednesday',
+  'Order.Thursday': 'Thursday',
+  'Order.Friday': 'Friday',
+  'Order.Saturday': 'Saturday',
+  'Order.Sunday': 'Sunday',
+
+  // 月份
+  'Order.January': 'January',
+  'Order.February': 'February',
+  'Order.March': 'March',
+  'Order.April': 'April',
+  'Order.May': 'May',
+  'Order.June': 'June',
+  'Order.July': 'July',
+  'Order.August': 'August',
+  'Order.September': 'September',
+  'Order.October': 'October',
+  'Order.November': 'November',
+  'Order.December': 'December',
+  'Order.tomorrow': 'Tomorrow',
+
 
 
   /*-----------------------------  Task  ----------------------------------------------*/

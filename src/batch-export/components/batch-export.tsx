@@ -26,7 +26,9 @@ class BatchExport extends Component<BatchExportProps, any> {
       fieldKey: {},
       selectKey: [],
       exportField: 'search',
-      loading: false
+      loading: false,
+      pickErrorInfo: '',
+      pickOpen: false
     };
   }
 
@@ -73,11 +75,11 @@ class BatchExport extends Component<BatchExportProps, any> {
   }
 
   getFields() {
-    const { fieldKey, exportField } = this.state;
+    const { fieldKey, exportField, pickErrorInfo, pickOpen } = this.state;
     const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
     // const { getFieldDecorator, getFieldValue } = this.props.form;
     const children = fieldData.map(item => {
-      let content = <Input style={styles.wrapper} disabled={exportField === 'all'}/>;
+      let content = <Input style={styles.wrapper} disabled={exportField === 'all'} />;
       if (item.options) {
         let opts = item.options[fieldKey[item.key]] || [];
         // 判断当前选项是否根据其它值联动
@@ -121,10 +123,19 @@ class BatchExport extends Component<BatchExportProps, any> {
         <Col span={8} id="Range-picker-width" key={item.key}>
           <FormItem>
             {getFieldDecorator(item.key, {
+              required: false,
+              message: '',
               rules: [
                 {
-                  required: false,
-                  message: '',
+                  validator: (rule, value, callback) => {
+                    let startTime = value[0];
+                    let endTime = value[1];
+                    let endTimeClone: any = endTime && endTime.clone();
+                    if (startTime && endTimeClone && startTime.valueOf() < endTimeClone.subtract(6, 'months').valueOf()) {
+                      return callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })))
+                    }
+                    callback();
+                  }
                 },
               ],
             })(<RangePicker
@@ -198,6 +209,7 @@ class BatchExport extends Component<BatchExportProps, any> {
       "pickColums": selectKey,
       "tradeExportRequest": {}
     };
+    let bChecked = true;
     if (exportField === 'search') {
       form.validateFields((err, values) => {
         if (!err) {
@@ -226,15 +238,24 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
 
           params.tradeExportRequest = obj;
+        } else {
+          bChecked = false;
         }
       });
     }
 
-    batchExportMain(params).then(({res}) => {
+    if(!bChecked) {
       this.setState({
         loading: false
       });
-      if(res.code === 'K-000000') {
+      return;
+    }
+
+    batchExportMain(params).then(({ res }) => {
+      this.setState({
+        loading: false
+      });
+      if (res.code === 'K-000000') {
         Modal.success({
           width: 550,
           centered: true,

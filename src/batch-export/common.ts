@@ -97,9 +97,9 @@ export const orderSeachField:fieldDataType[] = [
   },
   {
     label: RCi18n({ id: 'Order.subscriptionType' }),
-    key: 'subscriptionType',
+    key: 'subscriptionTypeQuery',
     options: {
-      subscriptionType: [
+      subscriptionTypeQuery: [
         { value: 'ContractProduct', name: RCi18n({ id: 'Order.contractProduct' }) },
         { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
         { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },

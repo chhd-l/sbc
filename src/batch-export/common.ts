@@ -81,18 +81,18 @@ export const orderSeachField:fieldDataType[] = [
   {
     label: [
       {
-        value: 'paymentStatus',
+        value: 'payState',
         name: RCi18n({ id: 'Order.paymentStatus' })
       },
       {
-        value: 'shippingStatus',
+        value: 'deliverStatus',
         name: RCi18n({ id: 'Order.shippingStatus' })
       }
     ],
-    key: 'paymentStatus',
+    key: 'payState',
     options: {
-      paymentStatus: PaymentStatus,
-      shippingStatus: ShippStatus
+      payState: PaymentStatus,
+      deliverStatus: ShippStatus
     }
   },
   {
@@ -160,7 +160,7 @@ export const subscriptionSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.subscriptionNumber' })
       },
       {
-        value: 'id',
+        value: 'orderCode',
         name: RCi18n({ id: 'Order.OrderNumber' })
       }
     ],
@@ -169,7 +169,7 @@ export const subscriptionSeachField:fieldDataType[] = [
   {
     label: [
       {
-        value: 'skuName',
+        value: 'goodsName',
         name: RCi18n({ id: 'Order.productName' })
       },
       {
@@ -177,7 +177,7 @@ export const subscriptionSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.skuCode' })
       }
     ],
-    key: 'skuName',
+    key: 'goodsName',
   },
   {
     label: [
@@ -199,22 +199,22 @@ export const subscriptionSeachField:fieldDataType[] = [
   {
     label: [
       {
-        value: 'buyerName',
+        value: 'customerName',
         name: RCi18n({ id: 'Order.consumerName' })
       },
       {
-        value: 'buyerAccount',
+        value: 'customerAccount',
         name: RCi18n({ id: 'Order.consumerAccount' })
       }
     ],
-    key: 'buyerName',
+    key: 'customerName',
   },
   {
     label: [
-      { value: 'clinicsName', name: RCi18n({ id: 'Order.clinicName' }) },
-      { value: 'clinicsIds', name: RCi18n({ id: 'Order.clinicID' }) }
+      { value: 'prescriberName', name: RCi18n({ id: 'Order.clinicName' }) },
+      { value: 'prescriberId', name: RCi18n({ id: 'Order.clinicID' }) }
     ],
-    key: 'clinicsName'
+    key: 'prescriberName'
   },
   {
     label: RCi18n({ id: 'Order.subscriptionType' }),

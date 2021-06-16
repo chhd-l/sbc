@@ -86,7 +86,7 @@ export default class AppStore extends Store {
         couponJoinLevel: Number(couponJoinLevel),
         segmentIds,
         couponPromotionType,
-        couponDiscount: couponDiscount * 10.0,
+        couponDiscount: couponDiscount * 100.0,
         attributeValueIds,
         couponPurchaseType,
         isSuperimposeSubscription
@@ -243,7 +243,7 @@ export default class AppStore extends Store {
       scopeType,
       couponDesc,
       couponPromotionType,
-      couponDiscount: couponDiscount / 10.0,
+      couponDiscount: couponDiscount / 100.0,
       attributeValueIds,
       couponPurchaseType,
       isSuperimposeSubscription

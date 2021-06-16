@@ -1720,6 +1720,7 @@ export default {
   'Order.October': 'October',
   'Order.November': 'November',
   'Order.December': 'December',
+  'Order.tomorrow': 'Tomorrow',
 
 
 

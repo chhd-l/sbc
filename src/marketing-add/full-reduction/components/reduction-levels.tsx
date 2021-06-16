@@ -165,7 +165,6 @@ class ReductionLevels extends React.Component<any, any> {
                           },
                           {
                             validator: (_rule, value, callback) => {
-                              debugger
                               if (value) {
                                 if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                                   callback(
@@ -173,7 +172,7 @@ class ReductionLevels extends React.Component<any, any> {
                                       id: 'Marketing.0.01-99999999.99',
                                     })
                                   );
-                                } else if(!isFullCount && level.fullAmount &&  value > level.fullAmount) {
+                                } else if(!isFullCount && level.fullAmount &&  Number(value) > Number(level.fullAmount)) {
                                   callback(
                                     'Value cannot be greater than the previous value.'
                                   );

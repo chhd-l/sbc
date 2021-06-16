@@ -8,6 +8,8 @@ import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _, { divide } from 'lodash';
 import { getCountryList, getStateList, getCityList, searchCity, getAddressFieldList } from './webapi';
+import { FORM_FIELD_MAP } from './delivery-item';
+import { getAddressConfig } from '../member-detail';
 import { spawn } from 'child_process';
 
 const { TextArea } = Input;
@@ -30,6 +32,7 @@ class BasicEdit extends React.Component<any, any> {
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '',
       editable: false,
       customer: {},
+      fieldList: [],
       countryList: [],
       stateList: [],
       cityList: [],
@@ -48,9 +51,19 @@ class BasicEdit extends React.Component<any, any> {
   }
   componentDidMount() {
     this.getBasicDetails();
+    this.getAddressCon();
     // this.getDict();
     // this.getClinicList();
   }
+
+  getAddressCon = async () => {
+    const fields = await getAddressConfig();
+    const countries = await getCountryList();
+    this.setState({
+      fieldList: fields,
+      countryList: countries
+    });
+  };
 
   getDict = async () => {
     const addressTypeList = await getAddressFieldList();
@@ -331,42 +344,15 @@ class BasicEdit extends React.Component<any, any> {
                     )}
                   </FormItem>
                 </Col>
-                <Col span={12}>
-                  <FormItem label="First name">
-                    {editable ? (
-                      getFieldDecorator('firstName', {
-                        initialValue: customer.firstName,
-                        rules: [
-                          { required: true, message: 'Please input First Name!' },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(<Input disabled />)
-                    ) : (
-                      <span>{customer.firstName}</span>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem label="Last name">
-                    {editable ? (
-                      getFieldDecorator('lastName', {
-                        initialValue: customer.lastName,
-                        rules: [
-                          { required: true, message: 'Please input Last Name!' },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(<Input disabled />)
-                    ) : (
-                      <span>{customer.lastName}</span>
-                    )}
-                  </FormItem>
-                </Col>
+                {this.state.fieldList.map((field, idx) => (
+                  <Col key={idx} span={12}>
+                    <FormItem label={field.fieldName}>
+                      <span>
+                        {field.fieldName === 'Country' ? (customer.countryId ? this.state.countryList.find(c => c.id === customer.countryId)?.name : customer.country) : (customer[FORM_FIELD_MAP[field.fieldName]])}
+                      </span>
+                    </FormItem>
+                  </Col>
+                ))}
                 <Col span={12}>
                   <FormItem label="Birth Date">
                     {editable ? (
@@ -396,119 +382,6 @@ class BasicEdit extends React.Component<any, any> {
                       })(<Input disabled />)
                     ) : (
                       <span>{customer.email}</span>
-                    )}
-                  </FormItem>
-                </Col>
-                <Col span={12}>
-                  <FormItem label="Phone number">
-                    {editable ? (
-                      getFieldDecorator('contactPhone', {
-                        initialValue: customer.contactPhone,
-                        rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }]
-                      })(<Input />)
-                    ) : (
-                      <span>{customer.contactPhone}</span>
-                    )}
-                  </FormItem>
-                </Col>
-
-                <Col span={12}>
-                  <FormItem label="Postal code">
-                    {editable ? (
-                      getFieldDecorator('postalCode', {
-                        initialValue: customer.postalCode,
-                        rules: [{ required: true, message: 'Please input Postal Code!' }, { validator: this.compareZip }]
-                      })(<Input />)
-                    ) : (
-                      <span>{customer.postalCode}</span>
-                    )}
-                  </FormItem>
-                </Col>
-
-                <Col span={12}>
-                  <FormItem label="Country">
-                    {editable ? (
-                      getFieldDecorator('countryId', {
-                        initialValue: customer.countryId,
-                        rules: [{ required: true, message: 'Please select country!' }]
-                      })(
-                        <Select optionFilterProp="children">
-                          {countryList.map((item) => (
-                            <Option value={item.id} key={item.id}>
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
-                      )
-                    ) : (
-                      <span>{customer.country}</span>
-                    )}
-                  </FormItem>
-                </Col>
-
-                {this.state.stateEnable && (
-                  <Col span={12}>
-                    <FormItem label="State">
-                      {editable ? (
-                        getFieldDecorator('province', {
-                          initialValue: customer.province,
-                          rules: [{ required: true, message: 'Please select state!' }]
-                        })(
-                          <Select showSearch>
-                            {stateList.map((item) => (
-                              <Option value={item.stateName} key={item.id}>
-                                {item.stateName}
-                              </Option>
-                            ))}
-                          </Select>
-                        )
-                      ) : (
-                        <div style={{ minHeight: 40 }}>{customer.province || ''}</div>
-                      )}
-                    </FormItem>
-                  </Col>
-                )}
-
-                <Col span={12}>
-                  <FormItem label="City">
-                    {editable ? (
-                      getFieldDecorator('city', {
-                        rules: [{ required: true, message: 'Please select City!' }],
-                        initialValue: customer.city
-                      })(
-                        this.state.cityType === 1 ? (
-                          <AutoComplete dataSource={cityList.map((city) => city.cityName)} onSearch={this.searchCity} />
-                        ) : (
-                          <Select showSearch>
-                            {this.state.dropDownCityList.map((item) => (
-                              <Option value={item.name} key={item.id}>
-                                {item.name}
-                              </Option>
-                            ))}
-                          </Select>
-                        )
-                      )
-                    ) : (
-                      <span>{customer.city}</span>
-                    )}
-                  </FormItem>
-                </Col>
-
-                <Col span={12}>
-                  <FormItem label="Address reference">
-                    {editable ? (
-                      getFieldDecorator('address1', {
-                        initialValue: customer.address1,
-                        rules: [
-                          { required: true, message: 'Please input Address 1!' },
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(<Input />)
-                    ) : (
-                      <span>{customer.address1}</span>
                     )}
                   </FormItem>
                 </Col>

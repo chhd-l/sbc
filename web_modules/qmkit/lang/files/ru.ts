@@ -975,6 +975,31 @@ export default {
   "Order.Sales category": "Категория Продаж",
   "Order.Signedclassification": "Подписанная Классификация",
   "Order.number": "Номер Заказа",
+  // 星期
+  'Order.Monday': 'Понедельник',
+  'Order.Tuesday': 'Вторник',
+  'Order.Wednesday': 'Среда',
+  'Order.Thursday': 'Четверг',
+  'Order.Friday': 'Пятница',
+  'Order.Saturday': 'Суббота',
+  'Order.Sunday': 'Воскресенье',
+  'Order.tomorrow': 'завтра',
+
+  // 月份
+  'Order.January': 'Января',
+  'Order.February': 'Февраля',
+  'Order.March': 'Марта',
+  'Order.April': 'Апреля',
+  'Order.May': 'Мая',
+  'Order.June': 'Июня',
+  'Order.July': 'Июля',
+  'Order.August': 'Августа',
+  'Order.September': 'Сентября',
+  'Order.October': 'Октября',
+  'Order.November': 'Ноября',
+  'Order.December': 'Декабря',
+
+
   "task.Completed": "Завершённый",
   "task.Email": "E-mail",
   "task.PetOwnerName": "Имя Владельца",

@@ -1305,6 +1305,30 @@ export default {
     "Order.Sales category": "Satış Kategorisi",
     "Order.Signedclassification": "Kayıtlı Sınıflandırma",
     "Order.number": "Sipariş numarası",
+
+    // 星期
+    'Order.Monday': 'Pazartesi.',
+    'Order.Tuesday': 'Salı günü.',
+    'Order.Wednesday': 'Çarşamba.',
+    'Order.Thursday': 'Perşembe',
+    'Order.Friday': 'Cuma',
+    'Order.Saturday': 'Cumartesi',
+    'Order.Sunday': 'Pazar',
+
+    // 月份
+    'Order.January': 'Ocak',
+    'Order.February': 'Şubat',
+    'Order.March': 'Mart',
+    'Order.April': 'April',
+    'Order.May': 'May ıs',
+    'Order.June': 'Haziran',
+    'Order.July': 'Temmuz',
+    'Order.August': 'Ağustos',
+    'Order.September': 'Eylül',
+    'Order.October': 'Ekim',
+    'Order.November': 'Kasım',
+    'Order.December': 'Aralık',
+
     "task.Completed": "Tamamlandı",
     "task.Email": "E-posta",
     "task.PetOwnerName": "Evcil Hayvan sahibinin adı",

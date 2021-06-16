@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -129,7 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice') ? detail.get('tradePrice').toJS() as any : {};
+    const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
     const consignee = detail.get('consignee')
@@ -200,7 +200,7 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     });
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
-    const installmentPrice= tradePrice.installmentPrice;
+    const installmentPrice = tradePrice.installmentPrice;
 
     const columns = [
       {
@@ -384,7 +384,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
                 </p>
                 <p>
-                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
+                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & ') : ''}
                 </p>
                 <p>
                   <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}
@@ -534,9 +534,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
-                  {installmentPrice && installmentPrice.additionalFee ? 
-                   ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')'
-                  : null}
+                  {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')' : null}
                 </strong>
               </label>
             </div>
@@ -606,7 +604,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   </p>
                 </Col>
                 <Col span={12}>
-                <Tooltip
+                  <Tooltip
                     overlayStyle={{
                       overflowY: 'auto'
                     }}
@@ -614,7 +612,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.city}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.city" />: {consignee.city}
+                      <FormattedMessage id="Order.city" />: {consignee.city}
                     </p>
                   </Tooltip>
                   <p>
@@ -629,9 +627,17 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                   </p>
-                  <p>
-                    <FormattedMessage id="Order.deliveryDate" />: {consignee.deliveryDate}
-                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.deliveryDate" />: {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                    </p>
+                  </Tooltip>
                 </Col>
                 <Col span={24}>
                   <Tooltip

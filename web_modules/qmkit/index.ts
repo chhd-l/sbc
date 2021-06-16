@@ -46,6 +46,7 @@ import Fonts from './images/iconfont/iconfont.json'
 import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
 import QRScaner from './qr-scan';
 import {RCi18n} from './lang';
+import { getFormatDeliveryDateStr } from './deliveryDate'
 export {
   noop,
   SelectGroup,
@@ -99,5 +100,6 @@ export {
   PaymentStatus,
   getOrderStatusValue,
   QRScaner,
-  RCi18n
+  RCi18n,
+  getFormatDeliveryDateStr
 };

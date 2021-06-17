@@ -255,7 +255,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
             housing: dadataAddress.block || '',
             house: dadataAddress.house || '',
             settlement: dadataAddress.settlement || '',
-            street: dadataAddress.street || ''
+            street: dadataAddress.street || '',
+            postCode: rFields.postCode || dadataAddress.postCode,
           } : {
             country: (this.state.countryList[0] ?? {}).value ?? '',
             countryId: (this.state.countryList[0] ?? {}).id ?? '',

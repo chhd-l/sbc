@@ -6,6 +6,7 @@ import './style.less';
 import * as webapi from './webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
+import { RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -416,13 +417,13 @@ class TaskUpdate extends Component<any, any> {
             {tabKey !== 'activity' ? (
               <Col span={12} style={{ textAlign: 'right' }}>
                 {!editable ? (
-                  <Tooltip placement="top" title="Edit">
+                  <Tooltip placement="top" title={RCi18n({id:'task.Edit'})}>
                     <Button style={{ marginRight: '20px' }} type="primary" onClick={() => this.setState({ editable: true })}>
-                      <FormattedMessage id="Order.Edit" />
+                      <FormattedMessage id="task.Edit" />
                     </Button>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'task.Cancel'})}>
                     <Button onClick={() => this.setState({ editable: false })}>
                       <FormattedMessage id="task.Cancel" />
                     </Button>

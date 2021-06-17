@@ -1831,6 +1831,7 @@ export default {
   'task.By': 'By',
   'task.All': 'All',
   'task.Search': 'Search',
+  'task.Edit': 'Edit',
 
   
   /*-----------------------------  Subscription  ---------------------------------------*/

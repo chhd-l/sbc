@@ -218,7 +218,7 @@ export default class Task extends React.Component<any, any> {
                       value={taskForm.priority}
                     >
                       <Option value="">
-                        <FormattedMessage id="Order.All" />
+                        <FormattedMessage id="task.All" />
                       </Option>
 
                       {priorityList &&

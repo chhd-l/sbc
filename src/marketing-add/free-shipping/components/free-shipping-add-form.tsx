@@ -274,9 +274,8 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              // /^\+?[1-9]\d{0,3}(\.\d*)?$/
-                              let rule = /(?!^0\.0?0$)^[0-9][0-9](\.[0-9]{1,2})?$/
-                              if(marketingBean.get('subType') !== 10 || value == 0) {
+                              debugger
+                              if(marketingBean.get('subType') !== 10 || value === 0 || value === '0') {
                                 callback();
                               } else if (!value) {//marketingBean.get('shippingValue')
                                 callback(

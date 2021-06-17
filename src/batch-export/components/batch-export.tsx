@@ -77,7 +77,6 @@ class BatchExport extends Component<BatchExportProps, any> {
   getFields() {
     const { fieldKey, exportField, pickErrorInfo, pickOpen } = this.state;
     const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
-    // const { getFieldDecorator, getFieldValue } = this.props.form;
     const children = fieldData.map(item => {
       let content = <Input style={styles.wrapper} disabled={exportField === 'all'} />;
       if (item.options) {
@@ -123,8 +122,6 @@ class BatchExport extends Component<BatchExportProps, any> {
         <Col span={8} id="Range-picker-width" key={item.key}>
           <FormItem>
             {getFieldDecorator(item.key, {
-              required: false,
-              message: '',
               rules: [
                 {
                   validator: (rule, value, callback) => {
@@ -132,12 +129,13 @@ class BatchExport extends Component<BatchExportProps, any> {
                     let endTime = value[1];
                     let endTimeClone: any = endTime && endTime.clone();
                     if (startTime && endTimeClone && startTime.valueOf() < endTimeClone.subtract(6, 'months').valueOf()) {
-                      return callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })))
+                      callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })));
                     }
                     callback();
                   }
                 },
               ],
+              initialValue: [null, null]
             })(<RangePicker
               disabledDate={current => current && current > moment().endOf('day')}
               disabled={exportField === 'all'}
@@ -151,14 +149,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           <Form.Item>
             <Input.Group compact style={styles.formItemStyle}>
               {this.getLabel(item.label, item.key)}
-              {getFieldDecorator(item.key, {
-                rules: [
-                  {
-                    required: false,
-                    message: '',
-                  },
-                ],
-              })(content)}
+              {getFieldDecorator(item.key)(content)}
             </Input.Group>
           </Form.Item>
         </Col>)
@@ -213,12 +204,14 @@ class BatchExport extends Component<BatchExportProps, any> {
     if (exportField === 'search') {
       form.validateFields((err, values) => {
         if (!err) {
-          let obj = {};
+          let obj = {
+            tradeState: {}
+          };
           // 单独处理时间值
           let timeArr = values.beginTime;
           if (timeArr && timeArr.length) {
-            obj['beginTime'] = timeArr[0].format(Const.DAY_FORMAT);
-            obj['endTime'] = timeArr[1].format(Const.DAY_FORMAT);
+            obj['beginTime'] = timeArr[0]?.format(Const.DAY_FORMAT);
+            obj['endTime'] = timeArr[1]?.format(Const.DAY_FORMAT);
           }
           delete fieldKey['beginTime'];
 
@@ -232,6 +225,8 @@ class BatchExport extends Component<BatchExportProps, any> {
           for (let key in fieldKey) {
             if (key === 'orderType') {// orderType要默认赋值
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
+            } else if(key === 'payState') {
+              obj['tradeState'][fieldKey[key]] = values[key] || '';
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }
@@ -250,7 +245,7 @@ class BatchExport extends Component<BatchExportProps, any> {
       });
       return;
     }
-
+    
     batchExportMain(params).then(({ res }) => {
       this.setState({
         loading: false
@@ -273,6 +268,7 @@ class BatchExport extends Component<BatchExportProps, any> {
         });
       }
     });
+    
   }
 
   render() {

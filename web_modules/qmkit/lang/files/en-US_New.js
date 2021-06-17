@@ -2015,7 +2015,7 @@ export default {
         "Setting.Friday":"Friday",
         "Setting.Saturday":"Saturday",
         "Setting.Sunday":"Sunday",
-        "Setting.timeSolt":"Time solt",
+        "Setting.timeSolt":"Time slot",
         "Setting.closedHours":"Closed Hours",
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",

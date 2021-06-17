@@ -222,6 +222,11 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
           delete fieldKey['cycleTypeId_autoship'];
 
+          if(fieldKey['clinicsName'] === 'clinicsIds') {
+            obj['clinicsIds'] = [values['clinicsName']];
+            delete fieldKey['clinicsName'];
+          }
+
           for (let key in fieldKey) {
             if (key === 'orderType') {// orderType要默认赋值
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';

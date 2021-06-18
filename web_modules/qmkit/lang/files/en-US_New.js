@@ -2020,7 +2020,7 @@ export default {
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",
         "Setting.add": "Add",
-        "Setting.Operator": "Operator",
+        "Setting.Delete": "Delete",
         "Setting.pleaseSelectCity": "Please select city",
         "Setting.pleaseSelectTime": "Please select time",
         "Setting.mustSelectOneOpenDay": "Please select at least one open date"

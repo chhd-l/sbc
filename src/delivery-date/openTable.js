@@ -94,7 +94,7 @@ const openTable = (props) => {
             <FormattedMessage id="Setting.timeSolt" />
           </th>
           <th style={{ width: '9%' }}>
-            <FormattedMessage id="Setting.Operator" />
+            <FormattedMessage id="Setting.Delete" />
           </th>
         </tr>
       </thead>

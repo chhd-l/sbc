@@ -29,7 +29,7 @@ const formRowItemLayout = {
   labelCol: {
     span: 2,
     xs: { span: 24 },
-    sm: { span: 4  }
+    sm: { span: 4 }
   },
   wrapperCol: {
     span: 24,
@@ -101,11 +101,11 @@ class TaskUpdate extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
       });
     const { id } = this.state;
     if (id) {
@@ -130,14 +130,14 @@ class TaskUpdate extends Component<any, any> {
               this.getPetOwnerSubscriptions(customerAccount);
             }
           } else {
-            message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+            message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
             this.setState({
               loading: false
             });
           }
         })
         .catch(() => {
-          message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             loading: false
           });
@@ -192,14 +192,14 @@ class TaskUpdate extends Component<any, any> {
             petAssistantLoading: false
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             petAssistantLoading: false
           });
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         this.setState({
           petAssistantLoading: false
         });
@@ -225,14 +225,14 @@ class TaskUpdate extends Component<any, any> {
             petOwnerLoading: false
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             petOwnerLoading: false
           });
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         this.setState({
           petOwnerLoading: false
         });
@@ -249,11 +249,11 @@ class TaskUpdate extends Component<any, any> {
             associatedPetList: res.context.context
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
       });
   }
 
@@ -267,11 +267,11 @@ class TaskUpdate extends Component<any, any> {
             associatedOrderList: res.context.content
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
       });
   }
 
@@ -285,11 +285,11 @@ class TaskUpdate extends Component<any, any> {
             associatedSubscriptionList: res.context.subscriptionResponses
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
       .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+        message.error((window as any).RCi18n({ id: 'Public.GetDataFailed' }));
       });
   }
 
@@ -340,14 +340,14 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success((window as any).RCi18n({id:'Content.OperateSuccessfully'}));
+                message.success((window as any).RCi18n({ id: 'Content.OperateSuccessfully' }));
                 history.goBack();
               } else {
-                message.error(res.message || (window as any).RCi18n({id:'Order.UpdateFailed'}));
+                message.error(res.message || (window as any).RCi18n({ id: 'Order.UpdateFailed' }));
               }
             })
             .catch((err) => {
-              message.error(err || (window as any).RCi18n({id:'Order.UpdateFailed'}));
+              message.error(err || (window as any).RCi18n({ id: 'Order.UpdateFailed' }));
             });
         } else {
           webapi
@@ -355,7 +355,7 @@ class TaskUpdate extends Component<any, any> {
             .then((data) => {
               const { res } = data;
               if (res.code === 'K-000000') {
-                message.success((window as any).RCi18n({id:'Content.OperateSuccessfully'}));
+                message.success((window as any).RCi18n({ id: 'Content.OperateSuccessfully' }));
                 history.push({ pathname: '/tasks' });
               } else {
                 message.error(res.message || <FormattedMessage id="Order.AddFailed" />);
@@ -393,6 +393,7 @@ class TaskUpdate extends Component<any, any> {
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
     const { goldenMomentList, actionTypeList, priorityList, statusList, reminderTypes, associatedSubscriptionList } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
+    let subscriptionNumbers = task.subscriptionNumber ? task.subscriptionNumber.split(',') : [];
     return (
       <div>
         <Breadcrumb>
@@ -452,7 +453,7 @@ class TaskUpdate extends Component<any, any> {
                           editable ? (
                             <Input
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({id:'task.Inputtasknametocreateanewtask'})}
+                              placeholder={(window as any).RCi18n({ id: 'task.Inputtasknametocreateanewtask' })}
                               onChange={(e: any) =>
                                 this.onChange({
                                   field: 'name',
@@ -506,7 +507,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({id:'task.Pleaseinputemailorname'})}
+                              placeholder={(window as any).RCi18n({ id: 'task.Pleaseinputemailorname' })}
                               showSearch
                               loading={petAssistantLoading}
                               onSearch={this.searchAssignedTo}
@@ -572,7 +573,7 @@ class TaskUpdate extends Component<any, any> {
                               disabledDate={this.disabledEventStartDate}
                               disabled={taskCompleted || (!!task.startTime && id)}
                               style={{ width: '100%' }}
-                              placeholder={(window as any).RCi18n({id:'task.StartTime'})}
+                              placeholder={(window as any).RCi18n({ id: 'task.StartTime' })}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -599,7 +600,7 @@ class TaskUpdate extends Component<any, any> {
                               disabledDate={this.disabledEventEndDate}
                               disabled={taskCompleted}
                               style={{ width: '100%' }}
-                              placeholder={(window as any).RCi18n({id:'task.DueTime'})}
+                              placeholder={(window as any).RCi18n({ id: 'task.DueTime' })}
                               format="YYYY-MM-DD"
                               onChange={(date, dateString) => {
                                 const value = dateString ? dateString + ' 00:00:00' : null;
@@ -668,7 +669,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Priority"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Priority" />}>
                         {getFieldDecorator('priority', {
                           initialValue: task.priority
                         })(
@@ -699,7 +700,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPetOwner"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPetOwner" />}>
                         {getFieldDecorator('contactId', {
                           initialValue: task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''
                         })(
@@ -707,7 +708,7 @@ class TaskUpdate extends Component<any, any> {
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({id:'task.Pleaseinputpetowneraccountorname'})}
+                              placeholder={(window as any).RCi18n({ id: 'task.Pleaseinputpetowneraccountorname' })}
                               showSearch
                               loading={petOwnerLoading}
                               onSearch={this.searchAssignedPetOwners}
@@ -733,7 +734,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPet"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPet" />}>
                         {getFieldDecorator('petId', {
                           initialValue: task.petId
                         })(
@@ -763,7 +764,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedOrder"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedOrder" />}>
                         {getFieldDecorator('orderCode', {
                           initialValue: task.orderCode
                         })(
@@ -791,7 +792,7 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.ActionType"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.ActionType" />}>
                         {getFieldDecorator('actionType', {
                           initialValue: task.actionType
                         })(
@@ -821,9 +822,9 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociateSubscription"/>}>
+                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociateSubscription" />}>
                         {getFieldDecorator('subscriptionNumber', {
-                          initialValue: task.subscriptionNumber ? task.subscriptionNumber.split(',') : []
+                          initialValue: subscriptionNumbers
                         })(
                           editable ? (
                             <Select
@@ -844,7 +845,16 @@ class TaskUpdate extends Component<any, any> {
                               ))}
                             </Select>
                           ) : (
-                            <Link to={`/subscription-detail/${task.subscriptionNumber}`}>{task.subscriptionNumber}</Link>
+                            <>
+                              {subscriptionNumbers.map((subscriptionNumber, index) => (
+                                <>
+                                  <Link key={subscriptionNumber} to={`/subscription-detail/${subscriptionNumber}`}>
+                                    {subscriptionNumber}
+                                    {index !== subscriptionNumbers.length - 1 ? ', ' : ''}
+                                  </Link>
+                                </>
+                              ))}
+                            </>
                           )
                         )}
                       </FormItem>
@@ -852,7 +862,7 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     {editable ? (
-                      <FormItem {...formRowItemLayout} label={<FormattedMessage id="task.Description"/>}>
+                      <FormItem {...formRowItemLayout} label={<FormattedMessage id="task.Description" />}>
                         {taskCompleted ? (
                           <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
                         ) : task.description ? (

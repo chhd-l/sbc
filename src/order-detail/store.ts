@@ -35,21 +35,17 @@ export default class AppStore extends Store {
 
     if (code == Const.SUCCESS_CODE) {
       await Promise.all([
-        payRecord(orderInfo.totalTid),
+        payRecord(orderInfo.id),
         fetchLogistics(),
-        // webapi.getOrderNeedAudit(),
-        webapi.getPaymentInfo(orderInfo.totalTid),
+        webapi.getPaymentInfo(orderInfo.id),
         queryDictionary({
           type: 'country'
         })
-        // webapi.refresh(orderInfo.totalTid)
       ]).then((results) => {
         const { res: payRecordResult } = results[0] as any;
         const { res: logistics } = results[1] as any;
-        // const { res: needRes } = results[2] as any;
         const { res: payRecordResult2 } = results[2] as any;
         const { res: countryDictRes } = results[3] as any;
-        // const { res: refresh } = (results[6]) as any;
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('detail:init', orderInfo);

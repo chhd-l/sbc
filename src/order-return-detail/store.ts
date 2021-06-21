@@ -5,7 +5,7 @@ import DetailActor from './actor/detail-actor';
 import RefundRecordActor from './actor/refund-record-actor';
 import LoadingActor from './actor/loading-actor';
 import * as webapi from './webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
@@ -40,6 +40,49 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
       // this.fetchRefundOrder();
     }
+    webapi
+      .getOrderSettingConfig()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let pcashList = res.context.pcashList;
+          let ponlineList = res.context.ponlineList;
+          let unLimitedList = res.context.unLimitedList;
+
+          let pendingRefundConfig = {
+            online: 0,
+            cash: 0,
+            cashOnDelivery: 0
+          }
+
+          ponlineList.map((item) => {
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.online=context.day
+            }
+          });
+
+          pcashList.map((item) => {
+            
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cash=context.day
+            }
+          });
+
+          unLimitedList.map((item) => {
+           
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cashOnDelivery=context.day
+            }
+          });
+          this.dispatch('order-return-pending-refund-config',fromJS(pendingRefundConfig) )
+        }
+      })
   };
 
   // 驳回／拒绝收货 modal状态改变

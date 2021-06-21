@@ -16,7 +16,12 @@ export default class DetailActor extends Actor {
       onlineRefundModalData: {
         refund: 0
       },
-      refundPrice:null
+      refundPrice: null,
+      pendingRefundConfig: {
+        online: 0,
+        cash: 0,
+        cashOnDelivery: 0
+      }
     };
   }
 
@@ -115,9 +120,14 @@ export default class DetailActor extends Actor {
     return state.setIn(['onlineRefundModalData', 'visible'], true);
   }
 
-   // 修改退款实际金额
-   @Action('change-refund-price')
-   changeRefundPrice(state: IMap,{refundPrice}) {
-     return state.set('refundPrice', refundPrice);
-   }
+  // 修改退款实际金额
+  @Action('change-refund-price')
+  changeRefundPrice(state: IMap, { refundPrice }) {
+    return state.set('refundPrice', refundPrice);
+  }
+  // 获取pendingRefund配置
+  @Action('order-return-pending-refund-config')
+  getPendingRefundConfig(state: IMap, config: IMap) {
+    return state.set('pendingRefundConfig', config)
+  }
 }

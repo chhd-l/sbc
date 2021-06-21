@@ -348,12 +348,6 @@ export default class CustomerDetails extends React.Component<any, any> {
                         {basic.email}
                       </Col>
                       <Col span={4} className="text-tip">
-                        Phone number
-                      </Col>
-                      <Col span={8} className="text-highlight">
-                        {basic.contactPhone}
-                      </Col>
-                      <Col span={4} className="text-tip">
                         Prefer channel
                       </Col>
                       <Col span={8} className="text-highlight">

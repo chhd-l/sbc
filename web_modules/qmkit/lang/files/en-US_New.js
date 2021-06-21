@@ -103,7 +103,8 @@ export default {
         "Public.orders": "orders",
         "Public.subscriptions": "subscriptions",
         "Public.maximumTip":"The maximum period is six months",
-        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email."
+        "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email.",
+        "Public.timeErrorTip":"The start time and end time should be within 6 months",
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -436,7 +437,7 @@ export default {
         "Product.thedistributionactivity": "The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?",
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
         "Product.On/Off shelves": "On/Off shelves",
-
+        "Product.SynchronizeTips": "Please wait 5-10 minutes pariently.",
 
     },
 
@@ -791,11 +792,15 @@ export default {
         "Order.Clientname": "Client name",
         "Order.Clientaccounts": "Client accounts",
         "Order.Recipientscell": "Recipient's cell",
+        "Order.moreFields": "More Fields",
         "Order.Automaticskip": "Automatic skip logistic information collection ",
         "Order.AfterDaysLogistics": "After days, the logistic information collection will be automatically dismissed",
         "Order.Automatictrigger": "Automatic trigger full amount refund ",
         "Order.AfterDaysFullrefund": "After days, the full amount refund will be automatically triggered",
-	'Order.region': 'Region',
+	    'Order.region': 'Region',
+        "Order.timeSlot": "Time slot",
+        "Order.deliveryDate": "Delivery date",
+
 
 
     },
@@ -1106,6 +1111,10 @@ export default {
         "PetOwner.Keyword": "Keyword",
         "PetOwner.TaskStatus": "Task Status",
         "PetOwner.GoldenMoment": "GoldenMoment",
+        "PetOwner.AddressStreetTip": "Пожалуйста, укажите: Улица",
+        "PetOwner.AddressPostCodeTip": "Пожалуйста, укажите: Индекс",
+        "PetOwner.AddressHouseTip": "Пожалуйста, укажите: Дом",
+        "PetOwner.AddressCityTip": "Пожалуйста, укажите: Город",
         "PetOwner.DefaultPrescriberName": "Default prescriber name",
         "PetOwner.Activity": "Activity",
         "PetOwner.theCorrectPhone": "Please enter the correct phone",
@@ -1634,7 +1643,8 @@ export default {
         "Marketing.Idontwanttocumulate": "I don’t want to cumulate with default subscription discount",
         "Marketing.Alltype": "All type",
         "Marketing.percent": "%",
-        "Marketing.InputValuefrom0to100": "Input value is an integer from 0 to 100",
+        "Marketing.InputValuefrom1to99": "Input value is an integer from 1 to 99",
+        "Marketing.InputValuefrom1to100": "Input value is an integer from 1 to 100",
     },
     Content: {
         "Content.Prompt": "Prompt",
@@ -2005,14 +2015,16 @@ export default {
         "Setting.Friday":"Friday",
         "Setting.Saturday":"Saturday",
         "Setting.Sunday":"Sunday",
-        "Setting.timeSolt":"Time solt",
+        "Setting.timeSolt":"Time slot",
         "Setting.closedHours":"Closed Hours",
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",
         "Setting.add": "Add",
-        "Setting.opertaor": "Opertaor",
+        "Setting.Delete": "Delete",
         "Setting.pleaseSelectCity": "Please select city",
         "Setting.pleaseSelectTime": "Please select time",
+        "Setting.mustSelectOneOpenDay": "Please select at least one open date",
+        "Setting.Keyword": "Keyword",
         
     },
     Menu: {

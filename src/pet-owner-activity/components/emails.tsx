@@ -70,7 +70,7 @@ export default class emails extends Component<any, any> {
             emailLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             emailLoading: false
           });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -10,7 +10,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PetItem from '@/customer-details/component/pet-item';
 
 import './style.less';
-import { debug } from 'console';
+import OrderMoreFields from './order_more_field'
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -104,6 +104,8 @@ class OrderDetailTab extends React.Component<any, any> {
   };
   state = {
     visiblePetDetails: false,
+    moreData: [],
+    visibleMoreFields: false,
     currentPet: {}
   };
 
@@ -129,7 +131,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice') ? detail.get('tradePrice').toJS() as any : {};
+    const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
     const consignee = detail.get('consignee')
@@ -152,6 +154,8 @@ class OrderDetailTab extends React.Component<any, any> {
           entrance: string;
           apartment: string;
           area: string;
+          timeSlot: string;
+          deliveryDate: string;
         })
       : {};
 
@@ -207,18 +211,35 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.SKUcode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
-        render: (text) => text
+        render: (text) => text,
+        width: '11%'
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%'
+        width: '9%',
+        render: (text) => {
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{text}</div>}
+            >
+              <p className="overFlowtext" style={{ width: 100 }}>
+                {text}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
-        key: 'specDetails'
+        key: 'specDetails',
+        width: '10%'
       },
       // {
       //   title: 'Price',
@@ -234,12 +255,14 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.Quantity" />,
         dataIndex: 'num',
-        key: 'num'
+        key: 'num',
+        width: '10%'
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
+        width: '10%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
             <div>
@@ -261,6 +284,7 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
+        width: '10%',
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -273,6 +297,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
+        width: '10%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -285,10 +310,27 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
+        title:<FormattedMessage id="Order.Subscriptionumber" />,
+        dataIndex: 'subscriptionSourceList',
+        key: 'subscriptionSourceList',
+        width: '15%',
+        render: (text, record) => (
+          record.subscriptionSourceList && record.subscriptionSourceList.length > 0 ?
+          record.subscriptionSourceList.map(x=>x.subscribeId).join(',') : null
+        )
+      },
+  
+      {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
+        width: '9%',
         render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{record.petsInfo ? record.petsInfo.petsName : ''}</a>
+      },
+      {
+        title: '',
+        width: '6%',
+        render: (text, record) => <a onClick={() => this._openMoreFields(record)}> <FormattedMessage id="more" /></a>
       }
     ];
 
@@ -376,13 +418,10 @@ class OrderDetailTab extends React.Component<any, any> {
         <Row gutter={30}>
           {detail.get('subscribeId') ? (
             <Col span={12}>
-              <div className="headBox">
+              <div className="headBox" style={{ height:120 }}>
                 <h4>
                   <FormattedMessage id="Order.subscription" />
                 </h4>
-                <p>
-                  <FormattedMessage id="Order.Subscriptionumber" />: {detail.get('subscribeId')}
-                </p>
                 <p>
                   <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
                 </p>
@@ -427,6 +466,24 @@ class OrderDetailTab extends React.Component<any, any> {
         >
           <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
 
+          <Modal
+            title={<FormattedMessage id="Order.moreFields" />}
+            width={600}
+            visible={this.state.visibleMoreFields}
+            onOk={() => {
+              this.setState({
+                visibleMoreFields: false
+              });
+            }}
+            onCancel={() => {
+              this.setState({
+                visibleMoreFields: false
+              });
+            }}>
+            <Row>
+             <OrderMoreFields data={this.state.moreData}/>
+            </Row>
+          </Modal>
           <Modal
             title={<FormattedMessage id="PetOwner.PetInformation" />}
             width={1100}
@@ -534,9 +591,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <strong>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
-                  {installmentPrice && installmentPrice.additionalFee ? 
-                   ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')'
-                  : null}
+                  {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')' : null}
                 </strong>
               </label>
             </div>
@@ -545,7 +600,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           <Col span={12}>
-            <div className="headBox" style={{ height: 235 }}>
+            <div className="headBox" style={{ height: 250 }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
@@ -601,11 +656,22 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </p>
                 </Col>
                 <Col span={12}>
-                  <p>
+                <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.city}</div>}
+                  >
+                    <p className="overFlowtext">
                     <FormattedMessage id="Order.city" />: {consignee.city}
                   </p>
+                  </Tooltip>
                   <p>
                     <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
                   </p>
@@ -621,6 +687,17 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
                   </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.deliveryDate" />: {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                  </p>
+                  </Tooltip>
                 </Col>
                 <Col span={24}>
                   <Tooltip
@@ -952,6 +1029,14 @@ class OrderDetailTab extends React.Component<any, any> {
     this.setState({
       visiblePetDetails: true,
       currentPet: petsInfo ? petsInfo : {}
+    });
+  };
+
+  _openMoreFields = (recored) => {
+    var data = [{...recored}];
+    this.setState({
+      visibleMoreFields: true,
+      moreData: data
     });
   };
 }

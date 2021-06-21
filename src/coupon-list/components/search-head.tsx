@@ -49,10 +49,10 @@ export default class SearchHead extends React.Component<any, any> {
             getPopupContainer={() => document.getElementById('page-content')}
             label={<FormattedMessage id="Marketing.PromotionType" />}
             // style={{ width: 170 }}
-            defaultValue="All"
             onChange={(value) => {
               onFormFieldChange('couponPurchaseType', value);
             }}
+            value={form.get('couponPurchaseType')}
           >
             <Option value={null}><FormattedMessage id="Marketing.Alltype" /></Option>
             <Option value="0"><FormattedMessage id="Marketing.All" /></Option>

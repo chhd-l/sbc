@@ -49,6 +49,9 @@ const index = () => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           if (res.context && res.context.id && res.context.openDate) {
+            if (!res.context.closeDate) {
+              res.context.closeDate = [];
+            }
             setDeliveryFrom(res.context);
           }
           setCities(res.context.city);
@@ -138,7 +141,10 @@ const index = () => {
   }
 
   function addOpenTable() {
-    const maxSort = Math.max(...deliveryForm.openDate.map((x) => [x.sort]));
+    const maxSort =
+      deliveryForm.openDate && deliveryForm.openDate.length > 0
+        ? Math.max(...deliveryForm.openDate.map((x) => [x.sort]))
+        : 0;
     const newOpenDate = [
       ...deliveryForm.openDate,
       {
@@ -175,7 +181,10 @@ const index = () => {
   }
 
   function addCloseTable() {
-    const maxSort = Math.max(...deliveryForm.closeDate.map((x) => [x.sort]));
+    const maxSort =
+      deliveryForm.closeDate && deliveryForm.closeDate.length > 0
+        ? Math.max(...deliveryForm.closeDate.map((x) => [x.sort]))
+        : 0;
     const newCloseDate = [
       ...deliveryForm.closeDate,
       {
@@ -215,6 +224,10 @@ const index = () => {
   }
 
   function SaveDeliveryDate() {
+    if (allSelectWeeks.length === 0) {
+      message.info(window.RCi18n({ id: 'Setting.mustSelectOneOpenDay' }));
+      return;
+    }
     setLoading(true);
     webapi
       .SaveDeliveryDate(deliveryForm)
@@ -336,6 +349,7 @@ const index = () => {
             <Col span={3}>
               <TimePicker
                 className={!cutTimeOk ? 'input-error' : ''}
+                style={{ width: '100%' }}
                 format={format}
                 value={deliveryForm.cutOffTime ? moment(deliveryForm.cutOffTime, format) : null}
                 onChange={(time, timeString) => handleChange('cutOffTime', timeString)}
@@ -346,7 +360,7 @@ const index = () => {
                 </div>
               ) : null}
             </Col>
-            <Col span={2}>
+            <Col span={2} style={{ marginLeft:20 }}>
               <p className="center">
                 <FormattedMessage id="Setting.before" />
               </p>
@@ -359,7 +373,11 @@ const index = () => {
               </p>
             </Col>
             <Col span={2}>
-              <Button type="primary" onClick={() => addOpenTable()}>
+              <Button
+                type="primary"
+                onClick={() => addOpenTable()}
+                disabled={allSelectWeeks.length === 7}
+              >
                 <FormattedMessage id="Setting.add" />
               </Button>
             </Col>
@@ -399,7 +417,11 @@ const index = () => {
             ))}
           </Row>
           <Row>
-            <Button type="primary" onClick={() => SaveDeliveryDate()} disabled={!(cityOk && cutTimeOk)}>
+            <Button
+              type="primary"
+              onClick={() => SaveDeliveryDate()}
+              disabled={!(cityOk && cutTimeOk)}
+            >
               <FormattedMessage id="save" />
             </Button>
           </Row>

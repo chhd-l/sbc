@@ -23,9 +23,12 @@ podTemplate(label: label, cloud: 'kubernetes',
             resourceRequestMemory: '800Mi'
             )
     ],
-    volumes: [
-        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock')
-            ],
+    //volumes: [
+    //    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock')
+    //        ],
+    envVars: [ 
+          envVar(key: 'DOCKER_HOST',value: 'tcp://40.85.188.69:2375')
+    ],
     imagePullSecrets: [ 'sit-docker' ]
 )
 {

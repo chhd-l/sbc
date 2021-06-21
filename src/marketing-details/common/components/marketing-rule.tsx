@@ -93,6 +93,10 @@ export default class MarketingRule extends React.Component<any, any> {
                       </div>
                     </div>
                   ) : null}
+                  {
+                    level.limitAmount &&
+                    <div className="display-inline-block">,&nbsp;&nbsp;discount limit&nbsp;&nbsp;{level.limitAmount}</div>
+                  }
                 </Col>
               </Row>
             </GreyBg>

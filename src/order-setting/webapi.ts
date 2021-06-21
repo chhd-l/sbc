@@ -19,7 +19,7 @@ export function querySysDictionary(filterParams = {}) {
   });
 }
 
-export function getOrderSettingConfig(filterParams = {}) {
+export function getOrderSettingConfig() {
   return Fetch<TResult>('/orderConfig/query', {
     method: 'GET'
   });

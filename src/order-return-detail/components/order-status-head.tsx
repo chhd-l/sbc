@@ -48,6 +48,7 @@ class OrderStatusHead extends React.Component<any, any> {
       fetchRefundOrder: Function;
       changeRefundPrice: Function;
       onRealRefund: Function;
+      pendingRefundConfig:IMap;
     };
   };
 
@@ -79,7 +80,8 @@ class OrderStatusHead extends React.Component<any, any> {
     refundRecord: 'refundRecord',
     fetchRefundOrder: noop,
     changeRefundPrice: noop,
-    onRealRefund: noop
+    onRealRefund: noop,
+    pendingRefundConfig:'pendingRefundConfig'
   };
 
   constructor(props) {
@@ -201,7 +203,7 @@ class OrderStatusHead extends React.Component<any, any> {
 
                 </AuthWrapper>
               )}
-              {returnFlowState === 'PENDING_REFUND' && (
+              {returnFlowState === 'PENDING_REFUND' &&this.showPendingRefundBtn(payType)? (
                 <AuthWrapper functionName="f_return_refund">
                   <Tooltip placement="top" title={<FormattedMessage id="Order.refusedToRefund" />}>
                     <a
@@ -227,7 +229,7 @@ class OrderStatusHead extends React.Component<any, any> {
                     </a>
                   </Tooltip>
                 </AuthWrapper>
-              )}
+              ):null}
             </div>
           </div>
           <Row>
@@ -426,6 +428,19 @@ class OrderStatusHead extends React.Component<any, any> {
     this.props.relaxProps.changeRefundPrice({
       refundPrice: value
     })
+  }
+  showPendingRefundBtn=(payType)=>{
+    const {pendingRefundConfig}= this.props.relaxProps;
+    if(payType===0){
+      return pendingRefundConfig.get('online')
+    }
+    if(payType===1){
+      return pendingRefundConfig.get('cashOnDelivery')
+    }
+    if(payType===2){
+      return pendingRefundConfig.get('cash')
+    }
+    return 1
   }
 }
 

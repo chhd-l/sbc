@@ -134,7 +134,6 @@ class OrderSetting extends Component<any, any> {
           let pcashList = res.context.pcashList;
           let ponlineList = res.context.ponlineList;
           let unLimitedList = res.context.unLimitedList;
-
           ponlineList.map((item) => {
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {

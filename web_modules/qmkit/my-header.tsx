@@ -28,6 +28,7 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
+import { RCi18n } from 'qmkit';
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -134,7 +135,7 @@ export default class MyHeader extends React.Component {
   content = () => (
     <div style={{ width: 350, minHeight: 380 }}>
       <Tabs defaultActiveKey="1">
-        <TabPane tab="Reminder" key="1">
+        <TabPane tab={RCi18n({id:'Home.Reminder'})} key="1">
           <ul style={{ height: 380, overflow: 'auto' }}>
             {this.state.reminderTasks.length > 0 ? (
               this.state.reminderTasks.map((item) => {
@@ -158,7 +159,7 @@ export default class MyHeader extends React.Component {
             )}
           </ul>
         </TabPane>
-        <TabPane tab="To Do Task" key="2">
+        <TabPane tab={RCi18n({id:'Home.Todotask'})} key="2">
           <ul style={{ height: 380, overflow: 'auto' }}>
             {this.state.taskList.length > 0 ? (
               this.state.taskList.map((item) => {
@@ -184,7 +185,7 @@ export default class MyHeader extends React.Component {
 
       <div style={styles.linkMore}>
         <Link to="/tasks" style={{ fontSize: 16, color: '#909399' }}>
-          View all task
+       {RCi18n({id:'Home.Viewalltask'})}
         </Link>
         <Icon type="right" />
       </div>

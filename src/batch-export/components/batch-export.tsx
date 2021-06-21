@@ -26,7 +26,9 @@ class BatchExport extends Component<BatchExportProps, any> {
       fieldKey: {},
       selectKey: [],
       exportField: 'search',
-      loading: false
+      loading: false,
+      pickErrorInfo: '',
+      pickOpen: false
     };
   }
 
@@ -73,11 +75,10 @@ class BatchExport extends Component<BatchExportProps, any> {
   }
 
   getFields() {
-    const { fieldKey, exportField } = this.state;
+    const { fieldKey, exportField, pickErrorInfo, pickOpen } = this.state;
     const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
-    // const { getFieldDecorator, getFieldValue } = this.props.form;
     const children = fieldData.map(item => {
-      let content = <Input style={styles.wrapper} disabled={exportField === 'all'}/>;
+      let content = <Input style={styles.wrapper} disabled={exportField === 'all'} />;
       if (item.options) {
         let opts = item.options[fieldKey[item.key]] || [];
         // 判断当前选项是否根据其它值联动
@@ -95,6 +96,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           <Select
             disabled={exportField === 'all'}
             style={styles.wrapper}
+            allowClear
             onChange={() => {
               // 如果选择的值影响其他下拉框的选项，则将那个受影响的下拉框的值清空
               if (item.valueLink) {
@@ -122,10 +124,18 @@ class BatchExport extends Component<BatchExportProps, any> {
             {getFieldDecorator(item.key, {
               rules: [
                 {
-                  required: false,
-                  message: '',
+                  validator: (rule, value, callback) => {
+                    let startTime = value[0];
+                    let endTime = value[1];
+                    let endTimeClone: any = endTime && endTime.clone();
+                    if (startTime && endTimeClone && startTime.valueOf() < endTimeClone.subtract(6, 'months').valueOf()) {
+                      callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })));
+                    }
+                    callback();
+                  }
                 },
               ],
+              initialValue: [null, null]
             })(<RangePicker
               disabledDate={current => current && current > moment().endOf('day')}
               disabled={exportField === 'all'}
@@ -139,14 +149,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           <Form.Item>
             <Input.Group compact style={styles.formItemStyle}>
               {this.getLabel(item.label, item.key)}
-              {getFieldDecorator(item.key, {
-                rules: [
-                  {
-                    required: false,
-                    message: '',
-                  },
-                ],
-              })(content)}
+              {getFieldDecorator(item.key)(content)}
             </Input.Group>
           </Form.Item>
         </Col>)
@@ -197,15 +200,18 @@ class BatchExport extends Component<BatchExportProps, any> {
       "pickColums": selectKey,
       "tradeExportRequest": {}
     };
+    let bChecked = true;
     if (exportField === 'search') {
       form.validateFields((err, values) => {
         if (!err) {
-          let obj = {};
+          let obj = {
+            tradeState: {}
+          };
           // 单独处理时间值
           let timeArr = values.beginTime;
           if (timeArr && timeArr.length) {
-            obj['beginTime'] = timeArr[0].format(Const.DAY_FORMAT);
-            obj['endTime'] = timeArr[1].format(Const.DAY_FORMAT);
+            obj['beginTime'] = timeArr[0]?.format(Const.DAY_FORMAT);
+            obj['endTime'] = timeArr[1]?.format(Const.DAY_FORMAT);
           }
           delete fieldKey['beginTime'];
 
@@ -216,24 +222,40 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
           delete fieldKey['cycleTypeId_autoship'];
 
+          if(fieldKey['clinicsName'] === 'clinicsIds') {
+            obj['clinicsIds'] = [values['clinicsName']];
+            delete fieldKey['clinicsName'];
+          }
+
           for (let key in fieldKey) {
             if (key === 'orderType') {// orderType要默认赋值
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
+            } else if(key === 'payState') {
+              obj['tradeState'][fieldKey[key]] = values[key] || '';
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }
           }
 
           params.tradeExportRequest = obj;
+        } else {
+          bChecked = false;
         }
       });
     }
 
-    batchExportMain(params).then(({res}) => {
+    if(!bChecked) {
       this.setState({
         loading: false
       });
-      if(res.code === 'K-000000') {
+      return;
+    }
+    
+    batchExportMain(params).then(({ res }) => {
+      this.setState({
+        loading: false
+      });
+      if (res.code === 'K-000000') {
         Modal.success({
           width: 550,
           centered: true,
@@ -251,6 +273,7 @@ class BatchExport extends Component<BatchExportProps, any> {
         });
       }
     });
+    
   }
 
   render() {

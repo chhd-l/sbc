@@ -39,7 +39,10 @@ export default class CouponDetailActor extends Actor {
       // 商品分类
       skuCates: [],
       // 商品
-      skus: []
+      skus: [],
+      goodsList : null,
+      currentCategary: null,
+      currentAttribute: null
     };
   }
 

@@ -21,7 +21,7 @@ const closeTable = (props) => {
             <FormattedMessage id="Setting.selectDay" />
           </th>
           <th style={{ width: '9%' }}>
-            <FormattedMessage id="Setting.opertaor" />
+            <FormattedMessage id="Setting.Delete" />
           </th>
         </tr>
       </thead>

@@ -2023,7 +2023,8 @@ export default {
         "Setting.Delete": "Delete",
         "Setting.pleaseSelectCity": "Please select city",
         "Setting.pleaseSelectTime": "Please select time",
-        "Setting.mustSelectOneOpenDay": "Please select at least one open date"
+        "Setting.mustSelectOneOpenDay": "Please select at least one open date",
+        "Setting.Keyword": "Keyword",
         
     },
     Menu: {

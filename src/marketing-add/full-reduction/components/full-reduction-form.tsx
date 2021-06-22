@@ -646,11 +646,11 @@ class FullReductionForm extends React.Component<any, any> {
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderReduction', {
               rules: [
-                { required: true, message:
-                    (window as any).RCi18n({
-                      id: 'Marketing.AmountMustBeEntered',
-                    })
-                },
+                // { required: true, message:
+                //     (window as any).RCi18n({
+                //       id: 'Marketing.AmountMustBeEntered',
+                //     })
+                // },
                 {
                   validator: (_rule, value, callback) => {
                     if (value) {

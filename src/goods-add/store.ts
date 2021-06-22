@@ -961,31 +961,58 @@ export default class AppStore extends Store {
           });
     }
 
-    let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
-    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
-      this.state().get('goods').get('subscriptionStatus') == 1 ) {
-      message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
-      valid = false;
-      return;
-    }
+    // let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
+    // if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
+    //   this.state().get('goods').get('subscriptionStatus') == 1 ) {
+    //   message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
+    //   valid = false;
+    //   return;
+    // }
 
-    let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
-    if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
-      (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
-      message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
-      valid = false;
-      return;
-    }
+    // let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
+    // if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
+    //   (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
+    //   message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
+    //   valid = false;
+    //   return;
+    // }
 
-    let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
-    if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
-      this.state().get('goods').get('promotions') == 'club' ) {
-      message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
-      valid = false;
-      return;
-    }
+    // let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
+    // if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
+    //   this.state().get('goods').get('promotions') == 'club' ) {
+    //   message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
+    //   valid = false;
+    //   return;
+    // }
+
+    valid = this.checkGoodsStatus();
     
     return valid;
+  }
+
+  checkGoodsStatus() {
+    const { subscriptionStatus, addedFlag, promotions} = this.state().get('goods').toJS();
+    const goodsList = this.state().get('goodsList').toJS();
+
+    //至少要有一个上架状态的sku为Y
+    if(subscriptionStatus === 1) {
+      if(!goodsList.some(item => item.subscriptionStatus === 1 && item.addedFlag === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
+        message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
+        return false;
+      }
+    }
+
+    if ((addedFlag == 1 || addedFlag == 2) && goodsList.every(item => item.addedFlag == 0)){
+      message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
+      return false;
+    }
+
+    if(promotions === 'club' && goodsList.every(item => item.promotions === 'autoship')) {
+      message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
+      return false;
+    }
+
+    return true;
   }
 
   /**

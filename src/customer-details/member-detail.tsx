@@ -10,7 +10,7 @@ import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
-import DeliveryItem, { FORM_FIELD_MAP } from './component/delivery-item';
+import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
@@ -26,6 +26,22 @@ const { confirm } = Modal;
 
 const dogImg = require('./img/dog.png');
 const catImg = require('./img/cat.png');
+
+export const FORM_FIELD_MAP = {
+  'First name': 'firstName',
+  'Last name': 'lastName',
+  Country: 'countryId',
+  Region: 'area',
+  State: 'province',
+  City: 'city',
+  Address1: 'address1',
+  Address2: 'address2',
+  'Phone number': 'contactPhone',
+  'Postal code': 'postCode',
+  Entrance: 'entrance',
+  Apartment: 'apartment',
+  Comment: 'rfc'
+};
 
 export async function getAddressConfig() {
   let fields = [];

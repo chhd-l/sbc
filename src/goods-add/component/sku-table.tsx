@@ -521,27 +521,30 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo) => {
 
         // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-        rowInfo.subscriptionStatus = goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus != null ? rowInfo.subscriptionStatus : '1';
+        // rowInfo.subscriptionStatus = goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus != null ? rowInfo.subscriptionStatus : '1';
 
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                {/* {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
-                })(
-                  <Select disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false }
-                          getPopupContainer={() => document.getElementById('page-content')}
-                          style={{ width: '81px' }}
-                          placeholder="please select status"
-                          onFocus={() => this.onfocus()}
-                          onBlur={() => this.onblur()}
+                })( */}
+                  <Select 
+                    disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false }
+                    getPopupContainer={() => document.getElementById('page-content')}
+                    style={{ width: '81px' }}
+                    placeholder="please select status"
+                    onFocus={() => this.onfocus()}
+                    onBlur={() => this.onblur()}
+                    value={rowInfo.subscriptionStatus}
+                    onChange={(e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e)}
                   >
-                    <Option value="1">Y</Option>
-                    <Option value="0">N</Option>
+                    <Option value={1}>Y</Option>
+                    <Option value={0}>N</Option>
                   </Select>
-                )}
+                {/* )} */}
               </FormItem>
             </Col>
           </Row>

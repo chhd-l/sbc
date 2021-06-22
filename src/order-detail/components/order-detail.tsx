@@ -14,7 +14,8 @@ import OrderMoreFields from './order_more_field'
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
-  { value: 'SUBSCRIPTION', name: 'Subscription' }
+  { value: 'SUBSCRIPTION', name: 'Subscription' },
+  { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
 /**

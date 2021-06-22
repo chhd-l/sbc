@@ -650,11 +650,11 @@ class FullDiscountForm extends React.Component<any, any> {
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount"/>&nbsp;&nbsp;</span>
                 {getFieldDecorator('restSubscriptionOrderDiscount', {
                   rules: [
-                    { required: true, message:
-                        (window as any).RCi18n({
-                        id: 'Marketing.AmountMustBeEntered'
-                      })
-                    },
+                    // { required: true, message:
+                    //     (window as any).RCi18n({
+                    //     id: 'Marketing.AmountMustBeEntered'
+                    //   })
+                    // },
                     {
                       validator: (_rule, value, callback) => {
                         let rule = marketingBean.get('promotionType') == 1 ? /^(?:[1-9][0-9])$/: /^(?:[1-9][0-9]?|100)$/

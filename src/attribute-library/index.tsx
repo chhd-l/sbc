@@ -725,7 +725,7 @@ class AttributeLibrary extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem label={RCi18n({id:'Product.Attributename'})}>
+              <FormItem label={RCi18n({id:'Product.Displayname'})}>
                 {getFieldDecorator('attributeNameEn', {
                   rules: [
                     {

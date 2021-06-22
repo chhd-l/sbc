@@ -964,7 +964,7 @@ export default class AppStore extends Store {
     let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === a.toJS().length) &&
       this.state().get('goods').get('subscriptionStatus') == 1 ) {
-      message.error('If the subscription status in SPU is Y, at lease one subscription status of Sku is on shelves.');
+      message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
       valid = false;
       return;
     }
@@ -972,7 +972,7 @@ export default class AppStore extends Store {
     let b = this.state().get('goodsList').filter((item)=>item.get('addedFlag') == 0)
     if ( this.state().get('goodsList').toJS().length>1 && (this.state().get('goodsList').toJS().length === b.toJS().length) &&
       (this.state().get('goods').get('addedFlag') == 1 || this.state().get('goods').get('addedFlag') == 2) ) {
-      message.error('If the shelves status in SPU is Y, at lease one shelves status of Sku is on shelves.');
+      message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
       valid = false;
       return;
     }
@@ -980,7 +980,7 @@ export default class AppStore extends Store {
     let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
     if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
       this.state().get('goods').get('promotions') == 'club' ) {
-      message.error('If the subscription type in SPU is club, at lease one subscription type of Sku is club');
+      message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
       valid = false;
       return;
     }

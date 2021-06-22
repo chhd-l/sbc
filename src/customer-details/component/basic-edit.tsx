@@ -8,8 +8,7 @@ import moment from 'moment';
 import { Const, Headline, history, cache } from 'qmkit';
 import _, { divide } from 'lodash';
 import { getCountryList, getStateList, getCityList, searchCity, getAddressFieldList } from './webapi';
-import { FORM_FIELD_MAP } from './delivery-item';
-import { getAddressConfig } from '../member-detail';
+import { getAddressConfig, FORM_FIELD_MAP } from '../member-detail';
 import { spawn } from 'child_process';
 
 const { TextArea } = Input;

@@ -349,6 +349,7 @@ const index = () => {
             <Col span={3}>
               <TimePicker
                 className={!cutTimeOk ? 'input-error' : ''}
+                style={{ width: '100%' }}
                 format={format}
                 value={deliveryForm.cutOffTime ? moment(deliveryForm.cutOffTime, format) : null}
                 onChange={(time, timeString) => handleChange('cutOffTime', timeString)}
@@ -359,7 +360,7 @@ const index = () => {
                 </div>
               ) : null}
             </Col>
-            <Col span={2}>
+            <Col span={2} style={{ marginLeft:20 }}>
               <p className="center">
                 <FormattedMessage id="Setting.before" />
               </p>

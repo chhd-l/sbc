@@ -302,16 +302,9 @@ export default class SubscriptionList extends Component<any, any> {
     const menu = (
       <Menu>
         <Menu.Item>
-          <AuthWrapper functionName="f_subscription_export">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="Subscription.batchExport" />
-            </a>
-          </AuthWrapper>
-        </Menu.Item>
-        <Menu.Item>
-          <AuthWrapper functionName="fOrderList004">
+          <AuthWrapper functionName="f_subscription_export_1">
             <Link to="/batch-export/subscription-list" >
-              <FormattedMessage id="Order.batchExport" />
+              <FormattedMessage id="Subscription.batchExport" />
             </Link>
           </AuthWrapper>
         </Menu.Item>

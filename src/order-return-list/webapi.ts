@@ -187,3 +187,13 @@ export const rejectRefund = (rid: string, reason: string) => {
     body: JSON.stringify({ reason: reason })
   });
 };
+
+/**
+ * order setting
+ * 需要其中的退单配置项
+ */
+export function getOrderSettingConfig() {
+  return Fetch<TResult>('/orderConfig/query', {
+    method: 'GET'
+  });
+}

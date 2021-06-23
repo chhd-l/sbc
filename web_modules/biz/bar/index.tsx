@@ -42,7 +42,7 @@ class Line extends React.Component {
         }
       },
       grid: {
-        left: '9%',
+        left: '10%',
         right: '1%',
         top: '9%',
         bottom: '0%',

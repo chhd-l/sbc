@@ -16,32 +16,38 @@ class DitionaryList extends Component<any, any> {
         {
           title: <FormattedMessage id="Setting.Name" />,
           dataIndex: 'name',
-          key: 'name'
+          key: 'name',
+          width: '20%',
         },
         {
           title: <FormattedMessage id="Setting.Type" />,
           dataIndex: 'type',
-          key: 'type'
+          key: 'type',
+          width: '20%',
         },
         {
           title: <FormattedMessage id="Setting.Value" />,
           dataIndex: 'valueEn',
-          key: 'value'
+          key: 'value',
+          width: '20%',
         },
         {
           title: <FormattedMessage id="Setting.Description" />,
           dataIndex: 'description',
-          key: 'description'
+          key: 'description',
+          width: '20%',
         },
         {
           title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'priority',
-          key: 'priority'
+          key: 'priority',
+          width: '10%',
         },
         {
           title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'operation',
           key: 'operation',
+          width: '10%',
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title={`${RCi18n({id: 'Setting.Edit'})}`}>

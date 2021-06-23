@@ -42,10 +42,10 @@ class Line extends React.Component {
         }
       },
       grid: {
-        left: '1%',
+        left: '9%',
         right: '1%',
-        top: '10%',
-        bottom: '1%',
+        top: '9%',
+        bottom: '0%',
         containLabel: true
       },
       xAxis: [
@@ -66,8 +66,8 @@ class Line extends React.Component {
             },
             formatter: function(value) {
               var res = value;
-              if(res.length > 15) {
-                res = res.substring(0, 15) + "..";
+              if(res.length > 8) {
+                res = res.substring(0, 8) + "..";
               }
               return res;
             }

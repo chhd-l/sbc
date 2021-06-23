@@ -642,7 +642,7 @@ class FullReductionForm extends React.Component<any, any> {
         </FormItem>
 
         {(marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) && (
-          <FormItem {...settingRuleFrom} label={settingLabel1} required={true} labelAlign="left" style={{ marginTop: '-50px' }}>
+          <FormItem {...settingRuleFrom} label={settingLabel1} required={false} labelAlign="left" style={{ marginTop: '-50px' }}>
             <span>&nbsp;&nbsp;&nbsp;&nbsp;{settingType}&nbsp;&nbsp;</span>
             {getFieldDecorator('restSubscriptionOrderReduction', {
               rules: [

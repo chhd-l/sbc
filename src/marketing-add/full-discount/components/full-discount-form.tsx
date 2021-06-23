@@ -603,9 +603,7 @@ class FullDiscountForm extends React.Component<any, any> {
                       {
                         validator: (_rule, value, callback) => {
                           if (value) {
-                            if(value === '10' || value === 10) {
-                              callback();
-                            } else if (!/^(?:[1-9][0-9]?)$/.test(value)) { // 0|[1-9][0-9]?|100
+                           if (!/^(?:[1-9][0-9]?)$/.test(value)) { // 0|[1-9][0-9]?|100
                               callback(
                                 (window as any).RCi18n({
                                   id: 'Marketing.InputValuefrom1to99',
@@ -644,7 +642,7 @@ class FullDiscountForm extends React.Component<any, any> {
           )
         }
         {(marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2) && (
-          <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={true} style={{ marginTop: '-20px' }} labelAlign="left">
+          <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={false} style={{ marginTop: '-20px' }} labelAlign="left">
             <div style={{ display: 'flex' }}>
               <FormItem>
                 <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount"/>&nbsp;&nbsp;</span>
@@ -657,11 +655,9 @@ class FullDiscountForm extends React.Component<any, any> {
                     // },
                     {
                       validator: (_rule, value, callback) => {
-                        let rule = marketingBean.get('promotionType') == 1 ? /^(?:[1-9][0-9])$/: /^(?:[1-9][0-9]?|100)$/
+                        let rule = marketingBean.get('promotionType') == 1 ? /^(?:[1-9][0-9]?)$/: /^(?:[1-9][0-9]?|100)$/
                         if (value) {
-                          if(value === '10' || value === 10) {
-                            callback();
-                          } else if (!rule.test(value)) {
+                          if (!rule.test(value)) {
                             marketingBean.get('promotionType') == 1 ?
                             callback(
                               (window as any).RCi18n({

@@ -45,6 +45,10 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "node --version"
                     sh "npm --version"
                     sh "npm install"
+                    sh "npm view postcss versions"
+                    sh "npm view postcss-discard-comments  versions"
+                    sh ""
+                    sh ""
                     sh "npm run build"
                 }
         }

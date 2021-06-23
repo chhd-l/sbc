@@ -105,6 +105,7 @@ export default {
         "Public.maximumTip":"The maximum period is six months",
         "Public.exportConfirmTip":"The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email.",
         "Public.timeErrorTip":"The start time and end time should be within 6 months",
+        "Public.ordelineTip":"If nothing is selected below, then by default only ordeline fields are exported"
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -418,7 +419,7 @@ export default {
         "Product.Synchronize": "Synchronize",
         "Product.exportStockPrice": "Batch export Stock&Price",
         "Product.No sale": "No sale",
-        "Product.subscriptionstatusinSPUisY": "If the subscription status in SPU is Y, at lease one subscription status of Sku is Y.",
+        "Product.subscriptionstatusinSPUisY": "If the subscription status in SPU is Y, at lease one subscription status of Sku is Y and the shelves status is on shelves.",
         "Product.shelvesstatusinSPUisY": "If the shelves status in SPU is on shelves, at lease one shelves status of Sku is on shelves.",
         "Product.subscriptiontypeinSPUisclub": "If the subscription type in SPU is club, at lease one subscription type of Sku is club",
         "Product.Marketpricecannotbezero": "Market price cannot be zero",

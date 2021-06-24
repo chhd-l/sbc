@@ -89,6 +89,17 @@ class PetItem extends React.Component<Iprop, any> {
           catBreed
         });
       });
+    } else if(this.props.petsInfo) {
+      const pet = this.props.petsInfo;
+      const newPetInfo = {
+          ...this.props.petsInfo,
+          petsBreedName: this.props.petsInfo.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+        }
+      this.setState({
+        pet: newPetInfo,
+        petImg: this.props.petsInfo ? this.props.petsInfo.petsImg : '',
+        loading: false
+      });
     }
   };
 

@@ -3,7 +3,7 @@ import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconf
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement, cache } from 'qmkit';
 import moment from 'moment';
-import { querySysDictionary, petsById, editPets, delPets, getMixedBreedDisplayName } from '../webapi';
+import { petsById, editPets, delPets, getMixedBreedDisplayName } from '../webapi';
 import { getPetsBreedListByType } from '../member-detail';
 import { getTaggingList } from './webapi';
 import { setTagging } from '../webapi';
@@ -296,7 +296,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Breeder code">
+                    <Form.Item label="Breed">
                       {editable ? (
                         getFieldDecorator('petsBreed', {
                           initialValue: pet.petsBreed,

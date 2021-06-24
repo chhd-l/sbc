@@ -27,7 +27,7 @@ podTemplate(label: label, cloud: 'kubernetes',
     //    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock')
     //        ],
     envVars: [
-          envVar(key: 'DOCKER_HOST',value: 'tcp://40.117.189.42:2375')
+          envVar(key: 'DOCKER_HOST',value: 'tcp://40.85.188.69:2375')
     ],
     imagePullSecrets: [ 'sit-docker' ]
 )

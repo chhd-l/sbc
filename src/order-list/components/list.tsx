@@ -260,7 +260,9 @@ class ListView extends React.Component<any, any> {
         const id = v.get('id');
         // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
-        const installmentPrice = tradePrice.installmentPrice;
+
+        const tradePriceObject = v.get('tradePrice') ? (v.get('tradePrice').toJS() as any) : {};
+        const installmentPrice= tradePriceObject.installmentPrice;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
           v

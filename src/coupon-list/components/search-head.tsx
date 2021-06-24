@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { Relax } from 'plume2';
-import { DatePicker, Form, Input, Select, Button } from 'antd';
+import { DatePicker, Form, Input, Select, Button, Col } from 'antd';
 import { Const, noop, SelectGroup } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
+const Option = Select.Option;
+
 @Relax
 export default class SearchHead extends React.Component<any, any> {
   props: {
@@ -42,7 +44,25 @@ export default class SearchHead extends React.Component<any, any> {
             }}
           />
         </FormItem>
-
+        <FormItem>
+          <SelectGroup
+            getPopupContainer={() => document.getElementById('page-content')}
+            label={<FormattedMessage id="Marketing.PromotionType" />}
+            // style={{ width: 170 }}
+            defaultValue="All"
+            onChange={(value) => {
+              onFormFieldChange('couponPurchaseType', value);
+            }}
+          >
+            <Option value={null}><FormattedMessage id="Marketing.Alltype" /></Option>
+            <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
+            <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
+            <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>
+            <Option value="3"><FormattedMessage id="Marketing.Singlepurchase" /></Option>
+            {/* <Option value="4">满金额赠</Option>
+            <Option value="5">满数量赠</Option> */}
+          </SelectGroup>
+        </FormItem>
         {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}

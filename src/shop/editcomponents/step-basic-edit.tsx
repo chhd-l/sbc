@@ -445,7 +445,7 @@ class StepOneEdit extends React.Component<any, any> {
                   )}
                 </FormItem>
               </Col>
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.prescriberMap" />}>
                   {getFieldDecorator('prescriberMap', {
                     initialValue: storeInfo.get('prescriberMap') === '1' ? true : false,
@@ -467,7 +467,7 @@ class StepOneEdit extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
               {/* <Col span={12}>
                 <FormItem
                   {...formItemLayout}
@@ -503,7 +503,7 @@ class StepOneEdit extends React.Component<any, any> {
                 </FormItem>
               </Col> */}
 
-              <Col span={12}>
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.onePageCheckout" />}>
                   {getFieldDecorator('onePageCheckout', {
                     initialValue: storeInfo.get('onePageCheckout') === '1' ? true : false
@@ -519,8 +519,8 @@ class StepOneEdit extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col>
-              <Col span={12}>
+              </Col> */}
+              {/* <Col span={12}>
                 <FormItem {...formItemLayout} required={false} label={(window as any).RCi18n({ id: 'Setting.CitySelect' })}>
                   {getFieldDecorator('citySelection', {
                     initialValue: storeInfo.get('citySelection') === 0 ? false : true // default checked
@@ -536,7 +536,7 @@ class StepOneEdit extends React.Component<any, any> {
                     />
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
             </Row>
             <Row>
               <Col span={12}>

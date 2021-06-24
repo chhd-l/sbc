@@ -513,11 +513,11 @@ class InvoiceList extends Component<any, any> {
                     {/* <Tooltip placement="top" title="Details">
                   <Link to={'/invoice-details/' + record.id} className="iconfont iconxiangqing" style={{ marginRight: 10 }}></Link>
                 </Tooltip> */}
-                    <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.disableThisItem" />} onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
+                    {/* <Popconfirm placement="topLeft" title={<FormattedMessage id="Finance.disableThisItem" />} onConfirm={() => this.disableInvoice(record.orderInvoiceId)} okText={<FormattedMessage id="Finance.Confirm" />} cancelText={<FormattedMessage id="Finance.Cancel" />}>
                       <Tooltip placement="top" title="Disable">
                         <a className="iconfont iconjinyong" style={{ marginRight: 10 }}></a>
                       </Tooltip>
-                    </Popconfirm>
+                    </Popconfirm> */}
                     <Tooltip placement="top" title={<FormattedMessage id="Finance.Download" />}>
                       <Icon type="download" style={{ color: '#e2001a', fontSize: 16 }} onClick={() => this.downloadInvoice(record.orderInvoiceId)} />
                     </Tooltip>
@@ -546,11 +546,11 @@ class InvoiceList extends Component<any, any> {
     };
     const menu = (
       <Menu>
-        <Menu.Item>
+        {/* <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchInvoice()}>
             <FormattedMessage id="Finance.BatchInvoice" />
           </a>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item>
           <a target="_blank" rel="noopener noreferrer" onClick={() => this.batchDownload()}>
             <FormattedMessage id="Finance.BatchDownload" />
@@ -699,12 +699,13 @@ class InvoiceList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
+          {/* <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
             <span><FormattedMessage id="Finance.AddNew" /></span>
-          </Button>
-          <Dropdown overlay={menu} placement="bottomCenter">
-            <Button>
-              <span className="icon iconfont iconBatchInvoicing" style={{ marginRight: 5 }}></span> <FormattedMessage id="Finance.BatchOperation" />
+          </Button> */}
+          <Dropdown overlay={menu} placement="bottomCenter" getPopupContainer={(trigger: any) => trigger.parentNode}>
+            <Button style={{ margin: '0px 10px 10px 0' }}> 
+              <span className="icon iconfont iconBatchInvoicing" style={{marginRight:5}}></span> 
+              <FormattedMessage id="Finance.BatchOperation" />
             </Button>
           </Dropdown>
           <Table

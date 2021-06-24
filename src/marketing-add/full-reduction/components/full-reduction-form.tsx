@@ -379,11 +379,12 @@ class FullReductionForm extends React.Component<any, any> {
     }
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">
+        <FormItem {...formItemLayout} labelAlign="left">
+          <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
-              <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
-              <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+              <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
               <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
             </Radio.Group>
@@ -396,6 +397,20 @@ class FullReductionForm extends React.Component<any, any> {
             {/*) : null}*/}
           </div>
         </FormItem>
+        {
+          marketingBean.get('promotionType') == 0 &&
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Checkbox checked={marketingBean.get('isSuperimposeSubscription') === 0} onChange={(e) => {
+                this.onBeanChange({
+                  isSuperimposeSubscription: e.target.checked ? 0 : 1
+                });
+              }}>
+                <FormattedMessage id="Marketing.Idontwanttocumulate" />
+              </Checkbox>
+            </div>
+          </FormItem>
+        }
         <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
@@ -993,11 +1008,13 @@ class FullReductionForm extends React.Component<any, any> {
     const { initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      isSuperimposeSubscription: 1
     });
     this.props.form.setFieldsValue({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6
+      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      isSuperimposeSubscription: 1
     })
     initReductionDefualtLevelList()
   };

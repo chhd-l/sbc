@@ -64,9 +64,32 @@ class PetItem extends React.Component<Iprop, any> {
     this.getTaggingList();
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { petsInfo } = nextProps;
+    if(petsInfo) {
+      const pet = petsInfo;
+      const newPetInfo = {
+          ...pet,
+          petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? prevState.dogBreed : prevState.catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+        }
+      if (petsInfo !== prevState.pet) {
+        return {
+          pet: newPetInfo,
+          petImg: newPetInfo && newPetInfo.petsImg ? newPetInfo.petsImg : '',
+          loading: false
+        };
+      }
+    }
+    return null;
+  }
+
   getPet = async () => {
     this.setState({ loading: true });
     const [dogBreed, catBreed] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    this.setState({
+      dogBreed,
+      catBreed,
+    })
     if(this.props.petId) {
       petsById({ petsId: this.props.petId })
       .then((data) => {
@@ -76,29 +99,14 @@ class PetItem extends React.Component<Iprop, any> {
             ...pet,
             petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
           },
-          petImg: pet.petsImg || '',
-          dogBreed,
-          catBreed,
+          petImg: pet.petsImg || '',       
           loading: false
         });
       })
       .catch(() => {
         this.setState({
-          loading: false,
-          dogBreed,
-          catBreed
+          loading: false
         });
-      });
-    } else if(this.props.petsInfo) {
-      const pet = this.props.petsInfo;
-      const newPetInfo = {
-          ...this.props.petsInfo,
-          petsBreedName: this.props.petsInfo.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
-        }
-      this.setState({
-        pet: newPetInfo,
-        petImg: this.props.petsInfo ? this.props.petsInfo.petsImg : '',
-        loading: false
       });
     }
   };

@@ -43,6 +43,16 @@ export const FORM_FIELD_MAP = {
   Comment: 'rfc'
 };
 
+export async function getPetsBreedListByType(type: string) {
+  return await webapi.querySysDictionary({
+    type: type
+  }).then((data) => {
+    return data.res.context?.sysDictionaryVOS ?? [];
+  }).catch(() => {
+    return [];
+  });
+};
+
 export async function getAddressConfig() {
   let fields = [];
   const addressInputType = await getAddressInputTypeSetting();
@@ -136,12 +146,17 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
-  getPetsList = () => {
+  getPetsList = async () => {
     const { customerAccount } = this.state;
-    webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
-      this.setState({
-        pets: data.res.context.context
-      });
+    const [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    const pets = await webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
+      return (data.res.context?.context ?? []).map(pet => ({
+        ...pet,
+        petsBreedName: pet.isPurebred ? (((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(breed => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed) ?? {})['name'] ?? pet.petsBreed) : webapi.getMixedBreedDisplayName()
+      }));
+    });
+    this.setState({
+      pets: pets
     });
   };
 
@@ -453,8 +468,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
                             <Col span={12}>
                               {pet.petsBreed && (
-                                <Tooltip title={pet.petsBreed}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreed}</div>
+                                <Tooltip title={pet.petsBreedName}>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreedName}</div>
                                 </Tooltip>
                               )}
                             </Col>

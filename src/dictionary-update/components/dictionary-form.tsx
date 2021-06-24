@@ -158,7 +158,7 @@ class DictionaryForm extends Component<any, any> {
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
         <FormItem label="Name">
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: 'Please input Dictionary Name!' }]
+            rules: [{ required: true, message: 'Please input Dictionary Name!' }, { max: 200, message: 'Exceed maximum length!' }]
           })(
             <Input
               onChange={(e) => {
@@ -173,7 +173,7 @@ class DictionaryForm extends Component<any, any> {
         </FormItem>
         <FormItem label="Type">
           {getFieldDecorator('type', {
-            rules: [{ required: true, message: 'Please select Dictionary Type' }]
+            rules: [{ required: true, message: 'Please select Dictionary Type' }, { max: 200, message: 'Exceed maximum length!' }]
           })(
             <Input
               onChange={(e) => {
@@ -192,7 +192,8 @@ class DictionaryForm extends Component<any, any> {
               {
                 required: true,
                 message: 'Please input Value!'
-              }
+              },
+              { max: 200, message: 'Exceed maximum length!' }
             ]
           })(
             <Input
@@ -236,7 +237,9 @@ class DictionaryForm extends Component<any, any> {
         <FormItem label="Description">
           {getFieldDecorator(
             'description',
-            {}
+            {
+              rules: [{ max: 200, message: 'Exceed maximum length!' }]
+            }
           )(
             <Input.TextArea
               onChange={(e) => {

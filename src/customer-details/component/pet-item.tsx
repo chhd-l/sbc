@@ -3,7 +3,8 @@ import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconf
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement, cache } from 'qmkit';
 import moment from 'moment';
-import { querySysDictionary, petsById, editPets, delPets } from '../webapi';
+import { petsById, editPets, delPets, getMixedBreedDisplayName } from '../webapi';
+import { getPetsBreedListByType } from '../member-detail';
 import { getTaggingList } from './webapi';
 import { setTagging } from '../webapi';
 
@@ -60,32 +61,33 @@ class PetItem extends React.Component<Iprop, any> {
 
   componentDidMount() {
     this.getPet();
-    //this.getBreedListByType('dogBreed');
-    //this.getBreedListByType('catBreed');
     this.getTaggingList();
   }
 
-  getPet = () => {
+  getPet = async () => {
     this.setState({ loading: true });
+    const [dogBreed, catBreed] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
     if(this.props.petId) {
       petsById({ petsId: this.props.petId })
       .then((data) => {
+        const pet = data.res.context?.context ?? {};
         this.setState({
-          pet: data.res.context.context,
-          petImg: data.res.context.context.petsImg,
+          pet: {
+            ...pet,
+            petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+          },
+          petImg: pet.petsImg || '',
+          dogBreed,
+          catBreed,
           loading: false
         });
       })
       .catch(() => {
         this.setState({
-          loading: false
+          loading: false,
+          dogBreed,
+          catBreed
         });
-      });
-    } else if(this.props.petsInfo) {
-      this.setState({
-        pet: this.props.petsInfo,
-        petImg: this.props.petsInfo ? this.props.petsInfo.petsImg : '',
-        loading: false
       });
     }
   };
@@ -157,18 +159,6 @@ class PetItem extends React.Component<Iprop, any> {
   onChangePetType = (petType: string) => {
     this.setState({
       petType: petType
-    });
-  };
-
-  getBreedListByType = (type: string) => {
-    querySysDictionary({
-      delFlag: 0,
-      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '',
-      type: type
-    }).then((data) => {
-      this.setState({
-        [type]: data.res.context.sysDictionaryVOS
-      });
     });
   };
 
@@ -306,7 +296,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Breeder code">
+                    <Form.Item label="Breed">
                       {editable ? (
                         getFieldDecorator('petsBreed', {
                           initialValue: pet.petsBreed,
@@ -314,14 +304,14 @@ class PetItem extends React.Component<Iprop, any> {
                         })(
                           <Select showSearch>
                             {breedOptions.map((breedItem) => (
-                              <Option value={breedItem.name} key={breedItem.id}>
+                              <Option value={breedItem.value} key={breedItem.id}>
                                 {breedItem.name}
                               </Option>
                             ))}
                           </Select>
                         )
                       ) : (
-                        <span>{pet.petsBreed}</span>
+                        <span>{pet.petsBreedName}</span>
                       )}
                     </Form.Item>
                   </Col>

@@ -193,7 +193,10 @@ class ShippingFeeSetting extends Component<any, any> {
       ? JSON.parse(this.state.selectShippingFee.header)
       : {};
     let domain = header.Domain;
-    let activeDelivery = deliveryOptions.filter((x) => x.status === 1);
+    let activeDelivery =
+      deliveryOptions && deliveryOptions.length > 0
+        ? deliveryOptions.filter((x) => x.status === 1)
+        : [];
     const disbaleDeliveryOption = activeDelivery && activeDelivery.length === 1;
     return (
       <div>

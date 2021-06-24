@@ -29,8 +29,10 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       if (res.context.promotionType === 1 || res.context.promotionType === 2) {
-        res.context.firstSubscriptionOrderDiscount = res.context.fullDiscountLevelList ? (res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 100 ).toFixed(): null;
-        res.context.restSubscriptionOrderDiscount = res.context.fullDiscountLevelList ? (res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount * 100).toFixed() : null;
+        res.context.firstSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount
+          ? (res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 100 ).toFixed(): null;
+        res.context.restSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount
+          ? (res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount * 100).toFixed() : null;
       }
       this.dispatch('marketing:initDiscountBean', res.context);
       const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;

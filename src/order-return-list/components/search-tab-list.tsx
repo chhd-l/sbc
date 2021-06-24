@@ -11,18 +11,21 @@ export default class SearchTabList extends React.Component<any, any> {
     relaxProps?: {
       onTabChange: Function;
       tab: IMap;
+      tabConfig: IMap
     };
   };
 
   static relaxProps = {
     onTabChange: noop,
-    tab: 'tab'
+    tab: 'tab',
+    tabConfig: 'tabConfig'
   };
 
   render() {
-    const { onTabChange, tab } = this.props.relaxProps;
+    const { onTabChange, tab, tabConfig } = this.props.relaxProps;
     const key = tab.get('key');
-
+    
+  
     return (
       <div>
         <Tabs
@@ -34,19 +37,25 @@ export default class SearchTabList extends React.Component<any, any> {
           <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={<FormattedMessage id="Order.pendingReview" />}
-            key="PENDING_REVIEW"
-          >
-            {tab.get('key') === 'PENDING_REVIEW' ? <List /> : null}
-          </Tabs.TabPane>
+          {
+            tabConfig.get('pendingReview') ? <Tabs.TabPane
+              tab={<FormattedMessage id="Order.pendingReview" />}
+              key="PENDING_REVIEW"
+            >
+              {tab.get('key') === 'PENDING_REVIEW' ? <List /> : null}
+            </Tabs.TabPane> : null
+          }
+
           {/*{<FormattedMessage id="pendingReview" />}*/}
-          <Tabs.TabPane
-            tab={<FormattedMessage id="Order.toBeDelivered" />}
-            key="TO_BE_DELIVERED"
-          >
-            {tab.get('key') === 'TO_BE_DELIVERED' ? <List /> : null}
-          </Tabs.TabPane>
+          {
+            tabConfig.get('toBeDelivery') ? <Tabs.TabPane
+              tab={<FormattedMessage id="Order.toBeDelivered" />}
+              key="TO_BE_DELIVERED"
+            >
+              {tab.get('key') === 'TO_BE_DELIVERED' ? <List /> : null}
+            </Tabs.TabPane> : null
+          }
+
           <Tabs.TabPane
             tab={
               <FormattedMessage id="Order.toBeReceived" />

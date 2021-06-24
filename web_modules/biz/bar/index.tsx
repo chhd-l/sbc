@@ -42,10 +42,10 @@ class Line extends React.Component {
         }
       },
       grid: {
-        left: '1%',
+        left: '10%',
         right: '1%',
-        top: '10%',
-        bottom: '1%',
+        top: '9%',
+        bottom: '0%',
         containLabel: true
       },
       xAxis: [
@@ -57,16 +57,17 @@ class Line extends React.Component {
           axisLine: { show: false },
           axisLabel: {
             show: true,
-            interval:0,
             rotate:10,
             textStyle: {
               color: '#999',
-              fontsize: '11'
+              fontsize: '11',
+              borderWidth: 0,
+              fontWeight: 0
             },
             formatter: function(value) {
               var res = value;
-              if(res.length > 22) {
-                res = res.substring(0, 22) + "..";
+              if(res.length > 8) {
+                res = res.substring(0, 8) + "..";
               }
               return res;
             }

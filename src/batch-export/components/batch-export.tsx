@@ -296,7 +296,7 @@ class BatchExport extends Component<BatchExportProps, any> {
           <div style={contentStyle}>
             <div style={{ fontSize: 16, fontWeight: 'bold' }}>{RCi18n({ id: 'Public.Objects' })}</div>
             <Radio style={radioStyle} defaultChecked>
-              {RCi18n({ id: 'Menu.Order' })}
+              {RCi18n({ id: 'Menu.Order' })} ({RCi18n({ id: 'Public.ordelineTip' })})
             </Radio>
             <div style={fieldStyle}>{this.getSelects()}</div>
           </div>

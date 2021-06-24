@@ -575,7 +575,7 @@ class TodoItems extends React.Component<any, any> {
 
             <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
             <div className="item-best-main space-between">
-              <div className="main">
+              <div className="best-main">
                 <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
                 {!prescriberTradeAndItemTopView ||
                 (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
@@ -584,7 +584,7 @@ class TodoItems extends React.Component<any, any> {
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
-                  <div className="line">
+                  <div className="main-chart">
                     {prescriberTradeAndItemTopView && (
                       <Bar
                         yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
@@ -599,7 +599,7 @@ class TodoItems extends React.Component<any, any> {
                   </div>
                 )}
               </div>
-              <div className="main">
+              <div className="best-main">
                 <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
                 {!prescriberTradeTopView ||
                 (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0)? (
@@ -607,7 +607,7 @@ class TodoItems extends React.Component<any, any> {
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
-                  <div className="line">
+                  <div className="main-chart">
                     {prescriberTradeTopView && (
                       <Bar
                         yName={{y1: (window as any).RCi18n({id: 'Home.UJ1'})}}
@@ -622,14 +622,14 @@ class TodoItems extends React.Component<any, any> {
                   </div>
                 )}
               </div>
-              <div className="main">
+              <div className="best-main">
                 <div className="main-text"><FormattedMessage id="Home.UJ2Prescriber"/></div>
                 {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
                 ) : (
-                  <div className="line">
+                  <div className="main-chart">
                     {prescriberTradeItemTopView && (
                       <Bar
                         yName={{y1: (window as any).RCi18n({id: 'Home.UJ2'})}}

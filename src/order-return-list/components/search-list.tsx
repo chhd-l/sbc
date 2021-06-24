@@ -56,6 +56,7 @@ class SearchList extends React.Component<any, any> {
       onlineRefundModalData: IMap;
       onlineRefundModalHide: Function;
       changeRefundPrice: Function;
+      pendingRefundConfig:IMap;
     };
   };
 
@@ -93,11 +94,12 @@ class SearchList extends React.Component<any, any> {
     onRefundOnlineModalChange: noop,
     onlineRefundModalData: 'onlineRefundModalData',
     onlineRefundModalHide: noop,
-    changeRefundPrice: noop
+    changeRefundPrice: noop,
+    pendingRefundConfig:'pendingRefundConfig'
   };
 
   render() {
-    const { loading, total, pageSize, currentPage, init, allChecked, dataList, onCheckedAll, rejectModalData, onRejectModalHide, deliverModalData, onDeliverModalHide, refundModalData, onRefundModalHide, onlineRefundModalData, onlineRefundModalHide } = this.props.relaxProps;
+    const { loading, total, pageSize, currentPage, init,  dataList,  rejectModalData, onRejectModalHide, deliverModalData, onDeliverModalHide, refundModalData, onRefundModalHide, onlineRefundModalData, onlineRefundModalHide } = this.props.relaxProps;
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -320,7 +322,7 @@ class SearchList extends React.Component<any, any> {
 
                           </AuthWrapper>
                         )}
-                        {returnFlowState === 'PENDING_REFUND' && (
+                        {returnFlowState === 'PENDING_REFUND' && this.showPendingRefundBtn(payType)? (
                           <AuthWrapper functionName="f_return_refund">
                             <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.refusedToRefund'})}>
                               <a
@@ -346,7 +348,7 @@ class SearchList extends React.Component<any, any> {
                               </a>
                             </Tooltip>
                           </AuthWrapper>
-                        )}
+                        ):null}
 
                         <AuthWrapper functionName="f_retrun_detail">
                           <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.detail'})}>
@@ -600,12 +602,23 @@ class SearchList extends React.Component<any, any> {
     //   return;
     // }
   }
-  changeRealRefund = (value) => {
-    console.log(value);
-    
+  changeRealRefund = (value) => {    
     this.props.relaxProps.changeRefundPrice({
       refundPrice: value
     })
+  }
+  showPendingRefundBtn=(payType)=>{
+    const {pendingRefundConfig}= this.props.relaxProps;
+    if(payType===0){
+      return pendingRefundConfig.get('online')
+    }
+    if(payType===1){
+      return pendingRefundConfig.get('cashOnDelivery')
+    }
+    if(payType===2){
+      return pendingRefundConfig.get('cash')
+    }
+    return 1
   }
 }
 

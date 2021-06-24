@@ -407,7 +407,7 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
+        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
         let disable = false
         if (goods.get('subscriptionStatus') == 0) {
           disable = true
@@ -422,15 +422,21 @@ class SkuForm extends React.Component<any, any> {
           <Row>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
+                {/* {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
-                })(
-                  <Select disabled={disable} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '81px' }} placeholder="please select status">
-                    <Option value="1">Y</Option>
-                    <Option value="0">N</Option>
+                })( */}
+                  <Select 
+                    value={rowInfo.subscriptionStatus}
+                    onChange = {(e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e)}
+                    disabled={disable} 
+                    getPopupContainer={() => document.getElementById('page-content')} 
+                    style={{ width: '81px' }} 
+                    placeholder="please select status">
+                    <Option value={1}>Y</Option>
+                    <Option value={0}>N</Option>
                   </Select>
-                )}
+                {/* )} */}
               </FormItem>
             </Col>
           </Row>

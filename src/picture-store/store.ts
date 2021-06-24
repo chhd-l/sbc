@@ -148,6 +148,7 @@ export default class AppStore extends Store {
    */
   showCateModal = (type: boolean) => {
     this.dispatch('cateActor: showCateModal', type);
+    this.init();
   };
 
   /**

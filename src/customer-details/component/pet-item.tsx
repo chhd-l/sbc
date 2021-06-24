@@ -4,6 +4,7 @@ import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement, cache } from 'qmkit';
 import moment from 'moment';
 import { querySysDictionary, petsById, editPets, delPets, getMixedBreedDisplayName } from '../webapi';
+import { getPetsBreedListByType } from '../member-detail';
 import { getTaggingList } from './webapi';
 import { setTagging } from '../webapi';
 
@@ -60,14 +61,12 @@ class PetItem extends React.Component<Iprop, any> {
 
   componentDidMount() {
     this.getPet();
-    this.getBreedListByType('dogBreed');
-    this.getBreedListByType('catBreed');
     this.getTaggingList();
   }
 
   getPet = async () => {
     this.setState({ loading: true });
-    const [dogBreed, catBreed] = await Promise.all([this.getBreedListByType('dogBreed'), this.getBreedListByType('catBreed')]);
+    const [dogBreed, catBreed] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
     if(this.props.petId) {
       petsById({ petsId: this.props.petId })
       .then((data) => {
@@ -160,18 +159,6 @@ class PetItem extends React.Component<Iprop, any> {
   onChangePetType = (petType: string) => {
     this.setState({
       petType: petType
-    });
-  };
-
-  getBreedListByType = async (type: string) => {
-    return await querySysDictionary({
-      // delFlag: 0,
-      // storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '',
-      type: type
-    }).then((data) => {
-      return data.res.context?.sysDictionaryVOS ?? [];
-    }).catch(() => {
-      return [];
     });
   };
 

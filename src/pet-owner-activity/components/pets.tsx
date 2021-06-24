@@ -6,6 +6,8 @@ const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
 const dogFemale = require('../components/image/dog2.png');
 import * as webapi from '../webapi';
+import { getMixedBreedDisplayName } from '../../customer-details/webapi';
+import { getPetsBreedListByType } from '../../customer-details/member-detail';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { parseInt } from 'lodash';
 
@@ -18,7 +20,9 @@ export default class pets extends Component<any, any> {
         total: 0,
         current: 1,
         pageSize: 1
-      }
+      },
+      dogBreed: [],
+      catBreed: []
     };
     this.getPetAgeString = this.getPetAgeString.bind(this);
     this.pageChange = this.pageChange.bind(this);
@@ -62,13 +66,17 @@ export default class pets extends Component<any, any> {
     );
   }
 
-  getPetList() {
-    const { petPagination } = this.state;
+  async getPetList() {
+    const { petPagination, dogBreed, catBreed } = this.state;
     let params = {
       pageNum: petPagination.current - 1,
       pageSize: petPagination.pageSize,
       customerId: this.props.petOwnerId
     };
+    let dogBreedList = dogBreed, catBreedList = catBreed;
+    if (dogBreed.lengh === 0 || catBreed.length === 0) {
+      [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    }
     this.setState({
       loading: true
     });
@@ -77,23 +85,33 @@ export default class pets extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          const pets = (res.context?.customerPets ?? []).map(pet => ({
+            ...pet,
+            petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+          }));
           petPagination.total = res.context.total;
           this.setState({
-            petList: res.context.customerPets ? res.context.customerPets : [],
+            petList: pets,
             loading: false,
-            petPagination: petPagination
+            petPagination: petPagination,
+            dogBreed: dogBreedList,
+            catBreed: catBreedList
           });
         } else {
           message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
           this.setState({
-            loading: false
+            loading: false,
+            dogBreed: dogBreedList,
+            catBreed: catBreedList
           });
         }
       })
       .catch(() => {
         message.error('Get data failed');
         this.setState({
-          loading: false
+          loading: false,
+          dogBreed: dogBreedList,
+          catBreed: catBreedList
         });
       });
   }
@@ -188,9 +206,9 @@ export default class pets extends Component<any, any> {
                               overflowY: 'auto'
                             }}
                             placement="bottomLeft"
-                            title={<div> {item.petsBreed}</div>}
+                            title={<div> {item.petsBreedName}</div>}
                           >
-                            <p style={styles.text}> {item.petsBreed}</p>
+                            <p style={styles.text}> {item.petsBreedName}</p>
                           </Tooltip>
                         </span>
                       </Col>

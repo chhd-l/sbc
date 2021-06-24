@@ -43,6 +43,16 @@ export const FORM_FIELD_MAP = {
   Comment: 'rfc'
 };
 
+export async function getPetsBreedListByType(type: string) {
+  return await webapi.querySysDictionary({
+    type: type
+  }).then((data) => {
+    return data.res.context?.sysDictionaryVOS ?? [];
+  }).catch(() => {
+    return [];
+  });
+};
+
 export async function getAddressConfig() {
   let fields = [];
   const addressInputType = await getAddressInputTypeSetting();
@@ -136,19 +146,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     });
   };
 
-  getBreedListByType = async (type: string) => {
-    return await webapi.querySysDictionary({
-      type: type
-    }).then((data) => {
-      return data.res.context?.sysDictionaryVOS ?? [];
-    }).catch(() => {
-      return [];
-    });
-  };
-
   getPetsList = async () => {
     const { customerAccount } = this.state;
-    const [dogBreedList, catBreedList] = await Promise.all([this.getBreedListByType('dogBreed'), this.getBreedListByType('catBreed')]);
+    const [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
     const pets = await webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
       return (data.res.context?.context ?? []).map(pet => ({
         ...pet,

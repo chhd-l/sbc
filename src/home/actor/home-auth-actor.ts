@@ -16,6 +16,9 @@ export default class HomeAuthActor extends Actor {
       trafficTrendDashboardView: '',
       conversionFunnelDashboardView: '',
       taskEmployeeStatisticsView: [],
+      prescriberTradeTopView: '',
+      prescriberTradeItemTopView: '',
+      prescriberTradeAndItemTopView: '',
       search: '',
       searchData: '',
       selectSearchData: '',
@@ -69,6 +72,20 @@ export default class HomeAuthActor extends Actor {
   conversionFunnelDashboardView(state: IMap, res) {
     return state.set('conversionFunnelDashboardView', res);
   }
+  @Action('home:prescriberTradeTopView')
+  prescriberTradeTopView(state: IMap, res) {
+    return state.set('prescriberTradeTopView', res);
+  }
+  @Action('home:prescriberTradeItemTopView')
+  prescriberTradeItemTopView(state: IMap, res) {
+    return state.set('prescriberTradeItemTopView', res);
+  }
+  @Action('home:prescriberTradeAndItemTopView')
+  prescriberTradeAndItemTopView(state: IMap, res) {
+    return state.set('prescriberTradeAndItemTopView', res);
+  }
+
+
 
   /*Prescriber*/
 

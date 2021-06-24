@@ -119,7 +119,7 @@ export default class Activities extends Component<any, any> {
             activityLoading: false
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             activityLoading: false
           });

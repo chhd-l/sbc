@@ -3,6 +3,12 @@ import { LoginCallback } from '@okta/okta-react';
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
+  //异步导出
+  {
+    path: '/batch-export/:from',
+    exact: true,
+    asyncComponent: () => import('./batch-export')
+  },
   //订单列表
   {
     path: '/order-list',
@@ -490,6 +496,10 @@ const routes = [
     path: '/customer-statistics',
     asyncComponent: () => import('./customer-statistics')
   },
+  {
+    path: '/delivery-date',
+    asyncComponent: () => import('./delivery-date')
+  },
   //业务员统计
   {
     path: '/employee-statistics',
@@ -860,6 +870,10 @@ const routes = [
   {
     path: '/report-traffic',
     asyncComponent: () => import('./report-traffic')
+  },
+  {
+    path: '/export-report',
+    asyncComponent: () => import('./export-report')
   },
   {
     path: '/sales-category',

@@ -61,7 +61,7 @@ class UserList extends Component<any, any> {
             hasPrescriberRole: allRoles.includes('Prescriber')
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {

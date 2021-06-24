@@ -170,10 +170,10 @@ class DiscountLevels extends React.Component<any, any> {
                                 {
                                   validator: (_rule, value, callback) => {
                                     if (value) {
-                                      if (!/^(?:0|[1-9][0-9]?|100)$/.test(value)) { // /(^[0-9]?(\.[0-9])?$)/
+                                      if (!/^(?:[1-9][0-9]?)$/.test(value)) { // /(^[0-9]?(\.[0-9])?$)/
                                         callback(
                                           (window as any).RCi18n({
-                                            id: 'Marketing.InputValuefrom0to100'
+                                            id: 'Marketing.InputValuefrom1to99'
                                           })
                                         );
                                       }
@@ -189,12 +189,12 @@ class DiscountLevels extends React.Component<any, any> {
                                 className="input-width"
                                 title={
                                   (window as any).RCi18n({
-                                    id: 'Marketing.InputValuefrom0to100'
+                                    id: 'Marketing.InputValuefrom1to99'
                                   })
                                 }
                                 placeholder={
                                   (window as any).RCi18n({
-                                    id: 'Marketing.InputValuefrom0to100'
+                                    id: 'Marketing.InputValuefrom1to99'
                                   })
                                 }
                                 onChange={(e) => {

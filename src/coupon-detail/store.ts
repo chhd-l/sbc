@@ -28,6 +28,11 @@ export default class AppStore extends Store {
           field: 'coupon',
           value: fromJS(res.context.couponInfo)
         });
+        if(res.context.couponInfo.scopeType == 5) { //category
+          this.seCurrentCategory(res.context.couponInfo.storeCateIds)
+        } else if(res.context.couponInfo.scopeType == 6) { //Attribute
+          this.setCurrentAttribute(res.context.couponInfo.attributeValueIds)
+        }
         // 设置商品品牌信息
         this.dispatch('coupon: detail: field: value', {
           field: 'skuBrands',
@@ -43,8 +48,92 @@ export default class AppStore extends Store {
           field: 'skus',
           value: fromJS(null == res.context.goodsList ? [] : res.context.goodsList) // 设置商品列表
         });
+
+        this.dispatch('coupon: detail: field: value', {
+          field: 'goodsList',
+          value: fromJS(res.context.goodsList) // 设置商品列表
+        });
       });
     } else {
     }
+
   };
+
+
+
+  /**
+   * 店铺分类
+   * @param discountBean
+   * @returns {Promise<void>}
+   */
+  seCurrentCategory = async (storeCateIds) => {
+    const { res } = await webapi.getGoodsCate();
+    if (res && res.code === Const.SUCCESS_CODE) {
+      const allCategary = res.context
+      let  currentCategary = []
+      allCategary.map(item => {
+        storeCateIds.map(cate => {
+          if(item.storeCateId == cate) {
+            currentCategary.push(item)
+          }
+        })
+      })
+      this.dispatch('coupon: detail: field: value', {
+        field: 'currentCategary',
+        value: fromJS(currentCategary)
+      });
+    }
+  };
+
+
+  setCurrentAttribute = async (attributeValueIds) => {
+    let params = {
+      attributeName: '',
+      displayName: '',
+      attributeValue: '',
+      displayValue: '',
+      pageSize: 10000,
+      pageNum: 0
+    };
+    const { res } = await webapi.getAllAttribute(params);
+    if (res.code == Const.SUCCESS_CODE) {
+      let  currentAttribute = []
+      let attributesList = fromJS(res.context.attributesList)
+      attributesList = this.generateAttributeTree(attributesList)
+      attributesList = attributesList.toJS().flat(2)
+      attributesList.map(item => {
+        attributeValueIds.map(attribute => {
+          if(item.id == attribute) {
+            currentAttribute.push(item)
+          }
+        })
+      })
+
+      this.dispatch('coupon: detail: field: value', {
+        field: 'currentAttribute',
+        value: fromJS(currentAttribute)
+      });
+    } else {
+      // message.error('load group error.');
+    }
+  };
+
+  /**
+   * Attribute分类树形下拉框
+   * @param storeCateList
+   */
+  generateAttributeTree = (attributesList) => {
+    return (
+      attributesList &&
+      attributesList.map((item) => {
+        if (item.get('attributesValuesVOList') && item.get('attributesValuesVOList').count()) {
+          return (
+            this.generateAttributeTree(item.get('attributesValuesVOList'))
+          );
+        }
+        return item
+      })
+    );
+  };
+
 }

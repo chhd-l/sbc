@@ -1223,9 +1223,10 @@ class FullDiscountForm extends React.Component<any, any> {
               'fullDiscountLevelList',
               marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 100))
             );
+            debugger
             let obj = {
-              firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') / 100,
-              restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') / 100,
+              firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') ? marketingBean.get('firstSubscriptionOrderDiscount') / 100 : null,
+              restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') ? marketingBean.get('restSubscriptionOrderDiscount') / 100 : null,
               subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
               subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
             };

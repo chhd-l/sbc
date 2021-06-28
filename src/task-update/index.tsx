@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import { Const, Headline, ReactEditor, history, cache } from 'qmkit';
-import { Form, Input, Button, Col, Row, Select, message, DatePicker, Tabs, Breadcrumb, Tooltip, InputNumber, Spin } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Col,
+  Row,
+  Select,
+  message,
+  DatePicker,
+  Tabs,
+  Breadcrumb,
+  Tooltip,
+  InputNumber,
+  Spin
+} from 'antd';
 import Activity from './components/activity';
 import './style.less';
 import * as webapi from './webapi';
@@ -44,7 +58,11 @@ class TaskUpdate extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.match.params.id ? <FormattedMessage id="task.Taskedition" /> : <FormattedMessage id="task.Taskcreation" />,
+      title: this.props.match.params.id ? (
+        <FormattedMessage id="task.Taskedition" />
+      ) : (
+        <FormattedMessage id="task.Taskcreation" />
+      ),
       taskCompleted: false,
       tabKey: '',
       task: {},
@@ -359,11 +377,11 @@ class TaskUpdate extends Component<any, any> {
                 message.success((window as any).RCi18n({ id: 'Content.OperateSuccessfully' }));
                 history.push({ pathname: '/tasks' });
               } else {
-                message.error(res.message || (window as any).RCi18n({id:'Order.AddFailed'}));
+                message.error(res.message || (window as any).RCi18n({ id: 'Order.AddFailed' }));
               }
             })
             .catch((err) => {
-              message.error(err || (window as any).RCi18n({id:'Order.AddFailed'}));
+              message.error(err || (window as any).RCi18n({ id: 'Order.AddFailed' }));
             });
         }
       }
@@ -390,9 +408,26 @@ class TaskUpdate extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { title, tabKey, editable, task, id, taskCompleted, assignedUsers, petAssistantLoading, petOwnerLoading } = this.state;
+    const {
+      title,
+      tabKey,
+      editable,
+      task,
+      id,
+      taskCompleted,
+      assignedUsers,
+      petAssistantLoading,
+      petOwnerLoading
+    } = this.state;
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
-    const { goldenMomentList, actionTypeList, priorityList, statusList, reminderTypes, associatedSubscriptionList } = this.state;
+    const {
+      goldenMomentList,
+      actionTypeList,
+      priorityList,
+      statusList,
+      reminderTypes,
+      associatedSubscriptionList
+    } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
     let subscriptionNumbers = task.subscriptionNumber ? task.subscriptionNumber.split(',') : [];
     return (
@@ -418,13 +453,17 @@ class TaskUpdate extends Component<any, any> {
             {tabKey !== 'activity' ? (
               <Col span={12} style={{ textAlign: 'right' }}>
                 {!editable ? (
-                  <Tooltip placement="top" title={RCi18n({id:'task.Edit'})}>
-                    <Button style={{ marginRight: '20px' }} type="primary" onClick={() => this.setState({ editable: true })}>
+                  <Tooltip placement="top" title={RCi18n({ id: 'task.Edit' })}>
+                    <Button
+                      style={{ marginRight: '20px' }}
+                      type="primary"
+                      onClick={() => this.setState({ editable: true })}
+                    >
                       <FormattedMessage id="task.Edit" />
                     </Button>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title={RCi18n({id:'task.Cancel'})}>
+                  <Tooltip placement="top" title={RCi18n({ id: 'task.Cancel' })}>
                     <Button onClick={() => this.setState({ editable: false })}>
                       <FormattedMessage id="task.Cancel" />
                     </Button>
@@ -442,7 +481,17 @@ class TaskUpdate extends Component<any, any> {
             }}
           >
             <TabPane tab={<FormattedMessage id="task.BasicInformation" />} key="basic">
-              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Spin
+                spinning={this.state.loading}
+                indicator={
+                  <img
+                    className="spinner"
+                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                    style={{ width: '90px', height: '90px' }}
+                    alt=""
+                  />
+                }
+              >
                 <Form>
                   <Row>
                     <Col span={12}>
@@ -454,7 +503,9 @@ class TaskUpdate extends Component<any, any> {
                           editable ? (
                             <Input
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({ id: 'task.Inputtasknametocreateanewtask' })}
+                              placeholder={(window as any).RCi18n({
+                                id: 'task.Inputtasknametocreateanewtask'
+                              })}
                               onChange={(e: any) =>
                                 this.onChange({
                                   field: 'name',
@@ -470,7 +521,10 @@ class TaskUpdate extends Component<any, any> {
                     </Col>
                     {id ? (
                       <Col span={12}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="task.TaskStatus" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          label={<FormattedMessage id="task.TaskStatus" />}
+                        >
                           {getFieldDecorator('status', {
                             initialValue: task.status
                           })(
@@ -500,15 +554,23 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Assignedto" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.Assignedto" />}
+                      >
                         {getFieldDecorator('assistantId', {
-                          initialValue: task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : ''
+                          initialValue: task.assistantName
+                            ? task.assistantName +
+                              (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                            : ''
                         })(
                           editable ? (
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({ id: 'task.Pleaseinputemailorname' })}
+                              placeholder={(window as any).RCi18n({
+                                id: 'task.Pleaseinputemailorname'
+                              })}
                               showSearch
                               loading={petAssistantLoading}
                               onSearch={this.searchAssignedTo}
@@ -519,22 +581,36 @@ class TaskUpdate extends Component<any, any> {
                                 })
                               }
                               optionFilterProp="children"
-                              filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                              filterOption={(input, option) =>
+                                option.props.children
+                                  .toString()
+                                  .toLowerCase()
+                                  .indexOf(input.toLowerCase()) >= 0
+                              }
                             >
                               {assignedUsers.map((item) => (
                                 <Option value={item.employeeId} key={item.employeeId}>
-                                  {item.employeeName} {item.accountName ? '(' + item.accountName + ')' : ''}
+                                  {item.employeeName}{' '}
+                                  {item.accountName ? '(' + item.accountName + ')' : ''}
                                 </Option>
                               ))}
                             </Select>
                           ) : (
-                            <span>{task.assistantName ? task.assistantName + (task.assistantEmail ? '(' + task.assistantEmail + ')' : '') : ''}</span>
+                            <span>
+                              {task.assistantName
+                                ? task.assistantName +
+                                  (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                                : ''}
+                            </span>
                           )
                         )}
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.GoldenMoment" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.GoldenMoment" />}
+                      >
                         {getFieldDecorator('goldenMoment', {
                           initialValue: task.goldenMoment
                         })(
@@ -564,10 +640,18 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.StartTime" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.StartTime" />}
+                      >
                         {getFieldDecorator('startTime', {
                           initialValue: task.startTime ? moment(task.startTime) : null,
-                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseselectstarttime" /> }]
+                          rules: [
+                            {
+                              required: true,
+                              message: <FormattedMessage id="task.Pleaseselectstarttime" />
+                            }
+                          ]
                         })(
                           editable ? (
                             <DatePicker
@@ -585,7 +669,11 @@ class TaskUpdate extends Component<any, any> {
                               }}
                             />
                           ) : (
-                            <span>{task.startTime}</span>
+                            <span>
+                              {task.startTime
+                                ? moment(task.startTime).format('YYYY-MM-DD')
+                                : ''}
+                            </span>
                           )
                         )}
                       </FormItem>
@@ -594,7 +682,12 @@ class TaskUpdate extends Component<any, any> {
                       <FormItem {...formItemLayout} label={<FormattedMessage id="task.DueTime" />}>
                         {getFieldDecorator('dueTime', {
                           initialValue: task.dueTime ? moment(task.dueTime) : null,
-                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseselectduetime" /> }]
+                          rules: [
+                            {
+                              required: true,
+                              message: <FormattedMessage id="task.Pleaseselectduetime" />
+                            }
+                          ]
                         })(
                           editable ? (
                             <DatePicker
@@ -612,7 +705,11 @@ class TaskUpdate extends Component<any, any> {
                               }}
                             />
                           ) : (
-                            <span>{task.dueTime}</span>
+                            <span>
+                              {task.dueTime
+                                ? moment(task.dueTime).format('YYYY-MM-DD')
+                                : ''}
+                            </span>
                           )
                         )}
                       </FormItem>
@@ -620,7 +717,10 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.Reminderbeforeduetime" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.Reminderbeforeduetime" />}
+                      >
                         {editable ? (
                           <Row>
                             <Col span={8}>
@@ -701,15 +801,22 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPetOwner" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.AssociatedPetOwner" />}
+                      >
                         {getFieldDecorator('contactId', {
-                          initialValue: task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''
+                          initialValue: task.petOwner
+                            ? task.petOwner + '(' + task.customerAccount + ')'
+                            : ''
                         })(
                           editable ? (
                             <Select
                               allowClear
                               disabled={taskCompleted}
-                              placeholder={(window as any).RCi18n({ id: 'task.Pleaseinputpetowneraccountorname' })}
+                              placeholder={(window as any).RCi18n({
+                                id: 'task.Pleaseinputpetowneraccountorname'
+                              })}
                               showSearch
                               loading={petOwnerLoading}
                               onSearch={this.searchAssignedPetOwners}
@@ -720,7 +827,12 @@ class TaskUpdate extends Component<any, any> {
                                 })
                               }
                               optionFilterProp="children"
-                              filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                              filterOption={(input, option) =>
+                                option.props.children
+                                  .toString()
+                                  .toLowerCase()
+                                  .indexOf(input.toLowerCase()) >= 0
+                              }
                             >
                               {associatedPetOwners.map((item) => (
                                 <Option value={item.customerAccount} key={item.customerAccount}>
@@ -729,13 +841,22 @@ class TaskUpdate extends Component<any, any> {
                               ))}
                             </Select>
                           ) : (
-                            <Link to={`/petowner-details/${task.contactId}/${task.customerAccount}`}>{task.petOwner ? task.petOwner + '(' + task.customerAccount + ')' : ''}</Link>
+                            <Link
+                              to={`/petowner-details/${task.contactId}/${task.customerAccount}`}
+                            >
+                              {task.petOwner
+                                ? task.petOwner + '(' + task.customerAccount + ')'
+                                : ''}
+                            </Link>
                           )
                         )}
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedPet" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.AssociatedPet" />}
+                      >
                         {getFieldDecorator('petId', {
                           initialValue: task.petId
                         })(
@@ -757,7 +878,14 @@ class TaskUpdate extends Component<any, any> {
                               ))}
                             </Select>
                           ) : (
-                            <Link to={{ pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`, query: { hash: 'pets-list' } }}>{task.petName}</Link>
+                            <Link
+                              to={{
+                                pathname: `/petowner-details/${task.contactId}/${task.customerAccount}`,
+                                query: { hash: 'pets-list' }
+                              }}
+                            >
+                              {task.petName}
+                            </Link>
                           )
                         )}
                       </FormItem>
@@ -765,7 +893,10 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociatedOrder" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.AssociatedOrder" />}
+                      >
                         {getFieldDecorator('orderCode', {
                           initialValue: task.orderCode
                         })(
@@ -793,7 +924,10 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.ActionType" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.ActionType" />}
+                      >
                         {getFieldDecorator('actionType', {
                           initialValue: task.actionType
                         })(
@@ -823,7 +957,10 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     <Col span={12}>
-                      <FormItem {...formItemLayout} label={<FormattedMessage id="task.AssociateSubscription" />}>
+                      <FormItem
+                        {...formItemLayout}
+                        label={<FormattedMessage id="task.AssociateSubscription" />}
+                      >
                         {getFieldDecorator('subscriptionNumber', {
                           initialValue: subscriptionNumbers
                         })(
@@ -849,7 +986,10 @@ class TaskUpdate extends Component<any, any> {
                             <>
                               {subscriptionNumbers.map((subscriptionNumber, index) => (
                                 <>
-                                  <Link key={subscriptionNumber} to={`/subscription-detail/${subscriptionNumber}`}>
+                                  <Link
+                                    key={subscriptionNumber}
+                                    to={`/subscription-detail/${subscriptionNumber}`}
+                                  >
                                     {subscriptionNumber}
                                     {index !== subscriptionNumbers.length - 1 ? ', ' : ''}
                                   </Link>
@@ -863,9 +1003,18 @@ class TaskUpdate extends Component<any, any> {
                   </Row>
                   <Row>
                     {editable ? (
-                      <FormItem {...formRowItemLayout} label={<FormattedMessage id="task.Description" />}>
+                      <FormItem
+                        {...formRowItemLayout}
+                        label={<FormattedMessage id="task.Description" />}
+                      >
                         {taskCompleted ? (
-                          <ReactEditor id="description" height={200} disabled={true} content={task.description} onContentChange={(html) => {}} />
+                          <ReactEditor
+                            id="description"
+                            height={200}
+                            disabled={true}
+                            content={task.description}
+                            onContentChange={(html) => {}}
+                          />
                         ) : task.description ? (
                           <ReactEditor
                             id="description"
@@ -911,7 +1060,11 @@ class TaskUpdate extends Component<any, any> {
         {tabKey !== 'activity' ? (
           <div className="bar-button" style={{ left: '134px' }}>
             {editable ? (
-              <Button type="primary" style={{ marginRight: '10px' }} onClick={(e) => this.updateTask(e)}>
+              <Button
+                type="primary"
+                style={{ marginRight: '10px' }}
+                onClick={(e) => this.updateTask(e)}
+              >
                 <FormattedMessage id="task.Save" />
               </Button>
             ) : null}

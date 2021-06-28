@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment'
 import * as weapi from './webapi';
 import { BreadCrumb, cache, DataGrid, Headline, SelectGroup, Const, util } from 'qmkit';
 import { Button, Col, Form, Row, DatePicker, Icon, Select, Tooltip, message } from 'antd';
@@ -262,11 +263,12 @@ class ExportReport extends Component<any, any> {
                   }}/>
                 </Tooltip>
               )
-              let losetime = new Date(record.loseTime.replace(/-/g,'/'))
+              // let losetime = new Date(record.loseTime.replace(/-/g,'/'))
+              let losetime = moment(record.loseTime).valueOf()
               let now = new Date()
-              console.log(now.getTime())
-              console.log(losetime.getTime())
-              if(now.getTime() < losetime.getTime()){
+              // console.log(now.getTime())
+              console.log(losetime)
+              if(now.getTime() < losetime){
                 return docment
               }else {
                return

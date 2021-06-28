@@ -263,15 +263,10 @@ class ExportReport extends Component<any, any> {
                   }}/>
                 </Tooltip>
               )
-              // let losetime = new Date(record.loseTime.replace(/-/g,'/'))
-              let losetime = moment(record.loseTime).valueOf()
-              let now = new Date()
-              // console.log(now.getTime())
-              console.log(losetime)
-              if(now.getTime() < losetime){
+              if(moment(record.loseTime, 'YYYY-MM-DD hh:mm:ss.SSS').isAfter(moment())){
                 return docment
               }else {
-               return
+                return
               }
               break;
           }

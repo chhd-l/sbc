@@ -263,7 +263,7 @@ class ExportReport extends Component<any, any> {
                   }}/>
                 </Tooltip>
               )
-              if(moment(record.loseTime, 'YYYY-MM-DD hh:mm:ss.SSS').isAfter(moment())){
+              if(moment(record.loseTime, 'YYYY-MM-DD HH:mm:ss.SSS').isAfter(moment())){
                 return docment
               }else {
                 return

@@ -427,7 +427,7 @@ class SkuForm extends React.Component<any, any> {
                   initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
                 })( */}
                   <Select 
-                    value={rowInfo.subscriptionStatus}
+                    value={rowInfo.subscriptionStatus === undefined ? goods.get('subscriptionStatus') : rowInfo.subscriptionStatus}
                     onChange = {(e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e)}
                     disabled={disable} 
                     getPopupContainer={() => document.getElementById('page-content')} 

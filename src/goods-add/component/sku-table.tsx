@@ -519,18 +519,10 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-
-        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-        // rowInfo.subscriptionStatus = goods.get('subscriptionStatus') == 0 ? '0' : rowInfo.subscriptionStatus != null ? rowInfo.subscriptionStatus : '1';
-
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {/* {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
-                  initialValue: rowInfo.subscriptionStatus == 0 ? '0' : '1'
-                })( */}
                   <Select 
                     disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false }
                     getPopupContainer={() => document.getElementById('page-content')}
@@ -544,7 +536,6 @@ class SkuForm extends React.Component<any, any> {
                     <Option value={1}>Y</Option>
                     <Option value={0}>N</Option>
                   </Select>
-                {/* )} */}
               </FormItem>
             </Col>
           </Row>
@@ -632,21 +623,6 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
-    /*columns = columns.push({
-      title: (
-        <div>
-
-        </div>
-      ),
-      key: 'subscriptionStatus',
-      render: (rowInfo) => (
-        <Row>
-        </Row>
-      )
-    });*/
-    /*let a = columns.toJS()
-    let b = a.splice(a.length-5,1)
-    a.splice(3,0,b[0])*/
     return columns.toJS();
   };
   _handleChange = (value) => {

@@ -407,36 +407,20 @@ class SkuForm extends React.Component<any, any> {
       ),
       key: 'subscriptionStatus',
       render: (rowInfo) => {
-        // goods.get('subscriptionStatus') == 0?rowInfo.subscriptionStatus = '0' : rowInfo.subscriptionStatus!=null?rowInfo.subscriptionStatus:rowInfo.subscriptionStatus = '1'
-        let disable = false
-        if (goods.get('subscriptionStatus') == 0) {
-          disable = true
-        }else {
-          if(goodsList.toJS().length == 1 ) {
-            disable = true
-          }else {
-            disable = false
-          }
-        }
         return (
           <Row>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
-                {/* {getFieldDecorator('subscriptionStatus_' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', Number(e)),
-                  initialValue: rowInfo.subscriptionStatus == 0 ? '0':'1'
-                })( */}
                   <Select 
-                    value={rowInfo.subscriptionStatus === undefined ? goods.get('subscriptionStatus') : rowInfo.subscriptionStatus}
+                    value={rowInfo.subscriptionStatus}
                     onChange = {(e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e)}
-                    disabled={disable} 
+                    disabled={goods.get('subscriptionStatus') === 0 || goodsList.toJS().length == 1} 
                     getPopupContainer={() => document.getElementById('page-content')} 
                     style={{ width: '81px' }} 
                     placeholder="please select status">
                     <Option value={1}>Y</Option>
                     <Option value={0}>N</Option>
                   </Select>
-                {/* )} */}
               </FormItem>
             </Col>
           </Row>

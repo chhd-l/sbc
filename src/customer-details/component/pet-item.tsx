@@ -37,6 +37,7 @@ class PetItem extends React.Component<Iprop, any> {
       petImg: '',
       catBreed: [],
       dogBreed: [],
+      specialNeeds: [],
       tagList: [],
       customerPetsPropRelationList: [
         'Age support',
@@ -70,7 +71,8 @@ class PetItem extends React.Component<Iprop, any> {
       const pet = petsInfo;
       const newPetInfo = {
           ...pet,
-          petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? prevState.dogBreed : prevState.catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+          petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? prevState.dogBreed : prevState.catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName(),
+          needs: pet.needs ? pet.needs.split(',').map(need => prevState.specialNeeds.find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
         }
       if (petsInfo !== prevState.pet) {
         return {
@@ -85,11 +87,15 @@ class PetItem extends React.Component<Iprop, any> {
 
   getPet = async () => {
     this.setState({ loading: true });
-    const [dogBreed, catBreed] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
-    this.setState({
-      dogBreed,
-      catBreed,
-    })
+    let { dogBreed, catBreed, specialNeeds } = this.state;
+    if (dogBreed.length === 0 && catBreed.length === 0 && specialNeeds.length === 0) {
+      [dogBreed, catBreed, specialNeeds] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed'), getPetsBreedListByType('specialNeeds')]);
+      this.setState({
+        dogBreed,
+        catBreed,
+        specialNeeds
+      });
+    }
     if(this.props.petId) {
       petsById({ petsId: this.props.petId })
       .then((data) => {
@@ -97,7 +103,8 @@ class PetItem extends React.Component<Iprop, any> {
         this.setState({
           pet: {
             ...pet,
-            petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+            petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName(),
+            needs: pet.needs ? pet.needs.split(',').map(need => specialNeeds.find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
           },
           petImg: pet.petsImg || '',       
           loading: false

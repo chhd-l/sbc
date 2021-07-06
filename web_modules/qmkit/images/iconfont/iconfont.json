@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "22694626",
+      "name": "皇冠",
+      "font_class": "huangguan1",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
       "icon_id": "586087",
       "name": "message",
       "font_class": "message1",

@@ -1199,10 +1199,10 @@ export default {
         "PetOwner.TaggingNameIsRequired": "Tagging name is required",
         "PetOwner.ExceedMaximumLength": "Exceed maximum length!",
         "PetOwner.PleaseInputTaggingDescription": "Please input tagging description",
-        
+
         "PetOwner.TaggingNameLabel": "Tagging name",
         "PetOwner.TaggingTypeLabel": "Tagging type",
-        
+
         "PetOwner.TaggingDescription": "Tagging description",
         "PetOwner.Search": "Search",
         "PetOwner.AddNewTagging": "Add new tagging",
@@ -1285,7 +1285,7 @@ export default {
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
         'Marketing.EmailApiSetting':'Email Api Setting',
         'Marketing.sendsayTip':'Please go to Sendsay to activate Email,and set up your AccessKeyId and AccessKeySecret in the Sendsay.',
-     
+
         "Marketing.PromotionType": "Promotion type",
         "Marketing.NormalPromotion": "Normal promotion",
         "Marketing.SubscriptionPromotion": "Subscription promotion",
@@ -1608,6 +1608,10 @@ export default {
         "Marketing.percent": "%",
         "Marketing.InputValuefrom1to99": "Input value is an integer from 1 to 99",
         "Marketing.InputValuefrom1to100": "Input value is an integer from 1 to 100",
+        "Marketing.ReductionType": "Reduction type",
+        "Marketing.Normal": "Normal",
+        "Marketing.Gift": "Gift",
+        "Marketing.Definemainproductandgift": "Define main product and gift"
     },
     Content: {
         "Content.Prompt": "Prompt",

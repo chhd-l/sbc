@@ -14,7 +14,14 @@ export default class FullReductionActor extends Actor {
         isSuperimposeSubscription: 1,//未选中
         subType: 0,// 0 1 6
         isClub: false,
-        fullReductionLevelList: []
+        fullReductionLevelList: [],
+        marketingType: 0
+      },
+      marketingType: 0,
+      shippingBean: {
+        subType: 10, // 10 11
+        joinLevel: -1,
+        promotionType: 0,
       },
       allGroups: [],
       // 店铺分类信息
@@ -32,6 +39,15 @@ export default class FullReductionActor extends Actor {
 
   constructor() {
     super();
+  }
+  @Action('marketing:marketingType')
+  setMarketingType(state, marketingType) {
+    return state.set('marketingType', marketingType);
+  }
+
+  @Action('marketing:shippingBean')
+  getShippingBean(state: IMap, bean) {
+    return state.set('shippingBean', bean);
   }
 
   @Action('marketing:reductionBean')

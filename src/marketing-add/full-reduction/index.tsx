@@ -8,8 +8,9 @@ import AppStore from './store';
 import FullReductionForm from './components/full-reduction-form';
 import * as Enum from '../common-components/marketing-enum';
 import '../index.less';
+import FreeShipingForm from '@/marketing-add/common-components/free-shipping-add-form';
 const WrappedForm = Form.create()(FullReductionForm);
-
+const WrappedShippingForm = Form.create()(FreeShipingForm);
 @StoreProvider(AppStore, { debug: __DEV__ })
 class MarketingFullReductionAdd extends React.Component<any, any> {
   store: AppStore;
@@ -23,9 +24,14 @@ class MarketingFullReductionAdd extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+    const { marketingType, marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+    debugger
     if (marketingId) {
-      this.store.init(marketingId);
+      if( !marketingType) {
+        this.store.init(marketingId);
+      } else {
+        this.store.initShipping(marketingId);
+      }
     } else {
       this.store.initReductionDefualtLevelList();
       this.store.setSelectedProductRows({ selectedRows: [], selectedSkuIds: [] })
@@ -75,13 +81,26 @@ class MarketingFullReductionAdd extends React.Component<any, any> {
               })
             } type="info" showIcon />
 
-            <WrappedForm
-              ref={(form) => (this._form = form)}
-              {...{
-                store: this.store,
-                marketingType: Enum.MARKETING_TYPE.FULL_REDUCTION
-              }}
-            />
+
+            {
+
+              this.store.state().get('marketingType') === 0 ?
+                <WrappedForm
+                  ref={(form) => (this._form = form)}
+                  {...{
+                    store: this.store,
+                    marketingType: Enum.MARKETING_TYPE.FULL_REDUCTION
+                  }}
+                />
+               :
+                <WrappedShippingForm
+                  ref={(form) => (this._form = form)}
+                  {...{
+                    store: this.store,
+                    marketingType: Enum.MARKETING_TYPE.FREE_SHIPPING
+                  }}
+                />
+            }
           </div>
         </div>
       </AuthWrapper>

@@ -321,29 +321,29 @@ export default class List extends React.Component<any, any> {
               </AuthWrapper>
             </Row>
             <Row>
-              <AuthWrapper functionName="f_marketing_gift_add">
-                <Col span={6}>
-                  <a
-                    className="createMarket"
-                    onClick={() =>
-                      history.push({
-                        pathname: '/marketing-free-shipping',
-                        state: {
-                          source: 'marketCenter'
-                        }
-                      })
-                    }
-                  >
-                    <span className="left left2">
-                      <img src={images.shipping_icon} />
-                    </span>
-                    <div className="info">
-                      <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>
-                      {/*<p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>*/}
-                    </div>
-                  </a>
-                </Col>
-              </AuthWrapper>
+              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
+              {/*  <Col span={6}>*/}
+              {/*    <a*/}
+              {/*      className="createMarket"*/}
+              {/*      onClick={() =>*/}
+              {/*        history.push({*/}
+              {/*          pathname: '/marketing-free-shipping',*/}
+              {/*          state: {*/}
+              {/*            source: 'marketCenter'*/}
+              {/*          }*/}
+              {/*        })*/}
+              {/*      }*/}
+              {/*    >*/}
+              {/*      <span className="left left2">*/}
+              {/*        <img src={images.shipping_icon} />*/}
+              {/*      </span>*/}
+              {/*      <div className="info">*/}
+              {/*        <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>*/}
+              {/*        /!*<p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>*!/*/}
+              {/*      </div>*/}
+              {/*    </a>*/}
+              {/*  </Col>*/}
+              {/*</AuthWrapper>*/}
 
               {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
               {/*  <Col span={6}>*/}

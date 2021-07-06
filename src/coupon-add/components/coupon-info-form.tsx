@@ -646,49 +646,97 @@ class CouponInfoForm extends Component<any, any> {
             </FormItem>
           )}
           {couponPromotionType === 1 && (
-            <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupondiscount" />} required={true}>
-              <Row>
-                {getFieldDecorator('couponDiscount', {
-                  initialValue: couponDiscount,
-                  rules: [
-                    { required: true,
-                      message:
-                        (window as any).RCi18n({
-                          id: 'Marketing.Pleaseinputcoupondiscount'
-                        })
-                    },
-                    {
-                      validator: (_rule, value, callback) => {
-                        if (value) {
-                          if (!/^(?:[1-9][0-9]?)$/.test(value)) {
-                            callback(
-                              (window as any).RCi18n({
-                                id: 'Marketing.InputValuefrom1to99'
-                              })
-                            );
+
+              <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupondiscount" />} required={true}>
+                <div style={{ display: 'flex' }}>
+                  <FormItem>
+                    {getFieldDecorator('couponDiscount', {
+                      initialValue: couponDiscount,
+                      rules: [
+                        { required: true,
+                          message:
+                            (window as any).RCi18n({
+                              id: 'Marketing.Pleaseinputcoupondiscount'
+                            })
+                        },
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (value) {
+                              if (!/^(?:[1-9][0-9]?)$/.test(value)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to99'
+                                  })
+                                );
+                              }
+                            }
+                            callback();
                           }
                         }
-                        callback();
-                      }
-                    }
-                  ]
-                })(
-                  <Input
-                    placeholder="1-99"
-                    maxLength={3}
-                    value={couponDiscount}
-                    onChange={async (e) => {
-                      await fieldsValue({
-                        field: 'couponDiscount',
-                        value: e.currentTarget.value
-                      });
-                    }}
-                    style={{ width: 360 }}
-                  />
-                )} %
-                {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
-              </Row>
-            </FormItem>
+                      ]
+                    })(
+                      <Input
+                        placeholder="1-99"
+                        maxLength={3}
+                        value={couponDiscount}
+                        onChange={async (e) => {
+                          await fieldsValue({
+                            field: 'couponDiscount',
+                            value: e.currentTarget.value
+                          });
+                        }}
+                        style={{ width: 160 }}
+                      />
+                    )} %,
+                  </FormItem>
+                  <FormItem>
+                    <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                    {getFieldDecorator(`firstLimit`, {
+                      rules: [
+                        // { required: true, message: 'Must enter rules' },
+                        {
+                          validator: (_rule, value, callback) => {
+                            if (value) {
+                              if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.1-9999'
+                                  })
+                                );
+                              }
+                            }
+                            callback();
+                          }
+                          // callback();
+                        }
+                      ],
+                      initialValue: null
+                    })(
+                      <Input
+                        // style={{ width: 200 }}
+                        className="input-width"
+                        title={
+                          (window as any).RCi18n({
+                            id: 'Marketing.1-9999'
+                          })
+                        }
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.1-9999'
+                          })
+                        }
+                        onChange={(e) => {
+
+                        }}
+                        value={null}
+                        style={{ width: 160 }}
+                      />
+                    )}
+                    &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  </FormItem>
+                </div>
+              </FormItem>
+
           )}
           <ErrorDiv>
             <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />} required={true} style={{ marginTop: '40px' }}>

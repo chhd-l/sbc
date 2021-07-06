@@ -636,6 +636,51 @@ class FullDiscountForm extends React.Component<any, any> {
                   )}
                   <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
                 </FormItem>
+                <FormItem>
+                  <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                  {getFieldDecorator(`firstLimit`, {
+                    rules: [
+                      // { required: true, message: 'Must enter rules' },
+                      {
+                        validator: (_rule, value, callback) => {
+                          if (value) {
+                            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.1-9999'
+                                })
+                              );
+                            }
+                          }
+                          callback();
+                        }
+                        // callback();
+                      }
+                    ],
+                    initialValue: null
+                  })(
+                    <Input
+                      // style={{ width: 200 }}
+                      className="input-width"
+                      title={
+                        (window as any).RCi18n({
+                          id: 'Marketing.1-9999'
+                        })
+                      }
+                      placeholder={
+                        (window as any).RCi18n({
+                          id: 'Marketing.1-9999'
+                        })
+                      }
+                      onChange={(e) => {
+
+                      }}
+                      value={null}
+                    />
+                  )}
+                  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                </FormItem>
+
               </div>
 
             </FormItem>
@@ -700,6 +745,50 @@ class FullDiscountForm extends React.Component<any, any> {
                   />
                 )}
                 <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
+              </FormItem>
+              <FormItem>
+                <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                {getFieldDecorator(`firstLimit`, {
+                  rules: [
+                    // { required: true, message: 'Must enter rules' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.1-9999'
+                              })
+                            );
+                          }
+                        }
+                        callback();
+                      }
+                      // callback();
+                    }
+                  ],
+                  initialValue: null
+                })(
+                  <Input
+                    // style={{ width: 200 }}
+                    className="input-width"
+                    title={
+                      (window as any).RCi18n({
+                        id: 'Marketing.1-9999'
+                      })
+                    }
+                    placeholder={
+                      (window as any).RCi18n({
+                        id: 'Marketing.1-9999'
+                      })
+                    }
+                    onChange={(e) => {
+
+                    }}
+                    value={null}
+                  />
+                )}
+                &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </FormItem>
             </div>
           </FormItem>

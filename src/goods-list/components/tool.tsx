@@ -5,7 +5,6 @@ import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import {noop, AuthWrapper, checkAuth, util, Const} from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import SyncButton from './sync-product';
 const confirm = Modal.confirm;
 
 @withRouter
@@ -18,6 +17,7 @@ class Tool extends React.Component<any, any> {
       spuOnSale: Function;
       spuOffSale: Function;
       spuSyncImage: Function;
+      spuSyncText: Function;
       selectedSpuKeys: IList;
       setFeightVisible: Function;
       likeGoodsName: string;
@@ -34,6 +34,7 @@ class Tool extends React.Component<any, any> {
     spuOnSale: noop,
     spuOffSale: noop,
     spuSyncImage: noop,
+    spuSyncText: noop,
     selectedSpuKeys: 'selectedSpuKeys',
     field: 'field',
     setFeightVisible: noop,
@@ -60,7 +61,12 @@ class Tool extends React.Component<any, any> {
     return (
       <div className="handle-bar">
         <AuthWrapper functionName="f_goods_sync">
-          <SyncButton />
+          <Dropdown overlay={this._syncMenu} getPopupContainer={() => document.getElementById('page-content')}>
+            <Button>
+              {<FormattedMessage id="Product.Synchronize" />}
+              <Icon type="down" />
+            </Button>
+          </Dropdown>
         </AuthWrapper>
         {hasMenu && (
           <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
@@ -73,6 +79,35 @@ class Tool extends React.Component<any, any> {
       </div>
     );
   }
+
+  _syncMenu = () => {
+    return (
+      <Menu>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_sync">
+            <a
+              onClick={() => {
+                this._syncText();
+              }}
+            >
+              <FormattedMessage id="Product.SynchronizeText" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_sync">
+            <a
+              onClick={() => {
+                this._syncImage();
+              }}
+            >
+              <FormattedMessage id="Product.SynchronizeImage" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+      </Menu>
+    );
+  };
 
   _menu = () => {
     return (
@@ -118,17 +153,6 @@ class Tool extends React.Component<any, any> {
               }}
             >
               <FormattedMessage id="Product.exportStockPrice" />
-            </a>
-          </AuthWrapper>
-        </Menu.Item>
-        <Menu.Item>
-          <AuthWrapper functionName="f_goods_sync">
-            <a
-              onClick={() => {
-                this._syncImage();
-              }}
-            >
-              <FormattedMessage id="Product.SynchronizeImage" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -222,6 +246,11 @@ class Tool extends React.Component<any, any> {
     }
     spuSyncImage();
   };
+
+  _syncText = () => {
+    const { spuSyncText } = this.props.relaxProps;
+    spuSyncText();
+  }
 
 
   _export = () => {

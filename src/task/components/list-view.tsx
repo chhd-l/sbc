@@ -18,10 +18,10 @@ export default class ListView extends Component<any, any> {
         total: 0
       },
       taskStatus: [
-        { name: <FormattedMessage id="task.ToDo"/>, value: 'To Do' },
-        { name: <FormattedMessage id="task.On-going"/>, value: 'On-going' },
-        { name: <FormattedMessage id="task.Completed"/>, value: 'Completed' },
-        { name: <FormattedMessage id="task.Cancelled"/>, value: 'Cancelled' }
+        { name: <FormattedMessage id="task.ToDo" />, value: 'To Do' },
+        { name: <FormattedMessage id="task.On-going" />, value: 'On-going' },
+        { name: <FormattedMessage id="task.Completed" />, value: 'Completed' },
+        { name: <FormattedMessage id="task.Cancelled" />, value: 'Cancelled' }
       ],
       loading: false,
       queryType: '1'
@@ -77,14 +77,14 @@ export default class ListView extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message ||<FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="Public.GetDataFailed"/>);
+        message.error(err || <FormattedMessage id="Public.GetDataFailed" />);
         this.setState({
           loading: false
         });
@@ -112,17 +112,17 @@ export default class ListView extends Component<any, any> {
     const { taskList, taskStatus } = this.state;
     const columns = [
       {
-        title: <FormattedMessage id="task.TaskName"/>,
+        title: <FormattedMessage id="task.TaskName" />,
         dataIndex: 'name',
         width: '10%'
       },
       {
-        title: <FormattedMessage id="task.GoldenMoment"/>,
+        title: <FormattedMessage id="task.GoldenMoment" />,
         dataIndex: 'goldenMoment',
         width: '15%'
       },
       {
-        title: <FormattedMessage id="task.TaskStatus"/>,
+        title: <FormattedMessage id="task.TaskStatus" />,
         dataIndex: 'status',
         width: '10%',
         render: (text) => {
@@ -131,28 +131,38 @@ export default class ListView extends Component<any, any> {
         }
       },
       {
-        title: <FormattedMessage id="task.Priority"/>,
+        title: <FormattedMessage id="task.Priority" />,
         dataIndex: 'priority',
         width: '10%'
       },
       {
-        title: <FormattedMessage id="task.PetAssistant"/>,
+        title: <FormattedMessage id="task.PetAssistant" />,
         dataIndex: 'assistantName',
         width: '10%'
       },
       {
-        title: <FormattedMessage id="task.PetOwner"/>,
+        title: <FormattedMessage id="task.PetOwner" />,
         dataIndex: 'petOwner',
         width: '10%'
       },
       {
-        title: <FormattedMessage id="task.DueTime"/>,
+        title: <FormattedMessage id="task.DueTime" />,
         dataIndex: 'dueTime',
         width: '15%',
-        render: (text, record) => (moment(text) < moment(new Date()) && (record.status === 'To Do' || record.status === 'On-going') ? <div style={{ color: 'rgba(239,28,51)' }}>{text}</div> : text)
+        render: (text, record) =>
+          moment(text) < moment(new Date()) &&
+          (record.status === 'To Do' || record.status === 'On-going') ? (
+            <div style={{ color: 'rgba(239,28,51)' }}>
+              {text ? moment(text).format('YYYY-MM-DD') : ''}
+            </div>
+          ) : text ? (
+            moment(text).format('YYYY-MM-DD')
+          ) : (
+            ''
+          )
       },
       {
-        title:<FormattedMessage id="Order.Operation"/>,
+        title: <FormattedMessage id="Order.Operation" />,
         key: 'operation',
         width: '10%',
         render: (text, record) => (
@@ -171,7 +181,17 @@ export default class ListView extends Component<any, any> {
           columns={columns}
           dataSource={taskList}
           pagination={this.state.pagination}
-          loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          loading={{
+            spinning: this.state.loading,
+            indicator: (
+              <img
+                className="spinner"
+                src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                style={{ width: '90px', height: '90px' }}
+                alt=""
+              />
+            )
+          }}
           scroll={{ x: '100%' }}
           onChange={this.handleTableChange}
         />

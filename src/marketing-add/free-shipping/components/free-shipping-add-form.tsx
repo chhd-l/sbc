@@ -171,6 +171,21 @@ class FreeShippingAddForm extends React.Component<any, any> {
     const { allGroups, marketingBean, loading } = this.props.relaxProps;
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
+        <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
+        <FormItem {...formItemLayout} labelAlign="left">
+          <div className="ant-form-inline">
+            <Radio.Group onChange={e => {
+              this.onBeanChange({
+                promotionType: e.target.value,
+              });
+            }} value={marketingBean.get('promotionType')}>
+              <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+              <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
+              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+            </Radio.Group>
+          </div>
+        </FormItem>
         <div className="bold-title">Basic Setting</div>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {
@@ -259,21 +274,21 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value && marketingBean.get('subType') === 10) {//marketingBean.get('shippingValue')
+                              debugger
+                              if(marketingBean.get('subType') !== 10 || value === 0 || value === '0') {
+                                callback();
+                              } else if (!value) {//marketingBean.get('shippingValue')
                                 callback(
                                   (window as any).RCi18n({
                                     id: 'Marketing.Shippingvalueentered',
                                   })
                                 );
-                              }
-                              if (marketingBean.get('shippingValue')) {
-                                if (!ValidConst.zeroPrice.test(marketingBean.get('shippingValue')) || !(marketingBean.get('shippingValue') < 10000 && marketingBean.get('shippingValue') >= 0)) {
-                                  callback(
-                                    (window as any).RCi18n({
-                                      id: 'Marketing.0-9999',
-                                    })
-                                  );
-                                }
+                              } else if(!/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/.test(value) || value>= 10000) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.0-9999',
+                                  })
+                                );
                               }
                               callback();
                             }
@@ -312,28 +327,28 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              if (!value&& marketingBean.get('subType') === 11) {//marketingBean.get('shippingItemValue')
+                              if(marketingBean.get('subType') !== 11) {
+                                callback()
+                              }else if (!value) {//marketingBean.get('shippingItemValue')
                                 callback(
                                   (window as any).RCi18n({
                                     id: 'Marketing.Itemsmustbeentered',
                                   })
                                 );
-                              }
-                              if (marketingBean.get('shippingItemValue')) {
-                                if (!ValidConst.zeroNumber.test(marketingBean.get('shippingItemValue')) || !(marketingBean.get('shippingItemValue') < 10000 && marketingBean.get('shippingItemValue') > 0)) {
-                                  callback(
-                                    (window as any).RCi18n({
-                                      id: 'Marketing.1-9999',
-                                    })
-                                  );
-                                }
+                              } else if(!/^\+?[1-9]\d{0,3}?$/.test(value)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.1-9999',
+                                  })
+                                );
                               }
                               callback();
                             }
                           }
                         ],
                         initialValue: marketingBean.get('shippingItemValue')
-                      })(<Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
+                      })(
+                        <Input style={{ width: 200 }} value={marketingBean.get('shippingItemValue')} title={'1-9999'} placeholder={'1-9999'} onChange={(e) => this.shippingRadioOnChange(e, 'shippingItemValue')} disabled={marketingBean.get('subType') !== 11} />)}
                       <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
                     </span>
                   </Radio>

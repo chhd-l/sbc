@@ -22,6 +22,7 @@ export default class GoodsSpecActor extends Actor {
       goodsList: [
         {
           id: this._getRandom(),
+          subscriptionStatus: 1,
           index: 1,
           addedFlag: 1,
           subscriptionPrice: 0,

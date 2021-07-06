@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { fromJS } from 'immutable';
 import { message } from 'antd';
-import { Const, util } from 'qmkit';
+import { Const, RCi18n, util } from 'qmkit';
 import TabActor from './actor/tab-actor';
 import ListActor from './actor/list-actor';
 import FormActor from './actor/form-actor';
@@ -36,6 +36,105 @@ export default class AppStore extends Store {
     //   form['returnFlowState'] = values[1];
     // }
 
+    webapi
+      .getOrderSettingConfig()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let pcashList = res.context.pcashList;
+          let ponlineList = res.context.ponlineList;
+          let unLimitedList = res.context.unLimitedList;
+          let returnOrderConfig = {
+            pendingReview: 0,
+            toBeDelivery: 0,
+            toBeReceived: 0,
+            pendingRefund: 0
+          }
+          let pendingRefundConfig = {
+            online: 0,
+            cash: 0,
+            cashOnDelivery: 0
+          }
+
+          ponlineList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.online=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+
+          pcashList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cash=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+
+          unLimitedList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cashOnDelivery=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+          this.dispatch('order-return-hide',fromJS(returnOrderConfig) )
+          this.dispatch('order-return-pending-refund-config',fromJS(pendingRefundConfig) )
+        }
+      })
+
     webapi.fetchOrderReturnList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code === Const.SUCCESS_CODE) {
         this.transaction(() => {
@@ -52,6 +151,7 @@ export default class AppStore extends Store {
         }
       }
     });
+
   };
 
   onSearchFormChange = (searchFormParams) => {
@@ -295,7 +395,7 @@ export default class AppStore extends Store {
     let selected = this.state().get('selected');
 
     if (selected.count() === 0) {
-      message.error(RCi18n({id:'Order.exportedTip2'}));
+      message.error(RCi18n({ id: 'Order.exportedTip2' }));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });

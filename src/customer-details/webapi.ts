@@ -157,6 +157,20 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+//mixed_breed没有配置在字典里，前端写死来显示
+export function getMixedBreedDisplayName() {
+  const names = {
+    de: "Gemischte Rasse",
+    us: "Mixed Breed",
+    mx: "Raza Mixta",
+    fr: "Race Mixte",
+    ru: "Смешанная порода",
+    tr: "Melez ırk",
+  };
+  return names[(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']];
+};
+
 // 根据ID删除Pet
 export function delPets(filterParams = {}) {
   return Fetch<TResult>('/pets/delPets', {

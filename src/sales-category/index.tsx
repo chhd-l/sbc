@@ -9,6 +9,7 @@ import CateModal from './component/cate-modal';
 import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
 import PicModal from './component/pic-modal';
+import ImgModal from './component/img-modal';
 import SeoSettingModal from './component/seo-setting-modal';
 const _SeoSettingModal = Form.create({})(SeoSettingModal);
 import './index.less';
@@ -63,6 +64,7 @@ export default class GoodsCate extends React.Component<any, any> {
             <CateModal />
 
             <PicModal />
+            <ImgModal />
 
             <_SeoSettingModal />
           </div>

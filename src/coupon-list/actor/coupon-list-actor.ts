@@ -10,7 +10,8 @@ export default class CouponDetailActor extends Actor {
         couponStatus: null,
         scopeType: null,
         beginTime: null,
-        endTime: null
+        endTime: null,
+        couponPurchaseType: null
       },
       //当前的数据总数
       total: 0,

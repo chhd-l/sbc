@@ -56,7 +56,7 @@ export default class Task extends React.Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
@@ -185,7 +185,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="Order.All" />
+                        <FormattedMessage id="task.All" />
                       </Option>
                       {taskStatus &&
                         taskStatus.map((item, index) => (
@@ -218,7 +218,7 @@ export default class Task extends React.Component<any, any> {
                       value={taskForm.priority}
                     >
                       <Option value="">
-                        <FormattedMessage id="Order.All" />
+                        <FormattedMessage id="task.All" />
                       </Option>
 
                       {priorityList &&
@@ -324,7 +324,7 @@ export default class Task extends React.Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="Order.search" />
+                        <FormattedMessage id="task.Search" />
                       </span>
                     </Button>
                   </FormItem>

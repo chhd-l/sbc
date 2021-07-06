@@ -35,3 +35,21 @@ export function enableShippingFee(id) {
     })
   });
 }
+
+export function getDeliveryOptions() {
+  return Fetch<TResult>('/system/config/listByStoreIdAndKey', {
+    method: 'POST',
+    body: JSON.stringify({
+      configKey: 'delivery_option'
+    })
+  });
+}
+
+export function editDeliveryOption(id, status) {
+  return Fetch<TResult>('/system/config/batchEnableAndDisable', {
+    method: 'POST',
+    body: JSON.stringify({
+      requestList: [{ id: id, status: status }]
+    })
+  });
+}

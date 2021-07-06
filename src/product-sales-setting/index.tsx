@@ -194,7 +194,7 @@ class ProductSearchSetting extends Component<any, any> {
               style={{ marginBottom: 0 }}
             >
               <Row gutter={20}>
-                <Col span={6}>
+                <Col span={8}>
                   <Form.Item>
                     {getFieldDecorator('defaultSubscriptionFrequencyId', {
                       initialValue: defaultSubscriptionFrequencyId||'',
@@ -207,7 +207,7 @@ class ProductSearchSetting extends Component<any, any> {
                     })(
                       <Select disabled={disabled}  
                       optionLabelProp="label" 
-                      placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 180 }}>
+                      placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
                         {options.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
                           <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
@@ -251,7 +251,7 @@ class ProductSearchSetting extends Component<any, any> {
               style={{ marginBottom: 0 }}
             >
               <Row gutter={20}>
-                <Col span={6}>
+                <Col span={8}>
                   <Form.Item>
 
                     {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
@@ -266,7 +266,7 @@ class ProductSearchSetting extends Component<any, any> {
                     })(
                       <Select disabled={disabled}
                         optionLabelProp="label"
-                        placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 180 }}>
+                        placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
                         {optionsClub.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
                             <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
@@ -311,9 +311,9 @@ class ProductSearchSetting extends Component<any, any> {
                       ]
                     })( <Select disabled={disabled}
                       optionLabelProp="label"
-                      placeholder="Please select Price display method !" style={{ width: 180 }}>
-                      {["From the lowest height","Above the lowest"].map((item,index) => (
-                        <Option key={index} value={index} label={item} >{item}</Option>
+                      placeholder="Please select Price display method !" style={{ width: 220 }}>
+                      {["From the lowest to highest","Above the lowest","Lowest one-off and subscription price"].map((item,index) => (
+                        <Option key={index} title={item} value={index} label={item} >{item}</Option>
                       ))}
                     </Select>)}
               </Form.Item>

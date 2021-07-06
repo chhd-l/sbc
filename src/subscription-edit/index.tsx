@@ -1241,6 +1241,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
       },
       {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="order.orderId" />
+          </span>
+        ),
+        key: 'id',
+        width: '10%',
+        dataIndex: 'id',
+      },
+      {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Order.OrderTime"/></span>,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',

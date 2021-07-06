@@ -5,8 +5,9 @@
 
 .rule-span {
   text-align: left !important;
-  width: 400px !important;
+  /*width: 400px !important;*/
   display: inline-block;
+  margin: 0!important;
 }
 
 .loading-spin {
@@ -39,4 +40,12 @@
 
 .goods-table .ant-table-column-title {
   text-align: center;
+}
+.Idontwanttocumulate {
+  min-width: 30em;
+  text-align: left;
+}
+
+.display-inline-block {
+  display: inline-block;
 }

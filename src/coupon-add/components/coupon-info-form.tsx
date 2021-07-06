@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 
-import { Button, Col, DatePicker, Form, Input, message, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Tree,
+  TreeSelect
+} from 'antd';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -109,6 +123,9 @@ class CouponInfoForm extends Component<any, any> {
       attributesList: any;
 
       attributeValueIds: any;
+      couponPurchaseType: any;
+
+      isSuperimposeSubscription:any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -161,6 +178,8 @@ class CouponInfoForm extends Component<any, any> {
     storeCateIds: 'storeCateIds',
     attributesList: 'attributesList',
     attributeValueIds: 'attributeValueIds',
+    couponPurchaseType: 'couponPurchaseType',
+    isSuperimposeSubscription: 'isSuperimposeSubscription',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -348,7 +367,9 @@ class CouponInfoForm extends Component<any, any> {
       couponPromotionType,
       couponDiscount,
       attributesList,
-      attributeValueIds
+      attributeValueIds,
+      couponPurchaseType,
+      isSuperimposeSubscription
     } = this.props.relaxProps;
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
@@ -384,6 +405,44 @@ class CouponInfoForm extends Component<any, any> {
               </>
             )}
           </FormItem>
+          <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Radio.Group
+                onChange={(e) => {
+                  fieldsValue({
+                    field: 'couponPurchaseType',
+                    value: e.target.value
+                  });
+                  fieldsValue({
+                    field: 'isSuperimposeSubscription',
+                    value: 1
+                  });
+                }}
+                value={couponPurchaseType}>
+                <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+                <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
+                <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+                <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+              </Radio.Group>
+            </div>
+          </FormItem>
+          {
+            couponPurchaseType == 0 &&
+            <FormItem {...formItemLayout} labelAlign="left">
+              <div className="ant-form-inline">
+                <Checkbox checked={ isSuperimposeSubscription === 0} onChange={(e) => {
+
+                  fieldsValue({
+                    field: 'isSuperimposeSubscription',
+                    value: e.target.checked ? 0 : 1
+                  });
+                }}>
+                  <FormattedMessage id="Marketing.Idontwanttocumulate" />
+                </Checkbox>
+              </div>
+            </FormItem>
+          }
           <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
           <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponName" />} required={true}>
             {getFieldDecorator('couponName', {
@@ -601,13 +660,10 @@ class CouponInfoForm extends Component<any, any> {
                     {
                       validator: (_rule, value, callback) => {
                         if (value) {
-                          if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
-                            (window as any).RCi18n({
-                              id: 'Marketing.integerfrom1to99999'
-                            })
+                          if (!/^(?:[1-9][0-9]?)$/.test(value)) {
                             callback(
                               (window as any).RCi18n({
-                                id: 'Marketing.InputValueBetween'
+                                id: 'Marketing.InputValuefrom1to99'
                               })
                             );
                           }
@@ -618,7 +674,7 @@ class CouponInfoForm extends Component<any, any> {
                   ]
                 })(
                   <Input
-                    placeholder="0.1-9.9"
+                    placeholder="1-99"
                     maxLength={3}
                     value={couponDiscount}
                     onChange={async (e) => {
@@ -629,7 +685,7 @@ class CouponInfoForm extends Component<any, any> {
                     }}
                     style={{ width: 360 }}
                   />
-                )}
+                )} %
                 {/*<span style={styles.darkColor}>&nbsp;&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>*/}
               </Row>
             </FormItem>
@@ -743,7 +799,8 @@ class CouponInfoForm extends Component<any, any> {
                       callback();
                     }
                   }
-                ]
+                ],
+                initialValue: storeCateValues
               })(
                 <TreeSelect
                   id="storeCateIds"
@@ -792,7 +849,8 @@ class CouponInfoForm extends Component<any, any> {
                       callback();
                     }
                   }
-                ]
+                ],
+                initialValue: attributeDefaultValue
               })(
                 <TreeSelect
                   id="attributeValueIds"

@@ -7,10 +7,11 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import AppStore from './store';
 import AddCompanyModal from './components/add-company-modal'
-import LogisticSettingModal from './components/ logistic-setting-modal'
+import LogisticSettingModal from './components/logistic-setting-modal'
 import CompanyChoose from './components/company-choose';
 import './index.less'
 import { fromJS } from 'immutable';
+// @ts-ignore
 import parcelLabImg from '../../web_modules/qmkit/images/icon/parcelLab-logo.png'
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class LogisticsManage extends React.Component<any, any> {
@@ -38,7 +39,7 @@ export default class LogisticsManage extends React.Component<any, any> {
             <Breadcrumb.Item>物流公司设置</Breadcrumb.Item>
           </Breadcrumb> */}
         <div className="container-search company-container">
-          <Headline title={<FormattedMessage id="Setting.LogisticsCompanySettings" />} />
+          <Headline title={<FormattedMessage id="Setting.CarriersCompanySettings" />} />
           <Alert message={<FormattedMessage id="Setting.Manage" />} type="info" showIcon />
           <AuthWrapper functionName="f_expressManage_1">
             {/*<CompanyChoose />*/}

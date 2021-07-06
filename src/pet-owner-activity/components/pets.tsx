@@ -6,6 +6,8 @@ const catFemale = require('../components/image/cat2.png');
 const dog = require('../components/image/dog.png');
 const dogFemale = require('../components/image/dog2.png');
 import * as webapi from '../webapi';
+import { getMixedBreedDisplayName } from '../../customer-details/webapi';
+import { getPetsBreedListByType } from '../../customer-details/member-detail';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { parseInt } from 'lodash';
 
@@ -18,7 +20,9 @@ export default class pets extends Component<any, any> {
         total: 0,
         current: 1,
         pageSize: 1
-      }
+      },
+      dogBreed: [],
+      catBreed: []
     };
     this.getPetAgeString = this.getPetAgeString.bind(this);
     this.pageChange = this.pageChange.bind(this);
@@ -31,8 +35,8 @@ export default class pets extends Component<any, any> {
 
   getPetAgeString(item) {
     let ageString = '';
-    let petAgeYear = item.petAgeYear ? parseInt(item.petAgeYear) : 0
-    let petAgeMonth = item.petAgeMonth ? parseInt(item.petAgeMonth) : 0
+    let petAgeYear = item.petAgeYear ? parseInt(item.petAgeYear) : 0;
+    let petAgeMonth = item.petAgeMonth ? parseInt(item.petAgeMonth) : 0;
     if (petAgeYear < 1 && petAgeMonth <= 1) {
       ageString = petAgeMonth + ' Month';
     } else if (petAgeYear < 1 && petAgeMonth > 1) {
@@ -62,13 +66,17 @@ export default class pets extends Component<any, any> {
     );
   }
 
-  getPetList() {
-    const { petPagination } = this.state;
+  async getPetList() {
+    const { petPagination, dogBreed, catBreed } = this.state;
     let params = {
       pageNum: petPagination.current - 1,
       pageSize: petPagination.pageSize,
       customerId: this.props.petOwnerId
     };
+    let dogBreedList = dogBreed, catBreedList = catBreed;
+    if (dogBreed.lengh === 0 || catBreed.length === 0) {
+      [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    }
     this.setState({
       loading: true
     });
@@ -77,23 +85,33 @@ export default class pets extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          const pets = (res.context?.customerPets ?? []).map(pet => ({
+            ...pet,
+            petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName()
+          }));
           petPagination.total = res.context.total;
           this.setState({
-            petList: res.context.customerPets ? res.context.customerPets : [],
+            petList: pets,
             loading: false,
-            petPagination: petPagination
+            petPagination: petPagination,
+            dogBreed: dogBreedList,
+            catBreed: catBreedList
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           this.setState({
-            loading: false
+            loading: false,
+            dogBreed: dogBreedList,
+            catBreed: catBreedList
           });
         }
       })
       .catch(() => {
         message.error('Get data failed');
         this.setState({
-          loading: false
+          loading: false,
+          dogBreed: dogBreedList,
+          catBreed: catBreedList
         });
       });
   }
@@ -124,9 +142,17 @@ export default class pets extends Component<any, any> {
           className="topCard"
           title={
             <div className="title">
-              <span>{RCi18n({id:'PetOwner.Pets'})}</span>
-              <span className="viewAll" onClick={() => history.push({ pathname: `/petowner-details/${petOwnerId}/${customerAccount}`, query: { hash: 'pets-list' } })}>
-                {RCi18n({id:'PetOwner.ViewAll'})}
+              <span>{RCi18n({ id: 'PetOwner.Pets' })}</span>
+              <span
+                className="viewAll"
+                onClick={() =>
+                  history.push({
+                    pathname: `/petowner-details/${petOwnerId}/${customerAccount}`,
+                    query: { hash: 'pets-list' }
+                  })
+                }
+              >
+                {RCi18n({ id: 'PetOwner.ViewAll' })}
                 <Icon type="right" />
               </span>
             </div>
@@ -134,18 +160,39 @@ export default class pets extends Component<any, any> {
         >
           <div>
             {petList.map((item, index) => (
-              <Row type="flex" justify="space-between" align="middle" key={index} className="pet-panel">
+              <Row
+                type="flex"
+                justify="space-between"
+                align="middle"
+                key={index}
+                className="pet-panel"
+              >
                 <Row type="flex" align="middle" className="ui-row-detail userBase">
-                  <Row className="avatar-box" type="flex" justify="center" align="middle" style={{ borderRight: '1px solid #CED3DA' }}>
-                    {item.photo ? <img src={item.photo} /> : <img className="icon-default" src={item.defaultPhoto} />}
-                    <span style={{ color: '#e2001a' }} v-if="item.clubStatus" className="icon iconfont iconhuangguan inclub" />
+                  <Row
+                    className="avatar-box"
+                    type="flex"
+                    justify="center"
+                    align="middle"
+                    style={{ borderRight: '1px solid #CED3DA' }}
+                  >
+                    {item.photo ? (
+                      <img src={item.photo} />
+                    ) : (
+                      <img className="icon-default" src={item.defaultPhoto} />
+                    )}
+                    {item.subscriptionList && item.subscriptionList.length > 0 ? (
+                      <span
+                        style={{ color: '#e2001a' }}
+                        className="icon iconfont iconhuangguan inclub"
+                      />
+                    ) : null}
                   </Row>
                   <div className="detail-content" style={{ width: '60%' }}>
                     <div>
                       <span className="contactName">{item.petsName}</span>
                     </div>
                     <span className="ui-lighter">
-                      {RCi18n({id:'PetOwner.ID'})}:
+                      {RCi18n({ id: 'PetOwner.ID' })}:
                       <span className="content">
                         <Tooltip
                           overlayStyle={{
@@ -165,7 +212,7 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Age'})}</span>
+                        <span className="ui-lighter">{RCi18n({ id: 'PetOwner.Age' })}</span>
                       </Col>
                       <Col span={18}>
                         <span className="content">{this.getPetAgeString(item)}</span>
@@ -179,7 +226,7 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Breed'})}</span>
+                        <span className="ui-lighter">{RCi18n({ id: 'PetOwner.Breed' })}</span>
                       </Col>
                       <Col span={18}>
                         <span className="content">
@@ -188,9 +235,9 @@ export default class pets extends Component<any, any> {
                               overflowY: 'auto'
                             }}
                             placement="bottomLeft"
-                            title={<div> {item.petsBreed}</div>}
+                            title={<div> {item.petsBreedName}</div>}
                           >
-                            <p style={styles.text}> {item.petsBreed}</p>
+                            <p style={styles.text}> {item.petsBreedName}</p>
                           </Tooltip>
                         </span>
                       </Col>
@@ -203,17 +250,46 @@ export default class pets extends Component<any, any> {
                   <div className="detail-content">
                     <Row>
                       <Col span={6}>
-                        <span className="ui-lighter">{RCi18n({id:'PetOwner.Club'})}</span>
+                        <span className="ui-lighter">{RCi18n({ id: 'PetOwner.Club' })}</span>
                       </Col>
                       <Col span={18}>
-                        <span className="content">{item.clubStatu ? item.club : 'No Subscription'}</span>
+                        <span className="content">
+                          <Tooltip
+                            overlayStyle={{
+                              overflowY: 'auto'
+                            }}
+                            placement="bottomLeft"
+                            title={
+                              <div>
+                                {item.subscriptionList && item.subscriptionList.length > 0
+                                  ? item.subscriptionList.map((x) => x.subscribeId).join(',')
+                                  : 'No Subscription'}
+                              </div>
+                            }
+                          >
+                            <p style={styles.text}>
+                              {item.subscriptionList && item.subscriptionList.length > 0
+                                ? item.subscriptionList.map((x) => x.subscribeId).join(',')
+                                : 'No Subscription'}
+                            </p>
+                          </Tooltip>
+                        </span>
                       </Col>
                     </Row>
                   </div>
                 </Row>
               </Row>
             ))}
-            {petList.length > 0 ? <Pagination style={{ top: '331px' }} onChange={this.pageChange} current={petPagination.current} total={petPagination.total} pageSize={petPagination.pageSize} size="small" /> : null}
+            {petList.length > 0 ? (
+              <Pagination
+                style={{ top: '331px' }}
+                onChange={this.pageChange}
+                current={petPagination.current}
+                total={petPagination.total}
+                pageSize={petPagination.pageSize}
+                size="small"
+              />
+            ) : null}
             {petList.length === 0 ? <Empty /> : null}
           </div>
         </Card>

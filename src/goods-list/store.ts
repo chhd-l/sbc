@@ -7,7 +7,7 @@ import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
 import { Const, RCi18n } from 'qmkit';
-import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProductImage } from './webapi';
+import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProductImage, syncProduct } from './webapi';
 import { intl  } from 'react-intl';
 
 import { IList } from 'typings/globalType';
@@ -213,7 +213,16 @@ export default class AppStore extends Store {
     }
 
     const data: any = await syncProductImage({ goodsIds: ids });
-    this.message(data);
+    if (data.res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({id:'Product.SynchronizeTips'}));
+    }
+  }
+
+  spuSyncText = async () => {
+    const data: any = await syncProduct();
+    if (data.res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({id:'Product.SynchronizeTips'}));
+    }
   }
 
   /**

@@ -217,7 +217,6 @@ export default class SelectedProduct extends React.Component<any, any> {
         key: 'periodTypeId',
 
         render: (text, record, index) => {
-          console.log(record, '========')
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
           return [1, 2].includes(record.goodsInfoFlag) ? (

@@ -245,8 +245,8 @@ export default {
   'Menu.User list':'User list',
   'Menu.Group managment':'Group managment',
   'Menu.Role permissions':'Role permissions',
-  'Menu.Logistics Settings':'Logistics Settings',
-  'Menu.Logistics Company Settings':'Logistics Company Settings',
+  // 'Menu.Logistics Settings':'Logistics Settings',
+  // 'Menu.Logistics Company Settings':'Logistics Company Settings',
   'Menu.Freight Template':'Freight Template',
   'Menu.Asset management':'Asset management',
   'Menu.Image asset':'Image asset',
@@ -277,6 +277,8 @@ export default {
   'Menu.Shipping Fee':'Shipping Fee',
   'Menu.NPS':'NPS',
   'Menu.Message setting':'Message setting',
+  'Menu.Logistics Settings':'Carriers Settings',
+  'Menu.Logistics Company Settings':'Carriers Company Settings',
 
 
 
@@ -339,6 +341,10 @@ export default {
   'Home.Rate': 'Rate',
   'Home.units': 'units',
   'Home.Week':'Week',
+  'Home.Reminder':'Reminder',
+  'Home.Todotask':'To Do Task',
+  'Home.Viewalltask':'View all task',
+
   /*-----------------------------  Product  ------------------------------------------*/
   "Product.Productlist": "Product list",
   "Product.Productname": "Product name",
@@ -915,18 +921,18 @@ export default {
   'Order.CompletedOrders':'Completed orders are allowed to apply for refunds',
   'Order.WithinDays':'Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.',
   'Order.Automatic':'Automatic review of pending return orders',
-  'Order.AfterDaysMerchant':'After days, the merchant’s overdue and pending refund orders will be automatically approved.',
+  'Order.AfterDaysMerchant':'After days, the pending review return orders will be automatically approved.',
   'Order.AutomaticConfirmation':'Automatic confirmation of receipt of return order',
-  'Order.AfterDaysAutomatically':'After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
+  'Order.AfterDaysAutomatically':'After days, the pending received return order will be automatically confirmed',
   'Order.AfterHoursCustomer':'After hours, if the customer fails to pay overdue, the order will be automatically voided.',
   'Order.AutomaticallyConfirm':'Automatically confirm receipt of order',
   'Order.AfterDaysCustomer':'After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.',
   'Order.CompletedOrdersAllowed':'Completed orders are allowed to apply for refunds',
   'Order.WithinDaysCustomers':'Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.',
   'Order.AutomaticReview':'Automatic review of pending return orders',
-  'Order.AfterDaysTheMerchant':'After days, the merchant’s overdue and pending refund orders will be automatically approved.',
+  'Order.AfterDaysTheMerchant':'After days, the pending review return orders will be automatically approved.',
   'Order.AutomaticReceipt':'Automatic confirmation of receipt of return order',
-  'Order.AfterTheMerchant':' After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.',
+  'Order.AfterTheMerchant':'After days, the pending received return order will be automatically confirmed',
   'Order.Unlimited':'Unlimited',
   'Order.HoursCustomer':'After hours, if the customer fails to pay overdue, the order will be automatically voided.',
   'Order.CustomerOverdue':'After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.',
@@ -1698,6 +1704,30 @@ export default {
   'Order.refundableAmountTips2':'The refund amount should not be greater than the refundable amount. Please modify it.',
   'Order.Cat&Dog':'Cat & Dog',
   'Order.number':'Order number',
+  // 星期
+  'Order.Monday': 'Monday',
+  'Order.Tuesday': 'Tuesday',
+  'Order.Wednesday': 'Wednesday',
+  'Order.Thursday': 'Thursday',
+  'Order.Friday': 'Friday',
+  'Order.Saturday': 'Saturday',
+  'Order.Sunday': 'Sunday',
+
+  // 月份
+  'Order.January': 'January',
+  'Order.February': 'February',
+  'Order.March': 'March',
+  'Order.April': 'April',
+  'Order.May': 'May',
+  'Order.June': 'June',
+  'Order.July': 'July',
+  'Order.August': 'August',
+  'Order.September': 'September',
+  'Order.October': 'October',
+  'Order.November': 'November',
+  'Order.December': 'December',
+  'Order.tomorrow': 'Tomorrow',
+
 
 
   /*-----------------------------  Task  ----------------------------------------------*/
@@ -1799,6 +1829,10 @@ export default {
   'task.Foodtransition(newlife-stage)':'Food transition (new life-stage)',
   'task.3daysbeforenextrefillorder':'3 days before next refill order',
   'task.By': 'By',
+  'task.All': 'All',
+  'task.Search': 'Search',
+  'task.Edit': 'Edit',
+
   
   /*-----------------------------  Subscription  ---------------------------------------*/
 
@@ -3410,7 +3444,7 @@ export default {
   'Setting.SaveSettings': 'Save settings',
   'Setting.ChooseALogisticsCompany': 'Choose a logistics company',
   'Setting.LogisticsCompanySettings': 'Logistics company settings',
-  'Setting.Manage': 'Manage your commonly used logistics companies, easy to choose when ordering and shipping, up to 20 logistics companies can be set up.',
+  'Setting.Manage': 'Manage your commonly used carriers companies, easy to choose when ordering and shipping, up to 20 carriers companies can be set up.',
   'Setting.roleName': 'Role name',
   'Setting.permission': 'Permission',
   'Setting.setPermission': 'Set permission',

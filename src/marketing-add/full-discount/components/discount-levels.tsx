@@ -170,10 +170,10 @@ class DiscountLevels extends React.Component<any, any> {
                                 {
                                   validator: (_rule, value, callback) => {
                                     if (value) {
-                                      if (!/(^[0-9]?(\.[0-9])?$)/.test(value)) {
+                                      if (!/^(?:[1-9][0-9]?)$/.test(value)) { // /(^[0-9]?(\.[0-9])?$)/
                                         callback(
                                           (window as any).RCi18n({
-                                            id: 'Marketing.InputValueBetween'
+                                            id: 'Marketing.InputValuefrom1to99'
                                           })
                                         );
                                       }
@@ -189,12 +189,12 @@ class DiscountLevels extends React.Component<any, any> {
                                 className="input-width"
                                 title={
                                   (window as any).RCi18n({
-                                    id: 'Marketing.InputValueBetween'
+                                    id: 'Marketing.InputValuefrom1to99'
                                   })
                                 }
                                 placeholder={
                                   (window as any).RCi18n({
-                                    id: 'Marketing.InputValueBetween'
+                                    id: 'Marketing.InputValuefrom1to99'
                                   })
                                 }
                                 onChange={(e) => {
@@ -203,7 +203,7 @@ class DiscountLevels extends React.Component<any, any> {
                                 value={level.discount}
                               />
                             )}
-                            <span>&nbsp;of orginal price,</span>
+                            <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" /></span>
                           </FormItem>
                         </div>
 

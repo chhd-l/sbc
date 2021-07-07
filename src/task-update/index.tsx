@@ -22,6 +22,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { Table, Divider, Tag } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -52,6 +53,35 @@ const formRowItemLayout = {
     sm: { span: 20 }
   }
 };
+
+const columns = [
+  {
+    title: 'Subscription Number',
+    dataIndex: 'subscriptionNumber',
+    key: 'subscription number',
+  },
+  {
+    title: 'Product Name',
+    dataIndex: 'product name',
+    key: 'product name',
+  },
+  {
+    title: 'Shipment Date',
+    dataIndex: 'shipment date',
+    key: 'shipment date',
+  },
+  {
+    title: 'Delivery Address',
+    dataIndex: 'delivery address',
+    key: 'delivery address',
+  },
+  {
+    title: 'Payment Method',
+    dataIndex: 'payment metod',
+    key: 'payment method',
+  }
+]
+
 @injectIntl
 class TaskUpdate extends Component<any, any> {
   constructor(props) {
@@ -119,6 +149,7 @@ class TaskUpdate extends Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
+          
         } else {
           message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
@@ -142,6 +173,7 @@ class TaskUpdate extends Component<any, any> {
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
               loading: false
             });
+            
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
               this.getPetOwnerPets(customerAccount);
@@ -984,6 +1016,7 @@ class TaskUpdate extends Component<any, any> {
                             </Select>
                           ) : (
                             <>
+                            <Table bordered columns={columns}/>
                               {subscriptionNumbers.map((subscriptionNumber, index) => (
                                 <>
                                   <Link

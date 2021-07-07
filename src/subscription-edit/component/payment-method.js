@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm } from 'antd';
 import * as webapi from '../webapi';
 import { Const, AuthWrapper } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
@@ -9,19 +10,20 @@ const PaymentMethod = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [paymentType, setPaymentType] = useState(0);
   const [deliveryPay, setDeliveryPay] = useState(true);
-  const [showError, setShowError] = useState(true);
   const [paymentMethods, setPaymentMethods] = useState([
     {
       id: 1,
       bank: 'XXXX Bank',
       cardType: 'Credit Card',
-      cardNo: '**** **** **** 8989'
+      cardNo: '**** **** **** 8989',
+      showError: false
     },
     {
       id: 2,
       bank: 'XXXX Bank',
       cardType: 'Credit Card',
-      cardNo: '**** **** **** 0001'
+      cardNo: '**** **** **** 0001',
+      showError: false
     }
   ]);
   const [selectPaymentMethod, setSelectPaymentMethod] = useState();
@@ -74,7 +76,15 @@ const PaymentMethod = (props) => {
     props.cancel();
   }
 
-  function deleteCard(id) {}
+  function deleteCard(id) {
+    let newPaymentMethods = paymentMethods.map((item) => {
+      if (item.id === id) {
+        item.showError = true;
+      }
+      return item;
+    });
+    setPaymentMethods(newPaymentMethods);
+  }
 
   return (
     <Modal
@@ -87,8 +97,13 @@ const PaymentMethod = (props) => {
       }}
     >
       <Radio.Group onChange={(e) => setPaymentType(e.target.value)} value={paymentType}>
-        <Radio value={0}>Debit Card or Credit Card</Radio>
-        <Radio value={1}>Cash on Delivery</Radio>
+        <Radio value={0}>
+          <FormattedMessage id="Subscription.DebitOrCreditCard" />
+        </Radio>
+        {  }
+        <Radio value={1}>
+          <FormattedMessage id="Subscription.CashOnDelivery" />
+        </Radio>
       </Radio.Group>
       {paymentType === 0 ? (
         <Row className="paymentDoor">
@@ -114,12 +129,13 @@ const PaymentMethod = (props) => {
                       okText="Yes"
                       cancelText="No"
                     >
-                      <a>Delete</a>
+                      <a>
+                        <FormattedMessage id="Subscription.Delete" />
+                      </a>
                     </Popconfirm>
-                    {showError ? (
+                    {item.showError ? (
                       <div className="errorMessage">
-                        This card cannot be removed due to the subscription association, please
-                        remove the association first.
+                        <FormattedMessage id="Subscription.RemoveAssociationFirst" />
                       </div>
                     ) : null}
                   </AuthWrapper>
@@ -129,14 +145,14 @@ const PaymentMethod = (props) => {
           </Radio.Group>
           <AuthWrapper functionName="f_delete_card">
             <Button style={{ marginTop: 20 }} type="primary">
-              Add New
+              <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>
         </Row>
       ) : (
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
-            I want to pay by cash or card on delivery{' '}
+            <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
             <span className="ant-form-item-required"></span>
           </Checkbox>
         </Row>

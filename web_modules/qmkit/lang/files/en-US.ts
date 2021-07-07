@@ -190,6 +190,7 @@ export default {
   'Menu.Subscription List':'Subscription List',
   'Menu.Subscription setting':'Subscription setting',
   'Menu.Subscription Plan':'Subscription Plan',
+  'Menu.Benefit setting':'Benefit setting',
   'Menu.Pet owner':'Pet owner',
   'Menu.Pet owner management':'Pet owner management',
   'Menu.Pet owner list':'Pet owner list',

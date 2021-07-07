@@ -851,7 +851,11 @@ export default {
         "Subscription.ReminderSwitchProductDesc": "Days before the next lifestage, an email will be sent to pet owners to recommend a new product",
         "Subscription.EmailReminderIntervals": "Email reminder intervals",
         "Subscription.EmailReminderIntervalsDesc": "Attempts between first and last emails due to inventory issues",
-        'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
+        'Subscription.Membership benefits': 'Membership benefits',
+        'Subscription.Higher retention rare and more repurchases': 'Higher retention rare and more repurchases',
+        'Subscription.Consumption gift': 'Consumption gift',
+        'Subscription.Buy the products regulary to enjoy the membership gift': 'Buy the products regulary to enjoy the membership gift',
+
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

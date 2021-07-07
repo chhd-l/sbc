@@ -20,7 +20,7 @@ export default class BenefitSetting extends React.Component<any, any> {
                     </div>
                     <div className="benefitSetting-content">
                         <AuthWrapper functionName="f_benefit_setting">
-                            <Link to="/goods-add">
+                            <Link to="/subscription-benefit-setting-add">
                                 <div className="benefitSetting-item">
                                     <div className="benefitSetting-item-content">
                                         {/*<img src={icon1} alt="" />*/}

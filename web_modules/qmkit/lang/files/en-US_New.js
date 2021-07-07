@@ -855,6 +855,18 @@ export default {
         'Subscription.Higher retention rare and more repurchases': 'Higher retention rare and more repurchases',
         'Subscription.Consumption gift': 'Consumption gift',
         'Subscription.Buy the products regulary to enjoy the membership gift': 'Buy the products regulary to enjoy the membership gift',
+        'Subscription.Creating Consumption gift': 'Creating Consumption gift',
+        'Subscription.Consumption gif is set for order type is club, and subscription order is the recurrent by default':'Consumption gif is set for order type is club, and subscription order is the recurrent by default;',
+        'Subscription.Consumption gift only delivered one time for the same conditions club':'Consumption gift only delivered one time for the same conditions club.',
+        'Subscription.start and end time':'start and end time',
+        'Subscription.Campaign name':'Campaign name',
+        'Subscription.basicInformation':'Basic information',
+        'Subscription.setConditions':'Set Conditions',
+        'Subscription.tags':'Tags',
+        'Subscription.NO threshold':'NO threshold',
+        'Subscription.benefits':'Benefits',
+        'Subscription.Save':'Save',
+        'Subscription.Cancel':'Cancel',
 
     },
     Appointment: {

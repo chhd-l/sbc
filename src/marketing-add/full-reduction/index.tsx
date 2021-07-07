@@ -25,7 +25,6 @@ class MarketingFullReductionAdd extends React.Component<any, any> {
 
   componentDidMount() {
     const { marketingType, marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
-    debugger
     if (marketingId) {
       if( !marketingType) {
         this.store.init(marketingId);

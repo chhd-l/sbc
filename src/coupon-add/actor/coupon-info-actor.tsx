@@ -66,6 +66,7 @@ export default class CouponInfoActor extends Actor {
       attributeValueIds: null,
       couponPurchaseType: 0,
       isSuperimposeSubscription: 1 //未勾选
+
     };
   }
   /**

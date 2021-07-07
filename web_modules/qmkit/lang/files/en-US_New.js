@@ -1611,7 +1611,10 @@ export default {
         "Marketing.ReductionType": "Reduction type",
         "Marketing.Normal": "Normal",
         "Marketing.Gift": "Gift",
-        "Marketing.Definemainproductandgift": "Define main product and gift"
+        "Marketing.Definemainproductandgift": "Define main product and gift",
+        "Marketing.CodeType": "Code type",
+        "Marketing.Promotion": "Promotion",
+        "Marketing.Coupon": "Coupon",
     },
     Content: {
         "Content.Prompt": "Prompt",

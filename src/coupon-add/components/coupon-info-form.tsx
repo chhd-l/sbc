@@ -124,7 +124,7 @@ class CouponInfoForm extends Component<any, any> {
 
       attributeValueIds: any;
       couponPurchaseType: any;
-
+      marketingType: any,
       isSuperimposeSubscription:any;
       // 键值设置方法
       fieldsValue: Function;
@@ -140,6 +140,7 @@ class CouponInfoForm extends Component<any, any> {
       onOkBackFun: Function;
       dealErrorCode: Function;
       changeBtnDisabled: Function;
+      setMarketingType: Function;
     };
   };
 
@@ -180,6 +181,7 @@ class CouponInfoForm extends Component<any, any> {
     attributeValueIds: 'attributeValueIds',
     couponPurchaseType: 'couponPurchaseType',
     isSuperimposeSubscription: 'isSuperimposeSubscription',
+    marketingType: 'marketingType',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -188,7 +190,8 @@ class CouponInfoForm extends Component<any, any> {
     onCancelBackFun: noop,
     onOkBackFun: noop,
     changeBtnDisabled: noop,
-    dealErrorCode: noop
+    dealErrorCode: noop,
+    setMarketingType: noop
   };
 
   storeCateChange = (value, _label, extra) => {
@@ -369,7 +372,9 @@ class CouponInfoForm extends Component<any, any> {
       attributesList,
       attributeValueIds,
       couponPurchaseType,
-      isSuperimposeSubscription
+      isSuperimposeSubscription,
+      marketingType,
+      setMarketingType
     } = this.props.relaxProps;
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
@@ -389,6 +394,21 @@ class CouponInfoForm extends Component<any, any> {
     return (
       <RightContent>
         <Form labelAlign={'left'}>
+          <div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Radio.Group value={marketingType} onChange={(e) => {
+                setMarketingType(e.target.value)
+                fieldsValue({
+                  field: 'marketingType',
+                  value: e.target.value
+                });
+              }}>
+                <Radio value={0}><FormattedMessage id="Marketing.Promotion" /></Radio>
+                <Radio value={3}><FormattedMessage id="Marketing.Coupon" /></Radio>
+              </Radio.Group>
+            </div>
+          </FormItem>
           <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupontype" />} required={true}>
             {getFieldDecorator('couponPromotionType', {
               initialValue: couponPromotionType

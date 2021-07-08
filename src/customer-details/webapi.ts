@@ -361,3 +361,10 @@ export function bindTagging(filterParams = {}) {
     })
   });
 }
+
+//更新pet lifestage数据
+export function refreshPetLifeStage(petId: string) {
+  return Fetch<TResult>(`/pets/updateLifeStage/${petId}`, {
+    method: 'PUT'
+  });
+}

@@ -54,6 +54,19 @@ const formRowItemLayout = {
   }
 };
 
+const formTableItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 9 },
+    lg: { span: 5 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    lg: { span: 15 }
+  }
+};
+
 const columns = [
   {
     title: 'Subscription Number',
@@ -149,7 +162,7 @@ class TaskUpdate extends Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
-          
+
         } else {
           message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
@@ -173,7 +186,7 @@ class TaskUpdate extends Component<any, any> {
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
               loading: false
             });
-            
+
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
               this.getPetOwnerPets(customerAccount);
@@ -593,7 +606,7 @@ class TaskUpdate extends Component<any, any> {
                         {getFieldDecorator('assistantId', {
                           initialValue: task.assistantName
                             ? task.assistantName +
-                              (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                            (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
                             : ''
                         })(
                           editable ? (
@@ -631,7 +644,7 @@ class TaskUpdate extends Component<any, any> {
                             <span>
                               {task.assistantName
                                 ? task.assistantName +
-                                  (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                                (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
                                 : ''}
                             </span>
                           )
@@ -988,7 +1001,51 @@ class TaskUpdate extends Component<any, any> {
                     </Col>
                   </Row>
                   <Row>
-                    <Col span={12}>
+                    {
+                      editable ? <Col span={12}>
+                        <FormItem
+                          {...formItemLayout}
+                          label={<FormattedMessage id="task.AssociateSubscription" />}
+                        >
+                          {getFieldDecorator('subscriptionNumber', {
+                            initialValue: subscriptionNumbers
+                          })(
+
+                            <Select
+                              mode="multiple"
+                              allowClear
+                              disabled={taskCompleted}
+                              onChange={(value) =>
+                                this.onChange({
+                                  field: 'subscriptionNumber',
+                                  value: value ? (value as []).join(',') : ''
+                                })
+                              }
+                            >
+                              {associatedSubscriptionList.map((item) => (
+                                <Option value={item.subscribeId} key={item.subscribeId}>
+                                  {item.subscribeId}
+                                </Option>
+                              ))}
+                            </Select>
+                          )}
+                        </FormItem>
+                      </Col> :
+                        <Col span={22}>
+                          <FormItem
+                            {...formTableItemLayout}
+                            label={<FormattedMessage id="task.AssociateSubscription" />}
+                          >
+                            {getFieldDecorator('subscriptionNumber', {
+                              initialValue: subscriptionNumbers
+                            })(
+                              < Table bordered columns={columns} />
+                            ) }
+
+                          </FormItem>
+                        </Col>
+                    }
+                    {/* <Col span={12}>
                       <FormItem
                         {...formItemLayout}
                         label={<FormattedMessage id="task.AssociateSubscription" />}
@@ -1016,7 +1073,7 @@ class TaskUpdate extends Component<any, any> {
                             </Select>
                           ) : (
                             <>
-                            <Table bordered columns={columns}/>
+                              <Table bordered columns={columns} />
                               {subscriptionNumbers.map((subscriptionNumber, index) => (
                                 <>
                                   <Link
@@ -1032,7 +1089,8 @@ class TaskUpdate extends Component<any, any> {
                           )
                         )}
                       </FormItem>
-                    </Col>
+                    </Col> */}
+
                   </Row>
                   <Row>
                     {editable ? (
@@ -1046,7 +1104,7 @@ class TaskUpdate extends Component<any, any> {
                             height={200}
                             disabled={true}
                             content={task.description}
-                            onContentChange={(html) => {}}
+                            onContentChange={(html) => { }}
                           />
                         ) : task.description ? (
                           <ReactEditor

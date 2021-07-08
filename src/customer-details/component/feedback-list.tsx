@@ -96,7 +96,7 @@ class FeedBack extends React.Component<Iprop, any> {
           <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
               <Col span={4}>
-                <span className="text-highlight"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
+                <span className="text-strong"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
               </Col>
               <Col span={14}>
                 <Row gutter={8}>
@@ -151,7 +151,7 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={4}>
-                <span className="text-highlight"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
+                <span className="text-strong"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
               </Col>
               <Col span={14}>
                 <Row gutter={8}>
@@ -208,15 +208,15 @@ class FeedBack extends React.Component<Iprop, any> {
             </Row>
             <Row gutter={8}>
               <Col span={4}>
-                <span className="text-highlight"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
+                <span className="text-strong"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
               </Col>
               <Col span={16}>
                 <Row gutter={8}>
                   <Col span={10}>
-                    <div className="text-align-left text-highlight"><FormattedMessage id="Subscription.Visit"/> 1</div>
+                    <div className="text-align-left text-strong"><FormattedMessage id="Subscription.Visit"/> 1</div>
                   </Col>
                   <Col span={10} offset={4}>
-                    <div className="text-align-left text-highlight"><FormattedMessage id="Subscription.Visit"/> 2</div>
+                    <div className="text-align-left text-strong"><FormattedMessage id="Subscription.Visit"/> 2</div>
                   </Col>
                 </Row>
                 <Row gutter={8}>

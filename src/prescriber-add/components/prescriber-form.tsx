@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Divider, Icon, Switch, Spin } from 'antd';
-import { history, cache, Const } from 'qmkit';
+import { history, cache, Const, util } from 'qmkit';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
 import { Tabs } from 'antd';
@@ -10,6 +10,7 @@ import UserList from './user-list';
 import { bool } from 'prop-types';
 import _ from 'lodash';
 import { RCi18n } from 'qmkit';
+import AddRecommendaionCode  from './add-recommendaion-code'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -43,8 +44,11 @@ class ClinicForm extends React.Component<any, any> {
         // auditStatus: '1',
         prescriberCode: '',
         partneredShop: '',
-        //auditAuthority: false
+        //auditAuthority: false,
+        recommendationMode: 'SINGLE_USE',
+        addRecommendaionCodeVisible: false
       },
+      prescriberCodeNumber: '0 ' + RCi18n({ id: 'Prescriber.active' }),
       firstPrescriberForm: {},
       cityArr: [],
       typeArr: [],
@@ -76,7 +80,7 @@ class ClinicForm extends React.Component<any, any> {
       qrCodeLink: '',
       url: '',
       saveLoading: false,
-      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
+      isMapMode: false,
       clinicsLites: [],
       prescriberKeyId: this.props.prescriberId,
       isPrescriber: bool,
@@ -86,10 +90,18 @@ class ClinicForm extends React.Component<any, any> {
   componentWillMount() {
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
-    } else {
-      this.reloadCode();
     }
-
+    webapi.getListSystemConfig().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context) {
+          let selectType = res.context.find(x=>x.configType === 'selection_type') 
+          this.setState({
+            isMapMode: selectType && selectType.status === 0
+          })
+        }
+      }
+    })
     // else {
     //   this.props.form.setFieldsValue({
     //     auditStatus: this.state.prescriberForm.auditStatus
@@ -198,7 +210,8 @@ class ClinicForm extends React.Component<any, any> {
       this.setState({
         qrCodeLink: qrCodeLink,
         url: url,
-        prescriberForm: res.context
+        prescriberForm: res.context,
+        prescriberCodeNumber: res.context.singleUse + ' ' + RCi18n({ id: 'Prescriber.active' }),
       });
       let firstPrescriberForm = sessionStorage.getItem(cache.FIRST_PRESCRIBER_DATA);
       if (!firstPrescriberForm) {
@@ -219,10 +232,11 @@ class ClinicForm extends React.Component<any, any> {
         location: res.context.location,
         prescriberType: res.context.prescriberType,
         // auditStatus: res.context.auditStatus,
-        prescriberCode: res.context.prescriberCode,
+        prescriberCode: res.context.multipeUse,
         parentPrescriberId: res.context.parentPrescriberId,
         // auditAuthority: res.context.auditAuthority,
-        website: res.context.website
+        website: res.context.website,
+        recommendationMode: res.context.recommendationMode
       });
       this.getClinicsReward(res.context.prescriberId);
     }
@@ -263,13 +277,6 @@ class ClinicForm extends React.Component<any, any> {
       {
         prescriberForm: data
       }
-      // () => {
-      //   if (field === 'auditStatus' && this.state.isEdit) {
-      //     this.props.form.setFieldsValue({
-      //       prescriberCode: data.prescriberCode
-      //     });
-      //   }
-      // }
     );
   };
   onCreate = () => {
@@ -534,8 +541,28 @@ class ClinicForm extends React.Component<any, any> {
       .catch((err) => {});
   };
 
+  onExport = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        let base64 = new util.Base64();
+        const token = (window as any).token;
+        if (token) {
+          let result = JSON.stringify({ prescriberId:this.state.prescriberKeyId, token: token });
+          let encrypted = base64.urlEncode(result);
+          // 新窗口下载
+          const exportHref = Const.HOST + `/prescriber/exportRecommendationCode/${encrypted}`;
+          window.open(exportHref);
+        } else {
+          message.error(<FormattedMessage id="Prescriber.Unsuccessful" />);
+        }
+
+        resolve();
+      }, 500);
+    });
+  };
+
   render() {
-    const { cityArr, typeArr, prescriberForm, firstPrescriberForm, objectFetching } = this.state;
+    const { cityArr, typeArr, prescriberForm, firstPrescriberForm, objectFetching, addRecommendaionCodeVisible, prescriberCodeNumber, prescriberKeyId } = this.state;
     const { getFieldDecorator } = this.props.form;
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
@@ -610,32 +637,62 @@ class ClinicForm extends React.Component<any, any> {
                   )}
                 </FormItem>
 
-                {/* <FormItem label="Audit status">
-                  {getFieldDecorator('auditStatus', {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Please select Audit status!'
+                {!this.state.isMapMode ? 
+                <>
+                <FormItem label={RCi18n({ id: 'Prescriber.RecommendationMode' })}>
+                {getFieldDecorator('recommendationMode', {
+                  initialValue: prescriberForm.recommendationMode
+                })(
+                  <Radio.Group onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'recommendationMode',
+                      value
+                    });
+                    if(value === 'MULTIPE_USE') {
+                      if(!this.props.prescriberId){
+                        this.reloadCode();
                       }
-                    ]
-                  })(
-                    <Radio.Group
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'auditStatus',
-                          value
-                        });
-                      }}
-                    >
-                      <Radio value="1">Online</Radio>
-                      <Radio value="0">Offline</Radio>
-                    </Radio.Group>
-                  )}
+                    }
+                  }}>
+                    <Radio value={'SINGLE_USE'}><FormattedMessage id="Prescriber.SingleUse"/></Radio>
+                    <Radio value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
+                  </Radio.Group>
+                )}
                 </FormItem>
-                 */}
-
-                {!this.state.isMapMode ? <FormItem label={RCi18n({ id: 'Prescriber.RecommendationCode' })}>{getFieldDecorator('prescriberCode', {})(<Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}</FormItem> : null}
+                { this.props.prescriberId ?
+                 <>  
+                  { prescriberForm.recommendationMode === 'SINGLE_USE' ? 
+                    <FormItem label={RCi18n({ id: 'Prescriber.RecommendationCode' })}>
+                      <Row>
+                        <Col span={10}>
+                          <Input disabled value={prescriberCodeNumber}/>
+                        </Col>
+                        <Col span={7} style={{textAlign: 'right'}}>
+                          <Button icon="plus" type="primary" onClick={()=>this.setState({ addRecommendaionCodeVisible: true })}><FormattedMessage id="Prescriber.New"/></Button>
+                          <AddRecommendaionCode 
+                            prescriberKeyId={prescriberKeyId}
+                            prescriberId={prescriberForm.prescriberId}
+                            cancel={()=>this.setState({addRecommendaionCodeVisible: false})} 
+                            addRecommendaionCodeVisible={addRecommendaionCodeVisible}/>
+                        </Col>
+                        <Col span={7} style={{textAlign: 'right'}}>
+                          <Button icon="download" type="default" onClick={()=>this.onExport()}><FormattedMessage id="Setting.export"/></Button>
+                        </Col>           
+                      </Row>
+                    </FormItem>
+                    :
+                    <FormItem label={RCi18n({ id: 'Prescriber.RecommendationCode' })}>
+                      {getFieldDecorator('prescriberCode', {
+                        initialValue: prescriberForm.multipeUse
+                      })(
+                      <Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}
+                    </FormItem>
+                    }          
+                  </>
+                  : null}
+               </> : null }
+               
 
                 <FormItem label={RCi18n({ id: 'Prescriber.PrescriberPhoneNumber' })}>
                   {getFieldDecorator('phone', {
@@ -1016,7 +1073,7 @@ class ClinicForm extends React.Component<any, any> {
           </Row>
         </TabPane>
         <TabPane tab="User List" key="users">
-          <UserList prescriberKeyId={this.state.prescriberKeyId} alreadyHasPrescriber={this.state.isEdit} />
+          <UserList prescriberKeyId={prescriberKeyId} alreadyHasPrescriber={this.state.isEdit} />
         </TabPane>
       </Tabs>
     );

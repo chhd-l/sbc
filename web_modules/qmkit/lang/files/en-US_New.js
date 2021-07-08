@@ -1081,7 +1081,11 @@ export default {
         "Prescriber.NewPrescriberType": "New Prescriber type",
         "Prescriber.Prescriber Setting": "Prescriber Setting",
         "Prescriber.Please select the product": "Please select the product category to be reviewed.",
-        "Prescriber.Category": "Category"
+        "Prescriber.Category": "Category",
+        "Prescriber.RecommendationMode": "Recommendation mode",
+        "Prescriber.SingleUse": "Single Use",
+        "Prescriber.MultipleUse": "Multiple Use",
+        "Prescriber.active": "ACTIVE"
 
     },
     'Pet owner': {

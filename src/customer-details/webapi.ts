@@ -248,6 +248,14 @@ export function getPrescriberList(params = {}) {
     })
   });
 }
+export function getBenefitsList(params={}){
+  return Fetch<TResult>('/', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
 
 // import axios from '@/utils/request'
 // import { register } from '../serviceWorker'

@@ -1,10 +1,8 @@
 import React from 'react';
-import { Empty, Table } from 'antd';
+import { Table } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-// import { getBenefitsList} from "../webapi";
-import { Const, cache } from 'qmkit';
-const defaultImg = require('../../goods-list/img/none.png');
+import { getBenefitsList} from "../webapi";
 interface Iprop {
     startDate: string;
     endDate: string;
@@ -36,7 +34,28 @@ export default class BenefitsList extends React.Component<Iprop, any> {
     getBebefitsList = () => {
         const { startDate, endDate, customerId } = this.props;
         const { pagination } = this.state;
-        // this.setState({loading:true});
+        this.setState({loading:true});
+        getBenefitsList({
+            endTime:endDate,
+            startTime:startDate,
+            pageNum: pagination.current - 1,
+            pageSize: pagination.pageSize,
+            buyerId:customerId
+        }).
+        then((data)=>{
+            this.setState({
+                loading: false,
+                list:data.res.context.content,
+                pagination: {
+                    ...pagination,
+                    total: data.res.context.total
+                  }
+            });
+        }).catch(()=>{
+            this.setState({
+                loading:false
+            })
+        })
 
     }
     onTableChange = (pagination) => {

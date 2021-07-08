@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Modal, Form, TreeSelect, Tree, Upload, Icon, message } from 'antd';
 import { Relax } from 'plume2';
-import { noop, Const, cache } from 'qmkit';
+import { noop, Const, cache, RCi18n } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 declare type IList = List<any>;
@@ -83,23 +83,23 @@ export default class uploadImageModal extends React.Component<any, any> {
       accept: '.jpg,.jpeg,.png,.gif',
       beforeUpload(file) {
         if (!cateIdCurr) {
-          message.error(<FormattedMessage id="Setting.PleaseSelectCategoryFirst" />);
+          message.error(RCi18n({id:"Setting.PleaseSelectCategoryFirst"}));
           return false;
         }
         let fileName = file.name.toLowerCase();
 
         if (!fileName.trim()) {
-          message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
+          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
           return false;
         }
 
         if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
+          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
+          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
           return false;
         }
 
@@ -108,11 +108,11 @@ export default class uploadImageModal extends React.Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error(<FormattedMessage id="Setting.FileSizeCannotExceed2M" />);
+            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
             return false;
           }
         } else {
-          message.error(<FormattedMessage id="Setting.FileFormatError" />);
+          message.error(RCi18n({id:"Setting.FileFormatError"}));
           return false;
         }
       },
@@ -222,11 +222,11 @@ export default class uploadImageModal extends React.Component<any, any> {
    */
   _handleOk = () => {
     if (this.state.cateId == '') {
-      message.error(<FormattedMessage id="Setting.PleaseSelectACategory" />);
+      message.error(RCi18n({id:"Setting.PleaseSelectACategory"}));
       return;
     }
     if (this.state.fileList.filter((file) => file.status === 'done').length <= 0) {
-      message.error(<FormattedMessage id="Setting.PleaseChooseToUploadPictures" />);
+      message.error(RCi18n({id:"Setting.PleaseChooseToUploadPictures"}));
       return;
     }
 

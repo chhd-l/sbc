@@ -9,7 +9,8 @@ export default class FreeShippingActor extends Actor {
     return {
       marketingBean: {
         subType: 10, // 10 11
-        joinLevel: -1
+        joinLevel: -1,
+        promotionType: 0,
       },
       allGroups: []
     };

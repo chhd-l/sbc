@@ -49,7 +49,6 @@ export default class GoodsList extends React.Component<any, any> {
 
   render() {
     const { goodsPageContent, brands, cates, marketingScopeList, scopeType, currentCategary, currentAttribute } = this.props.relaxProps;
-
     let dataSource = fromJS([])
     if (scopeType === 1) {
         dataSource = marketingScopeList.map((scope) => {

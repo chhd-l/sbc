@@ -40,10 +40,10 @@ const SUB_TYPE = {
 };
 const PROMOTION_TYPE = {
   0:  RCi18n({
-    id: 'Marketing.NormalPromotion'
+    id: 'Marketing.All'
   }),
   1:  RCi18n({
-    id: 'Marketing.SubscriptionPromotion'
+    id: 'Marketing.Autoship'
   }),
   2:
     RCi18n({
@@ -68,12 +68,14 @@ class MarketingDes extends React.Component<any, any> {
       subType: any;
       promotionCode: any;
       marketingFreeShippingLevel: any;
+      isSuperimposeSubscription: any;
     };
   };
 
   static relaxProps = {
     promotionType: 'promotionType',
     marketingName: 'marketingName',
+    isSuperimposeSubscription: 'isSuperimposeSubscription',
     beginTime: 'beginTime',
     endTime: 'endTime',
     marketingType: 'marketingType',
@@ -84,7 +86,7 @@ class MarketingDes extends React.Component<any, any> {
   };
 
   render() {
-    const { promotionType, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel } = this.props.relaxProps;
+    const { promotionType, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel, isSuperimposeSubscription } = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
@@ -96,6 +98,14 @@ class MarketingDes extends React.Component<any, any> {
           <Col span={18}>
             {
               PROMOTION_TYPE[promotionType]
+            }
+            {
+              promotionType === 0 &&
+              <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={isSuperimposeSubscription === 0} disabled={true}>
+                <div className="Idontwanttocumulate">
+                  <FormattedMessage id="Marketing.Idontwanttocumulate" />
+                </div>
+              </Checkbox>
             }
           </Col>
         </Row>
@@ -109,6 +119,7 @@ class MarketingDes extends React.Component<any, any> {
             {marketingName}
           </Col>
         </Row>
+
         <Row>
           <Col span={4}>
             <span>

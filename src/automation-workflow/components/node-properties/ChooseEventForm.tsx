@@ -54,7 +54,7 @@ export default class ChooseEventForm extends Component<any, any> {
             value: '1stPurchaseForOrderConfirmation',
             key: '0-0-1'
           },
-          { title: RCi18n({id:'task.task.After1stdelivery'}), value: 'after1stDelivery', key: '0-0-2' },
+          { title: RCi18n({id:'task.After1stdelivery'}), value: 'after1stDelivery', key: '0-0-2' },
           { title: RCi18n({id:'task.After4thdelivery'}), value: 'After4thDelivery', key: '0-0-3' }
         ]
       },

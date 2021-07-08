@@ -12,6 +12,7 @@ export default class FullDiscountActor extends Actor {
       marketingBean: {
         promotionType: 0,
         publicStatus: 1,
+        isSuperimposeSubscription: 1,//未选中
         subType: 2,
         isClub: false,
         fullDiscountLevelList: []
@@ -41,7 +42,7 @@ export default class FullDiscountActor extends Actor {
       'fullDiscountLevelList',
       fromJS(res)
         .get('fullDiscountLevelList')
-        .map((item) => item.set('discount', (item.get('discount') * 10).toFixed(1)))
+        .map((item) => item.set('discount', (item.get('discount') * 100).toFixed())) //.toFixed(1)
     );
     return state.set('marketingBean', bean);
   }

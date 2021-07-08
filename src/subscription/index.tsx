@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
 import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n } from 'qmkit';
@@ -116,7 +117,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm, activeKey,subscriptionType, subscriptionPlanType } = this.state;
+    const { searchForm, activeKey, subscriptionType, subscriptionPlanType } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
@@ -295,13 +296,16 @@ export default class SubscriptionList extends Component<any, any> {
       recipientOption, frequencyOption, frequencyList, frequencyListClub, activeKey,
       prescriberOption, prescriberList, subscriptionType,
       subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList } = this.state;
+    // 将frequencyListClub和frequencyList存起来，以便导出页面使用
+    sessionStorage.setItem('frequencyList', JSON.stringify((frequencyList || []).map(item => ({value: item.id, name: item.name}))));
+    sessionStorage.setItem('frequencyListClub', JSON.stringify((frequencyListClub || []).map(item => ({value: item.id, name: item.name}))));
     const menu = (
       <Menu>
         <Menu.Item>
-          <AuthWrapper functionName="f_subscription_export">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
+          <AuthWrapper functionName="f_subscription_export_1">
+            <Link to="/batch-export/subscription-list" >
               <FormattedMessage id="Subscription.batchExport" />
-            </a>
+            </Link>
           </AuthWrapper>
         </Menu.Item>
       </Menu>
@@ -383,7 +387,7 @@ export default class SubscriptionList extends Component<any, any> {
                     />
                   </FormItem>
                 </Col>
-                
+
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
@@ -427,7 +431,7 @@ export default class SubscriptionList extends Component<any, any> {
                   </FormItem>
                 </Col>
 
-                
+
                 {/* <Col span={8}>
                   <FormItem>
                     <SelectGroup
@@ -657,27 +661,22 @@ export default class SubscriptionList extends Component<any, any> {
                   />
                 </FormItem> */}
             </Form>
+            <div className="handle-bar">
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+              >
+                <Button>
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </div>
           </div>
           <div className="container">
-            {/* 
-            <Spin spinning={this.state.loading}>
-              {/* 
-              <div className="handle-bar">
-                <Dropdown
-                  overlay={menu}
-                  placement="bottomLeft"
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
-                >
-                  <Button>
-                    <FormattedMessage id="order.bulkOperations" />{' '}
-                    <Icon type="down" />
-                  </Button>
-                </Dropdown>
-              </div> */}
-
-            {/* <SearchList /> */}
             <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
               <Tabs
                 onChange={(key) => {

@@ -709,6 +709,16 @@ class SubscriptionDetail extends React.Component<any, any> {
       {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="order.orderId" />
+          </span>
+        ),
+        key: 'id',
+        width: '10%',
+        dataIndex: 'id',
+      },
+      {
+        title: (
+          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Order.OrderTime" />
           </span>
         ),

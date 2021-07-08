@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Relax, IMap } from 'plume2';
-import { cache } from 'qmkit';
+import { cache, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
-import { Form, Table } from 'antd';
+import { Checkbox, Col, Form, Row, Table } from 'antd';
 import { IList } from 'typings/globalType';
 import { Const, QMFloat } from 'qmkit';
 import styled from 'styled-components';
+import { fromJS } from 'immutable';
 const FormDiv = styled.div`
   h3 {
     font-size: 14px;
@@ -27,7 +28,7 @@ const FormDiv = styled.div`
   }
 `;
 const FormItem = Form.Item;
-
+const { Column } = Table;
 const formItemLayout = {
   labelCol: {
     span: 3
@@ -67,6 +68,30 @@ const columns = [
 const style = {
   marginLeft: 20
 }
+const checkboxStyle = {
+
+
+}
+const checkboxContainerStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+}
+const PROMOTION_TYPE = {
+  0:  RCi18n({
+    id: 'Marketing.All'
+  }),
+  1:  RCi18n({
+    id: 'Marketing.Autoship'
+  }),
+  2:
+    RCi18n({
+      id: 'Marketing.Club'
+    }),
+  3: RCi18n({
+    id: 'Marketing.Singlepurchase'
+  })
+}
+
 @Relax
 export default class CouponBasicInfo extends Component<any, any> {
   props: {
@@ -81,6 +106,9 @@ export default class CouponBasicInfo extends Component<any, any> {
       skuCates: IList;
       // 商品
       skus: IList;
+      goodsList: any;
+      currentCategary: any;
+      currentAttribute: any;
     };
   };
 
@@ -89,17 +117,57 @@ export default class CouponBasicInfo extends Component<any, any> {
     coupon: 'coupon',
     skuBrands: 'skuBrands',
     skuCates: 'skuCates',
-    skus: 'skus'
+    skus: 'skus',
+    goodsList: 'goodsList',
+    currentCategary: 'currentCategary',
+    currentAttribute: 'currentAttribute'
   };
 
   render() {
-    const { couponCates, coupon, skuBrands, skuCates, skus } = this.props.relaxProps;
-    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType, fullBuyPrice, scopeType, couponDesc } = coupon.toJS();
+    const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute } = this.props.relaxProps;
+    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
+      fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
+    } = coupon.toJS();
+    let dataSource = fromJS([])
+    // const goodsInfoPage = goodsList.goodsInfoPage.content
+    if (scopeType === 4) {
+      const cates = goodsList.get('cates')
+      const brands = goodsList.get('brands')
+      let array = []
+      scopeIds.map((scope) => {
+        if(goodsList.get('goodsInfoPage')) {
+          let goodInfo = fromJS(goodsList.get('goodsInfoPage').get('content')).find((s) => s.get('goodsInfoId') == scope);
+          if (goodInfo) {
+            const cId = goodInfo.get('cateId');
+            const cate = fromJS(cates || []).find((s) => s.get('cateId') === cId);
+            goodInfo = goodInfo.set('cateName', cate ? cate.get('cateName') : '-');
+
+            const bId = goodInfo.get('brandId');
+            const brand = fromJS(brands || []).find((s) => s.get('brandId') === bId);
+            goodInfo = goodInfo.set('brandName', brand ? brand.get('brandName') : '-');
+            array.push(goodInfo.toJS())
+          }
+        }
+      });
+      dataSource = fromJS(array).filter((goodsInfo) => goodsInfo);
+    }
     return (
       <FormDiv>
         <Form>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.CouponName" />}>
             <div style={style}>{couponName}</div>
+          </FormItem>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType" />}>
+            <div style={checkboxContainerStyle}>{PROMOTION_TYPE[couponPurchaseType]}
+              {
+                couponPurchaseType === 0 &&
+                <Checkbox className="checkboxStyle"checked={isSuperimposeSubscription === 0} disabled={true}>
+                  <div >
+                    <FormattedMessage id="Marketing.Idontwanttocumulate" />
+                  </div>
+                </Checkbox>
+              }
+            </div>
           </FormItem>
           {/* <FormItem {...formItemLayout} label="Coupon classify">
             <div className="bubbleBox">
@@ -120,7 +188,28 @@ export default class CouponBasicInfo extends Component<any, any> {
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
             <div style={style}>
-              {this._buildSkus(scopeType, skuBrands, skuCates, skus)}
+              {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
+
+              {
+                scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
+                  scopeType === 4 && dataSource.size > 0?
+                    <Table dataSource={ dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
+                      <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+                      <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
+                      <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
+                    </Table> :  scopeType === 5 ?
+                    currentCategary && currentCategary.map(item=> (
+                      <span className="coupon-mgr10" key={item.storeCateId}>{item.get('cateName')}</span>
+                    ))
+                    :
+                    currentAttribute && currentAttribute.map(item=> (
+                      <span key={item.id} className="coupon-mgr10" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
+                    ))
+              }
+
             </div>
           </FormItem>
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>

@@ -47,7 +47,7 @@ export default class CardView extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
       })
       .catch(() => {
@@ -113,14 +113,14 @@ export default class CardView extends Component<any, any> {
             }
           );
         } else {
-          message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || <FormattedMessage id="Public.GetDataFailed" />);
+        message.error(err || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         this.setState({
           loading: false
         });
@@ -271,7 +271,7 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                            {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
                         </Col>
                       </Row>
@@ -304,7 +304,7 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
                         </Col>
                       </Row>
@@ -337,7 +337,7 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
                         </Col>
                       </Row>
@@ -370,7 +370,7 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? item.dueTime : 'No Due Time'}
+                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
                         </Col>
                       </Row>

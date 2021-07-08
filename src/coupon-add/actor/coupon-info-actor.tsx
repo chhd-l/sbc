@@ -63,7 +63,9 @@ export default class CouponInfoActor extends Actor {
       couponPromotionType: 0, //Amount: 0 or Percentage: 1
       couponDiscount: null,
       attributesList: [],
-      attributeValueIds: null
+      attributeValueIds: null,
+      couponPurchaseType: 0,
+      isSuperimposeSubscription: 1 //未勾选
     };
   }
   /**
@@ -115,7 +117,9 @@ export default class CouponInfoActor extends Actor {
       segmentIds,
       couponPromotionType,
       couponDiscount,
-      attributeValueIds
+      attributeValueIds,
+      couponPurchaseType,
+      isSuperimposeSubscription
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -136,7 +140,9 @@ export default class CouponInfoActor extends Actor {
       .set('segmentIds', fromJS(segmentIds))
       .set('couponPromotionType', couponPromotionType)
       .set('couponDiscount', fromJS(couponDiscount))
-      .set('attributeValueIds', fromJS(attributeValueIds));
+      .set('attributeValueIds', fromJS(attributeValueIds))
+      .set('couponPurchaseType', couponPurchaseType)
+      .set('isSuperimposeSubscription', isSuperimposeSubscription)
 
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));

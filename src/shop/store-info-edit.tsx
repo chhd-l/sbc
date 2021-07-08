@@ -1,7 +1,7 @@
 import React from 'react';
-import { Form, Breadcrumb, Tabs } from 'antd';
+import {Form, Breadcrumb, Tabs, Button} from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb } from 'qmkit';
+import {Headline, BreadCrumb, AuthWrapper} from 'qmkit';
 
 import AppStore from './store';
 import StepOne from './editcomponents/step-basic-edit';
@@ -78,11 +78,27 @@ export default class ShopInfoEdit extends React.Component<any, any> {
           <div className="steps-content" style={{ marginTop: 20 }}>
             {PAIN[currentTab]}
           </div>
+
           {/* 签约品牌弹框 */}
           <BrandForm />
           {/* 签约类目弹框*/}
           <SortsForm />
         </div>
+        <AuthWrapper functionName="f_storeInfoEdit_0">
+          {(+currentTab === 4) ? (
+            <div>
+              {this.store.state().get('pageChangeType') == 'List' ? null : (
+                <div className="bar-button">
+                  <Button type="primary" onClick={() => this.store.consentSubmit(this.store.state().get('consentForm'), this.store.state().get('editId'))}>
+                    <FormattedMessage id="Setting.Submit" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </AuthWrapper>
       </div>
     );
   }

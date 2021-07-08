@@ -12,7 +12,7 @@ import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
-import { getTaggingList } from './component/webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
 
@@ -26,6 +26,41 @@ const { confirm } = Modal;
 
 const dogImg = require('./img/dog.png');
 const catImg = require('./img/cat.png');
+
+export const FORM_FIELD_MAP = {
+  'First name': 'firstName',
+  'Last name': 'lastName',
+  Country: 'countryId',
+  Region: 'area',
+  State: 'province',
+  City: 'city',
+  Address1: 'address1',
+  Address2: 'address2',
+  'Phone number': 'contactPhone',
+  'Postal code': 'postCode',
+  Entrance: 'entrance',
+  Apartment: 'apartment',
+  Comment: 'rfc'
+};
+
+export async function getPetsBreedListByType(type: string) {
+  return await webapi.querySysDictionary({
+    type: type
+  }).then((data) => {
+    return data.res.context?.sysDictionaryVOS ?? [];
+  }).catch(() => {
+    return [];
+  });
+};
+
+export async function getAddressConfig() {
+  let fields = [];
+  const addressInputType = await getAddressInputTypeSetting();
+  if (addressInputType) {
+    fields = await getAddressFieldList(addressInputType);
+  }
+  return fields;
+};
 
 const calcPetAge = (dateStr: string) => {
   const birthday = moment(dateStr, 'YYYY-MM-DD');
@@ -63,13 +98,16 @@ export default class CustomerDetails extends React.Component<any, any> {
       delivery: {},
       addressType: 'delivery',
       startDate: moment().subtract(3, 'months').format('YYYY-MM-DD'),
-      endDate: moment().format('YYYY-MM-DD')
+      endDate: moment().format('YYYY-MM-DD'),
+      fieldList: [],
+      countryList: []
     };
   }
   componentDidMount() {
     this.getBasicInformation();
     this.getPetsList();
     this.getTagList();
+    this.getAddressCon();
     if (this.props.location.query && this.props.location.query.hash) {
       document.getElementById('page-content').scrollTo(0, document.getElementById(this.props.location.query.hash).offsetTop + 40);
     }
@@ -99,12 +137,26 @@ export default class CustomerDetails extends React.Component<any, any> {
       });
   };
 
-  getPetsList = () => {
+  getAddressCon = async () => {
+    const fileds = await getAddressConfig();
+    const countries = await getCountryList();
+    this.setState({
+      fieldList: fileds,
+      countryList: countries
+    });
+  };
+
+  getPetsList = async () => {
     const { customerAccount } = this.state;
-    webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
-      this.setState({
-        pets: data.res.context.context
-      });
+    const [dogBreedList, catBreedList] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed')]);
+    const pets = await webapi.petsByConsumer({ consumerAccount: customerAccount }).then((data) => {
+      return (data.res.context?.context ?? []).map(pet => ({
+        ...pet,
+        petsBreedName: pet.isPurebred ? (((pet.petsType === 'dog' ? dogBreedList : catBreedList).find(breed => breed.value === pet.petsBreed || breed.valueEn === pet.petsBreed) ?? {})['name'] ?? pet.petsBreed) : webapi.getMixedBreedDisplayName()
+      }));
+    });
+    this.setState({
+      pets: pets
     });
   };
 
@@ -311,63 +363,47 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </Row>
               </div>
               <div className="basic-info-detail">
-                <Row type="flex" align="middle">
-                  <Col span={3} className="text-tip">
-                    Registration date
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.createTime ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}
-                  </Col>
-                  <Col span={3} className="text-tip">
-                    Email address
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.email}
-                  </Col>
-                </Row>
-                <Row type="flex" align="middle">
-                  <Col span={3} className="text-tip">
-                    Phone number
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.contactPhone}
-                  </Col>
-                  <Col span={3} className="text-tip">
-                    Prefer channel
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {['Email', 'Phone', 'Print']
-                      .reduce((prev, curr) => {
-                        if (+basic[`communication${curr}`]) {
-                          prev.push(curr === 'Print' ? 'Message' : curr);
-                        }
-                        return prev;
-                      }, [])
-                      .join(' ')}
-                  </Col>
-                </Row>
-                <Row type="flex" align="middle">
-                  <Col span={3} className="text-tip">
-                    Country
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.country}
-                  </Col>
-                  <Col span={3} className="text-tip">
-                    Address reference
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.address1}
-                  </Col>
-                </Row>
                 <Row>
-                  <Col span={3} className="text-tip">
-                    City
-                  </Col>
-                  <Col span={6} className="text-highlight">
-                    {basic.city}
+                  <Col span={18}>
+                    <Row type="flex" align="middle">
+                      <Col span={4} className="text-tip">
+                        Registration date
+                      </Col>
+                      <Col span={8} className="text-highlight">
+                        {basic.createTime ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}
+                      </Col>
+                      <Col span={4} className="text-tip">
+                        Email address
+                      </Col>
+                      <Col span={8} className="text-highlight">
+                        {basic.email}
+                      </Col>
+                      <Col span={4} className="text-tip">
+                        Prefer channel
+                      </Col>
+                      <Col span={8} className="text-highlight">
+                        {['Email', 'Phone', 'Print']
+                          .reduce((prev, curr) => {
+                            if (+basic[`communication${curr}`]) {
+                              prev.push(curr === 'Print' ? 'Message' : curr);
+                            }
+                            return prev;
+                          }, [])
+                          .join(' ')}
+                      </Col>
+                    
+                      {this.state.fieldList.map((field, idx) => (
+                        <>
+                          <Col key={`label${idx}`} span={4} className="text-tip">{field.fieldName}</Col>
+                          <Col key={`field${idx}`} span={8} className="text-highlight">
+                            {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
+                          </Col>
+                        </>
+                      ))}
+                    </Row>
                   </Col>
                 </Row>
+
                 {/* <Row>
                   <Col span={3} className="text-tip">
                     Consent
@@ -376,6 +412,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                 </Row> */}
+                  
               </div>
             </div>
             <div className="detail-container">
@@ -431,8 +468,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
                             <Col span={12}>
                               {pet.petsBreed && (
-                                <Tooltip title={pet.petsBreed}>
-                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreed}</div>
+                                <Tooltip title={pet.petsBreedName}>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{pet.petsBreedName}</div>
                                 </Tooltip>
                               )}
                             </Col>

@@ -11,6 +11,7 @@ export default class FullReductionActor extends Actor {
       marketingBean: {
         promotionType: 0,
         publicStatus: 1,
+        isSuperimposeSubscription: 1,//未选中
         subType: 0,// 0 1 6
         isClub: false,
         fullReductionLevelList: []

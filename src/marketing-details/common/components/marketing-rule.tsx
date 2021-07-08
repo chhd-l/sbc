@@ -57,42 +57,46 @@ export default class MarketingRule extends React.Component<any, any> {
                 <Col span={18}>
                   {subType === 0 ? ( // full amount reduction
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} reduction {level.reduction ? level.reduction : 0} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 1 ? ( // full quantity reduction
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction ? level.reduction : 0} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 2 ? ( //full amount discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {level.discount * 100 / 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {(level.discount * 100).toFixed()} % discount
                     </span>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {level.discount * 100 / 10} discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {(level.discount * 100).toFixed()} % discount
                     </span>
                   ) : subType === 6 ? ( // subsctiption reduction
                     <div className="rule-span">
                       <div>
                         <FormattedMessage id="Marketing.SubscriptionOrderReduction" />
-                        {level.firstSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        {level.firstSubscriptionOrderReduction || 0} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       </div>
                       <div>
                         <FormattedMessage id="Marketing.Fortherestsubscriptionorderreduction" />
-                        {level.restSubscriptionOrderReduction} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        {level.restSubscriptionOrderReduction || 0} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       </div>
                     </div>
                   ) : subType === 7 ? ( // subsctiption discount
                     <div className="rule-span">
                       <div>
                         <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
-                        {level.firstSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
+                        {(level.firstSubscriptionOrderDiscount * 100).toFixed()} % <FormattedMessage id="Marketing.discount" />
                       </div>
                       <div>
-                        <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {level.restSubscriptionOrderDiscount * 10} <FormattedMessage id="Marketing.discount" />
+                        <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {(level.restSubscriptionOrderDiscount * 100).toFixed()}&nbsp;% <FormattedMessage id="Marketing.discount" />
                       </div>
                     </div>
                   ) : null}
+                  {
+                    level.limitAmount &&
+                    <div className="display-inline-block">,&nbsp;&nbsp;discount limit&nbsp;&nbsp;{level.limitAmount}</div>
+                  }
                 </Col>
               </Row>
             </GreyBg>

@@ -23,9 +23,12 @@ podTemplate(label: label, cloud: 'kubernetes',
             resourceRequestMemory: '800Mi'
             )
     ],
-    volumes: [
-        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock')
-            ],
+    //volumes: [
+    //    hostPathVolume(hostPath: '/var/run/docker.sock', mountPath:'/var/run/docker.sock')
+    //        ],
+    envVars: [
+          envVar(key: 'DOCKER_HOST',value: 'tcp://172.16.0.4:2375')
+    ],
     imagePullSecrets: [ 'sit-docker' ]
 )
 {
@@ -42,6 +45,10 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "node --version"
                     sh "npm --version"
                     sh "npm install"
+                    sh "npm view postcss versions"
+                    sh "npm view postcss-discard-comments  versions"
+                    sh ""
+                    sh ""
                     sh "npm run build"
                 }
         }
@@ -75,7 +82,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                     // 使用 Kubectl Cli 插件的方法，提供 Kubernetes 环境，在其方法块内部能够执行 kubectl 命令
                     withKubeConfig([credentialsId: "${KUBERNETES_CREADENTIAL}",serverUrl: "${KUBERNETES_URL}"]) {
                    
-                    sh "kubectl set image sts ${APP_NAME} *=${dockerImageName} -n ${PROJECT_ENV}"
+                    sh "kubectl set image deployment ${APP_NAME} *=${dockerImageName} -n ${PROJECT_ENV}"
                 }
         }
         

@@ -426,3 +426,10 @@ export const getDescriptionTab = (cateId) => {
     method: 'GET'
   });
 };
+
+export const getSubSkuStock = (params) => {
+  return Fetch<TResult>('/bundleGoods/querySubSkuStockById', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};

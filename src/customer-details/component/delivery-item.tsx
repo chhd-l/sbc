@@ -30,7 +30,7 @@ interface Iprop extends FormComponentProps {
   backToDetail?: Function;
 }
 
-const FORM_FIELD_MAP = {
+export const FORM_FIELD_MAP = {
   'First name': 'firstName',
   'Last name': 'lastName',
   Country: 'countryId',
@@ -255,7 +255,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
             housing: dadataAddress.block || '',
             house: dadataAddress.house || '',
             settlement: dadataAddress.settlement || '',
-            street: dadataAddress.street || ''
+            street: dadataAddress.street || '',
+            postCode: rFields.postCode || dadataAddress.postCode,
           } : {
             country: (this.state.countryList[0] ?? {}).value ?? '',
             countryId: (this.state.countryList[0] ?? {}).id ?? '',

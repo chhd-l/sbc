@@ -180,13 +180,13 @@ class FreightItem extends React.Component<any, any> {
               )}
               {((checkAuth('f_store_temp_edit') && isStore) || (checkAuth('f_goods_temp_edit') && !isStore)) && (
                 <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
-                  <a href="#!" onClick={() => this._edit(freightId, isStore)} className="iconfont iconEdit"></a>
+                  <a href="javascript:void(0);" onClick={() => this._edit(freightId, isStore)} className="iconfont iconEdit"></a>
                 </Tooltip>
               )}
               {typeFlag && (
                 <AuthWrapper functionName="f_goods_rela_list">
                   <Tooltip placement="top" title={<FormattedMessage id="Setting.Related" />}>
-                    <a href="#!" onClick={() => history.push(`/freight-with-goods/${freightId}`)}>
+                    <a href="javascript:void(0);" onClick={() => history.push(`/freight-with-goods/${freightId}`)}>
                       <FormattedMessage id="Setting.Related" />
                     </a>
                   </Tooltip>
@@ -194,7 +194,7 @@ class FreightItem extends React.Component<any, any> {
               )}
               {!isDefault && ((checkAuth('f_store_temp_del') && isStore) || (checkAuth('f_goods_temp_del') && !isStore)) && (
                 <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
-                  <a onClick={() => this._del(freightId, isStore)} className="iconfont iconDelete"></a>
+                  <a href="javascript:void(0);" onClick={() => this._del(freightId, isStore)} className="iconfont iconDelete"></a>
                 </Tooltip>
               )}
             </div>

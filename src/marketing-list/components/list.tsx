@@ -25,8 +25,8 @@ const SUB_TYPE = {
   // 5: '满数量赠'
 };
 const PROMOTION_TYPE = {
-  0: RCi18n({id: 'Marketing.NormalPromotion'}),
-  1: RCi18n({id: 'Marketing.SubscriptionPromotion'}),
+  0: RCi18n({id: 'Marketing.All'}),
+  1: RCi18n({id: 'Marketing.Autoship'}),
   2: RCi18n({id: 'Marketing.Clubpromotion'}),
   3: RCi18n({id: 'Marketing.Singlepurchase'})
 };

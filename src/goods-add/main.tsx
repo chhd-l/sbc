@@ -26,6 +26,7 @@ import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
 import { FormattedMessage } from 'react-intl';
+import ShippingInformation from './component/shippingInformation';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -61,8 +62,10 @@ export default class Main extends React.Component<any, any> {
       type = 'main';
     } else if (res == 'inventory') {
       type = 'price';
-    } else if (res == 'related') {
+    } else if (res == 'shipping') {
       type = 'inventory';
+    } else if (res == 'related') {
+      type = 'shipping';
     } else if (res == 'seo') {
       type = 'related';
     }
@@ -80,6 +83,8 @@ export default class Main extends React.Component<any, any> {
       type = 'inventory';
       this.store.getSubSkuStockByAPI();
     } else if (res == 'inventory') {
+      type = 'shipping';
+    } else if (res == 'shipping') {
       type = 'related';
     } else if (res == 'related') {
       type = 'seo';
@@ -164,6 +169,12 @@ export default class Main extends React.Component<any, any> {
                 <AlertInfo />
 
                 <ProductInventory />
+              </Tabs.TabPane>
+
+              <Tabs.TabPane tab={<FormattedMessage id="Product.shippingInformation" />} key="shipping">
+                <AlertInfo />
+
+                <ShippingInformation />
               </Tabs.TabPane>
 
               <Tabs.TabPane

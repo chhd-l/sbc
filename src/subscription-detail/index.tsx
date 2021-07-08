@@ -1099,7 +1099,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             </Row>
           </div>
           <AuthWrapper functionName="f_subscription_feedback">
-            <FeedBack subscriptionId={this.state.subscriptionId} />
+            {this.state.subscriptionId ? <FeedBack subscriptionId={this.state.subscriptionId} /> : null}
           </AuthWrapper>
         </Spin>
         <div className="bar-button">

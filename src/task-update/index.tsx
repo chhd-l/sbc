@@ -63,34 +63,35 @@ const formTableItemLayout = {
   wrapperCol: {
     xs: { span: 24 },
     sm: { span: 12 },
-    lg: { span: 15 }
+    lg: { span: 19 }
   }
 };
 
 const columns = [
   {
     title: 'Subscription Number',
-    dataIndex: 'subscriptionNumber',
+    dataIndex: 'id',
     key: 'subscription number',
+    width: '18%'
   },
   {
     title: 'Product Name',
-    dataIndex: 'product name',
+    dataIndex: 'type',
     key: 'product name',
   },
   {
     title: 'Shipment Date',
-    dataIndex: 'shipment date',
+    dataIndex: 'name',
     key: 'shipment date',
   },
   {
     title: 'Delivery Address',
-    dataIndex: 'delivery address',
+    dataIndex: 'value',
     key: 'delivery address',
   },
   {
     title: 'Payment Method',
-    dataIndex: 'payment metod',
+    dataIndex: 'storeId',
     key: 'payment method',
   }
 ]
@@ -175,6 +176,8 @@ class TaskUpdate extends Component<any, any> {
       this.setState({
         loading: true
       });
+
+
       webapi
         .getTaskById(id)
         .then((data) => {
@@ -186,6 +189,9 @@ class TaskUpdate extends Component<any, any> {
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
               loading: false
             });
+
+            console.log(this.state.task,"111111111111111111111111111")
+            
 
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
@@ -1039,7 +1045,7 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} />
+                              < Table bordered columns={columns} dataSource={goldenMomentList} />
                             ) }
 
                           </FormItem>

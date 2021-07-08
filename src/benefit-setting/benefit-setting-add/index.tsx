@@ -6,7 +6,7 @@ import {FormattedMessage} from 'react-intl';
 import BasicInformation from './components/basicInformation';
 import BenefitSettingAddHint from './components/BenefitSettingAddHint';
 import SetConditions from './components/setConditions';
-import BenefitList from './components/Benefits';
+import BenefitList from './components/BenefitList';
 
 export default class BenefitSettingAdd extends Component<any, any> {
     constructor(props) {

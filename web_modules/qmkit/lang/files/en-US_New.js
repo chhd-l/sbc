@@ -1253,6 +1253,8 @@ export default {
         "PetOwner.PetOwner": "Pet owner",
         "PetOwner.Pet": "Pet",
         "PetOwner.TaggingInstruction": "Taggings whose descriptions marked set by default can not be deleted and edited.",
+        "PetOwner.NormalMember": "Normal Member",
+        "PetOwner.ClubMember": "Club Member",
 
     },
     Finance: {

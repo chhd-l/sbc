@@ -68,9 +68,9 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
-                <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
+                <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
-              {record.customerLevelName === 'Member' ? (
+              {record.customerLevelId !== 233 ? (
                 <span>
                   <Divider type="vertical" />
                   <Tooltip placement="top" title={RCi18n({id:'PetOwner.Activity'})}>
@@ -109,9 +109,14 @@ export default class Customer extends React.Component<any, any> {
       },
       customerTypeArr: [
         {
-          value: 'Member',
-          name: RCi18n({id:'PetOwner.Member'}),
+          value: 'Normal Member',
+          name: RCi18n({id:'PetOwner.NormalMember'}),
           id: 234
+        },
+        {
+          value: 'Club Member',
+          name: RCi18n({id:'PetOwner.ClubMember'}),
+          id: 235
         },
         {
           value: 'Guest',
@@ -120,7 +125,8 @@ export default class Customer extends React.Component<any, any> {
         }
       ],
       customerTypeObj: {
-        234: RCi18n({id:'PetOwner.Member'}),
+        234: RCi18n({id:'PetOwner.NormalMember'}),
+        235: RCi18n({id:'PetOwner.ClubMember'}),
         233: RCi18n({id:'PetOwner.Guest'})
       },
       subscriptionTypeList: [],

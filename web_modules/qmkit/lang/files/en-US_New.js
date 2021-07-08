@@ -439,7 +439,13 @@ export default {
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
         "Product.On/Off shelves": "On/Off shelves",
         "Product.SynchronizeTips": "Please wait 5-10 minutes pariently.",
-
+        "Product.depth": "Length",
+        "Product.depthUnit": "Length Unit",
+        "Product.width": "Width",
+        "Product.widthUnit": "Width Unit",
+        "Product.height": "Height",
+        "Product.heightUnit": "Height Unit",
+        "Product.shippingInformation": "Shipping information"
     },
 
     Order: {

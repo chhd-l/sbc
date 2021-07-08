@@ -361,3 +361,20 @@ export function bindTagging(filterParams = {}) {
     })
   });
 }
+
+//feedback
+export function getByCustomerId(customerId) {
+  return Fetch<TResult>('/customer/feedback/getByCustomerId', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerId
+    })
+  });
+}
+
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/customer/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

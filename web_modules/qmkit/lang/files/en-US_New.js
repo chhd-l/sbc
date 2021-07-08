@@ -445,7 +445,13 @@ export default {
         "Product.widthUnit": "Width Unit",
         "Product.height": "Height",
         "Product.heightUnit": "Height Unit",
-        "Product.shippingInformation": "Shipping information"
+        "Product.shippingInformation": "Shipping information",
+        "Product.Synonyms":"Synonyms",
+        "Product.AddSynonyms":"Add synonyms",
+        "Product.SearchPhrase":"Search phrase(When search for)",
+        "Product.Synonyms(asf)":"Synonyms (also search for)",
+        "Product.PleaseInputSynonyms":"Please input synonyms.",
+        "Product.PleaseInputPhrase":"Please input phrase.",
     },
 
     Order: {

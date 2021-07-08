@@ -40,3 +40,53 @@ export function getRepair(filterParams = {}) {
     method: 'POST',
   });
 }
+
+//同义词列表
+export function getSynonList(filterParams = {}) {
+  return Fetch<TResult>('/synon/findPage', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//添加同义词
+export function addSynon(filterParams = {}) {
+  return Fetch<TResult>('/synon/addSynon', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//添加同义词
+export function eidtSynon(filterParams = {}) {
+  return Fetch<TResult>('/synon/modifySynon', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//删除同义词
+export function delSynon(filterParams = {}) {
+  return Fetch<TResult>('/synon/deleteSynon', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//根据id查询同义词
+export function synonFindById(filterParams = {}) {
+  return Fetch<TResult>('/synon/findById', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

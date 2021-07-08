@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import {BreadCrumb, Const, Headline, cache, util, AuthWrapper} from 'qmkit';
-import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal} from 'antd';
+import { BreadCrumb, Const, Headline, cache, util, AuthWrapper, history, QRScaner } from 'qmkit';
+import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal, Input, Space} from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import { RCi18n } from 'qmkit';
+import SynonymsTable from '@/product-search-list/synonymsTable';
+
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const { confirm } = Modal;
@@ -622,6 +624,9 @@ export default class ProductSearchList extends React.Component<any, any> {
               </TabPane>
               <TabPane tab={<FormattedMessage id="Product.NoResultsSearches" />} key="2">
                 <Table rowKey="id" columns={columnsNoResult} dataSource={noSearchResult} pagination={noResultPagination} loading={noResultLoading} scroll={{ x: '100%' }} onChange={this.noResultTableChange} />
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Product.Synonyms" />} key="3">
+                <SynonymsTable />
               </TabPane>
             </Tabs>
           </div>

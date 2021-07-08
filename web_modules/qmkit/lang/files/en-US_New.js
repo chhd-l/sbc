@@ -439,7 +439,12 @@ export default {
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
         "Product.On/Off shelves": "On/Off shelves",
         "Product.SynchronizeTips": "Please wait 5-10 minutes pariently.",
-
+        "Product.Synonyms":"Synonyms",
+        "Product.AddSynonyms":"Add synonyms",
+        "Product.SearchPhrase":"Search phrase(When search for)",
+        "Product.Synonyms(asf)":"Synonyms (also search for)",
+        "Product.PleaseInputSynonyms":"Please input synonyms.",
+        "Product.PleaseInputPhrase":"Please input phrase."
     },
 
     Order: {

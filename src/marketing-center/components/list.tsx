@@ -271,63 +271,38 @@ export default class List extends React.Component<any, any> {
                 </Col>
               </AuthWrapper>
             </Row>
-            {/*<Row>*/}
-            {/*  <AuthWrapper functionName="f_marketing_gift_add">*/}
-            {/*    <Col span={6}>*/}
-            {/*      <a*/}
-            {/*        className="createMarket"*/}
-            {/*        onClick={() =>*/}
-            {/*          history.push({*/}
-            {/*            pathname: './marketing-first-order-discount',*/}
-            {/*            state: {*/}
-            {/*              source: 'marketCenter'*/}
-            {/*            }*/}
-            {/*          })*/}
-            {/*        }*/}
-            {/*      >*/}
-            {/*        <span className="left left2">*/}
-            {/*          <img src={images.first_order_icon} />*/}
-            {/*        </span>*/}
-            {/*        <div className="info">*/}
-            {/*          <h5><FormattedMessage id="Marketing.Firstorderdiscount" /></h5>*/}
-            {/*          <p><FormattedMessage id="Marketing.Creatediscountforfirstorder" /></p>*/}
-            {/*        </div>*/}
-            {/*      </a>*/}
-            {/*    </Col>*/}
-            {/*  </AuthWrapper>*/}
-            
-            {/*  <AuthWrapper functionName="f_marketing_gift_add">*/}
-            {/*    <Col span={6}>*/}
-            {/*      <a*/}
-            {/*        className="createMarket"*/}
-            {/*        onClick={() =>*/}
-            {/*          history.push({*/}
-            {/*            pathname: '/marketing-full-gift',*/}
-            {/*            state: {*/}
-            {/*              source: 'marketCenter'*/}
-            {/*            }*/}
-            {/*          })*/}
-            {/*        }*/}
-            {/*      >*/}
-            {/*        <span className="left left2">*/}
-            {/*          <img src={images.gift_icon} />*/}
-            {/*        </span>*/}
-            {/*        <div className="info">*/}
-            {/*          <h5><FormattedMessage id="Marketing.Gift" /></h5>*/}
-            {/*          <p><FormattedMessage id="Marketing.Definemainproductandgift" /></p>*/}
-            {/*        </div>*/}
-            {/*      </a>*/}
-            {/*    </Col>*/}
-            {/*  </AuthWrapper>*/}
-            {/*</Row>*/}
             <Row>
+              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
+              {/*  <Col span={6}>*/}
+              {/*    <a*/}
+              {/*      className="createMarket"*/}
+              {/*      onClick={() =>*/}
+              {/*        history.push({*/}
+              {/*          pathname: './marketing-first-order-discount',*/}
+              {/*          state: {*/}
+              {/*            source: 'marketCenter'*/}
+              {/*          }*/}
+              {/*        })*/}
+              {/*      }*/}
+              {/*    >*/}
+              {/*      <span className="left left2">*/}
+              {/*        <img src={images.first_order_icon} />*/}
+              {/*      </span>*/}
+              {/*      <div className="info">*/}
+              {/*        <h5><FormattedMessage id="Marketing.Firstorderdiscount" /></h5>*/}
+              {/*        <p><FormattedMessage id="Marketing.Creatediscountforfirstorder" /></p>*/}
+              {/*      </div>*/}
+              {/*    </a>*/}
+              {/*  </Col>*/}
+              {/*</AuthWrapper>*/}
+
               <AuthWrapper functionName="f_marketing_gift_add">
                 <Col span={6}>
                   <a
                     className="createMarket"
                     onClick={() =>
                       history.push({
-                        pathname: '/marketing-free-shipping',
+                        pathname: '/marketing-full-gift',
                         state: {
                           source: 'marketCenter'
                         }
@@ -335,15 +310,40 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left left2">
-                      <img src={images.shipping_icon} />
+                      <img src={images.gift_icon} />
                     </span>
                     <div className="info">
-                      <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>
-                      {/*<p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>*/}
+                      <h5><FormattedMessage id="Marketing.Gift" /></h5>
+                      <p><FormattedMessage id="Marketing.Definemainproductandgift" /></p>
                     </div>
                   </a>
                 </Col>
               </AuthWrapper>
+            </Row>
+            <Row>
+              {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
+              {/*  <Col span={6}>*/}
+              {/*    <a*/}
+              {/*      className="createMarket"*/}
+              {/*      onClick={() =>*/}
+              {/*        history.push({*/}
+              {/*          pathname: '/marketing-free-shipping',*/}
+              {/*          state: {*/}
+              {/*            source: 'marketCenter'*/}
+              {/*          }*/}
+              {/*        })*/}
+              {/*      }*/}
+              {/*    >*/}
+              {/*      <span className="left left2">*/}
+              {/*        <img src={images.shipping_icon} />*/}
+              {/*      </span>*/}
+              {/*      <div className="info">*/}
+              {/*        <h5><FormattedMessage id="Marketing.Freeshipping" /></h5>*/}
+              {/*        /!*<p><FormattedMessage id="Marketing.Freeshippingwhenorder" /></p>*!/*/}
+              {/*      </div>*/}
+              {/*    </a>*/}
+              {/*  </Col>*/}
+              {/*</AuthWrapper>*/}
 
               {/*<AuthWrapper functionName="f_marketing_gift_add">*/}
               {/*  <Col span={6}>*/}

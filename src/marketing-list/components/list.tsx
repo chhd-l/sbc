@@ -215,7 +215,8 @@ class MarketingList extends React.Component<any, any> {
             } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
-              url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
+              // url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
+              url = `/marketing-full-reduction/${rowInfo['marketingId']} /${rowInfo['marketingType']}`;
             }
 
             return (

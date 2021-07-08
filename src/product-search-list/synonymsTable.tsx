@@ -3,7 +3,7 @@ import { Button, Col, Input, Popconfirm, Row, Table, Tooltip, Modal, Radio, Form
 import { FormattedMessage } from 'react-intl';
 import { history, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
-export default class SynonymsTable extends Component<any, any> {
+class SynonymsTable extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,22 +17,28 @@ export default class SynonymsTable extends Component<any, any> {
   componentDidMount() {
     this.getList()
   }
+  onChange(val){
 
+  }
   /**
    * 获取同义词列表
    */
-  getList=async ()=>{
+  getList=async (keyword='')=>{
     let result:any = await webapi.getSynonList({
       pageNum: this.state.pageNum,
       pageSize: this.state.pageSize,
-      keyword:'',
+      keyword:keyword,
     })
-    console.log(result)
     this.setState({
       dataSource:result.res.context.content,
       total:result.res.context.total,
     })
   }
+
+  /**
+   * 删除
+   * @param id
+   */
   async delSynonyms(id){
     await webapi.delSynon({
       id,
@@ -40,8 +46,21 @@ export default class SynonymsTable extends Component<any, any> {
     message.success(RCi18n({id:'Product.OperateSuccessfully'}));
     this.getList()
   }
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.setState({
+          pageNum:0,
+        },()=>{
+          this.getList(values.keyword)
+        })
+      }
+    });
+  };
   render() {
     const { dataSource,pageSize,pageNum,total } =this.state
+    const { getFieldDecorator } = this.props.form;
     const columns = [
       {
         title: <FormattedMessage id="Product.SearchPhrase" />,
@@ -90,17 +109,25 @@ export default class SynonymsTable extends Component<any, any> {
         <Row style={{ marginBottom: 10 }} type="flex" justify="space-between">
           <Col>
             <div style={{display:'flex'}}>
-
-              <Input style={{marginRight:10}}/>
-              <Button
-                type="primary"
-                icon="search"
-                shape="round"
-              >
+              <Form layout="inline" onSubmit={this.handleSubmit}>
+                <Form.Item >
+                  {getFieldDecorator('keyword')(
+                    <Input style={{marginRight:10}} />
+                  )}
+                </Form.Item>
+                <Form.Item >
+                  <Button
+                    type="primary"
+                    icon="search"
+                    shape="round"
+                    htmlType="submit"
+                  >
                 <span>
                   <FormattedMessage id="Product.search" />
                 </span>
-              </Button>
+                  </Button>
+                </Form.Item>
+              </Form>
             </div>
           </Col>
           <Col>
@@ -120,3 +147,4 @@ export default class SynonymsTable extends Component<any, any> {
     )
   }
 }
+export default Form.create()(SynonymsTable);

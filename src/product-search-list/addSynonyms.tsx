@@ -81,8 +81,6 @@ class AddSynonyms extends Component<any, any> {
           })
         }
         if(result.res.code === 'K-000000') message.success(RCi18n({id:'Product.OperateSuccessfully'}));
-
-        console.log('Received values of form: ', values);
       }
     });
   };

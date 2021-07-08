@@ -126,6 +126,7 @@ class CouponInfoForm extends Component<any, any> {
       couponPurchaseType: any;
       marketingType: any,
       isSuperimposeSubscription:any;
+      limitAmount: any;
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -182,6 +183,7 @@ class CouponInfoForm extends Component<any, any> {
     couponPurchaseType: 'couponPurchaseType',
     isSuperimposeSubscription: 'isSuperimposeSubscription',
     marketingType: 'marketingType',
+    limitAmount:'limitAmount',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -341,6 +343,7 @@ class CouponInfoForm extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const {
       couponName,
+      limitAmount,
       couponCates,
       couponCateIds,
       rangeDayType,
@@ -711,7 +714,8 @@ class CouponInfoForm extends Component<any, any> {
                   </FormItem>
                   <FormItem>
                     <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                    {getFieldDecorator(`firstLimit`, {
+                    {getFieldDecorator(`limitAmount`, {
+                      initialValue: limitAmount,
                       rules: [
                         // { required: true, message: 'Must enter rules' },
                         {
@@ -730,7 +734,6 @@ class CouponInfoForm extends Component<any, any> {
                           // callback();
                         }
                       ],
-                      initialValue: null
                     })(
                       <Input
                         // style={{ width: 200 }}
@@ -746,7 +749,10 @@ class CouponInfoForm extends Component<any, any> {
                           })
                         }
                         onChange={(e) => {
-
+                          fieldsValue({
+                            field: 'limitAmount',
+                            value: e.target.value
+                          });
                         }}
                         value={null}
                         style={{ width: 160 }}

@@ -61,7 +61,8 @@ export default class AppStore extends Store {
         couponDiscount,
         attributeValueIds,
         couponPurchaseType,
-        isSuperimposeSubscription
+        isSuperimposeSubscription,
+        limitAmount
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -88,7 +89,8 @@ export default class AppStore extends Store {
         couponDiscount: couponDiscount * 100.0,
         attributeValueIds,
         couponPurchaseType,
-        isSuperimposeSubscription
+        isSuperimposeSubscription,
+        limitAmount
       });
       this.dispatch('loading:end');
     }
@@ -226,7 +228,8 @@ export default class AppStore extends Store {
       chooseSkuIds,
       attributeValueIds,
       couponPurchaseType,
-      isSuperimposeSubscription
+      isSuperimposeSubscription,
+      limitAmount
     } = this.state().toJS();
 
     let params = {
@@ -245,7 +248,8 @@ export default class AppStore extends Store {
       couponDiscount: couponDiscount / 100.0,
       attributeValueIds,
       couponPurchaseType,
-      isSuperimposeSubscription
+      isSuperimposeSubscription,
+      limitAmount
     } as any;
 
     if (rangeDayType === 0) {
@@ -494,7 +498,7 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     }
   };
-  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType }) => {
+  toParams = ({ marketingId, marketingName, limitAmount, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType }) => {
     return {
       marketingType: 3, //免邮
       marketingName,
@@ -508,6 +512,7 @@ export default class AppStore extends Store {
       marketingId,
       publicStatus: 1,
       promotionType,
+      limitAmount,
       promotionCode: promotionCode ? promotionCode : this.randomPromotionCode()
     };
   };

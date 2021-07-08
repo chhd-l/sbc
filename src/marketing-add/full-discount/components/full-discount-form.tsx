@@ -638,7 +638,7 @@ class FullDiscountForm extends React.Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                  {getFieldDecorator(`firstLimit`, {
+                  {getFieldDecorator(`firstSubscriptionLimitAmount`, {
                     rules: [
                       // { required: true, message: 'Must enter rules' },
                       {
@@ -673,9 +673,11 @@ class FullDiscountForm extends React.Component<any, any> {
                         })
                       }
                       onChange={(e) => {
-
+                        this.onBeanChange({
+                          firstSubscriptionLimitAmount: e.target.value
+                        });
                       }}
-                      value={null}
+                      value={marketingBean.get('firstSubscriptionLimitAmount')}
                     />
                   )}
                   &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -748,7 +750,7 @@ class FullDiscountForm extends React.Component<any, any> {
               </FormItem>
               <FormItem>
                 <span>&nbsp;discount limit&nbsp;&nbsp;</span>
-                {getFieldDecorator(`firstLimit`, {
+                {getFieldDecorator(`restSubscriptionLimitAmount`, {
                   rules: [
                     // { required: true, message: 'Must enter rules' },
                     {
@@ -783,9 +785,11 @@ class FullDiscountForm extends React.Component<any, any> {
                       })
                     }
                     onChange={(e) => {
-
+                      this.onBeanChange({
+                        restSubscriptionLimitAmount: e.target.value
+                      });
                     }}
-                    value={null}
+                    value={marketingBean.get('restSubscriptionLimitAmount')}
                   />
                 )}
                 &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -1135,6 +1139,7 @@ class FullDiscountForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
+    debugger
     const { marketingBean, discountBeanOnChange, } = this.props.relaxProps;
     discountBeanOnChange(marketingBean.merge(params));
   };
@@ -1312,12 +1317,13 @@ class FullDiscountForm extends React.Component<any, any> {
               'fullDiscountLevelList',
               marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 100))
             );
-            debugger
             let obj = {
               firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') ? marketingBean.get('firstSubscriptionOrderDiscount') / 100 : null,
               restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') ? marketingBean.get('restSubscriptionOrderDiscount') / 100 : null,
               subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
-              subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
+              subscriptionRestLimit: marketingBean.get('subscriptionRestLimit'),
+              firstSubscriptionLimitAmount: marketingBean.get('firstSubscriptionLimitAmount'),
+              restSubscriptionLimitAmount: marketingBean.get('restSubscriptionLimitAmount'),
             };
 
             marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);

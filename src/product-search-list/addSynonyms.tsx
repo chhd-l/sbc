@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Button, Form, Input, Icon, message } from 'antd';
-import { BreadCrumb, Headline, RCi18n } from 'qmkit';
+import { BreadCrumb, Headline, history, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 
 const FormItem = Form.Item;
@@ -15,7 +15,7 @@ class AddSynonyms extends Component<any, any> {
     };
   }
   componentDidMount() {
-    if(this.props.location.state.id){
+    if(this.props.location.state && this.props.location.state.id){
       this.getDetail(this.props.location.state.id)
     }else {
       this.add()
@@ -26,13 +26,10 @@ class AddSynonyms extends Component<any, any> {
     let result = await webapi.synonFindById({id})
     let nextKeys = []
     result.res.context.synonyms.forEach((item,index)=>{
-      nextKeys.push({id:index,value:item})
+      this.add(item)
     })
     form.setFieldsValue({
       phrase: result.res.context.phrase,
-    });
-    form.setFieldsValue({
-      keys: nextKeys,
     });
   }
 
@@ -44,18 +41,17 @@ class AddSynonyms extends Component<any, any> {
     if (keys.length === 1) {
       return;
     }
-
     // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key.id !== k),
     });
   };
 
-  add = () => {
+  add = (value = '') => {
     const { form } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
-    const nextKeys = keys.concat({id:id++,value:''});
+    const nextKeys = keys.concat({id:id++,value});
     // can use data-binding to set
     // important! notify form to detect changes
     form.setFieldsValue({
@@ -67,20 +63,26 @@ class AddSynonyms extends Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        let result
-        if(this.props.location.state.id){
+        let result;
+        let synonyms = Array.from(new Set(values.synonyms)).filter(n => n)
+        if(this.props.location.state && this.props.location.state.id){
           result = await webapi.eidtSynon({
             phrase: values.phrase,
-            synonyms: Array.from(new Set(values.synonyms)),
+            synonyms,
             id:this.props.location.state.id
           })
         }else {
           result = await webapi.addSynon({
             phrase: values.phrase,
-            synonyms: Array.from(new Set(values.synonyms)),
+            synonyms,
           })
         }
-        if(result.res.code === 'K-000000') message.success(RCi18n({id:'Product.OperateSuccessfully'}));
+        if(result.res.code === 'K-000000') {
+          message.success(RCi18n({id:'Product.OperateSuccessfully'}));
+          history.go(-1)
+          //重置一下key的值
+          id = 0
+        }
       }
     });
   };
@@ -167,7 +169,10 @@ class AddSynonyms extends Component<any, any> {
           <Button type="primary" onClick={this.handleSubmit} style={{ marginRight: 10 }}>
             <FormattedMessage id="Product.Save"/>
           </Button>
-          <Button style={{ marginRight: 10 }} onClick={()=>{history.back()}}>
+          <Button style={{ marginRight: 10 }} onClick={()=>{
+            history.go(-1)
+            id = 0
+          }}>
             <FormattedMessage id="Product.Cancel" />
           </Button>
         </div>

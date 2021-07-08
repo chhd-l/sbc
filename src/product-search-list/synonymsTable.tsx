@@ -112,7 +112,7 @@ class SynonymsTable extends Component<any, any> {
               <Form layout="inline" onSubmit={this.handleSubmit}>
                 <Form.Item >
                   {getFieldDecorator('keyword')(
-                    <Input style={{marginRight:10}} />
+                    <Input style={{marginRight:10}} allowClear/>
                   )}
                 </Form.Item>
                 <Form.Item >

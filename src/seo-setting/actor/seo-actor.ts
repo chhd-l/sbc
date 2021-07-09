@@ -7,7 +7,9 @@ export default class SeoActor extends Actor {
       seoForm: {
         title: '',
         metaKeywords: '',
-        description: ''
+        description: '',
+        priorityFlag: 0,
+        priorityTime: '',
       },
       seoModalVisible: false,
       currentTab: 'siteSeo',
@@ -29,7 +31,9 @@ export default class SeoActor extends Actor {
       fromJS({
         title: '',
         metaKeywords: '',
-        description: ''
+        description: '',
+        priorityFlag: 0,
+        priorityTime: '',
       })
     );
   }

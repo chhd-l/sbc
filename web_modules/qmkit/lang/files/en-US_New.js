@@ -452,6 +452,8 @@ export default {
         "Product.Synonyms(asf)":"Synonyms (also search for)",
         "Product.PleaseInputSynonyms":"Please input synonyms.",
         "Product.PleaseInputPhrase":"Please input phrase.",
+        "Product.SynonymsAreRepeated":"Synonyms are repeated",
+
     },
 
     Order: {
@@ -2052,12 +2054,13 @@ export default {
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",
         "Setting.add": "Add",
-        "Setting.Delete": "Delete",
         "Setting.pleaseSelectCity": "Please select city",
         "Setting.pleaseSelectTime": "Please select time",
         "Setting.mustSelectOneOpenDay": "Please select at least one open date",
         "Setting.Keyword": "Keyword",
-        
+        "Setting.turnText1": "Turn on and off to set time frame",
+        "Setting.turnText2": "Turn on and off to set time frame;Return to your previous setting when the time frame has passed",
+        "Setting.Startandendtime": "Start and end time",
     },
     Menu: {
         "Menu.Appointment": "Appointment",

@@ -56,8 +56,13 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    //保持当前选中tab状态
+    if(sessionStorage.getItem('productSearchActive')){
+      this.onTabChange(sessionStorage.getItem('productSearchActive'))
+    }
     this.dateRangeChange([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]);
   }
+
 
   onTabChange(key) {
     this.setState({
@@ -68,6 +73,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     } else if (key === '2') {
       this.onNoResultSerch();
     }
+    sessionStorage.setItem('productSearchActive',key)
   }
   dateRangeChange(date) {
     this.setState({
@@ -619,7 +625,7 @@ export default class ProductSearchList extends React.Component<any, any> {
 
             </div>
             <Tabs
-              defaultActiveKey={tabKey}
+              activeKey={tabKey}
               onChange={(key) => {
                 this.onTabChange(key);
               }}

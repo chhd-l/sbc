@@ -1132,21 +1132,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="subscription.paymentMethod"/></span>,
-        key: 'paymentMethodNickName',
-        width: '10%',
-        render: (text, record) => {
-          if(record.paymentMethodNickName) {
-            return (
-              <>
-                {record.paymentMethodNickName}
-                <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
-              </>            
-            )
-          }
-        }
-      },
-      {
         title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.ShipmentDate"/></span>,
         key: 'shipmentDate',
         width: '10%',

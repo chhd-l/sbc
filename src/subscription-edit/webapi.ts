@@ -189,11 +189,8 @@ export async function calcShippingFee(address: string) {
   }).then(data => data).catch(() => ({ res: { code: '505' } }));
 }
 
-export function changePaymentMethod(filterParams = {}) {
-  return Fetch<TResult>('/subsciption/changePaymentMethod', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function getCards(customerId) {
+  return Fetch<TResult>('/pay-payment-info/' + customerId, {
+    method: 'Get'
   });
 }

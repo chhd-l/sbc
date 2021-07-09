@@ -137,7 +137,7 @@ export default class PageSettingForm extends Component<any, any> {
                 onChange={(e) =>
                   updateSeoForm({
                     field: 'description',
-                    value: e
+                    value: e.target.value
                   })
                 }
               />

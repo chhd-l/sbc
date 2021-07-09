@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Modal } from 'antd';
 import { Link } from 'react-router-dom';
 import PageSettingForm from './page-seo-form';
+import moment from 'moment';
 const FormItem = Form.Item;
 const _PageSettingForm = Form.create({})(PageSettingForm);
 
@@ -41,12 +42,16 @@ export default class SeoModal extends Component<any, any> {
   _handleSubmit = () => {
     const { seoForm, currentPage, setSeoModalVisible, editSeo } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
+    console.log(moment(seoObj.priorityTime[0], 'YYYY-MM-DD').format('YYYY-MM-DD'),1111);
     const params = {
       type: 3,
       metaDescriptionSource: seoObj.description,
       metaKeywordsSource: seoObj.metaKeywords,
       titleSource: seoObj.title,
-      pageName: currentPage
+      pageName: currentPage,
+      priorityFlag: seoObj.priorityFlag,
+      priorityStartTime: moment(seoObj.priorityTime[0], 'YYYY-MM-DD').format('YYYY-MM-DD') + " " + "00:00:00",
+      priorityEndTime: moment(seoObj.priorityTime[1], 'YYYY-MM-DD').format('YYYY-MM-DD') + " " + "23:23:59"
     };
     editSeo(params, 1);
   };

@@ -104,7 +104,7 @@ class FeedBack extends React.Component<Iprop, any> {
           </Headline>
         </div>
         <div style={{ display: showMore ? 'block' : 'none' }}>
-          <Form labelAlign="left" className="petowner-feedback-form">
+        <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
               <Col span={6}>
                 <span className="text-strong"><FormattedMessage id="Subscription.After3rdDelivery"/></span>

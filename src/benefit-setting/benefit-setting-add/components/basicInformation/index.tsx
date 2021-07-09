@@ -5,7 +5,7 @@ import './index.less';
 
 const { RangePicker } = DatePicker;
 
-class BasicInformation extends Component<any, any>{
+export default class BasicInformation extends Component<any, any>{
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -27,7 +27,7 @@ class BasicInformation extends Component<any, any>{
             rules: [
                 {
                     required: true,
-                    message: 'Please input your CampaignName!',
+                    message: 'Please input your marketingName!',
                 },
             ]
         }
@@ -36,17 +36,17 @@ class BasicInformation extends Component<any, any>{
                 <div className='BasicInformation-title'>
                     <FormattedMessage id="Subscription.basicInformation" />
                 </div>
-                <Form {...formItemLayout}>
+                <div>
                     <Form.Item label={<FormattedMessage id={'Subscription.Campaign name'}/>}>
-                        {getFieldDecorator('CampaignName', inputConfig)(<Input />)}
+                        {getFieldDecorator('marketingName', inputConfig)(<Input />)}
                     </Form.Item>
                     <Form.Item label={<FormattedMessage id={'Subscription.start and end time'} />}>
-                        {getFieldDecorator('range-picker', rangeConfig)(<RangePicker />)}
+                        {getFieldDecorator('timers', rangeConfig)(<RangePicker />)}
                     </Form.Item>
-                </Form>
+                </div>
             </div>
         );
     }
 }
-const BasicInformationForm = Form.create()(BasicInformation);
-export default BasicInformationForm;
+// const BasicInformationForm = Form.create()(BasicInformation);
+// export default BasicInformationForm;

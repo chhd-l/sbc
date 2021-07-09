@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
+import {Relax} from 'plume2';
 import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table} from 'antd';
 import {RCi18n, ValidConst} from 'qmkit';
 import {GoodsModal} from 'biz';
@@ -42,9 +43,11 @@ const deliveryNumberData = [
 
 const { Option } = Select;
 
-class BenefitList extends Component<any, any>{
+
+export default class BenefitList extends Component<any, any>{
     columns: any;
     currentSelected: any;
+
     constructor(props) {
         super(props);
         this.currentSelected = null;
@@ -127,6 +130,7 @@ class BenefitList extends Component<any, any>{
     closeGoodsModal = () => {
         this.setState({visible: false});
     }
+
     openGoodsModal = (currentSelected) => {
 
         if (!currentSelected) return;
@@ -306,4 +310,4 @@ class BenefitList extends Component<any, any>{
     }
 }
 
-export default Form.create()(BenefitList)
+// export default Form.create()(BenefitList)

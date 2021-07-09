@@ -1,54 +1,86 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
 import { Form, Radio, Select } from 'antd';
+import { Relax} from 'plume2';
 import './index.less';
+import {noop} from 'qmkit';
 
 const { Option } = Select;
-class SetConditions extends Component<any, any>{
-    componentDidMount() {
-        //初始化setConditions为true
-        this.props.form.setFieldsValue({
-            setConditions: true
-        });
-    }
+
+@Relax
+export default class SetConditions extends Component<any, any>{
+
+    props: {
+        form: any;
+        relaxProps?: {
+            allGroups: any;
+            formObj: any;
+            giftBeanOnChange: Function;
+        };
+    };
+    static relaxProps = {
+        allGroups: 'allGroups',
+        formObj: 'formObj',
+        giftBeanOnChange: noop,
+
+    };
 
     onChange = (e) => {
         console.log('value', e.target.value);
     }
 
+    handleChange = (value) => {
+        console.log(`selected ${value}`);
+    }
+
+    onBeanChange = (params) => {
+        const { formObj, giftBeanOnChange } = this.props.relaxProps;
+        giftBeanOnChange(formObj.merge(params));
+    };
+
+    onTagChange = (e) => {
+        this.onBeanChange({
+            isTags: e.target.value,
+        });
+    };
+
+    onSegmentIdChange = (segmentIds) => {
+        this.onBeanChange({
+            segmentIds
+        })
+    }
+
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 3 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-        };
-        let isSetConditions = getFieldValue('setConditions')
+        const {
+            allGroups,
+            formObj,
+        } = this.props.relaxProps;
 
+        let isTags = getFieldValue('isTags')
 
-        const inputConfig = {
-            rules: [{ required: true,  message: 'Please input your CampaignName!',},]
+        const selectConfig = {
+            rules: [{ required: true,  message: 'Please Select your tags!'}],
+            initialValue: formObj.get('segmentIds') || '',
+        }
+        const radioConfig = {
+            initialValue: formObj.get('isTags') || true
         }
         const radioStyle = {
             display: 'block',
             height: '30px',
             lineHeight: '30px',
         };
+
         return (
             <div className='SetConditions-wrap'>
                 <div className='SetConditions-title'>
                     <FormattedMessage id="Subscription.setConditions" />
                 </div>
                 <div className='SetConditions-content'>
-                    <Form {...formItemLayout}>
                         <Form.Item label={''}>
-                            {getFieldDecorator('setConditions')(
-                                <Radio.Group onChange={this.onChange}>
+                            {getFieldDecorator('isTags', radioConfig)(
+                                <Radio.Group onChange={e => this.onTagChange(e)}>
                                     <Radio style={radioStyle} value={true}>
                                         <FormattedMessage id={'Subscription.tags'}/>
                                     </Radio>
@@ -60,27 +92,31 @@ class SetConditions extends Component<any, any>{
                         </Form.Item>
                         <div className='setConditionsSelect-box'>
                             {
-                                isSetConditions
+                                isTags
                                     ? (
                                         <Form.Item label=''>
-                                            {getFieldDecorator('setConditionsSelect', inputConfig)(<Select
-                                                mode="multiple"
-                                                style={{ width: '100%' }}
-                                                placeholder="Please select"
-                                            >
-                                                <Option value="jack">Jack</Option>
-                                                <Option value="lucy">Lucy</Option>
-                                            </Select>)}
+                                            {getFieldDecorator('segmentIds', selectConfig)(
+                                                <Select
+                                                    style={{ width: '100%' }}
+                                                    placeholder="Please select"
+                                                    onChange={this.onSegmentIdChange}
+                                                >
+                                                    {allGroups.size > 0 &&
+                                                    allGroups.toJS().map((item) => (
+                                                        <Option key={item.id} value={item.id}>
+                                                            {item.name}
+                                                        </Option>
+                                                    ))}
+                                                </Select>
+                                            )
+                                            }
                                         </Form.Item>
-                                    ): null
+                                    )
+                                    : null
                             }
                         </div>
-                    </Form>
-
                 </div>
             </div>
         );
     }
 }
-const SetConditionsForm = Form.create()(SetConditions);
-export default SetConditionsForm;

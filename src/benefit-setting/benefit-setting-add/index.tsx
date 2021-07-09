@@ -1,21 +1,38 @@
 import React, { Component } from 'react';
 import {Breadcrumb, Tabs, Form, Alert, Spin, Button} from 'antd';
-import './index.less';
-import {AuthWrapper, BreadCrumb} from 'qmkit';
+import { StoreProvider} from 'plume2';
 import {FormattedMessage} from 'react-intl';
-import BasicInformation from './components/basicInformation';
-import BenefitSettingAddHint from './components/BenefitSettingAddHint';
-import SetConditions from './components/setConditions';
-import BenefitList from './components/BenefitList';
 
+import {BreadCrumb} from 'qmkit';
+import BenefitSettingAddHint from './components/BenefitSettingAddHint';
+import BenefitSettingAddFrom from './components/BenefitSettingAddFrom';
+
+import AppStore from './store';
+import './index.less';
+
+@StoreProvider(AppStore, { debug: true })
 export default class BenefitSettingAdd extends Component<any, any> {
+    store: AppStore;
+    form: any;
     constructor(props) {
         super(props);
         this.state = {
             loading: false
         }
     }
+    componentDidMount() {
+        this.store.getAllGroups();
+    }
 
+    onSubmit = () => {
+        let form = this.form.props.form;
+        let {getFieldsValue} = form;
+        console.log('values', getFieldsValue());
+    }
+
+    goBack = () => {
+        this.props.history.goBack()
+    }
 
     render() {
         let { loading } = this.state;
@@ -26,19 +43,25 @@ export default class BenefitSettingAdd extends Component<any, any> {
                         <Breadcrumb.Item><FormattedMessage id="Subscription.Consumption gift" /></Breadcrumb.Item>
                     </BreadCrumb>
                     <div className='container'>
+
                         <BenefitSettingAddHint />
 
-                        <BasicInformation  />
-
-                        <SetConditions  />
-
-                        <BenefitList/>
+                        <BenefitSettingAddFrom
+                            wrappedComponentRef={(form) => this.form = form}
+                            {...{
+                                store: this.store,
+                            }}
+                        />
 
                         <div className="bar-button" style={{marginLeft:'-20px'}}>
-                            <Button type="primary" style={{ marginRight: 10 }}>
+                            <Button
+                                onClick={this.onSubmit}
+                                type="primary"
+                                style={{ marginRight: 10 }}
+                            >
                                 <FormattedMessage id="Subscription.Save" />
                             </Button>
-                            <Button style={{ marginRight: 10 }}>
+                            <Button onClick={this.goBack} style={{ marginRight: 10 }}>
                                 <FormattedMessage id="Subscription.Cancel" />
                             </Button>
                         </div>

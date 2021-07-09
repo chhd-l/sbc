@@ -594,16 +594,21 @@ export default class ProductSearchList extends React.Component<any, any> {
           <div className="container">
             <div className="exportContainer">
               <div className="flex-end">
-                <Button
-                  style={{marginRight:'20px'}}
-                  type="primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onExport();
-                  }}
-                >
-                  <FormattedMessage id="Product.Export" />
-                </Button>
+                {
+                  tabKey !== '3' ? (
+                    <Button
+                      style={{marginRight:'20px'}}
+                      type="primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onExport();
+                      }}
+                    >
+                      <FormattedMessage id="Product.Export" />
+                    </Button>
+                  ) : ''
+                }
+
                 <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
                   <Button>
                   <FormattedMessage id="Product.Index operation" />

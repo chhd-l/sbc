@@ -48,12 +48,13 @@ export default class CreditCard extends Component {
     renderCreditForm() {
         const { payPspItem ,customerId,storeId,pspName} = this.state;
         let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
-        console.log(payPspItem)
+ 
         let secretKey = Const.PAYMENT[d]
+        console.log(payPspItem,d,secretKey)
         switch (d) {
             case 'de':
             case 'fr':
-                return <AdyenCreditCardForm  pspName={pspName} storeId={storeId} customerId={customerId}/>
+                return <AdyenCreditCardForm  secretKey={secretKey} pspName={pspName} storeId={storeId} customerId={customerId}/>
             case 'mx':
             case 'ru':
             case 'tr':

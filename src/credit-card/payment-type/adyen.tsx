@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css';
 import { fetchAddPaymentInfo } from '../webapi';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
 interface IKey {
@@ -22,7 +22,7 @@ interface IAdyenCardParam {
 }
 export default class AdyenCreditCardForm extends Component {
   props: {
-
+    secretKey:any
     showPayButton?: boolean
     showBrandIcon?: boolean
     hasHolderName?: boolean
@@ -36,7 +36,8 @@ export default class AdyenCreditCardForm extends Component {
     super(props);
   }
   state = {
-    adyenCardParam: {}
+    adyenCardParam: {},
+    loading:false
   }
   static defaultProps = {
     showPayButton: false,
@@ -60,7 +61,7 @@ export default class AdyenCreditCardForm extends Component {
     const configuration: any = {
       locale: language,
       environment: process.env.NODE_ENV === 'development' ? "test" : 'live',
-      clientKey: "pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
+      clientKey: this.props.secretKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,
       onChange: this.handleOnChange,
       onAdditionalDetails: this.handleOnAdditionalDetails,
@@ -96,8 +97,9 @@ export default class AdyenCreditCardForm extends Component {
    */
   handleOnChange = (state, component) => {
     if (state.isValid) {
+      console.log(state)
       this.setState({
-        adyenCardParam: state.paymentMethod
+        adyenCardParam: state.data.paymentMethod
       })
     }
   }
@@ -131,17 +133,20 @@ export default class AdyenCreditCardForm extends Component {
       holderName,
       pspName
     }
+    this.setState({loading:true})
     await fetchAddPaymentInfo(storeId, params);
+    this.setState({loading:false})
   }
   render() {
+
     return (
-      <>
+      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div id="component-container" ></div>
 
         <div style={{ marginTop: 10, textAlign: 'right' }}>
           <Button type="primary" onClick={() => this.save()}> <FormattedMessage id="save" /></Button>
         </div>
-      </>
+      </Spin>
     )
   }
 }

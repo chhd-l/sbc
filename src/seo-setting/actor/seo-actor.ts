@@ -8,8 +8,8 @@ export default class SeoActor extends Actor {
         title: '',
         metaKeywords: '',
         description: '',
-        turnType: false,
-        seoTime: '',
+        priorityFlag: 0,
+        priorityTime: '',
       },
       seoModalVisible: false,
       currentTab: 'siteSeo',
@@ -32,8 +32,8 @@ export default class SeoActor extends Actor {
         title: '',
         metaKeywords: '',
         description: '',
-        turnType: false,
-        sdtime: ''
+        priorityFlag: 0,
+        priorityTime: '',
       })
     );
   }

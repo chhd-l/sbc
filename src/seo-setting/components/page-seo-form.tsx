@@ -7,6 +7,7 @@ import {Form, Select, Spin, Input, Switch, DatePicker, Button, Table, Divider, m
 import {Link} from 'react-router-dom';
 import {IMap} from '../../../typings/globalType';
 import {settings} from 'cluster';
+import moment from 'moment';
 
 const {TextArea} = Input;
 const FormItem = Form.Item;
@@ -59,12 +60,9 @@ export default class PageSettingForm extends Component<any, any> {
       title: seoObj.title,
       metaKeywords: seoObj.metaKeywords,
       description: seoObj.description,
-      turnType: seoObj.turnType,
-      sdtime: seoObj.sdtime,
+      priorityFlag: seoObj.priorityFlag,
+      priorityTime: seoObj.priorityTime,
     });
-    setTimeout(()=>{
-      console.log(seoObj,111111);
-    })
     return (
       <div>
         {loading ? (
@@ -73,25 +71,25 @@ export default class PageSettingForm extends Component<any, any> {
           </div>
         ) : null}
         <div className="turn-type flex-start">
-          <Switch onChange={(e) =>
+          <Switch checkedChildren="On" unCheckedChildren="off" size='default' onChange={(e) =>
             updateSeoForm({
-              field: 'turnType',
-              value: e
+              field: 'priorityFlag',
+              value: e == true?1:0
             })
           }/>
-          <span>{seoObj.turnType === false ? (<FormattedMessage id="Setting.turnText1"/>):(<FormattedMessage id="Setting.turnText2"/>)}</span>
+          <p>{seoObj.priorityFlag === 0 ? (<FormattedMessage id="Setting.turnText1"/>):(<FormattedMessage id="Setting.turnText2"/>)}</p>
         </div>
 
         <Form {...formItemLayout} className="login-form">
           {
-            seoObj.turnType == true ? (
+            seoObj.priorityFlag == 1 ? (
               <Form.Item label={<FormattedMessage id="Setting.Startandendtime"/>}>
-                {getFieldDecorator('sdtime', {
-                  initialValue: seoObj.title
+                {getFieldDecorator('priorityTime', {
+                  initialValue: seoObj.priorityTime
                 })(
-                  <RangePicker onChange={(e) =>
+                  <RangePicker  onChange={(e) =>
                     updateSeoForm({
-                      field: 'sdtime',
+                      field: 'priorityTime',
                       value: e
                     })
                   }/>
@@ -139,7 +137,7 @@ export default class PageSettingForm extends Component<any, any> {
                 onChange={(e) =>
                   updateSeoForm({
                     field: 'description',
-                    value: e.target.value
+                    value: e
                   })
                 }
               />

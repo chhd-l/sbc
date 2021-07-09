@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Select, InputNumber, message } from 'antd';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 
 const FormItem = Form.Item;
@@ -75,7 +75,7 @@ const AddRecommendaionCode = (props) => {
   }
   return (
     <Modal
-      title="Add Recommendaion Code"
+      title={RCi18n({ id: 'Prescriber.addRecommendaionCode' })}
       maskClosable={false}
       visible={visible}
       onOk={() => addCode()}
@@ -84,9 +84,9 @@ const AddRecommendaionCode = (props) => {
     >
       <Form {...formItemLayout}>
         {prescriberId ? (
-          <FormItem label="Amount">
+          <FormItem label={RCi18n({ id: 'Prescriber.amount' })}>
             {getFieldDecorator('amount', {
-              rules: [{ required: true, message: 'Please input amount' }]
+              rules: [{ required: true, message: RCi18n({ id: 'Prescriber.pleaseInputAmount' }) }]
             })(
               <InputNumber
                 style={{ width: '100%' }}
@@ -102,7 +102,7 @@ const AddRecommendaionCode = (props) => {
         ) : (
           <FormItem label="Amount">
             {getFieldDecorator('amount', {
-              rules: [{ required: true, message: 'Please select amount' }]
+              rules: [{ required: true, message: RCi18n({ id: 'Prescriber.PleaseSelectAmount' }) }]
             })(
               <Select onChange={(value) => setAmount(value)} allowClear>
                 {amountList.map((item) => (

@@ -33,7 +33,7 @@ export default class Customer extends React.Component<any, any> {
           dataIndex: 'customerLevelId',
           key: 'consumerType',
           width: '15%',
-          render: text => this.state.customerTypeObj[text]
+          render: (text, record) => <p>{text === 233 ? RCi18n({id:'PetOwner.Guest'}) : record.customerClubFlag === 1 ? RCi18n({id:'PetOwner.ClubMember'}) : RCi18n({id:'PetOwner.NormalMember'})}</p>
         },
         {
           title: RCi18n({id:'PetOwner.Email'}),
@@ -124,11 +124,6 @@ export default class Customer extends React.Component<any, any> {
           id: 233
         }
       ],
-      customerTypeObj: {
-        234: RCi18n({id:'PetOwner.NormalMember'}),
-        235: RCi18n({id:'PetOwner.ClubMember'}),
-        233: RCi18n({id:'PetOwner.Guest'})
-      },
       subscriptionTypeList: [],
       loading: false
     };

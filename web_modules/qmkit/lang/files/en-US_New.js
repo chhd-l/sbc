@@ -1097,7 +1097,12 @@ export default {
         "Prescriber.RecommendationMode": "Recommendation mode",
         "Prescriber.SingleUse": "Single Use",
         "Prescriber.MultipleUse": "Multiple Use",
-        "Prescriber.active": "ACTIVE"
+        "Prescriber.active": "ACTIVE",
+        "Prescriber.addRecommendaionCode":"Add Recommendaion Code",
+        "Prescriber.amount": "Amount",
+        "Prescriber.pleaseInputAmount": "Please input amount",
+        "Prescriber.PleaseSelectAmount": "Please select amount"
+        
 
     },
     'Pet owner': {

@@ -93,17 +93,18 @@ class FeedBack extends React.Component<Iprop, any> {
           </Headline>
         </div>
         <div>
-          <Form labelAlign="left" className="petowner-feedback-form">
+        <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
-              <Col span={4}>
+              <Col span={6}>
                 <span className="text-highlight"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
               </Col>
-              <Col span={14}>
+              <Col span={18}>
                 <Row gutter={8}>
                   <Col span={6}>
-                    <div><FormattedMessage id="Subscription.RateDelivery"/>(<FormattedMessage id="Subscription.scaleFrom"/>):</div>
+                    <div><FormattedMessage id="Subscription.RateDelivery"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
-                  <Col span={4} offset={1}>
+                  <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('rateDelivery', {
                         initialValue: feedback.rateDelivery
@@ -118,12 +119,11 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  </Row>
-                  <Row gutter={8}>
-                  <Col span={6}>
-                    <div><FormattedMessage id="Subscription.RateThePack"/>(<FormattedMessage id="Subscription.scaleFrom"/>):</div>
+                  <Col span={6} offset={4}>
+                    <div><FormattedMessage id="Subscription.RateThePack"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
-                  <Col span={4} offset={1}>
+                  <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('ratePack', {
                         initialValue: feedback.ratePack
@@ -143,22 +143,23 @@ class FeedBack extends React.Component<Iprop, any> {
                   <Col span={6}>
                     <div><FormattedMessage id="Subscription.Comments"/>:</div>
                   </Col>
-                  <Col span={14} offset={1}>
+                  <Col span={18}>
                     <FormItem>{getFieldDecorator('rateComments', { initialValue: feedback.rateComments })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row gutter={8}>
-              <Col span={4}>
+              <Col span={6}>
                 <span className="text-highlight"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
               </Col>
-              <Col span={14}>
+              <Col span={18}>
                 <Row gutter={8}>
-                  <Col span={6} >
-                    <div><FormattedMessage id="Subscription.NPS"/>(<FormattedMessage id="Subscription.scaleFrom10"/>):</div>
+                  <Col span={6}>
+                    <div><FormattedMessage id="Subscription.NPS"/>:</div>
+                    <div>(<FormattedMessage id="Subscription.scaleFrom10"/>)</div>
                   </Col>
-                  <Col span={4} offset={1}>
+                  <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('nps2rd', {
                         initialValue: feedback.nps2rd
@@ -176,7 +177,7 @@ class FeedBack extends React.Component<Iprop, any> {
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
                   <Col span={6}><FormattedMessage id="Subscription.DeliveryScheduleFit"/>:</Col>
-                  <Col span={4} offset={1}>
+                  <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('deliveryScheduleFit_2rd', {
                         initialValue: feedback.deliveryScheduleFit_2rd
@@ -188,41 +189,41 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={8} offset={2}>
+                  <Col span={8} offset={6}>
                     <FormItem>{getFieldDecorator('delivery_schedule_fit_reason_2rd', { initialValue: feedback.delivery_schedule_fit_reason_2rd })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8} type="flex" align="middle">
-                  <Col span={6} ><FormattedMessage id="Subscription.ReasonOfInterest"/>:</Col>
-                  <Col span={14} offset={1}>
+                  <Col span={6}><FormattedMessage id="Subscription.ReasonOfInterest"/>:</Col>
+                  <Col span={18}>
                     <FormItem>{getFieldDecorator('interestReason2rd', { initialValue: feedback.interestReason2rd })(<Input disabled={!editable} />)}</FormItem>
                   </Col>
                 </Row>
                 <Row gutter={8}>
                   <Col span={6}><FormattedMessage id="Subscription.Comments"/>:</Col>
-                  <Col span={14} offset={1}>
+                  <Col span={18}>
                     <FormItem>{getFieldDecorator('comments2rd', { initialValue: feedback.comments2rd })(<TextArea disabled={!editable} cols={6} />)}</FormItem>
                   </Col>
                 </Row>
               </Col>
             </Row>
             <Row gutter={8}>
-              <Col span={4}>
+              <Col span={6}>
                 <span className="text-highlight"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
+                <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
               </Col>
-              <Col span={16}>
+              <Col span={18}>
                 <Row gutter={8}>
-                  <Col span={10}>
-                    <div className="text-align-left text-highlight"><FormattedMessage id="Subscription.Visit"/> 1</div>
+                  <Col span={12}>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 1</div>
                   </Col>
-                  <Col span={10} offset={4}>
-                    <div className="text-align-left text-highlight"><FormattedMessage id="Subscription.Visit"/> 2</div>
+                  <Col span={12}>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 2</div>
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>
+                  <Col span={7}>
                     <div><FormattedMessage id="Subscription.QualityOfService"/> 1:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -239,9 +240,8 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={6} offset={4}>
+                  <Col span={7} offset={2}>
                     <div><FormattedMessage id="Subscription.QualityOfService"/> 2:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -260,11 +260,10 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>
+                  <Col span={7}>
                     <div><FormattedMessage id="Subscription.VeterinarianQualification"/> 1:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
-                  <Col span={4}> 
+                  <Col span={4}>
                     <FormItem>
                       {getFieldDecorator('veterinarianQualification1', {
                         initialValue: feedback.veterinarianQualification1
@@ -279,9 +278,8 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={6} offset={4}>
+                  <Col span={7} offset={2}>
                     <div><FormattedMessage id="Subscription.VeterinarianQualification"/> 2:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -300,8 +298,8 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>
-                    <div><FormattedMessage id="Subscription.Clinics1"/>(<FormattedMessage id="Subscription.scaleFrom"/>):</div>
+                  <Col span={7}>
+                    <div><FormattedMessage id="Subscription.Clinics1"/>:</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -318,8 +316,9 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={6} offset={4}>
-                    <div><FormattedMessage id="Subscription.Clinics2"/>(<FormattedMessage id="Subscription.scaleFrom"/>):</div>                 
+                  <Col span={7} offset={2}>
+                    <div><FormattedMessage id="Subscription.Clinics2"/>:</div>
+              
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -338,9 +337,8 @@ class FeedBack extends React.Component<Iprop, any> {
                   </Col>
                 </Row>
                 <Row gutter={8}>
-                  <Col span={6}>
+                  <Col span={7}>
                     <div><FormattedMessage id="Subscription.Vet"/> 1:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>
@@ -357,9 +355,8 @@ class FeedBack extends React.Component<Iprop, any> {
                       )}
                     </FormItem>
                   </Col>
-                  <Col span={6} offset={4}>
+                  <Col span={7} offset={2}>
                     <div><FormattedMessage id="Subscription.Vet"/> 2:</div>
-                    <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
                   </Col>
                   <Col span={4}>
                     <FormItem>

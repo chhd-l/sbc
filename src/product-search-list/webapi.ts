@@ -58,7 +58,7 @@ export function addSynon(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  });
+  },{isHandleResult:true,customerTip:true});
 }
 
 //添加同义词
@@ -68,7 +68,7 @@ export function eidtSynon(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  });
+  },{isHandleResult:true,customerTip:true});
 }
 
 //删除同义词

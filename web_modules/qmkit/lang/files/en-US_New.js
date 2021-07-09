@@ -452,6 +452,8 @@ export default {
         "Product.Synonyms(asf)":"Synonyms (also search for)",
         "Product.PleaseInputSynonyms":"Please input synonyms.",
         "Product.PleaseInputPhrase":"Please input phrase.",
+        "Product.SynonymsAreRepeated":"Synonyms are repeated",
+
     },
 
     Order: {

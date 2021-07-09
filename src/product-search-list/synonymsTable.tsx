@@ -12,18 +12,30 @@ class SynonymsTable extends Component<any, any> {
       total:0,
 
       dataSource:[],
+      loading:false,
     };
   }
   componentDidMount() {
     this.getList()
   }
-  onChange(val){
-
+  /**
+   * 翻页
+   * @param pagination
+   */
+  handleTableChange(pagination){
+    this.setState({
+      pageNum:pagination.current - 1
+    },()=>{
+      this.getList()
+    })
   }
   /**
    * 获取同义词列表
    */
   getList=async (keyword='')=>{
+    this.setState({
+      loading:true
+    })
     let result:any = await webapi.getSynonList({
       pageNum: this.state.pageNum,
       pageSize: this.state.pageSize,
@@ -32,6 +44,7 @@ class SynonymsTable extends Component<any, any> {
     this.setState({
       dataSource:result.res.context.content,
       total:result.res.context.total,
+      loading:false
     })
   }
 
@@ -59,7 +72,7 @@ class SynonymsTable extends Component<any, any> {
     });
   };
   render() {
-    const { dataSource,pageSize,pageNum,total } =this.state
+    const { dataSource,pageSize,pageNum,total,loading } =this.state
     const { getFieldDecorator } = this.props.form;
     const columns = [
       {
@@ -138,10 +151,14 @@ class SynonymsTable extends Component<any, any> {
             </Button>
           </Col>
         </Row>
-        <Table dataSource={dataSource}
+        <Table loading={loading}
+               dataSource={dataSource}
                columns={columns}
-               pagination={{pageSize,current:pageNum,total}}
+               pagination={{pageSize,current:pageNum+1,total}}
                rowKey={record=>record.id}
+               onChange={(pagination, filters, sorter) =>
+                 this.handleTableChange(pagination)
+               }
         />
       </>
     )

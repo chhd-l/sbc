@@ -66,35 +66,40 @@ const formTableItemLayout = {
     lg: { span: 19 }
   }
 };
-
 const columns = [
   {
     title: 'Subscription Number',
-    dataIndex: 'id',
-    key: 'subscription number',
-    width: '18%'
-  },
+    dataIndex: 'subscriptionNumber',
+    key: 'subscriptionNumber',
+    width: '18%',
+    render: text =>      
+        <Link
+          to={`/subscription-detail/${text}`}
+        >
+       {text}
+      </Link>
+    },
   {
     title: 'Product Name',
-    dataIndex: 'type',
-    key: 'product name',
+    dataIndex: 'productName',
+    key: 'productName',
   },
   {
     title: 'Shipment Date',
-    dataIndex: 'name',
-    key: 'shipment date',
+    dataIndex: 'shipmentDate',
+    key: 'shipmentDate',
   },
   {
     title: 'Delivery Address',
-    dataIndex: 'value',
-    key: 'delivery address',
+    dataIndex: 'deliveryAddress',
+    key: 'deliveryAddress',
   },
   {
     title: 'Payment Method',
-    dataIndex: 'storeId',
-    key: 'payment method',
+    dataIndex: 'paymentMethod',
+    key: 'paymentMethod',
   }
-]
+];
 
 @injectIntl
 class TaskUpdate extends Component<any, any> {
@@ -112,6 +117,7 @@ class TaskUpdate extends Component<any, any> {
       task: {},
       assignedUsers: [],
       goldenMomentList: [],
+      tableres: [],
       actionTypeList: [
         { name: <FormattedMessage id="task.Call" />, value: 'Call' },
         { name: <FormattedMessage id="task.Email" />, value: 'Email' },
@@ -187,11 +193,11 @@ class TaskUpdate extends Component<any, any> {
             this.setState({
               task: res.context.task,
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
-              loading: false
-            });
 
-            console.log(this.state.task,"111111111111111111111111111")
-            
+              tableres: res.context.subscribeList,
+
+              loading: false,
+            });
 
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
@@ -481,6 +487,7 @@ class TaskUpdate extends Component<any, any> {
     } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
     let subscriptionNumbers = task.subscriptionNumber ? task.subscriptionNumber.split(',') : [];
+  
     return (
       <div>
         <Breadcrumb>
@@ -1045,7 +1052,8 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={goldenMomentList} />
+                              < Table bordered columns={columns} dataSource={this.state.tableres} />
+                              // < Table bordered columns={columns} />
                             ) }
 
                           </FormItem>

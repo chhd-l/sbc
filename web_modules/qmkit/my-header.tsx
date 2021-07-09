@@ -42,7 +42,8 @@ export default class MyHeader extends React.Component {
       English: util.requireLocalSrc('sys/English.png'),
       Russian: util.requireLocalSrc('sys/Russian.png'),
       Turkey: util.requireLocalSrc('sys/Turkey.png'),
-      France: util.requireLocalSrc('sys/France.png')
+      France: util.requireLocalSrc('sys/France.png'),
+      Spanish: util.requireLocalSrc('sys/Spanish.png')
     };
   }
 
@@ -94,7 +95,8 @@ export default class MyHeader extends React.Component {
       { name: 'English', value: 'en-US' },
       { name: 'Russian', value: 'ru' },
       { name: 'Turkey', value: 'tr' },
-      { name: 'France', value: 'fr' }
+      { name: 'France', value: 'fr' },
+      { name: 'Spanish', value: 'es' }
     ];
     return (
       <div style={{ position: 'relative', height: 640 }}>

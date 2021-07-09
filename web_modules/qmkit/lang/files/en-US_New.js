@@ -439,6 +439,20 @@ export default {
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
         "Product.On/Off shelves": "On/Off shelves",
         "Product.SynchronizeTips": "Please wait 5-10 minutes pariently.",
+        "Product.depth": "Length",
+        "Product.depthUnit": "Length Unit",
+        "Product.width": "Width",
+        "Product.widthUnit": "Width Unit",
+        "Product.height": "Height",
+        "Product.heightUnit": "Height Unit",
+        "Product.shippingInformation": "Shipping information",
+        "Product.Synonyms":"Synonyms",
+        "Product.AddSynonyms":"Add synonyms",
+        "Product.SearchPhrase":"Search phrase(When search for)",
+        "Product.Synonyms(asf)":"Synonyms (also search for)",
+        "Product.PleaseInputSynonyms":"Please input synonyms.",
+        "Product.PleaseInputPhrase":"Please input phrase.",
+        "Product.SynonymsAreRepeated":"Synonyms are repeated",
 
     },
 
@@ -1081,7 +1095,16 @@ export default {
         "Prescriber.NewPrescriberType": "New Prescriber type",
         "Prescriber.Prescriber Setting": "Prescriber Setting",
         "Prescriber.Please select the product": "Please select the product category to be reviewed.",
-        "Prescriber.Category": "Category"
+        "Prescriber.Category": "Category",
+        "Prescriber.RecommendationMode": "Recommendation mode",
+        "Prescriber.SingleUse": "Single Use",
+        "Prescriber.MultipleUse": "Multiple Use",
+        "Prescriber.active": "ACTIVE",
+        "Prescriber.addRecommendaionCode":"Add Recommendaion Code",
+        "Prescriber.amount": "Amount",
+        "Prescriber.pleaseInputAmount": "Please input amount",
+        "Prescriber.PleaseSelectAmount": "Please select amount"
+        
 
     },
     'Pet owner': {
@@ -1240,6 +1263,9 @@ export default {
         "PetOwner.All": "All",
         "PetOwner.PetOwner": "Pet owner",
         "PetOwner.Pet": "Pet",
+        "PetOwner.TaggingInstruction": "Taggings whose descriptions marked set by default can not be deleted and edited.",
+        "PetOwner.NormalMember": "Normal Member",
+        "PetOwner.ClubMember": "Club Member",
 
         //===========begin payments Method================
         'payment.add': 'Add new',
@@ -1437,8 +1463,13 @@ export default {
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
+<<<<<<< HEAD
         'Marketing.EmailApiSetting': 'Email Api Setting',
         'Marketing.sendsayTip': 'Please go to Sendsay to activate Email,and set up your AccessKeyId and AccessKeySecret in the Sendsay.',
+=======
+        'Marketing.EmailApiSetting':'Email Api Setting',
+        'Marketing.sendsayTip':'Please go to Sendsay to activate Email,and set up your AccessKeyId and AccessKeySecret in the Sendsay.',
+>>>>>>> 21d6287f25d8401be81c3a2f50e55b33c7c40ef2
 
         "Marketing.PromotionType": "Promotion type",
         "Marketing.NormalPromotion": "Normal promotion",
@@ -1762,6 +1793,13 @@ export default {
         "Marketing.percent": "%",
         "Marketing.InputValuefrom1to99": "Input value is an integer from 1 to 99",
         "Marketing.InputValuefrom1to100": "Input value is an integer from 1 to 100",
+        "Marketing.ReductionType": "Reduction type",
+        "Marketing.Normal": "Normal",
+        "Marketing.Gift": "Gift",
+        "Marketing.Definemainproductandgift": "Define main product and gift",
+        "Marketing.CodeType": "Code type",
+        "Marketing.Promotion": "Promotion",
+        "Marketing.Coupon": "Coupon",
     },
     Content: {
         "Content.Prompt": "Prompt",

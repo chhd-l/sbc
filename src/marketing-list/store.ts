@@ -125,15 +125,18 @@ export default class AppStore extends Store {
   };
 
   download = async (marketingId) => {
-    // const { res } = await webapi.close(marketingId);
-    // if (res.code == Const.SUCCESS_CODE) {
-    //   message.success('download successful');
-    // }
-    message.success('download successful');
-    // this.init({
-    //   pageNum: this.state().get('currentPage') - 1,
-    //   pageSize: 10
-    // });
+    const base64 = new util.Base64();
+    const token = (window as any).token;
+    if (token) {
+      const result = JSON.stringify({
+        couponId: marketingId,
+        token: token
+      });
+      const encrypted = base64.urlEncode(result);
+      const exportHref = Const.HOST + `/marketing/marketing-used-record/export/${encrypted}`;
+      window.open(exportHref);
+    }
+      message.success('download successful');
   };
   onStart = async (marketingId) => {
     this.dispatch('loading:start');

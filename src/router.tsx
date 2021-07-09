@@ -281,13 +281,13 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
-  
+
   // goods-regular-edit > 审核通过的商品编辑
   {
     path: '/goods-regular-edit/:gid',
     asyncComponent: () => import('./regular-product-add/main')
   },
-  
+
   // goods-bundle-edit
   {
     path: '/goods-bundle-edit/:gid',
@@ -526,7 +526,7 @@ const routes = [
   },
   //新增 / 编辑营销-满减
   {
-    path: '/marketing-full-reduction/:marketingId?',
+    path: '/marketing-full-reduction/:marketingId?/:marketingType?',
     asyncComponent: () => import('./marketing-add/full-reduction')
   },
   //新增 / 编辑营销-首次折扣
@@ -903,6 +903,11 @@ const routes = [
     path: '/product-search-list',
     asyncComponent: () => import('./product-search-list')
   },
+  //添加同义词
+  {
+    path: '/addSynonyms',
+    asyncComponent: () => import('./product-search-list/addSynonyms')
+  },
   {
     path: '/product-search-details',
     asyncComponent: () => import('./product-search-details')
@@ -1059,6 +1064,8 @@ const homeRoutes = [
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
   },
+
+
   { path: '/error', asyncComponent: () => import('./error') }
   //{ path: '*', asyncComponent: () => import('./error') }
 ];
@@ -1071,5 +1078,6 @@ const auditDidNotPass = [
     asyncComponent: () => import('./shop/process-index')
   }
 ];
+
 
 export { routes, homeRoutes, auditDidNotPass };

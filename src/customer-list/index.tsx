@@ -67,10 +67,15 @@ export default class Customer extends React.Component<any, any> {
           width: '10%',
           render: (text, record) => (
             <span>
+<<<<<<< HEAD
               <Tooltip placement="top" title={RCi18n({ id: 'PetOwner.Details' })}>
                 <Link to={record.customerLevelName === 'Member' ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
+=======
+              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
+                <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
+>>>>>>> 21d6287f25d8401be81c3a2f50e55b33c7c40ef2
               </Tooltip>
-              {record.customerLevelName === 'Member' ? (
+              {record.customerLevelId !== 233 ? (
                 <span>
                   <Divider type="vertical" />
                   <Tooltip placement="top" title={RCi18n({ id: 'PetOwner.Activity' })}>
@@ -109,9 +114,19 @@ export default class Customer extends React.Component<any, any> {
       },
       customerTypeArr: [
         {
+<<<<<<< HEAD
           value: 'Member',
           name: RCi18n({ id: 'PetOwner.Member' }),
+=======
+          value: 'Normal Member',
+          name: RCi18n({id:'PetOwner.NormalMember'}),
+>>>>>>> 21d6287f25d8401be81c3a2f50e55b33c7c40ef2
           id: 234
+        },
+        {
+          value: 'Club Member',
+          name: RCi18n({id:'PetOwner.ClubMember'}),
+          id: 235
         },
         {
           value: 'Guest',
@@ -120,8 +135,14 @@ export default class Customer extends React.Component<any, any> {
         }
       ],
       customerTypeObj: {
+<<<<<<< HEAD
         234: RCi18n({ id: 'PetOwner.Member' }),
         233: RCi18n({ id: 'PetOwner.Guest' })
+=======
+        234: RCi18n({id:'PetOwner.NormalMember'}),
+        235: RCi18n({id:'PetOwner.ClubMember'}),
+        233: RCi18n({id:'PetOwner.Guest'})
+>>>>>>> 21d6287f25d8401be81c3a2f50e55b33c7c40ef2
       },
       subscriptionTypeList: [],
       loading: false

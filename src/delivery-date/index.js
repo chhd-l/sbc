@@ -242,7 +242,7 @@ const index = () => {
         }
       })
       .catch(() => {
-        message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
+        message.error(window.RCi18n({ id: 'Order.UpdateFailed' }));
         setLoading(false);
       });
   }

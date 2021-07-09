@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import {BreadCrumb, Const, Headline, cache, util, AuthWrapper} from 'qmkit';
-import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal} from 'antd';
+import { BreadCrumb, Const, Headline, cache, util, AuthWrapper, history, QRScaner } from 'qmkit';
+import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal, Input, Space} from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import { RCi18n } from 'qmkit';
+import SynonymsTable from '@/product-search-list/synonymsTable';
+
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
 const { confirm } = Modal;
@@ -54,8 +56,13 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    //保持当前选中tab状态
+    if(sessionStorage.getItem('productSearchActive')){
+      this.onTabChange(sessionStorage.getItem('productSearchActive'))
+    }
     this.dateRangeChange([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]);
   }
+
 
   onTabChange(key) {
     this.setState({
@@ -66,6 +73,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     } else if (key === '2') {
       this.onNoResultSerch();
     }
+    sessionStorage.setItem('productSearchActive',key)
   }
   dateRangeChange(date) {
     this.setState({
@@ -592,16 +600,21 @@ export default class ProductSearchList extends React.Component<any, any> {
           <div className="container">
             <div className="exportContainer">
               <div className="flex-end">
-                <Button
-                  style={{marginRight:'20px'}}
-                  type="primary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onExport();
-                  }}
-                >
-                  <FormattedMessage id="Product.Export" />
-                </Button>
+                {
+                  tabKey !== '3' ? (
+                    <Button
+                      style={{marginRight:'20px'}}
+                      type="primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onExport();
+                      }}
+                    >
+                      <FormattedMessage id="Product.Export" />
+                    </Button>
+                  ) : ''
+                }
+
                 <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
                   <Button>
                   <FormattedMessage id="Product.Index operation" />
@@ -612,7 +625,7 @@ export default class ProductSearchList extends React.Component<any, any> {
 
             </div>
             <Tabs
-              defaultActiveKey={tabKey}
+              activeKey={tabKey}
               onChange={(key) => {
                 this.onTabChange(key);
               }}
@@ -622,6 +635,9 @@ export default class ProductSearchList extends React.Component<any, any> {
               </TabPane>
               <TabPane tab={<FormattedMessage id="Product.NoResultsSearches" />} key="2">
                 <Table rowKey="id" columns={columnsNoResult} dataSource={noSearchResult} pagination={noResultPagination} loading={noResultLoading} scroll={{ x: '100%' }} onChange={this.noResultTableChange} />
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Product.Synonyms" />} key="3">
+                <SynonymsTable />
               </TabPane>
             </Tabs>
           </div>

@@ -147,6 +147,7 @@ class FullReductionForm extends React.Component<any, any> {
       attributesList: any;
       selectedRows: any;
       selectedSkuIds: any;
+      marketingType: any;
       submitFullGift: Function;
       submitFullDiscount: Function;
       submitFullReduction: Function;
@@ -157,6 +158,7 @@ class FullReductionForm extends React.Component<any, any> {
       setSelectedProductRows: Function;
       initDefualtLevelList: Function;
       initReductionDefualtLevelList: Function;
+      setMarketingType: Function;
     };
   };
   static relaxProps = {
@@ -167,6 +169,7 @@ class FullReductionForm extends React.Component<any, any> {
     sourceStoreCateList: 'sourceStoreCateList',
     attributesList: 'attributesList',
     selectedRows: 'selectedRows',
+    marketingType: 'marketingType',
     selectedSkuIds: 'selectedSkuIds',
     submitFullGift: noop,
     submitFullDiscount: noop,
@@ -177,7 +180,8 @@ class FullReductionForm extends React.Component<any, any> {
     deleteSelectedSku: noop,
     setSelectedProductRows: noop,
     initDefualtLevelList: noop,
-    initReductionDefualtLevelList: noop
+    initReductionDefualtLevelList: noop,
+    setMarketingType: noop
   };
 
   componentDidMount() {
@@ -349,7 +353,7 @@ class FullReductionForm extends React.Component<any, any> {
     const { marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { customerLevel, sourceGoodCateList, skuExists, saveLoading } = this.state;
-    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
+    const { marketingBean, setMarketingType, marketingType, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
@@ -380,6 +384,20 @@ class FullReductionForm extends React.Component<any, any> {
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
         <FormItem {...formItemLayout} labelAlign="left">
+          <div className="bold-title"><FormattedMessage id="Marketing.ReductionType" />:</div>
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Radio.Group value={marketingType} onChange={(e) => {
+                setMarketingType(e.target.value)
+                this.onBeanChange({
+                  marketingType: e.target.value
+                })
+              }}>
+                <Radio value={0}><FormattedMessage id="Marketing.Normal" /></Radio>
+                <Radio value={3}><FormattedMessage id="Marketing.Freeshipping" /></Radio>
+              </Radio.Group>
+            </div>
+          </FormItem>
           <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>

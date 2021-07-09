@@ -12,6 +12,7 @@ import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
+import FeedbackList from './component/feedback-list';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
@@ -505,6 +506,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </TabPane> : null}
                 <TabPane tab="Payment methods" key="payment">
                   <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
+                </TabPane>
+                <TabPane tab="Feedback" key="feedback">
+                  <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
               </Tabs>
             </div>

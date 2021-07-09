@@ -352,6 +352,10 @@ const routes = [
     asyncComponent: () => import('./customer-details/member-detail')
   },
   {
+    path: '/credit-card/:id/:account',
+    asyncComponent: () => import('./credit-card')
+  },
+  {
     path: '/edit-petowner/:id/:account',
     asyncComponent: () => import('./customer-details/edit-basic-information')
   },

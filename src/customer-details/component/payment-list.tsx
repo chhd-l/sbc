@@ -1,10 +1,11 @@
 import React from 'react';
 import { Table, Popconfirm, message, Button, Tooltip } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
-import { cache } from 'qmkit';
-
+import { cache, RCi18n } from 'qmkit';
+import { Link } from 'react-router-dom';
 interface Iprop {
   customerId: string;
+  customerAccount:string
 }
 
 export default class PaymentList extends React.Component<Iprop, any> {
@@ -55,6 +56,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   render() {
     const { list, loading } = this.state;
+    const customerId = this.props.customerId || '';
+    const customerAccount = this.props.customerAccount || '';
     const columns = [
       {
         title: 'Card number',
@@ -99,6 +102,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
+        
+        <Button type="primary">
+          <Link to={`/credit-card/${customerId}/${customerAccount}`}>
+        {RCi18n({id:'payment.add'})}
+         </Link></Button>
         <Table
           rowKey="id"
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}

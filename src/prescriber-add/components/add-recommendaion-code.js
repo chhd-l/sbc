@@ -59,6 +59,8 @@ const AddRecommendaionCode = (props) => {
           if (res.code === Const.SUCCESS_CODE) {
             message.success(window.RCi18n({ id: 'Content.OperateSuccessfully' }));
             setLoading(false);
+            props.updatePrescriberCodeNumber(res.context.singleUse);
+            cancel();
           } else {
             message.error(res.message || window.RCi18n({ id: 'Order.AddFailed' }));
             setLoading(false);
@@ -74,6 +76,7 @@ const AddRecommendaionCode = (props) => {
   return (
     <Modal
       title="Add Recommendaion Code"
+      maskClosable={false}
       visible={visible}
       onOk={() => addCode()}
       onCancel={() => cancel()}

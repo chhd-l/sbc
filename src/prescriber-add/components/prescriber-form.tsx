@@ -561,6 +561,12 @@ class ClinicForm extends React.Component<any, any> {
     });
   };
 
+  updatePrescriberCodeNumber=(number)=>{
+      this.setState({
+        prescriberCodeNumber: number + ' ' + RCi18n({ id: 'Prescriber.active' })
+      })
+  }
+
   render() {
     const { cityArr, typeArr, prescriberForm, firstPrescriberForm, objectFetching, addRecommendaionCodeVisible, prescriberCodeNumber, prescriberKeyId } = this.state;
     const { getFieldDecorator } = this.props.form;
@@ -674,6 +680,7 @@ class ClinicForm extends React.Component<any, any> {
                             prescriberKeyId={prescriberKeyId}
                             prescriberId={prescriberForm.prescriberId}
                             cancel={()=>this.setState({addRecommendaionCodeVisible: false})} 
+                            updatePrescriberCodeNumber={this.updatePrescriberCodeNumber}
                             addRecommendaionCodeVisible={addRecommendaionCodeVisible}/>
                         </Col>
                         <Col span={7} style={{textAlign: 'right'}}>

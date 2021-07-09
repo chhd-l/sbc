@@ -93,7 +93,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       addressItem: {},
       addressType: 'delivery',
       customerId: '',
-      paymentMethodVisible: false
+      paymentMethodVisible: false,
+      paymentId: '',
+      payPspItemEnum: ''
     };
   }
 
@@ -376,7 +378,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format('YYYY-MM-DD'),
       subscribeId: subscriptionInfo.subscriptionNumber,
       changeField: '',
-      promotionCode: this.state.promotionCodeShow
+      promotionCode: this.state.promotionCodeShow,
+      paymentId: this.state.paymentId,
+      payPspItemEnum: this.state.payPspItemEnum
     };
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
@@ -1489,14 +1493,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <Col span={12}>
                     <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod"/></label>
                   </Col>
-                  <Col span={12}>
-                    <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
-                  </Col>
-                  <PaymentMethod 
-                    cancel={()=>this.setState({paymentMethodVisible:false})} 
-                    subscriptionId={this.state.subscriptionId}  
-                    paymentMethodVisible={this.state.paymentMethodVisible}/>
-
+                  <AuthWrapper functionName="f_change_payment_method">
+                    <>
+                      <Col span={12}>
+                        <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
+                      </Col>
+                      <PaymentMethod 
+                        cancel={()=>this.setState({paymentMethodVisible:false})} 
+                        cardId={paymentInfo.id}
+                        customerId = {paymentInfo.customerId}
+                        changePaymentMethod={(paymentId, payPspItemEnum)=>{this.setState({
+                          paymentId, payPspItemEnum
+                        })}}
+                        paymentMethodVisible={this.state.paymentMethodVisible}/>
+                    </>
+                  </AuthWrapper>
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
                     <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm } from 'antd';
+import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin } from 'antd';
 import * as webapi from '../webapi';
 import { Const, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -10,66 +10,53 @@ const PaymentMethod = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [paymentType, setPaymentType] = useState(0);
   const [deliveryPay, setDeliveryPay] = useState(true);
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      id: 1,
-      bank: 'XXXX Bank',
-      cardType: 'Credit Card',
-      cardNo: '**** **** **** 8989',
-      showError: false
-    },
-    {
-      id: 2,
-      bank: 'XXXX Bank',
-      cardType: 'Credit Card',
-      cardNo: '**** **** **** 0001',
-      showError: false
-    }
-  ]);
-  const [selectPaymentMethod, setSelectPaymentMethod] = useState();
+  const [cards, setCards] = useState([]);
+  const [selectCardId, setSelectCardId] = useState();
 
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
-      setPaymentType(0);
+      setLoading(true);
+      webapi
+        .getCards(props.customerId)
+        .then((data) => {
+          const res = data.res;
+          if (res.code === Const.SUCCESS_CODE) {
+            setCards(res.context);
+            setLoading(false);
+          } else {
+            message.error(res.message || window.RCi18n({ id: 'Public.GetDataFailed' }));
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
+          setLoading(false);
+        });
+      setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
     }
   }, [props.paymentMethodVisible]);
 
   useEffect(() => {
-    if (paymentType === 0) {
-      setSelectPaymentMethod(1);
+    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+      setSelectCardId(props.cardId);
     } else {
+      setSelectCardId(null)
       setDeliveryPay(true);
     }
   }, [paymentType]);
 
   useEffect(() => {
-    if (paymentType === 0) {
-      setDisabled(!selectPaymentMethod);
+    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+      setDisabled(!selectCardId);
     } else {
       setDisabled(!deliveryPay);
     }
-  }, [paymentType, selectPaymentMethod, deliveryPay]);
+  }, [paymentType, selectCardId, deliveryPay]);
 
   function changePaymentMethod() {
-    setLoading(true);
-    webapi
-      .changePaymentMethod()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(window.RCi18n({ id: 'Content.OperateSuccessfully' }));
-          clear();
-          setLoading(false);
-        } else {
-          message.error(res.message || window.RCi18n({ id: 'Order.UpdateFailed' }));
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
-        setLoading(false);
-      });
+    props.changePaymentMethod(selectCardId, paymentType);
+    props.cancel();
   }
 
   function clear() {
@@ -77,71 +64,82 @@ const PaymentMethod = (props) => {
   }
 
   function deleteCard(id) {
-    let newPaymentMethods = paymentMethods.map((item) => {
+    let newPaymentMethods = cards.map((item) => {
       if (item.id === id) {
         item.showError = true;
       }
       return item;
     });
-    setPaymentMethods(newPaymentMethods);
+    setCards(newPaymentMethods);
   }
 
   return (
     <Modal
       visible={visible}
-      title="Payment Method"
+      title={window.RCi18n({ id: 'Subscription.Active.PaymentMethod' })}
       onOk={() => changePaymentMethod()}
-      okButtonProps={{ loading: loading, disabled: disabled }}
+      okButtonProps={{disabled: disabled }}
       onCancel={() => {
         clear();
       }}
     >
       <Radio.Group onChange={(e) => setPaymentType(e.target.value)} value={paymentType}>
-        <Radio value={0}>
+        <Radio value={'PAYU_RUSSIA_AUTOSHIP2'}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
-        {  }
-        <Radio value={1}>
+        {}
+        <Radio value={'PAYU_RUSSIA_COD'}>
           <FormattedMessage id="Subscription.CashOnDelivery" />
         </Radio>
       </Radio.Group>
-      {paymentType === 0 ? (
+      {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
         <Row className="paymentDoor">
-          <Radio.Group
-            onChange={(e) => setSelectPaymentMethod(e.target.value)}
-            value={selectPaymentMethod}
-          >
-            {paymentMethods.map((item, index) => (
-              <Row key={index} className="payment-panel">
-                <Radio value={item.id}>
-                  <div className="cardInfo">
-                    <h4>{item.bank}</h4>
-                    <p>{item.cardType}</p>
-                    <p>{item.cardNo}</p>
-                  </div>
-                </Radio>
-                <Row>
-                  <AuthWrapper functionName="f_delete_card">
-                    <Popconfirm
-                      placement="topLeft"
-                      title={`Are you sure to delete this card?`}
-                      onConfirm={() => deleteCard(item.id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <a>
-                        <FormattedMessage id="Subscription.Delete" />
-                      </a>
-                    </Popconfirm>
-                    {item.showError ? (
-                      <div className="errorMessage">
-                        <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+          <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
+            <Spin
+              spinning={loading}
+              indicator={
+                <img
+                  className="spinner"
+                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                  style={{ width: '90px', height: '90px' }}
+                  alt=""
+                />
+              }
+            >
+              <>
+                {cards.map((item, index) => (
+                  <Row key={index} className="payment-panel">
+                    <Radio value={item.id}>
+                      <div className="cardInfo">
+                        <h4>{item.paymentVendor}</h4>
+                        <p>{item.cardType}</p>
+                        <p>{'**** **** **** ' + item.lastFourDigits}</p>
                       </div>
-                    ) : null}
-                  </AuthWrapper>
-                </Row>
-              </Row>
-            ))}
+                    </Radio>
+                    <Row>
+                      <AuthWrapper functionName="f_delete_card">
+                        <Popconfirm
+                          placement="topLeft"
+                          title={`Are you sure to delete this card?`}
+                          onConfirm={() => deleteCard(item.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <a>
+                            <FormattedMessage id="Subscription.Delete" />
+                          </a>
+                        </Popconfirm>
+                        {item.showError ? (
+                          <div className="errorMessage">
+                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                          </div>
+                        ) : null}
+                      </AuthWrapper>
+                    </Row>
+                  </Row>
+                ))}
+              </>
+            </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_delete_card">
             <Button style={{ marginTop: 20 }} type="primary">

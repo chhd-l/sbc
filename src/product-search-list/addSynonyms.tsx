@@ -58,13 +58,29 @@ class AddSynonyms extends Component<any, any> {
       keys: nextKeys,
     });
   };
-
+// 验证重复元素，有重复返回true；否则返回false
+  isRepeat = (arr) => {
+    let hash = {};
+    for(let i in arr) {
+      if(hash[arr[i]]) {
+        return true;
+      }
+      // 不存在该元素，则赋值为true，可以赋任意值，相应的修改if判断条件即可
+      hash[arr[i]] = true;
+    }
+    return false;
+  }
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
+        // Synonyms有重复 提示给用户重复
+        if(this.isRepeat(values.synonyms.filter(n => n))){
+          message.warn(RCi18n({id:'Product.SynonymsAreRepeated'}));
+          return
+        }
         let result;
-        let synonyms = Array.from(new Set(values.synonyms)).filter(n => n)
+        let synonyms = Array.from(new Set(values.synonyms)).filter(n => n)//再次确保没有重复的synonyms
         if(this.props.location.state && this.props.location.state.id){
           result = await webapi.eidtSynon({
             phrase: values.phrase,
@@ -82,6 +98,8 @@ class AddSynonyms extends Component<any, any> {
           history.go(-1)
           //重置一下key的值
           id = 0
+        }else {
+          message.warn(result.res.internalMessage || result.res.message);
         }
       }
     });

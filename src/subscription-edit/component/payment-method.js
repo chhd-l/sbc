@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin } from 'antd';
 import * as webapi from '../webapi';
-import { Const, AuthWrapper } from 'qmkit';
+import { Const, AuthWrapper, cache, history } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const PaymentMethod = (props) => {
@@ -16,30 +16,21 @@ const PaymentMethod = (props) => {
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
-      setLoading(true);
-      webapi
-        .getCards(props.customerId)
-        .then((data) => {
-          const res = data.res;
-          if (res.code === Const.SUCCESS_CODE) {
-            setCards(res.context);
-            setLoading(false);
-          } else {
-            message.error(res.message || window.RCi18n({ id: 'Public.GetDataFailed' }));
-            setLoading(false);
-          }
-        })
-        .catch(() => {
-          message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
-          setLoading(false);
-        });
-      setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
+      if(props.cardId) {
+        setLoading(true);
+        setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
+      } else {
+        setPaymentType('PAYU_RUSSIA_COD');
+      }
     }
   }, [props.paymentMethodVisible]);
 
   useEffect(() => {
     if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
-      setSelectCardId(props.cardId);
+      getCards();
+      if(props.cardId) {
+        setSelectCardId(props.cardId);
+      }
     } else {
       setSelectCardId(null)
       setDeliveryPay(true);
@@ -54,8 +45,28 @@ const PaymentMethod = (props) => {
     }
   }, [paymentType, selectCardId, deliveryPay]);
 
+  function getCards() {
+    webapi
+    .getCards(props.customerId)
+    .then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        setCards(res.context);
+        setLoading(false);
+      } else {
+        message.error(res.message || window.RCi18n({ id: 'Public.GetDataFailed' }));
+        setLoading(false);
+      }
+    })
+    .catch(() => {
+      message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
+      setLoading(false);
+    });
+  }
+
   function changePaymentMethod() {
-    props.changePaymentMethod(selectCardId, paymentType);
+    let selectCard = selectCardId ? cards.find(x=>x.id === selectCardId) : null;
+    props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
 
@@ -63,9 +74,27 @@ const PaymentMethod = (props) => {
     props.cancel();
   }
 
-  function deleteCard(id) {
+  function deleteCard(paymentId) {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    webapi
+    .deleteCard(storeId, paymentId)
+    .then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+        getCards();
+      } else {
+        showError(paymentId)
+      }
+    })
+    .catch(() => {
+      showError(paymentId)
+    });
+  }
+
+  function showError(paymentId) {
     let newPaymentMethods = cards.map((item) => {
-      if (item.id === id) {
+      if (item.id === paymentId) {
         item.showError = true;
       }
       return item;
@@ -142,7 +171,7 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_delete_card">
-            <Button style={{ marginTop: 20 }} type="primary">
+            <Button onClick={()=>history.push(`/credit-card/${props.customerId}/${props.customerAccount}`)} style={{ marginTop: 20 }} type="primary">
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>

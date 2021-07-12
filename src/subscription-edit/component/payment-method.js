@@ -83,12 +83,11 @@ const PaymentMethod = (props) => {
       if (res.code === Const.SUCCESS_CODE) {
         message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
         getCards();
-      } else {
+      } else if(res.code ==='K-100209') {
         showError(paymentId)
       }
     })
     .catch(() => {
-      showError(paymentId)
     });
   }
 

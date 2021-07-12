@@ -4,6 +4,12 @@ import es_ES from './en-US';
  */
 export default {
   ...es_ES,
+  'payment.cardOwner': 'Владелец карты',
+  'payment.cardNumber': 'Номер карты',
+  'payment.email': 'Эл. адрес',
+  'payment.phone': 'Номер телефона',
+
+
   "Public.Overview": "Обзор",
   "Public.WelcometoROYALCANIN": "Добро пожаловать в Royal Canin",
   "Public.storeportal": "Магазин",

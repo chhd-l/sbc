@@ -35,14 +35,15 @@ class PaymentInformation extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    this.getList();
+  //  this.getList();
   }
   getList() {
     this.setState({
       loading: true
     });
+    let {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     webapi
-      .getPaymentMethods({ customerId: this.props.customerId, storeId: JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).storeId || '' })
+      .getPaymentMethods({ customerId: this.props.customerId, storeId })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {

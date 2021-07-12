@@ -4,6 +4,12 @@ import es_ES from './en-US';
  */
 export default {
   ...es_ES,
+
+  // 'payment.cardOwner': 'Titulaires de carte',
+  // 'payment.cardNumber': 'Номер карты',
+  // 'payment.email': 'Эл. адрес',
+  // 'payment.phone': 'Номер телефона',
+
   /*-----------------------------  Task  ----------------------------------------------*/
   'task.CardView':'Affichage en carte',
   'task.ListView':'Affichage en liste',

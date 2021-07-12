@@ -96,6 +96,8 @@ class AddSynonyms extends Component<any, any> {
         if(result.res.code === 'K-000000') {
           message.success(RCi18n({id:'Product.OperateSuccessfully'}));
           history.go(-1)
+          //跳转回list页面时tab默认展开第3个
+          sessionStorage.setItem('productSearchActive','3')
           //重置一下key的值
           id = 0
         }else {
@@ -189,6 +191,8 @@ class AddSynonyms extends Component<any, any> {
           </Button>
           <Button style={{ marginRight: 10 }} onClick={()=>{
             history.go(-1)
+            //跳转回list页面时tab默认展开第3个
+            sessionStorage.setItem('productSearchActive','3')
             id = 0
           }}>
             <FormattedMessage id="Product.Cancel" />

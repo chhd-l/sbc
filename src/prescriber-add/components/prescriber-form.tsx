@@ -895,19 +895,20 @@ class ClinicForm extends React.Component<any, any> {
                 </FormItem>
               </Form>
             </Col>
-            <Col span={12} style={{ display: !this.state.isEdit ? 'none' : null }}>
-              <div style={{ textAlign: 'center', marginTop: '50px' }}>
-                {this.state.qrCodeLink ? <img src={this.state.qrCodeLink} alt="" /> : null}
-                {this.state.url ? (
-                  <div>
-                    {this.newUrl(this.state.url)}
-                    <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
-                      <FormattedMessage id="Prescriber.copy" />
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-            </Col>
+            {this.state.isMapMode ?             
+              <Col span={12} style={{ display: !this.state.isEdit ? 'none' : null }}>
+                <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                  {this.state.qrCodeLink ? <img src={this.state.qrCodeLink} alt="" /> : null}
+                  {this.state.url ? (
+                    <div>
+                      {this.newUrl(this.state.url)}
+                      <Button style={{ marginLeft: '10px' }} onClick={() => this.handleCopy(this.newUrl(this.state.url))} size="small">
+                        <FormattedMessage id="Prescriber.copy" />
+                      </Button>
+                    </div>
+                  ) : null}
+                </div>
+              </Col> : null}
           </Row>
         </TabPane>
         <TabPane tab="Reward Rate" key="reward">

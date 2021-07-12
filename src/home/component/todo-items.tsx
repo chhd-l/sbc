@@ -96,8 +96,10 @@ class TodoItems extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView,
-      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView} = nextProps.relaxProps;
+    const {
+      tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView,
+      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView
+    } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       tradeCustomerView !== prevState.tradeCustomerView ||
@@ -143,10 +145,10 @@ class TodoItems extends React.Component<any, any> {
   };
 
   render() {
-    const {loading , prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
+    const {loading, prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
     const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView} = this.state;
-    setTimeout(()=>{
-      console.log(this.props.relaxProps.prescriberTradeAndItemTopView,11111);
+    setTimeout(() => {
+      console.log(this.props.relaxProps.prescriberTradeAndItemTopView, 11111);
     })
     return (
       <div className="item">
@@ -579,30 +581,30 @@ class TodoItems extends React.Component<any, any> {
                 <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
                 {!prescriberTradeAndItemTopView ||
                 (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
-                   ? (
-                  <div className="data-img">
-                    <img src={nodataImg} className="no-data-img"/>
-                  </div>
-                ) : (
-                  <div className="main-chart">
-                    {prescriberTradeAndItemTopView && (
-                      <Bar
-                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
-                        unit={{unit1: '', unit2: '%'}}
-                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
-                        data={{
-                          x: prescriberTradeAndItemTopView.prescriberNameList,
-                          y1: prescriberTradeAndItemTopView.numList
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
+                  ? (
+                    <div className="data-img">
+                      <img src={nodataImg} className="no-data-img"/>
+                    </div>
+                  ) : (
+                    <div className="main-chart">
+                      {prescriberTradeAndItemTopView && (
+                        <Bar
+                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
+                          unit={{unit1: '', unit2: '%'}}
+                          nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                          data={{
+                            x: prescriberTradeAndItemTopView.prescriberNameList,
+                            y1: prescriberTradeAndItemTopView.numList
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
               </div>
               <div className="best-main">
                 <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
                 {!prescriberTradeTopView ||
-                (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0)? (
+                (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0) ? (
                   <div className="data-img">
                     <img src={nodataImg} className="no-data-img"/>
                   </div>
@@ -643,6 +645,37 @@ class TodoItems extends React.Component<any, any> {
                     )}
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+
+          <div className="item-recom">
+
+            <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
+            <div className="item-recommendation-main space-between">
+              <div className="recommendation-main flex-start">
+                <div className="recommendation-text">
+                  <FormattedMessage id="Home.recommendation"/>
+                </div>
+                <div className="recommendation-num">
+                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
+                </div>
+              </div>
+              <div className="recommendation-main flex-start">
+                <div className="recommendation-text">
+                  <FormattedMessage id="Home.NumberofCodesUsed"/>
+                </div>
+                <div className="recommendation-num">
+                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
+                </div>
+              </div>
+              <div className="recommendation-main flex-start">
+                <div className="recommendation-text">
+                  <FormattedMessage id="Home.Numberofrecommendationcodes"/>
+                </div>
+                <div className="recommendation-num">
+                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
+                </div>
               </div>
             </div>
           </div>

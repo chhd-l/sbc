@@ -448,6 +448,7 @@ export default {
         "Product.shippingInformation": "Shipping information",
         "Product.Synonyms":"Synonyms",
         "Product.AddSynonyms":"Add synonyms",
+        "Product.EditSynonyms":"Edit synonyms",
         "Product.SearchPhrase":"Search phrase(When search for)",
         "Product.Synonyms(asf)":"Synonyms (also search for)",
         "Product.PleaseInputSynonyms":"Please input synonyms.",

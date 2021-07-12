@@ -62,8 +62,9 @@ export default class ProductSearchList extends React.Component<any, any> {
     }
     this.dateRangeChange([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]);
   }
-
-
+  componentWillUnmount() {
+    sessionStorage.removeItem('productSearchActive');
+  }
   onTabChange(key) {
     this.setState({
       tabKey: key
@@ -73,7 +74,6 @@ export default class ProductSearchList extends React.Component<any, any> {
     } else if (key === '2') {
       this.onNoResultSerch();
     }
-    sessionStorage.setItem('productSearchActive',key)
   }
   dateRangeChange(date) {
     this.setState({

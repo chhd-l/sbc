@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin } from 'antd';
+import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
 import * as webapi from '../webapi';
-import { Const, AuthWrapper, cache, history } from 'qmkit';
+import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const PaymentMethod = (props) => {
@@ -57,12 +57,12 @@ const PaymentMethod = (props) => {
         setCards(res.context);
         setLoading(false);
       } else {
-        message.error(res.message || window.RCi18n({ id: 'Public.GetDataFailed' }));
+        message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
         setLoading(false);
       }
     })
     .catch(() => {
-      message.error(window.RCi18n({ id: 'Public.GetDataFailed' }));
+      message.error(RCi18n({ id: 'Public.GetDataFailed' }));
       setLoading(false);
     });
   }
@@ -85,7 +85,7 @@ const PaymentMethod = (props) => {
     .then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
-        message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+        message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
         getCards();
         setLoading(false);
       } else if(res.code ==='K-100209') {
@@ -110,7 +110,7 @@ const PaymentMethod = (props) => {
   return (
     <Modal
       visible={visible}
-      title={window.RCi18n({ id: 'Subscription.Active.PaymentMethod' })}
+      title={RCi18n({ id: 'Subscription.Active.PaymentMethod' })}
       onOk={() => changePaymentMethod()}
       okButtonProps={{disabled: disabled }}
       onCancel={() => {

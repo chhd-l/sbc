@@ -21,11 +21,11 @@ export default {
     },
     'de':{
       app_id:'ROYALCAIN_GERMANY_D2C',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXNpdC5yb3lhbGNhbmluLmNvbQ.2dKUkAYcc6N_ZLnqIXeWPSxt14cFPMs0X_LJM0IBA2Q'
     },
     'fr':{
       app_id:'ROYALCAIN_GERMANY_D2C',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXNpdC5yb3lhbGNhbmluLmNvbQ.2dKUkAYcc6N_ZLnqIXeWPSxt14cFPMs0X_LJM0IBA2Q'
     }
   }
 };

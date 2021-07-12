@@ -20,12 +20,12 @@ export default {
       "key": "7c340ecb-962b-4660-b663-78b66f790797"
     },
     'de':{
-      app_id:'ROYALCAIN_GERMANY_D2C',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      app_id:'ROYALCANIN_GERMANY_D2C',
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXN0Zy5yb3lhbGNhbmluLmNvbQ._SI921RC_7nOpBTbi513hsM38WXLvY55InUJ_KkBHg8'
     },
     'fr':{
-      app_id:'ROYALCAIN_GERMANY_D2C',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      app_id:'ROYALCANIN_FRANCE_D2C',
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXN0Zy5yb3lhbGNhbmluLmNvbQ._SI921RC_7nOpBTbi513hsM38WXLvY55InUJ_KkBHg8'
     }
   }
 };

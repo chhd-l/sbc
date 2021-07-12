@@ -18,14 +18,15 @@ export default class PaymentList extends React.Component<Iprop, any> {
   }
 
   componentDidMount() {
-    this.getCardList();
+   this.getCardList();
   }
 
   getCardList = () => {
     this.setState({ loading: true });
+    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     getPaymentMethods({
       customerId: this.props.customerId,
-      storeId: JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).storeId || ''
+      storeId
     })
       .then((data) => {
         this.setState({
@@ -42,7 +43,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   deleteCard = (id) => {
     this.setState({ loading: true });
-    deleteCard({ id })
+    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
+    deleteCard({storeId, id })
       .then((data) => {
         message.success(data.res.message);
         this.getCardList();

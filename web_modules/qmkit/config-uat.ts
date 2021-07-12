@@ -20,11 +20,11 @@ export default {
       "key": "066b7c52-daba-4aeb-8c4a-9074d85f2adc"
     },
     'de':{
-      app_id:'ROYALCAIN_GERMANY_D2C',
+      app_id:'MarsIncorporated_ROYALCANIN_GERMANY_D2C_UAT_TEST',
       key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
     },
     'fr':{
-      app_id:'ROYALCAIN_GERMANY_D2C',
+      app_id:'MarsIncorporated_ROYALCANIN_FRANCE_D2C_UAT_TEST',
       key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
     }
   }

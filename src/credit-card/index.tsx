@@ -9,11 +9,11 @@ import { Breadcrumb, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { fetchGetPayPspList, fetchAddPaymentInfo } from './webapi';
 
-export default class CreditCard extends Component {
+export default class CreditCard extends Component<any> {
     state = {
         adyenCardParam: {},
         payPspItem: [],
-        storeId: '',
+        storeId: -1,
         customerId: '',
         customerAccount: '',
         pspName: ''
@@ -58,7 +58,7 @@ export default class CreditCard extends Component {
             case 'mx':
             case 'ru':
             case 'tr':
-                return <PayuCreditCardForm  pspName={pspName} storeId={storeId} customerId={customerId}  secretKey={secretKey}  />
+                return <PayuCreditCardForm  storeId={storeId} customerId={customerId}  secretKey={secretKey} pspName={pspName}  />
             default:
                 return <CyberCreditCardForm country={secretKey} />
         }

@@ -11,24 +11,25 @@ interface IKey {
   app_id: string
   key: string
 }
-class PayuCreditCardForm extends Component {
-
-
+interface IProps {
+  secretKey: IKey
+  customerId: string
+  storeId: number
+  pspName: string
+  form:any
+}
+class PayuCreditCardForm extends Component<IProps> {
   cardNumber: any;
   expiry: any;
   cvv: any;
-  props: {
-    secretKey: IKey
-    cardPaymentData: Function
-    customerId: string
-    storeId: number,
-    pspName: string
-  }
+
   constructor(props) {
     super(props);
 
   }
+  static defaultProps = {
 
+  }
   componentDidMount() {
     this.initFormPay()
   }
@@ -132,7 +133,7 @@ class PayuCreditCardForm extends Component {
       paymentToken: params.token,
       paymentVendor: "VISA",
       phone: params.phone,
-      pspName: "PAYU",
+      pspName: this.props.pspName,
       storeId: this.props.storeId
     }
     await fetchAddPaymentInfo(this.props.storeId, param);
@@ -210,4 +211,5 @@ class PayuCreditCardForm extends Component {
   }
 }
 
-export default Form.create({ name: 'PAYU' })(PayuCreditCardForm);
+
+export default Form.create<IProps>()(PayuCreditCardForm);

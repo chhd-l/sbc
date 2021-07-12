@@ -21,11 +21,11 @@ export default {
     },
     'de':{
       app_id:'MarsIncorporated_ROYALCANIN_GERMANY_D2C_UAT_TEST',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXVhdC5yb3lhbGNhbmluLmNvbQ._gQyfk5nAPLML12ddHCBO7H3IkcPaIxxoHYahGniDJ4'
     },
     'fr':{
       app_id:'MarsIncorporated_ROYALCANIN_FRANCE_D2C_UAT_TEST',
-      key:'AQErhmfuXNWTK0Qc+iSdk3YrjuqYR5ldAoFLTGBSrF51ENJOAzIOrvI655613hDBXVsNvuR83LVYjEgiTGAH-1IAk3WNsFHn9OQTCs1zqAgfITuuhrk2BSWACax6iq4g=-~7C;smxATY88pe*7'
+      key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXVhdC5yb3lhbGNhbmluLmNvbQ._gQyfk5nAPLML12ddHCBO7H3IkcPaIxxoHYahGniDJ4'
     }
   }
 };

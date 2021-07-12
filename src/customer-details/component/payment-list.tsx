@@ -41,7 +41,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
       });
   };
 
-  deleteCard = (id) => {
+  deleteCard = ({id,canDelFlag}) => {
+    if(!canDelFlag){
+      message.error('you can\'\t deleted the card');
+      return
+    }
     this.setState({ loading: true });
     const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     deleteCard({storeId, id })
@@ -91,7 +95,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: 'Operation',
         key: 'oper',
         render: (_, record) => (
-          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record.id)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record)} okText="Confirm" cancelText="Cancel">
             <Tooltip title="Delete">
               <Button type="link">
                 <a className="iconfont iconDelete"></a>

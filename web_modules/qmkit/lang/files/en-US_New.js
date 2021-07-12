@@ -448,6 +448,7 @@ export default {
         "Product.shippingInformation": "Shipping information",
         "Product.Synonyms":"Synonyms",
         "Product.AddSynonyms":"Add synonyms",
+        "Product.EditSynonyms":"Edit synonyms",
         "Product.SearchPhrase":"Search phrase(When search for)",
         "Product.Synonyms(asf)":"Synonyms (also search for)",
         "Product.PleaseInputSynonyms":"Please input synonyms.",
@@ -2057,7 +2058,6 @@ export default {
         "Setting.Edit": "Edit",
         "Setting.Delete": "Delete",
         'Setting.CarriersCompanySettings': 'Carriers company settings',
-        "Setting.Delete": "Delete",
         "Setting.orderDeliveryDateSettings": "Order delivery date settings",
         "Setting.allowDeliveryOption": "Allow delivery option",
         "Setting.homeDelivery": "Home Delivery",
@@ -2084,6 +2084,7 @@ export default {
         "Setting.turnText1": "Turn on and off to set time frame",
         "Setting.turnText2": "Turn on and off to set time frame;Return to your previous setting when the time frame has passed",
         "Setting.Startandendtime": "Start and end time",
+        "Setting.Timeisrequired":"Time is required!",
     },
     Menu: {
         "Menu.Appointment": "Appointment",

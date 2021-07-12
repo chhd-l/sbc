@@ -136,7 +136,11 @@ class PayuCreditCardForm extends Component<IProps> {
       pspName: this.props.pspName,
       storeId: this.props.storeId
     }
-    await fetchAddPaymentInfo(this.props.storeId, param);
+   const {res}= await fetchAddPaymentInfo(this.props.storeId, param);
+    if(res.code==Const.SUCCESS_CODE){
+      message.success(res.message);
+      history.go(-1);
+    }
     this.setState({ loading: false })
   }
 

@@ -17,7 +17,6 @@ const PaymentMethod = (props) => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
       if(props.cardId) {
-        setLoading(true);
         setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
       } else {
         setPaymentType('PAYU_RUSSIA_COD');
@@ -46,6 +45,7 @@ const PaymentMethod = (props) => {
   }, [paymentType, selectCardId, deliveryPay]);
 
   function getCards() {
+    setLoading(true);
     webapi
     .getCards(props.customerId)
     .then((data) => {

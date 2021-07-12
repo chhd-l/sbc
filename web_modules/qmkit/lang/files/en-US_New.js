@@ -866,6 +866,11 @@ export default {
         "Subscription.EmailReminderIntervals": "Email reminder intervals",
         "Subscription.EmailReminderIntervalsDesc": "Attempts between first and last emails due to inventory issues",
         'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
+        'Subscription.DebitOrCreditCard': 'Debit Card or Credit Card',
+        'Subscription.CashOnDelivery': 'Cash on Delivery',
+        'Subscription.RemoveAssociationFirst': 'This card cannot be removed due to the subscription association, please remove the association first.',
+        'Subscription.PayByCashOrCard': 'I want to pay by cash or card on delivery',
+        'Subscription.savePaymentMethod': 'Please click the Save button to save payment method'
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

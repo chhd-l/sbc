@@ -395,8 +395,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                     
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx}`} span={4} className="text-tip">{field.fieldName}</Col>
-                          <Col key={`field${idx}`} span={8} className="text-highlight">
+                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{field.fieldName}</Col>
+                          <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
                             {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
                           </Col>
                         </>
@@ -505,7 +505,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
                 </TabPane> : null}
                 <TabPane tab="Payment methods" key="payment">
-                  <PaymentList customerId={this.state.customerId} />
+                  <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
                 </TabPane>
                 <TabPane tab="Feedback" key="feedback">
                   <FeedbackList customerId={this.state.customerId} />

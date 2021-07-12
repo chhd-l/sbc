@@ -1,10 +1,11 @@
 import React from 'react';
 import { Table, Popconfirm, message, Button, Tooltip } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
-import { cache } from 'qmkit';
-
+import { cache, RCi18n } from 'qmkit';
+import { Link } from 'react-router-dom';
 interface Iprop {
   customerId: string;
+  customerAccount:string
 }
 
 export default class PaymentList extends React.Component<Iprop, any> {
@@ -17,14 +18,15 @@ export default class PaymentList extends React.Component<Iprop, any> {
   }
 
   componentDidMount() {
-    this.getCardList();
+   this.getCardList();
   }
 
   getCardList = () => {
     this.setState({ loading: true });
+    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     getPaymentMethods({
       customerId: this.props.customerId,
-      storeId: JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).storeId || ''
+      storeId
     })
       .then((data) => {
         this.setState({
@@ -41,7 +43,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   deleteCard = (id) => {
     this.setState({ loading: true });
-    deleteCard({ id })
+    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
+    deleteCard({storeId, id })
       .then((data) => {
         message.success(data.res.message);
         this.getCardList();
@@ -55,6 +58,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   render() {
     const { list, loading } = this.state;
+    const customerId = this.props.customerId || '';
+    const customerAccount = this.props.customerAccount || '';
     const columns = [
       {
         title: 'Card number',
@@ -99,6 +104,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
+        
+        <Button type="primary">
+          <Link to={`/credit-card/${customerId}/${customerAccount}`}>
+        {RCi18n({id:'payment.add'})}
+         </Link></Button>
         <Table
           rowKey="id"
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}

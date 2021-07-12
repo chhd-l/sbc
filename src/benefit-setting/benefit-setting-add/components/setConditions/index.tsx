@@ -95,7 +95,7 @@ export default class SetConditions extends Component<any, any>{
                                 isTags
                                     ? (
                                         <Form.Item label=''>
-                                            {getFieldDecorator('segmentIds', selectConfig)(
+                                            {getFieldDecorator('segmentObj', selectConfig)(
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     placeholder="Please select"
@@ -103,7 +103,7 @@ export default class SetConditions extends Component<any, any>{
                                                 >
                                                     {allGroups.size > 0 &&
                                                     allGroups.toJS().map((item) => (
-                                                        <Option key={item.id} value={item.id}>
+                                                        <Option key={item.id} value={JSON.stringify(item)}>
                                                             {item.name}
                                                         </Option>
                                                     ))}

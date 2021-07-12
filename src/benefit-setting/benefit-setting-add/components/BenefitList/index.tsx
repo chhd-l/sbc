@@ -75,6 +75,8 @@ export default class BenefitList extends Component<any, any>{
 
     handleAdd = () => {
         const { count, dataSource } = this.state;
+        let minLength = deliveryNumberData.length;
+        if (dataSource.length >= minLength) return;
         const newData = {
             key: count,
             deliveryNumber: '',
@@ -90,15 +92,15 @@ export default class BenefitList extends Component<any, any>{
 
     };
 
-    editGiftItem = (item) => {}
+    editGiftItem = (item) => {
 
+    }
 
     onDelGiftItem= (record, item) => {
         if (!record || !item) return;
         // 删除更新当前行数据
         let dataSource = [...this.state.dataSource];
         let index = dataSource.findIndex(item => item.key === record.key);
-        debugger;
         if (index > -1) {
             dataSource[index].gifts = dataSource[index].gifts.filter(x => x.goodsInfoId !== item.goodsInfoId);
             this.setState({
@@ -117,7 +119,9 @@ export default class BenefitList extends Component<any, any>{
 
         // 选中gift,更新dataSource
         let index = dataSource.findIndex((item) => item.key === currentSelected.key);
-        if (index > -1 ) dataSource[index].gifts = selectedRows.toJS();
+        if (index > -1 ) {
+            dataSource[index].gifts = selectedRows.toJS();
+        }
 
         this.setState({
             selectedSkuIds,
@@ -139,11 +143,22 @@ export default class BenefitList extends Component<any, any>{
         // 当前行已选中产品，
         if (Array.isArray(gifts) && gifts.length > 0){
 
-        }else {
-
+        }else { // 重置
+            this.setState({
+                selectedSkuIds: [],
+                selectedRows: [],
+            })
         }
         // 当前行没有选中产品，
         this.setState({visible: true});
+    };
+
+    getValueFromEvent = (e, info) => {
+        console.log('e.target.value', e, info);
+        return {
+            productId: info.goodsInfoId,
+            productNum: e || 1,
+        };
     };
 
     getColumns = () => {
@@ -166,7 +181,7 @@ export default class BenefitList extends Component<any, any>{
                                                 rules: [
                                                     {
                                                         required: true,
-                                                        message: RCi18n({id: 'Product.PleaseInputSKU'})
+                                                        message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
                                                     },
                                                 ]
                                             })(
@@ -186,60 +201,111 @@ export default class BenefitList extends Component<any, any>{
                 title: 'Gift',
                 dataIndex: 'gifts',
                 render: (rowInfo, record, index) => {
-                    console.log('rowInfo', rowInfo);
-                    console.log('record', record);
                     let el = (
                         <Row>
                             <Col span={16}>
-                                <Form.Item style={styles.tableFormItem}>
-                                    {getFieldDecorator(`benefitList[${index}].gift`, {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                whitespace: true,
-                                                message: RCi18n({id:'Product.PleaseInputSKU'})
-                                            },
-                                            {
-                                                pattern: ValidConst.number,
-                                                message: RCi18n({id:'Product.positiveInteger'})
-                                            }
-                                        ]
-                                    })(
-                                        <div className="space-between-align">
-                                            <div style={{ paddingTop: 6 }}>
-                                                {' '}
-                                                <Icon
-                                                    style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}
-                                                    type="plus-circle"
-                                                    onClick={(e) => this.openGoodsModal(record)}
-                                                />
-                                            </div>
-                                            <div style={{ lineHeight: 2 }}>
-                                                {record.gifts &&
-                                                record.gifts.map((item, index) => {
-                                                    return (
-                                                        <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>
-                                                            <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
-                                                            <InputNumber
-                                                                style={{ width: '60px', height: '28px', textAlign: 'center' }}
-                                                                defaultValue={item.productNum || 1}
-                                                                // key={item.subGoodsInfoId}
-                                                                min={1}
-                                                                max={item.stock || 10000}
-                                                                onChange={(e) => this.editGiftItem(item)}
-                                                            />
-                                                            <a
-                                                                style={{paddingLeft: 5}}
-                                                                className="iconfont iconDelete"
-                                                                onClick={() => this.onDelGiftItem(record, item)}
-                                                            />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    )}
-                                </Form.Item>
+                                <div className="space-between-align">
+                                    <div style={{ paddingTop: 6 }}>
+                                        {' '}
+                                        <Icon
+                                            style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}
+                                            type="plus-circle"
+                                            onClick={(e) => this.openGoodsModal(record)}
+                                        />
+                                    </div>
+                                    <div style={{ lineHeight: 2 }}>
+                                        {record.gifts &&
+                                        record.gifts.map((item, recordIndex) => {
+                                            return (
+                                                <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>
+                                                    <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
+                                                    <Form.Item key={recordIndex} style={styles.tableFormItem}>
+                                                        {
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}]`, {
+                                                                getValueFromEvent: (e) => this.getValueFromEvent(e, item),
+                                                                initialValue: {
+                                                                    productId: item.goodsInfoId,
+                                                                    productNum: 1
+                                                                },
+                                                                rules: [
+                                                                    { required: true, message:
+                                                                            (window as any).RCi18n({
+                                                                                id: 'Marketing.greaterthan0andlessthan999'
+                                                                            })
+                                                                    }
+                                                                ]
+                                                            })(
+                                                                <InputNumber
+                                                                    style={{ width: '60px', height: '28px', textAlign: 'center' }}
+                                                                    key={item.goodsInfoId || recordIndex}
+                                                                    min={1}
+                                                                    max={item.stock || 999}
+                                                                    formatter={(value: any) => value.productNum}
+                                                                    onChange={(e) => this.editGiftItem(item)}
+                                                                />
+                                                            )
+                                                        }
+                                                    </Form.Item>
+                                                    <a
+                                                        style={{paddingLeft: 5}}
+                                                        className="iconfont iconDelete"
+                                                        onClick={() => this.onDelGiftItem(record, item)}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                {/*<Form.Item style={styles.tableFormItem}>*/}
+                                {/*    {getFieldDecorator(`benefitList[${index}].gifts`, {*/}
+                                {/*        rules: [*/}
+                                {/*            {*/}
+                                {/*                required: true,*/}
+                                {/*                message: RCi18n({id:'Product.PleaseInputSKU'})*/}
+                                {/*            },*/}
+                                {/*            {*/}
+                                {/*                pattern: ValidConst.number,*/}
+                                {/*                message: RCi18n({id:'Product.positiveInteger'})*/}
+                                {/*            }*/}
+                                {/*        ]*/}
+                                {/*    })(*/}
+                                {/*        <div className="space-between-align">*/}
+                                {/*            <div style={{ paddingTop: 6 }}>*/}
+                                {/*                {' '}*/}
+                                {/*                <Icon*/}
+                                {/*                    style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}*/}
+                                {/*                    type="plus-circle"*/}
+                                {/*                    onClick={(e) => this.openGoodsModal(record)}*/}
+                                {/*                />*/}
+                                {/*            </div>*/}
+                                {/*            <div style={{ lineHeight: 2 }}>*/}
+                                {/*                {record.gifts.selectedRows &&*/}
+                                {/*                record.gifts.selectedRows.map((item, recordIndex) => {*/}
+                                {/*                    return (*/}
+                                {/*                        <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>*/}
+                                {/*                            <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>*/}
+
+                                {/*                            <InputNumber*/}
+                                {/*                                style={{ width: '60px', height: '28px', textAlign: 'center' }}*/}
+                                {/*                                defaultValue={item.productNum || 1}*/}
+                                {/*                                // key={item.subGoodsInfoId}*/}
+                                {/*                                min={1}*/}
+                                {/*                                max={item.stock || 10000}*/}
+                                {/*                                onChange={(e) => this.editGiftItem(item)}*/}
+                                {/*                            />*/}
+                                {/*                            <a*/}
+                                {/*                                style={{paddingLeft: 5}}*/}
+                                {/*                                className="iconfont iconDelete"*/}
+                                {/*                                onClick={() => this.onDelGiftItem(record, item)}*/}
+                                {/*                            />*/}
+                                {/*                        </div>*/}
+                                {/*                    );*/}
+                                {/*                })}*/}
+                                {/*            </div>*/}
+                                {/*        </div>*/}
+                                {/*    )}*/}
+                                {/*</Form.Item>*/}
                             </Col>
                         </Row>
                     );
@@ -260,7 +326,7 @@ export default class BenefitList extends Component<any, any>{
                             {/*/>*/}
                         </div>
                         <div>
-                            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                            <Popconfirm title={RCi18n({id: 'Subscription.SureToDelete'})} onConfirm={() => this.handleDelete(record.key)}>
                                 <a style={{paddingLeft: 5}} className="iconfont iconDelete" />
                             </Popconfirm>
                         </div>
@@ -296,6 +362,7 @@ export default class BenefitList extends Component<any, any>{
                         columns={columns}
                         pagination={false}
                         size="small"
+                        key='key'
                     />
                 </div>
                 <GoodsModal

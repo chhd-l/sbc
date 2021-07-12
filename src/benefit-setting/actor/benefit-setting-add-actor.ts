@@ -15,7 +15,8 @@ export default class BenefitSettingAddActor extends Actor {
         return {
             formObj: {
                 isTags: true,
-                segmentIds: ''
+                segmentIds: '',
+                gifts: []
             },
             allGroups: []
         };
@@ -33,4 +34,6 @@ export default class BenefitSettingAddActor extends Actor {
     getGiftBean(state: IMap, res) {
         return state.set('formObj', fromJS(res));
     }
+
+
 }

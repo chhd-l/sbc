@@ -1,7 +1,8 @@
-import {IOptions, Store, ViewAction} from 'plume2';
+import {IOptions, Store } from 'plume2';
 import BenefitSettingAddActor from '../actor/benefit-setting-add-actor'
 import * as commonWebapi from '../webapi';
-import {Const} from 'qmkit';
+import {Const, history} from 'qmkit';
+import {message} from 'antd';
 
 export default class AppStore extends Store {
 
@@ -46,4 +47,29 @@ export default class AppStore extends Store {
         this.dispatch('marketing:formObj', bean);
     };
 
+    /**
+     * 满赠提交，编辑和新增由marketingId是否存在区分
+     * @param giftBean
+     * @returns {Promise<void>}
+     */
+    submitFullGift = async (giftBean) => {
+        let response;
+        if (giftBean.marketingId) {
+            response = await commonWebapi.updateFullGift(giftBean);
+        } else {
+            response = await commonWebapi.addFullGift(giftBean);
+        }
+        if(response.res && response.res.code === Const.SUCCESS_CODE) {
+            message.success((window as any).RCi18n({
+                id: 'Marketing.OperateSuccessfully'
+            }))
+            history.push('/marketing-list');
+        } else if(response.res && response.res.code === 'K-080218') {
+            message.error(response.res.message)
+        }
+        return response
+    };
+
 }
+
+

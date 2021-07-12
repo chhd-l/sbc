@@ -867,7 +867,8 @@ export default {
         'Subscription.benefits':'Benefits',
         'Subscription.Save':'Save',
         'Subscription.Cancel':'Cancel',
-
+        'Subscription.PleaseSelectDeliveryNumber':'Please select delivery Number ',
+        'Subscription.SureToDelete':'Sure to delete ?'
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

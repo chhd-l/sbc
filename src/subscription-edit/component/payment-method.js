@@ -8,7 +8,7 @@ const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
-  const [paymentType, setPaymentType] = useState(0);
+  const [paymentType, setPaymentType] = useState('');
   const [deliveryPay, setDeliveryPay] = useState(true);
   const [cards, setCards] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
@@ -25,6 +25,9 @@ const PaymentMethod = (props) => {
   }, [props.paymentMethodVisible]);
 
   useEffect(() => {
+    if(!props.paymentMethodVisible) {
+      return;
+    }
     if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
       getCards();
       if(props.cardId) {
@@ -34,7 +37,7 @@ const PaymentMethod = (props) => {
       setSelectCardId(null)
       setDeliveryPay(true);
     }
-  }, [paymentType]);
+  }, [paymentType, props.paymentMethodVisible]);
 
   useEffect(() => {
     if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
@@ -75,16 +78,19 @@ const PaymentMethod = (props) => {
   }
 
   function deleteCard(paymentId) {
+    setLoading(true);
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
     .deleteCard(storeId, paymentId)
     .then((data) => {
-      const { res } = data;
+      const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
         message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
         getCards();
+        setLoading(false);
       } else if(res.code ==='K-100209') {
-        showError(paymentId)
+        showError(paymentId);
+        setLoading(false);
       }
     })
     .catch(() => {

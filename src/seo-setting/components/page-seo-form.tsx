@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Relax, StoreProvider} from 'plume2';
 import {fromJS, Map} from 'immutable';
-import {AuthWrapper, BreadCrumb, Headline, noop, SelectGroup} from 'qmkit';
+import {AuthWrapper, BreadCrumb, Headline, noop, SelectGroup, ValidConst} from 'qmkit';
 import {FormattedMessage} from 'react-intl';
 import {Form, Select, Spin, Input, Switch, DatePicker, Button, Table, Divider, message, Icon} from 'antd';
 import {Link} from 'react-router-dom';
@@ -63,9 +63,6 @@ export default class PageSettingForm extends Component<any, any> {
       priorityFlag: seoObj.priorityFlag,
       priorityTime: seoObj.priorityTime,
     });
-    setTimeout(()=>{
-      console.log(seoObj.priorityTime);
-    })
     return (
       <div>
         {loading ? (
@@ -86,7 +83,7 @@ export default class PageSettingForm extends Component<any, any> {
         <Form {...formItemLayout} className="login-form">
           {
             seoObj.priorityFlag == 1 ? (
-              <Form.Item label={<FormattedMessage id="Setting.Startandendtime"/>}>
+              <Form.Item required label={<FormattedMessage id="Setting.Startandendtime"/>}>
                 {getFieldDecorator('priorityTime', {
                   initialValue: seoObj.priorityTime
                 })(

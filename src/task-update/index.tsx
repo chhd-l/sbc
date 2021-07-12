@@ -88,6 +88,7 @@ const columns = [
     title: 'Shipment Date',
     dataIndex: 'shipmentDate',
     key: 'shipmentDate',
+    width: '15%',
   },
   {
     title: 'Delivery Address',
@@ -98,6 +99,7 @@ const columns = [
     title: 'Payment Method',
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
+    
   }
 ];
 

@@ -543,6 +543,7 @@ class TodoItems extends React.Component<any, any> {
               )}
             </div>
             <div className="item-btm-r">
+
               <div className="top-text space-between">
                 <span><FormattedMessage id="Home.TransactionTrend"/></span>
                 <span>

@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import AdyenCheckout from '@adyen/adyen-web';
 import '@adyen/adyen-web/dist/adyen.css';
 import { fetchAddPaymentInfo } from '../webapi';
-import { Button, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import {  Const, history } from 'qmkit';
 
 interface IKey {
   app_id: string
@@ -97,7 +98,6 @@ export default class AdyenCreditCardForm extends Component {
    */
   handleOnChange = (state, component) => {
     if (state.isValid) {
-      console.log(state)
       this.setState({
         adyenCardParam: state.data.paymentMethod
       })
@@ -134,7 +134,11 @@ export default class AdyenCreditCardForm extends Component {
       pspName
     }
     this.setState({loading:true})
-    await fetchAddPaymentInfo(storeId, params);
+   const{res}= await fetchAddPaymentInfo(storeId, params);
+   if(res.code==Const.SUCCESS_CODE){
+     message.success(res.message);
+     history.go(-1);
+   }
     this.setState({loading:false})
   }
   render() {

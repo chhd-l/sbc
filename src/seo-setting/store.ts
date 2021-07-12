@@ -47,6 +47,8 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       this.dispatch('loading:end');
       //console.log(momnet(res.context.seoSettingVO.priorityStartTime),2222222);
+      let priorityStartTime = moment(res.context.seoSettingVO.priorityStartTime != null? res.context.seoSettingVO.priorityStartTime: new Date(), 'YYYY-MM-DD')
+      let priorityEndTime = moment(res.context.seoSettingVO.priorityEndTime != null? res.context.seoSettingVO.priorityEndTime : new Date(), 'YYYY-MM-DD')
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
@@ -54,8 +56,7 @@ export default class AppStore extends Store {
           metaKeywords: res.context.seoSettingVO.metaKeywordsSource,
           description: res.context.seoSettingVO.metaDescriptionSource,
           priorityFlag: res.context.seoSettingVO.priorityFlag != null ? res.context.seoSettingVO.priorityFlag : 0,
-          priorityTime: [moment(res.context.seoSettingVO.priorityStartTime != null? res.context.seoSettingVO.priorityStartTime: new Date, 'YYYY-MM-DD'),
-            moment(res.context.seoSettingVO.priorityEndTime != null? res.context.seoSettingVO.priorityEndTime : new Date(), 'YYYY-MM-DD')],
+          priorityTime: [priorityStartTime, priorityEndTime],
         })
       );
     } else {

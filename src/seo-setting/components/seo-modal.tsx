@@ -42,7 +42,6 @@ export default class SeoModal extends Component<any, any> {
   _handleSubmit = () => {
     const { seoForm, currentPage, setSeoModalVisible, editSeo } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
-    console.log(moment(seoObj.priorityTime[0], 'YYYY-MM-DD').format('YYYY-MM-DD'),1111);
     const params = {
       type: 3,
       metaDescriptionSource: seoObj.description,
@@ -73,5 +72,10 @@ export default class SeoModal extends Component<any, any> {
         </AuthWrapper>
       </Modal>
     );
+  }
+  componentWillUnmount() {
+    const { clear } = this.props.relaxProps;
+    clear()
+    console.log(11111)
   }
 }

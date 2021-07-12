@@ -63,6 +63,9 @@ export default class PageSettingForm extends Component<any, any> {
       priorityFlag: seoObj.priorityFlag,
       priorityTime: seoObj.priorityTime,
     });
+    setTimeout(()=>{
+      console.log(seoObj.priorityTime);
+    })
     return (
       <div>
         {loading ? (
@@ -71,10 +74,10 @@ export default class PageSettingForm extends Component<any, any> {
           </div>
         ) : null}
         <div className="turn-type flex-start">
-          <Switch checkedChildren="On" unCheckedChildren="off" size='default' onChange={(e) =>
+          <Switch checkedChildren="On" unCheckedChildren="off" checked={seoObj.priorityFlag != 0} size='default' onChange={(e) =>
             updateSeoForm({
               field: 'priorityFlag',
-              value: e == true?1:0
+              value: e == true || null ?1:0
             })
           }/>
           <p>{seoObj.priorityFlag === 0 ? (<FormattedMessage id="Setting.turnText1"/>):(<FormattedMessage id="Setting.turnText2"/>)}</p>
@@ -94,7 +97,7 @@ export default class PageSettingForm extends Component<any, any> {
                     })
                   }/>
                 )}
-              </Form.Item>) : null
+              </Form.Item>) : <></>
           }
           <Form.Item label={<FormattedMessage id="Setting.Title"/>}>
             {getFieldDecorator('title', {

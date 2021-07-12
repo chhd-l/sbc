@@ -1,5 +1,6 @@
 import { Actor, Action, IMap } from 'plume2';
 import { fromJS } from 'immutable';
+import moment from 'moment';
 
 export default class SeoActor extends Actor {
   defaultState() {
@@ -9,7 +10,7 @@ export default class SeoActor extends Actor {
         metaKeywords: '',
         description: '',
         priorityFlag: 0,
-        priorityTime: '',
+        priorityTime: [moment(new Date(), 'YYYY-MM-DD'), moment(new Date(), 'YYYY-MM-DD')],
       },
       seoModalVisible: false,
       currentTab: 'siteSeo',
@@ -33,7 +34,7 @@ export default class SeoActor extends Actor {
         metaKeywords: '',
         description: '',
         priorityFlag: 0,
-        priorityTime: '',
+        priorityTime: [moment(new Date(), 'YYYY-MM-DD'), moment(new Date(), 'YYYY-MM-DD')],
       })
     );
   }

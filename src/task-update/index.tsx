@@ -105,6 +105,7 @@ const columns = [
     // },
     render:(text,record,index)=>{
       let html =  text.replaceAll(",","<br/>")
+      
        return(
         <span className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
           maxWidth: 80,

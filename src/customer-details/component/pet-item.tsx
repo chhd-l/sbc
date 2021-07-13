@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconfirm, Icon, message, Divider, Avatar } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
-import { Headline, history, AssetManagement, cache } from 'qmkit';
+import { Headline, history, AssetManagement, cache, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import { petsById, editPets, delPets, getMixedBreedDisplayName, refreshPetLifeStage } from '../webapi';
 import { getPetsBreedListByType } from '../member-detail';
@@ -12,10 +13,10 @@ const { Option } = Select;
 const dogImg = require('../img/dog.png');
 const catImg = require('../img/cat.png');
 const stageKeyMapping = {
-  "firstLifeStageName": "First stage name",
-  "secondLifeStageName": "Second stage name",
-  "thirdLifeStageName": "Third stage name",
-  "fourthLifeStageName": "Fourth stage name",
+  "firstLifeStageName": RCi18n({id:"PetOwner.firstStageName"}),
+  "secondLifeStageName": RCi18n({id:"PetOwner.secondStageName"}),
+  "thirdLifeStageName": RCi18n({id:"PetOwner.thirdStageName"}),
+  "fourthLifeStageName": RCi18n({id:"PetOwner.fourthStageName"}),
 };
 
 interface Iprop extends FormComponentProps {
@@ -271,7 +272,7 @@ class PetItem extends React.Component<Iprop, any> {
     return (
       <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <div className="container petowner-noedit-form">
-          {this.props.petsInfo ? null : <Headline title="Pet information" />}
+          {this.props.petsInfo ? null : <Headline title={RCi18n({id:"PetOwner.PetInformation"})} />}
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col span={4} style={{ paddingLeft: '30px' }}>
@@ -287,13 +288,13 @@ class PetItem extends React.Component<Iprop, any> {
                 {this.props.petsInfo ? null : (
                   <Row gutter={16}>
                     <Col span={24}>
-                      <div style={{ fontSize: 16, color: '#666' }}>Basic information</div>
+                      <div style={{ fontSize: 16, color: '#666' }}><FormattedMessage id="PetOwner.BasicInformation" /></div>
                     </Col>
                   </Row>
                 )}
                 <Row gutter={16}>
                   <Col span={12}>
-                    <Form.Item label="Pet category">
+                    <Form.Item label={RCi18n({id:"PetOwner.PetCategory"})}>
                       {editable ? (
                         getFieldDecorator('petsType', {
                           initialValue: pet.petsType,
@@ -314,7 +315,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Name">
+                    <Form.Item label={RCi18n({id:"PetOwner.Name"})}>
                       {editable ? (
                         getFieldDecorator('petsName', {
                           initialValue: pet.petsName,
@@ -326,7 +327,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Gender">
+                    <Form.Item label={RCi18n({id:"PetOwner.Gender"})}>
                       {editable ? (
                         getFieldDecorator('petsSex', {
                           initialValue: pet.petsSex,
@@ -347,7 +348,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Breed">
+                    <Form.Item label={RCi18n({id:"PetOwner.Breed"})}>
                       {editable ? (
                         getFieldDecorator('petsBreed', {
                           initialValue: pet.petsBreed,
@@ -367,7 +368,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Adult size">
+                    <Form.Item label={RCi18n({id:"PetOwner.AdultSize"})}>
                       {editable ? (
                         getFieldDecorator('petsSizeValueName', {
                           initialValue: pet.petsSizeValueName,
@@ -387,7 +388,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Sterilized status">
+                    <Form.Item label={RCi18n({id:"PetOwner.SterilizedStatus"})}>
                       {editable ? (
                         getFieldDecorator('sterilized', {
                           initialValue: pet.sterilized,
@@ -404,7 +405,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Pure-breed">
+                    <Form.Item label={RCi18n({id:"PetOwner.isPureBreed"})}>
                       {editable ? (
                         getFieldDecorator('isPurebred', {
                           initialValue: pet.isPurebred,
@@ -421,7 +422,7 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Birth">
+                    <Form.Item label={RCi18n({id:"PetOwner.BirthDate"})}>
                       {editable ? (
                         getFieldDecorator('birthOfPets', {
                           initialValue: moment(pet.birthOfPets, 'YYYY-MM-DD'),
@@ -441,22 +442,22 @@ class PetItem extends React.Component<Iprop, any> {
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Weight">
+                    <Form.Item label={RCi18n({id:"PetOwner.Weight"})}>
                       <span>{pet.weight ? calcPetWeight(pet.weight) : ''}</span>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Activity">
+                    <Form.Item label={RCi18n({id:"PetOwner.Activity"})}>
                       <span>{pet.activity}</span>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Lifestyle">
+                    <Form.Item label={RCi18n({id:"PetOwner.lifeStyle"})}>
                       <span>{pet.lifestyle}</span>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
-                    <Form.Item label="Special needs">
+                    <Form.Item label={RCi18n({id:"PetOwner.SpecialNeeds"})}>
                       {editable ? (
                         getFieldDecorator('customerPetsPropRelations', {
                           initialValue: pet.customerPetsPropRelations ? pet.customerPetsPropRelations.map((v) => v.propName) : null,
@@ -477,9 +478,9 @@ class PetItem extends React.Component<Iprop, any> {
                   </Col>
                   <Col span={12}>
                     {this.props.petsInfo ? (
-                      <Form.Item label="Pet tagging">{pet.segmentList && pet.segmentList.length > 0 ? pet.segmentList.map((v) => v.name).join(',') : null}</Form.Item>
+                      <Form.Item label={RCi18n({id:"PetOwner.petTagging"})}>{pet.segmentList && pet.segmentList.length > 0 ? pet.segmentList.map((v) => v.name).join(',') : null}</Form.Item>
                     ) : (
-                      <Form.Item label="Pet tagging">
+                      <Form.Item label={RCi18n({id:"PetOwner.petTagging"})}>
                         {editable ? (
                           getFieldDecorator('segmentIdList', {
                             initialValue: pet.segmentList ? pet.segmentList.map((v) => v.id) : []
@@ -513,19 +514,19 @@ class PetItem extends React.Component<Iprop, any> {
                 <Divider />
                 <Row gutter={16} type="flex" align="middle">
                   <Col span={16}>
-                    <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
+                    <div style={{ fontSize: 16, color: '#666' }}>{RCi18n({id:"PetOwner.lifeStageInformation"})}</div>
                   </Col>
                   <Col span={8} style={{ textAlign: 'right' }}>
                     <Button type="link" size="small" disabled={this.state.stageLoading} onClick={this.getPetLifeStage}>
                       <Icon type="sync" spin={this.state.stageLoading} /> 
-                      {this.state.stageLoading ? 'Loading' : 'Refresh'}
+                      {this.state.stageLoading ? RCi18n({id:"PetOwner.Loading"}) : RCi18n({id:"PetOwner.Refresh"})}
                     </Button>
                   </Col>
                 </Row>
                 <Row gutter={16}>
                   {this.state.stageList.map((stage, idx) => (
                     <Col key={idx} span={12}>
-                      <Form.Item label={stageKeyMapping[stage.propType] ?? "Stage ending"}>{stage.propName}</Form.Item>
+                      <Form.Item label={stageKeyMapping[stage.propType] ?? RCi18n({id:"PetOwner.stageEnding"})}>{stage.propName}</Form.Item>
                     </Col>
                   ))}
                 </Row>
@@ -539,144 +540,144 @@ class PetItem extends React.Component<Iprop, any> {
                       this.onShowOrHide(!show);
                     }}
                   >
-                    {show ? 'Hide more fields' : 'Show more fields'} <Icon type={show ? 'up' : 'down'} />
+                    {show ? RCi18n({id:"PetOwner.hideMoreFields"}) : RCi18n({id:"PetOwner.showMoreFields"})} <Icon type={show ? 'up' : 'down'} />
                   </a>
                   <div style={{ display: show ? 'block' : 'none' }}>
                     <Row gutter={16}>
                       <Col span={12}>
-                        <Form.Item label="Pet ID">{pet.petSourceId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.petID"})}>{pet.petSourceId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pet owner ID">{pet.ownerId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.petOwnerID"})}>{pet.ownerId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Breeder ID">{pet.breederId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.breederID"})}>{pet.breederId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Vet ID">{pet.vetId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.vetID"})}>{pet.vetId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Death reason">{pet.reasonOfDeath}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.deathReason"})}>{pet.reasonOfDeath}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Weight">{pet.weightAdded == 1 ? 'Yes' : pet.weightAdded == 0 ? 'No' : ''}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.Weight"})}>{pet.weightAdded == 1 ? 'Yes' : pet.weightAdded == 0 ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Reproduction status">{pet.reproductionStatusCode == 1 ? 'Yes' : pet.reproductionStatusCode == 0 ? 'No' : ''}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.reproductionStatus"})}>{pet.reproductionStatusCode == 1 ? 'Yes' : pet.reproductionStatusCode == 0 ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="ICD">{pet.icd}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.ICD"})}>{pet.icd}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pet certificate ID ">{pet.certificateId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.petCertificateID"})}>{pet.certificateId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Certificate information">{pet.certificateInfo}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.certificateInformation"})}>{pet.certificateInfo}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Coat color">{pet.coatColour}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.coatColor"})}>{pet.coatColour}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Complementary information">{pet.complementaryInformation}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.ComplementaryInformation"})}>{pet.complementaryInformation}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Death date">{pet.deathDate ? moment(pet.deathDate).format('DD/MM/YYYY') : ''}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.deathDate"})}>{pet.deathDate ? moment(pet.deathDate).format('DD/MM/YYYY') : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Description">{pet.description}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.description"})}>{pet.description}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Distinctives signs">{pet.distinctiveSigns}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.distinctivesSigns"})}>{pet.distinctiveSigns}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Hair color">{pet.hair}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.hairColor"})}>{pet.hair}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Reproducer">{pet.isReproducer == 1 ? 'Yes' : pet.isReproducer ? 'No' : ''}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.reproducer"})}>{pet.isReproducer == 1 ? 'Yes' : pet.isReproducer ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Reason">{pet.reason}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.reason"})}>{pet.reason}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Microship ID">{pet.microchipId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.microshipID"})}>{pet.microchipId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Genetic code">{pet.geneticCode}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.geneticCode"})}>{pet.geneticCode}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pathologies">{pet.pathologies}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.pathologies"})}>{pet.pathologies}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Pedigree name">{pet.pedigreeName}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.pedigreeName"})}>{pet.pedigreeName}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Value">{pet.value}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.value"})}>{pet.value}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Weight category">{pet.weightCategory}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.weightCategory"})}>{pet.weightCategory}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Species">{pet.speciesCode}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.species"})}>{pet.speciesCode}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Sterilisation status">{pet.sterilisation == 1 ? 'Yes' : pet.sterilisation ? 'No' : ''}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.sterilisationStatus"})}>{pet.sterilisation == 1 ? 'Yes' : pet.sterilisation ? 'No' : ''}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Status">{pet.status}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.status"})}>{pet.status}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Tags">{pet.tags}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.tags"})}>{pet.tags}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Tatoo ID">{pet.tattooId}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.tatooID"})}>{pet.tattooId}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Birth time">{pet.timeOfBirth}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.birthTime"})}>{pet.timeOfBirth}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Death time">{pet.timeOfDeath}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.deathTime"})}>{pet.timeOfDeath}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Treatments">{pet.treatments}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.treatments"})}>{pet.treatments}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Vaccinations">{pet.vaccinations}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.vaccinations"})}>{pet.vaccinations}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Breeder prescription">{pet.breederPrescription}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.breederPrescription"})}>{pet.breederPrescription}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Ideal body weight">{pet.idealBodyWeight}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.idealBodyWeight"})}>{pet.idealBodyWeight}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Target weight">{pet.adultTargetWeight}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.targetWeight"})}>{pet.adultTargetWeight}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Last pet status">{pet.lastPetStatus}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.lastPetStatus"})}>{pet.lastPetStatus}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Current risk">{pet.currentRisk}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.currentRisk"})}>{pet.currentRisk}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Last weight">{pet.lastWeight}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.lastWeight"})}>{pet.lastWeight}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Birth weight">{pet.birthWeight}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.birthWeight"})}>{pet.birthWeight}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="After 48h weight">{pet.weight48h}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.after48hWeight"})}>{pet.weight48h}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Lof number">{pet.lofNumber}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.lofNumber"})}>{pet.lofNumber}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Mother lof number">{pet.motherLofNumber}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.motherLofNumber"})}>{pet.motherLofNumber}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Father lof number">{pet.fatherLofNumber}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.fatherLofNumber"})}>{pet.fatherLofNumber}</Form.Item>
                       </Col>
                       <Col span={12}>
-                        <Form.Item label="Size">{pet.size}</Form.Item>
+                        <Form.Item label={RCi18n({id:"PetOwner.size"})}>{pet.size}</Form.Item>
                       </Col>
                     </Row>
                   </div>
@@ -689,7 +690,7 @@ class PetItem extends React.Component<Iprop, any> {
           <div className="bar-button">
             {editable && (
               <Button type="primary" onClick={this.savePet} style={{ marginRight: '20px' }}>
-                Save
+                {RCi18n({id:"PetOwner.Save"})}
               </Button>
             )}
             <Button
@@ -697,7 +698,7 @@ class PetItem extends React.Component<Iprop, any> {
                 history.go(-1);
               }}
             >
-              Cancel
+              {RCi18n({id:"PetOwner.Cancel"})}
             </Button>
           </div>
         )}

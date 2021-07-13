@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, BreadCrumb, history, Const, cache } from 'qmkit';
+import { Headline, BreadCrumb, history, Const, cache, RCi18n } from 'qmkit';
 import OrderInformation from './component/order-information';
 import SubscribInformation from './component/subscrib-information';
 import PrescribInformation from './component/prescrib-information';
@@ -191,7 +191,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: RCi18n({id:"PetOwner.DeleteThisItem"}),
       onOk() {
         return that.removeConsumer(id);
       },
@@ -213,7 +213,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       .delCustomer(params)
       .then((data) => {
         if (data.res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
           history.push('/customer-list');
         } else {
           this.setState({
@@ -288,10 +288,10 @@ export default class CustomerDetails extends React.Component<any, any> {
         <div>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner</a>
+              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner" /></a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner list</a>
+              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner list" /></a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
               <a
@@ -300,10 +300,10 @@ export default class CustomerDetails extends React.Component<any, any> {
                   this.backToDetail();
                 }}
               >
-                Pet owner detail
+                <FormattedMessage id="PetOwner.petOwnerDetail" />
               </a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>{addressType === 'delivery' ? 'Delivery information' : 'Billing information'}</Breadcrumb.Item>
+            <Breadcrumb.Item>{addressType === 'delivery' ? RCi18n({id:"Order.deliveryInformation"}) : RCi18n({id:"Subscription.Billing information"})}</Breadcrumb.Item>
           </Breadcrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
@@ -315,25 +315,25 @@ export default class CustomerDetails extends React.Component<any, any> {
         <div>
           <Breadcrumb>
             <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner</a>
+              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner" /></a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <a href="/customer-list">Pet owner list</a>
+              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner list" /></a>
             </Breadcrumb.Item>
-            <Breadcrumb.Item>Pet owner detail</Breadcrumb.Item>
+            <Breadcrumb.Item><FormattedMessage id="PetOwner.petOwnerDetail" /></Breadcrumb.Item>
           </Breadcrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div className="detail-container">
               <Headline
-                title="Basic information"
+                title={RCi18n({id:"PetOwner.BasicInformation"})}
                 extra={
                   <>
                     <Link to={`/edit-petowner/${this.state.customerId}/${this.state.customerAccount}`}>
-                      <i className="iconfont iconDetails"></i> Detail
+                      <i className="iconfont iconDetails"></i> <FormattedMessage id="PetOwner.Detail" />
                     </Link>
                     <Link to={`/pet-owner-activity/${this.state.customerId}`} style={{ marginLeft: '20px' }}>
-                      <i className="iconfont iconfenxiang"></i> Overview
+                      <i className="iconfont iconfenxiang"></i> <FormattedMessage id="Home.Overview" />
                     </Link>
                   </>
                 }
@@ -341,10 +341,10 @@ export default class CustomerDetails extends React.Component<any, any> {
               <div style={{ margin: '20px 0' }}>
                 <Row className="text-tip">
                   <Col span={4}>
-                    <Icon type="user" /> Name
+                    <Icon type="user" /> <FormattedMessage id="PetOwner.Name" />
                   </Col>
                   <Col span={4}>
-                    <Icon type="calendar" /> Age
+                    <Icon type="calendar" /> <FormattedMessage id="PetOwner.Age" />
                   </Col>
                   <Col span={16} className="text-align-right" style={{ padding: '0 35px' }}>
                     {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => this.removeConsumer(this.state.customerId)} okText="Confirm" cancelText="Cancel">
@@ -368,25 +368,25 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <Col span={18}>
                     <Row type="flex" align="middle">
                       <Col span={4} className="text-tip">
-                        Registration date
+                        <FormattedMessage id="PetOwner.RegistrationDate" />
                       </Col>
                       <Col span={8} className="text-highlight">
                         {basic.createTime ? moment(basic.createTime, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}
                       </Col>
                       <Col span={4} className="text-tip">
-                        Email address
+                        <FormattedMessage id="PetOwner.emailAddress" />
                       </Col>
                       <Col span={8} className="text-highlight">
                         {basic.email}
                       </Col>
                       <Col span={4} className="text-tip">
-                        Prefer channel
+                        <FormattedMessage id="PetOwner.PreferChannel" />
                       </Col>
                       <Col span={8} className="text-highlight">
                         {['Email', 'Phone', 'Print']
                           .reduce((prev, curr) => {
                             if (+basic[`communication${curr}`]) {
-                              prev.push(curr === 'Print' ? 'Message' : curr);
+                              prev.push(curr === 'Print' ? RCi18n({id:"PetOwner.Message"}) : RCi18n({id:`PetOwner.${curr}`}));
                             }
                             return prev;
                           }, [])
@@ -395,7 +395,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{field.fieldName}</Col>
+                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${field.fieldName}`})}</Col>
                           <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
                             {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
                           </Col>
@@ -420,7 +420,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               <Headline title="Tagging" />
               <Row>
                 <Col span={12}>
-                  <div className="text-highlight">Tag name</div>
+                  <div className="text-highlight"><FormattedMessage id="PetOwner.TagName" /></div>
                   <div>
                     <Select style={{ width: '100%' }} value={this.state.petOwnerTag} mode="multiple" onChange={this.setPetOwnerTagging} getPopupContainer={(trigger: any) => trigger.parentNode}>
                       {this.state.tagList
@@ -436,7 +436,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </Row>
             </div>
             <div className="detail-container" id="pets-list">
-              <Headline title="Pet information" />
+              <Headline title={RCi18n({id:"PetOwner.PetInformation"})} />
               <Row gutter={16}>
                 {pets.map((pet, idx) => (
                   <Col key={idx} span={8} style={{ margin: '10px 0' }}>
@@ -448,7 +448,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                           </Button>
                         </Popconfirm> */}
                         <Link to={`/edit-pet/${this.state.customerId}/${this.state.customerAccount}/${pet.petsId}`}>
-                          <span className="iconfont iconDetails"></span> Detail
+                          <span className="iconfont iconDetails"></span> <FormattedMessage id="PetOwner.Detail" />
                         </Link>
                       </div>
                       <Row gutter={10}>
@@ -462,8 +462,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                             </Col>
                           </Row>
                           <Row className="text-tip">
-                            <Col span={12}>Age</Col>
-                            <Col span={12}>Breed</Col>
+                            <Col span={12}><FormattedMessage id="PetOwner.Age" /></Col>
+                            <Col span={12}><FormattedMessage id="PetOwner.Breed" /></Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
                             <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
@@ -485,29 +485,29 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title="Other information"
+                title={RCi18n({id:"PetOwner.OtherInformation"})}
                 extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
-                <TabPane tab="Order information" key="order">
+                <TabPane tab={RCi18n({id:"PetOwner.OrderInformation"})} key="order">
                   <OrderInformation startDate={startDate} endDate={endDate} customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab="Subscription information" key="subscrib">
+                <TabPane tab={RCi18n({id:"PetOwner.SubscriptionInformation"})} key="subscrib">
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab="Prescriber information" key="prescrib">
+                <TabPane tab={RCi18n({id:"PetOwner.PrescriberInformation"})} key="prescrib">
                   <PrescribInformation customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab="Delivery information" key="delivery">
+                <TabPane tab={RCi18n({id:"PetOwner.DeliveryInformation"})} key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab="Billing information" key="billing">
+                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
                 </TabPane> : null}
-                <TabPane tab="Payment methods" key="payment">
+                <TabPane tab={RCi18n({id:"PetOwner.PaymentMethods"})} key="payment">
                   <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
                 </TabPane>
-                <TabPane tab="Feedback" key="feedback">
+                <TabPane tab={RCi18n({id:"PetOwner.Feedback"})} key="feedback">
                   <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
               </Tabs>

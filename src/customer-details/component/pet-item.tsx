@@ -129,7 +129,7 @@ class PetItem extends React.Component<Iprop, any> {
           pet: {
             ...pet,
             petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName(),
-            needs: pet.needs ? pet.needs.split(',').map(need => (pet.petsType === 'dog' ? dogSpecialNeeds : catSpecialNeeds).find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
+            needs: pet.needs ? pet.needs.split(',').map(need => (pet.petsType === 'dog' ? specialNeeds.dogSpecialNeeds : specialNeeds.catSpecialNeeds).find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
           },
           petImg: pet.petsImg || '',       
           loading: false

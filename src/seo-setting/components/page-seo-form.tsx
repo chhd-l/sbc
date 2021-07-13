@@ -96,7 +96,7 @@ export default class PageSettingForm extends Component<any, any> {
                 )}
               </Form.Item>) : <></>
           }
-          <Form.Item label={<FormattedMessage id="Setting.Title"/>}>
+          <Form.Item required={seoObj.priorityFlag == 1} label={<FormattedMessage id="Setting.Title"/>}>
             {getFieldDecorator('title', {
               initialValue: seoObj.title
             })(

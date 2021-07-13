@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, Popconfirm } from 'antd';
+import { RCi18n } from 'qmkit';
 import { getPrescriberList } from '../webapi';
 
 interface Iprop {
@@ -62,27 +63,27 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     const { list, pagination, loading } = this.state;
     const columns = [
       {
-        title: 'Prescriber ID',
+        title: RCi18n({id:"PetOwner.PrescriberID"}),
         dataIndex: 'prescriberId',
         key: 'id'
       },
       {
-        title: 'Prescriber name',
+        title: RCi18n({id:"PetOwner.PrescriberName"}),
         dataIndex: 'prescriberName',
         key: 'name'
       },
       {
-        title: 'Prescriber phone',
+        title: RCi18n({id:"PetOwner.PrescriberPhone"}),
         dataIndex: 'phone',
         key: 'phone'
       },
       {
-        title: 'Prescriber city',
+        title: RCi18n({id:"PetOwner.PrescriberCity"}),
         dataIndex: 'primaryCity',
         key: 'city'
       },
       {
-        title: 'Prescriber type',
+        title: RCi18n({id:"PetOwner.PrescriberType"}),
         dataIndex: 'prescriberType',
         key: 'type'
       }

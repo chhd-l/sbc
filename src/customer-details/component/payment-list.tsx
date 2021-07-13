@@ -43,7 +43,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   deleteCard = ({id,canDelFlag}) => {
     if(!canDelFlag){
-      message.error('The card cannot be deleted. A subscription is bound to this card');
+      message.error(RCi18n({id:"PetOwner.cannotDeletePaymentCard"}));
       return
     }
     this.setState({ loading: true });
@@ -59,6 +59,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
    
       })
       .catch(() => {
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         this.setState({
           loading: false
         });
@@ -71,37 +72,37 @@ export default class PaymentList extends React.Component<Iprop, any> {
     const customerAccount = this.props.customerAccount || '';
     const columns = [
       {
-        title: 'Card number',
+        title: RCi18n({id:"PetOwner.CardNumber"}),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
         render: (text, record) => <div>{text ? '**** **** **** ' + text : ''}</div>
       },
       {
-        title: 'Card type',
+        title: RCi18n({id:"PetOwner.CardType"}),
         dataIndex: 'paymentVendor',
         key: 'type'
       },
       {
-        title: 'Card holder',
+        title: RCi18n({id:"PetOwner.CardHolder"}),
         dataIndex: 'holderName',
         key: 'holder'
       },
       {
-        title: 'E-mail address',
+        title: RCi18n({id:"PetOwner.EmailAddress"}),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'Phone number',
+        title: RCi18n({id:"PetOwner.phoneNumber"}),
         dataIndex: 'phone',
         key: 'phoneNumber'
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:"PetOwner.Operation"}),
         key: 'oper',
         render: (_, record) => (
-          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record)} okText="Confirm" cancelText="Cancel">
-            <Tooltip title="Delete">
+          <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.deleteCard(record)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
+            <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
               <Button type="link">
                 <a className="iconfont iconDelete"></a>
               </Button>

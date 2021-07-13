@@ -1,5 +1,7 @@
 import React from 'react';
 import { Table, Popconfirm, Button, Tooltip } from 'antd';
+import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 import { getAddressListByType, delAddress } from '../webapi';
 
 interface Iprop {
@@ -75,37 +77,37 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     const { onEdit } = this.props;
     const columns = [
       {
-        title: 'Receiver name',
+        title: RCi18n({id:"PetOwner.ReceiverName"}),
         dataIndex: 'consigneeName',
         key: 'name'
       },
       {
-        title: 'Phone number',
+        title: RCi18n({id:"PetOwner.PhoneNumber"}),
         dataIndex: 'consigneeNumber',
         key: 'phone'
       },
       {
-        title: 'Postal code',
+        title: RCi18n({id:"PetOwner.PostalCode"}),
         dataIndex: 'postCode',
         key: 'postcode'
       },
       {
-        title: 'Address',
+        title: RCi18n({id:"PetOwner.Address"}),
         dataIndex: 'address1',
         key: 'address'
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:"PetOwner.Operation"}),
         key: 'oper',
         render: (_, record) => (
           <div>
-            <Tooltip title="Edit">
+            <Tooltip title={RCi18n({id:"PetOwner.Edit"})}>
               <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
                 <i className="iconfont iconEdit"></i>
               </Button>
             </Tooltip>
-            <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText="Confirm" cancelText="Cancel">
-              <Tooltip title="Delete">
+            <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
+              <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
                 <Button type="link" size="small">
                   <i className="iconfont iconDelete"></i>
                 </Button>
@@ -119,7 +121,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     return (
       <div>
         <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
-          Add new
+          <FormattedMessage id="Subscription.AddNew" />
         </Button>
         <Table
           rowKey="deliveryAddressId"

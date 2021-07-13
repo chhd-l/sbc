@@ -22,7 +22,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Table, Divider, Tag  } from 'antd';
+import { Table, Divider, Tag } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -73,20 +73,20 @@ const columns = [
     dataIndex: 'subscriptionNumber',
     key: 'subscriptionNumber',
     width: '18%',
-    render: text =>      
-        <Link
-          to={`/subscription-detail/${text}`}
-        >
-       {text}
+    render: text =>
+      <Link
+        to={`/subscription-detail/${text}`}
+      >
+        {text}
       </Link>
-    },
+  },
   {
     title: 'Product Name',
     dataIndex: 'productName',
     key: 'productName',
 
     width: '14%',
-    
+
     // onCell: () => {
     //   return {
     //     render:(text,record,index)=>{
@@ -103,19 +103,36 @@ const columns = [
     //     },
     //   }
     // },
-    render:(text,record,index)=>{
-      let html =  text.replaceAll(",","<br/>")
+    render: (text, record, index) => {
+      // let html = text.replaceAll(",", "<br/>")
+      let productNames = text.split(',')      
+      return <div>
+        {
+          productNames && productNames.map(productName => (
+            <Tooltip placement="topLeft" title={productName}>
+              <p className="msg" style={{
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+                cursor: "pointer"
+              }} >{productName} </p>
+    
+            </Tooltip>
+    
+          ))
+        }
+      </div>
       
-       return(
-        <span className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
-          maxWidth: 80,
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          display:"inline-block",
-          textOverflow: "ellipsis",
-          cursor: "pointer"}
-      } />
-       )
+      //  return(
+      //   <span className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
+      //     maxWidth: 80,
+      //     overflow: "hidden",
+      //     whiteSpace: "nowrap",
+      //     display:"inline-block",
+      //     textOverflow: "ellipsis",
+      //     cursor: "pointer"}
+      // } />
+      //  )
     },
     ellipsis: true,
   },
@@ -134,7 +151,7 @@ const columns = [
     title: 'Payment Method',
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
-    
+
   }
 ];
 
@@ -524,7 +541,7 @@ class TaskUpdate extends Component<any, any> {
     } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
     let subscriptionNumbers = task.subscriptionNumber ? task.subscriptionNumber.split(',') : [];
-  
+
     return (
       <div>
         <Breadcrumb>
@@ -1091,7 +1108,7 @@ class TaskUpdate extends Component<any, any> {
                             })(
                               < Table bordered columns={columns} dataSource={this.state.tableres} pagination={false} />
                               // < Table bordered columns={columns} />
-                            ) }
+                            )}
 
                           </FormItem>
                         </Col>

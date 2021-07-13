@@ -129,6 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
       orderType = '代客下单';
     }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
+    //订阅赠品信息
     let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
     giftList = giftList.map((gift)=>{
       let tempGift ={
@@ -142,9 +143,9 @@ class OrderDetailTab extends React.Component<any, any> {
       return tempGift
     })
     
-    //赠品信息
+    //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', '[gift]' + gift.get('skuName'))).toJS();
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
@@ -482,7 +483,7 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(giftList)} pagination={false} bordered />
+          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts,giftList)} pagination={false} bordered />
 
           <Modal
             title={<FormattedMessage id="Order.moreFields" />}

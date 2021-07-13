@@ -4,7 +4,7 @@ import '@adyen/adyen-web/dist/adyen.css';
 import { fetchAddPaymentInfo } from '../webapi';
 import { Button, message, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import {  Const, history } from 'qmkit';
+import {  Const, history, RCi18n } from 'qmkit';
 
 interface IKey {
   app_id: string
@@ -19,10 +19,11 @@ interface IAdyenCardParam {
   "encryptedSecurityCode": string,//adyen
   "holderName": string,//adyen
   "pspName": string
-  
+  isDefault?:number
 
 }
 export default class AdyenCreditCardForm extends Component {
+  card:any
   props: {
     clientKey:any
     showPayButton?: boolean
@@ -72,18 +73,18 @@ export default class AdyenCreditCardForm extends Component {
     };
     const checkout = new AdyenCheckout(configuration);
 
-    const card = checkout.create('card', {
+    this.card = checkout.create('card', {
       //: ["visa", "amex"],
       brands:cardType,
+      enableStoreDetails:true,
       hasHolderName,
       holderNameRequired,
       showPayButton,
       showBrandIcon,
       taxNumber,
-      // data: {
-      //   holderName: 'J'
-      // }
+      
     }).mount('#component-container');
+   
   }
   /**
    * 当购物者提供所需的付款详细信息时调用
@@ -100,6 +101,7 @@ export default class AdyenCreditCardForm extends Component {
    */
   handleOnChange = (state, component) => {
     if (state.isValid) {
+      console.log(state.data.paymentMethod)
       this.setState({
         adyenCardParam: state.data.paymentMethod
       })
@@ -122,6 +124,7 @@ export default class AdyenCreditCardForm extends Component {
     console.log(res)
   }
   async save() {
+   const isDefault= this.card.data.storePaymentMethod
     const { adyenCardParam } = this.state;
     const { customerId, pspName, storeId } = this.props
     const { encryptedCardNumber, encryptedExpiryMonth, encryptedExpiryYear, encryptedSecurityCode, holderName } = adyenCardParam as any
@@ -133,7 +136,8 @@ export default class AdyenCreditCardForm extends Component {
       encryptedExpiryYear,
       encryptedSecurityCode,
       holderName,
-      pspName
+      pspName,
+      isDefault:isDefault?1:0
     }
     this.setState({loading:true})
    const{res}= await fetchAddPaymentInfo(storeId, params);
@@ -148,7 +152,7 @@ export default class AdyenCreditCardForm extends Component {
     return (
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div id="component-container" ></div>
-
+          <div> <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span></div>
         <div style={{ marginTop: 10, textAlign: 'right' }}>
           <Button type="primary" onClick={() => this.save()}> <FormattedMessage id="save" /></Button>
         </div>

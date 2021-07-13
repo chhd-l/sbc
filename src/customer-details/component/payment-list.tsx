@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Popconfirm, message, Button, Tooltip } from 'antd';
+import { Table, Popconfirm, message, Button, Tooltip, Tag } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
 import { cache, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
@@ -74,7 +74,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: 'Card number',
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''}</div>
+        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color="red">default</Tag>}</div>
       },
       {
         title: 'Card type',

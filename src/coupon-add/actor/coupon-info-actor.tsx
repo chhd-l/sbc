@@ -31,6 +31,7 @@ export default class CouponInfoActor extends Actor {
       fullBuyType: 1,
       // 购满多少钱
       fullBuyPrice: null,
+      fullbuyCount: null,
       // 营销类型(0,1,2,3) 0全部商品，1品牌，2平台类目/店铺分类，3自定义货品（店铺可用）
       scopeType: 0,
       // 分类
@@ -109,6 +110,7 @@ export default class CouponInfoActor extends Actor {
       endTime,
       fullBuyPrice,
       fullBuyType,
+      fullbuyCount,
       rangeDayType,
       scopeIds,
       scopeType,
@@ -132,6 +134,7 @@ export default class CouponInfoActor extends Actor {
       .set('effectiveDays', effectiveDays)
       .set('endTime', endTime ? moment(endTime).format(Const.DAY_FORMAT) : '')
       .set('fullBuyPrice', fullBuyPrice)
+      .set('fullbuyCount', fullbuyCount)
       .set('fullBuyType', fullBuyType)
       .set('rangeDayType', rangeDayType)
       .set('scopeType', scopeType)

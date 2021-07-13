@@ -367,7 +367,7 @@ export function getByCustomerId(customerId) {
   return Fetch<TResult>('/customer/feedback/getByCustomerId', {
     method: 'POST',
     body: JSON.stringify({
-      customerId
+      petOwnerId: customerId
     })
   });
 }

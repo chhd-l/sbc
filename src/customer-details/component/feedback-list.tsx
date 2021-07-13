@@ -33,6 +33,7 @@ class FeedBack extends React.Component<Iprop, any> {
     const { customerId } = this.props;
     getByCustomerId(customerId).then((data) => {
       this.setState({
+        petOwnerId: this.props.customerId,
         feedback: data.res.context
       });
     });
@@ -95,8 +96,8 @@ class FeedBack extends React.Component<Iprop, any> {
         <div>
         <Form labelAlign="left" className="petowner-feedback-form">
             <Row gutter={8}>
-              <Col span={5}>
-                <span className="text-strong"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
+              <Col span={6}>
+                <span className="text-highlight"><FormattedMessage id="Subscription.AfterWelcomePackReceived"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
@@ -150,8 +151,8 @@ class FeedBack extends React.Component<Iprop, any> {
               </Col>
             </Row>
             <Row gutter={8}>
-              <Col span={5}>
-                <span className="text-strong"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
+              <Col span={6}>
+                <span className="text-highlight"><FormattedMessage id="Subscription.deliveryConfirmation"/></span>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
@@ -208,17 +209,17 @@ class FeedBack extends React.Component<Iprop, any> {
               </Col>
             </Row>
             <Row gutter={8}>
-              <Col span={5}>
-                <span className="text-strong"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
+              <Col span={6}>
+                <span className="text-highlight"><FormattedMessage id="Subscription.FeedbackForClinics"/></span>
                 <div>(<FormattedMessage id="Subscription.scaleFrom"/>)</div>
               </Col>
               <Col span={18}>
                 <Row gutter={8}>
                   <Col span={12}>
-                    <div className="text-align-center text-strong"><FormattedMessage id="Subscription.Visit"/> 1</div>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 1</div>
                   </Col>
                   <Col span={12}>
-                    <div className="text-align-center text-strong"><FormattedMessage id="Subscription.Visit"/> 2</div>
+                    <div className="text-align-center text-highlight"><FormattedMessage id="Subscription.Visit"/> 2</div>
                   </Col>
                 </Row>
                 <Row gutter={8}>

@@ -354,11 +354,11 @@ class DeliveryInfomation extends React.Component<any, any> {
             objectFetching: false
           });
         } else {
-          message.error((RCi18n({id:"PetOwner.Unsuccessful"}));
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error((RCi18n({id:"PetOwner.Unsuccessful"}));
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 

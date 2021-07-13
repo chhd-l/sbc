@@ -46,21 +46,36 @@ export default class CreditCard extends Component<any> {
 
 
     renderCreditForm() {
-        const { payPspItem ,customerId,storeId,pspName} = this.state;
+        const { payPspItem, customerId, storeId, pspName } = this.state;
         let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
- 
-        let secretKey = Const.PAYMENT[d]
-        console.log(payPspItem,d,secretKey)
+        let cardType=this.payCardType(d);
+        let clientKey = Const.PAYMENT[d]
+        console.log(payPspItem, d, clientKey)
         switch (d) {
             case 'de':
             case 'fr':
-                return <AdyenCreditCardForm  secretKey={secretKey} pspName={pspName} storeId={storeId} customerId={customerId}/>
+                return <AdyenCreditCardForm clientKey={clientKey} cardType={cardType} pspName={pspName} storeId={storeId} customerId={customerId} />
             case 'mx':
             case 'ru':
             case 'tr':
-                return <PayuCreditCardForm  storeId={storeId} customerId={customerId}  secretKey={secretKey} pspName={pspName}  />
+                return <PayuCreditCardForm storeId={storeId} cardType={cardType} customerId={customerId} clientKey={clientKey} pspName={pspName} />
             default:
-                return <CyberCreditCardForm country={secretKey} />
+                return <CyberCreditCardForm country={clientKey} />
+        }
+    }
+
+    payCardType(d) {
+        switch (d) {
+            case 'fr':
+                return ['mc', 'visa', 'cartebancaire'];
+            case 'ru':
+                return ['mc', 'visa', 'amex', 'discover'];
+            case 'us':
+                return ['mc', 'visa', 'amex', 'discover'];
+            case 'de':
+                return ['mc', 'visa'];
+            default:
+                return ['mc', 'visa', 'amex'];
         }
     }
 

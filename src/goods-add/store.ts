@@ -1506,7 +1506,13 @@ export default class AppStore extends Store {
           basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
           subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null,
           virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
-          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null
+          virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null,
+          depth: item.get('depth') || 0,
+          depthUnit: item.get('depthUnit') || 'mm',
+          width: item.get('width') || 0,
+          widthUnit: item.get('widthUnit') || 'mm',
+          height: item.get('height') || 0,
+          heightUnit: item.get('heightUnit') || 'mm',
         })
       );
     });

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
-import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Radio, Modal } from 'antd';
+import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Radio, Modal, Alert } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 import * as webapi from './webapi';
 
@@ -373,6 +374,7 @@ class PetOwnerTagging extends Component<any, any> {
             </BreadCrumb>
             <div className="container-search">
               <Headline title={title} />
+              <Alert type="info" message={<FormattedMessage id="PetOwner.TaggingInstruction" />} />
               <Form layout="inline" style={{ marginBottom: 20 }}>
                 <Row>
                   <Col span={8}>

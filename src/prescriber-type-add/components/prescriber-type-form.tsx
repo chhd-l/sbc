@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, InputNumber, Button, Select, message } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from '../webapi';
-import { Const, history } from 'qmkit';
+import { Const, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,6 +16,7 @@ class PrescriberTypeForm extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      loading: false,
       clinicTypeForm: {
         clinicTypeId: '',
         clinicTypeName: '',
@@ -67,10 +68,13 @@ class PrescriberTypeForm extends React.Component<any, any> {
       priority: 0,
       delFlag: 0
     };
+    this.setState({ loading: true });
     const { res } = await webapi.addClinicsDictionary(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
-      history.push('/prescriber-type')
+      message.success(RCi18n({id:"Prescriber.OperateSuccessfully"}));
+      history.push('/prescriber-type');
+    } else {
+      this.setState({ loading: false });
     }
   };
   onUpdate = async () => {
@@ -85,10 +89,13 @@ class PrescriberTypeForm extends React.Component<any, any> {
       priority: 0,
       delFlag: 0
     };
-
+    this.setState({ loading: true });
     const { res } = await webapi.updateClinicsDictionary(params);
     if (res.code === Const.SUCCESS_CODE) {
-      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
+      message.success(RCi18n({id:"Prescriber.OperateSuccessfully"}));
+      history.push('/prescriber-type');
+    } else {
+      this.setState({ loading: false });
     }
   };
 
@@ -156,11 +163,11 @@ class PrescriberTypeForm extends React.Component<any, any> {
         </FormItem>
         <FormItem wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           {this.props.pageType === 'edit' ? (
-            <Button type="primary" htmlType="submit">
+            <Button loading={this.state.loading} type="primary" htmlType="submit">
               <FormattedMessage id="Prescriber.Update" />
             </Button>
           ) : (
-            <Button type="primary" htmlType="submit">
+            <Button loading={this.state.loading} type="primary" htmlType="submit">
               <FormattedMessage id="Prescriber.Create" />
             </Button>
           )}

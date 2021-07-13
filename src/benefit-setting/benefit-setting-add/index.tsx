@@ -9,8 +9,7 @@ import BenefitSettingAddFrom from './components/BenefitSettingAddFrom';
 
 import AppStore from './store';
 import './index.less';
-import { makeRandom }from '../webapi';
-import {fromJS} from 'immutable';
+import { makeRandom, getMarketingInfo }from '../webapi';
 
 @StoreProvider(AppStore, { debug: true })
 export default class BenefitSettingAdd extends Component<any, any> {
@@ -22,15 +21,33 @@ export default class BenefitSettingAdd extends Component<any, any> {
         super(props);
         this.state = {
             loading: false,
-
-
+            initData: null
         }
     }
 
     componentDidMount() {
         this.store.getAllGroups();
-        this.promotionCode = this.getPromotionCode()
+        this.promotionCode = this.getPromotionCode();
+        const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+        // marketingId 有值为编辑状态，
+        if (marketingId) {
+            this.initData(marketingId)
+        }else {
+
+        }
     }
+
+    initData = async (marketingId) => {
+        if (!marketingId) return;
+        const { res } = await getMarketingInfo(marketingId);
+        if (res.code == Const.SUCCESS_CODE) {
+            this.setState({
+                initData: res.context
+            })
+        } else {
+        }
+
+    };
 
     getPromotionCode = () => {
         if (!this.state.promotionCode) {
@@ -76,19 +93,27 @@ export default class BenefitSettingAdd extends Component<any, any> {
             // 遍历gif的错误 todo item.gifts
             console.log('Received values of form: ', values);
 
-            values.benefitList.forEach((item, index) => {
-                if (!item.gifts || item.gifts.length === 0) {
-                    errorObject[`gifts_${index}`] = {
-                        value: null,
-                        errors: [new Error('A full gift cannot be empty')]
-                    };
-                }
-            })
             if (!err) {
                 //满赠规则具体内容校验
-                if (Object.keys(errorObject).length != 0) {
+                if (!values.benefitList) {
+                    errorObject['gif-errors'] = {
+                        value: null,
+                        errors: [new Error('Delivery number cannot be empty')]
+                    };
+                    return form.setFields(errorObject);
+                }
+                values.benefitList.forEach((item, index) => {
+                    if (!item.gifts) {
+                        errorObject['gif-errors'] = {
+                            value: null,
+                            errors: [new Error('A full gift cannot be empty')]
+                        };
+                    }
+                })
+                if (errorObject['gif-errors']) {
                   return form.setFields(errorObject);
                 }
+
                 let segmentObj = JSON.parse(values.segmentObj)
 
                 let params = {
@@ -109,7 +134,6 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "publicStatus":1,
                     "promotionType": 0
                 }
-                debugger;
                 this.setState({loading: true});
                 this.store.submitFullGift(params).then(() => {
                     this.setState({loading: false});
@@ -128,7 +152,10 @@ export default class BenefitSettingAdd extends Component<any, any> {
 
 
     render() {
-        let { loading } = this.state;
+        let { loading, initData } = this.state;
+        // @ts-ignore
+        console.log('allGroups', this.state.allGroups.toJS())
+
         return (
             <Spin spinning={loading}>
                 <div className='BenefitSettingAdd-wrap'>
@@ -140,10 +167,8 @@ export default class BenefitSettingAdd extends Component<any, any> {
                         <BenefitSettingAddHint />
 
                         <BenefitSettingAddFrom
+                            initData={initData}
                             wrappedComponentRef={(form) => this.form = form}
-                            {...{
-                                store: this.store,
-                            }}
                         />
 
                         <div className="bar-button" style={{marginLeft:'-20px'}}>

@@ -43,3 +43,13 @@ export const updateFullGift = (giftBean) => {
 export const makeRandom = () => {
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
 };
+
+/**
+ * 获取详情
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const getMarketingInfo = (marketingId) => {
+    return Fetch<TResult>(`/marketing/${marketingId}`, {
+        method: 'GET'
+    });
+};

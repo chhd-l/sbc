@@ -60,6 +60,10 @@ export default class BenefitList extends Component<any, any>{
         };
     }
 
+    componentDidMount() {
+        // 有ID 编辑状态
+    }
+
     handleDelete = key => {
         const dataSource = [...this.state.dataSource];
         // 最后一个重置数据
@@ -81,6 +85,8 @@ export default class BenefitList extends Component<any, any>{
             key: count,
             deliveryNumber: '',
             gifts: [],
+            selectedSkuIds: [],
+            selectedRows: []
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -121,6 +127,8 @@ export default class BenefitList extends Component<any, any>{
         let index = dataSource.findIndex((item) => item.key === currentSelected.key);
         if (index > -1 ) {
             dataSource[index].gifts = selectedRows.toJS();
+            dataSource[index].selectedSkuIds = selectedSkuIds;
+            dataSource[index].selectedRows = selectedRows;
         }
 
         this.setState({
@@ -138,18 +146,20 @@ export default class BenefitList extends Component<any, any>{
     openGoodsModal = (currentSelected) => {
 
         if (!currentSelected) return;
-        let {gifts} = currentSelected;
+        let {selectedSkuIds,selectedRows} = currentSelected;
         this.currentSelected = currentSelected;
-        // 当前行已选中产品，
-        if (Array.isArray(gifts) && gifts.length > 0){
-
+        // 当前行存在已选中产品，
+        if (Array.isArray(selectedSkuIds) && selectedSkuIds.length > 0){
+            this.setState({
+                selectedSkuIds,
+                selectedRows,
+            })
         }else { // 重置
             this.setState({
                 selectedSkuIds: [],
                 selectedRows: [],
             })
         }
-        // 当前行没有选中产品，
         this.setState({visible: true});
     };
 
@@ -338,6 +348,15 @@ export default class BenefitList extends Component<any, any>{
         return columns;
     }
 
+    getGiftsValidateFields = () => {
+        const { getFieldDecorator } = this.props.form;
+
+        return (
+            <Form.Item>
+                {getFieldDecorator('gif-errors')(<input hidden/>)}
+            </Form.Item>
+        );
+    }
 
     render() {
         let {
@@ -355,7 +374,7 @@ export default class BenefitList extends Component<any, any>{
                 </div>
                 <div className='BenefitList-main'>
                     <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                        Add a row
+                        <FormattedMessage id="Marketing.Addgift" />
                     </Button>
                     <Table
                         dataSource={dataSource}
@@ -364,6 +383,7 @@ export default class BenefitList extends Component<any, any>{
                         size="small"
                         key='key'
                     />
+                    {this.getGiftsValidateFields()}
                 </div>
                 <GoodsModal
                     visible={visible}

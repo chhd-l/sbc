@@ -67,7 +67,7 @@ export default class AppStore extends Store {
         } else if(response.res && response.res.code === 'K-080218') {
             message.error(response.res.message)
         }
-        return response
+        return response.res
     };
 
 }

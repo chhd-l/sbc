@@ -12,6 +12,7 @@ export default class SetConditions extends Component<any, any>{
 
     props: {
         form: any;
+        initData: any;
         relaxProps?: {
             allGroups: any;
             formObj: any;
@@ -50,7 +51,20 @@ export default class SetConditions extends Component<any, any>{
         })
     }
 
+    initDada = (initData) => {
+        // joinLevel = -3 指定人群  0 全部人群
+        if (!initData) return;
+        this.onBeanChange({
+            isTags: initData.joinLevel === '-3',
+            segmentIds: initData.joinLevel === -3 ? JSON.stringify({
+                id: initData.segmentIds[0],
+                name: initData.segmentName || 'shi',
+            }) : undefined,
+        });
+    }
+
     render() {
+        let {initData} = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const {
             allGroups,
@@ -58,13 +72,14 @@ export default class SetConditions extends Component<any, any>{
         } = this.props.relaxProps;
 
         let isTags = getFieldValue('isTags')
+        this.initDada(initData);
 
         const selectConfig = {
             rules: [{ required: true,  message: 'Please Select your tags!'}],
-            initialValue: formObj.get('segmentIds') || '',
+            initialValue: formObj.get('segmentIds') || undefined,
         }
         const radioConfig = {
-            initialValue: formObj.get('isTags') || true
+            initialValue: formObj.get('isTags') || false
         }
         const radioStyle = {
             display: 'block',

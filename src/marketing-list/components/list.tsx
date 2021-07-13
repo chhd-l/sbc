@@ -216,7 +216,13 @@ class MarketingList extends React.Component<any, any> {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
               url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
+            } else if (rowInfo.subType === 12){
+                url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
             }
+            /**
+             *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始
+             *  注意： subType为12 时，marketingStatus为任何值，都可以编辑
+             **/
 
             return (
               <div className="operation-box">
@@ -238,7 +244,7 @@ class MarketingList extends React.Component<any, any> {
                   <Tooltip placement="top" title={<FormattedMessage id="Marketing.Download" />}>
                     <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
                   </Tooltip>
-                  {rowInfo['marketingStatus'] == 3 && (
+                  {(rowInfo['marketingStatus'] == 3 || ([0,1,2,3,4,5].includes(Number(rowInfo['marketingStatus'] && rowInfo.subType === 12)))) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"

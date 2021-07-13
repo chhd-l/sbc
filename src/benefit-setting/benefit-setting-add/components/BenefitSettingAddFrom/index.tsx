@@ -7,11 +7,18 @@ import BenefitList from '../BenefitList';
 
 
 class BenefitSettingAddFrom extends Component<any, any>{
+    props: {
+        form: any;
+        initData: any;
+    };
     constructor(props) {
         super(props);
+
     }
 
+
     render() {
+        let { initData } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -26,9 +33,9 @@ class BenefitSettingAddFrom extends Component<any, any>{
 
         return (<div>
             <Form {...formItemLayout}>
-                <BasicInformation form={this.props.form} />
-                <SetConditions form={this.props.form} />
-                <BenefitList form={this.props.form}/>
+                <BasicInformation initData={initData} form={this.props.form} />
+                <SetConditions initData={initData} form={this.props.form} />
+                <BenefitList initData={initData} form={this.props.form}/>
             </Form>
 
         </div>);

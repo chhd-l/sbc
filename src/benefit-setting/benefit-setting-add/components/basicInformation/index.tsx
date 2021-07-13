@@ -2,14 +2,21 @@ import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
 import { Form, DatePicker, Input } from 'antd';
 import './index.less';
-import {Const, QMMethod} from 'qmkit';
+import {Const} from 'qmkit';
+import moment from 'moment';
 
 const { RangePicker } = DatePicker;
 
 export default class BasicInformation extends Component<any, any>{
 
+    constructor(props) {
+        super(props);
+    }
+    
+
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {initData, form} = this.props;
+        const { getFieldDecorator, setFieldsValue } = form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -29,29 +36,16 @@ export default class BasicInformation extends Component<any, any>{
                         id: 'Marketing.PleaseSelectStartingAndEndTime'
                     })
                 },
-                {
-                    validator: (_rule, value, callback) => {
-                        if (value[0]) {
-                            callback();
-                        } else {
-                            callback(
-                                (window as any).RCi18n({
-                                    id: 'Marketing.PleaseSelectStartingAndEndTime'
-                                })
-                            );
-                        }
-                    }
-                }
-            ],
+            ], initialValue: !!initData  ? [moment(initData.beginTime), moment(initData.endTime)]:undefined
+
         };
         const inputConfig = {
             rules: [
                 {
                     required: true,
-                    whitespace: true,
                     message:
                         (window as any).RCi18n({
-                            id: 'Marketing.PleaseInputPromotionName'
+                            id: 'Subscription.PleaseInputCampaignName'
                         })
                 },
                 { min: 1, max: 40, message:
@@ -59,18 +53,9 @@ export default class BasicInformation extends Component<any, any>{
                             id: 'Marketing.40Words'
                         })
                 },
-                {
-                    validator: (rule, value, callback) => {
-                        QMMethod.validatorEmoji(rule, value, callback,
-                            (window as any).RCi18n({
-                                id: 'Marketing.PromotionName'
-                            })
-                        );
-                    }
-                }
-            ],
-
+            ], initialValue: !!initData ? initData.marketingName : undefined
         }
+
         return (
             <div className='BasicInformation-wrap'>
                 <div className='BasicInformation-title'>

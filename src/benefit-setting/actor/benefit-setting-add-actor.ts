@@ -14,8 +14,8 @@ export default class BenefitSettingAddActor extends Actor {
         //不需要特殊指定immutable数据结构
         return {
             formObj: {
-                isTags: true,
-                segmentIds: '',
+                isTags: false,
+                segmentIds: undefined,
                 gifts: []
             },
             allGroups: []

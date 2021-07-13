@@ -24,7 +24,7 @@ export default class BenefitSetting extends React.Component<any, any> {
                                 <div className="benefitSetting-item">
                                     <div className="benefitSetting-item-content">
                                         {/*<img src={icon1} alt="" />*/}
-                                        <i className="iconfont icondata"/>
+                                        <i className="iconfont iconliwu-"/>
                                         <div className="benefitSetting-item-text">
                                             <h2>
                                                 <FormattedMessage id="Subscription.Consumption gift" />

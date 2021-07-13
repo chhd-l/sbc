@@ -2084,7 +2084,7 @@ export default {
         "Setting.turnText1": "Turn on and off to set time frame",
         "Setting.turnText2": "Turn on and off to set time frame;Return to your previous setting when the time frame has passed",
         "Setting.Startandendtime": "Start and end time",
-        "Setting.Timeisrequired":"Time is required!",
+        "Setting.requiredFields":"Asterisk (*) indicates required fields!",
     },
     Menu: {
         "Menu.Appointment": "Appointment",

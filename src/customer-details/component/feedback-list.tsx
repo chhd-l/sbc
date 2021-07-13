@@ -30,10 +30,9 @@ class FeedBack extends React.Component<Iprop, any> {
   }
 
   getFeedback = () => {
-    const { customerId } = this.props;
-    getByCustomerId(customerId).then((data) => {
+    const  petOwnerId  = this.props.customerId;
+    getByCustomerId(petOwnerId).then((data) => {
       this.setState({
-        petOwnerId: this.props.customerId,
         feedback: data.res.context
       });
     });

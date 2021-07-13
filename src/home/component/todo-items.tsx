@@ -650,7 +650,7 @@ class TodoItems extends React.Component<any, any> {
             </div>
           </div>
 
-          <div className="item-recom">
+          {/*<div className="item-recom">
 
             <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
             <div className="item-recommendation-main space-between">
@@ -679,7 +679,7 @@ class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
             </div>
-          </div>
+          </div>*/}
         </Spin>
       </div>
     );

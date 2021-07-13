@@ -12,6 +12,7 @@ const TextArea = Input.TextArea;
 
 interface Iprop extends FormComponentProps {
   customerId: string;
+  petOwnerId: string;
 }
 
 class FeedBack extends React.Component<Iprop, any> {
@@ -30,10 +31,9 @@ class FeedBack extends React.Component<Iprop, any> {
   }
 
   getFeedback = () => {
-    const { customerId } = this.props;
-    getByCustomerId(customerId).then((data) => {
+    const  petOwnerId  = this.props.customerId;
+    getByCustomerId(petOwnerId).then((data) => {
       this.setState({
-        petOwnerId: this.props.customerId,
         feedback: data.res.context
       });
     });

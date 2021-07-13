@@ -13,6 +13,7 @@ class AddSynonyms extends Component<any, any> {
     this.state = {
       title: RCi18n({id:'Product.AddSynonyms'}),
       loading: false,
+      btnLoading: false,
     };
   }
   componentDidMount() {
@@ -81,6 +82,9 @@ class AddSynonyms extends Component<any, any> {
     return false;
   }
   handleSubmit = e => {
+    this.setState({
+      btnLoading:true,
+    })
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
@@ -105,16 +109,23 @@ class AddSynonyms extends Component<any, any> {
         }
         if(result.res.code === 'K-000000') {
           message.success(RCi18n({id:'Product.OperateSuccessfully'}));
-          history.go(-1)
           //跳转回list页面时tab默认展开第3个
           sessionStorage.setItem('productSearchActive','3')
           //重置一下key的值
           id = 0
+
+          history.go(-1)
         }else {
           message.warn(result.res.internalMessage || result.res.message);
         }
       }
     });
+    setTimeout(()=>{
+      this.setState({
+        btnLoading:false,
+      })
+    },500)
+
   };
 
   render(){
@@ -137,7 +148,7 @@ class AddSynonyms extends Component<any, any> {
     };
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { title,loading } = this.state
+    const { title,loading,btnLoading } = this.state
 
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
@@ -196,7 +207,7 @@ class AddSynonyms extends Component<any, any> {
           </div>
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={this.handleSubmit} style={{ marginRight: 10 }}>
+          <Button type="primary" onClick={this.handleSubmit} style={{ marginRight: 10 }} loading={btnLoading}>
             <FormattedMessage id="Product.Save"/>
           </Button>
           <Button style={{ marginRight: 10 }} onClick={()=>{

@@ -33,6 +33,18 @@ const calcPetWeight = (jsonStr: string) => {
   }
 };
 
+export async function getSpecialNeedsList() {
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] ?? '0';
+  const storeLan = (window as any).countryEnum[storeId] ?? 'mx';
+  if (storeLan === 'us') {
+    return await Promise.all([getPetsBreedListByType('specialneeds_dog'), getPetsBreedListByType('specialneeds_cat')]).then(([dogList, catList]) => ({ dogSpecialNeeds: dogList, catSpecialNeeds: catList }));
+  } else if (storeLan === 'tr' || storeLan === 'ru' || storeLan === 'fr') {
+    return await Promise.all([getPetsBreedListByType('sensitivity_dog'), getPetsBreedListByType('sensitivity_cat')]).then(([dogList, catList]) => ({ dogSpecialNeeds: dogList, catSpecialNeeds: catList }));
+  } else {
+    return await getPetsBreedListByType('specialNeeds').then((specialList) => ({ dogSpecialNeeds: specialList, catSpecialNeeds: specialList }));
+  }
+};
+
 class PetItem extends React.Component<Iprop, any> {
   constructor(props: Iprop) {
     super(props);
@@ -45,7 +57,8 @@ class PetItem extends React.Component<Iprop, any> {
       petImg: '',
       catBreed: [],
       dogBreed: [],
-      specialNeeds: [],
+      dogSpecialNeeds: [],
+      catSpecialNeeds: [],
       tagList: [],
       stageList: [],
       customerPetsPropRelationList: [
@@ -82,7 +95,7 @@ class PetItem extends React.Component<Iprop, any> {
       const newPetInfo = {
           ...pet,
           petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? prevState.dogBreed : prevState.catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName(),
-          needs: pet.needs ? pet.needs.split(',').map(need => prevState.specialNeeds.find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
+          needs: pet.needs ? pet.needs.split(',').map(need => (pet.petsType === 'dog' ? prevState.dogSpecialNeeds : prevState.catSpecialNeeds).find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
         }
       if (petsInfo !== prevState.pet) {
         return {
@@ -97,13 +110,15 @@ class PetItem extends React.Component<Iprop, any> {
 
   getPet = async () => {
     this.setState({ loading: true });
-    let { dogBreed, catBreed, specialNeeds } = this.state;
-    if (dogBreed.length === 0 && catBreed.length === 0 && specialNeeds.length === 0) {
-      [dogBreed, catBreed, specialNeeds] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed'), getPetsBreedListByType('specialNeeds')]);
+    let { dogBreed, catBreed, dogSpecialNeeds, catSpecialNeeds } = this.state;
+    let specialNeeds = { dogSpecialNeeds: [], catSpecialNeeds: [] };
+    if (dogBreed.length === 0 && catBreed.length === 0 && dogSpecialNeeds.length === 0 && catSpecialNeeds.length === 0) {
+      [dogBreed, catBreed, specialNeeds] = await Promise.all([getPetsBreedListByType('dogBreed'), getPetsBreedListByType('catBreed'), getSpecialNeedsList()]);
       this.setState({
         dogBreed,
         catBreed,
-        specialNeeds
+        dogSpecialNeeds: specialNeeds.dogSpecialNeeds,
+        catSpecialNeeds: specialNeeds.catSpecialNeeds
       });
     }
     if(this.props.petId) {
@@ -114,7 +129,7 @@ class PetItem extends React.Component<Iprop, any> {
           pet: {
             ...pet,
             petsBreedName: pet.isPurebred ? ((pet.petsType === 'dog' ? dogBreed : catBreed).find(b => b.value === pet.petsBreed || b.valueEn === pet.petsBreed)?.name ?? pet.petsBreed) : getMixedBreedDisplayName(),
-            needs: pet.needs ? pet.needs.split(',').map(need => specialNeeds.find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
+            needs: pet.needs ? pet.needs.split(',').map(need => (pet.petsType === 'dog' ? dogSpecialNeeds : catSpecialNeeds).find(n => n.value === need || n.valueEn === need)?.name ?? need).join(',') : ''
           },
           petImg: pet.petsImg || '',       
           loading: false

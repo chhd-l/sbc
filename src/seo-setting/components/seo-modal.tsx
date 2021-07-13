@@ -78,7 +78,5 @@ export default class SeoModal extends Component<any, any> {
       </Modal>
     );
   }
-  componentWillUnmount() {
-    const { clear } = this.props.relaxProps;
-    clear()}
+
 }

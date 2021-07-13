@@ -1294,7 +1294,7 @@ export default {
         "PetOwner.verifyAddressAlert": "We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery.",
         "PetOwner.originalAddress": "Original Address",
         "PetOwner.suggestAddress": "Suggested Address",
-        "PetOwner.cannotDeletePaymentCard": "your cannot delete the card!",
+        "PetOwner.cannotDeletePaymentCard": "The card cannot be deleted. A subscription is bound to this card!",
         "PetOwner.firstStageName": "First stage name",
         "PetOwner.secondStageName": "Second stage name",
         "PetOwner.thirdStageName": "Third stage name",

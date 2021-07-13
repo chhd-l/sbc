@@ -22,7 +22,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag  } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -66,6 +66,7 @@ const formTableItemLayout = {
     lg: { span: 19 }
   }
 };
+
 const columns = [
   {
     title: 'Subscription Number',
@@ -83,6 +84,39 @@ const columns = [
     title: 'Product Name',
     dataIndex: 'productName',
     key: 'productName',
+
+    width: '14%',
+    
+    // onCell: () => {
+    //   return {
+    //     render:(text,record,index)=>{
+    //       let html =  text.replaceAll(",","<br/>")
+    //        return(
+    //         <div className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
+    //           maxWidth: 100,
+    //           overflow: "hidden",
+    //           whiteSpace: "nowrap",
+    //           textOverflow: "ellipsis",
+    //           cursor: "pointer"}
+    //       } />
+    //        )
+    //     },
+    //   }
+    // },
+    render:(text,record,index)=>{
+      let html =  text.replaceAll(",","<br/>")
+       return(
+        <span className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
+          maxWidth: 80,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          display:"inline-block",
+          textOverflow: "ellipsis",
+          cursor: "pointer"}
+      } />
+       )
+    },
+    ellipsis: true,
   },
   {
     title: 'Shipment Date',
@@ -1054,7 +1088,7 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={this.state.tableres} />
+                              < Table bordered columns={columns} dataSource={this.state.tableres} pagination={false} />
                               // < Table bordered columns={columns} />
                             ) }
 

@@ -101,5 +101,5 @@ export {
   getOrderStatusValue,
   QRScaner,
   RCi18n,
-  getFormatDeliveryDateStr
+  getFormatDeliveryDateStr,
 };

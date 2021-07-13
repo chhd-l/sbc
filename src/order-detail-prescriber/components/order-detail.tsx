@@ -450,7 +450,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 {/*)}*/}
               </p>
               <p style={styles.darkText}>
-                {<FormattedMessage id="Order.orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                {<FormattedMessage id="Order.OrderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
@@ -470,7 +470,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               <p style={styles.darkText}>
                 {<FormattedMessage id="Order.consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
               </p>
-              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}>{'Pet owner type:  ' + detail.getIn(['buyer', 'levelName'])}</p>}
+              {detail.getIn(['buyer', 'customerFlag']) && <p style={styles.darkText}><FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}</p>}
               {/* <p style={styles.darkText}>
                 {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
               </p>

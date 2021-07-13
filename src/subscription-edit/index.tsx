@@ -1,21 +1,19 @@
 import React from 'react';
-import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, Select, message, DatePicker, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Tag, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
-import { StoreProvider } from 'plume2';
+import { Breadcrumb, Tabs, Card, Menu, Row, Col, Button, Input, Select, message, Table, InputNumber, Collapse, Modal, Radio, Checkbox, Spin, Tooltip, Popconfirm, Popover, Calendar } from 'antd';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
-import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
 import moment from 'moment';
+import PaymentMethod from './component/payment-method'
 
-const Panel = Collapse.Panel;
 
 const { Option } = Select;
 
 const { TabPane } = Tabs;
-const { Search } = Input;
 
 const NEW_ADDRESS_TEMPLATE = {
   firstName: '',
@@ -33,19 +31,6 @@ const NEW_ADDRESS_TEMPLATE = {
   rfc: ''
 };
 
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="Subscription.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="Subscription.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="Subscription.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="Subscription.invalid" />;
-  } else {
-    return <FormattedMessage id="Subscription.unknown" />;
-  }
-};
 /**
  * 订单详情
  */
@@ -64,7 +49,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
-      paymentInfo: {},
+      paymentInfo: null,
       deliveryAddressId: '',
       deliveryAddressInfo: {},
       billingAddressId: '',
@@ -107,7 +92,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       addressLoading: false,
       addressItem: {},
       addressType: 'delivery',
-      customerId: ''
+      customerId: '',
+      paymentMethodVisible: false,
+      paymentId: '',
+      payPspItemEnum: ''
     };
   }
 
@@ -130,7 +118,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : subscriptionDetail.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />,
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? RCi18n({id:"Subscription.Active"}) : subscriptionDetail.subscribeStatus === '1' ? RCi18n({ id:"Subscription.Pause" }) : RCi18n({ id:"Subscription.Inactive" }),
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -141,7 +129,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             phoneNumber: subscriptionDetail.customerPhone,
             // frequency: subscriptionDetail.cycleTypeId,
             // frequencyName: subscriptionDetail.frequency,
-            nextDeliveryTime: subscriptionDetail.nextDeliveryTime
+            nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
+            customerId: subscriptionDetail.customerId
           };
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
@@ -216,7 +205,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -238,7 +227,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {});
+      .catch(() => {});
   };
 
   getDict = () => {
@@ -319,7 +308,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         } else {
         }
       })
-      .catch((err) => {});
+      .catch(() => {});
   };
   onSubscriptionChange = ({ field, value }) => {
     let data = this.state.subscriptionInfo;
@@ -379,7 +368,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       this.setState({
         saveLoading: false
       });
-      message.error(<FormattedMessage id="Subscription.quantityAndFrequency"/>);
+      message.error((window as any).RCi18n({id:"Subscription.quantityAndFrequency"}));
       return;
     }
     let params = {
@@ -390,7 +379,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format('YYYY-MM-DD'),
       subscribeId: subscriptionInfo.subscriptionNumber,
       changeField: '',
-      promotionCode: this.state.promotionCodeShow
+      promotionCode: this.state.promotionCodeShow,
+      paymentId: this.state.paymentId,
+      payPspItemEnum: this.state.payPspItemEnum
     };
     let changeFieldArr = [];
     if (params.deliveryAddressId !== originalParams.deliveryAddressId) {
@@ -398,7 +389,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     // if (params.cycleTypeId !== originalParams.cycleTypeId) {
     //   changeFieldArr.push('Frequency');
-    // }
+    // 
     if (params.billingAddressId !== originalParams.billingAddressId) {
       changeFieldArr.push('Billing Address');
     }
@@ -424,9 +415,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            saveLoading: false
+            saveLoading: false,
+            payPspItemEnum: ''
           });
-          message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+          message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
           this.getSubscriptionDetail();
         } else {
           this.setState({
@@ -434,7 +426,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           saveLoading: false
         });
@@ -545,7 +537,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   deliveryOK = async () => {
-    let { deliveryList, deliveryAddressId, deliveryPrice } = this.state;
+    let { deliveryList, deliveryAddressId } = this.state;
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
@@ -714,15 +706,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loading: false
         });
       });
   };
 
-  handleYearChange = (value) => {};
-  tabChange = (key) => {};
+  handleYearChange = () => {};
+  tabChange = () => {};
   cancelNextSubscription = (row) => {
     let goodsItems = [];
     if (row && row.tradeItems) {
@@ -748,14 +740,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail();
-          message.success(<FormattedMessage id="Subscription.OperationSuccessful"/>);
+          message.success(RCi18n({id:"Subscription.OperationSuccessful"}));
         } else {
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -789,14 +781,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail();
-          message.success(<FormattedMessage id="Subscription.OperationSuccessful"/>);
+          message.success(RCi18n({id:"Subscription.OperationSuccessful"}));
         } else {
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -840,11 +832,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || <FormattedMessage id="Subscription.OperationFailure"/>);
+          message.error(res.message || RCi18n({ id:"Subscription.OperationFailure"}));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || <FormattedMessage id="Subscription.OperationFailure"/>);
+        message.error(err.toString() || RCi18n({ id:"Subscription.OperationFailure"}));
       });
   };
 
@@ -889,20 +881,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   render() {
     const {
-      orderInfo,
       recentOrderList,
       subscriptionInfo,
       frequencyList,
       frequencyClubList,
       goodsInfo,
-      petsInfo,
       paymentInfo,
       deliveryAddressInfo,
       billingAddressInfo,
       countryArr,
       deliveryList,
       billingList,
-      title,
       noStartOrder,
       completedOrder,
       currentOrder,
@@ -911,15 +900,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       visibleDate
       // operationLog
     } = this.state;
-    const menu = (
-      <Menu>
-        {recentOrderList.map((item) => (
-          <Menu.Item key={item.recentOrderId}>
-            <Link to={'/order-detail/' + item.recentOrderId}>{item.recentOrderId + '(' + item.orderStatus + ')'}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
-    );
     // const cartExtra = (
     //   <Button type="link"  style={{fontSize:16,}}>Skip Next Delivery</Button>
     // );
@@ -1433,9 +1413,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
 
                   <Col span={12}>
-                    <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change"/>}>
-                      <a style={styles.edit} onClick={() => this.deliveryOpen()} className="iconfont iconEdit"></a>
-                    </Tooltip>
+                    <a style={styles.edit} onClick={() => this.deliveryOpen()} className="iconfont iconEdit"></a>
                   </Col>
 
                   <Col span={24}>
@@ -1514,18 +1492,44 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <Row>
-                  <Col span={24}>
+                  <Col span={12}>
                     <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod"/></label>
                   </Col>
-
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                  </Col>
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
-                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                  </Col>
+                  <AuthWrapper functionName="f_change_payment_method">
+                    <>
+                      <Col span={12}>
+                        <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
+                      </Col>
+                        <PaymentMethod 
+                        cancel={()=>this.setState({paymentMethodVisible:false})} 
+                        cardId={paymentInfo && paymentInfo.id}
+                        customerId = {subscriptionInfo.customerId}
+                        customerAccount = { subscriptionInfo.consumerAccount }
+                        changePaymentMethod={(paymentId, payPspItemEnum, selectCard)=>{this.setState({
+                          paymentId, payPspItemEnum, paymentInfo: selectCard
+                        })}}
+                        paymentMethodVisible={this.state.paymentMethodVisible}/>            
+                    </>
+                  </AuthWrapper>
+                  { paymentInfo ? 
+                  <>
+                    <Col span={24}>
+                         <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                         <p>{paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                     </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
+                      <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                    </Col></> 
+                    : 
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                      <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
+                    </Col>}    
+                    { this.state.payPspItemEnum ?   
+                     <div className="errorMessage">
+                       <FormattedMessage id="Subscription.savePaymentMethod" />
+                    </div> : null}                   
                 </Row>
               </Col>
             </Row>
@@ -1734,7 +1738,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <TabPane tab={<FormattedMessage id="Subscription.Completed"/>} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
-                  rowClassName={(record, index) => {
+                  rowClassName={(record) => {
                     let className = 'normal-row';
                     if (!record.id) className = 'disable-row';
                     return className;

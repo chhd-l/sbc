@@ -12,11 +12,12 @@ interface IKey {
   key: string
 }
 interface IProps {
-  secretKey: IKey
+  clientKey: IKey
   customerId: string
   storeId: number
   pspName: string
   form:any
+  cardType:any
 }
 class PayuCreditCardForm extends Component<IProps> {
   cardNumber: any;
@@ -49,7 +50,7 @@ class PayuCreditCardForm extends Component<IProps> {
         src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro',
       }
     ]
-    const formElements = new (window as any).POS.Fields(this.props.secretKey.key, {
+    const formElements = new (window as any).POS.Fields(this.props.clientKey.key, {
       fonts
     })
 

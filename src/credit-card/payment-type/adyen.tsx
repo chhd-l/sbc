@@ -19,11 +19,12 @@ interface IAdyenCardParam {
   "encryptedSecurityCode": string,//adyen
   "holderName": string,//adyen
   "pspName": string
+  
 
 }
 export default class AdyenCreditCardForm extends Component {
   props: {
-    secretKey:any
+    clientKey:any
     showPayButton?: boolean
     showBrandIcon?: boolean
     hasHolderName?: boolean
@@ -32,6 +33,7 @@ export default class AdyenCreditCardForm extends Component {
     customerId: string
     pspName: string
     storeId: number
+    cardType:any
   }
   constructor(props) {
     super(props);
@@ -58,11 +60,11 @@ export default class AdyenCreditCardForm extends Component {
    */
   initFormPay() {
     const language = sessionStorage.getItem('language')
-    const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon } = this.props;
+    const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon ,cardType,clientKey} = this.props;
     const configuration: any = {
       locale: language,
       environment: Const.PAYMENT_ENVIRONMENT,
-      clientKey: this.props.secretKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
+      clientKey: clientKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,
       onChange: this.handleOnChange,
       onAdditionalDetails: this.handleOnAdditionalDetails,
@@ -72,6 +74,7 @@ export default class AdyenCreditCardForm extends Component {
 
     const card = checkout.create('card', {
       //: ["visa", "amex"],
+      brands:cardType,
       hasHolderName,
       holderNameRequired,
       showPayButton,

@@ -46,30 +46,30 @@ const AddRecommendaionCode = (props) => {
   function addCode() {
     props.form.validateFields((err) => {
       if (!err) {
-        setLoading(true)
+        setLoading(true);
         webapi
-        .generateRecommendationCode({
-          count: amount,
-          prescriberId: props.prescriberKeyId,
-          prescriberNo: props.prescriberId,
-          recommendationMode: 'SINGLE_USE'
-        })
-        .then((data) => {
-          const res = data.res;
-          if (res.code === Const.SUCCESS_CODE) {
-            message.success(window.RCi18n({ id: 'Content.OperateSuccessfully' }));
+          .generateRecommendationCode({
+            count: amount,
+            prescriberId: props.prescriberKeyId,
+            prescriberNo: props.prescriberId,
+            recommendationMode: 'SINGLE_USE'
+          })
+          .then((data) => {
+            const res = data.res;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success(window.RCi18n({ id: 'Content.OperateSuccessfully' }));
+              setLoading(false);
+              props.updatePrescriberCodeNumber(res.context.singleUse);
+              cancel();
+            } else {
+              message.error(res.message || window.RCi18n({ id: 'Order.AddFailed' }));
+              setLoading(false);
+            }
+          })
+          .catch(() => {
+            message.error(window.RCi18n({ id: 'Order.AddFailed' }));
             setLoading(false);
-            props.updatePrescriberCodeNumber(res.context.singleUse);
-            cancel();
-          } else {
-            message.error(res.message || window.RCi18n({ id: 'Order.AddFailed' }));
-            setLoading(false);
-          }
-        })
-        .catch(() => {
-          message.error(window.RCi18n({ id: 'Order.AddFailed' }));
-          setLoading(false);
-        })
+          });
       }
     });
   }
@@ -80,10 +80,24 @@ const AddRecommendaionCode = (props) => {
       visible={visible}
       onOk={() => addCode()}
       onCancel={() => cancel()}
-      okButtonProps={{loading: loading }}
+      okButtonProps={{ loading: loading }}
     >
       <Form {...formItemLayout}>
         {prescriberId ? (
+          <FormItem label={RCi18n({ id: 'Prescriber.amount' })}>
+            {getFieldDecorator('amount', {
+              rules: [{ required: true, message: RCi18n({ id: 'Prescriber.PleaseSelectAmount' }) }]
+            })(
+              <Select onChange={(value) => setAmount(value)} allowClear>
+                {amountList.map((item) => (
+                  <Option value={item} key={item}>
+                    {item}
+                  </Option>
+                ))}
+              </Select>
+            )}
+          </FormItem>
+        ) : (
           <FormItem label={RCi18n({ id: 'Prescriber.amount' })}>
             {getFieldDecorator('amount', {
               rules: [{ required: true, message: RCi18n({ id: 'Prescriber.pleaseInputAmount' }) }]
@@ -97,20 +111,6 @@ const AddRecommendaionCode = (props) => {
                   setAmount(value);
                 }}
               />
-            )}
-          </FormItem>
-        ) : (
-          <FormItem label="Amount">
-            {getFieldDecorator('amount', {
-              rules: [{ required: true, message: RCi18n({ id: 'Prescriber.PleaseSelectAmount' }) }]
-            })(
-              <Select onChange={(value) => setAmount(value)} allowClear>
-                {amountList.map((item) => (
-                  <Option value={item} key={item}>
-                    {item}
-                  </Option>
-                ))}
-              </Select>
             )}
           </FormItem>
         )}

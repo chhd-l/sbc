@@ -91,6 +91,8 @@ class CouponInfoForm extends Component<any, any> {
       fullBuyType: Number;
       // 购满多少钱
       fullBuyPrice: Number;
+
+      fullbuyCount: string | number;
       // 营销类型(0,1,2,3) 0全部商品，1品牌，2平台类目/店铺分类，3自定义货品（店铺可用）
       scopeType: Number;
       // 商品品牌
@@ -157,6 +159,7 @@ class CouponInfoForm extends Component<any, any> {
     denomination: 'denomination',
     fullBuyType: 'fullBuyType',
     fullBuyPrice: 'fullBuyPrice',
+    fullbuyCount: 'fullbuyCount',
     scopeType: 'scopeType',
     brands: 'brands',
     cates: 'cates',
@@ -305,6 +308,19 @@ class CouponInfoForm extends Component<any, any> {
       field: 'couponDiscount',
       value: null
     });
+
+    fieldsValue({
+      field: 'fullBuyPrice',
+      value: null
+    })
+    fieldsValue({
+      field: 'fullbuyCount',
+      value: null
+    })
+    fieldsValue({
+      field: 'fullBuyType',
+      value: 1
+    });
   };
 
   attributeChange = (value) => {
@@ -353,6 +369,7 @@ class CouponInfoForm extends Component<any, any> {
       denomination,
       fullBuyType,
       fullBuyPrice,
+      fullbuyCount,
       scopeType,
       couponDesc,
       fieldsValue,
@@ -397,21 +414,21 @@ class CouponInfoForm extends Component<any, any> {
     return (
       <RightContent>
         <Form labelAlign={'left'}>
-          <div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>
-          <FormItem {...formItemLayout} labelAlign="left">
-            <div className="ant-form-inline">
-              <Radio.Group value={marketingType} onChange={(e) => {
-                setMarketingType(e.target.value)
-                fieldsValue({
-                  field: 'marketingType',
-                  value: e.target.value
-                });
-              }}>
-                <Radio value={0}><FormattedMessage id="Marketing.Promotion" /></Radio>
-                <Radio value={3}><FormattedMessage id="Marketing.Coupon" /></Radio>
-              </Radio.Group>
-            </div>
-          </FormItem>
+          {/*<div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>*/}
+          {/*<FormItem {...formItemLayout} labelAlign="left">*/}
+          {/*  <div className="ant-form-inline">*/}
+          {/*    <Radio.Group value={marketingType} onChange={(e) => {*/}
+          {/*      setMarketingType(e.target.value)*/}
+          {/*      fieldsValue({*/}
+          {/*        field: 'marketingType',*/}
+          {/*        value: e.target.value*/}
+          {/*      });*/}
+          {/*    }}>*/}
+          {/*      <Radio value={0}><FormattedMessage id="Marketing.Promotion" /></Radio>*/}
+          {/*      <Radio value={3}><FormattedMessage id="Marketing.Coupon" /></Radio>*/}
+          {/*    </Radio.Group>*/}
+          {/*  </div>*/}
+          {/*</FormItem>*/}
           <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupontype" />} required={true}>
             {getFieldDecorator('couponPromotionType', {
               initialValue: couponPromotionType
@@ -423,6 +440,9 @@ class CouponInfoForm extends Component<any, any> {
                   </Radio>
                   <Radio value={1}>
                     <span style={styles.darkColor}><FormattedMessage id="Marketing.Percentage" /></span>
+                  </Radio>
+                  <Radio value={3}>
+                    <span style={styles.darkColor}><FormattedMessage id="Marketing.Freeshipping" /></span>
                   </Radio>
                 </RadioGroup>
               </>
@@ -467,7 +487,7 @@ class CouponInfoForm extends Component<any, any> {
             </FormItem>
           }
           <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
-          <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.CouponName" />} required={true}>
+          <FormItem {...formItemSmall} label={couponPromotionType !== 3 ? <FormattedMessage id="Marketing.CouponName" /> : <FormattedMessage id="Marketing.Freeshippingname" />} required={true}>
             {getFieldDecorator('couponName', {
               initialValue: couponName,
               rules: [
@@ -669,7 +689,6 @@ class CouponInfoForm extends Component<any, any> {
             </FormItem>
           )}
           {couponPromotionType === 1 && (
-
               <FormItem {...formItemSmall} label={<FormattedMessage id="Marketing.Coupondiscount" />} required={true}>
                 <div style={{ display: 'flex' }}>
                   <FormItem>
@@ -762,92 +781,225 @@ class CouponInfoForm extends Component<any, any> {
                   </FormItem>
                 </div>
               </FormItem>
-
           )}
-          <ErrorDiv>
-            <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />} required={true} style={{ marginTop: '40px' }}>
-              <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
-                <FormItem>
-                  <Radio value={1}>
-                    {/* <span style={styles.darkColor}>满&nbsp;&nbsp;</span> */}
-                    {getFieldDecorator('fullBuyPrice', {
-                      initialValue: fullBuyPrice,
-                      rules: [
-                        {
-                          required: fullBuyType === 1,
-                          message: (window as any).RCi18n({
-                            id: 'Marketing.theUsageThreshold'
-                          })
-                        },
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (fullBuyType == 1 && (value || value === 0)) {
-                              if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                                callback(
-                                  (window as any).RCi18n({
-                                    id: 'Marketing.IntegersBetweenAreAllowed'
-                                  })
-                                );
-                                return;
-                              } else if (value <= parseInt(`${denomination}`)) {
-                                callback(
-                                  (window as any).RCi18n({
-                                    id: 'Marketing.TheThresholdMust'
-                                  })
-                                );
-                                return;
-                              }
-                            }
-                            callback();
-                          }
-                        }
-                      ]
-                    })(
-                      <Input
-                        // style={{ maxWidth: 170 }}
-                        style={{ width: 338 }}
-                        prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                        disabled={fullBuyType === 0}
-                        placeholder={
-                          (window as any).RCi18n({
-                          id: 'Marketing.integerfrom1to99999'
-                        })
-                        }
-                        maxLength={5}
-                        onChange={(e) => {
-                          fieldsValue({
-                            field: 'fullBuyPrice',
-                            value: e.currentTarget.value
-                          });
-                        }}
-                      />
-                    )}
-                  </Radio>
-                  <Radio value={0}>
-                    <span style={styles.darkColor}><FormattedMessage id="Marketing.NoThreshold" /></span>
-                  </Radio>
-                </FormItem>
-              </RadioGroup>
-            </FormItem>
-          </ErrorDiv>
+          {
 
-          <div className="bold-title"><FormattedMessage id="Marketing.SelectProducts" /></div>
-          <FormItem {...formItemLayout} required={true}>
-            <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
-              <Radio value={0}>
-                <span style={styles.darkColor}><FormattedMessage id="Marketing.AllProducts" /></span>
-              </Radio>
-              <Radio value={5}>
-                <span style={styles.darkColor}><FormattedMessage id="Marketing.Category" /></span>
-              </Radio>
-              <Radio value={4}>
-                <span style={styles.darkColor}><FormattedMessage id="Marketing.Custom" /></span>
-              </Radio>
-              <Radio value={6}>
-                <span style={styles.darkColor}><FormattedMessage id="Marketing.Attribute" /></span>
-              </Radio>
-            </RadioGroup>
-          </FormItem>
+            couponPromotionType !== 3 && (
+              <>
+                <ErrorDiv>
+                  <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />} required={true} style={{ marginTop: '40px' }}>
+                    <RadioGroup value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}>
+                      <FormItem>
+                        <Radio value={1}>
+                          {/* <span style={styles.darkColor}>满&nbsp;&nbsp;</span> */}
+                          {getFieldDecorator('fullBuyPrice', {
+                            initialValue: fullBuyPrice,
+                            rules: [
+                              {
+                                required: fullBuyType === 1,
+                                message: (window as any).RCi18n({
+                                  id: 'Marketing.theUsageThreshold'
+                                })
+                              },
+                              {
+                                validator: (_rule, value, callback) => {
+                                  if (fullBuyType == 1 && (value || value === 0)) {
+                                    if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.IntegersBetweenAreAllowed'
+                                        })
+                                      );
+                                      return;
+                                    } else if (value <= parseInt(`${denomination}`)) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.TheThresholdMust'
+                                        })
+                                      );
+                                      return;
+                                    }
+                                  }
+                                  callback();
+                                }
+                              }
+                            ]
+                          })(
+                            <Input
+                              // style={{ maxWidth: 170 }}
+                              style={{ width: 338 }}
+                              prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                              disabled={fullBuyType === 0}
+                              placeholder={
+                                (window as any).RCi18n({
+                                  id: 'Marketing.integerfrom1to99999'
+                                })
+                              }
+                              maxLength={5}
+                              onChange={(e) => {
+                                fieldsValue({
+                                  field: 'fullBuyPrice',
+                                  value: e.currentTarget.value
+                                });
+                              }}
+                            />
+                          )}
+                        </Radio>
+                        <Radio value={0}>
+                          <span style={styles.darkColor}><FormattedMessage id="Marketing.NoThreshold" /></span>
+                        </Radio>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormItem>
+                </ErrorDiv>
+                <div className="bold-title"><FormattedMessage id="Marketing.SelectProducts" /></div>
+                <FormItem {...formItemLayout} required={true}>
+                  <RadioGroup value={scopeType} onChange={(e) => chooseScopeType((e as any).target.value)}>
+                    <Radio value={0}>
+                      <span style={styles.darkColor}><FormattedMessage id="Marketing.AllProducts" /></span>
+                    </Radio>
+                    <Radio value={5}>
+                      <span style={styles.darkColor}><FormattedMessage id="Marketing.Category" /></span>
+                    </Radio>
+                    <Radio value={4}>
+                      <span style={styles.darkColor}><FormattedMessage id="Marketing.Custom" /></span>
+                    </Radio>
+                    <Radio value={6}>
+                      <span style={styles.darkColor}><FormattedMessage id="Marketing.Attribute" /></span>
+                    </Radio>
+                  </RadioGroup>
+                </FormItem>
+              </>
+            )
+          }
+          {
+            couponPromotionType === 3 && (
+              <>
+                <div className="bold-title"><FormattedMessage id="Marketing.Freeshippingtype" />:</div>
+                <FormItem {...formItemLayout} labelAlign="left">
+                  {getFieldDecorator(
+                    'subType',
+                    {}
+                  )(
+                    <>
+                      <RadioGroup
+                        value={fullBuyType} onChange={(e) => this.changeFullBuyType((e as any).target.value)}
+                      >
+                        {/*<FormItem>*/}
+                        {/*  <Radio value={1}>All order</Radio>*/}
+                        {/*</FormItem>*/}
+                        <FormItem>
+                          <Radio value={1}>
+                    <span>
+                      <FormattedMessage id="Marketing.Orderreach" /> &nbsp;
+                      {getFieldDecorator('fullBuyPrice', {
+                        initialValue: fullBuyPrice,
+                        rules: [
+                          {
+                            required: fullBuyType === 1,
+                            message: (window as any).RCi18n({
+                              id: 'Marketing.theUsageThreshold'
+                            })
+                          },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (fullBuyType == 1 && (value || value === 0)) {
+                                if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                                  callback(
+                                    (window as any).RCi18n({
+                                      id: 'Marketing.IntegersBetweenAreAllowed'
+                                    })
+                                  );
+                                  return;
+                                } else if (value <= parseInt(`${denomination}`)) {
+                                  callback(
+                                    (window as any).RCi18n({
+                                      id: 'Marketing.TheThresholdMust'
+                                    })
+                                  );
+                                  return;
+                                }
+                              }
+                              callback();
+                            }
+                          }
+                        ]
+                      })(
+                        <Input
+                          style={{ width: 200 }}
+                          title={
+                            (window as any).RCi18n({
+                              id: 'Marketing.0-9999',
+                            })
+                          }
+                          disabled={fullBuyType !== 1 }
+                          placeholder={
+                            (window as any).RCi18n({
+                              id: 'Marketing.integerfrom1to99999'
+                            })
+                          }
+                          maxLength={5}
+                          onChange={(e) => {
+                            fieldsValue({
+                              field: 'fullBuyPrice',
+                              value: e.currentTarget.value
+                            });
+                          }}
+                        />
+                      )}
+                      <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+                    </span>
+                          </Radio>
+                        </FormItem>
+                        <FormItem>
+                          <Radio value={2}>
+                    <span>
+                      <FormattedMessage id="Marketing.Orderreach" />&nbsp;
+                      {getFieldDecorator('fullbuyCount', {
+                        // rules: [
+                        //   {
+                        //     validator: (_rule, value, callback) => {
+                        //       if(shippingBean.get('subType') !== 11) {
+                        //         callback()
+                        //       }else if (!value) {//shippingBean.get('shippingItemValue')
+                        //         callback(
+                        //           (window as any).RCi18n({
+                        //             id: 'Marketing.Itemsmustbeentered',
+                        //           })
+                        //         );
+                        //       } else if(!/^\+?[1-9]\d{0,3}?$/.test(value)) {
+                        //         callback(
+                        //           (window as any).RCi18n({
+                        //             id: 'Marketing.1-9999',
+                        //           })
+                        //         );
+                        //       }
+                        //       callback();
+                        //     }
+                        //   }
+                        // ],
+                        initialValue: fullbuyCount
+                      })(
+                        <Input style={{ width: 200 }}
+                               onChange={(e) => {
+                                 fieldsValue({
+                                   field: 'fullbuyCount',
+                                   value: e.currentTarget.value
+                                 });
+                               }}
+                               disabled={fullBuyType !== 2}
+                        />)}
+                      <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
+                    </span>
+                          </Radio>
+                        </FormItem>
+                      </RadioGroup>
+                    </>
+                  )}
+                </FormItem>
+              </>
+            )
+          }
           {scopeType === 4 ? (
             <FormItem id={'page-content'}>
               {/* {this.chooseGoods().dom}  {...this._scopeBoxStyle(scopeType)}*/}
@@ -995,33 +1147,39 @@ class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           )}
-          <div className="bold-title"> <FormattedMessage id="Marketing.InstructionsForUse" /></div>
-          <FormItem {...formItemLayout}>
-            {getFieldDecorator('couponDesc', {
-              initialValue: couponDesc,
-              rules: [{ max: 500, message:
-                  (window as any).RCi18n({
-                    id: 'Marketing.Instructionsareupto500'
-                  })
-              }]
-            })(
-              <TextArea
-                maxLength={500}
-                style={{ width: 800, marginTop: '10px' }}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Instructionsareupto500'
-                  })
-                }
-                onChange={(e) => {
-                  fieldsValue({
-                    field: 'couponDesc',
-                    value: e.target.value
-                  });
-                }}
-              />
-            )}
-          </FormItem>
+          {
+            couponPromotionType !== 3 && (
+              <>
+                <div className="bold-title"> <FormattedMessage id="Marketing.InstructionsForUse" /></div>
+                <FormItem {...formItemLayout}>
+                  {getFieldDecorator('couponDesc', {
+                    initialValue: couponDesc,
+                    rules: [{ max: 500, message:
+                        (window as any).RCi18n({
+                          id: 'Marketing.Instructionsareupto500'
+                        })
+                    }]
+                  })(
+                    <TextArea
+                      maxLength={500}
+                      style={{ width: 800, marginTop: '10px' }}
+                      placeholder={
+                        (window as any).RCi18n({
+                          id: 'Marketing.Instructionsareupto500'
+                        })
+                      }
+                      onChange={(e) => {
+                        fieldsValue({
+                          field: 'couponDesc',
+                          value: e.target.value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+              </>
+            )
+          }
         </Form>
         <div>
           <Button disabled={btnDisabled} type="primary" onClick={() => this.saveCoupon()} style={{ marginRight: 10 }}>
@@ -1235,9 +1393,17 @@ class CouponInfoForm extends Component<any, any> {
     const { fieldsValue } = this.props.relaxProps;
     const { resetFields, setFieldsValue } = this.props.form;
     resetFields('fullBuyPrice');
-    if (value == 0) {
-      setFieldsValue({ fullBuyPrice: null });
-    }
+    resetFields('fullbuyCount');
+    setFieldsValue({ fullBuyPrice: null });
+    setFieldsValue({ fullbuyCount: null });
+    fieldsValue({
+      field: 'fullBuyPrice',
+      value: null
+    })
+    fieldsValue({
+      field: 'fullbuyCount',
+      value: null
+    })
     fieldsValue({
       field: 'fullBuyType',
       value

@@ -64,9 +64,9 @@ export default class MarketingRule extends React.Component<any, any> {
                       <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items reduction {level.reduction ? level.reduction : 0} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </span>
                   ) : subType === 2 ? ( //full amount discount
-                    <span className="rule-span">
+                    <div className="rule-span">
                       <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {(level.discount * 100).toFixed()} % discount
-                    </span>
+                    </div>
                   ) : subType === 3 ? ( //full quantity discount
                     <span className="rule-span">
                       <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {(level.discount * 100).toFixed()} % discount

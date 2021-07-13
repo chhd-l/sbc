@@ -5,7 +5,7 @@ import '@adyen/adyen-web/dist/adyen.css';
 import '../js/secure-fields.min.js'
 import { cache, Const, RCi18n } from 'qmkit';
 import styleCss from '../js/style.js';
-import { Col, Form, Input, Row, Button, message, Spin } from 'antd';
+import { Col, Form, Input, Row, Button, message, Spin, Checkbox } from 'antd';
 import { fetchAddPaymentInfo } from '../webapi';
 interface IKey {
   app_id: string
@@ -16,8 +16,8 @@ interface IProps {
   customerId: string
   storeId: number
   pspName: string
-  form:any
-  cardType:any
+  form: any
+  cardType: any
 }
 class PayuCreditCardForm extends Component<IProps> {
   cardNumber: any;
@@ -95,7 +95,6 @@ class PayuCreditCardForm extends Component<IProps> {
     event.preventDefault()
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-
         const additionalData = {
           holder_name: values.cardOwner// This field is mandatory
 
@@ -109,36 +108,27 @@ class PayuCreditCardForm extends Component<IProps> {
 
         } else {
           let _result = JSON.parse(result)
-          console.log(_result)
-
           this.save({ ..._result, ...values })
-
-
-
-
         }
-
-
-
-
       }
     });
   }
   async save(params) {
+ 
     this.setState({ loading: true })
     let param = {
       binNumber: params.bin_number,
       customerId: this.props.customerId,
       email: params.email,
-      isDefault: "0",
       paymentToken: params.token,
-      paymentVendor: "VISA",
+      paymentVendor: params.vendor,
       phone: params.phone,
       pspName: this.props.pspName,
-      storeId: this.props.storeId
+      storeId: this.props.storeId,
+      isDefault:params.isDefault?1:0
     }
-   const {res}= await fetchAddPaymentInfo(this.props.storeId, param);
-    if(res.code==Const.SUCCESS_CODE){
+    const { res } = await fetchAddPaymentInfo(this.props.storeId, param);
+    if (res.code == Const.SUCCESS_CODE) {
       message.success(res.message);
       history.go(-1);
     }
@@ -158,15 +148,10 @@ class PayuCreditCardForm extends Component<IProps> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please input your name',
+                    message: RCi18n({ id: 'payment.cardOwner' }),
                   },
                 ],
               })(<Input placeholder={RCi18n({ id: 'payment.cardOwner' })} style={{ height: 38 }} />)}
-
-
-
-
-
             </Form.Item>
             <Form.Item label={RCi18n({ id: 'payment.cardNumber' })} style={{ marginBottom: 10 }}>
               <div className="payment-form">
@@ -199,12 +184,21 @@ class PayuCreditCardForm extends Component<IProps> {
                   {getFieldDecorator('phone', {
                     rules: [{ required: true, message: RCi18n({ id: 'payment.phone' }) }],
                   })(<Input placeholder={RCi18n({ id: 'payment.phone' })} style={{ height: 38 }} />)}
-
-
                 </Form.Item>
               </Col>
             </Row>
+            <Form.Item style={{ marginBottom: 0 }}>
 
+              {getFieldDecorator('isDefault', {
+                
+              })(<label><Checkbox   />  {RCi18n({ id: 'payment.isDefault' })}</label>)}
+            </Form.Item>
+            <Form.Item>
+              <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span>
+            </Form.Item>
+
+
+           
             <div style={{ marginTop: 10, textAlign: 'right' }}>
               <Button type="primary" htmlType="submit"> Save</Button>
             </div>

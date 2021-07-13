@@ -1370,6 +1370,8 @@ export default {
         'payment.cardType': 'CARD TYPE',
         'payment.checkout': 'Checkout',
         'payment.choosePayment': 'Choose a payment',
+        'payment.isDefault': 'Save for my next payment',
+        "payment.isDefaultTip":"cette case est obligatoire pour l'abonnement"
         
     //===========end payments Method================
     },

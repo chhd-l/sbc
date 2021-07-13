@@ -384,16 +384,11 @@ class FullGiftForm extends React.Component<any, any> {
         <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Promotiontype" />} labelAlign="left">
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
-              <Radio value={0}><FormattedMessage id="Marketing.NormalPromotion" /></Radio>
-              <Radio value={1}><FormattedMessage id="Marketing.SubscriptionPromotion" /></Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
+              <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
+              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
             </Radio.Group>
-            {/*{marketingBean.get('promotionType') === 1 ? (*/}
-            {/*  <Checkbox onChange={(e) => this.onBeanChange({*/}
-            {/*    isClub: e.target.checked*/}
-            {/*  })} checked={marketingBean.get('isClub')}>*/}
-            {/*    Club*/}
-            {/*  </Checkbox>*/}
-            {/*) : null}*/}
           </div>
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>

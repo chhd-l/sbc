@@ -13,15 +13,32 @@ const RadioGroup = Radio.Group;
 const RangePicker = DatePicker.RangePicker;
 const CheckboxGroup = Checkbox.Group;
 const Confirm = Modal.confirm;
-
 const formItemLayout = {
   labelCol: {
-    span: 3
+    span: 4
   },
   wrapperCol: {
-    span: 21
+    span: 20
   }
 };
+const formItemSmall = {
+  labelCol: {
+    span: 4
+  },
+  wrapperCol: {
+    span: 20
+  }
+};
+//
+//
+// const formItemLayout = {
+//   labelCol: {
+//     span: 3
+//   },
+//   wrapperCol: {
+//     span: 21
+//   }
+// };
 const smallformItemLayout = {
   labelCol: {
     span: 8
@@ -61,6 +78,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
       shippingBean: any;
       loading: boolean;
       marketingType: any;
+      couponPromotionType: number | string;
       submitFreeShipping: Function;
       shippingBeanOnChange: Function;
       setMarketingType: Function;
@@ -72,6 +90,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
     shippingBean: 'shippingBean',
     marketingType: 'marketingType',
     loading: 'loading',
+    couponPromotionType: 'couponPromotionType',
     submitFreeShipping: noop,
     shippingBeanOnChange: noop,
     setMarketingType: noop,
@@ -170,24 +189,43 @@ class FreeShippingAddForm extends React.Component<any, any> {
   render() {
     const { form } = this.props; //marketingType, marketingId,
     const { getFieldDecorator } = this.props.form;
-    const { allGroups, shippingBean, loading, marketingType, setMarketingType } = this.props.relaxProps;
+    const { allGroups, shippingBean, loading, marketingType, setMarketingType,couponPromotionType } = this.props.relaxProps;
     console.log(marketingType, 'marketingType-----------');
     return (
       <Form onSubmit={this.handleSubmit} style={{ marginTop: 20 }}>
-        <div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>
-        <FormItem {...formItemLayout} labelAlign="left">
-        <div className="ant-form-inline">
-          <Radio.Group value={marketingType} onChange={(e) => {
-            setMarketingType(e.target.value)
-            this.onBeanChange({
-              marketingType: e.target.value
-            })
-          }}>
-            <Radio value={0}><FormattedMessage id="Marketing.Promotion" /></Radio>
-            <Radio value={3}><FormattedMessage id="Marketing.Coupon" /></Radio>
-          </Radio.Group>
-        </div>
-      </FormItem>
+      {/*  <div className="bold-title"><FormattedMessage id="Marketing.CodeType" />:</div>*/}
+      {/*  <FormItem {...formItemLayout} labelAlign="left">*/}
+      {/*  <div className="ant-form-inline">*/}
+      {/*    <Radio.Group value={marketingType} onChange={(e) => {*/}
+      {/*      setMarketingType(e.target.value)*/}
+      {/*      this.onBeanChange({*/}
+      {/*        marketingType: e.target.value*/}
+      {/*      })*/}
+      {/*    }}>*/}
+      {/*      <Radio value={0}><FormattedMessage id="Marketing.Promotion" /></Radio>*/}
+      {/*      <Radio value={3}><FormattedMessage id="Marketing.Coupon" /></Radio>*/}
+      {/*    </Radio.Group>*/}
+      {/*  </div>*/}
+      {/*</FormItem>*/}
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupontype" />} required={true}>
+          {getFieldDecorator('couponPromotionType', {
+            initialValue: couponPromotionType
+          })(
+            <>
+              <RadioGroup value={couponPromotionType} onChange={(e) => this.couponPromotionTypeOnChange((e as any).target.value)}>
+                <Radio value={0}>
+                  <span style={styles.darkColor}><FormattedMessage id="Marketing.Amount" /></span>
+                </Radio>
+                <Radio value={1}>
+                  <span style={styles.darkColor}><FormattedMessage id="Marketing.Percentage" /></span>
+                </Radio>
+                <Radio value={2}>
+                  <span style={styles.darkColor}><FormattedMessage id="Marketing.Freeshipping" /></span>
+                </Radio>
+              </RadioGroup>
+            </>
+          )}
+        </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.PromotionType" />:</div>
         <FormItem {...formItemLayout} labelAlign="left">
           <div className="ant-form-inline">
@@ -565,3 +603,21 @@ class FreeShippingAddForm extends React.Component<any, any> {
 }
 
 export default injectIntl(FreeShippingAddForm)
+const styles = {
+  greyColor: {
+    fontSize: 12,
+    color: '#999',
+    wordBreak: 'keep-all'
+  },
+  darkColor: {
+    fontSize: 12,
+    color: '#333'
+  },
+  radioStyle: {
+    display: 'block'
+  },
+  lastRadioStyle: {
+    display: 'block',
+    marginTop: 10
+  }
+} as any;

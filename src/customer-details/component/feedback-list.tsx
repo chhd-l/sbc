@@ -12,7 +12,6 @@ const TextArea = Input.TextArea;
 
 interface Iprop extends FormComponentProps {
   customerId: string;
-  petOwnerId: string;
 }
 
 class FeedBack extends React.Component<Iprop, any> {

@@ -101,7 +101,7 @@ class PayuCreditCardForm extends Component<IProps> {
         }
         const result = await (window as any).POS.createToken(this.cardNumber, {
           additionalData,
-          environment: process.env.NODE_ENV === 'development' ? "test" : 'live', // Set the PaymentsOS environment you're connecting to
+          environment: Const.PAYMENT_ENVIRONMENT // Set the PaymentsOS environment you're connecting to
         })
         if (result.error) {
           message.error(result.error['cvv'] + ',' + result.error['pan'] + ',' + result.error['expiry'])

@@ -61,7 +61,7 @@ export default class AdyenCreditCardForm extends Component {
     const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon } = this.props;
     const configuration: any = {
       locale: language,
-      environment: process.env.NODE_ENV === 'development' ? "test" : 'live',
+      environment: Const.PAYMENT_ENVIRONMENT,
       clientKey: this.props.secretKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,
       onChange: this.handleOnChange,

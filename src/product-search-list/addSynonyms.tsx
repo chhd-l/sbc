@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Button, Form, Input, Icon, message } from 'antd';
+import { Button, Form, Input, Icon, message, Spin } from 'antd';
 import { BreadCrumb, Headline, history, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 
@@ -12,16 +12,23 @@ class AddSynonyms extends Component<any, any> {
     super(props);
     this.state = {
       title: RCi18n({id:'Product.AddSynonyms'}),
+      loading: false,
     };
   }
   componentDidMount() {
     if(this.props.location.state && this.props.location.state.id){
       this.getDetail(this.props.location.state.id)
+      this.setState({
+        title: RCi18n({id:'Product.EditSynonyms'}),
+      })
     }else {
       this.add()
     }
   }
   async getDetail(id){
+    this.setState({
+      loading:true,
+    })
     const { form } = this.props;
     let result = await webapi.synonFindById({id})
     let nextKeys = []
@@ -31,6 +38,9 @@ class AddSynonyms extends Component<any, any> {
     form.setFieldsValue({
       phrase: result.res.context.phrase,
     });
+    this.setState({
+      loading:false,
+    })
   }
 
   remove = k => {
@@ -127,7 +137,7 @@ class AddSynonyms extends Component<any, any> {
     };
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
-    const { title } = this.state
+    const { title,loading } = this.state
 
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
@@ -163,7 +173,7 @@ class AddSynonyms extends Component<any, any> {
       </Form.Item>
     ));
     return (
-      <div>
+      <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <BreadCrumb />
         <div className="container">
           <Headline title={title} />
@@ -198,7 +208,7 @@ class AddSynonyms extends Component<any, any> {
             <FormattedMessage id="Product.Cancel" />
           </Button>
         </div>
-      </div>
+      </Spin>
     );
   }
 }

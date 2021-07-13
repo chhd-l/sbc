@@ -190,7 +190,7 @@ export function getPaymentMethods(param) {
 export function deleteCard(param) {
   return Fetch<TResult>(`/${param.storeId}/pay-payment-info-del/${param.id}`, {
     method: 'DELETE'
-  });
+  },{ isHandleResult: true, customerTip: true });
 }
 
 export function addOrUpdatePaymentMethod(param) {

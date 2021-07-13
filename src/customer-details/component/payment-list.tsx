@@ -43,15 +43,20 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   deleteCard = ({id,canDelFlag}) => {
     if(!canDelFlag){
-      message.error('you can\'\t deleted the card');
+      message.error('The card cannot be deleted. A subscription is bound to this card');
       return
     }
     this.setState({ loading: true });
     const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     deleteCard({storeId, id })
       .then((data) => {
+      if(data.res.code==='K-100209'){
+        message.error(data.res.message);
+      }else{
         message.success(data.res.message);
         this.getCardList();
+      }
+   
       })
       .catch(() => {
         this.setState({

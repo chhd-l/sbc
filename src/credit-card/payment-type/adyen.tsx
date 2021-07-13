@@ -80,11 +80,10 @@ export default class AdyenCreditCardForm extends Component {
       showPayButton,
       showBrandIcon,
       taxNumber,
-      data: {
-        holderName: ''
-      }
+      // data: {
+      //   holderName: 'J'
+      // }
     }).mount('#component-container');
-
   }
   /**
    * 当购物者提供所需的付款详细信息时调用

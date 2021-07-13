@@ -5,7 +5,7 @@ export default {
 
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',
-
+  PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
 

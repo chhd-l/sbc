@@ -1,6 +1,7 @@
 import Common from './config-common';
 
 const OKTA_APP_CONFIG = {
+  PAYMENT_ENVIRONMENT:'test',
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
   REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
   REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
@@ -14,19 +15,22 @@ const getOktaAppConfig = () => {
     return Object.assign({}, OKTA_APP_CONFIG, {
       REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
       REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
-      REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357"
+      REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357",
+      PAYMENT_ENVIRONMENT:'live',
     });
   } else if (host === 'store.royalcanin.com') {
     return Object.assign({}, OKTA_APP_CONFIG, {
       REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
       REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
-      REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357"
+      REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
+      PAYMENT_ENVIRONMENT:'live',
     });
   } else {
     return OKTA_APP_CONFIG;
   }
   
 };
+"pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXNpdC5yb3lhbGNhbmluLmNvbQ.2dKUkAYcc6N_ZLnqIXeWPSxt14cFPMs0X_LJM0IBA2Q"
 const _config={
   'storesit.royalcanin.com':{
     PAYMENT: {
@@ -87,7 +91,9 @@ const _config={
         key:'pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXVhdC5yb3lhbGNhbmluLmNvbQ._gQyfk5nAPLML12ddHCBO7H3IkcPaIxxoHYahGniDJ4'
       }
     }
-  }
+  },
+  "eurostore.royalcanin.com":{},
+  "store.royalcanin.com":{}
 };
 
 

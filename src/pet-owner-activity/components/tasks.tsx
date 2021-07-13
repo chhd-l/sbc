@@ -56,7 +56,7 @@ export default class tasks extends Component<any, any> {
             goldenMomentList: res.context.sysDictionaryVOS
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
       .catch(() => {
@@ -89,7 +89,7 @@ export default class tasks extends Component<any, any> {
             taskLoading: false
           });
         } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
           this.setState({
             taskLoading: false
           });
@@ -282,7 +282,10 @@ export default class tasks extends Component<any, any> {
                                   <span className="icontaskName icon iconfont addTaskIcon" />
                                   Name
                                 </div>
-                                <div>{item.name}</div>
+                                <div>
+                                  <Tooltip placement="bottomLeft" title={item.name}>
+                                    <p className="taskCardTitle">{item.name}</p>
+                                  </Tooltip></div>
                               </Col>
                               <Col span={12}>
                                 <div className="taskContactLable">
@@ -421,7 +424,7 @@ export default class tasks extends Component<any, any> {
             )}
           </Spin>
         </Col>
-        {visible ? <AddComment visible={visible} getActivities={() => {}} petOwnerId={this.props.petOwnerId} closeModel={() => this.setState({ visible: false })} /> : null}
+        {visible ? <AddComment visible={visible} getActivities={() => { }} petOwnerId={this.props.petOwnerId} closeModel={() => this.setState({ visible: false })} /> : null}
       </Row>
     );
   }

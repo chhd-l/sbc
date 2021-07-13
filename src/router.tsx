@@ -352,6 +352,10 @@ const routes = [
     asyncComponent: () => import('./customer-details/member-detail')
   },
   {
+    path: '/credit-card/:id/:account',
+    asyncComponent: () => import('./credit-card')
+  },
+  {
     path: '/edit-petowner/:id/:account',
     asyncComponent: () => import('./customer-details/edit-basic-information')
   },
@@ -899,6 +903,11 @@ const routes = [
     path: '/product-search-list',
     asyncComponent: () => import('./product-search-list')
   },
+  //添加同义词
+  {
+    path: '/addSynonyms',
+    asyncComponent: () => import('./product-search-list/addSynonyms')
+  },
   {
     path: '/product-search-details',
     asyncComponent: () => import('./product-search-details')
@@ -1055,6 +1064,8 @@ const homeRoutes = [
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
   },
+
+
   { path: '/error', asyncComponent: () => import('./error') }
   //{ path: '*', asyncComponent: () => import('./error') }
 ];
@@ -1067,5 +1078,6 @@ const auditDidNotPass = [
     asyncComponent: () => import('./shop/process-index')
   }
 ];
+
 
 export { routes, homeRoutes, auditDidNotPass };

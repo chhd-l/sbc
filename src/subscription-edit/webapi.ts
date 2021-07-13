@@ -69,9 +69,12 @@ export function updateSubscription(filterParams = {}) {
  * @param filterParams
  */
 export function getAddressListByType(id = null, type = '') {
-  return Fetch<TResult>('/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
-    method: 'Get'
-  });
+  return Fetch<TResult>(
+    '/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type,
+    {
+      method: 'Get'
+    }
+  );
 }
 // 根据订阅单号查找日志信息
 export function getBySubscribeId(filterParams = {}) {
@@ -124,7 +127,7 @@ export function queryCityById(filterParams = {}) {
  *
  * @returns 获取地址输入类型
  */
- export async function getAddressInputTypeSetting() {
+export async function getAddressInputTypeSetting() {
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
     method: 'POST',
     body: JSON.stringify({
@@ -133,7 +136,11 @@ export function queryCityById(filterParams = {}) {
   })
     .then((data) => {
       if (data.res.code === Const.SUCCESS_CODE && data.res.context && data.res.context.length > 0) {
-        return data.res.context.findIndex((ad) => ad.configKey === 'address_input_type_manually' && ad.context === '1') > -1 ? 'MANUALLY' : 'AUTOMATICALLY';
+        return data.res.context.findIndex(
+          (ad) => ad.configKey === 'address_input_type_manually' && ad.context === '1'
+        ) > -1
+          ? 'MANUALLY'
+          : 'AUTOMATICALLY';
       } else {
         return '';
       }
@@ -148,18 +155,20 @@ export function queryCityById(filterParams = {}) {
  * @param txt
  * @returns
  */
- async function getAddressListByDadata(txt: string) {
+async function getAddressListByDadata(txt: string) {
   return Fetch<TResult>(`/address-input-auto/list?keyword=${txt}`, {
     method: 'GET'
-  }).then(data => {
-    if (data.res.code === Const.SUCCESS_CODE && data.res.context.addressList.length > 0) {
-      return data.res.context.addressList[0];
-    } else {
+  })
+    .then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE && data.res.context.addressList.length > 0) {
+        return data.res.context.addressList[0];
+      } else {
+        return {};
+      }
+    })
+    .catch(() => {
       return {};
-    }
-  }).catch(() => {
-    return {};
-  });
+    });
 }
 
 export async function calcShippingFee(address: string) {
@@ -186,5 +195,19 @@ export async function calcShippingFee(address: string) {
         depth: '1'
       }
     })
-  }).then(data => data).catch(() => ({ res: { code: '505' } }));
+  })
+    .then((data) => data)
+    .catch(() => ({ res: { code: '505' } }));
+}
+
+export function getCards(customerId) {
+  return Fetch<TResult>('/pay-payment-info/' + customerId, {
+    method: 'Get'
+  });
+}
+
+export function deleteCard(storeId, paymentId) {
+  return Fetch<TResult>('/' + storeId + '/pay-payment-info-del/' + paymentId, {
+    method: 'DELETE'
+  }, { isHandleResult: true, customerTip: true });
 }

@@ -3,7 +3,7 @@ import { Form, Row, Col, Input, Select, Radio, Spin, DatePicker, Button, Popconf
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, history, AssetManagement, cache } from 'qmkit';
 import moment from 'moment';
-import { petsById, editPets, delPets, getMixedBreedDisplayName } from '../webapi';
+import { petsById, editPets, delPets, getMixedBreedDisplayName, refreshPetLifeStage } from '../webapi';
 import { getPetsBreedListByType } from '../member-detail';
 import { getTaggingList } from './webapi';
 import { setTagging } from '../webapi';
@@ -11,6 +11,12 @@ import { setTagging } from '../webapi';
 const { Option } = Select;
 const dogImg = require('../img/dog.png');
 const catImg = require('../img/cat.png');
+const stageKeyMapping = {
+  "firstLifeStageName": "First stage name",
+  "secondLifeStageName": "Second stage name",
+  "thirdLifeStageName": "Third stage name",
+  "fourthLifeStageName": "Fourth stage name",
+};
 
 interface Iprop extends FormComponentProps {
   petId?: string;
@@ -31,6 +37,7 @@ class PetItem extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
+      stageLoading: false,
       show: false,
       editable: false,
       pet: {},
@@ -39,6 +46,7 @@ class PetItem extends React.Component<Iprop, any> {
       dogBreed: [],
       specialNeeds: [],
       tagList: [],
+      stageList: [],
       customerPetsPropRelationList: [
         'Age support',
         'Cardiac support',
@@ -62,6 +70,7 @@ class PetItem extends React.Component<Iprop, any> {
 
   componentDidMount() {
     this.getPet();
+    this.getPetLifeStage();
     this.getTaggingList();
   }
 
@@ -113,6 +122,22 @@ class PetItem extends React.Component<Iprop, any> {
       .catch(() => {
         this.setState({
           loading: false
+        });
+      });
+    }
+  };
+
+  getPetLifeStage = () => {
+    if (this.props.petId || this.props.petsInfo) {
+      this.setState({ stageLoading: true });
+      refreshPetLifeStage(this.props.petId || this.props.petsInfo?.petsId).then(data => {
+        this.setState({
+          stageLoading: false,
+          stageList: data.res.context ?? []
+        });
+      }).catch(() => {
+        this.setState({
+          stageLoading: false
         });
       });
     }
@@ -491,32 +516,18 @@ class PetItem extends React.Component<Iprop, any> {
                     <div style={{ fontSize: 16, color: '#666' }}>Life stage information</div>
                   </Col>
                   <Col span={8} style={{ textAlign: 'right' }}>
-                    <Button type="link" size="small" icon="sync" onClick={this.getPet}>
-                      Refresh
+                    <Button type="link" size="small" disabled={this.state.stageLoading} onClick={this.getPetLifeStage}>
+                      <Icon type="sync" spin={this.state.stageLoading} /> 
+                      {this.state.stageLoading ? 'Loading' : 'Refresh'}
                     </Button>
                   </Col>
                 </Row>
                 <Row gutter={16}>
-                  <Col span={12}>
-                    <Form.Item label="This stage name">
-                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'firstLifeStageName') ?? {}).propName ?? ''}
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Stage ending">
-                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'firstLifeStageValue') ?? {}).propName ?? ''}
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Next stage name">
-                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'secondLifeStageName') ?? {}).propName ?? ''}
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item label="Stage ending">
-                      {((pet.customerPetsPropRelations ?? []).find(x => x.propType === 'secondLifeStageValue') ?? {}).propName ?? ''}
-                    </Form.Item>
-                  </Col>
+                  {this.state.stageList.map((stage, idx) => (
+                    <Col key={idx} span={12}>
+                      <Form.Item label={stageKeyMapping[stage.propType] ?? "Stage ending"}>{stage.propName}</Form.Item>
+                    </Col>
+                  ))}
                 </Row>
                 <Divider />
                 <div>

@@ -48,4 +48,5 @@ export default {
   enterpriseRange:  /^(0|[1-9][0-9]{0,6})(\.([1-9]|[0-9][1-9]))?$/,
   //不能为负数
   noMinus: /^\d+(\.\d+)?$/,
+  Retimes: undefined
 };

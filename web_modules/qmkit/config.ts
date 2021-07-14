@@ -1,14 +1,11 @@
 import Common from './config-common';
 export default {
   /* dev */
-  HOST: 'http://124.71.151.9:8390',
-
-  /* sit */
-  // HOST: 'https://storestg.royalcanin.com/api',
+  // HOST: 'http://124.71.151.9:8390',
 
   /* stg */
-  //HOST: 'https://storesit.royalcanin.com/api',
-
+  HOST: 'https://storesit.royalcanin.com/api',
+  PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
 

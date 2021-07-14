@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import _ from 'lodash';
 
 const { TextArea } = Input;
@@ -100,11 +100,11 @@ class BasicInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -243,13 +243,13 @@ class BasicInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -270,14 +270,14 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   //手机校验
@@ -285,7 +285,7 @@ class BasicInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9+-\s\(\)]{6,20}$/;
     if (!reg.test(form.getFieldValue('contactPhone'))) {
-      callback('Please enter the correct phone');
+      callback(RCi18n({id:"PetOwner.theCorrectPhone"}));
     } else {
       callback();
     }
@@ -295,7 +295,7 @@ class BasicInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(form.getFieldValue('postalCode'))) {
-      callback('Please enter the correct Postal Code');
+      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       callback();
     }
@@ -305,7 +305,7 @@ class BasicInfomation extends React.Component<any, any> {
     const { form } = this.props;
     let reg = /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/;
     if (!reg.test(form.getFieldValue('email'))) {
-      callback('Please enter the correct email');
+      callback(RCi18n({id:"PetOwner.theCorrectEmail"}));
     } else {
       callback();
     }
@@ -326,11 +326,11 @@ class BasicInfomation extends React.Component<any, any> {
             objectFetching: false
           });
         } else {
-          message.error(res.message || 'Operation failure');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -376,7 +376,7 @@ class BasicInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   bindTagging = () => {
@@ -400,7 +400,7 @@ class BasicInfomation extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -433,13 +433,13 @@ class BasicInfomation extends React.Component<any, any> {
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Row gutter={16}>
               <Col span={12}>
-                <FormItem label="First Name">
+                <FormItem label={RCi18n({id:"PetOwner.FirstName"})}>
                   {getFieldDecorator('firstName', {
                     rules: [
-                      { required: true, message: 'Please input First Name!' },
+                      { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                       {
                         max: 50,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:"PetOwner.ExceedMaximumLength"})
                       }
                     ],
                     initialValue: basicForm.firstName
@@ -458,13 +458,13 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Last Name">
+                <FormItem label={RCi18n({id:"PetOwner.LastName"})}>
                   {getFieldDecorator('lastName', {
                     rules: [
-                      { required: true, message: 'Please input Last Name!' },
+                      { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                       {
                         max: 50,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:"PetOwner.ExceedMaximumLength"})
                       }
                     ],
                     initialValue: basicForm.lastName
@@ -482,9 +482,9 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Birth Date">
+                <FormItem label={RCi18n({id:"PetOwner.BirthDate"})}>
                   {getFieldDecorator('birthDay', {
-                    rules: [{ required: true, message: 'Please input Birth Date!' }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                     initialValue: moment(new Date(this.state.currentBirthDay), 'YYYY-MM-DD')
                   })(
                     <DatePicker
@@ -506,9 +506,9 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Email">
+                <FormItem label={RCi18n({id:"PetOwner.Email"})}>
                   {getFieldDecorator('email', {
-                    rules: [{ required: true, message: 'Please input Email!' }, { validator: this.compareEmail }, { max: 50, message: 'Exceed maximum length!' }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { validator: this.compareEmail }, { max: 50, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) }],
                     initialValue: basicForm.email
                   })(
                     <Input
@@ -525,9 +525,9 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Phone Number">
+                <FormItem label={RCi18n({id:"PetOwner.PhoneNumber"})}>
                   {getFieldDecorator('contactPhone', {
-                    rules: [{ required: true, message: 'Please input Phone Number!' }, { validator: this.comparePhone }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { validator: this.comparePhone }],
                     initialValue: basicForm.contactPhone
                   })(
                     <Input
@@ -544,9 +544,9 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Postal Code">
+                <FormItem label={RCi18n({id:"PetOwner.Postal code"})}>
                   {getFieldDecorator('postalCode', {
-                    rules: [{ required: true, message: 'Please input Postal Code!' }, { validator: this.compareZip }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { validator: this.compareZip }],
                     initialValue: basicForm.postalCode
                   })(
                     <Input
@@ -563,9 +563,9 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Country">
+                <FormItem label={RCi18n({id:"PetOwner.Country"})}>
                   {getFieldDecorator('country', {
-                    rules: [{ required: true, message: 'Please input Country!' }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                     initialValue: basicForm.countryId
                   })(
                     <Select
@@ -592,9 +592,9 @@ class BasicInfomation extends React.Component<any, any> {
 
               {storeId.toString() === '123457910' ? (
                 <Col span={12}>
-                  <FormItem label="State">
+                  <FormItem label={RCi18n({id:"PetOwner.State"})}>
                     {getFieldDecorator('state', {
-                      rules: [{ required: true, message: 'Please input State!' }],
+                      rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                       initialValue: basicForm.state
                     })(
                       <Select
@@ -622,13 +622,13 @@ class BasicInfomation extends React.Component<any, any> {
               ) : null}
 
               <Col span={12}>
-                <FormItem label="City">
+                <FormItem label={RCi18n({id:"PetOwner.City"})}>
                   {getFieldDecorator('city', {
-                    rules: [{ required: true, message: 'Please input or select City!' }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                     initialValue: basicForm.city ? [basicForm.city] : []
                   })(
                     <AutoComplete
-                      placeholder="Please input or select City"
+                      placeholder={RCi18n({id:"PetOwner.PleaseInputCity"})}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onSearch={_.debounce(this.getCityList, 500)}
                       onChange={(value) => {
@@ -651,13 +651,13 @@ class BasicInfomation extends React.Component<any, any> {
             </Row>
             <Row>
               <Col span={12}>
-                <FormItem label="Address 1">
+                <FormItem label={RCi18n({id:"PetOwner.Address1"})}>
                   {getFieldDecorator('address1', {
                     rules: [
-                      { required: true, message: 'Please input Address 1!' },
+                      { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                       {
                         max: 200,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:"PetOwner.ExceedMaximumLength"})
                       }
                     ],
                     initialValue: basicForm.address1
@@ -676,12 +676,12 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Address 2">
+                <FormItem label={RCi18n({id:"PetOwner.Address2"})}>
                   {getFieldDecorator('address2', {
                     rules: [
                       {
                         max: 200,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:"PetOwner.ExceedMaximumLength"})
                       }
                     ],
                     initialValue: basicForm.address2
@@ -701,12 +701,12 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Prefer channel">
+                <FormItem label={RCi18n({id:"PetOwner.PreferChannel"})}>
                   {getFieldDecorator('preferredMethods', {
                     rules: [
                       {
                         required: true,
-                        message: 'Please Select Preferred methods of communication!'
+                        message: RCi18n({id:"PetOwner.SelectPreferredMethods"})
                       }
                     ],
                     initialValue: initPreferChannel
@@ -725,12 +725,12 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem label="Reference">
+                <FormItem label={RCi18n({id:"PetOwner.Reference"})}>
                   {getFieldDecorator('reference', {
                     rules: [
                       {
                         max: 200,
-                        message: 'Exceed maximum length!'
+                        message: RCi18n({id:"PetOwner.ExceedMaximumLength"})
                       }
                     ],
                     initialValue: basicForm.reference
@@ -748,7 +748,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Default Prescriber">
+                <FormItem label={RCi18n({id:"PetOwner.DefaultPrescriberName"})}>
                   {getFieldDecorator(
                     'defaultClinicsId',
                     {}
@@ -756,7 +756,7 @@ class BasicInfomation extends React.Component<any, any> {
                     <Select
                       showSearch
                       getPopupContainer={(trigger: any) => trigger.parentNode}
-                      placeholder="Please select"
+                      placeholder={RCi18n({id:"PetOwner.PleaseSelectPrescriber"})}
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
                         let tempArr = Option.props.children.split(',');
@@ -783,7 +783,7 @@ class BasicInfomation extends React.Component<any, any> {
                 </FormItem>
               </Col>
               <Col span={12}>
-                <FormItem label="Select Prescriber">
+                <FormItem label={RCi18n({id:"PetOwner.SelectedPrescriber"})}>
                   {getFieldDecorator(
                     'selectedClinics',
                     {}
@@ -791,7 +791,7 @@ class BasicInfomation extends React.Component<any, any> {
                     <Select
                       mode="multiple"
                       getPopupContainer={(trigger: any) => trigger.parentNode}
-                      placeholder="Please select"
+                      placeholder={RCi18n({id:"PetOwner.PleaseSelectPrescriber"})}
                       style={{ width: '100%' }}
                       onChange={(value, Option) => {
                         let clinics = [];
@@ -827,7 +827,7 @@ class BasicInfomation extends React.Component<any, any> {
               </Col>
 
               <Col span={12}>
-                <FormItem {...formItemLayout} label="Pet owner tagging">
+                <FormItem {...formItemLayout} label={RCi18n({id:"Menu.Pet owner tagging"})}>
                   {getFieldDecorator('selectedBind', {
                     rules: [
                       {
@@ -842,8 +842,6 @@ class BasicInfomation extends React.Component<any, any> {
                       treeCheckable={true}
                       showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
                       // treeCheckStrictly={true}
-                      placeholder="Please select product tagging"
-                      notFoundContent="No classification"
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                       showSearch={false}
                       onChange={(value) =>
@@ -862,11 +860,11 @@ class BasicInfomation extends React.Component<any, any> {
               <Col span={24}>
                 <FormItem>
                   <Button type="primary" htmlType="submit" loading={loading}>
-                    Save
+                    {RCi18n({id:"PetOwner.Save"})}
                   </Button>
 
                   <Button style={{ marginLeft: '20px' }}>
-                    <Link to="/customer-list">Cancel</Link>
+                    <Link to="/customer-list">{RCi18n({id:"PetOwner.Cancel"})}</Link>
                   </Button>
                 </FormItem>
               </Col>

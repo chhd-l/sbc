@@ -35,6 +35,7 @@ export default class AppStore extends Store {
         this.dispatch('marketing:selectedSkuIds', scopeIds.toJS());
       }
       const selectedGiftRows = this.makeSelectedRows(null);
+      debugger
       this.dispatch('marketing:selectedGiftRows', selectedGiftRows)
     } else if (res.code == 'K-080016') {
       history.go(-1);

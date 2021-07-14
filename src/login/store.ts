@@ -28,24 +28,16 @@ export default class AppStore extends Store {
       .getSiteInfo()
       .then((resIco: any) => {
         if (resIco.res.code == Const.SUCCESS_CODE) {
-          //logo
           const logo = JSON.parse((resIco.res.context as any).pcLogo);
-          this.dispatch('login:logo', logo[0].url);
-          sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
-          //icon
-          /*const ico = (resIco.res.context as any).pcIco
-          ? JSON.parse((resIco.res.context as any).pcIco)
-          : null;
-        if (ico) {
-          const linkEle = document.getElementById('icoLink') as any;
-          linkEle.href = ico[0].url;
-          linkEle.type = 'image/x-icon';
-        }*/
+          if(logo && logo.length > 0) {
+            this.dispatch('login:logo', logo[0].url);
+            sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
+          }
         }
         this.dispatch('login:refresh', true);
       })
       .catch((err) => {
-        message.error(err.toString());
+        console.log(err.toString());
       });
   };
 

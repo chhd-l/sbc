@@ -209,5 +209,5 @@ export function getCards(customerId) {
 export function deleteCard(storeId, paymentId) {
   return Fetch<TResult>('/' + storeId + '/pay-payment-info-del/' + paymentId, {
     method: 'DELETE'
-  });
+  }, { isHandleResult: true, customerTip: true });
 }

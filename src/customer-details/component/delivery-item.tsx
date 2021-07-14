@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Modal, Alert, Radio } from 'antd';
+import { FormattedMessage } from 'react-intl';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const, RCi18n } from 'qmkit';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
@@ -216,7 +217,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             this.props.form.setFields({
               address1: {
                 value: fields['address1'],
-                errors: [new Error('Please enter an address that is within the delivery areas of the online store')]
+                errors: [new Error(RCi18n({id:"PetOwner.addressWithinAlert"}))]
               }
             });
             this.setState({ loading: false });
@@ -383,7 +384,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
-      callback('Please enter the correct phone');
+      callback(RCi18n({id:"PetOwner.theCorrectPhone"}));
     } else {
       callback();
     }
@@ -391,7 +392,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   compareZip = (rule, value, callback) => {
     if (!/^[0-9]{3,10}$/.test(value)) {
-      callback('Please enter the correct Postal Code');
+      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       callback();
     }
@@ -431,17 +432,17 @@ class DeliveryItem extends React.Component<Iprop, any> {
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
           <div className="container">
-            <Headline title={`${delivery.deliveryAddressId ? 'Edit' : 'Add'} ${addressType === 'delivery' ? 'delivery' : 'billing'} information`} />
+            <Headline title={delivery.deliveryAddressId ? (addressType === 'delivery' ? RCi18n({id:"PetOwner.EditDeliveryInformation"}) : RCi18n({id:"PetOwner.EditBillingInformation"})) : (addressType === 'delivery' ? RCi18n({id:"PetOwner.AddDeliveryInformation"}) : RCi18n({id:"PetOwner.AddBillingInformation"}))} />
             <Form>
               <Row>
                 {this.state.formFieldList.map((field, colIdx) => (
                   <Col span={12 * field.occupancyNum} key={colIdx}>
-                    <Form.Item {...formItemLayout(field.occupancyNum)} label={field.fieldName}>
+                    <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({id:`PetOwner.${field.fieldName}`})}>
                       {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
                         initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
                         rules: [
-                          { required: field.requiredFlag === 1, message: `${field.fieldName} is required` },
-                          field.fieldName != 'Country' ? { max: field.maxLength, message: 'Exceed maximum length' } : undefined,
+                          { required: field.requiredFlag === 1, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
+                          field.fieldName != 'Country' ? { max: field.maxLength, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) } : undefined,
                           { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1 ? this.comparePhone : (rule, value, callback) => callback() },
                           { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1 ? this.compareZip : (rule, value, callback) => callback() },
                           { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1 ? this.ruAddress1Validator : (rule, value, callback) => callback() }
@@ -455,30 +456,30 @@ class DeliveryItem extends React.Component<Iprop, any> {
           </div>
           <div className="bar-button">
             <Button type="primary" disabled={this.state.formFieldList.length === 0} onClick={() => this.validateAddress()}>
-              Save
+              <FormattedMessage id="PetOwner.Save" />
             </Button>
             <Button onClick={this.backToCustomerDetail} style={{ marginLeft: '20px' }}>
-              Cancel
+              <FormattedMessage id="PetOwner.Cancel" />
             </Button>
           </div>
-          <Modal width={920} title="Verify your address" visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
-            <Alert type="warning" message="We could not verify the address you provided, please confirm or edit your address to ensure prompt delivery." />
+          <Modal width={920} title={RCi18n({id:"PetOwner.verifyYourAddress"})} visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
+            <Alert type="warning" message={RCi18n({id:"PetOwner.verifyAddressAlert"})} />
             <Row gutter={32} style={{ marginTop: 20 }}>
               <Col span={12}>
                 <Radio disabled={!validationSuccess} checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>
-                  <span className="text-highlight">Original Address</span>
+                  <span className="text-highlight"><FormattedMessage id="PetOwner.originalAddress" /></span>
                   <br />
                   <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[fields.address1, fields.address2].join(''), fields.city, fields.state, fields.postCode].filter((fd) => !!fd).join(',')}</span>
                 </Radio>
                 <div style={{ paddingLeft: 10 }}>
                   <Button type="link" onClick={this.onCancelSuggestionModal}>
-                    Edit
+                    <FormattedMessage id="PetOwner.Edit" />
                   </Button>
                 </div>
               </Col>
               <Col span={12}>
                 <Radio checked={checkedAddress === 1} onClick={() => this.onChangeCheckedAddress(1)}>
-                  <span className="text-highlight">Suggested Address</span>
+                  <span className="text-highlight"><FormattedMessage id="PetOwner.suggestAddress" /></span>
                   <br />
                   <span style={{ paddingLeft: 26, wordBreak: 'break-word' }}>{[[suggestionAddress.address1, suggestionAddress.address2].join(''), suggestionAddress.city, suggestionAddress.provinceCode, suggestionAddress.postalCode].filter((fd) => !!fd).join(',')}</span>
                 </Radio>

@@ -50,11 +50,7 @@ export default class CouponInfo extends Component<any, any> {
           <Headline title={id ? <FormattedMessage id="Marketing.EditCoupon" /> : <FormattedMessage id="Marketing.CreateCoupon" />} />
           <div style={styles.container}>
             {/*<MobileShowBox />*/}
-            {
-              this.store.state().get('marketingType') === 0 ?
-                <CouponInfoRelax /> :
-                <WrappedShippingForm />
-            }
+            <CouponInfoRelax />
           </div>
         </div>
       </>

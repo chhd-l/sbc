@@ -13,15 +13,15 @@ export default function EditBasicInfo(props: any) {
     <div>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to="/customer-list">Pet owner</Link>
+          <Link to="/customer-list"><FormattedMessage id="Menu.Pet owner" /></Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/customer-list">Pet owner list</Link>
+          <Link to="/customer-list"><FormattedMessage id="Menu.Pet owner list" /></Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</Link>
+          <Link to={`/petowner-details/${customerId}/${customerAccount}`}><FormattedMessage id="PetOwner.petOwnerDetail" /></Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>Basic information</Breadcrumb.Item>
+        <Breadcrumb.Item><FormattedMessage id="PetOwner.BasicInformation" /></Breadcrumb.Item>
       </Breadcrumb>
       <div>
         <BasicEdit customerId={customerId} customerAccount={customerAccount} />

@@ -95,7 +95,7 @@ class GiftLevels extends React.Component<any, any> {
     const { getFieldDecorator } = form;
     return (
       <div>
-        {fullGiftLevelList &&
+        {fullGiftLevelList && fullGiftLevelList.length> 0 &&
           fullGiftLevelList.map((level, index) => {
             return (
               <div key={level.key ? level.key : level.giftLevelId}>

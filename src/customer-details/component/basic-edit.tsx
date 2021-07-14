@@ -5,7 +5,7 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { Const, Headline, history, cache } from 'qmkit';
+import { Const, Headline, history, cache, RCi18n } from 'qmkit';
 import _, { divide } from 'lodash';
 import { getCountryList, getStateList, getCityList, searchCity, getAddressFieldList } from './webapi';
 import { getAddressConfig, FORM_FIELD_MAP } from '../member-detail';
@@ -158,7 +158,7 @@ class BasicEdit extends React.Component<any, any> {
           .then((data) => {
             const res = data.res;
             if (res.code === Const.SUCCESS_CODE) {
-              message.success('Operate successfully');
+              message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
               history.go(-1);
             }
           })
@@ -195,7 +195,7 @@ class BasicEdit extends React.Component<any, any> {
     webapi.basicDetailsUpdate(params).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
       }
     });
   };
@@ -318,11 +318,11 @@ class BasicEdit extends React.Component<any, any> {
       <div>
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container petowner-noedit-form">
-            <Headline title="Basic information" />
+            <Headline title={RCi18n({id:"PetOwner.BasicInformation"})} />
             <Form {...formItemLayout}>
               <Row gutter={16}>
                 <Col span={12}>
-                  <FormItem label="Pet owner account">
+                  <FormItem label={RCi18n({id:"PetOwner.ConsumerAccount"})}>
                     {editable ? (
                       getFieldDecorator('customerAccount', {
                         initialValue: customer.customerAccount
@@ -333,7 +333,7 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="Registration date">
+                  <FormItem label={RCi18n({id:"PetOwner.RegistrationDate"})}>
                     {editable ? (
                       getFieldDecorator('createTime', {
                         initialValue: moment(customer.createTime, 'YYYY-MM-DD')
@@ -345,7 +345,7 @@ class BasicEdit extends React.Component<any, any> {
                 </Col>
                 {this.state.fieldList.map((field, idx) => (
                   <Col key={idx} span={12}>
-                    <FormItem label={field.fieldName}>
+                    <FormItem label={RCi18n({id:`PetOwner.${field.fieldName}`})}>
                       <span>
                         {field.fieldName === 'Country' ? (customer.countryId ? this.state.countryList.find(c => c.id === customer.countryId)?.name : customer.country) : (customer[FORM_FIELD_MAP[field.fieldName]])}
                       </span>
@@ -353,7 +353,7 @@ class BasicEdit extends React.Component<any, any> {
                   </Col>
                 ))}
                 <Col span={12}>
-                  <FormItem label="Birth Date">
+                  <FormItem label={RCi18n({id:"PetOwner.BirthDate"})}>
                     {editable ? (
                       getFieldDecorator('birthDay', {
                         rules: [{ required: true, message: 'Please input Birth Date!' }],
@@ -373,7 +373,7 @@ class BasicEdit extends React.Component<any, any> {
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="Email">
+                  <FormItem label={RCi18n({id:"PetOwner.Email"})}>
                     {editable ? (
                       getFieldDecorator('email', {
                         initialValue: customer.email,
@@ -386,7 +386,7 @@ class BasicEdit extends React.Component<any, any> {
                 </Col>
 
                 <Col span={12}>
-                  <FormItem label="Prefer channel">
+                  <FormItem label={RCi18n({id:"PetOwner.PreferChannel"})}>
                     {editable ? (
                       getFieldDecorator('preferredMethods', {
                         rules: [
@@ -407,7 +407,7 @@ class BasicEdit extends React.Component<any, any> {
                         {['Email', 'Phone', 'Print']
                           .reduce((prev, curr) => {
                             if (+customer[`communication${curr}`]) {
-                              prev.push(curr === 'Print' ? 'Message' : curr);
+                              prev.push(curr === 'Print' ? RCi18n({id:"PetOwner.Message"}) : RCi18n({id:`PetOwner.${curr}`}));
                             }
                             return prev;
                           }, [])
@@ -418,7 +418,7 @@ class BasicEdit extends React.Component<any, any> {
                 </Col>
 
                 <Col span={24}>
-                  <FormItem label="Consent" labelCol={{ sm: { span: 4 } }} wrapperCol={{ sm: { span: 18 } }}>
+                  <FormItem label={RCi18n({id:"PetOwner.Consent"})} labelCol={{ sm: { span: 4 } }} wrapperCol={{ sm: { span: 18 } }}>
                     {customer.userConsentList && customer.userConsentList.length > 0 ? customer.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </FormItem>
                 </Col>
@@ -428,7 +428,7 @@ class BasicEdit extends React.Component<any, any> {
           <div className="bar-button">
             {editable && (
               <Button type="primary" onClick={this.handleSubmit} style={{ marginRight: '20px' }}>
-                Save
+                <FormattedMessage id="PetOwner.Save" />
               </Button>
             )}
 
@@ -437,7 +437,7 @@ class BasicEdit extends React.Component<any, any> {
                 history.go(-1);
               }}
             >
-              Cancel
+              <FormattedMessage id="PetOwner.Cancel" />
             </Button>
           </div>
         </Spin>

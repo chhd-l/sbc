@@ -215,14 +215,10 @@ class MarketingList extends React.Component<any, any> {
             } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
-<<<<<<< HEAD
               // url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
-              url = `/marketing-full-reduction/${rowInfo['marketingId']} /${rowInfo['marketingType']}`;
-=======
-              url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
+              url = `/marketing-full-reduction/${rowInfo['marketingId']}/${rowInfo['marketingType']}`;
             } else if (rowInfo.subType === 12){
                 url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
->>>>>>> d13f770a1d3ab846fef64fdf4775b8797c5a5750
             }
             /**
              *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始

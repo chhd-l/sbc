@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb } from 'antd';
 import { cache } from '../index';
 import { fromJS } from 'immutable';
+import { RCi18n } from '../lang';
 
 export default class BreadCrumb extends React.Component<any, any> {
   props: {
@@ -31,12 +32,16 @@ export default class BreadCrumb extends React.Component<any, any> {
     let second = allGradeMenus.get(firstIndex).get('children').get(secondIndex).get('title') || '';
     let third = allGradeMenus.get(firstIndex).get('children').get(secondIndex).get('children').get(thirdIndex).get('title') || '';
     let thirdUrl = allGradeMenus.getIn([firstIndex, 'children', secondIndex, 'children', thirdIndex, 'url']) || '';
+
+    const firstMenuName = first ? RCi18n({id:`Menu.${first}`}) : first;
+    const thirdMenuName = third ? RCi18n({id:`Menu.${third}`}) : third;
+
     return (
       <Breadcrumb>
         <Breadcrumb.Item>
-          <a href={firstUrl}>{first}</a>
+          <a href={firstUrl}>{firstMenuName}</a>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>{this.props.thirdLevel ? <a href={thirdUrl}>{third}</a> : third}</Breadcrumb.Item>
+        <Breadcrumb.Item>{this.props.thirdLevel ? <a href={thirdUrl}>{thirdMenuName}</a> : thirdMenuName}</Breadcrumb.Item>
         {this.props.children}
       </Breadcrumb>
     );

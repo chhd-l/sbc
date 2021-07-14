@@ -18,6 +18,7 @@ interface IProps {
   pspName: string
   form: any
   cardType: any
+  fromSubscroption:any
 }
 class PayuCreditCardForm extends Component<IProps> {
   cardNumber: any;
@@ -168,22 +169,22 @@ class PayuCreditCardForm extends Component<IProps> {
                     rules: [
                       {
                         type: 'email',
-                        message: RCi18n({ id: 'payment.email' }),
+                        message: RCi18n({ id: 'payment.emailPlaceholder' }),
                       },
                       {
                         required: true,
-                        message: RCi18n({ id: 'payment.email' })
+                        message: RCi18n({ id: 'payment.emailPlaceholder' })
                       },
                     ],
-                  })(<Input placeholder={RCi18n({ id: 'payment.email' })} style={{ height: 38 }} />)}
+                  })(<Input placeholder={RCi18n({ id: 'payment.emailPlaceholder' })} style={{ height: 38 }} />)}
 
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label={RCi18n({ id: 'payment.phone' })} style={{ marginBottom: 10 }}>
                   {getFieldDecorator('phone', {
-                    rules: [{ required: true, message: RCi18n({ id: 'payment.phone' }) }],
-                  })(<Input placeholder={RCi18n({ id: 'payment.phone' })} style={{ height: 38 }} />)}
+                    rules: [{ required: true,  pattern: new RegExp(/^[0-9]+$/), message: RCi18n({ id: 'payment.phonePlaceholder' }) }],
+                  })(<Input placeholder={RCi18n({ id: 'payment.phonePlaceholder' })} style={{ height: 38 }} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -193,10 +194,10 @@ class PayuCreditCardForm extends Component<IProps> {
                 
               })(<label><Checkbox   />  {RCi18n({ id: 'payment.isDefault' })}</label>)}
             </Form.Item>
-            <Form.Item>
+           {!this.props.fromSubscroption&&(<Form.Item>
               <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span>
-            </Form.Item>
-
+            </Form.Item>)
+           }
 
            
             <div style={{ marginTop: 10, textAlign: 'right' }}>

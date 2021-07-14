@@ -253,12 +253,6 @@ export function fetchAllRoles() {
   return Fetch<TResult>('/customer/employee/roles');
 }
 
-export function getListSystemConfig() {
-  return Fetch<TResult>('/order/config/listSystemConfig', {
-    method: 'GET',
-  });
-}
-
 export function generateRecommendationCode(filterParams = {}) {
   return Fetch<TResult>('/prescriber/generateRecommendationCode', {
     method: 'POST',

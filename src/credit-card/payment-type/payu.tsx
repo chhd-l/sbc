@@ -188,17 +188,17 @@ class PayuCreditCardForm extends Component<IProps> {
                 </Form.Item>
               </Col>
             </Row>
-            <Form.Item style={{ marginBottom: 0 }}>
 
+            {!this.props.fromSubscroption&& <>
+            <Form.Item style={{ marginBottom: 0 }}>
               {getFieldDecorator('isDefault', {
-                
               })(<label><Checkbox   />  {RCi18n({ id: 'payment.isDefault' })}</label>)}
             </Form.Item>
-           {!this.props.fromSubscroption&&(<Form.Item>
+         <Form.Item>
               <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span>
             </Form.Item>)
+            </>
            }
-
            
             <div style={{ marginTop: 10, textAlign: 'right' }}>
               <Button type="primary" htmlType="submit"> Save</Button>

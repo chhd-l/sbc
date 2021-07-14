@@ -105,4 +105,12 @@ export const getListAll = ({ prescriberName }) => {
   });
 };
 
+export const getPrescriberRecommentCodeUseView = (params) => {
+  return Fetch('/dashboard/prescriberRecommentCodeUseView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+
 /* ================================================================================================================ */

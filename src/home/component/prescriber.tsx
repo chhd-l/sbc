@@ -3,7 +3,7 @@ import { IMap, Relax } from 'plume2';
 import { Icon, Modal, Checkbox, Spin } from 'antd';
 //import { fromJS } from 'immutable';
 
-import { cache, RCi18n,  history, noop } from 'qmkit';
+import {cache, RCi18n, history, noop, AuthWrapper} from 'qmkit';
 //import { IList } from 'typings/globalType';
 //import { FormattedMessage } from 'react-intl';
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
@@ -12,6 +12,7 @@ import BarLine from '/web_modules/biz/BarLine/index.tsx';
 import CountUp from 'react-countup';
 import nodataImg from '@/home/images/no-data.jpg';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import Bar from '../../../web_modules/biz/bar';
 
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
@@ -39,7 +40,8 @@ class Prescriber extends React.Component<any, any> {
       trafficDashboardView: '',
       transactionTrendView: '',
       trafficTrendDashboardView: '',
-      conversionFunnelDashboardView: ''
+      conversionFunnelDashboardView: '',
+      p_prescriberRecommentCodeUseView: ''
     };
   }
 
@@ -52,6 +54,7 @@ class Prescriber extends React.Component<any, any> {
       p_trafficTrendDashboardView: any;
       p_conversionFunnelDashboardView: any;
       p_trafficDashboardView: any;
+      p_prescriberRecommentCodeUseView: any;
     };
     intl: any;
   };
@@ -63,6 +66,7 @@ class Prescriber extends React.Component<any, any> {
     p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
     p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView',
     p_trafficDashboardView: 'p_trafficDashboardView',
+    p_prescriberRecommentCodeUseView: 'prescriberRecommentCodeUseView',
     loading: 'loading'
   };
 
@@ -81,7 +85,8 @@ class Prescriber extends React.Component<any, any> {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView, p_conversionFunnelDashboardView, p_trafficDashboardView } = nextProps.relaxProps;
+    const { prescriberId, p_tradeCustomerView, p_prescriberTopView, p_transactionTrendView, p_trafficTrendDashboardView,
+      p_conversionFunnelDashboardView, p_trafficDashboardView, p_prescriberRecommentCodeUseView } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
       prescriberId !== prevState.prescriberId ||
@@ -90,7 +95,8 @@ class Prescriber extends React.Component<any, any> {
       p_transactionTrendView !== prevState.transactionTrendView ||
       p_trafficTrendDashboardView !== prevState.trafficTrendDashboardView ||
       p_conversionFunnelDashboardView !== prevState.conversionFunnelDashboardView ||
-      p_trafficDashboardView !== prevState.trafficDashboardView
+      p_trafficDashboardView !== prevState.trafficDashboardView ||
+      p_prescriberRecommentCodeUseView !== prevState.p_prescriberRecommentCodeUseView
     ) {
       return {
         tradeCustomerView: p_tradeCustomerView,
@@ -99,6 +105,7 @@ class Prescriber extends React.Component<any, any> {
         trafficTrendDashboardView: p_trafficTrendDashboardView,
         conversionFunnelDashboardView: p_conversionFunnelDashboardView,
         trafficDashboardView: p_trafficDashboardView,
+        p_prescriberRecommentCodeUseView: p_prescriberRecommentCodeUseView,
         prescriberId
       };
     }
@@ -120,7 +127,7 @@ class Prescriber extends React.Component<any, any> {
 
   render() {
     const { loading } = this.props.relaxProps;
-    const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView } = this.state;
+    const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, p_prescriberRecommentCodeUseView } = this.state;
     return (
       <div className="prescriber-item">
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -316,6 +323,116 @@ class Prescriber extends React.Component<any, any> {
               )}
             </div>
           </div>
+
+          {/*<AuthWrapper functionName="f_home_best_prescriber">
+            <div className="item-best">
+              <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
+              <div className="item-best-main space-between">
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
+                  {!prescriberTradeAndItemTopView ||
+                  (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
+                    ? (
+                      <div className="data-img">
+                        <img src={nodataImg} className="no-data-img"/>
+                      </div>
+                    ) : (
+                      <div className="main-chart">
+                        {prescriberTradeAndItemTopView && (
+                          <Bar
+                            yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
+                            unit={{unit1: '', unit2: '%'}}
+                            nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                            data={{
+                              x: prescriberTradeAndItemTopView.prescriberNameList,
+                              y1: prescriberTradeAndItemTopView.numList
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                </div>
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
+                  {!prescriberTradeTopView ||
+                  (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0) ? (
+                    <div className="data-img">
+                      <img src={nodataImg} className="no-data-img"/>
+                    </div>
+                  ) : (
+                    <div className="main-chart">
+                      {prescriberTradeTopView && (
+                        <Bar
+                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ1'})}}
+                          unit={{unit1: '', unit2: '%'}}
+                          nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                          data={{
+                            x: prescriberTradeTopView.prescriberNameList,
+                            y1: prescriberTradeTopView.numList
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ2Prescriber"/></div>
+                  {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
+                    <div className="data-img">
+                      <img src={nodataImg} className="no-data-img"/>
+                    </div>
+                  ) : (
+                    <div className="main-chart">
+                      {prescriberTradeItemTopView && (
+                        <Bar
+                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ2'})}}
+                          unit={{unit1: '', unit2: '%'}}
+                          nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                          data={{
+                            x: prescriberTradeItemTopView.prescriberNameList,
+                            y1: prescriberTradeItemTopView.numList
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </AuthWrapper>*/}
+
+
+          <AuthWrapper functionName="f_home_recommendation_codes">
+            <div className="item-recom">
+              <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
+              <div className="item-recommendation-main space-between">
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.recommendation"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {p_prescriberRecommentCodeUseView && p_prescriberRecommentCodeUseView.activeCodeNumber != null ? <CountUp end={p_prescriberRecommentCodeUseView.activeCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.NumberofCodesUsed"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {p_prescriberRecommentCodeUseView && p_prescriberRecommentCodeUseView.usedCodeNumber != null ? <CountUp end={p_prescriberRecommentCodeUseView.usedCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.Numberofrecommendationcodes"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {p_prescriberRecommentCodeUseView && p_prescriberRecommentCodeUseView.orderModeCodeNumber != null ? <CountUp end={p_prescriberRecommentCodeUseView.orderModeCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AuthWrapper>
         </Spin>
       </div>
     );

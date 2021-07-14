@@ -575,10 +575,6 @@ class BillingInfomation extends React.Component<any, any> {
                           <FormattedMessage id="delete" />
                         </Button>
                       </Popconfirm> */}
-
-                      <Button>
-                        <Link to="/customer-list"><FormattedMessage id="PetOwner.Cancel" /></Link>
-                      </Button>
                     </FormItem>
                   </Col>
                 </Row>

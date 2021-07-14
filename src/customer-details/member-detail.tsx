@@ -286,13 +286,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     if (displayPage === 'delivery') {
       return (
         <div>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner" /></a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner list" /></a>
-            </Breadcrumb.Item>
+          <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>
               <a
                 onClick={(e) => {
@@ -304,7 +298,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               </a>
             </Breadcrumb.Item>
             <Breadcrumb.Item>{addressType === 'delivery' ? RCi18n({id:"Order.deliveryInformation"}) : RCi18n({id:"Subscription.Billing information"})}</Breadcrumb.Item>
-          </Breadcrumb>
+          </BreadCrumb>
           <DeliveryItem customerId={this.state.customerId} delivery={delivery} addressType={addressType} backToDetail={this.backToDetail} />
         </div>
       );
@@ -313,15 +307,9 @@ export default class CustomerDetails extends React.Component<any, any> {
     return (
       <>
         <div>
-          <Breadcrumb>
-            <Breadcrumb.Item>
-              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner" /></a>
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>
-              <a href="/customer-list"><FormattedMessage id="Menu.Pet owner list" /></a>
-            </Breadcrumb.Item>
+          <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item><FormattedMessage id="PetOwner.petOwnerDetail" /></Breadcrumb.Item>
-          </Breadcrumb>
+          </BreadCrumb>
           {/*导航面包屑*/}
           <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
             <div className="detail-container">

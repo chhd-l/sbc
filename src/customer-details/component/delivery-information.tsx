@@ -576,14 +576,6 @@ class DeliveryInfomation extends React.Component<any, any> {
                           <FormattedMessage id="delete" />
                         </Button>
                       </Popconfirm> */}
-
-                      <Button
-                        style={{
-                          marginRight: '20px'
-                        }}
-                      >
-                        <Link to="/customer-list"><FormattedMessage id="PetOwner.Cancel" /></Link>
-                      </Button>
                     </FormItem>
                   </Col>
                 </Row>

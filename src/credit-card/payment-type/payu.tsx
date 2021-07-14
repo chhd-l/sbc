@@ -196,7 +196,7 @@ class PayuCreditCardForm extends Component<IProps> {
             </Form.Item>
          <Form.Item>
               <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span>
-            </Form.Item>)
+            </Form.Item>
             </>
            }
            

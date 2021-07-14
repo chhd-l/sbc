@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Popconfirm, message, Button, Tooltip, Tag } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
-import { cache, RCi18n } from 'qmkit';
+import { cache, RCi18n, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
 interface Iprop {
   customerId: string;
@@ -101,24 +101,28 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({id:"PetOwner.Operation"}),
         key: 'oper',
         render: (_, record) => (
-          <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.deleteCard(record)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
-            <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
-              <Button type="link">
-                <a className="iconfont iconDelete"></a>
-              </Button>
-            </Tooltip>
-          </Popconfirm>
+          <AuthWrapper functionName="f_create_credit_card">
+            <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.deleteCard(record)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
+              <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
+                <Button type="link">
+                  <a className="iconfont iconDelete"></a>
+                </Button>
+              </Tooltip>
+            </Popconfirm>
+          </AuthWrapper>
         )
       }
     ];
 
     return (
       <div>
-        
-        <Button type="primary">
-          <Link to={`/credit-card/${customerId}/${customerAccount}`}>
-        {RCi18n({id:'payment.add'})}
-         </Link></Button>
+        <AuthWrapper functionName="f_create_credit_card">
+          <Button type="primary">
+            <Link to={`/credit-card/${customerId}/${customerAccount}`}>
+              {RCi18n({id:'payment.add'})}
+            </Link>
+          </Button>
+        </AuthWrapper>
         <Table
           rowKey="id"
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}

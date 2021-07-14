@@ -51,28 +51,15 @@ export default class SetConditions extends Component<any, any>{
         })
     }
 
-    initDada = (initData) => {
-        // joinLevel = -3 指定人群  0 全部人群
-        if (!initData) return;
-        this.onBeanChange({
-            isTags: initData.joinLevel === '-3',
-            segmentIds: initData.joinLevel === -3 ? JSON.stringify({
-                id: initData.segmentIds[0],
-                name: initData.segmentName || 'shi',
-            }) : undefined,
-        });
-    }
-
     render() {
-        let {initData} = this.props;
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const {
             allGroups,
             formObj,
         } = this.props.relaxProps;
+        console.log('getFieldValue', getFieldValue('isTags'));
 
-        let isTags = getFieldValue('isTags')
-        this.initDada(initData);
+        let isTags =  formObj.get('isTags');
 
         const selectConfig = {
             rules: [{ required: true,  message: 'Please Select your tags!'}],
@@ -110,7 +97,7 @@ export default class SetConditions extends Component<any, any>{
                                 isTags
                                     ? (
                                         <Form.Item label=''>
-                                            {getFieldDecorator('segmentObj', selectConfig)(
+                                            {getFieldDecorator('segmentIds', selectConfig)(
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     placeholder="Please select"
@@ -118,7 +105,7 @@ export default class SetConditions extends Component<any, any>{
                                                 >
                                                     {allGroups.size > 0 &&
                                                     allGroups.toJS().map((item) => (
-                                                        <Option key={item.id} value={JSON.stringify(item)}>
+                                                        <Option key={item.id} value={item.id}>
                                                             {item.name}
                                                         </Option>
                                                     ))}

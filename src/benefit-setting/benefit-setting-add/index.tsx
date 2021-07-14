@@ -16,6 +16,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
     store: AppStore;
     form: any;
     promotionCode: any;
+    marketingId: any;
 
     constructor(props) {
         super(props);
@@ -29,21 +30,32 @@ export default class BenefitSettingAdd extends Component<any, any> {
         this.store.getAllGroups();
         this.promotionCode = this.getPromotionCode();
         const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+        this.marketingId = marketingId;
         // marketingId 有值为编辑状态，
         if (marketingId) {
             this.initData(marketingId)
-        }else {
-
         }
     }
 
     initData = async (marketingId) => {
         if (!marketingId) return;
+        this.setState({
+            loading: true,
+        })
         const { res } = await getMarketingInfo(marketingId);
+        this.setState({
+            loading: false,
+        })
         if (res.code == Const.SUCCESS_CODE) {
             this.setState({
                 initData: res.context
             })
+            // 初始化 SetConditions
+            this.store.giftBeanOnChange({
+                isTags: res.context.joinLevel === '-3',
+                segmentIds: res.context.joinLevel === '-3' ? res.context.segmentIds[0] : undefined,
+            })
+
         } else {
         }
 
@@ -67,7 +79,6 @@ export default class BenefitSettingAdd extends Component<any, any> {
     getFullGiftLevelList = (values: any) => {
         if (!values) return [];
         let defaultFullGiftLevel = {
-            key: makeRandom(),
             fullAmount: null,
             fullCount: null,
             giftType: 1,
@@ -78,6 +89,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
         return benefitList.map(item => {
             return {
                 ...defaultFullGiftLevel,
+                key: makeRandom(),
                 deliveryNumber: Number(item.deliveryNumber) || [],
                 fullGiftDetailList: item.gifts || []
             }
@@ -90,9 +102,8 @@ export default class BenefitSettingAdd extends Component<any, any> {
         let errorObject = {};
 
         form.validateFields((err, values) => {
-            // 遍历gif的错误 todo item.gifts
-            console.log('Received values of form: ', values);
 
+            console.log('Received values of form: ', values);
             if (!err) {
                 //满赠规则具体内容校验
                 if (!values.benefitList) {
@@ -114,17 +125,19 @@ export default class BenefitSettingAdd extends Component<any, any> {
                   return form.setFields(errorObject);
                 }
 
-                let segmentObj = JSON.parse(values.segmentObj)
+                // 获取segmentName
+                let segmentName = this.state.allGroups.toJS().find(element => element.id === values.segmentIds).name;
 
                 let params = {
                     "marketingName": values.marketingName,
                     "fullGiftLevelList": this.getFullGiftLevelList(values),
-                    "segmentIds": values.isTags && segmentObj.id ? [segmentObj.id]:[],
+                    "segmentIds": values.isTags && values.segmentIds ? [values.segmentIds]:[],
                     "beginTime": values.timers[0].format('YYYY-MM-DD hh:mm:ss'), // "2021-07-01 10:42:00",
                     "endTime": values.timers[1].format('YYYY-MM-DD hh:mm:ss'),
                     "promotionCode": this.promotionCode,
-                    "joinLevel": values.isTags && segmentObj.id ? -3 : 0,  // joinLevel = -3 指定人群  0 全部人群
-                    "segmentName": values.isTags && segmentObj.name ? segmentObj.name: null,
+                    "joinLevel": values.isTags && values.segmentIds ? -3 : 0,  // joinLevel = -3 指定人群  0 全部人群
+                    "segmentName": values.isTags ? segmentName : null,
+                    "marketingId": this.marketingId ? this.marketingId : undefined,
 
                     "isClub":false,
                     "marketingType":2,
@@ -132,7 +145,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "scopeType":0,
                     "subType":12,
                     "publicStatus":1,
-                    "promotionType": 0
+                    "promotionType": 0,
                 }
                 this.setState({loading: true});
                 this.store.submitFullGift(params).then(() => {
@@ -153,8 +166,6 @@ export default class BenefitSettingAdd extends Component<any, any> {
 
     render() {
         let { loading, initData } = this.state;
-        // @ts-ignore
-        console.log('allGroups', this.state.allGroups.toJS())
 
         return (
             <Spin spinning={loading}>

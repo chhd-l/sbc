@@ -564,7 +564,7 @@ class ClinicForm extends React.Component<any, any> {
     return ( 
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>       
-          <TabPane tab="Basic Information" key="basic">        
+          <TabPane tab={RCi18n({id:"PetOwner.BasicInformation"})} key="basic">        
             <Row>
                 <Col span={12}>
                   <Form {...layout} onSubmit={this.handleSubmit}>
@@ -895,7 +895,7 @@ class ClinicForm extends React.Component<any, any> {
                   </Col> : null}
               </Row>
           </TabPane>
-          <TabPane tab="Reward Rate" key="reward">
+          <TabPane tab={RCi18n({id:"Finance.RewardRate"})} key="reward">
             <Row>
               <Col span={24}>
                 <span
@@ -1064,7 +1064,7 @@ class ClinicForm extends React.Component<any, any> {
               </Col>
             </Row>
           </TabPane>
-          <TabPane tab="User List" key="users">
+          <TabPane tab={RCi18n({id:"Prescriber.UserList"})} key="users">
             <UserList prescriberKeyId={prescriberKeyId} alreadyHasPrescriber={this.state.isEdit} />
           </TabPane>
         </Tabs>

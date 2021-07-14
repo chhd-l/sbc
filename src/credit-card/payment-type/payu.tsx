@@ -194,7 +194,7 @@ class PayuCreditCardForm extends Component<IProps> {
                 
               })(<label><Checkbox   />  {RCi18n({ id: 'payment.isDefault' })}</label>)}
             </Form.Item>
-           {this.props.fromSubscroption&&(<Form.Item>
+           {!this.props.fromSubscroption&&(<Form.Item>
               <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span>
             </Form.Item>)
            }

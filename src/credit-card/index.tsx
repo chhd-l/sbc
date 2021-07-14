@@ -24,16 +24,25 @@ export default class CreditCard extends Component<any> {
         this.paymentCardType()
 
     }
+     getRequest(url) { 
+        var theRequest = {},strs; 
+           var str = url.substr(1); 
+           strs = str.split("&"); 
+           for(var i = 0; i < strs.length; i ++) { 
+              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]); 
+           } 
+        return theRequest; 
+     } 
     /**
      * 获取店铺支持银行卡
      */
     async paymentCardType() {
         const customerId = this.props.match.params.id || '';
-        // const fromSubscroption=this.props.location.query.fromSubscroption;
+        const {fromSubscroption}=this.getRequest(history.location.search) as any;
         const customerAccount = this.props.match.params.account || ''
         const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')
         const { res } = await fetchGetPayPspList(storeId)
-        console.log(this.props.location,'this.props.location')
+        console.log(fromSubscroption,'this.props.location')
         let { payPspItemVOList, name } = res.context
         if (res.code === Const.SUCCESS_CODE) {
             let list = payPspItemVOList[0]?.payPspItemCardTypeVOList ?? []
@@ -43,7 +52,7 @@ export default class CreditCard extends Component<any> {
                 customerId,
                 customerAccount,
                 pspName: name,
-                // fromSubscroption
+                fromSubscroption
             })
         }
     }

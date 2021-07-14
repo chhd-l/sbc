@@ -46,8 +46,7 @@ class ClinicForm extends React.Component<any, any> {
         partneredShop: '',
         //auditAuthority: false,
         recommendationMode: 'SINGLE_USE',
-        addRecommendaionCodeVisible: false,
-        loading: false
+        addRecommendaionCodeVisible: false
       },
       prescriberCodeNumber: '0 ' + RCi18n({ id: 'Prescriber.active' }),
       firstPrescriberForm: {},
@@ -85,7 +84,8 @@ class ClinicForm extends React.Component<any, any> {
       clinicsLites: [],
       prescriberKeyId: this.props.prescriberId,
       isPrescriber: bool,
-      objectFetching: false
+      objectFetching: false,
+      loading: false
     };
   }
   componentWillMount() {

@@ -48,6 +48,7 @@ class TodoItems extends React.Component<any, any> {
       prescriberTradeTopView: '',
       prescriberTradeAndItemTopView: '',
       prescriberTradeItemTopView: '',
+      prescriberRecommentCodeUseView: '',
     };
   }
 
@@ -67,6 +68,7 @@ class TodoItems extends React.Component<any, any> {
       prescriberTradeTopView: any;
       prescriberTradeAndItemTopView: any;
       prescriberTradeItemTopView: any;
+      prescriberRecommentCodeUseView: any;
     };
   };
 
@@ -84,6 +86,7 @@ class TodoItems extends React.Component<any, any> {
     prescriberTradeTopView: 'prescriberTradeTopView',
     prescriberTradeAndItemTopView: 'prescriberTradeAndItemTopView',
     prescriberTradeItemTopView: 'prescriberTradeItemTopView',
+    prescriberRecommentCodeUseView: 'prescriberRecommentCodeUseView',
     cleanRedux: noop
   };
 
@@ -98,7 +101,7 @@ class TodoItems extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const {
       tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView,
-      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView
+      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView
     } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
@@ -113,7 +116,8 @@ class TodoItems extends React.Component<any, any> {
       taskEmployeeStatisticsView !== prevState.taskEmployeeStatisticsView ||
       prescriberTradeTopView !== prevState.prescriberTradeTopView ||
       prescriberTradeAndItemTopView !== prevState.prescriberTradeAndItemTopView ||
-      prescriberTradeItemTopView !== prevState.prescriberTradeItemTopView
+      prescriberTradeItemTopView !== prevState.prescriberTradeItemTopView ||
+      prescriberRecommentCodeUseView !== prevState.prescriberRecommentCodeUseView
     ) {
       return {
         tradeCustomerView,
@@ -124,7 +128,8 @@ class TodoItems extends React.Component<any, any> {
         transactionTrendView,
         trafficTrendDashboardView,
         conversionFunnelDashboardView,
-        taskEmployeeStatisticsView
+        taskEmployeeStatisticsView,
+        prescriberRecommentCodeUseView
       };
     }
 
@@ -146,10 +151,9 @@ class TodoItems extends React.Component<any, any> {
 
   render() {
     const {loading, prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
-    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, taskEmployeeStatisticsView} = this.state;
-    setTimeout(() => {
-      console.log(this.props.relaxProps.prescriberTradeAndItemTopView, 11111);
-    })
+    const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView,
+      conversionFunnelDashboardView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView} = this.state;
+
     return (
       <div className="item">
         <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{width: '90px', height: '90px'}} alt=""/>}>
@@ -574,112 +578,116 @@ class TodoItems extends React.Component<any, any> {
             </div>
           </div>
 
-          <div className="item-best">
-
-            <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
-            <div className="item-best-main space-between">
-              <div className="best-main">
-                <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
-                {!prescriberTradeAndItemTopView ||
-                (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
-                  ? (
+          <AuthWrapper functionName="f_home_best_prescriber">
+            <div className="item-best">
+              <div className="top-text"><FormattedMessage id="Home.BestPrescriber"/></div>
+              <div className="item-best-main space-between">
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ1&UJ2Prescriber"/></div>
+                  {!prescriberTradeAndItemTopView ||
+                  (prescriberTradeAndItemTopView.prescriberNameList.length === 0 && prescriberTradeAndItemTopView.numList.length === 0)
+                    ? (
+                      <div className="data-img">
+                        <img src={nodataImg} className="no-data-img"/>
+                      </div>
+                    ) : (
+                      <div className="main-chart">
+                        {prescriberTradeAndItemTopView && (
+                          <Bar
+                            yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
+                            unit={{unit1: '', unit2: '%'}}
+                            nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                            data={{
+                              x: prescriberTradeAndItemTopView.prescriberNameList,
+                              y1: prescriberTradeAndItemTopView.numList
+                            }}
+                          />
+                        )}
+                      </div>
+                    )}
+                </div>
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
+                  {!prescriberTradeTopView ||
+                  (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0) ? (
                     <div className="data-img">
                       <img src={nodataImg} className="no-data-img"/>
                     </div>
                   ) : (
                     <div className="main-chart">
-                      {prescriberTradeAndItemTopView && (
+                      {prescriberTradeTopView && (
                         <Bar
-                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ1&UJ2'})}}
+                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ1'})}}
                           unit={{unit1: '', unit2: '%'}}
                           nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
                           data={{
-                            x: prescriberTradeAndItemTopView.prescriberNameList,
-                            y1: prescriberTradeAndItemTopView.numList
+                            x: prescriberTradeTopView.prescriberNameList,
+                            y1: prescriberTradeTopView.numList
                           }}
                         />
                       )}
                     </div>
                   )}
-              </div>
-              <div className="best-main">
-                <div className="main-text"><FormattedMessage id="Home.UJ1Prescriber"/></div>
-                {!prescriberTradeTopView ||
-                (!prescriberTradeTopView.prescriberNameList || prescriberTradeTopView.numList.length === 0) ? (
-                  <div className="data-img">
-                    <img src={nodataImg} className="no-data-img"/>
-                  </div>
-                ) : (
-                  <div className="main-chart">
-                    {prescriberTradeTopView && (
-                      <Bar
-                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ1'})}}
-                        unit={{unit1: '', unit2: '%'}}
-                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
-                        data={{
-                          x: prescriberTradeTopView.prescriberNameList,
-                          y1: prescriberTradeTopView.numList
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="best-main">
-                <div className="main-text"><FormattedMessage id="Home.UJ2Prescriber"/></div>
-                {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
-                  <div className="data-img">
-                    <img src={nodataImg} className="no-data-img"/>
-                  </div>
-                ) : (
-                  <div className="main-chart">
-                    {prescriberTradeItemTopView && (
-                      <Bar
-                        yName={{y1: (window as any).RCi18n({id: 'Home.UJ2'})}}
-                        unit={{unit1: '', unit2: '%'}}
-                        nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
-                        data={{
-                          x: prescriberTradeItemTopView.prescriberNameList,
-                          y1: prescriberTradeItemTopView.numList
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/*<div className="item-recom">
-
-            <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
-            <div className="item-recommendation-main space-between">
-              <div className="recommendation-main flex-start">
-                <div className="recommendation-text">
-                  <FormattedMessage id="Home.recommendation"/>
                 </div>
-                <div className="recommendation-num">
-                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
-                </div>
-              </div>
-              <div className="recommendation-main flex-start">
-                <div className="recommendation-text">
-                  <FormattedMessage id="Home.NumberofCodesUsed"/>
-                </div>
-                <div className="recommendation-num">
-                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
-                </div>
-              </div>
-              <div className="recommendation-main flex-start">
-                <div className="recommendation-text">
-                  <FormattedMessage id="Home.Numberofrecommendationcodes"/>
-                </div>
-                <div className="recommendation-num">
-                  {tradeCustomerView && tradeCustomerView.orderNumber != null ? <CountUp end={tradeCustomerView.orderNumber} {...countUpProps} /> : '--'}
+                <div className="best-main">
+                  <div className="main-text"><FormattedMessage id="Home.UJ2Prescriber"/></div>
+                  {!prescriberTradeItemTopView || (prescriberTradeItemTopView.prescriberNameList.length === 0 && prescriberTradeItemTopView.numList.length === 0) ? (
+                    <div className="data-img">
+                      <img src={nodataImg} className="no-data-img"/>
+                    </div>
+                  ) : (
+                    <div className="main-chart">
+                      {prescriberTradeItemTopView && (
+                        <Bar
+                          yName={{y1: (window as any).RCi18n({id: 'Home.UJ2'})}}
+                          unit={{unit1: '', unit2: '%'}}
+                          nameTextStyle={{y1: [0, 0, 0, 42], y2: [0, 0, 0, 22]}}
+                          data={{
+                            x: prescriberTradeItemTopView.prescriberNameList,
+                            y1: prescriberTradeItemTopView.numList
+                          }}
+                        />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>*/}
+          </AuthWrapper>
+
+
+          <AuthWrapper functionName="f_home_recommendation_codes">
+            <div className="item-recom">
+              <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
+              <div className="item-recommendation-main space-between">
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.recommendation"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {prescriberRecommentCodeUseView && prescriberRecommentCodeUseView.activeCodeNumber != null ? <CountUp end={prescriberRecommentCodeUseView.activeCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.NumberofCodesUsed"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {prescriberRecommentCodeUseView && prescriberRecommentCodeUseView.usedCodeNumber != null ? <CountUp end={prescriberRecommentCodeUseView.usedCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+                <div className="recommendation-main flex-start">
+                  <div className="recommendation-text">
+                    <FormattedMessage id="Home.Numberofrecommendationcodes"/>
+                  </div>
+                  <div className="recommendation-num">
+                    {prescriberRecommentCodeUseView && prescriberRecommentCodeUseView.orderModeCodeNumber != null ? <CountUp end={prescriberRecommentCodeUseView.orderModeCodeNumber} {...countUpProps} /> : '--'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </AuthWrapper>
+
         </Spin>
       </div>
     );

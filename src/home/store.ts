@@ -18,6 +18,7 @@ import HeaderActor from './actor/header-actor';
 import SettlementActor from './actor/settlement-actor';
 import EvaluateSumActor from './actor/evaluate-sum-actor';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
+import {getPrescriberRecommentCodeUseView} from './webapi';
 
 const SUCCESS = Modal.success;
 
@@ -51,6 +52,8 @@ export default class AppStore extends Store {
       this.dispatch('home:prescriberTradeTopView', res.context ? res.context.prescriberTradeTopView : []);
       this.dispatch('home:prescriberTradeItemTopView', res.context ? res.context.prescriberTradeItemTopView : []);
       this.dispatch('home:prescriberTradeAndItemTopView', res.context ? res.context.prescriberTradeAndItemTopView : []);
+      this.dispatch('home:prescriberRecommentCodeUseView', res.context ? res.context.prescriberRecommentCodeUseView : []);
+
       //this.dispatch('home:searchData', getListAll.context);
     } else {
       this.dispatch('loading:end');
@@ -83,17 +86,20 @@ export default class AppStore extends Store {
       webapi.getPrescriberConversionFunnelDashboardView(data),
       webapi.getPrescriberTrafficTrendDashboardView(data),
       webapi.getPrescriberTransactionTrendView(data),
-      webapi.getTrafficDashboardView(data)
+      webapi.getTrafficDashboardView(data),
+      webapi.getPrescriberRecommentCodeUseView(data)
+
     ])
       .then((results) => {
         this.dispatch('loading:end');
         this.transaction(() => {
-          this.dispatch('prescriber:p_tradeCustomerView', results[0].res.context);
-          this.dispatch('prescriber:p_prescriberTopView', results[1].res.context);
-          this.dispatch('prescriber:p_conversionFunnelDashboardView', results[2].res.context);
-          this.dispatch('prescriber:p_trafficTrendDashboardView', results[3].res.context);
-          this.dispatch('prescriber:p_transactionTrendView', results[4].res.context);
-          this.dispatch('prescriber:p_trafficDashboardView', results[5].res.context);
+          this.dispatch('prescriber:p_tradeCustomerView', (results[0].res as any).context);
+          this.dispatch('prescriber:p_prescriberTopView', (results[1].res as any).context);
+          this.dispatch('prescriber:p_conversionFunnelDashboardView', (results[2].res as any).context);
+          this.dispatch('prescriber:p_trafficTrendDashboardView', (results[3].res as any).context);
+          this.dispatch('prescriber:p_transactionTrendView', (results[4].res as any).context);
+          this.dispatch('prescriber:p_trafficDashboardView', (results[5].res as any).context);
+          this.dispatch('prescriber:p_prescriberRecommentCodeUseView', (results[6].res as any).context);
         });
       })
       .catch((err) => {

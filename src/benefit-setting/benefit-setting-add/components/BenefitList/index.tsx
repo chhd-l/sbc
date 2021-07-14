@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table} from 'antd';
-import {RCi18n, ValidConst} from 'qmkit';
+import {RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
 
 import './index.less';
@@ -42,9 +42,11 @@ const deliveryNumberData = [
 
 const { Option } = Select;
 
-class BenefitList extends Component<any, any>{
+
+export default class BenefitList extends Component<any, any>{
     columns: any;
     currentSelected: any;
+
     constructor(props) {
         super(props);
         this.currentSelected = null;
@@ -57,7 +59,46 @@ class BenefitList extends Component<any, any>{
         };
     }
 
+    componentDidUpdate(prevProps) {
+        // 典型用法（不要忘记比较 props）：
+        if (this.props.initData && !prevProps.initData) {
+            this.initDataSource(this.props.initData);
+        }
+    }
+
+    initDataSource = (initData) => {
+        if (!initData) return;
+        let {fullGiftLevelList} = initData;
+
+        if (Array.isArray(fullGiftLevelList) && fullGiftLevelList.length > 0) {
+            let initDataSource = fullGiftLevelList.map(item => {
+                let {
+                    giftLevelId,
+                    deliveryNumber,
+                    fullGiftDetailList
+                } = item;
+
+                let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
+                let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId))
+                return {
+                    gifts: selectedRows,
+                    selectedSkuIds,
+                    selectedRows,
+                    key: giftLevelId,
+                    deliveryNumber: deliveryNumber,
+                }
+            })
+
+            this.setState({
+                dataSource: initDataSource
+            })
+        }
+
+    };
+
+
     handleDelete = key => {
+
         const dataSource = [...this.state.dataSource];
         // 最后一个重置数据
         if (Array.isArray(dataSource) && dataSource.length === 1){
@@ -67,15 +108,33 @@ class BenefitList extends Component<any, any>{
             })
         }else {
             this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+
         }
     };
 
+    handleDeliveryNumberChange(value, record) {
+        console.log(`selected ${value}`);
+        const dataSource = [...this.state.dataSource];
+        let index = dataSource.findIndex(item => item.key === record.key);
+        if ( index > -1 ){
+            dataSource[index].deliveryNumber = Number(value);
+        }
+        this.setState({
+            dataSource
+        })
+
+    }
+
     handleAdd = () => {
         const { count, dataSource } = this.state;
+        let minLength = deliveryNumberData.length;
+        if (dataSource.length >= minLength) return;
         const newData = {
             key: count,
             deliveryNumber: '',
             gifts: [],
+            selectedSkuIds: [],
+            selectedRows: []
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -83,19 +142,11 @@ class BenefitList extends Component<any, any>{
         });
     };
 
-    showProduct = (key) => {
-
-    };
-
-    editGiftItem = (item) => {}
-
-
     onDelGiftItem= (record, item) => {
         if (!record || !item) return;
-        // 删除更新当前行数据
+        // 删除当前行数据
         let dataSource = [...this.state.dataSource];
         let index = dataSource.findIndex(item => item.key === record.key);
-        debugger;
         if (index > -1) {
             dataSource[index].gifts = dataSource[index].gifts.filter(x => x.goodsInfoId !== item.goodsInfoId);
             this.setState({
@@ -114,7 +165,11 @@ class BenefitList extends Component<any, any>{
 
         // 选中gift,更新dataSource
         let index = dataSource.findIndex((item) => item.key === currentSelected.key);
-        if (index > -1 ) dataSource[index].gifts = selectedRows.toJS();
+        if (index > -1 ) {
+            dataSource[index].gifts = selectedRows.toJS();
+            dataSource[index].selectedSkuIds = selectedSkuIds;
+            dataSource[index].selectedRows = selectedRows;
+        }
 
         this.setState({
             selectedSkuIds,
@@ -127,33 +182,48 @@ class BenefitList extends Component<any, any>{
     closeGoodsModal = () => {
         this.setState({visible: false});
     }
+
     openGoodsModal = (currentSelected) => {
 
         if (!currentSelected) return;
-        let {gifts} = currentSelected;
+        let {selectedSkuIds,selectedRows} = currentSelected;
         this.currentSelected = currentSelected;
-        // 当前行已选中产品，
-        if (Array.isArray(gifts) && gifts.length > 0){
-
-        }else {
-
+        // 当前行存在已选中产品，
+        if (Array.isArray(selectedSkuIds) && selectedSkuIds.length > 0){
+            this.setState({
+                selectedSkuIds,
+                selectedRows,
+            })
+        }else { // 重置
+            this.setState({
+                selectedSkuIds: [],
+                selectedRows: [],
+            })
         }
-        // 当前行没有选中产品，
         this.setState({visible: true});
+    };
+
+    getValueFromEvent = (e, info) => {
+        console.log('e.target.value', e, info);
+        return {
+            productId: info.goodsInfoId,
+            productNum: e || 1,
+        };
     };
 
     getColumns = () => {
         const { getFieldDecorator } = this.props.form;
 
-        let columns = [
+        return [
             {
                 title: 'Delivery number',
                 dataIndex: 'deliveryNumber',
                 width: '30%',
                 render: (rowInfo, record, index) => {
+                    // console.log('record', record);
                     let isDisabled = false;
                     return (
-                        <div>
+                        <div key={record.key}>
                             <Row>
                                 <Col span={16}>
                                     <Form.Item>
@@ -162,12 +232,20 @@ class BenefitList extends Component<any, any>{
                                                 rules: [
                                                     {
                                                         required: true,
-                                                        message: RCi18n({id: 'Product.PleaseInputSKU'})
+                                                        message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
                                                     },
-                                                ]
+                                                ],
+                                                initialValue: record.deliveryNumber || null
+
                                             })(
-                                                <Select className='deliveryNumber-select'>
-                                                    {deliveryNumberData.map(item => <Option key={item.id}><strong>{item.name}</strong></Option>)}
+                                                <Select onChange={(value) => this.handleDeliveryNumberChange(value, record)} className='deliveryNumber-select'>
+                                                    {deliveryNumberData.map(item => (
+                                                        <Option
+                                                            key={item.id}
+                                                            value={item.id}
+                                                        >
+                                                            <strong>{item.name}</strong>
+                                                        </Option>))}
                                                 </Select>
                                             )
                                         }
@@ -182,64 +260,73 @@ class BenefitList extends Component<any, any>{
                 title: 'Gift',
                 dataIndex: 'gifts',
                 render: (rowInfo, record, index) => {
-                    console.log('rowInfo', rowInfo);
-                    console.log('record', record);
-                    let el = (
+                    return (
                         <Row>
-                            <Col span={16}>
-                                <Form.Item style={styles.tableFormItem}>
-                                    {getFieldDecorator(`benefitList[${index}].gift`, {
-                                        rules: [
-                                            {
-                                                required: true,
-                                                whitespace: true,
-                                                message: RCi18n({id:'Product.PleaseInputSKU'})
-                                            },
-                                            {
-                                                pattern: ValidConst.number,
-                                                message: RCi18n({id:'Product.positiveInteger'})
-                                            }
-                                        ]
-                                    })(
-                                        <div className="space-between-align">
-                                            <div style={{ paddingTop: 6 }}>
-                                                {' '}
-                                                <Icon
-                                                    style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}
-                                                    type="plus-circle"
-                                                    onClick={(e) => this.openGoodsModal(record)}
-                                                />
-                                            </div>
-                                            <div style={{ lineHeight: 2 }}>
-                                                {record.gifts &&
-                                                record.gifts.map((item, index) => {
-                                                    return (
-                                                        <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>
-                                                            <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>
-                                                            <InputNumber
-                                                                style={{ width: '60px', height: '28px', textAlign: 'center' }}
-                                                                defaultValue={item.productNum || 1}
-                                                                // key={item.subGoodsInfoId}
-                                                                min={1}
-                                                                max={item.stock || 10000}
-                                                                onChange={(e) => this.editGiftItem(item)}
-                                                            />
-                                                            <a
-                                                                style={{paddingLeft: 5}}
-                                                                className="iconfont iconDelete"
-                                                                onClick={() => this.onDelGiftItem(record, item)}
-                                                            />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    )}
-                                </Form.Item>
+                            <Col span={20}>
+                                <div className="space-between-align">
+                                    <div style={{paddingTop: 6}}>
+                                        {' '}
+                                        <Icon
+                                            style={{paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer'}}
+                                            type="plus-circle"
+                                            onClick={(e) => this.openGoodsModal(record)}
+                                        />
+                                    </div>
+                                    <div style={{lineHeight: 2}}>
+                                        {record.gifts &&
+                                        record.gifts.map((item, recordIndex) => {
+                                            return (
+                                                <div className="space-between-align" key={item.goodsInfoId}
+                                                     style={{paddingLeft: 5}}>
+                                                    <span style={{
+                                                        paddingLeft: 5,
+                                                        paddingRight: 5
+                                                    }}>{item.goodsInfoNo}</span>
+                                                    <Form.Item key={recordIndex} style={styles.tableFormItem}>
+                                                        {
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}]`, {
+                                                                getValueFromEvent: (e) => this.getValueFromEvent(e, item),
+                                                                initialValue: {
+                                                                    productId: item.goodsInfoId,
+                                                                    productNum: item.productNum || 1,
+                                                                },
+                                                                rules: [
+                                                                    {
+                                                                        required: true, message:
+                                                                            (window as any).RCi18n({
+                                                                                id: 'Marketing.greaterthan0andlessthan999'
+                                                                            })
+                                                                    }
+                                                                ]
+                                                            })(
+                                                                <InputNumber
+                                                                    style={{
+                                                                        width: '60px',
+                                                                        height: '28px',
+                                                                        textAlign: 'center'
+                                                                    }}
+                                                                    key={item.goodsInfoId || recordIndex}
+                                                                    min={1}
+                                                                    max={item.stock || 999}
+                                                                    formatter={(value: any) => value.productNum}
+                                                                    // onChange={(e) => this.editGiftItem(item)}
+                                                                />
+                                                            )
+                                                        }
+                                                    </Form.Item>
+                                                    <a
+                                                        style={{paddingLeft: 5}}
+                                                        className="iconfont iconDelete"
+                                                        onClick={() => this.onDelGiftItem(record, item)}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                             </Col>
                         </Row>
                     );
-                    return el;
                 }
 
             },
@@ -256,18 +343,26 @@ class BenefitList extends Component<any, any>{
                             {/*/>*/}
                         </div>
                         <div>
-                            <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                                <a style={{paddingLeft: 5}} className="iconfont iconDelete" />
+                            <Popconfirm title={RCi18n({id: 'Subscription.SureToDelete'})}
+                                        onConfirm={() => this.handleDelete(record.key)}>
+                                <a style={{paddingLeft: 5}} className="iconfont iconDelete"/>
                             </Popconfirm>
                         </div>
                     </div>;
                 },
             },
         ];
-
-        return columns;
     }
 
+    getGiftsValidateFields = () => {
+        const { getFieldDecorator } = this.props.form;
+
+        return (
+            <Form.Item>
+                {getFieldDecorator('gif-errors')(<input hidden/>)}
+            </Form.Item>
+        );
+    }
 
     render() {
         let {
@@ -285,14 +380,16 @@ class BenefitList extends Component<any, any>{
                 </div>
                 <div className='BenefitList-main'>
                     <Button onClick={this.handleAdd} type="primary" style={{ marginBottom: 16 }}>
-                        Add a row
+                        <FormattedMessage id="Marketing.Addgift" />
                     </Button>
                     <Table
                         dataSource={dataSource}
                         columns={columns}
                         pagination={false}
                         size="small"
+                        rowKey='key'
                     />
+                    {this.getGiftsValidateFields()}
                 </div>
                 <GoodsModal
                     visible={visible}
@@ -306,4 +403,4 @@ class BenefitList extends Component<any, any>{
     }
 }
 
-export default Form.create()(BenefitList)
+// export default Form.create()(BenefitList)

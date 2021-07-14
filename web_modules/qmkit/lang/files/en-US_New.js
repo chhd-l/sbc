@@ -882,7 +882,10 @@ export default {
         'Subscription.benefits':'Benefits',
         'Subscription.Save':'Save',
         'Subscription.Cancel':'Cancel',
-
+        'Subscription.PleaseSelectDeliveryNumber':'Please select delivery Number ',
+        'Subscription.SureToDelete':'Sure to delete ?',
+        'Subscription.PleaseInputCampaignName':'Pleas Input Campaign name',
+        'Subscription.PleaseInputDeliveryNumber':'Please Input Delivery Number',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

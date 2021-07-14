@@ -636,6 +636,53 @@ class FullDiscountForm extends React.Component<any, any> {
                   )}
                   <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
                 </FormItem>
+                <FormItem>
+                  <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                  {getFieldDecorator(`firstSubscriptionLimitAmount`, {
+                    rules: [
+                      // { required: true, message: 'Must enter rules' },
+                      {
+                        validator: (_rule, value, callback) => {
+                          if (value) {
+                            if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.1-9999'
+                                })
+                              );
+                            }
+                          }
+                          callback();
+                        }
+                        // callback();
+                      }
+                    ],
+                    initialValue: null
+                  })(
+                    <Input
+                      // style={{ width: 200 }}
+                      className="input-width"
+                      title={
+                        (window as any).RCi18n({
+                          id: 'Marketing.1-9999'
+                        })
+                      }
+                      placeholder={
+                        (window as any).RCi18n({
+                          id: 'Marketing.1-9999'
+                        })
+                      }
+                      onChange={(e) => {
+                        this.onBeanChange({
+                          firstSubscriptionLimitAmount: e.target.value
+                        });
+                      }}
+                      value={marketingBean.get('firstSubscriptionLimitAmount')}
+                    />
+                  )}
+                  &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                </FormItem>
+
               </div>
 
             </FormItem>
@@ -700,6 +747,52 @@ class FullDiscountForm extends React.Component<any, any> {
                   />
                 )}
                 <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
+              </FormItem>
+              <FormItem>
+                <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                {getFieldDecorator(`restSubscriptionLimitAmount`, {
+                  rules: [
+                    // { required: true, message: 'Must enter rules' },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.1-9999'
+                              })
+                            );
+                          }
+                        }
+                        callback();
+                      }
+                      // callback();
+                    }
+                  ],
+                  initialValue: null
+                })(
+                  <Input
+                    // style={{ width: 200 }}
+                    className="input-width"
+                    title={
+                      (window as any).RCi18n({
+                        id: 'Marketing.1-9999'
+                      })
+                    }
+                    placeholder={
+                      (window as any).RCi18n({
+                        id: 'Marketing.1-9999'
+                      })
+                    }
+                    onChange={(e) => {
+                      this.onBeanChange({
+                        restSubscriptionLimitAmount: e.target.value
+                      });
+                    }}
+                    value={marketingBean.get('restSubscriptionLimitAmount')}
+                  />
+                )}
+                &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
               </FormItem>
             </div>
           </FormItem>
@@ -1046,6 +1139,7 @@ class FullDiscountForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
+    debugger
     const { marketingBean, discountBeanOnChange, } = this.props.relaxProps;
     discountBeanOnChange(marketingBean.merge(params));
   };
@@ -1223,12 +1317,13 @@ class FullDiscountForm extends React.Component<any, any> {
               'fullDiscountLevelList',
               marketingBean.get('fullDiscountLevelList').map((item) => item.set('discount', item.get('discount') / 100))
             );
-            debugger
             let obj = {
               firstSubscriptionOrderDiscount: marketingBean.get('firstSubscriptionOrderDiscount') ? marketingBean.get('firstSubscriptionOrderDiscount') / 100 : null,
               restSubscriptionOrderDiscount: marketingBean.get('restSubscriptionOrderDiscount') ? marketingBean.get('restSubscriptionOrderDiscount') / 100 : null,
               subscriptionFirstLimit: marketingBean.get('subscriptionFirstLimit'),
-              subscriptionRestLimit: marketingBean.get('subscriptionRestLimit')
+              subscriptionRestLimit: marketingBean.get('subscriptionRestLimit'),
+              firstSubscriptionLimitAmount: marketingBean.get('firstSubscriptionLimitAmount'),
+              restSubscriptionLimitAmount: marketingBean.get('restSubscriptionLimitAmount'),
             };
 
             marketingBean = marketingBean.set('marketingSubscriptionDiscount', obj);

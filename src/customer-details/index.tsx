@@ -137,7 +137,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
                 </TabPane>
                 <TabPane tab="Payment methods" key="payment">
-                  <PaymentInfo customerId={this.state.customerId}></PaymentInfo>
+                  <PaymentInfo customerId={this.state.customerId} ></PaymentInfo>
                 </TabPane>
               </Tabs>
             ) : (

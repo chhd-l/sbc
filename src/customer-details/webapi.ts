@@ -24,6 +24,12 @@ export function getBasicDetails(id = null) {
     method: 'GET'
   });
 }
+export function getMemberShipDetails(id = null) {
+  return Fetch<TResult>('/subscription/order/gift/detail/' + id, {
+    method: 'GET'
+  });
+}
+
 
 export function basicDetailsSave(filterParams = {}) {
   return Fetch('/customer/detail', {
@@ -188,7 +194,7 @@ export function getPaymentMethods(param) {
 }
 
 export function deleteCard(param) {
-  return Fetch<TResult>(`/pay-payment-info/${param.id}`, {
+  return Fetch<TResult>(`/${param.storeId}/pay-payment-info-del/${param.id}`, {
     method: 'DELETE'
   });
 }
@@ -248,8 +254,8 @@ export function getPrescriberList(params = {}) {
     })
   });
 }
-export function getBenefitsList(params={}){
-  return Fetch<TResult>('/', {
+export function getBenefitsList(params){
+  return Fetch<TResult>('/subscription/order/gift/page', {
     method: 'POST',
     body: JSON.stringify({
       ...params
@@ -367,5 +373,29 @@ export function bindTagging(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
+  });
+}
+
+//feedback
+export function getByCustomerId(customerId) {
+  return Fetch<TResult>('/customer/feedback/getByCustomerId', {
+    method: 'POST',
+    body: JSON.stringify({
+      customerId
+    })
+  });
+}
+
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/customer/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+//更新pet lifestage数据
+export function refreshPetLifeStage(petId: string) {
+  return Fetch<TResult>(`/pets/updateLifeStage/${petId}`, {
+    method: 'PUT'
   });
 }

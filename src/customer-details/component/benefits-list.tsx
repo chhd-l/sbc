@@ -2,11 +2,12 @@ import React from 'react';
 import { Table } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-import { getBenefitsList} from "../webapi";
+import { getBenefitsList } from "../webapi";
+import { Const } from 'qmkit';
 interface Iprop {
     startDate: string;
     endDate: string;
-    customerId: string;
+    customerAccount: string;
 }
 export default class BenefitsList extends React.Component<Iprop, any> {
 
@@ -32,31 +33,30 @@ export default class BenefitsList extends React.Component<Iprop, any> {
     }
 
     getBebefitsList = () => {
-        const { startDate, endDate, customerId } = this.props;
+        const { startDate, endDate, customerAccount } = this.props;
         const { pagination } = this.state;
-        this.setState({loading:true});
+        this.setState({ loading: true });
         getBenefitsList({
-            endTime:endDate,
-            startTime:startDate,
+            endDate,
+            startDate,
             pageNum: pagination.current - 1,
             pageSize: pagination.pageSize,
-            buyerId:customerId
+            customerAccount
         }).
-        then((data)=>{
-            this.setState({
-                loading: false,
-                list:data.res.context.content,
-                pagination: {
-                    ...pagination,
-                    total: data.res.context.total
-                  }
-            });
-        }).catch(()=>{
-            this.setState({
-                loading:false
+            then((data) => {
+                this.setState({
+                    loading: false,
+                    list: data.res.context.subscriptionOrderGiftList,
+                    pagination: {
+                        ...pagination,
+                        total: data.res.context.total
+                    }
+                });
+            }).catch(() => {
+                this.setState({
+                    loading: false
+                })
             })
-        })
-
     }
     onTableChange = (pagination) => {
         this.setState(
@@ -70,66 +70,69 @@ export default class BenefitsList extends React.Component<Iprop, any> {
 
     render() {
         const { list, pagination, loading } = this.state;
-        // for (let i = 0; i < 100; i++) {
-        //     list.push({
-        //       key: i,
-        //       BenefitType: `Edrward ${i}`,
-        //       GiftName: 32,
-        //       GiftType: `London Park no. ${i}`,
-        //       DeliveryNumber:112,
-        //       SPU:1,
-        //       SKU:2,
-        //       Status:3,
-        //       ScheduledTime:3,
-        //       DeliveryTime:4,
-        //     });
-        //   }
         const columns = [
             {
                 title: <FormattedMessage id="PetOwner.BenefitType" />,
-                dataIndex: 'BenefitType',
-                key: 'BenefitType'
+                dataIndex: 'benefitType',
+                key: 'BenefitType',
+                align: 'center'
             },
             {
                 title: <FormattedMessage id="PetOwner.GiftName" />,
-                dataIndex: 'GiftName',
-                key: 'GiftName'
+                dataIndex: 'giftName',
+                key: 'GiftName',
+                align: 'center'
             },
             {
                 title: <FormattedMessage id="PetOwner.GiftType" />,
-                dataIndex: 'GiftType',
-                key: 'GiftType'
+                dataIndex: 'giftType',
+                key: 'GiftType',
+                align: 'center'
             }, {
                 title: <FormattedMessage id="PetOwner.DeliveryNumber" />,
-                dataIndex: 'DeliveryNumber',
-                key: 'DeliveryNumber'
+                dataIndex: 'deliveryNumber',
+                key: 'DeliveryNumber',
+                align: 'center'
             },
             {
                 title: <FormattedMessage id="PetOwner.SPU" />,
-                dataIndex: 'SPU',
-                key: 'SPU'
+                dataIndex: 'spuNo',
+                key: 'SPUNO',
+                align: 'center'
+
             },
             {
                 title: <FormattedMessage id="PetOwner.SKU" />,
-                dataIndex: 'SKU',
-                key: 'SKU'
+                dataIndex: 'skuNO',
+                key: 'SKUNO',
+
             }, {
                 title: <FormattedMessage id="PetOwner.Status" />,
-                dataIndex: 'Status',
-                key: 'Status'
+                dataIndex: 'status',
+                key: 'Status',
+                align: 'center'
             }, {
                 title: <FormattedMessage id="PetOwner.ScheduledTime" />,
-                dataIndex: 'ScheduledTime',
-                key: 'ScheduledTime'
+                dataIndex: 'scheduledTime',
+                key: 'ScheduledTime',
+                render: (text) => {
+                    return (
+                        moment(text).format(Const.TIME_FORMAT)
+                    )
+                }
             }, {
                 title: <FormattedMessage id="PetOwner.DeliveryTime" />,
-                dataIndex: 'DeliveryTime',
-                key: 'DeliveryTime'
+                dataIndex: 'deliveredTime',
+                key: 'DeliveryTime',
+                align: 'center',
+                render: (text) => {
+                    return (
+                        moment(text).format(Const.TIME_FORMAT)
+                    )
+                }
             }
         ];
-
         return (
-
             <>
                 <Table
                     loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
@@ -139,12 +142,9 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                     pagination={pagination}
                     onChange={this.onTableChange}
                 >
-
                 </Table>
             </>
         )
     }
-
-
 }
 

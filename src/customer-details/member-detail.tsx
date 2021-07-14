@@ -12,10 +12,12 @@ import PrescribInformation from './component/prescrib-information';
 import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
+import FeedbackList from './component/feedback-list';
 import BenefitsList from './component/benefits-list'
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
+import json from 'web_modules/qmkit/json';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -94,6 +96,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       loading: false,
       tagList: [],
       basic: {},
+      memberShip: {},
       petOwnerTag: [],
       pets: [],
       delivery: {},
@@ -102,11 +105,12 @@ export default class CustomerDetails extends React.Component<any, any> {
       endDate: moment().format('YYYY-MM-DD'),
       fieldList: [],
       countryList: [],
-      showElem:false,
+      showElem: false,
     };
   }
   componentDidMount() {
     this.getBasicInformation();
+    this.getMemberShip();
     this.getPetsList();
     this.getTagList();
     this.getAddressCon();
@@ -138,7 +142,25 @@ export default class CustomerDetails extends React.Component<any, any> {
         this.setState({ loading: false });
       });
   };
-
+  getMemberShip = () => {
+    this.setState({ loading: true });
+    webapi
+      .getMemberShipDetails(this.state.customerId)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            memberShip: { ...res.context }
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  };
   getAddressCon = async () => {
     const fileds = await getAddressConfig();
     const countries = await getCountryList();
@@ -257,7 +279,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       endDate: dateStrs[1]
     });
   };
-  handleChangeshowElem=()=>{
+  handleChangeshowElem = () => {
     this.setState((state) => ({
       showElem: !state.showElem
     }));
@@ -286,7 +308,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   render() {
-    const { displayPage, basic, pets, delivery, addressType, startDate, endDate } = this.state;
+    const { displayPage, basic, memberShip, pets, delivery, addressType, startDate, endDate } = this.state;
 
     if (displayPage === 'delivery') {
       return (
@@ -402,8 +424,8 @@ export default class CustomerDetails extends React.Component<any, any> {
 
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx}`} span={4} className="text-tip">{field.fieldName}</Col>
-                          <Col key={`field${idx}`} span={8} className="text-highlight">
+                          <Col key={`label${idx * Math.random()}`} span={4} className="text-tip">{field.fieldName}</Col>
+                          <Col key={`field${idx * Math.random()}`} span={8} className="text-highlight">
                             {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
                           </Col>
                         </>
@@ -432,7 +454,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <div className="Membership-info-detail">
                     <Row type="flex" align="middle">
                       <Col span={13}>
-                      <i className="iconfont iconhuangguan1" style={{ fontSize: '20px',marginRight:"20px",color: "#d81e06" }}></i>
+                        <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: "20px", color: "#d81e06" }}></i>
                         <FormattedMessage id="PetOwner.ClubMember" />
                       </Col>
                       <Col span={11}>
@@ -441,38 +463,38 @@ export default class CustomerDetails extends React.Component<any, any> {
                           right: '20px',
                           top: "-10px"
                         }}>
-                          <span onClick={this.handleChangeshowElem} style={{cursor:'pointer',color:"#d81e06"}}><FormattedMessage id="PetOwner.more"/> <i style={{fontSize:"12px",marginLeft:'-2px'}}><Icon type={this.state.showElem ? 'down':'up'} /></i></span>
-                         
+                          <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "#d81e06" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
                         </div>
                       </Col>
                     </Row>
-                    <div  className={`${this.state.showElem?'':'hide'} word-style`}>    
-                    <Row>
-                      <Col span={1}></Col>
-                      <Col span={13} className="text-tip">
-                        <FormattedMessage id="PetOwner.AdmissionDate" />
-                        <span>ssss</span>
-                      </Col>
-                      <Col span={10} className="text-tip">
-                        <FormattedMessage id="PetOwner.SubscriptionNo" />
-                        <span style={{color:"#d81e06",textDecoration:"underline"}}>sssss</span>
-                      </Col>
-                      <Col span={1}></Col>
-                      <Col span={23} className="text-tip">
-                        <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
-                        <span>ssss</span>
-                      </Col>
-                      <Col span={1}></Col>
-                      <Col span={13} className="text-tip">
-                        <FormattedMessage id="PetOwner.WelcomeBoc" />
-                        <span style={{color:"#585858"}}>ssss</span>
-                      </Col>
-                      <Col span={10} className="text-tip">
-                        <FormattedMessage id="PetOwner.ConsumptionGift" />
-                        <span style={{color:"#d81e06",textDecoration:"underline"}}>ssss</span>
-                      </Col>
-                    </Row>
-                    </div>  
+                    <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
+                      <Row>
+                        <Col span={1}></Col>
+                        <Col span={13} className="text-tip">
+                          <FormattedMessage id="PetOwner.AdmissionDate" />
+                          <span>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                        </Col>
+                        <Col span={10} className="text-tip">
+                          <FormattedMessage id="PetOwner.SubscriptionNo" />
+                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={23} className="text-tip">
+                          <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
+                          <span>{memberShip.clubLoyaltyProgram}</span>
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={13} className="text-tip">
+                          <FormattedMessage id="PetOwner.WelcomeBox" />
+                        &nbsp;
+                        <span style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                        </Col>
+                        <Col span={10} className="text-tip">
+                          <FormattedMessage id="PetOwner.ConsumptionGift" />
+                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -547,7 +569,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             <div className="container">
               <Headline
                 title="Other information"
-                extra={<RangePicker style={{ display: ['order', 'subscrib','benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
+                extra={<RangePicker style={{ display: ['order', 'subscrib', 'benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab="Order information" key="order">
@@ -566,10 +588,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
                 </TabPane> : null}
                 <TabPane tab="Payment methods" key="payment">
-                  <PaymentList customerId={this.state.customerId} />
+                  <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount} />
                 </TabPane>
-                <TabPane tab={<FormattedMessage id="PetOwner.Benefit"/>} key="benefit">
-                  <BenefitsList  startDate={startDate} endDate={endDate} customerId={this.state.customerId}/>
+                <TabPane tab="Feedback" key="feedback">
+                  <FeedbackList customerId={this.state.customerId} />
+                </TabPane>
+                <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                  <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
               </Tabs>
             </div>

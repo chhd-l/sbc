@@ -90,3 +90,31 @@ export const getAllAttribute = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
+
+/**
+ * 新增满折
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const addFreeShipping = (shippingBean) => {
+  return Fetch<TResult>('/marketing/freeShipping', {
+    method: 'POST',
+    body: JSON.stringify(shippingBean)
+  });
+};
+
+/**
+ * 编辑满折
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const updateFreeShipping = (shippingBean) => {
+  return Fetch<TResult>('/marketing/freeShipping', {
+    method: 'PUT',
+    body: JSON.stringify(shippingBean)
+  });
+};
+/*获取市区*/
+export const timeZone = () => {
+  return Fetch('/timeZone/convert', {
+    method: 'POST'
+  });
+};

@@ -177,7 +177,7 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_add_delete_card">
-            <Button onClick={()=>history.push({pathname:`/credit-card/${props.customerId}/${props.customerAccount}`, query:{fromSubscroption:true}})} style={{ marginTop: 20 }} type="primary">
+            <Button onClick={()=>history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>

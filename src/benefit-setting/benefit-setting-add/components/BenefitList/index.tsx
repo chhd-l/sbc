@@ -98,6 +98,7 @@ export default class BenefitList extends Component<any, any>{
 
 
     handleDelete = key => {
+
         const dataSource = [...this.state.dataSource];
         // 最后一个重置数据
         if (Array.isArray(dataSource) && dataSource.length === 1){
@@ -107,8 +108,22 @@ export default class BenefitList extends Component<any, any>{
             })
         }else {
             this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
+
         }
     };
+
+    handleDeliveryNumberChange(value, record) {
+        console.log(`selected ${value}`);
+        const dataSource = [...this.state.dataSource];
+        let index = dataSource.findIndex(item => item.key === record.key);
+        if ( index > -1 ){
+            dataSource[index].deliveryNumber = Number(value);
+        }
+        this.setState({
+            dataSource
+        })
+
+    }
 
     handleAdd = () => {
         const { count, dataSource } = this.state;
@@ -127,17 +142,9 @@ export default class BenefitList extends Component<any, any>{
         });
     };
 
-    showProduct = (key) => {
-
-    };
-
-    editGiftItem = (item) => {
-
-    }
-
     onDelGiftItem= (record, item) => {
         if (!record || !item) return;
-        // 删除更新当前行数据
+        // 删除当前行数据
         let dataSource = [...this.state.dataSource];
         let index = dataSource.findIndex(item => item.key === record.key);
         if (index > -1) {
@@ -213,9 +220,10 @@ export default class BenefitList extends Component<any, any>{
                 dataIndex: 'deliveryNumber',
                 width: '30%',
                 render: (rowInfo, record, index) => {
+                    // console.log('record', record);
                     let isDisabled = false;
                     return (
-                        <div>
+                        <div key={record.key}>
                             <Row>
                                 <Col span={16}>
                                     <Form.Item>
@@ -227,12 +235,17 @@ export default class BenefitList extends Component<any, any>{
                                                         message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
                                                     },
                                                 ],
-                                                initialValue: record.deliveryNumber || undefined
+                                                initialValue: record.deliveryNumber || null
 
                                             })(
-                                                <Select className='deliveryNumber-select'>
-                                                    {deliveryNumberData.map(item => <Option
-                                                        key={item.id} value={item.id}><strong>{item.name}</strong></Option>)}
+                                                <Select onChange={(value) => this.handleDeliveryNumberChange(value, record)} className='deliveryNumber-select'>
+                                                    {deliveryNumberData.map(item => (
+                                                        <Option
+                                                            key={item.id}
+                                                            value={item.id}
+                                                        >
+                                                            <strong>{item.name}</strong>
+                                                        </Option>))}
                                                 </Select>
                                             )
                                         }
@@ -311,56 +324,6 @@ export default class BenefitList extends Component<any, any>{
                                         })}
                                     </div>
                                 </div>
-
-                                {/*<Form.Item style={styles.tableFormItem}>*/}
-                                {/*    {getFieldDecorator(`benefitList[${index}].gifts`, {*/}
-                                {/*        rules: [*/}
-                                {/*            {*/}
-                                {/*                required: true,*/}
-                                {/*                message: RCi18n({id:'Product.PleaseInputSKU'})*/}
-                                {/*            },*/}
-                                {/*            {*/}
-                                {/*                pattern: ValidConst.number,*/}
-                                {/*                message: RCi18n({id:'Product.positiveInteger'})*/}
-                                {/*            }*/}
-                                {/*        ]*/}
-                                {/*    })(*/}
-                                {/*        <div className="space-between-align">*/}
-                                {/*            <div style={{ paddingTop: 6 }}>*/}
-                                {/*                {' '}*/}
-                                {/*                <Icon*/}
-                                {/*                    style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }}*/}
-                                {/*                    type="plus-circle"*/}
-                                {/*                    onClick={(e) => this.openGoodsModal(record)}*/}
-                                {/*                />*/}
-                                {/*            </div>*/}
-                                {/*            <div style={{ lineHeight: 2 }}>*/}
-                                {/*                {record.gifts.selectedRows &&*/}
-                                {/*                record.gifts.selectedRows.map((item, recordIndex) => {*/}
-                                {/*                    return (*/}
-                                {/*                        <div className="space-between-align" key={item.subGoodsInfoId} style={{ paddingLeft: 5 }}>*/}
-                                {/*                            <span style={{ paddingLeft: 5, paddingRight: 5 }}>{item.goodsInfoNo}</span>*/}
-
-                                {/*                            <InputNumber*/}
-                                {/*                                style={{ width: '60px', height: '28px', textAlign: 'center' }}*/}
-                                {/*                                defaultValue={item.productNum || 1}*/}
-                                {/*                                // key={item.subGoodsInfoId}*/}
-                                {/*                                min={1}*/}
-                                {/*                                max={item.stock || 10000}*/}
-                                {/*                                onChange={(e) => this.editGiftItem(item)}*/}
-                                {/*                            />*/}
-                                {/*                            <a*/}
-                                {/*                                style={{paddingLeft: 5}}*/}
-                                {/*                                className="iconfont iconDelete"*/}
-                                {/*                                onClick={() => this.onDelGiftItem(record, item)}*/}
-                                {/*                            />*/}
-                                {/*                        </div>*/}
-                                {/*                    );*/}
-                                {/*                })}*/}
-                                {/*            </div>*/}
-                                {/*        </div>*/}
-                                {/*    )}*/}
-                                {/*</Form.Item>*/}
                             </Col>
                         </Row>
                     );
@@ -424,7 +387,7 @@ export default class BenefitList extends Component<any, any>{
                         columns={columns}
                         pagination={false}
                         size="small"
-                        key='key'
+                        rowKey='key'
                     />
                     {this.getGiftsValidateFields()}
                 </div>

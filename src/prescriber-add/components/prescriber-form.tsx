@@ -80,7 +80,7 @@ class ClinicForm extends React.Component<any, any> {
       qrCodeLink: '',
       url: '',
       saveLoading: false,
-      isMapMode: false,
+      isMapMode: sessionStorage.getItem(cache.MAP_MODE) === '1' ? true : false,
       clinicsLites: [],
       prescriberKeyId: this.props.prescriberId,
       isPrescriber: bool,
@@ -92,22 +92,6 @@ class ClinicForm extends React.Component<any, any> {
     if (this.props.prescriberId) {
       this.getDetail(this.props.prescriberId);
     }
-    webapi.getListSystemConfig().then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        if (res.context) {
-          let selectType = res.context.find(x=>x.configType === 'selection_type') 
-          this.setState({
-            isMapMode: selectType && selectType.status === 0
-          })
-        }
-      }
-    })
-    // else {
-    //   this.props.form.setFieldsValue({
-    //     auditStatus: this.state.prescriberForm.auditStatus
-    //   });
-    // }
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     this.setState({
@@ -660,11 +644,6 @@ class ClinicForm extends React.Component<any, any> {
                           field: 'recommendationMode',
                           value
                         });
-                        if(value === 'MULTIPE_USE') {
-                          if(!this.props.prescriberId){
-                            this.reloadCode();
-                          }
-                        }
                       }}>
                         <Radio value={'SINGLE_USE'}><FormattedMessage id="Prescriber.SingleUse"/></Radio>
                         <Radio value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
@@ -696,7 +675,7 @@ class ClinicForm extends React.Component<any, any> {
                         :
                         <FormItem label={RCi18n({ id: 'Prescriber.RecommendationCode' })}>
                           {getFieldDecorator('prescriberCode', {
-                            initialValue: prescriberForm.multipeUse
+                            initialValue: prescriberForm.prescriberCode
                           })(
                           <Input addonAfter={<Icon onClick={() => this.reloadCode()} type="reload" />} disabled />)}
                         </FormItem>

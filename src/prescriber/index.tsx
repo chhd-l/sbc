@@ -42,9 +42,22 @@ export default class ClinicList extends Component<any, any> {
     this.handleTableChange = this.handleTableChange.bind(this);
   }
   componentDidMount() {
-    this.querySysDictionary('city');
-    this.queryClinicsDictionary('clinicType');
-    this.init();
+    webapi.getListSystemConfig().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context) {
+          let selectType = res.context.find(x=>x.configType === 'selection_type') 
+          this.setState({
+            isMapMode: selectType && selectType.status === 0
+          }, () => {
+            sessionStorage.setItem(cache.MAP_MODE, this.state.isMapMode ? '1' : '0')
+            this.querySysDictionary('city');
+            this.queryClinicsDictionary('clinicType');
+            this.init();
+          })
+        }
+      }
+    })
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     this.setState({

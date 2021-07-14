@@ -79,3 +79,9 @@ export function exportPrescriber(filterParams = {}) {
     })
   });
 }
+
+export function getListSystemConfig() {
+  return Fetch<TResult>('/order/config/listSystemConfig', {
+    method: 'GET',
+  });
+}

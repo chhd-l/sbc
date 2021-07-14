@@ -35,6 +35,7 @@ export default class AdyenCreditCardForm extends Component {
     pspName: string
     storeId: number
     cardType:any
+    fromSubscroption?:any
   }
   constructor(props) {
     super(props);
@@ -152,7 +153,7 @@ export default class AdyenCreditCardForm extends Component {
     return (
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
         <div id="component-container" ></div>
-          <div> <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span></div>
+        {this.props.fromSubscroption&&<div> <span className="ant-form-item-required red">{RCi18n({ id: 'payment.isDefaultTip' })}</span></div>}
         <div style={{ marginTop: 10, textAlign: 'right' }}>
           <Button type="primary" onClick={() => this.save()}> <FormattedMessage id="save" /></Button>
         </div>

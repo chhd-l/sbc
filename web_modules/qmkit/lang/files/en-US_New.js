@@ -1366,6 +1366,8 @@ export default {
         'payment.cardNumber2': 'CARD NUMBER',
         'payment.phone': 'Phone',
         'payment.email': 'Email',
+        'payment.phonePlaceholder': 'Please input Card Phone Number',
+        'payment.emailPlaceholder': 'Please input Card  Email',
         'payment.cardOwner': 'Cardowner',
         'payment.cardType': 'CARD TYPE',
         'payment.checkout': 'Checkout',

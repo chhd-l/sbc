@@ -80,7 +80,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
         if (!values) return [];
         let defaultFullGiftLevel = {
             fullAmount: null,
-            fullCount: null,
+            // fullCount: null,
             giftType: 1,
             fullGiftDetailList: []
         }

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { fetchOrderList } from '../../order-list/webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Const, cache, getOrderStatusValue } from 'qmkit';
+import { Const, cache, getOrderStatusValue, RCi18n } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
@@ -118,7 +118,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                         </span>
                       )}
                       <span key="3" style={styles.orderTime}>
-                        Order time: {moment(item.tradeState.createTime).format(Const.TIME_FORMAT)}
+                        <FormattedMessage id="Order.OrderTime" />: {moment(item.tradeState.createTime).format(Const.TIME_FORMAT)}
                       </span>
                     </div>
                   </td>
@@ -198,25 +198,25 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th key="1" style={{ width: '30%' }}>
-                        Product
+                        {RCi18n({id:"PetOwner.Product"})}
                       </th>
                       <th key="2" style={{ width: '10%' }}>
-                        Recipient
+                        {RCi18n({id:"PetOwner.Recipient"})}
                       </th>
                       <th key="3" style={{ width: '10%' }}>
-                        Amount
+                        {RCi18n({id:"PetOwner.Amount"})}
                       </th>
                       <th key="4" style={{ width: '10%' }}>
-                        Quantity
+                        {RCi18n({id:"PetOwner.Quantity"})}
                       </th>
                       <th key="5" style={{ width: '20%' }}>
-                        Prescriber name
+                        {RCi18n({id:"PetOwner.PrescriberName"})}
                       </th>
                       <th key="6" style={{ width: '10%' }}>
-                        Shipping status
+                        {RCi18n({id:"PetOwner.ShippingStatus"})}
                       </th>
                       <th key="7" style={{ width: '10%' }}>
-                        Order status
+                        {RCi18n({id:"PetOwner.OrderStatus"})}
                       </th>
                     </tr>
                   </thead>

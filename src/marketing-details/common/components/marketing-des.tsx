@@ -33,8 +33,8 @@ const SUB_TYPE = {
   1: 'Full quantity reduction',
   2: 'Full amount discount',
   3: 'Full quantity discount',
-  // 4: '满金额赠',
-  // 5: '满数量赠'
+  4: 'Full amount gift',
+  5: 'Full quantity gift',
   10: 'Order reach',
   11: 'Order reach',
 };
@@ -100,7 +100,7 @@ class MarketingDes extends React.Component<any, any> {
               PROMOTION_TYPE[promotionType]
             }
             {
-              promotionType === 0 &&
+              promotionType === 0 && marketingType !==2 &&
               <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={isSuperimposeSubscription === 0} disabled={true}>
                 <div className="Idontwanttocumulate">
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />

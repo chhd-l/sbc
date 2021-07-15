@@ -6,7 +6,7 @@ import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import axios from 'axios';
 import moment from 'moment';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 const { TextArea } = Input;
 const { MonthPicker } = DatePicker;
@@ -57,14 +57,14 @@ class PaymentInformation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   }
 
@@ -77,11 +77,11 @@ class PaymentInformation extends React.Component<any, any> {
           message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.getList();
         } else {
-          message.error(res.message || 'Delete failed');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error('Delete failed');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   clickDefault = () => {

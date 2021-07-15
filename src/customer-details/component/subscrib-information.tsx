@@ -4,7 +4,7 @@ import { Pagination, Spin, Row, Col, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { getSubscriptionList } from '../../subscription/webapi';
 import moment from 'moment';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
@@ -105,7 +105,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                   <td colSpan={7}>
                     <div style={styles.orderCon}>
                       <Link to={'/subscription-detail/' + item.subscribeId} style={styles.orderId}>{item.subscribeId}</Link>
-                      <span style={styles.orderTime}>Subscription time: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
+                      <span style={styles.orderTime}><FormattedMessage id="PetOwner.SubscriptionTime" />: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
                     </div>
                   </td>
                 </tr>
@@ -131,7 +131,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                               {item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}
                             </td>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
-                              {item.subscribeStatus === '0' ? 'Active' : item.subscribeStatus === '1' ? 'Pause' : 'Inactive'}
+                              {item.subscribeStatus === '0' ? RCi18n({id:"Subscription.Active"}) : item.subscribeStatus === '1' ? RCi18n({id:"Subscription.Pause"}) : RCi18n({id:"Subscription.Inactive"})}
                             </td>
                           </>
                         )}
@@ -145,7 +145,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                     <td style={{ width: '10%' }}>{item.subscriptionType}</td>
                     <td style={{ width: '25%' }}>{item.petsInfo && item.petsInfo.petsId ? item.petsInfo.petsId : ''}</td>
                     <td style={{ width: '10%' }}>{item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}</td>
-                    <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? 'Active' : item.subscribeStatus === '1' ? 'Pause' : 'Inactive'}</td>
+                    <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? RCi18n({id:"Subscription.Active"}) : item.subscribeStatus === '1' ? RCi18n({id:"Subscription.Pause"}) : RCi18n({id:"Subscription.Inactive"})}</td>
                   </tr>
                 )}
               </tbody>
@@ -167,12 +167,12 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '30%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product name</th>
-                      <th style={{ width: '10%' }}>Subscription type</th>
-                      <th style={{ width: '25%' }}>Pet ID</th>
-                      <th style={{ width: '10%' }}>Pet name</th>
-                      <th style={{ width: '10%', textAlign: 'left' }}>Subscription status</th>
+                      <th style={{ width: '30%' }}><FormattedMessage id="PetOwner.Product" /></th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="PetOwner.ProductName" /></th>
+                      <th style={{ width: '10%' }}><FormattedMessage id="PetOwner.subscriptionType" /></th>
+                      <th style={{ width: '25%' }}><FormattedMessage id="PetOwner.petID" /></th>
+                      <th style={{ width: '10%' }}><FormattedMessage id="PetOwner.PetName" /></th>
+                      <th style={{ width: '10%', textAlign: 'left' }}><FormattedMessage id="PetOwner.SubscriptionStatus" /></th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList)}</tbody>

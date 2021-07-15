@@ -13,18 +13,12 @@ export default function EditPetItem(props: any) {
   const petId = props.match.params.petid || '';
   return (
     <div>
-      <Breadcrumb>
+      <BreadCrumb thirdLevel={true}>
         <Breadcrumb.Item>
-          <Link to="/customer-list">Pet owner</Link>
+          <Link to={`/petowner-details/${customerId}/${customerAccount}`}><FormattedMessage id="PetOwner.petOwnerDetail" /></Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/customer-list">Pet owner list</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>Pet information</Breadcrumb.Item>
-      </Breadcrumb>
+        <Breadcrumb.Item><FormattedMessage id="PetOwner.PetInformation" /></Breadcrumb.Item>
+      </BreadCrumb>
       <div>
         <PetItem petId={petId} />
       </div>

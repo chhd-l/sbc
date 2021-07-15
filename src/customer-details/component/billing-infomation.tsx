@@ -5,7 +5,7 @@ import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addressList } from '@/order-add-old/webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import _ from 'lodash';
 
 import '../index.less';
@@ -97,11 +97,11 @@ class BillingInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   handleSubmit = (e) => {
@@ -141,13 +141,13 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -220,14 +220,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -245,14 +245,14 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
           this.getAddressList();
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   clickDefault = () => {
@@ -278,14 +278,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -329,7 +329,7 @@ class BillingInfomation extends React.Component<any, any> {
   comparePhone = (rule, value, callback) => {
     let reg = /^[0-9+-\s\(\)]{6,20}$/;
     if (!reg.test(value)) {
-      callback('Please enter the correct phone');
+      callback(RCi18n({id:"PetOwner.theCorrectPhone"}));
     } else {
       callback();
     }
@@ -338,7 +338,7 @@ class BillingInfomation extends React.Component<any, any> {
   compareZip = (rule, value, callback) => {
     let reg = /^[0-9]{3,10}$/;
     if (!reg.test(value)) {
-      callback('Please enter the correct Post Code');
+      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       callback();
     }
@@ -362,14 +362,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -402,7 +402,7 @@ class BillingInfomation extends React.Component<any, any> {
       <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
         <Row>
           <Col span={3}>
-            <h3>All Address( {this.state.addressList.length} )</h3>
+            <h3><FormattedMessage id="PetOwner.AllAddress" />( {this.state.addressList.length} )</h3>
             <ul>
               {this.state.addressList
                 ? this.state.addressList.map((item) => (
@@ -436,7 +436,7 @@ class BillingInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Pet owner account">
+                    <FormItem label={RCi18n({id:"PetOwner.ConsumerAccount"})}>
                       {this.state.customerAccount}
                     </FormItem>
                   </Col>
@@ -486,57 +486,57 @@ class BillingInfomation extends React.Component<any, any> {
                     </FormItem>
                   </Col> */}
                   <Col span={12}>
-                    <FormItem label="First Name">
+                    <FormItem label={RCi18n({id:"PetOwner.First name"})}>
                       {billingForm.firstName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Last Name">
+                    <FormItem label={RCi18n({id:"PetOwner.Last name"})}>
                       {billingForm.lastName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Phone Number">
+                    <FormItem label={RCi18n({id:"PetOwner.Phone number"})}>
                       {billingForm.consigneeNumber}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Post Code">
+                    <FormItem label={RCi18n({id:"PetOwner.Postal code"})}>
                       {billingForm.postCode}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Country">
+                    <FormItem label={RCi18n({id:"PetOwner.Country"})}>
                     {(countryArr.find(t => t.id === billingForm.countryId) || {})['name'] || ''}
                     </FormItem>
                   </Col>
                   {storeId.toString() === '123457910' ? (
                     <Col span={12}>
-                      <FormItem label="State">
+                      <FormItem label={RCi18n({id:"PetOwner.State"})}>
                         {billingForm.province}
                       </FormItem>
                     </Col>
                   ) : null}
 
                   <Col span={12}>
-                    <FormItem label="City">
+                    <FormItem label={RCi18n({id:"PetOwner.City"})}>
                       {billingForm.city}
                     </FormItem>
                   </Col>
                 </Row>
                 <Row>
                   <Col span={12}>
-                    <FormItem label="Address 1">
+                    <FormItem label={RCi18n({id:"PetOwner.Address1"})}>
                       {billingForm.address1}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Address 2">
+                    <FormItem label={RCi18n({id:"PetOwner.Address2"})}>
                       {billingForm.address2}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Reference">
+                    <FormItem label={RCi18n({id:"PetOwner.Reference"})}>
                       {billingForm.rfc}
                     </FormItem>
                   </Col>
@@ -575,10 +575,6 @@ class BillingInfomation extends React.Component<any, any> {
                           <FormattedMessage id="delete" />
                         </Button>
                       </Popconfirm> */}
-
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
-                      </Button>
                     </FormItem>
                   </Col>
                 </Row>

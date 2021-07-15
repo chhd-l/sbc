@@ -1,7 +1,7 @@
 import React from 'react';
-import { Table, Popconfirm, message, Button, Tooltip } from 'antd';
+import { Table, Popconfirm, message, Button, Tooltip, Tag } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
-import { cache, RCi18n } from 'qmkit';
+import { cache, RCi18n, AuthWrapper } from 'qmkit';
 import { Link } from 'react-router-dom';
 interface Iprop {
   customerId: string;
@@ -43,17 +43,23 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   deleteCard = ({id,canDelFlag}) => {
     if(!canDelFlag){
-      message.error('you can\'\t deleted the card');
+      message.error(RCi18n({id:"PetOwner.cannotDeletePaymentCard"}));
       return
     }
     this.setState({ loading: true });
     const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     deleteCard({storeId, id })
       .then((data) => {
+      if(data.res.code==='K-100209'){
+        message.error(data.res.message);
+      }else{
         message.success(data.res.message);
         this.getCardList();
+      }
+   
       })
       .catch(() => {
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         this.setState({
           loading: false
         });
@@ -66,53 +72,57 @@ export default class PaymentList extends React.Component<Iprop, any> {
     const customerAccount = this.props.customerAccount || '';
     const columns = [
       {
-        title: 'Card number',
+        title: RCi18n({id:"PetOwner.CardNumber"}),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''}</div>
+        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color="red">default</Tag>}</div>
       },
       {
-        title: 'Card type',
+        title: RCi18n({id:"PetOwner.CardType"}),
         dataIndex: 'paymentVendor',
         key: 'type'
       },
       {
-        title: 'Card holder',
+        title: RCi18n({id:"PetOwner.CardHolder"}),
         dataIndex: 'holderName',
         key: 'holder'
       },
       {
-        title: 'E-mail address',
+        title: RCi18n({id:"PetOwner.EmailAddress"}),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'Phone number',
+        title: RCi18n({id:"PetOwner.phoneNumber"}),
         dataIndex: 'phone',
         key: 'phoneNumber'
       },
       {
-        title: 'Operation',
+        title: RCi18n({id:"PetOwner.Operation"}),
         key: 'oper',
         render: (_, record) => (
-          <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.deleteCard(record)} okText="Confirm" cancelText="Cancel">
-            <Tooltip title="Delete">
-              <Button type="link">
-                <a className="iconfont iconDelete"></a>
-              </Button>
-            </Tooltip>
-          </Popconfirm>
+          <AuthWrapper functionName="f_create_credit_card">
+            <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.deleteCard(record)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
+              <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
+                <Button type="link">
+                  <a className="iconfont iconDelete"></a>
+                </Button>
+              </Tooltip>
+            </Popconfirm>
+          </AuthWrapper>
         )
       }
     ];
 
     return (
       <div>
-        
-        <Button type="primary">
-          <Link to={`/credit-card/${customerId}/${customerAccount}`}>
-        {RCi18n({id:'payment.add'})}
-         </Link></Button>
+        <AuthWrapper functionName="f_create_credit_card">
+          <Button type="primary">
+            <Link to={`/credit-card/${customerId}/${customerAccount}`}>
+              {RCi18n({id:'payment.add'})}
+            </Link>
+          </Button>
+        </AuthWrapper>
         <Table
           rowKey="id"
           loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}

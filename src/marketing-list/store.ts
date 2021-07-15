@@ -129,8 +129,8 @@ export default class AppStore extends Store {
     const token = (window as any).token;
     if (token) {
       const result = JSON.stringify({
-        couponId: marketingId,
-        token: token
+        marketingId,
+        token
       });
       const encrypted = base64.urlEncode(result);
       const exportHref = Const.HOST + `/marketing/marketing-used-record/export/${encrypted}`;

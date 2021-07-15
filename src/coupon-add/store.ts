@@ -49,6 +49,7 @@ export default class AppStore extends Store {
         effectiveDays,
         endTime,
         fullBuyPrice,
+        fullbuyCount,
         fullBuyType,
         rangeDayType,
         // scopeNames,
@@ -76,6 +77,7 @@ export default class AppStore extends Store {
         effectiveDays,
         endTime,
         fullBuyPrice,
+        fullbuyCount,
         fullBuyType,
         rangeDayType,
         scopeIds,
@@ -221,6 +223,7 @@ export default class AppStore extends Store {
       denomination,
       fullBuyType,
       fullBuyPrice,
+      fullbuyCount,
       scopeType,
       chooseBrandIds,
       chooseCateIds,
@@ -261,6 +264,10 @@ export default class AppStore extends Store {
 
     if (fullBuyType === 1) {
       params.fullBuyPrice = fullBuyPrice;
+      params.fullbuyCount = null;
+    } else {
+      params.fullBuyPrice = null;
+      params.fullbuyCount = fullbuyCount
     }
 
     if (scopeType === 0) {

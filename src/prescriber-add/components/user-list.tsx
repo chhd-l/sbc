@@ -184,11 +184,13 @@ class UserList extends Component<any, any> {
       firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
       prescriberId: prescriberId
     };
-    const { res } = await webapi.sendEmail(paramter);
-    if (res.code === Const.SUCCESS_CODE) {
-      this.setState({ loading: false });
-      message.success(RCi18n({ id: 'Prescriber.sendSuccessful' }));
-    }
+    webapi.sendEmail(paramter).then((data)=>{
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({ loading: false });
+        message.success(RCi18n({ id: 'Prescriber.sendSuccessful' }));
+      }
+    });
   };
 
   onFormChange = ({ field, value }) => {

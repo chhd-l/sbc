@@ -1143,6 +1143,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
       },
+      // {
+      //   title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Active.PaymentMethod"/></span>,
+      //   key: 'paymentMethod',
+      //   width: '10%',
+      //   render: (text, record) => record.paymentItem ? <div>{record.paymentItem.name} <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a> </div>   : null
+      // },
       {
         title: <FormattedMessage id="Subscription.Operation"/>,
         dataIndex: '',

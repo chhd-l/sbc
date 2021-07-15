@@ -87,7 +87,7 @@ const columns = [
     render: (text, record, index) => {
       // let html = text.replaceAll(",", "<br/>")
       // let productNames = text.split(',') 
-      let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : ""
+      let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : []
       return <div>
         {
           nameAndDateVOList && nameAndDateVOList.map(data => (

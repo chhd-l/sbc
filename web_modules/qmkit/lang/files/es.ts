@@ -3154,6 +3154,7 @@ export default {
     "PetOwner.motherLofNumber": "Número lof de la madre",
     "PetOwner.fatherLofNumber": "Número del lof del padre",
     "PetOwner.size": "tamaño",
+    "payment.createPaymentMethod": "Crear un método de pago",
     "payment.add": "Agregar nuevo",
     "payment.acceptCards": "Aceptamos tarjetas de crédito.",
     "payment.address1": "Dirección, línea 1",

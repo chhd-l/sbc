@@ -245,7 +245,7 @@ class MarketingList extends React.Component<any, any> {
                   <Tooltip placement="top" title={<FormattedMessage id="Marketing.Download" />}>
                     <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
                   </Tooltip>
-                  {(rowInfo['marketingStatus'] == 3 || ([0,1,2,3,4,5].includes(Number(rowInfo['marketingStatus'] && rowInfo.subType === 12)))) && (
+                  {(rowInfo['marketingStatus'] == 3 || ([1,3].includes(Number(rowInfo['marketingStatus'] && rowInfo.subType === 12)))) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"

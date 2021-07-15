@@ -79,9 +79,18 @@ export default class BenefitList extends Component<any, any>{
                 } = item;
 
                 let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
-                let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId))
+                let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId));
+                // 添加数量属性
+                let gifts = selectedRows.map(item => {
+                    let productNum = fullGiftDetailList.find(gifItem => gifItem.productId === item.goodsInfoId).productNum;
+                    return {
+                        ...item,
+                        productNum,
+                    }
+                })
+
                 return {
-                    gifts: selectedRows,
+                    gifts,
                     selectedSkuIds,
                     selectedRows,
                     key: giftLevelId,

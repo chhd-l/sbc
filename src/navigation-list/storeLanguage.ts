@@ -14,7 +14,9 @@ export async function getStoreLanguages() {
       let languages = [];
       store.languageId.map((item) => {
         let language = allLanguages.find((x) => x.id.toString() === item);
-        languages.push(language);
+        if(language) {
+          languages.push(language);
+        }
       });
       sessionStorage.setItem(cache.STORE_LANGUAGES, JSON.stringify(languages));
       if (languages && languages.length > 0) {

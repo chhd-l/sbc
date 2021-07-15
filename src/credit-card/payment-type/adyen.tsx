@@ -5,7 +5,7 @@ import { fetchAddPaymentInfo } from '../webapi';
 import { Button, message, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import {  Const, history, RCi18n } from 'qmkit';
-
+import translations from '../js/translations';
 interface IKey {
   app_id: string
   key: string
@@ -64,13 +64,14 @@ export default class AdyenCreditCardForm extends Component {
     const language = sessionStorage.getItem('language')
     const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon ,cardType,clientKey,fromSubscroption} = this.props;
     const configuration: any = {
-      locale: language,
+      locale: language.replace(/-/gi,'_'),
       environment: Const.PAYMENT_ENVIRONMENT,
       clientKey: clientKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,
       onChange: this.handleOnChange,
       onAdditionalDetails: this.handleOnAdditionalDetails,
-      onSubmit: this.handlerSubmit
+      onSubmit: this.handlerSubmit,
+      translations
     };
     const checkout = new AdyenCheckout(configuration);
     this.card = checkout.create('card', {

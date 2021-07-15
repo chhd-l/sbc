@@ -84,6 +84,14 @@ const routes = [
     path: '/subscription-plan-add',
     asyncComponent: () => import('./subscription-plan-update')
   },
+  {
+    path: '/subscription-benefit-setting',
+    asyncComponent: () => import('./benefit-setting')
+  },
+  {
+    path: '/subscription-benefit-setting-add/:marketingId?',
+    asyncComponent: () => import('./benefit-setting/benefit-setting-add')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',

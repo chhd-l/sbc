@@ -13,9 +13,11 @@ import DeliveryList from './component/delivery-list';
 import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import FeedbackList from './component/feedback-list';
+import BenefitsList from './component/benefits-list'
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
+import json from 'web_modules/qmkit/json';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -94,6 +96,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       loading: false,
       tagList: [],
       basic: {},
+      memberShip: {},
       petOwnerTag: [],
       pets: [],
       delivery: {},
@@ -101,11 +104,13 @@ export default class CustomerDetails extends React.Component<any, any> {
       startDate: moment().subtract(3, 'months').format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD'),
       fieldList: [],
-      countryList: []
+      countryList: [],
+      showElem: false,
     };
   }
   componentDidMount() {
     this.getBasicInformation();
+    this.getMemberShip();
     this.getPetsList();
     this.getTagList();
     this.getAddressCon();
@@ -137,7 +142,25 @@ export default class CustomerDetails extends React.Component<any, any> {
         this.setState({ loading: false });
       });
   };
-
+  getMemberShip = () => {
+    this.setState({ loading: true });
+    webapi
+      .getMemberShipDetails(this.state.customerId)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            memberShip: { ...res.context }
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
+  };
   getAddressCon = async () => {
     const fileds = await getAddressConfig();
     const countries = await getCountryList();
@@ -177,7 +200,7 @@ export default class CustomerDetails extends React.Component<any, any> {
         segmentIdList: tagList.filter((tag) => values.indexOf(tag.name) > -1 && tag.segmentType == 0).map((tag) => tag.id),
         segmentType: 0
       })
-      .then(() => {});
+      .then(() => { });
     this.setState({
       petOwnerTag: values
     });
@@ -195,7 +218,7 @@ export default class CustomerDetails extends React.Component<any, any> {
       onOk() {
         return that.removeConsumer(id);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -256,7 +279,11 @@ export default class CustomerDetails extends React.Component<any, any> {
       endDate: dateStrs[1]
     });
   };
-
+  handleChangeshowElem = () => {
+    this.setState((state) => ({
+      showElem: !state.showElem
+    }));
+  }
   openDeliveryPage = (addressType, delivery) => {
     this.setState({
       displayPage: 'delivery',
@@ -281,7 +308,7 @@ export default class CustomerDetails extends React.Component<any, any> {
   };
 
   render() {
-    const { displayPage, basic, pets, delivery, addressType, startDate, endDate } = this.state;
+    const { displayPage, basic, memberShip, pets, delivery, addressType, startDate, endDate } = this.state;
 
     if (displayPage === 'delivery') {
       return (
@@ -401,8 +428,62 @@ export default class CustomerDetails extends React.Component<any, any> {
                     {basic.userConsentList && basic.userConsentList.length > 0 ? basic.userConsentList.map((consent, idx) => <div key={idx} dangerouslySetInnerHTML={{ __html: consent.consentTitle }}></div>) : null}
                   </Col>
                 </Row> */}
-                  
+
               </div>
+            </div>
+            <div className="detail-container">
+              <Headline
+                title={<FormattedMessage id="PetOwner.Membership" />}
+              />
+              <Row>
+                <Col span={18}>
+                  <div className="Membership-info-detail">
+                    <Row type="flex" align="middle">
+                      <Col span={13}>
+                        <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: "20px", color: "#d81e06" }}></i>
+                        <FormattedMessage id="PetOwner.ClubMember" />
+                      </Col>
+                      <Col span={11}>
+                        <div style={{
+                          position: 'absolute',
+                          right: '20px',
+                          top: "-10px"
+                        }}>
+                          <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "#d81e06" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
+                        </div>
+                      </Col>
+                    </Row>
+                    <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
+                      <Row>
+                        <Col span={1}></Col>
+                        <Col span={13} className="text-tip">
+                          <FormattedMessage id="PetOwner.AdmissionDate" />
+                          <span>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                        </Col>
+                        <Col span={10} className="text-tip">
+                          <FormattedMessage id="PetOwner.SubscriptionNo" />
+                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={23} className="text-tip">
+                          <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
+                          <span>{memberShip.clubLoyaltyProgram}</span>
+                        </Col>
+                        <Col span={1}></Col>
+                        <Col span={13} className="text-tip">
+                          <FormattedMessage id="PetOwner.WelcomeBox" />
+                        &nbsp;
+                        <span style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                        </Col>
+                        <Col span={10} className="text-tip">
+                          <FormattedMessage id="PetOwner.ConsumptionGift" />
+                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                        </Col>
+                      </Row>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             </div>
             <div className="detail-container">
               <Headline title="Tagging" />
@@ -473,8 +554,8 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title={RCi18n({id:"PetOwner.OtherInformation"})}
-                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
+                title="Other information"
+                extra={<RangePicker style={{ display: ['order', 'subscrib','benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab={RCi18n({id:"PetOwner.OrderInformation"})} key="order">
@@ -497,6 +578,9 @@ export default class CustomerDetails extends React.Component<any, any> {
                 </TabPane>
                 <TabPane tab={RCi18n({id:"PetOwner.Feedback"})} key="feedback">
                   <FeedbackList customerId={this.state.customerId} />
+                </TabPane>
+                <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                  <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
               </Tabs>
             </div>

@@ -658,7 +658,7 @@ class TodoItems extends React.Component<any, any> {
 
           <AuthWrapper functionName="f_home_recommendation_codes">
             <div className="item-recom">
-              <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
+              <div className="top-text"><FormattedMessage id="Home.RecommendationCodesUsage"/></div>
               <div className="item-recommendation-main space-between">
                 <div className="recommendation-main flex-start">
                   <div className="recommendation-text">

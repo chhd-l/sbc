@@ -130,6 +130,7 @@ export default {
         "Home.UJ1&UJ2": "UJ1 & UJ2",
         "Home.UJ1": "UJ1",
         "Home.UJ2": "UJ2",
+        "Home.RecommendationCodesUsage": " Recommendation Codes Usage",
         "Home.recommendation": "Number of active codes",
         "Home.NumberofCodesUsed": "Number of codes used",
         "Home.Numberofrecommendationcodes": "Number of recommendation codes with an order made",

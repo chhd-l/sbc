@@ -38,11 +38,9 @@ export default class CreditCard extends Component<any> {
      */
     async paymentCardType() {
         const customerId = this.props.match.params.id || '';
-        const {fromSubscroption}=this.getRequest(history.location.search) as any;
         const customerAccount = this.props.match.params.account || ''
         const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')
         const { res } = await fetchGetPayPspList(storeId)
-        console.log(fromSubscroption,'this.props.location')
         let { payPspItemVOList, name } = res.context
         if (res.code === Const.SUCCESS_CODE) {
             let list = payPspItemVOList[0]?.payPspItemCardTypeVOList ?? []
@@ -52,19 +50,18 @@ export default class CreditCard extends Component<any> {
                 customerId,
                 customerAccount,
                 pspName: name,
-                fromSubscroption
+                
             })
         }
     }
 
 
     renderCreditForm() {
-        const { payPspItem, customerId, storeId, pspName,fromSubscroption } = this.state;
-        console.log(fromSubscroption)
+        const { customerId, storeId, pspName } = this.state;
+        const {fromSubscroption}=this.getRequest(history.location.search) as any;
         let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
         let cardType=this.payCardType(d);
         let clientKey = Const.PAYMENT[d]
-        console.log(payPspItem, d, clientKey)
         switch (d) {
             case 'de':
             case 'fr':

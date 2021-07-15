@@ -82,9 +82,7 @@ const columns = [
   },
   {
     title: 'Product Name',
-    dataIndex: 'productName',
-    key: 'productName',
-
+    key: 'nameAndDateVOList',
     width: '14%',
 
     // onCell: () => {
@@ -105,17 +103,18 @@ const columns = [
     // },
     render: (text, record, index) => {
       // let html = text.replaceAll(",", "<br/>")
-      let productNames = text.split(',')      
+      // let productNames = text.split(',') 
+      let nameAndDateVOList = record.nameAndDateVOList   
       return <div>
         {
-          productNames && productNames.map(productName => (
-            <Tooltip placement="topLeft" title={productName}>
+          nameAndDateVOList && nameAndDateVOList.map(data => (
+            <Tooltip placement="topLeft" title={data.productName}>
               <p className="msg" style={{
                 overflow: "hidden",
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
                 cursor: "pointer"
-              }} >{productName} </p>
+              }} >{data.productName} </p>
     
             </Tooltip>
     
@@ -138,9 +137,25 @@ const columns = [
   },
   {
     title: 'Shipment Date',
-    dataIndex: 'shipmentDate',
+    // dataIndex: 'shipmentDate',
     key: 'shipmentDate',
     width: '15%',
+
+    render: (text, record, index) => {
+      // let html = text.replaceAll(",", "<br/>")
+      // let productNames = text.split(',') 
+      let nameAndDateVOList = record.nameAndDateVOList   
+      return <div>
+        {
+          nameAndDateVOList && nameAndDateVOList.map(data => (
+            <p>{data.shipmentDate} </p>
+            // <Tooltip placement="topLeft" title={data.shipmentDate}>
+              
+            // </Tooltip>
+          ))
+        }
+      </div>
+    },
   },
   {
     title: 'Delivery Address',

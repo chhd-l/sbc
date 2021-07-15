@@ -402,6 +402,8 @@ class TaskUpdate extends Component<any, any> {
     const { associatedPetOwners } = this.state;
     const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
     value = petOwner ? petOwner.customerId : ''; // save by customerId
+    let data = this.state.task;
+    data[field] = value;
     if (field === 'contactId') {
       this.getPetOwnerPets(value);
       this.getPetOwnerOrders(value);
@@ -418,8 +420,6 @@ class TaskUpdate extends Component<any, any> {
         orderCode: ''
       });
     }
-    let data = this.state.task;
-    data[field] = value;
     this.setState({
       task: data
     });
@@ -435,7 +435,6 @@ class TaskUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { task, id } = this.state;
-        // console.log(task);
         if (id) {
           task.id = id; // edit by id
           webapi

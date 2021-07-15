@@ -657,7 +657,7 @@ class FullDiscountForm extends React.Component<any, any> {
                         // callback();
                       }
                     ],
-                    initialValue: null
+                    initialValue: marketingBean.get('firstSubscriptionLimitAmount')
                   })(
                     <Input
                       // style={{ width: 200 }}
@@ -769,7 +769,7 @@ class FullDiscountForm extends React.Component<any, any> {
                       // callback();
                     }
                   ],
-                  initialValue: null
+                  initialValue: marketingBean.get('restSubscriptionLimitAmount')
                 })(
                   <Input
                     // style={{ width: 200 }}

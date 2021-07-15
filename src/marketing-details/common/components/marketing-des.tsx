@@ -100,7 +100,7 @@ class MarketingDes extends React.Component<any, any> {
               PROMOTION_TYPE[promotionType]
             }
             {
-              promotionType === 0 && marketingType !==2 &&
+              promotionType === 0 && (marketingType == 0 || marketingType === 1 )&&
               <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={isSuperimposeSubscription === 0} disabled={true}>
                 <div className="Idontwanttocumulate">
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />

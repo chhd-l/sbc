@@ -554,8 +554,8 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title={RCi18n({id:"PetOwner.OtherInformation"})}
-                extra={<RangePicker style={{ display: ['order', 'subscrib'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
+                title="Other information"
+                extra={<RangePicker style={{ display: ['order', 'subscrib','benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
                 <TabPane tab={RCi18n({id:"PetOwner.OrderInformation"})} key="order">

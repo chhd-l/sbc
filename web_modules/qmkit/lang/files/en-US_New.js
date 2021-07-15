@@ -1390,11 +1390,11 @@ export default {
         'payment.checkout': 'Checkout',
         'payment.choosePayment': 'Choose a payment',
         'payment.isDefault': 'Save for my next payment',
-        "payment.isDefaultTip":"cette case est obligatoire pour l'abonnement"
+        "payment.isDefaultTip":"cette case est obligatoire pour l'abonnement",
         
     //===========end payments Method================
         "PetOwner.Membership":"Membership",
-        "PetOwner.ClubMember":"Club member",
+        // "PetOwner.ClubMember":"Club member",
         "PetOwner.more":"more",
         "PetOwner.AdmissionDate":"Admission Date:",
         "PetOwner.SubscriptionNo":"Subscription No:",

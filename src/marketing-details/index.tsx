@@ -59,9 +59,9 @@ class MarketingDetails extends React.Component<any, any> {
                 {/*商品列表*/}
               </div>
               <div className="container">
-
-                <GoodsList />
-
+                {
+                  marketingType !== 3 ? <GoodsList /> : null
+                }
                 {/*满赠底部*/}
                 <Bottom />
               </div>

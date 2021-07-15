@@ -66,7 +66,7 @@ class Prescriber extends React.Component<any, any> {
     p_trafficTrendDashboardView: 'p_trafficTrendDashboardView',
     p_conversionFunnelDashboardView: 'p_conversionFunnelDashboardView',
     p_trafficDashboardView: 'p_trafficDashboardView',
-    p_prescriberRecommentCodeUseView: 'prescriberRecommentCodeUseView',
+    p_prescriberRecommentCodeUseView: 'p_prescriberRecommentCodeUseView',
     loading: 'loading'
   };
 

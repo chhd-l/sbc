@@ -1357,6 +1357,7 @@ export default {
         "PetOwner.size": "Size",
 
         //===========begin payments Method================
+        "payment.createPaymentMethod": "Create payment method",
         'payment.add': 'Add new',
         'payment.acceptCards': 'We accept credit cards.',
         'payment.address1': 'Address, line 1',

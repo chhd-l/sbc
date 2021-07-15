@@ -95,18 +95,9 @@ export default class CreditCard extends Component<any> {
         return (
             // <AuthWrapper functionName="f_create_credit_card">
             <div>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to="/customer-list">Pet owner</Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to="/customer-list">Pet owner list</Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to={`/petowner-details/${customerId}/${customerAccount}`}>Pet owner detail</Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Create payment method</Breadcrumb.Item>
-                </Breadcrumb>
+                <BreadCrumb thirdLevel={true}>
+                    <Breadcrumb.Item><FormattedMessage id="payment.createPaymentMethod" /></Breadcrumb.Item>
+                </BreadCrumb>
                 <div className="payment-method-content">
                     {payPspItem.map(item => {
                         return <img src={item.imgUrl} key={item.id} style={{ width: 40, marginRight: 10 }} />

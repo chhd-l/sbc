@@ -24,6 +24,12 @@ export function getBasicDetails(id = null) {
     method: 'GET'
   });
 }
+export function getMemberShipDetails(id = null) {
+  return Fetch<TResult>('/subscription/order/gift/detail/' + id, {
+    method: 'GET'
+  });
+}
+
 
 export function basicDetailsSave(filterParams = {}) {
   return Fetch('/customer/detail', {
@@ -245,6 +251,14 @@ export function getPrescriberList(params = {}) {
     body: JSON.stringify({
       ...params,
       storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    })
+  });
+}
+export function getBenefitsList(params){
+  return Fetch<TResult>('/subscription/order/gift/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
     })
   });
 }

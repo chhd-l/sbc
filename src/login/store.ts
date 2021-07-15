@@ -37,7 +37,7 @@ export default class AppStore extends Store {
         this.dispatch('login:refresh', true);
       })
       .catch((err) => {
-        console.log(err.toString());
+       // console.log(err.toString());
       });
   };
 

@@ -38,6 +38,7 @@ export default class AppStore extends Store {
         res.context.restSubscriptionLimitAmount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount
           ? res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount: null;
       }
+      debugger
       this.dispatch('marketing:initDiscountBean', res.context);
       const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
       if (scopeArray) {

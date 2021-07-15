@@ -33,6 +33,9 @@ export default class AppStore extends Store {
         } else if(res.context.couponInfo.scopeType == 6) { //Attribute
           this.setCurrentAttribute(res.context.couponInfo.attributeValueIds)
         }
+        if(res.context.couponInfo.couponJoinLevel == -3) {
+          this.setCurrentGroup(res.context.couponInfo.segmentIds[0])
+        }
         // 设置商品品牌信息
         this.dispatch('coupon: detail: field: value', {
           field: 'skuBrands',
@@ -134,6 +137,23 @@ export default class AppStore extends Store {
         return item
       })
     );
+  };
+
+  setCurrentGroup = async (id) => {
+    const { res } = await webapi.getAllGroups({
+      pageNum: 0,
+      pageSize: 1000000,
+      segmentType: 0
+    });
+
+    if (res.code == Const.SUCCESS_CODE) {
+      const allGroups =  res.context.segmentList
+      const group = allGroups.find(item=> item.id == id)
+      this.dispatch('marketingActor:allGroups', fromJS(res.context.segmentList));
+      this.dispatch('marketingActor:currentGroup', fromJS(group));
+    } else {
+      // message.error('load group error.');
+    }
   };
 
 }

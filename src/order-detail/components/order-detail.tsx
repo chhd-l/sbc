@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr,RCi18n } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -130,22 +130,22 @@ class OrderDetailTab extends React.Component<any, any> {
     }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //订阅赠品信息
-    let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
-    giftList = giftList.map((gift)=>{
-      let tempGift ={
-        skuNo:gift.goodsInfoNo,
-        skuName:gift.goodsInfoName,
-        num:gift.quantity,
-        originalPrice:0,
-        price:0,
-        isGift:true
-      }
-      return tempGift
-    })
+    // let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
+    // giftList = giftList.map((gift)=>{
+    //   let tempGift ={
+    //     skuNo:gift.goodsInfoNo,
+    //     skuName:gift.goodsInfoName,
+    //     num:gift.quantity,
+    //     originalPrice:0,
+    //     price:0,
+    //     isGift:true
+    //   }
+    //   return tempGift
+    // })
     
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '[gift]' + gift.get('skuName'))).toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', '['+ RCi18n({ id: 'Order.gift' }) +']' + gift.get('skuName'))).toJS();
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
@@ -483,7 +483,7 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts,giftList)} pagination={false} bordered />
+          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
 
           <Modal
             title={<FormattedMessage id="Order.moreFields" />}

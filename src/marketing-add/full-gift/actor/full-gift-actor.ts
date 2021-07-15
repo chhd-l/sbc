@@ -11,7 +11,7 @@ export default class FullGiftActor extends Actor {
       marketingBean: {
         promotionType: 0,
         publicStatus: 1,
-        subType: 4,
+        subType: 5, // 4 5
         isClub: false,
         fullGiftLevelList: []
       },

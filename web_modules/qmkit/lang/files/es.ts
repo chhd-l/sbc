@@ -21,6 +21,7 @@ export default {
     "Public.Cancel": "Cancelar",
     "Public.Batch Export": "Exportación por lotes",
     "Public.GetDataFailed": "Fallo en obtener la información",
+    'Public.Reminder100records':'Recordatorio: hasta 100 registros',
     "Menu.Home": "Inicio",
     "Menu.Product": "Producto",
     "Menu.Product list": "Lista de productos",

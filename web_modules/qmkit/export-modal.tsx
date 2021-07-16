@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Modal, Radio } from 'antd';
-import { noop } from 'qmkit';
+import { noop, RCi18n } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
@@ -125,7 +125,7 @@ class ExportForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please select an export method'
+                  message: RCi18n({id:"Order.Pleaseselectanexportmethod"})
                 }
               ]
             })(

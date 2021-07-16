@@ -201,7 +201,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderType'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderType'})} title={(window as any).RCi18n({id:'Order.orderType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -234,7 +234,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderSource'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderSource'})} title={(window as any).RCi18n({id:'Order.orderSource'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -321,7 +321,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionType'})} />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionType'})} title={(window as any).RCi18n({id:'Order.subscriptionType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear
@@ -386,7 +386,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} />
+                    <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} />
                     <Select
                       style={styles.wrapper}
                       allowClear

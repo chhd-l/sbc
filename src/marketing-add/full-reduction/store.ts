@@ -241,7 +241,7 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     }
   };
-  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType }) => {
+  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType, isSuperimposeSubscription }) => {
     return {
       marketingType: 3, //免邮
       marketingName,
@@ -255,6 +255,7 @@ export default class AppStore extends Store {
       marketingId,
       publicStatus: 1,
       promotionType,
+      isSuperimposeSubscription,
       promotionCode: promotionCode ? promotionCode : this.randomPromotionCode()
     };
   };

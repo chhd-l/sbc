@@ -251,6 +251,16 @@ export default class CouponBasicInfo extends Component<any, any> {
                       <div style={style}> <FormattedMessage id="Marketing.Orderreach" />&nbsp;{`${fullbuyCount}`}&nbsp;<FormattedMessage id="Marketing.items" /></div>
                   }
                 </FormItem>
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
+                  <div style={style}>
+                    {
+                      couponJoinLevel == 0 ?
+                        <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
+                        <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
+                        : null
+                    }
+                  </div>
+                </FormItem>
               </>
             )
           }

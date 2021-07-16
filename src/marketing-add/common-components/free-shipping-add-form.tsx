@@ -203,6 +203,20 @@ class FreeShippingAddForm extends React.Component<any, any> {
             </Radio.Group>
           </div>
         </FormItem>
+        {
+          shippingBean.get('promotionType') == 0 &&
+          <FormItem {...formItemLayout} labelAlign="left">
+            <div className="ant-form-inline">
+              <Checkbox checked={shippingBean.get('isSuperimposeSubscription') === 0} onChange={(e) => {
+                this.onBeanChange({
+                  isSuperimposeSubscription: e.target.checked ? 0 : 1
+                });
+              }}>
+                <FormattedMessage id="Marketing.Idontwanttocumulate" />
+              </Checkbox>
+            </div>
+          </FormItem>
+        }
         <div className="bold-title">Basic Setting</div>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {

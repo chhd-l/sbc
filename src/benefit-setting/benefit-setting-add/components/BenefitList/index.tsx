@@ -225,19 +225,19 @@ export default class BenefitList extends Component<any, any>{
 
         return [
             {
-                title: 'Delivery number',
+                title: <strong>{`${RCi18n({id: 'Subscription.Delivery number'})}`}</strong>,
                 dataIndex: 'deliveryNumber',
-                width: '30%',
+                className: 'deliveryNumber-warp',
+                width: '40%',
                 render: (rowInfo, record, index) => {
                     // console.log('record', record);
                     let isDisabled = false;
                     return (
-                        <div key={record.key}>
-                            <Row>
-                                <Col span={16}>
-                                    <Form.Item>
-                                        {
-                                            getFieldDecorator(`benefitList[${index}].deliveryNumber`, {
+                        <Row>
+                            <Col span={20}>
+                                <Form.Item>
+                                    {
+                                        getFieldDecorator(`benefitList[${index}].deliveryNumber`, {
                                                 rules: [
                                                     {
                                                         required: true,
@@ -256,18 +256,18 @@ export default class BenefitList extends Component<any, any>{
                                                             <strong>{item.name}</strong>
                                                         </Option>))}
                                                 </Select>
-                                            )
-                                        }
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </div>
+                                        )
+                                    }
+                                </Form.Item>
+                            </Col>
+                        </Row>
                     );
                 }
             },
             {
-                title: 'Gift',
+                title: <strong>{`${RCi18n({id: 'Subscription.Gift'})}`}</strong>,
                 dataIndex: 'gifts',
+                width: '40%',
                 render: (rowInfo, record, index) => {
                     return (
                         <Row>
@@ -340,8 +340,9 @@ export default class BenefitList extends Component<any, any>{
 
             },
             {
-                title: 'Operation',
+                title: <strong>{`${RCi18n({id: 'Subscription.Operation'})}`}</strong>,
                 dataIndex: 'Operation',
+                width: '20%',
                 render: (text, record) => {
                     return <div>
                         <div>
@@ -397,6 +398,7 @@ export default class BenefitList extends Component<any, any>{
                         pagination={false}
                         size="small"
                         rowKey='key'
+                        className='BenefitList-table-wrap'
                     />
                     {this.getGiftsValidateFields()}
                 </div>

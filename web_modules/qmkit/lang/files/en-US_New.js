@@ -890,6 +890,9 @@ export default {
         'Subscription.SureToDelete': 'Sure to delete ?',
         'Subscription.PleaseInputCampaignName': 'Pleas Input Campaign name',
         'Subscription.PleaseInputDeliveryNumber': 'Please Input Delivery Number',
+        'Subscription.Delivery number':'Delivery number',
+        'Subscription.Gift':'Gift',
+        'Subscription.Operation':'Operation',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

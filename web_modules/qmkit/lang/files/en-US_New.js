@@ -2063,5 +2063,12 @@ export default {
         "deliveryState": "Delivery State",
         "consumer.consumerDetails": "Consumer detail",
         "subscription.consumerName": "Pet owner name"
+    },
+    Task: {
+        "Task.SubscriptionNumber": "Subscription Number",
+        "Task.ProductName": "Product Name",
+        "Task.ShipmentDate": "Shipment Date",
+        "Task.DeliveryAddress": "Delivery Address",
+        "Task.PaymentMethod": "Payment Method"
     }
 }

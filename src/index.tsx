@@ -19,6 +19,7 @@ import 'moment/locale/zh-cn';
 import 'moment/locale/ru';
 import 'moment/locale/tr';
 import 'moment/locale/fr';
+import 'moment/locale/es';
 import { IntlProvider } from 'react-intl';
 import {language,antLanguage} from '../web_modules/qmkit/lang';
 import configOkta from '../web_modules/qmkit/config-okta';

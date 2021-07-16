@@ -890,6 +890,11 @@ export default {
         'Subscription.SureToDelete': 'Sure to delete ?',
         'Subscription.PleaseInputCampaignName': 'Pleas Input Campaign name',
         'Subscription.PleaseInputDeliveryNumber': 'Please Input Delivery Number',
+        'Subscription.DebitOrCreditCard': 'Debit Card or Credit Card',
+        'Subscription.CashOnDelivery': 'Cash on Delivery',
+        'Subscription.RemoveAssociationFirst': 'This card cannot be removed due to the subscription association, please remove the association first.',
+        'Subscription.PayByCashOrCard': 'I want to pay by cash or card on delivery',
+        'Subscription.savePaymentMethod': 'Please click the Save button to save payment method'
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

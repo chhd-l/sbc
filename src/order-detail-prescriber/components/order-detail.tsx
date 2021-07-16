@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, cache, Const, noop, util, getOrderStatusValue } from 'qmkit';
+import { AuthWrapper, cache, Const, noop, util, getOrderStatusValue, RCi18n } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -565,7 +565,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
               {tradePrice.discountsPrice ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
+                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : RCi18n({id:"Order.Promotion"})}: </span>
                   <strong>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '-'}
                     {(tradePrice.discountsPrice || 0).toFixed(2)}

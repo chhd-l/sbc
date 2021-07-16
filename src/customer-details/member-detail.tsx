@@ -588,11 +588,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
                 {
-                  isClubMember ? (
-                      <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
-                        <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
-                      </TabPane>
-                  ):null
+                  isClubMember
+                      ? (
+                          <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                            <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                          </TabPane>
+                      )
+                      : null
                 }
               </Tabs>
             </div>

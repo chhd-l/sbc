@@ -69,7 +69,7 @@ const formTableItemLayout = {
 
 const columns = [
   {
-    title: 'Subscription Number',
+    title: RCi18n({id:'Task.SubscriptionNumber'}),
     dataIndex: 'subscriptionNumber',
     key: 'subscriptionNumber',
     width: '18%',
@@ -81,7 +81,7 @@ const columns = [
       </Link>
   },
   {
-    title: 'Product Name',
+    title: RCi18n({id:'Task.ProductName'}),
     key: 'nameAndDateVOList',
     width: '14%',
     render: (text, record, index) => {
@@ -106,7 +106,7 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: 'Shipment Date',
+    title: RCi18n({id:'Task.ShipmentDate'}),
     // dataIndex: 'shipmentDate',
     key: 'shipmentDate',
     width: '15%',
@@ -124,12 +124,12 @@ const columns = [
     },
   },
   {
-    title: 'Delivery Address',
+    title: RCi18n({id:'Task.DeliveryAddress'}),
     dataIndex: 'deliveryAddress',
     key: 'deliveryAddress'
   },
   {
-    title: 'Payment Method',
+    title: RCi18n({id:'Task.PaymentMethod'}),
     dataIndex: 'paymentMethod',
     key: 'paymentMethod'
   }
@@ -1082,7 +1082,7 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} />
+                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
                             )}
                           </FormItem>
                         </Col>

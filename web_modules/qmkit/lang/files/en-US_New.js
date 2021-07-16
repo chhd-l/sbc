@@ -875,7 +875,7 @@ export default {
         'Subscription.Consumption gift': 'Consumption gift',
         'Subscription.Buy the products regulary to enjoy the membership gift': 'Buy the products regulary to enjoy the membership gift',
         'Subscription.Creating Consumption gift': 'Creating Consumption gift',
-        'Subscription.Consumption gif is set for order type is club, and subscription order is the recurrent by default': 'Consumption gif is set for order type is club, and subscription order is the recurrent by default;',
+        'Subscription.Consumption gift is set for order type is club, and subscription order is the recurrent by default': 'Consumption gift is set for order type is club, and subscription order is the recurrent by default;',
         'Subscription.Consumption gift only delivered one time for the same conditions club': 'Consumption gift only delivered one time for the same conditions club.',
         'Subscription.start and end time': 'start and end time',
         'Subscription.Campaign name': 'Campaign name',

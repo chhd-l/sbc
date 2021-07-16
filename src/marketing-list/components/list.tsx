@@ -19,10 +19,10 @@ const SUB_TYPE = {
   1: 'Full quantity reduction',
   2: 'Full amount discount',
   3: 'Full quantity discount',
+  4: 'Full amount gift',
+  5: 'Full quantity gift',
   6: '',
-  7: ''
-  // 4: '满金额赠',
-  // 5: '满数量赠'
+  7: '',
 };
 const PROMOTION_TYPE = {
   0: RCi18n({id: 'Marketing.All'}),

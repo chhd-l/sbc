@@ -132,6 +132,8 @@ export default class BenefitSettingAdd extends Component<any, any> {
                 let segmentName = values.isTags
                     ? this.state.allGroups.toJS().find(element => element.id === values.segmentIds).name
                     : undefined
+                // 是否是编辑状态
+                let isEdit =  (!!this.marketingId) && initData;
 
                 let params = {
                     "marketingName": values.marketingName,
@@ -139,12 +141,12 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "segmentIds": values.isTags && values.segmentIds ? [values.segmentIds]:[],
                     "beginTime": values.timers[0].format('YYYY-MM-DD hh:mm:ss'), // "2021-07-01 10:42:00",
                     "endTime": values.timers[1].format('YYYY-MM-DD hh:mm:ss'),
-                    "promotionCode": this.promotionCode,
                     "joinLevel": values.isTags && values.segmentIds ? -3 : 0,  // joinLevel = -3 指定人群  0 全部人群
                     "segmentName": values.isTags ? segmentName : null,
 
+                    "promotionCode": isEdit && initData ? initData.promotionCode : this.promotionCode,
                     "marketingId": this.marketingId ? this.marketingId : undefined,
-                    "storeId": this.marketingId && initData ? initData.storeId : undefined,
+                    "storeId": isEdit ? initData.storeId : undefined,
 
                     "isClub":false,
                     "marketingType":2,

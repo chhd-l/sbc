@@ -6,10 +6,29 @@
     font-weight: bold;
   }
   .BenefitList-main {
-    .deliveryNumber-select {
-      width: 120px;
-      .ant-select-selection {
-        border: none;
+    .BenefitList-table-wrap {
+      .ant-table-small > .ant-table-content > .ant-table-body {
+        margin: 0;
+      }
+      table > thead {
+        background-color: #e8e8e8;
+      }
+
+      .deliveryNumber-warp {
+        > span{
+          color: #e2001a;
+        }
+      }
+    }
+    .deliveryNumber-select-warp {
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+      .deliveryNumber-select {
+        width: 120px;
+        .ant-select-selection {
+          //border: none;
+        }
       }
     }
   }

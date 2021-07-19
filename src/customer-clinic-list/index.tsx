@@ -40,7 +40,7 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
-              <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
+              <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccountOriginal}` : `/customer-details/Guest/${record.customerId}/${record.customerAccountOriginal}`} className="iconfont iconDetails"></Link>
               </Tooltip>
             </span>
           )

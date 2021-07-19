@@ -1379,6 +1379,7 @@ export default {
         "PetOwner.motherLofNumber": "Mother lof number",
         "PetOwner.fatherLofNumber": "Father lof number",
         "PetOwner.size": "Size",
+        "PetOwner.tagging": "Tagging",
 
         //===========begin payments Method================
         "payment.createPaymentMethod": "Create payment method",

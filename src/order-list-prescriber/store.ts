@@ -241,7 +241,9 @@ export default class AppStore extends Store {
       const [state, value] = key.split('-');
       params['tradeState'][state] = value;
     }
-
+    if (sessionStorage.getItem('PrescriberSelect')) {
+      params['prescriberId'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : null;
+    }
     const total = this.state().get('total');
     if (total > 0) {
       return this._onExport(params);

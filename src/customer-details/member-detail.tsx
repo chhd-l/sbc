@@ -441,7 +441,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             title={<FormattedMessage id="PetOwner.Membership" />}
                         />
                         <Row>
-                          <Col span={18}>
+                          <Col span={24}>
                             <div className="Membership-info-detail">
                               <Row type="flex" align="middle">
                                 <Col span={13}>
@@ -472,7 +472,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                                   <Col span={1}></Col>
                                   <Col span={23} className="text-tip">
                                     <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
-                                    <span>{memberShip.clubLoyaltyProgram}</span>
+                                    {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
                                   </Col>
                                   <Col span={1}></Col>
                                   <Col span={13} className="text-tip">

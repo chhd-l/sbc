@@ -1409,7 +1409,7 @@ export default {
         "PetOwner.more": "more",
         "PetOwner.AdmissionDate": "Admission Date:",
         "PetOwner.SubscriptionNo": "Subscription No:",
-        "PetOwner.ClubLoyaltyProgram": "Club loyalty program:",
+        "PetOwner.ClubLoyaltyProgram": "Club loyalty program",
         "PetOwner.WelcomeBox": "Welcome box:",
         "PetOwner.ConsumptionGift": "Consumption gift:",
         "PetOwner.Benefit": "Benefit",

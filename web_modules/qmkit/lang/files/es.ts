@@ -647,7 +647,7 @@ export default {
     "Order.brand": "Marca",
     "Order.catogery": "Categoría",
     "Order.Pleaseselectmember": "Por favor selecciona miembro",
-    "Order.addProduct": "Añadir un producto",
+    "Order.addProduct": "Añadir producto",
     "Order.Mustselectaproduct": "Debe seleccionar un producto",
     "Order.serialNumber": "Número de serie",
     "Order.giveaway": "Regalo",

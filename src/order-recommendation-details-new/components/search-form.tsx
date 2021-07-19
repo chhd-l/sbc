@@ -60,7 +60,7 @@ class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={'Product list'} />
+        <Headline title={RCi18n({id:"Order.Product list"})} />
         <div>
           <Form className="filter-content" layout="inline">
             <Row>

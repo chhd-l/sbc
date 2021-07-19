@@ -99,6 +99,9 @@ export default class BenefitSettingAdd extends Component<any, any> {
 
     onSubmit = () => {
         let form = this.form.props.form;
+        let {
+            initData
+        } = this.state;
         let errorObject = {};
 
         form.validateFields((err, values) => {
@@ -125,8 +128,10 @@ export default class BenefitSettingAdd extends Component<any, any> {
                   return form.setFields(errorObject);
                 }
 
-                // 获取segmentName
-                let segmentName = this.state.allGroups.toJS().find(element => element.id === values.segmentIds).name;
+                // values.isTags 为true , 获取segmentName
+                let segmentName = values.isTags
+                    ? this.state.allGroups.toJS().find(element => element.id === values.segmentIds).name
+                    : undefined
 
                 let params = {
                     "marketingName": values.marketingName,
@@ -137,7 +142,9 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "promotionCode": this.promotionCode,
                     "joinLevel": values.isTags && values.segmentIds ? -3 : 0,  // joinLevel = -3 指定人群  0 全部人群
                     "segmentName": values.isTags ? segmentName : null,
+
                     "marketingId": this.marketingId ? this.marketingId : undefined,
+                    "storeId": this.marketingId && initData ? initData.storeId : undefined,
 
                     "isClub":false,
                     "marketingType":2,

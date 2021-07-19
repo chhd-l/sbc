@@ -80,6 +80,7 @@ export default class SetConditions extends Component<any, any>{
                     <FormattedMessage id="Subscription.setConditions" />
                 </div>
                 <div className='SetConditions-content'>
+                    <div className='setConditions-isTags-warp'>
                         <Form.Item label={''}>
                             {getFieldDecorator('isTags', radioConfig)(
                                 <Radio.Group onChange={e => this.onTagChange(e)}>
@@ -92,7 +93,9 @@ export default class SetConditions extends Component<any, any>{
                                 </Radio.Group>
                             )}
                         </Form.Item>
-                        <div className='setConditionsSelect-box'>
+                    </div>
+
+                    <div className='setConditions-segmentIds-warp'>
                             {
                                 isTags
                                     ? (

@@ -15,7 +15,7 @@ export default class BenefitSettingAddHint extends Component<any, any>{
                             <div>
                                 <p>
                                     1、
-                                    <FormattedMessage id="Subscription.Consumption gif is set for order type is club, and subscription order is the recurrent by default" />
+                                    <FormattedMessage id="Subscription.Consumption gift is set for order type is club, and subscription order is the recurrent by default" />
                                 </p>
                                 <p>
                                     2、

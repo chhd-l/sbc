@@ -1,72 +1,62 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
 import { Form, Radio, Select } from 'antd';
-import { Relax} from 'plume2';
 import './index.less';
-import {noop} from 'qmkit';
+import {Const, noop} from 'qmkit';
+import * as commonWebapi from '@/benefit-setting/webapi';
 
 const { Option } = Select;
 
-@Relax
 export default class SetConditions extends Component<any, any>{
 
-    props: {
-        form: any;
-        initData: any;
-        relaxProps?: {
-            allGroups: any;
-            formObj: any;
-            giftBeanOnChange: Function;
-        };
-    };
-    static relaxProps = {
-        allGroups: 'allGroups',
-        formObj: 'formObj',
-        giftBeanOnChange: noop,
-
-    };
-
-    onChange = (e) => {
-        console.log('value', e.target.value);
+    constructor(props) {
+        super(props);
+        this.state = {
+            allGroups: []
+        }
+    }
+    componentDidMount() {
+        this.getAllGroups();
     }
 
-    handleChange = (value) => {
-        console.log(`selected ${value}`);
-    }
-
-    onBeanChange = (params) => {
-        const { formObj, giftBeanOnChange } = this.props.relaxProps;
-        giftBeanOnChange(formObj.merge(params));
-    };
-
-    onTagChange = (e) => {
-        this.onBeanChange({
-            isTags: e.target.value,
+    getAllGroups = async () => {
+        const { res } = await commonWebapi.getAllGroups({
+            pageNum: 0,
+            pageSize: 1000000,
+            segmentType: 0,
+            isPublished: 1
         });
-    };
 
-    onSegmentIdChange = (segmentIds) => {
-        this.onBeanChange({
-            segmentIds
-        })
-    }
+        // @ts-ignore
+        if (res.code == Const.SUCCESS_CODE) {
+            // this.dispatch('marketing:allGroups', res.context.segmentList);
+            // @ts-ignore
+            this.setState({
+                allGroups: res.context.segmentList
+            })
+        } else {
+            // message.error('load group error.');
+        }
+    };
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        const {
-            allGroups,
-            formObj,
-        } = this.props.relaxProps;
-        console.log('getFieldValue', getFieldValue('isTags'));
+        let { allGroups } = this.state;
+        let { initData } = this.props;
 
-        let isTags =  formObj.get('isTags');
+        let isTags = getFieldValue('isTags');
 
         const selectConfig = {
-            rules: [{ required: true,  message: 'Please Select your tags!'}],
-            initialValue: formObj.get('segmentIds') || undefined,
+            rules: [{
+                required: true,
+                message: (window as any).RCi18n({
+                    id: 'Subscription.PleaseSelectYourTags!'
+                })
+            }],
+            initialValue: !!initData && (initData.joinLevel === '-3') ? initData.segmentIds[0] : null,
         }
         const radioConfig = {
-            initialValue: formObj.get('isTags') || false
+            initialValue: !!initData ? (initData.joinLevel === '-3') : false
         }
         const radioStyle = {
             display: 'block',
@@ -83,7 +73,9 @@ export default class SetConditions extends Component<any, any>{
                     <div className='setConditions-isTags-warp'>
                         <Form.Item label={''}>
                             {getFieldDecorator('isTags', radioConfig)(
-                                <Radio.Group onChange={e => this.onTagChange(e)}>
+                                <Radio.Group
+                                    // onChange={e => this.onTagChange(e)}
+                                >
                                     <Radio style={radioStyle} value={true}>
                                         <FormattedMessage id={'Subscription.tags'}/>
                                     </Radio>
@@ -102,12 +94,13 @@ export default class SetConditions extends Component<any, any>{
                                         <Form.Item label=''>
                                             {getFieldDecorator('segmentIds', selectConfig)(
                                                 <Select
+                                                    // allowClear
                                                     style={{ width: '100%' }}
                                                     placeholder="Please select"
-                                                    onChange={this.onSegmentIdChange}
+                                                    // onChange={this.onSegmentIdChange}
                                                 >
-                                                    {allGroups.size > 0 &&
-                                                    allGroups.toJS().map((item) => (
+                                                    {(allGroups.length > 0) &&
+                                                    allGroups.map((item) => (
                                                         <Option key={item.id} value={item.id}>
                                                             {item.name}
                                                         </Option>

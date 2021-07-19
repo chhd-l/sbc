@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table} from 'antd';
+import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input} from 'antd';
 import {RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
 
@@ -104,7 +104,6 @@ export default class BenefitList extends Component<any, any>{
         }
 
     };
-
 
     handleDelete = key => {
 
@@ -221,6 +220,8 @@ export default class BenefitList extends Component<any, any>{
     };
 
     getColumns = () => {
+
+        let { initData } = this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemBenefitListLayout = {
             labelCol: {
@@ -255,7 +256,10 @@ export default class BenefitList extends Component<any, any>{
                                         ],
                                         initialValue: record.deliveryNumber || null
                                     })(
-                                        <Select onChange={(value) => this.handleDeliveryNumberChange(value, record)} className='deliveryNumber-select'>
+                                        <Select
+                                            onChange={(value) => this.handleDeliveryNumberChange(value, record)}
+                                            className='deliveryNumber-select'
+                                        >
                                                     {deliveryNumberData.map(item => (
                                                         <Option
                                                             key={item.id}
@@ -277,7 +281,7 @@ export default class BenefitList extends Component<any, any>{
                 width: '40%',
                 render: (rowInfo, record, index) => {
                     return (
-                        <Row>
+                        <Row key={record.key}>
                             <Col span={24}>
                                 <div className="space-between-align">
                                     <div style={{paddingTop: 6}}>
@@ -298,14 +302,10 @@ export default class BenefitList extends Component<any, any>{
                                                         paddingLeft: 5,
                                                         paddingRight: 5
                                                     }}>{item.goodsInfoNo}</span>
-                                                    <Form.Item label='' key={recordIndex} style={styles.tableFormItem}>
+                                                    <Form.Item label='' style={styles.tableFormItem}>
                                                         {
-                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}]`, {
-                                                                getValueFromEvent: (e) => this.getValueFromEvent(e, item),
-                                                                initialValue: {
-                                                                    productId: item.goodsInfoId,
-                                                                    productNum: item.productNum,
-                                                                },
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productNum`, {
+                                                                initialValue: item.productNum || 1,
                                                                 rules: [
                                                                     {
                                                                         required: true, message:
@@ -324,12 +324,26 @@ export default class BenefitList extends Component<any, any>{
                                                                     key={item.goodsInfoId || recordIndex}
                                                                     min={1}
                                                                     max={999}
-                                                                    formatter={(value: any) => value.productNum}
-                                                                    // onChange={(e) => this.editGiftItem(item)}
                                                                 />
                                                             )
                                                         }
                                                     </Form.Item>
+                                                    <Form.Item label='' style={{width: 0, height: 0, visibility: 'hidden'}}>
+                                                        {
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productId`, {
+                                                                initialValue: item.goodsInfoId,
+                                                            })(
+                                                                <Input
+                                                                    style={{
+                                                                        width: '0',
+                                                                        height: '0',
+                                                                        textAlign: 'center'
+                                                                    }}
+                                                                />
+                                                            )
+                                                        }
+                                                    </Form.Item>
+
                                                     <a
                                                         style={{paddingLeft: 5}}
                                                         className="iconfont iconDelete"

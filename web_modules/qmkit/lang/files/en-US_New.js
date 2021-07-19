@@ -898,6 +898,7 @@ export default {
         'Subscription.Delivery number':'Delivery number',
         'Subscription.Gift':'Gift',
         'Subscription.Operation':'Operation',
+        'Subscription.PleaseSelectYourTags!':'Please Select your tags!',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

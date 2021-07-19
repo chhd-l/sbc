@@ -1054,6 +1054,7 @@ export default {
     'Order.InputPhone':'Introduzca el número de teléfono',
     'Order.CopyLink':'Copiar enlace',
     'Order.shareLinkTip':'Enlace compartido generado, no válido en 7 días',
+    'Order.RecommendedTip':'El producto recomendado no puede estar vacío',
     "task.Completed": "Terminado",
     "task.Cancelled": "cancelado",
     "task.Email": "Correo electronico",

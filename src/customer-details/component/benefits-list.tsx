@@ -68,6 +68,8 @@ export default class BenefitsList extends React.Component<Iprop, any> {
     };
 
 
+
+
     render() {
         const { list, pagination, loading } = this.state;
         const columns = [
@@ -75,7 +77,13 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                 title: <FormattedMessage id="PetOwner.BenefitType" />,
                 dataIndex: 'benefitType',
                 key: 'BenefitType',
-                align: 'center'
+                align: 'center',
+                render: (text) => {
+                    switch (text) {
+                        case 0: return <FormattedMessage id="PetOwner.Gift" />;
+                        default: return text;
+                    }
+                }
             },
             {
                 title: <FormattedMessage id="PetOwner.GiftName" />,
@@ -87,7 +95,15 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                 title: <FormattedMessage id="PetOwner.GiftType" />,
                 dataIndex: 'giftType',
                 key: 'GiftType',
-                align: 'center'
+                align: 'center',
+                render: (text) => {
+                    switch (text) {
+                        case 0: return <FormattedMessage id="PetOwner.Welcome box" />;
+                        case 1: return <FormattedMessage id="PetOwner.Consumption gift" />
+                        default: return text;
+                    }
+                }
+
             }, {
                 title: <FormattedMessage id="PetOwner.DeliveryNumber" />,
                 dataIndex: 'deliveryNumber',
@@ -103,14 +119,36 @@ export default class BenefitsList extends React.Component<Iprop, any> {
             },
             {
                 title: <FormattedMessage id="PetOwner.SKU" />,
-                dataIndex: 'skuNO',
+                dataIndex: 'skuNo',
                 key: 'SKUNO',
 
             }, {
                 title: <FormattedMessage id="PetOwner.Status" />,
                 dataIndex: 'status',
                 key: 'Status',
-                align: 'center'
+                align: 'center',
+                render: (text) => {
+                    /**
+                     * status:
+                     0 -> Scheduled
+                     1 -> To be delivered
+                     2 -> Delivered
+                     3 -> Promotion pause
+                     4 -> Subscription pause
+                     5 -> Subscription cancel
+                     6 -> Dismiss
+                     * **/
+                    switch (text) {
+                        case 0: return <FormattedMessage id="PetOwner.Scheduled" />;
+                        case 1: return <FormattedMessage id="PetOwner.To be delivered" />;
+                        case 2: return <FormattedMessage id="PetOwner.Delivered" />;
+                        case 3: return <FormattedMessage id="PetOwner.Promotion pause" />;
+                        case 4: return <FormattedMessage id="PetOwner.Subscription pause" />;
+                        case 5: return <FormattedMessage id="PetOwner.Subscription cancel" />;
+                        case 6: return <FormattedMessage id="PetOwner.Dismiss" />
+                        default: return text;
+                    }
+                }
             }, {
                 title: <FormattedMessage id="PetOwner.ScheduledTime" />,
                 dataIndex: 'scheduledTime',
@@ -123,7 +161,7 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                 }
             }, {
                 title: <FormattedMessage id="PetOwner.DeliveryTime" />,
-                dataIndex: 'deliveredTime',
+                dataIndex: 'deliveryTime',
                 key: 'DeliveryTime',
                 align: 'center',
                 render: (text) => {

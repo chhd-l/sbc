@@ -56,7 +56,7 @@ export default class Bottom extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={4}>
+            <Col span={6}>
               <span >
                 <FormattedMessage id="Marketing.TargetConsumer" />:
               </span>

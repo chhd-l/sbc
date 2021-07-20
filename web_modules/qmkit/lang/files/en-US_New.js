@@ -1423,6 +1423,17 @@ export default {
         "PetOwner.Status": "Status",
         "PetOwner.ScheduledTime": "Scheduled time",
         "PetOwner.DeliveryTime": "Delivery time",
+        'PetOwner.Gift':'Gift',
+        'PetOwner.Welcome box':'Welcome box',
+        'PetOwner.Consumption gift':'Consumption gift',
+        'PetOwner.Scheduled':'Scheduled',
+        'PetOwner.To be delivered':'To be delivered',
+        'PetOwner.Delivered':'Delivered',
+        'PetOwner.Promotion pause':'Promotion pause',
+        'PetOwner.Subscription pause':'Subscription pause',
+        'PetOwner.Subscription cancel':'Subscription cancel',
+        'PetOwner.Dismiss':'Dismiss',
+
     },
     Finance: {
         "Finance.recordAsSettled": "Are you sure you want to set this settlement record as settled? ",

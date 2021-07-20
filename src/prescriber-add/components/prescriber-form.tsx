@@ -646,7 +646,7 @@ class ClinicForm extends React.Component<any, any> {
                         });
                       }}>
                         <Radio value={'SINGLE_USE'}><FormattedMessage id="Prescriber.SingleUse"/></Radio>
-                        <Radio value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
+                        <Radio disabled={prescriberId} value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
                       </Radio.Group>
                     )}
                     </FormItem>

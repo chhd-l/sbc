@@ -69,7 +69,7 @@ const formTableItemLayout = {
 
 const columns = [
   {
-    title: RCi18n({id:'Task.SubscriptionNumber'}),
+    title: RCi18n({ id: 'Task.SubscriptionNumber' }),
     dataIndex: 'subscriptionNumber',
     key: 'subscriptionNumber',
     width: '18%',
@@ -81,7 +81,7 @@ const columns = [
       </Link>
   },
   {
-    title: RCi18n({id:'Task.ProductName'}),
+    title: RCi18n({ id: 'Task.ProductName' }),
     key: 'nameAndDateVOList',
     width: '14%',
     render: (text, record, index) => {
@@ -106,14 +106,14 @@ const columns = [
     ellipsis: true,
   },
   {
-    title: RCi18n({id:'Task.ShipmentDate'}),
+    title: RCi18n({ id: 'Task.ShipmentDate' }),
     // dataIndex: 'shipmentDate',
     key: 'shipmentDate',
     width: '15%',
     render: (text, record, index) => {
       // let html = text.replaceAll(",", "<br/>")
       // let productNames = text.split(',') 
-      let nameAndDateVOList = record.nameAndDateVOList   
+      let nameAndDateVOList = record.nameAndDateVOList
       return <div>
         {
           nameAndDateVOList && nameAndDateVOList.map(data => (
@@ -124,12 +124,12 @@ const columns = [
     },
   },
   {
-    title: RCi18n({id:'Task.DeliveryAddress'}),
+    title: RCi18n({ id: 'Task.DeliveryAddress' }),
     dataIndex: 'deliveryAddress',
     key: 'deliveryAddress'
   },
   {
-    title: RCi18n({id:'Task.PaymentMethod'}),
+    title: RCi18n({ id: 'Task.PaymentMethod' }),
     dataIndex: 'paymentMethod',
     key: 'paymentMethod'
   }
@@ -149,7 +149,7 @@ class TaskUpdate extends Component<any, any> {
       taskCompleted: false,
       tabKey: '',
       task: {},
-      assignedUsers: [],  
+      assignedUsers: [],
       goldenMomentList: [],
       subscriptionTable: [],
       actionTypeList: [
@@ -200,7 +200,7 @@ class TaskUpdate extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         console.log(res.context.sysDictionaryVOS);
-        
+
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
@@ -292,9 +292,9 @@ class TaskUpdate extends Component<any, any> {
     webapi
       .getEmployeesByKeyword(params)
       .then((data) => {
-        const res = data.res; 
+        const res = data.res;
         console.log(res.context.employees);
-        
+
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             assignedUsers: res.context.employees,
@@ -405,7 +405,7 @@ class TaskUpdate extends Component<any, any> {
   onChange = ({ field, value }) => {
     const { associatedPetOwners } = this.state;
     let data = this.state.task;
-    
+
     if (field === 'contactId') {
       const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
       data[field] = petOwner ? petOwner.customerId : ''; // save by customerId
@@ -607,7 +607,16 @@ class TaskUpdate extends Component<any, any> {
                               }
                             />
                           ) : (
-                            <span>{task.name}</span>
+                            <Tooltip placement="topLeft" title={task.name} >
+                              <p style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                display: '-webkit-box',
+                                WebkitLineClamp: 3,
+                                WebkitBoxOrient: 'vertical',
+                                cursor: "pointer"
+                              }} >{task.name} </p >
+                            </Tooltip>
                           )
                         )}
                       </FormItem>
@@ -1087,7 +1096,7 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
+                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
                             )}
                           </FormItem>
                         </Col>

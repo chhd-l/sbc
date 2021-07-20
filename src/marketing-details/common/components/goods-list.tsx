@@ -71,12 +71,12 @@ export default class GoodsList extends React.Component<any, any> {
       <div>
         <GreyBg>
           <Row>
-            <Col span={4}>
+            <Col span={6}>
               <span>
                 <FormattedMessage id="Marketing.SelectedGoods" />:
               </span>
             </Col>
-            <Col  span={20}>
+            <Col  span={18}>
               {
                 scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
                   scopeType === 1 ?

@@ -49,7 +49,7 @@ export default class MarketingRule extends React.Component<any, any> {
           <div key={Math.random()}>
             <GreyBg>
               <Row>
-                <Col span={4}>
+                <Col span={6}>
                   <span>
                     <FormattedMessage id="Marketing.Rules" />:
                   </span>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table} from 'antd';
+import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input} from 'antd';
 import {RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
 
@@ -79,9 +79,18 @@ export default class BenefitList extends Component<any, any>{
                 } = item;
 
                 let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
-                let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId))
+                let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId));
+                // 添加数量属性
+                let gifts = selectedRows.map(item => {
+                    let productNum = fullGiftDetailList.find(gifItem => gifItem.productId === item.goodsInfoId).productNum;
+                    return {
+                        ...item,
+                        productNum,
+                    }
+                })
+
                 return {
-                    gifts: selectedRows,
+                    gifts,
                     selectedSkuIds,
                     selectedRows,
                     key: giftLevelId,
@@ -95,7 +104,6 @@ export default class BenefitList extends Component<any, any>{
         }
 
     };
-
 
     handleDelete = key => {
 
@@ -212,33 +220,46 @@ export default class BenefitList extends Component<any, any>{
     };
 
     getColumns = () => {
+
+        let { initData } = this.props;
         const { getFieldDecorator } = this.props.form;
+        const formItemBenefitListLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 3 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 16 },
+            },
+        };
 
         return [
             {
-                title: 'Delivery number',
+                title: <strong>{`${RCi18n({id: 'Subscription.Delivery number'})}`}</strong>,
                 dataIndex: 'deliveryNumber',
-                width: '30%',
+                className: 'deliveryNumber-warp',
+                width: '20%',
                 render: (rowInfo, record, index) => {
                     // console.log('record', record);
                     let isDisabled = false;
                     return (
-                        <div key={record.key}>
-                            <Row>
-                                <Col span={16}>
-                                    <Form.Item>
-                                        {
-                                            getFieldDecorator(`benefitList[${index}].deliveryNumber`, {
-                                                rules: [
-                                                    {
-                                                        required: true,
-                                                        message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
-                                                    },
-                                                ],
-                                                initialValue: record.deliveryNumber || null
-
-                                            })(
-                                                <Select onChange={(value) => this.handleDeliveryNumberChange(value, record)} className='deliveryNumber-select'>
+                        <div className='deliveryNumber-select-warp'>
+                            <Form.Item label='' {...formItemBenefitListLayout}>
+                                {
+                                    getFieldDecorator(`benefitList[${index}].deliveryNumber`, {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
+                                            },
+                                        ],
+                                        initialValue: record.deliveryNumber || null
+                                    })(
+                                        <Select
+                                            onChange={(value) => this.handleDeliveryNumberChange(value, record)}
+                                            className='deliveryNumber-select'
+                                        >
                                                     {deliveryNumberData.map(item => (
                                                         <Option
                                                             key={item.id}
@@ -247,22 +268,21 @@ export default class BenefitList extends Component<any, any>{
                                                             <strong>{item.name}</strong>
                                                         </Option>))}
                                                 </Select>
-                                            )
-                                        }
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                                    )
+                                }
+                            </Form.Item>
                         </div>
                     );
                 }
             },
             {
-                title: 'Gift',
+                title: <strong>{`${RCi18n({id: 'Subscription.Gift'})}`}</strong>,
                 dataIndex: 'gifts',
+                width: '40%',
                 render: (rowInfo, record, index) => {
                     return (
-                        <Row>
-                            <Col span={20}>
+                        <Row key={record.key}>
+                            <Col span={24}>
                                 <div className="space-between-align">
                                     <div style={{paddingTop: 6}}>
                                         {' '}
@@ -282,14 +302,10 @@ export default class BenefitList extends Component<any, any>{
                                                         paddingLeft: 5,
                                                         paddingRight: 5
                                                     }}>{item.goodsInfoNo}</span>
-                                                    <Form.Item key={recordIndex} style={styles.tableFormItem}>
+                                                    <Form.Item label='' style={styles.tableFormItem}>
                                                         {
-                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}]`, {
-                                                                getValueFromEvent: (e) => this.getValueFromEvent(e, item),
-                                                                initialValue: {
-                                                                    productId: item.goodsInfoId,
-                                                                    productNum: item.productNum || 1,
-                                                                },
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productNum`, {
+                                                                initialValue: item.productNum || 1,
                                                                 rules: [
                                                                     {
                                                                         required: true, message:
@@ -307,13 +323,27 @@ export default class BenefitList extends Component<any, any>{
                                                                     }}
                                                                     key={item.goodsInfoId || recordIndex}
                                                                     min={1}
-                                                                    max={item.stock || 999}
-                                                                    formatter={(value: any) => value.productNum}
-                                                                    // onChange={(e) => this.editGiftItem(item)}
+                                                                    max={999}
                                                                 />
                                                             )
                                                         }
                                                     </Form.Item>
+                                                    <Form.Item label='' style={{width: 0, height: 0, visibility: 'hidden'}}>
+                                                        {
+                                                            getFieldDecorator(`benefitList[${index}].gifts[${recordIndex}].productId`, {
+                                                                initialValue: item.goodsInfoId,
+                                                            })(
+                                                                <Input
+                                                                    style={{
+                                                                        width: '0',
+                                                                        height: '0',
+                                                                        textAlign: 'center'
+                                                                    }}
+                                                                />
+                                                            )
+                                                        }
+                                                    </Form.Item>
+
                                                     <a
                                                         style={{paddingLeft: 5}}
                                                         className="iconfont iconDelete"
@@ -331,8 +361,9 @@ export default class BenefitList extends Component<any, any>{
 
             },
             {
-                title: 'Operation',
+                title: <strong>{`${RCi18n({id: 'Subscription.Operation'})}`}</strong>,
                 dataIndex: 'Operation',
+                width: '20%',
                 render: (text, record) => {
                     return <div>
                         <div>
@@ -388,6 +419,7 @@ export default class BenefitList extends Component<any, any>{
                         pagination={false}
                         size="small"
                         rowKey='key'
+                        className='BenefitList-table-wrap'
                     />
                     {this.getGiftsValidateFields()}
                 </div>

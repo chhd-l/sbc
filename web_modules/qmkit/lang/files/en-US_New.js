@@ -875,7 +875,7 @@ export default {
         'Subscription.Consumption gift': 'Consumption gift',
         'Subscription.Buy the products regulary to enjoy the membership gift': 'Buy the products regulary to enjoy the membership gift',
         'Subscription.Creating Consumption gift': 'Creating Consumption gift',
-        'Subscription.Consumption gif is set for order type is club, and subscription order is the recurrent by default': 'Consumption gif is set for order type is club, and subscription order is the recurrent by default;',
+        'Subscription.Consumption gift is set for order type is club, and subscription order is the recurrent by default': 'Consumption gift is set for order type is club, and subscription order is the recurrent by default;',
         'Subscription.Consumption gift only delivered one time for the same conditions club': 'Consumption gift only delivered one time for the same conditions club.',
         'Subscription.start and end time': 'start and end time',
         'Subscription.Campaign name': 'Campaign name',
@@ -894,7 +894,11 @@ export default {
         'Subscription.CashOnDelivery': 'Cash on Delivery',
         'Subscription.RemoveAssociationFirst': 'This card cannot be removed due to the subscription association, please remove the association first.',
         'Subscription.PayByCashOrCard': 'I want to pay by cash or card on delivery',
-        'Subscription.savePaymentMethod': 'Please click the Save button to save payment method'
+        'Subscription.savePaymentMethod': 'Please click the Save button to save payment method',
+        'Subscription.Delivery number':'Delivery number',
+        'Subscription.Gift':'Gift',
+        'Subscription.Operation':'Operation',
+        'Subscription.PleaseSelectYourTags!':'Please Select your tags!',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',
@@ -1376,6 +1380,7 @@ export default {
         "PetOwner.motherLofNumber": "Mother lof number",
         "PetOwner.fatherLofNumber": "Father lof number",
         "PetOwner.size": "Size",
+        "PetOwner.tagging": "Tagging",
 
         //===========begin payments Method================
         "payment.createPaymentMethod": "Create payment method",
@@ -1405,7 +1410,7 @@ export default {
         "PetOwner.more": "more",
         "PetOwner.AdmissionDate": "Admission Date:",
         "PetOwner.SubscriptionNo": "Subscription No:",
-        "PetOwner.ClubLoyaltyProgram": "Club loyalty program:",
+        "PetOwner.ClubLoyaltyProgram": "Club loyalty program",
         "PetOwner.WelcomeBox": "Welcome box:",
         "PetOwner.ConsumptionGift": "Consumption gift:",
         "PetOwner.Benefit": "Benefit",
@@ -2248,5 +2253,12 @@ export default {
         "deliveryState": "Delivery State",
         "consumer.consumerDetails": "Consumer detail",
         "subscription.consumerName": "Pet owner name"
+    },
+    Task: {
+        "Task.SubscriptionNumber": "Subscription Number",
+        "Task.ProductName": "Product Name",
+        "Task.ShipmentDate": "Shipment Date",
+        "Task.DeliveryAddress": "Delivery Address",
+        "Task.PaymentMethod": "Payment Method"
     }
 }

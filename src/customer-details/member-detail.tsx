@@ -331,6 +331,8 @@ export default class CustomerDetails extends React.Component<any, any> {
       );
     }
 
+    let isClubMember = memberShip && memberShip.isClubMember;
+
     return (
       <>
         <div>
@@ -431,60 +433,66 @@ export default class CustomerDetails extends React.Component<any, any> {
 
               </div>
             </div>
-            <div className="detail-container">
-              <Headline
-                title={<FormattedMessage id="PetOwner.Membership" />}
-              />
-              <Row>
-                <Col span={18}>
-                  <div className="Membership-info-detail">
-                    <Row type="flex" align="middle">
-                      <Col span={13}>
-                        <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: "20px", color: "#d81e06" }}></i>
-                        <FormattedMessage id="PetOwner.ClubMember" />
-                      </Col>
-                      <Col span={11}>
-                        <div style={{
-                          position: 'absolute',
-                          right: '20px',
-                          top: "-10px"
-                        }}>
-                          <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "#d81e06" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
-                        </div>
-                      </Col>
-                    </Row>
-                    <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
-                      <Row>
-                        <Col span={1}></Col>
-                        <Col span={13} className="text-tip">
-                          <FormattedMessage id="PetOwner.AdmissionDate" />
-                          <span>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
-                        </Col>
-                        <Col span={10} className="text-tip">
-                          <FormattedMessage id="PetOwner.SubscriptionNo" />
-                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
-                        </Col>
-                        <Col span={1}></Col>
-                        <Col span={23} className="text-tip">
-                          <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
-                          <span>{memberShip.clubLoyaltyProgram}</span>
-                        </Col>
-                        <Col span={1}></Col>
-                        <Col span={13} className="text-tip">
-                          <FormattedMessage id="PetOwner.WelcomeBox" />
-                        &nbsp;
-                        <span style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
-                        </Col>
-                        <Col span={10} className="text-tip">
-                          <FormattedMessage id="PetOwner.ConsumptionGift" />
-                          <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
-                        </Col>
-                      </Row>
-                    </div>
-                  </div>
-                </Col>
-              </Row>
-            </div>
+            {
+              isClubMember
+                  ? (
+                      <div className="detail-container">
+                        <Headline
+                            title={<FormattedMessage id="PetOwner.Membership" />}
+                        />
+                        <Row>
+                          <Col span={24}>
+                            <div className="Membership-info-detail">
+                              <Row type="flex" align="middle">
+                                <Col span={13}>
+                                  <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: "20px", color: "#d81e06" }}></i>
+                                  <FormattedMessage id="PetOwner.ClubMember" />
+                                </Col>
+                                <Col span={11}>
+                                  <div style={{
+                                    position: 'absolute',
+                                    right: '20px',
+                                    top: "-10px"
+                                  }}>
+                                    <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "#d81e06" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
+                                  </div>
+                                </Col>
+                              </Row>
+                              <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
+                                <Row>
+                                  <Col span={1}></Col>
+                                  <Col span={13} className="text-tip">
+                                    <FormattedMessage id="PetOwner.AdmissionDate" />
+                                    <span>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                                  </Col>
+                                  <Col span={10} className="text-tip">
+                                    <FormattedMessage id="PetOwner.SubscriptionNo" />
+                                    <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                                  </Col>
+                                  <Col span={1}></Col>
+                                  <Col span={23} className="text-tip">
+                                    <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
+                                    {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
+                                  </Col>
+                                  <Col span={1}></Col>
+                                  <Col span={13} className="text-tip">
+                                    <FormattedMessage id="PetOwner.WelcomeBox" />
+                                    &nbsp;
+                                    <span style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                                  </Col>
+                                  <Col span={10} className="text-tip">
+                                    <FormattedMessage id="PetOwner.ConsumptionGift" />
+                                    <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                                  </Col>
+                                </Row>
+                              </div>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                  )
+                  : null
+            }
             <div className="detail-container">
               <Headline title="Tagging" />
               <Row>
@@ -554,7 +562,7 @@ export default class CustomerDetails extends React.Component<any, any> {
             </div>
             <div className="container">
               <Headline
-                title="Other information"
+                title={RCi18n({id:"PetOwner.OtherInformation"})}
                 extra={<RangePicker style={{ display: ['order', 'subscrib','benefit'].indexOf(this.state.activeKey) > -1 ? 'block' : 'none' }} allowClear={false} value={[moment(startDate, 'YYYY-MM-DD'), moment(endDate, 'YYYY-MM-DD')]} onChange={this.handleChangeDateRange} getCalendarContainer={() => document.getElementById('page-content')} />}
               />
               <Tabs activeKey={this.state.activeKey} onChange={this.clickTabs}>
@@ -579,9 +587,15 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab={RCi18n({id:"PetOwner.Feedback"})} key="feedback">
                   <FeedbackList customerId={this.state.customerId} />
                 </TabPane>
-                <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
-                  <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
-                </TabPane>
+                {
+                  isClubMember
+                      ? (
+                          <TabPane tab={<FormattedMessage id="PetOwner.Benefit" />} key="benefit">
+                            <BenefitsList startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
+                          </TabPane>
+                      )
+                      : null
+                }
               </Tabs>
             </div>
           </Spin>

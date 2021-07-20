@@ -116,6 +116,7 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                 dataIndex: 'scheduledTime',
                 key: 'ScheduledTime',
                 render: (text) => {
+                    if (!text) return '';
                     return (
                         moment(text).format(Const.TIME_FORMAT)
                     )
@@ -126,6 +127,7 @@ export default class BenefitsList extends React.Component<Iprop, any> {
                 key: 'DeliveryTime',
                 align: 'center',
                 render: (text) => {
+                    if (!text) return '';
                     return (
                         moment(text).format(Const.TIME_FORMAT)
                     )

@@ -318,7 +318,7 @@ export default class Task extends React.Component<any, any> {
                         if (isCardView) {
                           this.cardViewRef.current.getTaskList(queryType);
                         } else {
-                          this.listViewRef.current.getTaskList(queryType);
+                          this.listViewRef.current.getTaskList(queryType, true);
                         }
                         sessionStorage.setItem(cache.TASKFROMDATA, JSON.stringify(taskForm));
                       }}

@@ -598,7 +598,16 @@ class TaskUpdate extends Component<any, any> {
                               }
                             />
                           ) : (
-                            <span>{task.name}</span>
+                            <Tooltip placement="topLeft" title={task.name} >
+                              <p style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                display: '-webkit-box',
+                                WebkitLineClamp:2,
+                                WebkitBoxOrient:'vertical',
+                                cursor: "pointer"
+                              }} >{task.name} </p >
+                            </Tooltip>
                           )
                         )}
                       </FormItem>

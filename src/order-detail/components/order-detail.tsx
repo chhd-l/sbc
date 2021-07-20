@@ -133,9 +133,9 @@ class OrderDetailTab extends React.Component<any, any> {
     let giftList= detail.get('subscriptionPlanGifts')?detail.get('subscriptionPlanGifts').toJS():[];
     giftList = giftList.map((gift)=>{
       let tempGift ={
-        skuNo:gift.skuNo,
-        skuName:gift.skuName,
-        num:gift.num,
+        skuNo:gift.goodsInfoNo,
+        skuName:gift.goodsInfoName,
+        num:gift.quantity,
         originalPrice:0,
         price:0,
         isGift:true

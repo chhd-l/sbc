@@ -404,11 +404,12 @@ class TaskUpdate extends Component<any, any> {
 
   onChange = ({ field, value }) => {
     const { associatedPetOwners } = this.state;
-    const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
-    value = petOwner ? petOwner.customerId : ''; // save by customerId
     let data = this.state.task;
-    data[field] = value;
+    
     if (field === 'contactId') {
+      const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
+      data[field] = petOwner ? petOwner.customerId : ''; // save by customerId
+
       this.getPetOwnerPets(value);
       this.getPetOwnerOrders(value);
       this.getPetOwnerSubscriptions(value); //search by customer account
@@ -416,13 +417,17 @@ class TaskUpdate extends Component<any, any> {
         task: {
           petName: '',
           petId: '',
-          orderCode: ''
+          orderCode: '',
+          subscriptionNumber: ''
         }
       });
       this.props.form.setFieldsValue({
         petId: '',
-        orderCode: ''
+        orderCode: '',
+        subscriptionNumber: []
       });
+    } else {
+      data[field] = value;
     }
     this.setState({
       task: data

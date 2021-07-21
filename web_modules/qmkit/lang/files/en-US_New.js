@@ -105,7 +105,8 @@ export default {
         "Public.maximumTip": "The maximum period is six months",
         "Public.exportConfirmTip": "The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email.",
         "Public.timeErrorTip": "The start time and end time should be within 6 months",
-        "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported"
+        "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported",
+        "Public.changeLanguageAlert": "Language switching, please wait...",
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -820,6 +821,7 @@ export default {
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
         "Order.gift": "Gift",
+        "Order.Giveaway": "【Giveaway】"
 
 
 

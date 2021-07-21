@@ -37,7 +37,7 @@ class GoodsList extends React.Component<any, any> {
     //赠品信息
     let returnGifts = detailObj.returnGifts ? detailObj.returnGifts : [];
     returnGifts = returnGifts.map((gift) => {
-      gift.skuName = '【赠品】' + gift.skuName;
+      gift.skuName = (window as any).RCi18n({ id: 'Order.Giveaway' }) + gift.skuName;
       gift.splitPrice = 0;
       return gift;
     });

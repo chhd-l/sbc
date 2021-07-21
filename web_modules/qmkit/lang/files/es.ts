@@ -22,6 +22,8 @@ export default {
     "Public.Batch Export": "Exportación por lotes",
     "Public.GetDataFailed": "Fallo en obtener la información",
     'Public.Reminder100records':'Recordatorio: hasta 100 registros',
+    "Public.changeLanguageAlert": "Cambiando idiomas, por favor espere...",
+    'Public.ChooseLocation':'Seleccionar idioma',
     "Menu.Home": "Inicio",
     "Menu.Product": "Producto",
     "Menu.Product list": "Lista de productos",

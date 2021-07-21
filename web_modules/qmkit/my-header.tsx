@@ -32,6 +32,7 @@ import { RCi18n } from 'qmkit';
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
+    const lan = sessionStorage.getItem(cache.LANGUAGE) || 'en-US';
     this.state = {
       qrCodeLink: '',
       url: '',
@@ -39,11 +40,11 @@ export default class MyHeader extends React.Component {
       reminderTasks: [],
       visible: false,
       modalVisible: false,
-      English: util.requireLocalSrc('sys/English.png'),
-      Russian: util.requireLocalSrc('sys/Russian.png'),
-      Turkey: util.requireLocalSrc('sys/Turkey.png'),
-      France: util.requireLocalSrc('sys/France.png'),
-      Spanish: util.requireLocalSrc('sys/Spanish.png')
+      English: util.requireLocalSrc(lan === 'en-US' ? 'sys/English_act.png' : 'sys/English.png'),
+      Russian: util.requireLocalSrc(lan === 'ru' ? 'sys/Russian_act.png' : 'sys/Russian.png'),
+      Turkey: util.requireLocalSrc(lan === 'tr' ? 'sys/Turkey_act.png' : 'sys/Turkey.png'),
+      France: util.requireLocalSrc(lan === 'fr' ? 'sys/France_act.png' : 'sys/France.png'),
+      Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png')
     };
   }
 
@@ -86,7 +87,8 @@ export default class MyHeader extends React.Component {
     this.setState({ visible });
   };
 
-  setImgSrc(val, type) {
+  setImgSrc(val, lan, type) {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lan) return;
     this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + '.png') });
   }
 
@@ -118,10 +120,10 @@ export default class MyHeader extends React.Component {
                     width: '30%'
                   }}
                   onMouseLeave={(e) => {
-                    this.setImgSrc(item.name, '');
+                    this.setImgSrc(item.name, item.value, '');
                   }}
                   onMouseEnter={(e) => {
-                    this.setImgSrc(item.name, '_act');
+                    this.setImgSrc(item.name, item.value, '_act');
                   }}
                   src={this.state[item.name]}
                   onClick={() => this.languageChange(item.value)}
@@ -461,17 +463,18 @@ export default class MyHeader extends React.Component {
 
   handleCopy = (value) => {
     if (copy(value)) {
-      message.success('Operate successfully');
-    } else message.error('Unsuccessful');
+      message.success(RCi18n({id:"Order.OperateSuccessfully"}));
+    } else message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
   };
 
   languageChange = (value) => {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
     sessionStorage.setItem(cache.LANGUAGE, value);
 
     history.go(0);
 
     notification['info']({
-      message: 'Language switching, please wait...'
+      message: RCi18n({id:"Public.changeLanguageAlert"})
     });
   };
 }

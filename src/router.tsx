@@ -1037,7 +1037,7 @@ const routes = [
   },
   {
     path: '/integration-log',
-    asyncComponent: () => import('./Integration/Log')
+    asyncComponent: () => import('./Integration/Log/log-list')
   },
 ];
 

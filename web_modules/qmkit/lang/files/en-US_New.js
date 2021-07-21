@@ -2277,5 +2277,12 @@ export default {
         "Task.ShipmentDate": "Shipment Date",
         "Task.DeliveryAddress": "Delivery Address",
         "Task.PaymentMethod": "Payment Method"
-    }
+    },
+    integration:{
+        'Interface.InterfaceList':'Interface List',
+        'Interface.InterfaceName':'Interface Name',
+        'Interface.Provider':'Provider',
+        'Interface.Invoker':'Invoker',
+        'Log.LogSearch': 'LogSearch',
+    },
 }

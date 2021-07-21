@@ -1033,7 +1033,7 @@ const routes = [
   },
   {
     path: '/integration-interface',
-    asyncComponent: () => import('./Integration/Interface')
+    asyncComponent: () => import('./Integration/Interface/interface-list')
   },
   {
     path: '/integration-log',

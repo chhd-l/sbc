@@ -105,7 +105,10 @@ export default {
         "Public.maximumTip": "The maximum period is six months",
         "Public.exportConfirmTip": "The export report task is operating, and it will show in the analyze module/ Export report. You can download it once you receive the result email.",
         "Public.timeErrorTip": "The start time and end time should be within 6 months",
-        "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported"
+        "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported",
+        "Public.ClientID": "Client ID",
+        "Public.InputClinetID": "Please Input Client ID",
+        "Public.ClientName": "Client Name",
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",

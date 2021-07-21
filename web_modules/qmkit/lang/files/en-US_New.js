@@ -821,6 +821,7 @@ export default {
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
         "Order.gift": "Gift",
+        "Order.Giveaway": "【Giveaway】"
 
 
 

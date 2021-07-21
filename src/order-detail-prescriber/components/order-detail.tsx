@@ -174,7 +174,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const tradeItems = detail.get('tradeItems').toJS();
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', (window as any).RCi18n({ id: 'Order.Giveaway' }) + gift.get('skuName')).set('levelPrice', 0)).toJS();
     const tradePrice = detail.get('tradePrice').toJS() as any;
 
     //收货人信息

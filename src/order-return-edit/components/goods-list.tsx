@@ -92,7 +92,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ? '【赠品】' : ''}${text}`
+        render: (text) => `${itemType == 1 ? (window as any).RCi18n({ id: 'Order.Giveaway' }) : ''}${text}`
       },
       {
         title: 'Specification',

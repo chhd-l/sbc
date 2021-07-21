@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
-import { SelectGroup, cache, Const } from 'qmkit';
+import { SelectGroup, cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
-import { RCi18n } from 'qmkit';
 
 const { confirm } = Modal;
 
@@ -395,7 +394,7 @@ class UserList extends Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <SelectGroup
-                    defaultValue="All"
+                    defaultValue={RCi18n({id:"Prescriber.All"})}
                     label={RCi18n({ id: 'Prescriber.UserStatus' })}
                     onChange={(value) => {
                       value = value === '' ? null : value;

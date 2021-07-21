@@ -2284,5 +2284,10 @@ export default {
         'Interface.Provider':'Provider',
         'Interface.Invoker':'Invoker',
         'Log.LogSearch': 'LogSearch',
+        'Log.RequestID':'Request ID',
+        'Log.System':'System',
+        'Log.Interface':'Interface',
+        'Log.NewDate':'New Date',
+        'Log.EndDate':'End Date',
     },
 }

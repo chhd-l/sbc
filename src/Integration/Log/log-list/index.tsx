@@ -25,12 +25,12 @@ class Loglist extends Component<any, any>{
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={<FormattedMessage id='log-list' />} />
+          <Headline title={<FormattedMessage id='Log.LogSearch' />} />
           <Form layout='inline' className="filter-content">
             <Row>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator('requestId')(<Input style={{ width: 337 }} addonBefore={<p style={styles.label}>Request ID</p>} />)}
+                  {getFieldDecorator('requestId')(<Input style={{ width: 337 }} addonBefore={<p style={styles.label}>{<FormattedMessage id='Log.RequestID' />}</p>} />)}
                 </Form.Item>
               </Col>
               <Col span={8}>
@@ -38,7 +38,7 @@ class Loglist extends Component<any, any>{
                   {getFieldDecorator('system')(
                     <SelectGroup
                       style={{ width: 194 }}
-                      label={<p style={styles.label}>System</p>}>
+                      label={<p style={styles.label}>{<FormattedMessage id='Log.System' />}</p>}>
                       <Option value="Datata">Datata</Option>
                       <Option value="Fedex">Fedex</Option>
                       <Option value="Mulesoft">Mulesoft</Option>
@@ -52,7 +52,7 @@ class Loglist extends Component<any, any>{
                 <Form.Item>
                   {getFieldDecorator('interface')(<SelectGroup
                     style={{ width: 194 }}
-                    label={<p style={styles.label}>Interface</p>}
+                    label={<p style={styles.label}>{<FormattedMessage id='Log.Interface' />}</p>}
                   >
                     <Option value="Inventory Synchonization">Inventory Synchonization</Option>
                     <Option value="Order Export">Order Export</Option>
@@ -64,12 +64,12 @@ class Loglist extends Component<any, any>{
             <Row>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator("newdate")(<MyDate label="New Date" style={{ width: 194 }} placeholder=""></MyDate>)}
+                  {getFieldDecorator("newdate")(<MyDate label={<FormattedMessage id='Log.NewDate' />} style={{ width: 194 }} placeholder=""></MyDate>)}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator("enddate")(<MyDate label="End Date" style={{ width: 194 }} placeholder=""></MyDate>)}
+                  {getFieldDecorator("enddate")(<MyDate label={<FormattedMessage id='Log.EndDate' />} style={{ width: 194 }} placeholder=""></MyDate>)}
                 </Form.Item>
               </Col>
             </Row>

@@ -130,12 +130,12 @@ class OrderDetailTab extends React.Component<any, any> {
     }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //订阅赠品信息
-    let giftList= detail.get('subscriptionPlanGifts')?detail.get('subscriptionPlanGifts').toJS():[];
+    let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
     giftList = giftList.map((gift)=>{
       let tempGift ={
-        skuNo:gift.skuNo,
-        skuName:gift.skuName,
-        num:gift.num,
+        skuNo:gift.goodsInfoNo,
+        skuName:gift.goodsInfoName,
+        num:gift.quantity,
         originalPrice:0,
         price:0,
         isGift:true

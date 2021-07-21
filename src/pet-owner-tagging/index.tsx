@@ -19,6 +19,10 @@ class PetOwnerTagging extends Component<any, any> {
         taggingName: '',
         taggingType: null
       },
+      oldSearchForm: {
+        taggingName: '',
+        taggingType: null
+      },
       pagination: {
         current: 1,
         pageSize: 10,
@@ -49,6 +53,10 @@ class PetOwnerTagging extends Component<any, any> {
           total: 0
         },
         searchForm: {
+          taggingName: '',
+          taggingType: null
+        },
+        oldSearchForm: {
           taggingName: '',
           taggingType: null
         }
@@ -129,13 +137,15 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   onSearch = () => {
+    const {searchForm} = this.state
     this.setState(
       {
         pagination: {
           current: 1,
           pageSize: 10,
           total: 0
-        }
+        },
+        oldSearchForm:searchForm
       },
       () => {
         this.getTaggingList();
@@ -143,12 +153,12 @@ class PetOwnerTagging extends Component<any, any> {
     );
   };
   getTaggingList = () => {
-    const { searchForm, pagination } = this.state;
+    const { oldSearchForm, pagination } = this.state;
     let params = {
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize,
-      name: searchForm.taggingName,
-      segmentType: searchForm.taggingType
+      name: oldSearchForm.taggingName,
+      segmentType: oldSearchForm.taggingType
     };
     this.setState({
       loading: true
@@ -272,7 +282,7 @@ class PetOwnerTagging extends Component<any, any> {
               visible: false,
               loading: false
             },
-            () => this.getTaggingList()
+            () => this.init()
           );
         }
       })

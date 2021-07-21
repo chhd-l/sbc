@@ -2289,5 +2289,13 @@ export default {
         'Log.Interface':'Interface',
         'Log.NewDate':'New Date',
         'Log.EndDate':'End Date',
+        'Log.Datata':'Datata',
+        'Log.Fedex':'Fedex',
+        'Log.Mulesoft':'Mulesoft',
+        'Log.OKTACIAM':'OKTA CIAM',
+        'Log.WEShare':'WEShare',
+        'Log.InventorySynchonization':'Inventory Synchonization',
+        'Log.OrderExport':'Order Export',
+        'Log.PriceSynchronization':'Price Synchronization'
     },
 }

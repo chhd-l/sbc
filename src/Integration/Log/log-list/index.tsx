@@ -39,11 +39,11 @@ class Loglist extends Component<any, any>{
                     <SelectGroup
                       style={{ width: 194 }}
                       label={<p style={styles.label}>{<FormattedMessage id='Log.System' />}</p>}>
-                      <Option value="Datata">Datata</Option>
-                      <Option value="Fedex">Fedex</Option>
-                      <Option value="Mulesoft">Mulesoft</Option>
-                      <Option value="OKTA CIAM">OKTA CIAM</Option>
-                      <Option value="WEShare">WEShare</Option>
+                      <Option value="0">{<FormattedMessage id='Log.Datata' />}</Option>
+                      <Option value="1">{<FormattedMessage id='Log.Fedex' />}</Option>
+                      <Option value="2">{<FormattedMessage id='Log.Mulesoft' />}</Option>
+                      <Option value="3">{<FormattedMessage id='Log.OKTACIAM' />}</Option>
+                      <Option value="4">{<FormattedMessage id='Log.WEShare' />}</Option>
                     </SelectGroup>
                   )}
                 </Form.Item>
@@ -54,9 +54,9 @@ class Loglist extends Component<any, any>{
                     style={{ width: 194 }}
                     label={<p style={styles.label}>{<FormattedMessage id='Log.Interface' />}</p>}
                   >
-                    <Option value="Inventory Synchonization">Inventory Synchonization</Option>
-                    <Option value="Order Export">Order Export</Option>
-                    <Option value="Price Synchronization">Price Synchronization</Option>
+                    <Option value="0">{<FormattedMessage id='Log.InventorySynchonization' />}</Option>
+                    <Option value="1">{<FormattedMessage id='Log.OrderExport' />}</Option>
+                    <Option value="2">{<FormattedMessage id='Log.PriceSynchronization' />}</Option>
                   </SelectGroup>)}
                 </Form.Item>
               </Col>

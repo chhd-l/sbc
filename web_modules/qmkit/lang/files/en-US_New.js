@@ -2250,6 +2250,12 @@ export default {
         "Menu.Message setting": "Message setting",
         "Menu.Delivery date": "Delivery date",
         "Menu.Export report": "Export report",
+        'Menu.Integration':'Integration',
+        'Menu.Integration Manage':'Integration Manage',
+        'Menu.Dashboard':'Dashboard',
+        'Menu.Interface':'Interface',
+        'Menu.Log':'Log',
+
     },
     Others: {
         "import": "Import",

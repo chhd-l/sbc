@@ -1023,7 +1023,22 @@ const routes = [
   {
     path: '/split-order-setting',
     asyncComponent: () => import('./order-split-setting')
-  }
+  },
+    /**
+     * Integration  -------------------------------------------------------
+     * **/
+  {
+    path: '/integration-dashboard',
+    asyncComponent: () => import('./Integration/Dashboard')
+  },
+  {
+    path: '/integration-interface',
+    asyncComponent: () => import('./Integration/Interface')
+  },
+  {
+    path: '/integration-log',
+    asyncComponent: () => import('./Integration/Log')
+  },
 ];
 
 const homeRoutes = [

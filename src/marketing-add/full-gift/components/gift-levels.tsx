@@ -193,13 +193,12 @@ class GiftLevels extends React.Component<any, any> {
                 </HasError>
 
                 <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={level.fullGiftDetailList ? this.getSelectedRowByIds(this.getIdsFromLevel(level.fullGiftDetailList)) : []} pagination={false}>
-                  <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" width="10%" />
+                  <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" />
 
                   <Column
                     title={<FormattedMessage id="Marketing.ProductName" />}
                     dataIndex="goodsInfoName"
                     key="goodsInfoName"
-                    width="20%"
                     render={(value) => {
                       return <div className="line-two">{value}</div>;
                     }}
@@ -209,7 +208,6 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.Specification" />}
                     dataIndex="specText"
                     key="specText"
-                    width="8%"
                     render={(value) => {
                       if (value) {
                         return <div>{value}</div>;
@@ -219,7 +217,7 @@ class GiftLevels extends React.Component<any, any> {
                     }}
                   />
 
-                  <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" width="8%" />
+                  <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
 
                   <Column
                     title={<FormattedMessage id="Marketing.Brand" />}
@@ -239,7 +237,6 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.Price" />}
                     key="marketPrice"
                     dataIndex="marketPrice"
-                    width="10%"
                     render={(data) => {
                       return `¥${data}`;
                     }}
@@ -249,7 +246,6 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.Inventory" />}
                     key="stock"
                     dataIndex="stock"
-                    width="10%"
                     render={(stock) => {
                       if (stock < 20) {
                         return (
@@ -268,7 +264,6 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.GiveTheNumber" />}
                     className="centerItem"
                     key="count"
-                    width="20%"
                     render={(row, _record, detailIndex) => {
                       return (
                         <FormItem>
@@ -315,7 +310,6 @@ class GiftLevels extends React.Component<any, any> {
                   <Column
                     title={<FormattedMessage id="Marketing.Operation" />}
                     key="operate"
-                    width="12%"
                     render={(row) => {
                       return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}>Delete</a>;
                     }}

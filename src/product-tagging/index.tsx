@@ -16,6 +16,9 @@ class AttributeLibrary extends Component<any, any> {
       searchForm: {
         taggingName: ''
       },
+      oldSearchForm: {
+        taggingName: ''
+      },
       pagination: {
         current: 1,
         pageSize: 10,
@@ -57,7 +60,12 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   onSearch = () => {
-    this.getTagging();
+    const {searchForm} = this.state
+    this.setState({
+      oldSearchForm:searchForm
+    },()=>{
+      this.getTagging();
+    })
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -102,7 +110,6 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   openEditPage = (row) => {
-    const { form } = this.props;
     row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
@@ -159,12 +166,12 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   getTagging = () => {
-    const { searchForm, pagination } = this.state;
+    const { oldSearchForm, pagination } = this.state;
     this.setState({
       loading: true
     });
     let params = {
-      taggingName: searchForm.taggingName,
+      taggingName: oldSearchForm.taggingName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };

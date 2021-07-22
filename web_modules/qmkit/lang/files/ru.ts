@@ -43,6 +43,7 @@ export default {
   "Public.Cancel": "Отмена",
   "Public.Batch Export": "Масс. Экспорт",
   "Public.GetDataFailed": "Ошибка получения Данных",
+  'Public.ChooseLocation':'Выберите свой язык',
   "Menu.Home": "Домой",
   "Menu.Product": "Продукт",
   "Menu.Product management": "Управление Товарами",

@@ -1036,6 +1036,10 @@ const routes = [
     asyncComponent: () => import('./Integration/Interface/interface-list')
   },
   {
+    path: '/interface-detail',
+    asyncComponent: () => import('./Integration/Interface/Interface-detail')
+  },
+  {
     path: '/integration-log',
     asyncComponent: () => import('./Integration/Log/log-list')
   },

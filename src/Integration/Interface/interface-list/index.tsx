@@ -3,7 +3,7 @@ import { BreadCrumb, Headline, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, Row, Col, Select, Button, Tooltip, Icon } from 'antd';
 import Tab from '@/Integration/components/tab';
-
+import {Link} from 'react-router-dom'
 const { Option } = Select;
 
 class InterfaceList extends Component<any, any> {
@@ -15,101 +15,57 @@ class InterfaceList extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      list: [
+      num:2,
+      dataSource: [
         {
         InterfaceID:1,
         id:1
       },{
         InterfaceID:1,
         id:2
-      },{
-        InterfaceID:1,
-        id:3
-      },{
-        InterfaceID:1,
-        id:4
-      },{
-        InterfaceID:1,
-        id:5
-      },{
-        InterfaceID:1,
-        id:6
-      },{
-        InterfaceID:1,
-        id:7
-      },{
-        InterfaceID:1,
-        id:8
-      },{
-        InterfaceID:1,
-        id:9
-      },{
-        InterfaceID:1,
-        id:10
-      },{
-        InterfaceID:1,
-        id:11
-      },{
-        InterfaceID:1,
-        id:12
-      },{
-        InterfaceID:1,
-        id:13
-      },{
-        InterfaceID:1,
-        id:14
       }
       ],
       columns : [
         {
-          title: 'Interface ID',
+          title: <FormattedMessage id="Interface.InterfaceID" />,
           dataIndex: 'InterfaceID',
           key: 'InterfaceID'
         },
         {
-          title: 'Name',
+          title: <FormattedMessage id="Interface.Name" />,
           dataIndex: 'Name',
-          key: 'Name'
         },
         {
-          // title: <FormattedMessage id="Product.ProductCount" />,
-          title: 'Provider',
+          title: <FormattedMessage id="Interface.Provider" />,
           dataIndex: 'Provider',
-          key: 'Provider'
         },
         {
-          title: 'Invoker',
+          title: <FormattedMessage id="Interface.Invoker" />,
           dataIndex: 'Invoker',
-          key: 'Invoker'
         },
         {
-          title: 'Data Flow',
+          title: <FormattedMessage id="Interface.DataFlow" />,
           dataIndex: 'DataFlow',
-          key: 'DataFlow'
         },
         {
-          title: 'URL',
+          title: <FormattedMessage id="Interface.URL" />,
           dataIndex: 'URL',
-          key: 'URL'
         },
         {
-          title: 'Method',
+          title: <FormattedMessage id="Interface.Method" />,
           dataIndex: 'Method',
-          key: 'Method'
         },
         {
-          title: 'Type',
+          title: <FormattedMessage id="Interface.Type" />,
           dataIndex: 'Type',
-          key: 'Type'
         },
         {
-          title: <FormattedMessage id="Product.Operation" />,
+          title: <FormattedMessage id="Interface.Operation" />,
           dataIndex: 'Operation',
-          key: 'Operation',
           render:(text, record)=> (
             <div>
-              <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
-                <a style={styles.edit} onClick={() => this.openView(record)} className="iconfont iconsearch"/>
+              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
+                <Link to="/interface-detail" className="iconfont iconsearch"/>
               </Tooltip>
             </div>
           )
@@ -196,7 +152,7 @@ class InterfaceList extends Component<any, any> {
         </div>
         <div className="container">
           <Tab
-            dataSource={this.state.list}
+            dataSource={this.state.dataSource}
             pagination={this.state.pagination}
             onChange={this.onSearchPage}
             columns={this.state.columns}
@@ -212,9 +168,6 @@ const styles = {
   label: {
     width: 151,
     textAlign: 'center'
-  },
-  wrapper: {
-    width: 177
   }
 } as any;
 

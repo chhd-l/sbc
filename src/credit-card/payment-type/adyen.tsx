@@ -63,8 +63,17 @@ export default class AdyenCreditCardForm extends Component {
   initFormPay() {
     const language = sessionStorage.getItem('language')
     const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon ,cardType,clientKey,fromSubscroption} = this.props;
+    let _language={
+      'en-US':'en-US',
+      'tr':'tr-TR',
+      'de':'de-DE',
+      'fr':'fr-FR',
+      'ru':'ru-RU',
+       'mx':'es-ES'
+    };
+    
     const configuration: any = {
-      locale: language.replace(/-/gi,'_'),
+      locale: _language[language],
       environment: Const.PAYMENT_ENVIRONMENT,
       clientKey: clientKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,

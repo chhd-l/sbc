@@ -825,7 +825,8 @@ export default {
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
         "Order.gift": "Gift",
-        "Order.Giveaway": "【Giveaway】"
+        "Order.Giveaway": "【Giveaway】",
+        "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
 
 
 
@@ -901,10 +902,10 @@ export default {
         'Subscription.RemoveAssociationFirst': 'This card cannot be removed due to the subscription association, please remove the association first.',
         'Subscription.PayByCashOrCard': 'I want to pay by cash or card on delivery',
         'Subscription.savePaymentMethod': 'Please click the Save button to save payment method',
-        'Subscription.Delivery number':'Delivery number',
-        'Subscription.Gift':'Gift',
-        'Subscription.Operation':'Operation',
-        'Subscription.PleaseSelectYourTags!':'Please Select your tags!',
+        'Subscription.Delivery number': 'Delivery number',
+        'Subscription.Gift': 'Gift',
+        'Subscription.Operation': 'Operation',
+        'Subscription.PleaseSelectYourTags!': 'Please Select your tags!',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',
@@ -1428,18 +1429,18 @@ export default {
         "PetOwner.Status": "Status",
         "PetOwner.ScheduledTime": "Scheduled time",
         "PetOwner.DeliveryTime": "Delivery time",
-        'PetOwner.Gift':'Gift',
-        'PetOwner.Welcome box':'Welcome box',
-        'PetOwner.Consumption gift':'Consumption gift',
-        'PetOwner.Scheduled':'Scheduled',
-        'PetOwner.To be delivered':'To be delivered',
-        'PetOwner.Delivered':'Delivered',
-        'PetOwner.Promotion pause':'Promotion pause',
-        'PetOwner.Subscription pause':'Subscription pause',
-        'PetOwner.Subscription cancel':'Subscription cancel',
-        'PetOwner.Dismiss':'Dismiss',
-        
-       
+        'PetOwner.Gift': 'Gift',
+        'PetOwner.Welcome box': 'Welcome box',
+        'PetOwner.Consumption gift': 'Consumption gift',
+        'PetOwner.Scheduled': 'Scheduled',
+        'PetOwner.To be delivered': 'To be delivered',
+        'PetOwner.Delivered': 'Delivered',
+        'PetOwner.Promotion pause': 'Promotion pause',
+        'PetOwner.Subscription pause': 'Subscription pause',
+        'PetOwner.Subscription cancel': 'Subscription cancel',
+        'PetOwner.Dismiss': 'Dismiss',
+
+
     },
     Finance: {
         "Finance.recordAsSettled": "Are you sure you want to set this settlement record as settled? ",

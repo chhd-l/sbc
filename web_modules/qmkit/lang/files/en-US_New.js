@@ -2279,6 +2279,7 @@ export default {
         "Task.PaymentMethod": "Payment Method"
     },
     integration:{
+        'Dashboard.Dashboard':'Dashboard',
         'Interface.InterfaceList':'Interface List',
         'Interface.InterfaceName':'Interface Name',
         'Interface.Provider':'Provider',

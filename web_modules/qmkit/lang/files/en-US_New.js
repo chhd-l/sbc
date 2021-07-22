@@ -2316,9 +2316,14 @@ export default {
         'Log.InventorySynchonization':'Inventory Synchonization',
         'Log.OrderExport':'Order Export',
         'Log.PriceSynchronization':'Price Synchronization',
-        'Log.AllLog':'AllLog',
+        'Log.AllLog':'All Log',
         'Log.Error':'Error',
         'Log.RequestDetail':'Request Detail',
-        'Log.Time':'Time'
+        'Log.Time':'Time',
+        'Log.ClientName':'Client Name',
+        'Log.InterfaceName':'Interface Name',
+        'Log.Header':'Header',
+        'Log.Payload':'Payload',
+        'Log.Response':'Response'
     },
 }

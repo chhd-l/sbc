@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Input, Row, Col, Select, Button, Tooltip, Icon } from 'antd';
+import { Form, Input, Row, Col, Select, Button, Tooltip } from 'antd';
 import Tab from '@/Integration/components/tab';
 import {Link} from 'react-router-dom'
 const { Option } = Select;
@@ -143,7 +143,10 @@ class InterfaceList extends Component<any, any> {
                 </Form.Item>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
-                <Button type="primary" onClick={this.onSearch}>
+                <Button type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round" onClick={this.onSearch}>
                   {<FormattedMessage id="Appointment.Search" />}
                 </Button>
               </Col>

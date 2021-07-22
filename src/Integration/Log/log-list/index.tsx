@@ -36,7 +36,7 @@ class Loglist extends Component<any, any>{
           key:"interfacename"
         },
         {
-          title:"Header",
+          title: "Header",
           dataIndex:"header",
           key:"header"
         },
@@ -102,7 +102,7 @@ class Loglist extends Component<any, any>{
     let endDate = value.enddate?value.enddate.format('YYYY-MM-DD'):'';
     let obj = {...value,enddate:endDate,newdate:startDate}
     console.log(obj);
-    
+
   }
   onSearchPage = (pagination)=>{
     this.setState({
@@ -194,7 +194,7 @@ class Loglist extends Component<any, any>{
               />
               </TabPane>
           </Tabs>
-        
+
         </div>
       </div>
     )

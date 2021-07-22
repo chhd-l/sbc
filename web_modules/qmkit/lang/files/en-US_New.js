@@ -2296,6 +2296,10 @@ export default {
         'Log.WEShare':'WEShare',
         'Log.InventorySynchonization':'Inventory Synchonization',
         'Log.OrderExport':'Order Export',
-        'Log.PriceSynchronization':'Price Synchronization'
+        'Log.PriceSynchronization':'Price Synchronization',
+        'Log.AllLog':'AllLog',
+        'Log.Error':'Error',
+        'Log.RequestDetail':'Request Detail',
+        'Log.Time':'Time'
     },
 }

@@ -1039,6 +1039,10 @@ const routes = [
     path: '/integration-log',
     asyncComponent: () => import('./Integration/Log/log-list')
   },
+  {
+    path: '/integration-log-detail',
+    asyncComponent: () => import('./Integration/Log/log-detail')
+  },
 ];
 
 const homeRoutes = [

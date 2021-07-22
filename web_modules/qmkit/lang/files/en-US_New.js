@@ -2279,6 +2279,7 @@ export default {
         "Task.PaymentMethod": "Payment Method"
     },
     integration:{
+        'Dashboard.Dashboard':'Dashboard',
         'Interface.InterfaceList':'Interface List',
         'Interface.InterfaceName':'Interface Name',
         'Interface.Provider':'Provider',
@@ -2314,6 +2315,10 @@ export default {
         'Log.WEShare':'WEShare',
         'Log.InventorySynchonization':'Inventory Synchonization',
         'Log.OrderExport':'Order Export',
-        'Log.PriceSynchronization':'Price Synchronization'
+        'Log.PriceSynchronization':'Price Synchronization',
+        'Log.AllLog':'AllLog',
+        'Log.Error':'Error',
+        'Log.RequestDetail':'Request Detail',
+        'Log.Time':'Time'
     },
 }

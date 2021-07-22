@@ -1,13 +1,99 @@
 import React, { Component } from 'react'
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
 import MyDate from './components/MyDate'
-import { Form, Row, Col, Input, Button, Select } from 'antd'
+import { Form, Row, Col, Input, Button, Select,Tabs,Tooltip } from 'antd'
 import { FormattedMessage } from 'react-intl';
-const {Option} = Select
+import Tab from "@/Integration/components/tab";
+
+const {TabPane} = Tabs;
+
+
+const {Option} = Select;
 
 class Loglist extends Component<any, any>{
   constructor(props) {
     super(props);
+    this.state={
+      pagination: {
+        current: 1,
+        pageSize: 5,
+        total: 0
+      },
+      columns:[
+        {
+          title:"Request ID",
+          dataIndex:"requestid",
+          key:"requestid"
+        },
+        {
+          title:"Time",
+          dataIndex:"time",
+          key:"time"
+        },
+        {
+          title:"Interface Name",
+          dataIndex:"interfacename",
+          key:"interfacename"
+        },
+        {
+          title:"Header",
+          dataIndex:"header",
+          key:"header"
+        },
+        {
+          title:"Payload",
+          dataIndex:"payload",
+          key:"payload"
+        },
+        {
+          title:"Response",
+          dataIndex:"response",
+          key:"response"
+        },
+        {
+          title:"Client Name",
+          dataIndex:"clientname",
+          key:"clientname",
+          render:()=> (
+            <div>
+              <Tooltip placement="top" title='Detail'>
+                <a onClick={() => this.openView()} className="iconfont iconDetails"/>
+              </Tooltip>
+            </div>
+          )
+        }
+      ],
+      list:[
+        {
+          requestid:1,
+          id:1
+        },
+        {
+          requestid:1,
+          id:2
+        },
+        {
+          requestid:1,
+          id:3
+        },
+        {
+          requestid:1,
+          id:4
+        },
+        {
+          requestid:1,
+          id:5
+        },
+        {
+          requestid:1,
+          id:6
+        },
+      ]
+    }
+  }
+
+  openView = () =>{
+    location.href="integration-log-detail"
   }
 
   handleSubmit = () => {
@@ -17,6 +103,11 @@ class Loglist extends Component<any, any>{
     let obj = {...value,enddate:endDate,newdate:startDate}
     console.log(obj);
     
+  }
+  onSearchPage = (pagination)=>{
+    this.setState({
+      pagination:pagination
+    })
   }
 
   render() {
@@ -85,7 +176,25 @@ class Loglist extends Component<any, any>{
           </Form>
         </div>
         <div className="container">
-
+          <Tabs defaultActiveKey='1' >
+              <TabPane tab={<FormattedMessage id="Log.AllLog" />} key = "1">
+                <Tab
+              dataSource={this.state.list}
+              pagination={this.state.pagination}
+              onChange={this.onSearchPage}
+              columns={this.state.columns}
+            />
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Log.Error" />} key = "2">
+                <Tab
+                dataSource={this.state.list}
+                pagination={this.state.pagination}
+                onChange={this.onSearchPage}
+                columns={this.state.columns}
+              />
+              </TabPane>
+          </Tabs>
+        
         </div>
       </div>
     )
@@ -96,6 +205,9 @@ const styles = {
   label: {
     width: 120,
     textAlign: 'center',
+  },
+  buttoncenter:{
+    textAlign:'center'
   }
 } as any
 

@@ -114,7 +114,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                       {item.isAutoSub && (
                         <span key="2" style={styles.orderNo}>
                           <span style={styles.platform}>S</span>
-                          {item.subscribeId}
+                          {(item.subIdList || []).join(',')}
                         </span>
                       )}
                       <span key="3" style={styles.orderTime}>

@@ -2280,6 +2280,15 @@ export default {
     },
     integration:{
         'Dashboard.Dashboard':'Dashboard',
+        'Dashboard.Monitor':'Monitor',
+        'Dashboard.Country':'Country',
+        'Dashboard.Default Report Time':'Default Report Time',
+        'Dashboard.Info':'Info',
+        'Dashboard.Statistics':'Statistics',
+        'Dashboard.Log':'Log',
+        'Dashboard.Error':'Error',
+        'Dashboard.Show More':'Show More',
+
         'Interface.InterfaceList':'Interface List',
         'Interface.InterfaceName':'Interface Name',
         'Interface.Provider':'Provider',

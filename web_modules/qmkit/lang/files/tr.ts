@@ -516,6 +516,7 @@ export default {
     "Public.Cancel": "İptal",
     "Public.Batch Export": "Toplu dışa aktar",
     "Public.GetDataFailed": "Veri Alma Başarısız",
+    'Public.ChooseLocation':'Dilinizi seçin',
     "Menu.Home": "Anasayfa",
     "Menu.Product": "Ürün",
     "Menu.Product management": "Ürün Yönetimi",

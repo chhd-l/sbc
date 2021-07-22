@@ -9,6 +9,7 @@ export default {
   // 'payment.cardNumber': 'Номер карты',
   // 'payment.email': 'Эл. адрес',
   // 'payment.phone': 'Номер телефона',
+  'Public.ChooseLocation':'Choisissez votre langue',
 
   /*-----------------------------  Task  ----------------------------------------------*/
   'task.CardView':'Affichage en carte',

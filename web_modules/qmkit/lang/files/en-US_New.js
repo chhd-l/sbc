@@ -1408,8 +1408,7 @@ export default {
         'payment.checkout': 'Checkout',
         'payment.choosePayment': 'Choose a payment',
         'payment.isDefault': 'Save for my next payment',
-        "payment.isDefaultTip": "cette case est obligatoire pour l'abonnement",
-
+        "payment.isDefaultTip": "this box is mandatory for the subscription.",
         //===========end payments Method================
         "PetOwner.Membership": "Membership",
         // "PetOwner.ClubMember":"Club member",
@@ -1439,7 +1438,8 @@ export default {
         'PetOwner.Subscription pause':'Subscription pause',
         'PetOwner.Subscription cancel':'Subscription cancel',
         'PetOwner.Dismiss':'Dismiss',
-
+        
+       
     },
     Finance: {
         "Finance.recordAsSettled": "Are you sure you want to set this settlement record as settled? ",

@@ -4,6 +4,7 @@ import es_ES from './en-US';
  */
 export default {
     ...es_ES,
+    "payment.isDefaultTip": "Bu kutu abonelik için gerekli.",
     "Order.whetherToSplitOrder": "Siparişi bölmek ister misiniz",
     "Order.COD": "COD",
     "Order.deliveryAfterPayment": "Ödeme sonrası teslimat",

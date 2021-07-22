@@ -100,4 +100,11 @@ export default {
    'Home.Reminder':'Alertes',
    'Home.Todotask':'Tâches à faire',
    'Home.Viewalltask':'Voir toutes les tâches',
+
+
+
+
+
+   "payment.isDefaultTip": "cette case est obligatoire pour l'abonnement",
+
 };

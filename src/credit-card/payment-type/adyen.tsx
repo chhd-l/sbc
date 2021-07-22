@@ -66,10 +66,10 @@ export default class AdyenCreditCardForm extends Component {
     let _language={
       'en-US':'en-US',
       'tr':'tr-TR',
-      // 'de':'de-DE',
-      // 'fr':'fr-FR',
-      // 'ru':'ru-RU',
-      // '':'es-ES'
+      'de':'de-DE',
+      'fr':'fr-FR',
+      'ru':'ru-RU',
+       'mx':'es-ES'
     };
     
     const configuration: any = {

@@ -1039,18 +1039,27 @@ class SubscriptionDetail extends React.Component<any, any> {
                     </label>
                   </Col>
 
+                  { paymentInfo ? 
+                  <>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                    </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                    </Col>
+                  </>
+                  :  
                   <Col span={24}>
-                    <p style={{ width: 140 }}>
-                      <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
-                    </p>
-                    <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                  </Col>
-                  <Col span={24}>
-                    <p style={{ width: 140 }}>
-                      <FormattedMessage id="Subscription.CardNumber" />:{' '}
-                    </p>
-                    <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                  </Col>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
+                  </Col>}
+          
                 </Row>
               </Col>
             </Row>

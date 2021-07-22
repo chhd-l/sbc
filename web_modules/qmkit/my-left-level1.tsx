@@ -100,7 +100,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                     {/* <Icon type="home" style={{fontSize:30 }}/>
                     <span style={{display: 'block',lineHeight:'10px',}} >{v.title}</span> */}
                     <i className={"icon iconfont " + v.icon } style={{fontSize:30 }}></i>
-                    <span style={{display: this.state.collapsed?'none':'block',lineHeight:'10px',}} title={RCi18n({id:`Menu.${v.title}`})}><FormattedMessage id={"Menu."+ v.title} /></span>
+                    <span style={{display: this.state.collapsed?'none':'block',lineHeight:'16px',whiteSpace:'initial'}} title={RCi18n({id:`Menu.${v.title}`})}><FormattedMessage id={"Menu."+ v.title} /></span>
                 </Menu.Item>
               );
             })}
@@ -161,8 +161,9 @@ const styles = {
   },
   navItem: {
     textAlign: 'center',
-    height:70,
-    marginBottom:0
+    height:'auto',
+    marginBottom:0,
+    paddingBottom:10
     // display: 'flex',
     // flexDirection: 'row',
     // alignItems: 'center',

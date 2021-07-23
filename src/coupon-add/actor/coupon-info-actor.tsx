@@ -123,7 +123,8 @@ export default class CouponInfoActor extends Actor {
       couponDiscount,
       attributeValueIds,
       couponPurchaseType,
-      isSuperimposeSubscription
+      isSuperimposeSubscription,
+      limitAmount
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -148,6 +149,7 @@ export default class CouponInfoActor extends Actor {
       .set('attributeValueIds', fromJS(attributeValueIds))
       .set('couponPurchaseType', couponPurchaseType)
       .set('isSuperimposeSubscription', isSuperimposeSubscription)
+      .set('limitAmount', limitAmount)
 
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));

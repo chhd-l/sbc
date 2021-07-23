@@ -22,7 +22,16 @@ export default class ListActor extends Actor {
 
   @Action('listActor:init')
   init(state: IMap, res: MarketingResponse) {
-    const { content, totalElements } = res;
+    let { content, totalElements } = res;
+    debugger
+    content.forEach(
+      (item, index) => {
+        if(item.marketingName === '40% скидка'  ||  item.marketingName === '25% скидка' || item.marketingName === 'gift_071602') {
+          content.splice(index, 1)
+          totalElements--
+        }
+      }
+    )
     return state.withMutations((state) => {
       state.set('total', totalElements).set('dataList', fromJS(content));
     });

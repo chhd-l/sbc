@@ -253,17 +253,17 @@ class MarketingList extends React.Component<any, any> {
                       ></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 2 && (
+                  {rowInfo['marketingStatus'] == 2 && rowInfo['marketingName'] !== '40% скидка'  ||  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка'  ||  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка'  ||  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                       <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>

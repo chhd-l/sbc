@@ -1048,8 +1048,12 @@ const routes = [
     asyncComponent: () => import('./Integration/Log/log-list')
   },
   {
-    path: '/integration-log-detail',
+    path: '/log-detail/:id',
     asyncComponent: () => import('./Integration/Log/log-detail')
+  },
+  {
+    path: '/log-response',
+    asyncComponent: () => import('./Integration/Log/log-response')
   },
 ];
 

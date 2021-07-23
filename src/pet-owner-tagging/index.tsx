@@ -145,7 +145,10 @@ class PetOwnerTagging extends Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        oldSearchForm:searchForm
+        oldSearchForm:{
+          taggingName: searchForm.taggingName,
+          taggingType: searchForm.taggingType
+        }
       },
       () => {
         this.getTaggingList();

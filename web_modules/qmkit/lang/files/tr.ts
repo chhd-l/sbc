@@ -4,6 +4,18 @@ import es_ES from './en-US';
  */
 export default {
     ...es_ES,
+  
+    'payment.cardOwner': 'kart sahibinin adı soyadı',
+    'payment.cardNumber': 'Kart numarası',
+    'payment.email': 'E-posta',
+    'payment.phone': 'Telefon numarası',
+    "payment.isDefault":"Varsayılan Ödeme yöntemi olarak ayarla",
+    // "payment.phonePlaceholder":"Введите номер карточки",
+    // "payment.emailPlaceholder":"Введите адрес электронной почты на карточке",
+  
+
+
+
     "Order.whetherToSplitOrder": "Siparişi bölmek ister misiniz",
     "Order.COD": "COD",
     "Order.deliveryAfterPayment": "Ödeme sonrası teslimat",
@@ -515,6 +527,7 @@ export default {
     "Public.Cancel": "İptal",
     "Public.Batch Export": "Toplu dışa aktar",
     "Public.GetDataFailed": "Veri Alma Başarısız",
+    'Public.ChooseLocation':'Dilinizi seçin',
     "Menu.Home": "Anasayfa",
     "Menu.Product": "Ürün",
     "Menu.Product management": "Ürün Yönetimi",

@@ -8,7 +8,10 @@ export default {
   'payment.cardNumber': 'Номер карты',
   'payment.email': 'Эл. адрес',
   'payment.phone': 'Номер телефона',
-
+  "payment.isDefault":"Выбрать платежом по умолчанию",
+  "payment.isDefaultTip": "Это поле необходимо для подписки.",
+  "payment.phonePlaceholder":"Введите номер карточки",
+  "payment.emailPlaceholder":"Введите адрес электронной почты на карточке",
 
   "Public.Overview": "Обзор",
   "Public.WelcometoROYALCANIN": "Добро пожаловать в Royal Canin",
@@ -43,6 +46,7 @@ export default {
   "Public.Cancel": "Отмена",
   "Public.Batch Export": "Масс. Экспорт",
   "Public.GetDataFailed": "Ошибка получения Данных",
+  'Public.ChooseLocation':'Выберите свой язык',
   "Menu.Home": "Домой",
   "Menu.Product": "Продукт",
   "Menu.Product management": "Управление Товарами",

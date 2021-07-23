@@ -3,6 +3,7 @@ import {FormattedMessage} from 'react-intl';
 import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input} from 'antd';
 import {RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
+import {fromJS} from 'immutable';
 
 import './index.less';
 
@@ -92,7 +93,7 @@ export default class BenefitList extends Component<any, any>{
                 return {
                     gifts,
                     selectedSkuIds,
-                    selectedRows,
+                    selectedRows: fromJS(selectedRows),
                     key: giftLevelId,
                     deliveryNumber: deliveryNumber,
                 }
@@ -157,7 +158,11 @@ export default class BenefitList extends Component<any, any>{
         let index = dataSource.findIndex(item => item.key === record.key);
         if (index > -1) {
             dataSource[index].gifts = dataSource[index].gifts.filter(x => x.goodsInfoId !== item.goodsInfoId);
+            dataSource[index].selectedSkuIds = dataSource[index].selectedSkuIds.filter(x => x !== item.goodsInfoId);
+            dataSource[index].selectedRows = fromJS(dataSource[index].selectedRows.toJS().filter(x => x.goodsInfoId !== item.goodsInfoId));
             this.setState({
+                selectedSkuIds: dataSource[index].selectedSkuIds,
+                selectedRows: dataSource[index].selectedRows,
                 dataSource: [...dataSource],
             })
         }
@@ -202,7 +207,7 @@ export default class BenefitList extends Component<any, any>{
                 selectedSkuIds,
                 selectedRows,
             })
-        }else { // 重置
+        }else { // 没有已选产品则为空
             this.setState({
                 selectedSkuIds: [],
                 selectedRows: [],
@@ -211,17 +216,8 @@ export default class BenefitList extends Component<any, any>{
         this.setState({visible: true});
     };
 
-    getValueFromEvent = (e, info) => {
-        console.log('e.target.value', e, info);
-        return {
-            productId: info.goodsInfoId,
-            productNum: e || 1,
-        };
-    };
-
     getColumns = () => {
 
-        let { initData } = this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemBenefitListLayout = {
             labelCol: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Upload, message } from 'antd';
 import { UploadProps } from 'antd/lib/upload/interface';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 
 /**
  * 图片上传组件，在Upload基础上增加了预览默认弹窗显示功能
@@ -37,7 +37,7 @@ export default class QMUpload extends React.Component<UploadProps, any> {
           }}
           beforeUpload={(file, fileList) => {
             if (!file.name.trim()) {
-              message.error('请输入文件名');
+              message.error(RCi18n({id:"Public.upload.filename"}));
               return false;
             }
 
@@ -46,12 +46,12 @@ export default class QMUpload extends React.Component<UploadProps, any> {
                 file.name
               )
             ) {
-              message.error('请输入正确格式的文件名');
+              message.error(RCi18n({id:"Public.upload.format"}));
               return false;
             }
 
             if (file.name.length > 40) {
-              message.error('文件名过长');
+              message.error(RCi18n({id:"Public.upload.filenametoolong"}));
               return false;
             }
             return beforeUpload ? beforeUpload(file, fileList) : true;
@@ -98,14 +98,14 @@ export default class QMUpload extends React.Component<UploadProps, any> {
      * 上传成功时file.response里面直接是图片的地址列表，所以这里针对response.code进行判断。修改file的状态
      */
     if (file.status == 'error') {
-      message.error(file.name + ' 上传失败！');
+      message.error(file.name + ' ' + RCi18n({id:"Public.upload.uploadfail"}));
     } else if (
       file.status == 'done' &&
       file.response &&
       file.response.code &&
       file.response.code !== Const.SUCCESS_CODE
     ) {
-      message.error(file.name + ' 上传失败！');
+      message.error(file.name + ' ' + RCi18n({id:"Public.upload.uploadfail"}));
       file.status = 'error';
     }
 

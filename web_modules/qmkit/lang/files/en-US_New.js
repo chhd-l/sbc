@@ -2302,7 +2302,7 @@ export default {
         'Interface.AllRequests':'All Requests',
         'Interface.Error':'Error',
         'Interface.RequestID':'Request ID',
-        'Log.LogSearch': 'LogSearch',
+        'Log.LogSearch': 'Log Search',
         'Log.RequestID':'Request ID',
         'Log.System':'System',
         'Log.Interface':'Interface',
@@ -2324,6 +2324,15 @@ export default {
         'Log.InterfaceName':'Interface Name',
         'Log.Header':'Header',
         'Log.Payload':'Payload',
-        'Log.Response':'Response'
+        'Log.Response':'Response',
+        'Log.LogHeader':'Log-Header',
+        'Log.LogPayload':'Log-Payload',
+        'Log.ResponseList':'Response List',
+        'Log.ClientID':'Client ID',
+        'Log.URL':'URL',
+        'Log.ResultFlag':'Result Flag',
+        'Log.Log':'Log',
+        'Log.AllResponse':'All Response',
+        'Log.ResponseLog':'Response Log'
     },
 }

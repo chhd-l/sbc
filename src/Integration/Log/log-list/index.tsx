@@ -20,7 +20,24 @@ class Loglist extends Component<any, any>{
         pageSize: 5,
         total: 0
       },
-      columns: [
+      list: [
+        {
+          id: 0,
+          requestid: 1,
+          time:'2021-05-18 10:35:54.293',
+          intername:'Price Synchronization',
+          header:'header1',
+          payload:'payload',
+          response:'response',
+          clientname:'MuleSoft'
+        },
+        {
+          requestid: 1,
+          id: 1,
+          header:'header2'
+        },
+      ],
+      columnsAll: [
         {
           title: <FormattedMessage id="Log.RequestID" />,
           dataIndex: 'requestid',
@@ -39,62 +56,96 @@ class Loglist extends Component<any, any>{
         {
           title: <FormattedMessage id="Log.Header" />,
           dataIndex: 'header',
-          key: 'header'
+          key: 'header',
         },
         {
           title: <FormattedMessage id="Log.Payload" />,
           dataIndex: 'payload',
-          key: 'payload'
+          key: 'payload',
         },
         {
           title: <FormattedMessage id="Log.Response" />,
           dataIndex: 'response',
-          key: 'response'
+          key: 'response',
         },
         {
           title: <FormattedMessage id="Log.ClientName" />,
           dataIndex: 'clientname',
           key: 'clientname',
+        },
+        {
+          title:'',
+          dataIndex:'detail',
           render: () => (
             <div>
               <Tooltip placement="top" title="Detail">
-                <Link to="/integration-log-detail" className="iconfont iconDetails" />
+                <Link to={'/log-detail/1'} className="iconfont iconDetails" />
               </Tooltip>
             </div>
           )
         }
       ],
-      list: [
+      columnsError: [
         {
-          requestid: 1,
-          id: 1
+          title: <FormattedMessage id="Log.RequestID" />,
+          dataIndex: 'requestid',
+          key: 'requestid'
         },
         {
-          requestid: 1,
-          id: 2
+          title: <FormattedMessage id="Log.Time" />,
+          dataIndex: 'time',
+          key: 'time'
         },
         {
-          requestid: 1,
-          id: 3
+          title: <FormattedMessage id="Log.InterfaceName" />,
+          dataIndex: 'interfacename',
+          key: 'interfacename'
         },
         {
-          requestid: 1,
-          id: 4
+          title: <FormattedMessage id="Log.Header" />,
+          dataIndex: 'header',
+          key: 'header',
         },
         {
-          requestid: 1,
-          id: 5
+          title: <FormattedMessage id="Log.Payload" />,
+          dataIndex: 'payload',
+          key: 'payload',
         },
         {
-          requestid: 1,
-          id: 6
+          title: <FormattedMessage id="Log.Response" />,
+          dataIndex: 'response',
+          key: 'response',
         },
-      ]
+        {
+          title: <FormattedMessage id="Log.ClientName" />,
+          dataIndex: 'clientname',
+          key: 'clientname',
+        },
+        {
+          title:'',
+          dataIndex:'detail',
+          render: () => (
+            <div>
+              <Tooltip placement="top" title="Detail">
+                <Link to={'/log-detail/2'} className="iconfont iconDetails" />
+              </Tooltip>
+            </div>
+          )
+        }
+      ],
     }
   }
 
-  openView = () => {
-    location.href = 'integration-log-detail'
+  toDate = (arr) => {
+    for(let i = 0;i<arr.length;i++){
+      const header = arr[i].header;
+      const response = arr[i].response;
+      const payload = arr[i].payload;
+      header?arr[i].header = <Tooltip placement="top" title={header}><Link to="#">Header</Link></Tooltip>:arr[i].header = <Tooltip placement="top" title=""><Link to="#">Header</Link></Tooltip>;
+      response?arr[i].response = <Tooltip placement="top" title={response}><Link to="#">R</Link></Tooltip>:arr[i].response = <Tooltip placement="top" title=""><Link to="#">R</Link></Tooltip>;
+      payload?arr[i].payload = <Tooltip placement="top" title={payload}><Link to="#">JOSN</Link></Tooltip>:arr[i].payload = <Tooltip placement="top" title=""><Link to="#">JSON</Link></Tooltip>;
+    }
+    return arr;
   }
 
   handleSubmit = () => {
@@ -102,7 +153,6 @@ class Loglist extends Component<any, any>{
     let startDate = value.newdate ? value.newdate.format('YYYY-MM-DD') : '';
     let endDate = value.enddate ? value.enddate.format('YYYY-MM-DD') : '';
     let obj = { ...value, enddate: endDate, newdate: startDate };
-
   }
   onSearchPage = (pagination) => {
     this.setState({
@@ -181,10 +231,10 @@ class Loglist extends Component<any, any>{
           <Tabs defaultActiveKey="1" >
             <TabPane tab={<FormattedMessage id="Log.AllLog" />} key="1">
               <Tab
-                dataSource={this.state.list}
+                dataSource={this.toDate(this.state.list)}
                 pagination={this.state.pagination}
                 onChange={this.onSearchPage}
-                columns={this.state.columns}
+                columns={this.state.columnsAll}
               />
             </TabPane>
             <TabPane tab={<FormattedMessage id="Log.Error" />} key="2">
@@ -192,7 +242,7 @@ class Loglist extends Component<any, any>{
                 dataSource={this.state.list}
                 pagination={this.state.pagination}
                 onChange={this.onSearchPage}
-                columns={this.state.columns}
+                columns={this.state.columnsError}
               />
             </TabPane>
           </Tabs>

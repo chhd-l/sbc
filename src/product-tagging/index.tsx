@@ -344,7 +344,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images } = this.state;
+    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images,searchForm } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -408,6 +408,7 @@ class AttributeLibrary extends Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={RCi18n({id:'Product.Taggingname'})}
+                      value={searchForm.taggingName}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({

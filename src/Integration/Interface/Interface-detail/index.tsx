@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Breadcrumb, Tabs, Tooltip } from 'antd';
 import Information from '@/Integration/components/Information';
 import Tab from '@/Integration/components/tab';
+import Statistics from '@/Integration/components/Statistics';
 import '@/Integration/components/index.less'
 import {Link} from 'react-router-dom'
 const { TabPane } = Tabs;
@@ -18,7 +19,7 @@ export default class InterfaceView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      activeKey: '0',
+      activeKey: '1',
       activeTableKey: '0',
       pagination: {
         current: 1,
@@ -99,7 +100,7 @@ export default class InterfaceView extends Component<any, any> {
             </TabPane>
             {/* Statistics */}
             <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="1">
-
+              <Statistics/>
             </TabPane>
           </Tabs>
         </div>

@@ -37,7 +37,7 @@ export default class QMUpload extends React.Component<UploadProps, any> {
           }}
           beforeUpload={(file, fileList) => {
             if (!file.name.trim()) {
-              message.error(RCi18n({id:"Public.upload.filename"}));
+              message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
               return false;
             }
 
@@ -46,12 +46,12 @@ export default class QMUpload extends React.Component<UploadProps, any> {
                 file.name
               )
             ) {
-              message.error(RCi18n({id:"Public.upload.format"}));
+              message.error(RCi18n({id:"Setting.theCorrectFormat"}));
               return false;
             }
 
             if (file.name.length > 40) {
-              message.error(RCi18n({id:"Public.upload.filenametoolong"}));
+              message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
               return false;
             }
             return beforeUpload ? beforeUpload(file, fileList) : true;
@@ -98,14 +98,14 @@ export default class QMUpload extends React.Component<UploadProps, any> {
      * 上传成功时file.response里面直接是图片的地址列表，所以这里针对response.code进行判断。修改file的状态
      */
     if (file.status == 'error') {
-      message.error(file.name + ' ' + RCi18n({id:"Public.upload.uploadfail"}));
+      message.error(file.name + ' ' + RCi18n({id:"Setting.uploadfailed"}));
     } else if (
       file.status == 'done' &&
       file.response &&
       file.response.code &&
       file.response.code !== Const.SUCCESS_CODE
     ) {
-      message.error(file.name + ' ' + RCi18n({id:"Public.upload.uploadfail"}));
+      message.error(file.name + ' ' + RCi18n({id:"Setting.uploadfailed"}));
       file.status = 'error';
     }
 

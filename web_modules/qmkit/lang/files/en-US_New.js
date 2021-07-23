@@ -111,11 +111,7 @@ export default {
         "Public.ClientName": "Client Name",
         "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported",
         "Public.changeLanguageAlert": "Language switching, please wait...",
-        "Public.upload.filename": "Please input file name",
-        "Public.upload.format": "File format wrong",
-        "Public.upload.filenametoolong": "File name is too long",
-        "Public.upload.uploadsuccess": "File upload succeed",
-        "Public.upload.uploadfail": "File upload failed",
+        "Public.Upload.uploadsuccess": "upload successful",
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",

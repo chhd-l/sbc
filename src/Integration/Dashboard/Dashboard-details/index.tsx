@@ -1,9 +1,9 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
-import {Button, Tabs} from 'antd';
+import {Button} from 'antd';
 
 import {BreadCrumb} from 'qmkit';
-import TabDataGrid from './component/TabDataGrid';
+import TabDataGrid from './TabDataGrid';
 import './index.less';
 
 const tabShowBtnKeys = ['Statistics', 'Log', 'Error']

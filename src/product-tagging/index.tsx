@@ -62,7 +62,9 @@ class AttributeLibrary extends Component<any, any> {
   onSearch = () => {
     const {searchForm} = this.state
     this.setState({
-      oldSearchForm:searchForm
+      oldSearchForm:{
+        taggingName:searchForm.taggingName
+      }
     },()=>{
       this.getTagging();
     })

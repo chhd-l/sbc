@@ -140,8 +140,8 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "marketingName": values.marketingName,
                     "fullGiftLevelList": this.getFullGiftLevelList(values),
                     "segmentIds": values.isTags && values.segmentIds ? [values.segmentIds]:[],
-                    "beginTime": values.timers[0].format('YYYY-MM-DD hh:mm:ss'), // "2021-07-01 10:42:00",
-                    "endTime": values.timers[1].format('YYYY-MM-DD hh:mm:ss'),
+                    "beginTime": values.timers[0].format(Const.DATE_FORMAT) + ':00', // "2021-07-01 10:42:00",
+                    "endTime": values.timers[1].format(Const.DATE_FORMAT) + ':00',
                     "joinLevel": values.isTags && values.segmentIds ? -3 : 0,  // joinLevel = -3 指定人群  0 全部人群
                     "segmentName": values.isTags ? segmentName : null,
 

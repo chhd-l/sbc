@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Tabs, Tooltip } from 'antd';
 import Information from '@/Integration/components/Information';
 import Tab from '@/Integration/components/tab';
+import Statistics from '@/Integration/components/Statistics';
 import '@/Integration/components/index.less'
+import {Link} from 'react-router-dom'
 const { TabPane } = Tabs;
 
+interface Props {
+  list: object;
+}
+
 export default class InterfaceView extends Component<any, any> {
+
+
   constructor(props: any) {
     super(props);
     this.state = {
-      activeKey: '0',
+      activeKey: '1',
       activeTableKey: '0',
       pagination: {
         current: 1,
@@ -19,12 +27,44 @@ export default class InterfaceView extends Component<any, any> {
         total: 0
       },
       dataSource: [],
+      infoList:{a:1},
       columns: [
         {
           title: <FormattedMessage id="Interface.RequestID" />,
           dataIndex: 'RequestID',
-          key: 'RequestID'
-        }
+        },
+        {
+          title: <FormattedMessage id="Interface.Time" />,
+          dataIndex: 'Time',
+        },
+        {
+          title: <FormattedMessage id="Interface.Header" />,
+          dataIndex: 'Header',
+        },
+        {
+          title: <FormattedMessage id="Interface.Payload" />,
+          dataIndex: 'Payload',
+        },
+        {
+          title: <FormattedMessage id="Interface.Response" />,
+          dataIndex: 'Response',
+        },
+        {
+          title: <FormattedMessage id="Interface.ClientName" />,
+          dataIndex: 'ClientName',
+        },
+        {
+          title: '',
+          dataIndex: '',
+          render:(text, record)=> (
+            <div>
+              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
+                <Link to="/interface-detail">Detail</Link>
+              </Tooltip>
+            </div>
+          )
+        },
+
       ]
     };
   }
@@ -56,11 +96,11 @@ export default class InterfaceView extends Component<any, any> {
           <Tabs defaultActiveKey={this.state.activeKey} onChange={(key) => this.onStateTabChange(key)}>
             {/* Information */}
             <TabPane tab={<FormattedMessage id="Interface.Information" />} key="0">
-              <Information />
+              <Information infoList={this.state.infoList} />
             </TabPane>
             {/* Statistics */}
             <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="1">
-
+              <Statistics/>
             </TabPane>
           </Tabs>
         </div>

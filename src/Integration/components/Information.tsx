@@ -2,25 +2,29 @@ import React, { Component } from 'react';
 import { Form, Row, Col, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
-class Information extends Component<any, any> {
+interface  IProps{
+  infoList:any, // 数据源
+  form:any
+}
+
+class Information extends Component<any> {
   constructor(props: any) {
     super(props);
-
   }
 
   render() {
     const { getFieldDecorator } = this.props.form;
-
+    const {infoList} = this.props
+    console.log(infoList);
     return (
-        <Form className="filter-content">
+        <Form className="filter-content myform">
           <Row gutter={24}>
             <Col span={8}>
-              <Form.Item className="myform">
+              <Form.Item>
                 {getFieldDecorator('InterfaceID',{
-                  initialValue:'22222'
+                  initialValue:infoList.a
                 })(
                   <Input
-                    className="aaa"
                     disabled
                     addonBefore={
                       <p style={styles.label}>
@@ -180,4 +184,4 @@ const styles = {
     textAlign: 'center'
   }
 } as any;
-export default Form.create()(Information);
+export default Form.create<IProps>()(Information);

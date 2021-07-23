@@ -1032,6 +1032,10 @@ const routes = [
     asyncComponent: () => import('./Integration/Dashboard')
   },
   {
+    path: '/integration-dashboard-detail/:id?',
+    asyncComponent: () => import('./Integration/Dashboard/Dashboard-details')
+  },
+  {
     path: '/integration-interface',
     asyncComponent: () => import('./Integration/Interface/interface-list')
   },

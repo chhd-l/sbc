@@ -145,7 +145,10 @@ class PetOwnerTagging extends Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        oldSearchForm:searchForm
+        oldSearchForm:{
+          taggingName: searchForm.taggingName,
+          taggingType: searchForm.taggingType
+        }
       },
       () => {
         this.getTaggingList();
@@ -303,7 +306,7 @@ class PetOwnerTagging extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, pagination, taggingForm, modalName, visible } = this.state;
+    const { loading, title, taggingList, pagination, taggingForm, modalName, visible,searchForm } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -393,6 +396,7 @@ class PetOwnerTagging extends Component<any, any> {
                         <Input style={styles.label} disabled defaultValue="Tagging name" />
                         <Input
                           style={styles.wrapper}
+                          value={searchForm.taggingName}
                           onChange={(e) => {
                             const value = (e.target as any).value;
                             this.onSearchFormChange({
@@ -411,6 +415,7 @@ class PetOwnerTagging extends Component<any, any> {
                         <Input style={styles.label} disabled defaultValue="Tagging type" />
                         <Select
                           style={styles.wrapper}
+                          value={searchForm.taggingType}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onSearchFormChange({

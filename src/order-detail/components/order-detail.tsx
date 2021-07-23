@@ -280,7 +280,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'originalPrice',
         width: '10%',
         render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 && !record.promotionCode ? (
+          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 && record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

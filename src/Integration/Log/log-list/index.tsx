@@ -1,112 +1,162 @@
 import React, { Component } from 'react'
 import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
 import MyDate from './components/MyDate'
-import { Form, Row, Col, Input, Button, Select,Tabs,Tooltip } from 'antd'
+import { Form, Row, Col, Input, Button, Select, Tabs, Tooltip } from 'antd'
 import { FormattedMessage } from 'react-intl';
-import Tab from "@/Integration/components/tab";
+import Tab from '@/Integration/components/tab';
+import { Link } from 'react-router-dom'
 
-const {TabPane} = Tabs;
+const { TabPane } = Tabs;
 
 
-const {Option} = Select;
+const { Option } = Select;
 
 class Loglist extends Component<any, any>{
   constructor(props) {
     super(props);
-    this.state={
+    this.state = {
       pagination: {
         current: 1,
         pageSize: 5,
         total: 0
       },
-      columns:[
+      list: [
         {
-          title:"Request ID",
-          dataIndex:"requestid",
-          key:"requestid"
+          id: 0,
+          requestid: 1,
+          time:'2021-05-18 10:35:54.293',
+          intername:'Price Synchronization',
+          header:'header1',
+          payload:'payload',
+          response:'response',
+          clientname:'MuleSoft'
         },
         {
-          title:"Time",
-          dataIndex:"time",
-          key:"time"
+          requestid: 1,
+          id: 1,
+          header:'header2'
+        },
+      ],
+      columnsAll: [
+        {
+          title: <FormattedMessage id="Log.RequestID" />,
+          dataIndex: 'requestid',
+          key: 'requestid'
         },
         {
-          title:"Interface Name",
-          dataIndex:"interfacename",
-          key:"interfacename"
+          title: <FormattedMessage id="Log.Time" />,
+          dataIndex: 'time',
+          key: 'time'
         },
         {
-          title: "Header",
-          dataIndex:"header",
-          key:"header"
+          title: <FormattedMessage id="Log.InterfaceName" />,
+          dataIndex: 'interfacename',
+          key: 'interfacename'
         },
         {
-          title:"Payload",
-          dataIndex:"payload",
-          key:"payload"
+          title: <FormattedMessage id="Log.Header" />,
+          dataIndex: 'header',
+          key: 'header',
         },
         {
-          title:"Response",
-          dataIndex:"response",
-          key:"response"
+          title: <FormattedMessage id="Log.Payload" />,
+          dataIndex: 'payload',
+          key: 'payload',
         },
         {
-          title:"Client Name",
-          dataIndex:"clientname",
-          key:"clientname",
-          render:()=> (
+          title: <FormattedMessage id="Log.Response" />,
+          dataIndex: 'response',
+          key: 'response',
+        },
+        {
+          title: <FormattedMessage id="Log.ClientName" />,
+          dataIndex: 'clientname',
+          key: 'clientname',
+        },
+        {
+          title:'',
+          dataIndex:'detail',
+          render: () => (
             <div>
-              <Tooltip placement="top" title='Detail'>
-                <a onClick={() => this.openView()} className="iconfont iconDetails"/>
+              <Tooltip placement="top" title="Detail">
+                <Link to={'/log-detail/1/2'} className="iconfont iconDetails" />
               </Tooltip>
             </div>
           )
         }
       ],
-      list:[
+      columnsError: [
         {
-          requestid:1,
-          id:1
+          title: <FormattedMessage id="Log.RequestID" />,
+          dataIndex: 'requestid',
+          key: 'requestid'
         },
         {
-          requestid:1,
-          id:2
+          title: <FormattedMessage id="Log.Time" />,
+          dataIndex: 'time',
+          key: 'time'
         },
         {
-          requestid:1,
-          id:3
+          title: <FormattedMessage id="Log.InterfaceName" />,
+          dataIndex: 'interfacename',
+          key: 'interfacename'
         },
         {
-          requestid:1,
-          id:4
+          title: <FormattedMessage id="Log.Header" />,
+          dataIndex: 'header',
+          key: 'header',
         },
         {
-          requestid:1,
-          id:5
+          title: <FormattedMessage id="Log.Payload" />,
+          dataIndex: 'payload',
+          key: 'payload',
         },
         {
-          requestid:1,
-          id:6
+          title: <FormattedMessage id="Log.Response" />,
+          dataIndex: 'response',
+          key: 'response',
         },
-      ]
+        {
+          title: <FormattedMessage id="Log.ClientName" />,
+          dataIndex: 'clientname',
+          key: 'clientname',
+        },
+        {
+          title:'',
+          dataIndex:'detail',
+          render: () => (
+            <div>
+              <Tooltip placement="top" title="Detail">
+                <Link to={'/log-detail/2/1'} className="iconfont iconDetails" />
+              </Tooltip>
+            </div>
+          )
+        }
+      ],
     }
   }
 
-  openView = () =>{
-    location.href="integration-log-detail"
+  toDate = (arr) => {
+    for(let i = 0;i<arr.length;i++){
+      const header = arr[i].header;
+      const response = arr[i].response;
+      const payload = arr[i].payload;
+      header?arr[i].header = <Tooltip placement="top" title={header}><Link to="#">Header</Link></Tooltip>:arr[i].header = <Tooltip placement="top" title=""><Link to="#">Header</Link></Tooltip>;
+      response?arr[i].response = <Tooltip placement="top" title={response}><Link to="#">R</Link></Tooltip>:arr[i].response = <Tooltip placement="top" title=""><Link to="#">R</Link></Tooltip>;
+      payload?arr[i].payload = <Tooltip placement="top" title={payload}><Link to="#">JOSN</Link></Tooltip>:arr[i].payload = <Tooltip placement="top" title=""><Link to="#">JSON</Link></Tooltip>;
+    }
+    return arr;
   }
 
   handleSubmit = () => {
     const value = this.props.form.getFieldsValue();
-    let startDate = value.newdate?value.newdate.format('YYYY-MM-DD'):'';
-    let endDate = value.enddate?value.enddate.format('YYYY-MM-DD'):'';
-    let obj = {...value,enddate:endDate,newdate:startDate}
-    console.log(obj);
-
+    let startDate = value.newdate ? value.newdate.format('YYYY-MM-DD') : '';
+    let endDate = value.enddate ? value.enddate.format('YYYY-MM-DD') : '';
+    let obj = { ...value, enddate: endDate, newdate: startDate };
   }
-  onSearchPage = (pagination)=>{
+  onSearchPage = (pagination) => {
     this.setState({
-      pagination:pagination
+      pagination: pagination
     })
   }
 
@@ -114,85 +164,86 @@ class Loglist extends Component<any, any>{
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <BreadCrumb />
         <div className="container-search">
-          <Headline title={<FormattedMessage id='Log.LogSearch' />} />
-          <Form layout='inline' className="filter-content">
-            <Row>
+          <Headline title={<FormattedMessage id="Log.LogSearch" />} />
+          <Form layout="inline" className="filter-content">
+            <Row gutter={24}>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator('requestId')(<Input style={{ width: 337 }} addonBefore={<p style={styles.label}>{<FormattedMessage id='Log.RequestID' />}</p>} />)}
+                  {getFieldDecorator('requestId')(<Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.RequestID" />}</p>} />)}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item>
                   {getFieldDecorator('system')(
                     <SelectGroup
-                      style={{ width: 194 }}
-                      label={<p style={styles.label}>{<FormattedMessage id='Log.System' />}</p>}>
-                      <Option value="0">{<FormattedMessage id='Log.Datata' />}</Option>
-                      <Option value="1">{<FormattedMessage id='Log.Fedex' />}</Option>
-                      <Option value="2">{<FormattedMessage id='Log.Mulesoft' />}</Option>
-                      <Option value="3">{<FormattedMessage id='Log.OKTACIAM' />}</Option>
-                      <Option value="4">{<FormattedMessage id='Log.WEShare' />}</Option>
+                      style={styles.selectWidth}
+                      label={<p style={styles.label}>{<FormattedMessage id="Log.System" />}</p>}>
+                      <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
+                      <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
+                      <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
+                      <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
+                      <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
                     </SelectGroup>
                   )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item>
-                  {getFieldDecorator('interface')(<SelectGroup
-                    style={{ width: 194 }}
-                    label={<p style={styles.label}>{<FormattedMessage id='Log.Interface' />}</p>}
-                  >
-                    <Option value="0">{<FormattedMessage id='Log.InventorySynchonization' />}</Option>
-                    <Option value="1">{<FormattedMessage id='Log.OrderExport' />}</Option>
-                    <Option value="2">{<FormattedMessage id='Log.PriceSynchronization' />}</Option>
-                  </SelectGroup>)}
+                  {getFieldDecorator('interface')
+                    (<SelectGroup
+                      style={styles.selectWidth}
+                      label={<p style={styles.label}>{<FormattedMessage id="Log.Interface" />}</p>}>
+                      <Option value="0">{<FormattedMessage id="Log.InventorySynchonization" />}</Option>
+                      <Option value="1">{<FormattedMessage id="Log.OrderExport" />}</Option>
+                      <Option value="2">{<FormattedMessage id="Log.PriceSynchronization" />}</Option>
+                    </SelectGroup>)}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={8}>
+                <Form.Item>
+                  {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.NewDate" /></p>} placeholder=""></MyDate>)}
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item>
+                  {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.EndDate" /></p>} placeholder=""></MyDate>)}
                 </Form.Item>
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
-                <Form.Item>
-                  {getFieldDecorator("newdate")(<MyDate label={<FormattedMessage id='Log.NewDate' />} style={{ width: 194 }} placeholder=""></MyDate>)}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item>
-                  {getFieldDecorator("enddate")(<MyDate label={<FormattedMessage id='Log.EndDate' />} style={{ width: 194 }} placeholder=""></MyDate>)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <div style={{ margin: "auto", width: 100, padding: "30px 0px 0px" }}>
-                  <Button type="primary" onClick={this.handleSubmit}>
-                    Search
-                  </Button>
-                </div>
+              <Col span={24} style={{ textAlign: 'center' }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  icon="search"
+                  shape="round" onClick={this.handleSubmit}>
+                  Search
+                </Button>
               </Col>
             </Row>
           </Form>
         </div>
         <div className="container">
-          <Tabs defaultActiveKey='1' >
-              <TabPane tab={<FormattedMessage id="Log.AllLog" />} key = "1">
-                <Tab
-              dataSource={this.state.list}
-              pagination={this.state.pagination}
-              onChange={this.onSearchPage}
-              columns={this.state.columns}
-            />
-              </TabPane>
-              <TabPane tab={<FormattedMessage id="Log.Error" />} key = "2">
-                <Tab
+          <Tabs defaultActiveKey="1" >
+            <TabPane tab={<FormattedMessage id="Log.AllLog" />} key="1">
+              <Tab
+                dataSource={this.toDate(this.state.list)}
+                pagination={this.state.pagination}
+                onChange={this.onSearchPage}
+                columns={this.state.columnsAll}
+              />
+            </TabPane>
+            <TabPane tab={<FormattedMessage id="Log.Error" />} key="2">
+              <Tab
                 dataSource={this.state.list}
                 pagination={this.state.pagination}
                 onChange={this.onSearchPage}
-                columns={this.state.columns}
+                columns={this.state.columnsError}
               />
-              </TabPane>
+            </TabPane>
           </Tabs>
 
         </div>
@@ -203,11 +254,11 @@ class Loglist extends Component<any, any>{
 
 const styles = {
   label: {
-    width: 120,
+    width: 151,
     textAlign: 'center',
   },
-  buttoncenter:{
-    textAlign:'center'
+  selectWidth: {
+    width: 194
   }
 } as any
 

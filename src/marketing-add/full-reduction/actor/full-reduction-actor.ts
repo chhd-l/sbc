@@ -23,6 +23,7 @@ export default class FullReductionActor extends Actor {
         joinLevel: -1,
         promotionType: 0,
         isSuperimposeSubscription: 1,
+        publicStatus: 1,
       },
       allGroups: [],
       // 店铺分类信息

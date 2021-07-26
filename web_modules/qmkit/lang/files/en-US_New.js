@@ -2288,6 +2288,7 @@ export default {
         'Dashboard.Log':'Log',
         'Dashboard.Error':'Error',
         'Dashboard.Show More':'Show More',
+        'Dashboard.Error Message':'Error Message',
 
         'Interface.InterfaceList':'Interface List',
         'Interface.InterfaceName':'Interface Name',

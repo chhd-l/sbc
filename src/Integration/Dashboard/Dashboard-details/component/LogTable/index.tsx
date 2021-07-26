@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Table, Tooltip} from 'antd';
 
 import './index.less';
+import {FormattedMessage} from 'react-intl';
 
 export default class LogTable extends Component<any, any> {
     constructor(props) {
@@ -46,22 +47,22 @@ export default class LogTable extends Component<any, any> {
     getColumns = () => {
         return [
             {
-                title: 'Request ID',
+                title: <FormattedMessage id="Log.RequestID" />,
                 dataIndex: 'requestID',
                 key: 'requestID',
             },
             {
-                title: 'Time',
+                title: <FormattedMessage id="Log.Time" />,
                 dataIndex: 'time',
                 key: 'time',
             },
             {
-                title: 'Intertace Name',
+                title: <FormattedMessage id="Log.InterfaceName" />,
                 dataIndex: 'intertaceName',
                 key: 'intertaceName',
             },
             {
-                title: 'Header',
+                title: <FormattedMessage id="Log.Header" />,
                 dataIndex: 'header',
                 key: 'header',
                 render: (text, record) => {
@@ -73,7 +74,7 @@ export default class LogTable extends Component<any, any> {
                 },
             },
             {
-                title: 'Payload',
+                title: <FormattedMessage id="Log.Payload" />,
                 dataIndex: 'payload',
                 key: 'payload',
                 render: (text, record) => {
@@ -85,7 +86,7 @@ export default class LogTable extends Component<any, any> {
                 },
             },
             {
-                title: 'Response',
+                title: <FormattedMessage id="Log.Response" />,
                 dataIndex: 'response',
                 key: 'response',
                 render: (text, record) => {
@@ -97,7 +98,7 @@ export default class LogTable extends Component<any, any> {
                 },
             },
             {
-                title: 'Cllent Name',
+                title: <FormattedMessage id="Log.ClientName" />,
                 dataIndex: 'cllentName',
                 key: 'cllentName',
             },
@@ -109,7 +110,7 @@ export default class LogTable extends Component<any, any> {
                 render: (text, record) => {
                     return (
                         <a onClick={() => this.goToDetails(record)}>
-                            <i className="iconfont iconxiangqing11"/>
+                            <i className="iconfont iconDetails"/>
                         </a>
                     );
                 },

@@ -1000,7 +1000,7 @@ class CouponInfoForm extends Component<any, any> {
               </>
             )
           }
-          {scopeType === 4 ? (
+          {scopeType === 4 && couponPromotionType !== 3? (
             <FormItem id={'page-content'}>
               {/* {this.chooseGoods().dom}  {...this._scopeBoxStyle(scopeType)}*/}
               <div style={{ width: 800 }}>
@@ -1008,7 +1008,7 @@ class CouponInfoForm extends Component<any, any> {
               </div>
             </FormItem>
           ) : null}
-          {scopeType === 5 ? (
+          {scopeType === 5  && couponPromotionType !== 3? (
             <FormItem>
               {getFieldDecorator('storeCateIds', {
                 rules: [
@@ -1058,7 +1058,7 @@ class CouponInfoForm extends Component<any, any> {
               )}
             </FormItem>
           ) : null}
-          {scopeType === 6 && (
+          {scopeType === 6 && couponPromotionType !== 3 && (
             <FormItem {...formItemLayout} required={true} labelAlign="left">
               {getFieldDecorator('attributeValueIds', {
                 rules: [

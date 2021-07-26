@@ -907,6 +907,7 @@ export default {
         'Subscription.Gift': 'Gift',
         'Subscription.Operation': 'Operation',
         'Subscription.PleaseSelectYourTags!': 'Please Select your tags!',
+        'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

@@ -15,7 +15,7 @@ export default class InterfaceView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      activeKey: '1',
+      activeKey: '0',
       activeTableKey: '0',
       pagination: {
         current: 1,
@@ -27,8 +27,17 @@ export default class InterfaceView extends Component<any, any> {
         id: 1,
         Header: 'Header',
         Payload: 'Payload',
-        Response: 'Response'
-      }],
+        Response: 'Response',
+        time: 'Batch product price sychronization'
+      },
+        {
+          RequestID: 1,
+          id: 2,
+          Header: 'Header',
+          Payload: 'Payload',
+          Response: 'Response',
+          time: 'Batch product price sychronization'
+        }],
       infoList: {
         InterfaceID: 10001,
         URL: '/v1/products/price',
@@ -45,7 +54,7 @@ export default class InterfaceView extends Component<any, any> {
       columns: [
         {
           title: <FormattedMessage id="Interface.RequestID" />,
-          dataIndex: 'RequestID'
+          dataIndex: 'RequestID',
         },
         {
           title: <FormattedMessage id="Interface.Time" />,
@@ -56,8 +65,8 @@ export default class InterfaceView extends Component<any, any> {
           dataIndex: 'Header',
           render: (text, record) => (
             <div>
-              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <a>{text}</a>
+              <Tooltip placement="top" title={record.time}>
+                <a>{record.Header}</a>
               </Tooltip>
             </div>
           )
@@ -67,7 +76,7 @@ export default class InterfaceView extends Component<any, any> {
           dataIndex: 'Payload',
           render: (text, record) => (
             <div>
-              <Tooltip placement="top" title={record.text}>
+              <Tooltip placement="top" title={record.time}>
                 <a>{text}</a>
               </Tooltip>
             </div>
@@ -78,7 +87,7 @@ export default class InterfaceView extends Component<any, any> {
           dataIndex: 'Response',
           render: (text, record) => (
             <div>
-              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
+              <Tooltip placement="top" title={record.time}>
                 <a>{text}</a>
               </Tooltip>
             </div>
@@ -105,7 +114,7 @@ export default class InterfaceView extends Component<any, any> {
   }
 
   componentDidMount() {
-    console.log(this.props.location.state);
+
   }
 
 
@@ -129,11 +138,31 @@ export default class InterfaceView extends Component<any, any> {
   };
   // 获取AllRequests列表
   getAllRequests = () => {
-
+    const data = [{
+      RequestID: 20,
+      id: 22,
+      Header: 'Header1',
+      Payload: 'Payload1',
+      Response: 'ResponseResponseResponseResponse',
+      time: 'all'
+    }];
+    this.setState({
+      dataSource: JSON.parse(JSON.stringify(data))
+    });
   };
   // 获取error列表
   getError = () => {
-
+    const data = [{
+      RequestID: 2,
+      id: 10,
+      Header: 'Header',
+      Payload: 'Payload',
+      Response: 'Response',
+      time: 'error'
+    }];
+    this.setState({
+      dataSource: JSON.parse(JSON.stringify(data))
+    });
   };
   /**
    * 点击分页

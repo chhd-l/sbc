@@ -9,7 +9,6 @@ import '@/Integration/components/index.less';
 import { Link } from 'react-router-dom';
 
 const { TabPane } = Tabs;
-import ReactJson from 'react-json-view';
 
 export default class InterfaceView extends Component<any, any> {
 
@@ -30,72 +29,6 @@ export default class InterfaceView extends Component<any, any> {
         Payload: 'Payload',
         Response: 'Response'
       }],
-      a: {
-
-        'header': {
-
-          'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
-
-          'content-length': '176',
-
-          'country': 'RU',
-
-          'clientid': 'IceROxHgyg0riyVq',
-
-          'x-forwarded-proto': 'https,http',
-
-          'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
-
-          'x-forwarded-port': '443,443',
-
-          'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-
-          'x-forwarded-for': '10.240.2.11,10.240.3.18',
-
-          'forwarded': 'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
-
-          'accept': '*/*',
-
-          'x-real-ip': '10.240.2.11',
-
-          'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
-
-          'host': '10.240.2.21:8690',
-
-          'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
-
-          'x-scheme': 'https',
-
-          'user-agent': 'AHC/1.0'
-
-        }
-
-      },
-      b: '{\n' +
-        '\n' +
-        '                "id": "70989930191138816",\n' +
-        '\n' +
-        '                "sn": "70989929016733696",\n' +
-        '\n' +
-        '                "countryCode": "RU",\n' +
-        '\n' +
-        '                "storeId": 123457907,\n' +
-        '\n' +
-        '                "clientId": "RHlmpGgZNFe4bfxq",\n' +
-        '\n' +
-        '                "clientName": "admin",\n' +
-        '\n' +
-        '                "resultFlag": 2,\n' +
-        '\n' +
-        '                "utl": "POST /v1/products/inventory",\n' +
-        '\n' +
-        '                "payloadMessage": "{\\"countryCode\\":\\"RU\\",\\"goodsInfoStockDTOS\\":[{\\"goodsInfoNo\\":\\"25220227HA\\",\\"stock\\":10}],\\"operator\\":{\\"account\\":\\"admin\\",\\"adminId\\":\\"1053\\",\\"clientId\\":\\"RHlmpGgZNFe4bfxq\\",\\"clientName\\":\\"admin\\",\\"companyInfoId\\":1051,\\"companyType\\":\\"NO\\",\\"ip\\":\\"118.143.211.83\\",\\"name\\":\\"admin\\",\\"platform\\":\\"INTEGRATION\\",\\"services\\":[],\\"storeId\\":\\"123457907\\",\\"userId\\":\\"RHlmpGgZNFe4bfxq\\"},\\"sn\\":\\"70989929016733696\\",\\"storeId\\":123457907}",\n' +
-        '\n' +
-        '                "resultMessage": "sku:25220227HA,non-existent",\n' +
-        '\n' +
-        '                "createTime": "2021-06-21 06:45:27.944"\n' +
-        '\n' +
-        '            }',
       infoList: {
         InterfaceID: 10001,
         URL: '/v1/products/price',

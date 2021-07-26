@@ -65,7 +65,7 @@ class InterfaceList extends Component<any, any> {
           render:(text, record)=> (
             <div>
               <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <Link to="/interface-detail" className="iconfont iconsearch"/>
+                <Link to={'/interface-detail/'+record.id} className="iconfont iconsearch"/>
               </Tooltip>
             </div>
           )
@@ -155,6 +155,7 @@ class InterfaceList extends Component<any, any> {
         </div>
         <div className="container">
           <Tab
+            rowKey={({ id })=>id}
             dataSource={this.state.dataSource}
             pagination={this.state.pagination}
             onChange={this.onSearchPage}

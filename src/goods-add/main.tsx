@@ -82,7 +82,7 @@ export default class Main extends React.Component<any, any> {
     } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
       this.store.getSubSkuStockByAPI();
-    } else if (res == 'inventory') {
+    } else if (res == 'inventory' && this.store._validInventoryFormsNew()) {
       type = 'shipping';
     } else if (res == 'shipping') {
       type = 'related';

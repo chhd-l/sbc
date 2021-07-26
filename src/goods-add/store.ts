@@ -985,7 +985,7 @@ export default class AppStore extends Store {
     //   return;
     // }
 
-    valid = this.checkGoodsStatus();
+    valid = valid && this.checkGoodsStatus();
     
     return valid;
   }
@@ -1068,66 +1068,90 @@ export default class AppStore extends Store {
     let reg=/^[1-9]\d*$|^0$/;
 
     let addSkUProduct = this.state().toJS().addSkUProduct;
+    const saleableFlag = this.state().get('goods').get('saleableFlag') != 0;
     if (goodsList) {
-      if (this.state().get('goods').get('saleableFlag') != 0 ) {
-        // goodsList.forEach((item, i ) => {
+      // if (this.state().get('goods').get('saleableFlag') != 0 ) {
+      //   // goodsList.forEach((item, i ) => {
 
-        //   if(i == 0) {
-        //     if ( item.get('goodsInfoBundleRels').length != 1 ) {
-        //       if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
-        //         tip = 1;
-        //         valid = false;
-        //         return;
-        //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0)  || item.get('subscriptionPrice') == null) {
-        //         tip = 2;
-        //         valid = false;
-        //         return;
-        //       }
+      //   //   if(i == 0) {
+      //   //     if ( item.get('goodsInfoBundleRels').length != 1 ) {
+      //   //       if (item.get('marketPrice') == 0 || item.get('subscriptionPrice') == null) {
+      //   //         tip = 1;
+      //   //         valid = false;
+      //   //         return;
+      //   //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0)  || item.get('subscriptionPrice') == null) {
+      //   //         tip = 2;
+      //   //         valid = false;
+      //   //         return;
+      //   //       }
 
-        //     }else {
-        //       if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
-        //         tip = 1;
-        //         valid = false;
-        //         return;
-        //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
-        //         tip = 2;
-        //         valid = false;
-        //         return;
-        //       }
-        //     }
+      //   //     }else {
+      //   //       if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+      //   //         tip = 1;
+      //   //         valid = false;
+      //   //         return;
+      //   //       }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+      //   //         tip = 2;
+      //   //         valid = false;
+      //   //         return;
+      //   //       }
+      //   //     }
 
-        //   }else {
+      //   //   }else {
 
-        //     if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
-        //       tip = 1;
-        //       valid = false;
-        //       return;
-        //     }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
-        //       tip = 2;
-        //       valid = false;
-        //       return;
-        //     }
+      //   //     if ( item.get('marketPrice') == 0  || item.get('marketPrice') == null) {
+      //   //       tip = 1;
+      //   //       valid = false;
+      //   //       return;
+      //   //     }else if ((item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) || item.get('subscriptionPrice') == null) {
+      //   //       tip = 2;
+      //   //       valid = false;
+      //   //       return;
+      //   //     }
 
-        //   }
+      //   //   }
 
 
 
-        // });
-        let subscriptionPriceCheck = goodsList.toJS().every(goodsItem => {
-          return goodsItem.subscriptionStatus === 1 ? goodsItem.subscriptionPrice > 0 : true;
-        });
-        if(!subscriptionPriceCheck) {
-          tip = 2;
-        }
-        let marketPriceCheck = goodsList.toJS().every(goodsItem => {
-          return goodsItem.marketPrice > 0;
-        });
-        if(!marketPriceCheck) {
+      //   // });
+      //   let subscriptionPriceCheck = goodsList.toJS().every(goodsItem => {
+      //     return goodsItem.subscriptionStatus === 1 ? goodsItem.subscriptionPrice > 0 : true;
+      //   });
+      //   if(!subscriptionPriceCheck) {
+      //     tip = 2;
+      //   }
+      //   let marketPriceCheck = goodsList.toJS().every(goodsItem => {
+      //     return goodsItem.marketPrice > 0;
+      //   });
+      //   if(!marketPriceCheck) {
+      //     tip = 1;
+      //   }
+      //   valid = subscriptionPriceCheck && marketPriceCheck;
+
+      // }
+
+      goodsList.forEach((item) => {
+        if (item.get('marketPrice') === '' || item.get('marketPrice') === null || item.get('marketPrice') === undefined) {
           tip = 1;
+          valid = false;
+          return;
         }
-        valid = subscriptionPriceCheck && marketPriceCheck;
-
-      }
+        if (item.get('subscriptionStatus') === 1 && (item.get('subscriptionPrice') === '' || item.get('subscriptionPrice') === null || item.get('subscriptionPrice') === undefined)) {
+          tip = 2;
+          valid = false;
+          return;
+        }
+        if (saleableFlag && item.get('marketPrice') == 0) {
+          tip = 3;
+          valid = false;
+          return;
+        }
+        if (saleableFlag && item.get('subscriptionStatus') === 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
+          valid = false;
+          return;
+        }
+      });
 
 
       /*if (this.state().get('goods').get('subscriptionStatus') != 0) {
@@ -1193,9 +1217,13 @@ export default class AppStore extends Store {
 
     }
     if (tip === 1) {
-      message.error('Please input market price');
+      message.error(RCi18n({id:'Product.inputMarketPrice'}));
     } else if (tip === 2) {
-      message.error('Please input subscription price');
+      message.error(RCi18n({id:'Product.subscriptionPrice'}));
+    } else if (tip === 3) {
+      message.error(RCi18n({id:'Product.Marketpricecannotbezero'}));
+    } else if (tip === 4) {
+      message.error(RCi18n({id:'Product.Subscriptionpricecannotbezero'}));
     }
     return valid;
 
@@ -2046,7 +2074,7 @@ export default class AppStore extends Store {
       res.context?.skuGoodsInfo?.forEach(item => {
         let curGood = goodsInfos.find(good => good.goodsInfoNo === item.goodsInfoNo);
         this.editGoodsItem(curGood.id, 'stock', item.bundleNum);
-      })
+      });
     });
   };
   onTabChanges = (nextKey) => {
@@ -2060,10 +2088,10 @@ export default class AppStore extends Store {
       }
       
       this.getSubSkuStockByAPI();
-    } else if (nextKey === 'related') {
+    } else if (nextKey === 'related' || nextKey === 'shipping') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
         return;
-      } else {
+      } else if (nextKey === 'related') {
         this.saveAll();
       }
     } else if (nextKey === 'seo') {

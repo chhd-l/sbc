@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { BreadCrumb, Headline } from 'qmkit'
 import { FormattedMessage } from 'react-intl'
-import { Form, Input, Row, Col, Collapse, Tooltip, Tabs } from 'antd'
+import { Breadcrumb,Form, Input, Row, Col, Collapse, Tooltip, Tabs } from 'antd'
 import Tab from '@/Integration/components/tab'
 import { Link } from 'react-router-dom'
 import '@/Integration/components/index.less'
@@ -50,7 +50,7 @@ class LogDetail extends Component<any, any>{
           render: () => (
             <div>
               <Tooltip placement="top" title="Detail">
-                <Link to="/log-response">Check</Link>
+                <Link to="/log-response/1">Check</Link>
               </Tooltip>
             </div>
           )
@@ -84,7 +84,9 @@ class LogDetail extends Component<any, any>{
   render() {
     return (
       <div>
-        <BreadCrumb />
+        <BreadCrumb thirdLevel={true}>
+          <Breadcrumb.Item>{<FormattedMessage id="Log.RequestDetail" />}</Breadcrumb.Item>
+        </BreadCrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="Log.RequestDetail" />} />
           <Form className="filter-content myform">
@@ -119,7 +121,7 @@ class LogDetail extends Component<any, any>{
         <div style={styles.info}>
           <Collapse expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']}>
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
-              <Tabs defaultActiveKey={this.props.match.params.id}>
+              <Tabs defaultActiveKey={this.props.match.params.tablelist}>
                 <TabPane tab={<FormattedMessage id="Log.AllResponse" />} key="1">
                   <Tab
                     dataSource={this.toDate(this.state.list)}

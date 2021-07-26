@@ -79,7 +79,7 @@ class Loglist extends Component<any, any>{
           render: () => (
             <div>
               <Tooltip placement="top" title="Detail">
-                <Link to={'/log-detail/1'} className="iconfont iconDetails" />
+                <Link to={'/log-detail/1/2'} className="iconfont iconDetails" />
               </Tooltip>
             </div>
           )
@@ -127,7 +127,7 @@ class Loglist extends Component<any, any>{
           render: () => (
             <div>
               <Tooltip placement="top" title="Detail">
-                <Link to={'/log-detail/2'} className="iconfont iconDetails" />
+                <Link to={'/log-detail/2/1'} className="iconfont iconDetails" />
               </Tooltip>
             </div>
           )
@@ -164,7 +164,6 @@ class Loglist extends Component<any, any>{
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <BreadCrumb />
         <div className="container-search">
           <Headline title={<FormattedMessage id="Log.LogSearch" />} />
           <Form layout="inline" className="filter-content">

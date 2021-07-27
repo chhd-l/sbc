@@ -43,7 +43,12 @@ export default class Statistics extends Component<any,any> {
                 nameData={this.state.nameData}
                 data={this.state.data}
                 title={<FormattedMessage id="Interface.Error" />}
-              />
+              >
+                <div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </MyLineChart>
             </Col>
             <Col span={12}>
               <MyLineChart

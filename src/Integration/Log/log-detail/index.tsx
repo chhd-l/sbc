@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { BreadCrumb, Headline } from 'qmkit'
 import { FormattedMessage } from 'react-intl'
-import { Breadcrumb,Form, Input, Row, Col, Collapse, Tooltip, Tabs } from 'antd'
+import { Breadcrumb, Popover, Collapse, Tooltip, Tabs } from 'antd'
+import ReactJson from 'react-json-view'
 import Tab from '@/Integration/components/tab'
 import { Link } from 'react-router-dom'
 import '@/Integration/components/index.less'
+import RequestDetail from './components/RequesDetailt'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
@@ -41,7 +43,18 @@ class LogDetail extends Component<any, any>{
         {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
-          key: 'error'
+          key: 'error',
+          render: (text, record) => (
+            <Popover placement="bottom" content={<ReactJson src={JSON.parse(record.error)}
+              name={false}
+              style={{ fontFamily: 'Sans-Serif' }}
+              displayDataTypes={false}
+              displayObjectSize={false}
+              enableClipboard={false}
+              collapseStringsAfterLength={180} />}>
+              <a>Error</a>
+            </Popover>
+          )
         },
         {
           title: <FormattedMessage id="Log.Log" />,
@@ -60,20 +73,31 @@ class LogDetail extends Component<any, any>{
         {
           id: 1,
           time: '2021-06-21 06:45:27.944',
-          error:'error'
+          error: '{' +
+
+            '\"id\": \"70989930191138816\"' + ',' +
+
+            '\"sn\": \"70989929016733696\"' + ',' +
+
+            '\"countryCode\": \"RU\"' +
+            '}'
+        },
+        {
+          id: 2,
+          time: '2021-06-21 06:45:27.944',
+          error: '{' +
+
+            '\"id\": \"0000000000000000\"' + ',' +
+
+            '\"sn\": \"70989929016733696\"' + ',' +
+
+            '\"countryCode\": \"RU\"' +
+            '}'
         }
       ]
     }
   }
 
-  
-  toDate = (arr) => {
-    for(let i = 0;i<arr.length;i++){
-      const error = arr[i].error;
-      error?arr[i].error = <Tooltip placement="top" title={error}><Link to="#">Error</Link></Tooltip>:arr[i].error = <Tooltip placement="top" title=""><Link to="#">Error</Link></Tooltip>;
-    }
-    return arr;
-  }
 
   onSearchPage = (pagination) => {
     this.setState({
@@ -89,48 +113,28 @@ class LogDetail extends Component<any, any>{
         </BreadCrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="Log.RequestDetail" />} />
-          <Form className="filter-content myform">
-            <Row gutter={24}>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.RequestID" />}</p>} defaultValue="123" disabled />
-              </Col>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.Time" />}</p>} defaultValue="123456" disabled />
-              </Col>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.Interface" />}</p>} defaultValue="123456" disabled />
-              </Col>
-            </Row>
-          </Form>
+          <RequestDetail />
         </div>
 
         <div style={styles.infofirst}>
-          <Collapse expandIconPosition="right" style={styles.ghost}>
+          <Collapse bordered={false} expandIconPosition="right" style={styles.ghost}>
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.LogHeader" />}</h3>} key="0" style={styles.panelStyle}>
 
             </Panel>
           </Collapse>
         </div>
         <div style={styles.info}>
-          <Collapse expandIconPosition="right" style={styles.ghost}>
+          <Collapse bordered={false} expandIconPosition="right" style={styles.ghost}>
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.LogPayload" />}</h3>} key="0" style={styles.panelStyle}>
 
             </Panel>
           </Collapse>
         </div>
         <div style={styles.info}>
-          <Collapse expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']}>
+          <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']}>
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
               <Tabs defaultActiveKey={this.props.match.params.tablelist}>
                 <TabPane tab={<FormattedMessage id="Log.AllResponse" />} key="1">
-                  <Tab
-                    dataSource={this.toDate(this.state.list)}
-                    pagination={this.state.pagination}
-                    onChange={this.onSearchPage}
-                    columns={this.state.columns}
-                  />
-                </TabPane>
-                <TabPane tab={<FormattedMessage id="Log.Error" />} key="2">
                   <Tab
                     dataSource={this.state.list}
                     pagination={this.state.pagination}

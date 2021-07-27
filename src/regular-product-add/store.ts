@@ -206,14 +206,15 @@ export default class AppStore extends Store {
         }
       });
       this.dispatch('goodsActor: goodsTabs', tabs);
-    }
-    //初始化价格为0
-    const goodsList = this.state().get('goodsList');
-    if (goodsList) {
-      goodsList.forEach((item) => {
-        this.editGoodsItem(item.id, 'marketPrice', '0');
-        this.editGoodsItem(item.id, 'subscriptionPrice', '0');
-      });
+    
+      //新增产品，初始化价格为0
+      const goodsList = this.state().get('goodsList');
+      if (goodsList) {
+        goodsList.forEach((item) => {
+          this.editGoodsItem(item.id, 'marketPrice', '0');
+          this.editGoodsItem(item.id, 'subscriptionPrice', '0');
+        });
+      }
     }
     //初始化素材
     this.initImg({

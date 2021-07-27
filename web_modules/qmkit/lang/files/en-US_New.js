@@ -463,6 +463,7 @@ export default {
         "Product.PleaseInputSynonyms": "Please input synonyms.",
         "Product.PleaseInputPhrase": "Please input phrase.",
         "Product.SynonymsAreRepeated": "Synonyms are repeated",
+        "Product.EditAttribute": "Edit attribute",
 
     },
 

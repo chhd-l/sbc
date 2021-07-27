@@ -1519,7 +1519,7 @@ export default class AppStore extends Store {
           goodsInfoImg: imageUrl,
           goodsInfoWeight: item.get('goodsInfoWeight') || 0,
           goodsInfoUnit: item.get('goodsInfoUnit') || 'kg',
-          goodsInfoType: 1,
+          goodsInfoType: 2,
           linePrice: item.get('linePrice') || 0,
           packSize: item.get('packSize') || '',
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',

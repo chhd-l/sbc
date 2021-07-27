@@ -23,95 +23,96 @@ export default class InterfaceView extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      dataSource: [{
-        RequestID: 1,
-        id: 1,
-        Header: 'Header',
-        Payload: 'Payload',
-        Response: 'Response',
-        time: {
+      dataSource: [
+        {
+          RequestID: 1,
+          id: 1,
+          Header: 'Header',
+          Payload: 'Payload',
+          Response: 'Response',
+          time: {
 
-          'header':{
+            'header': {
 
-            'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
 
-            'content-length':'176',
+              'content-length': '176',
 
-            'country':'RU',
+              'country': 'RU',
 
-            'clientid':'IceROxHgyg0riyVq',
+              'clientid': 'IceROxHgyg0riyVq',
 
-            'x-forwarded-proto':'https,http',
+              'x-forwarded-proto': 'https,http',
 
-            'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
 
-            'x-forwarded-port':'443,443',
+              'x-forwarded-port': '443,443',
 
-            'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
 
-            'x-forwarded-for':'10.240.2.11,10.240.3.18',
+              'x-forwarded-for': '10.240.2.11,10.240.3.18',
 
-            'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+              'forwarded': 'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
 
-            'accept':'*/*',
+              'accept': '*/*',
 
-            'x-real-ip':'10.240.2.11',
+              'x-real-ip': '10.240.2.11',
 
-            'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
 
-            'host':'10.240.2.21:8690',
+              'host': '10.240.2.21:8690',
 
-            'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
 
-            'x-scheme':'https',
+              'x-scheme': 'https',
 
-            'user-agent':'AHC/1.0'
+              'user-agent': 'AHC/1.0'
+            }
           }
-        }
-      },
+        },
         {
           RequestID: 1,
           id: 2,
           Header: 'Header',
           Payload: 'Payload',
           Response: 'Response',
-          time:{
+          time: {
 
-            'header':{
+            'header': {
 
-              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
 
-              'content-length':'176',
+              'content-length': '176',
 
-              'country':'RU',
+              'country': 'RU',
 
-              'clientid':'IceROxHgyg0riyVq',
+              'clientid': 'IceROxHgyg0riyVq',
 
-              'x-forwarded-proto':'https,http',
+              'x-forwarded-proto': 'https,http',
 
-              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
 
-              'x-forwarded-port':'443,443',
+              'x-forwarded-port': '443,443',
 
-              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
 
-              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+              'x-forwarded-for': '10.240.2.11,10.240.3.18',
 
-              'forwarded':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+              'forwarded': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
 
-              'accept':'*/*',
+              'accept': '*/*',
 
-              'x-real-ip':'10.240.2.11',
+              'x-real-ip': '10.240.2.11',
 
-              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
 
-              'host':'10.240.2.21:8690',
+              'host': '10.240.2.21:8690',
 
-              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
 
-              'x-scheme':'https',
+              'x-scheme': 'https',
 
-              'user-agent':'AHC/1.0'
+              'user-agent': 'AHC/1.0'
 
             }
 
@@ -133,7 +134,7 @@ export default class InterfaceView extends Component<any, any> {
       columns: [
         {
           title: <FormattedMessage id="Interface.RequestID" />,
-          dataIndex: 'RequestID',
+          dataIndex: 'RequestID'
         },
         {
           title: <FormattedMessage id="Interface.Time" />,
@@ -143,21 +144,21 @@ export default class InterfaceView extends Component<any, any> {
           title: <FormattedMessage id="Interface.Header" />,
           dataIndex: 'Header',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text}/>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
           title: <FormattedMessage id="Interface.Payload" />,
           dataIndex: 'Payload',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text}/>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
           title: <FormattedMessage id="Interface.Response" />,
           dataIndex: 'Response',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text}/>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
@@ -180,8 +181,11 @@ export default class InterfaceView extends Component<any, any> {
     };
   }
 
-  componentDidMount() {
-
+  UNSAFE_componentWillMount() {
+    console.log(this.props.location.state.activeKey);
+    this.setState({
+      activeKey: this.props.location.state.activeKey || '0'
+    });
   }
 
 

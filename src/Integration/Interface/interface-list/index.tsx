@@ -65,7 +65,7 @@ class InterfaceList extends Component<any, any> {
           render:(text, record)=> (
             <div>
               <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <Link to={'/interface-detail/'+record.id} className="iconfont iconsearch"/>
+                <Link to={{pathname:'/interface-detail',state:{id:record.id,activeKey:'1'}}} className="iconfont iconsearch"/>
               </Tooltip>
             </div>
           )

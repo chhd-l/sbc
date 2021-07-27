@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom'
 import LogSearch from './components/LogSearch'
 import LogTabs from './components/Logtab';
+import '@/Integration/components/index.less';
 const { TabPane } = Tabs;
 
 export default class Loglist extends Component<any, any>{
@@ -16,6 +17,7 @@ export default class Loglist extends Component<any, any>{
   render() { 
     return (
       <div>
+        <BreadCrumb thirdLevel={true} />
         <div className="container-search">
           <Headline title={<FormattedMessage id="Log.LogSearch" />} />
           {/* 搜索 */}

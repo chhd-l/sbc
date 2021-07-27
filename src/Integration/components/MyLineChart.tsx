@@ -1,11 +1,10 @@
 import React,{Component} from 'react';
 import ReactECharts from 'echarts-for-react';
-import style from '@/credit-card/js/style';
 
 
 export default class MyLineChart extends Component<any>{
   render(){
-    const {title,data,nameData} = this.props
+    const {title,data,nameData,children} = this.props
 
     const options = {
       grid: {
@@ -76,7 +75,7 @@ export default class MyLineChart extends Component<any>{
         <div className="flex-header">
           <div className="text-title">{title}</div>
           <div className="title-right">
-
+            {children}
           </div>
         </div>
         <ReactECharts

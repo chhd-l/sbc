@@ -33,7 +33,7 @@ export default class Dashboard extends React.Component<any, any> {
                     <div className='title'><FormattedMessage id="Dashboard.Monitor" /></div>
                     <p><FormattedMessage id="Dashboard.Country" />{`: ${country}`}</p>
                     <div className='Dashboard-flow-chart-wrap'>
-                        <AntvX6/>
+                        {/*<AntvX6/>*/}
                     </div>
                     <div className='Dashboard-flow-chart-hint'>
                         <p>

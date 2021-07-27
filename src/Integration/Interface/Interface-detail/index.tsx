@@ -182,10 +182,10 @@ export default class InterfaceView extends Component<any, any> {
   }
 
   UNSAFE_componentWillMount() {
-    console.log(this.props.location.state.activeKey);
-    this.setState({
-      activeKey: this.props.location.state.activeKey || '0'
-    });
+    // console.log(this.props.location.state.activeKey);
+    // this.setState({
+    //   activeKey: this.props.location.state.activeKey || '0'
+    // });
   }
 
 
@@ -215,7 +215,7 @@ export default class InterfaceView extends Component<any, any> {
       Header: 'Header1',
       Payload: 'Payload1',
       Response: 'ResponseResponseResponseResponse',
-      time: 'aaaaaaaaaaaaa'
+      time: ''
     }];
     this.setState({
       dataSource: JSON.parse(JSON.stringify(data))

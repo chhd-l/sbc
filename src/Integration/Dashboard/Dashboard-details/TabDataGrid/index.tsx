@@ -5,6 +5,7 @@ import {FormattedMessage} from 'react-intl';
 
 import LogTable from '../component/LogTable';
 import ErrorTable from '../component/ErrorTable';
+import StatisticsCharts from '../component/StatisticsCharts';
 import './index.less';
 
 
@@ -35,7 +36,9 @@ export default class TabDataGrid extends React.Component<any, any> {
                         </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={<FormattedMessage id="Dashboard.Statistics" />} key="Statistics">
-                        <div>Statistics</div>
+                        <div>
+                            <StatisticsCharts />
+                        </div>
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={<FormattedMessage id="Dashboard.Log" />} key="Log">
                         <div>

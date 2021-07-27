@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import {Table, Tooltip} from 'antd';
+import {FormattedMessage} from 'react-intl';
 
 import './index.less';
+
 
 export default class ErrorTable extends Component<any, any> {
     constructor(props) {
@@ -67,22 +69,22 @@ export default class ErrorTable extends Component<any, any> {
     getColumns = () => {
         return [
             {
-                title: 'Request ID',
+                title: <FormattedMessage id="Log.RequestID" />,
                 dataIndex: 'requestID',
                 key: 'requestID',
             },
             {
-                title: 'Time',
+                title: <FormattedMessage id="Log.Time" />,
                 dataIndex: 'time',
                 key: 'time',
             },
             {
-                title: 'Cllent Name',
+                title: <FormattedMessage id="Log.ClientName" />,
                 dataIndex: 'cllentName',
                 key: 'cllentName',
             },
             {
-                title: 'Error Message',
+                title: <FormattedMessage id="Dashboard.Error Message" />,
                 dataIndex: 'errorMessage',
                 key: 'errorMessage',
                 render: (text, record) => {
@@ -94,7 +96,7 @@ export default class ErrorTable extends Component<any, any> {
                 },
             },
             {
-                title: 'Log',
+                title:  <FormattedMessage id="Dashboard.Log" />,
                 dataIndex: 'log',
                 key: 'log',
                 align: 'center',

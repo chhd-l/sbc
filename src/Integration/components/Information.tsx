@@ -15,14 +15,13 @@ class Information extends Component<any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {infoList} = this.props
-    console.log(infoList);
     return (
         <Form className="filter-content myform">
           <Row gutter={24}>
             <Col span={8}>
               <Form.Item>
                 {getFieldDecorator('InterfaceID',{
-                  initialValue:infoList.a
+                  initialValue:infoList.InterfaceID
                 })(
                   <Input
                     disabled
@@ -37,7 +36,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('System')(
+                {getFieldDecorator('System',{
+                  initialValue:infoList.System
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -51,7 +52,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Method')(
+                {getFieldDecorator('Method',{
+                  initialValue:infoList.Method
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -64,7 +67,9 @@ class Information extends Component<any> {
               </Form.Item>
             </Col> <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('URL')(
+              {getFieldDecorator('URL',{
+                initialValue:infoList.URL
+              })(
                 <Input
                   disabled
                   addonBefore={
@@ -77,7 +82,9 @@ class Information extends Component<any> {
             </Form.Item>
           </Col> <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('MiddleLayer')(
+              {getFieldDecorator('MiddleLayer',{
+                initialValue:infoList.MiddleLayer
+              })(
                 <Input
                   disabled
                   addonBefore={
@@ -91,7 +98,9 @@ class Information extends Component<any> {
           </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Type')(
+                {getFieldDecorator('Type',{
+                  initialValue:infoList.Type
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -105,7 +114,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Provider')(
+                {getFieldDecorator('Provider',{
+                  initialValue:infoList.Provider
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -119,7 +130,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Invoker')(
+                {getFieldDecorator('Invoker',{
+                  initialValue:infoList.Invoker
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -133,7 +146,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('DataFlow')(
+                {getFieldDecorator('DataFlow',{
+                  initialValue:infoList.DataFlow
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -147,7 +162,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Function')(
+                {getFieldDecorator('Function',{
+                  initialValue:infoList.Function
+                })(
                   <Input
                     disabled
                     addonBefore={
@@ -161,7 +178,9 @@ class Information extends Component<any> {
             </Col>
             <Col span={8}>
               <Form.Item>
-                {getFieldDecorator('Uptime')(
+                {getFieldDecorator('Uptime',{
+                  initialValue:infoList.Uptime
+                })(
                   <Input
                     disabled
                     addonBefore={

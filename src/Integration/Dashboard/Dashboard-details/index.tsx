@@ -51,7 +51,7 @@ export default class DashboardDetails extends React.Component<any, any>{
                     <div className='DashboardDetails-tab-title'>
                         <div className='tab-title-left'>
                             <span>{`${tabTitle}`}</span>
-                            <i className="iconfont iconxiangqing11"/>
+                            <a><i className="iconfont iconDetails"/></a>
                         </div>
                         {
                             isShowBtn

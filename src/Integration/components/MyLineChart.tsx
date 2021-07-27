@@ -68,13 +68,17 @@ export default class MyLineChart extends Component<any>{
       ],
       tooltip: {
         trigger: 'axis',
-
       },
     };
 
     return(
       <div style={styles.myLine}>
-        <h3 className="text-title">{title}</h3>
+        <div className="flex-header">
+          <div className="text-title">{title}</div>
+          <div className="title-right">
+
+          </div>
+        </div>
         <ReactECharts
           option={options}
           style={{height: 200}}

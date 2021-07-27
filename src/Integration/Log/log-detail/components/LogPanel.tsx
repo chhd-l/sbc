@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Collapse, Tabs, Popover, Tooltip } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import ReactJson from 'react-json-view'
 import Tab from '@/Integration/components/tab'
-import { set } from 'lodash'
+import MyTooltip from '@/Integration/components/myTooltip'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
@@ -18,42 +17,28 @@ export default class LogPanel extends Component<any, any> {
         {
           title: <FormattedMessage id="Log.Time" />,
           dataIndex: 'time',
-          key: 'time'
         },
         {
           title: <FormattedMessage id="Log.ClientName" />,
           dataIndex: 'clientname',
-          key: 'clientname'
         },
         {
           title: <FormattedMessage id="Log.ClientID" />,
           dataIndex: 'clientid',
-          key: 'clientid'
         },
         {
           title: <FormattedMessage id="Log.URL" />,
           dataIndex: 'url',
-          key: 'url'
         },
         {
           title: <FormattedMessage id="Log.ResultFlag" />,
           dataIndex: 'resultflag',
-          key: 'resultflag'
         },
         {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
-          key: 'error',
           render: (text, record) => (
-            <Popover placement="bottom" content={<ReactJson src={record.error}
-              name={false}
-              style={{ fontFamily: 'Sans-Serif' }}
-              displayDataTypes={false}
-              displayObjectSize={false}
-              enableClipboard={false}
-              collapseStringsAfterLength={180} />}>
-              <a>Error</a>
-            </Popover>
+            <MyTooltip content={record.errorTip} text={text}/>
           )
         },
         {
@@ -73,7 +58,8 @@ export default class LogPanel extends Component<any, any> {
         {
           id: 1,
           time: '2021-06-21 06:45:27.944',
-          error:  {
+          error:'Error',
+          errorTip:  {
             'code': 'K-050102',
   
             'message': 'order status has changed, please refresh the page',
@@ -91,7 +77,8 @@ export default class LogPanel extends Component<any, any> {
         {
           id: 2,
           time: '2021-06-21 06:45:27.944',
-          error:  {
+          error:'Error',
+          errorTip:  {
             'code': 'K-050102',
   
             'message': 'order status has changed, please refresh the page',
@@ -110,12 +97,14 @@ export default class LogPanel extends Component<any, any> {
     }
   }
 
-  componentWillMount(){
+  //获取url中的默认显示表格 
+  UNSAFE_componentWillMount(){
     this.setState({
       activeTableKey:this.props.activeTableKey,
     })
   }
 
+  //变更表格数据
   onTableChange = (key) => {
     this.initPage()
     this.setState({
@@ -138,7 +127,8 @@ export default class LogPanel extends Component<any, any> {
         clientid: 11,
         URl: 'POST /v1/products/inventory',
         resultflag: 'Fail',
-        error: {
+        error:'Error',
+        errorTip: {
           'code': 'K-050102',
 
           'message': 'order status has changed, please refresh the page',
@@ -166,10 +156,11 @@ export default class LogPanel extends Component<any, any> {
         id: 1,
         time: '2021-05-18 10:35:54.293',
         clientname: 'MuleSoft',
-        clientid: 12,
+        clientid: 1,
         URl: 'POST /v1/products/inventory',
         resultflag: 'Fail',
-        error: {
+        error:'Error',
+        errorTip: {
           'code': 'K-050102',
 
           'message': 'order status has changed, please refresh the page',
@@ -226,7 +217,7 @@ export default class LogPanel extends Component<any, any> {
             </Panel>
           </Collapse>
         </div>
-        <div style={styles.info}>
+        <div className="container" style={styles.info}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']} >
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
               <Tabs defaultActiveKey={this.state.activeTableKey} onChange={this.onTableChange}>

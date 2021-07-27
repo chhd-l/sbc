@@ -15,9 +15,8 @@ export default class MyTooltip extends Component<any> {
 
   render() {
     let { content, text, trigger } = this.props;
-
     return (
-      <Tooltip title={
+      <Tooltip {...this.props} title={
         content && typeof (content) === 'object' ?
           <ReactJson
             src={content}

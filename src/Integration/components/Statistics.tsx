@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Icon } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import MyLineChart from '@/Integration/components/MyLineChart';
 import MyHeader from '@/Integration/components/myHeader';
@@ -42,13 +42,9 @@ export default class Statistics extends Component<any,any> {
               <MyLineChart
                 nameData={this.state.nameData}
                 data={this.state.data}
+                show
                 title={<FormattedMessage id="Interface.Error" />}
-              >
-                <div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </MyLineChart>
+              />
             </Col>
             <Col span={12}>
               <MyLineChart

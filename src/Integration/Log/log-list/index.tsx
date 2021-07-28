@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
-import { Headline, BreadCrumb, SelectGroup } from 'qmkit';
-// import MyDate from './components/MyDate'
-import { Form, Tabs, Tooltip } from 'antd'
+import { Headline, BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom'
 import LogSearch from './components/LogSearch'
 import LogTabs from './components/Logtab';
 import '@/Integration/components/index.less';
-const { TabPane } = Tabs;
 
 export default class Loglist extends Component<any, any>{
   constructor(props) {

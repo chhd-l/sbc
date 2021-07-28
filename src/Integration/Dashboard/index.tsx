@@ -1,8 +1,8 @@
 import React from 'react';
-import {Breadcrumb} from 'antd';
 import {FormattedMessage} from 'react-intl';
 
 import {BreadCrumb} from 'qmkit';
+import ModuleChart from './component/ModuleChart';
 import './index.less';
 
 export default class Dashboard extends React.Component<any, any> {
@@ -32,7 +32,8 @@ export default class Dashboard extends React.Component<any, any> {
                     <div className='title'><FormattedMessage id="Dashboard.Monitor" /></div>
                     <p><FormattedMessage id="Dashboard.Country" />{`: ${country}`}</p>
                     <div className='Dashboard-flow-chart-wrap'>
-                        <a onClick={() => this.props.history.push('/integration-dashboard-detail')}>我是流程图</a>
+                        {/*<AntvX6/>*/}
+                        <ModuleChart/>
                     </div>
                     <div className='Dashboard-flow-chart-hint'>
                         <p>

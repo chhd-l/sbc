@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { BreadCrumb, Headline } from 'qmkit'
 import { FormattedMessage } from 'react-intl'
-import { Breadcrumb, Popover, Tooltip } from 'antd'
-import '@/Integration/components/index.less'
+import { Breadcrumb} from 'antd'
 import RequestDetail from './components/RequesDetailt'
 import LogPanel from './components/LogPanel'
+
+import '@/Integration/components/index.less'
+
 
 
 class LogDetail extends Component<any, any>{
@@ -26,12 +28,11 @@ class LogDetail extends Component<any, any>{
         </BreadCrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="Log.RequestDetail" />} />
-          {/* 点击后数据结果展示 */}
+          {/* 跳转后的数据展示 */}
           <RequestDetail />
         </div>
         {/* Logpanel及表格 */}
         <LogPanel activeTableKey = {this.props.match.params.tablekey} />
-        
       </div>
     )
   }

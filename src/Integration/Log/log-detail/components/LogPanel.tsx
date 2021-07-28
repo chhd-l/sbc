@@ -14,6 +14,11 @@ export default class LogPanel extends Component<any, any> {
     super(props);
     this.state = {
       activeTableKey:'',
+      pagination: {
+        current: 1,
+        pageSize: 2,
+        total: 0
+      },
       columns: [
         {
           title: <FormattedMessage id="Log.Time" />,
@@ -39,7 +44,7 @@ export default class LogPanel extends Component<any, any> {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
           render: (text, record) => (
-            <MyTooltip placement="top" content={record.errorTip} text={text}/>
+            <MyTooltip content={record.errorTip} text={text}/>
           )
         },
         {
@@ -246,6 +251,7 @@ export default class LogPanel extends Component<any, any> {
         <div style={styles.info}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']} >
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
+              <div className="container">
               <Tabs defaultActiveKey={this.state.activeTableKey} onChange={this.onTableChange}>
                 <TabPane tab={<FormattedMessage id="Log.AllResponse" />} key="1" />
                 <TabPane tab={<FormattedMessage id="Log.Error" />} key="2" />
@@ -257,6 +263,7 @@ export default class LogPanel extends Component<any, any> {
                 onChange={this.onSearchPage}
                 columns={this.state.columns}
               />
+              </div>
             </Panel>
           </Collapse>
         </div>

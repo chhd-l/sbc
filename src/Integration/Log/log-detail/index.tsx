@@ -6,7 +6,7 @@ import RequestDetail from './components/RequesDetailt'
 import LogPanel from './components/LogPanel'
 
 import '@/Integration/components/index.less'
-import './index.less'
+
 
 
 class LogDetail extends Component<any, any>{

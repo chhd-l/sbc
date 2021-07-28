@@ -6,7 +6,9 @@ import '@/Integration/components/index.less';
 export default class MyTooltip extends Component<any> {
   static defaultProps = {
     trigger: 'click',
-    text: ''
+    text: '',
+    height: 300,
+    width: 600
   };
 
   constructor(props: any) {
@@ -14,7 +16,7 @@ export default class MyTooltip extends Component<any> {
   }
 
   render() {
-    let { content, text, trigger } = this.props;
+    let { content, text, trigger, height, width } = this.props;
     return (
       content?
       <Popover placement="leftTop" {...this.props} content={
@@ -22,7 +24,7 @@ export default class MyTooltip extends Component<any> {
           <ReactJson
             src={content}
             name={false}
-            style={{ fontFamily: 'Sans-Serif', width: 600, height: 300, overflow: 'auto', padding: 20 }}
+            style={{ fontFamily: 'Sans-Serif', width: width, height: height, overflow: 'auto', padding: 20 }}
             displayDataTypes={false}
             displayObjectSize={false}
             enableClipboard={false}

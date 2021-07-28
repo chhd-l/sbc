@@ -16,6 +16,11 @@ export default class DashboardDetails extends React.Component<any, any>{
             isShowBtn: false
         };
     }
+    componentDidMount() {
+        const { id } = this.props.match && this.props.match.params ? this.props.match.params : null;
+        console.log('id', id);
+
+    }
 
     handleTabChange = (tabKey) => {
         console.log('tabKey', tabKey)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tooltip } from 'antd';
+import { Popover } from 'antd';
 import ReactJson from 'react-json-view';
 import '@/Integration/components/index.less';
 
@@ -16,7 +16,8 @@ export default class MyTooltip extends Component<any> {
   render() {
     let { content, text, trigger } = this.props;
     return (
-      <Tooltip {...this.props} title={
+      content?
+      <Popover placement="leftTop" {...this.props} content={
         content && typeof (content) === 'object' ?
           <ReactJson
             src={content}
@@ -25,7 +26,8 @@ export default class MyTooltip extends Component<any> {
             displayDataTypes={false}
             displayObjectSize={false}
             enableClipboard={false}
-          /> : <div style={{ padding: 20 }}>{content}</div>
+          />
+          : <div style={{ padding: 20 }}>{content}</div>
       }
                overlayClassName="myTooltip"
                arrowPointAtCenter={true}
@@ -33,7 +35,7 @@ export default class MyTooltip extends Component<any> {
                getPopupContainer={(triggerNode: any) => triggerNode.parentNode}
       >
         <a>{text}</a>
-      </Tooltip>
+      </Popover>:<a>{text}</a>
     );
   }
 }

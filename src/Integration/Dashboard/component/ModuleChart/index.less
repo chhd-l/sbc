@@ -1,19 +1,149 @@
 .ModuleChart-wrap {
+
   .ModuleChart-main {
-    display: flex;
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 45px auto;
+
+    .ModuleChart-center {
+      width: 130px;
+      height: 130px;
+      background-color: #e5707e;
+      line-height: 130px;
+    }
+
     .ModuleChart-box {
       border: none;
       border-radius: 6px;
-
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
     }
-    .ModuleChart-left {
 
+    .ModuleChart-item-box {
+      position: relative;
+      width: 75px;
+      height: 35px;
+      line-height: 35px;
+      font-size: 14px;
+      background-color: #e6e6e6;
+      cursor: pointer;
+      &:hover {
+        box-shadow: 0 0 20px 2px #918f8f;
+        //transform: translateY(-3px);
+        transition: all .5s ease-out;
+      }
+
+      .arrows-box {
+        position: relative;
+        width: 30px;
+        height: 2px;
+        background-color: #999;
+
+
+      }
+      /**
+      箭头组件在默认显示容器右边，
+      **/
+      // 左箭头
+      .arrows-left {
+        position: absolute;
+        top: 25px;
+        right: -40px;
+        &.to-box-left {
+          left: -37px;
+        }
+        &.to-box-top {
+          width: 60px;
+          top: -45px;
+          left: 35%;
+          transform: rotate(90deg);
+        }
+        &::after {
+          display: inline-block;
+          content: '';
+          width: 0;
+          height: 0;
+          position: absolute;
+          left: -4px;
+          top: -4px;
+          border-right: 5px solid #999;
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+        }
+
+        &.active {
+          background-color: #e5707e;
+          &::after {
+            border-right: 5px solid #e5707e;
+          }
+        }
+      }
+      // 右箭头
+      .arrows-right {
+        position: absolute;
+        top: 10px;
+        right: -37px;
+        &.to-box-left {
+          left: -40px;
+        }
+        &.to-box-top {
+          width: 60px;
+          top: -50px;
+          right: 35%;
+          transform: rotate(90deg);
+        }
+
+        &::after {
+          display: inline-block;
+          content: '';
+          width: 0;
+          height: 0;
+          position: absolute;
+          right: -4px;
+          top: -4px;
+          border-left: 5px solid #999;
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+        }
+        &.active {
+          background-color: #e5707e;
+          &::after {
+            border-left: 5px solid #e5707e;
+          }
+        }
+      }
     }
-    .ModuleChart-center {
 
+    .Navision {
+      position: absolute;
+      top: 15px;
+      left: -120px;
     }
-    .ModuleChart-right {
-
+    .WeSahre {
+      position: absolute;
+      top: 80px;
+      left: -120px;
+    }
+    .DaData {
+      position: absolute;
+      top: 15px;
+      right: -120px;
+    }
+    .Fedex {
+      position: absolute;
+      top: 80px;
+      right: -120px;
+    }
+    .OKTA-CIAM {
+      position: absolute;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
     }
   }
-}
+
+  }

@@ -220,8 +220,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     }
 
   } else {
-    if (res.message === 'E-000052') {
+    if (res.message === 'E-000052' || res.code === 'E-000052') {
       history.push('/403')
+    } else if(res.code === 'E-000099') {
+      message.error('No prescriber available')
+      history.push('/login', { oktaLogout: true })
     } else {
       callback(res)
       //

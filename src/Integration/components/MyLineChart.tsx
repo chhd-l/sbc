@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import ReactECharts from 'echarts-for-react';
-import { Icon } from 'antd';
+import { Icon, Popover } from 'antd';
 
-export default class MyLineChart extends Component<any> {
+export default class MyLineChart extends Component<any,any> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      activeIndex:0
+    };
+  }
+
   render() {
-    const { title, data, nameData, show } = this.props;
-
+    const { title, data, nameData, show, activeIndex, getIndex } = this.props;
     const options = {
       grid: {
         top: 8,
@@ -69,26 +75,36 @@ export default class MyLineChart extends Component<any> {
         trigger: 'axis'
       }
     };
-
+    const textList = ['Technical', 'Business'];
+    const getContent=(index)=>{
+      if(index===0){
+        return 'code: K-020007'
+      } else {
+        return 'code: K-020008'
+      }
+    }
     return (
       <div style={styles.myLine}>
         <div className="flex-header">
           <div className="text-title">{title}</div>
           <div className="title-right">
-            {
-              show ? <div className="flex-between">
-                <div className="flex-between mr20">
-                  <span className="garden"/>
-                  <span className="mlr10">Technical</span>
-                  <Icon type="info-circle" />
-                </div>
-                <div className="flex-between">
-                  <span className="garden"/>
-                  <span className="mlr10">Business</span>
-                  <Icon type="info-circle" />
-                </div>
-              </div> : null
-            }
+            <div className="flex-between">
+              {
+                show ? textList.map((item, index) => {
+                  return (
+                    <div className="flex-between cur-poin" key={index} onClick={()=>getIndex(index)} >
+                      <div className="flex-between mr20">
+                        <span className={activeIndex===index?'garden bcrd':'garden'} />
+                        <span className={activeIndex===index?'mlr10 crrd':'mlr10'}>{item}</span>
+                        <Popover content={getContent(index)} arrowPointAtCenter placement="bottom">
+                          <Icon type="info-circle" style={{color:activeIndex===index?'#e1021a':''}}/>
+                        </Popover>
+                      </div>
+                    </div>
+                  );
+                }) : null
+              }
+            </div>
           </div>
         </div>
         <ReactECharts
@@ -97,7 +113,6 @@ export default class MyLineChart extends Component<any> {
         />
       </div>
     );
-
   }
 }
 const styles = {

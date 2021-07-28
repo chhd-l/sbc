@@ -16,7 +16,7 @@ export default class LogTabs extends Component<any, any>{
       activeTableKey: '1',
       pagination: {
         current: 1,
-        pageSize: 5,
+        pageSize: 4,
         total: 0
       },
       list: [
@@ -230,7 +230,259 @@ export default class LogTabs extends Component<any, any>{
               'user-agent':'AHC/1.0'
             }
           },
-        }
+        },
+        {
+          id: 2,
+          requestid: 2,
+          paylod:'JSON',
+          response:'R',
+          payloadTip: {
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+          responseTip:{
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+        },
+        {
+          id: 3,
+          requestid: 2,
+          paylod:'JSON',
+          response:'R',
+          payloadTip: {
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+          responseTip:{
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+        },
+        {
+          id: 4,
+          requestid: 2,
+          paylod:'JSON',
+          response:'R',
+          payloadTip: {
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+          responseTip:{
+
+            'time':{
+  
+              'x-request-id':'dc0306ca7ac6582b0ca8560bcdda115a',
+  
+              'content-length':'176',
+  
+              'country':'RU',
+  
+              'clientid':'IceROxHgyg0riyVq',
+  
+              'x-forwarded-proto':'https,http',
+  
+              'clientsecret':'1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+  
+              'x-forwarded-port':'443,443',
+  
+              'x-correlation-id':'d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+  
+              'x-forwarded-for':'10.240.2.11,10.240.3.18',
+  
+              'forwarded':'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+  
+              'accept':'*/*',
+  
+              'x-real-ip':'10.240.2.11',
+  
+              'x-forwarded-host':'open.royalcanin.com:443,open.royalcanin.com:443',
+  
+              'host':'10.240.2.21:8690',
+  
+              'content-type':'application/json; charset=UTF-8; skipnullon="everywhere"',
+  
+              'x-scheme':'https',
+  
+              'user-agent':'AHC/1.0'
+            }
+          },
+        },
       ],
 
       columns: [

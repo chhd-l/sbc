@@ -52,7 +52,7 @@ export default class LogPanel extends Component<any, any> {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
           render: (text, record) => (
-            <MyTooltip content={record.errorTip} text={text} />
+            <MyTooltip height="174px" width="500px" content={record.errorTip} text={text} />
           )
         },
         {
@@ -68,7 +68,7 @@ export default class LogPanel extends Component<any, any> {
           )
         }
       ],
-      // 数据
+      // 表格初始数据
       list: [
         {
           id: 1,
@@ -116,6 +116,44 @@ export default class LogPanel extends Component<any, any> {
         },
         {
           id: 2,
+          time: '2021-06-21 06:45:27.944',
+          error: 'Error',
+          errorTip: {
+            'code': 'K-050102',
+
+            'message': 'order status has changed, please refresh the page',
+
+            'errorData': null,
+
+            'context': null,
+
+            'defaultLocalDateTime': '2021-05-18 11:35:54.291',
+
+            'i18nParams': null
+
+          }
+        },
+        {
+          id: 3,
+          time: '2021-06-21 06:45:27.944',
+          error: 'Error',
+          errorTip: {
+            'code': 'K-050102',
+
+            'message': 'order status has changed, please refresh the page',
+
+            'errorData': null,
+
+            'context': null,
+
+            'defaultLocalDateTime': '2021-05-18 11:35:54.291',
+
+            'i18nParams': null
+
+          }
+        },
+        {
+          id: 4,
           time: '2021-06-21 06:45:27.944',
           error: 'Error',
           errorTip: {
@@ -185,7 +223,7 @@ export default class LogPanel extends Component<any, any> {
       },
     ];
     this.setState({
-      list: data
+      list:data
     })
   }
 

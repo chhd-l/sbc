@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, Modal } from 'antd';
 
@@ -13,7 +13,6 @@ class ValidationSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Validation setting',
       loading: false,
       isFGS: true,
       visibleApiSetting: false,
@@ -168,7 +167,7 @@ class ValidationSetting extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, isFGS, visibleApiSetting, addressSettingForm, addressApiSettings } = this.state;
+    const { loading, isFGS, visibleApiSetting, addressSettingForm, addressApiSettings } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -185,11 +184,9 @@ class ValidationSetting extends Component<any, any> {
       <AuthWrapper functionName="f_validation_setting">
         <div>
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-            <BreadCrumb thirdLevel={true}>
-              <Breadcrumb.Item>{title}</Breadcrumb.Item>
-            </BreadCrumb>
+            <BreadCrumb />
             <div className="container">
-              <Headline title={title} />
+              <Headline title={RCi18n({id:"Menu.Validation setting"})} />
               <Row style={{ marginBottom: 10 }}>
                 {addressApiSettings &&
                   addressApiSettings.map((item, index) => (
@@ -206,10 +203,10 @@ class ValidationSetting extends Component<any, any> {
                             >
                               FGS
                             </h1>
-                            <p>Set up your own rule</p>
+                            <p><FormattedMessage id="Setting.Setupyourownrule" /></p>
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -220,11 +217,11 @@ class ValidationSetting extends Component<any, any> {
                             <img src={item.imgUrl} style={{ marginTop: 15, height: '60px' }} />
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={'Are you sure to enable this?'} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText="Yes" cancelText="No">
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                             {item.isOpen ? (
-                              <Tooltip placement="top" title="Edit">
+                              <Tooltip placement="top" title={RCi18n({id:"Setting.Edit"})}>
                                 <a
                                   style={{
                                     position: 'absolute',
@@ -246,7 +243,7 @@ class ValidationSetting extends Component<any, any> {
               <Modal
                 width={1200}
                 maskClosable={false}
-                title={'Edit validation setting'}
+                title={RCi18n({id:"Setting.EditValidationSetting"})}
                 visible={visibleApiSetting}
                 confirmLoading={loading}
                 onCancel={() => this.handleCancel()}
@@ -257,19 +254,19 @@ class ValidationSetting extends Component<any, any> {
                       this.handleCancel();
                     }}
                   >
-                    Cancel
+                    <FormattedMessage id="Setting.Cancel" />
                   </Button>,
                   <Button key="submit" type="primary" onClick={this.handleSettingSubmit}>
-                    Submit
+                    <FormattedMessage id="Setting.Submit" />
                   </Button>
                 ]}
               >
                 <Form {...formItemLayout}>
                   <Row>
                     <Col span={12}>
-                      <FormItem label="Validation url">
+                      <FormItem label={RCi18n({id:"Setting.ValidationUrl"})}>
                         {getFieldDecorator('validationUrl', {
-                          rules: [{ required: true, message: 'Validation url is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.ValidationUrlRequired"}) }],
                           initialValue: addressSettingForm.validationUrl
                         })(
                           <Input
@@ -286,9 +283,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Client id">
+                      <FormItem label={RCi18n({id:"Setting.ClientId"})}>
                         {getFieldDecorator('clientId', {
-                          rules: [{ required: true, message: 'Client id is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.ClientIdRequired"}) }],
                           initialValue: addressSettingForm.clientId
                         })(
                           <Input
@@ -305,9 +302,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Parent key">
+                      <FormItem label={RCi18n({id:"Setting.ParentKey"})}>
                         {getFieldDecorator('parentKey', {
-                          rules: [{ required: true, message: 'Parent key is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.ParentKeyRequired"}) }],
                           initialValue: addressSettingForm.parentKey
                         })(
                           <Input
@@ -324,9 +321,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Company code">
+                      <FormItem label={RCi18n({id:"Setting.CompanyCode"})}>
                         {getFieldDecorator('companyCode', {
-                          rules: [{ required: true, message: 'Company code is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.CompanyCodeRequired"}) }],
                           initialValue: addressSettingForm.companyCode
                         })(
                           <Input
@@ -343,9 +340,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Parent password">
+                      <FormItem label={RCi18n({id:"Setting.ParentPassword"})}>
                         {getFieldDecorator('parentPassword', {
-                          rules: [{ required: true, message: 'Parent password is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.ParentPasswordRequired"}) }],
                           initialValue: addressSettingForm.parentPassword
                         })(
                           <Input.Password
@@ -362,9 +359,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="User key">
+                      <FormItem label={RCi18n({id:"Setting.UserKey"})}>
                         {getFieldDecorator('userKey', {
-                          rules: [{ required: true, message: 'User key is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.UserKeyRequired"}) }],
                           initialValue: addressSettingForm.userKey
                         })(
                           <Input
@@ -381,9 +378,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="User password">
+                      <FormItem label={RCi18n({id:"Setting.UserPassword"})}>
                         {getFieldDecorator('userPassword', {
-                          rules: [{ required: true, message: 'User password is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.UserPasswordRequired"}) }],
                           initialValue: addressSettingForm.userPassword
                         })(
                           <Input.Password
@@ -400,9 +397,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Account number">
+                      <FormItem label={RCi18n({id:"Setting.AccountNumber"})}>
                         {getFieldDecorator('accountNumber', {
-                          rules: [{ required: true, message: 'Account number is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.AccountNumberRequired"}) }],
                           initialValue: addressSettingForm.accountNumber
                         })(
                           <Input
@@ -419,9 +416,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Meter number">
+                      <FormItem label={RCi18n({id:"Setting.MeterNumber"})}>
                         {getFieldDecorator('meterNumber', {
-                          rules: [{ required: true, message: 'Meter number is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.MeterNumberRequired"}) }],
                           initialValue: addressSettingForm.meterNumber
                         })(
                           <Input
@@ -438,9 +435,9 @@ class ValidationSetting extends Component<any, any> {
                       </FormItem>
                     </Col>
                     <Col span={12}>
-                      <FormItem label="Client reference id">
+                      <FormItem label={RCi18n({id:"Setting.ClientReferId"})}>
                         {getFieldDecorator('clientReferenceId', {
-                          rules: [{ required: true, message: 'Client reference id is required' }],
+                          rules: [{ required: true, message: RCi18n({id:"Setting.ClientReferIdRequired"}) }],
                           initialValue: addressSettingForm.clientReferenceId
                         })(
                           <Input

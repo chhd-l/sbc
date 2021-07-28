@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import Tab from '@/Integration/components/tab'
 import MyTooltip from '@/Integration/components/myTooltip'
+import bottom from '@/billing-details/components/bottom'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
@@ -38,7 +39,7 @@ export default class LogPanel extends Component<any, any> {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
           render: (text, record) => (
-            <MyTooltip content={record.errorTip} text={text}/>
+            <MyTooltip placement="top" content={record.errorTip} text={text}/>
           )
         },
         {
@@ -70,7 +71,32 @@ export default class LogPanel extends Component<any, any> {
   
             'defaultLocalDateTime': '2021-05-18 11:35:54.291',
   
-            'i18nParams': null
+            'i18nParams': null,
+            'co1de': 'K-050102',
+  
+            'mess1age': 'order status has changed, please refresh the page',
+  
+            'error1Data': null,
+  
+            'cont1ext': null,
+  
+            'defau1ltLocalDateTime': '2021-05-18 11:35:54.291',
+  
+            'i18nP1arams': null,
+
+            'co3de': 'K-050102',
+  
+            'me2ssage': 'order status has changed, please refresh the page',
+  
+            'err2orData': null,
+  
+            'cont2ext': null,
+  
+            'defau2ltLocalDateTime': '2021-05-18 11:35:54.291',
+  
+            'i18nwParams': null
+  
+  
   
           }
         },
@@ -217,7 +243,7 @@ export default class LogPanel extends Component<any, any> {
             </Panel>
           </Collapse>
         </div>
-        <div className="container" style={styles.info}>
+        <div style={styles.info}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']} >
             <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
               <Tabs defaultActiveKey={this.state.activeTableKey} onChange={this.onTableChange}>

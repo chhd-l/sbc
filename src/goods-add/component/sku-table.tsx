@@ -567,6 +567,7 @@ class SkuForm extends React.Component<any, any> {
                 >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
+                  <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
                 </Select>
 
               </FormItem>

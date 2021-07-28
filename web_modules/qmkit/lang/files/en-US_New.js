@@ -148,6 +148,7 @@ export default {
         'Product.selectType': 'please select type',
         'Product.Auto ship': 'Auto ship',
         'Product.Club': 'Club',
+        'Product.Individual': 'Individual',
         'Product.morethanwords': 'Please input product name，no more than 225 words',
         'Product.Y': 'Y',
         'Product.N': 'N',

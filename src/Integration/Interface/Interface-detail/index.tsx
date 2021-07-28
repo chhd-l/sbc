@@ -6,6 +6,7 @@ import Information from '@/Integration/components/Information';
 import Tab from '@/Integration/components/tab';
 import Statistics from '@/Integration/components/Statistics';
 import '@/Integration/components/index.less';
+import MyTooltip from '@/Integration/components/myTooltip';
 import { Link } from 'react-router-dom';
 
 const { TabPane } = Tabs;
@@ -22,21 +23,100 @@ export default class InterfaceView extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      dataSource: [{
-        RequestID: 1,
-        id: 1,
-        Header: 'Header',
-        Payload: 'Payload',
-        Response: 'Response',
-        time: 'Batch product price sychronization'
-      },
+      dataSource: [
+        {
+          RequestID: 1,
+          id: 1,
+          Header: 'Header',
+          Payload: 'Payload',
+          Response: 'Response',
+          time: {
+
+            'header': {
+
+              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
+
+              'content-length': '176',
+
+              'country': 'RU',
+
+              'clientid': 'IceROxHgyg0riyVq',
+
+              'x-forwarded-proto': 'https,http',
+
+              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+
+              'x-forwarded-port': '443,443',
+
+              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+
+              'x-forwarded-for': '10.240.2.11,10.240.3.18',
+
+              'forwarded': 'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+
+              'accept': '*/*',
+
+              'x-real-ip': '10.240.2.11',
+
+              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
+
+              'host': '10.240.2.21:8690',
+
+              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
+
+              'x-scheme': 'https',
+
+              'user-agent': 'AHC/1.0'
+            }
+          }
+        },
         {
           RequestID: 1,
           id: 2,
           Header: 'Header',
           Payload: 'Payload',
           Response: 'Response',
-          time: 'Batch product price sychronization'
+          time: {
+
+            'header': {
+
+              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
+
+              'content-length': '176',
+
+              'country': 'RU',
+
+              'clientid': 'IceROxHgyg0riyVq',
+
+              'x-forwarded-proto': 'https,http',
+
+              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+
+              'x-forwarded-port': '443,443',
+
+              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+
+              'x-forwarded-for': '10.240.2.11,10.240.3.18',
+
+              'forwarded': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+
+              'accept': '*/*',
+
+              'x-real-ip': '10.240.2.11',
+
+              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
+
+              'host': '10.240.2.21:8690',
+
+              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
+
+              'x-scheme': 'https',
+
+              'user-agent': 'AHC/1.0'
+
+            }
+
+          }
         }],
       infoList: {
         InterfaceID: 10001,
@@ -54,7 +134,7 @@ export default class InterfaceView extends Component<any, any> {
       columns: [
         {
           title: <FormattedMessage id="Interface.RequestID" />,
-          dataIndex: 'RequestID',
+          dataIndex: 'RequestID'
         },
         {
           title: <FormattedMessage id="Interface.Time" />,
@@ -64,33 +144,21 @@ export default class InterfaceView extends Component<any, any> {
           title: <FormattedMessage id="Interface.Header" />,
           dataIndex: 'Header',
           render: (text, record) => (
-            <div>
-              <Tooltip placement="top" title={record.time}>
-                <a>{record.Header}</a>
-              </Tooltip>
-            </div>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
           title: <FormattedMessage id="Interface.Payload" />,
           dataIndex: 'Payload',
           render: (text, record) => (
-            <div>
-              <Tooltip placement="top" title={record.time}>
-                <a>{text}</a>
-              </Tooltip>
-            </div>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
           title: <FormattedMessage id="Interface.Response" />,
           dataIndex: 'Response',
           render: (text, record) => (
-            <div>
-              <Tooltip placement="top" title={record.time}>
-                <a>{text}</a>
-              </Tooltip>
-            </div>
+            <MyTooltip content={record.time} text={text} />
           )
         },
         {
@@ -113,8 +181,11 @@ export default class InterfaceView extends Component<any, any> {
     };
   }
 
-  componentDidMount() {
-
+  UNSAFE_componentWillMount() {
+    // console.log(this.props.location.state.activeKey);
+    // this.setState({
+    //   activeKey: this.props.location.state.activeKey || '0'
+    // });
   }
 
 
@@ -144,7 +215,7 @@ export default class InterfaceView extends Component<any, any> {
       Header: 'Header1',
       Payload: 'Payload1',
       Response: 'ResponseResponseResponseResponse',
-      time: 'all'
+      time: ''
     }];
     this.setState({
       dataSource: JSON.parse(JSON.stringify(data))
@@ -158,7 +229,7 @@ export default class InterfaceView extends Component<any, any> {
       Header: 'Header',
       Payload: 'Payload',
       Response: 'Response',
-      time: 'error'
+      time: ''
     }];
     this.setState({
       dataSource: JSON.parse(JSON.stringify(data))

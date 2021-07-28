@@ -2261,6 +2261,10 @@ export default {
         "Setting.MeterNumberRequired": "Meter number is required",
         "Setting.ClientReferId": "Client reference id",
         "Setting.ClientReferIdRequired": "Client reference id is required",
+        "Setting.NewConsent": "New consent",
+        "Setting.AddConsent": "Add consent",
+        "Setting.EditConsent": "Edit consent",
+        "Setting.requiredFields": "Please fill in required field!",
 
     },
     Menu: {

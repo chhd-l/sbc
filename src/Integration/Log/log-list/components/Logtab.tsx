@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Tabs, Tooltip } from 'antd';
-import ReactJson from 'react-json-view';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Tab from '@/Integration/components/tab';

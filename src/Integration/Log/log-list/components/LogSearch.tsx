@@ -33,22 +33,27 @@ class LogSearch extends Component<any, any> {
           </Col>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('system')(
+              {getFieldDecorator('system',{
+                initialValue:'0'
+              })(
                 <SelectGroup
                   style={styles.selectWidth}
-                  label={<p style={styles.label}>{<FormattedMessage id="Log.System" />}</p>}>
-                  <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
-                  <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
-                  <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
-                  <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
-                  <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
+                  label={<p style={styles.label}
+                  >{<FormattedMessage id="Log.System" />}</p>}>
+                    <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
+                    <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
+                    <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
+                    <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
+                    <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
                 </SelectGroup>
               )}
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('interface')
+              {getFieldDecorator('interface',{
+                initialValue:'0'
+              })
                 (<SelectGroup
                   style={styles.selectWidth}
                   label={<p style={styles.label}>{<FormattedMessage id="Log.Interface" />}</p>}>
@@ -62,12 +67,12 @@ class LogSearch extends Component<any, any> {
         <Row gutter={24}>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.NewDate" /></p>} placeholder=""></MyDate>)}
+              {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.NewDate" /></p>}></MyDate>)}
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.EndDate" /></p>} placeholder=""></MyDate>)}
+              {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.EndDate" /></p>}></MyDate>)}
             </Form.Item>
           </Col>
         </Row>
@@ -79,7 +84,7 @@ class LogSearch extends Component<any, any> {
                 htmlType="submit"
                 icon="search"
                 shape="round" onClick={this.handleSubmit}>
-                Search
+                <FormattedMessage id="Log.Search" />
               </Button>
             </Form.Item>
           </Col>

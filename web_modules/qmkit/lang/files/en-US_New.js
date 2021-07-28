@@ -2358,6 +2358,7 @@ export default {
         'Log.ResultFlag':'Result Flag',
         'Log.Log':'Log',
         'Log.AllResponse':'All Response',
-        'Log.ResponseLog':'Response Log'
+        'Log.ResponseLog':'Response Log',
+        'Log.Search':'search'
     },
 }

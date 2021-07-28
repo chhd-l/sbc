@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Collapse, Tabs, Popover, Tooltip } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
-import ReactJson from 'react-json-view'
 import Tab from '@/Integration/components/tab'
-import { set } from 'lodash'
+import MyTooltip from '@/Integration/components/myTooltip'
+import bottom from '@/billing-details/components/bottom'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
@@ -18,42 +18,28 @@ export default class LogPanel extends Component<any, any> {
         {
           title: <FormattedMessage id="Log.Time" />,
           dataIndex: 'time',
-          key: 'time'
         },
         {
           title: <FormattedMessage id="Log.ClientName" />,
           dataIndex: 'clientname',
-          key: 'clientname'
         },
         {
           title: <FormattedMessage id="Log.ClientID" />,
           dataIndex: 'clientid',
-          key: 'clientid'
         },
         {
           title: <FormattedMessage id="Log.URL" />,
           dataIndex: 'url',
-          key: 'url'
         },
         {
           title: <FormattedMessage id="Log.ResultFlag" />,
           dataIndex: 'resultflag',
-          key: 'resultflag'
         },
         {
           title: <FormattedMessage id="Log.Error" />,
           dataIndex: 'error',
-          key: 'error',
           render: (text, record) => (
-            <Popover placement="bottom" content={<ReactJson src={record.error}
-              name={false}
-              style={{ fontFamily: 'Sans-Serif' }}
-              displayDataTypes={false}
-              displayObjectSize={false}
-              enableClipboard={false}
-              collapseStringsAfterLength={180} />}>
-              <a>Error</a>
-            </Popover>
+            <MyTooltip placement="top" content={record.errorTip} text={text}/>
           )
         },
         {
@@ -73,7 +59,8 @@ export default class LogPanel extends Component<any, any> {
         {
           id: 1,
           time: '2021-06-21 06:45:27.944',
-          error:  {
+          error:'Error',
+          errorTip:  {
             'code': 'K-050102',
   
             'message': 'order status has changed, please refresh the page',
@@ -84,14 +71,40 @@ export default class LogPanel extends Component<any, any> {
   
             'defaultLocalDateTime': '2021-05-18 11:35:54.291',
   
-            'i18nParams': null
+            'i18nParams': null,
+            'co1de': 'K-050102',
+  
+            'mess1age': 'order status has changed, please refresh the page',
+  
+            'error1Data': null,
+  
+            'cont1ext': null,
+  
+            'defau1ltLocalDateTime': '2021-05-18 11:35:54.291',
+  
+            'i18nP1arams': null,
+
+            'co3de': 'K-050102',
+  
+            'me2ssage': 'order status has changed, please refresh the page',
+  
+            'err2orData': null,
+  
+            'cont2ext': null,
+  
+            'defau2ltLocalDateTime': '2021-05-18 11:35:54.291',
+  
+            'i18nwParams': null
+  
+  
   
           }
         },
         {
           id: 2,
           time: '2021-06-21 06:45:27.944',
-          error:  {
+          error:'Error',
+          errorTip:  {
             'code': 'K-050102',
   
             'message': 'order status has changed, please refresh the page',
@@ -110,12 +123,14 @@ export default class LogPanel extends Component<any, any> {
     }
   }
 
-  componentWillMount(){
+  //获取url中的默认显示表格 
+  UNSAFE_componentWillMount(){
     this.setState({
       activeTableKey:this.props.activeTableKey,
     })
   }
 
+  //变更表格数据
   onTableChange = (key) => {
     this.initPage()
     this.setState({
@@ -138,7 +153,8 @@ export default class LogPanel extends Component<any, any> {
         clientid: 11,
         URl: 'POST /v1/products/inventory',
         resultflag: 'Fail',
-        error: {
+        error:'Error',
+        errorTip: {
           'code': 'K-050102',
 
           'message': 'order status has changed, please refresh the page',
@@ -166,10 +182,11 @@ export default class LogPanel extends Component<any, any> {
         id: 1,
         time: '2021-05-18 10:35:54.293',
         clientname: 'MuleSoft',
-        clientid: 12,
+        clientid: 1,
         URl: 'POST /v1/products/inventory',
         resultflag: 'Fail',
-        error: {
+        error:'Error',
+        errorTip: {
           'code': 'K-050102',
 
           'message': 'order status has changed, please refresh the page',

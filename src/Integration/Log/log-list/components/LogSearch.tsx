@@ -33,26 +33,26 @@ class LogSearch extends Component<any, any> {
           </Col>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('system',{
-                initialValue:'0'
+              {getFieldDecorator('system', {
+                initialValue: '0'
               })(
                 <SelectGroup
                   style={styles.selectWidth}
                   label={<p style={styles.label}
                   >{<FormattedMessage id="Log.System" />}</p>}>
-                    <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
-                    <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
-                    <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
-                    <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
-                    <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
+                  <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
+                  <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
+                  <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
+                  <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
+                  <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
                 </SelectGroup>
               )}
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('interface',{
-                initialValue:'0'
+              {getFieldDecorator('interface', {
+                initialValue: '0'
               })
                 (<SelectGroup
                   style={styles.selectWidth}

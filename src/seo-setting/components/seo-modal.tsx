@@ -57,7 +57,7 @@ export default class SeoModal extends Component<any, any> {
       priorityEndTime: moment(seoObj.priorityTime[1], 'YYYY-MM-DD').format('YYYY-MM-DD') + ' ' + '23:59:59'
     };
     if (seoObj.priorityFlag == 1) {
-      if (seoObj.priorityTime[0] && seoObj.priorityTime[1] && seoObj.title != "") {
+      if (seoObj.priorityTime[0] && seoObj.priorityTime[1] && seoObj.title) {
         editSeo(params, 1);
       } else {
         message.info((window as any).RCi18n({id: 'Setting.requiredFields'}));

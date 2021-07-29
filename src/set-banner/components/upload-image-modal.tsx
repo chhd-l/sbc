@@ -437,7 +437,7 @@ class UploadImageModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="Setting.Upload" />}
+        title={bannerId ? RCi18n({id:"Setting.Edit"}) : RCi18n({id:"Setting.Upload"})}
         visible={modalVisible}
         width={920}
         // confirmLoading={true}

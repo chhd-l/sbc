@@ -50,7 +50,7 @@ export function deleteFreightGoods(freightId) {
 export function copyFreightGoods(freightId) {
   return Fetch(`/freightTemplate/freightTemplateGoods/${freightId}`, {
     method: 'PUT'
-  });
+  }, { isHandleResult: true, customerTip: true });
 }
 
 /**

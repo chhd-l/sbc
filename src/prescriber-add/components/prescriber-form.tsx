@@ -611,7 +611,7 @@ class ClinicForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: RCi18n({ id: 'PleaseInputPrescriberName' })
+                            message: RCi18n({ id: 'Prescriber.PleaseInputPrescriberName' })
                           },
                           {
                             max: 200,

@@ -582,16 +582,17 @@ class FullReductionForm extends React.Component<any, any> {
                   })
                 }
               ],
-              initialValue: marketingBean.get('subType')
+              initialValue: marketingBean.get('subType'),
+             
             })(
               <RadioGroup onChange={(e) => this.subTypeChange(e)}>
                 {/*<Radio style={radioStyle} value={2}>*/}
                 {/*  Direct reduction*/}
                 {/*</Radio>*/}
-                <Radio value={0} style={radioStyle}>
+                <Radio value={0} checked={marketingBean.get('subType')==0} style={radioStyle}>
                   <FormattedMessage id="Marketing.FullAmountReduction" />
                 </Radio>
-                <Radio value={1} style={radioStyle}>
+                <Radio value={1} checked={marketingBean.get('subType')==1} style={radioStyle}>
                   <FormattedMessage id="Marketing.FullQuantityReduction" />{' '}
                 </Radio>
               </RadioGroup>
@@ -1257,13 +1258,16 @@ class FullReductionForm extends React.Component<any, any> {
    * @param e
    */
   subTypeChange = (e) => {
+    e.stopPropagation()
     const { initDefualtLevelList, initReductionDefualtLevelList, marketingBean } = this.props.relaxProps
     const _thisRef = this;
+
     let levelType = '';
     // Session 有状态登录，保存一个seesion, 返回相应的cookie，
     // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
     levelType = 'fullReductionLevelList';
     if (levelType == '' || !marketingBean.get(levelType)) return;
+  
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
         title: (window as any).RCi18n({
@@ -1283,10 +1287,11 @@ class FullReductionForm extends React.Component<any, any> {
           };
           _thisRef.onBeanChange(beanObject);
           initReductionDefualtLevelList()
+          debugger
+        },
+        onCancel() {
+          _thisRef.props.form.setFieldsValue({'subType':marketingBean.get('subType')})
         }
-        // onCancel() {
-        //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
-        // }
       });
     }
   };

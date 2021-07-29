@@ -34,7 +34,8 @@ export default class Response extends Component<any, any>{
         </BreadCrumb>
         <div className="container-info">
           <Headline title={<FormattedMessage id="Log.ResponseLog" />} />
-          <div> <ReactJson
+          <div className="container"> 
+            <ReactJson
             src={JSON.parse(this.state.list[0].error)}
             name={false}
             style={{ fontFamily: 'Sans-Serif' }}

@@ -11,6 +11,7 @@ class LogSearch extends Component<any, any> {
     super(props);
   }
 
+  // 获取form各项value
   handleSubmit = () => {
     const value = this.props.form.getFieldsValue();
     let startDate = value.newdate ? value.newdate.format('YYYY-MM-DD') : '';
@@ -26,33 +27,36 @@ class LogSearch extends Component<any, any> {
     return (
       <Form layout="inline" className="filter-content">
         <Row gutter={24}>
+          {/* requestID */}
           <Col span={8}>
             <Form.Item>
               {getFieldDecorator('requestId')(<Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.RequestID" />}</p>} />)}
             </Form.Item>
           </Col>
+          {/* system */}
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('system',{
-                initialValue:'0'
+              {getFieldDecorator('system', {
+                initialValue: '0'
               })(
                 <SelectGroup
                   style={styles.selectWidth}
                   label={<p style={styles.label}
                   >{<FormattedMessage id="Log.System" />}</p>}>
-                    <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
-                    <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
-                    <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
-                    <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
-                    <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
+                  <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
+                  <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
+                  <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
+                  <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
+                  <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
                 </SelectGroup>
               )}
             </Form.Item>
           </Col>
+          {/* interface */}
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('interface',{
-                initialValue:'0'
+              {getFieldDecorator('interface', {
+                initialValue: '0'
               })
                 (<SelectGroup
                   style={styles.selectWidth}
@@ -65,11 +69,13 @@ class LogSearch extends Component<any, any> {
           </Col>
         </Row>
         <Row gutter={24}>
+          {/* newdate */}
           <Col span={8}>
             <Form.Item>
               {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.NewDate" /></p>}></MyDate>)}
             </Form.Item>
           </Col>
+          {/* enddate */}
           <Col span={8}>
             <Form.Item>
               {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.EndDate" /></p>}></MyDate>)}
@@ -100,8 +106,10 @@ const styles = {
     textAlign: 'center',
     padding: '0px'
   },
+
   selectWidth: {
     width: 194
   }
 } as any
+
 export default Form.create()(LogSearch)

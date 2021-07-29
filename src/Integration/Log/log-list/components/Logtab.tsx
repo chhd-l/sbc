@@ -540,6 +540,7 @@ export default class LogTabs extends Component<any, any>{
     }
   }
 
+  // 切换表格获取数据
   onTableChange = (key) => {
     this.initPage()
     this.setState({
@@ -799,7 +800,3 @@ export default class LogTabs extends Component<any, any>{
     )
   }
 }
-
-const styles = {
-
-} as any;

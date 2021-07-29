@@ -41,36 +41,6 @@ export default class DashboardDetails extends React.Component<any, any>{
                     Invoker: ' Navision',
                     DataFlow: 'Navision to FGS',
                 },
-                {
-                    name: 'Price Synchronization',
-                    Uptime: '',
-                    Provider: 'FGS',
-                    Invoker: ' Navision',
-                    DataFlow: 'Navision to FGS',
-
-                },
-                {
-                    name: 'Price Synchronization',
-                    Uptime: '',
-                    Provider: 'FGS',
-                    Invoker: ' Navision',
-                    DataFlow: 'Navision to FGS',
-                },
-                {
-                    name: 'Price Synchronization',
-                    Uptime: '',
-                    Provider: 'FGS',
-                    Invoker: ' Navision',
-                    DataFlow: 'Navision to FGS',
-
-                },
-                {
-                    name: 'Price Synchronization',
-                    Uptime: '',
-                    Provider: 'FGS',
-                    Invoker: ' Navision',
-                    DataFlow: 'Navision to FGS',
-                },
             ]
         };
     }

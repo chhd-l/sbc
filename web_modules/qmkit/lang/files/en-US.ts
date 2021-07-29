@@ -280,6 +280,8 @@ export default {
   'Menu.Message setting':'Message setting',
   'Menu.Logistics Settings':'Carriers Settings',
   'Menu.Logistics Company Settings':'Carriers Company Settings',
+  'Menu.Carriers Settings':'Carriers Settings',
+  'Menu.Carriers Company Settings':'Carriers Company Settings',
 
 
 

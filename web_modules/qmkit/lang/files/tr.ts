@@ -624,6 +624,8 @@ export default {
     "Menu.Role permissions": "Erişim İzinleri",
     "Menu.Logistics Settings": "Lojistik Ayarları",
     "Menu.Logistics Company Settings": "Lojistik Şirketi Ayarları",
+    'Menu.Carriers Settings':'Lojistik Ayarları',
+    'Menu.Carriers Company Settings':'Lojistik Şirketi Ayarları',
     "Menu.Freight Template": "Navlun Şablonu",
     "Menu.Asset management": "Dosya Yönetimi",
     "Menu.Image asset": "Resim dosyası",

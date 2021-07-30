@@ -112,6 +112,7 @@ export default {
         "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported",
         "Public.changeLanguageAlert": "Language switching, please wait...",
         "Public.Upload.uploadsuccess": "upload successful",
+        "Public.alreadyRegister": "User has been registered"
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -829,6 +830,7 @@ export default {
         "Order.gift": "Gift",
         "Order.Giveaway": "【Giveaway】",
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
+        'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
 
 
 

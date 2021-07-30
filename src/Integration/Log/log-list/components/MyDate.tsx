@@ -1,11 +1,8 @@
 import React from 'react';
 import { DatePicker } from 'antd';
 import {Const} from 'qmkit';
-// import { RangePickerProps } from 'antd/lib/date-picker/interface';
 
-const RangerPicker = DatePicker.RangePicker;
-
-export default class DatePickerLaber extends React.PureComponent<any, any> {
+export default class DatePickerLaber extends React.PureComponent<any> {
 
   render() {
     const { label, children, ...rest } = this.props;
@@ -15,7 +12,7 @@ export default class DatePickerLaber extends React.PureComponent<any, any> {
         style={{ lineHeight: '0.5', display: 'table'}}
       >
         <span className="ant-input-group-addon" style={{width:143,textAlign:'center'}}>{this.props.label}</span>
-        <DatePicker format={Const.DATE_FORMAT} {...rest}>{children}</DatePicker>
+      <DatePicker getCalendarContainer={(triggerNode:any) => triggerNode.parentNode} format={Const.DATE_FORMAT} {...rest}>{children}</DatePicker>
       </div>
     );
   }

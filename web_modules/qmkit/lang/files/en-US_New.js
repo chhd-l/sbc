@@ -2289,6 +2289,7 @@ export default {
         'Dashboard.Error':'Error',
         'Dashboard.Show More':'Show More',
         'Dashboard.Error Message':'Error Message',
+        'Dashboard.Technical Error Happened Default Report Time: Latest 1 hour':'Technical Error Happened Default Report Time: Latest 1 hour',
 
         'Interface.InterfaceList':'Interface List',
         'Interface.InterfaceName':'Interface Name',
@@ -2358,6 +2359,7 @@ export default {
         'Log.ResultFlag':'Result Flag',
         'Log.Log':'Log',
         'Log.AllResponse':'All Response',
-        'Log.ResponseLog':'Response Log'
+        'Log.ResponseLog':'Response Log',
+        'Log.Search':'search'
     },
 }

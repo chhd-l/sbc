@@ -160,6 +160,7 @@ class SkuForm extends React.Component<any, any> {
               <Col span={12}>
                 <Select defaultValue={rowInfo.depthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'depthUnit', e)}>
                   <Option key="mm">mm</Option>
+                  <Option key="cm">cm</Option>
                 </Select>
               </Col>
             </Row>
@@ -188,6 +189,7 @@ class SkuForm extends React.Component<any, any> {
               <Col span={12}>
                 <Select defaultValue={rowInfo.widthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'widthUnit', e)}>
                   <Option key="mm">mm</Option>
+                  <Option key="cm">cm</Option>
                 </Select>
               </Col>
             </Row>
@@ -216,6 +218,7 @@ class SkuForm extends React.Component<any, any> {
               <Col span={12}>
                 <Select defaultValue={rowInfo.heightUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'heightUnit', e)}>
                   <Option key="mm">mm</Option>
+                  <Option key="cm">cm</Option>
                 </Select>
               </Col>
             </Row>

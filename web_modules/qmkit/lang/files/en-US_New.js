@@ -164,7 +164,7 @@ export default {
         "Product.SynchronizeImage": "Synchronize image",
         'Product.specificationvaluecannot': 'The specification value cannot be a space character',
         'Product.Repeatedspecifications': 'Repeated specifications',
-        'Product.Supportupto20specifications': 'Support up to 20 specifications',
+        'Product.Supportupto20specifications': 'Support up to 100 specifications',
         'Product.inputspecification': 'Please input specification',
         'Product.inputspecificationValue': 'Please input specification Value',
         'Product.Nospecificationvalue': 'No specification value',

@@ -232,7 +232,7 @@ class SpecForm extends React.Component<any, any> {
                                       }
                                     }
 
-                                    if (value.length > 20) {
+                                    if (value.length > 100) {
                                       callback(new Error(RCi18n({id:'Product.Supportupto20specifications'})));
                                       return;
                                     }

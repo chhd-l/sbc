@@ -3,69 +3,66 @@ import { BreadCrumb, Headline, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, Row, Col, Select, Button, Tooltip } from 'antd';
 import Tab from '@/Integration/components/tab';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
 const { Option } = Select;
+import { goodsList } from './webapi';
 
 class InterfaceList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      loading: false,
       pagination: {
         current: 1,
+        pageNum: 0,
         pageSize: 10,
         total: 0
       },
-      num:2,
-      dataSource: [
-        {
-        InterfaceID:1,
-        id:1
-      },{
-        InterfaceID:1,
-        id:2
-      }
-      ],
-      columns : [
+      num: 2,
+      dataSource: [],
+      columns: [
         {
           title: <FormattedMessage id="Interface.InterfaceID" />,
-          dataIndex: 'InterfaceID',
-          key: 'InterfaceID'
+          dataIndex: 'goodsId',
+          key: 'goodsId'
         },
         {
           title: <FormattedMessage id="Interface.Name" />,
-          dataIndex: 'Name',
+          dataIndex: 'goodsNo'
         },
         {
           title: <FormattedMessage id="Interface.Provider" />,
-          dataIndex: 'Provider',
+          dataIndex: 'Provider'
         },
         {
           title: <FormattedMessage id="Interface.Invoker" />,
-          dataIndex: 'Invoker',
+          dataIndex: 'Invoker'
         },
         {
           title: <FormattedMessage id="Interface.DataFlow" />,
-          dataIndex: 'DataFlow',
+          dataIndex: 'DataFlow'
         },
         {
           title: <FormattedMessage id="Interface.URL" />,
-          dataIndex: 'URL',
+          dataIndex: 'URL'
         },
         {
           title: <FormattedMessage id="Interface.Method" />,
-          dataIndex: 'Method',
+          dataIndex: 'Method'
         },
         {
           title: <FormattedMessage id="Interface.Type" />,
-          dataIndex: 'Type',
+          dataIndex: 'Type'
         },
         {
           title: <FormattedMessage id="Interface.Operation" />,
           dataIndex: 'Operation',
-          render:(text, record)=> (
+          render: (text, record) => (
             <div>
               <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <Link to={{pathname:'/interface-detail',state:{id:record.id,activeKey:'1'}}} className="iconfont iconsearch"/>
+                <Link to={{ pathname: '/interface-detail', state: { id: record.id, activeKey: '1' } }}
+                      className="iconfont iconsearch" />
               </Tooltip>
             </div>
           )
@@ -73,17 +70,42 @@ class InterfaceList extends Component<any, any> {
       ]
     };
   }
-  openView = (row) =>{
-    console.log(row);
+
+  UNSAFE_componentWillMount() {
+    this.getPageList();
   }
-  onSearch = () => {
-    console.log(this.props.form.getFieldsValue());
-  };
-  onSearchPage = (pagination)=>{
+
+  getPageList = async () => {
+    this.setState({ loading: true });
+    const { res } = await goodsList(this.state.pagination);
+    let newPagination = Object.assign(this.state.pagination, { 'total': res.context.goodsPage.total });
+    this.setState({ loading: false });
     this.setState({
-      pagination:pagination
-    })
-  }
+      dataSource: res.context.goodsPage.content,
+      pagination: newPagination
+    });
+  };
+
+  openView = (row) => {
+    console.log(row);
+  };
+  onSearch = () => {
+    let searchParams = {
+      pageNum: 0,
+      current: 1
+    }
+    this.setState({
+      pagination: Object.assign(this.state.pagination,{...searchParams})
+    });
+    this.getPageList();
+  };
+  onSearchPage = (pagination) => {
+    this.setState({
+      pagination:Object.assign(this.state.pagination,pagination)
+    });
+    this.getPageList();
+  };
+
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -146,7 +168,8 @@ class InterfaceList extends Component<any, any> {
                 <Button type="primary"
                         htmlType="submit"
                         icon="search"
-                        shape="round" onClick={this.onSearch}>
+                        shape="round"
+                        onClick={this.onSearch}>
                   {<FormattedMessage id="Appointment.Search" />}
                 </Button>
               </Col>
@@ -155,11 +178,12 @@ class InterfaceList extends Component<any, any> {
         </div>
         <div className="container">
           <Tab
-            rowKey={({ id })=>id}
+            loading={this.state.loading}
             dataSource={this.state.dataSource}
             pagination={this.state.pagination}
             onChange={this.onSearchPage}
             columns={this.state.columns}
+            rowKey={(record) => record.goodsId}
           />
         </div>
       </div>

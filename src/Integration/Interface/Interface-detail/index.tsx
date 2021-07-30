@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { Breadcrumb, Tabs, Tooltip } from 'antd';
 import Information from '@/Integration/components/Information';
 import Tab from '@/Integration/components/tab';
-import Statistics from '@/Integration/components/Statistics';
+import Statistics from './components/Statistics';
 import '@/Integration/components/index.less';
 import MyTooltip from '@/Integration/components/myTooltip';
 import { Link } from 'react-router-dom';
@@ -77,45 +77,25 @@ export default class InterfaceView extends Component<any, any> {
           Payload: 'Payload',
           Response: 'Response',
           time: {
-
             'header': {
-
               'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
-
               'content-length': '176',
-
               'country': 'RU',
-
               'clientid': 'IceROxHgyg0riyVq',
-
               'x-forwarded-proto': 'https,http',
-
               'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
-
               'x-forwarded-port': '443,443',
-
               'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-
               'x-forwarded-for': '10.240.2.11,10.240.3.18',
-
               'forwarded': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-
               'accept': '*/*',
-
               'x-real-ip': '10.240.2.11',
-
               'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
-
               'host': '10.240.2.21:8690',
-
               'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
-
               'x-scheme': 'https',
-
               'user-agent': 'AHC/1.0'
-
             }
-
           }
         }],
       infoList: {
@@ -144,21 +124,21 @@ export default class InterfaceView extends Component<any, any> {
           title: <FormattedMessage id="Interface.Header" />,
           dataIndex: 'Header',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text} />
+            <MyTooltip content={record.time} text={text} trigger="hover"/>
           )
         },
         {
           title: <FormattedMessage id="Interface.Payload" />,
           dataIndex: 'Payload',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text} />
+            <MyTooltip content={record.time} text={text} trigger="hover"/>
           )
         },
         {
           title: <FormattedMessage id="Interface.Response" />,
           dataIndex: 'Response',
           render: (text, record) => (
-            <MyTooltip content={record.time} text={text} />
+            <MyTooltip content={record.time} text={text} trigger="hover"/>
           )
         },
         {
@@ -284,7 +264,7 @@ export default class InterfaceView extends Component<any, any> {
               </Tabs>
               {/* 表格 */}
               <Tab
-                rowKey={({ id }) => id}
+                rowKey={( record ) => record.id}
                 dataSource={this.state.dataSource}
                 pagination={this.state.pagination}
                 onChange={this.onSearchPage}

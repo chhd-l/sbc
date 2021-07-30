@@ -1139,7 +1139,6 @@ class FullDiscountForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    debugger
     const { marketingBean, discountBeanOnChange, } = this.props.relaxProps;
     discountBeanOnChange(marketingBean.merge(params));
   };
@@ -1373,10 +1372,10 @@ class FullDiscountForm extends React.Component<any, any> {
           };
           _thisRef.onBeanChange(beanObject);
           initDefualtLevelList()
+        },
+        onCancel() {
+          _thisRef.props.form.setFieldsValue({ subType: marketingBean.get('subType') });
         }
-        // onCancel() {
-        //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
-        // }
       });
     }
   };

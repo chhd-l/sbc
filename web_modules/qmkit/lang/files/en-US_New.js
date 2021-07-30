@@ -1148,7 +1148,8 @@ export default {
         "Prescriber.addRecommendaionCode": "Add Recommendation Code",
         "Prescriber.amount": "Amount",
         "Prescriber.pleaseInputAmount": "Please input amount",
-        "Prescriber.PleaseSelectAmount": "Please select amount"
+        "Prescriber.PleaseSelectAmount": "Please select amount",
+        "Prescriber.Ordernow": "Order now",
 
 
     },

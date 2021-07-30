@@ -1143,7 +1143,7 @@ export default {
         "Prescriber.SingleUse": "Single Use",
         "Prescriber.MultipleUse": "Multiple Use",
         "Prescriber.active": "ACTIVE",
-        "Prescriber.addRecommendaionCode": "Add Recommendaion Code",
+        "Prescriber.addRecommendaionCode": "Add Recommendation Code",
         "Prescriber.amount": "Amount",
         "Prescriber.pleaseInputAmount": "Please input amount",
         "Prescriber.PleaseSelectAmount": "Please select amount"

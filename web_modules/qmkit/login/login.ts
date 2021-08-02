@@ -40,7 +40,8 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       const resOkta = await webapi.getRCJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
     }
-  } else {
+  }
+  else {
     let base64 = new util.Base64();
     const account = routerType.account;
     const password = routerType.password;
@@ -50,6 +51,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     ) as any;
     res = resLocal.res as TResult;
   }
+
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
       sessionStorage.setItem(
@@ -219,7 +221,8 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       callback(res)
     }
 
-  } else {
+  }
+  else {
     if (res.message === 'E-000052' || res.code === 'E-000052') {
       history.push('/403')
     } else if(res.code === 'E-000099') {

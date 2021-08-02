@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Headline, BreadCrumb } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { Headline, BreadCrumb,RCi18n } from 'qmkit';
 import LogSearch from './components/LogSearch'
 import LogTabs from './components/Logtab';
 import '@/Integration/components/index.less';
@@ -15,7 +14,7 @@ export default class Loglist extends Component<any, any>{
       <div>
         <BreadCrumb thirdLevel={true} />
         <div className="container-search">
-          <Headline title={<FormattedMessage id="Log.LogSearch" />} />
+          <Headline title={RCi18n({id:'Log.LogSearch'})} />
           {/* 搜索 */}
           <LogSearch />
         </div>

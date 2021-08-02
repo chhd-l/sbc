@@ -10,7 +10,7 @@ import MyTooltip from '@/Integration/components/myTooltip'
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
-// 获取父组件数据源
+// 获取父组件传来的数据源
 interface IProps {
   dataList: any,
 }
@@ -20,7 +20,9 @@ export default class LogPanel extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      // 当前展示表格
       activeTableKey: '',
+      // 分页数据
       pagination: {
         current: 1,
         pageSize: 2,
@@ -68,7 +70,7 @@ export default class LogPanel extends Component<any, any> {
           )
         }
       ],
-      // 表格初始数据
+      // 表格初始测试数据
       list: [
         {
           id: 1,
@@ -175,14 +177,14 @@ export default class LogPanel extends Component<any, any> {
     }
   }
 
-  //获取url中的默认显示表格 
+  //获取url中的默认显示表格
   UNSAFE_componentWillMount() {
     this.setState({
       activeTableKey: this.props.activeTableKey,
     })
   }
 
-  //变更表格数据
+  //切换表格后，数据变化
   onTableChange = (key) => {
     this.initPage()
     this.setState({
@@ -223,7 +225,7 @@ export default class LogPanel extends Component<any, any> {
       },
     ];
     this.setState({
-      list:data
+      list: data
     })
   }
 
@@ -254,7 +256,6 @@ export default class LogPanel extends Component<any, any> {
         }
       },
     ];
-    // 处理JSON数据
     this.setState({
       list: data
     })
@@ -270,7 +271,7 @@ export default class LogPanel extends Component<any, any> {
     });
   };
 
-  // 分页
+  // 切换分页
   onSearchPage = (pagination) => {
     this.setState({
       pagination: pagination

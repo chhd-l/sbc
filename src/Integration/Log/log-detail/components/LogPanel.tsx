@@ -72,7 +72,7 @@ export default class LogPanel extends Component<any, any> {
       list: [
         {
           id: 1,
-          time: '2021-06-21 06:45:27.944',
+          time: '2021-06-21',
           error: 'Error',
           errorTip: {
             'code': 'K-050102',
@@ -135,7 +135,7 @@ export default class LogPanel extends Component<any, any> {
         },
         {
           id: 3,
-          time: '2021-06-21 06:45:27.944',
+          time: '06:45:27.944',
           error: 'Error',
           errorTip: {
             'code': 'K-050102',

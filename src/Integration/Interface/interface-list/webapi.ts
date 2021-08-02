@@ -6,6 +6,17 @@ type TResult = {
   context: any;
 };
 /**
+ * 商品列表
+ * @param params
+ */
+export const goodsList = (params) => {
+  const request = {
+    method: 'POST',
+    body: JSON.stringify(params)
+  };
+  return Fetch<TResult>('/goods/spus', request);
+};
+/**
  * 查看拼团活动详情
  */
 export const detail = (activityId) => {

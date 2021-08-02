@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import MyLineChart from '@/Integration/components/MyLineChart';
 import MyHeader from '@/Integration/components/myHeader';
@@ -15,12 +15,13 @@ export default class Statistics extends Component<any, any> {
       dataError: [82, 92, 90, 34, 190, 130, 320],
     };
   }
-
+  // 切换 Latest
   onChange = (e) => {
     this.setState({
       active: e.target.value
     });
   };
+  // 获取error 折线图切换方式
   getIndex = (index) => {
     this.setState({ activeIndex: index });
     if(index===0){

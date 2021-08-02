@@ -161,18 +161,19 @@ export default class GoodsGrid extends React.Component<any, any> {
 
     if ((res as any).code == Const.SUCCESS_CODE) {
       res = (res as any).context.goods;
-      let arr = res.content;
-      let a = arr;
-      let b = this.state.selectedRows.toJS();
-      b.reduce((pre, cur) => {
-        let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
-        if (target) {
-          Object.assign(target, cur);
-        } else {
-          pre.concat(arr);
-        }
-        return pre;
-      }, a);
+      // let arr = res.content;
+      // let a = arr;
+      // let b = this.state.selectedRows.toJS();
+      //
+      // b.reduce((pre, cur) => {
+      //   let target = pre.find((ee) => ee.goodsInfoId == cur.goodsInfoId);
+      //   if (target) {
+      //     Object.assign(target, cur);
+      //   } else {
+      //     pre.concat(arr);
+      //   }
+      //   return pre;
+      // }, a);
 
       this.setState({
         goodsInfoPage: res,

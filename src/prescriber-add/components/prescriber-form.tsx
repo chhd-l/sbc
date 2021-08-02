@@ -611,7 +611,7 @@ class ClinicForm extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: RCi18n({ id: 'PleaseInputPrescriberName' })
+                            message: RCi18n({ id: 'Prescriber.PleaseInputPrescriberName' })
                           },
                           {
                             max: 200,
@@ -646,7 +646,7 @@ class ClinicForm extends React.Component<any, any> {
                         });
                       }}>
                         <Radio value={'SINGLE_USE'}><FormattedMessage id="Prescriber.SingleUse"/></Radio>
-                        <Radio value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
+                        <Radio disabled={prescriberId && isCountryGermany} value={'MULTIPE_USE'}><FormattedMessage id="Prescriber.MultipleUse"/></Radio>
                       </Radio.Group>
                     )}
                     </FormItem>

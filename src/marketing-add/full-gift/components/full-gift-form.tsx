@@ -385,9 +385,9 @@ class FullGiftForm extends React.Component<any, any> {
           <div className="ant-form-inline">
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
-              <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
-              <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+              {/*<Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>*/}
+              {/*<Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>*/}
+              {/*<Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>*/}
             </Radio.Group>
           </div>
         </FormItem>
@@ -549,11 +549,11 @@ class FullGiftForm extends React.Component<any, any> {
                   <FormattedMessage id="Marketing.For" /> <Input /> <FormattedMessage id="Marketing.refill" />
                 </Radio>
               )}
-              {marketingBean.get('promotionType') === 0 && (
-                <Radio value={4} style={radioStyle}>
-                  <FormattedMessage id="Marketing.Fullamountgift" />
-                </Radio>
-              )}
+              {/*{marketingBean.get('promotionType') === 0 && (*/}
+              {/*  <Radio value={4} style={radioStyle}>*/}
+              {/*    <FormattedMessage id="Marketing.Fullamountgift" />*/}
+              {/*  </Radio>*/}
+              {/*)}*/}
               {marketingBean.get('promotionType') === 0 && (
                 <Radio value={5} style={radioStyle}>
                   <FormattedMessage id="Marketing.Fullquantitygift" />{' '}
@@ -964,7 +964,7 @@ class FullGiftForm extends React.Component<any, any> {
    */
   handleSubmit = (e) => {
     e.preventDefault();
-    const { submitFullGift, submitFullDiscount, submitFullReduction, selectedSkuIds } = this.props.relaxProps;
+    const { submitFullGift, selectedSkuIds } = this.props.relaxProps;
     let { marketingBean } = this.props.relaxProps;
     let levelList = fromJS([]);
     let errorObject = {};
@@ -1058,7 +1058,7 @@ class FullGiftForm extends React.Component<any, any> {
     if (this.state.promotionCode) {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
-
+    marketingBean = marketingBean.set('isSuperimposeSubscription', 1);
     form.validateFieldsAndScroll((err) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
@@ -1210,6 +1210,23 @@ class FullGiftForm extends React.Component<any, any> {
   onRulesChange = (rules) => {
     this.props.form.resetFields('rules');
     this.onBeanChange({ fullGiftLevelList: rules });
+    let errorObject = {};
+    //满赠规则具体内容校验
+    rules.forEach((level, index) => {
+      //校验赠品是否为空
+      if (!level.fullGiftDetailList || level.fullGiftDetailList.length == 0) {
+        errorObject[`level_${index}`] = {
+          value: null,
+          errors: [new Error('A full gift cannot be empty')]
+        };
+      } else {
+        errorObject[`level_${index}`] = {
+          value: null,
+          errors: null
+        };
+      }
+    });
+    this.props.form.setFields(errorObject);
   };
 
   onSubscriptionChange = (props, value) => {

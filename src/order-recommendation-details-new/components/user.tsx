@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
 import { DataGrid, cache, noop, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import { Table } from 'antd';
 const Column = Table.Column;
 import { Relax } from 'plume2';
@@ -35,13 +36,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
       <div className="user">
         <div className="text flex-start">
           <span>
-            First name:{' '}
+            <FormattedMessage id="PetOwner.First name" />:{' '}
             {detailProductList.consumerFirstName
               ? detailProductList.consumerFirstName
               : '--'}
           </span>
           <span>
-            Last name:{' '}
+            <FormattedMessage id="PetOwner.Last name" />:{' '}
             {detailProductList.consumerLastName
               ? detailProductList.consumerLastName
               : '--'}
@@ -49,13 +50,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         </div>
         <div className="text flex-start">
           <span>
-            E-mail:{' '}
+            <FormattedMessage id="Order.Email" />:{' '}
             {detailProductList.consumerEmail
               ? detailProductList.consumerEmail
               : '--'}
           </span>
           <span>
-            Phone number:{' '}
+            <FormattedMessage id="PetOwner.Phone number" />:{' '}
             {detailProductList.consumerPhoneNumber
               ? detailProductList.consumerPhoneNumber
               : '--'}
@@ -63,13 +64,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         </div>
         <div className="text flex-start">
           <span>
-            Create time:{' '}
+            <FormattedMessage id="Order.CreatedTime" />:{' '}
             {detailProductList.createTime
               ? moment(detailProductList.createTime).format('YYYY-MM-DD')
               : '--'}
           </span>
           <span>
-            Recommendation reasons:{' '}
+            <FormattedMessage id="Order.RecommendedReasons" />:{' '}
             {detailProductList.recommendationReasons
               ? detailProductList.recommendationReasons
               : '--'}
@@ -77,7 +78,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         </div>
         <div className="text flex-start">
           <span>
-            Link:
+            <FormattedMessage id="Order.Link" />:
             https://shopuat.466920.com/recommendation/MjAyMDA4MjYxMzU2NDE3MTI1
           </span>
           <span></span>

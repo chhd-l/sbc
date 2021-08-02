@@ -78,6 +78,7 @@ const AddRecommendaionCode = (props) => {
       title={RCi18n({ id: 'Prescriber.addRecommendaionCode' })}
       maskClosable={false}
       visible={visible}
+      okText={RCi18n({id:"Prescriber.Ordernow"})}
       onOk={() => addCode()}
       onCancel={() => cancel()}
       okButtonProps={{ loading: loading }}

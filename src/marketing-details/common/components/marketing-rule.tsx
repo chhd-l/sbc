@@ -49,7 +49,7 @@ export default class MarketingRule extends React.Component<any, any> {
           <div key={Math.random()}>
             <GreyBg>
               <Row>
-                <Col span={4}>
+                <Col span={6}>
                   <span>
                     <FormattedMessage id="Marketing.Rules" />:
                   </span>
@@ -87,9 +87,23 @@ export default class MarketingRule extends React.Component<any, any> {
                       <div>
                         <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
                         {(level.firstSubscriptionOrderDiscount * 100).toFixed()} % <FormattedMessage id="Marketing.discount" />
+                        {
+                          level.firstSubscriptionLimitAmount && (
+                            <>
+                              , discount limit {level.firstSubscriptionLimitAmount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                            </>
+                          )
+                        }
                       </div>
                       <div>
                         <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {(level.restSubscriptionOrderDiscount * 100).toFixed()}&nbsp;% <FormattedMessage id="Marketing.discount" />
+                        {
+                          level.restSubscriptionLimitAmount && (
+                            <>
+                              , discount limit {level.restSubscriptionLimitAmount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                            </>
+                          )
+                        }
                       </div>
                     </div>
                   ) : null}

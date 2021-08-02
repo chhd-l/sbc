@@ -54,13 +54,14 @@ class Header extends React.Component<any, any> {
   componentDidMount() {
     const { searchData } = this.props.relaxProps;
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
+    let selectPrescriber = sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')) : '';
 
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
-      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : '',
-      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].prescriberId : '',
-      id: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
+      prescriber: selectPrescriber ? selectPrescriber : prescribers && prescribers.length > 0 ? prescribers[0] : '',
+      prescriberId: selectPrescriber ? selectPrescriber.prescriberId : prescribers && prescribers.length > 0 ? prescribers[0].prescriberId : '',
+      id: selectPrescriber ? selectPrescriber.id : prescribers && prescribers.length > 0 ? prescribers[0].id : ''
     });
     if (searchData == '') {
       this.setState({

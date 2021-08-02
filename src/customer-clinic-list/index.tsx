@@ -40,7 +40,7 @@ export default class Customer extends React.Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
-              <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
+              <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccountOriginal}` : `/customer-details/Guest/${record.customerId}/${record.customerAccountOriginal}`} className="iconfont iconDetails"></Link>
               </Tooltip>
             </span>
           )
@@ -209,7 +209,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:"PetOwner.ConsumerName"})}>
                           <FormattedMessage id="PetOwner.ConsumerName" />
                         </p>
                       }
@@ -226,7 +226,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8} id="tree-select-props-width">
                   <FormItem>
                     <SelectGroup
-                      label={<p style={styles.label}><FormattedMessage id="PetOwner.ConsumerType" /></p>}
+                      label={<p style={styles.label} title={RCi18n({id:"PetOwner.ConsumerType"})}><FormattedMessage id="PetOwner.ConsumerType" /></p>}
                       // style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;

@@ -36,6 +36,7 @@ class AttributeLibrary extends Component<any, any> {
       currentEditAttribute: {},
       modalName: '',
       loading: true,
+      modalLoading: false,
       nameSelect: 'attributeName',
       valueSelect: 'attributeValue'
     };
@@ -178,7 +179,7 @@ class AttributeLibrary extends Component<any, any> {
 
     this.setState(
       {
-        modalName: RCi18n({id:'Addnewattribute'}),
+        modalName: RCi18n({id:'Product.Addnewattribute'}),
         attributeValueList: [],
         visibleAttribute: true,
         attributeForm,
@@ -200,7 +201,7 @@ class AttributeLibrary extends Component<any, any> {
     attributeForm.attributeType = row.attributeType;
     this.setState(
       {
-        modalName: 'Edit attribute',
+        modalName: RCi18n({id:"Product.EditAttribute"}),
         attributeValueList: row.attributesValuesVOList || [],
         visibleAttribute: true,
         attributeForm,
@@ -299,6 +300,7 @@ class AttributeLibrary extends Component<any, any> {
       });
   };
   addAttributes = (params: object) => {
+    this.setState({modalLoading:true});
     webapi
       .postAttributes(params)
       .then((data) => {
@@ -309,19 +311,23 @@ class AttributeLibrary extends Component<any, any> {
           this.setState(
             {
               visibleAttribute: false,
-              loading: false
+              modalLoading: false
             },
             () => this.getAttributes()
           );
         } else {
+          this.setState({modalLoading:false});
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({modalLoading:false});
+      });
   };
   deleteAttributes = (id) => {
     let params = {
       id: id
     };
+    this.setState({loading:true});
     webapi
       .deleteAttributes(params)
       .then((data) => {
@@ -332,7 +338,9 @@ class AttributeLibrary extends Component<any, any> {
         } else {
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        
+      });
   };
 
   updateAttributeStatus = (checked, row) => {
@@ -349,6 +357,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   updateAttributes = (params) => {
+    this.setState({modalLoading:true});
     webapi
       .putAttributes(params)
       .then((data) => {
@@ -356,14 +365,17 @@ class AttributeLibrary extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             visibleAttribute: false,
-            loading: false
+            modalLoading: false
           });
           this.getAttributes();
           message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         } else {
+          this.setState({modalLoading:false});
         }
       })
-      .catch((err) => {});
+      .catch((err) => {
+        this.setState({modalLoading:false});
+      });
   };
 
   getAttributeValue = (attributeValueList, type) => {
@@ -539,13 +551,13 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { title, attributeList, visibleAttribute, attributeValueList, modalName, loading } = this.state;
+    const { title, attributeList, visibleAttribute, attributeValueList, modalName, loading, modalLoading } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
-        title: RCi18n({id:'Product.Displayvalue'}),
+        title: RCi18n({id:'Product.Attributename'}),
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
@@ -667,7 +679,7 @@ class AttributeLibrary extends Component<any, any> {
 
           <div className="container-search">
             <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-              <span><FormattedMessage id="Product.Addnewattribute" />e</span>
+              <span><FormattedMessage id="Product.Addnewattribute" /></span>
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={attributeList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
@@ -694,7 +706,7 @@ class AttributeLibrary extends Component<any, any> {
               >
                 <FormattedMessage id="Product.Close" />
               </Button>,
-              <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
+              <Button key="submit" loading={modalLoading} type="primary" onClick={() => this.handleSubmit()}>
               <FormattedMessage id="Product.Submit" />
               </Button>
             ]}

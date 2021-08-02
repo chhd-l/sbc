@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
-import { history, cache } from 'qmkit';
+import { history, cache, RCi18n } from 'qmkit';
 import { fromJS } from 'immutable';
 import Fetch from './fetch';
 import {FormattedMessage} from "react-intl";
@@ -166,7 +166,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
                               style={styles.menuIcon}
                               src={util.requireLocalSrc(`icon/${item.icon}`)}
                             />*/}
-                            <span><FormattedMessage id={"Menu."+ item.title} /></span>
+                            <span title={RCi18n({id:`Menu.${item.title}`})}><FormattedMessage id={"Menu."+ item.title} /></span>
                           </div>
                         }
                       >
@@ -219,7 +219,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
         <Route
           path={v.url}
           children={() => (
-            <a href="#" onClick={(e) => {e.preventDefault();this._goThirdMenu(v.url, index, i);return false;}}>
+            <a href="#" onClick={(e) => {e.preventDefault();this._goThirdMenu(v.url, index, i);return false;}} title={RCi18n({id:`Menu.${v.title}`})}>
               <FormattedMessage id={"Menu."+ v.title} />
             </a>
           )}

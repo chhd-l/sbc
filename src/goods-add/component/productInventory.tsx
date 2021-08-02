@@ -187,13 +187,11 @@ class SkuForm extends React.Component<any, any> {
       render: (rowInfo,index) => {
         let a = null;
         let b = null;
-        let c = 0;
+        let c = rowInfo.stock || 0;
         let d = true
         if (rowInfo.goodsInfoBundleRels.length != 0) {
-          c = rowInfo.stock
           d = true
-        }else {
-          c = 0
+        } else {
           d = false
         }
 
@@ -249,7 +247,7 @@ class SkuForm extends React.Component<any, any> {
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('stock_' + rowInfo.id, {
+                {/*getFieldDecorator('stock_' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
@@ -275,7 +273,17 @@ class SkuForm extends React.Component<any, any> {
                     //max={b}
                     //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
                   />
-                )}
+                )*/}
+                <InputNumber
+                  style={{ width: '121px' }}
+                  min={0}
+                  max={99999999}
+                  disabled={d}
+                  value={c}
+                  onChange={this._editGoodsItem.bind(this, rowInfo.id, 'stock')}
+                  //max={b}
+                  //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
+                />
               </FormItem>
             </Col>
           </Row>

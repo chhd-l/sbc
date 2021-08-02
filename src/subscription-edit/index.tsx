@@ -1526,7 +1526,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
                       <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                    </Col></> 
+                    </Col>
+                  </> 
                     : 
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>

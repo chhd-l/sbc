@@ -121,13 +121,13 @@ export default class uploadImageModal extends React.Component<any, any> {
         let fileList = info.fileList;
         if (status === 'done') {
           if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
-            message.error(`${info.file.name} upload failed!`);
+            message.error(`${info.file.name} ${RCi18n({id:"Public.Upload.uploadfailed"})}`);
           } else {
-            message.success(`${info.file.name} uploaded successfully!`);
+            message.success(`${info.file.name} ${RCi18n({id:"Public.Upload.uploadsuccess"})}`);
             setCateDisabled();
           }
         } else if (status === 'error') {
-          message.error(`${info.file.name} upload failed!`);
+          message.error(`${info.file.name} ${RCi18n({id:"Public.Upload.uploadfailed"})}`);
         }
         //仅展示上传中和上传成功的文件列表
         fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
@@ -146,7 +146,7 @@ export default class uploadImageModal extends React.Component<any, any> {
               style={{ width: 300 }}
               value={this.state.cateId}
               dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-              placeholder="Please select a Category"
+              placeholder={RCi18n({id:"Setting.PleaseSelectACategory"})}
               notFoundContent="No categories"
               allowClear
               treeDefaultExpandAll

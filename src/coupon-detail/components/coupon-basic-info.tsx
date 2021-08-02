@@ -66,7 +66,8 @@ const columns = [
   }
 ];
 const style = {
-  marginLeft: 20
+  marginLeft: 20,
+  display: 'flex'
 }
 const checkboxStyle = {
 
@@ -109,6 +110,7 @@ export default class CouponBasicInfo extends Component<any, any> {
       goodsList: any;
       currentCategary: any;
       currentAttribute: any;
+      currentGroup: any;
     };
   };
 
@@ -120,14 +122,15 @@ export default class CouponBasicInfo extends Component<any, any> {
     skus: 'skus',
     goodsList: 'goodsList',
     currentCategary: 'currentCategary',
-    currentAttribute: 'currentAttribute'
+    currentAttribute: 'currentAttribute',
+    currentGroup: 'currentGroup'
   };
 
   render() {
-    const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute } = this.props.relaxProps;
+    const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute, currentGroup } = this.props.relaxProps;
     const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
       fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
-      couponPromotionType, fullbuyCount
+      couponPromotionType, fullbuyCount,couponJoinLevel
     } = coupon.toJS();
     let dataSource = fromJS([])
     // const goodsInfoPage = goodsList.goodsInfoPage.content
@@ -220,6 +223,16 @@ export default class CouponBasicInfo extends Component<any, any> {
 
                   </div>
                 </FormItem>
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
+                  <div style={style}>
+                    {
+                      couponJoinLevel == 0 ?
+                        <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
+                        <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
+                        : null
+                    }
+                  </div>
+                </FormItem>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>
                   <div
                     style={{ wordBreak: 'break-all', marginLeft: 20}}
@@ -237,6 +250,16 @@ export default class CouponBasicInfo extends Component<any, any> {
                       <div style={style}><FormattedMessage id="Marketing.Orderreach" /> &nbsp;{`${fullBuyPrice}${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}</div> :
                       <div style={style}> <FormattedMessage id="Marketing.Orderreach" />&nbsp;{`${fullbuyCount}`}&nbsp;<FormattedMessage id="Marketing.items" /></div>
                   }
+                </FormItem>
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
+                  <div style={style}>
+                    {
+                      couponJoinLevel == 0 ?
+                        <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
+                        <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
+                        : null
+                    }
+                  </div>
                 </FormItem>
               </>
             )

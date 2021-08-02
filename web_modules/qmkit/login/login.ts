@@ -177,7 +177,6 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           sessionStorage.setItem(cache.SYSTEM_BASE_CONFIG, JSON.stringify(menusRes.res.context.baseConfigRopResponse));
           sessionStorage.setItem(cache.EMPLOYEE_DATA, JSON.stringify(menusRes.res.context.employeeAccountByIdResponse));
           let configResponse = menusRes.res.context.configResponse
-          console.log(configResponse);
           let defaultPurchase = {
             defaultPurchaseType: parseInt((configResponse as any).storeVO?.defaultPurchaseType ?? -1),
             defaultSubscriptionFrequencyId: (configResponse as any).storeVO?.defaultSubscriptionFrequencyId ?? '',
@@ -221,8 +220,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     }
 
   } else {
-    if (res.message === 'E-000052') {
+    if (res.message === 'E-000052' || res.code === 'E-000052') {
       history.push('/403')
+    } else if(res.code === 'E-000099') {
+      message.error('No prescriber available')
+      history.push('/login', { oktaLogout: true })
     } else {
       callback(res)
       //

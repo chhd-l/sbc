@@ -19,10 +19,10 @@ const SUB_TYPE = {
   1: 'Full quantity reduction',
   2: 'Full amount discount',
   3: 'Full quantity discount',
+  4: 'Full amount gift',
+  5: 'Full quantity gift',
   6: '',
-  7: ''
-  // 4: '满金额赠',
-  // 5: '满数量赠'
+  7: '',
 };
 const PROMOTION_TYPE = {
   0: RCi18n({id: 'Marketing.All'}),
@@ -216,8 +216,14 @@ class MarketingList extends React.Component<any, any> {
               url = `/marketing-full-gift/${rowInfo['marketingId']}`;
             } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
               // url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
-              url = `/marketing-full-reduction/${rowInfo['marketingId']} /${rowInfo['marketingType']}`;
+              url = `/marketing-full-reduction/${rowInfo['marketingId']}/${rowInfo['marketingType']}`;
+            } else if (rowInfo.subType === 12){
+                url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
             }
+            /**
+             *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始
+             *  注意： subType为12 时，marketingStatus为任何值，都可以编辑
+             **/
 
             return (
               <div className="operation-box">
@@ -239,7 +245,7 @@ class MarketingList extends React.Component<any, any> {
                   <Tooltip placement="top" title={<FormattedMessage id="Marketing.Download" />}>
                     <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
                   </Tooltip>
-                  {rowInfo['marketingStatus'] == 3 && (
+                  {(rowInfo['marketingStatus'] == 3 || ([1,3].includes(Number(rowInfo['marketingStatus'] && rowInfo.subType === 12)))) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"
@@ -253,17 +259,17 @@ class MarketingList extends React.Component<any, any> {
                       ></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 2 && (
+                  {rowInfo['marketingStatus'] == 2 && rowInfo['marketingName'] !== '40% скидка'  &&  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка'  &&  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Stop" />}>
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onPause(rowInfo['marketingId'])} className="iconfont iconbtn-stop"></a>
                     </Tooltip>
                   )}
-                  {rowInfo['marketingStatus'] == 1 && (
+                  {rowInfo['marketingStatus'] == 1 && rowInfo['marketingName'] !== '40% скидка'  &&  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Close" />}>
                       <a style={{ marginRight: 5 }} onClick={() => close(rowInfo['marketingId'])} className="iconfont iconbtn-cancelall"></a>
                     </Tooltip>

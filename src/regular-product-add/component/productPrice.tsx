@@ -246,7 +246,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="product.listPrice" />
+          <FormattedMessage id="product.purchasePrice" />
         </div>
       ),
       key: 'linePrice',
@@ -265,7 +265,7 @@ class SkuForm extends React.Component<any, any> {
                   // ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                   initialValue: rowInfo.linePrice || 0
-                })(<InputNumber min={0} max={9999999.99} precision={2}
+                })(<InputNumber disabled min={0} max={9999999.99} precision={2}
                                 // step={0.01}
                                 //formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`}
                 />)}

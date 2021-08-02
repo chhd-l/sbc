@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="product.listPrice" />
+          <FormattedMessage id="product.purchasePrice" />
         </div>
       ),
       key: 'linePrice',
@@ -220,7 +220,7 @@ class SkuForm extends React.Component<any, any> {
                 // ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}
+              })(<InputNumber disabled style={{ width: '60px' }} min={0} max={9999999} precision={2} />)}
             </FormItem>
           </Col>
         </Row>

@@ -69,7 +69,7 @@ const formTableItemLayout = {
 
 const columns = [
   {
-    title: 'Subscription Number',
+    title: RCi18n({ id: 'Task.SubscriptionNumber' }),
     dataIndex: 'subscriptionNumber',
     key: 'subscriptionNumber',
     width: '18%',
@@ -81,77 +81,57 @@ const columns = [
       </Link>
   },
   {
-    title: 'Product Name',
-    dataIndex: 'productName',
-    key: 'productName',
-
+    title: RCi18n({ id: 'Task.ProductName' }),
+    key: 'nameAndDateVOList',
     width: '14%',
-
-    // onCell: () => {
-    //   return {
-    //     render:(text,record,index)=>{
-    //       let html =  text.replaceAll(",","<br/>")
-    //        return(
-    //         <div className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
-    //           maxWidth: 100,
-    //           overflow: "hidden",
-    //           whiteSpace: "nowrap",
-    //           textOverflow: "ellipsis",
-    //           cursor: "pointer"}
-    //       } />
-    //        )
-    //     },
-    //   }
-    // },
     render: (text, record, index) => {
       // let html = text.replaceAll(",", "<br/>")
-      let productNames = text.split(',')      
+      // let productNames = text.split(',') 
+      let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : []
       return <div>
         {
-          productNames && productNames.map(productName => (
-            <Tooltip placement="topLeft" title={productName}>
+          nameAndDateVOList && nameAndDateVOList.map(data => (
+            <Tooltip placement="topLeft" title={data.productName}>
               <p className="msg" style={{
                 overflow: "hidden",
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
                 cursor: "pointer"
-              }} >{productName} </p>
-    
+              }} >{data.productName} </p>
             </Tooltip>
-    
           ))
         }
       </div>
-      
-      //  return(
-      //   <span className="msg" dangerouslySetInnerHTML={{ __html: html }} style= {{
-      //     maxWidth: 80,
-      //     overflow: "hidden",
-      //     whiteSpace: "nowrap",
-      //     display:"inline-block",
-      //     textOverflow: "ellipsis",
-      //     cursor: "pointer"}
-      // } />
-      //  )
     },
     ellipsis: true,
   },
   {
-    title: 'Shipment Date',
-    dataIndex: 'shipmentDate',
+    title: RCi18n({ id: 'Task.ShipmentDate' }),
+    // dataIndex: 'shipmentDate',
     key: 'shipmentDate',
     width: '15%',
+    render: (text, record, index) => {
+      // let html = text.replaceAll(",", "<br/>")
+      // let productNames = text.split(',') 
+      let nameAndDateVOList = record.nameAndDateVOList
+      return <div>
+        {
+          nameAndDateVOList && nameAndDateVOList.map(data => (
+            <p>{data.shipmentDate} </p>
+          ))
+        }
+      </div>
+    },
   },
   {
-    title: 'Delivery Address',
+    title: RCi18n({ id: 'Task.DeliveryAddress' }),
     dataIndex: 'deliveryAddress',
-    key: 'deliveryAddress',
+    key: 'deliveryAddress'
   },
   {
-    title: 'Payment Method',
+    title: RCi18n({ id: 'Task.PaymentMethod' }),
     dataIndex: 'paymentMethod',
-    key: 'paymentMethod',
-
+    key: 'paymentMethod'
   }
 ];
 
@@ -171,7 +151,7 @@ class TaskUpdate extends Component<any, any> {
       task: {},
       assignedUsers: [],
       goldenMomentList: [],
-      tableres: [],
+      subscriptionTable: [],
       actionTypeList: [
         { name: <FormattedMessage id="task.Call" />, value: 'Call' },
         { name: <FormattedMessage id="task.Email" />, value: 'Email' },
@@ -219,6 +199,8 @@ class TaskUpdate extends Component<any, any> {
       .getGlodenMomentList()
       .then((data) => {
         const res = data.res;
+        console.log(res.context.sysDictionaryVOS);
+
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
@@ -236,8 +218,6 @@ class TaskUpdate extends Component<any, any> {
       this.setState({
         loading: true
       });
-
-
       webapi
         .getTaskById(id)
         .then((data) => {
@@ -247,12 +227,9 @@ class TaskUpdate extends Component<any, any> {
             this.setState({
               task: res.context.task,
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
-
-              tableres: res.context.subscribeList,
-
+              subscriptionTable: res.context.subscribeList,
               loading: false,
             });
-
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
               this.getPetOwnerPets(customerAccount);
@@ -316,6 +293,8 @@ class TaskUpdate extends Component<any, any> {
       .getEmployeesByKeyword(params)
       .then((data) => {
         const res = data.res;
+        console.log(res.context.employees);
+
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             assignedUsers: res.context.employees,
@@ -424,29 +403,32 @@ class TaskUpdate extends Component<any, any> {
   }
 
   onChange = ({ field, value }) => {
+    const { associatedPetOwners } = this.state;
+    let data = this.state.task;
+
     if (field === 'contactId') {
+      const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
+      data[field] = petOwner ? petOwner.customerId : ''; // save by customerId
+
       this.getPetOwnerPets(value);
       this.getPetOwnerOrders(value);
       this.getPetOwnerSubscriptions(value); //search by customer account
-
       this.setState({
         task: {
           petName: '',
           petId: '',
-          orderCode: ''
+          orderCode: '',
+          subscriptionNumber: ''
         }
       });
       this.props.form.setFieldsValue({
         petId: '',
-        orderCode: ''
+        orderCode: '',
+        subscriptionNumber: []
       });
-
-      const { associatedPetOwners } = this.state;
-      const petOwner = associatedPetOwners.find((x) => x.customerAccount === value);
-      value = petOwner ? petOwner.customerId : ''; // save by customerId
+    } else {
+      data[field] = value;
     }
-    let data = this.state.task;
-    data[field] = value;
     this.setState({
       task: data
     });
@@ -462,7 +444,6 @@ class TaskUpdate extends Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         const { task, id } = this.state;
-        // console.log(task);
         if (id) {
           task.id = id; // edit by id
           webapi
@@ -626,7 +607,9 @@ class TaskUpdate extends Component<any, any> {
                               }
                             />
                           ) : (
-                            <span>{task.name}</span>
+                            <Tooltip placement="topLeft" title={task.name} >
+                              <p className="taskName" >{task.name}</p >
+                            </Tooltip>
                           )
                         )}
                       </FormItem>
@@ -1106,10 +1089,8 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={this.state.tableres} pagination={false} />
-                              // < Table bordered columns={columns} />
+                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
                             )}
-
                           </FormItem>
                         </Col>
                     }
@@ -1158,7 +1139,6 @@ class TaskUpdate extends Component<any, any> {
                         )}
                       </FormItem>
                     </Col> */}
-
                   </Row>
                   <Row>
                     {editable ? (

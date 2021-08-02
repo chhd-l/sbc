@@ -9,6 +9,7 @@ export default {
   // 'payment.cardNumber': 'Номер карты',
   // 'payment.email': 'Эл. адрес',
   // 'payment.phone': 'Номер телефона',
+  'Public.ChooseLocation':'Choisissez votre langue',
 
   /*-----------------------------  Task  ----------------------------------------------*/
   'task.CardView':'Affichage en carte',
@@ -100,4 +101,11 @@ export default {
    'Home.Reminder':'Alertes',
    'Home.Todotask':'Tâches à faire',
    'Home.Viewalltask':'Voir toutes les tâches',
+
+
+
+
+
+   "payment.isDefaultTip": "cette case est obligatoire pour l'abonnement",
+
 };

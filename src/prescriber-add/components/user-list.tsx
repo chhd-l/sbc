@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
-import { SelectGroup, cache, Const } from 'qmkit';
+import { SelectGroup, cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
-import { RCi18n } from 'qmkit';
 
 const { confirm } = Modal;
 
@@ -168,28 +167,30 @@ class UserList extends Component<any, any> {
     }
   };
 
-  sendEmail = async (recored) => {
+  sendEmail = (recored) => {
     this.setState({ loading: true });
-    const { res: prescriberRes } = await webapi.getClinicById({
+    webapi.getClinicById({
       id: this.props.prescriberKeyId
-    });
-    let prescriberId = '';
-    if (prescriberRes.code === Const.SUCCESS_CODE) {
-      prescriberId = prescriberRes.context.prescriberId;
-    }
-    let employeeName = recored.employeeName.split(' ');
-    let paramter = {
-      baseUrl: window.origin,
-      email: recored.email,
-      firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
-      prescriberId: prescriberId
-    };
-    webapi.sendEmail(paramter).then((data)=>{
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        this.setState({ loading: false });
-        message.success(RCi18n({ id: 'Prescriber.sendSuccessful' }));
+    }).then((data)=>{
+      const prescriberRes = data.res;
+      let prescriberId = '';
+      if (prescriberRes.code === Const.SUCCESS_CODE) {
+        prescriberId = prescriberRes.context.prescriberId;
       }
+      let employeeName = recored.employeeName.split(' ');
+      let paramter = {
+        baseUrl: window.origin,
+        email: recored.email,
+        firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
+        prescriberId: prescriberId
+      };
+      webapi.sendEmail(paramter).then((data)=>{
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({ loading: false });
+          message.success(RCi18n({ id: 'Prescriber.sendSuccessful' }));
+        }
+      });
     });
   };
 
@@ -393,7 +394,7 @@ class UserList extends Component<any, any> {
                 </FormItem>
                 <FormItem>
                   <SelectGroup
-                    defaultValue="All"
+                    defaultValue={RCi18n({id:"Prescriber.All"})}
                     label={RCi18n({ id: 'Prescriber.UserStatus' })}
                     onChange={(value) => {
                       value = value === '' ? null : value;

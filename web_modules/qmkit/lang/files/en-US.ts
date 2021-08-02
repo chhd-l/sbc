@@ -190,6 +190,7 @@ export default {
   'Menu.Subscription List':'Subscription List',
   'Menu.Subscription setting':'Subscription setting',
   'Menu.Subscription Plan':'Subscription Plan',
+  'Menu.Benefit setting':'Benefit setting',
   'Menu.Pet owner':'Pet owner',
   'Menu.Pet owner management':'Pet owner management',
   'Menu.Pet owner list':'Pet owner list',
@@ -279,6 +280,8 @@ export default {
   'Menu.Message setting':'Message setting',
   'Menu.Logistics Settings':'Carriers Settings',
   'Menu.Logistics Company Settings':'Carriers Company Settings',
+  'Menu.Carriers Settings':'Carriers Settings',
+  'Menu.Carriers Company Settings':'Carriers Company Settings',
 
 
 
@@ -3349,8 +3352,8 @@ export default {
   'Setting.PcUrl': 'Pc url',
   'Setting.MobileUrl': 'Mobile url',
   'Setting.selectResource': 'Select {type} resource',
-  'Setting.dragImagesOrVideos': 'Click or drag images or videos to upload',
-  'Setting.supportUpload': 'Support one or more pictures or videos upload',
+  'Setting.dragImagesOrVideos': 'Click or drag image or video to upload',
+  'Setting.supportUpload': 'Support one picture or video',
   'Setting.setBanner': 'Set banner',
   'Setting.operatorAccount': 'Operator account',
   'Setting.operatorName': 'Operator name',

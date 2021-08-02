@@ -230,18 +230,18 @@ export default class AppStore extends Store {
     if (params.marketingId) {
       const { res } = await webapi.updateFreeShipping(params);
       if (res && res.code === Const.SUCCESS_CODE) {
-        history.push('/marketing-list');
+       history.push('/marketing-list');
       }
       this.dispatch('loading:end');
     } else {
       const { res } = await webapi.addFreeShipping(params);
       if (res && res.code === Const.SUCCESS_CODE) {
-        history.push('/marketing-list');
+       history.push('/marketing-list');
       }
       this.dispatch('loading:end');
     }
   };
-  toParams = ({ marketingId, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType }) => {
+  toParams = ({ marketingId,publicStatus, marketingName, beginTime, endTime, subType, shippingValue, shippingItemValue, joinLevel, segmentIds, promotionCode, promotionType, isSuperimposeSubscription }) => {
     return {
       marketingType: 3, //免邮
       marketingName,
@@ -253,8 +253,9 @@ export default class AppStore extends Store {
       segmentIds,
       scopeType: 0,
       marketingId,
-      publicStatus: 1,
+      publicStatus,
       promotionType,
+      isSuperimposeSubscription,
       promotionCode: promotionCode ? promotionCode : this.randomPromotionCode()
     };
   };

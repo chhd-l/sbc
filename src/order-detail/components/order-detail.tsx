@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr } from 'qmkit';
+import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr,RCi18n } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -145,7 +145,8 @@ class OrderDetailTab extends React.Component<any, any> {
     
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '[gift]' + gift.get('skuName'))).toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', '['+ RCi18n({ id: 'Order.gift' }) +']' + gift.get('skuName'))).toJS();
+    
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
@@ -279,7 +280,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'originalPrice',
         width: '10%',
         render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
+          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 && record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}

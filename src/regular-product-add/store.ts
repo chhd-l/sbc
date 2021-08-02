@@ -206,6 +206,15 @@ export default class AppStore extends Store {
         }
       });
       this.dispatch('goodsActor: goodsTabs', tabs);
+    
+      //新增产品，初始化价格为0
+      const goodsList = this.state().get('goodsList');
+      if (goodsList) {
+        goodsList.forEach((item) => {
+          this.editGoodsItem(item.id, 'marketPrice', '0');
+          this.editGoodsItem(item.id, 'subscriptionPrice', '0');
+        });
+      }
     }
     //初始化素材
     this.initImg({
@@ -492,7 +501,7 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
-        debugger
+        
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
@@ -1055,7 +1064,7 @@ export default class AppStore extends Store {
     //   return;
     // }
 
-    valid = this.checkGoodsStatus();
+    valid = valid && this.checkGoodsStatus();
 
     return valid;
   }
@@ -1135,70 +1144,92 @@ export default class AppStore extends Store {
     let valid = true;
     let tip = 0;
     let goodsList = this.state().get('goodsList');
-    console.log(goodsList,1234);
+    const saleableFlag = this.state().get('goods').get('saleableFlag') != 0;
     if (goodsList) {
+      // goodsList.forEach((item) => {
+      //   if (this.state().get('goods').get('saleableFlag') != 0) {
+      //     if(item.get('marketPrice') == undefined) {
+      //       tip = 1;
+      //       valid = false;
+      //       return;
+      //     }else {
+      //       if ( item.get('marketPrice') == 0 ) {
+      //         tip = 1;
+      //         valid = false;
+      //         return;
+      //       }
+      //     }
+      //   }
+
+
+      //   if (this.state().get('goods').get('saleableFlag') != 0) {
+      //     if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
+      //       tip = 2;
+      //       valid = false;
+      //       return;
+      //     }else {
+      //       if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
+      //         tip = 2;
+      //         valid = false;
+      //         return;
+      //       }
+      //     }
+      //   }
+
+
+      //   /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
+      //     valid = false;
+      //     tip = 1;
+      //     return;
+      //   }
+
+      //   if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
+      //     if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
+      //       tip = 4;
+      //       valid = false;
+      //       return;
+      //     }
+      //   }
+
+      //   if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0))) {
+      //     tip = 2;
+      //     valid = false;
+      //     return;
+      //   }
+
+      //   if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+      //     tip = 3;
+      //     valid = false;
+      //     return;
+      //   }*/
+
+      //   /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
+      //      tip = 4;
+      //      valid = false;
+      //      return;
+      //    }*/
+      // });
       goodsList.forEach((item) => {
-        if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('marketPrice') == undefined) {
-            tip = 1;
-            valid = false;
-            return;
-          }else {
-            if ( item.get('marketPrice') == 0 ) {
-              tip = 1;
-              valid = false;
-              return;
-            }
-          }
-        }
-
-
-        if (this.state().get('goods').get('saleableFlag') != 0) {
-          if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
-            tip = 2;
-            valid = false;
-            return;
-          }else {
-            if ( item.get('subscriptionPrice') == 0 && item.get('subscriptionStatus') != 0) {
-              tip = 2;
-              valid = false;
-              return;
-            }
-          }
-        }
-
-
-        /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
-          valid = false;
+        if (item.get('marketPrice') === '' || item.get('marketPrice') === null || item.get('marketPrice') === undefined) {
           tip = 1;
+          valid = false;
           return;
         }
-
-        if (this.state().get('goods').get('subscriptionStatus') == 1 && item.get('subscriptionStatus') !=0) {
-          if( item.get('subscriptionPrice') == 0 || item.get('subscriptionPrice') == null) {
-            tip = 4;
-            valid = false;
-            return;
-          }
-        }
-
-        if ((item.get('flag') && !(item.get('subscriptionPrice') || item.get('subscriptionPrice') == 0))) {
+        if (item.get('subscriptionStatus') === 1 && (item.get('subscriptionPrice') === '' || item.get('subscriptionPrice') === null || item.get('subscriptionPrice') === undefined)) {
           tip = 2;
           valid = false;
           return;
         }
-
-        if (this.state().get('goods').get('saleableFlag') == 1 && item.get('marketPrice') == 0) {
+        if (saleableFlag && item.get('marketPrice') == 0) {
           tip = 3;
           valid = false;
           return;
-        }*/
-
-        /* if (!(item.get('subscriptionStatus') || item.get('subscriptionStatus') == 0)) {
-           tip = 4;
-           valid = false;
-           return;
-         }*/
+        }
+        if (saleableFlag && item.get('subscriptionStatus') === 1 && item.get('subscriptionPrice') == 0) {
+          tip = 4;
+          valid = false;
+          return;
+        }
       });
     }
     if (tip === 1) {
@@ -1215,9 +1246,10 @@ export default class AppStore extends Store {
   _validInventoryFormsNew() {
     let valid = true;
     let goodsList = this.state().get('goodsList');
+    let reg=/^[1-9]\d*$|^0$/;
     if (goodsList) {
       goodsList.forEach((item) => {
-        if (!(item.get('stock') || item.get('stock') == 0)) {
+        if (!reg.test(item.get('stock'))) {
           valid = false;
           return;
         }
@@ -1995,10 +2027,10 @@ export default class AppStore extends Store {
       if (!this._validMainForms() || !this._validPriceFormsNew()) {
         return;
       }
-    } else if (nextKey === 'related') {
+    } else if (nextKey === 'related' || nextKey === 'shipping') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
         return;
-      } else {
+      } else if (nextKey === 'related') {
         this.saveAll();
       }
     } else if (nextKey === 'seo') {

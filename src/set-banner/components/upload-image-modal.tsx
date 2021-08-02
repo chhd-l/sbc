@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { cache, Const, noop, SelectGroup } from 'qmkit';
+import { cache, Const, noop, SelectGroup, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
 import { IMap } from 'plume2';
@@ -106,7 +106,7 @@ class UploadImageModal extends Component<any, any> {
       okDisabled: true
     });
     if (tableDatas.size > 5) {
-      message.error(<FormattedMessage id="Setting.addUpTo5banner" />);
+      message.error(RCi18n({id:"Setting.addUpTo5banner"}));
       // this._handleModelCancel();
       return;
     }
@@ -114,11 +114,11 @@ class UploadImageModal extends Component<any, any> {
       if (!err) {
         let imageObj = imageForm.toJS();
         if (imageObj.fileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error(<FormattedMessage id="Setting.uploadPcResource" />);
+          message.error(RCi18n({id:"Setting.uploadPcResource"}));
           return;
         }
         if (imageObj.mFileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error(<FormattedMessage id="Setting.uploadMobileResource" />);
+          message.error(RCi18n({id:"Setting.uploadMobileResource"}));
           return;
         }
         if (imageObj.bannerId) {
@@ -176,10 +176,10 @@ class UploadImageModal extends Component<any, any> {
     const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
     const ref = this;
     const res = await uploadBanner(params);
-    const title = (window as any).RCi18n({id:'Setting.Tip'});
-    const content = (window as any).RCi18n({id:'Setting.AddBanner'});
-    const ok = (window as any).RCi18n({id:'Setting.OK'});
-    const cancel = (window as any).RCi18n({id:'Setting.Cancel'});
+    const title = RCi18n({id:'Setting.Tip'});
+    const content = RCi18n({id:'Setting.AddBanner'});
+    const ok = RCi18n({id:'Setting.OK'});
+    const cancel = RCi18n({id:'Setting.Cancel'});
     if (res != -1) {
       confirm({
         title: title,
@@ -260,26 +260,26 @@ class UploadImageModal extends Component<any, any> {
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
         if (tableDatas.size > 5) {
-          message.error(<FormattedMessage id="Setting.onlyAddUpTo5banner" />);
+          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error(<FormattedMessage id="PleaseInputAFileName" />);
+          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
           return false;
         }
 
         if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error(<FormattedMessage id="theCorrectFormat" />);
+          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
           return false;
         }
         if (fileName.length > 40) {
-          message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
+          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
           return false;
         }
 
         if (list && list.length >= 1) {
-          message.error(<FormattedMessage id="Setting.uploadOneResource" />);
+          message.error(RCi18n({id:"Setting.uploadOneResource"}));
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
@@ -287,11 +287,11 @@ class UploadImageModal extends Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error(<FormattedMessage id="Setting.FileSizeCannotExceed2M" />);
+            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
             return false;
           }
         } else {
-          message.error(<FormattedMessage id="Setting.FileFormatError" />);
+          message.error(RCi18n({id:"Setting.FileFormatError"}));
           return false;
         }
       },
@@ -356,26 +356,26 @@ class UploadImageModal extends Component<any, any> {
         let fileName = file.name.toLowerCase();
 
         if (tableDatas.size > 5) {
-          message.error(<FormattedMessage id="Setting.onlyAddUpTo5banner" />);
+          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error(<FormattedMessage id="Setting.PleaseInputAFileName" />);
+          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
           return false;
         }
 
         if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error(<FormattedMessage id="Setting.theCorrectFormat" />);
+          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error(<FormattedMessage id="Setting.FileNameIsTooLong" />);
+          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
           return false;
         }
         if (mList && mList.length >= 1) {
-          message.error(<FormattedMessage id="Setting.uploadOneResource" />);
+          message.error(RCi18n({id:"Setting.uploadOneResource"}));
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
@@ -383,11 +383,11 @@ class UploadImageModal extends Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error(<FormattedMessage id="Setting.FileSizeCannotExceed2M" />);
+            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
             return false;
           }
         } else {
-          message.error(<FormattedMessage id="Setting.FileFormatError" />);
+          message.error(RCi18n({id:"Setting.FileFormatError"}));
           return false;
         }
       },
@@ -437,7 +437,7 @@ class UploadImageModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="Setting.Upload" />}
+        title={bannerId ? RCi18n({id:"Setting.Edit"}) : RCi18n({id:"Setting.Upload"})}
         visible={modalVisible}
         width={920}
         // confirmLoading={true}

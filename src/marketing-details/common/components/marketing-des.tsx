@@ -90,7 +90,7 @@ class MarketingDes extends React.Component<any, any> {
     return (
       <GreyBg>
         <Row>
-          <Col span={4}>
+          <Col span={6}>
             <span>
               <FormattedMessage id="Marketing.PromotionType" />:
             </span>
@@ -100,7 +100,7 @@ class MarketingDes extends React.Component<any, any> {
               PROMOTION_TYPE[promotionType]
             }
             {
-              promotionType === 0 && marketingType !==2 &&
+              promotionType === 0 && marketingType !== 2 &&
               <Checkbox className="publicBox" style={{ marginLeft: 20 }} checked={isSuperimposeSubscription === 0} disabled={true}>
                 <div className="Idontwanttocumulate">
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
@@ -110,7 +110,7 @@ class MarketingDes extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={4}>
+          <Col span={6}>
             <span>
               <FormattedMessage id="Marketing.PromotionName" />:
             </span>
@@ -121,7 +121,7 @@ class MarketingDes extends React.Component<any, any> {
         </Row>
 
         <Row>
-          <Col span={4}>
+          <Col span={6}>
             <span>
               <FormattedMessage id="Marketing.PromotionCode" />:
             </span>
@@ -134,7 +134,7 @@ class MarketingDes extends React.Component<any, any> {
           </Col>
         </Row>
         <Row>
-          <Col span={4}>
+          <Col span={6}>
             <span>
               <FormattedMessage id="Marketing.StartAndEndTime" />:
             </span>
@@ -145,7 +145,7 @@ class MarketingDes extends React.Component<any, any> {
         </Row>
         {subType === 6 || subType === 7 ? null : (
           <Row>
-            <Col span={4}>
+            <Col span={6}>
               <span>
                 {MAK_TYPE[marketingType]}
                 <FormattedMessage id="Marketing.Type" />:

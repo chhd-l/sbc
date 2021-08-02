@@ -54,11 +54,11 @@ export default class ListView extends Component<any, any> {
       () => this.getTaskList(this.state.queryType)
     );
   };
-  getTaskList = (queryType?: String) => {
+  getTaskList = (queryType?: String, fromSearch?: boolean) => {
     const { formData, pagination } = this.state;
     let params = Object.assign(formData, {
-      pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize,
+      pageNum: fromSearch ? 0 : pagination.current - 1,
+      pageSize: fromSearch ? 10 : pagination.pageSize,
       queryType: queryType
     });
     this.setState({
@@ -71,6 +71,9 @@ export default class ListView extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
+          if(fromSearch) {
+            pagination.current = 1;
+          }
           this.setState({
             taskList: res.context.taskList,
             pagination: pagination,

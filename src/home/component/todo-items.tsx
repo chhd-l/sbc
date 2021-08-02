@@ -153,6 +153,7 @@ class TodoItems extends React.Component<any, any> {
     const {loading, prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
     const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView,
       conversionFunnelDashboardView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView} = this.state;
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
 
     return (
       <div className="item">
@@ -655,10 +656,9 @@ class TodoItems extends React.Component<any, any> {
             </div>
           </AuthWrapper>
 
-
-          <AuthWrapper functionName="f_home_recommendation_codes">
+          {loginInfo.storeId == 123457908? <AuthWrapper functionName="f_home_recommendation_codes">
             <div className="item-recom">
-              <div className="top-text"><FormattedMessage id="Home.recommendation"/></div>
+              <div className="top-text"><FormattedMessage id="Home.RecommendationCodesUsage"/></div>
               <div className="item-recommendation-main space-between">
                 <div className="recommendation-main flex-start">
                   <div className="recommendation-text">
@@ -686,7 +686,7 @@ class TodoItems extends React.Component<any, any> {
                 </div>
               </div>
             </div>
-          </AuthWrapper>
+          </AuthWrapper>:<></>}
 
         </Spin>
       </div>

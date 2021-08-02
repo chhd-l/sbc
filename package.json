@@ -65,6 +65,7 @@
     "postcss-safe-parser": "^6.0.0",
     "prerender-spa-plugin": "^3.4.0",
     "prop-types": "^15.6.0",
+    "puppeteer": "^1.20.0",
     "react": "^16.8.3",
     "react-app-polyfill": "^1.0.6",
     "react-copy-to-clipboard": "^5.0.2",

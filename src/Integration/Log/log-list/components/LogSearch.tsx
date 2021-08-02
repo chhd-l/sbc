@@ -19,7 +19,6 @@ class LogSearch extends Component<any, any> {
     let obj = { ...value, enddate: endDate, newdate: startDate };
     // tslint:disable-next-line:no-console
     console.log(obj);
-
   }
 
   render() {

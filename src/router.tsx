@@ -1055,6 +1055,10 @@ const routes = [
     path: '/log-response/:id',
     asyncComponent: () => import('./Integration/Log/log-response')
   },
+  {
+    path: '/demo',
+    asyncComponent: () => import('./Integration/demo')
+  },
 ];
 
 const homeRoutes = [

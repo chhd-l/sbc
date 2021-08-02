@@ -78,10 +78,10 @@ class InterfaceList extends Component<any, any> {
   getPageList = async () => {
     this.setState({ loading: true });
     const { res } = await goodsList(this.state.pagination);
-    let newPagination = Object.assign(this.state.pagination, { 'total': res.context.goodsPage.total });
+    let newPagination = Object.assign(this.state.pagination, { 'total': res.context?.goodsPage?.total??0 });
     this.setState({ loading: false });
     this.setState({
-      dataSource: res.context.goodsPage.content,
+      dataSource: res.context?.goodsPage.content??[],
       pagination: newPagination
     });
   };

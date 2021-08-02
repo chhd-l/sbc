@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { BreadCrumb, Headline } from 'qmkit'
-import { FormattedMessage } from 'react-intl'
+import { BreadCrumb, Headline, RCi18n } from 'qmkit'
 import { Breadcrumb } from 'antd'
 import RequestDetail from './components/RequesDetailt'
 import LogPanel from './components/LogPanel'
@@ -83,10 +82,10 @@ class LogDetail extends Component<any, any>{
       <div>
         {/* 面包屑导航 */}
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="Log.RequestDetail" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{RCi18n({id:'Log.RequestDetail'})}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={<FormattedMessage id="Log.RequestDetail" />} />
+          <Headline title={RCi18n({id:'Log.RequestDetail'})} />
           {/* 跳转后的数据展示 */}
           <RequestDetail datalist={this.state.logList} />
         </div>

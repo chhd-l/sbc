@@ -2328,7 +2328,7 @@ export default {
         'Interface.Successful Rate (%)':'Successful Rate (%)',
         'Interface.Response Time (ms)':'Response Time (ms)',
         'Interface.90th Response Time Percentile (ms)':'90th Response Time Percentile (ms)',
-        'Log.LogSearch': 'LogSearch',
+        'Log.LogSearch': 'Log Search',
         'Log.RequestID':'Request ID',
         'Log.System':'System',
         'Log.Interface':'Interface',

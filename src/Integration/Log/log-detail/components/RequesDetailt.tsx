@@ -17,13 +17,13 @@ export default class RequestDetail extends Component<any, any>{
       <Form className="filter-content myform">
         <Row gutter={24}>
           <Col span={8}>
-            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'RequestID'})}</p>} defaultValue={datalist.requestId} disabled />
+            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'Log.RequestID'})}</p>} defaultValue={datalist.requestId} disabled />
           </Col>
           <Col span={8}>
-            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'Time'})}</p>} defaultValue={datalist.time} disabled />
+            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'Log.Time'})}</p>} defaultValue={datalist.time} disabled />
           </Col>
           <Col span={8}>
-            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'Interface'})}</p>} defaultValue={datalist.interface} disabled />
+            <Input addonBefore={<p style={styles.label}>{RCi18n({id:'Log.Interface'})}</p>} defaultValue={datalist.interface} disabled />
           </Col>
         </Row>
       </Form>

@@ -13,14 +13,45 @@ export default class Response extends Component<any, any>{
         {
           id: 1,
           time: '2021-06-21 06:45:27.944',
-          error: '{' +
+          error:{
 
-            '\n\"id\": \"70989930191138816\"' + ',' +
+            'time': {
 
-            '\n\"sn\": \"70989929016733696\"' + ',' +
+              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
 
-            '\n\"countryCode\": \"RU\"' +
-            '\n}'
+              'content-length': '176',
+
+              'country': 'RU',
+
+              'clientid': 'IceROxHgyg0riyVq',
+
+              'x-forwarded-proto': 'https,http',
+
+              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
+
+              'x-forwarded-port': '443,443',
+
+              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
+
+              'x-forwarded-for': '10.240.2.11,10.240.3.18',
+
+              'forwarded': 'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
+
+              'accept': '*/*',
+
+              'x-real-ip': '10.240.2.11',
+
+              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
+
+              'host': '10.240.2.21:8690',
+
+              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
+
+              'x-scheme': 'https',
+
+              'user-agent': 'AHC/1.0'
+            }
+          }
         }
       ]
     }
@@ -37,8 +68,9 @@ export default class Response extends Component<any, any>{
         <div className="container-info">
           <Headline title={RCi18n({ id: 'Log.ResponseLog' })} />
           <div className="container">
+            {/* ReactJson插件展示JSON数据 */}
             <ReactJson
-              src={JSON.parse(this.state.list[0].error)}
+              src={this.state.list[0].error}
               name={false}
               style={{ fontFamily: 'Sans-Serif' }}
               displayDataTypes={false}

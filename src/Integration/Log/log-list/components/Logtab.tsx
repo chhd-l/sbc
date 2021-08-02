@@ -550,20 +550,6 @@ export default class LogTabs extends Component<any, any>{
     this.getlist(0);
   }
 
-  initLog = async () => {
-    const { res } = await webapi.fetchLogList({
-      ...this.state.searchForm,
-      ...this.state.pagination
-    });
-    let newPagination = Object.assign({},this.state.pagination);
-    let currentLogList = res.context.content||[];
-      newPagination.total = res.context.total||0;
-      this.setState({
-        pagination:newPagination,
-        list:currentLogList
-      })
-  };
-
   handleTableChange= (pagination: any)=> {
     this.setState({
       pagination: pagination
@@ -728,6 +714,21 @@ export default class LogTabs extends Component<any, any>{
         this.initError()
     }
   }
+
+  initLog = async () => {
+    const { res } = await webapi.fetchLogList({
+      ...this.state.searchForm,
+      ...this.state.pagination
+    });
+    let newPagination = Object.assign({},this.state.pagination);
+    let currentLogList = res.context.content||[];
+      newPagination.total = res.context.total||0;
+      this.setState({
+        pagination:newPagination,
+        list:currentLogList
+      })
+  };
+
   initError = () =>{
       const objx = {
         total:0,

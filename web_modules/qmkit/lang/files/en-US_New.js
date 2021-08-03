@@ -801,6 +801,7 @@ export default {
 	    'Order.region': 'Region',
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
+      'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock'
 
 
 
@@ -1323,7 +1324,7 @@ export default {
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
         'Marketing.EmailApiSetting':'Email Api Setting',
         'Marketing.sendsayTip':'Please go to Sendsay to activate Email,and set up your AccessKeyId and AccessKeySecret in the Sendsay.',
-     
+
         "Marketing.PromotionType": "Promotion type",
         "Marketing.NormalPromotion": "Normal promotion",
         "Marketing.SubscriptionPromotion": "Subscription promotion",
@@ -2026,7 +2027,7 @@ export default {
         "Setting.pleaseSelectTime": "Please select time",
         "Setting.mustSelectOneOpenDay": "Please select at least one open date",
         "Setting.Keyword": "Keyword",
-        
+
     },
     Menu: {
         "Menu.Appointment": "Appointment",

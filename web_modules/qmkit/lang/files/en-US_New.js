@@ -801,7 +801,8 @@ export default {
 	    'Order.region': 'Region',
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
-      'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock'
+      'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
+        'Order.workTime':'Chosen delivery method'
 
 
 

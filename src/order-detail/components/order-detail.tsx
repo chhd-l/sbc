@@ -175,6 +175,7 @@ class OrderDetailTab extends React.Component<any, any> {
           area: string;
           timeSlot: string;
           deliveryDate: string;
+          workTime: string;
         } | null)
       : null;
 
@@ -536,8 +537,8 @@ class OrderDetailTab extends React.Component<any, any> {
           ) : null}
         </Row>
 
-        {!detail.get('subscribeId') &&
-        !(detail.get('clinicsId') || firstTradeItems.recommendationId) &&
+        {detail.get('subscribeId') &&
+        (detail.get('clinicsId') || firstTradeItems.recommendationId) &&
         (storeId === 123457907 || storeId === 123457911) ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
@@ -724,68 +725,77 @@ class OrderDetailTab extends React.Component<any, any> {
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
               <Row>
-                {consignee ? (
-                  <Col span={12}>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.firstName}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.lastName}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.LastName" />: {consignee.lastName}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.detailAddress1}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.detailAddress2}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
-                      </p>
-                    </Tooltip>
-                    <p>
-                      <FormattedMessage id="Order.country" />:{' '}
-                      {countryDict
-                        ? countryDict.find((c) => c.id == consignee.countryId)
-                          ? countryDict.find((c) => c.id == consignee.countryId).name
-                          : consignee.countryId
-                        : ''}
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
                     </p>
-                    <p>
-                      <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
                     </p>
-                    <p>
-                      <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress1}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
                     </p>
-                  </Col>
-                ) : null}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress2}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
+                    </p>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.country" />:{' '}
+                    {countryDict
+                      ? countryDict.find((c) => c.id == consignee.countryId)
+                        ? countryDict.find((c) => c.id == consignee.countryId).name
+                        : consignee.countryId
+                      : ''}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.comment}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                    </p>
+                  </Tooltip>
+                </Col>
 
                 <Col span={12}>
                   <Tooltip
@@ -826,19 +836,19 @@ class OrderDetailTab extends React.Component<any, any> {
                       {getFormatDeliveryDateStr(consignee.deliveryDate)}
                     </p>
                   </Tooltip>
-                </Col>
-                <Col span={24}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.comment}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
-                    </p>
-                  </Tooltip>
+                  {storeId === 123457907 && (
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{consignee.workTime}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.workTime" />: {consignee.workTime}
+                      </p>
+                    </Tooltip>
+                  )}
                 </Col>
                 {storeId === 123457907 ? (
                   <Col span={24}>

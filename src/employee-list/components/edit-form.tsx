@@ -107,38 +107,28 @@ export default class EditForm extends React.Component<any, any> {
     console.log('findEmployeeByEmail', value)
     if(!value) return;
     if(!ValidConst.email.test(value)) return; // 邮箱正则
-    this.setState({loading: true});
 
-    setTimeout(() => {
-      this.setState({loading: false})
+    this.setState({loading: true})
+    let {res} = await getUserInfo(value);
+    this.setState({loading: false});
+    if (res.code === Const.SUCCESS_CODE) {
+      let {
+        sex,
+        birthday,
+        firstName,
+        lastName,
+        employeeMobile,
+      } = res.context;
       this.props.form.setFieldsValue({
-        firstName: 'shi',
-        lastName: 'jack',
-        sex: 1,
-        birthday: moment('2021-08-02'),
-        employeeMobile: 14278234544,
+        sex,
+        firstName,
+        lastName,
+        birthday: moment(birthday),
+        employeeMobile,
       });
-    }, 3000)
+    }else {
 
-    // this.setState({loading: true})
-    // let res = await getUserInfo(value);
-    // this.setState({loading: false});
-    // if (res.code === Const.SUCCESS_CODE) {
-    //   let {
-    //     sex,
-    //     birthday,
-    //     firstName,
-    //     lastName,
-    //     employeeMobile,
-    //   } = res.context;
-    //   this.props.form.setFieldsValue({
-    //     sex,
-    //     firstName,
-    //     lastName,
-    //     birthday: moment(birthday),
-    //     employeeMobile,
-    //   });
-    // }else {}
+    }
   }
 
   onEmailChange = (value ) => {

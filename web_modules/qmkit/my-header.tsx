@@ -14,13 +14,17 @@ import {
   Tabs,
   notification,
   Modal,
-  Tooltip
+  Tooltip,
+  Spin
 } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const, AuthWrapper } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import OktaLogout from './okta/okta-logout';
+import {
+  getStoreList,
+} from './okta/webapi';
 import { getHomeTaskListAndCount, getTaskRead, getHomeTaskTodoListTop5 } from '../../src/task/webapi';
 import { FormattedMessage } from 'react-intl';
 import msgImg from './images/icon/msg-icon.png'
@@ -28,7 +32,8 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
-import { RCi18n } from 'qmkit';
+import { RCi18n, switchLogin } from 'qmkit';
+import tr from './lang/files/tr';
 
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1991001_qbfpgtolyzr.js',
@@ -49,20 +54,123 @@ export default class MyHeader extends React.Component {
       Turkey: util.requireLocalSrc(lan === 'tr' ? 'sys/Turkey_act.png' : 'sys/Turkey.png'),
       France: util.requireLocalSrc(lan === 'fr' ? 'sys/France_act.png' : 'sys/France.png'),
       Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png'),
-      shopList: [
+      storeList: [
         {
-          img: 'iconfangjian1',
-          accountName: 'account1'
+          "accountName": "13200000004",
+          "accountState": "ENABLE",
+          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
+          "applyEnterTime": "2018-07-12T08:10:47",
+          "areaId": 320114,
+          "auditState": "CHECKED",
+          "cityId": 1,
+          "citySelection": "NO",
+          "companyInfoId": 1055,
+          "companyType": "NO",
+          "contactEmail": "info.usa@royalcanin.com",
+          "contactMobile": "18911363762",
+          "contactPerson": "Antonia",
+          "contractEndDate": "2038-01-12T08:08:34",
+          "contractStartDate": "2018-07-12T08:08:24",
+          "countryId": 3620,
+          "currencyId": 3624,
+          "domainName": "https://shopuat.466920.com/us/",
+          "freightTemplateType": "NO",
+          "languageId": [
+            "5660"
+          ],
+          "onePageCheckout": "1",
+          "prescriberMap": "0",
+          "profilePaymentMethod": "1",
+          "provinceId": 320000,
+          "storeId": 1234579101,
+          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
+          "storeName": "Royal Canin_America",
+          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
+          "storeState": "OPENING",
+          "storeType": "SUPPLIER",
+          "supplierCode": "S00003",
+          "supplierName": "Royal Canin_America",
+          "taxRate": "15",
+          "timeZoneId": 4028
         },
         {
-          img: 'iconfangjian1',
-          accountName: 'account2-----'
+          "accountName": "13200000004",
+          "accountState": "ENABLE",
+          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
+          "applyEnterTime": "2018-07-12T08:10:47",
+          "areaId": 320114,
+          "auditState": "CHECKED",
+          "cityId": 1,
+          "citySelection": "NO",
+          "companyInfoId": 1055,
+          "companyType": "NO",
+          "contactEmail": "info.usa@royalcanin.com",
+          "contactMobile": "18911363762",
+          "contactPerson": "Antonia",
+          "contractEndDate": "2038-01-12T08:08:34",
+          "contractStartDate": "2018-07-12T08:08:24",
+          "countryId": 3620,
+          "currencyId": 3624,
+          "domainName": "https://shopuat.466920.com/us/",
+          "freightTemplateType": "NO",
+          "languageId": [
+            "5660"
+          ],
+          "onePageCheckout": "1",
+          "prescriberMap": "0",
+          "profilePaymentMethod": "1",
+          "provinceId": 320000,
+          "storeId": 1234579102,
+          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
+          "storeName": "Royal Canin_America",
+          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
+          "storeState": "OPENING",
+          "storeType": "SUPPLIER",
+          "supplierCode": "S00003",
+          "supplierName": "Royal Canin_America",
+          "taxRate": "15",
+          "timeZoneId": 4028
         },
         {
-          img: 'iconfangjian1',
-          accountName: 'account3--------'
+          "accountName": "13200000004",
+          "accountState": "ENABLE",
+          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
+          "applyEnterTime": "2018-07-12T08:10:47",
+          "areaId": 320114,
+          "auditState": "CHECKED",
+          "cityId": 1,
+          "citySelection": "NO",
+          "companyInfoId": 1055,
+          "companyType": "NO",
+          "contactEmail": "info.usa@royalcanin.com",
+          "contactMobile": "18911363762",
+          "contactPerson": "Antonia",
+          "contractEndDate": "2038-01-12T08:08:34",
+          "contractStartDate": "2018-07-12T08:08:24",
+          "countryId": 3620,
+          "currencyId": 3624,
+          "domainName": "https://shopuat.466920.com/us/",
+          "freightTemplateType": "NO",
+          "languageId": [
+            "5660"
+          ],
+          "onePageCheckout": "1",
+          "prescriberMap": "0",
+          "profilePaymentMethod": "1",
+          "provinceId": 320000,
+          "storeId": 123457907,
+          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
+          "storeName": "Royal Canin_America",
+          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
+          "storeState": "OPENING",
+          "storeType": "SUPPLIER",
+          "supplierCode": "S00003",
+          "supplierName": "Royal Canin_America",
+          "taxRate": "15",
+          "timeZoneId": 4028
         },
       ],
+      storeLoading: false
 
     };
   }
@@ -71,6 +179,7 @@ export default class MyHeader extends React.Component {
     if ((window as any).token) {
       this.getTaskList();
       // 获取切换店铺的下拉数据
+      this.getUserStoreList();
 
     }
   }
@@ -248,9 +357,54 @@ export default class MyHeader extends React.Component {
     });
   };
 
+  getUserStoreList = async () => {
+    const data = await getStoreList();
+    this.setState({
+      storeList: data.res?.context?.storeList ?? [],
+    });
+
+  }
+
+  /**
+   * 根据storeId获取国旗
+   *
+   * 123456858   墨西哥
+   * 123457907   俄罗斯
+   * 123457908   德国
+   * 123457909   法国
+   * 123457910   美国
+   * 123457911   土耳其
+   **/
+  getStoreIcon = (storeId) => {
+
+    switch (storeId) {
+      case 123456858: break;
+      case 123457907: break;
+      case 123457908: break;
+      case 123457909: break;
+      case 123457910: break;
+      case 123457911: break;
+      default: break;
+    }
+  }
+
   // 切换商铺
-  onchangeShop = (nfo) => {
-    console.log('onchangeShop', info);
+  onchangeShop = (info) => {
+    if (!info) return;
+    let {key: storeId} = info;
+    console.log('onchangeShop', storeId)
+
+    this.userSwitchStore(storeId);
+  }
+
+  // 切换商铺后重新获取LOGIN_DATA数据
+  userSwitchStore = (storeId) => {
+    this.setState({storeLoading: true});
+    switchLogin({storeId}, () => {
+      this.setState({storeLoading: false})
+      // 重新加载页面
+      window.location.reload();
+    })
   }
 
   render() {
@@ -407,14 +561,23 @@ export default class MyHeader extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    let { shopList } = this.state;
+    let {
+      storeList,
+      storeLoading
+    } = this.state;
     const shopMenu = (
-        <Menu>
-          {shopList.map(item => (
-              <Menu.Item key={item.accountName}>
-                <div className='shop-list-item' onClick={() => this.onchangeShop(item)}>
-                  <IconFont className='logo' type={item.img} />
-                  <span className='accountName'>{item.accountName}</span>
+        // 当前自己store
+        <Menu
+            onClick={(e) => this.onchangeShop(e)}
+        >
+          {storeList.map(item => (
+              <Menu.Item
+                  key={item.storeId}
+                  disabled={loginInfo.storeId === item.storeId}
+              >
+                <div className='shop-list-item' >
+                  <IconFont className='logo' type='iconfangjian1' />
+                  <span className='accountName'>{item.storeName}</span>
                 </div>
               </Menu.Item>
           ))}
@@ -496,16 +659,18 @@ export default class MyHeader extends React.Component {
                 </AuthWrapper>
               </div>
               <div className='headerRight-shop'>
-                <div style={{ marginRight: 30, marginTop: 10, height: 64 }}>
-                  <Dropdown
-                      placement={'bottomRight'}
-                      overlay={shopMenu}
-                      trigger={['click']}
-                      overlayClassName='shop-list-box'
-                  >
-                    <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
-                  </Dropdown>
-                </div>
+                <Spin spinning={storeLoading}>
+                  <div style={{ marginRight: 30, marginTop: 10, height: 64 }}>
+                    <Dropdown
+                        placement={'bottomRight'}
+                        overlay={shopMenu}
+                        trigger={['click']}
+                        overlayClassName='shop-list-box'
+                    >
+                      <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                    </Dropdown>
+                  </div>
+                </Spin>
               </div>
               <div style={{ height: 20, textAlign: 'right' }}>
                 <div style={{ height: 20 }}>

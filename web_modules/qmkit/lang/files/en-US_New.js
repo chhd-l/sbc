@@ -1601,7 +1601,7 @@ export default {
         "Marketing.EndTime": "End time",
         "Marketing.SelectCoupons": "Select coupons",
         "Marketing.GiveTheNumber": "Give the number",
-        "Marketing.CouponActivity": "Coupon activity",
+        "Marketing.CouponActivity": "Activity list",//Coupon activity
         "Marketing.CouponName": "Coupon name",
         "Marketing.ValidPeriod": "Valid period",
         "Marketing.PleaseEnterTheNumberOfCoupons": "Please enter the number of coupons",
@@ -1792,7 +1792,7 @@ export default {
         "Marketing.CCList": "CC List",
         "Marketing.Preview": "Preview",
         "Marketing.Singlepurchase": "Single purchase",
-        "Marketing.Automationlist": "Automation list",
+        "Marketing.Automationlist": "Marketing list",//"Automation list",
         "Marketing.OperationFailure": "Operation failure",
         "Marketing.OperationSuccessful": "Operation successful",
         "Marketing.AutomationName": "Automation name",

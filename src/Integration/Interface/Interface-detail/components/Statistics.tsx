@@ -16,8 +16,8 @@ export default class Statistics extends Component<any, any> {
     };
   }
   // 切换 Latest
-  onChange = (e) => {
-    this.setState({
+  onChange = async (e) => {
+    await this.setState({
       active: e.target.value
     });
   };

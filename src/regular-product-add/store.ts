@@ -1075,7 +1075,7 @@ export default class AppStore extends Store {
 
     //至少要有一个上架状态的sku为Y
     if(subscriptionStatus === 1) {
-      if(!goodsList.some(item => item.subscriptionStatus === 1 && item.addedFlag === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
+      if(!goodsList.some(item => item.subscriptionStatus === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
         message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
         return false;
       }

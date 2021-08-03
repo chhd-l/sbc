@@ -995,8 +995,9 @@ export default class AppStore extends Store {
     const goodsList = this.state().get('goodsList').toJS();
 
     //至少要有一个上架状态的sku为Y
+    //1.SPU维度，订阅状态为Y的时候，SKU维度至少有一个为Y（不考虑上架或者下架）；2.只有一个规格的情况下，SKU的上下架状态跟SPU联动；
     if(subscriptionStatus === 1) {
-      if(!goodsList.some(item => item.subscriptionStatus === 1 && item.addedFlag === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
+      if(!goodsList.some(item => item.subscriptionStatus === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
         message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
         return false;
       }

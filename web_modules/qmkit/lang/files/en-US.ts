@@ -2668,7 +2668,7 @@ export default {
   'Marketing.Price':'Price',
   'Marketing.Inventory':'Inventory',
   'Marketing.GiveTheNumber':'Give the number',
-  'Marketing.CouponActivity':'Coupon activity',
+  'Marketing.CouponActivity':'Activity list',//'Coupon activity',
   'Marketing.CouponName':'Coupon name',
   'Marketing.ValidPeriod':'Valid period',
   'Marketing.PleaseEnterTheNumberOfCoupons':'Please enter the number of coupons',

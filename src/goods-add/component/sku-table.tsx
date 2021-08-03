@@ -600,9 +600,9 @@ class SkuForm extends React.Component<any, any> {
         return (
           <Col span={8}>
             <FormItem style={styles.tableFormItem}>
-              {goodsList.toJS().length == 1 ? ( <div>
+              {goodsList.toJS().length == 1 ? ( goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (<div>
                 <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>
-              </div> ) : (<>
+              </div>) ) : (<>
                   {goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (
                     <>
                       {rowInfo.addedFlag == 1 ? (

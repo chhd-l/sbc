@@ -883,7 +883,7 @@ class GoodsForm extends React.Component<any, any> {
           [key]: fromJS(0)
         });
         editGoods(goods);
-        editGoodsItem(goods);
+        // editGoodsItem(goods);
         setFieldsValue({ addedFlag: 0 });
       } else {
         this.setState({
@@ -893,9 +893,13 @@ class GoodsForm extends React.Component<any, any> {
           [key]: fromJS(1)
         });
         editGoods(goods);
-        editGoodsItem(goods);
+        // editGoodsItem(goods);
         setFieldsValue({ addedFlag: 1 });
       }
+
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'addedFlag',fromJS(e));
+      })
     }
 
     else if (key === 'saleableFlag') {

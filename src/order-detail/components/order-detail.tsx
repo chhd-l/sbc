@@ -121,7 +121,8 @@ class OrderDetailTab extends React.Component<any, any> {
     visiblePetDetails: false,
     moreData: [],
     visibleMoreFields: false,
-    currentPet: {}
+    currentPet: {},
+    tableLoading: false
   };
 
   render() {
@@ -573,6 +574,7 @@ class OrderDetailTab extends React.Component<any, any> {
             dataSource={tradeItems.concat(gifts)}
             pagination={false}
             bordered
+            loading={this.state.tableLoading}
           />
 
           <Modal
@@ -984,10 +986,11 @@ class OrderDetailTab extends React.Component<any, any> {
   }
 
   //刷新商品实时库存
-  _refreshRealtimeStock = (tid: string) => {
-    console.log('1111');
+  _refreshRealtimeStock = async (tid: string) => {
+    // this.setState({ tableLoading: true });
     const { refreshGoodsRealtimeStock } = this.props.relaxProps;
-    refreshGoodsRealtimeStock(tid);
+    await refreshGoodsRealtimeStock(tid);
+    this.setState({ tableLoading: false });
   };
 
   //附件

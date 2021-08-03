@@ -48,7 +48,11 @@ export default class Related extends React.Component<any, any> {
         </div>
 
         <RelatedProduct />
-        {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
+        {
+          this.state.visible == true
+            ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} />
+            : <React.Fragment />
+        }
       </div>
     );
   }

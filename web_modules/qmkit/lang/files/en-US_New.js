@@ -112,6 +112,7 @@ export default {
         "Public.ordelineTip": "If nothing is selected below, then by default only ordeline fields are exported",
         "Public.changeLanguageAlert": "Language switching, please wait...",
         "Public.Upload.uploadsuccess": "upload successful",
+        "Public.alreadyRegister": "User has been registered"
     },
     Home: {
         "Home.ConversionFunnel": "Conversion Funnel",
@@ -164,7 +165,7 @@ export default {
         "Product.SynchronizeImage": "Synchronize image",
         'Product.specificationvaluecannot': 'The specification value cannot be a space character',
         'Product.Repeatedspecifications': 'Repeated specifications',
-        'Product.Supportupto20specifications': 'Support up to 20 specifications',
+        'Product.Supportupto20specifications': 'Support up to 100 specifications',
         'Product.inputspecification': 'Please input specification',
         'Product.inputspecificationValue': 'Please input specification Value',
         'Product.Nospecificationvalue': 'No specification value',
@@ -829,6 +830,7 @@ export default {
         "Order.gift": "Gift",
         "Order.Giveaway": "【Giveaway】",
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
+        'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
 
 
 
@@ -1143,10 +1145,11 @@ export default {
         "Prescriber.SingleUse": "Single Use",
         "Prescriber.MultipleUse": "Multiple Use",
         "Prescriber.active": "ACTIVE",
-        "Prescriber.addRecommendaionCode": "Add Recommendaion Code",
+        "Prescriber.addRecommendaionCode": "Add Recommendation Code",
         "Prescriber.amount": "Amount",
         "Prescriber.pleaseInputAmount": "Please input amount",
-        "Prescriber.PleaseSelectAmount": "Please select amount"
+        "Prescriber.PleaseSelectAmount": "Please select amount",
+        "Prescriber.Ordernow": "Order now",
 
 
     },

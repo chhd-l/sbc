@@ -437,13 +437,27 @@ class ListView extends React.Component<any, any> {
                                 </Tooltip>
                               </AuthWrapper>
                             )}
+                          {v.getIn(['tradeState', 'flowState']) === 'SHIPPED' && (
+                            <AuthWrapper functionName="fOrderList003">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Delivered" />}>
+                                <a
+                                  onClick={() => {
+                                    this._showConfirm(id, (window as any).RCi18n({ id: 'Order.Delivered' }), (window as any).RCi18n({ id: 'Order.ConfirmthatallproductsDeliverd' }));
+                                  }}
+                                  href="javascript:void(0)"
+                                >
+                                  <FormattedMessage id="Order.Delivered" />
+                                </a>
+                              </Tooltip>
+                            </AuthWrapper>
+                          )}
                           {/*待收货状态显示*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'SHIPPED') && (
+                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
                             <AuthWrapper functionName="fOrderList003">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
                                 <a
                                   onClick={() => {
-                                    this._showConfirm(id);
+                                    this._showConfirm(id, (window as any).RCi18n({ id: 'Order.ConfirmReceipt' }), (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' }));
                                   }}
                                   href="javascript:void(0)"
                                 >
@@ -452,6 +466,7 @@ class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
+                          
                           {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id)} className="iconfont iconaudit"></a>
@@ -592,13 +607,13 @@ class ListView extends React.Component<any, any> {
    * @param tdId
    * @private
    */
-  _showConfirm = (tdId: string) => {
+  _showConfirm = (tdId: string, title: string, content:string) => {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
     confirm({
-      title: (window as any).RCi18n({ id: 'Order.ConfirmReceipt' }),
-      content: (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' }),
+      title: title, 
+      content:  content,
       onOk() {
         onConfirm(tdId);
       },

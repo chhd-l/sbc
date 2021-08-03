@@ -421,7 +421,7 @@ export async function switchLogin(params, callback?: Function) {
             let url = _getUrl(allGradeMenus);
             history.push(url);
           }
-          callback(res.context)
+          callback(res)
           break;
           /**审核未通过*/
         case 2:
@@ -431,7 +431,7 @@ export async function switchLogin(params, callback?: Function) {
           //申请开店
           history.push('/shop-process');
       }
-      callback(res.context)
+      callback(res)
     } else {
       callback(res)
     }

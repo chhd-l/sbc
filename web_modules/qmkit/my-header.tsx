@@ -392,18 +392,22 @@ export default class MyHeader extends React.Component {
   onchangeShop = (info) => {
     if (!info) return;
     let {key: storeId} = info;
-    console.log('onchangeShop', storeId)
-
     this.userSwitchStore(storeId);
   }
 
   // 切换商铺后重新获取LOGIN_DATA数据
   userSwitchStore = (storeId) => {
     this.setState({storeLoading: true});
-    switchLogin({storeId}, () => {
+    switchLogin({storeId}, (res) => {
+      console.log('userSwitchStore', res);
+      if (res.code === Const.SUCCESS_CODE){
+        // 重新加载页面
+        window.location.reload();
+      }else {
+
+      }
       this.setState({storeLoading: false})
-      // 重新加载页面
-      window.location.reload();
+
     })
   }
 
@@ -597,7 +601,7 @@ export default class MyHeader extends React.Component {
             <a href="/" style={styles.logoBg}>
               <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
             </a>
-            <span style={{display: 'inline-block', color: '#333'}}>{accountName}</span>
+            <span style={{display: 'inline-block', color: '#333'}}>{storeName}</span>
 
             {baseConfig &&
               (!prescriberId ? (
@@ -631,7 +635,7 @@ export default class MyHeader extends React.Component {
             </div>
 
             <div style={styles.headerRight}>
-              <div style={{ marginRight: 30, marginTop: 15, height: 64 }}>
+              <div style={{ marginTop: 15, height: 64 }}>
                 <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover
@@ -660,7 +664,7 @@ export default class MyHeader extends React.Component {
               </div>
               <div className='headerRight-shop'>
                 <Spin spinning={storeLoading}>
-                  <div style={{ marginRight: 30, marginTop: 10, height: 64 }}>
+                  <div style={{ padding: '0 30px', marginTop: 10, height: 64 }}>
                     <Dropdown
                         placement={'bottomRight'}
                         overlay={shopMenu}

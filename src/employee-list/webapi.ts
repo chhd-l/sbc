@@ -220,7 +220,7 @@ export function sendEmail(filterParams = {}) {
 }
 
 export function getUserInfo(email) {
-  return Fetch<TResult>(`/customer/findEmployeeByEmail?email=${email}`, {
+  return Fetch<TResult>(`/customer/employee/findEmployeeByEmail?email=${email}`, {
     method: 'GET',
   });
 }

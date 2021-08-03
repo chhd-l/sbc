@@ -118,14 +118,17 @@ export default class EditForm extends React.Component<any, any> {
         firstName,
         lastName,
         employeeMobile,
+        employeeId,
       } = res.context;
-      this.props.form.setFieldsValue({
-        sex,
-        firstName,
-        lastName,
-        birthday: moment(birthday),
-        employeeMobile,
-      });
+      if (!!employeeId) {
+        this.props.form.setFieldsValue({
+          sex,
+          firstName,
+          lastName,
+          birthday: moment(birthday),
+          employeeMobile,
+        });
+      }
     }else {
 
     }

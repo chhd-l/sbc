@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Form, Row, Col, Select, Button } from 'antd';
-import { FormattedMessage } from 'react-intl';
-import { SelectGroup } from 'qmkit';
+import { SelectGroup,RCi18n } from 'qmkit';
 import MyDate from './MyDate'
 
 const { Option } = Select
@@ -29,7 +28,7 @@ class LogSearch extends Component<any, any> {
           {/* requestID */}
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('requestId')(<Input addonBefore={<p style={styles.label}>{<FormattedMessage id="Log.RequestID" />}</p>} />)}
+              {getFieldDecorator('requestId')(<Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.RequestID' })}</p>} />)}
             </Form.Item>
           </Col>
           {/* system */}
@@ -41,12 +40,12 @@ class LogSearch extends Component<any, any> {
                 <SelectGroup
                   style={styles.selectWidth}
                   label={<p style={styles.label}
-                  >{<FormattedMessage id="Log.System" />}</p>}>
-                  <Option value="0">{<FormattedMessage id="Log.Datata" />}</Option>
-                  <Option value="1">{<FormattedMessage id="Log.Fedex" />}</Option>
-                  <Option value="2">{<FormattedMessage id="Log.Mulesoft" />}</Option>
-                  <Option value="3">{<FormattedMessage id="Log.OKTACIAM" />}</Option>
-                  <Option value="4">{<FormattedMessage id="Log.WEShare" />}</Option>
+                  >{RCi18n({ id: 'Log.System' })}</p>}>
+                  <Option value="0">{RCi18n({ id: 'Log.Datata' })}</Option>
+                  <Option value="1">{RCi18n({ id: 'Log.Fedex' })}</Option>
+                  <Option value="2">{RCi18n({ id: 'Log.Mulesoft' })}</Option>
+                  <Option value="3">{RCi18n({ id: 'Log.OKTACIAM' })}</Option>
+                  <Option value="4">{RCi18n({ id: 'Log.WEShare' })}</Option>
                 </SelectGroup>
               )}
             </Form.Item>
@@ -59,10 +58,10 @@ class LogSearch extends Component<any, any> {
               })
                 (<SelectGroup
                   style={styles.selectWidth}
-                  label={<p style={styles.label}>{<FormattedMessage id="Log.Interface" />}</p>}>
-                  <Option value="0">{<FormattedMessage id="Log.InventorySynchonization" />}</Option>
-                  <Option value="1">{<FormattedMessage id="Log.OrderExport" />}</Option>
-                  <Option value="2">{<FormattedMessage id="Log.PriceSynchronization" />}</Option>
+                  label={<p style={styles.label}>{RCi18n({ id: 'Log.Interface' })}</p>}>
+                  <Option value="0">{RCi18n({ id: 'Log.InventorySynchonization' })}</Option>
+                  <Option value="1">{RCi18n({ id: 'Log.OrderExport' })}</Option>
+                  <Option value="2">{RCi18n({ id: 'Log.PriceSynchronization' })}</Option>
                 </SelectGroup>)}
             </Form.Item>
           </Col>
@@ -71,13 +70,13 @@ class LogSearch extends Component<any, any> {
           {/* newdate */}
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.NewDate" /></p>}></MyDate>)}
+              {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}>{RCi18n({ id: 'Log.NewDate' })}</p>}></MyDate>)}
             </Form.Item>
           </Col>
           {/* enddate */}
           <Col span={8}>
             <Form.Item>
-              {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}><FormattedMessage id="Log.EndDate" /></p>}></MyDate>)}
+              {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}>{RCi18n({ id: 'Log.EndDate' })}</p>}></MyDate>)}
             </Form.Item>
           </Col>
         </Row>
@@ -89,7 +88,7 @@ class LogSearch extends Component<any, any> {
                 htmlType="submit"
                 icon="search"
                 shape="round" onClick={this.handleSubmit}>
-                <FormattedMessage id="Log.Search" />
+                {RCi18n({ id: 'Log.Search' })}
               </Button>
             </Form.Item>
           </Col>

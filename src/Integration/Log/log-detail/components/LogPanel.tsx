@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { Collapse, Tabs, Tooltip } from 'antd'
-import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import ReactJson from 'react-json-view';
-
+import { RCi18n } from 'qmkit';
 import Tab from '@/Integration/components/tab'
 import MyTooltip from '@/Integration/components/myTooltip'
+
 
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
-// 获取父组件数据源
+// 获取父组件传来的数据源
 interface IProps {
   dataList: any,
 }
@@ -20,7 +20,9 @@ export default class LogPanel extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
+      // 当前展示表格
       activeTableKey: '',
+      // 分页数据
       pagination: {
         current: 1,
         pageSize: 2,
@@ -29,34 +31,34 @@ export default class LogPanel extends Component<any, any> {
       // 表头
       columns: [
         {
-          title: <FormattedMessage id="Log.Time" />,
+          title: RCi18n({id:'Log.Time'}),
           dataIndex: 'time',
         },
         {
-          title: <FormattedMessage id="Log.ClientName" />,
+          title: RCi18n({id:'Log.ClientName'}),
           dataIndex: 'clientname',
         },
         {
-          title: <FormattedMessage id="Log.ClientID" />,
+          title: RCi18n({id:'Log.ClientID'}),
           dataIndex: 'clientid',
         },
         {
-          title: <FormattedMessage id="Log.URL" />,
+          title: RCi18n({id:'Log.URL'}),
           dataIndex: 'url',
         },
         {
-          title: <FormattedMessage id="Log.ResultFlag" />,
+          title: RCi18n({id:'Log.ResultFlag'}),
           dataIndex: 'resultflag',
         },
         {
-          title: <FormattedMessage id="Log.Error" />,
+          title:RCi18n({id:'Log.Error'}),
           dataIndex: 'error',
           render: (text, record) => (
             <MyTooltip height="174px" width="500px" content={record.errorTip} text={text} />
           )
         },
         {
-          title: <FormattedMessage id="Log.Log" />,
+          title: RCi18n({id:'Log.Log'}),
           dataIndex: 'log',
           key: 'log',
           render: () => (
@@ -68,7 +70,7 @@ export default class LogPanel extends Component<any, any> {
           )
         }
       ],
-      // 表格初始数据
+      // 表格初始测试数据
       list: [
         {
           id: 1,
@@ -175,14 +177,14 @@ export default class LogPanel extends Component<any, any> {
     }
   }
 
-  //获取url中的默认显示表格 
+  //获取url中的默认显示表格
   UNSAFE_componentWillMount() {
     this.setState({
       activeTableKey: this.props.activeTableKey,
     })
   }
 
-  //变更表格数据
+  //切换表格后，数据变化
   onTableChange = (key) => {
     this.initPage()
     this.setState({
@@ -223,7 +225,7 @@ export default class LogPanel extends Component<any, any> {
       },
     ];
     this.setState({
-      list:data
+      list: data
     })
   }
 
@@ -254,7 +256,6 @@ export default class LogPanel extends Component<any, any> {
         }
       },
     ];
-    // 处理JSON数据
     this.setState({
       list: data
     })
@@ -270,7 +271,7 @@ export default class LogPanel extends Component<any, any> {
     });
   };
 
-  // 分页
+  // 切换分页
   onSearchPage = (pagination) => {
     this.setState({
       pagination: pagination
@@ -283,7 +284,7 @@ export default class LogPanel extends Component<any, any> {
       <div>
         <div style={styles.infofirst}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost}>
-            <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.LogHeader" />}</h3>} key="0" style={styles.panelStyle}>
+            <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({id:'Log.LogHeader'})}</h3>} key="0" style={styles.panelStyle}>
               <ReactJson
                 src={dataList.header}
                 name={false}
@@ -298,7 +299,7 @@ export default class LogPanel extends Component<any, any> {
         </div>
         <div style={styles.info}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost}>
-            <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.LogPayload" />}</h3>} key="0" style={styles.panelStyle}>
+            <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({id:'Log.LogPayload'})}</h3>} key="0" style={styles.panelStyle}>
               <ReactJson
                 src={dataList.payload}
                 name={false}
@@ -313,11 +314,11 @@ export default class LogPanel extends Component<any, any> {
         </div>
         <div style={styles.info}>
           <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']} >
-            <Panel header={<h3 style={{ fontSize: 18 }}>{<FormattedMessage id="Log.ResponseList" />}</h3>} key="0" style={styles.panelStyle}>
+            <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({id:'Log.ResponseList'})}</h3>} key="0" style={styles.panelStyle}>
               <div className="container">
                 <Tabs defaultActiveKey={this.state.activeTableKey} onChange={this.onTableChange}>
-                  <TabPane tab={<FormattedMessage id="Log.AllResponse" />} key="1" />
-                  <TabPane tab={<FormattedMessage id="Log.Error" />} key="2" />
+                  <TabPane tab={RCi18n({id:'Log.AllResponse'})} key="1" />
+                  <TabPane tab={RCi18n({id:'Log.Error'})} key="2" />
                 </Tabs>
                 <Tab
                   rowKey={({ id }) => id}

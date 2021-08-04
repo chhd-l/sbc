@@ -119,7 +119,6 @@ export default class MyHeader extends React.Component {
     ];
     return (
       <div style={{ position: 'relative', height: 640 }}>
-        <Button onClick={() => this.props.openMainLoading()}>click</Button>
         <div style={{ width: '60%', position: 'absolute', top: '23%', left: '20%' }}>
           <p style={{ textAlign: 'center', fontSize: 56, color: '#e1021a', marginBottom: 50 }}>
             <Icon type="environment" style={{ fontSize: 48 }} />

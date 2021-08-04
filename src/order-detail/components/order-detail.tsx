@@ -18,6 +18,7 @@ import PetItem from '@/customer-details/component/pet-item';
 
 import './style.less';
 import OrderMoreFields from './order_more_field';
+import details from '@/subscription-plan-update/components/details';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -476,76 +477,77 @@ class OrderDetailTab extends React.Component<any, any> {
           </Col>
         </Row>
         {detail.get('subscribeId') ||
-          (detail.get('clinicsId') || firstTradeItems.recommendationId) ? (
-            <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
-              {detail.get('subscribeId') ? (
-                <Col span={12}>
-                  <div className="headBox" style={{ height: 120 }}>
-                    <h4>
-                      <FormattedMessage id="Order.subscription" />
-                    </h4>
-                    <p>
-                      <FormattedMessage id="Order.subscriptionType" />:{' '}
-                      {detail.get('subscriptionTypeQuery')
-                        ? detail.get('subscriptionTypeQuery').replace('_', ' & ')
-                        : ''}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.subscriptionPlanType" />:{' '}
-                      {detail.get('subscriptionPlanType')}
-                    </p>
-                  </div>
-                </Col>
-              ) : null}
+        detail.get('clinicsId') ||
+        firstTradeItems.recommendationId ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            {detail.get('subscribeId') ? (
+              <Col span={12}>
+                <div className="headBox" style={{ height: 120 }}>
+                  <h4>
+                    <FormattedMessage id="Order.subscription" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionType" />:{' '}
+                    {detail.get('subscriptionTypeQuery')
+                      ? detail.get('subscriptionTypeQuery').replace('_', ' & ')
+                      : ''}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionPlanType" />:{' '}
+                    {detail.get('subscriptionPlanType')}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
 
-              {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
-                <Col span={12}>
-                  <div className="headBox">
-                    <h4>
-                      <FormattedMessage id="Order.partner" />
-                    </h4>
-                    <p>
-                      <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.Recommenderid" />:{' '}
-                      {firstTradeItems.recommendationId}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.Recommendername" />:{' '}
-                      {firstTradeItems.recommendationName}
-                    </p>
-                  </div>
-                </Col>
-              ) : null}
+            {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+              <Col span={12}>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.partner" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommenderid" />:{' '}
+                    {firstTradeItems.recommendationId}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommendername" />:{' '}
+                    {firstTradeItems.recommendationName}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
 
-              {(detail.get('subscribeId') &&
-                !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
-              (!detail.get('subscribeId') &&
-                (detail.get('clinicsId') || firstTradeItems.recommendationId) &&
-                (storeId === 123457907 || storeId === 123457911)) ? (
-                <Col span={12}>
-                  <AuthWrapper functionName="fOrderDetail001">
-                    <div
-                      style={{
-                        color: '#E1021A',
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        textDecoration: 'underline',
-                        cursor: 'pointer'
-                      }}
-                      onClick={() => this._refreshRealtimeStock(tid)}
-                    >
-                      Real-time stock
-                    </div>
-                  </AuthWrapper>
-                </Col>
-              ) : null}
-            </Row>
-          ):null}
+            {(detail.get('subscribeId') &&
+              !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+            (!detail.get('subscribeId') &&
+              (detail.get('clinicsId') || firstTradeItems.recommendationId) &&
+              (storeId === 123457907 || storeId === 123457911)) ? (
+              <Col span={12}>
+                <AuthWrapper functionName="fOrderDetail001">
+                  <div
+                    style={{
+                      color: '#E1021A',
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textDecoration: 'underline',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => this._refreshRealtimeStock(tid)}
+                  >
+                    Real-time stock
+                  </div>
+                </AuthWrapper>
+              </Col>
+            ) : null}
+          </Row>
+        ) : null}
 
         {(detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||

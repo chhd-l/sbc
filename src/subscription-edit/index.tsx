@@ -476,7 +476,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
-        let addressList = res.context.customerDeliveryAddressVOList;
+        let addressList = (res.context.customerDeliveryAddressVOList || []).filter(addr => addr.receiveType !== 'PICK_UP');
         let customerAccount = res.context.customerAccount;
 
         if (type === 'DELIVERY') {

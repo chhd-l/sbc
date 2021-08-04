@@ -38,6 +38,7 @@ import tr from './lang/files/tr';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1991001_qbfpgtolyzr.js',
 });
+
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -54,124 +55,7 @@ export default class MyHeader extends React.Component {
       Turkey: util.requireLocalSrc(lan === 'tr' ? 'sys/Turkey_act.png' : 'sys/Turkey.png'),
       France: util.requireLocalSrc(lan === 'fr' ? 'sys/France_act.png' : 'sys/France.png'),
       Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png'),
-      storeList: [
-        {
-          "accountName": "13200000004",
-          "accountState": "ENABLE",
-          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
-          "applyEnterTime": "2018-07-12T08:10:47",
-          "areaId": 320114,
-          "auditState": "CHECKED",
-          "cityId": 1,
-          "citySelection": "NO",
-          "companyInfoId": 1055,
-          "companyType": "NO",
-          "contactEmail": "info.usa@royalcanin.com",
-          "contactMobile": "18911363762",
-          "contactPerson": "Antonia",
-          "contractEndDate": "2038-01-12T08:08:34",
-          "contractStartDate": "2018-07-12T08:08:24",
-          "countryId": 3620,
-          "currencyId": 3624,
-          "domainName": "https://shopuat.466920.com/us/",
-          "freightTemplateType": "NO",
-          "languageId": [
-            "5660"
-          ],
-          "onePageCheckout": "1",
-          "prescriberMap": "0",
-          "profilePaymentMethod": "1",
-          "provinceId": 320000,
-          "storeId": 1234579101,
-          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
-          "storeName": "Royal Canin_America",
-          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
-          "storeState": "OPENING",
-          "storeType": "SUPPLIER",
-          "supplierCode": "S00003",
-          "supplierName": "Royal Canin_America",
-          "taxRate": "15",
-          "timeZoneId": 4028
-        },
-        {
-          "accountName": "13200000004",
-          "accountState": "ENABLE",
-          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
-          "applyEnterTime": "2018-07-12T08:10:47",
-          "areaId": 320114,
-          "auditState": "CHECKED",
-          "cityId": 1,
-          "citySelection": "NO",
-          "companyInfoId": 1055,
-          "companyType": "NO",
-          "contactEmail": "info.usa@royalcanin.com",
-          "contactMobile": "18911363762",
-          "contactPerson": "Antonia",
-          "contractEndDate": "2038-01-12T08:08:34",
-          "contractStartDate": "2018-07-12T08:08:24",
-          "countryId": 3620,
-          "currencyId": 3624,
-          "domainName": "https://shopuat.466920.com/us/",
-          "freightTemplateType": "NO",
-          "languageId": [
-            "5660"
-          ],
-          "onePageCheckout": "1",
-          "prescriberMap": "0",
-          "profilePaymentMethod": "1",
-          "provinceId": 320000,
-          "storeId": 1234579102,
-          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
-          "storeName": "Royal Canin_America",
-          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
-          "storeState": "OPENING",
-          "storeType": "SUPPLIER",
-          "supplierCode": "S00003",
-          "supplierName": "Royal Canin_America",
-          "taxRate": "15",
-          "timeZoneId": 4028
-        },
-        {
-          "accountName": "13200000004",
-          "accountState": "ENABLE",
-          "addressDetail": "Munichsfdfgdfg dfsdfsfsdfs   sfewrwrewrwr",
-          "applyEnterTime": "2018-07-12T08:10:47",
-          "areaId": 320114,
-          "auditState": "CHECKED",
-          "cityId": 1,
-          "citySelection": "NO",
-          "companyInfoId": 1055,
-          "companyType": "NO",
-          "contactEmail": "info.usa@royalcanin.com",
-          "contactMobile": "18911363762",
-          "contactPerson": "Antonia",
-          "contractEndDate": "2038-01-12T08:08:34",
-          "contractStartDate": "2018-07-12T08:08:24",
-          "countryId": 3620,
-          "currencyId": 3624,
-          "domainName": "https://shopuat.466920.com/us/",
-          "freightTemplateType": "NO",
-          "languageId": [
-            "5660"
-          ],
-          "onePageCheckout": "1",
-          "prescriberMap": "0",
-          "profilePaymentMethod": "1",
-          "provinceId": 320000,
-          "storeId": 123457907,
-          "storeLogo": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007310959592895.png",
-          "storeName": "Royal Canin_America",
-          "storeSign": "https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202007231110235051.png",
-          "storeState": "OPENING",
-          "storeType": "SUPPLIER",
-          "supplierCode": "S00003",
-          "supplierName": "Royal Canin_America",
-          "taxRate": "15",
-          "timeZoneId": 4028
-        },
-      ],
-      storeLoading: false
-
+      storeList: [],
     };
   }
 
@@ -235,6 +119,7 @@ export default class MyHeader extends React.Component {
     ];
     return (
       <div style={{ position: 'relative', height: 640 }}>
+        <Button onClick={() => this.props.openMainLoading()}>click</Button>
         <div style={{ width: '60%', position: 'absolute', top: '23%', left: '20%' }}>
           <p style={{ textAlign: 'center', fontSize: 56, color: '#e1021a', marginBottom: 50 }}>
             <Icon type="environment" style={{ fontSize: 48 }} />
@@ -397,17 +282,15 @@ export default class MyHeader extends React.Component {
 
   // 切换商铺后重新获取LOGIN_DATA数据
   userSwitchStore = (storeId) => {
-    this.setState({storeLoading: true});
+    this.props.openMainLoading();
     switchLogin({storeId}, (res) => {
-      console.log('userSwitchStore', res);
       if (res.code === Const.SUCCESS_CODE){
         // 重新加载页面
         window.location.reload();
       }else {
 
       }
-      this.setState({storeLoading: false})
-
+      // this.props.closeMainLoading();
     })
   }
 
@@ -567,7 +450,6 @@ export default class MyHeader extends React.Component {
     );
     let {
       storeList,
-      storeLoading
     } = this.state;
     const shopMenu = (
         // 当前自己store
@@ -663,7 +545,6 @@ export default class MyHeader extends React.Component {
                 </AuthWrapper>
               </div>
               <div className='headerRight-shop'>
-                <Spin spinning={storeLoading}>
                   <div style={{ padding: '0 30px', marginTop: 10, height: 64 }}>
                     <Dropdown
                         placement={'bottomRight'}
@@ -674,7 +555,6 @@ export default class MyHeader extends React.Component {
                       <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
                     </Dropdown>
                   </div>
-                </Spin>
               </div>
               <div style={{ height: 20, textAlign: 'right' }}>
                 <div style={{ height: 20 }}>

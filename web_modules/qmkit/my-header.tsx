@@ -546,14 +546,16 @@ export default class MyHeader extends React.Component {
               </div>
               <div className='headerRight-shop'>
                   <div style={{ padding: '0 30px', marginTop: 10, height: 64 }}>
-                    <Dropdown
-                        placement={'bottomRight'}
-                        overlay={shopMenu}
-                        trigger={['click']}
-                        overlayClassName='shop-list-box'
-                    >
-                      <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
-                    </Dropdown>
+                    <AuthWrapper functionName='f_home_switch_store'>
+                      <Dropdown
+                          placement={'bottomRight'}
+                          overlay={shopMenu}
+                          trigger={['click']}
+                          overlayClassName='shop-list-box'
+                      >
+                        <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                      </Dropdown>
+                    </AuthWrapper>
                   </div>
               </div>
               <div style={{ height: 20, textAlign: 'right' }}>

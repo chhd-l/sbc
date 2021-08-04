@@ -276,6 +276,11 @@ export default class MyHeader extends React.Component {
   onchangeShop = (info) => {
     if (!info) return;
     let {key: storeId} = info;
+    const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    // 点击当前已登录商铺不处理
+    let isCurrentStore = String(loginInfo.storeId) === String(storeId);
+    if (isCurrentStore) return;
+
     this.userSwitchStore(storeId);
   }
 
@@ -289,7 +294,6 @@ export default class MyHeader extends React.Component {
       }else {
 
       }
-      // this.props.closeMainLoading();
     })
   }
 
@@ -453,12 +457,13 @@ export default class MyHeader extends React.Component {
     const shopMenu = (
         // 当前自己store
         <Menu
+            defaultSelectedKeys={[String(loginInfo.storeId)]}
             onClick={(e) => this.onchangeShop(e)}
         >
           {storeList.map(item => (
               <Menu.Item
                   key={item.storeId}
-                  disabled={loginInfo.storeId === item.storeId}
+                  // disabled={loginInfo.storeId === item.storeId}
               >
                 <div className='shop-list-item' >
                   <IconFont className='logo' type='iconfangjian1' />
@@ -516,7 +521,7 @@ export default class MyHeader extends React.Component {
             </div>
 
             <div style={styles.headerRight}>
-              <div style={{ marginTop: 15, height: 64 }}>
+              <div style={{ paddingTop: 8}}>
                 <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover
@@ -528,7 +533,7 @@ export default class MyHeader extends React.Component {
                       trigger="click"
                     >
                       {/*<Icon type="bell" style={{ fontSize: 25 }} />*/}
-                      <span className="iconfont iconmessage" style={{ fontSize: 25 }} ></span>
+                      <span className="iconfont iconmessage" style={{fontSize: 25}} />
                       {/*<span className="iconfont iconmessage3" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
 
                       {/*<span className="iconfont iconmessage2" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
@@ -544,7 +549,7 @@ export default class MyHeader extends React.Component {
                 </AuthWrapper>
               </div>
               <div className='headerRight-shop'>
-                  <div style={{ padding: '0 30px', marginTop: 10, height: 64 }}>
+                  <div style={{ paddingLeft: 30}}>
                     <AuthWrapper functionName='f_home_switch_store'>
                       <Dropdown
                           placement={'bottomRight'}
@@ -557,8 +562,8 @@ export default class MyHeader extends React.Component {
                     </AuthWrapper>
                   </div>
               </div>
-              <div style={{ height: 20, textAlign: 'right' }}>
-                <div style={{ height: 20 }}>
+              <div >
+                <div>
                   <Dropdown overlay={menu} trigger={['click']}>
                     <a className="ant-dropdown-link" href="#">
                       {/* <Icon type="user" /> */}
@@ -570,7 +575,7 @@ export default class MyHeader extends React.Component {
                     </a>
                   </Dropdown>
                 </div>
-                <div>{storeName}</div>
+                {/*<div>{storeName}</div>*/}
               </div>
             </div>
           </div>
@@ -630,6 +635,6 @@ const styles = {
     // textAlign: 'right',
     display: 'flex',
     justifyContent: 'space-between',
-    alignitems: 'center'
+    alignItems: 'center'
   },
 } as any;

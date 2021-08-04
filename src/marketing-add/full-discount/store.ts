@@ -28,7 +28,7 @@ export default class AppStore extends Store {
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      if (res.context.promotionType === 1 || res.context.promotionType === 2) {
+      if ([1,2,4].includes(res.context.promotionType)) {
         res.context.firstSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount
           ? (res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 100 ).toFixed(): null;
         res.context.restSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount
@@ -38,7 +38,7 @@ export default class AppStore extends Store {
         res.context.restSubscriptionLimitAmount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount
           ? res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount: null;
       }
-      debugger
+      // debugger
       this.dispatch('marketing:initDiscountBean', res.context);
       const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
       if (scopeArray) {

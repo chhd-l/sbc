@@ -44,7 +44,7 @@ const largeformItemLayout = {
     span: 5
   },
   wrapperCol: {
-    span: 10
+    span: 14
   }
 };
 const discountFormLayout = {
@@ -372,7 +372,7 @@ class FullDiscountForm extends React.Component<any, any> {
     }
 
     let settingRuleFrom = { ...formItemLayout };
-    if (marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2) {
+    if ([1,2,4].includes(marketingBean.get('promotionType'))) {
       settingRuleFrom = { ...largeformItemLayout };
     }
     console.log(marketingBean.toJS(), 'marketingBean------------');
@@ -386,6 +386,7 @@ class FullDiscountForm extends React.Component<any, any> {
               <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
               <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
+              <Radio value={4}><FormattedMessage id="Marketing.Individualization" /></Radio>
             </Radio.Group>
           </div>
         </FormItem>
@@ -541,7 +542,7 @@ class FullDiscountForm extends React.Component<any, any> {
           )}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.DiscountType" />:</div>
-        {(marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3) && (
+        {([0,3].includes(marketingBean.get('promotionType'))) && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
               rules: [
@@ -569,7 +570,7 @@ class FullDiscountForm extends React.Component<any, any> {
           </FormItem>
         )}
         {
-          (marketingBean.get('promotionType') == 0 || marketingBean.get('promotionType') == 3 )&& (
+          ([0,3].includes(marketingBean.get('promotionType')))&& (
             <FormItem {...discountFormLayout} required={true} labelAlign="left">
               {getFieldDecorator(
                 'rules',
@@ -580,7 +581,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   fullDiscountLevelList={marketingBean.get('fullDiscountLevelList') && marketingBean.get('fullDiscountLevelList').toJS()}
                   onChangeBack={this.onRulesChange}
                   isFullCount={marketingBean.get('subType') % 2}
-                  isNormal={marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3}
+                  isNormal={[0,3].includes(marketingBean.get('promotionType'))}
                 />
               )}
             </FormItem>
@@ -588,7 +589,7 @@ class FullDiscountForm extends React.Component<any, any> {
         }
 
         {
-          (marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2 )&& (
+          ([1,2,4].includes(marketingBean.get('promotionType')))&& (
             <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left" >
               <div style={{ display: 'flex' }}>
                 <FormItem>
@@ -618,7 +619,7 @@ class FullDiscountForm extends React.Component<any, any> {
                     initialValue: marketingBean.get('firstSubscriptionOrderDiscount')
                   })(
                     <Input
-                      style={{ width: 100 }}
+                      style={{ width: 150 }}
                       title={
                         (window as any).RCi18n({
                           id: 'Marketing.InputValuefrom1to99'
@@ -677,7 +678,7 @@ class FullDiscountForm extends React.Component<any, any> {
                           firstSubscriptionLimitAmount: e.target.value
                         });
                       }}
-                      value={marketingBean.get('firstSubscriptionLimitAmount')}
+                     // value={marketingBean.get('firstSubscriptionLimitAmount')}
                     />
                   )}
                   &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -688,7 +689,7 @@ class FullDiscountForm extends React.Component<any, any> {
             </FormItem>
           )
         }
-        {(marketingBean.get('promotionType') == 1 || marketingBean.get('promotionType') == 2) && (
+        {([1,2,4].includes(marketingBean.get('promotionType'))) && (
           <FormItem {...settingRuleFrom} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={false} style={{ marginTop: '-20px' }} labelAlign="left">
             <div style={{ display: 'flex' }}>
               <FormItem>
@@ -724,7 +725,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   initialValue: marketingBean.get('restSubscriptionOrderDiscount')
                 })(
                   <Input
-                    style={{ width: 100 }}
+                    style={{ width: 150 }}
                     title={
                       marketingBean.get('promotionType') == 1?
                       (window as any).RCi18n({
@@ -789,7 +790,7 @@ class FullDiscountForm extends React.Component<any, any> {
                         restSubscriptionLimitAmount: e.target.value
                       });
                     }}
-                    value={marketingBean.get('restSubscriptionLimitAmount')}
+                   // value={marketingBean.get('restSubscriptionLimitAmount')}
                   />
                 )}
                 &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -803,7 +804,7 @@ class FullDiscountForm extends React.Component<any, any> {
           {getFieldDecorator('scopeType', {
             initialValue: marketingBean.get('scopeType') ? marketingBean.get('scopeType') : 0
           })(
-            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} value={marketingBean.get('scopeType')}>
+            <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} >
               <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
@@ -830,7 +831,7 @@ class FullDiscountForm extends React.Component<any, any> {
             })(
               <TreeSelect
                 id="storeCateIds"
-                defaultValue={storeCateValues}
+                // defaultValue={storeCateValues}
                 getPopupContainer={() => document.getElementById('page-content')}
                 treeCheckable={true}
                 showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
@@ -896,7 +897,6 @@ class FullDiscountForm extends React.Component<any, any> {
             })(
               <TreeSelect
                 id="attributeValueIds"
-                defaultValue={attributeDefaultValue}
                 getPopupContainer={() => document.getElementById('page-content')}
                 treeCheckable={true}
                 showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
@@ -973,7 +973,7 @@ class FullDiscountForm extends React.Component<any, any> {
                 }
               ]
             })(
-              <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}>
+              <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} >
                 {allGroups.size > 0 &&
                 allGroups.map((item) => (
                   <Select.Option key={item.get('id')} value={item.get('id')}>
@@ -1120,16 +1120,18 @@ class FullDiscountForm extends React.Component<any, any> {
    */
   promotionType = (e) => {
     const { initDefualtLevelList, initReductionDefualtLevelList } = this.props.relaxProps
+    let _value=e.target.value;
+    
     this.onBeanChange({
       // publicStatus: 1,
       promotionType: e.target.value,
       subType: e.target.value === 0 || e.target.value === 3? 2 : 7,
-      isSuperimposeSubscription: 1
+      isSuperimposeSubscription: _value===4?0:1
     });
     this.props.form.setFieldsValue({
       promotionType: e.target.value,
       subType:  e.target.value === 0 || e.target.value === 3? 2 : 7,
-      isSuperimposeSubscription: 1
+      isSuperimposeSubscription: _value===4?0:1
     })
     initDefualtLevelList()
   };

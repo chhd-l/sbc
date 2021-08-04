@@ -1795,6 +1795,7 @@ export default {
         "Marketing.CCList": "CC List",
         "Marketing.Preview": "Preview",
         "Marketing.Singlepurchase": "Single purchase",
+        "Marketing.Individualization":"Individualization",
         "Marketing.Automationlist": "Marketing list",//"Automation list",
         "Marketing.OperationFailure": "Operation failure",
         "Marketing.OperationSuccessful": "Operation successful",

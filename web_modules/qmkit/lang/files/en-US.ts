@@ -354,6 +354,7 @@ export default {
   "Product.Salescategory": "Sales category",
   "Product.SPU": "SPU",
   "Product.SKU": "SKU",
+  "Product.SKUCode": "SKU Code",
   "Product.Productcategory": "Product category",
   "Product.Brand": "Brand",
   "Product.Image": "Image",

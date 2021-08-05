@@ -32,11 +32,18 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
+import iconEengland from './images/icon/iconEengland.svg';
+import iconFrance from './images/icon/iconFrance.svg';
+import iconMexico from './images/icon/iconMexico.svg';
+import iconRussia from './images/icon/iconRussia.svg';
+import iconSpain from './images/icon/iconSpain.svg';
+import iconTurkey from './images/icon/iconTurkey.svg';
+
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';
 
 const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1991001_qbfpgtolyzr.js',
+  scriptUrl: '//at.alicdn.com/t/font_1991001_65pdey0igpv.js',
 });
 
 export default class MyHeader extends React.Component {
@@ -254,21 +261,21 @@ export default class MyHeader extends React.Component {
    *
    * 123456858   墨西哥
    * 123457907   俄罗斯
-   * 123457908   德国
+   * 123457908   德国  // 缺失
    * 123457909   法国
-   * 123457910   美国
+   * 123457910   美国  // 缺失
    * 123457911   土耳其
    **/
   getStoreIcon = (storeId) => {
 
     switch (storeId) {
-      case 123456858: break;
-      case 123457907: break;
-      case 123457908: break;
-      case 123457909: break;
-      case 123457910: break;
-      case 123457911: break;
-      default: break;
+      case '123456858': return  <Icon component={iconMexico} className='logo'/>;
+      case '123457907': return  <Icon component={iconRussia} className='logo'/>;
+      case '123457908': return  <IconFont className='logo' type='iconfangjian1' />;
+      case '123457909': return  <Icon component={iconFrance} className='logo'/>;
+      case '123457910': return  <IconFont className='logo' type='iconfangjian1' />;
+      case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      default: return  <IconFont className='logo' type='iconfangjian1' />;
     }
   }
 
@@ -466,7 +473,7 @@ export default class MyHeader extends React.Component {
                   // disabled={loginInfo.storeId === item.storeId}
               >
                 <div className='shop-list-item' >
-                  <IconFont className='logo' type='iconfangjian1' />
+                  {this.getStoreIcon(String(item.storeId))}
                   <span className='accountName'>{item.storeName}</span>
                 </div>
               </Menu.Item>

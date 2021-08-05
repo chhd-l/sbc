@@ -30,7 +30,6 @@ const getOktaAppConfig = () => {
   }
   
 };
-"pub.v2.8015632026961356.aHR0cHM6Ly9zdG9yZXNpdC5yb3lhbGNhbmluLmNvbQ.2dKUkAYcc6N_ZLnqIXeWPSxt14cFPMs0X_LJM0IBA2Q"
 const _config={
   'storesit.royalcanin.com':{
     PAYMENT: {
@@ -92,7 +91,26 @@ const _config={
       }
     }
   },
-  "eurostore.royalcanin.com":{},
+  "eurostore.royalcanin.com":{
+    PAYMENT: {
+      "ru": {
+        "app_id": "com.razorfish.fgs_ru",
+        "key": "dbc13b9e-9bc9-4023-8c1e-8a0de080a0a4",
+      },
+      "tr": {
+        "app_id": "com.razorfish.fgs_tr_ms",
+        "key": "13c0bad7-420a-43bd-8784-3402a1f270ce"
+      },
+      'de':{
+        app_id:'MarsIncorporated_ROYALCANIN_GERMANY_D2C_UAT_TEST',
+        key:'pub.v2.4116105963663555.aHR0cHM6Ly9ldXJvc3RvcmUucm95YWxjYW5pbi5jb20.sEPXI2OxOklPsU8l6m_n8E2oSZ34aXvMflvSSSJWXEs'
+      },
+      'fr':{
+        app_id:'MarsIncorporated_ROYALCANIN_FRANCE_D2C_UAT_TEST',
+        key:'pub.v2.4116105963663555.aHR0cHM6Ly9ldXJvc3RvcmUucm95YWxjYW5pbi5jb20.sEPXI2OxOklPsU8l6m_n8E2oSZ34aXvMflvSSSJWXEs'
+      }
+    }
+  },
   "store.royalcanin.com":{}
 };
 

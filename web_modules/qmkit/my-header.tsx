@@ -461,6 +461,7 @@ export default class MyHeader extends React.Component {
     let {
       storeList,
     } = this.state;
+    let isExistStoreList = Array.isArray(storeList) && (storeList.length > 0);
     const shopMenu = (
         // 当前自己store
         <Menu
@@ -555,17 +556,26 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>
+              {
+
+              }
               <div className='headerRight-shop'>
                   <div style={{ paddingLeft: 30}}>
                     <AuthWrapper functionName='f_home_switch_store'>
-                      <Dropdown
-                          placement={'bottomRight'}
-                          overlay={shopMenu}
-                          trigger={['click']}
-                          overlayClassName='shop-list-box'
-                      >
-                        <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
-                      </Dropdown>
+                      {
+                        isExistStoreList
+                            ? (
+                                <Dropdown
+                                    placement={'bottomRight'}
+                                    overlay={shopMenu}
+                                    trigger={['click']}
+                                    overlayClassName='shop-list-box'
+                                >
+                                  <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                                </Dropdown>
+                            )
+                            : null
+                      }
                     </AuthWrapper>
                   </div>
               </div>

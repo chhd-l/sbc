@@ -1524,6 +1524,9 @@ export default {
         "Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically": "Please remind that the report will expire after 7 days automatically."
     },
     Marketing: {
+        "Marketing.Includeproduct":"Include product",
+        "Marketing.Excludeproduct":"Exclude product",   
+
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',

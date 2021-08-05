@@ -442,7 +442,8 @@ class FullReductionForm extends React.Component<any, any> {
                     id: 'Marketing.PleaseInputPromotionCode'
                   })
               },
-              { min: 1, max: 20, message:
+              {
+                min: 1, max: 20, message:
                   (window as any).RCi18n({
                     id: 'Marketing.words'
                   })
@@ -495,7 +496,8 @@ class FullReductionForm extends React.Component<any, any> {
                     id: 'Marketing.PleaseInputPromotionName'
                   })
               },
-              { min: 1, max: 40, message:
+              {
+                min: 1, max: 40, message:
                   (window as any).RCi18n({
                     id: 'Marketing.40Words'
                   })
@@ -571,7 +573,7 @@ class FullReductionForm extends React.Component<any, any> {
         </FormItem>
 
         <div className="bold-title"><FormattedMessage id="Reductiontype" />:</div>
-        {(marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3)&& (
+        {(marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3) && (
           <FormItem {...formItemLayout} labelAlign="left">
             {getFieldDecorator('subType', {
               rules: [
@@ -583,16 +585,16 @@ class FullReductionForm extends React.Component<any, any> {
                 }
               ],
               initialValue: marketingBean.get('subType'),
-             
+
             })(
               <RadioGroup onChange={(e) => this.subTypeChange(e)}>
                 {/*<Radio style={radioStyle} value={2}>*/}
                 {/*  Direct reduction*/}
                 {/*</Radio>*/}
-                <Radio value={0} checked={marketingBean.get('subType')==0} style={radioStyle}>
+                <Radio value={0} checked={marketingBean.get('subType') == 0} style={radioStyle}>
                   <FormattedMessage id="Marketing.FullAmountReduction" />
                 </Radio>
-                <Radio value={1} checked={marketingBean.get('subType')==1} style={radioStyle}>
+                <Radio value={1} checked={marketingBean.get('subType') == 1} style={radioStyle}>
                   <FormattedMessage id="Marketing.FullQuantityReduction" />{' '}
                 </Radio>
               </RadioGroup>
@@ -605,22 +607,23 @@ class FullReductionForm extends React.Component<any, any> {
             'rules',
             {}
           )(
-            ( marketingBean.get('promotionType') === 0 ||  marketingBean.get('promotionType') === 3) ? (
+            (marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3) ? (
               <ReductionLevels
                 form={this.props.form}
                 fullReductionLevelList={marketingBean.get('fullReductionLevelList') && marketingBean.get('fullReductionLevelList').toJS()}
                 onChangeBack={this.onRulesChange}
-                isFullCount={marketingBean.get('subType') % 2 }
+                isFullCount={marketingBean.get('subType') % 2}
                 isNormal={marketingBean.get('promotionType') === 0 || marketingBean.get('promotionType') === 3}
                 PromotionTypeValue={marketingBean.get('promotionType')}
               />
             ) : (
               <div>
                 <FormItem labelAlign="left">
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.reduction"/>&nbsp;&nbsp;</span>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.reduction" />&nbsp;&nbsp;</span>
                   {getFieldDecorator('firstSubscriptionOrderReduction', {
                     rules: [
-                      { required: true, message:
+                      {
+                        required: true, message:
                           (window as any).RCi18n({
                             id: 'Marketing.AmountMustBeEntered',
                           })
@@ -766,20 +769,35 @@ class FullReductionForm extends React.Component<any, any> {
           </FormItem>
         )}
         {marketingBean.get('scopeType') === 1 ? (
-          <FormItem {...formItemLayout} required={true}>
-            {getFieldDecorator(
-              'goods',
-              {}
-            )(
-              <div>
-                <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
-                  <FormattedMessage id="Marketing.AddProducts" />
-                </Button>
-                &nbsp;&nbsp;
-                <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={deleteSelectedSku} />
-              </div>
-            )}
-          </FormItem>
+          <>
+            <FormItem {...formItemLayout} required={true}>
+              {getFieldDecorator('customProductsType', {
+                initialValue: 0,
+              })(<RadioGroup >
+                <Radio value={0}>
+                  <FormattedMessage id="Marketing.Includeproduct" />
+                </Radio>
+                <Radio value={1}>
+                  <FormattedMessage id="Marketing.Excludeproduct" />
+                </Radio>
+              </RadioGroup>)}
+
+            </FormItem>
+            <FormItem {...formItemLayout} required={true}>
+              {getFieldDecorator(
+                'goods',
+                {}
+              )(
+                <div>
+                  <Button type="primary" icon="plus" onClick={this.openGoodsModal}>
+                    <FormattedMessage id="Marketing.AddProducts" />
+                  </Button>
+                  &nbsp;&nbsp;
+                  <SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={deleteSelectedSku} />
+                </div>
+              )}
+            </FormItem>
+          </>
         ) : null}
         {marketingBean.get('scopeType') === 3 && (
           <FormItem {...formItemLayout} required={true} labelAlign="left">
@@ -881,11 +899,11 @@ class FullReductionForm extends React.Component<any, any> {
             })(
               <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}>
                 {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
               </Select>
             )}
           </FormItem>
@@ -1027,12 +1045,12 @@ class FullReductionForm extends React.Component<any, any> {
     const { initReductionDefualtLevelList } = this.props.relaxProps
     this.onBeanChange({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      subType: e.target.value === 0 || e.target.value === 3 ? 0 : 6,
       isSuperimposeSubscription: 1
     });
     this.props.form.setFieldsValue({
       promotionType: e.target.value,
-      subType:  e.target.value === 0 || e.target.value === 3? 0 : 6,
+      subType: e.target.value === 0 || e.target.value === 3 ? 0 : 6,
       isSuperimposeSubscription: 1
     })
     initReductionDefualtLevelList()
@@ -1043,7 +1061,7 @@ class FullReductionForm extends React.Component<any, any> {
    * @param params
    */
   onBeanChange = (params) => {
-    const { marketingBean,reductionBeanOnChange } = this.props.relaxProps;
+    const { marketingBean, reductionBeanOnChange } = this.props.relaxProps;
     reductionBeanOnChange(marketingBean.merge(params));
   };
   /**
@@ -1267,7 +1285,7 @@ class FullReductionForm extends React.Component<any, any> {
     // JWT无状态登录: 返回一个JWT加密文档(角色，权限，过期时间等)，前端保存起来
     levelType = 'fullReductionLevelList';
     if (levelType == '' || !marketingBean.get(levelType)) return;
-  
+
     if (marketingBean.get(levelType).size > 0) {
       Confirm({
         title: (window as any).RCi18n({
@@ -1290,7 +1308,7 @@ class FullReductionForm extends React.Component<any, any> {
           debugger
         },
         onCancel() {
-          _thisRef.props.form.setFieldsValue({'subType':marketingBean.get('subType')})
+          _thisRef.props.form.setFieldsValue({ 'subType': marketingBean.get('subType') })
         }
       });
     }

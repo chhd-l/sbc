@@ -1029,8 +1029,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             const month = value.month();
 
             const year = value.year();
+            const startYear = moment().year();
             const options = [];
-            for (let i = year; i < year + 10; i += 1) {
+            for (let i = startYear; i < year + 10; i += 1) {
               options.push(
                 <Select.Option key={i} value={i} className="year-item">
                   {i}
@@ -1161,7 +1162,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>
             </Popover>
-            ,
             <Popconfirm
               placement="topLeft"
               title={<FormattedMessage id="Subscription.skipThisItem"/>}

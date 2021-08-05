@@ -15,7 +15,12 @@ export default class FullDiscountActor extends Actor {
         isSuperimposeSubscription: 1,//未选中
         subType: 2,
         isClub: false,
-        fullDiscountLevelList: []
+        fullDiscountLevelList: [],
+        customProductsType:0,//Include product
+        marketingUseLimit:{
+          perCustomer:1,
+          isLimit:1
+        }
       },
       allGroups: [],
       // 店铺分类信息

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import DiscountLevels from '../../full-discount/components/discount-levels';
@@ -24,15 +24,15 @@ const { SHOW_PARENT } = TreeSelect;
 
 const formItemLayout = {
   labelCol: {
-    span: 3
+    span: 4
   },
   wrapperCol: {
-    span: 21
+    span: 20
   }
 };
 const smallformItemLayout = {
   labelCol: {
-    span: 3
+    span: 4
   },
   wrapperCol: {
     span: 10
@@ -356,6 +356,7 @@ class FullDiscountForm extends React.Component<any, any> {
     const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
+    const marketingUseLimit=marketingBean.get('marketingUseLimit');
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
@@ -405,6 +406,44 @@ class FullDiscountForm extends React.Component<any, any> {
           </FormItem>
         }
         <div className="bold-title"><FormattedMessage id="basicSetting" />:</div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.NumberOfUserPerPerson" />} labelAlign="left">
+          {getFieldDecorator('perCustomer', {
+            initialValue: marketingUseLimit.get('perCustomer')||1 ,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+            onChange:(e)=>{
+              console.log(e)
+              let _perCustomer=e
+              // debugger
+              this.onBeanChange({
+                marketingUseLimit:{perCustomer:_perCustomer, isLimit: marketingUseLimit.get('isLimit')}
+              })
+            }
+          })(
+            <InputNumber
+              min={1}
+              disabled={marketingUseLimit.get('isLimit') == 1}
+              style={{ width: 160 }}
+            />
+          )}
+
+          <Checkbox
+            style={{ marginLeft: 20 }}
+            checked={marketingUseLimit.get('isLimit')== 1}
+            onChange={(e) => {
+              let _isLimit=e.target.checked ? 1 : 0
+              this.onBeanChange({
+                marketingUseLimit:{perCustomer:marketingUseLimit.get('perCustomer'), isLimit: _isLimit}
+              });
+            }}
+          >
+            <FormattedMessage id="Marketing.UnlimitedUse" />
+          </Checkbox>
+        </FormItem>
+
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
@@ -866,7 +905,8 @@ class FullDiscountForm extends React.Component<any, any> {
           <>
             <FormItem {...formItemLayout} required={true}>
               {getFieldDecorator('customProductsType', {
-                initialValue: 0,
+                initialValue: marketingBean.get('customProductsType')||0,
+                onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
               })(<RadioGroup >
                 <Radio value={0}>
                   <FormattedMessage id="Marketing.Includeproduct" />
@@ -1303,13 +1343,17 @@ class FullDiscountForm extends React.Component<any, any> {
       marketingBean = marketingBean.set('promotionCode', this.state.promotionCode);
     }
 
-    form.validateFieldsAndScroll((err) => {
+    form.validateFieldsAndScroll((err,values) => {
       if (Object.keys(errorObject).length != 0) {
         form.setFields(errorObject);
         this.setState({ saveLoading: false });
       } else {
         if (!err) {
+          console.log(values)
+          // return
           this.setState({ saveLoading: true });
+
+          marketingBean.set('customProductsType',values.customProductsType)
           //组装营销类型
           marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
 

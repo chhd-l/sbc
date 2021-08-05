@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, List, Map } from 'immutable';
 
-import { Button, Checkbox, Col, DatePicker, Form, Input, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
+import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, message, Modal, Radio, Row, Select, Spin, Tree, TreeSelect } from 'antd';
 import { Const, history, QMMethod, util, cache, ValidConst, noop } from 'qmkit';
 import moment from 'moment';
 import ReductionLevels from '../../full-reduction/components/reduction-levels';
@@ -357,6 +357,7 @@ class FullReductionForm extends React.Component<any, any> {
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
+    const marketingUseLimit=marketingBean.get('marketingUseLimit');
     if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
@@ -430,6 +431,44 @@ class FullReductionForm extends React.Component<any, any> {
           </FormItem>
         }
         <div className="bold-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.NumberOfUserPerPerson" />} labelAlign="left">
+          {getFieldDecorator('perCustomer', {
+            initialValue: marketingUseLimit.get('perCustomer')||1 ,
+            rules: [
+              {
+                required: true,
+              },
+            ],
+            onChange:(e)=>{
+              console.log(e)
+              let _perCustomer=e
+              // debugger
+              this.onBeanChange({
+                marketingUseLimit:{perCustomer:_perCustomer, isLimit: marketingUseLimit.get('isLimit')}
+              })
+            }
+          })(
+            <InputNumber
+              min={1}
+              disabled={marketingUseLimit.get('isLimit') == 1}
+              style={{ width: 160 }}
+            />
+          )}
+
+          <Checkbox
+            style={{ marginLeft: 20 }}
+            checked={marketingUseLimit.get('isLimit')== 1}
+            onChange={(e) => {
+              let _isLimit=e.target.checked ? 1 : 0
+              this.onBeanChange({
+                marketingUseLimit:{perCustomer:marketingUseLimit.get('perCustomer'), isLimit: _isLimit}
+              });
+            }}
+          >
+            <FormattedMessage id="Marketing.UnlimitedUse" />
+          </Checkbox>
+        </FormItem>
+
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
           {getFieldDecorator('promotionCode', {
             initialValue: marketingBean.get('promotionCode') ? marketingBean.get('promotionCode') : this.getPromotionCode(),
@@ -772,7 +811,8 @@ class FullReductionForm extends React.Component<any, any> {
           <>
             <FormItem {...formItemLayout} required={true}>
               {getFieldDecorator('customProductsType', {
-                initialValue: 0,
+                initialValue: marketingBean.get('customProductsType')||0,
+                onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
               })(<RadioGroup >
                 <Radio value={0}>
                   <FormattedMessage id="Marketing.Includeproduct" />

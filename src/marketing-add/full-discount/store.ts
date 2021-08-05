@@ -28,19 +28,27 @@ export default class AppStore extends Store {
     const { res } = await commonWebapi.getMarketingInfo(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
-      if ([1,2,4].includes(res.context.promotionType)) {
-        res.context.firstSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount
-          ? (res.context.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 100 ).toFixed(): null;
-        res.context.restSubscriptionOrderDiscount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount
-          ? (res.context.fullDiscountLevelList[0].restSubscriptionOrderDiscount * 100).toFixed() : null;
-        res.context.firstSubscriptionLimitAmount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].firstSubscriptionLimitAmount
-          ? res.context.fullDiscountLevelList[0].firstSubscriptionLimitAmount: null;
-        res.context.restSubscriptionLimitAmount = res.context.fullDiscountLevelList && res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount
-          ? res.context.fullDiscountLevelList[0].restSubscriptionLimitAmount: null;
+      let _result=res.context;
+      if ([1,2,4].includes(_result.promotionType)) {
+        _result.firstSubscriptionOrderDiscount = _result.fullDiscountLevelList && _result.fullDiscountLevelList[0].firstSubscriptionOrderDiscount
+          ? (_result.fullDiscountLevelList[0].firstSubscriptionOrderDiscount * 100 ).toFixed(): null;
+          _result.restSubscriptionOrderDiscount = _result.fullDiscountLevelList && _result.fullDiscountLevelList[0].restSubscriptionOrderDiscount
+          ? (_result.fullDiscountLevelList[0].restSubscriptionOrderDiscount * 100).toFixed() : null;
+          _result.firstSubscriptionLimitAmount = _result.fullDiscountLevelList && _result.fullDiscountLevelList[0].firstSubscriptionLimitAmount
+          ? _result.fullDiscountLevelList[0].firstSubscriptionLimitAmount: null;
+          _result.restSubscriptionLimitAmount = _result.fullDiscountLevelList && _result.fullDiscountLevelList[0].restSubscriptionLimitAmount
+          ? _result.fullDiscountLevelList[0].restSubscriptionLimitAmount: null;
       }
+      if(!_result.marketingUseLimit){
+        _result.marketingUseLimit={
+          perCustomer:1,
+          isLimit:1
+        }
+      }
+      _result.customProductsType=_result?.customProductsType??0
       // debugger
-      this.dispatch('marketing:initDiscountBean', res.context);
-      const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
+      this.dispatch('marketing:initDiscountBean', _result);
+      const scopeArray = _result.marketingScopeList ? fromJS(_result.marketingScopeList) : null;
       if (scopeArray) {
         const scopeIds = scopeArray.map((scope) => scope.get('scopeId'));
         const selectedRows = this.makeSelectedRows(scopeIds);

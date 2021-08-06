@@ -419,24 +419,24 @@ class FullDiscountForm extends React.Component<any, any> {
               let _perCustomer=e
               // debugger
               this.onBeanChange({
-                marketingUseLimit:{perCustomer:_perCustomer, isLimit: marketingUseLimit.get('isLimit')}
+                marketingUseLimit:{perCustomer:_perCustomer, isNotLimit: marketingUseLimit.get('isNotLimit')}
               })
             }
           })(
             <InputNumber
               min={1}
-              disabled={marketingUseLimit.get('isLimit') == 1}
+              disabled={marketingUseLimit.get('isNotLimit') == 1}
               style={{ width: 160 }}
             />
           )}
 
           <Checkbox
             style={{ marginLeft: 20 }}
-            checked={marketingUseLimit.get('isLimit')== 1}
+            checked={marketingUseLimit.get('isNotLimit')== 1}
             onChange={(e) => {
               let _isLimit=e.target.checked ? 1 : 0
               this.onBeanChange({
-                marketingUseLimit:{perCustomer:marketingUseLimit.get('perCustomer'), isLimit: _isLimit}
+                marketingUseLimit:{perCustomer:marketingUseLimit.get('perCustomer'), isNotLimit: _isLimit}
               });
             }}
           >

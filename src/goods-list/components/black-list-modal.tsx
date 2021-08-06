@@ -12,85 +12,12 @@ export default class BlackListModal extends React.Component<any, any>{
     constructor(props) {
         super(props);
         this.state = {
-            priceBlackList: [
-                {
-                    goodsInfoId: 1,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName1',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-                {
-                    goodsInfoId: 2,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName2',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-                {
-                    goodsInfoId: 3,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName3',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-            ],
-            inventoryBlackList: [
-                {
-                    goodsInfoId: 1,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName1',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-                {
-                    goodsInfoId: 2,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName2',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-                {
-                    goodsInfoId: 3,
-                    goodsInfoNo: 1234,
-                    goodsInfoName: 'goodsInfoName3',
-                    specName: 'specName',
-                    cateName: 'cateName',
-                    brandName: 'brandName',
-                    marketPrice: '20',
-                    Inventory: 'Inventory',
-                    number: 2223,
-
-                },
-            ],
+            priceBlackList: [],
+            inventoryBlackList: [],
 
             confirmLoading: false,
             loading: false,
+
             productModalVisible: false,
 
             selectedSkuIds: [],
@@ -101,20 +28,14 @@ export default class BlackListModal extends React.Component<any, any>{
     }
 
     componentDidMount() {
-        // 初始化数据
-        this.setState({
-            loading: true
-        })
-        setTimeout(() =>{
-            this.setState({
-                loading: false,
-            })
-        }, 2000)
+        let priceBlackList = [
+
+        ]
+        // 初始化数据 priceBlackList 和 inventoryBlackList
+
     }
 
-
     handleOk = e => {
-        console.log(e);
         this.setState({
             confirmLoading: true
         })
@@ -124,6 +45,7 @@ export default class BlackListModal extends React.Component<any, any>{
             })
             this.props.onCancel();
         }, 2000)
+
         let {
             priceBlackList,
             inventoryBlackList,
@@ -280,12 +202,40 @@ export default class BlackListModal extends React.Component<any, any>{
 
     showProductModal = (type) => {
         this.currentSelected = type;
+        let {
+            priceBlackList,
+            inventoryBlackList,
+        } = this.state;
+        // price 和 inventory 存在数据, 更新selectedSkuIds （goodsInfoId）
+        switch (type){
+            case 'price':
+                // @ts-ignore
+                let isPriceBlackList = Array.isArray(priceBlackList) && (priceBlackList.length > 0);
+                this.setState({
+                    selectedSkuIds: isPriceBlackList
+                        ? priceBlackList.map(item => item.goodsInfoId)
+                        : []
+                })
+
+              break;
+            case 'inventory':
+                let isInventoryBlackList = Array.isArray(inventoryBlackList) && (inventoryBlackList.length > 0);
+                this.setState({
+                    selectedSkuIds: isInventoryBlackList
+                        ? inventoryBlackList.map(item => item.goodsInfoId)
+                        : []
+                })
+                break;
+            default: break;
+        }
         this.setState({
             productModalVisible: true
         })
+
     }
 
     closeProductModal = () => {
+        this.currentSelected = null;
         this.setState({
             productModalVisible: false
         })
@@ -293,13 +243,25 @@ export default class BlackListModal extends React.Component<any, any>{
 
     skuSelectedBackFun = (selectedSkuIds, selectedRows: any) => {
 
-        if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return;
+        if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
 
         // type price 和 inventory
+        switch (this.currentSelected) {
+            case 'price':
+                this.setState({
+                    priceBlackList: selectedRows.toJS(),
+                });
+                break;
+            case 'inventory':
+                this.setState({
+                    inventoryBlackList: selectedRows.toJS(),
+                });
+                break;
+            default: return;
+        }
 
         this.setState({
             selectedSkuIds,
-            selectedRows,
         })
 
         this.closeProductModal();
@@ -376,7 +338,7 @@ export default class BlackListModal extends React.Component<any, any>{
                 <GoodsModal
                     visible={productModalVisible}
                     selectedSkuIds={selectedSkuIds}
-                    selectedRows={selectedRows}
+                    // selectedRows={selectedRows}
                     onOkBackFun={this.skuSelectedBackFun}
                     onCancelBackFun={this.closeProductModal}
                 />

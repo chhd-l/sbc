@@ -481,7 +481,7 @@ class OrderDetailTab extends React.Component<any, any> {
         firstTradeItems.recommendationId ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             {detail.get('subscribeId') ? (
-              <Col span={12}>
+              <Col span={12} style={{ alignSelf: 'flex-start' }}>
                 <div className="headBox" style={{ height: 120 }}>
                   <h4>
                     <FormattedMessage id="Order.subscription" />

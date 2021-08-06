@@ -800,7 +800,7 @@ export default class AppStore extends Store {
    */
   editSpecValues = (specItem) => {
     const priceOpt = this.state().get('priceOpt');
-    const mtkPrice = this.state().get('mtkPrice');
+    const mtkPrice = this.state().get('mtkPrice') || 0;
     this.dispatch('goodsSpecActor: editSpecValues', {
       priceOpt,
       mtkPrice,

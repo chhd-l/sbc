@@ -150,8 +150,15 @@ export default class GoodsSpecActor extends Actor {
         marketPrice = firstSku.get('marketPrice');
       }
     }
-    if (marketPrice > 0) {
-      goods = goods.map((item) => item.set('marketPrice', marketPrice));
+    
+    if (marketPrice >= 0) {
+      goods = goods.map((item) => {
+        if (item.get('subscriptionStatus')) {
+          return item.set('marketPrice', marketPrice).set('subscriptionPrice', marketPrice);
+        } else {
+          return item.set('marketPrice', marketPrice);
+        }
+      });
     }
 
     if (goods.count() > Const.spuMaxSku) {

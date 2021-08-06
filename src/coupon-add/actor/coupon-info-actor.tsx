@@ -80,6 +80,7 @@ export default class CouponInfoActor extends Actor {
   @Action('coupon: info: field: value')
   fieldsValue(state, { field, value }) {
     state = state.set(field, fromJS(value));
+    // debugger
     return state;
   }
 

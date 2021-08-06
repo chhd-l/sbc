@@ -387,7 +387,7 @@ class FullDiscountForm extends React.Component<any, any> {
               <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
               <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
               <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
-              <Radio value={4}><FormattedMessage id="Marketing.Individualization" /></Radio>
+              {/* <Radio value={4}><FormattedMessage id="Marketing.Individualization" /></Radio> */}
             </Radio.Group>
           </div>
         </FormItem>

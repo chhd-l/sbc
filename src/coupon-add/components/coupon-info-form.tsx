@@ -1018,7 +1018,7 @@ class CouponInfoForm extends Component<any, any> {
             <>
               <FormItem {...formItemLayout} required={true}>
                 {getFieldDecorator('customProductsType', {
-                  initialValue: customProductsType,
+                  initialValue: customProductsType||0,
                   onChange:(e)=>this.targetCommonChangeValue('customProductsType',e.target.value)
                 })(<RadioGroup >
                   <Radio value={0}>

@@ -29,9 +29,53 @@ export default class BlackListModal extends React.Component<any, any>{
 
     componentDidMount() {
         let priceBlackList = [
-
+            {
+                goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
+                goodsInfoName: 'tmjgift12',
+                specText: null,
+                goodsInfoNo: 'T80010',
+                cateName: 'CA Cat food',
+                brandName: null,
+            },
+            {
+                goodsInfoId: '8a70802e7ae8ee92017aec3ad8a1001b',
+                goodsInfoName: 'tmjgift125',
+                goodsInfoNo: 'T80011',
+                specText: null,
+                cateName: 'CA Cat food',
+                brandName: null,
+            },
         ]
+        let inventoryBlackList = [
+            {
+                goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
+                goodsInfoName: 'tmjgift12',
+                specText: null,
+                goodsInfoNo: 'T80010',
+                cateName: 'CA Cat food',
+                brandName: null,
+            },
+            {
+                goodsInfoId: '8a70802e7ae8ee92017aec3ad8a1001b',
+                goodsInfoName: 'tmjgift125',
+                goodsInfoNo: 'T80011',
+                specText: null,
+                cateName: 'CA Cat food',
+                brandName: null,
+            },
+
+        ];
         // 初始化数据 priceBlackList 和 inventoryBlackList
+        this.setState({
+            loading: true
+        })
+        setTimeout(() => {
+            this.setState({
+                priceBlackList,
+                inventoryBlackList,
+                loading: false,
+            })
+        }, 2000)
 
     }
 
@@ -62,14 +106,14 @@ export default class BlackListModal extends React.Component<any, any>{
     handleDelPrice = (key) => {
         let priceBlackList = [...this.state.priceBlackList];
         this.setState({
-            priceBlackList: priceBlackList.filter((item) => item.goodsId !== key)
+            priceBlackList: priceBlackList.filter((item) => item.goodsInfoId !== key)
         })
     }
 
     handleDelInventory= (key) => {
         let inventoryBlackList = [...this.state.inventoryBlackList];
         this.setState({
-            inventoryBlackList: inventoryBlackList.filter((item) => item.goodsId !== key)
+            inventoryBlackList: inventoryBlackList.filter((item) => item.goodsInfoId !== key)
         })
     }
 
@@ -120,7 +164,7 @@ export default class BlackListModal extends React.Component<any, any>{
                         <Popconfirm
                             placement="topLeft"
                             title={<FormattedMessage id="Product.deleteThisProduct" />}
-                            onConfirm={() => this.handleDelPrice(rowInfo.goodsId)}
+                            onConfirm={() => this.handleDelPrice(rowInfo.goodsInfoId)}
                             okText={<FormattedMessage id="Product.Confirm" />}
                             cancelText={<FormattedMessage id="Product.Cancel" />}
                         >
@@ -183,7 +227,7 @@ export default class BlackListModal extends React.Component<any, any>{
                         <Popconfirm
                             placement="topLeft"
                             title={<FormattedMessage id="Product.deleteThisProduct" />}
-                            onConfirm={() => this.handleDelPrice(rowInfo.goodsId)}
+                            onConfirm={() => this.handleDelInventory(rowInfo.goodsInfoId)}
                             okText={<FormattedMessage id="Product.Confirm" />}
                             cancelText={<FormattedMessage id="Product.Cancel" />}
                         >

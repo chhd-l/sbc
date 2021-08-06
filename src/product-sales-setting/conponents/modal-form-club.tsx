@@ -103,6 +103,7 @@ class ModalFormClub extends Component<Props, any> {
               <Select placeholder="Please input  frequency type!">
                 <Select.Option value="Frequency_month_club">Frequency Month</Select.Option>
                 <Select.Option value="Frequency_week_club">Frequency Week</Select.Option>
+                <Select.Option value="Frequency_day_club">Frequency Day</Select.Option>
               </Select>
             )}
           </Form.Item>

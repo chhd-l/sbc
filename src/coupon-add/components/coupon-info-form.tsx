@@ -129,6 +129,7 @@ class CouponInfoForm extends Component<any, any> {
       marketingType: any,
       isSuperimposeSubscription: any;
       limitAmount: any;
+      customProductsType:number,
       // 键值设置方法
       fieldsValue: Function;
       // 修改时间区间方法
@@ -187,6 +188,7 @@ class CouponInfoForm extends Component<any, any> {
     isSuperimposeSubscription: 'isSuperimposeSubscription',
     marketingType: 'marketingType',
     limitAmount: 'limitAmount',
+    customProductsType:'customProductsType',
     fieldsValue: noop,
     changeDateRange: noop,
     chooseScopeType: noop,
@@ -270,6 +272,15 @@ class CouponInfoForm extends Component<any, any> {
       })
     );
   };
+
+  targetCommonChangeValue=(field,value)=>{
+    const { fieldsValue } = this.props.relaxProps;
+    console.log(field,value)
+      fieldsValue({
+        field: field,
+        value: value
+      });
+  }
 
   targetCustomerRadioChange = (value) => {
     const { fieldsValue } = this.props.relaxProps;
@@ -394,7 +405,8 @@ class CouponInfoForm extends Component<any, any> {
       couponPurchaseType,
       isSuperimposeSubscription,
       marketingType,
-      setMarketingType
+      setMarketingType,
+      customProductsType
     } = this.props.relaxProps;
     const storeCateValues = [];
     const parentIds = sourceStoreCateList ? sourceStoreCateList.toJS().map((x) => x.cateParentId) : [];
@@ -1006,7 +1018,8 @@ class CouponInfoForm extends Component<any, any> {
             <>
               <FormItem {...formItemLayout} required={true}>
                 {getFieldDecorator('customProductsType', {
-                  initialValue: 0,
+                  initialValue: customProductsType,
+                  onChange:(e)=>this.targetCommonChangeValue('customProductsType',e.target.value)
                 })(<RadioGroup >
                   <Radio value={0}>
                     <span style={styles.darkColor}><FormattedMessage id="Marketing.Includeproduct" /></span>

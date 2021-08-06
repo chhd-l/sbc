@@ -63,7 +63,8 @@ export default class AppStore extends Store {
         attributeValueIds,
         couponPurchaseType,
         isSuperimposeSubscription,
-        limitAmount
+        limitAmount,
+        customProductsType=0
       } = couponInfo;
 
       const scopeIds = await this.fetchScope(scopeType, couponInfo.scopeIds);
@@ -92,7 +93,8 @@ export default class AppStore extends Store {
         attributeValueIds,
         couponPurchaseType,
         isSuperimposeSubscription,
-        limitAmount
+        limitAmount,
+        customProductsType
       });
       this.dispatch('loading:end');
     }

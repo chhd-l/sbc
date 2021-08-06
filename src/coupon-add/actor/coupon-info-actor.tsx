@@ -53,6 +53,7 @@ export default class CouponInfoActor extends Actor {
       goodsModalVisible: false,
       // 聚合给选择分类使用
       reducedCateIds: [],
+      customProductsType:0,
 
       // 店铺分类信息
       storeCateList: [],
@@ -124,7 +125,8 @@ export default class CouponInfoActor extends Actor {
       attributeValueIds,
       couponPurchaseType,
       isSuperimposeSubscription,
-      limitAmount
+      limitAmount,
+      customProductsType
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -150,6 +152,7 @@ export default class CouponInfoActor extends Actor {
       .set('couponPurchaseType', couponPurchaseType)
       .set('isSuperimposeSubscription', isSuperimposeSubscription)
       .set('limitAmount', limitAmount)
+      .set('customProductsType',customProductsType)
 
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));

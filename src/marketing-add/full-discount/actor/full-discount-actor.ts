@@ -19,7 +19,7 @@ export default class FullDiscountActor extends Actor {
         customProductsType:0,//Include product
         marketingUseLimit:{
           perCustomer:1,
-          isLimit:1
+          isNotLimit:1
         }
       },
       allGroups: [],

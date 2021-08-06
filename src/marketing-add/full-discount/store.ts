@@ -42,7 +42,7 @@ export default class AppStore extends Store {
       if(!_result.marketingUseLimit){
         _result.marketingUseLimit={
           perCustomer:1,
-          isLimit:1
+          isNotLimit:1
         }
       }
       _result.customProductsType=_result?.customProductsType??0

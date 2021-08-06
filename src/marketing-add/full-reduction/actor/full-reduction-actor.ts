@@ -19,7 +19,7 @@ export default class FullReductionActor extends Actor {
         marketingType: 0,
         marketingUseLimit:{
           perCustomer:1,
-          isLimit:1
+          isNotLimit:1
         }
       },
       marketingType: 0,

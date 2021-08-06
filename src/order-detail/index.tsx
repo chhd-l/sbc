@@ -29,10 +29,21 @@ export default class OrderDetail extends React.Component<any, any> {
 
   render() {
     const { tid } = this.props.match.params;
+    const detail = this.store.state().get('detail');
     if (this.state.loading) {
       return (
         <div style={styles.noBackgroundContainer}>
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+          <Spin
+            spinning={this.state.loading}
+            indicator={
+              <img
+                className="spinner"
+                src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+                style={{ width: '90px', height: '90px' }}
+                alt=""
+              />
+            }
+          />
         </div>
       );
     }
@@ -41,34 +52,56 @@ export default class OrderDetail extends React.Component<any, any> {
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/order-list"><FormattedMessage id="Menu.Order" /></a>
+            <a href="/order-list">
+              <FormattedMessage id="Menu.Order" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <a href="/order-list"><FormattedMessage id="Menu.Order list" /></a>
+            <a href="/order-list">
+              <FormattedMessage id="Menu.Order list" />
+            </a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="Order.OrderDetails" />}</Breadcrumb.Item>
         </Breadcrumb>
         <div className="container-search">
           <Headline title={<FormattedMessage id="Order.OrderDetails" />} />
         </div>
-        <div className="container">
-          <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
-            <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
-              <OrderDetailTab />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="Order.DeliveryRecord" />} key="2">
-              <OrderDelivery />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="Order.PaymentRecords" />} key="3">
-              <OrderReceive />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="Order.Comment" />} key="4">
-              <Comment orderNumber={tid} petOwnerName={this.store.state().get('detail').getIn(['buyer', 'name'])} />
-            </Tabs.TabPane>
-          </Tabs>
-          
-          <OperateLog />
-        </div>
+        {detail.size > 0 ? (
+          <div className="container">
+            <Tabs
+              onChange={(key) => this.store.onTabsChange(key)}
+              activeKey={this.store.state().get('tab')}
+            >
+              <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
+                <OrderDetailTab />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<FormattedMessage id="Order.DeliveryRecord" />} key="2">
+                <OrderDelivery />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<FormattedMessage id="Order.PaymentRecords" />} key="3">
+                <OrderReceive />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<FormattedMessage id="Order.Comment" />} key="4">
+                <Comment orderNumber={tid} petOwnerName={detail.getIn(['buyer', 'name'])} />
+              </Tabs.TabPane>
+            </Tabs>
+
+            <OperateLog />
+          </div>
+        ) : (
+          <div
+            className="container"
+            style={{
+              height: '200px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            operation failure
+          </div>
+        )}
+
         <div className="bar-button">
           <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="Order.Back" />}

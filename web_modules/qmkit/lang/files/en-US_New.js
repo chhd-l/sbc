@@ -831,6 +831,8 @@ export default {
         "Order.Giveaway": "【Giveaway】",
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
         'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
+      'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
+        'Order.workTime':'Chosen delivery method'
 
 
 

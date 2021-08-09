@@ -179,6 +179,7 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticTriggerValue = context.day;
             }
+            //todo 调整orderAllowZonePriceStatus的接口configType取值
             //允许0元订单
             if (item.configType === 'order_setting_refund_auto_refund') {
               paymentOnlineForm.orderAllowZonePriceStatus = !!item.status;

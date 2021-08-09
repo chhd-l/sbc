@@ -243,8 +243,9 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (text) => text,
         width: '11%'
       },
+      // todo 调整externalSKuCode取值字段
       {
-        title: <FormattedMessage id="Order.externalSKUcode" />,
+        title: <FormattedMessage id="Order.externalSKuCode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text,
@@ -299,8 +300,6 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'num',
         width: '9%',
         render: (text, record) => {
-          console.log('record', record);
-          // const quantityAndRealtimestock = Math.floor(Math.random()*1000);
           return (
             <span>
               {storeId === 123457907 || storeId === 123457911

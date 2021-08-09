@@ -35,6 +35,7 @@ class OrderSetting extends Component<any, any> {
     this.state = {
       title: <FormattedMessage id="Order.AuditSetting" />,
       auditMethod: '',
+      zeroAuditMethod:'',
       isPetInfo: false,
 
       configForm: {
@@ -78,11 +79,17 @@ class OrderSetting extends Component<any, any> {
             const { configForm } = this.state;
             let isPetInfo = false;
             let auditMethod = '';
+            let zeroAuditMethod='';
             for (let i = 0; i < configList.length; i++) {
               if (configList[i].configType && configList[i].configType === 'no_audit_required') {
                 configForm.autoAuditId = configList[i].id;
                 //判断自动审核是否开启
                 auditMethod = configList[i].status === 1 ? 'Auto audit' : 'Manual audit';
+              }
+              //todo 从接口获取zeroAuditMethod的值
+              if (configList[i].configType && configList[i].configType === 'no_audit_required') {
+                //判断自动审核是否开启
+                zeroAuditMethod = configList[i].status === 1 ? 'Auto audit' : 'Manual audit';
               }
               if (
                 configList[i].configType &&
@@ -102,7 +109,8 @@ class OrderSetting extends Component<any, any> {
               auditMethod,
               isPetInfo,
               configForm,
-              loading: false
+              loading: false,
+              zeroAuditMethod
             });
           }
         } else {
@@ -204,7 +212,7 @@ class OrderSetting extends Component<any, any> {
     if (e.target.value === 'Auto audit') {
       this.setState({
         auditMethod: e.target.value,
-        visiblePrescriberConfig: true,
+        // visiblePrescriberConfig: true,
         isPetInfo: false
       });
 
@@ -250,6 +258,13 @@ class OrderSetting extends Component<any, any> {
       this.save(params);
     }
   };
+  //改变0元订单审核方式
+  changeZeroAuditMethod=(e)=>{
+    //todo 0元订单值改变事件
+    this.setState({
+      zeroAuditMethod: e.target.value,
+    });
+  }
   onPetInfoChange = (checked) => {
     const { configForm } = this.state;
     this.setState({
@@ -283,7 +298,8 @@ class OrderSetting extends Component<any, any> {
       visibleAuditConfig,
       visiblePrescriberConfig,
       configData,
-      categoryLoading
+      categoryLoading,
+      zeroAuditMethod
     } = this.state;
 
     const columns = [
@@ -428,14 +444,14 @@ class OrderSetting extends Component<any, any> {
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}>
                 <FormattedMessage id="Order.zeroOrderAuditMethod" />:
               </p>
-              <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
+              <Radio.Group onChange={this.changeZeroAuditMethod} value={zeroAuditMethod}>
                 <Radio value="Auto audit">
                   <FormattedMessage id="Order.AutoAudit" />
                 </Radio>
                 <Radio value="Manual audit">
                   <FormattedMessage id="Order.ManualAudit" />
                 </Radio>
-                {auditMethod === 'Manual audit' ? (
+                {zeroAuditMethod === 'Manual audit' ? (
                   <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
                     <span
                       onClick={() => {

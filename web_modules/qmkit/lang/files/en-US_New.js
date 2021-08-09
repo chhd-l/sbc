@@ -2360,6 +2360,13 @@ export default {
         'Log.Log':'Log',
         'Log.AllResponse':'All Response',
         'Log.ResponseLog':'Response Log',
-        'Log.Search':'search'
-    },
+        'Log.Search':'search',
+        'Log.All':'All',
+        'Log.LogDate':'Log Date',
+        'Log.Keywords':'Keywords',
+        'Log.Success':'Success',
+        'Log.Fail':'fail',
+        'Log.ResultMessage':'Result message',
+
+    }
 }

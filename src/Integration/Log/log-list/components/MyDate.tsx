@@ -3,7 +3,6 @@ import { DatePicker } from 'antd';
 import {Const} from 'qmkit';
 
 export default class DatePickerLaber extends React.PureComponent<any> {
-
   render() {
     const { label, children, ...rest } = this.props;
     return (

@@ -1048,7 +1048,7 @@ const routes = [
     asyncComponent: () => import('./Integration/Log/log-list')
   },
   {
-    path: '/log-detail/:tablekey/:id',
+    path: '/log-detail/:id',
     asyncComponent: () => import('./Integration/Log/log-detail')
   },
   {

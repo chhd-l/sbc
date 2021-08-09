@@ -1,83 +1,231 @@
 import React, { Component } from 'react';
-import { Input, Form, Row, Col, Select, Button } from 'antd';
-import { SelectGroup,RCi18n } from 'qmkit';
-import MyDate from './MyDate'
+import { Input, Form, Row, Col, Select, Button, Spin, DatePicker } from 'antd';
+import { SelectGroup, RCi18n, Const } from 'qmkit';
+import MyDate from './MyDate';
+import _ from 'lodash';
+import * as webapi from '../webapi'
+import moment from 'moment';
+import searchForm from '@/order-recommendation-details-new/components/search-form';
 
 const { Option } = Select
+const FormItem = Form.Item
+const InputGroup = Input.Group
+const { RangePicker } = DatePicker;
 
 class LogSearch extends Component<any, any> {
   constructor(props) {
     super(props);
+    this.state = {
+      systemList: [],
+      interfaceList: [],
+      interfaceLoading: false,
+      searchForm: {
+        startDate: null,
+        endDate: null,
+        interface: null,
+        requestId: null,
+        system: null,
+        keywords: null
+      }
+    }
   }
+  componentDidMount() {
+    this.init()
+  }
+  init = () => {
+    this.getSystemList()
+    let params = {
+      pageNum: 0,
+      pageSize: 30,
+      systemId: '',
+      interfaceName: ''
+    }
+    this.getInterface(params)
+  }
+
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
+    this.setState({
+      searchForm: data
+    });
+  };
+
+  onChangeDate = (date, dateString) => {
+    const { searchForm } = this.state;
+    searchForm.startDate = dateString[0] ? moment(dateString[0]).format('YYYY-MM-DD') : '';
+    searchForm.endDate = dateString[1] ? moment(dateString[1]).format('YYYY-MM-DD') : '';
+    this.setState({
+      searchForm
+    });
+  };
 
   // 获取form各项value
   handleSubmit = () => {
-    const value = this.props.form.getFieldsValue();
-    let startDate = value.newdate ? value.newdate.format('YYYY-MM-DD') : '';
-    let endDate = value.enddate ? value.enddate.format('YYYY-MM-DD') : '';
-    let obj = { ...value, enddate: endDate, newdate: startDate };
-    // tslint:disable-next-line:no-console
-    console.log(obj);
+    const { searchForm } = this.state
+    console.log(searchForm);
+    this.props.searchLogList(searchForm)
+
+  }
+
+  getSystemList = () => {
+    webapi.fetchSystemList().then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        let systemList = res.context.intSystemDTOS
+        this.setState({
+          systemList
+        })
+      }
+    })
+  }
+  getInterface = (params) => {
+    webapi.fetchInterfaceList(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        console.log(res);
+        let interfaceList = res.context.intInterfaceDTOS.content
+        this.setState({
+          interfaceList
+        })
+      }
+    })
+  }
+  searchInterface = (value) => {
+    const { searchForm } = this.state
+    let params = {
+      pageNum: 0,
+      pageSize: 30,
+      systemId: searchForm.system,
+      interfaceName: value
+    }
+    this.getInterface(params)
+
+  }
+
+  handleSystemChange = (value) => {
+    this.onFormChange({
+      field: 'system',
+      value
+    });
+    this.onFormChange({
+      field: 'interface',
+      value: null
+    });
+    let params = {
+      pageNum: 0,
+      pageSize: 30,
+      systemId: value,
+      interfaceName: null
+    }
+    this.getInterface(params)
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { interfaceLoading, systemList, interfaceList, searchForm } = this.state
     return (
       <Form layout="inline" className="filter-content">
         <Row gutter={24}>
           {/* requestID */}
           <Col span={8}>
-            <Form.Item>
-              {getFieldDecorator('requestId')(<Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.RequestID' })}</p>} />)}
-            </Form.Item>
+            <FormItem>
+              <InputGroup compact style={styles.formItemStyle}>
+                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.RequestID' })} />
+                <Input
+                  style={styles.wrapper}
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'requestId',
+                      value
+                    });
+                  }}
+                />
+              </InputGroup>
+            </FormItem>
           </Col>
+
           {/* system */}
           <Col span={8}>
-            <Form.Item>
-              {getFieldDecorator('system', {
-                initialValue: '0'
-              })(
-                <SelectGroup
-                  style={styles.selectWidth}
-                  label={<p style={styles.label}
-                  >{RCi18n({ id: 'Log.System' })}</p>}>
-                  <Option value="0">{RCi18n({ id: 'Log.Datata' })}</Option>
-                  <Option value="1">{RCi18n({ id: 'Log.Fedex' })}</Option>
-                  <Option value="2">{RCi18n({ id: 'Log.Mulesoft' })}</Option>
-                  <Option value="3">{RCi18n({ id: 'Log.OKTACIAM' })}</Option>
-                  <Option value="4">{RCi18n({ id: 'Log.WEShare' })}</Option>
-                </SelectGroup>
-              )}
-            </Form.Item>
+            <FormItem>
+              <InputGroup compact style={styles.formItemStyle}>
+                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.System' })} />
+                <Select
+                  style={styles.wrapper}
+                  allowClear
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    this.handleSystemChange(value)
+                  }}
+                >
+                  {
+                    systemList && systemList.map(item => (
+                      <Option value={item.id}>{item.sysShort}</Option>
+                    ))
+                  }
+                </Select>
+              </InputGroup>
+            </FormItem>
+
           </Col>
           {/* interface */}
           <Col span={8}>
-            <Form.Item>
-              {getFieldDecorator('interface', {
-                initialValue: '0'
-              })
-                (<SelectGroup
-                  style={styles.selectWidth}
-                  label={<p style={styles.label}>{RCi18n({ id: 'Log.Interface' })}</p>}>
-                  <Option value="0">{RCi18n({ id: 'Log.InventorySynchonization' })}</Option>
-                  <Option value="1">{RCi18n({ id: 'Log.OrderExport' })}</Option>
-                  <Option value="2">{RCi18n({ id: 'Log.PriceSynchronization' })}</Option>
-                </SelectGroup>)}
-            </Form.Item>
+            <FormItem>
+              <InputGroup compact style={styles.formItemStyle}>
+                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.Interface' })} />
+                <Select
+                  style={styles.wrapper}
+                  allowClear
+                  showSearch
+                  value={searchForm.interface}
+                  optionFilterProp="children"
+                  notFoundContent={interfaceLoading ? <Spin size="small" /> : null}
+                  onSearch={_.debounce(this.searchInterface, 500)}
+                  filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    this.onFormChange({
+                      field: 'interface',
+                      value
+                    });
+                  }}
+                >
+                  {
+                    interfaceList && interfaceList.map(item => (
+                      <Option value={item.id}>{item.name}</Option>
+                    ))
+                  }
+                </Select>
+              </InputGroup>
+            </FormItem>
           </Col>
         </Row>
         <Row gutter={24}>
-          {/* newdate */}
           <Col span={8}>
-            <Form.Item>
-              {getFieldDecorator('newdate')(<MyDate label={<p style={styles.label}>{RCi18n({ id: 'Log.NewDate' })}</p>}></MyDate>)}
-            </Form.Item>
+            <FormItem>
+              <InputGroup compact style={styles.formItemStyle}>
+                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.Keywords' })} />
+                <Input
+                  style={styles.wrapper}
+                  onChange={(e) => {
+                    const value = (e.target as any).value;
+                    this.onFormChange({
+                      field: 'keywords',
+                      value
+                    });
+                  }}
+                />
+              </InputGroup>
+            </FormItem>
           </Col>
-          {/* enddate */}
+          {/* Log date */}
           <Col span={8}>
-            <Form.Item>
-              {getFieldDecorator('enddate')(<MyDate label={<p style={styles.label}>{RCi18n({ id: 'Log.EndDate' })}</p>}></MyDate>)}
-            </Form.Item>
+            <FormItem>
+              <InputGroup compact style={styles.formItemStyle}>
+                <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({ id: 'Log.LogDate' })} />
+                <RangePicker style={styles.wrapper} onChange={this.onChangeDate} format={'YYYY-MM-DD'} />
+              </InputGroup>
+            </FormItem>
           </Col>
         </Row>
         <Row>
@@ -99,15 +247,19 @@ class LogSearch extends Component<any, any> {
 }
 
 const styles = {
-  label: {
-    width: 151,
-    textAlign: 'center',
-    padding: '0px'
+  formItemStyle: {
+    width: 335
   },
-
-  selectWidth: {
-    width: 194
-  }
+  label: {
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  wrapper: {
+    width: 200
+  },
 } as any
 
 export default Form.create()(LogSearch)

@@ -112,6 +112,9 @@ class ModalForm extends Component<Props, any> {
                 <Select.Option value="Frequency_week">
                   <FormattedMessage id="Product.FrequencyWeek" />
                 </Select.Option>
+                <Select.Option value="Frequency_day">
+                  <FormattedMessage id="Product.FrequencyDay" />
+                </Select.Option>
               </Select>
             )}
           </Form.Item>

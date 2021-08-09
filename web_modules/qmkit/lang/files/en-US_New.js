@@ -833,7 +833,9 @@ export default {
         'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
       'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
         'Order.workTime':'Chosen delivery method',
-        'Order.externalSKUcode':'External SKU'
+        'Order.externalSKUcode':'External SKU',
+        'Order.AllowZoneOrder':'Allow for orders with 0 price',
+        'Order.zeroOrderAuditMethod':'Zero price order audit method '
 
 
     },

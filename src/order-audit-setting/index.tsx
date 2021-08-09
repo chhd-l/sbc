@@ -177,7 +177,7 @@ class OrderSetting extends Component<any, any> {
     if (e.target.value === 'Auto audit') {
       this.setState({
         auditMethod: e.target.value,
-        visiblePrescriberConfig: true,
+        // visiblePrescriberConfig: true,
         isPetInfo: false
       });
 

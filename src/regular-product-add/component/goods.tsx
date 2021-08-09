@@ -444,6 +444,7 @@ class GoodsForm extends React.Component<any, any> {
                 <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder={<FormattedMessage id="Product.selectType" />} disabled={Number(goods.get('subscriptionStatus')) === 0} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
+                  <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
                 </Select>
               )}
             </FormItem>
@@ -791,28 +792,26 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          {goods.get('saleableFlag') == 0 ? (
-            <Col span={12}>
-              {/* Displayonshop */}
-              <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
-                {getFieldDecorator('displayFlag', {
-                  rules: [
-                    {
-                      required: true,
-                      message: RCi18n({id:'Product.Displayonshop'})
-                    }
-                  ],
-                  onChange: this._editGoods.bind(this, 'displayFlag'),
-                  initialValue: goods.get('displayFlag')
-                })(
-                  <RadioGroup>
-                    <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
-                    <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
-                  </RadioGroup>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
+          <Col span={12}>
+            {/* Displayonshop */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
+              {getFieldDecorator('displayFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: RCi18n({id:'Product.Displayonshop'})
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'displayFlag'),
+                initialValue: goods.get('displayFlag')
+              })(
+                <RadioGroup>
+                  <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
+                  <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         {/* <Row>
           <Col span={8}>

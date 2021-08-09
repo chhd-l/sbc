@@ -298,6 +298,8 @@ class GoodsForm extends React.Component<any, any> {
         getFrequencyList = [...frequencyList.autoShip.dayList, ...frequencyList.autoShip.weekList, ...frequencyList.autoShip.monthList]
       }else if (goods.get('promotions') == "club"){
         getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
+      }else if (goods.get('promotions') == 'individual'){
+        getFrequencyList = [...frequencyList.individual.dayIndividualList, ...frequencyList.individual.weekIndividualList, ...frequencyList.individual.monthIndividualList]
       }
     }
 

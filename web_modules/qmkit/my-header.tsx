@@ -38,8 +38,8 @@ import iconMexico from './images/icon/iconMexico.svg';
 import iconRussia from './images/icon/iconRussia.svg';
 import iconSpain from './images/icon/iconSpain.svg';
 import iconTurkey from './images/icon/iconTurkey.svg';
-import iconAmerica from './images/icon/iconAmerica';
-import iconGermany from './images/icon/iconGermany';
+import iconAmerica from './images/icon/iconAmerica.svg';
+import iconGermany from './images/icon/iconGermany.svg';
 
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';

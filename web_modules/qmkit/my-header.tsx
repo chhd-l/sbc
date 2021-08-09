@@ -14,13 +14,17 @@ import {
   Tabs,
   notification,
   Modal,
-  Tooltip
+  Tooltip,
+  Spin
 } from 'antd';
 const { Header } = Layout;
 import { history, cache, util, Const, AuthWrapper } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import OktaLogout from './okta/okta-logout';
+import {
+  getStoreList,
+} from './okta/webapi';
 import { getHomeTaskListAndCount, getTaskRead, getHomeTaskTodoListTop5 } from '../../src/task/webapi';
 import { FormattedMessage } from 'react-intl';
 import msgImg from './images/icon/msg-icon.png'
@@ -28,7 +32,22 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
-import { RCi18n } from 'qmkit';
+import iconEengland from './images/icon/iconEengland.svg';
+import iconFrance from './images/icon/iconFrance.svg';
+import iconMexico from './images/icon/iconMexico.svg';
+import iconRussia from './images/icon/iconRussia.svg';
+import iconSpain from './images/icon/iconSpain.svg';
+import iconTurkey from './images/icon/iconTurkey.svg';
+import iconAmerica from './images/icon/iconAmerica';
+import iconGermany from './images/icon/iconGermany';
+
+import { RCi18n, switchLogin } from 'qmkit';
+import tr from './lang/files/tr';
+
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1991001_65pdey0igpv.js',
+});
+
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -44,13 +63,17 @@ export default class MyHeader extends React.Component {
       Russian: util.requireLocalSrc(lan === 'ru' ? 'sys/Russian_act.png' : 'sys/Russian.png'),
       Turkey: util.requireLocalSrc(lan === 'tr' ? 'sys/Turkey_act.png' : 'sys/Turkey.png'),
       France: util.requireLocalSrc(lan === 'fr' ? 'sys/France_act.png' : 'sys/France.png'),
-      Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png')
+      Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png'),
+      storeList: [],
     };
   }
 
   componentDidMount() {
     if ((window as any).token) {
       this.getTaskList();
+      // 获取切换店铺的下拉数据
+      this.getUserStoreList();
+
     }
   }
 
@@ -64,12 +87,14 @@ export default class MyHeader extends React.Component {
       taskList: data[1].res?.context?.taskList ?? []
     });
   }
+
   returnTask(item, type) {
     if (type === 'reminderTasks') {
       this.readTask(item);
     }
     history.push(`/edit-task/${item.id}`);
   }
+
   async readTask(item) {
     const { res } = await getTaskRead({ id: item.id });
     if (res.code === Const.SUCCESS_CODE) {
@@ -83,6 +108,7 @@ export default class MyHeader extends React.Component {
       }
     }
   }
+
   handleVisibleChange = (visible) => {
     this.setState({ visible });
   };
@@ -195,6 +221,91 @@ export default class MyHeader extends React.Component {
       </div>
     </div>
   );
+
+  _handlePreview = async () => {
+    var prescriber = JSON.parse(sessionStorage.getItem(cache.PRESCRIBER_DATA));
+    if (prescriber) {
+      this.setState({
+        // isPrescriber : true,
+        qrCodeLink: prescriber.qrCodeLink,
+        url: prescriber.url
+      });
+    }
+  };
+
+  handleCopy = (value) => {
+    if (copy(value)) {
+      message.success(RCi18n({id:"Order.OperateSuccessfully"}));
+    } else message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
+  };
+
+  languageChange = (value) => {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
+    sessionStorage.setItem(cache.LANGUAGE, value);
+
+    history.go(0);
+
+    notification['info']({
+      message: RCi18n({id:"Public.changeLanguageAlert"})
+    });
+  };
+
+  getUserStoreList = async () => {
+    const data = await getStoreList();
+    this.setState({
+      storeList: data.res?.context?.storeList ?? [],
+    });
+
+  }
+
+  /**
+   * 根据storeId获取国旗
+   *
+   * 123456858   墨西哥
+   * 123457907   俄罗斯
+   * 123457908   德国  // 缺失
+   * 123457909   法国
+   * 123457910   美国  // 缺失
+   * 123457911   土耳其
+   **/
+  getStoreIcon = (storeId) => {
+
+    switch (storeId) {
+      case '123456858': return  <Icon component={iconMexico} className='logo'/>;
+      case '123457907': return  <Icon component={iconRussia} className='logo'/>;
+      case '123457908': return  <Icon component={iconGermany} className='logo'/>;
+      case '123457909': return  <Icon component={iconFrance} className='logo'/>;
+      case '123457910': return  <Icon component={iconAmerica} className='logo'/>;
+      case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      default: return  <IconFont className='logo' type='iconfangjian1' />;
+    }
+  }
+
+  // 切换商铺
+  onchangeShop = (info) => {
+    if (!info) return;
+    let {key: storeId} = info;
+    const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+    // 点击当前已登录商铺不处理
+    let isCurrentStore = String(loginInfo.storeId) === String(storeId);
+    if (isCurrentStore) return;
+
+    this.userSwitchStore(storeId);
+  }
+
+  // 切换商铺后重新获取LOGIN_DATA数据
+  userSwitchStore = (storeId) => {
+    this.props.openMainLoading();
+    switchLogin({storeId}, (res) => {
+      if (res.code === Const.SUCCESS_CODE){
+        // 重新加载页面
+        window.location.reload();
+      }else {
+
+      }
+    })
+  }
+
   render() {
     const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     if (!loginInfo) {
@@ -349,6 +460,29 @@ export default class MyHeader extends React.Component {
         </Menu.Item>
       </Menu>
     );
+    let {
+      storeList,
+    } = this.state;
+    let isExistStoreList = Array.isArray(storeList) && (storeList.length > 0);
+    const shopMenu = (
+        // 当前自己store
+        <Menu
+            defaultSelectedKeys={[String(loginInfo.storeId)]}
+            onClick={(e) => this.onchangeShop(e)}
+        >
+          {storeList.map(item => (
+              <Menu.Item
+                  key={item.storeId}
+                  // disabled={loginInfo.storeId === item.storeId}
+              >
+                <div className='shop-list-item' >
+                  {this.getStoreIcon(String(item.storeId))}
+                  <span className='accountName'>{item.storeName}</span>
+                </div>
+              </Menu.Item>
+          ))}
+        </Menu>
+    );
 
     const userImg =
       'data:image/png;base64,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';
@@ -363,6 +497,8 @@ export default class MyHeader extends React.Component {
             <a href="/" style={styles.logoBg}>
               <img style={styles.logoImg} src={sessionStorage.getItem(cache.SITE_LOGO) ? sessionStorage.getItem(cache.SITE_LOGO) : util.requireLocalSrc('sys/02.jpg')} />
             </a>
+            <span style={{display: 'inline-block', color: '#333'}}>{storeName}</span>
+
             {baseConfig &&
               (!prescriberId ? (
                 <a className="ant-dropdown-link" href={`${baseConfig.pcWebsite}`} target="_blank">
@@ -395,7 +531,7 @@ export default class MyHeader extends React.Component {
             </div>
 
             <div style={styles.headerRight}>
-              <div style={{ marginRight: 30, marginTop: 15, height: 64 }}>
+              <div style={{ paddingTop: 8}}>
                 <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover
@@ -407,7 +543,7 @@ export default class MyHeader extends React.Component {
                       trigger="click"
                     >
                       {/*<Icon type="bell" style={{ fontSize: 25 }} />*/}
-                      <span className="iconfont iconmessage" style={{ fontSize: 25 }} ></span>
+                      <span className="iconfont iconmessage" style={{fontSize: 25}} />
                       {/*<span className="iconfont iconmessage3" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
 
                       {/*<span className="iconfont iconmessage2" style={{ fontSize: 25, marginRight: 10 }} ></span>*/}
@@ -422,8 +558,31 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>
-              <div style={{ height: 20, textAlign: 'right' }}>
-                <div style={{ height: 20 }}>
+              {
+
+              }
+              <div className='headerRight-shop'>
+                  <div style={{ paddingLeft: 30}}>
+                    <AuthWrapper functionName='f_home_switch_store'>
+                      {
+                        isExistStoreList
+                            ? (
+                                <Dropdown
+                                    placement={'bottomRight'}
+                                    overlay={shopMenu}
+                                    trigger={['click']}
+                                    overlayClassName='shop-list-box'
+                                >
+                                  <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                                </Dropdown>
+                            )
+                            : null
+                      }
+                    </AuthWrapper>
+                  </div>
+              </div>
+              <div >
+                <div>
                   <Dropdown overlay={menu} trigger={['click']}>
                     <a className="ant-dropdown-link" href="#">
                       {/* <Icon type="user" /> */}
@@ -435,7 +594,7 @@ export default class MyHeader extends React.Component {
                     </a>
                   </Dropdown>
                 </div>
-                <div>{storeName}</div>
+                {/*<div>{storeName}</div>*/}
               </div>
             </div>
           </div>
@@ -449,34 +608,6 @@ export default class MyHeader extends React.Component {
       </div>
     );
   }
-
-  _handlePreview = async () => {
-    var prescriber = JSON.parse(sessionStorage.getItem(cache.PRESCRIBER_DATA));
-    if (prescriber) {
-      this.setState({
-        // isPrescriber : true,
-        qrCodeLink: prescriber.qrCodeLink,
-        url: prescriber.url
-      });
-    }
-  };
-
-  handleCopy = (value) => {
-    if (copy(value)) {
-      message.success(RCi18n({id:"Order.OperateSuccessfully"}));
-    } else message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
-  };
-
-  languageChange = (value) => {
-    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
-    sessionStorage.setItem(cache.LANGUAGE, value);
-
-    history.go(0);
-
-    notification['info']({
-      message: RCi18n({id:"Public.changeLanguageAlert"})
-    });
-  };
 }
 
 const styles = {
@@ -523,6 +654,6 @@ const styles = {
     // textAlign: 'right',
     display: 'flex',
     justifyContent: 'space-between',
-    alignitems: 'center'
-  }
+    alignItems: 'center'
+  },
 } as any;

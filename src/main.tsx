@@ -1,11 +1,14 @@
 import React from 'react';
-import { Layout, message } from 'antd';
+import {Layout, message, Spin, Icon} from 'antd';
 import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
 import { routes, auditDidNotPass } from './router';
+import { LogoLoadingIcon } from 'biz';
 import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
 import { FormattedMessage } from 'react-intl';
 const { Content } = Layout;
+
+
 export default class Main extends React.Component<any, any> {
   _menu: any;
 
@@ -15,7 +18,8 @@ export default class Main extends React.Component<any, any> {
       // 当前浏览器地址匹配的路由path
       matchedPath: '',
       hasError: false,
-      uuid: ''
+      uuid: '',
+      loading: false,
     };
     (window as any).countryEnum = {
       123456858: 'mx',
@@ -97,36 +101,58 @@ export default class Main extends React.Component<any, any> {
     }
   }
 
+  openMainLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  closeMainLoading = () => {
+    this.setState({
+      loading: false
+    })
+  }
+
   render() {
+    let { loading } = this.state;
+    const mainLoadingIcon = <LogoLoadingIcon style={{ fontSize: 24 }} spin />;
     // this.props.text.d
     return (
       <div>
-        <Layout>
-          {/*头部*/}
-          <MyHeader />
-          <div className="layout-header"></div>
-          <Layout className="ant-layout-has-sider">
-            {/*左侧一级菜单*/}
-            <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
-            {/*左侧二三级菜单*/}
-            <MyLeftMenu matchedPath={this.state.matchedPath} onSecondActiveChange={this._onSecondActiveChange} ref={(menu) => (this._menu = menu)} />
-            {/*右侧主操作区域*/}
-            <ErrorBoundary uuid={this.state.uuid}>
-              <Content>
-                <div className="main-content" id="page-content">
-                  {routeWithSubRoutes(routes, this.handlePathMatched)}
-                  {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
-                  <div style={styles.copyright}>
-                    © <FormattedMessage id="Public.RoyalCaninSAS2020" />
-                    {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
+        <Spin
+            spinning={loading}
+            indicator={mainLoadingIcon}
+        >
+          <Layout>
+            {/*头部*/}
+            <MyHeader
+                openMainLoading={this.openMainLoading}
+                closeMainLoading={this.closeMainLoading}
+            />
+            <div className="layout-header"/>
+            <Layout className="ant-layout-has-sider">
+              {/*左侧一级菜单*/}
+              <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
+              {/*左侧二三级菜单*/}
+              <MyLeftMenu matchedPath={this.state.matchedPath} onSecondActiveChange={this._onSecondActiveChange} ref={(menu) => (this._menu = menu)} />
+              {/*右侧主操作区域*/}
+              <ErrorBoundary uuid={this.state.uuid}>
+                <Content>
+                  <div className="main-content" id="page-content">
+                    {routeWithSubRoutes(routes, this.handlePathMatched)}
+                    {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
+                    <div style={styles.copyright}>
+                      © <FormattedMessage id="Public.RoyalCaninSAS2020" />
+                      {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
                     Const.COPY_VERSION
                   } */}
+                    </div>
                   </div>
-                </div>
-              </Content>
-            </ErrorBoundary>
+                </Content>
+              </ErrorBoundary>
+            </Layout>
           </Layout>
-        </Layout>
+        </Spin>
       </div>
     );
   }

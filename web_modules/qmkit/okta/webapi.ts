@@ -11,3 +11,12 @@ export function logout() {
         method: 'GET'
     });
 }
+
+export function getStoreList() {
+    return Fetch<TResult>('/customer/employee/getStoreList', {
+        method: 'GET'
+    });
+}
+
+
+

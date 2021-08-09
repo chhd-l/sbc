@@ -3,6 +3,7 @@ import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
 import { Form, Input, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip, Switch } from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
+import ModalFormIndividual from './conponents/modal-form-individual';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { querySysDictionary,delSysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
@@ -12,12 +13,17 @@ class ProductSearchSetting extends Component<any, any> {
   state = {
     visible: false,
     visibleClub: false,
+    visibleIndividual: false,
+
     disabled: false,
     options: [],
     optionsClub: [],
+    optionsIndividual: [],
+
     defaultPurchaseType: '',
     defaultSubscriptionFrequencyId: '',
     defaultSubscriptionClubFrequencyId: '',
+    defaultSubscriptionIndividualFrequencyId: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod:0,
@@ -74,6 +80,33 @@ class ProductSearchSetting extends Component<any, any> {
     );
   };
 
+
+  showIndividualModal = () => {
+    this.setState({
+      visibleIndividual: true
+    });
+  };
+
+  handleIndividualCancel = () => {
+    this.setState({
+      visibleIndividual: false
+    });
+  };
+
+  handleIndividualSubmit = () => {
+    this.setState(
+        {
+          visibleIndividual: false
+        },
+        () => {
+          this.querySysDictionary();
+        }
+    );
+  };
+
+
+
+
   /**
    * 获取更新频率月｜ 周
    */
@@ -87,12 +120,17 @@ class ProductSearchSetting extends Component<any, any> {
       querySysDictionary({ type: 'purchase_type' }),
       querySysDictionary({ type: 'Frequency_day' }),
       querySysDictionary({ type: 'Frequency_day_club' }),
-    
+
+      querySysDictionary({ type: 'Frequency_day_individual' }),
+      querySysDictionary({ type: 'Frequency_week_individual' }),
+      querySysDictionary({ type: 'Frequency_month_individual' }),
+
     ]);
     let {
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
       defaultSubscriptionClubFrequencyId,
+      defaultSubscriptionIndividualFrequencyId,
       languageId,
       priceDisplayMethod,
       basePricePDPShowedFlag
@@ -105,8 +143,16 @@ class ProductSearchSetting extends Component<any, any> {
     let purchaseType = result[5].res?.context?.sysDictionaryVOS ?? [];
     let day = result[6].res?.context?.sysDictionaryVOS ?? [];
     let dayClub = result[7].res?.context?.sysDictionaryVOS ?? [];
+    /**
+     * individual day week month
+     **/
+    let dayIndividual = result[8].res?.context?.sysDictionaryVOS ?? [];
+    let weeksIndividual = result[9].res?.context?.sysDictionaryVOS ?? [];
+    let monthsIndividual = result[10].res?.context?.sysDictionaryVOS ?? [];
+
     let options = [...months, ...weeks,...day];
     let optionsClub = [...monthsClub, ...weeksClub,...dayClub];
+    let optionsIndividual = [...monthsIndividual, ...weeksIndividual, ...dayIndividual];
 
     let d = languageId.split(',');
     let language = languageList.filter((item) => {
@@ -117,12 +163,16 @@ class ProductSearchSetting extends Component<any, any> {
     this.setState({
       options,
       optionsClub,
+      optionsIndividual,
       defaultPurchaseType,
       defaultSubscriptionFrequencyId,
       defaultSubscriptionClubFrequencyId,
+      defaultSubscriptionIndividualFrequencyId,
       language,
       purchaseType,
-      basePricePDPShowedFlag,priceDisplayMethod
+      basePricePDPShowedFlag,
+      priceDisplayMethod,
+
     });
   }
 
@@ -169,11 +219,15 @@ class ProductSearchSetting extends Component<any, any> {
     const {
       disabled,
       defaultPurchaseType,
-      visible, visibleClub,
+      visible,
+      visibleClub,
+      visibleIndividual,
       defaultSubscriptionFrequencyId,
       defaultSubscriptionClubFrequencyId,
+      defaultSubscriptionIndividualFrequencyId,
       options,
       optionsClub,
+      optionsIndividual,
       language,
       purchaseType,
       basePricePDPShowedFlag,
@@ -349,7 +403,7 @@ class ProductSearchSetting extends Component<any, any> {
                   <Form.Item>
 
                     {getFieldDecorator('defaultSubscriptionIndividualFrequencyId', {
-                      initialValue: defaultSubscriptionClubFrequencyId||'',
+                      initialValue: defaultSubscriptionIndividualFrequencyId||'',
                       rules: [
                         {
                           required: true,
@@ -361,7 +415,7 @@ class ProductSearchSetting extends Component<any, any> {
                         <Select disabled={disabled}
                                 optionLabelProp="label"
                                 placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
-                          {optionsClub.map((item) => (
+                          {optionsIndividual.map((item) => (
                               <Option key={item.id} value={item.id} label={item.name}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
                                   <span >{item.name}</span>
@@ -385,7 +439,7 @@ class ProductSearchSetting extends Component<any, any> {
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                  <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
+                  <Button type="danger" size="default" onClick={this.showIndividualModal} disabled={disabled}>
                     <FormattedMessage id="Product.Addnewfrequency" />
                   </Button>
                 </Col>
@@ -443,6 +497,12 @@ class ProductSearchSetting extends Component<any, any> {
             languageList={language}
             handleClubOk={this.handleClubSubmit}
             handleClubCancel={this.handleClubCancel}
+        />
+        <ModalFormIndividual
+            visible={visibleIndividual}
+            languageList={language}
+            handleOk={this.handleIndividualSubmit}
+            handleCancel={this.handleIndividualCancel}
         />
       </div>
     );

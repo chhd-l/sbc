@@ -1,7 +1,16 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr,RCi18n } from 'qmkit';
+import {
+  AuthWrapper,
+  Const,
+  noop,
+  cache,
+  util,
+  getOrderStatusValue,
+  getFormatDeliveryDateStr,
+  RCi18n
+} from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -140,22 +149,28 @@ class OrderDetailTab extends React.Component<any, any> {
     }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //订阅赠品信息
-    let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
-    giftList = giftList.map((gift)=>{
-      let tempGift ={
-        skuNo:gift.goodsInfoNo,
-        skuName:gift.goodsInfoName,
-        num:gift.quantity,
-        originalPrice:0,
-        price:0,
-        isGift:true
-      }
-      return tempGift
-    })
+    let giftList = detail.get('subscriptionPlanGiftList')
+      ? detail.get('subscriptionPlanGiftList').toJS()
+      : [];
+    giftList = giftList.map((gift) => {
+      let tempGift = {
+        skuNo: gift.goodsInfoNo,
+        skuName: gift.goodsInfoName,
+        num: gift.quantity,
+        originalPrice: 0,
+        price: 0,
+        isGift: true
+      };
+      return tempGift;
+    });
 
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '['+ RCi18n({ id: 'Order.gift' }) +']' + gift.get('skuName'))).toJS();
+    gifts = gifts
+      .map((gift) =>
+        gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
+      )
+      .toJS();
 
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
@@ -234,6 +249,13 @@ class OrderDetailTab extends React.Component<any, any> {
     const installmentPrice = tradePrice.installmentPrice;
 
     const SYSTEM_GET_CONFIG = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG);
+    const deliverWay = detail.get('deliverWay');
+    const deliveryMethod =
+      deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
+    const address1 =
+      consignee.detailAddress1 +
+      ' ' +
+      (deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '');
 
     const columns = [
       {
@@ -282,26 +304,11 @@ class OrderDetailTab extends React.Component<any, any> {
       //   )
       // },
       {
-        title:
-          storeId === 123457907 || storeId === 123457911 ? (
-            <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
-          ) : (
-            <FormattedMessage id="Order.Quantity" />
-          ),
+        title: <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />,
         dataIndex: 'num',
         key: 'num',
         width: '10%',
-        render: (text, record) => {
-          console.log('record', record);
-          // const quantityAndRealtimestock = Math.floor(Math.random()*1000);
-          return (
-            <span>
-              {storeId === 123457907 || storeId === 123457911
-                ? record.quantityAndRealtimestock || text
-                : text}
-            </span>
-          );
-        }
+        render: (text, record) => record.quantityAndRealtimestock
       },
       {
         title: <FormattedMessage id="Order.Price" />,
@@ -309,13 +316,16 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'originalPrice',
         width: '10%',
         render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 && record.isSuperimposeSubscription === 1 ? (
+          record.subscriptionPrice > 0 &&
+          record.subscriptionStatus === 1 &&
+          record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
                 {SYSTEM_GET_CONFIG}
                 {record.subscriptionPrice.toFixed(2)}
               </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+              <br/>
+              <span style={{ textDecoration: 'line-through' }}>
                 {SYSTEM_GET_CONFIG}
                 {originalPrice && originalPrice.toFixed(2)}
               </span>
@@ -379,11 +389,14 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: '',
         width: '6%',
-        render: (text, record) =>
-          {
-            return record.isGift ? null :<a onClick={() => this._openMoreFields(record)}> <FormattedMessage id="more" /></a>
-          }
-
+        render: (text, record) => {
+          return record.isGift ? null : (
+            <a onClick={() => this._openMoreFields(record)}>
+              {' '}
+              <FormattedMessage id="more" />
+            </a>
+          );
+        }
       }
     ];
 
@@ -532,8 +545,7 @@ class OrderDetailTab extends React.Component<any, any> {
             {(detail.get('subscribeId') &&
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
             (!detail.get('subscribeId') &&
-              (detail.get('clinicsId') || firstTradeItems.recommendationId) &&
-              (storeId === 123457907 || storeId === 123457911)) ? (
+              (detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -557,8 +569,7 @@ class OrderDetailTab extends React.Component<any, any> {
         {(detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
         (!detail.get('subscribeId') &&
-          !(detail.get('clinicsId') || firstTradeItems.recommendationId) &&
-          (storeId === 123457907 || storeId === 123457911)) ? (
+          !(detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">
@@ -588,7 +599,13 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts,giftList)} pagination={false} bordered />
+          <Table
+            rowKey={(_record, index) => index.toString()}
+            columns={columns}
+            dataSource={tradeItems.concat(gifts, giftList)}
+            pagination={false}
+            bordered
+          />
 
           <Modal
             title={<FormattedMessage id="Order.moreFields" />}
@@ -765,10 +782,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.detailAddress1}</div>}
+                    title={<div>{address1}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
+                      <FormattedMessage id="Order.address1" />: {address1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -854,10 +871,10 @@ class OrderDetailTab extends React.Component<any, any> {
                         overflowY: 'auto'
                       }}
                       placement="bottomLeft"
-                      title={<div>{consignee.workTime}</div>}
+                      title={<div>{deliveryMethod}</div>}
                     >
                       <p className="overFlowtext">
-                        <FormattedMessage id="Order.workTime" />: {consignee.workTime}
+                        <FormattedMessage id="Order.workTime" />: {deliveryMethod}
                       </p>
                     </Tooltip>
                   )}

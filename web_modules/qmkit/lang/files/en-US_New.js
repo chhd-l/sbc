@@ -835,7 +835,9 @@ export default {
         'Order.chosenDeliveryMethods':'Chosen delivery method',
         'Order.externalSKuCode':'External SKU',
         'Order.AllowZoneOrder':'Allow for orders with 0 price',
-        'Order.zeroOrderAuditMethod':'Zero price order audit method '
+        'Order.zeroOrderAuditMethod':'Zero price order audit method ',
+        'Order.pending':'Pending',
+        'Order.pendingAuditBasis':'Audit Basis: Authorization, payment, product, order'
 
 
     },

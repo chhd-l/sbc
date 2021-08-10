@@ -332,7 +332,8 @@ class OrderDetailTab extends React.Component<any, any> {
                 {SYSTEM_GET_CONFIG}
                 {record.subscriptionPrice.toFixed(2)}
               </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
+              <br/>
+              <span style={{ textDecoration: 'line-through' }}>
                 {SYSTEM_GET_CONFIG}
                 {originalPrice && originalPrice.toFixed(2)}
               </span>

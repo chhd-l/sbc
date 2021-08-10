@@ -4,10 +4,6 @@ import {
   deleteCard,
   getPaymentMethods,
 } from '../webapi';
-import {
-  fetchOrderDetail,
-  getPaymentInfo,
-} from './webapi';
 import {AuthWrapper, cache, RCi18n} from 'qmkit';
 import {Link} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
@@ -24,8 +20,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
       loading: false,
       list: [],
       visible: false,
-      detailsList: null,
-      detailsLoading: false,
+      detailsList: [],
+      paymentInfo: {},
 
     };
   }
@@ -79,9 +75,18 @@ export default class PaymentList extends React.Component<Iprop, any> {
       });
   };
 
-  handleDetails = (id) => {
-    console.log('id', id);
-    this.setState({ detailsLoading: true});
+  handleDetails = (record) => {
+    if (!record) return;
+    let {
+      bindCardLogs,
+      bindCardRecord,
+    } = record;
+
+    this.setState({
+      detailsList: !!bindCardLogs ? bindCardLogs : [],
+      paymentInfo: !!bindCardRecord ? bindCardRecord : {},
+    })
+
     this.showModal();
 
   }
@@ -121,7 +126,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         key: 'amount',
         render: (text, record) => {
           const tradePrice = text || 0;
-          record (`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${tradePrice.toFixed(2)}`);
+          return (`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${tradePrice.toFixed(2)}`);
         }
       },
       {
@@ -159,7 +164,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
       loading,
       visible,
       detailsList,
-      detailsLoading,
+      paymentInfo,
     } = this.state;
     const customerId = this.props.customerId || '';
     const customerAccount = this.props.customerAccount || '';
@@ -210,20 +215,16 @@ export default class PaymentList extends React.Component<Iprop, any> {
                         <a className="iconfont iconDelete"/>
                       </Button>
                     </Tooltip>
+                    <Divider type="vertical" />
                   </Popconfirm>
                 </AuthWrapper>
-                <Divider type="vertical" />
-                <a className="iconfont iconDetails" onClick={() => this.handleDetails(record.id)} />
+                <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />
               </span>
           );
         }
       }
     ];
     const detailsColumns = this.getPaymentColumns();
-    let paymentInfo: any = {};
-    let detail: any = {};
-    const tradePrice = detail.tradePrice ? detail.tradePrice : {};
-    const installmentPrice = tradePrice.installmentPrice;
 
     return (
       <div>
@@ -247,11 +248,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
             visible={visible}
             footer={null}
         >
-          <Spin
-              spinning={detailsLoading}
-              indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}
-          >
-            <div style={{minHeight: 300, width: '100%', paddingTop: 25}}>
+          <div style={{minHeight: 300, width: '100%', paddingTop: 25}}>
               <Table
                   rowKey="id"
                   columns={detailsColumns}
@@ -259,37 +256,39 @@ export default class PaymentList extends React.Component<Iprop, any> {
                   pagination={false}
               />
               <Row>
-                <Col span={16} className="headBox" style={{ height: 200, marginTop: 10 }}>
-                  <h4>
+                <Col span={24} className="headBox" style={{ height: 200, marginTop: 10 }}>
+                  <h3>
                     <FormattedMessage id="Order.paymentDetails" />
-                  </h4>
-                  <Row>
-                    <Col span={12}>
-                      <p>
-                        {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.holderName}
-                      </p>
-                      <p>
-                        {<FormattedMessage id="Order.PSP" />}: {paymentInfo.pspName}
-                      </p>
-                      <p>
-                        {<FormattedMessage id="Order.cardType" />}: {paymentInfo.paymentVendor}
-                      </p>
-                      <p>
-                        {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.lastFourDigits}
-                      </p>
-                      <p>
-                        {<FormattedMessage id="paymentId" />}: {paymentInfo.chargeId}
-                      </p>
-                      <p>
-                        {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.phone}
-                      </p>
-                    </Col>
-                  </Row>
+                  </h3>
+                  <Col span={24}>
+                    <Row>
+                      <Col span={12}>
+                        <p>
+                          {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.holderName || ''}
+                        </p>
+                        <p>
+                          {<FormattedMessage id="Order.PSP" />}: {paymentInfo.pspName || ''}
+                        </p>
+                        <p>
+                          {<FormattedMessage id="Order.cardType" />}: {paymentInfo.paymentVendor || ''}
+                        </p>
+                        <p>
+                          {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.lastFourDigits || ''}
+                        </p>
+                        <p>
+                          {<FormattedMessage id="paymentId" />}: {paymentInfo.chargeId || ''}
+                        </p>
+                        <p>
+                          {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.phone || ''}
+                        </p>
+                      </Col>
+                    </Row>
+
+                  </Col>
                 </Col>
               </Row>
 
             </div>
-          </Spin>
         </Modal>
       </div>
     );

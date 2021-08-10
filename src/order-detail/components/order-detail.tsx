@@ -312,24 +312,11 @@ class OrderDetailTab extends React.Component<any, any> {
       //   )
       // },
       {
-        title:
-          storeId === 123457907 || storeId === 123457911 ? (
-            <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
-          ) : (
-            <FormattedMessage id="Order.Quantity" />
-          ),
+        title: <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />,
         dataIndex: 'num',
         key: 'num',
         width: '9%',
-        render: (text, record) => {
-          return (
-            <span>
-              {storeId === 123457907 || storeId === 123457911
-                ? record.quantityAndRealtimestock || text
-                : text}
-            </span>
-          );
-        }
+        render: (text, record) => record.quantityAndRealtimestock
       },
       {
         title: <FormattedMessage id="Order.Price" />,
@@ -565,8 +552,7 @@ class OrderDetailTab extends React.Component<any, any> {
             {(detail.get('subscribeId') &&
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
             (!detail.get('subscribeId') &&
-              (detail.get('clinicsId') || firstTradeItems.recommendationId) &&
-              (storeId === 123457907 || storeId === 123457911)) ? (
+              (detail.get('clinicsId') || firstTradeItems.recommendationId)) ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -590,8 +576,7 @@ class OrderDetailTab extends React.Component<any, any> {
         {(detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
         (!detail.get('subscribeId') &&
-          !(detail.get('clinicsId') || firstTradeItems.recommendationId) &&
-          (storeId === 123457907 || storeId === 123457911)) ? (
+          !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">

@@ -240,3 +240,13 @@ export function getTaggingList() {
     })
   });
 }
+
+export function fetchOrderDetail(tid: string) {
+  return Fetch(`/trade/${tid}`);
+}
+
+export function getPaymentInfo(tid: string) {
+  return Fetch(`/trade/payment/record/${tid}`);
+}
+
+

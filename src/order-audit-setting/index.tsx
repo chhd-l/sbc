@@ -177,7 +177,7 @@ class OrderSetting extends Component<any, any> {
     if (e.target.value === 'Auto audit') {
       this.setState({
         auditMethod: e.target.value,
-        visiblePrescriberConfig: true,
+        // visiblePrescriberConfig: true,
         isPetInfo: false
       });
 
@@ -329,19 +329,19 @@ class OrderSetting extends Component<any, any> {
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.OnlinePayment" />:</p>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
                 <Radio value="Auto audit"><FormattedMessage id="Order.AutoAudit" /></Radio>
-                {auditMethod === 'Auto audit' ? (
-                  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
-                    <span
-                      onClick={() => {
-                        this.setState({
-                          visiblePrescriberConfig: true
-                        });
-                      }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
-                      className="iconfont iconEdit"
-                    ></span>
-                  </Tooltip>
-                ) : null}
+                {/*{auditMethod === 'Auto audit' ? (*/}
+                {/*  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>*/}
+                {/*    <span*/}
+                {/*      onClick={() => {*/}
+                {/*        this.setState({*/}
+                {/*          visiblePrescriberConfig: true*/}
+                {/*        });*/}
+                {/*      }}*/}
+                {/*      style={{ marginRight: 10, color: '#e2001a' }}*/}
+                {/*      className="iconfont iconEdit"*/}
+                {/*    ></span>*/}
+                {/*  </Tooltip>*/}
+                {/*) : null}*/}
                 <Radio value="Manual audit"><FormattedMessage id="Order.ManualAudit" /></Radio>
                 {auditMethod === 'Manual audit' ? (
                   <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
@@ -362,19 +362,19 @@ class OrderSetting extends Component<any, any> {
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.COD" />:</p>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>
                 <Radio value="Auto audit"><FormattedMessage id="Order.AutoAudit" /></Radio>
-                {auditMethod === 'Auto audit' ? (
-                  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
-                    <span
-                      onClick={() => {
-                        this.setState({
-                          visiblePrescriberConfig: true
-                        });
-                      }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
-                      className="iconfont iconEdit"
-                    ></span>
-                  </Tooltip>
-                ) : null}
+                {/*{auditMethod === 'Auto audit' ? (*/}
+                {/*  <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>*/}
+                {/*    <span*/}
+                {/*      onClick={() => {*/}
+                {/*        this.setState({*/}
+                {/*          visiblePrescriberConfig: true*/}
+                {/*        });*/}
+                {/*      }}*/}
+                {/*      style={{ marginRight: 10, color: '#e2001a' }}*/}
+                {/*      className="iconfont iconEdit"*/}
+                {/*    ></span>*/}
+                {/*  </Tooltip>*/}
+                {/*) : null}*/}
                 <Radio value="Manual audit"><FormattedMessage id="Order.ManualAudit" /></Radio>
                 {auditMethod === 'Manual audit' ? (
                   <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>

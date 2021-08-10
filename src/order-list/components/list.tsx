@@ -92,9 +92,7 @@ class ListView extends React.Component<any, any> {
       onCheckReturn: Function;
       verify: Function;
       hideRejectModal: Function;
-      hideAuditModal: Function;
       showRejectModal: Function;
-      showAuditModal: Function;
     };
   };
 
@@ -122,9 +120,7 @@ class ListView extends React.Component<any, any> {
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
     hideRejectModal: noop,
-    hideAuditModal: noop,
     showRejectModal: noop,
-    showAuditModal: noop
   };
 
   render() {

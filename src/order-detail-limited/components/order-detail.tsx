@@ -20,7 +20,7 @@ const columns = [
     dataIndex: 'skuName',
     key: 'skuName',
     width: '50%',
-    render: (text) => text==='individualization'?'Your pet\'s personalized subscription':text
+    render: (text,record) => text==='individualization'?record.petsName+'\'s personalized subscription':text
   },
   {
     title: 'Weight',

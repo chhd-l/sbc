@@ -280,9 +280,9 @@ class CateModalForm extends React.Component<any, any> {
                   })(
                       <RangePicker
                           // allowClear={false}
-                          format={Const.DATE_FORMAT}
+                          format={Const.TIME_FORMAT}
                           placeholder={['Start time', 'End time']}
-                          showTime={{ format: 'HH:mm' }}
+                          showTime
                       />
                   )}
                 </FormItem>

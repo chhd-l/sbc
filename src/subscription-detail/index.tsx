@@ -526,7 +526,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName==='individualization'?'Your pet\'s personalized subscription':record.goodsName}</span>
           </div>
         )
       },
@@ -659,7 +659,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={styles.imgItem} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName==='individualization'?'Your pet\'s personalized subscription':item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -785,7 +785,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName==='individualization'?'Your pet\'s personalized subscription':item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -1039,7 +1039,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                     </label>
                   </Col>
 
-                  { paymentInfo ? 
+                  { paymentInfo ?
                   <>
                     <Col span={24}>
                       <p style={{ width: 140 }}>
@@ -1054,12 +1054,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                       <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
                     </Col>
                   </>
-                  :  
+                  :
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
+                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>
                   </Col>}
-          
+
                 </Row>
               </Col>
             </Row>

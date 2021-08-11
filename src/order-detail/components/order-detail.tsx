@@ -271,16 +271,17 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text) => {
+          const productName=text==='individualization'?'Your pet\'s personalized subscription':text
           return (
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{text}</div>}
+              title={<div>{productName}</div>}
             >
               <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
+                {productName}
               </p>
             </Tooltip>
           );

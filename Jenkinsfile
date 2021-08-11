@@ -50,6 +50,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh ""
                     sh ""
                     sh "npm run build"
+//                    sh "npm run build:myvetreco"
                 }
         }
 

@@ -15,7 +15,12 @@ export default class FullReductionActor extends Actor {
         subType: 0,// 0 1 6
         isClub: false,
         fullReductionLevelList: [],
-        marketingType: 0
+        customProductsType:0,//Include product
+        marketingType: 0,
+        marketingUseLimit:{
+          perCustomer:1,
+          isNotLimit:1
+        }
       },
       marketingType: 0,
       shippingBean: {
@@ -24,6 +29,7 @@ export default class FullReductionActor extends Actor {
         promotionType: 0,
         isSuperimposeSubscription: 1,
         publicStatus: 1,
+       
       },
       allGroups: [],
       // 店铺分类信息

@@ -30,6 +30,13 @@ export default class AppStore extends Store {
         res.context.firstSubscriptionOrderReduction = res.context.fullReductionLevelList ? res.context.fullReductionLevelList[0].firstSubscriptionOrderReduction: null;
         res.context.restSubscriptionOrderReduction = res.context.fullReductionLevelList ? res.context.fullReductionLevelList[0].restSubscriptionOrderReduction: null;
       }
+      if(!res.context.marketingUseLimit){
+        res.context.marketingUseLimit={
+          perCustomer:1,
+          isNotLimit:1
+        }
+      }
+      res.context.customProductsType=res.context?.customProductsType??0
       this.dispatch('marketing:reductionBean', res.context);
       const scopeArray = res.context.marketingScopeList ? fromJS(res.context.marketingScopeList) : null;
       if (scopeArray) {

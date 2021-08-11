@@ -15,6 +15,7 @@
     "build:prod_us": "node ./web_modules/qmkit/build.ts prod_us && cross-env NODE_ENV=production --info=true node scripts/build.js prod_us",
     "build:prod": "cross-env NODE_ENV=production node scripts/build.js prod",
     "build": "node ./web_modules/qmkit/build.ts prod && cross-env NODE_ENV=production --info=true node scripts/build.js prod",
+    "build:myvetreco": "node ./web_modules/qmkit/build.ts prod && cross-env NODE_ENV=production PRIMARY_COLOR=#448bff --info=true node scripts/build.js prod",
     "dll-dev": "node scripts/dll.js dev",
     "dll-prod": "node scripts/dll.js prod",
     "server": "http-server dist",

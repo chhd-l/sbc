@@ -2373,6 +2373,13 @@ export default {
   'PetOwner.SelectSterilizedStatus!':'Please Select Sterilized status!',
   'PetOwner.Yes':'Yes',
   'PetOwner.No':'No',
+  'PetOwner.EventType':'Event type',
+  'PetOwner.PspReference':'Psp reference',
+  'PetOwner.CollectionTime':'Collection Time ',
+  'PetOwner.EventCode':'Event code ',
+  'PetOwner.Result':'Result',
+  'PetOwner.Remarks':'Remarks',
+
   'PetOwner.Birthday':'Birthday',
   'PetOwner.SpecialNeeds':'Special needs',
   'PetOwner.SelectSpecialNeeds':'Please Select Special needs!',

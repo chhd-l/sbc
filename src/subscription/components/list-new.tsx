@@ -296,8 +296,8 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}>
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p key={k} style={styles.ellipsisName} title={item.goodsName}>
-                            {item.goodsName}
+                          <p key={k} style={styles.ellipsisName} title={item.goodsName==='individualization'?'Your pet\'s personalized subscription':item.goodsName}>
+                            {item.goodsName==='individualization'?'Your pet\'s personalized subscription':item.goodsName}
                           </p>
                         ))}
                     </td>

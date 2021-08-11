@@ -244,7 +244,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%'
+        width: '20%',
+        render: (text) => text==='individualization'?'Your pet\'s personalized subscription':text
       },
       {
         title: <FormattedMessage id="Order.Weight"/>,
@@ -355,7 +356,23 @@ export default class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%'
+        width: '20%',
+        render: (text) => {
+          const productName=text==='individualization'?'Your pet\'s personalized subscription':text
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{productName}</div>}
+            >
+              <p className="overFlowtext">
+                {productName}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: <FormattedMessage id="Order.Weight"/>,

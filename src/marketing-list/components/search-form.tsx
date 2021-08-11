@@ -80,6 +80,7 @@ class SearchForm extends React.Component<any, any> {
                 <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
                 <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>
                 <Option value="3"><FormattedMessage id="Marketing.Singlepurchase" /></Option>
+                <Option value="4"><FormattedMessage id="Marketing.Individualization" /></Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>

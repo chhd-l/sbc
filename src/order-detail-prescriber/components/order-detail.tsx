@@ -295,17 +295,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <div>
               <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
+                {this.judgePriceNum(record.subscriptionPrice,detail.get('subscriptionType'))}
               </span>
               <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
+                {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
               </span>
             </div>
           ) : (
             <span>
               {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
+              {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
             </span>
           )
       },
@@ -314,7 +314,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
+            {this.judgePriceNum((row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)),detail.get('subscriptionType'))}
           </span>
         )
       }
@@ -391,19 +391,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
             <div>
-              <span>
+            <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
+              {this.judgePriceNum(record.subscriptionPrice,detail.get('subscriptionType'))}
               </span>
               <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
+                {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
               </span>
             </div>
           ) : (
             <span>
               {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
+              {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
             </span>
           )
       },
@@ -412,7 +412,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
+            {this.judgePriceNum((row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)),detail.get('subscriptionType'))}
           </span>
         )
       }
@@ -779,6 +779,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
         </Modal>
       </div>
     );
+  }
+
+  //判断价格显示位数，针对Individualization类型小数位数特殊处理
+  judgePriceNum(price,subscriberType){
+    return price&&price.toFixed(subscriberType==='Individualization'?4:2)
   }
 
   //附件

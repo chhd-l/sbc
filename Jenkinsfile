@@ -49,7 +49,8 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "npm view postcss-discard-comments  versions"
                     sh ""
                     sh ""
-                    sh "npm run build"
+//                    sh "npm run build"
+                    sh "npm run build:myvetreco"
                 }
         }
 

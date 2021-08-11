@@ -142,7 +142,7 @@ export default class Main extends React.Component<any, any> {
                     {routeWithSubRoutes(routes, this.handlePathMatched)}
                     {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
                     <div style={styles.copyright}>
-                      © <FormattedMessage id="Public.RoyalCaninSAS2020" />
+                      © {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : <FormattedMessage id="Public.RoyalCaninSAS2020" />}
                       {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
                     Const.COPY_VERSION
                   } */}

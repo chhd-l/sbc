@@ -28,3 +28,25 @@ export const treeNesting = function (sourceData:IList,parent:string,current:stri
     });
   return newDataList
 }
+
+
+/**
+ * 函数防抖
+ * @param fn 执行函数
+ * @param delay 延迟时间
+ *
+ */
+export function debounce(fn, delay = 500) {
+    // timer 是在闭包中的
+    let timer = null;
+    return function() {
+        if(timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn.apply(this, arguments);
+            // 清空定时器
+            timer = null;
+        }, delay)
+    }
+}

@@ -447,6 +447,7 @@ class SkuForm extends React.Component<any, any> {
                          disabled={goods.get('promotions') == 'autoship'} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
+                  <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
                 </Select>
 
               </FormItem>
@@ -471,7 +472,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}>On/Off shelves</div>
+        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {

@@ -152,7 +152,7 @@ const PaymentMethod = (props) => {
                       </div>
                     </Radio>
                     <Row>
-                      <AuthWrapper functionName="f_add_delete_card">
+                      <AuthWrapper functionName="f_delete_card">
                         <Popconfirm
                           placement="topLeft"
                           title={`Are you sure to delete this card?`}
@@ -176,7 +176,7 @@ const PaymentMethod = (props) => {
               </>
             </Spin>
           </Radio.Group>
-          <AuthWrapper functionName="f_add_delete_card">
+          <AuthWrapper functionName="f_add_card">
             <Button onClick={()=>history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
               <FormattedMessage id="Subscription.AddNew" />
             </Button>

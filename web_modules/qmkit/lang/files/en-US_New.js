@@ -149,6 +149,7 @@ export default {
         'Product.selectType': 'please select type',
         'Product.Auto ship': 'Auto ship',
         'Product.Club': 'Club',
+        'Product.Individual': 'Individual',
         'Product.morethanwords': 'Please input product name，no more than 225 words',
         'Product.Y': 'Y',
         'Product.N': 'N',
@@ -369,6 +370,8 @@ export default {
         "Product.PleaseInputFrequencyType": "Please input  frequency type!",
         "Product.FrequencyMonth": "Frequency Month",
         "Product.FrequencyWeek": "Frequency Week",
+        "Product.FrequencyDay": "Frequency Day",
+
         "Product.PleaseInputFrequencyValue": "Please input  frequency value!",
         "Product.PleaseSelectPurchaseType": "Please select purchase type!",
         "Product.Oneoff": "One-off",
@@ -444,6 +447,8 @@ export default {
         "Product.Defaultautoshipfrequency": "Default autoship frequency",
         "Product.deletethisfrequency": "Are you sure you want to delete this frequency?",
         "Product.Defaultclubfrequency": "Default club frequency",
+        "Product.DefaultIndividualfrequency": "Default individual frequency",
+
         "Product.1-5000characters": "1-5000 characters",
         "Product.thedistributionactivity": "The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?",
         "Product.corporatepurchaseactivity": "The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?",
@@ -1536,6 +1541,12 @@ export default {
         "Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically": "Please remind that the report will expire after 7 days automatically."
     },
     Marketing: {
+        "Marketing.Includeproduct":"Include product",
+        "Marketing.Excludeproduct":"Exclude product",   
+        "Marketing.NumberOfUserPerPerson":"Number of user per person",
+        "Marketing.NumberOfUserPerPerson":"Number of user per person",
+        "Marketing.UnlimitedUse":"Unlimited use",
+        
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
@@ -1807,6 +1818,7 @@ export default {
         "Marketing.CCList": "CC List",
         "Marketing.Preview": "Preview",
         "Marketing.Singlepurchase": "Single purchase",
+        "Marketing.Individualization":"Individualization",
         "Marketing.Automationlist": "Marketing list",//"Automation list",
         "Marketing.OperationFailure": "Operation failure",
         "Marketing.OperationSuccessful": "Operation successful",

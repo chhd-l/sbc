@@ -278,17 +278,18 @@ class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: '9%',
-        render: (text) => {
+        render: (text,record) => {
+          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
           return (
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{text}</div>}
+              title={<div>{productName}</div>}
             >
               <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
+                {productName}
               </p>
             </Tooltip>
           );
@@ -330,18 +331,18 @@ class OrderDetailTab extends React.Component<any, any> {
             <div>
               <span>
                 {SYSTEM_GET_CONFIG}
-                {record.subscriptionPrice.toFixed(2)}
+                {record.subscriptionPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
               </span>
               <br/>
               <span style={{ textDecoration: 'line-through' }}>
                 {SYSTEM_GET_CONFIG}
-                {originalPrice && originalPrice.toFixed(2)}
+                {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
               </span>
             </div>
           ) : (
             <span>
               {SYSTEM_GET_CONFIG}
-              {originalPrice && originalPrice.toFixed(2)}
+              {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
             </span>
           )
       },
@@ -351,7 +352,7 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {SYSTEM_GET_CONFIG}
-            {row.price && row.price.toFixed(2)}
+            {row.price && row.price.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
         )
@@ -577,7 +578,7 @@ class OrderDetailTab extends React.Component<any, any> {
         {(detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
         (!detail.get('subscribeId') &&
-          !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ? (
+          !(detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">
@@ -793,7 +794,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{address1}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.address1" />:{address1}
+                      <FormattedMessage id="Order.address1" />: {address1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -882,7 +883,7 @@ class OrderDetailTab extends React.Component<any, any> {
                       title={<div>{deliveryMethod}</div>}
                     >
                       <p className="overFlowtext">
-                        <FormattedMessage id="Order.chosenDeliveryMethods" />:{deliveryMethod}
+                        <FormattedMessage id="Order.workTime" />: {deliveryMethod}
                       </p>
                     </Tooltip>
                   )}

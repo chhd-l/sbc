@@ -48,7 +48,9 @@ export default class Loglist extends Component<any, any>{
       if (res.code === Const.SUCCESS_CODE) {
         const { pagination } = this.state
         let logList = res.context.logList
+
         pagination.total = res.context.total
+        pagination.current = res.context.currentPage +1
         this.setState({
           logList,
           loading: false,

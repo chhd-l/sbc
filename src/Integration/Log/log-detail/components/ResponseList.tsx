@@ -47,6 +47,7 @@ export default class ResponseList extends Component<any, any>{
       if (res.code === Const.SUCCESS_CODE) {
         const { pagination } = this.state
         pagination.total = res.context.total
+        pagination.current = res.context.currentPage+1
         let responseList = res.context.responseLogList
         this.setState({
           loading: false,
@@ -107,7 +108,7 @@ export default class ResponseList extends Component<any, any>{
     })
   }
   searchResponse = (value) => {
-    const { pagination, currentTabKey } = this.state
+    const { currentTabKey } = this.state
     this.setState({
       keywords: value
     })
@@ -115,7 +116,7 @@ export default class ResponseList extends Component<any, any>{
       requestId: this.props.requestId,
       keys: value ? [value] : [],
       resultFlag: currentTabKey === 'all' ? null : 2,
-      pageSize: pagination.pageSize,
+      pageSize: 5,
       pageNum: 0,
     }
     this.getResponseList(params)
@@ -165,7 +166,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.ResultMessage' }),
-                JSON.parse(record.param.payload))
+                JSON.parse(record.resultMessage))
             }}>
             {RCi18n({ id: 'Log.ResultMessage' })}</Button>
 
@@ -179,7 +180,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.Log' }),
-                JSON.parse(record.param.payload))
+                JSON.parse(record.payloadMessage))
             }}>
             {RCi18n({ id: 'Log.Log' })}</Button>
         )

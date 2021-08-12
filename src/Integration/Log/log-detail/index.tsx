@@ -59,7 +59,9 @@ class LogDetail extends Component<any, any>{
     const { detailInfo, requestId,loading } = this.state
     return (
       <div>
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading} indicator={<img className="spinner" 
+        src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" 
+        style={{ width: '90px', height: '90px' }} alt="" />}>
           {/* 面包屑导航 */}
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>{RCi18n({ id: 'Log.RequestDetail' })}</Breadcrumb.Item>

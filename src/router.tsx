@@ -1040,7 +1040,7 @@ const routes = [
     asyncComponent: () => import('./Integration/Interface/interface-list')
   },
   {
-    path: '/interface-detail',
+    path: '/interface-detail/:id',
     asyncComponent: () => import('./Integration/Interface/Interface-detail')
   },
   {

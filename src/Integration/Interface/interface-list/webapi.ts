@@ -1,36 +1,26 @@
-import { Fetch } from 'qmkit';
+import {Fetch} from 'qmkit'
 
 type TResult = {
-  code: string;
-  message: string;
-  context: any;
-};
-/**
- * 商品列表
- * @param params
- */
-export const goodsList = (params) => {
-  const request = {
-    method: 'POST',
-    body: JSON.stringify(params)
-  };
-  return Fetch<TResult>('/goods/spus', request);
-};
-/**
- * 查看拼团活动详情
- */
-export const detail = (activityId) => {
-  return Fetch(`/groupon/activity/${activityId}`, {
-    method: 'GET'
-  });
-};
+  code:string,
+  message:string,
+  context:any
+}
 
-/**
- * 查看拼团活动订单列表
- */
-export const fetchOrderPage = (params) => {
-  return Fetch<TResult>('/trade/groupon/page', {
+// 获取system列表
+export function fetchSystemList() {
+  return Fetch<TResult>('/intSystem/findAll', {
     method: 'POST',
-    body: JSON.stringify({ ...params })
+    body: JSON.stringify({})
   });
-};
+}
+//获取interface列表
+export function fetchInterfaceList(filterParams = {}) {
+  return Fetch<TResult>('/intInterface/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+

@@ -3,8 +3,6 @@ import { Button, Modal, Tabs, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { RCi18n } from 'qmkit'
 import Tab from '@/Integration/components/tab';
-import MyTooltip from '@/Integration/components/myTooltip';
-import * as webapi from '../webapi'
 import ReactJson from 'react-json-view';
 
 const { TabPane } = Tabs;
@@ -86,7 +84,7 @@ export default class LogTabs extends Component<any, any>{
         dataIndex: 'detail',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Detail">
+            <Tooltip placement="top" title={RCi18n({id:"Product.Details"})}>
               <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
             </Tooltip>
           </div>

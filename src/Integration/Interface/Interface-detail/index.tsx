@@ -1,278 +1,293 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Breadcrumb, Tabs, Tooltip } from 'antd';
-import Information from '@/Integration/components/Information';
+import { Breadcrumb, Button, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
+import Information from './components/Information';
 import Tab from '@/Integration/components/tab';
 import Statistics from './components/Statistics';
 import '@/Integration/components/index.less';
-import MyTooltip from '@/Integration/components/myTooltip';
 import { Link } from 'react-router-dom';
+import * as webapi from './webapi'
+import ReactJson from 'react-json-view';
 
 const { TabPane } = Tabs;
+const { Search } = Input;
 
 export default class InterfaceView extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
     this.state = {
-      activeKey: '0',
-      activeTableKey: '0',
+      loading: false,
+      interfaceId: null,
+      detailsTabsKey: 'information',
+      tableTabsKey: 'all',
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
-      dataSource: [
-        {
-          RequestID: 1,
-          id: 1,
-          Header: 'Header',
-          Payload: 'Payload',
-          Response: 'Response',
-          time: {
-
-            'header': {
-
-              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
-
-              'content-length': '176',
-
-              'country': 'RU',
-
-              'clientid': 'IceROxHgyg0riyVq',
-
-              'x-forwarded-proto': 'https,http',
-
-              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
-
-              'x-forwarded-port': '443,443',
-
-              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-
-              'x-forwarded-for': '10.240.2.11,10.240.3.18',
-
-              'forwarded': 'proto=http;host="open.royalcanin.com:443";for="10.240.3.18:50552"',
-
-              'accept': '*/*',
-
-              'x-real-ip': '10.240.2.11',
-
-              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
-
-              'host': '10.240.2.21:8690',
-
-              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
-
-              'x-scheme': 'https',
-
-              'user-agent': 'AHC/1.0'
-            }
-          }
-        },
-        {
-          RequestID: 1,
-          id: 2,
-          Header: 'Header',
-          Payload: 'Payload',
-          Response: 'Response',
-          time: {
-            'header': {
-              'x-request-id': 'dc0306ca7ac6582b0ca8560bcdda115a',
-              'content-length': '176',
-              'country': 'RU',
-              'clientid': 'IceROxHgyg0riyVq',
-              'x-forwarded-proto': 'https,http',
-              'clientsecret': '1lehSUJ8i65rSfY5vSFXjPsqpQB9BJ9X',
-              'x-forwarded-port': '443,443',
-              'x-correlation-id': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-              'x-forwarded-for': '10.240.2.11,10.240.3.18',
-              'forwarded': 'd232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557d232f500-b7c4-11eb-a8fe-0a0b7caf7557',
-              'accept': '*/*',
-              'x-real-ip': '10.240.2.11',
-              'x-forwarded-host': 'open.royalcanin.com:443,open.royalcanin.com:443',
-              'host': '10.240.2.21:8690',
-              'content-type': 'application/json; charset=UTF-8; skipnullon="everywhere"',
-              'x-scheme': 'https',
-              'user-agent': 'AHC/1.0'
-            }
-          }
-        }],
-      infoList: {
-        InterfaceID: 10001,
-        URL: '/v1/products/price',
-        System: 'Navision',
-        MiddleLayer: 'MuleSoft',
-        Method: 'POST',
-        Type: 'asycn',
-        Provider: 'FGS',
-        Invoker: 'Navision',
-        DataFlow: 'Navision to FGS',
-        Function: 'Batch product price sychronization',
-        Uptime: 'Uptime'
+      visible:false, 
+      title:'', 
+      showJson:null,
+      logList:[],
+      detailInfo: {
       },
-      columns: [
-        {
-          title: <FormattedMessage id="Interface.RequestID" />,
-          dataIndex: 'RequestID'
-        },
-        {
-          title: <FormattedMessage id="Interface.Time" />,
-          dataIndex: 'Time'
-        },
-        {
-          title: <FormattedMessage id="Interface.Header" />,
-          dataIndex: 'Header',
-          render: (text, record) => (
-            <MyTooltip content={record.time} text={text} trigger="hover"/>
-          )
-        },
-        {
-          title: <FormattedMessage id="Interface.Payload" />,
-          dataIndex: 'Payload',
-          render: (text, record) => (
-            <MyTooltip content={record.time} text={text} trigger="hover"/>
-          )
-        },
-        {
-          title: <FormattedMessage id="Interface.Response" />,
-          dataIndex: 'Response',
-          render: (text, record) => (
-            <MyTooltip content={record.time} text={text} trigger="hover"/>
-          )
-        },
-        {
-          title: <FormattedMessage id="Interface.ClientName" />,
-          dataIndex: 'ClientName'
-        },
-        {
-          title: '',
-          dataIndex: '',
-          render: (text, record) => (
-            <div>
-              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <Link to="/interface-detail" className="iconfont iconaudit" />
-              </Tooltip>
-            </div>
-          )
-        }
-
-      ]
-    };
-  }
-
-  UNSAFE_componentWillMount() {
-    // console.log(this.props.location.state.activeKey);
-    // this.setState({
-    //   activeKey: this.props.location.state.activeKey || '0'
-    // });
-  }
-
-
-  // 点击切换info/stack
-  onStateTabChange = (key) => {
-    this.setState({
-      activeKey: key
-    });
-  };
-  // 点击切换表格数据
-  onStateTableChange = (key) => {
-    this.initPage();
-    this.setState({
-      activeTableKey: key
-    });
-    if (key === '0') { // All Requests
-      this.getAllRequests();
-    } else { // error
-      this.getError();
     }
   };
-  // 获取AllRequests列表
-  getAllRequests = () => {
-    const data = [{
-      RequestID: 20,
-      id: 22,
-      Header: 'Header1',
-      Payload: 'Payload1',
-      Response: 'ResponseResponseResponseResponse',
-      time: ''
-    }];
+  componentDidMount(){
+    this.init()
+  }
+  init = () => {
+    const interfaceId = this.props.match.params.id
     this.setState({
-      dataSource: JSON.parse(JSON.stringify(data))
-    });
-  };
-  // 获取error列表
-  getError = () => {
-    const data = [{
-      RequestID: 2,
-      id: 10,
-      Header: 'Header',
-      Payload: 'Payload',
-      Response: 'Response',
-      time: ''
-    }];
+      interfaceId:+interfaceId
+    })
+    this.getInterfaceDetail(+interfaceId)
+    let params = {
+      interfaceId:+interfaceId,
+      pageSize: 5,
+      pageNum: 0,
+    }
+    this.getLogList(params)
+  }
+  getInterfaceDetail = (interfaceId) => {
     this.setState({
-      dataSource: JSON.parse(JSON.stringify(data))
-    });
-  };
-  /**
-   * 点击分页
-   * @param pagination
-   */
-  onSearchPage = (pagination) => {
+      loading: true
+    })
+    let params={
+      interfaceId:interfaceId
+    }
+    webapi.getInterfaceDetail(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        let detailInfo = res.context
+        this.setState({
+          loading: false,
+          detailInfo
+        })
+      }
+      else {
+        this.setState({
+          loading: false
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+    })
+  }
+
+
+  onDetailTabsChange = (key) => {
+    this.setState({ detailsTabsKey: key })
+  }
+
+
+  getLogList = (params) => {
+    this.setState({
+      loading: true
+    })
+    webapi.fetchLogList(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        const { pagination } = this.state
+        let logList = res.context.logList
+
+        pagination.total = res.context.total
+        pagination.current = res.context.currentPage +1
+        this.setState({
+          logList,
+          loading: false,
+          pagination
+        })
+      } else {
+        this.setState({
+          loading: false
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+    })
+  }
+
+  
+
+  searchRequest = (value) => {
+    const { tableTabsKey,interfaceId } = this.state
+    this.setState({
+      keywords: value
+    })
+    let params = {
+      interfaceId: interfaceId,
+      keys: value ? [value] : [],
+      resultFlag: tableTabsKey === 'all' ? null : 2,
+      pageSize: 5,
+      pageNum: 0,
+    }
+    this.getLogList(params)
+  }
+  handlePageChange = (pagination) => {
+    const { keywords, tableTabsKey,interfaceId } = this.state
     this.setState({
       pagination
-    });
-  };
-  // 初始化分页
-  initPage = () => {
+    })
+    let params = {
+      businessKeys: keywords ? [keywords] : [],
+      interfaceId: interfaceId,
+      resultFlag: tableTabsKey === 'all' ? null : 2,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.pageNum,
+
+    }
+    this.getLogList(params)
+  }
+  onTableTabsChange = (key) => {
+    const { keywords,interfaceId } = this.state
+    this.setState({ tableTabsKey: key })
+    let params = {
+      businessKeys: keywords ? [keywords] : [],
+      interfaceId: interfaceId,
+      resultFlag: key === 'all' ? null : 2,
+      pageSize: 5,
+      pageNum: 0
+    }
+    this.getLogList(params)
+  }
+
+  openJsonPage = (title, showJson) => {
     this.setState({
-      pagination: {
-        current: 1,
-        pageSize: 10
-      }
-    });
-  };
+      currentTabKey: 'all',
+      title,
+      showJson,
+      visible: true
+    })
+  }
+
+
 
   render() {
+    const { loading, detailsTabsKey, tableTabsKey, detailInfo,visible, title, showJson,pagination,logList } = this.state
+    const columns = [
+      {
+        title: RCi18n({ id: 'Log.RequestID' }),
+        dataIndex: 'requestId',
+        key: 'requestId',
+      },
+      {
+        title: RCi18n({ id: 'Log.Time' }),
+        dataIndex: 'invokeTime',
+        key: 'invokeTime',
+      },
+      {
+        title: RCi18n({ id: 'Log.InterfaceName' }),
+        dataIndex: 'interfaceName',
+        key: 'interfaceName',
+      },
+      {
+        title: RCi18n({ id: 'Log.Header' }),
+        key: 'header',
+        render: (text, record) => (
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+        )
+      },
+      {
+        title: RCi18n({ id: 'Log.Payload' }),
+        key: 'payload',
+        render: (text, record) => (
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+        )
+      },
+      {
+        title: RCi18n({ id: 'Log.Response' }),
+        key: 'response',
+        render: (text, record) => (
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+        )
+      },
+      {
+        title: RCi18n({ id: 'Log.ClientName' }),
+        dataIndex: 'clientName',
+        key: 'clientName',
+      },
+      {
+        title: '',
+        dataIndex: 'detail',
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
+              <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
+            </Tooltip>
+          </div>
+        )
+      }
+    ]
+
     return (
       <div>
-        <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="Interface.PriceSynchronization" />}</Breadcrumb.Item>
-        </BreadCrumb>
-        <div className="container-info">
-          <Headline title={<FormattedMessage id="Interface.PriceSynchronization" />} />
-          <Tabs defaultActiveKey={this.state.activeKey} onChange={(key) => this.onStateTabChange(key)}>
-            {/* Information */}
-            <TabPane tab={<FormattedMessage id="Interface.Information" />} key="0">
-              <Information infoList={this.state.infoList} />
-            </TabPane>
-            {/* Statistics */}
-            <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="1">
-              <Statistics />
-            </TabPane>
-          </Tabs>
-        </div>
-        {
-          this.state.activeKey === '0' ? (
-            <div className="container">
-              <Tabs defaultActiveKey={this.state.activeTableKey} onChange={(key) => this.onStateTableChange(key)}>
-                {/* Information */}
-                <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="0" />
-                {/* Statistics */}
-                <TabPane tab={<FormattedMessage id="Interface.Error" />} key="1" />
-              </Tabs>
-              {/* 表格 */}
-              <Tab
-                rowKey={( record ) => record.id}
-                dataSource={this.state.dataSource}
-                pagination={this.state.pagination}
-                onChange={this.onSearchPage}
-                columns={this.state.columns}
-              />
-            </div>
-          ) : null
-        }
+        <Spin spinning={loading} indicator={<img className="spinner"
+          src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+          style={{ width: '90px', height: '90px' }} alt="" />}>
+
+
+          <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>{<FormattedMessage id="Interface.PriceSynchronization" />}</Breadcrumb.Item>
+          </BreadCrumb>
+          <div className="container-info">
+            <Headline title={<FormattedMessage id="Interface.PriceSynchronization" />} />
+            <Tabs defaultActiveKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+              {/* Information */}
+              <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
+                <Information detailInfo={detailInfo} />
+              </TabPane>
+              {/* Statistics */}
+              <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
+                <Statistics />
+              </TabPane>
+            </Tabs>
+          </div>
+          {
+            detailsTabsKey === 'information' ? (
+              <div className="container">
+                <Tabs defaultActiveKey={tableTabsKey} onChange={(key) => this.onTableTabsChange(key)}>
+                  {/* Information */}
+                  <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="all" />
+                  {/* Statistics */}
+                  <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
+                </Tabs>
+                {/* 表格 */}
+                <Search
+                  placeholder="keywords"
+                  onSearch={value => this.searchRequest(value)}
+                  style={{ width: 200, marginBottom: 20 }}
+                />
+                <Tab
+                  rowKey="id"
+                  dataSource={logList}
+                  pagination={pagination}
+                  onChange={this.handlePageChange}
+                  columns={columns}
+                />
+                <Modal
+                  visible={visible}
+                  width={1050}
+                  title={title}
+                  footer={null}
+                  onCancel={() => this.setState({
+                    visible: false
+                  })}
+                >
+
+                  <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+
+                </Modal>
+              </div>
+            ) : null
+          }
+        </Spin>
       </div>
     );
   }

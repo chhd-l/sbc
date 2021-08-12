@@ -2313,7 +2313,6 @@ export default {
         'Interface.AllRequests':'All Requests',
         'Interface.Error':'Error',
         'Interface.RequestID':'Request ID',
-        'Log.LogSearch': 'Log Search',
         'Interface.Time':'Time',
         'Interface.Header':'Header',
         'Interface.Payload':'Payload',

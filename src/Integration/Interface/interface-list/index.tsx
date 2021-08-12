@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Input, Row, Col, Select, Button, Tooltip } from 'antd';
+import { Form, Input, Row, Col, Select, Button, Tooltip, Spin } from 'antd';
 import Tab from '@/Integration/components/tab';
 import { Link } from 'react-router-dom';
+import * as webapi from './webapi';
 
 const { Option } = Select;
-import { goodsList } from './webapi';
+const FormItem = Form.Item
+const InputGroup = Input.Group
+
 
 class InterfaceList extends Component<any, any> {
   constructor(props: any) {
@@ -15,177 +18,279 @@ class InterfaceList extends Component<any, any> {
       loading: false,
       pagination: {
         current: 1,
-        pageNum: 0,
-        pageSize: 10,
+        pageSize: 5,
         total: 0
       },
-      num: 2,
-      dataSource: [],
-      columns: [
-        {
-          title: <FormattedMessage id="Interface.InterfaceID" />,
-          dataIndex: 'goodsId',
-          key: 'goodsId'
-        },
-        {
-          title: <FormattedMessage id="Interface.Name" />,
-          dataIndex: 'goodsNo'
-        },
-        {
-          title: <FormattedMessage id="Interface.Provider" />,
-          dataIndex: 'Provider'
-        },
-        {
-          title: <FormattedMessage id="Interface.Invoker" />,
-          dataIndex: 'Invoker'
-        },
-        {
-          title: <FormattedMessage id="Interface.DataFlow" />,
-          dataIndex: 'DataFlow'
-        },
-        {
-          title: <FormattedMessage id="Interface.URL" />,
-          dataIndex: 'URL'
-        },
-        {
-          title: <FormattedMessage id="Interface.Method" />,
-          dataIndex: 'Method'
-        },
-        {
-          title: <FormattedMessage id="Interface.Type" />,
-          dataIndex: 'Type'
-        },
-        {
-          title: <FormattedMessage id="Interface.Operation" />,
-          dataIndex: 'Operation',
-          render: (text, record) => (
-            <div>
-              <Tooltip placement="top" title={<FormattedMessage id="Interface.search" />}>
-                <Link to={{ pathname: '/interface-detail', state: { id: record.id, activeKey: '1' } }}
-                      className="iconfont iconsearch" />
-              </Tooltip>
-            </div>
-          )
-        }
-      ]
+      systemList: [],
+      interfaceList: [],
+      searchForm: {
+        interfaceName: '',
+        provider: null,
+        invoker: null
+      }
     };
   }
 
-  UNSAFE_componentWillMount() {
-    this.getPageList();
+  componentDidMount() {
+    this.init()
   }
 
-  getPageList = async () => {
-    this.setState({ loading: true });
-    const { res } = await goodsList(this.state.pagination);
-    let newPagination = Object.assign(this.state.pagination, { 'total': res.context?.goodsPage?.total??0 });
-    this.setState({ loading: false });
-    this.setState({
-      dataSource: res.context?.goodsPage.content??[],
-      pagination: newPagination
-    });
-  };
+  init = () => {
+    this.getSystemList()
+    this.getInterfaceList({})
+  }
 
-  openView = (row) => {
-    console.log(row);
-  };
+  getSystemList = () => {
+    webapi.fetchSystemList().then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        let systemList = res.context.intSystemDTOS
+        this.setState({
+          systemList
+        })
+      }
+    })
+  }
+
+
+  getInterfaceList = (params) => {
+    this.setState({
+      loading: true
+    })
+    webapi.fetchInterfaceList(params).then(data => {
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        const { pagination } = this.state
+        let interfaceList = res.context.intInterfaceDTOS.content
+        pagination.total = res.context.intInterfaceDTOS.total
+        pagination.current = res.context.intInterfaceDTOS.number + 1
+        this.setState({
+          interfaceList,
+          loading: false,
+          pagination
+        })
+      } else {
+        this.setState({
+          loading: false
+        })
+      }
+    }).catch(err => {
+      this.setState({
+        loading: false
+      })
+    })
+  }
+
   onSearch = () => {
-    let searchParams = {
-      pageNum: 0,
-      current: 1
+    const { searchForm } = this.state
+    let params = {
+      apiInvokerId: searchForm.invoker,
+      apiProviderId: searchForm.provider,
+      interfaceName: searchForm.interfaceName,
+      pageSize: 5,
+      pageNum: 0
     }
+    this.getInterfaceList(params)
+  }
+  handlePageChange = (pagination) => {
+    const { searchForm } = this.state
     this.setState({
-      pagination: Object.assign(this.state.pagination,{...searchParams})
-    });
-    this.getPageList();
-  };
-  onSearchPage = (pagination) => {
+      pagination
+    })
+    let params = {
+      apiInvokerId: searchForm.invoker,
+      apiProviderId: searchForm.provider,
+      interfaceName: searchForm.interfaceName,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.pageNum,
+
+    }
+    this.getInterfaceList(params)
+  }
+
+  onFormChange = ({ field, value }) => {
+    let data = this.state.searchForm;
+    data[field] = value;
     this.setState({
-      pagination:Object.assign(this.state.pagination,pagination)
+      searchForm: data
     });
-    this.getPageList();
   };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { systemList, interfaceList, pagination, loading } = this.state
+    const columns = [
+      {
+        title: <FormattedMessage id="Interface.InterfaceID" />,
+        dataIndex: 'id',
+        key: 'id'
+      },
+      {
+        title: <FormattedMessage id="Interface.Name" />,
+        dataIndex: 'name',
+        key: "name"
+      },
+      {
+        title: <FormattedMessage id="Interface.Provider" />,
+        dataIndex: 'apiProviderName',
+        key: "provider"
+      },
+      {
+        title: <FormattedMessage id="Interface.Invoker" />,
+        dataIndex: 'apiInvokerName',
+        key: "invoker"
+      },
+      {
+        title: <FormattedMessage id="Interface.DataFlow" />,
+        key: 'dataFlow',
+        render: (text, record) => (
+          <p>
+            <span>{record.dataSourceFromName}</span>
+            <span> → </span>
+            <span>{record.dataSourceToName}</span>
+          </p>
+        )
+      },
+      {
+        title: <FormattedMessage id="Interface.URL" />,
+        dataIndex: 'url',
+        key: 'url'
+      },
+      {
+        title: <FormattedMessage id="Interface.Method" />,
+        dataIndex: 'method',
+        key: 'method'
+      },
+      {
+        title: <FormattedMessage id="Interface.Type" />,
+        dataIndex: 'type',
+        key: 'type'
+      },
+      {
+        title: <FormattedMessage id="Interface.Operation" />,
+        dataIndex: 'Operation',
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
+              <Link to={`/interface-detail/${record.id}`}
+                className="iconfont iconDetails" />
+            </Tooltip>
+          </div>
+        )
+      }
+    ]
 
     return (
       <div>
-        <BreadCrumb />
-        <div className="container-search">
-          <Headline title={<FormattedMessage id="Interface.InterfaceList" />} />
-          {/*搜索*/}
-          <Form className="filter-content" layout="inline">
-            <Row>
-              <Col span={8}>
-                <Form.Item>
-                  {getFieldDecorator('interfaceName', {
-                    rules: [{ required: true, message: 'Please input your interfaceName!' }]
-                  })(
-                    <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="Interface.InterfaceName" />
-                        </p>
-                      }
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item>
-                  {getFieldDecorator('Provider', {
-                    rules: [{ required: true, message: 'Please input your interfaceName!' }]
-                  })(
-                    <SelectGroup
-                      label={<p style={styles.label}>{<FormattedMessage id="Interface.Provider" />}</p>}
-                      style={{ width: 194 }}
-                    >
-                      <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
-                      <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
-                      <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
-                    </SelectGroup>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item>
-                  {getFieldDecorator('Invoker', {
-                    rules: [{ required: true, message: 'Please input your interfaceName!' }]
-                  })(
-                    <SelectGroup
-                      label={<p style={styles.label}>{<FormattedMessage id="Interface.Invoker" />}</p>}
-                      style={{ width: 194 }}
-                    >
-                      <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
-                      <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
-                      <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
-                    </SelectGroup>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={24} style={{ textAlign: 'center' }}>
-                <Button type="primary"
-                        htmlType="submit"
-                        icon="search"
-                        shape="round"
-                        onClick={this.onSearch}>
-                  {<FormattedMessage id="Appointment.Search" />}
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-        <div className="container">
-          <Tab
-            loading={this.state.loading}
-            dataSource={this.state.dataSource}
-            pagination={this.state.pagination}
-            onChange={this.onSearchPage}
-            columns={this.state.columns}
-            rowKey={(record) => record.goodsId}
-          />
-        </div>
+        <Spin spinning={loading} indicator={<img className="spinner"
+          src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
+          style={{ width: '90px', height: '90px' }} alt="" />}>
+          <BreadCrumb />
+          <div className="container-search">
+            <Headline title={<FormattedMessage id="Interface.InterfaceList" />} />
+            {/*搜索*/}
+            <Form className="filter-content" layout="inline">
+              <Row>
+
+
+                {/* InterfaceName */}
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.InterfaceName' })} />
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'interfaceName',
+                            value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                {/* Provider */}
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Provider' })} />
+                      <Select
+                        style={styles.wrapper}
+                        allowClear
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'provider',
+                            value
+                          });
+                        }}
+                      >
+                        {
+                          systemList && systemList.map(item => (
+                            <Option value={item.id}>{item.sysShort}</Option>
+                          ))
+                        }
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+
+                </Col>
+                {/* Invoker */}
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Invoker' })} />
+                      <Select
+                        style={styles.wrapper}
+                        allowClear
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'invoker',
+                            value
+                          });
+                        }}
+                      >
+                        {
+                          systemList && systemList.map(item => (
+                            <Option value={item.id}>{item.sysShort}</Option>
+                          ))
+                        }
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+
+                </Col>
+              </Row>
+
+
+              <Row>
+                <Col span={24} style={{ textAlign: 'center' }}>
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      icon="search"
+                      shape="round" onClick={this.onSearch}>
+                      {RCi18n({ id: 'Log.Search' })}
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </div>
+          <div className="container">
+            <Tab
+              dataSource={interfaceList}
+              pagination={pagination}
+              onChange={this.handlePageChange}
+              columns={columns}
+              rowKey={(record) => record.goodsId}
+            />
+          </div>
+        </Spin>
       </div>
     );
   }
@@ -193,10 +298,19 @@ class InterfaceList extends Component<any, any> {
 
 
 const styles = {
+  formItemStyle: {
+    width: 335
+  },
   label: {
-    width: 151,
-    textAlign: 'center'
-  }
-} as any;
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  wrapper: {
+    width: 200
+  },
+} as any
 
 export default Form.create()(InterfaceList);

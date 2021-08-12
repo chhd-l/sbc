@@ -47,7 +47,7 @@ const debounce = (fn, delay = 500) => {
 }
 
 export default class EditForm extends React.Component<any, any> {
-  _store: Store;
+  _store: any;
 
   accountPassword;
 
@@ -104,37 +104,28 @@ export default class EditForm extends React.Component<any, any> {
   }
 
   findEmployeeByEmail = async (value) => {
-    console.log('findEmployeeByEmail', value)
     if(!value) return;
     if(!ValidConst.email.test(value)) return; // 邮箱正则
 
     this.setState({loading: true})
     let {res} = await getUserInfo(value);
     this.setState({loading: false});
+    //  改变为编辑状态， 更新form数据 TO DO
     if (res.code === Const.SUCCESS_CODE) {
       let {
-        sex,
-        birthday,
-        firstName,
-        lastName,
-        employeeMobile,
         employeeId,
       } = res.context;
       if (!!employeeId) {
-        this.props.form.setFieldsValue({
-          sex,
-          firstName,
-          lastName,
-          birthday: moment(birthday),
-          employeeMobile,
-        });
+        // initEmployeeByEmail
+        this._store.initEmployeeByEmail(res.context);
+
       }
     }else {
 
     }
   }
 
-  onEmailChange = (value ) => {
+  onEmailChange = (value: any ) => {
     this.findEmployeeByEmail(value);
   }
 

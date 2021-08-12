@@ -296,6 +296,11 @@ export default class AppStore extends Store {
     });
   };
 
+  initEmployeeByEmail = (employee) => {
+    this.dispatch('edit', true);
+    this.dispatch('edit:init', employee);
+  }
+
   onSave = async (employeeForm) => {
     //更新
     // if (employeeForm.roleName != null) {

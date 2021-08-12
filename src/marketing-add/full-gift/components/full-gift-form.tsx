@@ -1083,6 +1083,7 @@ class FullGiftForm extends React.Component<any, any> {
           this.setState({ saveLoading: true });
           //组装营销类型
           marketingBean = marketingBean.set('marketingType', marketingType); //.set('scopeType', 1);
+          marketingBean = marketingBean.set('customProductsType', 0);
 
           if (!marketingBean.get('joinLevel')) {
             marketingBean = marketingBean.set('joinLevel', -1); //.set('scopeType', 1);

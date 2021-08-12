@@ -18,7 +18,9 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   }
 
   componentWillMount() {
-    if (this.props.location.state && this.props.location.state.oktaLogout) {
+    if (Const.SITE_NAME === 'MYVETRECO') {
+      history.push('/login-admin');
+    } else if (this.props.location.state && this.props.location.state.oktaLogout) {
       if(this.props.authState.isAuthenticated) {
          let idToken = this.props.authState.idToken;
          let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);

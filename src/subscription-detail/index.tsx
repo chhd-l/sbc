@@ -482,6 +482,16 @@ class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  // 设置价格长度
+  getSubscriptionPrice = (num: any) => {
+    if (num > 0) {
+      let nlen = num.toString().split('.')[1].length;
+      return num.toFixed(nlen);
+    } else {
+      return num;
+    }
+  }
+
   render() {
     const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive } = this.state;
     const cartTitle = (
@@ -526,7 +536,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName==='individualization'?'Your pet\'s personalized subscription':record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>{record.goodsName === 'individualization' ? record.petsName + '\'s personalized subscription' : record.goodsName}</span>
           </div>
         )
       },
@@ -540,8 +550,16 @@ class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>{currencySymbol + record.originalPrice.toFixed(2)}</p>
-            <p>{currencySymbol + record.subscribePrice.toFixed(2)}</p>
+            <p style={{ textDecoration: 'line-through' }}>
+              {currencySymbol + ' '}
+              {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {currencySymbol + this.getSubscriptionPrice(record.originalPrice)} */}
+            </p>
+            <p>
+              {currencySymbol + ' '}
+              {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {currencySymbol + this.getSubscriptionPrice(record.subscribePrice)} */}
+            </p>
           </div>
         )
       },
@@ -592,7 +610,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <span>{currencySymbol + (+record.subscribeNum * +record.subscribePrice).toFixed(2)}</span>
+            <span>{currencySymbol + this.getSubscriptionPrice(+record.subscribeNum * +record.subscribePrice)}</span>
           </div>
         )
       }
@@ -659,7 +677,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={styles.imgItem} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName==='individualization'?'Your pet\'s personalized subscription':item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -785,7 +803,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName==='individualization'?'Your pet\'s personalized subscription':item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -879,7 +897,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <FormattedMessage id="Subscription.Subtotal" />
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + this.subTotal().toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.subTotal())}</span>
                 </div>
 
                 <div className="flex-between">
@@ -887,13 +905,13 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <FormattedMessage id="Order.subscriptionDiscount" />
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + '  -' + (this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + '  -' + this.getSubscriptionPrice(this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0)}</span>
                 </div>
 
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + this.getSubscriptionPrice(pvo.discountPrice ? pvo.discountPrice : 0)}</span>
                   </div>
                 ))}
 
@@ -901,18 +919,18 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <span>
                     <FormattedMessage id="Subscription.Shipping" />
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
                 </div>
                 {this.state.freeShippingFlag && <div className="flex-between">
-                  <span><FormattedMessage id="Order.shippingFeesDiscount"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0).toFixed(2)}</span>
+                  <span><FormattedMessage id="Order.shippingFeesDiscount" /></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + this.getSubscriptionPrice(this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0)}</span>
                 </div>}
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Subscription.Tax" />
                     </span>
-                    <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.state.taxFeePrice ? this.state.taxFeePrice : 0)}</span>
                   </div>
                 ) : null}
 
@@ -924,7 +942,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                     (<FormattedMessage id="Subscription.IVAInclude" />
                     ):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + (this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice - +this.state.freeShippingDiscountPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice - +this.state.freeShippingDiscountPrice)}</span>
                 </div>
               </Col>
             </Row>
@@ -1039,26 +1057,26 @@ class SubscriptionDetail extends React.Component<any, any> {
                     </label>
                   </Col>
 
-                  { paymentInfo ?
-                  <>
+                  {paymentInfo ?
+                    <>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                        </p>
+                        <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                      </Col>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                        </p>
+                        <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                      </Col>
+                    </>
+                    :
                     <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
-                      </p>
-                      <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.CardNumber" />:{' '}
-                      </p>
-                      <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                    </Col>
-                  </>
-                  :
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>
-                  </Col>}
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
+                      <p><FormattedMessage id="Subscription.CashOnDelivery" /></p>
+                    </Col>}
 
                 </Row>
               </Col>
@@ -1112,7 +1130,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           </AuthWrapper>
         </Spin>
         <div className="bar-button">
-          {isActive ? <Button type="primary" style={{marginRight:10}}>
+          {isActive ? <Button type="primary" style={{ marginRight: 10 }}>
             <Link to={'/subscription-edit/' + this.state.subscriptionId}>
               {<FormattedMessage id="Subscription.Edit" />}
             </Link>

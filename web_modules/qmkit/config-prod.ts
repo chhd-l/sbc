@@ -122,5 +122,6 @@ export default {
   ...Common,
   // Okta Config
   ..._config[host],
-  ...getOktaAppConfig()
+  ...getOktaAppConfig(),
+  SITE_NAME: host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC',
 };

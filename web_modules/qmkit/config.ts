@@ -1,10 +1,12 @@
 import Common from './config-common';
 export default {
   /* dev */
-  HOST: 'http://124.71.151.9:8390',
+  // HOST: 'http://124.71.151.9:8390',
 
   /* stg */
-  // HOST: 'https://storestg.royalcanin.com/api',
+  //HOST: 'https://storestg.royalcanin.com/api',
+  /* sit */
+  HOST: 'https://storesit.royalcanin.com/api',
   PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
@@ -28,5 +30,6 @@ export default {
     }
   },
   CDN_PATH: '/',
-  ...Common
+  ...Common,
+  SITE_NAME: window.location.host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC',
 };

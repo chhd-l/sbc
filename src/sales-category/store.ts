@@ -113,6 +113,12 @@ export default class AppStore extends Store {
     if (imagesJs) {
       formDataJs.cateImg = JSON.stringify(imagesJs);
     }
+
+    if (Array.isArray(formDataJs.period) && formDataJs.period.length){
+      formDataJs.periodBeginTime = formDataJs.period[0].format(Const.TIME_FORMAT);
+      formDataJs.periodEndTime = formDataJs.period[1].format(Const.TIME_FORMAT);
+    }
+
     let result: any;
     this.dispatch('loading:start');
     if (formData.get('storeCateId')) {

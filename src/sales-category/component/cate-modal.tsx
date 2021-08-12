@@ -20,6 +20,7 @@ import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormattedMessage } from 'react-intl';
 import { IList, IMap } from 'typings/globalType';
 import ImageLibraryUpload from './image-library-upload';
+import moment from 'moment';
 const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
 const Option = Select.Option;
@@ -188,8 +189,12 @@ class CateModalForm extends React.Component<any, any> {
     const cateType = formData.get('cateType');
     const displayStatus = formData.get('displayStatus');
     const altName = formData.get('altName');
-    const filterStatus = formData.get('filterStatus');
-    const period = formData.get('period');
+    const filterStatus = !!formData.get('filterStatus') ? formData.get('filterStatus') : false;
+    const periodBeginTime = formData.get('periodBeginTime');
+    const periodEndTime = formData.get('periodEndTime');
+    let period = periodBeginTime && periodEndTime
+        ? [moment(periodBeginTime), moment(periodEndTime)]
+        : []
 
     const { getFieldDecorator } = this.props.form;
     //处理分类的树形图结构数据

@@ -69,6 +69,7 @@ class MarketingDes extends React.Component<any, any> {
       promotionCode: any;
       marketingFreeShippingLevel: any;
       isSuperimposeSubscription: any;
+      marketingUseLimit:any
     };
   };
 
@@ -82,11 +83,12 @@ class MarketingDes extends React.Component<any, any> {
     subType: 'subType',
     promotionCode: 'promotionCode',
     publicStatus: 'publicStatus',
+    marketingUseLimit:'marketingUseLimit',
     marketingFreeShippingLevel: 'marketingFreeShippingLevel'
   };
 
   render() {
-    const { promotionType, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel, isSuperimposeSubscription } = this.props.relaxProps;
+    const { promotionType,marketingUseLimit, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel, isSuperimposeSubscription } = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
@@ -119,7 +121,7 @@ class MarketingDes extends React.Component<any, any> {
             {marketingName}
           </Col>
         </Row>
-
+ 
         <Row>
           <Col span={6}>
             <span>
@@ -133,6 +135,22 @@ class MarketingDes extends React.Component<any, any> {
             </Checkbox>
           </Col>
         </Row>
+
+       {marketingUseLimit&&marketingUseLimit.get("perCustomer")&& <Row>
+          <Col span={6}>
+            <span>
+              <FormattedMessage id="Marketing.NumberOfUserPerPerson" />:
+            </span>
+          </Col>
+          <Col span={18}>
+            {marketingUseLimit.get("perCustomer")}
+            <Checkbox className="publicBox" style={{ marginLeft: 20 ,marginRight:5}} checked={marketingUseLimit.get("isNotLimit") === 1} disabled={true}>
+             
+            </Checkbox>
+            <FormattedMessage id="Marketing.UnlimitedUse" />
+          </Col>
+        </Row>
+  }
         <Row>
           <Col span={6}>
             <span>

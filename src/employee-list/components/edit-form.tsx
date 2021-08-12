@@ -117,7 +117,36 @@ export default class EditForm extends React.Component<any, any> {
       } = res.context;
       if (!!employeeId) {
         // initEmployeeByEmail
-        this._store.initEmployeeByEmail(res.context);
+        const employeeForm = {
+              //员工名称
+              employeeName: '',
+              //员工手机
+              employeeMobile: '',
+              //角色id,逗号分隔
+              roleIds: '',
+              //账户名
+              accountName: '',
+              //账户手机
+              accountPassword: '',
+              //是否是业务员
+              isEmployee: null,
+              //邮箱
+              email: null,
+              //工号
+              jobNo: '',
+              //职位
+              position: null,
+              //性别，默认0，保密
+              sex: 0,
+              //归属部门，逗号分隔
+              departmentIds: '',
+              //生日
+              birthday: null
+            };
+        this._store.initEmployeeByEmail({
+          ...employeeForm,
+          ...res.context,
+        });
 
       }
     }else {

@@ -297,8 +297,10 @@ export default class AppStore extends Store {
   };
 
   initEmployeeByEmail = (employee) => {
-    this.dispatch('edit', true);
-    this.dispatch('edit:init', employee);
+    this.transaction(() => {
+      this.dispatch('edit', true);
+      this.dispatch('edit:init', employee);
+    })
   }
 
   onSave = async (employeeForm) => {

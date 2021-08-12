@@ -1531,6 +1531,12 @@ export default {
         "Analysis:PleaseRemindThatTheReportWillExpireAfter7DaysAutomatically": "Please remind that the report will expire after 7 days automatically."
     },
     Marketing: {
+        "Marketing.Includeproduct":"Include product",
+        "Marketing.Excludeproduct":"Exclude product",   
+        "Marketing.NumberOfUserPerPerson":"Number of user per person",
+        "Marketing.NumberOfUserPerPerson":"Number of user per person",
+        "Marketing.UnlimitedUse":"Unlimited use",
+        
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',
@@ -1802,6 +1808,7 @@ export default {
         "Marketing.CCList": "CC List",
         "Marketing.Preview": "Preview",
         "Marketing.Singlepurchase": "Single purchase",
+        "Marketing.Individualization":"Individualization",
         "Marketing.Automationlist": "Marketing list",//"Automation list",
         "Marketing.OperationFailure": "Operation failure",
         "Marketing.OperationSuccessful": "Operation successful",

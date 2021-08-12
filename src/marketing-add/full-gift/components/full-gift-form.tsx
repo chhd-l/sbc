@@ -149,10 +149,10 @@ class FullGiftForm extends React.Component<any, any> {
       selectedSkuIds: any;
       selectedGiftRows: any;
       submitFullGift: Function;
-      submitFullDiscount: Function;
-      submitFullReduction: Function;
-      discountBeanOnChange: Function;
-      reductionBeanOnChange: Function;
+      // submitFullDiscount?: Function;
+      // submitFullReduction?: Function;
+      // discountBeanOnChange?: Function;
+      // reductionBeanOnChange?: Function;
       giftBeanOnChange: Function;
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
@@ -173,10 +173,10 @@ class FullGiftForm extends React.Component<any, any> {
     setSelectedGiftRows: noop,
     initGiftDefualtLevelList: noop,
     submitFullGift: noop,
-    submitFullDiscount: noop,
-    submitFullReduction: noop,
-    discountBeanOnChange: noop,
-    reductionBeanOnChange: noop,
+    // submitFullDiscount: noop,
+    // submitFullReduction: noop,
+    // discountBeanOnChange: noop,
+    // reductionBeanOnChange: noop,
     giftBeanOnChange: noop,
     deleteSelectedSku: noop,
     setSelectedProductRows: noop,
@@ -356,7 +356,7 @@ class FullGiftForm extends React.Component<any, any> {
     const { marketingId, form } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { customerLevel, sourceGoodCateList, skuExists, saveLoading } = this.state;
-    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds,selectedGiftRows } = this.props.relaxProps;
+    const { marketingBean, allGroups, attributesList, loading, storeCateList, selectedRows, deleteSelectedSku, selectedSkuIds, selectedGiftRows } = this.props.relaxProps;
     const parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
     const storeCateIds = marketingBean.get('storeCateIds'); //fromJS([1275])
@@ -403,7 +403,8 @@ class FullGiftForm extends React.Component<any, any> {
                   id: 'Marketing.PleaseInputPromotionCode'
                 })
               },
-              { min: 1, max: 20, message:
+              {
+                min: 1, max: 20, message:
                   (window as any).RCi18n({
                     id: 'Marketing.words'
                   })
@@ -451,7 +452,8 @@ class FullGiftForm extends React.Component<any, any> {
                     id: 'Marketing.PleaseInputPromotionName'
                   })
               },
-              { min: 1, max: 40, message:
+              {
+                min: 1, max: 40, message:
                   (window as any).RCi18n({
                     id: 'Marketing.40Words'
                   })
@@ -528,58 +530,71 @@ class FullGiftForm extends React.Component<any, any> {
           )}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.Gifttype" />:</div>
-        <FormItem {...formItemLayout} labelAlign="left">
-          {getFieldDecorator('subType', {
-            rules: [
-              {
-                required: true,
-                message: (window as any).RCi18n({
-                  id: 'Marketing.fullgifttype',
-                })
-              }
-            ],
-            initialValue: marketingBean.get('subType')
-          })(
-            <RadioGroup onChange={(e) => this.subTypeChange(e)} value={marketingBean.get('subType')}>
-              {/*<Radio style={radioStyle} value={2}>*/}
-              {/*  Direct gift*/}
-              {/*</Radio>*/}
-              {marketingBean.get('promotionType') === 1 && (
-                <Radio value={3} style={radioStyle}>
-                  <FormattedMessage id="Marketing.For" /> <Input /> <FormattedMessage id="Marketing.refill" />
-                </Radio>
-              )}
-              {/*{marketingBean.get('promotionType') === 0 && (*/}
-              {/*  <Radio value={4} style={radioStyle}>*/}
-              {/*    <FormattedMessage id="Marketing.Fullamountgift" />*/}
-              {/*  </Radio>*/}
-              {/*)}*/}
-              {marketingBean.get('promotionType') === 0 && (
-                <Radio value={5} style={radioStyle}>
-                  <FormattedMessage id="Marketing.Fullquantitygift" />{' '}
-                </Radio>
-              )}
-            </RadioGroup>
-          )}
-        </FormItem>
+          <FormItem labelAlign="left">
+            {getFieldDecorator('subType', {
+              rules: [
+                {
+                  required: true,
+                  message: (window as any).RCi18n({
+                    id: 'Marketing.fullgifttype',
+                  })
+                }
+              ],
+              initialValue: marketingBean.get('subType'),
+              onChange: (e) => this.subTypeChange(e)
+            })(
+              <RadioGroup  >
+                {/*<Radio style={radioStyle} value={2}>*/}
+                {/*  Direct gift*/}
+                {/*</Radio>*/}
+                {marketingBean.get('promotionType') === 1 && (
+                  <Radio value={3} style={radioStyle}>
+                    <FormattedMessage id="Marketing.For" /> <Input /> <FormattedMessage id="Marketing.refill" />
+                  </Radio>
+                )}
+                {/* {marketingBean.get('promotionType') === 0 && (
+              
+              )} */}
+                {marketingBean.get('promotionType') === 0 && (
+                  <>
+
+                    <Radio value={4} style={radioStyle}>
+                      <FormattedMessage id="Marketing.Fullamountgift" />
+                     
+                    </Radio>
+
+
+                    <Radio value={5} style={radioStyle}>
+                      <FormattedMessage id="Marketing.Fullquantitygift" />{' '}
+                    </Radio>
+                  </>
+
+
+                )}
+              </RadioGroup>
+            )}
+          </FormItem>
+
+
+       
 
 
         <FormItem {...settingRuleFrom} label={settingLabel} required={true} labelAlign="left">
           {
-          getFieldDecorator(
-            'rules',
-            {}
-          )(
-            <GiftLevels
-              form={this.props.form}
-              selectedRows={selectedGiftRows}
-              isNormal={marketingBean.get('promotionType') === 0}
-              fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
-              onChangeBack={this.onRulesChange}
-              isFullCount={marketingBean.get('subType') % 2 }
-              GiftRowsOnChange={this.GiftRowsOnChange}
-            />
-          )}
+            getFieldDecorator(
+              'rules',
+              {}
+            )(
+              <GiftLevels
+                form={this.props.form}
+                selectedRows={selectedGiftRows}
+                isNormal={marketingBean.get('promotionType') === 0}
+                fullGiftLevelList={marketingBean.get('fullGiftLevelList') && marketingBean.get('fullGiftLevelList').toJS()}
+                onChangeBack={this.onRulesChange}
+                isFullCount={marketingBean.get('subType') % 2}
+                GiftRowsOnChange={this.GiftRowsOnChange}
+              />
+            )}
         </FormItem>
         <div className="bold-title"><FormattedMessage id="Marketing.SelectProducts" /> :</div>
         <FormItem {...formItemLayout} required={true} labelAlign="left">
@@ -761,11 +776,11 @@ class FullGiftForm extends React.Component<any, any> {
             })(
               <Select style={{ width: 520 }} onChange={this.selectGroupOnChange} defaultValue={marketingBean.get('segmentIds') && marketingBean.get('segmentIds').size > 0 ? marketingBean.get('segmentIds').toJS()[0] : null}>
                 {allGroups.size > 0 &&
-                allGroups.map((item) => (
-                  <Select.Option key={item.get('id')} value={item.get('id')}>
-                    {item.get('name')}
-                  </Select.Option>
-                ))}
+                  allGroups.map((item) => (
+                    <Select.Option key={item.get('id')} value={item.get('id')}>
+                      {item.get('name')}
+                    </Select.Option>
+                  ))}
               </Select>
             )}
           </FormItem>
@@ -814,10 +829,10 @@ class FullGiftForm extends React.Component<any, any> {
         </Row>
         {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
         <GoodsModal visible={this.state.goodsModal._modalVisible}
-                    selectedSkuIds={this.state.goodsModal._selectedSkuIds}
-                    selectedRows={this.state.goodsModal._selectedRows}
-                    onOkBackFun={this.skuSelectedBackFun}
-                    onCancelBackFun={this.closeGoodsModal}
+          selectedSkuIds={this.state.goodsModal._selectedSkuIds}
+          selectedRows={this.state.goodsModal._selectedRows}
+          onOkBackFun={this.skuSelectedBackFun}
+          onCancelBackFun={this.closeGoodsModal}
         />
       </Form>
     );
@@ -1136,10 +1151,10 @@ class FullGiftForm extends React.Component<any, any> {
           _thisRef.onBeanChange(beanObject);
           //gift需要替换
           initGiftDefualtLevelList()
+        },
+        onCancel() {
+          _thisRef.props.form.setFieldsValue({ subType: marketingBean.get('subType') });
         }
-        // onCancel() {
-        //   _thisRef.props.form.setFieldsValue({ subType: isFullCount });
-        // }
       });
     }
   };

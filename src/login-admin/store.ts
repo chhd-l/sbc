@@ -29,8 +29,9 @@ export default class AppStore extends Store {
     webapi.getSiteInfo().then((resIco: any) => {
       if (resIco.res && resIco.res.code && resIco.res.code == Const.SUCCESS_CODE) {
         //logo
-        this.dispatch('login:logo', pcLogo);
-        sessionStorage.setItem(cache.SITE_LOGO, pcLogo); //放入缓存,以便登陆后获取
+        const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
+        this.dispatch('login:logo', configLog);
+        sessionStorage.setItem(cache.SITE_LOGO, configLog); //放入缓存,以便登陆后获取
         //icon
         /*const ico = (resIco.res.context as any).pcIco
           ? JSON.parse((resIco.res.context as any).pcIco)

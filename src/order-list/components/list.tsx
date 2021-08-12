@@ -241,6 +241,11 @@ class ListView extends React.Component<any, any> {
     );
   }
 
+  //判断价格显示位数，针对Individualization类型小数位数特殊处理
+  judgePriceNum(price,subscriberType){
+    return price&&price.toFixed(subscriberType==='Individualization'?4:2)
+  }
+
   _renderLoading() {
     return (
       <tr style={styles.loading}>
@@ -466,7 +471,7 @@ class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          
+
                           {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id)} className="iconfont iconaudit"></a>
@@ -533,7 +538,7 @@ class ListView extends React.Component<any, any> {
                       {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                       {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null} */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(2) : tradePrice.toFixed(2)}
+                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?4:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?4:2)}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
@@ -612,7 +617,7 @@ class ListView extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: title, 
+      title: title,
       content:  content,
       onOk() {
         onConfirm(tdId);

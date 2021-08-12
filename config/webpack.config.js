@@ -49,6 +49,9 @@ const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
+//主题色读取环境变量
+let primaryColor = process.env.PRIMARY_COLOR || '#e2001a';
+
 module.exports = function (webpackEnv, envCode) {
 
   const isEnvDevelopment = webpackEnv === 'development';
@@ -312,8 +315,8 @@ module.exports = function (webpackEnv, envCode) {
                 loader: "less-loader", // compiles Less to CSS
                 options: {
                   modifyVars: {
-                    'primary-color': '#e2001a',
-                    'info-color': '#e2001a'
+                    'primary-color': primaryColor,
+                    'info-color': primaryColor
                   },
                   javascriptEnabled: true
                 }

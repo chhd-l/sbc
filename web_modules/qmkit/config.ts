@@ -30,5 +30,6 @@ export default {
     }
   },
   CDN_PATH: '/',
-  ...Common
+  ...Common,
+  SITE_NAME: window.location.host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC',
 };

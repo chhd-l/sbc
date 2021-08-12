@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { history, Const, login, RCi18n, } from 'qmkit';
 //import { TIMEOUT } from 'dns';
 const pcLogo = require('../../../public/images/login/logo1.png');
+const vetLogo = require('../img/myvetreco.png');
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 class LoginForm extends React.Component<any, any> {
@@ -36,7 +37,7 @@ class LoginForm extends React.Component<any, any> {
       <Form style={styles.loginForm}>
         <FormItem style={{ marginBottom: 15 }}>
           <div style={styles.header}>
-            <img style={styles.logo} src={loginLogo ? loginLogo : logo} />
+            <img style={styles.logo} src={Const.SITE_NAME === 'MYVETRECO' ? vetLogo : loginLogo ? loginLogo : logo} />
           </div>
           <strong style={styles.title}>
             <FormattedMessage id="Public.Storeportal" />
@@ -82,7 +83,7 @@ class LoginForm extends React.Component<any, any> {
         <FormItem style={{ marginBottom: 0 }}>
           <div>
             <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>
-              {/* © 2017-2019 南京万米信息技术有限公司 */}© <FormattedMessage id="Public.RoyalCaninSAS2020" />
+              {/* © 2017-2019 南京万米信息技术有限公司 */}© {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : <FormattedMessage id="Public.RoyalCaninSAS2020" />}
             </p>
             {/* <p
               style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}

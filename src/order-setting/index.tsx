@@ -181,7 +181,7 @@ class OrderSetting extends Component<any, any> {
             }
             //todo 调整orderAllowZonePriceStatus的接口configType取值
             //允许0元订单
-            if (item.configType === 'order_setting_refund_auto_refund') {
+            if (item.configType === 'order_setting_apply_refund') {
               paymentOnlineForm.orderAllowZonePriceStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAllowZonePriceValue = context.day;
@@ -414,6 +414,7 @@ class OrderSetting extends Component<any, any> {
           return
         }
       }
+      //todo 调整是否允许0元订单得configType为与接口约定的值
       //允许0元订单
       if (item.configType === 'order_setting_refund_auto_refund') {
         item.status = +paymentOnlineForm.orderAllowZonePriceStatus;

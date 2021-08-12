@@ -837,7 +837,13 @@ export default {
         'Order.AllowZoneOrder':'Allow for orders with 0 price',
         'Order.zeroOrderAuditMethod':'Zero price order audit method ',
         'Order.pending':'Pending',
-        'Order.pendingAuditBasis':'Audit Basis: Authorization, payment, product, order'
+        'Order.pendingAuditBasis':'Audit Basis: Authorization, payment, product, order',
+        'Order.orderAutoAudit':'Automatic audit:',
+        'Order.autoAuditExceptConditionTip1':'Order meeting the following conditions require  ',
+        'Order.autoAuditExceptConditionTip2':'manual audit',
+        'Order.autoAuditExceptCondition1':'Orders with 0 price ',
+        'Order.autoAuditExceptCondition2':'Product categories ',
+        'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
 
 
     },

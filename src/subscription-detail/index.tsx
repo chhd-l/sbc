@@ -65,6 +65,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
       promotionVOList: [],
+      individualFrequencyList: [],
       frequencyList: [],
       frequencyClubList: [],
       promotionDesc: 'Promotion',
@@ -317,6 +318,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     this.querySysDictionary('Frequency_day');
     this.querySysDictionary('Frequency_day_club');
 
+    this.querySysDictionary('Frequency_day_individual');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -326,6 +328,15 @@ class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          // Individualization Frequency
+          if (type == 'Frequency_day_individual') {
+            // Frequency_month_individual
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState({
+              individualFrequencyList: frequencyList
+            });
+          }
+
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -484,8 +495,11 @@ class SubscriptionDetail extends React.Component<any, any> {
 
   // 设置价格长度
   getSubscriptionPrice = (num: any) => {
+    const { subscriptionInfo } = this.state;
     if (num > 0) {
       let nlen = num.toString().split('.')[1].length;
+      // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
+      nlen > 4 ? nlen = 4 : nlen = nlen;
       return num.toFixed(nlen);
     } else {
       return num;
@@ -493,7 +507,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   }
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -527,7 +541,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     const columns = [
       {
         title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+          <span className="subscription_product" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Product" />
           </span>
         ),
@@ -550,11 +564,11 @@ class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>
-              {currencySymbol + ' '}
-              {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
-              {/* {currencySymbol + this.getSubscriptionPrice(record.originalPrice)} */}
-            </p>
+            {subscriptionInfo.subscriptionType == 'Individualization' ? null : (
+              <p style={{ textDecoration: 'line-through' }}>
+                {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
+              </p>
+            )}
             <p>
               {currencySymbol + ' '}
               {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
@@ -565,22 +579,22 @@ class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+          <span className="subscription_quantity" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Quantity" />
           </span>
         ),
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
-        width: '15%'
-        // render: (text, record) => (
-        //   <div>
-        //     <InputNumber min={1} max={100} value={record.subscribeNum} />
-        //   </div>
-        // )
+        width: '15%',
+        render: (text: any) => (
+          <>
+            {subscriptionInfo.subscriptionType == 'Individualization' ? 1 : (text)}
+          </>
+        )
       },
       {
         title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+          <span className="subscription_delivery_frequency" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.DeliveryFrequency" />
           </span>
         ),
@@ -588,13 +602,29 @@ class SubscriptionDetail extends React.Component<any, any> {
         key: 'frequency',
         width: '15%',
         render: (text, record) => (
-          <div>
+          <div className="subscription_delivery_frequency">
+
             <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
-              {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
+              {/* {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>
-              ))}
+              ))} */}
+
+              {/* individualFrequencyList */}
+              {subscriptionInfo.subscriptionType == 'Individualization' ? (
+                individualFrequencyList.map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              ) : (
+                ((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              )}
             </Select>
           </div>
         )
@@ -687,7 +717,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: (
-          <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+          <span className="subscription_quantity2" style={{ color: '#8E8E8E', fontWeight: 500 }}>
             <FormattedMessage id="Subscription.Quantity" />
           </span>
         ),
@@ -695,12 +725,14 @@ class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            {record.tradeItems &&
+            {subscriptionInfo.subscriptionType == 'Individualization' ? 1 : (
+              record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ height: 80 }} key={index}>
                   <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         )
       },

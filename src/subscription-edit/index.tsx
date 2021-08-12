@@ -46,6 +46,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionType: '',
       recentOrderList: [],
       frequencyList: [],
+      individualFrequencyList: [],
       frequencyClubList: [],
       goodsInfo: [],
       petsId: '',
@@ -244,6 +245,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     this.querySysDictionary('Frequency_day');
     this.querySysDictionary('Frequency_day_club');
+
+    this.querySysDictionary('Frequency_day_individual');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -252,10 +255,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        console.log('666 ---> res: ', res);
-        //  Frequency_day_individual
-        //  Frequency_month_individual
         if (res.code === Const.SUCCESS_CODE) {
+
+          // Individualization Frequency
+          if (type == 'Frequency_day_individual') {
+            // Frequency_month_individual
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState({
+              individualFrequencyList: frequencyList
+            });
+          }
+
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -886,8 +896,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   // 设置价格长度
   getSubscriptionPrice = (num: any) => {
+    const { subscriptionType } = this.state;
     if (num > 0) {
       let nlen = num.toString().split('.')[1].length;
+      // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
+      nlen > 4 ? nlen = 4 : nlen = nlen;
       return num.toFixed(nlen);
     } else {
       return num;
@@ -898,6 +911,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const {
       recentOrderList,
       subscriptionInfo,
+      individualFrequencyList,
       frequencyList,
       frequencyClubList,
       goodsInfo,
@@ -928,7 +942,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>
+              {record.goodsName === 'individualization' ? record.petsName + '\'s personalized subscription' : record.goodsName}
+            </span>
           </div>
         )
       },
@@ -938,17 +954,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>
-              {currencySymbol + ' '}
-              {subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
-              {/* {currencySymbol + ' ' + this.getSubscriptionPrice(record.originalPrice)} */}
-            </p>
-            <p>
+            {subscriptionType == 'Individualization' ? null : (
+              <p style={{ textDecoration: 'line-through' }}>
+                {currencySymbol + ' ' + this.getSubscriptionPrice(record.originalPrice)}
+              </p>
+            )}
+            < p >
               {currencySymbol + ' '}
               {subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
               {/* {currencySymbol + ' ' + this.getSubscriptionPrice(record.subscribePrice)} */}
-            </p>
-          </div>
+            </p >
+          </div >
         )
       },
       {
@@ -958,19 +974,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '15%',
         render: (text, record) => (
           <div>
-            <InputNumber
-              min={1}
-              max={100}
-              onChange={(value) => {
-                value = +value.toString().replace(/\D/g, '');
-                this.onGoodsChange({
-                  field: 'subscribeNum',
-                  goodsId: record.skuId,
-                  value
-                });
-              }}
-              value={record.subscribeNum}
-            />
+            {subscriptionType == 'Individualization' ? 1 : (
+              <InputNumber
+                min={1}
+                max={100}
+                onChange={(value) => {
+                  value = +value.toString().replace(/\D/g, '');
+                  this.onGoodsChange({
+                    field: 'subscribeNum',
+                    goodsId: record.skuId,
+                    value
+                  });
+                }}
+                value={record.subscribeNum}
+              />
+            )}
           </div>
         )
       },
@@ -980,7 +998,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'frequency',
         width: '15%',
         render: (text: any, record: any) => (
-          <div>
+          <div className="subscription_delivery_frequency">
             <Select
               style={{ width: '70%' }}
               value={record.periodTypeId}
@@ -989,11 +1007,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
             >
-              {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item: any) => (
-                <Option value={item.id} key={item.id}>
-                  {item.name}
-                </Option>
-              ))}
+              {/* individualFrequencyList */}
+              {subscriptionType == 'Individualization' ? (
+                individualFrequencyList.map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              ) : (
+                ((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              )}
             </Select>
           </div>
         )
@@ -1101,7 +1128,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -1115,12 +1142,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            {record.tradeItems &&
+            {subscriptionType == 'Individualization' ? 1 : (
+              record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ height: 80 }} key={index}>
                   <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         )
       },
@@ -1199,7 +1228,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }}>
                   <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -1213,12 +1242,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => (
           <div>
-            {record.tradeItems &&
+            {subscriptionType == 'Individualization' ? 1 : (
+              record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ height: 80 }} key={index}>
                   <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         )
       },

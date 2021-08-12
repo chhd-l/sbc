@@ -78,7 +78,7 @@ export default class ListView extends React.Component<any, any> {
         });
       });
   };
-  onChecked = (index, checked) => {};
+  onChecked = (index, checked) => { };
 
   goodsSum = (array) => {
     let sum = 0;
@@ -296,8 +296,8 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}>
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p key={k} style={styles.ellipsisName} title={v.subscriptionType==='Individualization'?'Your pet\'s personalized subscription':item.goodsName}>
-                            {v.subscriptionType==='Individualization'?'Your pet\'s personalized subscription':item.goodsName}
+                          <p key={k} style={styles.ellipsisName} title={v.subscriptionType === 'Individualization' ? 'Your pet\'s personalized subscription' : item.goodsName}>
+                            {v.subscriptionType === 'Individualization' ? 'Your pet\'s personalized subscription' : item.goodsName}
                           </p>
                         ))}
                     </td>
@@ -329,6 +329,8 @@ export default class ListView extends React.Component<any, any> {
                           <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
+
+                      {/* Individualization类型的订阅商品不展示编辑按钮 */}
                       {v.subscribeStatus === '0' ? (
                         <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit" />}>
                           <Button type="link" style={{ padding: '0 5px' }}>
@@ -336,6 +338,7 @@ export default class ListView extends React.Component<any, any> {
                           </Button>
                         </Tooltip>
                       ) : null}
+
                       {v.subscribeStatus === '0' ? (
                         <Popconfirm
                           placement="topRight"

@@ -1023,6 +1023,37 @@ const routes = [
   {
     path: '/split-order-setting',
     asyncComponent: () => import('./order-split-setting')
+  },
+    /**
+     * Integration  -------------------------------------------------------
+     * **/
+  {
+    path: '/integration-dashboard',
+    asyncComponent: () => import('./Integration/Dashboard')
+  },
+  {
+    path: '/integration-dashboard-detail/:id?',
+    asyncComponent: () => import('./Integration/Dashboard/Dashboard-details')
+  },
+  {
+    path: '/integration-interface',
+    asyncComponent: () => import('./Integration/Interface/interface-list')
+  },
+  {
+    path: '/interface-detail/:id',
+    asyncComponent: () => import('./Integration/Interface/Interface-detail')
+  },
+  {
+    path: '/integration-log',
+    asyncComponent: () => import('./Integration/Log/log-list')
+  },
+  {
+    path: '/log-detail/:id',
+    asyncComponent: () => import('./Integration/Log/log-detail')
+  },
+  {
+    path: '/log-response/:id',
+    asyncComponent: () => import('./Integration/Log/log-response')
   }
 ];
 

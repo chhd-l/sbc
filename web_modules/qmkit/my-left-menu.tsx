@@ -266,7 +266,7 @@ const styles = {
     width: '14px',
     height: '30px',
     lineHeight: '30px',
-    backgroundColor: '#ffe7e6',
+    backgroundColor: '#f5f5f5',
     position: 'absolute',
     top: '50%',
     left: '186px',
@@ -277,7 +277,7 @@ const styles = {
     width: '14px',
     height: '30px',
     lineHeight: '30px',
-    backgroundColor: '#ffe7e6',
+    backgroundColor: '#f5f5f5',
     position: 'absolute',
     top: '50%',
     zIndex: 2

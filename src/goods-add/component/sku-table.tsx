@@ -239,7 +239,7 @@ class SkuForm extends React.Component<any, any> {
         <div>
           <span
             style={{
-              color: 'red',
+              color: 'var(--primary-color)',
               fontFamily: 'SimSun',
               marginRight: '4px',
               fontSize: '12px'
@@ -309,7 +309,7 @@ class SkuForm extends React.Component<any, any> {
                   <div className="space-between-align">
                     <div style={{ paddingTop: 6 }}>
                       {' '}
-                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'red', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id )} />
+                      <Icon style={{ paddingRight: 8, fontSize: '24px', color: 'var(--primary-color)', cursor: 'pointer' }} type="plus-circle" onClick={(e) => this.showProduct({ type: 1 }, rowInfo.goodsInfoNo, rowInfo.id )} />
                     </div>
                     <div style={{ lineHeight: 2 }}>
                       {record.goodsInfoBundleRels &&

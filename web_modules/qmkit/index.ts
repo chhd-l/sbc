@@ -46,7 +46,8 @@ import Fonts from './images/iconfont/iconfont.json'
 import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
 import QRScaner from './qr-scan';
 import {RCi18n} from './lang';
-import { getFormatDeliveryDateStr } from './deliveryDate'
+import { getFormatDeliveryDateStr } from './deliveryDate';
+import { LoadingForRC, LoadingForMyvetreco } from './loading-indicator';
 export {
   noop,
   SelectGroup,
@@ -102,4 +103,6 @@ export {
   QRScaner,
   RCi18n,
   getFormatDeliveryDateStr,
+  LoadingForRC,
+  LoadingForMyvetreco
 };

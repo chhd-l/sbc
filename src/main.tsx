@@ -1,11 +1,14 @@
 import React from 'react';
-import { Layout, message } from 'antd';
-import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
+import { Layout, message, Spin } from 'antd';
+import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache, LoadingForRC, LoadingForMyvetreco } from 'qmkit';
 import { routes, auditDidNotPass } from './router';
 import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
 import { FormattedMessage } from 'react-intl';
 const { Content } = Layout;
+
+Spin.setDefaultIndicator(Const.SITE_NAME === 'MYVETRECO' ? <LoadingForMyvetreco /> : <LoadingForRC />);
+
 export default class Main extends React.Component<any, any> {
   _menu: any;
 

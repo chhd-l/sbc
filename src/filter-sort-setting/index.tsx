@@ -296,7 +296,7 @@ class FilterSortSetting extends Component<any, any> {
         <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <div className="container-search">
             <Headline title={title} />
-            <Alert message={description} type="error" />
+            <Alert message={description} type="info" />
           </div>
           <div className="container-search">
             <Tabs defaultActiveKey="attributeFilter">

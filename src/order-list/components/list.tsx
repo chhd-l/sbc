@@ -715,8 +715,8 @@ const styles = {
     padding: '1px 3px',
     display: 'inline-block',
     marginLeft: 5,
-    border: ' 1px solid #F56C1D',
-    color: '#F56C15',
+    border: ' 1px solid var(--primary-color)',
+    color: 'var(--primary-color)',
     borderRadius: 5
   }
 } as any;

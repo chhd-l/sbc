@@ -233,7 +233,7 @@ class ProductSearchSetting extends Component<any, any> {
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Button type="danger" size="default" onClick={this.showModal} disabled={disabled}>
+                  <Button type="primary" size="default" onClick={this.showModal} disabled={disabled}>
                   <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>
@@ -291,7 +291,7 @@ class ProductSearchSetting extends Component<any, any> {
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                <Button type="danger" size="default" onClick={this.showClubModal} disabled={disabled}>
+                <Button type="primary" size="default" onClick={this.showClubModal} disabled={disabled}>
                   <FormattedMessage id="Product.Addnewfrequency" />
                 </Button>
                 </Col>

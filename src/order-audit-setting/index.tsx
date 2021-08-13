@@ -337,7 +337,7 @@ class OrderSetting extends Component<any, any> {
                           visiblePrescriberConfig: true
                         });
                       }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: 'var(--primary-color)' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>
@@ -351,7 +351,7 @@ class OrderSetting extends Component<any, any> {
                           visibleAuditConfig: true
                         });
                       }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: 'var(--primary-color)' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>
@@ -370,7 +370,7 @@ class OrderSetting extends Component<any, any> {
                           visiblePrescriberConfig: true
                         });
                       }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: 'var(--primary-color)' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>
@@ -384,7 +384,7 @@ class OrderSetting extends Component<any, any> {
                           visibleAuditConfig: true
                         });
                       }}
-                      style={{ marginRight: 10, color: '#e2001a' }}
+                      style={{ marginRight: 10, color: 'var(--primary-color)' }}
                       className="iconfont iconEdit"
                     ></span>
                   </Tooltip>

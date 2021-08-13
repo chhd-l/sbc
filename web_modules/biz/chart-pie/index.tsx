@@ -9,7 +9,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { RCi18n } from 'qmkit'
+import { RCi18n, Const } from 'qmkit'
 class Line extends React.Component {
   constructor(props, ctx) {
     super(props);
@@ -68,7 +68,7 @@ class Line extends React.Component {
               name: '',
               itemStyle: {
                 normal: {
-                  color: '#ea162d',
+                  color: Const.COLORS.PRIMARY_COLOR,
                   label: {
                     show: false
                   },

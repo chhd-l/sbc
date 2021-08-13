@@ -7,7 +7,7 @@ import AddCustomizedFilter from './add-customized-filter';
 import RelevancyProduct from './relevancy-product';
 import { FormattedMessage } from 'react-intl';
 
-const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
+const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: 'var(--primary-color)', marginLeft: 20 }} />);
 
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);

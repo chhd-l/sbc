@@ -1,10 +1,9 @@
 import React from 'react';
-import {Modal, Spin, Popconfirm, Tooltip, Button} from 'antd';
+import {Modal, Spin, Popconfirm, Tooltip, Button, Table} from 'antd';
 import {FormattedMessage} from 'react-intl';
 import { DataGrid, RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
 import '../index.less';
-
 
 export default class BlackListModal extends React.Component<any, any>{
     currentSelected: any;
@@ -32,7 +31,20 @@ export default class BlackListModal extends React.Component<any, any>{
             {
                 goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
                 goodsInfoName: 'tmjgift12',
-                specText: null,
+                specText: [
+                    {
+                        name: '规格1',
+                        value: '10kg'
+                    },
+                    {
+                        name: '规格2',
+                        value: '10g'
+                    },
+                    {
+                        name: '规格3',
+                        value: '10unit'
+                    }
+                ],
                 goodsInfoNo: 'T80010',
                 cateName: 'CA Cat food',
                 brandName: null,
@@ -50,7 +62,20 @@ export default class BlackListModal extends React.Component<any, any>{
             {
                 goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
                 goodsInfoName: 'tmjgift12',
-                specText: null,
+                specText: [
+                    {
+                        name: '规格1',
+                        value: '10kg'
+                    },
+                    {
+                        name: '规格2',
+                        value: '10g'
+                    },
+                    {
+                        name: '规格3',
+                        value: '10unit'
+                    }
+                ],
                 goodsInfoNo: 'T80010',
                 cateName: 'CA Cat food',
                 brandName: null,
@@ -131,17 +156,17 @@ export default class BlackListModal extends React.Component<any, any>{
                 key: 'goodsInfoName',
                 width: "20%",
             },
-            {
-                title: <FormattedMessage id="Product.Specification" />,
-                dataIndex:"specText",
-                key:"specText",
-                ellipsis: true,
-                width: "20%",
-                render: (text, record) => {
-                    return !!text ? text : '-';
-                },
-
-            },
+            // {
+            //     title: <FormattedMessage id="Product.Specification" />,
+            //     dataIndex:"specText",
+            //     key:"specText",
+            //     ellipsis: true,
+            //     width: "20%",
+            //     render: (text, record) => {
+            //         return !!text ? text : '-';
+            //     },
+            //
+            // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
                 dataIndex: 'cateName',
@@ -194,17 +219,17 @@ export default class BlackListModal extends React.Component<any, any>{
                 key: 'goodsInfoName',
                 width: "20%",
             },
-            {
-                title: <FormattedMessage id="Product.Specification" />,
-                dataIndex:"specText",
-                key:"specText",
-                ellipsis: true,
-                width: "20%",
-                render: (text, record) => {
-                    return !!text ? text : '-';
-                },
-
-            },
+            // {
+            //     title: <FormattedMessage id="Product.Specification" />,
+            //     dataIndex:"specText",
+            //     key:"specText",
+            //     ellipsis: true,
+            //     width: "20%",
+            //     render: (text, record) => {
+            //         return !!text ? text : '-';
+            //     },
+            //
+            // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
                 dataIndex: 'cateName',
@@ -311,6 +336,27 @@ export default class BlackListModal extends React.Component<any, any>{
         this.closeProductModal();
     }
 
+    expandedRowRender = (data) => {
+        if (!data) return null;
+        if (!Array.isArray(data)) return null;
+        if (data.length < 1) return null;
+        const columns = [
+            {
+                title: 'Specification',
+                children: [
+                    { title: 'name', dataIndex: 'name', key: 'name' },
+                    { title: 'value', dataIndex: 'value', key: 'value' },
+                ],
+            },
+        ]
+        return <Table
+            bordered
+            columns={columns}
+            dataSource={data}
+            pagination={false}
+        />;
+    }
+
     render() {
         let {
             visible,
@@ -356,6 +402,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 className='table-box'
                                 dataSource={priceBlackList}
                                 columns={priceColumns}
+                                expandedRowRender={(record) => this.expandedRowRender(record.specText)}
                                 pagination={false}
                             />
                         </div>
@@ -372,8 +419,9 @@ export default class BlackListModal extends React.Component<any, any>{
                                 className='table-box'
                                 dataSource={inventoryBlackList}
                                 columns={inventoryColumns}
-                                pagination={false}
 
+                                expandedRowRender={(record) => this.expandedRowRender(record.specText)}
+                                pagination={false}
                             />
                         </div>
                     </Spin>
@@ -389,4 +437,9 @@ export default class BlackListModal extends React.Component<any, any>{
             </div>
         );
     }
+
+}
+
+function SpecificationList () {
+
 }

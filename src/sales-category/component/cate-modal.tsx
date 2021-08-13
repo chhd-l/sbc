@@ -189,7 +189,7 @@ class CateModalForm extends React.Component<any, any> {
     const cateType = formData.get('cateType');
     const displayStatus = formData.get('displayStatus');
     const altName = formData.get('altName');
-    const filterStatus = !!formData.get('filterStatus') ? formData.get('filterStatus') : false;
+    const filterStatus = !!formData.get('filterStatus');
     const periodBeginTime = formData.get('periodBeginTime');
     const periodEndTime = formData.get('periodEndTime');
     let period = periodBeginTime && periodEndTime

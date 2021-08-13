@@ -849,7 +849,8 @@ export default {
         'Order.autoAuditExceptCondition1':'Orders with 0 price ',
         'Order.autoAuditExceptCondition2':'Product categories ',
         'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
-        'Order.search.city':'City'
+        'Order.search.city':'City',
+        'Order.search.email':'Email Address'
 
     },
     Subscription: {

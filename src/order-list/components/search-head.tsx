@@ -65,6 +65,8 @@ class SearchHead extends Component<any, any> {
       numberSelectValue: '',
       recommenderSelectValue: '',
       city:'',
+      emailAddressType:'email',
+      emailAddressValue:'',
 
       // 21/3/3 新增字段
       refillNumber: '',
@@ -490,6 +492,41 @@ class SearchHead extends Component<any, any> {
                       />
                     </FormItem>
                   </Col>
+
+                  {/*新增email搜索*/}
+
+                  <AuthWrapper functionName="f_search_email">
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {/*<Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.email' })} disabled defaultValue={RCi18n({ id: 'Order.search.email' })} />*/}
+                        <Select
+                          onChange={(val, a) => {
+                            this.setState({
+                              emailAddressType: val
+                            });
+                          }}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          value={this.state.emailAddressType}
+                          style={styles.label}
+                        >
+                          <Option title={RCi18n({ id: 'Order.search.email' })} value="email">
+                            <FormattedMessage id="Order.search.email" />
+                          </Option>
+                        </Select>
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              emailAddressValue:  (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  </AuthWrapper>
+
                 </Row>
               ) : null}
 
@@ -814,7 +851,9 @@ class SearchHead extends Component<any, any> {
       subscriptionPlanType,
       codeSelect,
       codeSelectValue,
-      city
+      city,
+      emailAddressType,
+      emailAddressValue
     } = this.state;
 
     const ts = {} as any;
@@ -868,7 +907,8 @@ class SearchHead extends Component<any, any> {
       [recommenderSelect]: recommenderSelectValue,
       [clinicSelect]: clinicSelectValue,
       subscriptionPlanType,
-      [codeSelect]: codeSelectValue
+      [codeSelect]: codeSelectValue,
+      [emailAddressType]:emailAddressValue
       // city
     };
 

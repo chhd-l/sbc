@@ -28,6 +28,8 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
+const showRealStock = false; //增加变量控制要不要显示商品实时库存
+
 /**
  * 拒绝表单，只为校验体验
  */
@@ -278,8 +280,9 @@ class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: '9%',
-        render: (text,record) => {
-          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+        render: (text, record) => {
+          const productName =
+            text === 'individualization' ? record.petsName + "'s personalized subscription" : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -313,11 +316,15 @@ class OrderDetailTab extends React.Component<any, any> {
       //   )
       // },
       {
-        title: <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />,
+        title: showRealStock ? (
+          <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
+        ) : (
+          <FormattedMessage id="Order.Quantity" values={{ br: <br /> }} />
+        ),
         dataIndex: 'num',
         key: 'num',
         width: '9%',
-        render: (text, record) => record.quantityAndRealtimestock
+        render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
@@ -331,18 +338,26 @@ class OrderDetailTab extends React.Component<any, any> {
             <div>
               <span>
                 {SYSTEM_GET_CONFIG}
-                {record.subscriptionPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+                {record.subscriptionPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
               </span>
-              <br/>
+              <br />
               <span style={{ textDecoration: 'line-through' }}>
                 {SYSTEM_GET_CONFIG}
-                {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+                {originalPrice &&
+                  originalPrice.toFixed(
+                    detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                  )}
               </span>
             </div>
           ) : (
             <span>
               {SYSTEM_GET_CONFIG}
-              {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+              {originalPrice &&
+                originalPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
             </span>
           )
       },
@@ -352,7 +367,8 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {SYSTEM_GET_CONFIG}
-            {row.price && row.price.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+            {row.price &&
+              row.price.toFixed(detail.get('subscriptionType') === 'Individualization' ? 4 : 2)}
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
         )
@@ -551,10 +567,11 @@ class OrderDetailTab extends React.Component<any, any> {
               </Col>
             ) : null}
 
-            {(detail.get('subscribeId') &&
+            {((detail.get('subscribeId') &&
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
-            (!detail.get('subscribeId') &&
-              (detail.get('clinicsId') || firstTradeItems.recommendationId)) ? (
+              (!detail.get('subscribeId') &&
+                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+            showRealStock ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -575,10 +592,11 @@ class OrderDetailTab extends React.Component<any, any> {
           </Row>
         ) : null}
 
-        {(detail.get('subscribeId') &&
+        {((detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
-        (!detail.get('subscribeId') &&
-          !(detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
+          (!detail.get('subscribeId') &&
+            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+        showRealStock ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">

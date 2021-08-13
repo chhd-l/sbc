@@ -367,8 +367,7 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (row) => (
           <span>
             {SYSTEM_GET_CONFIG}
-            {row.price &&
-              row.price.toFixed(detail.get('subscriptionType') === 'Individualization' ? 4 : 2)}
+            {row.price && row.price.toFixed(2)}
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
         )

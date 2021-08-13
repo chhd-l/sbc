@@ -64,6 +64,7 @@ class SearchHead extends Component<any, any> {
       clinicSelectValue: '',
       numberSelectValue: '',
       recommenderSelectValue: '',
+      city:'',
 
       // 21/3/3 新增字段
       refillNumber: '',
@@ -436,7 +437,7 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -454,6 +455,23 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
+
+                  {/*新增city搜索*/}
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      <Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.city' })} disabled defaultValue={RCi18n({ id: 'Order.search.city' })} />*/}
+                  {/*      <Input*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        onChange={(e) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            city:  (e.target as any).value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      />*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
 
                   <Col span={8} id="Range-picker-width">
                     <FormItem>
@@ -795,7 +813,8 @@ class SearchHead extends Component<any, any> {
       subscriptionType,
       subscriptionPlanType,
       codeSelect,
-      codeSelectValue
+      codeSelectValue,
+      city
     } = this.state;
 
     const ts = {} as any;
@@ -850,6 +869,7 @@ class SearchHead extends Component<any, any> {
       [clinicSelect]: clinicSelectValue,
       subscriptionPlanType,
       [codeSelect]: codeSelectValue
+      // city
     };
 
     onSearch(params);

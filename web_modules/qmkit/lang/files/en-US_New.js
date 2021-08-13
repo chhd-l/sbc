@@ -849,7 +849,7 @@ export default {
         'Order.autoAuditExceptCondition1':'Orders with 0 price ',
         'Order.autoAuditExceptCondition2':'Product categories ',
         'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
-
+        'Order.search.city':'City'
 
     },
     Subscription: {
@@ -1542,11 +1542,11 @@ export default {
     },
     Marketing: {
         "Marketing.Includeproduct":"Include product",
-        "Marketing.Excludeproduct":"Exclude product",   
+        "Marketing.Excludeproduct":"Exclude product",
         "Marketing.NumberOfUserPerPerson":"Number of user per person",
         "Marketing.NumberOfUserPerPerson":"Number of user per person",
         "Marketing.UnlimitedUse":"Unlimited use",
-        
+
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',

@@ -2,7 +2,7 @@
 export const OrderStatus = [
   { langKey: 'Order.all', name: 'All', value: '0', listShow: true },
   { langKey: 'Order.created', name: 'Created', value: 'INIT', listShow: true },
-  { langKey: 'Order.pending', name: 'Pending', value: 'PENDING', listShow: true },
+  // { langKey: 'Order.pending', name: 'Pending', value: 'PENDING', listShow: true },
   { langKey: 'Order.pendingReview', name: 'Pending review', value: 'PENDING_REVIEW', listShow: true },
   { langKey: 'Order.Tobedelivered', name: 'To be delivered', value: 'TO_BE_DELIVERED', listShow: true },
   { langKey: 'Order.partiallyShipped', name: 'Partially Shipped', value: 'PARTIALLY_SHIPPED', listShow: true },

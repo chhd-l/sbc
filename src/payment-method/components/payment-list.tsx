@@ -175,7 +175,7 @@ export default class PaymentList extends React.Component<any, any> {
                 </div>
               </div> :
               <img src={nodataImg} width="80" className="no-data-img" /> :
-            <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+            <Spin className="loading-spin" />
         }
       </div>
     );

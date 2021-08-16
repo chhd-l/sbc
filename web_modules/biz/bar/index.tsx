@@ -10,7 +10,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { RCi18n } from 'qmkit'
+import { RCi18n, Const } from 'qmkit'
 
 class Line extends React.Component {
   constructor(props) {
@@ -111,7 +111,7 @@ class Line extends React.Component {
           nameLoaction: "left",
           itemStyle: {
             normal: {
-              color: '#F5828E',
+              color: Const.COLORS.PRIMARY_COLOR_1,
               label: {
                 show: true, //开启显示
                 position: 'top', //在上方显示

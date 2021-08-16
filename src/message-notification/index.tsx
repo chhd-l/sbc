@@ -233,7 +233,7 @@ class Notification extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={allLoading}>
           <div className="container-search">
             <Headline title={title} />
             <div style={{ marginTop: 10 }}>
@@ -336,7 +336,7 @@ class Notification extends Component<any, any> {
               </Form>
             </Col>
             <Col span={18}>
-              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Spin spinning={this.state.loading}>
                 {previewHtml ? <div dangerouslySetInnerHTML={{ __html: previewHtml }} style={{ zoom: '0.5' }}></div> : null}
               </Spin>
             </Col>

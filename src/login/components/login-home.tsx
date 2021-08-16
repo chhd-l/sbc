@@ -48,7 +48,7 @@ let LoginHome = (props) => {
   return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
     <div>
       <div style={styles.noBackgroundContainer}>
-        <Spin spinning={true} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+        <Spin spinning={true}></Spin>
       </div>
     </div>
   ) : (

@@ -114,7 +114,7 @@ class OrderDelivery extends React.Component<any, any> {
             </div>
           ) : null}
         </div>
-        <Spin spinning={logisticsLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={logisticsLoading}>
           {tradeDelivers.count() > 0
             ? tradeDelivers &&
               tradeDelivers.map((v, i) => {

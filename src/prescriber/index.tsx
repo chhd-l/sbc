@@ -572,7 +572,7 @@ export default class ClinicList extends Component<any, any> {
             </Button>
             <Button
               style={{
-                backgroundColor: '#e2001a',
+                backgroundColor: 'var(--primary-color)',
                 color: '#FFFFFF',
                 marginLeft: '20px'
               }}
@@ -588,7 +588,7 @@ export default class ClinicList extends Component<any, any> {
             columns={columns}
             dataSource={this.state.prescriberList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />

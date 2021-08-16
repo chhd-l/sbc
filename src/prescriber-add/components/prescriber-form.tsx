@@ -562,7 +562,7 @@ class ClinicForm extends React.Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const isCountryGermany = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de';
     return ( 
-      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={this.state.loading}>
         <Tabs activeKey={this.state.activeKey} onChange={this.switchTab}>       
           <TabPane tab={RCi18n({id:"PetOwner.BasicInformation"})} key="basic">        
             <Row>

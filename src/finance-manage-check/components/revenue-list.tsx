@@ -95,7 +95,7 @@ export default class RevenueList extends React.Component<any, any> {
 
         <div>
           <DataGrid
-            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'initial', zIndex: 999 }} alt="" /> }}
+            loading={loading}
             dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []}
             rowKey={(record, index) => index}
             pagination={false}

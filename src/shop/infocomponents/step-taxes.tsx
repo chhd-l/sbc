@@ -549,13 +549,13 @@ class StepTaxes extends Component<any, any> {
     };
     const { getFieldDecorator } = this.props.form;
     return (
-      <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={loading}>
         <div className="consent">
           <Headline
             title="Tax calculation"
             extra={
               <Button shape="round" type="primary" ghost icon="setting" onClick={() => this.openTaxSettingPage()}>
-                <span style={{ color: '#e2001a' }}>Tax setting</span>
+                <span style={{ color: 'var(--primary-color)' }}>Tax setting</span>
               </Button>
             }
           />

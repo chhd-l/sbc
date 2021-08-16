@@ -121,7 +121,7 @@ export default class emails extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Spin spinning={emailLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={emailLoading}>
             {emailList && emailList.length > 0 ? (
               <div>
                 <Timeline>

@@ -40,7 +40,7 @@ export default class GoodsCate extends React.Component<any, any> {
     return (
       <div>
         {/* this.store.get('loading') */}
-        <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.store.get('loading')}>
           <BreadCrumb />
           {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>

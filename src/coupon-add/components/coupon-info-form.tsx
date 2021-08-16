@@ -1221,7 +1221,7 @@ class CouponInfoForm extends Component<any, any> {
             <FormattedMessage id="Marketing.Cancel" />
           </Button>
         </div>
-        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
+        {loading && <Spin className="loading-spin" />}
         <GoodsModal showValidGood={true} visible={goodsModalVisible} selectedSkuIds={chooseSkuIds.toJS()} selectedRows={goodsRows.toJS()} onOkBackFun={this._onOkBackFun} onCancelBackFun={onCancelBackFun} />
       </RightContent>
     );

@@ -247,7 +247,7 @@ class TagManagementList extends Component<any, any> {
     return (
       <AuthWrapper functionName="f_tag_management_list">
         <div>
-          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={loading}>
             <BreadCrumb thirdLevel={true}>
               <Breadcrumb.Item>{title}</Breadcrumb.Item>
             </BreadCrumb>

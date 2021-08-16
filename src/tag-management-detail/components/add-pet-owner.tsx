@@ -253,7 +253,7 @@ export default class AddPetOwner extends Component<any, any> {
               </div>
             }
           />
-          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={loading}>
             <Table rowKey="customerId" rowSelection={rowSelection} columns={columns} pagination={pagination} dataSource={petOwnerList}></Table>
           </Spin>
         </Modal>

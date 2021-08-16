@@ -365,7 +365,7 @@ export default class AppointmentList extends React.Component<any, any> {
             rowSelection={rowSelection}
             columns={columns}
             dataSource={list}
-            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={loading}
             pagination={pagination}
             onChange={this.onTableChange}
           />

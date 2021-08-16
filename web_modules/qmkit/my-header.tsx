@@ -129,7 +129,7 @@ export default class MyHeader extends React.Component {
     return (
       <div style={{ position: 'relative', height: 640 }}>
         <div style={{ width: '60%', position: 'absolute', top: '23%', left: '20%' }}>
-          <p style={{ textAlign: 'center', fontSize: 56, color: '#e1021a', marginBottom: 50 }}>
+          <p style={{ textAlign: 'center', fontSize: 56, color: 'var(--primary-color)', marginBottom: 50 }}>
             <Icon type="environment" style={{ fontSize: 48 }} />
             &nbsp;&nbsp;
             <span>

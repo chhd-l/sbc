@@ -1,8 +1,20 @@
 import React from 'react';
-import {Modal, Spin, Popconfirm, Tooltip, Button, Table} from 'antd';
+import {
+    Modal,
+    Spin,
+    Popconfirm,
+    Tooltip,
+    Button,
+    Table,
+    message
+} from 'antd';
 import {FormattedMessage} from 'react-intl';
-import { DataGrid, RCi18n} from 'qmkit';
+import {Const, DataGrid, RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
+import {
+    getBlacklist,
+    saveBlacklist,
+} from '../webapi';
 import '../index.less';
 
 export default class BlackListModal extends React.Component<any, any>{
@@ -20,107 +32,57 @@ export default class BlackListModal extends React.Component<any, any>{
             productModalVisible: false,
 
             selectedSkuIds: [],
-            selectedRows: [],
         }
         this.currentSelected = null;
 
     }
 
     componentDidMount() {
-        let priceBlackList = [
-            {
-                goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
-                goodsInfoName: 'tmjgift12',
-                specText: [
-                    {
-                        name: '规格1',
-                        value: '10kg'
-                    },
-                    {
-                        name: '规格2',
-                        value: '10g'
-                    },
-                    {
-                        name: '规格3',
-                        value: '10unit'
-                    }
-                ],
-                goodsInfoNo: 'T80010',
-                cateName: 'CA Cat food',
-                brandName: null,
-            },
-            {
-                goodsInfoId: '8a70802e7ae8ee92017aec3ad8a1001b',
-                goodsInfoName: 'tmjgift125',
-                goodsInfoNo: 'T80011',
-                specText: null,
-                cateName: 'CA Cat food',
-                brandName: null,
-            },
-        ]
-        let inventoryBlackList = [
-            {
-                goodsInfoId: '8a70802e7ae8ee92017aec3b9f3a001d',
-                goodsInfoName: 'tmjgift12',
-                specText: [
-                    {
-                        name: '规格1',
-                        value: '10kg'
-                    },
-                    {
-                        name: '规格2',
-                        value: '10g'
-                    },
-                    {
-                        name: '规格3',
-                        value: '10unit'
-                    }
-                ],
-                goodsInfoNo: 'T80010',
-                cateName: 'CA Cat food',
-                brandName: null,
-            },
-            {
-                goodsInfoId: '8a70802e7ae8ee92017aec3ad8a1001b',
-                goodsInfoName: 'tmjgift125',
-                goodsInfoNo: 'T80011',
-                specText: null,
-                cateName: 'CA Cat food',
-                brandName: null,
-            },
+        this.initBlacklist();
+    }
 
-        ];
-        // 初始化数据 priceBlackList 和 inventoryBlackList
-        this.setState({
-            loading: true
-        })
-        setTimeout(() => {
+    initBlacklist = async () => {
+        this.setState({ loading: true });
+        const { res } = await getBlacklist();
+        this.setState({ loading: false });
+        // @ts-ignore
+        if (res.code === Const.SUCCESS_CODE ){
+            // @ts-ignore
+            let priceBlackList = res.content?.price?.goodsInfos?.content ?? [];
+            // @ts-ignore
+            let inventoryBlackList =  res.content?.inventory?.goodsInfos?.content ?? [];
             this.setState({
                 priceBlackList,
                 inventoryBlackList,
-                loading: false,
             })
-        }, 2000)
-
+        }
     }
 
-    handleOk = e => {
-        this.setState({
-            confirmLoading: true
-        })
-        setTimeout(() =>{
-            this.setState({
-                confirmLoading: false
-            })
-            this.props.onCancel();
-        }, 2000)
-
+    handleOk = async () => {
+        this.setState({ confirmLoading: true })
         let {
             priceBlackList,
             inventoryBlackList,
         } = this.state;
+        let params = {
+            price: {
+                blacklistType: 0,
+                goodsInfoIds: priceBlackList.map(item => item.goodsInfoId),
+            },
+            inventory: {
+                blacklistType: 1,
+                goodsInfoIds: inventoryBlackList.map(item => item.goodsInfoId),
+            },
+        }
+        const { res } = await saveBlacklist(params);
+        this.setState({ confirmLoading: false });
+        // @ts-ignore
+        if (res.code ===  Const.SUCCESS_CODE) {
+            message.success(RCi18n({id:'Product.OperateSuccessfully'}));
+            // @ts-ignore
+            this.handleCancel();
+        }
 
-        // 提交已选产品结
     };
 
     handleCancel = e => {
@@ -368,7 +330,6 @@ export default class BlackListModal extends React.Component<any, any>{
             priceBlackList,
             inventoryBlackList,
             selectedSkuIds,
-            selectedRows,
             productModalVisible,
         } = this.state;
 
@@ -402,7 +363,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 className='table-box'
                                 dataSource={priceBlackList}
                                 columns={priceColumns}
-                                expandedRowRender={(record) => this.expandedRowRender(record.specText)}
+                                expandedRowRender={(record) => this.expandedRowRender(record.specification)}
                                 pagination={false}
                             />
                         </div>
@@ -419,8 +380,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 className='table-box'
                                 dataSource={inventoryBlackList}
                                 columns={inventoryColumns}
-
-                                expandedRowRender={(record) => this.expandedRowRender(record.specText)}
+                                expandedRowRender={(record) => this.expandedRowRender(record.specification)}
                                 pagination={false}
                             />
                         </div>

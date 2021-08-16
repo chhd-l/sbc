@@ -130,4 +130,54 @@ const syncProductImage = (params: { goodsIds: string[] }) => {
   return Fetch('/product/syncImage', request);
 };
 
-export { goodsList, spuOnSale, spuOffSale, spuDelete, getBrandList, getCateList, getProductCategories, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProduct, syncProductImage };
+/**
+* 查询blacklist列表信息接口
+*
+**/
+export const getBlacklist = (params = {
+    pageNum: 0,
+    pageSize: 10000
+}) => {
+  return Fetch('/goods/blacklist/getPages', {
+    method: 'GET',
+    body: JSON.stringify(params)
+  });
+};
+
+/**
+ * 保存blacklist列表信息
+ * @param params
+ * @returns
+ */
+export const saveBlacklist = (params = {
+  price: {
+    blacklistType: 0,
+    goodsInfoIds: [],
+  },
+  inventory: {
+    blacklistType: 1,
+    goodsInfoIds: [],
+  },
+}) => {
+  const request = {
+    method: 'POST',
+    body: JSON.stringify(params)
+  };
+  return Fetch('/goods/blacklist/save', request);
+};
+
+export {
+  goodsList,
+  spuOnSale,
+  spuOffSale,
+  spuDelete,
+  getBrandList,
+  getCateList,
+  getProductCategories,
+  freightList,
+  goodsFreight,
+  goodsFreightExpress,
+  updateFreight,
+  syncProduct,
+  syncProductImage
+};

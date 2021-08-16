@@ -153,7 +153,7 @@ class SearchHead extends Component<any, any> {
             <Headline title={<FormattedMessage id="Order.orderList" />} />
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
-            <span style={{ color: '#e82f3d', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
+            <span style={{ color: 'var(--primary-color)', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
               <FormattedMessage id="Order.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
             </span>
           </Col>

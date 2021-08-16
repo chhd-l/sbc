@@ -85,7 +85,7 @@ class MarketingList extends React.Component<any, any> {
     const { loading, dataList, pageSize, total, currentPage, init, onDelete, customerLevels, onPause, close, onStart, download, onPageChange } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey={(record) => record.marketingId}
         isScroll={false}
         dataSource={dataList.toJS()}

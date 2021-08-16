@@ -316,7 +316,7 @@ class BasicEdit extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <div className="container petowner-noedit-form">
             <Headline title={RCi18n({id:"PetOwner.BasicInformation"})} />
             <Form {...formItemLayout}>

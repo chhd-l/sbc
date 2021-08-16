@@ -66,7 +66,7 @@ class MarketingDetails extends React.Component<any, any> {
                 <Bottom />
               </div>
             </> :
-            <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+            <Spin className="loading-spin" />
         }
 
       </div>

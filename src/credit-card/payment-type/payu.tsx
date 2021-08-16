@@ -140,7 +140,7 @@ class PayuCreditCardForm extends Component<IProps> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div className="checkout-page">
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
 
           <Form layout="vertical" onSubmit={this.handleSubmit} className="login-form">
             <Form.Item label={RCi18n({ id: 'payment.cardOwner' })} style={{ marginBottom: 10 }}>

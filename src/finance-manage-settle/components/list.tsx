@@ -44,7 +44,7 @@ export default class List extends React.Component<any, any> {
     const { loading, settlePage, selected, checkedSettleIds, fetchSettleList, queryParams, onSelect, setCheckedSettleIds, changeSettleStatus } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey="settleId"
         dataSource={settlePage.get('content') ? settlePage.get('content').toJS() : []}
         rowSelection={

@@ -273,7 +273,7 @@ class NavigationList extends Component<any, any> {
             </Col>
           </Row>
           <Row>
-            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin spinning={loading}>
               <DragTable columns={columns} dataSource={dataSource} sort={this.sortNavigation} />
             </Spin>
           </Row>

@@ -29,7 +29,7 @@ export default class OrderDetail extends React.Component<any, any> {
     if (this.state.loading) {
       return (
         <div style={styles.noBackgroundContainer}>
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+          <Spin spinning={this.state.loading}></Spin>
         </div>
       );
     }

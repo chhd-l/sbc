@@ -132,14 +132,6 @@ const PaymentMethod = (props) => {
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
             <Spin
               spinning={loading}
-              indicator={
-                <img
-                  className="spinner"
-                  src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                  style={{ width: '90px', height: '90px' }}
-                  alt=""
-                />
-              }
             >
               <>
                 {cards.map((item, index) => (

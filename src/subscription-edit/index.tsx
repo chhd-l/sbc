@@ -1358,7 +1358,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="Subscription.edit" />}</Breadcrumb.Item>
         </Breadcrumb>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           {' '}
           <div className="container-search">
             <Headline title={<FormattedMessage id="Subscription.edit" />} />

@@ -88,7 +88,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                         <div>
                           <Tooltip placement="top" title="Edit">
                             <a
-                              style={{ color: 'red' }}
+                              style={{ color: 'var(--primary-color)' }}
                               type="link"
                               onClick={() => {
                                 this.store.setCurrentPaymentForm(fromJS(item))
@@ -106,7 +106,7 @@ export default class PaymentSetting extends React.Component<any, any> {
                   </Col>
                 ))}
               </Row> :
-              <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+              <Spin className="loading-spin" />
             }
             <PaymentModel />
           </ContainerDiv>

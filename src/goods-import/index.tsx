@@ -102,7 +102,7 @@ export default class GoodsImport extends React.Component<any, any> {
             </div>
           ) : null}
           {current == 1 ? (
-            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin spinning={this.state.loading}>
               <div className="steps-content" style={styles.center}>
                 <Dragger name="uploadFile" multiple={false} showUploadList={false} accept=".xls,.xlsx" headers={header} action={Const.HOST + '/goods/excel/upload'} onChange={this.changeImage}>
                   <div style={styles.content}>

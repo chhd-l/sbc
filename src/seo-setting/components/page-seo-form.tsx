@@ -67,7 +67,7 @@ export default class PageSettingForm extends Component<any, any> {
       <div>
         {loading ? (
           <div className="spin-container">
-            <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{width: '90px', height: '90px'}} alt=""/>}/>
+            <Spin />
           </div>
         ) : null}
         <div className="turn-type flex-start">

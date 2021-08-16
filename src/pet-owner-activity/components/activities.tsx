@@ -193,7 +193,7 @@ export default class Activities extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Spin spinning={activityLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={activityLoading}>
             {activityList && activityList.length > 0 ? (
               <div>
                 <Timeline>

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const Reg = require('./image/Reg.png');
 const Bur = require('./image/Bur.png');
+const BlueReg = require('./image/Reg_blue.png');
+const BlueBur = require('./image/Bur_blue.png');
 
 export default class ReleaseProducts extends React.Component<any, any> {
   render() {
@@ -27,11 +29,11 @@ export default class ReleaseProducts extends React.Component<any, any> {
 
             <div className="release-content space-around">
               <Link to="/regular-product-add">
-                <img src={Reg} alt="" />
+                <img src={Const.SITE_NAME === 'MYVETRECO' ? BlueReg : Reg} alt="" />
               </Link>
 
               <Link to="/goods-main">
-                <img src={Bur} alt="" />
+                <img src={Const.SITE_NAME === 'MYVETRECO' ? BlueBur : Bur} alt="" />
               </Link>
             </div>
           </div>

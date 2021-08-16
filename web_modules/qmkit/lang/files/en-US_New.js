@@ -850,7 +850,8 @@ export default {
         'Order.autoAuditExceptCondition2':'Product categories ',
         'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
         'Order.search.city':'City',
-        'Order.search.email':'Email Address'
+        'Order.search.email':'Email Address',
+        'Order.search.cityId':'CityId'
 
     },
     Subscription: {

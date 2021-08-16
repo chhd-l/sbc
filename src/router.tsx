@@ -344,6 +344,11 @@ const routes = [
     path: '/goods-inventory',
     asyncComponent: () => import('./goods-inventory')
   },
+  // Mapping关系维护列表
+  {
+    path: '/product-sku-mapping',
+    asyncComponent: () => import('./product-sku-mapping')
+  },
 
   // 客户列表
   {

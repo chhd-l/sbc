@@ -5,7 +5,6 @@ import { Table, Tooltip, Switch, Modal, Button, Form, message, Spin, Checkbox } 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
-import { fromJS } from 'immutable';
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
@@ -38,25 +37,27 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          //todo 从接口获取audit setting 初始配置
-          let auditConfigList = (res?.context||[]).find((item)=>{
-            if(item.configType==='no_audit_required'){
-              return item
+          let auditConfigList = (res?.context || []).find((item) => {
+            if (item.configType === 'no_audit_required') {
+              return item;
             }
           });
-          if(auditConfigList){
-            let auditConfigContext=JSON.parse(auditConfigList?.context)
-            auditConfigContext.map((item)=>{
-              const name=item.name==='Orders with 0 price'?'ExceptCondition1':item.name==='Product categories'?'ExceptCondition2':'ExceptCondition3'
-              this.setState({[name]:item.state})
-            })
-            this.setState({isAutoAudit:auditConfigList.state})
+          if (auditConfigList) {
+            let auditConfigContext = JSON.parse(auditConfigList?.context);
+            auditConfigContext.map((item) => {
+              const name =
+                item.name === 'Orders with 0 price'
+                  ? 'ExceptCondition1'
+                  : item.name === 'Product categories'
+                  ? 'ExceptCondition2'
+                  : 'ExceptCondition3';
+              this.setState({ [name]: +item.state });
+            });
+            this.setState({ isAutoAudit: +auditConfigList.state });
           }
         }
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch((err) => {})
       .finally(() => {
         this.setState({
           loading: false
@@ -66,7 +67,6 @@ class OrderSetting extends Component<any, any> {
 
   //获取Product Category
   getGoodsCategory = () => {
-    //todo 根据接口返回字段调整
     webapi
       .getGoodsCategory()
       .then((data) => {
@@ -94,12 +94,11 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          this.getGoodsCategory();
           message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      })
+      .catch((err) => {})
       .finally(() => {
         this.setState({
           categoryLoading: false
@@ -107,13 +106,51 @@ class OrderSetting extends Component<any, any> {
       });
   };
 
+  //发送更新audit setting的请求
+  updateAuditSetting = () => {
+    const { ExceptCondition1, ExceptCondition2, ExceptCondition3, isAutoAudit } = this.state;
+    let params = {
+      requestList: [
+        {
+          id: 'no_audit_required',
+          status: isAutoAudit ? 1 : 0
+        },
+        {
+          id: 'Orders with 0 price',
+          status: ExceptCondition1 ? 1 : 0
+        },
+        {
+          id: 'Product categories',
+          status: ExceptCondition2 ? 1 : 0
+        },
+        {
+          id: 'A pet owner placed more than 5 orders on a day',
+          status: ExceptCondition3 ? 1 : 0
+        }
+      ]
+    };
+    webapi
+      .saveAuditConfig(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
+        }
+      })
+      .catch((err) => {})
+      .finally(() => {
+        this.getAuditConfig();
+      });
+  };
+
   //audit setting change
   onAuditSettingChange = (state, value) => {
-    this.setState({ [state]: value });
+    this.setState({ [state]: value }, () => {
+      this.updateAuditSetting();
+    });
     if (state === 'ExceptCondition2') {
       this.setState({ visibleAuditConfig: true });
     }
-    //todo audit setting update 接口联调
   };
 
   //打开product category modal
@@ -205,7 +242,8 @@ class OrderSetting extends Component<any, any> {
                   <div className="mt-20 flex flex-row items-center">
                     <span className="span-important">*</span>
                     <span>
-                      <FormattedMessage id="Order.autoAuditExceptConditionTip1" />&nbsp;
+                      <FormattedMessage id="Order.autoAuditExceptConditionTip1" />
+                      &nbsp;
                     </span>
                     <span style={{ textDecoration: 'underline' }}>
                       <FormattedMessage id="Order.autoAuditExceptConditionTip2" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import {FormattedMessage} from 'react-intl';
-import { AntIcon } from 'biz';
+import { AntIcon, AntSpin } from 'biz';
 
 export default class SkuMappingList extends React.Component<any, any>{
     constructor(props) {
@@ -10,6 +10,8 @@ export default class SkuMappingList extends React.Component<any, any>{
 
     handleEdit = (record) => {
         console.log('handleEdit', record);
+        // 更新列表
+        this.props.getListData();
     }
 
     getColumns = () => {
@@ -49,11 +51,17 @@ export default class SkuMappingList extends React.Component<any, any>{
     }
 
     render() {
-        let {} = this.props;
+        let {
+            loading
+        } = this.props;
         let columns = this.getColumns();
         return (
             <div>
                 <Table
+                    loading={{
+                        spinning: loading,
+                        indicator: AntSpin.loadingImg
+                    }}
                     bordered
                     dataSource={[]}
                     columns={columns}

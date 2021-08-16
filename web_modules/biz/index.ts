@@ -18,6 +18,7 @@ import EnterpriseSKUModal from './sku-modal-for-enterprise/goods-modal';
 import PieChart from './chart-pie/index';
 import LogoLoadingIcon from './LogoLoadingIcon';
 import AntIcon from './antIcon';
+import AntSpin from './antSpin';
 
 export {
   LogoLoadingIcon,
@@ -40,4 +41,5 @@ export {
   SKUModal,
   PieChart,
   AntIcon,
+  AntSpin,
 };

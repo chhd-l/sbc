@@ -179,12 +179,11 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticTriggerValue = context.day;
             }
-            //todo 调整orderAllowZonePriceStatus的接口configType取值
             //允许0元订单
-            if (item.configType === 'order_setting_apply_refund') {
+            if (item.configType === 'order_setting_zero_order') {
               paymentOnlineForm.orderAllowZonePriceStatus = !!item.status;
               let context = JSON.parse(item.context);
-              paymentOnlineForm.orderAllowZonePriceValue = context.day;
+              paymentOnlineForm.orderAllowZonePriceValue = context.hour;
             }
           });
 
@@ -414,13 +413,12 @@ class OrderSetting extends Component<any, any> {
           return
         }
       }
-      //todo 调整是否允许0元订单得configType为与接口约定的值
       //允许0元订单
-      if (item.configType === 'order_setting_refund_auto_refund') {
+      if (item.configType === 'order_setting_zero_order') {
         item.status = +paymentOnlineForm.orderAllowZonePriceStatus;
         if (this.verifyConfig(item.status, paymentOnlineForm.orderAllowZonePriceValue)) {
           let context = {
-            day: paymentOnlineForm.orderAllowZonePriceValue
+            hour: paymentOnlineForm.orderAllowZonePriceValue
           };
           item.context = JSON.stringify(context);
         }

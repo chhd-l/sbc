@@ -5,6 +5,7 @@ import { Table, Tooltip, Switch, Modal, Button, Form, message, Spin, Checkbox } 
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
+import { fromJS } from 'immutable';
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
@@ -15,7 +16,7 @@ class OrderSetting extends Component<any, any> {
       configData: [],
       loading: false,
       categoryLoading: false,
-      isAutoAudit: true, //是否开启订单自动审核
+      isAutoAudit: false, //是否开启订单自动审核
       ExceptCondition1: false, //Orders with 0 price
       ExceptCondition2: false, //Product categories
       ExceptCondition3: false //A pet owner placed more than 5 orders on a day
@@ -38,6 +39,19 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           //todo 从接口获取audit setting 初始配置
+          let auditConfigList = (res?.context||[]).find((item)=>{
+            if(item.configType==='no_audit_required'){
+              return item
+            }
+          });
+          if(auditConfigList){
+            let auditConfigContext=JSON.parse(auditConfigList?.context)
+            auditConfigContext.map((item)=>{
+              const name=item.name==='Orders with 0 price'?'ExceptCondition1':item.name==='Product categories'?'ExceptCondition2':'ExceptCondition3'
+              this.setState({[name]:item.state})
+            })
+            this.setState({isAutoAudit:auditConfigList.state})
+          }
         }
       })
       .catch((err) => {

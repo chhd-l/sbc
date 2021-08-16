@@ -497,8 +497,9 @@ class SubscriptionDetail extends React.Component<any, any> {
   getSubscriptionPrice = (num: any) => {
     const { subscriptionInfo } = this.state;
     if (num > 0) {
-      let nlen = num.toString().split('.')[1].length;
+      let nlen = num.toString().split('.')[1]?.length;
       // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
+      isNaN(nlen) ? 2 : nlen;
       nlen > 4 ? nlen = 4 : nlen = nlen;
       return num.toFixed(nlen);
     } else {

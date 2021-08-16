@@ -28,6 +28,8 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
+const showRealStock = false; //增加变量控制要不要显示商品实时库存
+
 /**
  * 拒绝表单，只为校验体验
  */
@@ -305,11 +307,15 @@ class OrderDetailTab extends React.Component<any, any> {
       //   )
       // },
       {
-        title: <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />,
+        title: showRealStock ? (
+          <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
+        ) : (
+          <FormattedMessage id="Order.Quantity" values={{ br: <br /> }} />
+        ),
         dataIndex: 'num',
         key: 'num',
-        width: '10%',
-        render: (text, record) => record.quantityAndRealtimestock
+        width: '9%',
+        render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
@@ -543,10 +549,11 @@ class OrderDetailTab extends React.Component<any, any> {
               </Col>
             ) : null}
 
-            {(detail.get('subscribeId') &&
+            {((detail.get('subscribeId') &&
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
-            (!detail.get('subscribeId') &&
-              (detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
+              (!detail.get('subscribeId') &&
+                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+            showRealStock ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -567,10 +574,11 @@ class OrderDetailTab extends React.Component<any, any> {
           </Row>
         ) : null}
 
-        {(detail.get('subscribeId') &&
+        {((detail.get('subscribeId') &&
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
-        (!detail.get('subscribeId') &&
-          !(detail.get('clinicsId') || firstTradeItems.recommendationId) ) ? (
+          (!detail.get('subscribeId') &&
+            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+        showRealStock ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">

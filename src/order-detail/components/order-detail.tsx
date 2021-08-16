@@ -300,7 +300,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '10%'
+        width: '8%'
       },
       // {
       //   title: 'Price',
@@ -321,14 +321,14 @@ class OrderDetailTab extends React.Component<any, any> {
         ),
         dataIndex: 'num',
         key: 'num',
-        width: '9%',
+        width: '8%',
         render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
-        width: '10%',
+        width: '9%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
           record.subscriptionStatus === 1 &&
@@ -353,7 +353,7 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
-        width: '10%',
+        width: '9%',
         render: (row) => (
           <span>
             {SYSTEM_GET_CONFIG}
@@ -366,7 +366,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '10%',
+        width: '9%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -382,7 +382,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Subscriptionumber" />,
         dataIndex: 'subscriptionSourceList',
         key: 'subscriptionSourceList',
-        width: '15%',
+        width: '11%',
         render: (text, record) =>
           record.subscriptionSourceList && record.subscriptionSourceList.length > 0
             ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
@@ -393,7 +393,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
-        width: '9%',
+        width: '7%',
         render: (text, record) => (
           <a onClick={() => this._openPetDetails(record.petsInfo)}>
             {record.petsInfo ? record.petsInfo.petsName : ''}

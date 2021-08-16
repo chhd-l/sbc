@@ -42,7 +42,7 @@ export default class List extends React.Component<any, any> {
     const { total, pageNum, pageSize, couponActivityList, init, loading } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey={(record) => record.activityId}
         dataSource={couponActivityList.toJS()}
         pagination={{

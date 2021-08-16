@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Popconfirm, message, Button, Tooltip, Tag } from 'antd';
 import { getPaymentMethods, deleteCard } from '../webapi';
-import { cache, RCi18n, AuthWrapper } from 'qmkit';
+import { cache, RCi18n, AuthWrapper, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 interface Iprop {
   customerId: string;
@@ -75,7 +75,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({id:"PetOwner.CardNumber"}),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color="red">default</Tag>}</div>
+        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>}</div>
       },
       {
         title: RCi18n({id:"PetOwner.CardType"}),
@@ -125,7 +125,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         </AuthWrapper>
         <Table
           rowKey="id"
-          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          loading={loading}
           columns={columns}
           dataSource={list}
           pagination={false}

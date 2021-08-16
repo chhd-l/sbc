@@ -94,7 +94,7 @@ class PaymentInformation extends React.Component<any, any> {
   render() {
     const { cardList, loading } = this.state;
     return (
-      <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={loading}>
         <Row style={{ minHeight: 200 }}>
           {cardList && cardList.length === 0 ? (
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

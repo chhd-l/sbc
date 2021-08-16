@@ -49,7 +49,7 @@ export default class BillingDetails extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>{<FormattedMessage id="Finance.rewardDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <Spin spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.store.get('loading')}>
           <div className="container-search">
             <div className="space-between">
               <div style={{ width: '60%' }}>

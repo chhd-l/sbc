@@ -430,7 +430,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     });
     return (
       <div>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <div className="container">
             <Headline title={delivery.deliveryAddressId ? (addressType === 'delivery' ? RCi18n({id:"PetOwner.EditDeliveryInformation"}) : RCi18n({id:"PetOwner.EditBillingInformation"})) : (addressType === 'delivery' ? RCi18n({id:"PetOwner.AddDeliveryInformation"}) : RCi18n({id:"PetOwner.AddBillingInformation"}))} />
             <Form>

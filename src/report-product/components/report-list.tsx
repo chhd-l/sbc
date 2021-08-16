@@ -48,7 +48,7 @@ export default class ReportList extends Component<any, any> {
     return (
       <div>
         <DataGrid
-          //loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          //loading={loading}
           rowKey="serialNum"
           /*  pagination={{
             current: selfCurrentPage,

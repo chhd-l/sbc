@@ -130,7 +130,7 @@ class Prescriber extends React.Component<any, any> {
     const { tradeCustomerView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView, p_prescriberRecommentCodeUseView } = this.state;
     return (
       <div className="prescriber-item">
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
               <div className="item-top-l-top">

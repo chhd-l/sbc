@@ -50,7 +50,7 @@ class OrderSplitSetting extends Component<any, any> {
 
     return (
       <AuthWrapper functionName="f_split_order_setting">
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">

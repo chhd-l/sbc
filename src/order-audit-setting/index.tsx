@@ -324,7 +324,7 @@ class OrderSetting extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline title={title} />
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={this.state.loading}>
             <div style={{ margin: 20 }}>
               <p style={{ marginRight: 20, width: 140, textAlign: 'end', display: 'inline-block' }}><FormattedMessage id="Order.OnlinePayment" />:</p>
               <Radio.Group onChange={this.onAuditMethodChange} value={auditMethod}>

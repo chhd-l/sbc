@@ -53,7 +53,7 @@ export default class PaymentInformation extends React.Component<any, any> {
 
     return (
       <div>
-         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} >
+         <Spin spinning={loading}>
         <Form >
           <Form.Item label={RCi18n({id:'Prescriber.suggestforyourcat'})}>
             {getFieldDecorator('suggest', {

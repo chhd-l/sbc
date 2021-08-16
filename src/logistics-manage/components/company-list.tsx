@@ -132,7 +132,7 @@ export default class CompanyList extends Component<any, any> {
             !loading ? !nodata ?
             <Table rowKey="id" columns={this.columns} dataSource={tableDatas.toJS()} />:
               <div className="img-container"><img src={nodataImg} width="80" className="no-data-img" /></div> :
-            <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />
+            <Spin className="loading-spin" />
           }
         </div>
       </div>

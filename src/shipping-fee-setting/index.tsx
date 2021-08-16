@@ -209,14 +209,6 @@ class ShippingFeeSetting extends Component<any, any> {
               <Spin
                 style={{ position: 'fixed', top: '30%', left: '100px' }}
                 spinning={deliveryLoading}
-                indicator={
-                  <img
-                    className="spinner"
-                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                    style={{ width: '90px', height: '90px' }}
-                    alt=""
-                  />
-                }
               >
                 <Row style={{ marginBottom: 20 }}>
                   {deliveryOptions.map((item) => (
@@ -265,14 +257,6 @@ class ShippingFeeSetting extends Component<any, any> {
               <Spin
                 style={{ position: 'fixed', top: '30%', left: '100px' }}
                 spinning={shippingfeeloading}
-                indicator={
-                  <img
-                    className="spinner"
-                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                    style={{ width: '90px', height: '90px' }}
-                    alt=""
-                  />
-                }
               >
                 <Row style={{ marginBottom: 20 }}>
                   {shippingFeeList.map((item, index) => (

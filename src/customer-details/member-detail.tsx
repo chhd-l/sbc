@@ -445,7 +445,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <div className="Membership-info-detail">
                               <Row type="flex" align="middle">
                                 <Col span={13}>
-                                  <i className="iconfont iconhuangguan1" style={{fontSize: '20px', marginRight: '20px', color: '#d81e06'}}/>
+                                  <i className="iconfont iconhuangguan1" style={{fontSize: '20px', marginRight: '20px', color: 'var(--primary-color)'}}/>
                                   <FormattedMessage id="PetOwner.ClubMember" />
                                 </Col>
                                 <Col span={11}>
@@ -454,7 +454,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                                     right: '20px',
                                     top: "-10px"
                                   }}>
-                                    <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "#d81e06" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
+                                    <span onClick={this.handleChangeshowElem} style={{ cursor: 'pointer', color: "var(--primary-color)" }}><FormattedMessage id="PetOwner.more" /> <i style={{ fontSize: "12px", marginLeft: '-2px' }}><Icon type={this.state.showElem ? 'down' : 'up'} /></i></span>
                                   </div>
                                 </Col>
                               </Row>
@@ -469,7 +469,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                                   <Col span={12} className="text-tip">
                                     <div className='Membership-info-box'>
                                       <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.SubscriptionNo" />:</span>
-                                      <span className='Membership-info-box-text' style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                                      <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
                                     </div>
                                   </Col>
                                 </Row>
@@ -487,7 +487,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                                   <Col span={12} className="text-tip">
                                     <div className='Membership-info-box'>
                                       <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.ConsumptionGift" />:</span>
-                                      <span className='Membership-info-box-text' style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                                      <span className='Membership-info-box-text' style={{ color: "var(--primary-color)", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
                                     </div>
                                   </Col>
                                 </Row>

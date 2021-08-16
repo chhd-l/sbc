@@ -837,9 +837,22 @@ export default {
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
         'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
       'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
-        'Order.workTime':'Chosen delivery method'
-
-
+        'Order.workTime':'Chosen delivery method',
+        'Order.chosenDeliveryMethods':'Chosen delivery method',
+        'Order.externalSKuCode':'External SKU',
+        'Order.AllowZoneOrder':'Allow for orders with 0 price',
+        'Order.zeroOrderAuditMethod':'Zero price order audit method ',
+        'Order.pending':'Pending',
+        'Order.pendingAuditBasis':'Audit Basis: Authorization, payment, product, order',
+        'Order.orderAutoAudit':'Automatic audit:',
+        'Order.autoAuditExceptConditionTip1':'Order meeting the following conditions require  ',
+        'Order.autoAuditExceptConditionTip2':'manual audit',
+        'Order.autoAuditExceptCondition1':'Orders with 0 price ',
+        'Order.autoAuditExceptCondition2':'Product categories ',
+        'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
+        'Order.search.city':'City',
+        'Order.search.email':'Email Address',
+        'Order.search.cityId':'CityId'
 
     },
     Subscription: {
@@ -1532,11 +1545,11 @@ export default {
     },
     Marketing: {
         "Marketing.Includeproduct":"Include product",
-        "Marketing.Excludeproduct":"Exclude product",   
+        "Marketing.Excludeproduct":"Exclude product",
         "Marketing.NumberOfUserPerPerson":"Number of user per person",
         "Marketing.NumberOfUserPerPerson":"Number of user per person",
         "Marketing.UnlimitedUse":"Unlimited use",
-        
+
         'Marketing.Youcanchooseupto10coupons': 'You can choose up to 10 coupons',
         'Marketing.Fortherestsubscriptionorder': 'For the rest subscription order, discount ',
         'Marketing.Fortherestsubscriptionorderreduction': 'For the rest subscription order, reduction ',

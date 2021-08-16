@@ -270,8 +270,8 @@ class OrderDetailTab extends React.Component<any, any> {
       // todo 调整externalSKuCode取值字段
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
-        dataIndex: 'skuNo',
-        key: 'skuNo',
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
         render: (text) => text,
         width: '11%'
       },

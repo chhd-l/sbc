@@ -268,6 +268,13 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '11%'
       },
       {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
+        width: '11%'
+      },
+      {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',

@@ -124,7 +124,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                                     rules: [
                                         {
                                             required: true,
-                                            message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
+                                            message: 'Please input externalSkuNo!'
                                         },
                                     ],
                                     initialValue: record.externalSkuNo || ''
@@ -149,7 +149,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                                     rules: [
                                         {
                                             required: true,
-                                            message: RCi18n({id: 'Subscription.PleaseInputDeliveryNumber'})
+                                            message: 'Please input condition!'
                                         },
                                     ],
                                     initialValue: isInitialValue

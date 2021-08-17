@@ -15,6 +15,7 @@ class OrderSetting extends Component<any, any> {
       configData: [],
       loading: false,
       categoryLoading: false,
+      auditConfigForm: null, //audit setting
       isAutoAudit: false, //是否开启订单自动审核
       ExceptCondition1: false, //Orders with 0 price
       ExceptCondition2: false, //Product categories
@@ -42,22 +43,32 @@ class OrderSetting extends Component<any, any> {
               return item;
             }
           });
+          console.log(auditConfigList)
           if (auditConfigList) {
-            let auditConfigContext = JSON.parse(auditConfigList?.context);
-            auditConfigContext.map((item) => {
-              const name =
-                item.name === 'Orders with 0 price'
-                  ? 'ExceptCondition1'
-                  : item.name === 'Product categories'
-                  ? 'ExceptCondition2'
-                  : 'ExceptCondition3';
-              this.setState({ [name]: +item.state });
+            this.setState({
+              isAutoAudit: auditConfigList.status === 1,
+              auditConfigForm: auditConfigList
             });
-            this.setState({ isAutoAudit: +auditConfigList.state });
+            let auditConfigContext = JSON.parse(auditConfigList?.context);
+            if (auditConfigContext) {
+              auditConfigContext.map((item) => {
+                const name =
+                  item.name === 'Orders with 0 price'
+                    ? 'ExceptCondition1'
+                    : item.name === 'Product categories'
+                    ? 'ExceptCondition2'
+                    : 'ExceptCondition3';
+                this.setState({ [name]: Boolean(item.state) });
+              });
+            }
+          } else {
+            this.setState({ isAutoAudit: false });
           }
         }
       })
-      .catch((err) => {})
+      .catch((err) => {
+        this.setState({ isAutoAudit: false });
+      })
       .finally(() => {
         this.setState({
           loading: false
@@ -95,10 +106,12 @@ class OrderSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getGoodsCategory();
-          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
+          message.success(res.message);
         }
       })
-      .catch((err) => {})
+      .catch((err) => {
+        message.error(err.message);
+      })
       .finally(() => {
         this.setState({
           categoryLoading: false
@@ -106,26 +119,38 @@ class OrderSetting extends Component<any, any> {
       });
   };
 
-  //发送更新audit setting的请求
-  updateAuditSetting = () => {
-    const { ExceptCondition1, ExceptCondition2, ExceptCondition3, isAutoAudit } = this.state;
+  //audit setting change
+  onAuditSettingChange = (state, value) => {
+    let ExceptCondition1 = state === 'ExceptCondition1' ? value : this.state.ExceptCondition1;
+    let ExceptCondition2 = state === 'ExceptCondition2' ? value : this.state.ExceptCondition2;
+    let ExceptCondition3 = state === 'ExceptCondition3' ? value : this.state.ExceptCondition3;
+    const isAutoAudit = state === 'isAutoAudit' ? value : this.state.isAutoAudit;
+    if (state === 'isAutoAudit' && !value) {
+      //todo 如果是手动审核，则例外条件都需要手动审核
+    }
+    if (state === 'isAutoAudit' && value) {
+      //todo 如果是自动审核审核，例外条件初始化为需要自动审核
+    }
     let params = {
       requestList: [
         {
-          id: 'no_audit_required',
-          status: isAutoAudit ? 1 : 0
-        },
-        {
-          id: 'Orders with 0 price',
-          status: ExceptCondition1 ? 1 : 0
-        },
-        {
-          id: 'Product categories',
-          status: ExceptCondition2 ? 1 : 0
-        },
-        {
-          id: 'A pet owner placed more than 5 orders on a day',
-          status: ExceptCondition3 ? 1 : 0
+          id: this.state.auditConfigForm?.id || '',
+          configType: 'no_audit_required',
+          status: isAutoAudit ? 1 : 0,
+          context: JSON.stringify([
+            {
+              name: 'Orders with 0 price',
+              state: ExceptCondition1 ? 1 : 0
+            },
+            {
+              name: 'Product categories',
+              state: ExceptCondition2 ? 1 : 0
+            },
+            {
+              name: 'A pet owner placed more than 5 orders on a day',
+              state: ExceptCondition3 ? 1 : 0
+            }
+          ])
         }
       ]
     };
@@ -134,23 +159,16 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(<FormattedMessage id="Order.OperateSuccessfully" />);
+          this.setState({ [state]: value });
+          if (state === 'ExceptCondition2' && value) {
+            this.setState({ visibleAuditConfig: true });
+          }
+          message.success(res.message);
         }
       })
-      .catch((err) => {})
-      .finally(() => {
-        this.getAuditConfig();
+      .catch((err) => {
+        message.success(err.message);
       });
-  };
-
-  //audit setting change
-  onAuditSettingChange = (state, value) => {
-    this.setState({ [state]: value }, () => {
-      this.updateAuditSetting();
-    });
-    if (state === 'ExceptCondition2') {
-      this.setState({ visibleAuditConfig: true });
-    }
   };
 
   //打开product category modal

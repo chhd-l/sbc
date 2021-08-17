@@ -1072,6 +1072,18 @@ const homeRoutes = [
     asyncComponent: () => import('./find-password')
   },
   {
+    path: '/forget-password',
+    asyncComponent: () => import('./myvetreco-logins/forget-password')
+  },
+  {
+    path: '/check-mail',
+    asyncComponent: () => import('./myvetreco-logins/check-mail')
+  },
+  {
+    path: '/reset-password',
+    asyncComponent: () => import('./myvetreco-logins/reset-password')
+  },
+  {
     path: '/lackcompetence',
     asyncComponent: () => import('./lackcompetence')
   },

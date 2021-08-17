@@ -127,7 +127,7 @@ class OrderDelivery extends React.Component<any, any> {
                   });
                 const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
                 //处理赠品
-                const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `【赠品】${gift.get('itemName')}`));
+                const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`));
                 return (
                   <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
                     <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>

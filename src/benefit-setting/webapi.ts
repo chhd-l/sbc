@@ -53,3 +53,16 @@ export const getMarketingInfo = (marketingId) => {
         method: 'GET'
     });
 };
+
+/**
+ * 获取 Gift_quarter_type 数据
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function getGiftQuarterTypeList() {
+    return Fetch<TResult>('/sysdict/querySysDictionary', {
+        method: 'POST',
+        body: JSON.stringify({
+            type: 'Gift_quarter_type'
+        })
+    });
+}

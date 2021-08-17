@@ -106,13 +106,13 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                 <i className="iconfont iconEdit"></i>
               </Button>
             </Tooltip>
-            <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
+            {record.canDelFlag && <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
               <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
                 <Button type="link" size="small">
                   <i className="iconfont iconDelete"></i>
                 </Button>
               </Tooltip>
-            </Popconfirm>
+            </Popconfirm>}
           </div>
         )
       }

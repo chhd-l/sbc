@@ -167,6 +167,20 @@ class FreeShippingAddForm extends React.Component<any, any> {
     }
   };
 
+  getPromotionCode = () => {
+    if (!this.state.promotionCode) {
+      let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
+      let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
+      let promotionCode = randomNumber + timeStamp;
+      this.setState({
+        promotionCode: promotionCode,
+        promotionCode2: promotionCode
+      });
+      return promotionCode;
+    } else {
+      return this.state.promotionCode;
+    }
+  };
   render() {
     const { form } = this.props; //marketingType, marketingId,
     const { getFieldDecorator } = this.props.form;
@@ -218,6 +232,62 @@ class FreeShippingAddForm extends React.Component<any, any> {
           </FormItem>
         }
         <div className="bold-title">Basic Setting</div>
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.PromotionCode" />} labelAlign="left">
+          {getFieldDecorator('promotionCode', {
+            initialValue: shippingBean.get('promotionCode') ? shippingBean.get('promotionCode') : this.getPromotionCode(),
+            rules: [
+              {
+                required: true,
+                whitespace: true,
+                message:
+                  (window as any).RCi18n({
+                    id: 'Marketing.PleaseInputPromotionCode'
+                  })
+              },
+              { min: 1, max: 20, message:
+                  (window as any).RCi18n({
+                    id: 'Marketing.words'
+                  })
+              },
+              {
+                validator: (rule, value, callback) => {
+                  QMMethod.validatorEmoji(rule, value, callback,
+                    (window as any).RCi18n({
+                      id: 'Marketing.PromotionCode'
+                    })
+                  );
+                }
+              }
+            ]
+          })(
+            <Input
+              onChange={(e) => {
+                this.setState({
+                  promotionCode: e.target.value
+                });
+                this.onBeanChange({
+                  promotionCode:  e.target.value
+                })
+              }}
+              // marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2 ||
+              disabled={shippingBean.get('publicStatus') == 1}
+              style={{ width: 160 }}
+            />
+          )}
+
+          <Checkbox
+            style={{ marginLeft: 20 }}
+            // disabled={marketingBean.get('promotionType') === 1 || marketingBean.get('promotionType') === 2}
+            checked={shippingBean.get('publicStatus') == 1}
+            onChange={(e) => {
+              this.onBeanChange({
+                publicStatus: e.target.checked ? 1 : 0
+              });
+            }}
+          >
+            <FormattedMessage id="Marketing.Public" />
+          </Checkbox>
+        </FormItem>
         <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.Freeshippingname" />} labelAlign="left"  className="gift-item">
           {getFieldDecorator('marketingName', {
             rules: [

@@ -63,7 +63,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map(
       (gift) =>
         gift
-          .set('skuName', `【赠品】${gift.get('skuName')}`)
+          .set('skuName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('skuName')}`)
           .set('levelPrice', 0)
           .set('isGift', true)
     );
@@ -101,7 +101,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                 ? v.get('giftItemList')
                 : fromJS([])
               ).map((gift) =>
-                gift.set('itemName', `【赠品】${gift.get('itemName')}`)
+                gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`)
               );
               return (
                 <div

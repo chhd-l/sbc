@@ -280,6 +280,8 @@ export default {
   'Menu.Message setting':'Message setting',
   'Menu.Logistics Settings':'Carriers Settings',
   'Menu.Logistics Company Settings':'Carriers Company Settings',
+  'Menu.Carriers Settings':'Carriers Settings',
+  'Menu.Carriers Company Settings':'Carriers Company Settings',
 
 
 
@@ -2666,7 +2668,7 @@ export default {
   'Marketing.Price':'Price',
   'Marketing.Inventory':'Inventory',
   'Marketing.GiveTheNumber':'Give the number',
-  'Marketing.CouponActivity':'Coupon activity',
+  'Marketing.CouponActivity':'Activity list',//'Coupon activity',
   'Marketing.CouponName':'Coupon name',
   'Marketing.ValidPeriod':'Valid period',
   'Marketing.PleaseEnterTheNumberOfCoupons':'Please enter the number of coupons',
@@ -3350,8 +3352,8 @@ export default {
   'Setting.PcUrl': 'Pc url',
   'Setting.MobileUrl': 'Mobile url',
   'Setting.selectResource': 'Select {type} resource',
-  'Setting.dragImagesOrVideos': 'Click or drag images or videos to upload',
-  'Setting.supportUpload': 'Support one or more pictures or videos upload',
+  'Setting.dragImagesOrVideos': 'Click or drag image or video to upload',
+  'Setting.supportUpload': 'Support one picture or video',
   'Setting.setBanner': 'Set banner',
   'Setting.operatorAccount': 'Operator account',
   'Setting.operatorName': 'Operator name',

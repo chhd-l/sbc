@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Button, Col, Form, Icon, InputNumber, Popconfirm, Row, Select, Table, Input} from 'antd';
-import {RCi18n} from 'qmkit';
+import {Const, RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
+import {fromJS} from 'immutable';
+import * as commonWebapi from '@/benefit-setting/webapi';
+
 
 import './index.less';
 
@@ -21,24 +24,24 @@ const styles = {
         padding: '2px'
     }
 };
-const deliveryNumberData = [
-    {
-        id: 1,
-        name: 'Quarter n*1',
-    },
-    {
-        id: 2,
-        name: 'Quarter n*2',
-    },
-    {
-        id: 3,
-        name: 'Quarter n*3',
-    },
-    {
-        id: 4,
-        name: 'Quarter n*4',
-    },
-    ]
+// const deliveryNumberData = [
+//     {
+//         id: 1,
+//         name: 'Quarter n*1',
+//     },
+//     {
+//         id: 2,
+//         name: 'Quarter n*2',
+//     },
+//     {
+//         id: 3,
+//         name: 'Quarter n*3',
+//     },
+//     {
+//         id: 4,
+//         name: 'Quarter n*4',
+//     },
+//     ]
 
 const { Option } = Select;
 
@@ -56,8 +59,24 @@ export default class BenefitList extends Component<any, any>{
             visible: false,
             selectedSkuIds: [],
             selectedRows: [],
+            deliveryNumberData: [],
         };
     }
+
+    componentDidMount() {
+        this.getGiftTypeList();
+    }
+
+    getGiftTypeList = async () => {
+        const { res } = await commonWebapi.getGiftQuarterTypeList();
+        // @ts-ignore
+        if (res.code == Const.SUCCESS_CODE) {
+
+            this.setState({
+                deliveryNumberData: res.context.sysDictionaryVOS
+            })
+        }
+    };
 
     componentDidUpdate(prevProps) {
         // 典型用法（不要忘记比较 props）：
@@ -92,7 +111,7 @@ export default class BenefitList extends Component<any, any>{
                 return {
                     gifts,
                     selectedSkuIds,
-                    selectedRows,
+                    selectedRows: fromJS(selectedRows),
                     key: giftLevelId,
                     deliveryNumber: deliveryNumber,
                 }
@@ -134,7 +153,11 @@ export default class BenefitList extends Component<any, any>{
     }
 
     handleAdd = () => {
-        const { count, dataSource } = this.state;
+        const {
+            count,
+            dataSource,
+            deliveryNumberData
+        } = this.state;
         let minLength = deliveryNumberData.length;
         if (dataSource.length >= minLength) return;
         const newData = {
@@ -157,7 +180,11 @@ export default class BenefitList extends Component<any, any>{
         let index = dataSource.findIndex(item => item.key === record.key);
         if (index > -1) {
             dataSource[index].gifts = dataSource[index].gifts.filter(x => x.goodsInfoId !== item.goodsInfoId);
+            dataSource[index].selectedSkuIds = dataSource[index].selectedSkuIds.filter(x => x !== item.goodsInfoId);
+            dataSource[index].selectedRows = fromJS(dataSource[index].selectedRows.toJS().filter(x => x.goodsInfoId !== item.goodsInfoId));
             this.setState({
+                selectedSkuIds: dataSource[index].selectedSkuIds,
+                selectedRows: dataSource[index].selectedRows,
                 dataSource: [...dataSource],
             })
         }
@@ -202,7 +229,7 @@ export default class BenefitList extends Component<any, any>{
                 selectedSkuIds,
                 selectedRows,
             })
-        }else { // 重置
+        }else { // 没有已选产品则为空
             this.setState({
                 selectedSkuIds: [],
                 selectedRows: [],
@@ -211,17 +238,9 @@ export default class BenefitList extends Component<any, any>{
         this.setState({visible: true});
     };
 
-    getValueFromEvent = (e, info) => {
-        console.log('e.target.value', e, info);
-        return {
-            productId: info.goodsInfoId,
-            productNum: e || 1,
-        };
-    };
-
     getColumns = () => {
+        let { deliveryNumberData } = this.state;
 
-        let { initData } = this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemBenefitListLayout = {
             labelCol: {
@@ -263,7 +282,7 @@ export default class BenefitList extends Component<any, any>{
                                                     {deliveryNumberData.map(item => (
                                                         <Option
                                                             key={item.id}
-                                                            value={item.id}
+                                                            value={item.priority}
                                                         >
                                                             <strong>{item.name}</strong>
                                                         </Option>))}

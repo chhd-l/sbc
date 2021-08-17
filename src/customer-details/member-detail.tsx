@@ -445,7 +445,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <div className="Membership-info-detail">
                               <Row type="flex" align="middle">
                                 <Col span={13}>
-                                  <i className="iconfont iconhuangguan1" style={{ fontSize: '20px', marginRight: "20px", color: "#d81e06" }}></i>
+                                  <i className="iconfont iconhuangguan1" style={{fontSize: '20px', marginRight: '20px', color: '#d81e06'}}/>
                                   <FormattedMessage id="PetOwner.ClubMember" />
                                 </Col>
                                 <Col span={11}>
@@ -459,30 +459,36 @@ export default class CustomerDetails extends React.Component<any, any> {
                                 </Col>
                               </Row>
                               <div className={`${this.state.showElem ? '' : 'hide'} word-style`}>
-                                <Row>
-                                  <Col span={1}></Col>
-                                  <Col span={13} className="text-tip">
-                                    <FormattedMessage id="PetOwner.AdmissionDate" />
-                                    <span>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                                <Row gutter={16}>
+                                  <Col span={12} className="text-tip">
+                                    <div className='Membership-info-box'>
+                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.AdmissionDate" />:</span>
+                                      <span className='Membership-info-box-text'>{memberShip.admissionDate ? moment(memberShip.admissionDate, 'YYYY-MM-DD').format('YYYY-MM-DD') : ''}</span>
+                                    </div>
                                   </Col>
-                                  <Col span={10} className="text-tip">
-                                    <FormattedMessage id="PetOwner.SubscriptionNo" />
-                                    <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                                  <Col span={12} className="text-tip">
+                                    <div className='Membership-info-box'>
+                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.SubscriptionNo" />:</span>
+                                      <span className='Membership-info-box-text' style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.subscriptionNo}</span>
+                                    </div>
                                   </Col>
-                                  <Col span={1}></Col>
-                                  <Col span={23} className="text-tip">
+                                </Row>
+                                <Row gutter={16}>
+                                  <Col span={24} className="text-tip" >
                                     <FormattedMessage id="PetOwner.ClubLoyaltyProgram" />
                                     {/*<span>{memberShip.clubLoyaltyProgram}</span>*/}
                                   </Col>
-                                  <Col span={1}></Col>
-                                  <Col span={13} className="text-tip">
-                                    <FormattedMessage id="PetOwner.WelcomeBox" />
-                                    &nbsp;
-                                    <span style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                                  <Col span={12} className="text-tip">
+                                    <div className='Membership-info-box'>
+                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.WelcomeBox" />:</span>
+                                      <span className='Membership-info-box-text' style={{ color: "#585858", fontSize: 16 }}>{memberShip.welcomeBox}</span>
+                                    </div>
                                   </Col>
-                                  <Col span={10} className="text-tip">
-                                    <FormattedMessage id="PetOwner.ConsumptionGift" />
-                                    <span style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                                  <Col span={12} className="text-tip">
+                                    <div className='Membership-info-box'>
+                                      <span className='Membership-info-box-label'><FormattedMessage id="PetOwner.ConsumptionGift" />:</span>
+                                      <span className='Membership-info-box-text' style={{ color: "#d81e06", textDecoration: "underline" }}>{memberShip.consumptionGift}</span>
+                                    </div>
                                   </Col>
                                 </Row>
                               </div>

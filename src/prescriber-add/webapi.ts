@@ -199,7 +199,7 @@ export function addUser(employee) {
   return Fetch<TResult>('/customer/employee', {
     method: 'POST',
     body: JSON.stringify(employee)
-  });
+  }, { isHandleResult: true, customerTip: true });
 }
 
 export function updateUser(employee) {

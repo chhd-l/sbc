@@ -103,6 +103,7 @@ export default class AppStore extends Store {
         }
       });
     } else {
+      message.error('Operate failed');
     }
   };
 

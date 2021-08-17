@@ -282,7 +282,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id='product.listPrice' />
+          <FormattedMessage id='product.purchasePrice' />
         </div>
       ),
       key: 'linePrice',
@@ -302,6 +302,7 @@ class SkuForm extends React.Component<any, any> {
                 initialValue: rowInfo.linePrice || 0
               })(
                 <InputNumber
+                  disabled
                   min={0}
                   max={9999999}
                   precision={2}

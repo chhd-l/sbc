@@ -16,6 +16,9 @@ class AttributeLibrary extends Component<any, any> {
       searchForm: {
         taggingName: ''
       },
+      oldSearchForm: {
+        taggingName: ''
+      },
       pagination: {
         current: 1,
         pageSize: 10,
@@ -57,7 +60,14 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   onSearch = () => {
-    this.getTagging();
+    const {searchForm} = this.state
+    this.setState({
+      oldSearchForm:{
+        taggingName:searchForm.taggingName
+      }
+    },()=>{
+      this.getTagging();
+    })
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -102,7 +112,6 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   openEditPage = (row) => {
-    const { form } = this.props;
     row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
@@ -159,12 +168,12 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   getTagging = () => {
-    const { searchForm, pagination } = this.state;
+    const { oldSearchForm, pagination } = this.state;
     this.setState({
       loading: true
     });
     let params = {
-      taggingName: searchForm.taggingName,
+      taggingName: oldSearchForm.taggingName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
@@ -335,7 +344,7 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images } = this.state;
+    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images,searchForm } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
@@ -399,6 +408,7 @@ class AttributeLibrary extends Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={RCi18n({id:'Product.Taggingname'})}
+                      value={searchForm.taggingName}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({

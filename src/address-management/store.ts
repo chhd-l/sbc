@@ -47,8 +47,6 @@ export default class AppStore extends Store {
           value: currentCountry.name
         });
       }
-    } else {
-      message.error(storeInfo.message);
     }
   };
 
@@ -161,7 +159,6 @@ export default class AppStore extends Store {
       }
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -177,7 +174,6 @@ export default class AppStore extends Store {
       this.dispatch('confirmLoading:end');
     } else {
       this.dispatch('confirmLoading:end');
-      message.error(res.message);
     }
   };
   editState = async (params) => {
@@ -191,7 +187,6 @@ export default class AppStore extends Store {
       });
       this.dispatch('confirmLoading:end');
     } else {
-      message.error(res.message);
       this.dispatch('confirmLoading:end');
     }
   };
@@ -202,8 +197,6 @@ export default class AppStore extends Store {
         pageNum: this.state().get('statePagination').toJS().current - 1,
         pageSize: this.state().get('statePagination').toJS().pageSize
       });
-    } else {
-      message.error(res.message);
     }
   };
   deleteCity = async (params) => {
@@ -213,8 +206,6 @@ export default class AppStore extends Store {
         pageNum: this.state().get('cityPagination').toJS().current - 1,
         pageSize: this.state().get('cityPagination').toJS().pageSize
       });
-    } else {
-      message.error(res.message);
     }
   };
   addCity = async (params) => {
@@ -228,7 +219,6 @@ export default class AppStore extends Store {
       });
       this.dispatch('confirmLoading:end');
     } else {
-      message.error(res.message);
       this.dispatch('confirmLoading:end');
     }
   };
@@ -244,7 +234,6 @@ export default class AppStore extends Store {
       });
       this.dispatch('confirmLoading:end');
     } else {
-      message.error(res.message);
       this.dispatch('confirmLoading:end');
     }
   };
@@ -268,8 +257,6 @@ export default class AppStore extends Store {
         const list = [...res.context.systemStates.content];
         this.dispatch('CityFormActor:stateNameList', fromJS(list));
       }
-    } else {
-      message.error(res.message);
     }
   };
 

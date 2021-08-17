@@ -166,6 +166,7 @@ export default class AppStore extends Store {
    * 确认收货
    */
   onConfirm = async (tid: string) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
@@ -173,6 +174,7 @@ export default class AppStore extends Store {
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
+      this.dispatch('loading:end');
       message.error('订单状态已改变，请刷新页面后重试!');
     }
   };

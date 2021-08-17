@@ -7,7 +7,8 @@ import NewDetail from '../components/consent-new-detail';
 import Detail from '../components/consent-detail';
 
 //import { bool } from 'prop-types';
-import { noop, SelectGroup } from 'qmkit';
+import { noop, SelectGroup, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { Option } = Select;
 
@@ -96,15 +97,15 @@ export default class StepConsent extends Component<any, any> {
         {pageChangeType == 'List' ? (
           <React.Fragment>
             <div className="consent-select space-between">
-              <div className="consent-select-text">Category</div>
+              <div className="consent-select-text"><FormattedMessage id="Setting.Category" /></div>
               <div className="consent-select-data space-between">
-                <Select defaultValue="All" style={{ width: 120 }} onChange={this.handleChange}>
-                  <Option value="">All</Option>
-                  <Option value="Prescriber">Prescriber</Option>
-                  <Option value="Consumer">Consumer</Option>
+                <Select defaultValue="" style={{ width: 120 }} onChange={this.handleChange}>
+                  <Option value=""><FormattedMessage id="Setting.All" /></Option>
+                  <Option value="Prescriber"><FormattedMessage id="Setting.Prescriber" /></Option>
+                  <Option value="Consumer"><FormattedMessage id="Setting.Consumer" /></Option>
                 </Select>
-                <Select style={{ width: 120 }} defaultValue="All" onChange={(e, v) => this.onDescription(e, v)}>
-                  <Option value="">All</Option>
+                <Select style={{ width: 120 }} defaultValue="" onChange={(e, v) => this.onDescription(e, v)}>
+                  <Option value=""><FormattedMessage id="Setting.All" /></Option>
                   {consentLanguage.map((item) => {
                     return <Option value={item.id}>{item.description}</Option>;
                   })}
@@ -112,7 +113,7 @@ export default class StepConsent extends Component<any, any> {
               </div>
             </div>
             <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
-              New consent
+              <FormattedMessage id="Setting.NewConsent" />
             </Button>
             <div id="consent" className="consent-table">
               <DragTable />
@@ -122,7 +123,7 @@ export default class StepConsent extends Component<any, any> {
           <React.Fragment>
             <div onClick={() => pageChange('List')}>
               <div className="detail-title">
-                <Icon type="left" /> Consent edit
+                <Icon type="left" /> {editId == '000' ? RCi18n({id:"Setting.AddConsent"}) : RCi18n({id:"Setting.EditConsent"})}
               </div>
             </div>
             {/*{editList.id != null ? <Detail /> : <Detail />}*/}

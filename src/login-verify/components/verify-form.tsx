@@ -77,8 +77,8 @@ export default withOktaAuth(
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
-                rules: [{ required: true, message: RCi18n({id:'Public.ClientID Input'}) }]
-              })(<Search size="large" placeholder={RCi18n({id:'Public.ClientID Input'})} onSearch={(value, e) => this.search(value, e)} />)}
+                rules: [{ required: true, message: RCi18n({id:'Public.InputClinetID'}) }]
+              })(<Search size="large" placeholder={RCi18n({id:'Public.ClientID'})} onSearch={(value, e) => this.search(value, e)} />)}
             </FormItem>
             <label style={styles.labelClientName}>
               <span style={{ color: '#E1021A' }}>*</span> <FormattedMessage id="Public.YourclientID" />
@@ -273,14 +273,14 @@ export default withOktaAuth(
             if (res.context === 'needAudit') {
               history.push('/login-notify');
             } else if (res.context === 'alreadyRegister') {
-              message.info(RCi18n({id:'Public.EmailTip'}));
+              message.info(RCi18n({id:'Public.alreadyRegister'}));
+              this.setState({
+                prcessLoadding: false
+              });
             } else {
               let type = getRoutType(window.location.search);
               login(type, oktaToken);
             }
-            this.setState({
-              prcessLoadding: false
-            });
           } else {
             this.setState({
               prcessLoadding: false

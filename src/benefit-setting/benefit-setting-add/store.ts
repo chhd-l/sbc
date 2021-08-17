@@ -65,7 +65,7 @@ export default class AppStore extends Store {
             }))
             history.push('/marketing-list');
         } else if(response.res && response.res.code === 'K-080218') {
-            message.error(response.res.message)
+            // message.error(response.res.message)
         }
         return response.res
     };

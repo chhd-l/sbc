@@ -236,8 +236,8 @@ class SpecForm extends React.Component<any, any> {
                                       }
                                     }
 
-                                    if (value.length > 20) {
-                                      callback(new Error('Support up to 20 specifications'));
+                                    if (value.length > 100) {
+                                      callback(new Error('Support up to 100 specifications'));
                                       return;
                                     }
 

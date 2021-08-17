@@ -836,7 +836,7 @@ export default {
         "Order.Giveaway": "【Giveaway】",
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
         'Order.ConfirmthatallproductsDeliverd': 'Confirm that all products have been delivered?',
-      'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
+        'Order.realTimeQuantity': 'Quantity/{br}Real-time{br}stock',
         'Order.chosenDeliveryMethods':'Chosen delivery method',
         'Order.externalSKuCode':'External SKU',
         'Order.AllowZoneOrder':'Allow for orders with 0 price',

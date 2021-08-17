@@ -158,6 +158,7 @@ export default {
   'Menu.Consumer Review':'Consumer Review',
   'Menu.Product tagging':'Product tagging',
   'Menu.Inventory warning':'Inventory warning',
+  'Menu.SKU mapping':'SKU mapping',
   'Menu.Category management':'Category management',
   'Menu.Sales category':'Sales category',
   'Menu.Product category':'Product category',

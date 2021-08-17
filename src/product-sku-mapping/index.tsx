@@ -12,22 +12,40 @@ export default class ProductSkuMapping extends React.Component<any, any> {
         super(props);
         this.state = {
             listArr: [],
-            loading: false
+            loading: false,
+            listParams: {
+                pageNum: 0,
+                pageSize: 10,
+            }
+
         }
     }
 
     componentDidMount() {
-        let initValue = {}
-        this.getListData(initValue);
+        let {
+            listParams
+        } = this.state;
+        this.getListData(listParams);
     }
 
-    // 初始化列表
-    getListData = (values) => {
+    // 获取列表数据
+    getListData = (params) => {
+        let listParams = {
+            ...this.state.listParams,
+            ...params,
+        }
         this.setState({ loading: true})
         setTimeout(() => {
             this.setState({
-                listArr: [],
+                listArr: [{
+                    id: 1,
+                    productName: 123,
+                    SPU: 234234,
+                    SKU: 23423,
+                    ExternalSKU: 234234
+                }],
                 loading: false,
+                listParams,
             })
         }, 1500)
     }
@@ -39,35 +57,26 @@ export default class ProductSkuMapping extends React.Component<any, any> {
         } = this.state;
         // @ts-ignore
         return (
-            // <AuthWrapper functionName="f_goods_skuMapping">
-            //     <div>
-            //         <BreadCrumb />
-            //         <div className="container-search">
-            //             <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
-            //             <SearchForm />
-            //         </div>
-            //         <div className="container">
-            //
-            //         </div>
-            //     </div>
-            // </AuthWrapper>
-            <div className='ProductSkuMapping-wrap'>
-                <BreadCrumb />
-                <div className="container-search">
-                    <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
-                    <SearchForm
-                        wrappedComponentRef={(form) => this.form = form}
-                        onSearch={this.getListData}
-                    />
+            <AuthWrapper functionName='f_goods_skuMapping'>
+                <div className='ProductSkuMapping-wrap'>
+                    <BreadCrumb />
+                    <div className="container-search">
+                        <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
+                        <SearchForm
+                            wrappedComponentRef={(form) => this.form = form}
+                            onSearch={this.getListData}
+                        />
+                    </div>
+                    <div className="container">
+                        <SkuMappingList
+                            loading={loading}
+                            data={listArr}
+                            getListData={this.getListData}
+                        />
+                    </div>
                 </div>
-                <div className="container">
-                    <SkuMappingList
-                        loading={loading}
-                        data={listArr}
-                        getListData={this.getListData}
-                    />
-                </div>
-            </div>
+            </AuthWrapper>
+
         );
     }
 }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Input } from 'antd';
-import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
 
 interface IProps {

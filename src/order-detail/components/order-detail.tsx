@@ -318,7 +318,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: showRealStock ? (
           <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
         ) : (
-          <FormattedMessage id="Order.Quantity" values={{ br: <br /> }} />
+          <FormattedMessage id="Order.Quantity" />
         ),
         dataIndex: 'num',
         key: 'num',
@@ -899,7 +899,7 @@ class OrderDetailTab extends React.Component<any, any> {
                       title={<div>{deliveryMethod}</div>}
                     >
                       <p className="overFlowtext">
-                        <FormattedMessage id="Order.workTime" />: {deliveryMethod}
+                        <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
                       </p>
                     </Tooltip>
                   )}

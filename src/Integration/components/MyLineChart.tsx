@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { Icon, Popover } from 'antd';
+import moment from 'moment';
 
 export default class MyLineChart extends Component<any,any> {
   constructor(props: any) {
@@ -15,8 +16,8 @@ export default class MyLineChart extends Component<any,any> {
     const options = {
       grid: {
         top: 8,
-        right: 8,
-        bottom: 24,
+        right: 36,
+        bottom: 36,
         left: 36
       },
       xAxis: {
@@ -31,11 +32,17 @@ export default class MyLineChart extends Component<any,any> {
           }
         },
         axisLabel: { // x轴文案
+          show:true,
           textStyle: { // 颜色
-            color: '#C7C7C7'
+            color: '#000000'
           },
           lineStyle: { // x轴线颜色
             color: '#C7C7C7'
+          },
+          align:"center",
+  
+          formatter: function (value, index) {
+            return moment(value).format("HH:mm") +'\n'+ moment(value).format("MM-DD")
           }
         }
 
@@ -62,9 +69,9 @@ export default class MyLineChart extends Component<any,any> {
           type: 'line',
           smooth: true,
           symbol: 'none',
-          areaStyle: { // 开起面积背景颜色
-            color: '#f4e3e5'
-          },
+          // areaStyle: { // 开起面积背景颜色
+          //   color: '#f4e3e5'
+          // },
           label: {
             show: false,
             position: 'top'

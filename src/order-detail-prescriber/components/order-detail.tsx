@@ -241,11 +241,32 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (text) => text
       },
       {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
+      },
+      {
         title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%',
-        render: (text,record) => text==='individualization'?record.petsName+'\'s personalized subscription':text
+        width: '15%',
+        render: (text,record) => {
+          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{productName}</div>}
+            >
+              <p className="overFlowtext" style={{width:'150px'}}>
+                {productName}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: <FormattedMessage id="Order.Weight"/>,
@@ -329,20 +350,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       //     </span>
       //   )
       // },
-      // {
-      //   title: 'Quantity',
-      //   dataIndex: 'num',
-      //   key: 'num'
-      // },
-      // {
-      //   title: 'Subtotal',
-      //   render: (row) => (
-      //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-      //       {row && (row.num * row.levelPrice).toFixed(2)}
-      //     </span>
-      //   )
-      // }
     ];
 
     const columnsNoPet = [
@@ -351,6 +358,12 @@ export default class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text
+      },
+      {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
       },
       {
         title: <FormattedMessage id="Order.ProductName"/>,
@@ -427,20 +440,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       //     </span>
       //   )
       // },
-      // {
-      //   title: 'Quantity',
-      //   dataIndex: 'num',
-      //   key: 'num'
-      // },
-      // {
-      //   title: 'Subtotal',
-      //   render: (row) => (
-      //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-      //       {row && (row.num * row.levelPrice).toFixed(2)}
-      //     </span>
-      //   )
-      // }
     ];
 
     return (

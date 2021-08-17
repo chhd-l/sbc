@@ -61,7 +61,7 @@ export default class InterfaceView extends Component<any, any> {
     webapi.getInterfaceDetail(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let detailInfo = res.context
+        let detailInfo = res.context || {}
         this.setState({
           loading: false,
           detailInfo
@@ -170,7 +170,7 @@ export default class InterfaceView extends Component<any, any> {
 
 
   render() {
-    const { loading, detailsTabsKey, tableTabsKey, detailInfo,visible, title, showJson,pagination,logList } = this.state
+    const { loading, detailsTabsKey, tableTabsKey, detailInfo,visible, title, showJson,pagination,logList,interfaceId } = this.state
     const columns = [
       {
         title: RCi18n({ id: 'Log.RequestID' }),
@@ -245,7 +245,7 @@ export default class InterfaceView extends Component<any, any> {
               </TabPane>
               {/* Statistics */}
               <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
-                <Statistics />
+                <Statistics interfaceId={interfaceId} />
               </TabPane>
             </Tabs>
           </div>
@@ -253,9 +253,9 @@ export default class InterfaceView extends Component<any, any> {
             detailsTabsKey === 'information' ? (
               <div className="container">
                 <Tabs defaultActiveKey={tableTabsKey} onChange={(key) => this.onTableTabsChange(key)}>
-                  {/* Information */}
+                  {/* All */}
                   <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="all" />
-                  {/* Statistics */}
+                  {/* Error */}
                   <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
                 </Tabs>
                 {/* 表格 */}

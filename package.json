@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./web_modules/qmkit/build.ts dev && cross-env NODE_ENV=development node scripts/start.js dev --hot --plugins dynamic-import-node",
+    "start:myvetreco": "node ./web_modules/qmkit/build.ts dev && cross-env NODE_ENV=development PRIMARY_COLOR=#448bff node scripts/start.js dev --hot --plugins dynamic-import-node",
     "build:dev": "node ./web_modules/qmkit/build.ts dev && cross-env NODE_ENV=development --info=true node scripts/build.js dev",
     "build:stg": "node ./web_modules/qmkit/build.ts stg && cross-env NODE_ENV=stg --info=true node scripts/build.js stg",
     "build:sit": "node ./web_modules/qmkit/build.ts sit && cross-env NODE_ENV=sit --info=true node scripts/build.js sit",
@@ -63,6 +64,7 @@
     "m3u8-parser": "^4.7.0",
     "moment": "^2.24.0",
     "mpd-parser": "^0.18.0",
+    "parallax-js": "^3.1.0",
     "plume2": "^1.2.7",
     "postcss": "8.3.5",
     "postcss-flexbugs-fixes": "^5.0.2",
@@ -104,6 +106,7 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",

@@ -267,7 +267,6 @@ class OrderDetailTab extends React.Component<any, any> {
         render: (text) => text,
         width: '11%'
       },
-      // todo 调整externalSKuCode取值字段
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
         dataIndex: 'externalSkuId',

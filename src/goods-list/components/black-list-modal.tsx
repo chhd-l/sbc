@@ -45,12 +45,13 @@ export default class BlackListModal extends React.Component<any, any>{
         this.setState({ loading: true });
         const { res } = await getBlacklist();
         this.setState({ loading: false });
+
         // @ts-ignore
         if (res.code === Const.SUCCESS_CODE ){
             // @ts-ignore
-            let priceBlackList = res.content?.price?.goodsInfos?.content ?? [];
+            let priceBlackList = res.context?.price?.goodsInfos?.content ?? [];
             // @ts-ignore
-            let inventoryBlackList =  res.content?.inventory?.goodsInfos?.content ?? [];
+            let inventoryBlackList =  res.context?.inventory?.goodsInfos?.content ?? [];
             this.setState({
                 priceBlackList,
                 inventoryBlackList,
@@ -114,8 +115,8 @@ export default class BlackListModal extends React.Component<any, any>{
             },
             {
                 title: <FormattedMessage id="Product.ProductName" />,
-                dataIndex: 'goodsInfoName',
-                key: 'goodsInfoName',
+                dataIndex: 'goodsName',
+                key: 'goodsName',
                 width: "20%",
             },
             // {
@@ -131,8 +132,8 @@ export default class BlackListModal extends React.Component<any, any>{
             // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
-                dataIndex: 'cateName',
-                key: 'cateName',
+                dataIndex: 'productCategoryNames',
+                key: 'productCategoryNames',
                 width: "15%"
             },
             {
@@ -177,8 +178,8 @@ export default class BlackListModal extends React.Component<any, any>{
             },
             {
                 title: <FormattedMessage id="Product.ProductName" />,
-                dataIndex: 'goodsInfoName',
-                key: 'goodsInfoName',
+                dataIndex: 'goodsName',
+                key: 'goodsName',
                 width: "20%",
             },
             // {
@@ -194,8 +195,8 @@ export default class BlackListModal extends React.Component<any, any>{
             // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
-                dataIndex: 'cateName',
-                key: 'cateName',
+                dataIndex: 'productCategoryNames',
+                key: 'productCategoryNames',
                 width: "15%"
             },
             {
@@ -273,7 +274,6 @@ export default class BlackListModal extends React.Component<any, any>{
     }
 
     skuSelectedBackFun = (selectedSkuIds, selectedRows: any) => {
-
         if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
 
         // type price 和 inventory
@@ -339,7 +339,7 @@ export default class BlackListModal extends React.Component<any, any>{
         return (
             <div>
                 <Modal
-                    width={1150}
+                    width={800}
                     title={null}
                     wrapClassName='blackListModal-wrap'
                     confirmLoading={confirmLoading}
@@ -349,7 +349,7 @@ export default class BlackListModal extends React.Component<any, any>{
                     okText={RCi18n({id:'Product.Confirm'})}
                     cancelText={RCi18n({id:'Product.Cancel'})}
                 >
-                    <Spin spinning={loading}>
+                    <div>
                         <div className='list-box priceBlackList-box'>
                             <div className='list-box-title'><FormattedMessage id="Product.PriceBlackList" /></div>
                             <Button
@@ -359,6 +359,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 <FormattedMessage id="Product.AddProduct" />
                             </Button>
                             <DataGrid
+                                loading={loading}
                                 rowKey={(record) => record.goodsInfoId}
                                 className='table-box'
                                 dataSource={priceBlackList}
@@ -376,6 +377,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 <FormattedMessage id="Product.AddProduct" />
                             </Button>
                             <DataGrid
+                                loading={loading}
                                 rowKey={(record) => record.goodsInfoId}
                                 className='table-box'
                                 dataSource={inventoryBlackList}
@@ -384,7 +386,7 @@ export default class BlackListModal extends React.Component<any, any>{
                                 pagination={false}
                             />
                         </div>
-                    </Spin>
+                    </div>
 
                 </Modal>
                 <GoodsModal
@@ -400,6 +402,3 @@ export default class BlackListModal extends React.Component<any, any>{
 
 }
 
-function SpecificationList () {
-
-}

@@ -59,11 +59,11 @@ export default class MyHeader extends React.Component {
       reminderTasks: [],
       visible: false,
       modalVisible: false,
-      English: util.requireLocalSrc(lan === 'en-US' ? 'sys/English_act.png' : 'sys/English.png'),
-      Russian: util.requireLocalSrc(lan === 'ru' ? 'sys/Russian_act.png' : 'sys/Russian.png'),
-      Turkey: util.requireLocalSrc(lan === 'tr' ? 'sys/Turkey_act.png' : 'sys/Turkey.png'),
-      France: util.requireLocalSrc(lan === 'fr' ? 'sys/France_act.png' : 'sys/France.png'),
-      Spanish: util.requireLocalSrc(lan === 'es' ? 'sys/Spanish_act.png' : 'sys/Spanish.png'),
+      English: util.requireLocalSrc(lan === 'en-US' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/English_act_blue.png' : 'sys/English_act.png' : 'sys/English.png'),
+      Russian: util.requireLocalSrc(lan === 'ru' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Russian_act_blue.png' : 'sys/Russian_act.png' : 'sys/Russian.png'),
+      Turkey: util.requireLocalSrc(lan === 'tr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Turkey_act_blue.png' : 'sys/Turkey_act.png' : 'sys/Turkey.png'),
+      France: util.requireLocalSrc(lan === 'fr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/France_act_blue.png' : 'sys/France_act.png' : 'sys/France.png'),
+      Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
       storeList: [],
     };
   }
@@ -115,7 +115,8 @@ export default class MyHeader extends React.Component {
 
   setImgSrc(val, lan, type) {
     if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lan) return;
-    this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + '.png') });
+    const siteFlag = type ? Const.SITE_NAME === 'MYVETRECO' ? '_blue' : '' : '';
+    this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
   }
 
   getLanguageItem() {

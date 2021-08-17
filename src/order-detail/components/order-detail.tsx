@@ -279,8 +279,9 @@ class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: '9%',
-        render: (text,record) => {
-          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+        render: (text, record) => {
+          const productName =
+            text === 'individualization' ? record.petsName + "'s personalized subscription" : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -336,18 +337,26 @@ class OrderDetailTab extends React.Component<any, any> {
             <div>
               <span>
                 {SYSTEM_GET_CONFIG}
-                {record.subscriptionPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+                {record.subscriptionPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
               </span>
-              <br/>
+              <br />
               <span style={{ textDecoration: 'line-through' }}>
                 {SYSTEM_GET_CONFIG}
-                {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+                {originalPrice &&
+                  originalPrice.toFixed(
+                    detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                  )}
               </span>
             </div>
           ) : (
             <span>
               {SYSTEM_GET_CONFIG}
-              {originalPrice && originalPrice.toFixed(detail.get('subscriptionType')==='Individualization'?4:2)}
+              {originalPrice &&
+                originalPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
             </span>
           )
       },

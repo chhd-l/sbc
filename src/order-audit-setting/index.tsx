@@ -279,7 +279,7 @@ class OrderSetting extends Component<any, any> {
               };
               this.updateCategoryStatus(params);
             }}
-          ></Switch>
+          />
         )
       }
     ];
@@ -313,7 +313,7 @@ class OrderSetting extends Component<any, any> {
               };
               this.updateCategoryPrescriber(params);
             }}
-          ></Switch>
+          />
         )
       }
     ];

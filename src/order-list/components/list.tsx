@@ -60,10 +60,15 @@ const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 class ListView extends React.Component<any, any> {
   _rejectForm;
 
-  state: {
-    selectedOrderId: null;
-    orderAduit: null;
-  };
+  constructor(props) {
+    super(props);
+    this.state =  {
+      selectedOrderId: null,
+      orderAduit: null,
+      curOrderFlowStatus:null,//当前选中的订单的状态
+      orderAuditModalVisible:false,//是否显示订单审核弹框
+    };
+  }
 
   props: {
     histroy?: Object;
@@ -71,7 +76,6 @@ class ListView extends React.Component<any, any> {
       loading: boolean;
       btnLoading: boolean;
       orderRejectModalVisible: boolean;
-      orderAuditModalVisible: boolean;
       total: number;
       pageSize: number;
       currentPage: number;
@@ -88,9 +92,7 @@ class ListView extends React.Component<any, any> {
       onCheckReturn: Function;
       verify: Function;
       hideRejectModal: Function;
-      hideAuditModal: Function;
       showRejectModal: Function;
-      showAuditModal: Function;
     };
   };
 
@@ -117,15 +119,13 @@ class ListView extends React.Component<any, any> {
     onCheckReturn: noop,
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
-    orderAuditModalVisible: 'orderAuditModalVisible',
     hideRejectModal: noop,
-    hideAuditModal: noop,
     showRejectModal: noop,
-    showAuditModal: noop
   };
 
   render() {
-    const { loading, btnLoading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible, orderAuditModalVisible } = this.props.relaxProps;
+    const { loading, btnLoading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
+    const {orderAuditModalVisible,curOrderFlowStatus}=this.state;
 
     return (
       <div>
@@ -215,7 +215,7 @@ class ListView extends React.Component<any, any> {
               </h3>
               <p className="ant-form-item-required" style={{ margin: '20px 0' }}>
                 {' '}
-                <span></span> {<FormattedMessage id="Order.auditBasis" />}
+                <span></span> {curOrderFlowStatus==='PENDING'?<FormattedMessage id="Order.pendingAuditBasis" />:<FormattedMessage id="Order.auditBasis" />}
               </p>
               <Row>
                 <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
@@ -472,16 +472,23 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
 
-                          {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
+                          {/*订单PENDING状态审核*/}
+                          {v.getIn(['tradeState', 'flowState']) === 'PENDING' ? (
                             <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id)} className="iconfont iconaudit"></a>
+                              <a onClick={() => this._showAuditConfirm(id,'PENDING')} className="iconfont iconPendingAudit"/>
                             </Tooltip>
                           ) : null}
+
+                          {/*订单PENDING_REVIEW状态审核*/}
+                          {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
+                            <Tooltip placement="top" title="Audit">
+                              <a onClick={() => this._showAuditConfirm(id,'PENDING_REVIEW')} className="iconfont iconaudit"/>
+                            </Tooltip>
+                          ) : null}
+
                           <AuthWrapper functionName="fOrderDetail001">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails">
-                                {/*<FormattedMessage id="order.seeDetails" />*/}
-                              </Link>
+                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails"/>
                             </Tooltip>
                           </AuthWrapper>
                         </span>
@@ -573,9 +580,12 @@ class ListView extends React.Component<any, any> {
     this.setState({ selectedOrderId: tdId }, showRejectModal());
   };
 
-  _showAuditConfirm = (tdId: string) => {
-    const { showAuditModal } = this.props.relaxProps;
-    this.setState({ selectedOrderId: tdId, orderAduit: 1 }, showAuditModal());
+  /**
+   * 订单Pending/Pending Review状态审核弹框
+   * @private
+   */
+  _showAuditConfirm = (tdId: string,orderStatus:string) => {
+    this.setState({ selectedOrderId: tdId, orderAduit: 1 ,curOrderFlowStatus:orderStatus,orderAuditModalVisible:true});
   };
 
   /**
@@ -641,6 +651,8 @@ class ListView extends React.Component<any, any> {
   };
 
   _handleAuditOK = () => {
+    //todo 现接口是针对PENDING_REVIEW状态做的审核，需添加PENDING状态审核接口
+    this.setState({orderAuditModalVisible:false})
     const { onValidateAudit } = this.props.relaxProps;
     onValidateAudit(this.state.selectedOrderId, this.state.orderAduit);
   };
@@ -654,8 +666,7 @@ class ListView extends React.Component<any, any> {
     this._rejectForm.setFieldsValue({ comment: '' });
   };
   _handleAuditCancel = () => {
-    const { hideAuditModal } = this.props.relaxProps;
-    hideAuditModal();
+    this.setState({orderAuditModalVisible:false})
   };
   isPrescriber = () => {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));

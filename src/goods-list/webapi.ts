@@ -139,7 +139,7 @@ export const getBlacklist = (params = {
     pageSize: 10000
 }) => {
   return Fetch('/goods/blacklist/getPages', {
-    method: 'GET',
+    method: 'POST',
     body: JSON.stringify(params)
   });
 };

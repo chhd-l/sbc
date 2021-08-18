@@ -32,6 +32,7 @@ export default class BlackListModal extends React.Component<any, any>{
             productModalVisible: false,
 
             selectedSkuIds: [],
+            selectedRows: [],
         }
         this.currentSelected = null;
 
@@ -241,7 +242,8 @@ export default class BlackListModal extends React.Component<any, any>{
                 this.setState({
                     selectedSkuIds: isPriceBlackList
                         ? priceBlackList.map(item => item.goodsInfoId)
-                        : []
+                        : [],
+                    selectedRows: priceBlackList,
                 })
 
               break;
@@ -250,7 +252,8 @@ export default class BlackListModal extends React.Component<any, any>{
                 this.setState({
                     selectedSkuIds: isInventoryBlackList
                         ? inventoryBlackList.map(item => item.goodsInfoId)
-                        : []
+                        : [],
+                    selectedRows: inventoryBlackList,
                 })
                 break;
             default: break;
@@ -324,6 +327,7 @@ export default class BlackListModal extends React.Component<any, any>{
             priceBlackList,
             inventoryBlackList,
             selectedSkuIds,
+            selectedRows,
             productModalVisible,
         } = this.state;
 
@@ -386,7 +390,7 @@ export default class BlackListModal extends React.Component<any, any>{
                 <GoodsModal
                     visible={productModalVisible}
                     selectedSkuIds={selectedSkuIds}
-                    // selectedRows={selectedRows}
+                    selectedRows={selectedRows}
                     onOkBackFun={this.skuSelectedBackFun}
                     onCancelBackFun={this.closeProductModal}
                 />

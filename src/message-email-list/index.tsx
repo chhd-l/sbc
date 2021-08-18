@@ -186,6 +186,7 @@ export default class ClinicList extends Component<any, any> {
 
   render() {
     const { title, searchForm, taskList, emailTemplateList } = this.state;
+    console.log(taskList,'🐖')
 
     const objectTypeList = [
       {
@@ -363,7 +364,7 @@ export default class ClinicList extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
-                <FormItem> 
+                <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input

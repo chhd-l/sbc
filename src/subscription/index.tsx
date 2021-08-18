@@ -137,8 +137,8 @@ export default class SubscriptionList extends Component<any, any> {
       status: activeKey,
       subscriptionType,
       subscriptionPlanType,
-      phoneNumber: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
-      deliveryAddressPhoneNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
+      phoneNum: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
+      consigneeNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
     };
     this.setState(
       () => {

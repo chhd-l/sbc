@@ -66,6 +66,12 @@ const columns = [
     render: (text, record) => (
       <div>
           <div>
+
+            <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+              <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+            </Tooltip>
+
+            <Divider type="vertical" />
             <Tooltip placement="top" title={RCi18n({id:'edit'})}>
               <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
             </Tooltip>

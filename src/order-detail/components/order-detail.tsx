@@ -21,6 +21,7 @@ import PetItem from '@/customer-details/component/pet-item';
 import './style.less';
 import OrderMoreFields from './order_more_field';
 import details from '@/subscription-plan-update/components/details';
+import { add } from '@/groupon-add/webapi';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -254,10 +255,9 @@ class OrderDetailTab extends React.Component<any, any> {
     const deliverWay = detail.get('deliverWay');
     const deliveryMethod =
       deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
-    const address1 =
-      consignee.detailAddress1 +
-      ' ' +
-      (deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '');
+    const addressHour =
+      deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
+    const address1 = consignee.detailAddress1 + ' ' + (addressHour || '');
 
     const columns = [
       {
@@ -281,7 +281,7 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '9%',
         render: (text, record) => {
           const productName =
-            text === 'individualization' ? record.petsName + "'s personalized subscription" : text;
+            text === 'individualization' ? record.petsName + '\'s personalized subscription' : text;
           return (
             <Tooltip
               overlayStyle={{

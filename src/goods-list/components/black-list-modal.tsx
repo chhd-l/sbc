@@ -111,12 +111,12 @@ export default class BlackListModal extends React.Component<any, any>{
                 title: <FormattedMessage id="Product.SKUCode" />,
                 dataIndex:"goodsInfoNo",
                 key:"goodsInfoNo",
-                width: "15%",
+                width: "20%",
             },
             {
                 title: <FormattedMessage id="Product.ProductName" />,
-                dataIndex: 'goodsName',
-                key: 'goodsName',
+                dataIndex: 'goodsInfoName',
+                key: 'goodsInfoName',
                 width: "20%",
             },
             // {
@@ -132,9 +132,9 @@ export default class BlackListModal extends React.Component<any, any>{
             // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
-                dataIndex: 'productCategoryNames',
-                key: 'productCategoryNames',
-                width: "15%"
+                dataIndex: 'cateName',
+                key: 'cateName',
+                width: "20%"
             },
             {
                 title: <FormattedMessage id="Product.Brand" />,
@@ -156,11 +156,9 @@ export default class BlackListModal extends React.Component<any, any>{
                             okText={<FormattedMessage id="Product.Confirm" />}
                             cancelText={<FormattedMessage id="Product.Cancel" />}
                         >
-                            <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
-                                <a>
-                                    <span className="icon iconfont iconDelete" style={{fontSize: 20}}/>
-                                </a>
-                            </Tooltip>
+                            <a>
+                                <span className="icon iconfont iconDelete" style={{fontSize: 18}}/>
+                            </a>
                         </Popconfirm>
                     );
                 }
@@ -174,12 +172,12 @@ export default class BlackListModal extends React.Component<any, any>{
                 title: <FormattedMessage id="Product.SKUCode" />,
                 dataIndex:"goodsInfoNo",
                 key:"goodsInfoNo",
-                width: "15%",
+                width: "20%",
             },
             {
                 title: <FormattedMessage id="Product.ProductName" />,
-                dataIndex: 'goodsName',
-                key: 'goodsName',
+                dataIndex: 'goodsInfoName',
+                key: 'goodsInfoName',
                 width: "20%",
             },
             // {
@@ -195,9 +193,9 @@ export default class BlackListModal extends React.Component<any, any>{
             // },
             {
                 title: <FormattedMessage id="Product.ProductCategory" />,
-                dataIndex: 'productCategoryNames',
-                key: 'productCategoryNames',
-                width: "15%"
+                dataIndex: 'cateName',
+                key: 'cateName',
+                width: "20%"
             },
             {
                 title: <FormattedMessage id="Product.Brand" />,
@@ -219,17 +217,14 @@ export default class BlackListModal extends React.Component<any, any>{
                             okText={<FormattedMessage id="Product.Confirm" />}
                             cancelText={<FormattedMessage id="Product.Cancel" />}
                         >
-                            <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
-                                <a>
-                                    <span className="icon iconfont iconDelete" style={{fontSize: 20}}/>
-                                </a>
-                            </Tooltip>
+                            <a>
+                                <span className="icon iconfont iconDelete" style={{fontSize: 18}}/>
+                            </a>
                         </Popconfirm>
                     );
                 }
             },
         ]
-
     }
 
     showProductModal = (type) => {
@@ -306,13 +301,12 @@ export default class BlackListModal extends React.Component<any, any>{
             {
                 title: 'Specification',
                 children: [
-                    { title: 'name', dataIndex: 'name', key: 'name' },
-                    { title: 'value', dataIndex: 'value', key: 'value' },
+                    { title: 'name', dataIndex: 'Name', key: 'Name' },
+                    { title: 'value', dataIndex: 'theValue', key: 'theValue' },
                 ],
             },
         ]
         return <Table
-            bordered
             columns={columns}
             dataSource={data}
             pagination={false}

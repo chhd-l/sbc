@@ -14,11 +14,12 @@ import {
   Spin,
   Radio,
   Select,
-  Table
+  Table, Tooltip, Divider
 } from 'antd';
 import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
+import { Link } from 'react-router-dom';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -26,34 +27,34 @@ const InputGroup = Input.Group;
 
 const columns = [
   {
-    title: 'Message Template Name',
+    title: 'Id',
     dataIndex: 'id',
     key: 'taskId',
     width: '10%'
   },
   {
-    title: 'Message Template Type',
-    dataIndex: 'template_id',
+    title: 'Template Id',
+    dataIndex: 'templateId',
     key: 'objectType',
     width: '10%',
     ellipsis: true
   },
   {
-    title: 'Created Date',
-    dataIndex: 'template_name',
+    title: 'Template Name',
+    dataIndex: 'emailTemplate',
     key: 'objectNo',
     width: '10%'
   },
   {
-    title: 'Message Template Type',
-    dataIndex: 'template_id',
+    title: 'Template Type',
+    dataIndex: 'sendCategory',
     key: 'objectType',
     width: '10%',
     ellipsis: true
   },
   {
     title: 'Created Date',
-    dataIndex: 'template_name',
+    dataIndex: 'createTime',
     key: 'objectNo',
     width: '10%'
   },
@@ -61,75 +62,113 @@ const columns = [
     title: 'Operation',
     dataIndex: 'objectNo',
     key: 'objectNo',
-    width: '10%'
+    width: '10%',
+    render: (text, record) => (
+      <div>
+          <div>
+            <Tooltip placement="top" title={RCi18n({id:'edit'})}>
+              <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
+            </Tooltip>
+
+            <Divider type="vertical" />
+
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title={RCi18n({id:'delete'})}>
+                <a type="link" className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
+          </div>
+      </div>
+    )
+
   },
 ]
 
 const TemplateData=[
-  {
-    'id': 19136,
-    'template_id': 'T202108180219382336',
-    'template_name': 'Prescriber creation',
-    },
+
   {
     id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19137,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    'id': 19136,
-    'template_id': 'T202108180219382336',
-    'template_name': 'Prescriber creation',
+    id: 19138,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19139,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 191340,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    'id': 19136,
-    'template_id': 'T202108180219382336',
-    'template_name': 'Prescriber creation',
+    id: 19141,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19142,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19143,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19144,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    'id': 19136,
-    'template_id': 'T202108180219382336',
-    'template_name': 'Prescriber creation',
+    id: 19145,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19146,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
   {
-    id: 19136,
-    template_id: 'T202108180219382336',
-    template_name: 'Prescriber creation',
+    id: 19147,
+    templateId: 'T202108180219382336',
+    emailTemplate: 'Prescriber creation',
+    sendCategory:1,
+    createTime:'2021-08-18 02:20:20.000',
   },
 
 ]
@@ -139,13 +178,18 @@ const MessageTemplateConfiguration=()=>{
 
 
   const [emailTemplateList,setEmailTemplateList]=useState([]);
+  const [templateListData,setTemplateListData]=useState([]);
+
 
   const getEmailTemplateList=()=>{
     webapi.getEmailTemplateList().then((data) => {
       const {res} =data;
-      console.log(res,'🐖')
       if(res.code===Const.SUCCESS_CODE){
-        setEmailTemplateList(res.context.emailTemplateResponseList)
+        //上方搜索框展示模板名
+        setEmailTemplateList(res.context.emailTemplateResponseList);
+
+        //下方展示展示所有模板
+        setTemplateListData(res.context.emailTemplateResponseList);
       }
     })
   }
@@ -192,10 +236,10 @@ const MessageTemplateConfiguration=()=>{
               </FormItem>
             </Col>
             <Col span={2}></Col>
-            <Col span={14}>
-              <FormItem >
-                <InputGroup compact style={styles.formItemStyle2}>
-                  <Input style={styles.label1} disabled defaultValue={'Message Template Type'} />
+            <Col span={8}>
+              <FormItem>
+                <InputGroup compact style={styles.formItemStyle}>
+                  <Input style={styles.label} disabled defaultValue={'Template type'} />
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -211,10 +255,10 @@ const MessageTemplateConfiguration=()=>{
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {/*{objectTypeList &&*/}
-                    {/*objectTypeList.map((item, index) => (*/}
-                    {/*  <Option value={item.value} key={index}>*/}
-                    {/*    {item.name}*/}
+                    {/*{emailTemplateList &&*/}
+                    {/*emailTemplateList.map((item, index) => (*/}
+                    {/*  <Option value={item.templateId} key={index}>*/}
+                    {/*    {item.emailTemplate}*/}
                     {/*  </Option>*/}
                     {/*))}*/}
                   </Select>
@@ -246,10 +290,11 @@ const MessageTemplateConfiguration=()=>{
       </div>
 
       <div className="container">
+        {console.log(templateListData,'🐱')}
         <Table
           rowKey="id"
           columns={columns}
-          dataSource={TemplateData}
+          dataSource={templateListData}
           // pagination={this.state.pagination}
           // loading={this.state.loading}
           // scroll={{ x: '100%' }}
@@ -269,18 +314,8 @@ const styles = {
     backgroundColor: '#fff',
     cursor: 'text'
   },
-  label1:{
-    width: 180,
-    textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.65)',
-    backgroundColor: '#fff',
-    cursor: 'text'
-  },
   wrapper: {
     width: 160
-  },
-  formItemStyle2:{
-    width:340,
   }
 } as any;
 

@@ -12,3 +12,5 @@ export function getEmailTemplateList() {
     method: 'POST'
   });
 }
+
+

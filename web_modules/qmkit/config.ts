@@ -1,7 +1,7 @@
 import Common from './config-common';
 
 const host = window.location.host;
-const SITE_NAME = 'MYVETRECO';
+const SITE_NAME = host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC';
 
 //配置colors值方便js中读取
 const COLORS = {
@@ -11,10 +11,7 @@ const COLORS = {
 
 export default {
   /* dev */
-  // HOST: 'http://124.71.151.9:8390',
-
-  /* sit */
-  HOST: 'https://storesit.royalcanin.com/api',
+  HOST: 'http://124.71.151.9:8390',
 
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',

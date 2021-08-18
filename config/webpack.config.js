@@ -50,7 +50,8 @@ const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 //主题色读取环境变量
-let primaryColor = process.env.PRIMARY_COLOR || '#e2001a';
+let primaryColor = process.env.SITE_NAME === 'MYVETRECO' ? '#448bff' : '#e2001a';
+let icoFile = process.env.SITE_NAME ==='MYVETRECO' ? 'faviconm.ico' : 'favicon.ico';
 
 module.exports = function (webpackEnv, envCode) {
 
@@ -477,6 +478,7 @@ module.exports = function (webpackEnv, envCode) {
             dllName: isEnvProduction ? require('./compile-env.json').prodDll : require('./compile-env.json').testDll,
             inject: true,
             template: paths.appHtml,
+            icoFile: icoFile,
           },
           isEnvProduction
             ? {

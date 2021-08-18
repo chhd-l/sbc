@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   Button,
@@ -16,8 +16,9 @@ import {
   Select,
   Table
 } from 'antd';
-import { BreadCrumb, Headline, RCi18n } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -28,6 +29,19 @@ const columns = [
     title: 'Message Template Name',
     dataIndex: 'id',
     key: 'taskId',
+    width: '10%'
+  },
+  {
+    title: 'Message Template Type',
+    dataIndex: 'template_id',
+    key: 'objectType',
+    width: '10%',
+    ellipsis: true
+  },
+  {
+    title: 'Created Date',
+    dataIndex: 'template_name',
+    key: 'objectNo',
     width: '10%'
   },
   {
@@ -124,6 +138,22 @@ const TemplateData=[
 const MessageTemplateConfiguration=()=>{
 
 
+  const [emailTemplateList,setEmailTemplateList]=useState([]);
+
+  const getEmailTemplateList=()=>{
+    webapi.getEmailTemplateList().then((data) => {
+      const {res} =data;
+      console.log(res,'🐖')
+      if(res.code===Const.SUCCESS_CODE){
+        setEmailTemplateList(res.context.emailTemplateResponseList)
+      }
+    })
+  }
+
+  useEffect(()=>{
+    getEmailTemplateList();
+  },[])
+
   return(
     <div>
       <BreadCrumb />
@@ -151,21 +181,21 @@ const MessageTemplateConfiguration=()=>{
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {/*{emailTemplateList &&*/}
-                    {/*emailTemplateList.map((item, index) => (*/}
-                    {/*  <Option value={item.templateId} key={index}>*/}
-                    {/*    {item.emailTemplate}*/}
-                    {/*  </Option>*/}
-                    {/*))}*/}
+                    {emailTemplateList &&
+                    emailTemplateList.map((item, index) => (
+                      <Option value={item.templateId} key={index}>
+                        {item.emailTemplate}
+                      </Option>
+                    ))}
                   </Select>
                 </InputGroup>
               </FormItem>
             </Col>
             <Col span={2}></Col>
-            <Col span={8}>
-              <FormItem>
-                <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
+            <Col span={14}>
+              <FormItem >
+                <InputGroup compact style={styles.formItemStyle2}>
+                  <Input style={styles.label1} disabled defaultValue={'Message Template Type'} />
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -239,8 +269,18 @@ const styles = {
     backgroundColor: '#fff',
     cursor: 'text'
   },
+  label1:{
+    width: 180,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
   wrapper: {
     width: 160
+  },
+  formItemStyle2:{
+    width:340,
   }
 } as any;
 

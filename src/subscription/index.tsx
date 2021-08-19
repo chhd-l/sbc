@@ -150,7 +150,7 @@ export default class SubscriptionList extends Component<any, any> {
             cycleTypeId: param.frequency,
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',
-            consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
+            // consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
             skuNo: param.skuCode ? param.skuCode : '',
             goodsName: param.productName ? param.productName : '',
@@ -158,8 +158,8 @@ export default class SubscriptionList extends Component<any, any> {
             prescriberName: param.prescriberName ? param.prescriberName : '',
             subscriptionType,
             subscriptionPlanType,
-            phoneNumber: param.phoneNumber ? param.phoneNumber : '',
-            deliveryAddressPhoneNumber: param.deliveryAddressPhoneNumber ? param.deliveryAddressPhoneNumber : '',
+            phoneNum: param.phoneNum ? param.phoneNum : '',
+            consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
           }
         };
       },

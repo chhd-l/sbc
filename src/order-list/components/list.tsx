@@ -230,7 +230,7 @@ class ListView extends React.Component<any, any> {
                     defaultValue={1}
                   >
                     <Radio value={1}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
-                    <Radio value={2}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
+                    <Radio value={0}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
                   </Radio.Group>
                 </Col>
               </Row>
@@ -482,8 +482,8 @@ class ListView extends React.Component<any, any> {
                             </Tooltip>
                           ) : null}
 
-                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已审核*/}
-                          {(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='CHECKED' ? (
+                          {/*订单PENDING_REVIEW下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW 2、审核状态：已人工审核*/}
+                          {flowState === 'PENDING_REVIEW'&&auditState==='CHECKED' ? (
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>

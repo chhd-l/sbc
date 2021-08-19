@@ -34,12 +34,12 @@ export const batchAudit = (ids) => {
  * @returns {Promise<IAsyncResult<TResult>>}
  */
 export const manualAudit = (tid: string, auditState) => {
-  //todo 接口地址调整
-  return Fetch<TResult>('/trade/pending/audit', {
+  return Fetch<TResult>('/trade/paidAuditBatch', {
     method: 'POST',
     body: JSON.stringify({
-      tid: tid,
-      auditState: auditState
+      reason:'',
+      ids: [tid],
+      auditState: auditState===1?'CHECKED':'REJECTED'
     })
   });
 };

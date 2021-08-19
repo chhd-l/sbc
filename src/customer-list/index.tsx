@@ -49,12 +49,18 @@ export default class Customer extends React.Component<any, any> {
           width: '15%'
         },
         {
-          title: RCi18n({ id: 'PetOwner.DefaultPrescriberName' }),
-          dataIndex: 'defaultClinics',
-          key: 'defaultClinics',
-          width: '15%',
-          render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+          title: RCi18n({ id: 'PetOwner.City' }),
+          dataIndex: 'city',
+          key: 'city',
+          width: '15%'
         },
+        // {
+        //   title: RCi18n({ id: 'PetOwner.DefaultPrescriberName' }),
+        //   dataIndex: 'defaultClinics',
+        //   key: 'defaultClinics',
+        //   width: '15%',
+        //   render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+        // },
         // {
         //   title: 'Selected Prescriber ID',
         //   dataIndex: 'clinicsIds',
@@ -105,7 +111,9 @@ export default class Customer extends React.Component<any, any> {
         //选中的诊所
         selectedPrescriberId: '',
         defaultPrescriberName: '',
-        subscriptionType: ''
+        subscriptionType: '',
+        // city
+        city: '',
       },
       customerTypeArr: [
         {
@@ -166,6 +174,7 @@ export default class Customer extends React.Component<any, any> {
     const query = this.state.searchForm;
 
     let params = {
+      city: query.city,
       subscriptionType: query.subscriptionType,
       contactPhone: query.phoneNumber,
       customerAccount: query.customerAccount,
@@ -399,17 +408,38 @@ export default class Customer extends React.Component<any, any> {
                     </TreeSelectGroup>
                   </FormItem>
                 </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="PetOwner.City" />
+                          </p>
+                        }
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'city',
+                            value
+                          });
+                        }}
+                    />
+                  </FormItem>
+                </Col>
+
+              </Row>
+              <Row>
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
-                      type="primary"
-                      htmlType="submit"
-                      icon="search"
-                      shape="round"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.onSearch();
-                      }}
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.onSearch();
+                        }}
                     >
                       <span>
                         <FormattedMessage id="PetOwner.search" />

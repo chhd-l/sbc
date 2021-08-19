@@ -2282,6 +2282,7 @@ export default {
   'PetOwner.consumerList':'Consumer list',
   'PetOwner.All':'All',
   'PetOwner.phoneNumber':'Phone number',
+  'PetOwner.City':'City',
   'PetOwner.search':'Search',
   'PetOwner.OperateSuccessfully':'Operate successfully',
   'PetOwner.theCorrectPhone':'Please enter the correct phone',

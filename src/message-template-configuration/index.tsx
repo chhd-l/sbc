@@ -185,7 +185,15 @@ const MessageTemplateConfiguration=()=>{
 
   const [emailTemplateList,setEmailTemplateList]=useState([]);
   const [templateListData,setTemplateListData]=useState([]);
+  const [defaultSearch,setDefaultSearch]=useState('112')
 
+
+  const searchEmail=()=>{
+    setTemplateListData(
+      templateListData.filter(item=>item.templateId===defaultSearch)
+    )
+    debugger
+  }
 
   const getEmailTemplateList=()=>{
     webapi.getEmailTemplateList().then((data) => {
@@ -209,7 +217,7 @@ const MessageTemplateConfiguration=()=>{
       <BreadCrumb />
       <div className="container-search">
         <Headline title="Template Settings"/>
-
+        {console.log(templateListData,'hah')}
         <Form className="filter-content" layout="inline">
           <Row>
 
@@ -227,6 +235,7 @@ const MessageTemplateConfiguration=()=>{
                     //     value
                     //   });
                     // }}
+
                   >
                     <Option value="">
                       <FormattedMessage id="all" />
@@ -280,10 +289,7 @@ const MessageTemplateConfiguration=()=>{
                   htmlType="submit"
                   icon="search"
                   shape="round"
-                  // onClick={(e) => {
-                  //   e.preventDefault();
-                  //   this.onSearch();
-                  // }}
+                  onClick={()=>searchEmail()}
                 >
                     <span>
                       <FormattedMessage id="search" />

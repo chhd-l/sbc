@@ -65,7 +65,7 @@ class ListView extends React.Component<any, any> {
     this.state =  {
       selectedOrderId: null,
       orderAduit: null,
-      curOrderFlowStatus:null,//当前选中的订单的状态
+      curOrderAuditType:null,//当前选中的订单的审核类型 ManualReview:人工审核  DownstreamAudit:下游审核库存
       orderAuditModalVisible:false,//是否显示订单审核弹框
     };
   }
@@ -125,7 +125,7 @@ class ListView extends React.Component<any, any> {
 
   render() {
     const { loading, btnLoading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
-    const {orderAuditModalVisible,curOrderFlowStatus}=this.state;
+    const {orderAuditModalVisible,curOrderAuditType}=this.state;
 
     return (
       <div>
@@ -215,7 +215,7 @@ class ListView extends React.Component<any, any> {
               </h3>
               <p className="ant-form-item-required" style={{ margin: '20px 0' }}>
                 {' '}
-                <span></span> {curOrderFlowStatus==='PENDING'?<FormattedMessage id="Order.pendingAuditBasis" />:<FormattedMessage id="Order.auditBasis" />}
+                <span></span> {curOrderAuditType==='ManualReview'?<FormattedMessage id="Order.pendingAuditBasis" />:<FormattedMessage id="Order.auditBasis" />}
               </p>
               <Row>
                 <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
@@ -290,6 +290,9 @@ class ListView extends React.Component<any, any> {
         } else if (orderSource == 'LITTLEPROGRAM') {
           orderType = 'Mini Program order';
         }
+        const flowState=v.getIn(['tradeState', 'flowState'])//订单状态
+        const isAutoAudit=v.get('isAuditOpen')//订单审核方式 true:自动审核  false:手动审核
+        const auditState=v.getIn(['tradeState', 'auditState'])//订单审核状态
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={9} style={{ padding: 0 }}>
@@ -472,17 +475,17 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
 
-                          {/*订单PENDING状态审核*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'PENDING' ? (
+                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED人工审核，人工审核条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
+                          {!isAutoAudit&&(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='NON_CHECKED' ? (
                             <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id,'PENDING')} className="iconfont iconPendingAudit"/>
+                              <a onClick={() => this._showAuditConfirm(id,'ManualReview')} className="iconfont iconPendingAudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>
                           ) : null}
 
-                          {/*订单PENDING_REVIEW状态审核*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'PENDING_REVIEW' ? (
+                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已审核*/}
+                          {(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='CHECKED' ? (
                             <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id,'PENDING_REVIEW')} className="iconfont iconaudit"/>
+                              <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>
                           ) : null}
 
@@ -585,7 +588,7 @@ class ListView extends React.Component<any, any> {
    * @private
    */
   _showAuditConfirm = (tdId: string,orderStatus:string) => {
-    this.setState({ selectedOrderId: tdId, orderAduit: 1 ,curOrderFlowStatus:orderStatus,orderAuditModalVisible:true});
+    this.setState({ selectedOrderId: tdId, orderAduit: 1 ,curOrderAuditType:orderStatus,orderAuditModalVisible:true});
   };
 
   /**
@@ -651,10 +654,9 @@ class ListView extends React.Component<any, any> {
   };
 
   _handleAuditOK = () => {
-    //todo 现接口是针对PENDING_REVIEW状态做的审核，需添加PENDING状态审核接口
     this.setState({orderAuditModalVisible:false})
     const { onValidateAudit } = this.props.relaxProps;
-    onValidateAudit(this.state.selectedOrderId, this.state.orderAduit);
+    onValidateAudit(this.state.selectedOrderId, this.state.orderAduit,this.state.curOrderAuditType);
   };
 
   /**

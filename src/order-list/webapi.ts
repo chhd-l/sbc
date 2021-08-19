@@ -28,7 +28,24 @@ export const batchAudit = (ids) => {
 };
 
 /**
- * 审核
+ * 人工审核
+ * @param tid
+ * @param audit
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export const manualAudit = (tid: string, auditState) => {
+  //todo 接口地址调整
+  return Fetch<TResult>('/trade/pending/audit', {
+    method: 'POST',
+    body: JSON.stringify({
+      tid: tid,
+      auditState: auditState
+    })
+  });
+};
+
+/**
+ * 下游审核库存
  * @param tid
  * @param audit
  * @returns {Promise<IAsyncResult<TResult>>}

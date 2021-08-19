@@ -140,10 +140,17 @@ export default class AppStore extends Store {
     }
   };
 
-  onValidateAudit = async (tid: string, audit)=> {
+  onValidateAudit = async (tid: string, audit,curOrderAuditType='')=> {
     this.dispatch('btnLoading:start');
-    const { res } = await webapi.audit(tid, audit);
-    if (res.code == Const.SUCCESS_CODE) {
+    let result={code:''}
+    if(curOrderAuditType==='ManualReview'){
+      const { res } = await webapi.manualAudit(tid, audit);
+      result=res
+    }else{
+      const { res } = await webapi.audit(tid, audit);
+      result=res
+    }
+    if (result.code == Const.SUCCESS_CODE) {
       message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       this.init();
     }

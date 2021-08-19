@@ -230,7 +230,7 @@ class ListView extends React.Component<any, any> {
                     defaultValue={1}
                   >
                     <Radio value={1}>{<FormattedMessage id="Order.auditPassed" />}</Radio>
-                    <Radio value={0}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
+                    <Radio value={2}>{<FormattedMessage id="Order.auditFailed" />}</Radio>
                   </Radio.Group>
                 </Col>
               </Row>

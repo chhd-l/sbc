@@ -215,11 +215,16 @@ class ListView extends React.Component<any, any> {
     );
   }
 
+  //判断价格显示位数，针对Individualization类型小数位数特殊处理
+  judgePriceNum(price,subscriberType){
+    return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+  }
+
   _renderLoading() {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -487,7 +492,7 @@ class ListView extends React.Component<any, any> {
                       {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
-                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {this.judgePriceNum(tradePrice,v.get('subscriptionType'))}
                       <br />（{num} <FormattedMessage id="Order.Piece" />)
                     </td>
                     {/* <td style={{ width: '10%' }}>
@@ -685,8 +690,8 @@ const styles = {
     padding: '1px 3px',
     display: 'inline-block',
     marginLeft: 5,
-    border: ' 1px solid #F56C1D',
-    color: '#F56C15',
+    border: ' 1px solid var(--primary-color)',
+    color: 'var(--primary-color)',
     borderRadius: 5
   }
 } as any;

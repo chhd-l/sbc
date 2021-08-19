@@ -246,7 +246,7 @@ export default class tasks extends Component<any, any> {
           </Dropdown>
         </Col>
         <Col span={24}>
-          <Spin spinning={taskLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={taskLoading}>
             {taskList && taskList.length > 0 ? (
               <div>
                 <Timeline className="contactTaskList">

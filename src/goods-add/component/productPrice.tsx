@@ -13,7 +13,7 @@ const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 const limitDecimals = (value: string | number): string => {
 
-  const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
+  const reg = /^(\-)*(\d+)\.(\d\d\d\d\d).*$/;
   if (typeof value === 'string') {
     if (!isNaN(Number(value))) {
       //value = Number(value).toFixed(2)

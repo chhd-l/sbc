@@ -5,11 +5,18 @@ import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
 import {noop, AuthWrapper, checkAuth, util, Const} from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import BlackListModal from './black-list-modal';
 const confirm = Modal.confirm;
 
 @withRouter
 @Relax
 class Tool extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      backListVisible: false
+    }
+  }
   props: {
     history?: any;
     relaxProps?: {
@@ -29,6 +36,7 @@ class Tool extends React.Component<any, any> {
       addedFlag: string;
     };
   };
+
   static relaxProps = {
     spuDelete: noop,
     spuOnSale: noop,
@@ -52,7 +60,20 @@ class Tool extends React.Component<any, any> {
     addedFlag: 'addedFlag'
   };
 
+  showBackListModal = () => {
+    this.setState({
+      backListVisible: true
+    })
+  }
+
+  closeBackListModal = () => {
+    this.setState({
+      backListVisible: false,
+    })
+  }
+
   render() {
+    let { backListVisible } = this.state;
     let hasMenu = false;
     if (checkAuth('f_goods_up_down') || checkAuth('f_goods_6') || checkAuth('f_goods_temp_set')) {
       hasMenu = true;
@@ -76,6 +97,16 @@ class Tool extends React.Component<any, any> {
             </Button>
           </Dropdown>
         )}
+        {
+          backListVisible
+              ? (
+                  <BlackListModal
+                      visible={backListVisible}
+                      onCancel={this.closeBackListModal}
+                  />
+              )
+              : null
+        }
       </div>
     );
   }
@@ -102,6 +133,17 @@ class Tool extends React.Component<any, any> {
               }}
             >
               <FormattedMessage id="Product.SynchronizeImage" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_sync">
+            <a
+                onClick={() => {
+                  this.showBackListModal();
+                }}
+            >
+              <FormattedMessage id="Product.SynchronizedSetting" />
             </a>
           </AuthWrapper>
         </Menu.Item>

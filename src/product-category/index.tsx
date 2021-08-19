@@ -343,7 +343,7 @@ class PeoductCategory extends Component<any, any> {
         {/*导航面包屑*/}
 
         <div className="container-search">
-          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.state.loading}>
             <Headline title={title} />
             <Alert message={description} type="info" />
 

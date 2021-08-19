@@ -248,7 +248,7 @@ class AutomationForm extends Component<any, any> {
     return (
       <AuthWrapper functionName="f_automation_form">
         <div>
-          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={loading}>
             <BreadCrumb thirdLevel={true}>
               <Breadcrumb.Item>{title}</Breadcrumb.Item>
             </BreadCrumb>

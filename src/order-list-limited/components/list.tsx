@@ -230,7 +230,7 @@ class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -672,8 +672,8 @@ const styles = {
     padding: '1px 3px',
     display: 'inline-block',
     marginLeft: 5,
-    border: ' 1px solid #F56C1D',
-    color: '#F56C15',
+    border: ' 1px solid var(--primary-color)',
+    color: 'var(--primary-color)',
     borderRadius: 5
   }
 } as any;

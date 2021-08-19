@@ -124,9 +124,14 @@ export default class AppStore extends Store {
               monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : [],
             },
             club: {
-              dayClubList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
+              dayClubList: (results[0].res as any).context.frequency_day_club ? (results[0].res as any).context.frequency_day_club.sysDictionaryPage.content : [],
               weekClubList: (results[0].res as any).context.frequency_week_club ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content : [],
               monthClubList: (results[0].res as any).context.frequency_month_club ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content : []
+            },
+            individual: {
+              dayIndividualList: (results[0].res as any).context.frequency_day_individual ? (results[0].res as any).context.frequency_day_individual.sysDictionaryPage.content : [],
+              weekIndividualList: (results[0].res as any).context.frequency_week_individual ? (results[0].res as any).context.frequency_week_individual.sysDictionaryPage.content : [],
+              monthIndividualList: (results[0].res as any).context.frequency_month_individual ? (results[0].res as any).context.frequency_month_individual.sysDictionaryPage.content : []
             }
           });
 
@@ -800,7 +805,7 @@ export default class AppStore extends Store {
    */
   editSpecValues = (specItem) => {
     const priceOpt = this.state().get('priceOpt');
-    const mtkPrice = this.state().get('mtkPrice');
+    const mtkPrice = this.state().get('mtkPrice') || 0;
     this.dispatch('goodsSpecActor: editSpecValues', {
       priceOpt,
       mtkPrice,

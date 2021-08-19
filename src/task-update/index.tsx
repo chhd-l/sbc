@@ -576,14 +576,6 @@ class TaskUpdate extends Component<any, any> {
             <TabPane tab={<FormattedMessage id="task.BasicInformation" />} key="basic">
               <Spin
                 spinning={this.state.loading}
-                indicator={
-                  <img
-                    className="spinner"
-                    src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                    style={{ width: '90px', height: '90px' }}
-                    alt=""
-                  />
-                }
               >
                 <Form>
                   <Row>

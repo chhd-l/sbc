@@ -157,7 +157,7 @@ class TodoItems extends React.Component<any, any> {
 
     return (
       <div className="item">
-        <Spin spinning={loading} delay="500" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{width: '90px', height: '90px'}} alt=""/>}>
+        <Spin spinning={loading} delay={500}>
           <div className="item-top space-between">
             <div className="item-top-l flex-content">
               <div className="item-top-l-top">

@@ -45,7 +45,7 @@ export default class ProductReport extends Component<any, any> {
     return (
       <div>
         <BreadCrumb />
-        <Spin spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.store.get('loading')}>
           {/*导航面包屑*/}
           <ProductOverView />
           <ProductReportList />

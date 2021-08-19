@@ -34,6 +34,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticConfirmationValue: 1,
         orderAutomaticTriggerStatus: false,
         orderAutomaticTriggerValue: 1,
+        orderAllowZonePriceStatus:false,
+        orderAllowZonePriceValue:1,
         paymentWhen: 'None'
       },
       paymentCashForm: {
@@ -176,6 +178,12 @@ class OrderSetting extends Component<any, any> {
               paymentOnlineForm.orderAutomaticTriggerStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticTriggerValue = context.day;
+            }
+            //允许0元订单
+            if (item.configType === 'order_setting_zero_order') {
+              paymentOnlineForm.orderAllowZonePriceStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAllowZonePriceValue = context.hour;
             }
           });
 
@@ -405,7 +413,20 @@ class OrderSetting extends Component<any, any> {
           return
         }
       }
-
+      //允许0元订单
+      if (item.configType === 'order_setting_zero_order') {
+        item.status = +paymentOnlineForm.orderAllowZonePriceStatus;
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAllowZonePriceValue)) {
+          let context = {
+            hour: paymentOnlineForm.orderAllowZonePriceValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
     });
     if(!isVerify){
       return message.error(RCi18n({ id: 'Order.settingTips' }))
@@ -612,7 +633,7 @@ class OrderSetting extends Component<any, any> {
         else {
           isVerify = false
           return
-          
+
         }
       }
     });
@@ -665,7 +686,7 @@ class OrderSetting extends Component<any, any> {
 
     return (
       <AuthWrapper functionName="f_order_setting_1">
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
 
           <BreadCrumb />
           {/*导航面包屑*/}
@@ -974,6 +995,23 @@ class OrderSetting extends Component<any, any> {
                               </div>
                             </Col>
                           ) : null}
+                        </Row>
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.AllowZoneOrder" />}>
+                        <Row>
+                          <Col span={1}>
+                            <Switch
+                              checkedChildren={RCi18n({ id: 'Order.On' })}
+                              unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                              checked={paymentOnlineForm.orderAllowZonePriceStatus}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderAllowZonePriceStatus',
+                                  value: value
+                                })
+                              }
+                            />
+                          </Col>
                         </Row>
                       </FormItem>
                     </>

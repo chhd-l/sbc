@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const icon1 = require('./img/icon1.png');
 const icon2 = require('./img/icon2.png');
 const icon3 = require('./img/icon3.png');
+const Blueicon1 = require('./img/icon1_blue.png');
+const Blueicon2 = require('./img/icon2_blue.png');
+const Blueicon3 = require('./img/icon3_blue.png');
 
 export default class ReleaseProducts extends React.Component<any, any> {
   render() {
@@ -31,7 +34,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-add">
                   <div className="item">
                     <div className="context">
-                      <img src={icon1} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon1 : icon1} alt="" />
                       <div>
                         <h2>
                           <FormattedMessage id="Product.publishDirectly" />
@@ -48,7 +51,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-import">
                   <div className="item">
                     <div className="context">
-                      <img src={icon2} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon2 : icon2} alt="" />
                       <div>
                         <h2>
                           <FormattedMessage id="Product.productTemplateImport" />
@@ -65,7 +68,7 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-library">
                   <div className="item">
                     <div className="context">
-                      <img src={icon3} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon3 : icon3} alt="" />
                       <div>
                         <h2>
                           <FormattedMessage id="Product.productPoolImport" />

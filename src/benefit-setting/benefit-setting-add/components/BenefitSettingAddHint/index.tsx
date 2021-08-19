@@ -23,7 +23,7 @@ export default class BenefitSettingAddHint extends Component<any, any>{
                                 </p>
                             </div>
                         }
-                        type="error"
+                        type="info"
                     />
                 </div>
             </div>

@@ -43,8 +43,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       loading: false,
       orderInfo: {},
       subscriptionInfo: {},
+      subscriptionType: '',
       recentOrderList: [],
       frequencyList: [],
+      individualFrequencyList: [],
       frequencyClubList: [],
       goodsInfo: [],
       petsId: '',
@@ -118,7 +120,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
-            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? RCi18n({id:"Subscription.Active"}) : subscriptionDetail.subscribeStatus === '1' ? RCi18n({ id:"Subscription.Pause" }) : RCi18n({ id:"Subscription.Inactive" }),
+            subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? RCi18n({ id: "Subscription.Active" }) : subscriptionDetail.subscribeStatus === '1' ? RCi18n({ id: "Subscription.Pause" }) : RCi18n({ id: "Subscription.Inactive" }),
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -168,6 +170,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           this.setState(
             {
+              subscriptionType: subscriptionDetail.subscriptionType,
               subscriptionInfo: subscriptionInfo,
               orderInfo: orderInfo,
               recentOrderList: recentOrderList,
@@ -227,7 +230,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   getDict = () => {
@@ -242,6 +245,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     this.querySysDictionary('Frequency_day');
     this.querySysDictionary('Frequency_day_club');
+
+    this.querySysDictionary('Frequency_day_individual');
   };
   querySysDictionary = (type: String) => {
     webapi
@@ -251,6 +256,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+
+          // Individualization Frequency
+          if (type == 'Frequency_day_individual') {
+            // Frequency_month_individual
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState({
+              individualFrequencyList: frequencyList
+            });
+          }
+
           if (type === 'country') {
             this.setState({
               countryArr: res.context.sysDictionaryVOS
@@ -308,7 +323,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         } else {
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
   onSubscriptionChange = ({ field, value }) => {
     let data = this.state.subscriptionInfo;
@@ -368,7 +383,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       this.setState({
         saveLoading: false
       });
-      message.error((window as any).RCi18n({id:"Subscription.quantityAndFrequency"}));
+      message.error((window as any).RCi18n({ id: "Subscription.quantityAndFrequency" }));
       return;
     }
     let params = {
@@ -543,13 +558,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
     //俄罗斯地址验证是否完整
     if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru' && (!deliveryAddressInfo.street || !deliveryAddressInfo.postCode || !deliveryAddressInfo.house || !deliveryAddressInfo.city)) {
-      const errMsg = !deliveryAddressInfo.street 
-        ? RCi18n({id:'PetOwner.AddressStreetTip'}) 
-        : !deliveryAddressInfo.postCode 
-        ? RCi18n({id:'PetOwner.AddressPostCodeTip'}) 
-        : !deliveryAddressInfo.house 
-        ? RCi18n({id:'PetOwner.AddressHouseTip'}) 
-        : RCi18n({id:'PetOwner.AddressCityTip'});
+      const errMsg = !deliveryAddressInfo.street
+        ? RCi18n({ id: 'PetOwner.AddressStreetTip' })
+        : !deliveryAddressInfo.postCode
+          ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
+          : !deliveryAddressInfo.house
+            ? RCi18n({ id: 'PetOwner.AddressHouseTip' })
+            : RCi18n({ id: 'PetOwner.AddressCityTip' });
       message.error(errMsg);
       return;
     }
@@ -713,8 +728,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  handleYearChange = () => {};
-  tabChange = () => {};
+  handleYearChange = () => { };
+  tabChange = () => { };
   cancelNextSubscription = (row) => {
     let goodsItems = [];
     if (row && row.tradeItems) {
@@ -740,7 +755,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail();
-          message.success(RCi18n({id:"Subscription.OperationSuccessful"}));
+          message.success(RCi18n({ id: "Subscription.OperationSuccessful" }));
         } else {
           this.setState({
             loading: false
@@ -781,7 +796,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail();
-          message.success(RCi18n({id:"Subscription.OperationSuccessful"}));
+          message.success(RCi18n({ id: "Subscription.OperationSuccessful" }));
         } else {
           this.setState({
             loading: false
@@ -832,11 +847,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || RCi18n({ id:"Subscription.OperationFailure"}));
+          message.error(res.message || RCi18n({ id: "Subscription.OperationFailure" }));
         }
       })
       .catch((err) => {
-        message.error(err.toString() || RCi18n({ id:"Subscription.OperationFailure"}));
+        message.error(err.toString() || RCi18n({ id: "Subscription.OperationFailure" }));
       });
   };
 
@@ -879,10 +894,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
   };
 
+  // 设置价格长度
+  getSubscriptionPrice = (num: any) => {
+    const { subscriptionType } = this.state;
+    if (num > 0) {
+      let nlen = num.toString().split('.')[1]?.length;
+      // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
+      isNaN(nlen) ? 2 : nlen;
+      nlen > 4 ? nlen = 4 : nlen = nlen;
+      return num.toFixed(nlen);
+    } else {
+      return num;
+    }
+  }
+
   render() {
     const {
       recentOrderList,
       subscriptionInfo,
+      individualFrequencyList,
       frequencyList,
       frequencyClubList,
       goodsInfo,
@@ -897,107 +927,113 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       currentOrder,
       currencySymbol,
       currentDateId,
-      visibleDate
+      visibleDate,
+      subscriptionType,
       // operationLog
     } = this.state;
+
     // const cartExtra = (
     //   <Button type="link"  style={{fontSize:16,}}>Skip Next Delivery</Button>
     // );
     const columns = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product" /></span>,
         key: 'Product',
         width: '30%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
             <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
-            <span style={{ margin: 'auto 10px' }}>{record.goodsName}</span>
+            <span style={{ margin: 'auto 10px' }}>
+              {record.goodsName === 'individualization' ? record.petsName + '\'s personalized subscription' : record.goodsName}
+            </span>
           </div>
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Price"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Price" /></span>,
         key: 'Price',
         width: '15%',
         render: (text, record) => (
           <div>
-            <p style={{ textDecoration: 'line-through' }}>{currencySymbol + ' ' + record.originalPrice.toFixed(2)}</p>
-            <p>{currencySymbol + ' ' + record.subscribePrice.toFixed(2)}</p>
-          </div>
+            {subscriptionType == 'Individualization' ? null : (
+              <p style={{ textDecoration: 'line-through' }}>
+                {currencySymbol + ' ' + this.getSubscriptionPrice(record.originalPrice)}
+              </p>
+            )}
+            < p >
+              {currencySymbol + ' '}
+              {subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {currencySymbol + ' ' + this.getSubscriptionPrice(record.subscribePrice)} */}
+            </p >
+          </div >
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity" /></span>,
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
         width: '15%',
         render: (text, record) => (
           <div>
-            <InputNumber
-              min={1}
-              max={100}
-              onChange={(value) => {
-                value = +value.toString().replace(/\D/g, '');
-                this.onGoodsChange({
-                  field: 'subscribeNum',
-                  goodsId: record.skuId,
-                  value
-                });
-              }}
-              value={record.subscribeNum}
-            />
+            {subscriptionType == 'Individualization' ? 1 : (
+              <InputNumber
+                min={1}
+                max={100}
+                onChange={(value) => {
+                  value = +value.toString().replace(/\D/g, '');
+                  this.onGoodsChange({
+                    field: 'subscribeNum',
+                    goodsId: record.skuId,
+                    value
+                  });
+                }}
+                value={record.subscribeNum}
+              />
+            )}
           </div>
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.DeliveryFrequency"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.DeliveryFrequency" /></span>,
         dataIndex: 'frequency',
         key: 'frequency',
         width: '15%',
-        render: (text, record) => (
-          <div>
+        render: (text: any, record: any) => (
+          <div className="subscription_delivery_frequency">
             <Select
               style={{ width: '70%' }}
               value={record.periodTypeId}
-              onChange={(value) => {
+              onChange={(value: any) => {
                 value = value === '' ? null : value;
-                this.onGoodsChange({
-                  field: 'periodTypeId',
-                  goodsId: record.skuId,
-                  value
-                });
+                this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
             >
-              {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
-                <Option value={item.id} key={item.id}>
-                  {item.name}
-                </Option>
-              ))}
+              {/* individualFrequencyList */}
+              {subscriptionType == 'Individualization' ? (
+                individualFrequencyList.map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              ) : (
+                ((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              )}
             </Select>
-            {/* <InputNumber
-              min={1}
-              max={100}
-              onChange={(value) => {
-                value = +value.toString().replace(/\D/g, '');
-                let goodsId = record.skuId;
-                this.onGoodsChange({
-                  goodsId,
-                  value
-                });
-              }}
-              value={record.subscribeNum}
-            /> */}
           </div>
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Subtotal"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Subtotal" /></span>,
         dataIndex: 'Total',
         key: 'Total',
         width: '15%',
-        render: (text, record) => (
+        render: (text: any, record: any) => (
           <div>
-            <span>{currencySymbol + ' ' + (+record.subscribeNum * +record.originalPrice).toFixed(2)}</span>
+            <span>{currencySymbol + ' ' + this.getSubscriptionPrice((+record.subscribeNum * +record.originalPrice))}</span>
           </div>
         )
       }
@@ -1040,7 +1076,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }
             return (
               <div style={{ padding: 10 }}>
-                <div style={{ marginBottom: '10px' }}><FormattedMessage id="Subscription.CustomHeader"/> </div>
+                <div style={{ marginBottom: '10px' }}><FormattedMessage id="Subscription.CustomHeader" /> </div>
                 <Row type="flex" justify="space-between">
                   <Col>
                     <Select
@@ -1083,7 +1119,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
     const columns_no_start = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product" /></span>,
         key: 'Product',
         width: '20%',
         render: (text, record) => (
@@ -1093,7 +1129,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }} key={index}>
                   <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -1102,17 +1138,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity" /></span>,
         key: 'subscribeNum',
         width: '10%',
         render: (text, record) => (
           <div>
-            {record.tradeItems &&
+            {subscriptionType == 'Individualization' ? 1 : (
+              record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ height: 80 }} key={index}>
                   <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         )
       },
@@ -1127,19 +1165,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   )
       // },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.EnjoyDiscount"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.EnjoyDiscount" /></span>,
         key: 'discount',
         width: '10%',
-        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + this.getSubscriptionPrice(record.tradePrice.discountsPrice) : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Amount"/></span>,
+        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Amount" /></span>,
         key: 'amount',
         width: '10%',
-        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice.toFixed(2) : '-'}</div>
+        render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + this.getSubscriptionPrice(record.tradePrice.totalPrice) : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.ShipmentDate"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.ShipmentDate" /></span>,
         key: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeItems && record.tradeItems[0].nextDeliveryTime ? moment(record.tradeItems[0].nextDeliveryTime).format('YYYY-MM-DD') : '-'}</div>
@@ -1151,27 +1189,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   render: (text, record) => record.paymentItem ? <div>{record.paymentItem.name} <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a> </div>   : null
       // },
       {
-        title: <FormattedMessage id="Subscription.Operation"/>,
+        title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         width: '10%',
         key: 'x',
         render: (text, record) => (
           <div>
             <Popover content={content} trigger="click" visible={visibleDate && currentDateId === record.tradeItems[0].skuId} onVisibleChange={() => this.handleVisibleDateChange(record)}>
-              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SelectDate"/>}>
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SelectDate" />}>
                 <a style={styles.edit} className="iconfont icondata"></a>
               </Tooltip>
             </Popover>
             <Popconfirm
               placement="topLeft"
-              title={<FormattedMessage id="Subscription.skipThisItem"/>}
+              title={<FormattedMessage id="Subscription.skipThisItem" />}
               onConfirm={() => {
                 this.cancelNextSubscription(record);
               }}
               okText="Confirm"
               cancelText="Cancel"
             >
-              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SkipDelivery"/>}>
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.SkipDelivery" />}>
                 <a className="iconfont iconskip"></a>
               </Tooltip>
             </Popconfirm>
@@ -1181,7 +1219,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     ];
     const columns_completed = [
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Product" /></span>,
         key: 'Product',
         width: '30%',
         render: (text, record) => (
@@ -1191,7 +1229,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 <div style={{ display: 'flex' }}>
                   <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
-                    <p>{item.skuName}</p>
+                    <p>{item.skuName === 'individualization' ? item.petsName + '\'s personalized subscription' : item.skuName}</p>
                     <p>{item.specDetails}</p>
                   </div>
                 </div>
@@ -1200,28 +1238,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.Quantity" /></span>,
         key: 'subscribeNum',
         width: '10%',
         render: (text, record) => (
           <div>
-            {record.tradeItems &&
+            {subscriptionType == 'Individualization' ? 1 : (
+              record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ height: 80 }} key={index}>
                   <p style={{ paddingTop: 30 }}>X {item.num}</p>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         )
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.EnjoyDiscount"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.EnjoyDiscount" /></span>,
         key: 'discount',
         width: '10%',
         render: (text, record) => <div style={{ color: '#e2001a' }}>{record.tradePrice && record.tradePrice.discountsPrice ? currencySymbol + ' ' + '-' + record.tradePrice.discountsPrice : '-'}</div>
       },
       {
-        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Amount"/></span>,
+        title: <span style={{ fontWeight: 500 }}><FormattedMessage id="Subscription.Amount" /></span>,
         key: 'amount',
         width: '10%',
         render: (text, record) => <div>{record.tradePrice && record.tradePrice.totalPrice ? currencySymbol + ' ' + record.tradePrice.totalPrice : '-'}</div>
@@ -1237,24 +1277,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         dataIndex: 'id',
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Order.OrderTime"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Order.OrderTime" /></span>,
         key: 'shipmentDate',
         dataIndex: 'shipmentDate',
         width: '10%',
         render: (text, record) => <div>{record.tradeState && record.tradeState.createTime ? moment(record.tradeState.createTime).format('YYYY-MM-DD') : '-'}</div>
       },
       {
-        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.OrderStatus"/></span>,
+        title: <span style={{ color: '#8E8E8E', fontWeight: 500 }}><FormattedMessage id="Subscription.OrderStatus" /></span>,
         key: 'shipmentStatus',
         dataIndex: 'shipmentStatus',
         width: '10%',
-        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeState && record.tradeState.flowState ? 
-        <FormattedMessage id={getOrderStatusValue('OrderStatus',record.tradeState.flowState)} />
-        // deliverStatus(record.tradeItems[0].deliverStatus) 
-        : '-'}</div>
+        render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeState && record.tradeState.flowState ?
+          <FormattedMessage id={getOrderStatusValue('OrderStatus', record.tradeState.flowState)} />
+          // deliverStatus(record.tradeItems[0].deliverStatus) 
+          : '-'}</div>
       },
       {
-        title: <FormattedMessage id="Subscription.Operation"/>,
+        title: <FormattedMessage id="Subscription.Operation" />,
         dataIndex: '',
         key: 'x',
         width: '10%',
@@ -1262,7 +1302,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <>
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
-                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
+                <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail" />}>
                   <a style={styles.edit} className="iconfont iconDetails"></a>
                 </Tooltip>
               </Link>
@@ -1318,7 +1358,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </Breadcrumb.Item>
           <Breadcrumb.Item>{<FormattedMessage id="Subscription.edit" />}</Breadcrumb.Item>
         </Breadcrumb>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           {' '}
           <div className="container-search">
             <Headline title={<FormattedMessage id="Subscription.edit" />} />
@@ -1329,30 +1369,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  <FormattedMessage id="Subscription.SubscriptionNumber"/> : <span>{subscriptionInfo.subscriptionNumber}</span>
+                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>{subscriptionInfo.subscriptionNumber}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.SubscriptionDate"/> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
+                  <FormattedMessage id="Subscription.SubscriptionDate" /> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.AuditorID"/> : <span>{subscriptionInfo.presciberID}</span>
+                  <FormattedMessage id="Subscription.AuditorID" /> : <span>{subscriptionInfo.presciberID}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.AuditorName"/> : <span>{subscriptionInfo.presciberName}</span>
+                  <FormattedMessage id="Subscription.AuditorName" /> : <span>{subscriptionInfo.presciberName}</span>
                 </p>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                <FormattedMessage id="Subscription.PetOwnerName"/> : <span>{subscriptionInfo.consumer}</span>
+                  <FormattedMessage id="Subscription.PetOwnerName" /> : <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.ConsumerAccount"/> : <span>{subscriptionInfo.consumerAccount}</span>
+                  <FormattedMessage id="Subscription.ConsumerAccount" /> : <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.ConsumerType"/> : <span>{subscriptionInfo.consumerType}</span>
+                  <FormattedMessage id="Subscription.ConsumerType" /> : <span>{subscriptionInfo.consumerType}</span>
                 </p>
                 <p>
-                <FormattedMessage id="Subscription.PhoneNumber"/> : <span>{subscriptionInfo.phoneNumber}</span>
+                  <FormattedMessage id="Subscription.PhoneNumber" /> : <span>{subscriptionInfo.phoneNumber}</span>
                 </p>
               </Col>
             </Row>
@@ -1364,49 +1404,39 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
               <Col span={8} offset={16}>
                 <div className="flex-between">
-                  <span><FormattedMessage id="Subscription.Subtotal"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + this.subTotal().toFixed(2)}</span>
+                  <span><FormattedMessage id="Subscription.Subtotal" /></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + this.getSubscriptionPrice(this.subTotal())}</span>
                 </div>
                 <div className="flex-between">
-                  <span><FormattedMessage id="Order.subscriptionDiscount"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0).toFixed(2)}</span>
+                  <span><FormattedMessage id="Order.subscriptionDiscount" /></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + this.getSubscriptionPrice((this.state.subscriptionDiscountPrice ? this.state.subscriptionDiscountPrice : 0))}</span>
                 </div>
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">
                     <span>{pvo.marketingName}</span>
-                    <span style={styles.priceStyle}>{currencySymbol + ' -' + (pvo.discountPrice ? pvo.discountPrice : 0).toFixed(2)}</span>
+                    <span style={styles.priceStyle}>{currencySymbol + ' -' + this.getSubscriptionPrice(pvo.discountPrice ? pvo.discountPrice : 0)}</span>
                   </div>
                 ))}
-                {/* <div className="flex-between">
-                      <span>Promotion Code</span>
-                      {promotionCodeShow ? (
-                        <Tag
-                          closable
-                          onClose={() => this.removePromotionCode()}
-                        >
-                          {promotionCodeShow}
-                        </Tag>
-                      ) : null}
-                    </div> */}
+
                 <div className="flex-between">
-                  <span><FormattedMessage id="Subscription.Shipping"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.state.deliveryPrice ? this.state.deliveryPrice : 0).toFixed(2)}</span>
+                  <span><FormattedMessage id="Subscription.Shipping" /></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + this.getSubscriptionPrice(this.state.deliveryPrice ? this.state.deliveryPrice : 0)}</span>
                 </div>
                 {this.state.freeShippingFlag && <div className="flex-between">
-                  <span><FormattedMessage id="Order.shippingFeesDiscount"/></span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' -' + (this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0).toFixed(2)}</span>
+                  <span><FormattedMessage id="Order.shippingFeesDiscount" /></span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' -' + this.getSubscriptionPrice(this.state.freeShippingDiscountPrice ? this.state.freeShippingDiscountPrice : 0)}</span>
                 </div>}
                 {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                   <div className="flex-between">
-                    <span><FormattedMessage id="Subscription.Tax"/></span>
-                    <span style={styles.priceStyle}>{currencySymbol + (this.state.taxFeePrice ? this.state.taxFeePrice : 0).toFixed(2)}</span>
+                    <span><FormattedMessage id="Subscription.Tax" /></span>
+                    <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.state.taxFeePrice ? this.state.taxFeePrice : 0)}</span>
                   </div>
                 ) : null}
                 <div className="flex-between">
                   <span>
-                    <span><FormattedMessage id="Subscription.Total"/></span> (<FormattedMessage id="Subscription.IVAInclude"/>):
+                    <span><FormattedMessage id="Subscription.Total" /></span> (<FormattedMessage id="Subscription.IVAInclude" />):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + ' ' + (this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice - +this.state.freeShippingDiscountPrice).toFixed(2)}</span>
+                  <span style={styles.priceStyle}>{currencySymbol + ' ' + this.getSubscriptionPrice(this.subTotal() - +this.state.discountsPrice + +this.state.taxFeePrice + +this.state.deliveryPrice - +this.state.freeShippingDiscountPrice)}</span>
                 </div>
               </Col>
             </Row>
@@ -1415,7 +1445,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.DeliveryAddress"/></label>
+                    <label className="info-title"><FormattedMessage id="Subscription.DeliveryAddress" /></label>
                   </Col>
 
                   <Col span={12}>
@@ -1423,127 +1453,129 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name"/>: </p>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.City"/>: </p>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.City" />: </p>
                     <p>{deliveryAddressInfo.city}</p>
                   </Col>
                   {deliveryAddressInfo.province ? (
                     <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.State"/>: </p>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.State" />: </p>
                       <p>{deliveryAddressInfo.province}</p>
                     </Col>
                   ) : null}
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country"/>: </p>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
                     <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
                   </Col>
 
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1"/>: </p>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
                   </Col>
                   <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2"/>: </p>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
                 </Row>
               </Col>
               <Col span={8}>
-              {storeId === 123457907 || storeId === 123457910 ? null : (
-                <Row>
-                  <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.BillingAddress"/></label>
-                  </Col>
-                  <Col span={12}>
-                    <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change"/>}>
-                      <a style={styles.edit} onClick={() => this.billingOpen()} className="iconfont iconEdit"></a>
-                    </Tooltip>
-                  </Col>
-
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
-                  </Col>
-
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.City"/>: </p>
-                    <p>{billingAddressInfo.city}</p>
-                  </Col>
-                  {billingAddressInfo.province ? (
-                    <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.State"/>: </p>
-                      <p>{billingAddressInfo.province}</p>
+                {storeId === 123457907 || storeId === 123457910 ? null : (
+                  <Row>
+                    <Col span={12}>
+                      <label className="info-title"><FormattedMessage id="Subscription.BillingAddress" /></label>
                     </Col>
-                  ) : null}
+                    <Col span={12}>
+                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change" />}>
+                        <a style={styles.edit} onClick={() => this.billingOpen()} className="iconfont iconEdit"></a>
+                      </Tooltip>
+                    </Col>
 
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country"/>: </p>
-                    <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
-                  </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.Name" />: </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
+                    </Col>
 
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                  </Col>
-                  <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2"/>: </p>
-                    <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
-                  </Col>
-                </Row>
-              )}
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.City" />: </p>
+                      <p>{billingAddressInfo.city}</p>
+                    </Col>
+                    {billingAddressInfo.province ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.State" />: </p>
+                        <p>{billingAddressInfo.province}</p>
+                      </Col>
+                    ) : null}
+
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
+                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                    </Col>
+
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address1" />: </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                    </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                    </Col>
+                  </Row>
+                )}
               </Col>
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod"/></label>
+                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod" /></label>
                   </Col>
                   <AuthWrapper functionName="f_change_payment_method">
                     <>
                       <Col span={12}>
                         <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
                       </Col>
-                        <PaymentMethod 
-                        cancel={()=>this.setState({paymentMethodVisible:false})} 
+                      <PaymentMethod
+                        cancel={() => this.setState({ paymentMethodVisible: false })}
                         cardId={paymentInfo && paymentInfo.id}
-                        customerId = {subscriptionInfo.customerId}
-                        customerAccount = { subscriptionInfo.consumerAccount }
-                        changePaymentMethod={(paymentId, payPspItemEnum, selectCard)=>{this.setState({
-                          paymentId, payPspItemEnum, paymentInfo: selectCard
-                        })}}
-                        paymentMethodVisible={this.state.paymentMethodVisible}/>            
+                        customerId={subscriptionInfo.customerId}
+                        customerAccount={subscriptionInfo.consumerAccount}
+                        changePaymentMethod={(paymentId, payPspItemEnum, selectCard) => {
+                          this.setState({
+                            paymentId, payPspItemEnum, paymentInfo: selectCard
+                          })
+                        }}
+                        paymentMethodVisible={this.state.paymentMethodVisible} />
                     </>
                   </AuthWrapper>
-                  { paymentInfo ? 
-                  <>
+                  {paymentInfo ?
+                    <>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
+                        <p>{paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                      </Col>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber" />: </p>
+                        <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                      </Col>
+                    </>
+                    :
                     <Col span={24}>
-                         <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                         <p>{paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                     </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
-                      <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                    </Col>
-                  </> 
-                    : 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                      <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
-                    </Col>}    
-                    { this.state.payPspItemEnum ?   
-                     <div className="errorMessage">
-                       <FormattedMessage id="Subscription.savePaymentMethod" />
-                    </div> : null}                   
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
+                      <p><FormattedMessage id="Subscription.CashOnDelivery" /></p>
+                    </Col>}
+                  {this.state.payPspItemEnum ?
+                    <div className="errorMessage">
+                      <FormattedMessage id="Subscription.savePaymentMethod" />
+                    </div> : null}
                 </Row>
               </Col>
             </Row>
 
             <Modal
               width={650}
-              title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress"/>}
+              title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress" />}
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
               onOk={() => this.deliveryOK()}
@@ -1565,12 +1597,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       });
                     }}
                   >
-                    <FormattedMessage id="Subscription.BillingAddressIs"/>
+                    <FormattedMessage id="Subscription.BillingAddressIs" />
                   </Checkbox>}
                 </Col>
                 <Col>
                   <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'delivery')}>
-                    <FormattedMessage id="Subscription.AddNew"/>
+                    <FormattedMessage id="Subscription.AddNew" />
                   </Button>
                 </Col>
               </Row>
@@ -1591,13 +1623,33 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
+                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Radio value={item.deliveryAddressId}>
+                        <div style={{ display: 'inline-grid' }}>
+                          <p>{item.firstName + item.lastName}</p>
+                          <p>{item.city}</p>
+                          {item.province ? <p>{item.province}</p> : null}
+
+                          <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                          <p>{item.address1}</p>
+                          <p>{item.address2}</p>
+                        </div>
+                      </Radio>
+                      <div>
+                        <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                          <FormattedMessage id="Subscription.Edit" />
+                        </Button>
+                      </div>
+                    </Card>
+                  ))
+                  : deliveryList.map((item, index) =>
+                    index < 2 ? (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
                             <p>{item.city}</p>
                             {item.province ? <p>{item.province}</p> : null}
-
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
@@ -1605,32 +1657,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Radio>
                         <div>
                           <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
-                            <FormattedMessage id="Subscription.Edit"/>
+                            <FormattedMessage id="Subscription.Edit" />
                           </Button>
                         </div>
                       </Card>
-                    ))
-                  : deliveryList.map((item, index) =>
-                      index < 2 ? (
-                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                          <Radio value={item.deliveryAddressId}>
-                            <div style={{ display: 'inline-grid' }}>
-                              <p>{item.firstName + item.lastName}</p>
-                              <p>{item.city}</p>
-                              {item.province ? <p>{item.province}</p> : null}
-                              <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                              <p>{item.address1}</p>
-                              <p>{item.address2}</p>
-                            </div>
-                          </Radio>
-                          <div>
-                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
-                            <FormattedMessage id="Subscription.Edit"/>
-                            </Button>
-                          </div>
-                        </Card>
-                      ) : null
-                    )}
+                    ) : null
+                  )}
               </Radio.Group>
               {this.state.isUnfoldedDelivery || deliveryList.length <= 2 ? null : (
                 <Button
@@ -1641,13 +1673,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     });
                   }}
                 >
-                  <FormattedMessage id="Subscription.UnfoldedAll"/>
+                  <FormattedMessage id="Subscription.UnfoldedAll" />
                 </Button>
               )}
             </Modal>
 
             <Modal
-              title={<FormattedMessage id="Subscription.Active.ChooseBillingAddress"/>}
+              title={<FormattedMessage id="Subscription.Active.ChooseBillingAddress" />}
               width={650}
               visible={this.state.visibleBilling}
               onOk={() => this.billingOK()}
@@ -1660,7 +1692,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             >
               <div style={{ marginBottom: 10, textAlign: 'right' }}>
                 <Button size="small" type="primary" onClick={() => this.onOpenAddressForm(NEW_ADDRESS_TEMPLATE, 'billing')}>
-                  <FormattedMessage id="Subscription.AddNew"/>
+                  <FormattedMessage id="Subscription.AddNew" />
                 </Button>
               </div>
               <Radio.Group
@@ -1675,6 +1707,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedBilling
                   ? billingList.map((item) => (
+                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Radio value={item.deliveryAddressId}>
+                        <div style={{ display: 'inline-grid' }}>
+                          <p>{item.firstName + item.lastName}</p>
+                          <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item)}</p>
+                          <p>{item.address1}</p>
+                          <p>{item.address2}</p>
+                        </div>
+                      </Radio>
+                      <div>
+                        <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'billing')}>
+                          <FormattedMessage id="Subscription.Edit" />
+                        </Button>
+                      </div>
+                    </Card>
+                  ))
+                  : billingList.map((item, index) =>
+                    index < 2 ? (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
                         <Radio value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
@@ -1686,30 +1736,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Radio>
                         <div>
                           <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'billing')}>
-                          <FormattedMessage id="Subscription.Edit"/>
+                            <FormattedMessage id="Subscription.Edit" />
                           </Button>
                         </div>
                       </Card>
-                    ))
-                  : billingList.map((item, index) =>
-                      index < 2 ? (
-                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                          <Radio value={item.deliveryAddressId}>
-                            <div style={{ display: 'inline-grid' }}>
-                              <p>{item.firstName + item.lastName}</p>
-                              <p>{this.getDictValue(countryArr, item.countryId) + ',' + this.getCityName(item)}</p>
-                              <p>{item.address1}</p>
-                              <p>{item.address2}</p>
-                            </div>
-                          </Radio>
-                          <div>
-                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'billing')}>
-                            <FormattedMessage id="Subscription.Edit"/>
-                            </Button>
-                          </div>
-                        </Card>
-                      ) : null
-                    )}
+                    ) : null
+                  )}
               </Radio.Group>
               {this.state.isUnfoldedBilling || billingList.length <= 2 ? null : (
                 <Button
@@ -1720,29 +1752,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     });
                   }}
                 >
-                  <FormattedMessage id="Subscription.UnfoldedAll"/>
+                  <FormattedMessage id="Subscription.UnfoldedAll" />
                 </Button>
               )}
             </Modal>
           </div>
           <div className="container-search" style={{ marginBottom: 20 }}>
             <Headline
-              title={<FormattedMessage id="Subscription.AutoshipOrder"/>}
-              // extra={
-              //   <div>
-              //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-              //       <Option value="2020">2020</Option>
-              //       <Option value="2019">2019</Option>
-              //       <Option value="2018">2018</Option>
-              //     </Select>
-              //   </div>
-              // }
+              title={<FormattedMessage id="Subscription.AutoshipOrder" />}
+            // extra={
+            //   <div>
+            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
+            //       <Option value="2020">2020</Option>
+            //       <Option value="2019">2019</Option>
+            //       <Option value="2018">2018</Option>
+            //     </Select>
+            //   </div>
+            // }
             />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
-              <TabPane tab={<FormattedMessage id="Subscription.NoStart"/>} key="noStart">
+              <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>
               </TabPane>
-              <TabPane tab={<FormattedMessage id="Subscription.Completed"/>} key="completed">
+              <TabPane tab={<FormattedMessage id="Subscription.Completed" />} key="completed">
                 <Table
                   rowKey={(record, index) => index.toString()}
                   rowClassName={(record) => {

@@ -62,6 +62,20 @@ export default class AppStore extends Store {
     }
   };
 
+  //刷新商品实时库存
+  refreshGoodsRealtimeStock = async (tid: string) => {
+    this.transaction(() => {
+      this.dispatch('loading:start');
+      this.dispatch('tid:init', tid);
+    });
+    const { res } = (await fetchOrderDetail(tid)) as any;
+    let { code, context: orderInfo } = res;
+    if (code == Const.SUCCESS_CODE) {
+      this.dispatch('detail:init', orderInfo);
+    }
+    this.dispatch('loading:end');
+  };
+
   /* 刷新物流信息*/
   onRefresh = async (params) => {
     this.dispatch('logisticsLoading:start');

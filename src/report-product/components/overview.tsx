@@ -116,7 +116,7 @@ export default class ProductOverView extends Component<any, any> {
     const { productStatistics, beginDate } = this.props.relaxProps;
     let loadinga = false;
     return (
-      <Spin spinning={loadinga} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={loadinga}>
         <div className="container statistics">
           <div className="list-head-container">
             <h4>

@@ -50,7 +50,7 @@ export default class Customer extends React.Component<any, any> {
               <AuthWrapper functionName="f_goods_detail_1">
                 <span
                   style={{
-                    color: '#F56C1D',
+                    color: 'var(--primary-color)',
                     cursor: 'pointer',
                     marginLeft: '20px'
                   }}

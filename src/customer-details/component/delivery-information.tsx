@@ -388,7 +388,7 @@ class DeliveryInfomation extends React.Component<any, any> {
     const { countryArr, cityArr, clinicList, storeId, stateList, deliveryForm } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
+      <Spin spinning={this.state.loading}>
         <Row>
           <Col span={3}>
             <h3><FormattedMessage id="PetOwner.AllAddress" />( {this.state.addressList.length} )</h3>

@@ -57,7 +57,7 @@ export default class targetProduct extends Component<any, any> {
           <FormattedMessage id="Subscription.TargetProduct" />
         </h4>
         <div className="targetProduct">
-          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={loading}>
             <div className="ant-table-wrapper">
               <div className="ant-table ant-table-large ant-table-scroll-position-left">
                 <div className="ant-table-content">

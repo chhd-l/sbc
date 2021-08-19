@@ -220,7 +220,7 @@ class DitionaryList extends Component<any, any> {
           </Button>
         </div>
         <div className="container">
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={this.state.loading}>
             <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} onChange={this.handleTableChange} />
           </Spin>
         </div>

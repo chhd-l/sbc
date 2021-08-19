@@ -289,7 +289,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         <div className="basicInformation">
           <Table
             pagination={false}
-            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={loading}
             rowKey="goodsInfoId"
             dataSource={dataSource}
             columns={columns}

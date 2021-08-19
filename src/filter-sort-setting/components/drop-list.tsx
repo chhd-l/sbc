@@ -7,7 +7,7 @@ import AddCustomizedFilter from './add-customized-filter';
 import RelevancyProduct from './relevancy-product';
 import { FormattedMessage } from 'react-intl';
 
-const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
+const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: 'var(--primary-color)', marginLeft: 20 }} />);
 
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
@@ -46,22 +46,27 @@ export default class SortableTable extends React.Component {
 
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter((el) => !!el);
-      for (let i = 0; i < newData.length; i++) {
-        newData[i].sort = i + 1;
-      }
-      if (oldIndex > newIndex) {
-        let tempIndex = oldIndex;
-        oldIndex = newIndex;
-        newIndex = tempIndex;
-      }
       let newSortList = [];
-      for (let index = oldIndex; index <= newIndex; index++) {
-        let param = {
-          id: newData[index].id,
-          sort: newData[index].sort
-        };
-        newSortList.push(param);
+      for (let i = 0; i < newData.length; i++) {
+        //newData[i].sort = i + 1;
+        newSortList.push({
+          id: newData[i].id,
+          sort: i + 1,
+        });
       }
+      // if (oldIndex > newIndex) {
+      //   let tempIndex = oldIndex;
+      //   oldIndex = newIndex;
+      //   newIndex = tempIndex;
+      // }
+      
+      // for (let index = oldIndex; index <= newIndex; index++) {
+      //   let param = {
+      //     id: newData[index].id,
+      //     sort: newData[index].sort
+      //   };
+      //   newSortList.push(param);
+      // }
       if (type === 'sort') {
         let params = {
           storeGoodsSortList: newSortList

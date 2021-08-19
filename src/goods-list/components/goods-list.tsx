@@ -76,7 +76,7 @@ class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         // expandedRowRender={this._expandedRowRender}
         // expandedRowKeys={expandedRowKeys.toJS()}
         // onExpand={(expanded, record) => {

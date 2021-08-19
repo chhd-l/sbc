@@ -64,6 +64,10 @@ class SearchHead extends Component<any, any> {
       clinicSelectValue: '',
       numberSelectValue: '',
       recommenderSelectValue: '',
+      emailAddressType:'buyerEmail',
+      emailAddressValue:'',
+      citySearchType:'city',
+      citySearchValue:'',
 
       // 21/3/3 新增字段
       refillNumber: '',
@@ -149,7 +153,7 @@ class SearchHead extends Component<any, any> {
             <Headline title={<FormattedMessage id="Order.orderList" />} />
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
-            <span style={{ color: '#e82f3d', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
+            <span style={{ color: 'var(--primary-color)', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
               <FormattedMessage id="Order.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
             </span>
           </Col>
@@ -436,7 +440,7 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -455,6 +459,40 @@ class SearchHead extends Component<any, any> {
                     </FormItem>
                   </Col>
 
+                  {/*新增city搜索*/}
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      /!*<Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.city' })} disabled defaultValue={RCi18n({ id: 'Order.search.city' })} />*!/*/}
+                  {/*      <Select*/}
+                  {/*        onChange={(val, a) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            citySearchValue: val*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        value={this.state.citySearchType}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.search.email' })} value="city">*/}
+                  {/*          <FormattedMessage id="Order.search.city" />*/}
+                  {/*        </Option>*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.search.email' })} value="cityId">*/}
+                  {/*          <FormattedMessage id="Order.search.cityId" />*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Input*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        onChange={(e) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            citySearchValue:  (e.target as any).value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      />*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
+
                   <Col span={8} id="Range-picker-width">
                     <FormItem>
                       <RangePicker
@@ -472,6 +510,39 @@ class SearchHead extends Component<any, any> {
                       />
                     </FormItem>
                   </Col>
+
+                  {/*新增email搜索*/}
+                  <AuthWrapper functionName="f_search_email">
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {/*<Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.email' })} disabled defaultValue={RCi18n({ id: 'Order.search.email' })} />*/}
+                        <Select
+                          onChange={(val, a) => {
+                            this.setState({
+                              emailAddressType: val
+                            });
+                          }}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          value={this.state.emailAddressType}
+                          style={styles.label}
+                        >
+                          <Option title={RCi18n({ id: 'Order.search.email' })} value="buyerEmail">
+                            <FormattedMessage id="Order.search.email" />
+                          </Option>
+                        </Select>
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              emailAddressValue:  (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  </AuthWrapper>
                 </Row>
               ) : null}
 
@@ -795,7 +866,11 @@ class SearchHead extends Component<any, any> {
       subscriptionType,
       subscriptionPlanType,
       codeSelect,
-      codeSelectValue
+      codeSelectValue,
+      emailAddressType,
+      emailAddressValue,
+      citySearchType,
+      citySearchValue
     } = this.state;
 
     const ts = {} as any;
@@ -849,7 +924,9 @@ class SearchHead extends Component<any, any> {
       [recommenderSelect]: recommenderSelectValue,
       [clinicSelect]: clinicSelectValue,
       subscriptionPlanType,
-      [codeSelect]: codeSelectValue
+      [codeSelect]: codeSelectValue,
+      [emailAddressType]:emailAddressValue,
+      [citySearchType]:citySearchValue
     };
 
     onSearch(params);

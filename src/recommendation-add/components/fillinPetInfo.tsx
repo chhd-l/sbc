@@ -109,7 +109,7 @@ export default class FillinPetInfo extends Component {
         const { felinReco, customerPet, appointmentVO, petsList, funType } = this.props.relaxProps;
         const { lifeList, loading, activityList, specialNeedsList, petsBreedList, weightList, fetching } = this.state
         return (
-            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} >
+            <Spin spinning={loading}>
 
                 <Row>
                     <Col span={16}>

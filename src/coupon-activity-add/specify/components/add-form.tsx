@@ -263,7 +263,7 @@ export default class SpecifyAddForm extends React.Component<any, any> {
             </Col>
           </Row>
         </Form>
-        {loading && <Spin className="loading-spin" indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" alt="" />} />}
+        {loading && <Spin className="loading-spin" />}
       </NumBox>
     );
   }

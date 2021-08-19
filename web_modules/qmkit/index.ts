@@ -35,7 +35,7 @@ import DatePickerLaber from './date-picker-laber';
 import * as Resource from './resource';
 import BreadCrumb from './bread-crumb';
 import VASConst from './VAS-Const';
-import { login, getRoutType } from './login/login';
+import { login, switchLogin, getRoutType } from './login/login';
 import OktaLogout from './okta/okta-logout'
 import DragTable from './dragTable';
 import AssetManagement from './assetManagement';
@@ -46,7 +46,8 @@ import Fonts from './images/iconfont/iconfont.json'
 import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
 import QRScaner from './qr-scan';
 import {RCi18n} from './lang';
-import { getFormatDeliveryDateStr } from './deliveryDate'
+import { getFormatDeliveryDateStr } from './deliveryDate';
+import { LoadingForRC, LoadingForMyvetreco } from './loading-indicator';
 export {
   noop,
   SelectGroup,
@@ -88,6 +89,7 @@ export {
   VASConst,
   FindBusiness,
   login,
+  switchLogin,
   OktaLogout,
   getRoutType,
   DragTable,
@@ -102,4 +104,6 @@ export {
   QRScaner,
   RCi18n,
   getFormatDeliveryDateStr,
+  LoadingForRC,
+  LoadingForMyvetreco
 };

@@ -218,3 +218,9 @@ export function sendEmail(filterParams = {}) {
     body: JSON.stringify({ ...filterParams })
   });
 }
+
+export function getUserInfo(email) {
+  return Fetch<TResult>(`/customer/employee/findEmployeeByEmail?email=${email}`, {
+    method: 'GET',
+  });
+}

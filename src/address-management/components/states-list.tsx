@@ -84,7 +84,7 @@ export default class StatesList extends Component<any, any> {
               <Tooltip placement="top" title="Edit">
                 <span
                   /*className="red mgl20"*/
-                  style={{ color: 'red', paddingRight: 10, cursor: 'pointer' }}
+                  style={{ color: 'var(--primary-color)', paddingRight: 10, cursor: 'pointer' }}
                   onClick={() => this.editRow(item.toJS())}
                   className="iconfont iconEdit"
                 >
@@ -110,7 +110,7 @@ export default class StatesList extends Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={9}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );

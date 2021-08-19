@@ -125,7 +125,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb />
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
           <div className="container-search">
             <Row style={{ marginBottom: 10 }}>
               <Col span={12}>

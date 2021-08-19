@@ -241,10 +241,32 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (text) => text
       },
       {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
+      },
+      {
         title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%'
+        width: '15%',
+        render: (text,record) => {
+          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{productName}</div>}
+            >
+              <p className="overFlowtext" style={{width:'150px'}}>
+                {productName}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: <FormattedMessage id="Order.Weight"/>,
@@ -294,17 +316,17 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <div>
               <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
+                {this.judgePriceNum(record.subscriptionPrice,detail.get('subscriptionType'))}
               </span>
               <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
+                {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
               </span>
             </div>
           ) : (
             <span>
               {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
+              {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
             </span>
           )
       },
@@ -328,20 +350,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       //     </span>
       //   )
       // },
-      // {
-      //   title: 'Quantity',
-      //   dataIndex: 'num',
-      //   key: 'num'
-      // },
-      // {
-      //   title: 'Subtotal',
-      //   render: (row) => (
-      //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-      //       {row && (row.num * row.levelPrice).toFixed(2)}
-      //     </span>
-      //   )
-      // }
     ];
 
     const columnsNoPet = [
@@ -352,10 +360,32 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (text) => text
       },
       {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
+      },
+      {
         title: <FormattedMessage id="Order.ProductName"/>,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '20%'
+        width: '20%',
+        render: (text,record) => {
+          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{productName}</div>}
+            >
+              <p className="overFlowtext">
+                {productName}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
         title: <FormattedMessage id="Order.Weight"/>,
@@ -374,19 +404,19 @@ export default class OrderDetailTab extends React.Component<any, any> {
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
             <div>
-              <span>
+            <span>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
+              {this.judgePriceNum(record.subscriptionPrice,detail.get('subscriptionType'))}
               </span>
               <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
+                {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
               </span>
             </div>
           ) : (
             <span>
               {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
+              {this.judgePriceNum(originalPrice,detail.get('subscriptionType'))}
             </span>
           )
       },
@@ -410,20 +440,6 @@ export default class OrderDetailTab extends React.Component<any, any> {
       //     </span>
       //   )
       // },
-      // {
-      //   title: 'Quantity',
-      //   dataIndex: 'num',
-      //   key: 'num'
-      // },
-      // {
-      //   title: 'Subtotal',
-      //   render: (row) => (
-      //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-      //       {row && (row.num * row.levelPrice).toFixed(2)}
-      //     </span>
-      //   )
-      // }
     ];
 
     return (
@@ -762,6 +778,11 @@ export default class OrderDetailTab extends React.Component<any, any> {
         </Modal>
       </div>
     );
+  }
+
+  //判断价格显示位数，针对Individualization类型小数位数特殊处理
+  judgePriceNum(price,subscriberType){
+    return price&&price.toFixed(subscriberType==='Individualization'?4:2)
   }
 
   //附件

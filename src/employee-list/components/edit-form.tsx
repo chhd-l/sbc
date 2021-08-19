@@ -9,7 +9,10 @@ import Checkbox from 'antd/lib/checkbox/Checkbox';
 
 import { QMMethod, ValidConst } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getClinicsLites } from './../webapi';
+import {
+  getClinicsLites,
+  getUserInfo
+} from './../webapi';
 
 const RadioGroup = Radio.Group;
 const { TreeNode } = TreeSelect;
@@ -28,9 +31,23 @@ const formItemLayout = {
     sm: { span: 10 }
   }
 };
+const debounce = (fn, delay = 500) => {
+  // timer 是在闭包中的
+  let timer = null;
+  return function() {
+    if(timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+      // 清空定时器
+      timer = null;
+    }, delay)
+  }
+}
 
 export default class EditForm extends React.Component<any, any> {
-  _store: Store;
+  _store: any;
 
   accountPassword;
 
@@ -49,10 +66,12 @@ export default class EditForm extends React.Component<any, any> {
       value: undefined,
       clinicsLites: [],
       selectRoleNames: '',
-      prescriberIds: {}
+      prescriberIds: {},
+      loading: false,
     };
     this._store = ctx['_plume$Store'];
     this.getClinicsLites();
+    // this.findEmployeeByEmail = debounce(this.findEmployeeByEmail, 500);
   }
 
   getClinicsLites = async () => {
@@ -84,7 +103,63 @@ export default class EditForm extends React.Component<any, any> {
     });
   }
 
+  findEmployeeByEmail = async (value) => {
+    if(!value) return;
+    if(!ValidConst.email.test(value)) return; // 邮箱正则
+
+    this.setState({loading: true})
+    let {res} = await getUserInfo(value);
+    this.setState({loading: false});
+    //  改变为编辑状态， 更新form数据 TO DO
+    if (res.code === Const.SUCCESS_CODE) {
+      let {
+        employeeId,
+      } = res.context;
+      if (!!employeeId) {
+        // initEmployeeByEmail
+        const employeeForm = {
+              //员工名称
+              employeeName: '',
+              //员工手机
+              employeeMobile: '',
+              //角色id,逗号分隔
+              roleIds: '',
+              //账户名
+              accountName: '',
+              //账户手机
+              accountPassword: '',
+              //是否是业务员
+              isEmployee: null,
+              //邮箱
+              email: null,
+              //工号
+              jobNo: '',
+              //职位
+              position: null,
+              //性别，默认0，保密
+              sex: 0,
+              //归属部门，逗号分隔
+              departmentIds: '',
+              //生日
+              birthday: null
+            };
+        this._store.initEmployeeByEmail({
+          ...employeeForm,
+          ...res.context,
+        });
+
+      }
+    }else {
+
+    }
+  }
+
+  onEmailChange = (value: any ) => {
+    this.findEmployeeByEmail(value);
+  }
+
   render() {
+    let {loading} = this.state;
     const { getFieldDecorator } = this.props.form;
 
     const _state = this._store.state();
@@ -163,6 +238,34 @@ export default class EditForm extends React.Component<any, any> {
     return (
       <Form>
         <Row>
+          <FormItem
+              {...formItemLayout}
+              label={<FormattedMessage id="email" />}
+              // required={true}
+              // hasFeedback
+          >
+            {getFieldDecorator('email', {
+              ...email,
+              rules: [
+                { required: true, message: 'Email is required' },
+                {
+                  pattern: ValidConst.email,
+                  message: 'Please enter your vaild email'
+                },
+                {
+                  validator: (rule, value, callback) => {
+                    QMMethod.validatorWhiteSpace(rule, value, callback, 'Email');
+                  }
+                }
+              ]
+            })(<Input.Search
+                loading={loading}
+                onSearch={this.onEmailChange}
+                disabled={_state.get('edit')}
+                placeholder="0-50 characters"
+            />)}
+          </FormItem>
+
           <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" />} hasFeedback>
             {getFieldDecorator('firstName', {
               ...firstName,
@@ -207,24 +310,6 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input disabled={editDisable} placeholder="Only 1-20 characters" />)}
-          </FormItem>
-
-          <FormItem {...formItemLayout} label={<FormattedMessage id="email" />} required={true} hasFeedback>
-            {getFieldDecorator('email', {
-              ...email,
-              rules: [
-                { required: true, message: 'Email is required' },
-                {
-                  pattern: ValidConst.email,
-                  message: 'Please enter your vaild email'
-                },
-                {
-                  validator: (rule, value, callback) => {
-                    QMMethod.validatorWhiteSpace(rule, value, callback, 'Email');
-                  }
-                }
-              ]
-            })(<Input disabled={_state.get('edit')} placeholder="0-50 characters" />)}
           </FormItem>
 
           <FormItem {...formItemLayout} label={<FormattedMessage id="employeePhone" />} hasFeedback required={false}>

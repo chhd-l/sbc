@@ -88,7 +88,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={7}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -118,7 +118,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                         <td style={{ width: '30%' }}>
                           <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
                         </td>
-                        <td style={{ width: '15%' }}>{v.goodsName}</td>
+                        <td style={{ width: '15%' }}>{item.subscriptionType==='Individualization'?'Your pet\'s personalized subscription':v.goodsName}</td>
                         {k === 0 && (
                           <>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>

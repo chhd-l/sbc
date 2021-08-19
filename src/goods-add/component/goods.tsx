@@ -298,6 +298,8 @@ class GoodsForm extends React.Component<any, any> {
         getFrequencyList = [...frequencyList.autoShip.dayList, ...frequencyList.autoShip.weekList, ...frequencyList.autoShip.monthList]
       }else if (goods.get('promotions') == "club"){
         getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
+      }else if (goods.get('promotions') == 'individual'){
+        getFrequencyList = [...frequencyList.individual.dayIndividualList, ...frequencyList.individual.weekIndividualList, ...frequencyList.individual.monthIndividualList]
       }
     }
 
@@ -437,6 +439,7 @@ class GoodsForm extends React.Component<any, any> {
                 <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder="please select type" disabled={Number(goods.get('subscriptionStatus')) === 0} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
+                  <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
                 </Select>
               )}
             </FormItem>
@@ -758,27 +761,25 @@ class GoodsForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
-          {goods.get('saleableFlag') == 0 ? (
-            <Col span={12}>
-              <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
-                {getFieldDecorator('displayFlag', {
-                  rules: [
-                    {
-                      required: true,
-                      message: RCi18n({id:'Product.PleaseSelect'})
-                    }
-                  ],
-                  onChange: this._editGoods.bind(this, 'displayFlag'),
-                  initialValue: goods.get('displayFlag')
-                })(
-                  <RadioGroup>
-                    <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
-                    <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
-                  </RadioGroup>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
+          <Col span={12}>
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
+              {getFieldDecorator('displayFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: RCi18n({id:'Product.PleaseSelect'})
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'displayFlag'),
+                initialValue: goods.get('displayFlag')
+              })(
+                <RadioGroup>
+                  <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
+                  <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         {/* <Row>
           <Col span={8}>

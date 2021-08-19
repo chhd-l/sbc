@@ -1,7 +1,16 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util, getOrderStatusValue, getFormatDeliveryDateStr,RCi18n } from 'qmkit';
+import {
+  AuthWrapper,
+  Const,
+  noop,
+  cache,
+  util,
+  getOrderStatusValue,
+  getFormatDeliveryDateStr,
+  RCi18n
+} from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -10,13 +19,16 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import PetItem from '@/customer-details/component/pet-item';
 
 import './style.less';
-import OrderMoreFields from './order_more_field'
+import OrderMoreFields from './order_more_field';
+import details from '@/subscription-plan-update/components/details';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
   { value: 'SUBSCRIPTION', name: 'Subscription' },
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
+
+const showRealStock = false; //增加变量控制要不要显示商品实时库存
 
 /**
  * 拒绝表单，只为校验体验
@@ -40,7 +52,12 @@ class RejectForm extends React.Component<any, any> {
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(
+            <Input.TextArea
+              placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })}
+              autosize={{ minRows: 4, maxRows: 4 }}
+            />
+          )}
         </FormItem>
       </Form>
     );
@@ -85,6 +102,7 @@ class OrderDetailTab extends React.Component<any, any> {
       orderRejectModalVisible: boolean;
       showRejectModal: Function;
       hideRejectModal: Function;
+      refreshGoodsRealtimeStock: Function;
     };
   };
 
@@ -101,18 +119,21 @@ class OrderDetailTab extends React.Component<any, any> {
     verify: noop,
     onDelivery: noop,
     showRejectModal: noop,
-    hideRejectModal: noop
+    hideRejectModal: noop,
+    refreshGoodsRealtimeStock: noop
   };
   state = {
     visiblePetDetails: false,
     moreData: [],
     visibleMoreFields: false,
-    currentPet: {}
+    currentPet: {},
+    tableLoading: false
   };
 
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
     let orderSource = detail.get('orderSource');
@@ -130,23 +151,29 @@ class OrderDetailTab extends React.Component<any, any> {
     }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //订阅赠品信息
-    let giftList= detail.get('subscriptionPlanGiftList')?detail.get('subscriptionPlanGiftList').toJS():[];
-    giftList = giftList.map((gift)=>{
-      let tempGift ={
-        skuNo:gift.goodsInfoNo,
-        skuName:gift.goodsInfoName,
-        num:gift.quantity,
-        originalPrice:0,
-        price:0,
-        isGift:true
-      }
-      return tempGift
-    })
-    
+    let giftList = detail.get('subscriptionPlanGiftList')
+      ? detail.get('subscriptionPlanGiftList').toJS()
+      : [];
+    giftList = giftList.map((gift) => {
+      let tempGift = {
+        skuNo: gift.goodsInfoNo,
+        skuName: gift.goodsInfoName,
+        num: gift.quantity,
+        originalPrice: 0,
+        price: 0,
+        isGift: true
+      };
+      return tempGift;
+    });
+
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '['+ RCi18n({ id: 'Order.gift' }) +']' + gift.get('skuName'))).toJS();
-    
+    gifts = gifts
+      .map((gift) =>
+        gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
+      )
+      .toJS();
+
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
@@ -172,8 +199,9 @@ class OrderDetailTab extends React.Component<any, any> {
           area: string;
           timeSlot: string;
           deliveryDate: string;
-        })
-      : {};
+          workTime: string;
+        } | null)
+      : null;
 
     //发票信息
     const invoice = detail.get('invoice')
@@ -203,8 +231,8 @@ class OrderDetailTab extends React.Component<any, any> {
           entrance: string;
           apartment: string;
           area: string;
-        })
-      : {};
+        } | null)
+      : null;
 
     //附件信息
     const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
@@ -220,7 +248,16 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     });
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
-    const installmentPrice= tradePrice.installmentPrice;
+    const installmentPrice = tradePrice.installmentPrice;
+
+    const SYSTEM_GET_CONFIG = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG);
+    const deliverWay = detail.get('deliverWay');
+    const deliveryMethod =
+      deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
+    const address1 =
+      consignee.detailAddress1 +
+      ' ' +
+      (deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '');
 
     const columns = [
       {
@@ -231,21 +268,30 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '11%'
       },
       {
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuId',
+        key: 'externalSkuId',
+        render: (text) => text,
+        width: '11%'
+      },
+      {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: '9%',
-        render: (text) => {
+        render: (text, record) => {
+          const productName =
+            text === 'individualization' ? record.petsName + "'s personalized subscription" : text;
           return (
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{text}</div>}
+              title={<div>{productName}</div>}
             >
               <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
+                {productName}
               </p>
             </Tooltip>
           );
@@ -255,7 +301,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '10%'
+        width: '8%'
       },
       // {
       //   title: 'Price',
@@ -263,47 +309,63 @@ class OrderDetailTab extends React.Component<any, any> {
       //   key: 'levelPrice',
       //   render: (levelPrice) => (
       //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+      //       {SYSTEM_GET_CONFIG}
       //       {levelPrice && levelPrice.toFixed(2)}
       //     </span>
       //   )
       // },
       {
-        title: <FormattedMessage id="Order.Quantity" />,
+        title: showRealStock ? (
+          <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
+        ) : (
+          <FormattedMessage id="Order.Quantity" />
+        ),
         dataIndex: 'num',
         key: 'num',
-        width: '10%'
+        width: '8%',
+        render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
-        width: '10%',
+        width: '9%',
         render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 && record.isSuperimposeSubscription === 1 ? (
+          record.subscriptionPrice > 0 &&
+          record.subscriptionStatus === 1 &&
+          record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
+                {SYSTEM_GET_CONFIG}
+                {record.subscriptionPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
               </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
+              <br />
+              <span style={{ textDecoration: 'line-through' }}>
+                {SYSTEM_GET_CONFIG}
+                {originalPrice &&
+                  originalPrice.toFixed(
+                    detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                  )}
               </span>
             </div>
           ) : (
             <span>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
+              {SYSTEM_GET_CONFIG}
+              {originalPrice &&
+                originalPrice.toFixed(
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
             </span>
           )
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
-        width: '10%',
+        width: '9%',
         render: (row) => (
           <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {SYSTEM_GET_CONFIG}
             {row.price && row.price.toFixed(2)}
             {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
           </span>
@@ -313,7 +375,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '10%',
+        width: '9%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -326,36 +388,43 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
-        title:<FormattedMessage id="Order.Subscriptionumber" />,
+        title: <FormattedMessage id="Order.Subscriptionumber" />,
         dataIndex: 'subscriptionSourceList',
         key: 'subscriptionSourceList',
-        width: '15%',
-        render: (text, record) => (
-          record.subscriptionSourceList && record.subscriptionSourceList.length > 0 ?
-          record.subscriptionSourceList.map(x=>x.subscribeId).join(',') : null
-        )
+        width: '11%',
+        render: (text, record) =>
+          record.subscriptionSourceList && record.subscriptionSourceList.length > 0
+            ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
+            : null
       },
-  
+
       {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
-        width: '9%',
-        render: (text, record) => <a onClick={() => this._openPetDetails(record.petsInfo)}>{record.petsInfo ? record.petsInfo.petsName : ''}</a>
+        width: '7%',
+        render: (text, record) => (
+          <a onClick={() => this._openPetDetails(record.petsInfo)}>
+            {record.petsInfo ? record.petsInfo.petsName : ''}
+          </a>
+        )
       },
       {
         title: '',
         width: '6%',
-        render: (text, record) => 
-          {
-            return record.isGift ? null :<a onClick={() => this._openMoreFields(record)}> <FormattedMessage id="more" /></a>
-          }
-        
+        render: (text, record) => {
+          return record.isGift ? null : (
+            <a onClick={() => this._openMoreFields(record)}>
+              {' '}
+              <FormattedMessage id="more" />
+            </a>
+          );
+        }
       }
     ];
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+
     return (
       <div className="orderDetail">
         <div
@@ -367,7 +436,9 @@ class OrderDetailTab extends React.Component<any, any> {
           }}
         >
           <label style={styles.greenText}>
-            <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} />
+            <FormattedMessage
+              id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
+            />
           </label>
 
           {this._renderBtnAction(tid)}
@@ -392,18 +463,27 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.ExternalOrderId" />: {detail.getIn(['tradeOms', 'orderNo'])}
+                    <FormattedMessage id="Order.ExternalOrderId" />:{' '}
+                    {detail.getIn(['tradeOms', 'orderNo'])}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.OrderStatus" />: <FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} />
+                    <FormattedMessage id="Order.OrderStatus" />:{' '}
+                    <FormattedMessage
+                      id={getOrderStatusValue(
+                        'OrderStatus',
+                        detail.getIn(['tradeState', 'flowState'])
+                      )}
+                    />
                   </p>
                   <p>
-                    <FormattedMessage id="Order.orderType" />: {orderDetailType ? orderDetailType.name : ''}
+                    <FormattedMessage id="Order.orderType" />:{' '}
+                    {orderDetailType ? orderDetailType.name : ''}
                   </p>
                 </Col>
                 <Col span={12}>
                   <p>
-                    <FormattedMessage id="Order.OrderTime" />: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                    <FormattedMessage id="Order.OrderTime" />:{' '}
+                    {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
                   </p>
                   <p>
                     <FormattedMessage id="Order.orderSource" />: {detail.get('orderSource')}
@@ -412,7 +492,8 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.paymentMethod" />: {detail.get('paymentMethodNickName')}
+                    <FormattedMessage id="Order.paymentMethod" />:{' '}
+                    {detail.get('paymentMethodNickName')}
                   </p>
                 </Col>
               </Row>
@@ -430,50 +511,109 @@ class OrderDetailTab extends React.Component<any, any> {
                 <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
               <p>
-                <FormattedMessage id="Order.Petowneraccount" />: {detail.getIn(['buyer', 'account'])}
+                <FormattedMessage id="Order.Petowneraccount" />:{' '}
+                {detail.getIn(['buyer', 'account'])}
               </p>
             </div>
           </Col>
         </Row>
-        <Row gutter={30}>
-          {detail.get('subscribeId') ? (
-            <Col span={12}>
-              <div className="headBox" style={{ height:120 }}>
-                <h4>
-                  <FormattedMessage id="Order.subscription" />
-                </h4>
-                <p>
-                  <FormattedMessage id="Order.subscriptionType" />: {detail.get('subscriptionTypeQuery') ? detail.get('subscriptionTypeQuery').replace('_', ' & '): '' }
-                </p>
-                <p>
-                  <FormattedMessage id="Order.subscriptionPlanType" />: {detail.get('subscriptionPlanType')}
-                </p>
-              </div>
-            </Col>
-          ) : null}
+        {detail.get('subscribeId') ||
+        detail.get('clinicsId') ||
+        firstTradeItems.recommendationId ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            {detail.get('subscribeId') ? (
+              <Col span={12} style={{ alignSelf: 'flex-start' }}>
+                <div className="headBox" style={{ height: 120 }}>
+                  <h4>
+                    <FormattedMessage id="Order.subscription" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionType" />:{' '}
+                    {detail.get('subscriptionTypeQuery')
+                      ? detail.get('subscriptionTypeQuery').replace('_', ' & ')
+                      : ''}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionPlanType" />:{' '}
+                    {detail.get('subscriptionPlanType')}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
 
-          {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
-            <Col span={12}>
-              <div className="headBox">
-                <h4>
-                  <FormattedMessage id="Order.partner" />
-                </h4>
-                <p>
-                  <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
-                </p>
-                <p>
-                  <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
-                </p>
-                <p>
-                  <FormattedMessage id="Order.Recommenderid" />: {firstTradeItems.recommendationId}
-                </p>
-                <p>
-                  <FormattedMessage id="Order.Recommendername" />: {firstTradeItems.recommendationName}
-                </p>
-              </div>
+            {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+              <Col span={12}>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.partner" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommenderid" />:{' '}
+                    {firstTradeItems.recommendationId}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommendername" />:{' '}
+                    {firstTradeItems.recommendationName}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
+
+            {((detail.get('subscribeId') &&
+              !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+              (!detail.get('subscribeId') &&
+                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+            showRealStock ? (
+              <Col span={12}>
+                <AuthWrapper functionName="fOrderDetail001">
+                  <div
+                    style={{
+                      color: '#E1021A',
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textDecoration: 'underline',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => this._refreshRealtimeStock(tid)}
+                  >
+                    Real-time stock
+                  </div>
+                </AuthWrapper>
+              </Col>
+            ) : null}
+          </Row>
+        ) : null}
+
+        {((detail.get('subscribeId') &&
+          (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+          (!detail.get('subscribeId') &&
+            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+        showRealStock ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Col span={24}>
+              <AuthWrapper functionName="fOrderDetail001">
+                <div
+                  style={{
+                    color: '#E1021A',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => this._refreshRealtimeStock(tid)}
+                >
+                  Real-time stock
+                </div>
+              </AuthWrapper>
             </Col>
-          ) : null}
-        </Row>
+          </Row>
+        ) : null}
 
         <div
           style={{
@@ -484,7 +624,13 @@ class OrderDetailTab extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={tradeItems.concat(gifts,giftList)} pagination={false} bordered />
+          <Table
+            rowKey={(_record, index) => index.toString()}
+            columns={columns}
+            dataSource={tradeItems.concat(gifts, giftList)}
+            pagination={false}
+            bordered
+          />
 
           <Modal
             title={<FormattedMessage id="Order.moreFields" />}
@@ -499,9 +645,10 @@ class OrderDetailTab extends React.Component<any, any> {
               this.setState({
                 visibleMoreFields: false
               });
-            }}>
+            }}
+          >
             <Row>
-             <OrderMoreFields data={this.state.moreData}/>
+              <OrderMoreFields data={this.state.moreData} />
             </Row>
           </Modal>
           <Modal
@@ -531,7 +678,7 @@ class OrderDetailTab extends React.Component<any, any> {
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.Productamount" />}:</span>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {SYSTEM_GET_CONFIG}
                   {(tradePrice.goodsPrice || 0).toFixed(2)}
                 </strong>
               </label>
@@ -540,7 +687,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
                   <strong>
-                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{SYSTEM_GET_CONFIG}
                     {discount.discounts.toFixed(2)}
                   </strong>
                 </label>
@@ -550,7 +697,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>First Order Discount:</span>
                   <strong>
-                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{SYSTEM_GET_CONFIG}
                     {tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}
                   </strong>
                 </label>
@@ -561,7 +708,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <label style={styles.priceItem as any}>
                       <span style={styles.name}>{promotion.marketingName}</span>
                       <strong>
-                        -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        -{SYSTEM_GET_CONFIG}
                         {(promotion.discountPrice || 0).toFixed(2)}
                       </strong>
                     </label>
@@ -574,7 +721,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.subscriptionDiscount" />:
                   </span>
                   <strong>
-                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{SYSTEM_GET_CONFIG}
                     {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
@@ -583,15 +730,17 @@ class OrderDetailTab extends React.Component<any, any> {
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {SYSTEM_GET_CONFIG}
                   {(tradePrice.deliveryPrice || 0).toFixed(2)}
                 </strong>
               </label>
               {tradePrice.freeShippingFlag ? (
                 <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="Order.shippingFeesDiscount" />}: </span>
+                  <span style={styles.name}>
+                    {<FormattedMessage id="Order.shippingFeesDiscount" />}:{' '}
+                  </span>
                   <strong>
-                    -{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    -{SYSTEM_GET_CONFIG}
                     {(tradePrice.freeShippingDiscountPrice || 0).toFixed(2)}
                   </strong>
                 </label>
@@ -600,7 +749,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
                   <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    {SYSTEM_GET_CONFIG}
                     {(tradePrice.taxFeePrice || 0).toFixed(2)}
                   </strong>
                 </label>
@@ -609,9 +758,14 @@ class OrderDetailTab extends React.Component<any, any> {
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.Total" />}: </span>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                  {SYSTEM_GET_CONFIG}
                   {(tradePrice.totalPrice || 0).toFixed(2)}
-                  {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (installmentPrice.additionalFee || 0).toFixed(2) + ')' : null}
+                  {installmentPrice && installmentPrice.additionalFee
+                    ? ' +(' +
+                      SYSTEM_GET_CONFIG +
+                      (installmentPrice.additionalFee || 0).toFixed(2) +
+                      ')'
+                    : null}
                 </strong>
               </label>
             </div>
@@ -653,10 +807,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.detailAddress1}</div>}
+                    title={<div>{address1}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.address1" />: {consignee.detailAddress1}
+                      <FormattedMessage id="Order.address1" />: {address1}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -671,7 +825,12 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.country" />: {countryDict ? (countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId) : ''}
+                    <FormattedMessage id="Order.country" />:{' '}
+                    {countryDict
+                      ? countryDict.find((c) => c.id == consignee.countryId)
+                        ? countryDict.find((c) => c.id == consignee.countryId).name
+                        : consignee.countryId
+                      : ''}
                   </p>
                   <p>
                     <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
@@ -679,9 +838,21 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
                   </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.comment}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                    </p>
+                  </Tooltip>
                 </Col>
+
                 <Col span={12}>
-                <Tooltip
+                  <Tooltip
                     overlayStyle={{
                       overflowY: 'auto'
                     }}
@@ -689,8 +860,8 @@ class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{consignee.city}</div>}
                   >
                     <p className="overFlowtext">
-                    <FormattedMessage id="Order.city" />: {consignee.city}
-                  </p>
+                      <FormattedMessage id="Order.city" />: {consignee.city}
+                    </p>
                   </Tooltip>
                   <p>
                     <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
@@ -715,22 +886,23 @@ class OrderDetailTab extends React.Component<any, any> {
                     title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.deliveryDate" />: {getFormatDeliveryDateStr(consignee.deliveryDate)}
-                  </p>
-                  </Tooltip>
-                </Col>
-                <Col span={24}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.comment}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                      <FormattedMessage id="Order.deliveryDate" />:{' '}
+                      {getFormatDeliveryDateStr(consignee.deliveryDate)}
                     </p>
                   </Tooltip>
+                  {storeId === 123457907 && (
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{deliveryMethod}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
+                      </p>
+                    </Tooltip>
+                  )}
                 </Col>
                 {storeId === 123457907 ? (
                   <Col span={24}>
@@ -738,9 +910,18 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.estimatedDeliveryDate" />:
                       {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
                         detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
-                          <FormattedMessage id="Order.estimatedDeliveryDateDesc" values={{ minDay: detail.get('minDeliveryTime'), maxDay: detail.get('maxDeliveryTime') }} />
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDesc"
+                            values={{
+                              minDay: detail.get('minDeliveryTime'),
+                              maxDay: detail.get('maxDeliveryTime')
+                            }}
+                          />
                         ) : (
-                          <FormattedMessage id="Order.estimatedDeliveryDateDescEqual" values={{ day: detail.get('minDeliveryTime') }} />
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDescEqual"
+                            values={{ day: detail.get('minDeliveryTime') }}
+                          />
                         )
                       ) : null}
                     </p>
@@ -802,7 +983,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       </p>
                     </Tooltip>
                     <p>
-                      <FormattedMessage id="Order.country" />: {countryDict.find((c) => c.id == invoice.countryId) ? countryDict.find((c) => c.id == invoice.countryId).name : invoice.countryId}
+                      <FormattedMessage id="Order.country" />:{' '}
+                      {countryDict.find((c) => c.id == invoice.countryId)
+                        ? countryDict.find((c) => c.id == invoice.countryId).name
+                        : invoice.countryId}
                     </p>
                     <p>
                       <FormattedMessage id="Order.Entrance" />: {invoice.entrance}
@@ -822,8 +1006,8 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.state" />: {invoice.province}
                     </p>
                     <p>
-                    <FormattedMessage id="Order.region" />: {invoice.area}
-                  </p>
+                      <FormattedMessage id="Order.region" />: {invoice.area}
+                    </p>
                     <p>
                       <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
                     </p>
@@ -847,7 +1031,14 @@ class OrderDetailTab extends React.Component<any, any> {
           ) : null}
         </Row>
 
-        <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
+        <Modal
+          maskClosable={false}
+          title={<FormattedMessage id="Order.rejectionReasonTip" />}
+          visible={orderRejectModalVisible}
+          okText={<FormattedMessage id="Order.save" />}
+          onOk={() => this._handleOK(tid)}
+          onCancel={() => this._handleCancel()}
+        >
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -858,6 +1049,14 @@ class OrderDetailTab extends React.Component<any, any> {
     );
   }
 
+  //刷新商品实时库存
+  _refreshRealtimeStock = async (tid: string) => {
+    // this.setState({ tableLoading: true });
+    const { refreshGoodsRealtimeStock } = this.props.relaxProps;
+    await refreshGoodsRealtimeStock(tid);
+    this.setState({ tableLoading: false });
+  };
+
   //附件
   _renderEncloses(encloses) {
     if (encloses.size == 0 || encloses[0] === '') {
@@ -866,7 +1065,13 @@ class OrderDetailTab extends React.Component<any, any> {
 
     return encloses.map((v, k) => {
       return (
-        <Popover key={'pp-' + k} placement="topRight" title={''} trigger="click" content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}>
+        <Popover
+          key={'pp-' + k}
+          placement="topRight"
+          title={''}
+          trigger="click"
+          content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}
+        >
           <a href="#">
             <img key={k} style={styles.attachment} src={v.get('url')} />
           </a>
@@ -939,7 +1144,11 @@ class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if ((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && payState === 'PAID') {
+    } else if (
+      (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
+      (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
+      payState === 'PAID'
+    ) {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">
@@ -1053,7 +1262,7 @@ class OrderDetailTab extends React.Component<any, any> {
   };
 
   _openMoreFields = (recored) => {
-    var data = [{...recored}];
+    const data = [{ ...recored }];
     this.setState({
       visibleMoreFields: true,
       moreData: data

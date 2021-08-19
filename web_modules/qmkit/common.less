@@ -199,6 +199,33 @@ body {
   }
 }
 
+.header {
+  .headerRight-shop {
+    .headerRight-shop-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+.shop-list-box {
+  .shop-list-item {
+    display: flex;
+    height: 35px;
+    align-items: center;
+
+    .logo {
+      padding-right: 15px;
+      font-size: 14px;
+    }
+
+    .accountName {
+      color: #333;
+      font-size: 14px;
+    }
+  }
+}
+
+
 
 .leftHeader.ant-layout-sider {
   display: flex;
@@ -2024,7 +2051,7 @@ body {
 
           h2,
           p {
-            color: #e2001a;
+            color: var(--primary-color);
           }
         }
       }
@@ -3460,4 +3487,12 @@ form .ant-input-group-compact {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.global-indicator-loading svg {
+  animation: donutSpin .8s linear infinite;
+}
+
+.bg-white {
+  background-color: #fff;
 }

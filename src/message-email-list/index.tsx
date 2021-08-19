@@ -338,10 +338,10 @@ export default class ClinicList extends Component<any, any> {
                   }}
                   style={{
                     marginRight: 20,
-                    borderColor: '#e2001a'
+                    borderColor: 'var(--primary-color)'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>
+                  <p style={{ color: 'var(--primary-color)' }}>
                     <FormattedMessage id="Marketing.Overview" />
                   </p>
                 </Button>
@@ -350,10 +350,10 @@ export default class ClinicList extends Component<any, any> {
                     this.quickSend();
                   }}
                   style={{
-                    borderColor: '#e2001a'
+                    borderColor: 'var(--primary-color)'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>
+                  <p style={{ color: 'var(--primary-color)' }}>
                     <FormattedMessage id="Marketing.QuickSend" />
                   </p>
                 </Button>
@@ -556,7 +556,7 @@ export default class ClinicList extends Component<any, any> {
             columns={columns}
             dataSource={taskList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />

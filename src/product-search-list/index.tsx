@@ -479,7 +479,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     return (
       <div id="productSearch">
         <BreadCrumb />
-        <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={allLoading}>
           <div className="container-search">
             <Row>
               <Col span={8}>

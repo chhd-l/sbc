@@ -190,7 +190,7 @@ export default class PrescriberSetting extends Component<any, any> {
             <span className="ant-form-item-required">Sigase category 4 categories have been signed then maximum is 20 categories</span>
           </Row>
           <Row>
-            <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin spinning={this.state.loading}>
               <Table rowKey="cateId" pagination={false} dataSource={this.state.productCategoryData} columns={columns} />
             </Spin>
           </Row>

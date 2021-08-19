@@ -13,7 +13,7 @@ const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 const limitDecimals = (value: string | number): string => {
-  const reg = /^(\-)*(\d+)\.(\d\d\d\d).*$/;
+  const reg = /^(\-)*(\d+)\.(\d\d\d\d\d).*$/;
   if(typeof value === 'string') {
     return !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
   } else if (typeof value === 'number') {

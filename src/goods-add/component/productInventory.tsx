@@ -268,7 +268,7 @@ class SkuForm extends React.Component<any, any> {
                   <InputNumber
                     style={{ width: '121px' }}
                     min={0}
-                    max={99999999}
+                    max={999999999}
                     disabled={d}
                     //max={b}
                     //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
@@ -277,7 +277,7 @@ class SkuForm extends React.Component<any, any> {
                 <InputNumber
                   style={{ width: '121px' }}
                   min={0}
-                  max={99999999}
+                  max={999999999}
                   disabled={d}
                   value={c}
                   onChange={this._editGoodsItem.bind(this, rowInfo.id, 'stock')}
@@ -310,7 +310,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
                 initialValue: rowInfo.virtualInventory
-              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '121px' }} min={0} max={999999999} />)}
             </FormItem>
           </Col>
         </Row>
@@ -362,7 +362,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
                 initialValue: rowInfo.virtualAlert
-              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} />)}
+              })(<InputNumber style={{ width: '121px' }} min={0} max={999999999} />)}
             </FormItem>
           </Col>
         </Row>

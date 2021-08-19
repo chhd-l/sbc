@@ -1,14 +1,26 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input, TreeSelect, Tree, message, Select, Radio } from 'antd';
+import {
+  Modal,
+  Form,
+  Input,
+  TreeSelect,
+  Tree,
+  message,
+  Select,
+  Radio,
+  Switch,
+  DatePicker,
+} from 'antd';
 import { Relax } from 'plume2';
-import { noop, QMMethod, Tips } from 'qmkit';
+import {Const, noop, QMMethod, Tips} from 'qmkit';
 import { Map, fromJS } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormattedMessage } from 'react-intl';
 import { IList, IMap } from 'typings/globalType';
 import ImageLibraryUpload from './image-library-upload';
+import moment from 'moment';
 const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
 const Option = Select.Option;
@@ -26,6 +38,7 @@ const formItemLayout = {
     sm: { span: 10 }
   }
 };
+const { RangePicker } = DatePicker;
 
 @Relax
 export default class CateModal extends React.Component<any, any> {
@@ -86,7 +99,16 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal maskClosable={false} title={formData.get('storeCateId') ? 'Edit' : 'Add'} visible={modalVisible} zIndex={100} width={700} onCancel={this._handleModelCancel} onOk={this._handleSubmit} confirmLoading={loading}>
+      <Modal
+          maskClosable={false}
+          title={formData.get('storeCateId') ? 'Edit' : 'Add'}
+          visible={modalVisible}
+          zIndex={100}
+          width={700}
+          onCancel={this._handleModelCancel}
+          onOk={this._handleSubmit}
+          confirmLoading={loading}
+      >
         <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
@@ -167,6 +189,12 @@ class CateModalForm extends React.Component<any, any> {
     const cateType = formData.get('cateType');
     const displayStatus = formData.get('displayStatus');
     const altName = formData.get('altName');
+    const filterStatus = !!formData.get('filterStatus');
+    const periodBeginTime = formData.get('periodBeginTime');
+    const periodEndTime = formData.get('periodEndTime');
+    let period = periodBeginTime && periodEndTime
+        ? [moment(periodBeginTime), moment(periodEndTime)]
+        : []
 
     const { getFieldDecorator } = this.props.form;
     //处理分类的树形图结构数据
@@ -231,69 +259,162 @@ class CateModalForm extends React.Component<any, any> {
             )}
           </FormItem>
         )}
-
-        {displayStatus ? (
-          <>
-            {formData.get('cateParentName') ? null : (
-              <FormItem {...formItemLayout} label="Router">
-                {getFieldDecorator('cateRouter', {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: <FormattedMessage id="Product.PleaseEnterRouter" />
-                    },
-                    { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
-                  ],
-                  initialValue: cateRouter,
-                  onChange: this._editGoods.bind(this, 'cateRouter')
-                })(<Input />)}
-                <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />
-              </FormItem>
-            )}
-            {formData.get('cateParentName') ? null : (
-              <FormItem {...formItemLayout} label="ALT name">
-                {getFieldDecorator('altName', {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: <FormattedMessage id="Product.PleaseEnterALT" />
-                    },
-                    { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
-                  ],
-                  initialValue: altName,
-                  onChange: this._editGoods.bind(this, 'altName')
-                })(<Input />)}
-              </FormItem>
-            )}
-            <FormItem labelCol={2} {...formItemLayout} label="Category type">
-              {getFieldDecorator('cateType', {
-                // rules: [
-                //   {
-                //     required: true,
-                //     message: 'Please selected category type'
-                //   }
-                // ],
-                onChange: this._editGoods.bind(this, 'cateType'),
-                initialValue: cateType ? this._getCateTypeName(cateType) : ''
-              })(
-                <Select>
-                  <Option value="">
-                    <FormattedMessage id="Product.All" />
-                  </Option>
-                  {petType &&
-                    petType.toJS().map((item, index) => (
-                      <Option value={item.valueEn} key={index}>
-                        {item.name}
-                      </Option>
-                    ))}
-                </Select>
-              )}
-              <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />
+        {formData.get('cateParentName')
+            ? null
+            : (
+                <FormItem {...formItemLayout} label="Filter status">
+                  {getFieldDecorator('filterStatus', {
+                    rules: [],
+                    valuePropName: 'checked',
+                    initialValue: filterStatus || false,
+                    onChange: this._editGoods.bind(this, 'filterStatus')
+                  })(
+                      <Switch/>
+                    )}
             </FormItem>
-          </>
-        ) : null}
+        )}
+
+        {formData.get('cateParentName')
+            ? null
+            : (
+                <FormItem {...formItemLayout} label="Period">
+                  {getFieldDecorator('period', {
+                    rules: [],
+                    initialValue: period || [],
+                    onChange: this._editGoods.bind(this, 'period')
+                  })(
+                      <RangePicker
+                          // allowClear={false}
+                          format={Const.TIME_FORMAT}
+                          placeholder={['Start time', 'End time']}
+                          showTime
+                      />
+                  )}
+                </FormItem>
+            )
+        }
+
+        {formData.get('cateParentName') ? null : (
+            <FormItem {...formItemLayout} label="Router">
+              {getFieldDecorator('cateRouter', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: <FormattedMessage id="Product.PleaseEnterRouter" />
+                  },
+                  { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
+                ],
+                initialValue: cateRouter,
+                onChange: this._editGoods.bind(this, 'cateRouter')
+              })(<Input />)}
+              <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />
+            </FormItem>
+        )}
+        {formData.get('cateParentName') ? null : (
+            <FormItem {...formItemLayout} label="ALT name">
+              {getFieldDecorator('altName', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: <FormattedMessage id="Product.PleaseEnterALT" />
+                  },
+                  { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
+                ],
+                initialValue: altName,
+                onChange: this._editGoods.bind(this, 'altName')
+              })(<Input />)}
+            </FormItem>
+        )}
+        <FormItem labelCol={2} {...formItemLayout} label="Category type">
+          {getFieldDecorator('cateType', {
+            // rules: [
+            //   {
+            //     required: true,
+            //     message: 'Please selected category type'
+            //   }
+            // ],
+            onChange: this._editGoods.bind(this, 'cateType'),
+            initialValue: cateType ? this._getCateTypeName(cateType) : ''
+          })(
+              <Select>
+                <Option value="">
+                  <FormattedMessage id="Product.All" />
+                </Option>
+                {petType &&
+                petType.toJS().map((item, index) => (
+                    <Option value={item.valueEn} key={index}>
+                      {item.name}
+                    </Option>
+                ))}
+              </Select>
+          )}
+          <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />
+        </FormItem>
+
+        {/*{displayStatus ? (*/}
+        {/*  <>*/}
+        {/*    {formData.get('cateParentName') ? null : (*/}
+        {/*      <FormItem {...formItemLayout} label="Router">*/}
+        {/*        {getFieldDecorator('cateRouter', {*/}
+        {/*          rules: [*/}
+        {/*            {*/}
+        {/*              required: true,*/}
+        {/*              whitespace: true,*/}
+        {/*              message: <FormattedMessage id="Product.PleaseEnterRouter" />*/}
+        {/*            },*/}
+        {/*            { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }*/}
+        {/*          ],*/}
+        {/*          initialValue: cateRouter,*/}
+        {/*          onChange: this._editGoods.bind(this, 'cateRouter')*/}
+        {/*        })(<Input />)}*/}
+        {/*        <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />*/}
+        {/*      </FormItem>*/}
+        {/*    )}*/}
+        {/*    {formData.get('cateParentName') ? null : (*/}
+        {/*      <FormItem {...formItemLayout} label="ALT name">*/}
+        {/*        {getFieldDecorator('altName', {*/}
+        {/*          rules: [*/}
+        {/*            {*/}
+        {/*              required: true,*/}
+        {/*              whitespace: true,*/}
+        {/*              message: <FormattedMessage id="Product.PleaseEnterALT" />*/}
+        {/*            },*/}
+        {/*            { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }*/}
+        {/*          ],*/}
+        {/*          initialValue: altName,*/}
+        {/*          onChange: this._editGoods.bind(this, 'altName')*/}
+        {/*        })(<Input />)}*/}
+        {/*      </FormItem>*/}
+        {/*    )}*/}
+        {/*    <FormItem labelCol={2} {...formItemLayout} label="Category type">*/}
+        {/*      {getFieldDecorator('cateType', {*/}
+        {/*        // rules: [*/}
+        {/*        //   {*/}
+        {/*        //     required: true,*/}
+        {/*        //     message: 'Please selected category type'*/}
+        {/*        //   }*/}
+        {/*        // ],*/}
+        {/*        onChange: this._editGoods.bind(this, 'cateType'),*/}
+        {/*        initialValue: cateType ? this._getCateTypeName(cateType) : ''*/}
+        {/*      })(*/}
+        {/*        <Select>*/}
+        {/*          <Option value="">*/}
+        {/*            <FormattedMessage id="Product.All" />*/}
+        {/*          </Option>*/}
+        {/*          {petType &&*/}
+        {/*            petType.toJS().map((item, index) => (*/}
+        {/*              <Option value={item.valueEn} key={index}>*/}
+        {/*                {item.name}*/}
+        {/*              </Option>*/}
+        {/*            ))}*/}
+        {/*        </Select>*/}
+        {/*      )}*/}
+        {/*      <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />*/}
+        {/*    </FormItem>*/}
+        {/*  </>*/}
+        {/*) : null}*/}
 
         <FormItem {...formItemLayout} label={<FormattedMessage id="Product.cateImage" />}>
           <div style={{ width: '400px' }}>

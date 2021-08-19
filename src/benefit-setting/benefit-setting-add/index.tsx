@@ -178,7 +178,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
         let { loading, initData } = this.state;
 
         return (
-            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'fixed', marginLeft: '5%' }} alt="" />}>
+            <Spin spinning={loading}>
                 <div className='BenefitSettingAdd-wrap'>
                     <BreadCrumb thirdLevel={true}>
                         <Breadcrumb.Item><FormattedMessage id="Subscription.Consumption gift" /></Breadcrumb.Item>

@@ -49,12 +49,18 @@ export default class Customer extends React.Component<any, any> {
           width: '15%'
         },
         {
-          title: RCi18n({ id: 'PetOwner.DefaultPrescriberName' }),
-          dataIndex: 'defaultClinics',
-          key: 'defaultClinics',
-          width: '15%',
-          render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+          title: RCi18n({ id: 'PetOwner.City' }),
+          dataIndex: 'city',
+          key: 'city',
+          width: '15%'
         },
+        // {
+        //   title: RCi18n({ id: 'PetOwner.DefaultPrescriberName' }),
+        //   dataIndex: 'defaultClinics',
+        //   key: 'defaultClinics',
+        //   width: '15%',
+        //   render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+        // },
         // {
         //   title: 'Selected Prescriber ID',
         //   dataIndex: 'clinicsIds',

@@ -95,7 +95,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       customerId: '',
       paymentMethodVisible: false,
       paymentId: '',
-      payPspItemEnum: ''
+      payPspItemEnum: '',
+      paymentMethod:''
     };
   }
 
@@ -149,6 +150,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
+          let paymentMethod = subscriptionDetail.paymentMethod
 
           let subscribeNumArr = [];
           let periodTypeArr = [];
@@ -182,6 +184,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
+              paymentMethod:paymentMethod,
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -418,7 +421,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             saveLoading: false,
             payPspItemEnum: ''
           });
-          message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+          message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
           this.getSubscriptionDetail();
         } else {
           this.setState({
@@ -897,7 +900,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       currentOrder,
       currencySymbol,
       currentDateId,
-      visibleDate
+      visibleDate,
+      paymentMethod
       // operationLog
     } = this.state;
     // const cartExtra = (
@@ -1520,23 +1524,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   { paymentInfo ? 
                   <>
                     <Col span={24}>
-                         <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                         <p>{paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                     </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber"/>: </p>
-                      <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
                     </Col>
-                  </> 
-                    : 
                     <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                      <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
-                    </Col>}    
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                    </Col>
+                  </>
+                  :  
+                    paymentMethod.indexOf('COD')!== -1? <Col span={24}>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
+                  </Col>:null
+                  
+                  }
+
                     { this.state.payPspItemEnum ?   
                      <div className="errorMessage">
                        <FormattedMessage id="Subscription.savePaymentMethod" />
-                    </div> : null}                   
+                    </div> : null}
                 </Row>
               </Col>
             </Row>

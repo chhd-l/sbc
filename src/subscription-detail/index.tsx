@@ -74,6 +74,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       deliveryCityName: '',
       currencySymbol: '',
       isActive: false,
+      paymentMethod:'',
     };
   }
 
@@ -155,6 +156,7 @@ class SubscriptionDetail extends React.Component<any, any> {
 
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
+          let paymentMethod = subscriptionDetail.paymentMethod
 
           this.setState(
             {
@@ -171,7 +173,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              isActive: subscriptionDetail.subscribeStatus === "0"
+              isActive: subscriptionDetail.subscribeStatus === "0",
+              paymentMethod:paymentMethod
             },
             () => {
               this.applyPromationCode(this.state.promotionCode);
@@ -483,7 +486,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive,paymentMethod } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -1038,7 +1041,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                       <FormattedMessage id="Subscription.PaymentMethod" />
                     </label>
                   </Col>
-
+                    {/* 如果有paymentInfo 显示 paymentInfo,否则判断是否是cod,不是cod 不显示 */}
                   { paymentInfo ? 
                   <>
                     <Col span={24}>
@@ -1055,10 +1058,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                     </Col>
                   </>
                   :  
-                  <Col span={24}>
+                    paymentMethod.indexOf('COD')!== -1? <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
                     <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
-                  </Col>}
+                  </Col>:null
+                  
+                  }
           
                 </Row>
               </Col>

@@ -1,26 +1,34 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import {BreadCrumb} from 'qmkit';
+import { BreadCrumb, Const } from 'qmkit';
 import ModuleChart from './component/ModuleChart';
 
 import TopologicalGraph from './component/TopologicalGraph';
 import './index.less';
+import * as webapi from './webapi'
 
 export default class Dashboard extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
         this.state = {
             country: 'France',
-            latestTimeNum: 1
+            latestTimeNum: 1,
         }
     }
 
+    componentDidMount() {
+        this.init()
+    }
+    init = () => {
+       
+    }
+    
 
     render() {
-        let {
+        const {
             country,
-            latestTimeNum
+            latestTimeNum,
         } = this.state;
         return (
             <div className='Dashboard-wrap'>
@@ -38,15 +46,15 @@ export default class Dashboard extends React.Component<any, any> {
                     </div>
 
                     <div className='Dashboard-flow-chart-wrap'>
-                        <ModuleChart/>
+                        <ModuleChart />
                     </div>
                     <div className='Dashboard-flow-chart-hint'>
                         <p>
-                            <i className="iconfont iconjinggao"/>
+                            <i className="iconfont iconjinggao" />
                             <span>Technical Error Happened </span>
                         </p>
                         <p>
-                            <i className="iconfont iconwarning"/>
+                            <i className="iconfont iconwarning" />
                             <span><FormattedMessage id="Dashboard.Default Report Time" />{`: Latest ${latestTimeNum} hour`}</span>
                         </p>
                     </div>

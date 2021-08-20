@@ -869,7 +869,7 @@ const routes = [
   },
   {
     path: '/order-audit-setting',
-    asyncComponent: () => import('./order-audit-setting')
+    asyncComponent: () => import('./order-audit-setting-new')
   },
   {
     path: '/report-product',

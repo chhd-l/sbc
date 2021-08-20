@@ -72,7 +72,7 @@ export default class MyHeader extends React.Component {
     if ((window as any).token) {
       this.getTaskList();
       // 获取切换店铺的下拉数据
-      this.getUserStoreList();
+      // this.getUserStoreList();
 
     }
   }
@@ -559,29 +559,27 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>
-              {
-
-              }
-              <div className='headerRight-shop'>
-                  <div style={{ paddingLeft: 30}}>
-                    <AuthWrapper functionName='f_home_switch_store'>
-                      {
-                        isExistStoreList
-                            ? (
-                                <Dropdown
-                                    placement={'bottomRight'}
-                                    overlay={shopMenu}
-                                    trigger={['click']}
-                                    overlayClassName='shop-list-box'
-                                >
-                                  <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
-                                </Dropdown>
-                            )
-                            : null
-                      }
-                    </AuthWrapper>
-                  </div>
-              </div>
+              {/* 暂时隐藏 */}
+              {/*<div className='headerRight-shop'>*/}
+              {/*    <div style={{ paddingLeft: 30}}>*/}
+              {/*      <AuthWrapper functionName='f_home_switch_store'>*/}
+              {/*        {*/}
+              {/*          isExistStoreList*/}
+              {/*              ? (*/}
+              {/*                  <Dropdown*/}
+              {/*                      placement={'bottomRight'}*/}
+              {/*                      overlay={shopMenu}*/}
+              {/*                      trigger={['click']}*/}
+              {/*                      overlayClassName='shop-list-box'*/}
+              {/*                  >*/}
+              {/*                    <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />*/}
+              {/*                  </Dropdown>*/}
+              {/*              )*/}
+              {/*              : null*/}
+              {/*        }*/}
+              {/*      </AuthWrapper>*/}
+              {/*    </div>*/}
+              {/*</div>*/}
               <div >
                 <div>
                   <Dropdown overlay={menu} trigger={['click']}>

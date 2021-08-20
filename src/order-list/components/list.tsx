@@ -291,7 +291,7 @@ class ListView extends React.Component<any, any> {
           orderType = 'Mini Program order';
         }
         const flowState=v.getIn(['tradeState', 'flowState'])//订单状态
-        const isAutoAudit=v.get('isAutoAuditOpen')//订单审核方式 true:自动审核  false:手动审核
+        const isAutoAudit=v.get('isAuditOpen')//订单审核方式 true:自动审核  false:手动审核
         const auditState=v.getIn(['tradeState', 'auditState'])//订单审核状态
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>

@@ -39,7 +39,7 @@ export const manualAudit = (tid: string, auditState) => {
     body: JSON.stringify({
       reason:'',
       ids: [tid],
-      auditState: auditState===1?'CHECKED':'REJECTED'
+      auditState: auditState===1?'INSIDE_CHECKED':'REJECTED'
     })
   });
 };

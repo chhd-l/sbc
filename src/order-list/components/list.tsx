@@ -291,7 +291,7 @@ class ListView extends React.Component<any, any> {
           orderType = 'Mini Program order';
         }
         const flowState=v.getIn(['tradeState', 'flowState'])//订单状态
-        const isAutoAudit=v.get('isAuditOpen')//订单审核方式 true:自动审核  false:手动审核
+        const isAutoAudit=v.get('isAutoAuditOpen')//订单审核方式 true:自动审核  false:手动审核
         const auditState=v.getIn(['tradeState', 'auditState'])//订单审核状态
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
@@ -483,7 +483,7 @@ class ListView extends React.Component<any, any> {
                           ) : null}
 
                           {/*订单PENDING_REVIEW下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW 2、审核状态：已人工审核*/}
-                          {flowState === 'PENDING_REVIEW'&&auditState==='CHECKED' ? (
+                          {flowState === 'PENDING_REVIEW'&&auditState==='INSIDE_CHECKED' ? (
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>

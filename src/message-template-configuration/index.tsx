@@ -20,6 +20,8 @@ import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
+import value from '*.json';
+
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -90,113 +92,39 @@ const columns = [
   },
 ]
 
-const TemplateData=[
-
+const statusList = [
   {
-    id: 19136,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
+    value:'0',
+    name:'Email'
   },
   {
-    id: 19137,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19138,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19139,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 191340,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19141,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19142,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19143,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19144,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19145,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19146,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-  {
-    id: 19147,
-    templateId: 'T202108180219382336',
-    emailTemplate: 'Prescriber creation',
-    sendCategory:1,
-    createTime:'2021-08-18 02:20:20.000',
-  },
-
+    value:'1',
+    name:'Text'
+  }
 ]
-
 
 const MessageTemplateConfiguration=()=>{
 
 
   const [emailTemplateList,setEmailTemplateList]=useState([]);
   const [templateListData,setTemplateListData]=useState([]);
-  const [defaultSearch,setDefaultSearch]=useState('112')
+  const [searchForm,setSearchForm]=useState({
+    emailTemplate: '',
+    templateType: '',
+  })
 
 
-  const searchEmail=()=>{
-    setTemplateListData(
-      templateListData.filter(item=>item.templateId===defaultSearch)
-    )
-    debugger
-  }
+
+  const onFormChange = ({ field, value }) => {
+    let data = searchForm;
+    data[field] = value;
+    setSearchForm(data)
+    console.log(searchForm,'New')
+  };
+
 
   const getEmailTemplateList=()=>{
-    webapi.getEmailTemplateList().then((data) => {
+    webapi.getEmailTemplateList(searchForm).then((data) => {
       const {res} =data;
       if(res.code===Const.SUCCESS_CODE){
         //上方搜索框展示模板名
@@ -212,15 +140,14 @@ const MessageTemplateConfiguration=()=>{
     getEmailTemplateList();
   },[])
 
+
   return(
     <div>
       <BreadCrumb />
       <div className="container-search">
         <Headline title="Template Settings"/>
-        {console.log(templateListData,'hah')}
         <Form className="filter-content" layout="inline">
           <Row>
-
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
@@ -228,21 +155,22 @@ const MessageTemplateConfiguration=()=>{
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}
-                    // onChange={(value) => {
-                    //   value = value === '' ? null : value;
-                    //   this.onFormChange({
-                    //     field: 'templateId',
-                    //     value
-                    //   });
-                    // }}
-
+                      onChange={(value)=>{
+                        value = value ===''?null:value;
+                        onFormChange(
+                          {
+                            field:'emailTemplate',
+                            value
+                          }
+                        )
+                      }}
                   >
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
                     {emailTemplateList &&
                     emailTemplateList.map((item, index) => (
-                      <Option value={item.templateId} key={index}>
+                      <Option value={item.emailTemplate} key={index}>
                         {item.emailTemplate}
                       </Option>
                     ))}
@@ -259,23 +187,24 @@ const MessageTemplateConfiguration=()=>{
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}
                     defaultValue=""
-                    // onChange={(value) => {
-                    //   value = value === '' ? null : value;
-                    //   this.onFormChange({
-                    //     field: 'objectType',
-                    //     value
-                    //   });
-                    // }}
+                    onChange={(value)=>{
+                      value = value === '' ? null : value;
+                      onFormChange({
+                        field:'templateType',
+                        value
+                      })
+                    }}
                   >
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {/*{emailTemplateList &&*/}
-                    {/*emailTemplateList.map((item, index) => (*/}
-                    {/*  <Option value={item.templateId} key={index}>*/}
-                    {/*    {item.emailTemplate}*/}
-                    {/*  </Option>*/}
-                    {/*))}*/}
+                    {
+                      statusList && statusList.map((item,index)=>(
+                        <Option value={item.value} key={index}>
+                          {item.name}
+                        </Option>
+                      ))
+                    }
                   </Select>
                 </InputGroup>
               </FormItem>
@@ -289,7 +218,7 @@ const MessageTemplateConfiguration=()=>{
                   htmlType="submit"
                   icon="search"
                   shape="round"
-                  onClick={()=>searchEmail()}
+                  onClick={()=>getEmailTemplateList()}
                 >
                     <span>
                       <FormattedMessage id="search" />

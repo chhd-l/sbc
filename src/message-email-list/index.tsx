@@ -186,7 +186,6 @@ export default class ClinicList extends Component<any, any> {
 
   render() {
     const { title, searchForm, taskList, emailTemplateList } = this.state;
-    console.log(taskList,'🐖')
 
     const objectTypeList = [
       {
@@ -223,12 +222,24 @@ export default class ClinicList extends Component<any, any> {
       },
       {
         value: '1',
-        name: 'To do'
+        name: 'Pending'
       },
       {
         value: '2',
-        name: 'Finish'
-      }
+        name: 'Todo'
+      },
+      {
+        value: '3',
+        name: 'Sending'
+      },
+      {
+        value: '4',
+        name: 'Success'
+      },
+      {
+        value: '5',
+        name: 'Failed'
+      },
     ];
 
     const columns = [
@@ -275,7 +286,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '5%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Finish' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,

@@ -242,8 +242,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
-        dataIndex: 'externalSkuId',
-        key: 'externalSkuId',
+        dataIndex: 'externalSkuNo',
+        key: 'externalSkuNo',
         render: (text) => text,
       },
       {
@@ -361,8 +361,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
-        dataIndex: 'externalSkuId',
-        key: 'externalSkuId',
+        dataIndex: 'externalSkuNo',
+        key: 'externalSkuNo',
         render: (text) => text,
       },
       {

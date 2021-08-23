@@ -269,8 +269,8 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
-        dataIndex: 'externalSkuId',
-        key: 'externalSkuId',
+        dataIndex: 'externalSkuNo',
+        key: 'externalSkuNo',
         render: (text) => text,
         width: '11%'
       },

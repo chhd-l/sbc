@@ -1,8 +1,9 @@
 import React from 'react';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import {Headline, AuthWrapper, BreadCrumb, Const} from 'qmkit';
 import SearchForm from './components/SearchForm';
 import SkuMappingList from './components/SkuMappingList';
 import { FormattedMessage } from 'react-intl';
+import { getSkuMappingList } from './webapi';
 
 import './index.less';
 
@@ -11,13 +12,16 @@ export default class ProductSkuMapping extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
-            listArr: [],
+            mappingPage: {
+                content: [],
+                total: 0,
+                number: 0,
+            },
             loading: false,
             listParams: {
                 pageNum: 0,
                 pageSize: 10,
             }
-
         }
     }
 
@@ -25,58 +29,76 @@ export default class ProductSkuMapping extends React.Component<any, any> {
         let {
             listParams
         } = this.state;
+
         this.getListData(listParams);
     }
 
     // 获取列表数据
-    getListData = (params) => {
-        let listParams = {
+    getListData = async (listParams) => {
+        // 获取form表单数据
+        let formData = this.form.props.form.getFieldsValue();
+        let params = {
             ...this.state.listParams,
-            ...params,
+            ...formData,
+            ...listParams,
         }
         this.setState({ loading: true})
-        setTimeout(() => {
+        let {res} = await getSkuMappingList(params);
+        this.setState({ loading: false})
+        if(res.code === Const.SUCCESS_CODE){
+            let {mappingPage} = res.context;
             this.setState({
-                listArr: [{
-                    id: 1,
-                    productName: 123,
-                    SPU: 234234,
-                    SKU: 23423,
-                    ExternalSKU: 234234
-                }],
-                loading: false,
-                listParams,
+                mappingPage,
+                listParams: params // 记录参数
             })
-        }, 1500)
+        }
+
     }
 
     render() {
         let {
             loading,
-            listArr,
+            mappingPage,
         } = this.state;
         // @ts-ignore
         return (
-            <AuthWrapper functionName='f_goods_skuMapping'>
-                <div className='ProductSkuMapping-wrap'>
-                    <BreadCrumb />
-                    <div className="container-search">
-                        <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
-                        <SearchForm
-                            wrappedComponentRef={(form) => this.form = form}
-                            onSearch={this.getListData}
-                        />
-                    </div>
-                    <div className="container">
-                        <SkuMappingList
-                            loading={loading}
-                            data={listArr}
-                            getListData={this.getListData}
-                        />
-                    </div>
+            <div className='ProductSkuMapping-wrap'>
+                <BreadCrumb />
+                <div className="container-search">
+                    <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
+                    <SearchForm
+                        wrappedComponentRef={(form) => this.form = form}
+                        onSearch={this.getListData}
+                    />
                 </div>
-            </AuthWrapper>
+                <div className="container">
+                    <SkuMappingList
+                        loading={loading}
+                        data={mappingPage}
+                        getListData={this.getListData}
+                    />
+                </div>
+            </div>
 
+            // <AuthWrapper functionName='f_goods_skuMapping'>
+            //     <div className='ProductSkuMapping-wrap'>
+            //         <BreadCrumb />
+            //         <div className="container-search">
+            //             <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
+            //             <SearchForm
+            //                 wrappedComponentRef={(form) => this.form = form}
+            //                 onSearch={this.getListData}
+            //             />
+            //         </div>
+            //         <div className="container">
+            //             <SkuMappingList
+            //                 loading={loading}
+            //                 data={listArr}
+            //                 getListData={this.getListData}
+            //             />
+            //         </div>
+            //     </div>
+            // </AuthWrapper>
         );
     }
 }

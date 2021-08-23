@@ -7,12 +7,13 @@ import {
     DatePicker,
     Popconfirm,
     Icon,
-    Divider
+    Divider, message
 } from 'antd';
 import {FormattedMessage} from 'react-intl';
 import {Const, RCi18n} from 'qmkit';
 import moment from 'moment';
 import './index.less';
+import { getEditSkuMappingList, saveSkuMapping } from '../../webapi';
 
 const styles = {
     label: {
@@ -32,13 +33,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
         super(props);
         this.state = {
             confirmLoading: false,
-            dataSource: [
-                {
-                    id: 12,
-                    externalSkuNo: '',
-                    condition: null,
-                }
-            ],
+            dataSource: [],
             count: 0,
             loading: false,
         }
@@ -49,26 +44,62 @@ export default class SkuMappingModal extends React.Component<any, any>{
             goodsInfoId,
         } = this.props;
         if (goodsInfoId){
-            // 初始化数据
-            this.setState({
-                dataSource: [
-                    {
-                        id: 12,
-                        externalSkuNo: '',
-                        condition: null,
-                    }
-                ],
-            })
+          this.initList(goodsInfoId);
         }
     }
 
+    initList = async (goodsInfoId) => {
+        if (!goodsInfoId) return;
+        this.setState({ loading: true});
+        let { res } = await getEditSkuMappingList({goodsInfoId});
+        this.setState({ loading: false});
 
-    handleOk = () => {
-        let {onOk} = this.props;
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        if(res.code === Const.SUCCESS_CODE){
+          this.setState({
+              dataSource: res.context || [
+                  {
+                      key: 0,
+                      externalSkuNo: '',
+                      condition: null,
+                  }
+              ] // 接口数据为空，默认添加一条数据
+          })
+        }
+
+    }
+
+
+    handleOk =  () => {
+        let {onOk, goodsInfoId} = this.props;
+        if (!goodsInfoId) return;
+        this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                onOk && onOk(values)
+                this.setState({confirmLoading: true})
+                let mappings = values.mappings.map(item => {
+                    return {
+                        externalSkuNo: item.externalSkuNo,
+                        condition: {
+                            startTime: item.condition[0].format(Const.DAY_FORMAT),
+                            endTime: item.condition[1].format(Const.DAY_FORMAT)
+                        }
+                    }
+                })
+                let params = {
+                    goodsInfoId,
+                    mappings,
+                    ruleNo: 0,
+
+                }
+                let { res } = await saveSkuMapping(params);
+                this.setState({confirmLoading: false})
+
+                if (res.code === Const.SUCCESS_CODE){
+                    message.success('Operate successfully');
+                    // 提交成功的回调
+                    onOk && onOk(values)
+                }
+
             }
         });
     };
@@ -240,7 +271,6 @@ export default class SkuMappingModal extends React.Component<any, any>{
                         {/*<h3><FormattedMessage id="Product.SkuMapping"/></h3>*/}
                         <div className='SkuMappingModal-table-main'>
                             <Table
-                                className=''
                                 loading={loading}
                                 dataSource={dataSource}
                                 columns={columns}

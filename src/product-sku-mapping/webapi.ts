@@ -22,7 +22,7 @@ export const getSkuMappingList = (params) => {
  * mapping页面编辑查询接口
  **/
 
-export const editSkuMapping = (params) => {
+export const getEditSkuMappingList = (params) => {
   const request = {
     method: 'POST',
     body: JSON.stringify(params)

@@ -49,8 +49,8 @@ export default class SkuMappingList extends React.Component<any, any>{
             },
             {
                 title: <FormattedMessage id="Product.ExternalSKU" />,
-                dataIndex: 'ExternalSKU',
-                key: 'ExternalSKU',
+                dataIndex: 'externalSku',
+                key: 'externalSku',
             },
             {
                 title: 'Action',
@@ -68,11 +68,12 @@ export default class SkuMappingList extends React.Component<any, any>{
         ]
     }
 
-    handleOk = values => {
+    handleOk = (values) => {
         console.log('values', values);
-        this.setState({
-            visible: false,
-        });
+        let { getListData } = this.props;
+        // 更新列表
+        getListData && getListData();
+        this.handleCancel();
     };
 
     showModal = () => {
@@ -102,17 +103,17 @@ export default class SkuMappingList extends React.Component<any, any>{
         return (
             <div>
                 <Table
-                    rowKey='id'
+                    rowKey='goodsInfoId'
                     loading={{
                         spinning: loading,
                         indicator: AntSpin.loadingImg
                     }}
                     bordered
-                    dataSource={data}
+                    dataSource={data.context}
                     columns={columns}
                     pagination={{
-                        total: 1,
-                        current: 1,
+                        total: data.total || 0,
+                        current: data.number || 0,
                         onChange: this.handleChange
                     }}
                 />

@@ -1,37 +1,40 @@
 import Graphin, { Behaviors, GraphinContext, IG6GraphEvent, Utils } from '@antv/graphin';
 import React, { Component, useContext, useEffect } from 'react';
 
-import iconfont from './iconfont.json'
-import './index.css'
+import './index.less'
 import * as webapi from './../../webapi'
-import { Const } from 'qmkit';
-import { Button, Col, Dropdown, Icon, Menu, message, Row } from 'antd';
+import { Const, RCi18n } from 'qmkit';
+import { Button, Card, Col, Dropdown, Icon, Menu, message, Row, Spin } from 'antd';
 import { INode, NodeConfig } from '@antv/g6';
 import ReactDOM from 'react-dom';
+import DashboardDetails from '../DashboardDetails';
 
 const { ZoomCanvas, Hoverable } = Behaviors;
 
 const SampleBehavior = () => {
+  const { graph } = useContext(GraphinContext);
   function renderApiList(list) {
     return (
-      <ul className='interface-api-list'>
+      <ul className='main-content' style={{ maxHeight: 500 }}>
         {
-          list&&list.map((item,index) => (
-            <li className='api-item' key={index}>
-              <div className='apiName api-item-box'>
-                {`${item.name} >`}
+          list && list.map((item, index) => (
+            <li className='api-item' key={index} >
+              <Button className='api-item-box' type="link"
+                onClick={() => { handleApiBtn(item.id) }}
+                style={{ fontWeight: 600, marginTop: 10, padding: 0, color: '#000000' }}>
+                {item.name}{item.isInvoker ? <Icon type="right" /> : <Icon type="left" />}
+              </Button>
+              <div className='api-item-box'>
+                {`${RCi18n({ id: 'Dashboard.Uptime' })}: ${item.updateTime}`}
               </div>
-              <div className='Uptime api-item-box'>
-                {`Uptime: ${item.Uptime}`}
+              <div className='api-item-box'>
+                {`${RCi18n({ id: 'Dashboard.Provider' })}: ${item.provider}`}
               </div>
-              <div className='Provider api-item-box'>
-                {`Provider: ${item.Provider}`}
+              <div className='api-item-box'>
+                {`${RCi18n({ id: 'Dashboard.Invoker' })}: ${item.invoker}`}
               </div>
-              <div className='Invoker api-item-box'>
-                {`Invoker: ${item.Invoker}`}
-              </div>
-              <div className='DataFlow api-item-box'>
-                {`Data Flow: ${item.DataFlow}`}
+              <div className='api-item-box'>
+                {`${RCi18n({ id: 'Dashboard.Data Flow:' })} ${item.dataFlow}`}
               </div>
             </li>
           ))
@@ -40,63 +43,59 @@ const SampleBehavior = () => {
     )
   }
 
-
   function ApiList(props) {
-    
+
     return (
-      <div>
-        <p>{props.title}</p>
+      <Card size="small" title={props.title}
+        headStyle={{ fontSize: 16, fontWeight: 600 }}
+        bodyStyle={{ paddingRight: 0, paddingTop: 0 }}>
         {renderApiList(props.list)}
-      </div>
+      </Card>
     );
   }
-  const { graph, apis } = useContext(GraphinContext);
+
+  function handleApiBtn(id) {
+    ReactDOM.render(
+      <DashboardDetails id={id} key={id} />,
+      document.getElementById('dashboard-details')
+    );
+  }
+
   useEffect(() => {
     const handleClick = (evt: IG6GraphEvent) => {
       const node = evt.item as INode;
       const model = node.getModel() as NodeConfig;
-      message.success(model.id)
       let title = model.style.label.value
-      webapi.getApiList().then(data=>{
+      webapi.getApiList({ systemId: model.id }).then(data => {
         const { res } = data
         if (res.code === Const.SUCCESS_CODE) {
-          const apiList= [
-            {
-                name: 'Price Synchronization',
-                Uptime: '',
-                Provider: 'FGS',
-                Invoker: ' Navision',
-                DataFlow: 'Navision to FGS',
+          let tempApiList = res.context.intInterfaceDTOS
+          let apiList = []
+          tempApiList.forEach(element => {
 
-            },
-            {
-                name: 'Price Synchronization',
-                Uptime: '',
-                Provider: 'FGS',
-                Invoker: ' Navision',
-                DataFlow: 'Navision to FGS',
+            apiList.push({
+              id: element.id,
+              name: element.name,
+              updateTime: element.updateTime || '',
+              provider: element.apiProviderName,
+              invoker: element.apiInvokerName,
+              dataFlow: element.dataSourceFromName + ' → ' + element.dataSourceToName,
+              isInvoker: element.apiInvokerName === title ? true : false
+            })
+          });
 
-            },
-            {
-                name: 'Price Synchronization',
-                Uptime: '',
-                Provider: 'FGS',
-                Invoker: ' Navision',
-                DataFlow: 'Navision to FGS',
-            },
-        ]
           ReactDOM.render(
-            <ApiList list={apiList} title={title}/>,
+            <ApiList list={apiList} title={title} />,
             document.getElementById('topo_graph')
           );
 
         }
-        
-      }).catch(err=>{
+
+      }).catch(err => {
         console.log(err);
-        
+
       })
-      
+
     };
     // 每次点击聚焦到点击节点上
     graph.on('node:click', handleClick);
@@ -110,7 +109,10 @@ export default class TopologicalGraph extends Component<any> {
   constructor(props: any) {
     super(props);
     this.state = {
+      loading: false,
       topoData: {},
+      latestTimeNum: 1,
+      country: '',
       layout: { type: 'concentric' },
       layoutList: [
         'graphin-force',
@@ -134,12 +136,23 @@ export default class TopologicalGraph extends Component<any> {
     this.getNodesAndEdges()
   }
   getNodesAndEdges = () => {
+    this.setState({
+      loading: true
+    })
     webapi.findSystemNodesByStoreId().then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
         let nodes = res.context.nodes
         let edges = res.context.edges
         this.renderGraph(nodes, edges)
+        this.setState({
+          loading: false
+        })
+      }
+      else {
+        this.setState({
+          loading: false
+        })
       }
 
     })
@@ -208,14 +221,14 @@ export default class TopologicalGraph extends Component<any> {
 
       }
     })
-    console.log(tempNodes);
 
     let data = {
       nodes: tempNodes,
       edges: tempEdges
     }
     this.setState({
-      topoData: data
+      topoData: data,
+      lading: false
     })
   }
   switchLayout = (layout) => {
@@ -226,7 +239,7 @@ export default class TopologicalGraph extends Component<any> {
 
 
   render() {
-    const { topoData, layoutList, layout } = this.state
+    const { topoData, layoutList, layout, latestTimeNum, country, loading } = this.state
 
 
     const menu = (
@@ -243,10 +256,12 @@ export default class TopologicalGraph extends Component<any> {
       </Menu>
     )
 
-    return <div>
-      <div>
+    return (<Spin spinning={loading} >
+      <div className="container">
+        <div className='title'>{RCi18n({ id: "Dashboard.Monitor" })}</div>
+        <p>{RCi18n({ id: "Dashboard.Country" })} {`: ${country}`}</p>
         <Row>
-          <Col span={20}>
+          <Col span={18}>
             <Dropdown overlay={menu}>
               <Button type="link" >
                 {layout.type} <Icon type="down" />
@@ -257,14 +272,30 @@ export default class TopologicalGraph extends Component<any> {
               <ZoomCanvas disabled />
             </Graphin>
           </Col>
-          <Col span={4}>
+          <Col span={6}>
             <div id="topo_graph"></div>
           </Col>
-
         </Row>
+        <div className='Dashboard-flow-chart-hint'>
+          <p>
+            <i className="iconfont iconjinggao" />
+            <span>
+              {RCi18n({ id: 'Dashboard.Technical Error Happened' })}
+            </span>
+          </p>
+          <p>
+            <i className="iconfont iconwarning" />
+            <span>
+              {RCi18n({ id: "Dashboard.Default Report Time" })} {`: Latest ${latestTimeNum} hour`}</span>
+          </p>
+        </div>
 
       </div>
-    </div>
+      <div className="container">
+        <div id="dashboard-details"></div>
+      </div>
+
+    </Spin >)
   }
 
 }

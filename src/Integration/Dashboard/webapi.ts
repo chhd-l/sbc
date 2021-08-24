@@ -18,7 +18,7 @@ export function findSystemNodesByStoreId(filterParams = {}) {
 
 //mock 
 export function getApiList(filterParams = {}) {
-  return Fetch<TResult>('/intSystem/findSystemNodesByStoreId', {
+  return Fetch<TResult>('/intInterface/findBySystemId', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

@@ -1,51 +1,48 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
-import { Breadcrumb, Button, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
-import Information from './components/Information';
-import Tab from '@/Integration/components/tab';
-import Statistics from './components/Statistics';
-import '@/Integration/components/index.less';
-import { Link } from 'react-router-dom';
-import * as webapi from './webapi'
+import { Button, Input, Modal, Spin, Table, Tabs, Tooltip } from 'antd';
+import Information from './components/information';
+import Statistics from './components/statistics';
 import ReactJson from 'react-json-view';
+import * as webapi from '@/Integration/Interface/Interface-detail/webapi'
+import { Link } from 'react-router-dom';
 
-const { TabPane } = Tabs;
+const { TabPane } = Tabs
 const { Search } = Input;
 
-export default class InterfaceView extends Component<any, any> {
+export default class DashboardDetails extends Component<any, any> {
 
-  constructor(props: any) {
-    super(props);
+  constructor(props) {
+    super(props)
     this.state = {
       loading: false,
       interfaceId: null,
-      detailsTabsKey: 'information',
-      tableTabsKey: 'all',
+      detailsTabsKey: 'info',
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
-      visible:false, 
-      title:'', 
-      showJson:null,
-      logList:[],
+      visible: false,
+      title: '',
+      showJson: null,
+      logList: [],
       detailInfo: {
       },
     }
-  };
-  componentDidMount(){
+  }
+
+  componentDidMount() {
     this.init()
   }
   init = () => {
-    const interfaceId = this.props.match.params.id
+    const interfaceId = this.props.id
     this.setState({
-      interfaceId:+interfaceId
+      interfaceId: +interfaceId
     })
     this.getInterfaceDetail(+interfaceId)
     let params = {
-      interfaceId:+interfaceId,
+      interfaceId: +interfaceId,
       pageSize: 5,
       pageNum: 0,
     }
@@ -55,8 +52,8 @@ export default class InterfaceView extends Component<any, any> {
     this.setState({
       loading: true
     })
-    let params={
-      interfaceId:interfaceId
+    let params = {
+      interfaceId: interfaceId
     }
     webapi.getInterfaceDetail(params).then(data => {
       const { res } = data
@@ -96,7 +93,7 @@ export default class InterfaceView extends Component<any, any> {
         let logList = res.context.logList
 
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage +1
+        pagination.current = res.context.currentPage + 1
         this.setState({
           logList,
           loading: false,
@@ -114,10 +111,10 @@ export default class InterfaceView extends Component<any, any> {
     })
   }
 
-  
+
 
   searchRequest = (value) => {
-    const { tableTabsKey,interfaceId } = this.state
+    const { tableTabsKey, interfaceId } = this.state
     this.setState({
       keywords: value
     })
@@ -131,7 +128,7 @@ export default class InterfaceView extends Component<any, any> {
     this.getLogList(params)
   }
   handlePageChange = (pagination) => {
-    const { keywords, tableTabsKey,interfaceId } = this.state
+    const { keywords, tableTabsKey, interfaceId } = this.state
     this.setState({
       pagination
     })
@@ -146,7 +143,7 @@ export default class InterfaceView extends Component<any, any> {
     this.getLogList(params)
   }
   onTableTabsChange = (key) => {
-    const { keywords,interfaceId } = this.state
+    const { keywords, interfaceId } = this.state
     this.setState({ tableTabsKey: key })
     let params = {
       businessKeys: keywords ? [keywords] : [],
@@ -167,10 +164,8 @@ export default class InterfaceView extends Component<any, any> {
     })
   }
 
-
-
   render() {
-    const { loading, detailsTabsKey, tableTabsKey, detailInfo,visible, title, showJson,pagination,logList,interfaceId } = this.state
+    const { loading, interfaceId, detailInfo, detailsTabsKey, pagination, logList, showJson, title, visible } = this.state
     const columns = [
       {
         title: RCi18n({ id: 'Log.RequestID' }),
@@ -219,76 +214,80 @@ export default class InterfaceView extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
-              <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
+              1
+              {/* <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" /> */}
             </Tooltip>
           </div>
         )
       }
     ]
-
     return (
-      <div>
-        <Spin spinning={loading} indicator={<img className="spinner"
-          src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-          style={{ width: '90px', height: '90px' }} alt="" />}>
 
+      <div className="container-info">
+        <Spin spinning={loading}>
+          <Headline title={detailInfo.name} />
+          <Tabs defaultActiveKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+            {/* Information */}
+            <TabPane tab={RCi18n({ id: 'Interface.Info' })} key="info">
+              <Information detailInfo={detailInfo} />
+            </TabPane>
+            {/* Statistics */}
+            <TabPane tab={RCi18n({ id: "Interface.Statistics" })} key="statistics">
+              <Statistics interfaceId={interfaceId} />
+            </TabPane>
 
-          <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>{detailInfo.name}</Breadcrumb.Item>
-          </BreadCrumb>
-          <div className="container-info">
-            <Headline title={detailInfo.name} />
-            <Tabs defaultActiveKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
-              {/* Information */}
-              <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
-                <Information detailInfo={detailInfo} />
-              </TabPane>
-              {/* Statistics */}
-              <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
-                <Statistics interfaceId={interfaceId} />
-              </TabPane>
-            </Tabs>
-          </div>
-          {
-            detailsTabsKey === 'information' ? (
-              <div className="container">
-                <Tabs defaultActiveKey={tableTabsKey} onChange={(key) => this.onTableTabsChange(key)}>
-                  {/* All */}
-                  <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="all" />
-                  {/* Error */}
-                  <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
-                </Tabs>
-                {/* 表格 */}
-                <Search
-                  placeholder="keywords"
-                  onSearch={value => this.searchRequest(value)}
-                  style={{ width: 200, marginBottom: 20 }}
-                />
-                <Tab
-                  rowKey="id"
-                  dataSource={logList}
-                  pagination={pagination}
-                  onChange={this.handlePageChange}
-                  columns={columns}
-                />
-                <Modal
-                  visible={visible}
-                  width={1050}
-                  title={title}
-                  footer={null}
-                  onCancel={() => this.setState({
-                    visible: false
-                  })}
-                >
+            {/* All */}
+            <TabPane tab={RCi18n({ id: "Interface.Log" })} key="log" >
+              <Search
+                placeholder="keywords"
+                onSearch={value => this.searchRequest(value)}
+                style={{ width: 200, marginBottom: 20 }}
+              />
+              <Table
+                key="log"
+                rowKey="id"
+                dataSource={logList}
+                pagination={pagination}
+                onChange={this.handlePageChange}
+                columns={columns}
+              />
+            </TabPane>
+            {/* Error */}
+            <TabPane tab={RCi18n({ id: "Interface.Error" })} key="error" >
+              <Search
+                placeholder="keywords"
+                onSearch={value => this.searchRequest(value)}
+                style={{ width: 200, marginBottom: 20 }}
+              />
+              <Table
+                key="error"
+                rowKey="id"
+                dataSource={logList}
+                pagination={pagination}
+                onChange={this.handlePageChange}
+                columns={columns}
+              />
+            </TabPane>
+          </Tabs>
+          {/* 表格 */}
 
-                  <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+          <Modal
+            visible={visible}
+            width={1050}
+            title={title}
+            footer={null}
+            onCancel={() => this.setState({
+              visible: false
+            })}
+          >
 
-                </Modal>
-              </div>
-            ) : null
-          }
+            <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+
+          </Modal>
         </Spin>
-      </div>
-    );
+      </div >
+
+
+    )
   }
 }

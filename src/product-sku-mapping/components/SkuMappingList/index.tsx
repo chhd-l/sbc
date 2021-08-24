@@ -26,7 +26,7 @@ export default class SkuMappingList extends React.Component<any, any>{
         console.log('pagination', page);
         // 更新列表
         this.props.getListData({
-            pageNum: page,
+            pageNum: page - 1,
         });
     }
 
@@ -39,13 +39,13 @@ export default class SkuMappingList extends React.Component<any, any>{
             },
             {
                 title: <FormattedMessage id="Product.SPU" />,
-                dataIndex: 'SPU',
-                key: 'SPU',
+                dataIndex: 'spu',
+                key: 'spu',
             },
             {
                 title: <FormattedMessage id="Product.SKU" />,
-                dataIndex: 'SKU',
-                key: 'SKU',
+                dataIndex: 'sku',
+                key: 'sku',
             },
             {
                 title: <FormattedMessage id="Product.ExternalSKU" />,
@@ -109,11 +109,11 @@ export default class SkuMappingList extends React.Component<any, any>{
                         indicator: AntSpin.loadingImg
                     }}
                     bordered
-                    dataSource={data.context}
+                    dataSource={data.content}
                     columns={columns}
                     pagination={{
                         total: data.total || 0,
-                        current: data.number || 0,
+                        current: data.number + 1 || 0,
                         onChange: this.handleChange
                     }}
                 />

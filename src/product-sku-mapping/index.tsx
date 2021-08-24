@@ -34,7 +34,7 @@ export default class ProductSkuMapping extends React.Component<any, any> {
     }
 
     // 获取列表数据
-    getListData = async (listParams) => {
+    getListData = async (listParams={}) => {
         // 获取form表单数据
         let formData = this.form.props.form.getFieldsValue();
         let params = {

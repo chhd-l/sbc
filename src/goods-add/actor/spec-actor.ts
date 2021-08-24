@@ -359,6 +359,9 @@ export default class GoodsSpecActor extends Actor {
         resultArray = resultArray.push(goodsItem);
       });
     });
+    //每次循环后情况random缓存
+    this.generatedNo = Map();
+
     if (index == goodsSpecs.count() - 1) {
       return resultArray;
     }
@@ -369,7 +372,7 @@ export default class GoodsSpecActor extends Actor {
    * 转换规格为数组
    */
   _convertSpev = (spec: IMap) => {
-    return spec.get('specValues').map((item, index) => {
+    let resultArr = spec.get('specValues').map((item, index) => {
       const specId = 'specId-' + spec.get('specId');
       const specDetailId = 'specDetailId-' + spec.get('specId');
       const goodsInfoNo = this._randomGoodsInfoNo();
@@ -389,6 +392,10 @@ export default class GoodsSpecActor extends Actor {
         skuSvIds: [item.get('specDetailId')]
       });
     });
+    //每次循环后情况random缓存
+    this.generatedNo = Map();
+
+    return resultArr;
   };
 
   /**

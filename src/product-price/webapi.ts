@@ -46,13 +46,5 @@ export function exportPriceList(filterParams = {}) {
     })
   });
 }
-//  查询
-export function searchPriceList(filterParams = {}) {
-  return Fetch<TResult>('/goods/price/export', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}
+
 

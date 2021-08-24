@@ -1,113 +1,130 @@
 
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AssetManagement } from 'qmkit';
-import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm, Checkbox, Popover, Icon, Card, InputNumber } from 'antd';
+import { BreadCrumb, Headline, Const } from 'qmkit';
+import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm, Checkbox, Popover, Icon, Card, InputNumber, Avatar, Pagination } from 'antd';
 import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+const { confirm } = Modal;
+const SORT_TYPE = {
+  ascend: 'asc',
+  descend: 'desc'
+}
+let objP = {
+  marketPricePercentage: 0,
+  subscriptionPricePercentage: 0
+}
 class ProductPrice extends Component<any, any> {
 
   constructor(props: any) {
     super(props);
     this.state = {
       title: <FormattedMessage id="Product.ProductPrice" />,
-      searchForm: {
-        taggingName: ''
-      },
+      totalColumn: 0,
+      currentTotal: 0,
+      searchName: '',
       pagination: {
-        current: 1,
+        pageNum: 0,
         pageSize: 10,
-        total: 0
+        sortColumn: '',
+        sortRole: '',
+        condition: ''
       },
-      popoverKey:0,
-      visible:false,
-      taggingList: [{
-        id: 2344,
-        imageurl: '',
-        type: 'Regular',
-        name: 'Royal Canin',
-        sku: 1234,
-        spu: 3455,
-        category: 'SPT vet',
-        p_price: 234,
-        m_price: 345,
-        s_price: 344,
-        datetime: '21:00 08/08/21'
-      },{
-        id: 234422,
-        imageurl: '',
-        type: 'Regular',
-        name: 'Royal Canin',
-        sku: 1234,
-        spu: 3455,
-        category: 'SPT vet',
-        p_price: 234,
-        m_price: 3451,
-        s_price: 3442,
-        datetime: '21:00 08/08/21'
-      }],
-      currentPrice:0,
-      loading:false
+      goodsInfoIds: "",
+      isDisabled: true,
+      popoverKey: 0,
+      visible: false,
+      goodsPriceList: [],
+      currentPrice: 0,
+      loading: false
     };
   }
   componentDidMount() {
-
+    this.getGoodsPriceFun();
   }
   //获取列表
-  getGoodsPriceFun=async()=>{
-    const {context,code}=await webapi.getGoodPrice();
-
+  getGoodsPriceFun = async () => {
+    let p = this.state.pagination
+    this.setState({ loading: true })
+    const { res } = await webapi.getGoodPrice(p);
+    const { code, context } = res;
+    if (code === Const.SUCCESS_CODE) {
+      let goodsObj = context?.goodsManagePriceList
+      this.setState({
+        goodsPriceList: goodsObj?.content ?? [],
+        totalColumn: context?.total ?? 0,
+        currentTotal: goodsObj.total,
+        loading: false,
+        pagination: {
+          pageNum: goodsObj.number,
+          pageSize: goodsObj.size,
+          ...p
+        }
+      })
+    }
   }
-   //查询
-   getGoodsPriceSearch=async()=>{
-    const {context,code}=await webapi.searchPriceList();
 
-  }
-   //全部更新
-   updatePriceAllFun=async()=>{
-    const {context,code}=await webapi.updatePriceAll();
+  //提交全部更新
+  submitApply = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        let goodsInfoIds = this.state.goodsInfoIds;
+        values.marketPricePercentage = values.marketPricePercentage.toString()
+        values.subscriptionPricePercentage = values.subscriptionPricePercentage.toString()
+        let allP = {
+          goodsInfoIds,
+          ...values
+        }
+        if (goodsInfoIds === '') {
+          this.showConfirm(allP);
+        } else {
+          this.updatePriceAllFun(allP)
 
-  }
-   // 手动更新
-   updatePriceSingleFun=async()=>{
-    const {context,code}=await webapi.updatePriceSingle();
-
-  }
-
-  changPrice=(e)=> {
-   this.setState({
-    currentPrice:e
-   })
-  }
-  submitPrice=(item)=>{
-    console.log(item);
-  }
-  onSearchFormChange = ({ field, value }) => {
-    let data = this.state.searchForm;
-    data[field] = value;
-    this.setState({
-      searchForm: data
-    });
-  };
-
-  onSearch = () => {
-    const { searchForm } = this.state
-    this.setState({
-      oldSearchForm: {
-        taggingName: searchForm.taggingName
+        }
       }
-    }, () => {
+    });
+  }
+  //全部更新
+  updatePriceAllFun = async (params) => {
+    const { res } = await webapi.updatePriceAll(params);
+    const { code } = res;
+    if (code === Const.SUCCESS_CODE) {
+      this.getGoodsPriceFun();
+    }
+  }
+  // 手动更新
+  updatePriceSingleFun = async (param) => {
+    const { res } = await webapi.updatePriceSingle(param);
+    const { code } = res;
+    if (code === Const.SUCCESS_CODE) {
+      this.getGoodsPriceFun();
+    }
+  }
+
+
+  changPrice = (e) => {
+    this.setState({
+      currentPrice: e.toString()
+    })
+  }
+  submitPrice = (item, name) => {
+    console.log(item);
+    let param = {
+      goodsInfoId: item.goodsInfoId,
+      [name]: this.state.currentPrice
+    }
+    this.updatePriceSingleFun(param);
+  }
+  onSearchFormChange = (e) => {
+    const searchName = e.target.value;
+    this.setState({
+      searchName
     })
   };
-  content = (item) => (<div
-    style={{ width: 200, padding: 15 }} >
-    <InputNumber min={1} onChange={(e)=>this.changPrice(e)} value={this.state.currentPrice} style={{ width: '100%' }} />
-    <div style={{ marginTop: 10, display: "flex" }}>
-      <Button type="primary" key="ok" style={{ flex: 1 }} onClick={()=>this.submitPrice(item)}>OK</Button>
-      <Button key="cancel" style={{ flex: 1, marginLeft: 10 }} onClick={() => this.hide()}>Cancel</Button>
-    </div>
-  </div>
-  );
+
+
+
 
 
   hide = () => {
@@ -117,26 +134,66 @@ class ProductPrice extends Component<any, any> {
     });
   };
 
-  handleVisibleChange = (visible,item,name) => {
-    console.log(item, visible,item[name],name)
-    if(visible){
-      this.setState({currentPrice:item[name], visible,popoverKey:(item.id + '_'+name)});
-    }else{
-      this.setState({ visible,popoverKey:0});
+  handleVisibleChange = (visible, item, name) => {
+    if (visible) {
+      this.setState({ currentPrice: item[name], visible, popoverKey: (item.goodsInfoId + '_' + name) });
+    } else {
+      this.setState({ visible, popoverKey: 0 });
     }
 
-   
+
   };
+  //排序
+  handleTableChange = (pagination, filters, sorter) => {
+    console.log(sorter, pagination, filters)
+    const pager = { ...this.state.pagination };
+    pager.pageNum = pagination.current;
+    pager.sortColumn = sorter.field
+    pager.sortRole = SORT_TYPE[sorter.order];
+    this.setState({
+      pagination: pager,
+    }, () => {
+      this.getGoodsPriceFun();
+    });
+  };
+  //检测用户输入
+  checkFomeInput = (e, name) => {
+    objP[name] = e
+    let bool = objP.marketPricePercentage > 0 && objP.subscriptionPricePercentage > 0;
+    this.setState({
+      isDisabled: !bool
+    })
+  }
 
 
+  showConfirm = (param) => {
+    confirm({
+      title: 'Do you want to apply all items?',
+      content: 'When clicked the OK button, this dialog will be closed after 1 second',
+      onOk: () => {
+        this.updatePriceAllFun(param)
+      },
+      onCancel() { },
+    });
+  }
+  content = (item, name) => (<div
+    style={{ width: 200, padding: 15 }} >
+    <InputNumber min={1} onChange={(e) => this.changPrice(e)} value={this.state.currentPrice} style={{ width: '100%' }} />
+    <div style={{ marginTop: 10, display: "flex" }}>
+      <Button type="primary" key="ok" style={{ flex: 1 }} onClick={() => this.submitPrice(item, name)}>OK</Button>
+      <Button key="cancel" style={{ flex: 1, marginLeft: 10 }} onClick={() => this.hide()}>Cancel</Button>
+    </div>
+  </div>
+  );
   render() {
-    const { loading, title, taggingList, searchForm } = this.state;
+    const { loading, title, goodsPriceList, pagination, isDisabled, totalColumn, currentTotal, searchName } = this.state;
     const { getFieldDecorator } = this.props.form;
     const columns = [
       {
         title: <FormattedMessage id="Product.PriceTableColumnImage" />,
         dataIndex: 'image',
-        key: 'image'
+        key: 'image',
+        render: (text) => <Avatar shape="square" size={60} src={text} />
       },
       {
         title: <FormattedMessage id="Product.PriceTableColumnType" />,
@@ -156,7 +213,8 @@ class ProductPrice extends Component<any, any> {
       {
         title: <FormattedMessage id="Product.PriceTableColumnSPU" />,
         dataIndex: 'goodsNo',
-        key: 'goodsNo'
+        key: 'goodsNo',
+        sorter: true,
       },
       {
         title: <FormattedMessage id="Product.PriceTableColumnCategory" />,
@@ -172,12 +230,13 @@ class ProductPrice extends Component<any, any> {
         title: <FormattedMessage id="Product.PriceTableColumnMarketPrice" />,
         dataIndex: 'marketPrice',
         key: 'marketPrice',
+        sorter: true,
         render: (text, recode) => {
-          
-          return (<Popover  content={this.content(recode)}
+
+          return (<Popover content={this.content(recode, 'marketPrice')}
             trigger="click"
-            visible={this.state.popoverKey ===(recode.id + '_m_price') && this.state.visible}
-            onVisibleChange={(v) => this.handleVisibleChange(v, recode,'m_price')}
+            visible={this.state.popoverKey === (recode.goodsInfoId + '_marketPrice') && this.state.visible}
+            onVisibleChange={(v) => this.handleVisibleChange(v, recode, 'marketPrice')}
           >
             <span style={{ marginRight: 10 }}>{text}</span><Icon type="edit" />
           </Popover>)
@@ -187,11 +246,12 @@ class ProductPrice extends Component<any, any> {
         title: <FormattedMessage id="Product.PriceTableColumnSubscriptionPrice" />,
         dataIndex: 'subscriptionPrice',
         key: 'subscriptionPrice',
+        sorter: true,
         render: (text, recode) => {
-          return (<Popover  content={this.content(recode)}
+          return (<Popover content={this.content(recode, 'subscriptionPrice')}
             trigger="click"
-            visible={this.state.popoverKey ===(recode.id + '_s_price') && this.state.visible}
-            onVisibleChange={(v) => this.handleVisibleChange(v, recode,'s_price')}
+            visible={this.state.popoverKey === (recode.goodsInfoId + '_subscriptionPrice') && this.state.visible}
+            onVisibleChange={(v) => this.handleVisibleChange(v, recode, 'subscriptionPrice')}
           >
             <span style={{ marginRight: 10 }}>{text}</span><Icon type="edit" />
           </Popover>)
@@ -200,100 +260,141 @@ class ProductPrice extends Component<any, any> {
       {
         title: <FormattedMessage id="Product.PriceTableColumnUpatatime" />,
         dataIndex: 'updateTime',
-        key: 'updateTime'
+        key: 'updateTime',
+        sorter: true,
       },
 
     ];
-
+    const rowSelection = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        let goodsInfoIds = selectedRows.map(item => item.goodsInfoId);
+        this.setState({
+          goodsInfoIds: goodsInfoIds.toString()
+        })
+      }
+    };
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
-          <div className="container-search" style={{ paddingBottom: 20 }}>
-            <Headline title={title} />
-            <Row>
-              <Col span={8}>
-                <Input
-                  style={{ width: '95%' }}
-                  // addonBefore={RCi18n({id:'Product.Taggingname'})}
-                  value={searchForm.taggingName}
-                  placeholder={RCi18n({ id: 'Product.SearchProducts' })}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onSearchFormChange({
-                      field: 'taggingName',
-                      value
-                    });
-                  }}
-                />
-              </Col>
-              <Col span={8}>
-                <Button
-                  type="primary"
-                  icon="search"
-                  shape="round"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.onSearch();
-                  }}
-                >
-                  <span>
-                    <FormattedMessage id="Product.search" />
-                  </span>
-                </Button>
-              </Col>
-            </Row>
-          </div>
+        <div className="container-search" style={{ paddingBottom: 20 }}>
+          <Headline title={title} />
+          <Row>
+            <Col span={8}>
+              <Input
+                style={{ width: '95%' }}
+                // addonBefore={RCi18n({id:'Product.Taggingname'})}
+                value={searchName}
+                placeholder={RCi18n({ id: 'Product.SearchProducts' })}
+                onChange={this.onSearchFormChange}
+              />
+            </Col>
+            <Col span={8}>
+              <Button
+                type="primary"
+                icon="search"
+                shape="round"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.setState({
+                    pagination: {
+                      ...pagination,
+                      pageNum: 0,
+                      condition: searchName
+                    }
+                  }, () => {
+                    this.getGoodsPriceFun();
+                  })
+                }}
+              >
+                <span>
+                  <FormattedMessage id="Product.search" />
+                </span>
+              </Button>
+            </Col>
+          </Row>
+        </div>
 
-          <div className="container-search">
-            <Form layout="inline" >
-              <Form.Item label={RCi18n({ id: 'Product.Marketpricepercentage' })}>
-                {getFieldDecorator('marketPricePercentage', {
-                  initialValue: '',
-
-                })(<Input />)}
-              </Form.Item>
-              <Form.Item label={RCi18n({ id: 'Product.Subscriptionpricepercentage' })}>
-                {getFieldDecorator('subscriptionPricePercentage', {
-                  initialValue: ''
-                })(<Input />)}
-              </Form.Item>
-              <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
-                {getFieldDecorator('roundOff', {
-                  initialValue: '',
-
-                })(<Checkbox />)}
-              </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  apply
-                </Button>
-              </Form.Item>
-            </Form>
+        <div className="container-search">
+          <Row>
+            <Col span={18}>
+              <Form layout="inline" onSubmit={(e) => this.submitApply(e)}>
+                <Form.Item label={RCi18n({ id: 'Product.Marketpricepercentage' })}>
+                  {getFieldDecorator('marketPricePercentage', {
+                    initialValue: '',
+                    onChange: (e) => this.checkFomeInput(e, 'marketPricePercentage')
+                  })(<InputNumber min={0} />)}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Product.Subscriptionpricepercentage' })}>
+                  {getFieldDecorator('subscriptionPricePercentage', {
+                    initialValue: '',
+                    onChange: (e) => this.checkFomeInput(e, 'subscriptionPricePercentage')
+                  })(<InputNumber min={0} />)}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
+                  {getFieldDecorator('roundOff', {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                  })(<Checkbox />)}
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit" disabled={isDisabled}>
+                    apply
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+            <Col span={6}>
+              <div style={{ textAlign: "right" }}>
+                <span>{totalColumn} SKU</span> <Button type="primary">export</Button>
+              </div>
+            </Col>
+          </Row>
+          <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
 
             <div style={{ marginTop: 20 }}>
-              <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
+              <Table style={{ paddingRight: 20 }}
 
+                rowKey="goodsInfoId"
+                rowSelection={rowSelection}
+                onChange={this.handleTableChange}
+                columns={columns}
+                dataSource={goodsPriceList}
+                pagination={false}
+                scroll={{ x: '100%' }} />
+
+
+              {currentTotal > 0 ? (
+                <Pagination
+                  current={pagination.pageNum + 1}
+                  total={currentTotal}
+                  pageSize={pagination.pageSize}
+                  showTotal={total => `Total ${currentTotal}`}
+                  onChange={(pageNum, pageSize) => {
+                    console.log(pageNum)
+                    this.setState({
+                      pagination: {
+                        ...this.state.pagination,
+                        pageNum: pageNum - 1,
+                        pageSize
+                      }
+                    }, () => {
+                      this.getGoodsPriceFun();
+                    })
+                  }}
+                />
+              ) : null}
             </div>
-          </div>
+          </Spin>
 
-        </Spin>
+        </div>
+
+
       </div>
     );
   }
 }
-const styles = {
-  edit: {
-    paddingRight: 10
-  },
-  tableImage: {
-    width: '60px',
-    height: '60px',
-    padding: '5px',
-    border: '1px solid rgb(221, 221, 221)',
-    background: 'rgb(255, 255, 255)'
-  }
-} as any;
+
 
 export default Form.create()(ProductPrice);

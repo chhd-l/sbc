@@ -54,42 +54,6 @@ const radioStyle = {
   lineHeight: '40px'
 };
 
-const treeData = [
-  {
-    title: 'Node1',
-    value: '0-0',
-    key: '0-0',
-    children: [
-      {
-        title: 'Child Node1',
-        value: '0-0-0',
-        key: '0-0-0'
-      }
-    ]
-  },
-  {
-    title: 'Node2',
-    value: '0-1',
-    key: '0-1',
-    children: [
-      {
-        title: 'Child Node3',
-        value: '0-1-0',
-        key: '0-1-0'
-      },
-      {
-        title: 'Child Node4',
-        value: '0-1-1',
-        key: '0-1-1'
-      },
-      {
-        title: 'Child Node5',
-        value: '0-1-2',
-        key: '0-1-2'
-      }
-    ]
-  }
-];
 const TreeNode = Tree.TreeNode;
 
 @Relax
@@ -149,10 +113,6 @@ class FullGiftForm extends React.Component<any, any> {
       selectedSkuIds: any;
       selectedGiftRows: any;
       submitFullGift: Function;
-      // submitFullDiscount?: Function;
-      // submitFullReduction?: Function;
-      // discountBeanOnChange?: Function;
-      // reductionBeanOnChange?: Function;
       giftBeanOnChange: Function;
       deleteSelectedSku: Function;
       setSelectedProductRows: Function;
@@ -173,10 +133,6 @@ class FullGiftForm extends React.Component<any, any> {
     setSelectedGiftRows: noop,
     initGiftDefualtLevelList: noop,
     submitFullGift: noop,
-    // submitFullDiscount: noop,
-    // submitFullReduction: noop,
-    // discountBeanOnChange: noop,
-    // reductionBeanOnChange: noop,
     giftBeanOnChange: noop,
     deleteSelectedSku: noop,
     setSelectedProductRows: noop,
@@ -1150,6 +1106,8 @@ class FullGiftForm extends React.Component<any, any> {
             subType: e.target.value
           };
           _thisRef.onBeanChange(beanObject);
+          let _list=[]
+          _thisRef.GiftRowsOnChange(fromJS(_list));
           //gift需要替换
           initGiftDefualtLevelList()
         },

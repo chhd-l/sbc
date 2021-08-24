@@ -2670,7 +2670,7 @@ export default {
   'Marketing.ActivityName':'Activity name',
   'Marketing.StartTime':'Start time',
   'Marketing.EndTime':'End time',
-  'Marketing.Status':'Status',
+  'Marketing.Status':'Task Status',
   'Marketing.SelectCoupons':'Select coupons',
   'Marketing.Price':'Price',
   'Marketing.Inventory':'Inventory',

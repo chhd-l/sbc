@@ -34,7 +34,11 @@ export default class ClinicList extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      emailTemplateList: []
+      emailTemplateList: [],
+      resendParams: {
+        isReSend:true,
+        messageTaskId:'',
+      }
     };
   }
   componentDidMount() {
@@ -65,6 +69,11 @@ export default class ClinicList extends Component<any, any> {
       () => this.getEmailTaskList()
     );
   };
+  resendEmail=()=>{
+    const {resendParams}=this.state;
+    console.log(resendParams)
+  }
+
   getEmailTaskList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
@@ -285,15 +294,15 @@ export default class ClinicList extends Component<any, any> {
         title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'status',
         key: 'status',
-        width: '5%',
+        width: '7%',
         render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
       },
       {
-        title: 'Receive Status',
+        title: 'Email Receive Status',
         dataIndex: 'status',
         key: 'status',
         width: '10%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Success' : +text === 1 ? 'Failed' : +text === 2 ? 'To do' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,

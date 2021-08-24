@@ -45,3 +45,14 @@ export function deleteEmailTask(id: string) {
     method: 'DELETE'
   });
 }
+
+// 重新发送Email
+
+export function resendEmailTask(resendParams={}){
+  return Fetch<TResult>('/message/resent',{
+    method: 'POST',
+    body: JSON.stringify({
+      ...resendParams
+    })
+  })
+}

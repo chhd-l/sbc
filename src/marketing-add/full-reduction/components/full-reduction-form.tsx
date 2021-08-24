@@ -33,7 +33,7 @@ const formItemLayout = {
 };
 const smallformItemLayout = {
   labelCol: {
-    span: 3
+    span: 4
   },
   wrapperCol: {
     span: 10
@@ -557,7 +557,7 @@ class FullReductionForm extends React.Component<any, any> {
             id: 'Marketing.noMoreThan40Words'
           })} style={{ width: 360 }} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left">
+        <FormItem {...smallformItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />} labelAlign="left">
           {getFieldDecorator('time', {
             rules: [
               {

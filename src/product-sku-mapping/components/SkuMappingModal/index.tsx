@@ -34,6 +34,8 @@ export default class SkuMappingModal extends React.Component<any, any>{
         this.state = {
             confirmLoading: false,
             dataSource: [],
+            editList: [], // 已存在待编辑SkuMappingList
+            ruleNo: 0,
             count: 0,
             loading: false,
         }
@@ -56,13 +58,14 @@ export default class SkuMappingModal extends React.Component<any, any>{
 
         if(res.code === Const.SUCCESS_CODE){
           this.setState({
-              dataSource: res.context || [
-                  {
-                      key: 0,
+              editList: res.context?.mappings ?? [],
+              dataSource: res.context?.mappings ?? [{
+                      id: 0,
                       externalSkuNo: '',
                       condition: null,
                   }
-              ] // 接口数据为空，默认添加一条数据
+              ], // 接口数据为空，默认添加一条数据
+              ruleNo: res.context?.ruleNo ?? 0,
           })
         }
 
@@ -70,26 +73,59 @@ export default class SkuMappingModal extends React.Component<any, any>{
 
 
     handleOk =  () => {
-        let {onOk, goodsInfoId} = this.props;
+        let {
+            onOk,
+            goodsInfoId,
+            sku,
+        } = this.props;
+        let {
+            ruleNo,
+            editList,
+        } = this.state;
         if (!goodsInfoId) return;
         this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
                 this.setState({confirmLoading: true})
+                let pattern = /^[0-9]*$/g;
+                /**
+                 * 编辑和新增的mappings一起提交，编辑的list需要返回原来已存在的字段
+                 *
+                 * 待编辑id为字符串，新增的id为数字，
+                 **/
+
                 let mappings = values.mappings.map(item => {
-                    return {
-                        externalSkuNo: item.externalSkuNo,
-                        condition: {
-                            startTime: item.condition[0].format(Const.DAY_FORMAT),
-                            endTime: item.condition[1].format(Const.DAY_FORMAT)
+                    // 是否为新增的数据
+                    if (pattern.test(item.id)){
+                        return {
+                            internalSkuId: goodsInfoId,
+                            internalSkuNo: sku,
+                            externalSkuNo: item.externalSkuNo,
+                            condition: {
+                                startTime: item.condition[0].format(Const.TIME_FORMAT),
+                                endTime: item.condition[1].format(Const.TIME_FORMAT)
+                            }
+                        }
+                    }else {
+                        const found = editList.find(element => element.id === item.id);
+                        let editItem = !!found ? found : {};
+                        return {
+                            ...editItem,
+                            internalSkuId: goodsInfoId,
+                            internalSkuNo: sku,
+                            externalSkuNo: item.externalSkuNo,
+                            condition: {
+                                startTime: item.condition[0].format(Const.TIME_FORMAT),
+                                endTime: item.condition[1].format(Const.TIME_FORMAT)
+                            }
                         }
                     }
+
                 })
                 let params = {
                     goodsInfoId,
                     mappings,
-                    ruleNo: 0,
-
+                    ruleNo,
                 }
                 let { res } = await saveSkuMapping(params);
                 this.setState({confirmLoading: false})
@@ -97,7 +133,10 @@ export default class SkuMappingModal extends React.Component<any, any>{
                 if (res.code === Const.SUCCESS_CODE){
                     message.success('Operate successfully');
                     // 提交成功的回调
-                    onOk && onOk(values)
+                    onOk && onOk({
+                        sku,
+                        ...params,
+                    })
                 }
 
             }
@@ -115,7 +154,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
             dataSource,
         } = this.state;
         const newData = {
-            key: count,
+            id: count,
             externalSkuNo: '',
             condition: null,
         };
@@ -127,16 +166,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
 
     handleDelete = key => {
         const dataSource = [...this.state.dataSource];
-        // 最后一个重置数据
-        if (Array.isArray(dataSource) && dataSource.length === 1){
-            this.setState({
-                dataSource: [],
-                count: 0,
-            })
-        }else {
-            this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-
-        }
+        this.setState({ dataSource: dataSource.filter(item => item.id !== key) });
     };
 
     getColumns = () => {
@@ -149,21 +179,34 @@ export default class SkuMappingModal extends React.Component<any, any>{
                 width: '35%',
                 render: (rowInfo, record, index) => {
                     return (
-                        <Form.Item>
-                            {
-                                getFieldDecorator(`mappings[${index}].externalSkuNo`, {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: 'Please input externalSkuNo!'
-                                        },
-                                    ],
-                                    initialValue: record.externalSkuNo || ''
-                                })(
-                                    <Input />
-                                )
-                            }
-                        </Form.Item>
+                        <div>
+                            <Form.Item>
+                                {
+                                    getFieldDecorator(`mappings[${index}].externalSkuNo`, {
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message: 'Please input externalSkuNo!'
+                                            },
+                                        ],
+                                        initialValue: record.externalSkuNo || ''
+                                    })(
+                                        <Input />
+                                    )
+                                }
+
+                            </Form.Item>
+                            <Form.Item>
+                                {
+                                    getFieldDecorator(`mappings[${index}].id`, {
+                                        initialValue: record.id
+                                    })(
+                                        <Input hidden />
+                                    )
+                                }
+                            </Form.Item>
+
+                        </div>
                     );
                 }
             },
@@ -188,7 +231,8 @@ export default class SkuMappingModal extends React.Component<any, any>{
                                         : []
                                 })(
                                     <RangePicker
-                                        format={Const.DAY_FORMAT}
+                                        showTime
+                                        format={Const.TIME_FORMAT}
                                         placeholder={[
                                             (window as any).RCi18n({
                                                 id: 'Marketing.StartTime'
@@ -220,7 +264,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                                 ? (
                                     <Popconfirm
                                         title={RCi18n({id: 'Subscription.SureToDelete'})}
-                                        onConfirm={() => this.handleDelete(record.key)}
+                                        onConfirm={() => this.handleDelete(record.id)}
                                     >
                                         <a style={{paddingLeft: 5}} className="iconfont iconDelete"/>
                                     </Popconfirm>
@@ -235,12 +279,13 @@ export default class SkuMappingModal extends React.Component<any, any>{
 
     render() {
         let {
+            sku,
             visible,
-            goodsInfoId,
         } = this.props;
         let {
             loading,
             dataSource,
+            confirmLoading,
         } = this.state;
 
         let columns = this.getColumns();
@@ -250,6 +295,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                 width={800}
                 title={<strong><FormattedMessage id="Product.SkuMapping" /></strong>}
                 visible={visible}
+                confirmLoading={confirmLoading}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
                 wrapClassName='SkuMappingModal-wrap'
@@ -258,7 +304,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                     <div className='SkuMappingModal-sku'>
                         <Input
                             disabled
-                            value={goodsInfoId}
+                            value={sku}
                             addonBefore={
                                 <p style={styles.label}>
                                     <FormattedMessage id="Product.SKU" />

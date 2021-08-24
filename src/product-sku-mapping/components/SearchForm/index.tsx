@@ -24,7 +24,11 @@ export default class SearchForm extends React.Component<any, any>{
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                this.props.onSearch(values);
+                this.props.onSearch({
+                    pageNum: 0,
+                    pageSize: 10,
+                    ...values,
+                });
             }
         });
     };
@@ -61,7 +65,7 @@ export default class SearchForm extends React.Component<any, any>{
                         <Col span={8}>
                             <Form.Item>
                                 {
-                                    getFieldDecorator('SPU')(
+                                    getFieldDecorator('spu')(
                                         <Input
                                             addonBefore={
                                                 <p style={styles.label}>
@@ -77,7 +81,7 @@ export default class SearchForm extends React.Component<any, any>{
                         <Col span={8}>
                             <Form.Item>
                                 {
-                                    getFieldDecorator('SKU')(
+                                    getFieldDecorator('sku')(
                                         <Input
                                             addonBefore={
                                                 <p style={styles.label}>
@@ -94,7 +98,7 @@ export default class SearchForm extends React.Component<any, any>{
                         <Col span={8}>
                             <Form.Item>
                                 {
-                                    getFieldDecorator('externalSKU')(
+                                    getFieldDecorator('externalSku')(
                                         <Input
                                             addonBefore={
                                                 <p style={styles.label}>

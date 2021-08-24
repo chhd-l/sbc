@@ -36,10 +36,10 @@ export default class ProductSkuMapping extends React.Component<any, any> {
     // 获取列表数据
     getListData = async (listParams={}) => {
         // 获取form表单数据
-        let formData = this.form.props.form.getFieldsValue();
+        // let formData = this.form.props.form.getFieldsValue();
         let params = {
             ...this.state.listParams,
-            ...formData,
+            // ...formData,
             ...listParams,
         }
         this.setState({ loading: true})
@@ -62,43 +62,25 @@ export default class ProductSkuMapping extends React.Component<any, any> {
         } = this.state;
         // @ts-ignore
         return (
-            <div className='ProductSkuMapping-wrap'>
-                <BreadCrumb />
-                <div className="container-search">
-                    <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
-                    <SearchForm
-                        wrappedComponentRef={(form) => this.form = form}
-                        onSearch={this.getListData}
-                    />
+            <AuthWrapper functionName="f_goods_skuMapping_list">
+                <div className='ProductSkuMapping-wrap'>
+                    <BreadCrumb />
+                    <div className="container-search">
+                        <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
+                        <SearchForm
+                            wrappedComponentRef={(form) => this.form = form}
+                            onSearch={this.getListData}
+                        />
+                    </div>
+                    <div className="container">
+                        <SkuMappingList
+                            loading={loading}
+                            data={mappingPage}
+                            getListData={this.getListData}
+                        />
+                    </div>
                 </div>
-                <div className="container">
-                    <SkuMappingList
-                        loading={loading}
-                        data={mappingPage}
-                        getListData={this.getListData}
-                    />
-                </div>
-            </div>
-
-            // <AuthWrapper functionName='f_goods_skuMapping'>
-            //     <div className='ProductSkuMapping-wrap'>
-            //         <BreadCrumb />
-            //         <div className="container-search">
-            //             <Headline title={<FormattedMessage id="Product.SkuMapping" />} />
-            //             <SearchForm
-            //                 wrappedComponentRef={(form) => this.form = form}
-            //                 onSearch={this.getListData}
-            //             />
-            //         </div>
-            //         <div className="container">
-            //             <SkuMappingList
-            //                 loading={loading}
-            //                 data={listArr}
-            //                 getListData={this.getListData}
-            //             />
-            //         </div>
-            //     </div>
-            // </AuthWrapper>
+            </AuthWrapper>
         );
     }
 }

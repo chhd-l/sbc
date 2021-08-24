@@ -121,6 +121,7 @@ export default class SkuMappingList extends React.Component<any, any>{
                     visible
                         ? (
                             <SkuMappingModal
+                                sku={currentRecord.sku}
                                 goodsInfoId={currentRecord.goodsInfoId}
                                 visible={visible}
                                 onOk={this.handleOk}

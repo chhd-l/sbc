@@ -45,8 +45,8 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "node --version"
                     sh "npm --version"
                     sh "npm install"
-                    //sh "npm run build"
-                    sh "npm run build:myvetreco"
+                    sh "npm run build"
+                    //sh "npm run build:myvetreco"
                 }
         }
 
@@ -79,7 +79,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                     // 使用 Kubectl Cli 插件的方法，提供 Kubernetes 环境，在其方法块内部能够执行 kubectl 命令
                     withKubeConfig([credentialsId: "${KUBERNETES_CREADENTIAL}",serverUrl: "${KUBERNETES_URL}"]) {
                    
-                    //sh "kubectl set image deployment ${APP_NAME} *=${dockerImageName} -n ${PROJECT_ENV}"
+                    sh "kubectl set image deployment ${APP_NAME} *=${dockerImageName} -n ${PROJECT_ENV}"
                 }
         }
         

@@ -174,6 +174,7 @@ export default {
         'Product.inputspecificationValue': 'Please input specification Value',
         'Product.Nospecificationvalue': 'No specification value',
         'Product.ExternalSKU': 'External SKU',
+        'Product.ValidPeriod':'Valid Period',
         'Product.EAN': 'EAN',
         'Product.Inputweightvalue': 'Please input weight value',
         'Product.Aftercheckinguse': 'After checking, all SKUs use the same market price',

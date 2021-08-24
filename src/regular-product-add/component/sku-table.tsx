@@ -8,6 +8,8 @@ import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
 import { RCi18n } from 'qmkit';
+import {AntIcon} from 'biz';
+import SkuMappingModal from '../../product-sku-mapping/components/SkuMappingModal';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -107,11 +109,49 @@ class SkuForm extends React.Component<any, any> {
     super(props);
     this.state = {
       count: 0,
-      visible: false
+      visible: false,
+      skuMappingModalVisible: false,
+      currentRecord: {},
     };
   }
 
+  handleExternalSku = (record) => {
+    this.setState({
+      currentRecord: record
+    }, () => {
+      this.showModal();
+    })
+  }
+
+  handleOk = (values) => {
+    console.log('values', values);
+    let { currentRecord } = this.state;
+    // 更新externalSku的值
+    let externalSku = values.mappings.map(item => item.externalSkuNo).join();
+    this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
+    // @ts-ignore
+    this.handleCancel();
+  };
+
+  showModal = () => {
+    this.setState({
+      skuMappingModalVisible: true,
+
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      skuMappingModalVisible: false,
+    });
+  };
+
   render() {
+    let  {
+      currentRecord,
+      skuMappingModalVisible
+    } = this.state;
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
@@ -121,6 +161,19 @@ class SkuForm extends React.Component<any, any> {
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
+        {
+          skuMappingModalVisible
+              ? (
+                  <SkuMappingModal
+                      sku={currentRecord.goodsInfoNo}
+                      goodsInfoId={currentRecord.goodsInfoId}
+                      visible={skuMappingModalVisible}
+                      onOk={this.handleOk}
+                      onCancel={this.handleCancel}
+                  />
+              )
+              : null
+        }
       </div>
     );
   }
@@ -233,9 +286,10 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: RCi18n({id:'Product.ExternalSKU'}),
       key: 'externalSku',
+      width: 150,
       render: (rowInfo) => {
         return (
-          <Row>
+          <Row className='row-externalSku-wrap'>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
@@ -254,6 +308,15 @@ class SkuForm extends React.Component<any, any> {
                 })(<Input style={{ width: '116px' }} maxLength={45}/>)}
               </FormItem>
             </Col>
+            {
+              !!rowInfo.goodsInfoId
+                  ? (
+                        <a className='skuMappingList-btn' onClick={() => this.handleExternalSku(rowInfo)}>
+                          <AntIcon className='SkuMappingList-action-icon' type='iconEdit'/>
+                        </a>
+                  )
+                  : null
+            }
           </Row>
         );
       }

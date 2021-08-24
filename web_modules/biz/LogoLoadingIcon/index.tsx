@@ -1,7 +1,6 @@
 import React from 'react';
 import {Icon} from 'antd';
 import './index.less';
-
 const LoadingSvg = () => (
     <div style={{
         position: 'absolute',

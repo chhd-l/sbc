@@ -39,6 +39,5 @@ export default {
   },
   CDN_PATH: '/',
   ...Common,
-  SITE_NAME,
-  COLORS,
+  SITE_NAME: window.location.host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC',
 };

@@ -60,6 +60,8 @@ class ProductPrice extends Component<any, any> {
           pageSize: goodsObj.size,
           ...p
         }
+      },()=>{
+        this.hide();
       })
     }
   }
@@ -91,6 +93,7 @@ class ProductPrice extends Component<any, any> {
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
+      message.success('operation success')
     }
   }
   // 手动更新
@@ -99,6 +102,7 @@ class ProductPrice extends Component<any, any> {
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
+      message.success('operation success')
     }
   }
 
@@ -164,7 +168,12 @@ class ProductPrice extends Component<any, any> {
       isDisabled: !bool
     })
   }
-
+  exportExcel=async()=>{
+    const res=await webapi.exportPriceList()
+    console.log(res)
+    // const exportHref = Const.HOST + `/goods/price/export`;
+    // window.open(exportHref);
+  }
 
   showConfirm = (param) => {
     confirm({
@@ -347,7 +356,7 @@ class ProductPrice extends Component<any, any> {
             </Col>
             <Col span={6}>
               <div style={{ textAlign: "right" }}>
-                <span>{totalColumn} SKU</span> <Button type="primary">export</Button>
+                <span>{totalColumn} SKU</span> <Button type="primary" onClick={()=>this.exportExcel()}>export</Button>
               </div>
             </Col>
           </Row>

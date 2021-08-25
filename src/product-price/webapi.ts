@@ -1,4 +1,5 @@
-import { Fetch } from 'qmkit';
+import { message } from 'antd';
+import { Const, Fetch, util } from 'qmkit';
 type TResult = {
   code: string;
   message: string;
@@ -38,12 +39,24 @@ export function updatePriceSingle(filterParams = {}) {
 }
 
 //  导出
-export function exportPriceList(filterParams = {}) {
-  return Fetch<TResult>('/goods/price/export', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...filterParams
-    })
+export function exportPriceList(params = {}) {
+ 
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      // 参数加密
+      let base64 = new util.Base64();
+      const token = (window as any).token;
+      if (token) {
+        let result = JSON.stringify({ ...params, token: token });
+        let encrypted = base64.urlEncode(result);
+        // 新窗口下载
+        const exportHref = Const.HOST + `/goods/price/export/${encrypted}`;
+        window.open(exportHref);
+      } else {
+        //message.error('');
+      }
+      resolve();
+    }, 500);
   });
 }
 

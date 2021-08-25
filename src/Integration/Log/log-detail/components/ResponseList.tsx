@@ -180,7 +180,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.Log' }),
-                JSON.parse(record.payloadMessage))
+                JSON.parse(record.payloadMessage)||{})
             }}>
             {RCi18n({ id: 'Log.Log' })}</Button>
         )

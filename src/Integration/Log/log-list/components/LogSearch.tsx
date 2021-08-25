@@ -159,8 +159,8 @@ class LogSearch extends Component<any, any> {
                   }}
                 >
                   {
-                    systemList && systemList.map(item => (
-                      <Option value={item.id}>{item.sysShort}</Option>
+                    systemList && systemList.map((item,index) => (
+                      <Option value={item.id} key={index}>{item.sysShort}</Option>
                     ))
                   }
                 </Select>
@@ -191,8 +191,8 @@ class LogSearch extends Component<any, any> {
                   }}
                 >
                   {
-                    interfaceList && interfaceList.map(item => (
-                      <Option value={item.id}>{item.name}</Option>
+                    interfaceList && interfaceList.map((item,index) => (
+                      <Option value={item.id} key={index}>{item.name}</Option>
                     ))
                   }
                 </Select>

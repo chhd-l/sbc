@@ -56,7 +56,9 @@ const SampleBehavior = () => {
 
   function handleApiBtn(id) {
     ReactDOM.render(
-      <DashboardDetails id={id} key={id} />,
+      <div className="container">
+        <DashboardDetails id={id} key={id} />
+      </div>,
       document.getElementById('dashboard-details')
     );
   }
@@ -291,9 +293,11 @@ export default class TopologicalGraph extends Component<any> {
         </div>
 
       </div>
-      <div className="container">
-        <div id="dashboard-details"></div>
+
+      <div id="dashboard-details">
+
       </div>
+
 
     </Spin >)
   }

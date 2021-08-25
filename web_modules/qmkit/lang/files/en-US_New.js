@@ -2374,6 +2374,8 @@ export default {
         'Dashboard.Invoker':'Invoker',
         'Dashboard.Data Flow':'Data Flow',
         'Dashboard.Technical Error Happened':'Technical Error Happened',
+        'Dashboard.Show More':'Show More',
+        'Dashboard.Check More':'Check More',
 
         'Interface.InterfaceList': 'Interface List',
         'Interface.InterfaceName': 'Interface Name',

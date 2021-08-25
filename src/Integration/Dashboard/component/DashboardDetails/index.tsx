@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n,history } from 'qmkit';
 import { Button, Input, Modal, Spin, Table, Tabs, Tooltip } from 'antd';
 import Information from './components/information';
 import Statistics from './components/statistics';
 import ReactJson from 'react-json-view';
 import * as webapi from '@/Integration/Interface/Interface-detail/webapi'
-import { Link } from 'react-router-dom';
 
 const { TabPane } = Tabs
 const { Search } = Input;
@@ -18,11 +17,6 @@ export default class DashboardDetails extends Component<any, any> {
       loading: false,
       interfaceId: null,
       detailsTabsKey: 'info',
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      },
       visible: false,
       title: '',
       showJson: null,
@@ -41,12 +35,6 @@ export default class DashboardDetails extends Component<any, any> {
       interfaceId: +interfaceId
     })
     this.getInterfaceDetail(+interfaceId)
-    let params = {
-      interfaceId: +interfaceId,
-      pageSize: 5,
-      pageNum: 0,
-    }
-    this.getLogList(params)
   }
   getInterfaceDetail = (interfaceId) => {
     this.setState({
@@ -78,7 +66,17 @@ export default class DashboardDetails extends Component<any, any> {
 
 
   onDetailTabsChange = (key) => {
-    this.setState({ detailsTabsKey: key })
+    this.setState({ detailsTabsKey: key }, () => {
+      if (key === 'log' || key === 'error') {
+        let params = {
+          interfaceId: +this.state.interfaceId,
+          resultFlag: key === 'log' ? null : 2,
+          pageSize: 5,
+          pageNum: 0,
+        }
+        this.getLogList(params)
+      }
+    })
   }
 
 
@@ -89,15 +87,10 @@ export default class DashboardDetails extends Component<any, any> {
     webapi.fetchLogList(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        const { pagination } = this.state
         let logList = res.context.logList
-
-        pagination.total = res.context.total
-        pagination.current = res.context.currentPage + 1
         this.setState({
           logList,
           loading: false,
-          pagination
         })
       } else {
         this.setState({
@@ -111,61 +104,23 @@ export default class DashboardDetails extends Component<any, any> {
     })
   }
 
-
-
-  searchRequest = (value) => {
-    const { tableTabsKey, interfaceId } = this.state
-    this.setState({
-      keywords: value
-    })
-    let params = {
-      interfaceId: interfaceId,
-      keys: value ? [value] : [],
-      resultFlag: tableTabsKey === 'all' ? null : 2,
-      pageSize: 5,
-      pageNum: 0,
-    }
-    this.getLogList(params)
-  }
-  handlePageChange = (pagination) => {
-    const { keywords, tableTabsKey, interfaceId } = this.state
-    this.setState({
-      pagination
-    })
-    let params = {
-      businessKeys: keywords ? [keywords] : [],
-      interfaceId: interfaceId,
-      resultFlag: tableTabsKey === 'all' ? null : 2,
-      pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum,
-
-    }
-    this.getLogList(params)
-  }
-  onTableTabsChange = (key) => {
-    const { keywords, interfaceId } = this.state
-    this.setState({ tableTabsKey: key })
-    let params = {
-      businessKeys: keywords ? [keywords] : [],
-      interfaceId: interfaceId,
-      resultFlag: key === 'all' ? null : 2,
-      pageSize: 5,
-      pageNum: 0
-    }
-    this.getLogList(params)
-  }
-
   openJsonPage = (title, showJson) => {
     this.setState({
-      currentTabKey: 'all',
+      currentTabKey: 'log',
       title,
       showJson,
       visible: true
     })
   }
+  openLogDetail = (requestId) => {
+    history.push({ pathname: `/log-detail/${requestId}` })
+  }
+  openLogList = (type) => {
+    history.push({ pathname: `/integration-log`, query: { type: type } })
+  }
 
   render() {
-    const { loading, interfaceId, detailInfo, detailsTabsKey, pagination, logList, showJson, title, visible } = this.state
+    const { loading, interfaceId, detailInfo, detailsTabsKey, logList, showJson, title, visible } = this.state
     const columns = [
       {
         title: RCi18n({ id: 'Log.RequestID' }),
@@ -186,21 +141,21 @@ export default class DashboardDetails extends Component<any, any> {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header || {}) }}>{RCi18n({ id: 'Log.Header' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload) || {}) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content) || {}) }}>{RCi18n({ id: 'Log.Response' })}</Button>
         )
       },
       {
@@ -214,8 +169,10 @@ export default class DashboardDetails extends Component<any, any> {
         render: (text, record) => (
           <div>
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
-              1
-              {/* <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" /> */}
+              <Button type="link" onClick={() => this.openLogDetail(record.requestId)}>
+                <i className="iconfont iconDetails" ></i>
+              </Button>
+              
             </Tooltip>
           </div>
         )
@@ -226,7 +183,7 @@ export default class DashboardDetails extends Component<any, any> {
       <div className="container-info">
         <Spin spinning={loading}>
           <Headline title={detailInfo.name} />
-          <Tabs defaultActiveKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+          <Tabs activeKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
             {/* Information */}
             <TabPane tab={RCi18n({ id: 'Interface.Info' })} key="info">
               <Information detailInfo={detailInfo} />
@@ -238,35 +195,33 @@ export default class DashboardDetails extends Component<any, any> {
 
             {/* All */}
             <TabPane tab={RCi18n({ id: "Interface.Log" })} key="log" >
-              <Search
-                placeholder="keywords"
-                onSearch={value => this.searchRequest(value)}
-                style={{ width: 200, marginBottom: 20 }}
-              />
               <Table
                 key="log"
-                rowKey="id"
+                rowKey="requestId"
                 dataSource={logList}
-                pagination={pagination}
-                onChange={this.handlePageChange}
+                pagination={false}
                 columns={columns}
               />
+              <Button type="link"
+                onClick={() => this.openLogList('log')}
+                style={{ float: 'right', marginTop: 20 }}>{
+                  RCi18n({ id: 'Dashboard.Check More' })
+                }</Button>
             </TabPane>
             {/* Error */}
             <TabPane tab={RCi18n({ id: "Interface.Error" })} key="error" >
-              <Search
-                placeholder="keywords"
-                onSearch={value => this.searchRequest(value)}
-                style={{ width: 200, marginBottom: 20 }}
-              />
               <Table
                 key="error"
-                rowKey="id"
+                rowKey="requestId"
+                pagination={false}
                 dataSource={logList}
-                pagination={pagination}
-                onChange={this.handlePageChange}
                 columns={columns}
               />
+              <Button type="link"
+                onClick={() => this.openLogList('error')}
+                style={{ float: 'right', marginTop: 20 }}>{
+                  RCi18n({ id: 'Dashboard.Check More' })
+                }</Button>
             </TabPane>
           </Tabs>
           {/* 表格 */}

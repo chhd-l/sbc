@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import {Row, Col, message, Button} from 'antd';
 import { RunBoyCheckForMobile, RunBoyCheckForDesktop } from './../components/runBoy';
@@ -20,6 +20,24 @@ export default function ResetPassword(props) {
   // const handleRest = () => {
   //   props.history.push('/login');
   // };  
+  const timer = useRef(null);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    return () => {
+      clearInterval(timer.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (count === 60) {
+      timer.current = setInterval(() => {
+        setCount((count) => count - 1);
+      }, 1000);
+    } else if (count === 0) {
+      clearInterval(timer.current);
+    }
+  }, [count]);
 
   const handleLogin = () => {
     history.push('/login');
@@ -29,9 +47,20 @@ export default function ResetPassword(props) {
     history.push('/create-account');
   };
   const resendEmail = () => {
+    if (count > 0) {
+      return;
+    }
     if(sessionStorage.getItem('forgetEmail')) {
+      setCount(60);
       let email = sessionStorage.getItem('forgetEmail');
-      sendEmail(email).catch(() => {
+      sendEmail(email).then(data => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          message.success(RCi18n({id:'Prescriber.sendSuccessful'}));
+        } else {
+          setCount(0);
+        }
+      }).catch(() => {
+        setCount(0);
       });
     }
   }
@@ -56,7 +85,7 @@ export default function ResetPassword(props) {
             <span>{RCi18n({id:'Login.check_your_mail'})}</span>
           </div>}
           <div className="check-text1 password">{RCi18n({id:'Login.check_tip'})}</div>
-          <div className="check-text2 password">{RCi18n({id:'Login.check_tip1'})} <span onClick={resendEmail}>{RCi18n({id:'Login.resend'})}</span></div>
+          <div className="check-text2 password">{RCi18n({id:'Login.check_tip1'})} <span onClick={resendEmail} style={{color: count > 0 ? '#999' : '#448bff'}}>{RCi18n({id:'Login.resend'})}{count > 0 ? `(${count})` : ''}</span></div>
 
           <div className="text password">{/*<span onClick={handleSignUp}>Sign up</span> / */}<span onClick={handleLogin}>{RCi18n({id:'Login.log_in'})}</span></div>
         

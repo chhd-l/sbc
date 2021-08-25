@@ -2485,5 +2485,6 @@ export default {
         "Login.create_store_ing": "Sit tight,We’re creating your store!",
         "Login.create_store_success": "Success! You are ready to go",
         "Login.create_store_error": "Store creation failed. Please try again",
+        "Login.password_length": "Password length should between 6-32 characters",
     }
 }

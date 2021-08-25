@@ -101,7 +101,7 @@ function ResetPassword(props) {
 
             <FormItem className="login-input">
               {getFieldDecorator('password', {
-                rules: [{required:true,message:RCi18n({id:'Login.new_password_vld'})}],
+                rules: [{required:true,message:RCi18n({id:'Login.new_password_vld'})}, { max: 32, min: 6, message:RCi18n({id:'Login.password_length'}) }],
                 initialValue: ''
               })(
                 <Input.Password size="large" placeholder={RCi18n({id:'Login.new_password'})} />

@@ -143,6 +143,25 @@ export default {
         "Home.Numberofrecommendationcodes": "Number of recommendation codes with an order made",
     },
     Product: {
+        'Product.ProductPrice':'Product price',
+        'Product.SearchProducts':'Search products',
+        'Product.Marketpricepercentage':'Market price percentage',
+        'Product.Subscriptionpricepercentage':'Subscription price percentage',
+        'Product.Roundoff':'round off',
+        'Product.PriceTableColumnImage':'IMAGE',
+        'Product.PriceTableColumnType':'PRODUCT TYPE',
+        'Product.PriceTableColumnName':'PRODUCT NAME',
+        'Product.PriceTableColumnSKU':'SKU',
+        'Product.PriceTableColumnSPU':'SPU',
+        'Product.PriceTableColumnCategory':'PRODUCT CATEGORY',
+        'Product.PriceTableColumnPurchasePrice':'PURCHASE PRICE',
+        'Product.PriceTableColumnMarketPrice':'MARKET PRICE',
+        'Product.PriceTableColumnSubscriptionPrice':'SUBSCRIPTION PRICE',
+        'Product.PriceTableColumnUpatatime':'UPDATED TIME',
+
+        
+
+
         'Product.Notification': 'Notification',
         'Product.deleteTip': 'Are you sure to batch delete selected products?',
         'Product.subscriptionType': 'Subscription type',

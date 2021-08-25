@@ -901,6 +901,11 @@ const routes = [
     asyncComponent: () => import('./product-category')
   },
   {
+    path: '/product-price',
+    asyncComponent: () => import('./product-price')
+  },
+  
+  {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')
   },

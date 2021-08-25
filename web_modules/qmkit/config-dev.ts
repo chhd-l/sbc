@@ -11,8 +11,8 @@ const COLORS = {
 
 export default {
   /* dev */
-  HOST: 'http://124.71.151.9:8390',
-
+  //HOST: 'http://121.36.199.41:8390/',
+  HOST: 'https://portal.myvetreco.co/api',
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',
   PAYMENT_ENVIRONMENT:'test',

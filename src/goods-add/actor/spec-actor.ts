@@ -354,6 +354,7 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('id', this._getRandom());
         goodsItem = goodsItem.set('index', resultIndex++);
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
+        goodsItem = goodsItem.set('externalSku', goodsInfoNo);
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);
@@ -384,6 +385,7 @@ export default class GoodsSpecActor extends Actor {
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
+        externalSku: goodsInfoNo,
         addedFlag: 1,
         goodsInfoBundleRels: [],
         stock: 0,

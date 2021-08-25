@@ -2,10 +2,11 @@ import { Actor, Action } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, Map, List } from 'immutable';
 import { message } from 'antd';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 export default class GoodsSpecActor extends Actor {
   defaultState() {
+    let defaultGoodsInfoNo = this._randomGoodsInfoNo();
     return {
       // 是否为单规格
       specSingleFlag: true,
@@ -28,7 +29,8 @@ export default class GoodsSpecActor extends Actor {
           subscriptionPrice: 0,
           promotions: 'autoship',
           stock: 0,
-          goodsInfoNo: this._randomGoodsInfoNo()
+          goodsInfoNo: defaultGoodsInfoNo,
+          externalSku: defaultGoodsInfoNo,
         }
       ],
       stockChecked: false,
@@ -163,7 +165,7 @@ export default class GoodsSpecActor extends Actor {
 
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     return state.set('goodsSpecs', goodsSpecs).set('goodsList', goods);
@@ -262,7 +264,7 @@ export default class GoodsSpecActor extends Actor {
     const goods = this._getGoods(goodsSpecs, state.get('goodsList'));
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     state = state.set('goodsList', goods);
@@ -298,7 +300,7 @@ export default class GoodsSpecActor extends Actor {
     if (goodsSpecs.isEmpty()) {
       return fromJS([]);
     }
-
+    
     let resultArray = this._convertSpev(goodsSpecs.first());
     if (goodsSpecs.count() > 1) {
       resultArray = this._convertSpecValues(this._convertSpev(goodsSpecs.first()), 0, goodsSpecs.slice(1).toList());
@@ -353,6 +355,7 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('id', this._getRandom());
         goodsItem = goodsItem.set('index', resultIndex++);
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
+        goodsItem = goodsItem.set('externalSku', goodsInfoNo);
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);
@@ -360,6 +363,10 @@ export default class GoodsSpecActor extends Actor {
         resultArray = resultArray.push(goodsItem);
       });
     });
+
+    //每次循环完清空random缓存
+    this.generatedNo = Map();
+
     if (index == goodsSpecs.count() - 1) {
       return resultArray;
     }
@@ -370,7 +377,7 @@ export default class GoodsSpecActor extends Actor {
    * 转换规格为数组
    */
   _convertSpev = (spec: IMap) => {
-    return spec.get('specValues').map((item, index) => {
+    let resultArr = spec.get('specValues').map((item, index) => {
       let b = spec.toJS()
       const promotions  = spec.get('promotions');
       const specId = 'specId-' + spec.get('specId');
@@ -383,12 +390,16 @@ export default class GoodsSpecActor extends Actor {
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
+        externalSku: goodsInfoNo,
         promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         addedFlag: 1,
         subscriptionStatus: item.get('subscriptionStatus'),
         skuSvIds: [item.get('specDetailId')]
       });
     });
+    //每次循环后情况random缓存
+    this.generatedNo = Map();
+    return resultArr;
   };
 
   /**

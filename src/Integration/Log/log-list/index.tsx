@@ -10,7 +10,7 @@ export default class Loglist extends Component<any, any>{
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
+      loading: false,
       searchForm: {
         startDate: null,
         endDate: null,
@@ -35,7 +35,27 @@ export default class Loglist extends Component<any, any>{
   }
 
   init = () => {
-    this.getLogList({})
+    if (this.props.location.query && this.props.location.query.type) {
+      this.setState({
+        currentTabKey: this.props.location.query.type === 'error' ? 'error' : 'all'
+      }, () => {
+        let params = {
+          pageSize: 5,
+          pageNum: 0,
+          resultFlag: this.state.currentTabKey === 'all' ? null : 2,
+        }
+        this.getLogList(params)
+      })
+    }
+    else{
+      let params = {
+        pageSize: 5,
+        pageNum: 0,
+        resultFlag: this.state.currentTabKey === 'all' ? null : 2,
+      }
+      this.getLogList(params)
+    }
+    
   }
 
 
@@ -50,7 +70,7 @@ export default class Loglist extends Component<any, any>{
         let logList = res.context.logList
 
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage +1
+        pagination.current = res.context.currentPage + 1
         this.setState({
           logList,
           loading: false,

@@ -1562,7 +1562,7 @@ export default class AppStore extends Store {
     }
 
     if (goodsList.count() > Const.spuMaxSku) {
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
       return false;
     }
 

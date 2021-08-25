@@ -11,6 +11,7 @@ import {
 import {FormattedMessage} from 'react-intl';
 import {Const, DataGrid, RCi18n} from 'qmkit';
 import {GoodsModal} from 'biz';
+import { fromJS } from 'immutable';
 import {
     getBlacklist,
     saveBlacklist,
@@ -390,7 +391,7 @@ export default class BlackListModal extends React.Component<any, any>{
                 <GoodsModal
                     visible={productModalVisible}
                     selectedSkuIds={selectedSkuIds}
-                    selectedRows={selectedRows}
+                    selectedRows={fromJS(selectedRows)}
                     onOkBackFun={this.skuSelectedBackFun}
                     onCancelBackFun={this.closeProductModal}
                 />

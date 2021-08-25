@@ -1,0 +1,44 @@
+{
+  "id": "2755719",
+  "name": "RC integration",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4722205",
+      "name": "分析",
+      "font_class": "analysis",
+      "unicode": "61",
+      "unicode_decimal": 97
+    },
+    {
+      "icon_id": "6510098",
+      "name": "主机聚合",
+      "font_class": "aggregation",
+      "unicode": "68",
+      "unicode_decimal": 104
+    },
+    {
+      "icon_id": "7067817",
+      "name": "云主机",
+      "font_class": "cloud",
+      "unicode": "7a",
+      "unicode_decimal": 122
+    },
+    {
+      "icon_id": "7133534",
+      "name": "主机安全",
+      "font_class": "safe",
+      "unicode": "73",
+      "unicode_decimal": 115
+    },
+    {
+      "icon_id": "15644327",
+      "name": "服务器",
+      "font_class": "server",
+      "unicode": "66",
+      "unicode_decimal": 102
+    }
+  ]
+}

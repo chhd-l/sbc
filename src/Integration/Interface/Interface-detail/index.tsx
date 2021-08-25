@@ -27,36 +27,42 @@ export default class InterfaceView extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      visible:false, 
-      title:'', 
-      showJson:null,
-      logList:[],
+      visible: false,
+      title: '',
+      showJson: null,
+      logList: [],
       detailInfo: {
       },
     }
   };
-  componentDidMount(){
+  componentDidMount() {
     this.init()
   }
   init = () => {
     const interfaceId = this.props.match.params.id
     this.setState({
-      interfaceId:+interfaceId
+      interfaceId: +interfaceId
     })
     this.getInterfaceDetail(+interfaceId)
     let params = {
-      interfaceId:+interfaceId,
+      interfaceId: +interfaceId,
       pageSize: 5,
       pageNum: 0,
     }
     this.getLogList(params)
+    if (this.props.location.query && this.props.location.query.type) {
+      this.setState({
+        detailsTabsKey: this.props.location.query.type
+      })
+    }
+
   }
   getInterfaceDetail = (interfaceId) => {
     this.setState({
       loading: true
     })
-    let params={
-      interfaceId:interfaceId
+    let params = {
+      interfaceId: interfaceId
     }
     webapi.getInterfaceDetail(params).then(data => {
       const { res } = data
@@ -96,7 +102,7 @@ export default class InterfaceView extends Component<any, any> {
         let logList = res.context.logList
 
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage +1
+        pagination.current = res.context.currentPage + 1
         this.setState({
           logList,
           loading: false,
@@ -114,10 +120,10 @@ export default class InterfaceView extends Component<any, any> {
     })
   }
 
-  
+
 
   searchRequest = (value) => {
-    const { tableTabsKey,interfaceId } = this.state
+    const { tableTabsKey, interfaceId } = this.state
     this.setState({
       keywords: value
     })
@@ -131,7 +137,7 @@ export default class InterfaceView extends Component<any, any> {
     this.getLogList(params)
   }
   handlePageChange = (pagination) => {
-    const { keywords, tableTabsKey,interfaceId } = this.state
+    const { keywords, tableTabsKey, interfaceId } = this.state
     this.setState({
       pagination
     })
@@ -146,7 +152,7 @@ export default class InterfaceView extends Component<any, any> {
     this.getLogList(params)
   }
   onTableTabsChange = (key) => {
-    const { keywords,interfaceId } = this.state
+    const { keywords, interfaceId } = this.state
     this.setState({ tableTabsKey: key })
     let params = {
       businessKeys: keywords ? [keywords] : [],
@@ -170,7 +176,7 @@ export default class InterfaceView extends Component<any, any> {
 
 
   render() {
-    const { loading, detailsTabsKey, tableTabsKey, detailInfo,visible, title, showJson,pagination,logList,interfaceId } = this.state
+    const { loading, detailsTabsKey, tableTabsKey, detailInfo, visible, title, showJson, pagination, logList, interfaceId } = this.state
     const columns = [
       {
         title: RCi18n({ id: 'Log.RequestID' }),
@@ -191,21 +197,21 @@ export default class InterfaceView extends Component<any, any> {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header || {}) }}>{RCi18n({ id: 'Log.Header' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload) || {}) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content) || {}) }}>{RCi18n({ id: 'Log.Response' })}</Button>
         )
       },
       {
@@ -234,11 +240,11 @@ export default class InterfaceView extends Component<any, any> {
 
 
           <BreadCrumb thirdLevel={true}>
-            <Breadcrumb.Item>{<FormattedMessage id="Interface.PriceSynchronization" />}</Breadcrumb.Item>
+            <Breadcrumb.Item>{detailInfo.name}</Breadcrumb.Item>
           </BreadCrumb>
           <div className="container-info">
-            <Headline title={<FormattedMessage id="Interface.PriceSynchronization" />} />
-            <Tabs defaultActiveKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+            <Headline title={detailInfo.name} />
+            <Tabs activeKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
               {/* Information */}
               <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
                 <Information detailInfo={detailInfo} />
@@ -265,7 +271,7 @@ export default class InterfaceView extends Component<any, any> {
                   style={{ width: 200, marginBottom: 20 }}
                 />
                 <Tab
-                  rowKey="id"
+                  rowKey="requestId"
                   dataSource={logList}
                   pagination={pagination}
                   onChange={this.handlePageChange}

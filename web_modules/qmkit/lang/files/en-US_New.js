@@ -2370,6 +2370,13 @@ export default {
         'Dashboard.Show More': 'Show More',
         'Dashboard.Error Message': 'Error Message',
         'Dashboard.Technical Error Happened Default Report Time: Latest 1 hour': 'Technical Error Happened Default Report Time: Latest 1 hour',
+        'Dashboard.Uptime':'Update',
+        'Dashboard.Provider':'Provider',
+        'Dashboard.Invoker':'Invoker',
+        'Dashboard.Data Flow':'Data Flow',
+        'Dashboard.Technical Error Happened':'Technical Error Happened',
+        'Dashboard.Show More':'Show More',
+        'Dashboard.Check More':'Check More',
 
         'Interface.InterfaceList': 'Interface List',
         'Interface.InterfaceName': 'Interface Name',
@@ -2407,6 +2414,9 @@ export default {
         'Interface.Successful Rate (%)': 'Successful Rate (%)',
         'Interface.Response Time (ms)': 'Response Time (ms)',
         'Interface.90th Response Time Percentile (ms)': '90th Response Time Percentile (ms)',
+        'Interface.Info':'Info',
+        'Interface.Log':'Log',
+
         'Log.LogSearch': 'Log Search',
         'Log.RequestID': 'Request ID',
         'Log.System': 'System',

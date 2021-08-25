@@ -57,21 +57,21 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header||{}) }}>{RCi18n({ id: 'Log.Header' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)||{}) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)||{}) }}>{RCi18n({ id: 'Log.Response' })}</Button>
         )
       },
       {
@@ -98,7 +98,7 @@ export default class LogTabs extends Component<any, any>{
           <TabPane tab={RCi18n({ id: 'Log.Error' })} key="error" />
         </Tabs>
         <Tab
-          rowKey="id"
+          rowKey="requestId"
           dataSource={this.props.logList}
           pagination={this.props.pagination}
           onChange={this.handleTableChange}

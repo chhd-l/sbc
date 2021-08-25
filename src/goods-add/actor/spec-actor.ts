@@ -6,6 +6,7 @@ import { cache, Const, RCi18n } from 'qmkit';
 
 export default class GoodsSpecActor extends Actor {
   defaultState() {
+    let defaultGoodsInfoNo = this._randomGoodsInfoNo();
     return {
       // 是否为单规格
       specSingleFlag: true,
@@ -24,7 +25,8 @@ export default class GoodsSpecActor extends Actor {
           id: this._getRandom(),
           index: 1,
           addedFlag: 1,
-          goodsInfoNo: this._randomGoodsInfoNo(),
+          goodsInfoNo: defaultGoodsInfoNo,
+          externalSku: defaultGoodsInfoNo,
           subscriptionStatus: 1,
           promotions: 'autoship',
           marketPrice: 0,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, RCi18n,history } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n, history } from 'qmkit';
 import { Button, Input, Modal, Spin, Table, Tabs, Tooltip } from 'antd';
 import Information from './components/information';
 import Statistics from './components/statistics';
@@ -141,21 +141,37 @@ export default class DashboardDetails extends Component<any, any> {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header || {}) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Header' }),
+              record.param && record.param.header ? record.param.header : {})
+          }}>
+            {RCi18n({ id: 'Log.Header' })}
+          </Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload) || {}) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
+              record.param && record.param.payload ?
+                JSON.parse(record.param.payload) : {})
+          }}>
+            {RCi18n({ id: 'Log.Payload' })}
+          </Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content) || {}) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
+              JSON.parse(record.result.content) : {})
+          }}>
+            {RCi18n({ id: 'Log.Response' })}
+          </Button>
         )
       },
       {
@@ -172,7 +188,7 @@ export default class DashboardDetails extends Component<any, any> {
               <Button type="link" onClick={() => this.openLogDetail(record.requestId)}>
                 <i className="iconfont iconDetails" ></i>
               </Button>
-              
+
             </Tooltip>
           </div>
         )

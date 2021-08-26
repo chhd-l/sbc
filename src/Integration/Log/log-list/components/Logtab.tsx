@@ -57,21 +57,35 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Header' }), record.param.header||{}) }}>{RCi18n({ id: 'Log.Header' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Header' }),
+              record.param && record.param.header ? record.param.header : {})
+          }}>
+            {RCi18n({ id: 'Log.Header' })}
+          </Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Payload' }), JSON.parse(record.param.payload)||{}) }}>{RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
+              record.param && record.param.payload ?
+                JSON.parse(record.param.payload) : {})
+          }}>
+            {RCi18n({ id: 'Log.Payload' })}</Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => { this.openJsonPage(RCi18n({ id: 'Log.Response' }), JSON.parse(record.result.content)||{}) }}>{RCi18n({ id: 'Log.Response' })}</Button>
+          <Button type="link" onClick={() => {
+            this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
+              JSON.parse(record.result.content) : {})
+          }}>
+            {RCi18n({ id: 'Log.Response' })}</Button>
         )
       },
       {
@@ -84,7 +98,7 @@ export default class LogTabs extends Component<any, any>{
         dataIndex: 'detail',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title={RCi18n({id:"Product.Details"})}>
+            <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
             </Tooltip>
           </div>

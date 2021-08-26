@@ -5,6 +5,7 @@ import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, 
 import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 const { confirm } = Modal;
 const SORT_TYPE = {
   ascend: 'asc',
@@ -273,6 +274,7 @@ class ProductPrice extends Component<any, any> {
         dataIndex: 'updateTime',
         key: 'updateTime',
         sorter: true,
+        render:(text)=>moment(text).format('YYYY-MM-DD HH:mm:ss')
       },
 
     ];

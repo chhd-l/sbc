@@ -302,7 +302,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '10%',
-        render: (text) => <span>{+text === 0 ? 'Success' : +text === 1 ? 'Failed' : +text === 2 ? 'To do' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Success' : +text === 1 ? 'Failed' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,
@@ -315,7 +315,6 @@ export default class ClinicList extends Component<any, any> {
                 <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
-
                 <Divider type="vertical" />
 
                 <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">

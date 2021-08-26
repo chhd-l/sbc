@@ -136,7 +136,7 @@ const Common = {
     TWO: 2 * 1024 * 1024
   },
 
-  spuMaxSku: 50,
+  spuMaxSku: 100,
 
   // STG  Okta Config
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",

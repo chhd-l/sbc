@@ -92,7 +92,7 @@ export default class MyLineChart extends Component<any,any> {
     }
     return (
       <div style={styles.myLine}>
-        <div className="flex-header">
+        {/* <div className="flex-header">
           <div className="text-title">{title}</div>
           <div className="title-right">
             <div className="flex-between">
@@ -113,7 +113,7 @@ export default class MyLineChart extends Component<any,any> {
               }
             </div>
           </div>
-        </div>
+        </div> */}
         <ReactECharts
           option={options}
           style={{ height: 200 }}

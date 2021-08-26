@@ -158,6 +158,7 @@ export default {
   'Menu.Consumer Review':'Consumer Review',
   'Menu.Product tagging':'Product tagging',
   'Menu.Inventory warning':'Inventory warning',
+  'Menu.SKU mapping':'SKU mapping',
   'Menu.Category management':'Category management',
   'Menu.Sales category':'Sales category',
   'Menu.Product category':'Product category',
@@ -282,6 +283,7 @@ export default {
   'Menu.Logistics Company Settings':'Carriers Company Settings',
   'Menu.Carriers Settings':'Carriers Settings',
   'Menu.Carriers Company Settings':'Carriers Company Settings',
+  'Menu.Product price':'Product price',
 
 
 
@@ -446,6 +448,7 @@ export default {
   "Product.Taggingtype": "Tagging type",
   "Product.Productcount": "Product count",
   "Product.Inventorywarning": "Inventory warning",
+  'Product.SkuMapping':'SKU mapping',
   "Product.Inventorywarningdesc": "Set a quantity that when products are below this certain quantity, they are considered as ‘Low inventory’ and will be shown in the list below.",
   "Product.Bulkexport": "Bulk export",
   "Product.Addnewcategory": "Add new category",
@@ -3559,6 +3562,7 @@ export default {
   'product.productName': 'Product name',
   'product.SPU': 'SPU',
   'product.SKU': 'SKU',
+  'product.externalSKU':'external SKU',
   "product.purchasePrice": "Purchase price",
   'product.productCategory': 'Product category',
   'product.storeCategory': 'Store category',

@@ -222,12 +222,24 @@ export default class ClinicList extends Component<any, any> {
       },
       {
         value: '1',
-        name: 'To do'
+        name: 'Pending'
       },
       {
         value: '2',
-        name: 'Finish'
-      }
+        name: 'Todo'
+      },
+      {
+        value: '3',
+        name: 'Sending'
+      },
+      {
+        value: '4',
+        name: 'Success'
+      },
+      {
+        value: '5',
+        name: 'Failed'
+      },
     ];
 
     const columns = [
@@ -274,7 +286,14 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '5%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
+      },
+      {
+        title: 'Receive Status',
+        dataIndex: 'status',
+        key: 'status',
+        width: '10%',
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,
@@ -363,7 +382,7 @@ export default class ClinicList extends Component<any, any> {
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
-                <FormItem> 
+                <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input

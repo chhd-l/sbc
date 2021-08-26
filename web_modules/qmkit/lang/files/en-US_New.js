@@ -143,6 +143,25 @@ export default {
         "Home.Numberofrecommendationcodes": "Number of recommendation codes with an order made",
     },
     Product: {
+        'Product.ProductPrice':'Product price',
+        'Product.SearchProducts':'Search products',
+        'Product.Marketpricepercentage':'Market price percentage',
+        'Product.Subscriptionpricepercentage':'Subscription price percentage',
+        'Product.Roundoff':'round off',
+        'Product.PriceTableColumnImage':'IMAGE',
+        'Product.PriceTableColumnType':'PRODUCT TYPE',
+        'Product.PriceTableColumnName':'PRODUCT NAME',
+        'Product.PriceTableColumnSKU':'SKU',
+        'Product.PriceTableColumnSPU':'SPU',
+        'Product.PriceTableColumnCategory':'PRODUCT CATEGORY',
+        'Product.PriceTableColumnPurchasePrice':'PURCHASE PRICE',
+        'Product.PriceTableColumnMarketPrice':'MARKET PRICE',
+        'Product.PriceTableColumnSubscriptionPrice':'SUBSCRIPTION PRICE',
+        'Product.PriceTableColumnUpatatime':'UPDATED TIME',
+
+        
+
+
         'Product.Notification': 'Notification',
         'Product.deleteTip': 'Are you sure to batch delete selected products?',
         'Product.subscriptionType': 'Subscription type',
@@ -174,6 +193,7 @@ export default {
         'Product.inputspecificationValue': 'Please input specification Value',
         'Product.Nospecificationvalue': 'No specification value',
         'Product.ExternalSKU': 'External SKU',
+        'Product.ValidPeriod':'Valid Period',
         'Product.EAN': 'EAN',
         'Product.Inputweightvalue': 'Please input weight value',
         'Product.Aftercheckinguse': 'After checking, all SKUs use the same market price',
@@ -2369,6 +2389,13 @@ export default {
         'Dashboard.Show More': 'Show More',
         'Dashboard.Error Message': 'Error Message',
         'Dashboard.Technical Error Happened Default Report Time: Latest 1 hour': 'Technical Error Happened Default Report Time: Latest 1 hour',
+        'Dashboard.Uptime':'Update',
+        'Dashboard.Provider':'Provider',
+        'Dashboard.Invoker':'Invoker',
+        'Dashboard.Data Flow':'Data Flow',
+        'Dashboard.Technical Error Happened':'Technical Error Happened',
+        'Dashboard.Show More':'Show More',
+        'Dashboard.Check More':'Check More',
 
         'Interface.InterfaceList': 'Interface List',
         'Interface.InterfaceName': 'Interface Name',
@@ -2406,6 +2433,9 @@ export default {
         'Interface.Successful Rate (%)': 'Successful Rate (%)',
         'Interface.Response Time (ms)': 'Response Time (ms)',
         'Interface.90th Response Time Percentile (ms)': '90th Response Time Percentile (ms)',
+        'Interface.Info':'Info',
+        'Interface.Log':'Log',
+
         'Log.LogSearch': 'Log Search',
         'Log.RequestID': 'Request ID',
         'Log.System': 'System',
@@ -2484,5 +2514,6 @@ export default {
         "Login.create_store_ing": "Sit tight,We’re creating your store!",
         "Login.create_store_success": "Success! You are ready to go",
         "Login.create_store_error": "Store creation failed. Please try again",
+        "Login.password_length": "Password length should between 6-32 characters",
     }
 }

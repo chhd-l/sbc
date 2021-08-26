@@ -36,7 +36,7 @@ export function getTemplateList() {
   return Fetch<TResult>('/message/listEmailTemplate', {
     method: 'POST'
   });
-}
+};
 
 // 删除Email Task
 

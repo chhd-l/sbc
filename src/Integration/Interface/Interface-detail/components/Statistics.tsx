@@ -190,18 +190,18 @@ export default class Statistics extends Component<any, any> {
 
 
   // 获取error 折线图切换方式
-  getIndex = (index) => {
-    this.setState({ activeIndex: index });
-    if (index === 0) {
-      this.setState({
-        dataError: [82, 92, 90, 34, 190, 130, 320]
-      })
-    } else {
-      this.setState({
-        dataError: [30, 42, 90, 34, 90, 20, 220]
-      })
-    }
-  };
+  // getIndex = (index) => {
+  //   this.setState({ activeIndex: index });
+  //   if (index === 0) {
+  //     this.setState({
+  //       dataError: [82, 92, 90, 34, 190, 130, 320]
+  //     })
+  //   } else {
+  //     this.setState({
+  //       dataError: [30, 42, 90, 34, 90, 20, 220]
+  //     })
+  //   }
+  // };
 
   render() {
     const {
@@ -245,8 +245,8 @@ export default class Statistics extends Component<any, any> {
                 show
                 nameData={errorDateTime}
                 data={errorCount}
-                getIndex={(index) => this.getIndex(index)}
-                activeIndex={this.state.activeIndex}
+                // getIndex={(index) => this.getIndex(index)}
+                // activeIndex={this.state.activeIndex}
                 title={<FormattedMessage id="Interface.Error" />}
               />
             </Col>

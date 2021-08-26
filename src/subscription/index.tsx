@@ -632,7 +632,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {phoneNumber.map((item: any) => (
-                            <Option value={item} key={item}>
+                            <Option title={item} value={item} key={item}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}

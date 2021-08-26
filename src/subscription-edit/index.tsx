@@ -97,7 +97,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       customerId: '',
       paymentMethodVisible: false,
       paymentId: '',
-      payPspItemEnum: ''
+      payPspItemEnum: '',
+      paymentMethod:''
     };
   }
 
@@ -151,6 +152,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           let goodsInfo = subscriptionDetail.goodsInfo;
           let paymentInfo = subscriptionDetail.payPaymentInfo;
+          let paymentMethod = subscriptionDetail.paymentMethod
 
           let subscribeNumArr = [];
           let periodTypeArr = [];
@@ -185,6 +187,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               promotionCodeShow: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
+              paymentMethod:paymentMethod,
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -433,7 +436,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             saveLoading: false,
             payPspItemEnum: ''
           });
-          message.success(window.RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+          message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
           this.getSubscriptionDetail();
         } else {
           this.setState({
@@ -929,6 +932,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       currentDateId,
       visibleDate,
       subscriptionType,
+      paymentMethod
       // operationLog
     } = this.state;
 
@@ -1549,25 +1553,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         paymentMethodVisible={this.state.paymentMethodVisible} />
                     </>
                   </AuthWrapper>
-                  {paymentInfo ?
-                    <>
-                      <Col span={24}>
-                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
-                        <p>{paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.CardNumber" />: </p>
-                        <p>{paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                      </Col>
-                    </>
-                    :
+                  { paymentInfo ? 
+                  <>
                     <Col span={24}>
-                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
-                      <p><FormattedMessage id="Subscription.CashOnDelivery" /></p>
-                    </Col>}
-                  {this.state.payPspItemEnum ?
-                    <div className="errorMessage">
-                      <FormattedMessage id="Subscription.savePaymentMethod" />
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                    </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                      </p>
+                      <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                    </Col>
+                  </>
+                  :  
+                    paymentMethod.indexOf('COD')!== -1? <Col span={24}>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
+                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
+                  </Col>:null
+                  
+                  }
+
+                    { this.state.payPspItemEnum ?   
+                     <div className="errorMessage">
+                       <FormattedMessage id="Subscription.savePaymentMethod" />
                     </div> : null}
                 </Row>
               </Col>

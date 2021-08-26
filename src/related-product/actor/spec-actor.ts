@@ -2,7 +2,7 @@ import { Actor, Action } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, Map, List } from 'immutable';
 import { message } from 'antd';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 
 export default class GoodsSpecActor extends Actor {
   defaultState() {
@@ -137,7 +137,7 @@ export default class GoodsSpecActor extends Actor {
 
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     return state.set('goodsSpecs', goodsSpecs).set('goodsList', goods);
@@ -206,7 +206,7 @@ export default class GoodsSpecActor extends Actor {
     const goods = this._getGoods(goodsSpecs, state.get('goodsList'));
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     state = state.set('goodsList', goods);

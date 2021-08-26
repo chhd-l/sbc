@@ -17,6 +17,8 @@ import SKUModal from './sku-modal-for-distribution/goods-modal';
 import EnterpriseSKUModal from './sku-modal-for-enterprise/goods-modal';
 import PieChart from './chart-pie/index';
 import LogoLoadingIcon from './LogoLoadingIcon';
+import AntIcon from './antIcon';
+import AntSpin from './antSpin';
 
 export {
   LogoLoadingIcon,
@@ -37,5 +39,7 @@ export {
   DistributionGoodsMatterHead,
   ShowImageModel,
   SKUModal,
-  PieChart
+  PieChart,
+  AntIcon,
+  AntSpin,
 };

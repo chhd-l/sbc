@@ -344,6 +344,11 @@ const routes = [
     path: '/goods-inventory',
     asyncComponent: () => import('./goods-inventory')
   },
+  // Mapping关系维护列表
+  {
+    path: '/product-sku-mapping',
+    asyncComponent: () => import('./product-sku-mapping')
+  },
 
   // 客户列表
   {
@@ -845,6 +850,11 @@ const routes = [
     path: '/message-setting',
     asyncComponent: () => import('./message-setting')
   },
+  //message-template-configuration
+  {
+    path:'/message-template-configuration',
+    asyncComponent: () => import('./message-template-configuration')
+  },
   //message-overview
   {
     path: '/message-overview',
@@ -895,6 +905,11 @@ const routes = [
     path: '/product-category',
     asyncComponent: () => import('./product-category')
   },
+  {
+    path: '/product-price',
+    asyncComponent: () => import('./product-price')
+  },
+  
   {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')

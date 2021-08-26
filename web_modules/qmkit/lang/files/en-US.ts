@@ -284,6 +284,7 @@ export default {
   'Menu.Carriers Settings':'Carriers Settings',
   'Menu.Carriers Company Settings':'Carriers Company Settings',
   'Menu.Product price':'Product price',
+  'Menu.Shop editor':'Shop editor',
 
 
 

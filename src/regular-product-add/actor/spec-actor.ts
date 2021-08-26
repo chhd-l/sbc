@@ -391,6 +391,7 @@ export default class GoodsSpecActor extends Actor {
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
         externalSku: goodsInfoNo,
+        stock: 0,
         promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
         addedFlag: 1,
         subscriptionStatus: item.get('subscriptionStatus'),

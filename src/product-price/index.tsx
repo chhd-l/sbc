@@ -89,12 +89,14 @@ class ProductPrice extends Component<any, any> {
   }
   //全部更新
   updatePriceAllFun = async (params) => {
+    this.setState({ loading: true })
     const { res } = await webapi.updatePriceAll(params);
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
       message.success('operation success')
     }
+    this.setState({ loading: false })
   }
   // 手动更新
   updatePriceSingleFun = async (param) => {

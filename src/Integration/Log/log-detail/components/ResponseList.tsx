@@ -166,7 +166,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.ResultMessage' }),
-                JSON.parse(record.resultMessage))
+              record.resultMessage? JSON.parse(record.resultMessage):{})
             }}>
             {RCi18n({ id: 'Log.ResultMessage' })}</Button>
 
@@ -180,7 +180,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.Log' }),
-                JSON.parse(record.payloadMessage)||{})
+              record.resultMessage?JSON.parse(record.payloadMessage):{})
             }}>
             {RCi18n({ id: 'Log.Log' })}</Button>
         )

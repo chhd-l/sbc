@@ -5,6 +5,7 @@ import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, 
 import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 const { confirm } = Modal;
 const SORT_TYPE = {
   ascend: 'asc',
@@ -89,12 +90,14 @@ class ProductPrice extends Component<any, any> {
   }
   //全部更新
   updatePriceAllFun = async (params) => {
+    this.setState({ loading: true })
     const { res } = await webapi.updatePriceAll(params);
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
       message.success('operation success')
     }
+    this.setState({ loading: false })
   }
   // 手动更新
   updatePriceSingleFun = async (param) => {
@@ -271,6 +274,7 @@ class ProductPrice extends Component<any, any> {
         dataIndex: 'updateTime',
         key: 'updateTime',
         sorter: true,
+        render:(text)=>moment(text).format('YYYY-MM-DD HH:mm:ss')
       },
 
     ];
@@ -363,7 +367,7 @@ class ProductPrice extends Component<any, any> {
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
 
             <div style={{ marginTop: 20 }}>
-              <Table style={{ paddingRight: 20 }}
+              <Table
 
                 rowKey="goodsInfoId"
                 rowSelection={rowSelection}

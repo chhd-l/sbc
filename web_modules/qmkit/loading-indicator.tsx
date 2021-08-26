@@ -21,7 +21,7 @@ export function LoadingComponent(props: any) {
                   </g>
               </g>
               <circle id="椭圆形" stroke="#D7D7D7" stroke-width="4" cx="47" cy="47" r="47"/>
-              <path d="M47,0 C21.0426168,0 0,21.0426168 0,47 C0,72.9573832 21.0426168,94 47,94 C72.9573832,94 94,72.9573832 94,47 C94,40.9038213 92.8393713,35.0787219 90.7270275,29.7336155" id="路径" stroke="#3C8CFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"/>
+              <path className="global-indicator-loading" d="M47,0 C21.0426168,0 0,21.0426168 0,47 C0,72.9573832 21.0426168,94 47,94 C72.9573832,94 94,72.9573832 94,47 C94,40.9038213 92.8393713,35.0787219 90.7270275,29.7336155" id="路径" stroke="#3C8CFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="bevel"/>
           </g>
       </g>
     </svg>
@@ -30,6 +30,6 @@ export function LoadingComponent(props: any) {
 
 export function LoadingForMyvetreco(props: any) {
   return (
-    <Icon component={LoadingComponent} className="ant-spin-dot global-indicator-loading" />
+    <Icon component={LoadingComponent} className="ant-spin-dot" />
   );
 }

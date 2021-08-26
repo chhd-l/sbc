@@ -365,7 +365,7 @@ class ProductPrice extends Component<any, any> {
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
 
             <div style={{ marginTop: 20 }}>
-              <Table style={{ paddingRight: 20 }}
+              <Table
 
                 rowKey="goodsInfoId"
                 rowSelection={rowSelection}

@@ -178,7 +178,7 @@ class ProductPrice extends Component<any, any> {
   showConfirm = (param) => {
     confirm({
       title: 'Do you want to apply all items?',
-      content: 'When clicked the OK button, this dialog will be closed after 1 second',
+      content: 'When clicked the OK button, there are product list will update new price ,are you got it',
       onOk: () => {
         this.updatePriceAllFun(param)
       },

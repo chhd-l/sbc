@@ -189,7 +189,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       params.pageSize = 10;
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
-
+    this.setState({loading: true});
     let { res } = await webapi.fetchGoodsList({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {

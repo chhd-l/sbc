@@ -318,10 +318,10 @@
   resolved "https://registry.nlark.com/@antv/graphin-icons/download/@antv/graphin-icons-1.0.0.tgz#86ba9e9ab6565bfe2ea1096e8678e76c279053f1"
   integrity sha1-hrqemrZWW/4uoQluhnjnbCeQU/E=
 
-"@antv/graphin@^2.3.1":
-  version "2.3.2"
-  resolved "https://registry.nlark.com/@antv/graphin/download/@antv/graphin-2.3.2.tgz#0b716dfa3e27711b2b3919992fb2bcb7a72d9f10"
-  integrity sha1-C3Ft+j4ncRsrORmZL7K8t6ctnxA=
+"@antv/graphin@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@antv/graphin/-/graphin-2.3.3.tgz#28cb86b469c2ad4a851844e6d6814f7e34fbf7ba"
+  integrity sha512-ava1hUC3uKPromPt8xmVlpefgKgRPt1QqLbbCmtWfHAGDARdN0SbSGzrhanrrvo8czz+/MgSGXWeasc4I1LRKw==
   dependencies:
     "@antv/g6" "4.3.4"
     "@antv/util" "^2.0.10"
@@ -423,13 +423,8 @@
 
 "@antv/x6@^1.24.8":
   version "1.25.5"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/@antv/x6/-/x6-1.25.5.tgz#46b7ca5c42af8c6d31bed88f15503201e1c8dc12"
-  integrity sha512-lmcKPGZzPAxcqfFHL0qVxvPwFCJWaUZPaHTl9KuPEljypToik0qq1TdQNWijwNRXz+7WmYtQEudGYqAtn6XMWg==
-=======
   resolved "https://registry.nlark.com/@antv/x6/download/@antv/x6-1.25.5.tgz#46b7ca5c42af8c6d31bed88f15503201e1c8dc12"
   integrity sha1-RrfKXEKvjG0xvtiPFVAyAeHI3BI=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
   dependencies:
     csstype "^3.0.3"
     jquery "^3.5.1"
@@ -8560,22 +8555,13 @@ isstream@~0.1.2:
 
 jquery-mousewheel@^3.1.13:
   version "3.1.13"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
-=======
   resolved "https://registry.npm.taobao.org/jquery-mousewheel/download/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
   integrity sha1-BvAzXxbjU6aV5yBr9QUDy1I6buU=
 
 jquery@^3.5.1:
   version "3.6.0"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
-  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
-=======
   resolved "https://registry.npm.taobao.org/jquery/download/jquery-3.6.0.tgz?cache=0&sync_timestamp=1614705838607&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjquery%2Fdownload%2Fjquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha1-xyoJ8Vwb3OFC9J2/EXC9+K2sJHA=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
 
 js-base64@^2.1.9:
   version "2.6.4"
@@ -9015,17 +9001,10 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-<<<<<<< HEAD
-lodash-es@^4.17.15:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
-=======
 lodash-es@^4.17.15, lodash-es@^4.17.21:
   version "4.17.21"
   resolved "https://registry.npm.taobao.org/lodash-es/download/lodash-es-4.17.21.tgz?cache=0&sync_timestamp=1613835893273&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash-es%2Fdownload%2Flodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
   integrity sha1-Q+YmxG5lkbd1C+srUBFzkMYJ4+4=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
 
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
@@ -9716,13 +9695,8 @@ moon-wanmi@^0.0.7-alpha.23:
 
 mousetrap@^1.6.5:
   version "1.6.5"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
-  integrity sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==
-=======
   resolved "https://registry.npm.taobao.org/mousetrap/download/mousetrap-1.6.5.tgz#8a766d8c272b08393d5f56074e0b5ec183485bf9"
   integrity sha1-inZtjCcrCDk9X1YHTgtewYNIW/k=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -10364,13 +10338,8 @@ pako@~1.0.5:
 
 parallax-js@^3.1.0:
   version "3.1.0"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/parallax-js/-/parallax-js-3.1.0.tgz#cc8a5d7dd5e2529b94b9a34f3d4cd13a22eb049e"
-  integrity sha512-UONoPKSQykeNvFcemDPxYYDU/T89LSffoaZAwOMhDp0ABhmFPwthgn2GrfB7An9Qo+8nPZIuQeZsh2pWn1qN3A==
-=======
   resolved "https://registry.nlark.com/parallax-js/download/parallax-js-3.1.0.tgz#cc8a5d7dd5e2529b94b9a34f3d4cd13a22eb049e"
   integrity sha1-zIpdfdXiUpuUuaNPPUzROiLrBJ4=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
   dependencies:
     object-assign "^4.1.1"
     raf "^3.3.0"
@@ -14562,13 +14531,8 @@ utila@~0.4:
 
 utility-types@^3.10.0:
   version "3.10.0"
-<<<<<<< HEAD
-  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
-  integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
-=======
   resolved "https://registry.npm.taobao.org/utility-types/download/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
   integrity sha1-6kFI+adBAV8F7XT9YV4dIOa+2Cs=
->>>>>>> 4ccf9c2eafc3835a096ade4ccb71298ad1622ec0
 
 utils-merge@1.0.1:
   version "1.0.1"

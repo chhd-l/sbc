@@ -512,7 +512,7 @@ class SearchHead extends Component<any, any> {
                   </Col>
 
                   {/*新增email搜索*/}
-                  <AuthWrapper functionName="f_search_email">
+                  {/*<AuthWrapper functionName="f_search_email">*/}
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -542,7 +542,7 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  </AuthWrapper>
+                  {/*</AuthWrapper>*/}
                 </Row>
               ) : null}
 

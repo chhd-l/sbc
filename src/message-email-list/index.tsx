@@ -273,8 +273,8 @@ export default class ClinicList extends Component<any, any> {
       },
       {
         title: <FormattedMessage id="Marketing.EmailTemplate" />,
-        dataIndex: 'emailTemplate',
-        key: 'emailTemplate',
+        dataIndex: 'messageTemplate',
+        key: 'messageTemplate',
         width: '10%'
       },
       {
@@ -301,7 +301,7 @@ export default class ClinicList extends Component<any, any> {
         title: 'Email Receive Status',
         dataIndex: 'emailReceiveStatus',
         key: 'emailReceiveStatus',
-        width: '10%',
+        width: '9%',
         render: (text) => <span>{+text === null ? 'Success' : +text === 1 ? 'Failed' : ''}</span>
       },
       {

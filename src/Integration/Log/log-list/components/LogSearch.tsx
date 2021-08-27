@@ -72,7 +72,7 @@ class LogSearch extends Component<any, any> {
     webapi.fetchSystemList().then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let systemList = res.context.intSystemDTOS
+        let systemList = res.context.intSystemVOS
         this.setState({
           systemList
         })
@@ -84,7 +84,7 @@ class LogSearch extends Component<any, any> {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
         console.log(res);
-        let interfaceList = res.context.intInterfaceDTOS.content
+        let interfaceList = res.context.intInterfaceVOS.content
         this.setState({
           interfaceList
         })
@@ -152,6 +152,7 @@ class LogSearch extends Component<any, any> {
                 <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.System' })} />
                 <Select
                   style={styles.wrapper}
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
                   allowClear
                   onChange={(value) => {
                     value = value === '' ? null : value;
@@ -176,6 +177,7 @@ class LogSearch extends Component<any, any> {
                 <Select
                   style={styles.wrapper}
                   allowClear
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
                   showSearch
                   value={searchForm.interface}
                   optionFilterProp="children"

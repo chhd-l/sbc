@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Row, Col, Input, Collapse, } from 'antd';
+import { Form, Row, Col, Input, Collapse, Descriptions, } from 'antd';
 import { AuthWrapper, RCi18n } from 'qmkit';
 import ReactJson from 'react-json-view';
 import moment from 'moment';
@@ -20,25 +20,19 @@ export default class RequestDetail extends Component<any, any>{
 
     return (
       <AuthWrapper functionName="f_pet_owner_tagging">
-      {/* <AuthWrapper functionName="f_lod_detail"> */}
+        {/* <AuthWrapper functionName="f_lod_detail"> */}
         <div className="container-search">
-          <Form className="filter-content myform">
-            <Row gutter={24}>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.RequestID' })}</p>}
-                  value={detailInfo.requestId || ''} disabled />
-              </Col>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.Time' })}</p>}
-                  value={detailInfo.invokeTime ? moment(detailInfo.invokeTime).format('YYYY-MM-DD HH:mm:ss') : ''}
-                  disabled />
-              </Col>
-              <Col span={8}>
-                <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.Interface' })}</p>}
-                  value={detailInfo.interfaceName || ''} disabled />
-              </Col>
-            </Row>
-          </Form>
+          <Descriptions>
+            <Descriptions.Item label={RCi18n({ id: 'Log.RequestID' })}>
+              {detailInfo.requestId || ''}
+            </Descriptions.Item>
+            <Descriptions.Item label={RCi18n({ id: 'Log.Time' })}>
+              {detailInfo.invokeTime ? moment(detailInfo.invokeTime).format('YYYY-MM-DD HH:mm:ss') : ''}
+            </Descriptions.Item>
+            <Descriptions.Item label={RCi18n({ id: 'Log.Interface' })}>
+              {detailInfo.interfaceName || ''}
+            </Descriptions.Item>
+          </Descriptions>
 
         </div>
 
@@ -72,7 +66,7 @@ export default class RequestDetail extends Component<any, any>{
             </Panel>
           </Collapse>
         </div>
-        
+
 
       </AuthWrapper>
 

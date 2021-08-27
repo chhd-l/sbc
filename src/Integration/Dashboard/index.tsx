@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { BreadCrumb, Const, RCi18n } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Const, RCi18n } from 'qmkit';
 import ModuleChart from './component/ModuleChart';
 
 import TopologicalGraph from './component/TopologicalGraph';
@@ -21,14 +21,16 @@ export default class Dashboard extends React.Component<any, any> {
             country,
         } = this.state;
         return (
-            <div className='Dashboard-wrap'>
-                <BreadCrumb />
+            <AuthWrapper functionName="f_integration_dashboard">
+                <div className='Dashboard-wrap'>
+                    <BreadCrumb />
 
-                <div className='Dashboard-title-wrap'>
-                    <div className='Dashboard-title'><FormattedMessage id="Dashboard.Dashboard" /></div>
+                    <div className='Dashboard-title-wrap'>
+                        <div className='Dashboard-title'><FormattedMessage id="Dashboard.Dashboard" /></div>
+                    </div>
+                    <TopologicalGraph />
                 </div>
-                <TopologicalGraph />
-            </div>
+            </AuthWrapper>
         );
     }
 }

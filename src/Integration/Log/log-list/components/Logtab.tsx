@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, Tabs, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
-import { RCi18n } from 'qmkit'
+import { AuthWrapper, RCi18n } from 'qmkit'
 import Tab from '@/Integration/components/tab';
 import ReactJson from 'react-json-view';
 
@@ -57,7 +57,7 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Header' }),
               record.param && record.param.header ? record.param.header : {})
           }}>
@@ -69,7 +69,7 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
               record.param && record.param.payload ?
                 JSON.parse(record.param.payload) : {})
@@ -81,7 +81,7 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
               JSON.parse(record.result.content) : {})
           }}>
@@ -97,11 +97,11 @@ export default class LogTabs extends Component<any, any>{
         title: '',
         dataIndex: 'detail',
         render: (text, record) => (
-          <div>
+          <AuthWrapper functionName="f_log_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
             </Tooltip>
-          </div>
+          </AuthWrapper>
         )
       }
     ]

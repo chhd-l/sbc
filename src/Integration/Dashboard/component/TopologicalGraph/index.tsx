@@ -71,7 +71,7 @@ const SampleBehavior = () => {
       webapi.getApiList({ systemId: model.id }).then(data => {
         const { res } = data
         if (res.code === Const.SUCCESS_CODE) {
-          let tempApiList = res.context.intInterfaceDTOS
+          let tempApiList = res.context.intInterfaceVOS
           let apiList = []
           tempApiList.forEach(element => {
 

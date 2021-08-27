@@ -44,7 +44,7 @@ class InterfaceList extends Component<any, any> {
     webapi.fetchSystemList().then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let systemList = res.context.intSystemDTOS
+        let systemList = res.context.intSystemVOS
         this.setState({
           systemList
         })
@@ -61,9 +61,9 @@ class InterfaceList extends Component<any, any> {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
         const { pagination } = this.state
-        let interfaceList = res.context.intInterfaceDTOS.content
-        pagination.total = res.context.intInterfaceDTOS.total
-        pagination.current = res.context.intInterfaceDTOS.number + 1
+        let interfaceList = res.context.intInterfaceVOS.content
+        pagination.total = res.context.intInterfaceVOS.total
+        pagination.current = res.context.intInterfaceVOS.number + 1
         this.setState({
           interfaceList,
           loading: false,

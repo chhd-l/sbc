@@ -135,6 +135,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                     // 提交成功的回调
                     onOk && onOk({
                         sku,
+                        res,
                         ...params,
                     })
                 }

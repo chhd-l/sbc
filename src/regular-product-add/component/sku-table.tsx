@@ -124,13 +124,21 @@ class SkuForm extends React.Component<any, any> {
   }
 
   handleOk = (values) => {
-    console.log('values', values);
+    console.log('values', values)
+    let { res } = values;
     let { currentRecord } = this.state;
     // 更新externalSku的值
     let externalSku = values.mappings.map(item => item.externalSkuNo).join();
     this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
     // @ts-ignore
-    this.handleCancel();
+
+    if(res && res.context.switched){
+      window.location.reload();
+    }else {
+      this.handleCancel();
+    }
+
+
   };
 
   showModal = () => {
@@ -305,7 +313,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
+                })(<Input disabled style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
             {

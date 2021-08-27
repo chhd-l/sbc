@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit'
+import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit'
 import { Breadcrumb, Spin } from 'antd'
 import RequestDetail from './components/RequesDetailt'
 import ResponseList from './components/ResponseList'
@@ -58,7 +58,7 @@ class LogDetail extends Component<any, any>{
   render() {
     const { detailInfo, requestId,loading } = this.state
     return (
-      <div>
+      <AuthWrapper functionName="f_log_details">
         <Spin spinning={loading} indicator={<img className="spinner" 
         src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" 
         style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -75,7 +75,7 @@ class LogDetail extends Component<any, any>{
           
         </Spin>
 
-      </div>
+      </AuthWrapper>
     )
   }
 }

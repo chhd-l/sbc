@@ -152,6 +152,7 @@ class LogSearch extends Component<any, any> {
                 <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.System' })} />
                 <Select
                   style={styles.wrapper}
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
                   allowClear
                   onChange={(value) => {
                     value = value === '' ? null : value;
@@ -176,6 +177,7 @@ class LogSearch extends Component<any, any> {
                 <Select
                   style={styles.wrapper}
                   allowClear
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
                   showSearch
                   value={searchForm.interface}
                   optionFilterProp="children"

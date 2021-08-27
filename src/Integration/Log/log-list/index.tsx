@@ -146,8 +146,7 @@ export default class Loglist extends Component<any, any>{
   render() {
     const { loading, logList, pagination, currentTabKey } = this.state
     return (
-      // <AuthWrapper functionName="f_log_list">
-      <AuthWrapper functionName="f_pet_owner_tagging">
+      <AuthWrapper functionName="f_log_list">
         <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
           <BreadCrumb thirdLevel={true} />
           <div className="container-search">

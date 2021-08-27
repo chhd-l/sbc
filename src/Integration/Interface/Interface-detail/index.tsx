@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Breadcrumb, Button, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
 import Information from './components/Information';
@@ -197,7 +197,7 @@ export default class InterfaceView extends Component<any, any> {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Header' }),
               record.param && record.param.header ? record.param.header : {})
           }}>
@@ -209,7 +209,7 @@ export default class InterfaceView extends Component<any, any> {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
               record.param && record.param.payload ?
                 JSON.parse(record.param.payload) : {})
@@ -221,7 +221,7 @@ export default class InterfaceView extends Component<any, any> {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
               JSON.parse(record.result.content) : {})
           }}>
@@ -237,17 +237,17 @@ export default class InterfaceView extends Component<any, any> {
         title: '',
         dataIndex: 'detail',
         render: (text, record) => (
-          <div>
+          <AuthWrapper functionName="f_log_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
             </Tooltip>
-          </div>
+          </AuthWrapper>
         )
       }
     ]
 
     return (
-      <div>
+      <AuthWrapper functionName="f_interface_details">
         <Spin spinning={loading} indicator={<img className="spinner"
           src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
           style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -308,7 +308,7 @@ export default class InterfaceView extends Component<any, any> {
             ) : null
           }
         </Spin>
-      </div>
+      </AuthWrapper>
     );
   }
 }

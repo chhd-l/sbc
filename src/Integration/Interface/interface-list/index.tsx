@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, RCi18n, SelectGroup } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, Row, Col, Select, Button, Tooltip, Spin } from 'antd';
 import Tab from '@/Integration/components/tab';
@@ -169,18 +169,18 @@ class InterfaceList extends Component<any, any> {
         title: <FormattedMessage id="Interface.Operation" />,
         dataIndex: 'Operation',
         render: (text, record) => (
-          <div>
+          <AuthWrapper functionName="f_interface_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/interface-detail/${record.id}`}
                 className="iconfont iconDetails" />
             </Tooltip>
-          </div>
+          </AuthWrapper>
         )
       }
     ]
 
     return (
-      <div>
+      <AuthWrapper functionName="f_interface_list">
         <Spin spinning={loading} indicator={<img className="spinner"
           src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
           style={{ width: '90px', height: '90px' }} alt="" />}>
@@ -218,6 +218,7 @@ class InterfaceList extends Component<any, any> {
                       <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Provider' })} />
                       <Select
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         allowClear
                         onChange={(value) => {
                           value = value === '' ? null : value;
@@ -244,6 +245,7 @@ class InterfaceList extends Component<any, any> {
                       <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Invoker' })} />
                       <Select
                         style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         allowClear
                         onChange={(value) => {
                           value = value === '' ? null : value;
@@ -291,7 +293,7 @@ class InterfaceList extends Component<any, any> {
             />
           </div>
         </Spin>
-      </div>
+     </AuthWrapper>
     );
   }
 }

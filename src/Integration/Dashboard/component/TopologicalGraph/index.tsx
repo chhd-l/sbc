@@ -249,7 +249,7 @@ export default class TopologicalGraph extends Component<any> {
         {
           layoutList && layoutList.map((layout, index) => (
             <Menu.Item key={index}>
-              <Button type="link" onClick={() => this.switchLayout(layout)}>
+              <Button type="link" style={{ padding: 0 }} onClick={() => this.switchLayout(layout)}>
                 {layout}
               </Button>
             </Menu.Item>

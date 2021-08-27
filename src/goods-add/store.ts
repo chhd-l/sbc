@@ -451,7 +451,7 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: editGoods', goods);
 
       this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
-      this.dispatch('goodsSpecActor: editSpecSingleFlag', goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0);
+      this.dispatch('goodsSpecActor: editSpecSingleFlag', { specSingleFlag: goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0, promotions: goodsDetail.getIn(['goods', 'promotions']), subscriptionStatus: goodsDetail.getIn(['goods', 'subscriptionStatus'])});
 
       // 商品图片
       let images = goodsDetail.get('images').map((image, index) => {
@@ -706,7 +706,8 @@ export default class AppStore extends Store {
    * 设置是否为单规格
    */
   editSpecSingleFlag = (specSingleFlag: boolean) => {
-    this.dispatch('goodsSpecActor: editSpecSingleFlag', specSingleFlag);
+    const goods = this.state().get('goods');
+    this.dispatch('goodsSpecActor: editSpecSingleFlag', { specSingleFlag, promotions: goods.get('promotions'), subscriptionStatus: goods.get('subscriptionStatus') });
   };
 
   /**

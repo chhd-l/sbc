@@ -70,7 +70,11 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
       level1SelectKeys = [];
     }
     
-    const myvetreco_shop_domain_url = sessionStorage.getItem(cache.DOMAINNAME).endsWith('/') ? sessionStorage.getItem(cache.DOMAINNAME) + 'admin' : sessionStorage.getItem(cache.DOMAINNAME) + '/admin';
+    const shopDomain = sessionStorage.getItem(cache.DOMAINNAME);
+    let myvetreco_shop_domain_url = '';
+    if (shopDomain) {
+      myvetreco_shop_domain_url = shopDomain.endsWith('/') ? shopDomain + 'admin' : shopDomain + '/admin';
+    }
 
     return (
       <Sider width={134} className="leftHeader" 
@@ -106,7 +110,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                 </Menu.Item>
               );
             })}
-            {Const.SITE_NAME === 'MYVETRECO' && (
+            {Const.SITE_NAME === 'MYVETRECO' && shopDomain ? (
               <Menu.Item
                 key="myvetreco-shop-editor"
                 style={styles.navItem}
@@ -116,7 +120,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                   <span style={{display: this.state.collapsed?'none':'block',lineHeight:'16px',whiteSpace:'initial'}} title={RCi18n({id:`Menu.Shop editor`})}><FormattedMessage id="Menu.Shop editor" /></span>
                 </a>
               </Menu.Item>
-            )}
+            ) : null}
         </Menu>
       </Sider>
     );

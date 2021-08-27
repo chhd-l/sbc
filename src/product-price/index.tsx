@@ -197,9 +197,17 @@ class ProductPrice extends Component<any, any> {
     </div>
   </div>
   );
+ 
   render() {
     const { loading, title, goodsPriceList, pagination, isDisabled, totalColumn, currentTotal, searchName } = this.state;
     const { getFieldDecorator } = this.props.form;
+    let infoType={
+    0:"Physical commodity",
+    1:"Virtual goods",
+    2:'Bundle goods',
+    3:'VET goods',
+    4:'Gift goods'
+    }
     const columns = [
       {
         title: <FormattedMessage id="Product.PriceTableColumnImage" />,
@@ -210,7 +218,8 @@ class ProductPrice extends Component<any, any> {
       {
         title: <FormattedMessage id="Product.PriceTableColumnType" />,
         dataIndex: 'goodsInfoType',
-        key: 'goodsInfoType'
+        key: 'goodsInfoType',
+        render:(text)=>infoType[text]
       },
       {
         title: <FormattedMessage id="Product.PriceTableColumnName" />,

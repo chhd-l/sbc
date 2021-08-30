@@ -870,7 +870,7 @@ export default {
         'Order.zeroOrderAuditMethod': 'Zero price order audit method ',
         'Order.pending': 'Pending',
         'Order.pendingAuditBasis': 'Audit Basis: Authorization, payment, product, order',
-        'Order.orderAutoAudit': 'Automatic audit:',
+        'Order.orderAutoAudit': 'Automatic audit',
         'Order.autoAuditExceptConditionTip1': 'Order meeting the following conditions require  ',
         'Order.autoAuditExceptConditionTip2': 'manual audit',
         'Order.autoAuditExceptCondition1': 'Orders with 0 price ',
@@ -882,6 +882,8 @@ export default {
         'Order.Operator Type': 'Operator Type',
         'Order.Operation Category': 'Operation Category',
         'Order.Operation Log': 'Operation Log',
+        'Order.PrerequisitesForAudit': 'Prerequisites for audit',
+        'Order.PetProfile': 'Operation Log',
 
     },
     Subscription: {

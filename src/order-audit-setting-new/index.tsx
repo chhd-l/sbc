@@ -17,6 +17,8 @@ class OrderSetting extends Component<any, any> {
       categoryLoading: false,
       auditConfigForm: null, //audit setting
       isAutoAudit: false, //是否开启订单自动审核
+      isAutoPetId: false,
+      isAutoPet: false, //是否开启宠物信息自动审核
       ExceptCondition1: false, //Orders with 0 price
       ExceptCondition2: false, //Product categories
       ExceptCondition3: false //A pet owner placed more than 5 orders on a day
@@ -38,12 +40,21 @@ class OrderSetting extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          let auditConfigList = (res?.context || []).find((item) => {
+          let isPetInfo = (res?.context || []).find((item: any) => {
+            if (item.configType === 'pet_information_as_reference') {
+              return item;
+            }
+          });
+          this.setState({
+            isAutoPet: isPetInfo?.status === 1,
+            isAutoPetId: isPetInfo?.id || ''
+          });
+          
+          let auditConfigList = (res?.context || []).find((item: any) => {
             if (item.configType === 'no_audit_required') {
               return item;
             }
           });
-          console.log(auditConfigList)
           if (auditConfigList) {
             this.setState({
               isAutoAudit: auditConfigList.status === 1,
@@ -56,8 +67,8 @@ class OrderSetting extends Component<any, any> {
                   item.name === 'Orders with 0 price'
                     ? 'ExceptCondition1'
                     : item.name === 'Product categories'
-                    ? 'ExceptCondition2'
-                    : 'ExceptCondition3';
+                      ? 'ExceptCondition2'
+                      : 'ExceptCondition3';
                 this.setState({ [name]: Boolean(item.state) });
               });
             }
@@ -67,7 +78,10 @@ class OrderSetting extends Component<any, any> {
         }
       })
       .catch((err) => {
-        this.setState({ isAutoAudit: false });
+        this.setState({
+          isAutoAudit: false,
+          isAutoPet: false,
+        });
       })
       .finally(() => {
         this.setState({
@@ -87,7 +101,7 @@ class OrderSetting extends Component<any, any> {
           });
         }
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => {
         this.setState({
           categoryLoading: false
@@ -125,6 +139,7 @@ class OrderSetting extends Component<any, any> {
     let ExceptCondition2 = state === 'ExceptCondition2' ? value : this.state.ExceptCondition2;
     let ExceptCondition3 = state === 'ExceptCondition3' ? value : this.state.ExceptCondition3;
     const isAutoAudit = state === 'isAutoAudit' ? value : this.state.isAutoAudit;
+    const isAutoPet = state === 'isAutoPet' ? value : this.state.isAutoPet;
     if (state === 'isAutoAudit' && !value) {
       //todo 如果是手动审核，则例外条件都需要手动审核
     }
@@ -151,6 +166,11 @@ class OrderSetting extends Component<any, any> {
               state: ExceptCondition3 ? 1 : 0
             }
           ])
+        },
+        {
+          id: this.state.isAutoPetId,
+          configType: 'pet_information_as_reference',
+          status: isAutoPet ? 1 : 0,
         }
       ]
     };
@@ -188,6 +208,7 @@ class OrderSetting extends Component<any, any> {
       configData,
       categoryLoading,
       isAutoAudit,
+      isAutoPet,
       ExceptCondition1,
       ExceptCondition2,
       ExceptCondition3
@@ -245,9 +266,24 @@ class OrderSetting extends Component<any, any> {
             }
           >
             <div style={{ margin: 20 }}>
-              <div className="flex flex-row justify-start items-center">
+
+              {/*  */}
+              <div className="flex flex-row justify-start items-center order_auto_audit" style={{ marginBottom: '20px' }}>
+                <p style={{ marginRight: 20 }}>
+                  <FormattedMessage id="Order.PrerequisitesForAudit" />:
+                </p>
+                <Switch
+                  style={{ marginRight: 20 }}
+                  checked={isAutoPet}
+                  onChange={(e) => this.onAuditSettingChange('isAutoPet', e)}
+                />
+                
+                <FormattedMessage id="Order.PetProfile" />
+              </div>
+
+              <div className="flex flex-row justify-start items-center order_auto_audit">
                 <p style={{ marginRight: 20, width: 140 }}>
-                  <FormattedMessage id="Order.orderAutoAudit" />
+                  <FormattedMessage id="Order.orderAutoAudit" />:
                 </p>
                 <Switch
                   checked={isAutoAudit}

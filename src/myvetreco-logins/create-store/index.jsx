@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Steps } from 'antd';
-
+import { RCi18n } from 'qmkit';
 
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
@@ -37,14 +37,14 @@ export default function CreateStore() {
      <div className="vmargin-level-4 align-item-center">
        <img src={logo} width="166" alt="" />
      </div>
-     <div className="vmargin-level-4 align-item-center word large">{intl.get('Login.create_store_title')}</div>
+     <div className="vmargin-level-4 align-item-center word large">{RCi18n({id:'Login.create_store_title'})}</div>
      <div className="vmargin-level-4 align-item-center">
        <Steps current={current} size="small" labelPlacement="vertical" style={{width:960,margin:'0 auto'}}>
-         <Step title={intl.get('Login.create_store_step1')} />
-         <Step title={intl.get('Login.create_store_step2')} />
-         <Step title={intl.get('Login.create_store_step3')} />
-         <Step title={intl.get('Login.create_store_step4')} />
-         <Step title={intl.get('Login.create_store_step5')} />
+         <Step title={RCi18n({id:'Login.create_store_step1'})} />
+         <Step title={RCi18n({id:'Login.create_store_step2'})} />
+         <Step title={RCi18n({id:'Login.create_store_step3'})} />
+         <Step title={RCi18n({id:'Login.create_store_step4'})} />
+         <Step title={RCi18n({id:'Login.create_store_step5'})} />
        </Steps>
      </div>
      <div>

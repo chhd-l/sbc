@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, RCi18n, history } from 'qmkit';
+import { BreadCrumb, Const, Headline, RCi18n, history, AuthWrapper } from 'qmkit';
 import { Button, Input, Modal, Spin, Table, Tabs, Tooltip } from 'antd';
 import Information from './components/information';
 import Statistics from './components/statistics';
@@ -141,7 +141,7 @@ export default class DashboardDetails extends Component<any, any> {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Header' }),
               record.param && record.param.header ? record.param.header : {})
           }}>
@@ -153,7 +153,7 @@ export default class DashboardDetails extends Component<any, any> {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
               record.param && record.param.payload ?
                 JSON.parse(record.param.payload) : {})
@@ -166,7 +166,7 @@ export default class DashboardDetails extends Component<any, any> {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" onClick={() => {
+          <Button type="link" style={{ padding: 0 }} onClick={() => {
             this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
               JSON.parse(record.result.content) : {})
           }}>
@@ -183,80 +183,84 @@ export default class DashboardDetails extends Component<any, any> {
         title: '',
         dataIndex: 'detail',
         render: (text, record) => (
-          <div>
+          <AuthWrapper functionName="f_log_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
-              <Button type="link" onClick={() => this.openLogDetail(record.requestId)}>
+              <Button type="link" style={{ padding: 0 }} onClick={() => this.openLogDetail(record.requestId)}>
                 <i className="iconfont iconDetails" ></i>
               </Button>
-
             </Tooltip>
-          </div>
+          </AuthWrapper>
         )
       }
     ]
     return (
 
-      <div className="container-info">
-        <Spin spinning={loading}>
-          <Headline title={detailInfo.name} />
-          <Tabs activeKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
-            {/* Information */}
-            <TabPane tab={RCi18n({ id: 'Interface.Info' })} key="info">
-              <Information detailInfo={detailInfo} />
-            </TabPane>
-            {/* Statistics */}
-            <TabPane tab={RCi18n({ id: "Interface.Statistics" })} key="statistics">
-              <Statistics interfaceId={interfaceId} />
-            </TabPane>
+      
+        <div className="container-info">
+          <Spin spinning={loading}>
+            <Headline title={detailInfo.name} />
+            <Tabs activeKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+              {/* Information */}
+              <TabPane tab={RCi18n({ id: 'Interface.Info' })} key="info">
+                <Information detailInfo={detailInfo} />
+              </TabPane>
+              {/* Statistics */}
+              <TabPane tab={RCi18n({ id: "Interface.Statistics" })} key="statistics">
+                <Statistics interfaceId={interfaceId} />
+              </TabPane>
 
-            {/* All */}
-            <TabPane tab={RCi18n({ id: "Interface.Log" })} key="log" >
-              <Table
-                key="log"
-                rowKey="requestId"
-                dataSource={logList}
-                pagination={false}
-                columns={columns}
-              />
-              <Button type="link"
-                onClick={() => this.openLogList('log')}
-                style={{ float: 'right', marginTop: 20 }}>{
-                  RCi18n({ id: 'Dashboard.Check More' })
-                }</Button>
-            </TabPane>
-            {/* Error */}
-            <TabPane tab={RCi18n({ id: "Interface.Error" })} key="error" >
-              <Table
-                key="error"
-                rowKey="requestId"
-                pagination={false}
-                dataSource={logList}
-                columns={columns}
-              />
-              <Button type="link"
-                onClick={() => this.openLogList('error')}
-                style={{ float: 'right', marginTop: 20 }}>{
-                  RCi18n({ id: 'Dashboard.Check More' })
-                }</Button>
-            </TabPane>
-          </Tabs>
-          {/* 表格 */}
+              {/* All */}
+              <TabPane tab={RCi18n({ id: "Interface.Log" })} key="log" >
+                <Table
+                  key="log"
+                  rowKey="requestId"
+                  dataSource={logList}
+                  pagination={false}
+                  columns={columns}
+                />
+                <AuthWrapper functionName="f_log_list">
+                  <Button type="link" 
+                    onClick={() => this.openLogList('log')}
+                    style={{ float: 'right', marginTop: 20 }}>{
+                      RCi18n({ id: 'Dashboard.Check More' })
+                    }</Button>
+                </AuthWrapper>
 
-          <Modal
-            visible={visible}
-            width={1050}
-            title={title}
-            footer={null}
-            onCancel={() => this.setState({
-              visible: false
-            })}
-          >
+              </TabPane>
+              {/* Error */}
+              <TabPane tab={RCi18n({ id: "Interface.Error" })} key="error" >
+                <Table
+                  key="error"
+                  rowKey="requestId"
+                  pagination={false}
+                  dataSource={logList}
+                  columns={columns}
+                />
+                <Button type="link"
+                  onClick={() => this.openLogList('error')}
+                  style={{ float: 'right', marginTop: 20 }}>{
+                    RCi18n({ id: 'Dashboard.Check More' })
+                  }</Button>
+              </TabPane>
+            </Tabs>
+            {/* 表格 */}
 
-            <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+            <Modal
+              visible={visible}
+              width={1050}
+              title={title}
+              footer={null}
+              onCancel={() => this.setState({
+                visible: false
+              })}
+            >
 
-          </Modal>
-        </Spin>
-      </div >
+              <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+
+            </Modal>
+          </Spin>
+        </div >
+
 
 
     )

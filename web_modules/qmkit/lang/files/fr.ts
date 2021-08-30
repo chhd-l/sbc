@@ -83,6 +83,7 @@ export default {
   'task.By': 'Le',
   'task.All': 'Tout',
   'task.Search': 'Recherche',
+  'task.SterilizationTimeOnlyKitten':'Temps de stérilisation 5 mois (seulement chaton)',
 
 
 

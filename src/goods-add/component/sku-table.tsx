@@ -9,6 +9,8 @@ import { FormattedMessage } from 'react-intl';
 import ProductTooltipSKU from './productTooltip-sku';
 import * as _ from 'lodash';
 import { RCi18n } from 'qmkit';
+import {AntIcon} from 'biz';
+import SkuMappingModal from '@/product-sku-mapping/components/SkuMappingModal';
 const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
@@ -72,7 +74,9 @@ export default class SkuTable extends React.Component<any, any> {
       onProductselectSku: Function;
       onEditSubSkuItem: Function;
       editGoods: Function;
+      init: Function;
     };
+    gid: any,
   };
 
   static relaxProps = {
@@ -99,14 +103,17 @@ export default class SkuTable extends React.Component<any, any> {
     removeImg: noop,
     modalVisible: noop,
     onProductselectSku: noop,
-    onEditSubSkuItem: noop
+    onEditSubSkuItem: noop,
+    init: noop,
   };
 
   render() {
     const WrapperForm = this.WrapperForm;
     const { updateSkuForm } = this.props.relaxProps;
+    let {gid} = this.props;
     return (
       <WrapperForm
+          gid={gid}
         // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
@@ -122,9 +129,51 @@ class SkuForm extends React.Component<any, any> {
       count: 0,
       visible: false,
       pid: '',
-      id: ''
+      id: '',
+      skuMappingModalVisible: false,
+      currentRecord: {},
     };
   }
+
+  handleExternalSku = (record) => {
+    this.setState({
+      currentRecord: record
+    }, () => {
+      this.showModal();
+    })
+  }
+
+  handleOk = (values) => {
+    console.log('values', values)
+    let { res } = values;
+    let { currentRecord } = this.state;
+    let { gid } = this.props;
+    let { init } = this.props.relaxProps;
+    // 更新externalSku的值
+    // let externalSku = values.mappings.map(item => item.externalSkuNo).join();
+    // this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
+    // @ts-ignore
+    if(res && res.context.switched && gid){
+      init(gid);
+      this.handleCancel();
+    }else {
+      this.handleCancel();
+    }
+  };
+
+  showModal = () => {
+    this.setState({
+      skuMappingModalVisible: true,
+
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      skuMappingModalVisible: false,
+    });
+  };
 
   /*static getDerivedStateFromProps(nextProps, prevState) {
     const { goodsList } = nextProps.relaxProps;
@@ -148,6 +197,10 @@ class SkuForm extends React.Component<any, any> {
 
 
   render() {
+    let  {
+      currentRecord,
+      skuMappingModalVisible
+    } = this.state;
     const { goodsList } = this.props.relaxProps;
     const columns = this._getColumns();
     return (
@@ -156,6 +209,19 @@ class SkuForm extends React.Component<any, any> {
         <Form>
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
+        {
+          skuMappingModalVisible
+              ? (
+                  <SkuMappingModal
+                      sku={currentRecord.goodsInfoNo}
+                      goodsInfoId={currentRecord.goodsInfoId}
+                      visible={skuMappingModalVisible}
+                      onOk={this.handleOk}
+                      onCancel={this.handleCancel}
+                  />
+              )
+              : null
+        }
       </div>
     );
   }
@@ -346,7 +412,7 @@ class SkuForm extends React.Component<any, any> {
       key: 'externalSku',
       render: (rowInfo) => {
         return (
-          <Row>
+          <Row className='row-externalSku-wrap'>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                 {getFieldDecorator('externalSku' + rowInfo.id, {
@@ -362,9 +428,18 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45} onFocus={() => this.onfocus()} onBlur={() => this.onblur()} />)}
+                })(<Input disabled style={{ width: '116px' }} maxLength={45} onFocus={() => this.onfocus()} onBlur={() => this.onblur()} />)}
               </FormItem>
             </Col>
+            {
+              !!rowInfo.goodsInfoId
+                  ? (
+                      <a className='skuMappingList-btn' onClick={() => this.handleExternalSku(rowInfo)}>
+                        <AntIcon className='SkuMappingList-action-icon' type='iconEdit'/>
+                      </a>
+                  )
+                  : null
+            }
           </Row>
         );
       }

@@ -5,6 +5,7 @@ import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, 
 import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 const { confirm } = Modal;
 const SORT_TYPE = {
   ascend: 'asc',
@@ -196,9 +197,17 @@ class ProductPrice extends Component<any, any> {
     </div>
   </div>
   );
+ 
   render() {
     const { loading, title, goodsPriceList, pagination, isDisabled, totalColumn, currentTotal, searchName } = this.state;
     const { getFieldDecorator } = this.props.form;
+    let infoType={
+    0:"Physical commodity",
+    1:"Virtual goods",
+    2:'Bundle goods',
+    3:'VET goods',
+    4:'Gift goods'
+    }
     const columns = [
       {
         title: <FormattedMessage id="Product.PriceTableColumnImage" />,
@@ -209,7 +218,8 @@ class ProductPrice extends Component<any, any> {
       {
         title: <FormattedMessage id="Product.PriceTableColumnType" />,
         dataIndex: 'goodsInfoType',
-        key: 'goodsInfoType'
+        key: 'goodsInfoType',
+        render:(text)=>infoType[text]
       },
       {
         title: <FormattedMessage id="Product.PriceTableColumnName" />,
@@ -273,6 +283,7 @@ class ProductPrice extends Component<any, any> {
         dataIndex: 'updateTime',
         key: 'updateTime',
         sorter: true,
+        render:(text)=>moment(text).format('YYYY-MM-DD HH:mm:ss')
       },
 
     ];
@@ -365,7 +376,7 @@ class ProductPrice extends Component<any, any> {
           <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
 
             <div style={{ marginTop: 20 }}>
-              <Table style={{ paddingRight: 20 }}
+              <Table
 
                 rowKey="goodsInfoId"
                 rowSelection={rowSelection}

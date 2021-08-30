@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
-import { history, cache, util, RCi18n } from 'qmkit';
+import { history, cache, util, RCi18n, Const } from 'qmkit';
 import { fromJS } from 'immutable';
 import {FormattedMessage} from "react-intl";
 
@@ -69,6 +69,12 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     if (path == '/account-manage') {
       level1SelectKeys = [];
     }
+    
+    const shopDomain = sessionStorage.getItem(cache.DOMAINNAME);
+    let myvetreco_shop_domain_url = '';
+    if (shopDomain) {
+      myvetreco_shop_domain_url = shopDomain.endsWith('/') ? shopDomain + 'admin' : shopDomain + '/admin';
+    }
 
     return (
       <Sider width={134} className="leftHeader" 
@@ -104,6 +110,17 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
                 </Menu.Item>
               );
             })}
+            {Const.SITE_NAME === 'MYVETRECO' && shopDomain ? (
+              <Menu.Item
+                key="myvetreco-shop-editor"
+                style={styles.navItem}
+              >
+                <a href={myvetreco_shop_domain_url} target="_blank">
+                  <i className="icon iconfont iconEdit" style={{fontSize:30 }}></i>
+                  <span style={{display: this.state.collapsed?'none':'block',lineHeight:'16px',whiteSpace:'initial'}} title={RCi18n({id:`Menu.Shop editor`})}><FormattedMessage id="Menu.Shop editor" /></span>
+                </a>
+              </Menu.Item>
+            ) : null}
         </Menu>
       </Sider>
     );

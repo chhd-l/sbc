@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import MyLineChart from '@/Integration/components/MyLineChart';
 import MyHeader from '@/Integration/components/myHeader';
 import * as webapi from '@/Integration/Interface/Interface-detail/webapi'
-import { Const, RCi18n,history } from 'qmkit';
+import { Const, RCi18n, history, AuthWrapper } from 'qmkit';
 
 export default class Statistics extends Component<any, any> {
   constructor(props: any) {
@@ -166,11 +166,13 @@ export default class Statistics extends Component<any, any> {
                 />
               </Col>
             </Row>
-            <Button type="link"
-              onClick={() => this.openInterface(this.props.interfaceId, 'statistics')}
-              style={{ float: 'right', marginTop: 20 }}>{
-                RCi18n({ id: 'Dashboard.Show More' })
-              }</Button>
+            <AuthWrapper functionName="f_interface_details">
+              <Button type="link"
+                onClick={() => this.openInterface(this.props.interfaceId, 'statistics')}
+                style={{ float: 'right', marginTop: 20 }}>{
+                  RCi18n({ id: 'Dashboard.Show More' })
+                }</Button>
+            </AuthWrapper>
           </div>
         </div>
       </Spin>

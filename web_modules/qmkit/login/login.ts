@@ -198,7 +198,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           // } else {
           //   message.error(config.res.message)
           // }
-          fetchStore();
+          await fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');
@@ -413,7 +413,7 @@ export async function switchLogin(params, callback?: Function) {
           // } else {
           //   message.error(config.res.message)
           // }
-          fetchStore();
+          await fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');

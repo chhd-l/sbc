@@ -58,7 +58,9 @@ export default class SkuTable extends React.Component<any, any> {
       goods: IMap;
       baseSpecId: Number;
       editGoods: Function;
+      init: Function;
     };
+    gid: any,
   };
 
   static relaxProps = {
@@ -80,7 +82,8 @@ export default class SkuTable extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    init: noop,
   };
 
   constructor(props) {
@@ -94,8 +97,10 @@ export default class SkuTable extends React.Component<any, any> {
   render() {
     const WrapperForm = this.WrapperForm;
     const { updateSkuForm } = this.props.relaxProps;
+    let {gid} = this.props;
     return (
       <WrapperForm
+          gid={gid}
         // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
@@ -124,13 +129,22 @@ class SkuForm extends React.Component<any, any> {
   }
 
   handleOk = (values) => {
-    console.log('values', values);
+    console.log('values', values)
+    let { res } = values;
     let { currentRecord } = this.state;
+    let { gid } = this.props;
+    let { init } = this.props.relaxProps;
     // 更新externalSku的值
-    let externalSku = values.mappings.map(item => item.externalSkuNo).join();
-    this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
+    // let externalSku = values.mappings.map(item => item.externalSkuNo).join();
+    // this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
     // @ts-ignore
-    this.handleCancel();
+
+    if(res && res.context.switched && gid){
+      init(gid);
+      this.handleCancel();
+    }else {
+      this.handleCancel();
+    }
   };
 
   showModal = () => {
@@ -305,7 +319,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalSku'),
                   initialValue: rowInfo.externalSku
-                })(<Input style={{ width: '116px' }} maxLength={45}/>)}
+                })(<Input disabled style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
             {

@@ -70,7 +70,8 @@ export default class ChooseEventForm extends Component<any, any> {
           { title: RCi18n({id:'task.SubscriptionprogramcancelationbyPO'}), value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
           { title: RCi18n({id:'task.Foodtransition(newlife-stage)'}), value: 'foodTransition', key: '0-1-5' },
           { title: RCi18n({id:'task.3daysbeforenextrefillorder'}), value: '3DaysBeforeNextRefillOrder', key: '0-1-6' },
-          { title: 'Create pet profile', value: 'createPetProfile', key: '0-1-7' }
+          { title: 'Create pet profile', value: 'createPetProfile', key: '0-1-7' },
+          { title: RCi18n({id:'task.SterilizationTimeOnlyKitten'}), value: 'SterilizationTime', key: '0-1-8' }
         ]
       },
       {

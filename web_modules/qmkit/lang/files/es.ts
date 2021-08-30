@@ -3235,4 +3235,5 @@ export default {
     'PetOwner.Subscription pause':'Pausa de suscripción',
     'PetOwner.Subscription cancel':'Cancelación de suscripción',
     'PetOwner.Dismiss':'Disolución',
+    'task.SterilizationTimeOnlyKitten': 'Tiempo de esterilización 5 meses (solo gatito)'
 };

@@ -2728,5 +2728,6 @@ export default {
   'task.3daysbeforenextrefillorder': '3 дня до создания следующего заказа',
   'task.By': 'По',
   'task.Taskcreation': 'Создать задачу',
-  'Subscription.AutoshipOrder': 'Авто-доставка Заказа'
+  'Subscription.AutoshipOrder': 'Авто-доставка Заказа',
+  'task.SterilizationTimeOnlyKitten': 'рекомендация по стерилизации (котенок)'
 };

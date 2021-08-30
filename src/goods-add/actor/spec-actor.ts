@@ -87,15 +87,25 @@ export default class GoodsSpecActor extends Actor {
    * 设置是否为单规格
    */
   @Action('goodsSpecActor: editSpecSingleFlag')
-  editSpecSingleFlag(state, specSingleFlag: boolean) {
+  editSpecSingleFlag(state, { specSingleFlag, promotions, subscriptionStatus }: any) {
     if (specSingleFlag) {
+      let defaultGoodsInfoNo = this._randomGoodsInfoNo();
       state = state.set(
         'goodsList',
         fromJS([
           {
-            id: Math.random().toString().substring(2),
+            id: this._getRandom(),
             index: 1,
-            goodsInfoNo: this._randomGoodsInfoNo()
+            addedFlag: 1,
+            goodsInfoNo: defaultGoodsInfoNo,
+            externalSku: defaultGoodsInfoNo,
+            subscriptionStatus: subscriptionStatus,
+            promotions: promotions,
+            marketPrice: 0,
+            subscriptionPrice: 0,
+            stock: 0,
+            goodsInfoBundleRels: [],
+            specType: false
           }
         ])
       );
@@ -153,15 +163,16 @@ export default class GoodsSpecActor extends Actor {
         marketPrice = firstSku.get('marketPrice');
       }
     }
-    if (marketPrice >= 0) {
-      goods = goods.map((item) => {
-        if (item.get('subscriptionStatus')) {
-          return item.set('marketPrice', marketPrice).set('subscriptionPrice', marketPrice);
-        } else {
-          return item.set('marketPrice', marketPrice);
-        }
-      });
-    }
+    // 初始化marketPrice和subscriptionPrice放在this._getGoods方法中
+    // if (marketPrice >= 0) {
+    //   goods = goods.map((item) => {
+    //     if (item.get('subscriptionStatus')) {
+    //       return item.set('marketPrice', marketPrice).set('subscriptionPrice', marketPrice);
+    //     } else {
+    //       return item.set('marketPrice', marketPrice);
+    //     }
+    //   });
+    // }
 
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
@@ -355,6 +366,11 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('index', resultIndex++);
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
         goodsItem = goodsItem.set('externalSku', goodsInfoNo);
+        goodsItem = goodsItem.set('stock', 0);
+        goodsItem = goodsItem.set('marketPrice', 0);
+        goodsItem = goodsItem.set('subscriptionPrice', 0);
+        goodsItem = goodsItem.set('subscriptionStatus', item2.get('subscriptionStatus'));
+        goodsItem = goodsItem.set('promotions', item2.get('goodsPromotions'));
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);

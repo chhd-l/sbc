@@ -477,16 +477,20 @@ class ListView extends React.Component<any, any> {
 
                           {/*订单PENDING_REVIEW or TO_BE_DELIVERED人工审核，人工审核条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
                           {isAutoAudit&&(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='NON_CHECKED' ? (
+                            <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id,'ManualReview')} className="iconfont iconPendingAudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>
+                            </AuthWrapper>
                           ) : null}
 
                           {/*订单PENDING_REVIEW下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW 2、审核状态：已人工审核*/}
                           {flowState === 'PENDING_REVIEW'&&auditState==='INSIDE_CHECKED' ? (
+                            // <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>
                             </Tooltip>
+                            // </AuthWrapper>
                           ) : null}
 
                           <AuthWrapper functionName="fOrderDetail001">

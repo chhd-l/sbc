@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Row, Col, Input } from 'antd';
+import { Form, Row, Col, Input, Descriptions } from 'antd';
 import { RCi18n } from 'qmkit';
-
 interface IProps {
   detailInfo: any, // 数据源
   form: any
@@ -17,8 +16,39 @@ class Information extends Component<any> {
     return (
 
       <Form className="filter-content myform">
-        <Row gutter={24}>
-          <Col span={8}>
+         <Descriptions>
+          <Descriptions.Item label={RCi18n({ id: 'Log.RequestID' })}>
+            {detailInfo.id || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Method' })}>
+            {detailInfo.method || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.URL' })}>
+            {detailInfo.url || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.MiddleLayer' })}>
+            {detailInfo.middleLayer || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Type' })}>
+            {detailInfo.type || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Provider' })}>
+            {detailInfo.apiProviderName || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Invoker' })}>
+            {detailInfo.apiProviderName || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.DataFlow' })}>
+            {detailInfo.dataSourceFromName && detailInfo.dataSourceToName ?
+              detailInfo.dataSourceFromName + ' → ' + detailInfo.dataSourceToName : ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Function' })}>
+            {detailInfo.description || ''}
+          </Descriptions.Item>
+          <Descriptions.Item label={RCi18n({ id: 'Interface.Uptime' })}>
+            {detailInfo.updateTime || ''}
+          </Descriptions.Item>
+          {/* <Col span={8}>
             <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Log.RequestID' })}</p>}
               value={detailInfo.id || ''} disabled />
           </Col>
@@ -31,7 +61,7 @@ class Information extends Component<any> {
               value={detailInfo.url || ''} disabled />
           </Col>
         </Row>
-        <Row gutter={24} style={{marginTop:20}}>
+        <Row gutter={24} style={{ marginTop: 20 }}>
           <Col span={8}>
             <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Interface.MiddleLayer' })}</p>}
               value={detailInfo.middleLayer || ''} disabled />
@@ -45,7 +75,7 @@ class Information extends Component<any> {
               value={detailInfo.apiProviderName || ''} disabled />
           </Col>
         </Row>
-        <Row gutter={24} style={{marginTop:20}}>
+        <Row gutter={24} style={{ marginTop: 20 }}>
           <Col span={8}>
             <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Interface.Invoker' })}</p>}
               value={detailInfo.apiInvokerName || ''} disabled />
@@ -60,12 +90,12 @@ class Information extends Component<any> {
               value={detailInfo.description || ''} disabled />
           </Col>
         </Row>
-        <Row gutter={24} style={{marginTop:20}}>
+        <Row gutter={24} style={{ marginTop: 20 }}>
           <Col span={8}>
             <Input addonBefore={<p style={styles.label}>{RCi18n({ id: 'Interface.Uptime' })}</p>}
               value={detailInfo.updateTime || ''} disabled />
-          </Col>
-        </Row>
+          </Col> */}
+        </Descriptions>
       </Form>
     );
   }

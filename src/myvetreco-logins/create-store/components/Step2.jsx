@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Button, Input, Row, Col, Spin, Select} from 'antd';
 import {checkCompanyInfoExists, saveLegalInfo} from "../webapi";
-import intl from "react-intl-universal";
+import { FormattedMessage } from 'react-intl';
 import debounce from 'lodash/debounce';
 
 const FormItem = Form.Item;
@@ -114,7 +114,7 @@ export default function Step2({ setStep,userInfo,legalInfo={} }) {
                         name="contactEmail"
                         rules={[
                             { required: true, message: 'Please input your Email!' },
-                            {type:'email',message:intl.get('Login.email_address_vld1')}
+                            {type:'email',message:<FormattedMessage id="Login.email_address_vld1"/>}
                         ]}>
                 <Input size="large" />
               </FormItem>

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Button, Row, Col, Input, Checkbox, InputNumber, Space, message, Spin} from 'antd';
+import {Button, Row, Col, Input, Checkbox, InputNumber, message, Spin} from 'antd';
 import ProductList from './price/ProductList';
 import {listCategory, listGoodsByCategory, priceSetting} from "../webapi";
 
@@ -188,11 +188,11 @@ export default function Step4({ setStep,userInfo,step }) {
                 </Checkbox>
               </Col>
               <Col span={6}>
-                <Space>
+                <>
                   <Button type="primary" onClick={applyPercentage}>Apply</Button>
                   <Button loading={loading} type="primary" onClick={savePrice}>Save and Next</Button>
                   <Button onClick={() => setStep(2)}>back</Button>
-                </Space>
+                </>
               </Col>
             </Row>
           </div>

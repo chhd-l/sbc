@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Steps } from 'antd';
-import intl from 'react-intl-universal';
+
 
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
@@ -11,18 +11,17 @@ import Step5 from './components/Step5';
 import Create from './components/Creating';
 
 import './index.less';
-import logo from 'assets/images/login_logo.png';
+import logo from '../assets/images/login_logo.png';
 import {getUserStatus} from "../login/webapi";
 
 const { Step } = Steps;
-
 export default function CreateStore() {
   const userInfo = JSON.parse(sessionStorage.getItem('employeeInfo'))
   const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
-  },[])
+  },[]) 
   /**
    * 获取上次提交的数据进行回显
    */
@@ -75,3 +74,4 @@ export default function CreateStore() {
 </>
   )
 }
+

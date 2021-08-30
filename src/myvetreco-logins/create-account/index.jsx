@@ -102,8 +102,8 @@ function CreateAccount({ form }) {
             </FormItem>
 
             <FormItem name="recommendationCode" className="password">
-              {getFieldDecorator('password', {
-                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+              {getFieldDecorator('recommendationCode', {
+                rules: [{required:true,message:RCi18n({id:'Login.recommendation_code_opt'})}],
                 initialValue: ''
               })(
                 <Input size="large" placeholder={RCi18n({id:'Login.recommendation_code_opt'})} suffix={

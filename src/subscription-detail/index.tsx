@@ -75,7 +75,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       deliveryCityName: '',
       currencySymbol: '',
       isActive: false,
-      paymentMethod:'',
+      paymentMethod: '',
     };
   }
 
@@ -175,7 +175,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
               isActive: subscriptionDetail.subscribeStatus === "0",
-              paymentMethod:paymentMethod
+              paymentMethod: paymentMethod
             },
             () => {
               this.applyPromationCode(this.state.promotionCode);
@@ -497,13 +497,16 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   // 设置价格长度
-  getSubscriptionPrice = (num: any) => {
+  getSubscriptionPrice = (num: any, type?: any) => {
     const { subscriptionInfo } = this.state;
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
       isNaN(nlen) ? 2 : nlen;
       nlen > 4 ? nlen = 4 : nlen = nlen;
+      if (subscriptionInfo.subscriptionType === 'Club') {
+        nlen = 2;
+      }
       return num.toFixed(nlen);
     } else {
       return num;
@@ -511,7 +514,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   }
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive,paymentMethod } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -977,7 +980,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                     (<FormattedMessage id="Subscription.IVAInclude" />
                     ):
                   </span>
-                  <span style={styles.priceStyle}>{currencySymbol + this.getSubscriptionPrice(this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice - +this.state.freeShippingDiscountPrice)}</span>
+                  <span className="total-iva-include" style={styles.priceStyle}>
+                    {currencySymbol + this.getSubscriptionPrice(this.subTotal() - +this.state.discountsPrice + +this.state.deliveryPrice + +this.state.taxFeePrice - +this.state.freeShippingDiscountPrice, 'total')}
+                  </span>
                 </div>
               </Col>
             </Row>
@@ -1091,30 +1096,30 @@ class SubscriptionDetail extends React.Component<any, any> {
                       <FormattedMessage id="Subscription.PaymentMethod" />
                     </label>
                   </Col>
-                    {/* 如果有paymentInfo 显示 paymentInfo,否则判断是否是cod,不是cod 不显示 */}
-                  { paymentInfo ? 
-                  <>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
-                      </p>
-                      <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.CardNumber" />:{' '}
-                      </p>
-                      <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
-                    </Col>
-                  </>
-                  :  
-                    paymentMethod.indexOf('COD')!== -1? <Col span={24}>
-                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod"/>: </p>
-                    <p><FormattedMessage id="Subscription.CashOnDelivery"/></p>  
-                  </Col>:null
-                  
+                  {/* 如果有paymentInfo 显示 paymentInfo,否则判断是否是cod,不是cod 不显示 */}
+                  {paymentInfo ?
+                    <>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                        </p>
+                        <p>{paymentInfo && paymentInfo.paymentVendor ? paymentInfo.paymentVendor : ''}</p>
+                      </Col>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                        </p>
+                        <p>{paymentInfo && paymentInfo.lastFourDigits ? '**** **** **** ' + paymentInfo.lastFourDigits : ''}</p>
+                      </Col>
+                    </>
+                    :
+                    paymentMethod.indexOf('COD') !== -1 ? <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.PaymentMethod" />: </p>
+                      <p><FormattedMessage id="Subscription.CashOnDelivery" /></p>
+                    </Col> : null
+
                   }
-          
+
                 </Row>
               </Col>
             </Row>

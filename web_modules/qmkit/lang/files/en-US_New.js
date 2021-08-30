@@ -143,6 +143,9 @@ export default {
         "Home.Numberofrecommendationcodes": "Number of recommendation codes with an order made",
     },
     Product: {
+        'Product.bundle':'bundle',
+        'Product.regular':'regular',
+
         'Product.ProductPrice':'Product price',
         'Product.SearchProducts':'Search products',
         'Product.Marketpricepercentage':'Market price percentage',

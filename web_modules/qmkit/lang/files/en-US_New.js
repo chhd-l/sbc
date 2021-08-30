@@ -848,7 +848,7 @@ export default {
         'Order.autoAuditExceptConditionTip2':'manual audit',
         'Order.autoAuditExceptCondition1':'Orders with 0 price ',
         'Order.autoAuditExceptCondition2':'Product categories ',
-        'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day ',
+        'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day (Only applicable to checkout orders) ',
         'Order.search.city':'City',
         'Order.search.email':'Email Address',
         'Order.search.cityId':'CityId'

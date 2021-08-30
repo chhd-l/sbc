@@ -12,13 +12,14 @@ import { util, RCi18n, history, login } from 'qmkit';
 
 const FormItem = Form.Item;
 
-export default function CreateAccount(props) {
+function CreateAccount({ form }) {
+  const { getFieldDecorator } = form;
   const base64 = new util.Base64();
 
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
-    props.history.push('/login');
+    history.push('/login');
   };
 
   const handleSubmit =  (values) => {
@@ -33,7 +34,7 @@ export default function CreateAccount(props) {
         login(base64.urlEncode(values.email), base64.urlEncode(values.password)).then(res => {
           sessionStorage.setItem('employeeInfo',JSON.stringify(res.context));
           sessionStorage.setItem('storeToken', res.context?.token ?? '');
-          props.history.push('/create-store');
+          history.push('/create-store');
         }).catch(() => {
           setLoading(false);
         });
@@ -51,7 +52,8 @@ export default function CreateAccount(props) {
       <div className={`account-content ${isMobile ? 'bg-white' : ''}`}>
         {isMobile ? <MobileHeader title={RCi18n({id:'Login.create_an_account'})} /> : <RunBoyForDesktop />}
 
-        <Form name="regist" initialValues={{email:'',password:'',confirmPassword:'',code:''}} onFinish={handleSubmit}>
+        <Form name="regist"
+              onSubmit={handleSubmit}>
           <div className={`ca-main ${isMobile ? 'on-mobile' : ''}`}>
 
             {!isMobile && <div className="ca-logo space-between">
@@ -60,37 +62,54 @@ export default function CreateAccount(props) {
             </div>}
 
             <FormItem name="email" rules={[{required:true,message:RCi18n({id:'Login.email_address_vld'})},{type:'email',message:RCi18n({id:'Login.email_address_vld1'})}]}>
-              <Input placeholder={RCi18n({id:'Login.email_address'})}
-                // suffix={<VIcon type="icon-p--icon_youxiang" style={{fontSize: 20,color: '#a0b0bb'}}/>}
-              />
+              {getFieldDecorator('email', {
+                rules: [{required:true,message:RCi18n({id:'Login.email_address_vld'})}],
+                initialValue: ''
+              })(
+                <Input size="large" placeholder={RCi18n({id:'Login.email_address'})} suffix={<i className="iconfont iconemail1" style={{ fontSize: 18, color: '#a0b0bb' }}></i>} />
+              )}
             </FormItem>
 
-            <FormItem name="password" className="password" rules={[{required:true,message:RCi18n({id:'Login.password_vld'})}]}>
-              <Input.Password placeholder={RCi18n({id:'Login.password'})} />
+            <FormItem name="password" className="password">
+              {getFieldDecorator('password', {
+                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+                initialValue: ''
+              })(
+                <Input.Password size="large" placeholder={RCi18n({id:'Login.password'})} />
+              )}
             </FormItem>
 
             <FormItem
               name="confirmPassword"
               className="password"
-              rules={[
-                {required:true,message:RCi18n({id:'Login.confirm_password_vld'})},
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error(RCi18n({id:'Login.confirm_password_vld1'})));
-                  },
-                })
-              ]}
             >
-              <Input.Password placeholder={RCi18n({id:'Login.confirm_password'})} />
+              {getFieldDecorator('confirmPassword', {
+                rules: [
+                  {required:true,message:RCi18n({id:'Login.confirm_password_vld'})},
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error(RCi18n({id:'Login.confirm_password_vld1'})));
+                    },
+                  })
+                ],
+                initialValue: ''
+              })(
+                <Input.Password size="large" placeholder={RCi18n({id:'Login.confirm_password'})} />
+              )}
             </FormItem>
 
             <FormItem name="recommendationCode" className="password">
-              <Input placeholder={RCi18n({id:'Login.recommendation_code_opt'})} suffix={
-                <Icon type="unordered-list" style={{fontSize: 20,color: '#a0b0bb'}}/>
-              } />
+              {getFieldDecorator('password', {
+                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+                initialValue: ''
+              })(
+                <Input size="large" placeholder={RCi18n({id:'Login.recommendation_code_opt'})} suffix={
+                  <Icon type="unordered-list" style={{fontSize: 20,color: '#a0b0bb'}}/>
+                } />
+              )}
             </FormItem>
 
             <div className="password">
@@ -105,5 +124,5 @@ export default function CreateAccount(props) {
     </div>
   );
 }
-
+export default Form.create()(CreateAccount);
 

@@ -97,8 +97,10 @@ export default class SkuTable extends React.Component<any, any> {
   render() {
     const WrapperForm = this.WrapperForm;
     const { updateSkuForm } = this.props.relaxProps;
+    let {gid} = this.props;
     return (
       <WrapperForm
+          gid={gid}
         // ref={(form) => updateSkuForm(form)}
         {...{ relaxProps: this.props.relaxProps }}
       />
@@ -139,11 +141,10 @@ class SkuForm extends React.Component<any, any> {
 
     if(res && res.context.switched && gid){
       init(gid);
+      this.handleCancel();
     }else {
       this.handleCancel();
     }
-
-
   };
 
   showModal = () => {

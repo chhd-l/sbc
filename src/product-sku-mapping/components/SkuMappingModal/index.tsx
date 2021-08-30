@@ -131,7 +131,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                 this.setState({confirmLoading: false})
 
                 if (res.code === Const.SUCCESS_CODE){
-                    message.success('Operate successfully');
+                    message.success('Operate successfully', 2);
                     // 提交成功的回调
                     onOk && onOk({
                         sku,

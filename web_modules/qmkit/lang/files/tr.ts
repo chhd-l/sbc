@@ -3025,5 +3025,6 @@ export default {
     "Appointment.Guest": "Misafir",
     "Appointment.Consumer information": "Tüketici bilgisi",
     "consumerInfo": "Tüketici bilgisi",
-    "order.createBy": "Oluşturan"
+    "order.createBy": "Oluşturan",
+    'task.SterilizationTimeOnlyKitten': 'Sterilizasyon süresi 5 ay (sadece yavru kedi)'
 };

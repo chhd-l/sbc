@@ -1840,6 +1840,7 @@ export default {
   'task.All': 'All',
   'task.Search': 'Search',
   'task.Edit': 'Edit',
+  'task.SterilizationTimeOnlyKitten': 'Sterilization time 5 months (only kitten)',
 
   
   /*-----------------------------  Subscription  ---------------------------------------*/

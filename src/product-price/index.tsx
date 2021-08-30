@@ -219,7 +219,7 @@ class ProductPrice extends Component<any, any> {
         title: <FormattedMessage id="Product.PriceTableColumnType" />,
         dataIndex: 'goodsInfoType',
         key: 'goodsInfoType',
-        render:(text)=>infoType[text]
+        render:(text)=>(text === 2 ? <FormattedMessage id='Product.bundle'/> : <FormattedMessage id='Product.regular'/>)
       },
       {
         title: <FormattedMessage id="Product.PriceTableColumnName" />,

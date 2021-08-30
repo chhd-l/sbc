@@ -369,6 +369,8 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('stock', 0);
         goodsItem = goodsItem.set('marketPrice', 0);
         goodsItem = goodsItem.set('subscriptionPrice', 0);
+        goodsItem = goodsItem.set('subscriptionStatus', item2.get('subscriptionStatus'));
+        goodsItem = goodsItem.set('promotions', item2.get('goodsPromotions'));
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);

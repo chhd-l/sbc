@@ -905,6 +905,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
       isNaN(nlen) ? 2 : nlen;
       nlen > 4 ? nlen = 4 : nlen = nlen;
+      if (subscriptionType === 'Club') {
+        nlen = 2;
+      }
       return num.toFixed(nlen);
     } else {
       return num;

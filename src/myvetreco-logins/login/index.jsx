@@ -4,13 +4,13 @@ import { util, Const, RCi18n, login, history } from 'qmkit';
 
 import './index.less';
 
-import { RunBoyForMobile, RunBoyForDesktop } from './../components/runBoy';
+import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import logo from './../assets/images/logo-l.png';
 
 const FormItem = Form.Item;
 
 
-function CreateAccount({ form }) {
+function CreateAccount( { form }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const base64 = new util.Base64();
@@ -38,10 +38,9 @@ function CreateAccount({ form }) {
     });
   };
 
-  // const handleSignUp = () => {
-  //   console.log(props);
-  //   history.push('/create-account');
-  // };
+  const handleSignUp = () => {
+    history.push('/create-account');
+  };
   
   const handleForgot = () => {
     history.push('/forget-password');
@@ -96,7 +95,10 @@ function CreateAccount({ form }) {
 
               <Button loading={loading} type="primary" size="large" block onClick={handleLogin}>{RCi18n({id:'Login.log_in'})}</Button>
 
-              {/* <div className="text">Don`&apos;t have an account? <span onClick={handleSignUp}>{intl.get('Login.sign_up')}</span></div> */}
+               <div className="text">
+                 Don`&apos;t have an account?
+                 <span onClick={handleSignUp}>{RCi18n({id:'Login.sign_up'})}</span>
+               </div>
             
           </div>
         </Form>

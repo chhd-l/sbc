@@ -103,7 +103,8 @@ export const orderSeachField:fieldDataType[] = [
         { value: 'ContractProduct', name: RCi18n({ id: 'Order.contractProduct' }) },
         { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
         { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },
-        { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) }
+        { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) },
+        { value: 'Individualization', name: RCi18n({ id: 'Order.Individualization' }) }
       ]
     },
     valueLink: 'subscriptionPlanType'

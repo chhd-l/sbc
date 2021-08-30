@@ -851,7 +851,8 @@ export default {
         'Order.autoAuditExceptCondition3':'A pet owner placed more than 5 orders on a day (Only applicable to checkout orders) ',
         'Order.search.city':'City',
         'Order.search.email':'Email Address',
-        'Order.search.cityId':'CityId'
+        'Order.search.cityId':'CityId',
+        'Order.Individualization':'Individualization',
 
     },
     Subscription: {

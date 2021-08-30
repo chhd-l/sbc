@@ -58,7 +58,9 @@ export default class SkuTable extends React.Component<any, any> {
       goods: IMap;
       baseSpecId: Number;
       editGoods: Function;
+      init: Function;
     };
+    gid: any,
   };
 
   static relaxProps = {
@@ -80,7 +82,8 @@ export default class SkuTable extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    init: noop,
   };
 
   constructor(props) {
@@ -127,13 +130,15 @@ class SkuForm extends React.Component<any, any> {
     console.log('values', values)
     let { res } = values;
     let { currentRecord } = this.state;
+    let { gid } = this.props;
+    let { init } = this.props.relaxProps;
     // 更新externalSku的值
-    let externalSku = values.mappings.map(item => item.externalSkuNo).join();
-    this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
+    // let externalSku = values.mappings.map(item => item.externalSkuNo).join();
+    // this._editGoodsItem(currentRecord.id, 'externalSku', externalSku);
     // @ts-ignore
 
-    if(res && res.context.switched){
-      window.location.reload();
+    if(res && res.context.switched && gid){
+      init(gid);
     }else {
       this.handleCancel();
     }

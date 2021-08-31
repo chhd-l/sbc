@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Input, Form, Row, Col, Select, Button, Spin, DatePicker } from 'antd';
 import { SelectGroup, RCi18n, Const } from 'qmkit';
-import MyDate from './MyDate';
 import _ from 'lodash';
 import * as webapi from '../webapi'
 import moment from 'moment';
-import searchForm from '@/order-recommendation-details-new/components/search-form';
 
 const { Option } = Select
 const FormItem = Form.Item
@@ -26,7 +24,8 @@ class LogSearch extends Component<any, any> {
         requestId: null,
         system: null,
         keywords: null
-      }
+      },
+      currentSearchForm:{}
     }
   }
   componentDidMount() {
@@ -63,7 +62,6 @@ class LogSearch extends Component<any, any> {
   // 获取form各项value
   handleSubmit = () => {
     const { searchForm } = this.state
-    console.log(searchForm);
     this.props.searchLogList(searchForm)
 
   }

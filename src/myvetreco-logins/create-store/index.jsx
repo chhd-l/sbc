@@ -6,7 +6,7 @@ import logo from '../assets/images/login_logo.png';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
-// import Step4 from './components/Step4';
+import Step4 from './components/Step4';
 import Step5 from './components/Step5';
 import Create from './components/Creating';
 import './index.less';
@@ -15,7 +15,7 @@ const { Step } = Steps;
 
  function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
-  const [current, setCurrent] = useState(2);
+  const [current, setCurrent] = useState(3);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
@@ -62,9 +62,9 @@ const { Step } = Steps;
         <div style={{display: current === 2 ? 'block' : 'none' }}>
           <Step3 setStep={setCurrent} userInfo={userInfo} step={current} store={submitData?.store}/>
         </div>
-        {/* <div style={{display: current === 3 ? 'block' : 'none' }}>
+        <div style={{display: current === 3 ? 'block' : 'none' }}>
           <Step4 setStep={setCurrent} userInfo={userInfo} step={current}/>
-        </div> */}
+        </div>
         <div style={{display: current === 4 ? 'block' : 'none' }}>
           <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>
         </div>

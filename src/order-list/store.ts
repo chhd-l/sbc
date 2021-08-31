@@ -141,7 +141,7 @@ export default class AppStore extends Store {
   };
 
   onValidateAudit = async (tid: string, audit,curOrderAuditType='')=> {
-    this.dispatch('btnLoading:start');
+    this.dispatch('loading:start');
     let result={code:''}
     if(curOrderAuditType==='ManualReview'){
       const { res } = await webapi.manualAudit(tid, audit);
@@ -154,7 +154,7 @@ export default class AppStore extends Store {
       message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       this.init();
     }
-    this.dispatch('btnLoading:end');
+    this.dispatch('loading:end');
   }
 
   onRetrial = async (tid: string) => {

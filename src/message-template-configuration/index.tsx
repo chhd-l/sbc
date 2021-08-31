@@ -43,7 +43,7 @@ const columns = [
   },
   {
     title: 'Template Name',
-    dataIndex: 'emailTemplate',
+    dataIndex: 'messageTemplate',
     key: 'objectNo',
     width: '10%'
   },
@@ -70,17 +70,17 @@ const columns = [
           <div>
 
             <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
-              <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+              <Link to={'/template-details/' + record.templateId} className="iconfont iconDetails"></Link>
             </Tooltip>
 
             <Divider type="vertical" />
             <Tooltip placement="top" title={RCi18n({id:'edit'})}>
-              <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
+              <Link to={'/template-edit/' + record.templateId} className="iconfont iconEdit"></Link>
             </Tooltip>
 
             <Divider type="vertical" />
 
-            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}  okText="Confirm" cancelText="Cancel">
               <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                 <a type="link" className="iconfont iconDelete"></a>
               </Tooltip>
@@ -92,6 +92,7 @@ const columns = [
   },
 ]
 
+//假数据
 const statusList = [
   {
     value:'0',
@@ -126,12 +127,13 @@ const MessageTemplateConfiguration=()=>{
   const getEmailTemplateList=()=>{
     webapi.getEmailTemplateList(searchForm).then((data) => {
       const {res} =data;
+      console.log(res.context,'hua')
       if(res.code===Const.SUCCESS_CODE){
         //上方搜索框展示模板名
-        setEmailTemplateList(res.context.emailTemplateResponseList);
+        setEmailTemplateList(res.context.messageTemplateResponseList);
 
         //下方展示展示所有模板
-        setTemplateListData(res.context.emailTemplateResponseList);
+        setTemplateListData(res.context.messageTemplateResponseList);
       }
     })
   }
@@ -170,8 +172,8 @@ const MessageTemplateConfiguration=()=>{
                     </Option>
                     {emailTemplateList &&
                     emailTemplateList.map((item, index) => (
-                      <Option value={item.emailTemplate} key={index}>
-                        {item.emailTemplate}
+                      <Option value={item.messageTemplate} key={index}>
+                        {item.messageTemplate}
                       </Option>
                     ))}
                   </Select>

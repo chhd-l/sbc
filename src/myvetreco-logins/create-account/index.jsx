@@ -36,17 +36,21 @@ function CreateAccount({ form }) {
           recommendationCode: values.recommendationCode && base64.urlEncode(values.recommendationCode)
         }).then(val=>{
           console.log(val)
-          if(val.code === 'K-000000'){
-            login(base64.urlEncode(values.email), base64.urlEncode(values.password)).then(res => {
-              sessionStorage.setItem('employeeInfo',JSON.stringify(res.context));
-              sessionStorage.setItem('storeToken', res.context?.token ?? '');
-              history.push('/create-store');
-            }).catch(() => {
+          if(val.res.code === 'K-000000'){
+            login(
+              {account: values.email, password: values.password},
+              '',
+              res => {
+                console.log(res)
+                  // sessionStorage.setItem('storeToken', res.context?.token ?? '');
+                  // history.push('/create-store');
+                }
+              );
+          }else {
+            if(val.err){
               setLoading(false);
-            });
+            }
           }
-        }).catch(()=>{
-          setLoading(false);
         })
       }
     })

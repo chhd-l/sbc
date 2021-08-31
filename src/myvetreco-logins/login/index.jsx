@@ -6,6 +6,7 @@ import './index.less';
 
 import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import logo from './../assets/images/logo-l.png';
+import { getUserStatus } from './webapi';
 
 const FormItem = Form.Item;
 

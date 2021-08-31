@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
 import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
-// import { CheckOutlined,CloseOutlined } from '@ant-design/icons';
+import { util, RCi18n, history } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
 
 
@@ -14,16 +13,7 @@ const STATUS = {
   PAYMENT_INFO:4,
   SETTING_INIT:5,
 }
-// let statusList =
-// [
-//     {title:'Contract Agreement', message: null, result: true},
-//     {title:'Legal Info', message: null, result: true},
-//     {title:'Store Details', message: null, result: true},
-//     {title:'Price Setting', message: null, result: true},
-//     {title:'Payment Info', message: null, result: true},
-// ]
 export default function Creating({userInfo,setStep}) {
-  let history = useHistory();
   let [statusList,setStatusList] = useState([
     {title:'Contract Agreement', message: null, result: false},
     {title:'Legal Info', message: null, result: false},

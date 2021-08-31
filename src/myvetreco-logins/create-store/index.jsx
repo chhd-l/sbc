@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Steps } from 'antd';
-import { RCi18n } from 'qmkit';
+import { RCi18n,Const } from 'qmkit';
 import {getUserStatus} from '../login/webapi'
 import logo from '../assets/images/login_logo.png';
 import Step1 from './components/Step1';
@@ -22,10 +22,12 @@ const { Step } = Steps;
   /**
    * 获取上次提交的数据进行回显
    */
-  const getData = ()=>{
-    getUserStatus(userInfo.accountName).then(res=>{
-      setSubmitData(res.context)
-    })
+  const getData = async()=>{
+   const {res}=await getUserStatus(userInfo.accountName);
+      if(res.code==='K-000000'){
+        setSubmitData(res.context)
+      }
+    
   }
 
    return( <div>

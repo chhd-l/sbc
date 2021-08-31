@@ -164,7 +164,7 @@ export default class ClinicList extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList
+          emailTemplateList: res.context.messageTemplateResponseList
         });
       }
     });
@@ -501,7 +501,7 @@ export default class ClinicList extends Component<any, any> {
                       {emailTemplateList &&
                         emailTemplateList.map((item, index) => (
                           <Option value={item.templateId} key={index}>
-                            {item.emailTemplate}
+                            {item.messageTemplate}
                           </Option>
                         ))}
                     </Select>

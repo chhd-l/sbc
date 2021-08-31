@@ -6,8 +6,6 @@ import './index.less';
 
 import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import logo from './../assets/images/logo-l.png';
-import { setTag } from '@sentry/browser';
-import { getUserStatus } from './webapi';
 
 const FormItem = Form.Item;
 
@@ -34,14 +32,11 @@ function CreateAccount( { form }) {
             localStorage.removeItem('account');
             localStorage.removeItem('password');
           }
-          console.log(![123456858,123457907,123457908,123457909,123457910,123457911,123457915].includes(values.storeId))
           if(![123456858,123457907,123457908,123457909,123457910,123457911,123457915].includes(values.storeId)){
             getIsCreateStore(values.account);
           }
-        });
-        setTimeout(()=>{
           setLoading(false);
-        },2000)
+        });
       }
     });
   };
@@ -52,8 +47,7 @@ function CreateAccount( { form }) {
    */
   const getIsCreateStore = (email)=>{
     getUserStatus(email).then((res)=>{
-      debugger
-      if(!res.res.context.createStoreSuccess){
+      if(!res.context.createStoreSuccess){
         history.push('/create-store');
       }
     })

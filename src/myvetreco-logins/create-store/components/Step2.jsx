@@ -2,24 +2,23 @@ import React, {useEffect, useState} from 'react';
 import {Form, Button, Input, Row, Col, Spin, Select} from 'antd';
 import {checkCompanyInfoExists, saveLegalInfo} from "../webapi";
 import { FormattedMessage } from 'react-intl';
-import debounce from 'lodash/debounce';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 export default function Step2({ setStep,userInfo,legalInfo={} }) {
-  const [form] = Form.useForm()
+  // const [form] = Form.useForm()
   const [loading, setLoading] = useState(false);
 
-  useEffect(()=>{
-    form.setFieldsValue({
-      email:userInfo.accountName,
-    })
-    if(legalInfo){
-      form.setFieldsValue({
-        ...legalInfo,
-      })
-    }
-  },[legalInfo])
+  // useEffect(()=>{
+  //   form.setFieldsValue({
+  //     email:userInfo.accountName,
+  //   })
+  //   if(legalInfo){
+  //     form.setFieldsValue({
+  //       ...legalInfo,
+  //     })
+  //   }
+  // },[legalInfo])
 
   const toNext = async (values)=>{
     setLoading(true)
@@ -60,7 +59,7 @@ export default function Step2({ setStep,userInfo,legalInfo={} }) {
     <div>
       <div className="vmargin-level-4 align-item-center word big">2 / 5  Fill in legal information and contact person</div>
       <div style={{width:800,margin:'20px auto'}}>
-        <Form layout="vertical" onFinish={toNext} form={form}>
+        {/* <Form layout="vertical" onFinish={toNext} form={form}>
           <Row gutter={[24,12]}>
             <Col span={12}>
               <FormItem label="Trader category code (MCC)"
@@ -134,7 +133,7 @@ export default function Step2({ setStep,userInfo,legalInfo={} }) {
               </FormItem>
             </Col>
           </Row>
-        </Form>
+        </Form> */}
       </div>
     </div>
   );

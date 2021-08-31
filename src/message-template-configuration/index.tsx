@@ -43,7 +43,7 @@ const columns = [
   },
   {
     title: 'Template Name',
-    dataIndex: 'emailTemplate',
+    dataIndex: 'messageTemplate',
     key: 'objectNo',
     width: '10%'
   },
@@ -127,12 +127,13 @@ const MessageTemplateConfiguration=()=>{
   const getEmailTemplateList=()=>{
     webapi.getEmailTemplateList(searchForm).then((data) => {
       const {res} =data;
+      console.log(res.context,'hua')
       if(res.code===Const.SUCCESS_CODE){
         //上方搜索框展示模板名
-        setEmailTemplateList(res.context.emailTemplateResponseList);
+        setEmailTemplateList(res.context.messageTemplateResponseList);
 
         //下方展示展示所有模板
-        setTemplateListData(res.context.emailTemplateResponseList);
+        setTemplateListData(res.context.messageTemplateResponseList);
       }
     })
   }
@@ -171,8 +172,8 @@ const MessageTemplateConfiguration=()=>{
                     </Option>
                     {emailTemplateList &&
                     emailTemplateList.map((item, index) => (
-                      <Option value={item.emailTemplate} key={index}>
-                        {item.emailTemplate}
+                      <Option value={item.messageTemplate} key={index}>
+                        {item.messageTemplate}
                       </Option>
                     ))}
                   </Select>

@@ -34,7 +34,11 @@ export default class ClinicList extends Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      emailTemplateList: []
+      emailTemplateList: [],
+      resendParams: {
+        isReSend:true,
+        messageTaskId:'',
+      }
     };
   }
   componentDidMount() {
@@ -65,6 +69,11 @@ export default class ClinicList extends Component<any, any> {
       () => this.getEmailTaskList()
     );
   };
+  resendEmail=()=>{
+    const {resendParams}=this.state;
+    console.log(resendParams)
+  }
+
   getEmailTaskList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
@@ -264,8 +273,8 @@ export default class ClinicList extends Component<any, any> {
       },
       {
         title: <FormattedMessage id="Marketing.EmailTemplate" />,
-        dataIndex: 'emailTemplate',
-        key: 'emailTemplate',
+        dataIndex: 'messageTemplate',
+        key: 'messageTemplate',
         width: '10%'
       },
       {
@@ -285,15 +294,15 @@ export default class ClinicList extends Component<any, any> {
         title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'status',
         key: 'status',
-        width: '5%',
+        width: '7%',
         render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
       },
       {
-        title: 'Receive Status',
-        dataIndex: 'status',
-        key: 'status',
-        width: '10%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
+        title: 'Email Receive Status',
+        dataIndex: 'emailReceiveStatus',
+        key: 'emailReceiveStatus',
+        width: '9%',
+        render: (text) => <span>{+text === null ? 'Success' : +text === 1 ? 'Failed' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,
@@ -306,9 +315,7 @@ export default class ClinicList extends Component<any, any> {
                 <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
-
                 <Divider type="vertical" />
-
                 <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
                   <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
@@ -317,6 +324,21 @@ export default class ClinicList extends Component<any, any> {
               </div>
             ) : null}
             {+record.status === 1 ? (
+              <div>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
+                </Tooltip>
+
+                <Divider type="vertical" />
+
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+
+
+              </div>
+            ) : null}
+            {+record.status === 2 ? (
               <div>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
@@ -331,7 +353,21 @@ export default class ClinicList extends Component<any, any> {
                 </Popconfirm>
               </div>
             ) : null}
-            {+record.status === 2 ? (
+            {+record.status === 3 ? (
+              <div>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+              </div>
+            ) : null}
+            {+record.status === 4 ? (
+              <div>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+              </div>
+            ) : null}
+            {+record.status === 5 ? (
               <div>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>

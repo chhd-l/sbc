@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Upload, Form, Button, Row, Col, Input, Radio, message, Image} from 'antd';
+import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
 
@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 export default function Step3({ setStep,userInfo,store={} }) {
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
   const [faviconUrl, setFavicon] = useState('');
@@ -17,10 +17,10 @@ export default function Step3({ setStep,userInfo,store={} }) {
 
   useEffect(()=>{
     if(store){
-      form.setFieldsValue({
-        ...store,
-        cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
-      })
+      // form.setFieldsValue({
+      //   ...store,
+      //   cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
+      // })
       if(store.cityId){
         setDefaultOptions([{
           id: store.cityId,
@@ -223,7 +223,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
 
 
       <div style={{width:800,margin:'20px auto'}}>
-        <Form layout="vertical" onFinish={toNext} form={form}>
+        {/* <Form layout="vertical" onFinish={toNext} form={form}>
           <Row gutter={[24,12]}>
             <Col span={12}>
               <FormItem label="Store name" name="storeName"
@@ -285,7 +285,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
               </FormItem>
             </Col>
           </Row>
-        </Form>
+        </Form> */}
       </div>
     </div>
   );

@@ -855,6 +855,16 @@ const routes = [
     path:'/message-template-configuration',
     asyncComponent: () => import('./message-template-configuration')
   },
+  //message-template-detail
+  {
+    path:'/template-details/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateDetail')
+  },
+  //message-template-edit
+  {
+    path:'/template-edit/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateEdit')
+  },
   //message-overview
   {
     path: '/message-overview',

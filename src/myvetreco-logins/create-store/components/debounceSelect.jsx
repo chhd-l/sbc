@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
 const { Option } = Select;
 
-export default function DebounceSelect({ fetchOptions, debounceTimeout = 800, defaultOptions=[], ...props }) {
+function DebounceSelect({ fetchOptions, debounceTimeout = 800, defaultOptions=[], ...props },ref) {
     console.log(props)
     const [fetching, setFetching] = React.useState(false);
     const [options, setOptions] = React.useState([]);
@@ -29,6 +29,7 @@ export default function DebounceSelect({ fetchOptions, debounceTimeout = 800, de
     }, [fetchOptions, debounceTimeout]);
     return (
         <Select
+            ref={ref}
             labelInValue
             size="large"
             showSearch
@@ -45,3 +46,4 @@ export default function DebounceSelect({ fetchOptions, debounceTimeout = 800, de
         </Select>
     );
 } // Usage of DebounceSelect
+export default forwardRef(DebounceSelect)

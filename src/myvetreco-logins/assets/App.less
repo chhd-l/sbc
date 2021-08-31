@@ -1,0 +1,204 @@
+.App {
+  width: 100%;
+  height: 100%;
+}
+
+// @font-face {
+//   font-family: Nunito;
+//   src: url(./fonts/Nunito-Regular.ttf) format("ttf")
+// }
+
+body {
+  font-family: Avenir Next W02, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #33475b;
+  background-color: #f0f2f5;
+}
+
+h1, h2, h3 {
+  font-family: Avenir Next W02, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-family: Avenir Next W02, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  background-color: #fff;
+  box-shadow: inset 0 0 0 1000px #fff!important;
+}
+
+.scrollbar, .ant-drawer-body{
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  &::-webkit-scrollbar-track {
+    box-shadow: none;
+    border-radius: 0;
+    background: rgba(0, 4, 40, 0.06);
+  }
+}
+
+.generate-margin-padding(@n, @i: 1) when (@i =< @n) {
+  .vmargin-level-@{i} {
+    margin-top: (@i * 5px);
+    margin-bottom: (@i * 5px);
+  }
+  .hmargin-level-@{i} {
+    margin-left: (@i * 5px);
+    margin-right: (@i * 5px);
+  }
+  .vpadding-level-@{i} {
+    padding-top: (@i * 5px);
+    padding-bottom: (@i * 5px);
+  }
+  .hpadding-level-@{i} {
+    padding-left: (@i * 5px);
+    padding-right: (@i * 5px);
+  }
+  .generate-margin-padding(@n, (@i + 1));
+}
+
+.generate-margin-padding(4);
+
+.bg-primary {
+  background-color: @primary-color;
+}
+.bg-page {
+  background-color: rgb(237, 240, 255);
+}
+.bg-white {
+  background-color: #fff;
+}
+.bg-lightgray {
+  background-color: rgb(251,251,251);
+}
+
+.align-item-left {
+  text-align: left;
+}
+.align-item-center {
+  text-align: center;
+}
+.align-item-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+  &.flex-column {
+    flex-direction: column;
+  }
+  &.flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+  &.flex-column-reverse {
+    flex-direction: column-reverse;
+  }
+  &.wrap {
+    flex-wrap: wrap;
+  }
+  &.space-between {
+    justify-content: space-between;
+  }
+  &.space-around {
+    justify-content: space-around;
+  }
+  &.center {
+    justify-content: center;
+  }
+  &.flex-end {
+    justify-content: flex-end;
+  }
+  &.align-start {
+    align-items: flex-start;
+  }
+  &.align-end {
+    align-items: flex-end;
+  }
+  &.align-center {
+    align-items: center;
+  }
+  .flex-item {
+    flex-grow: 0;
+    &.flex-main {
+      flex-grow: 1;
+    }
+    &.noshrink {
+      flex-shrink: 0;
+    }
+  }
+}
+
+.word {
+
+  &.primary {
+    color: @primary-color;
+  }
+  &.cont {
+    color: #666;
+  }
+  &.tip {
+    color: #999;
+  }
+  &.white {
+    color: #fff;
+  }
+  &.bold {
+    font-weight: 500;
+  }
+  &.big {
+    font-size: 16px;
+  }
+  &.small {
+    font-size: 12px;
+  }
+  &.large {
+    font-size: 18px;
+  }
+  &.size20 {
+    font-size: 20px;
+  }
+  &.size22 {
+    font-size: 22px;
+  }
+  &.size24 {
+    font-size: 24px;
+  }
+  &.weight{
+    font-weight: 600;
+  }
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.ellipsis{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+/*
+重置antd的某些样式，可以使用配置的尽量在theme.less里面启用配置，无法使用配置的覆盖在这里
+*/
+.ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before {
+  display: none;
+}
+.ant-checkbox-inner{
+  border-radius: 2px!important;
+}

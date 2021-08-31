@@ -7,14 +7,15 @@ import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
 // import Step4 from './components/Step4';
-// import Step5 from './components/Step5';
+import Step5 from './components/Step5';
 import Create from './components/Creating';
 import './index.less';
+import '../assets/App.less'
 const { Step } = Steps;
 
  function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(2);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
@@ -35,7 +36,7 @@ const { Step } = Steps;
         <img src={logo} width="166" alt="" />
       </div>
       <div className="vmargin-level-4 align-item-center word large">{RCi18n({id:'Login.create_store_title'})}</div>
-      <div className="vmargin-level-4 align-item-center">
+      <div className="vmargin-level-4">
         <Steps current={current} size="small" labelPlacement="vertical" style={{width:960,margin:'0 auto'}}>
           <Step title={RCi18n({id:'Login.create_store_step1'})} />
           <Step title={RCi18n({id:'Login.create_store_step2'})} />
@@ -62,9 +63,9 @@ const { Step } = Steps;
         {/* <div style={{display: current === 3 ? 'block' : 'none' }}>
           <Step4 setStep={setCurrent} userInfo={userInfo} step={current}/>
         </div> */}
-        {/* <div style={{display: current === 4 ? 'block' : 'none' }}>
+        <div style={{display: current === 4 ? 'block' : 'none' }}>
           <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>
-        </div> */}
+        </div>
       </div>
     </div>):( <Create userInfo={userInfo} setStep={setCurrent}/>)
     }

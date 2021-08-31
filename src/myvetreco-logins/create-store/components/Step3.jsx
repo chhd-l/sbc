@@ -8,34 +8,34 @@ const FormItem = Form.Item;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
-export default function Step3({ setStep,userInfo,store={} }) {
-  // const [form] = Form.useForm();
+function Step3({ setStep,userInfo,store={},form }) {
+  const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
   const [faviconUrl, setFavicon] = useState('');
   const [defaultOptions, setDefaultOptions] = useState([]);
-
-  useEffect(()=>{
-    if(store){
-      // form.setFieldsValue({
-      //   ...store,
-      //   cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
-      // })
-      if(store.cityId){
-        setDefaultOptions([{
-          id: store.cityId,
-          cityName: store?.cityName
-        }])
-      }
-      if(store.storeLogo) {
-        setImgUrl(store.storeLogo)
-      }
-      if(store.storeSign) {
-        setFavicon(store.storeSign)
-      }
-    }
-
-  },[store])
+  //
+  // useEffect(()=>{
+  //   if(store){
+  //     form.setFieldsValue({
+  //       ...store,
+  //       cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
+  //     })
+  //     if(store.cityId){
+  //       setDefaultOptions([{
+  //         id: store.cityId,
+  //         cityName: store?.cityName
+  //       }])
+  //     }
+  //     if(store.storeLogo) {
+  //       setImgUrl(store.storeLogo)
+  //     }
+  //     if(store.storeSign) {
+  //       setFavicon(store.storeSign)
+  //     }
+  //   }
+  //
+  // },[store])
 
   const toNext = async (values)=>{
     if(!imgUrl){
@@ -223,30 +223,45 @@ export default function Step3({ setStep,userInfo,store={} }) {
 
 
       <div style={{width:800,margin:'20px auto'}}>
-        {/* <Form layout="vertical" onFinish={toNext} form={form}>
+        <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24,12]}>
             <Col span={12}>
-              <FormItem label="Store name" name="storeName"
-                        rules={[{ required: true, message: 'Please input Store name!' }]}>
-                <Input size="large" onChange={(e)=>{
-                  let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
-                  form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
-                }}/>
+              <FormItem label="Store name" name="storeName">
+                {getFieldDecorator('storeName', {
+                  rules: [{ required: true, message: 'Please input Store name!' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" onChange={(e)=>{
+                    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
+                    form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                  }}/>
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="Store domain" name="domainName">
-                <Input size="large" disabled/>
+                {getFieldDecorator('domainName', {
+                  initialValue: ''
+                })(
+                  <Input size="large" disabled/>
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
-                <Input size="large" />
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="City" name="cityId">
-                <DebounceSelect
+                {getFieldDecorator('cityId', {
+                  initialValue: {key:'',label:''}
+                })(
+                  <DebounceSelect
                     size="large"
                     placeholder="Select users"
                     fetchOptions={fetchUserList}
@@ -254,12 +269,17 @@ export default function Step3({ setStep,userInfo,store={} }) {
                     style={{
                       width: '100%',
                     }}
-                />
+                  />
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="Postcode" name="postcode">
-                <Input size="large" />
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
@@ -267,12 +287,16 @@ export default function Step3({ setStep,userInfo,store={} }) {
                 <span style={{lineHeight:'32px'}}>
                   <span className='form-require'>Order audit setting</span>
                 </span>
-                <FormItem name="auditSetting" initialValue={0}
-                          rules={[{ required: true, message: 'Please choose Order audit setting!' }]}>
-                  <Radio.Group className="hmargin-level-4">
-                    <Radio value={0}>Auto audit</Radio>
-                    <Radio value={1}>Manual audit</Radio>
-                  </Radio.Group>
+                <FormItem name="auditSetting">
+                  {getFieldDecorator('auditSetting', {
+                    rules: [{ required: true, message: 'Please choose Order audit setting!' }],
+                    initialValue: 0
+                  })(
+                    <Radio.Group className="hmargin-level-4">
+                      <Radio value={0}>Auto audit</Radio>
+                      <Radio value={1}>Manual audit</Radio>
+                    </Radio.Group>
+                  )}
                 </FormItem>
               </div>
             </Col>
@@ -285,9 +309,9 @@ export default function Step3({ setStep,userInfo,store={} }) {
               </FormItem>
             </Col>
           </Row>
-        </Form> */}
+        </Form>
       </div>
     </div>
   );
 }
-
+export default Form.create()(Step3);

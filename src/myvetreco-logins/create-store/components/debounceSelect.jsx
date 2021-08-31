@@ -35,7 +35,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, defaultOptions=[]
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}
-            notFoundContent={fetching ? <Spin size="small" /> : null}
+            notFoundContent={fetching ? <Spin size="small"/> : null}
             {...props}
         >
             {

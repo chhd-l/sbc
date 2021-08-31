@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
+import { Const } from '../../../../web_modules/qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -14,65 +15,74 @@ function Step3({ setStep,userInfo,store={},form }) {
   const [imgUrl, setImgUrl] = useState('');
   const [faviconUrl, setFavicon] = useState('');
   const [defaultOptions, setDefaultOptions] = useState([]);
-  //
-  // useEffect(()=>{
-  //   if(store){
-  //     form.setFieldsValue({
-  //       ...store,
-  //       cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
-  //     })
-  //     if(store.cityId){
-  //       setDefaultOptions([{
-  //         id: store.cityId,
-  //         cityName: store?.cityName
-  //       }])
-  //     }
-  //     if(store.storeLogo) {
-  //       setImgUrl(store.storeLogo)
-  //     }
-  //     if(store.storeSign) {
-  //       setFavicon(store.storeSign)
-  //     }
-  //   }
-  //
-  // },[store])
 
-  const toNext = async (values)=>{
+  useEffect(()=>{
+    if(store){
+      form.setFieldsValue({
+        ...store,
+        cityId:store.cityId ? {value: store.cityId, label: store?.cityName, key: store.cityId} : ''
+      })
+      if(store.cityId){
+        setDefaultOptions([{
+          id: store.cityId,
+          cityName: store?.cityName
+        }])
+      }
+      if(store.storeLogo) {
+        setImgUrl(store.storeLogo)
+      }
+      if(store.storeSign) {
+        setFavicon(store.storeSign)
+      }
+    }
+
+  },[store])
+
+  const toNext = async (e)=>{
+    e.preventDefault();
     if(!imgUrl){
       message.warn('Please upload logo')
       return
     }
-    setLoading(true)
-    checkCompanyInfoExists({
-      storeName:values.storeName,
-      storeId:userInfo?.storeId,
-      companyInfoId: userInfo?.companyInfoId
-    }).then(res=>{
-      if(!res.context.storeNameExists){
-        saveStoreDetail({
-          email: userInfo?.accountName,
-          storeId: userInfo?.storeId,
-          storeLogo:imgUrl,
-          currentCompanyInfoId: userInfo?.companyInfoId,
-          currentStoreId: userInfo?.storeId,
-          sourceCompanyInfoId: 1062,
-          sourceStoreId: 123457915,
-          storeSign:faviconUrl,
-          ...values,
-          cityId:values.cityId.value,
-          cityName:values.cityId.label,
-        }).then(res=>{
-          setStep(3)
-        }).catch(err=>{
+    form.validateFields((err, values) => {
+      console.log(values)
+      if (!err) {
+        setLoading(true)
+        checkCompanyInfoExists({
+          storeName:values.storeName,
+          storeId:userInfo?.storeId,
+          companyInfoId: userInfo?.companyInfoId
+        }).then(({res,err})=>{
+          if(!res.context.storeNameExists){
+            saveStoreDetail({
+              email: userInfo?.accountName,
+              storeId: userInfo?.storeId,
+              storeLogo:imgUrl,
+              currentCompanyInfoId: userInfo?.companyInfoId,
+              currentStoreId: userInfo?.storeId,
+              sourceCompanyInfoId: 1062,
+              sourceStoreId: 123457915,
+              storeSign:faviconUrl,
+              ...values,
+              cityId:values.cityId.key,
+              cityName:values.cityId.label,
+            }).then(({res,err})=>{
+              if(err){
+                setLoading(false)
+              }else {
+                setStep(3)
+              }
+            })
+          }else {
+            form.setFields([
+              {name:'storeName',errors:['Store name number is repeated']}
+            ])
+          }
           setLoading(false)
         })
-      }else {
-        form.setFields([
-          {name:'storeName',errors:['Store name number is repeated']}
-        ])
       }
-      setLoading(false)
-    })
+    });
+
 
   }
   /**
@@ -87,7 +97,7 @@ function Step3({ setStep,userInfo,store={},form }) {
     name: 'uploadFile',
     maxCount:1,
     accept:'.jpg,.jpeg,.png,.gif',
-    action: `${process.env.REACT_APP_HOST}/store/uploadStoreResource?storeId=${userInfo?.storeId}&companyInfoId=${userInfo?.companyInfoId}&resourceType=IMAGE`,
+    action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
@@ -138,7 +148,7 @@ function Step3({ setStep,userInfo,store={},form }) {
     name: 'uploadFile',
     maxCount:1,
     accept:'.ico',
-    action: `${process.env.REACT_APP_HOST}/store/uploadStoreResource?storeId=${userInfo?.storeId}&companyInfoId=${userInfo?.companyInfoId}&resourceType=IMAGE`,
+    action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
@@ -177,7 +187,7 @@ function Step3({ setStep,userInfo,store={},form }) {
     }
   };
   async function fetchUserList(cityName) {
-    return cityList({cityName,storeId:123457915}).then(res=>{
+    return cityList({cityName,storeId:123457915}).then(({res})=>{
       return res.context.systemCityVO
     })
   }
@@ -195,7 +205,6 @@ function Step3({ setStep,userInfo,store={},form }) {
                       src={imgUrl}
                       width={90+'px'}
                       height={90+'px'}
-                      preview={false}
                   /> : (
                       <>
                         <p className="ant-upload-drag-icon">
@@ -211,10 +220,21 @@ function Step3({ setStep,userInfo,store={},form }) {
           <Col span={12}>
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadIconProps}>
-                <p className="ant-upload-drag-icon">
-                <Icon type="cloud" className="word primary size24"/>
-                </p>
-                <p className="ant-upload-hint">Upload the Shop favicon</p>
+                {
+                  faviconUrl ? <Image
+                    src={faviconUrl}
+                    width={90}
+                    height={90}
+                    preview={false}
+                  /> : (
+                    <>
+                      <p className="ant-upload-drag-icon">
+                        <CloudUploadOutlined className="word primary size24" />
+                      </p>
+                      <p className="ant-upload-hint">Upload the Shop favicon</p>
+                    </>
+                  )
+                }
               </Dragger>
             </div>
           </Col>
@@ -275,7 +295,7 @@ function Step3({ setStep,userInfo,store={},form }) {
             </Col>
             <Col span={12}>
               <FormItem label="Postcode" name="postcode">
-                {getFieldDecorator('addressDetail', {
+                {getFieldDecorator('postcode', {
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -284,7 +304,7 @@ function Step3({ setStep,userInfo,store={},form }) {
             </Col>
             <Col span={24}>
               <div className='flex'>
-                <span style={{lineHeight:'32px'}}>
+                <span>
                   <span className='form-require'>Order audit setting</span>
                 </span>
                 <FormItem name="auditSetting">

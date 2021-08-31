@@ -1,8 +1,8 @@
 .create-store-page {
   padding-bottom: 40px;
   background-color: #fff;
-  min-height: 100vh;
-  overflow: auto;
+  height: 100vh;
+  overflow: scroll!important;
   .ant-btn {
     border-radius: 4px;
     &.ant-btn-lg {
@@ -19,8 +19,11 @@
   }
 
   .ant-select-lg{
-    .ant-select-selector{
+    .ant-select-selection{
       height: 46px!important;
+      .ant-select-selection__rendered{
+        height: 44px!important;
+      }
       .ant-select-selection-search-input{
         height: 44px!important;
       }

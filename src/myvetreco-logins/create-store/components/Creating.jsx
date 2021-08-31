@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
 import { util, RCi18n, history } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
+import { Icon } from 'antd';
 
 
 const STATUS = {
@@ -38,11 +39,11 @@ export default function Creating({userInfo,setStep}) {
       if(errorIndex == 9){
         setLoadingText('Success');
         setClassText('ok');
-        // setInterval(null);
+        setInterval(null);
         finishCreateStore({
           email: userInfo.accountName,
           storeId: userInfo.storeId,
-        }).then(res=>{
+        }).then(({res})=>{
           if(res.code === 'K-000000'){
             history.push("/login")
           }
@@ -61,7 +62,7 @@ export default function Creating({userInfo,setStep}) {
   }, interval, { immediate: true });
 
   async function getStatus() {
-    queryStatus(userInfo.accountName).then(res=>{
+    queryStatus(userInfo.accountName).then(({res})=>{
       for(let i in res.context){
         console.log(statusList[STATUS[i]])
         if(statusList[STATUS[i]]){

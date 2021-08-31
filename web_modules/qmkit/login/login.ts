@@ -402,8 +402,8 @@ export async function switchLogin(params, callback?: Function) {
             basePricePDPShowedFlag:(configResponse as any).storeVO?.basePricePDPShowedFlag ?? 0,
             priceDisplayMethod:(configResponse as any).storeVO?.priceDisplayMethod ?? 0
           }
-          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency.valueEn); //货币符号
-          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency.name); //货币名称
+          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG, (configResponse as any).currency?.valueEn); //货币符号
+          sessionStorage.setItem(cache.SYSTEM_GET_CONFIG_NAME, (configResponse as any).currency?.name); //货币名称
           sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
 
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting

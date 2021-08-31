@@ -47,7 +47,7 @@ function CreateAccount( { form }) {
    * @param email
    */
   const getIsCreateStore = (email)=>{
-    getUserStatus(email).then((res)=>{
+    getUserStatus(email).then(({res})=>{
       if(!res.context.createStoreSuccess){
         history.push('/create-store');
       }

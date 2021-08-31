@@ -24,11 +24,13 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
           storeId: userInfo.storeId,
           companyInfoId:userInfo.companyInfoId,
           ...values
-        }).then(res=>{
-          setLoading(false)
-          setStep(5)
-        }).catch(err=>{
-          setLoading(false)
+        }).then(({res,err})=>{
+          if(err){
+            setLoading(false)
+          }else {
+            setLoading(false)
+            setStep(5)
+          }
         })
       }
     });

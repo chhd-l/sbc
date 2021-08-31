@@ -9,8 +9,6 @@ const { Option } = Select;
   const [loading, setLoading] = useState(false);
   const {getFieldDecorator}=form
  
-
- 
   const toNext = async (e) => {
     e.preventDefault();
    

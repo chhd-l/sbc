@@ -53,6 +53,7 @@ export default async function Fetch<T>(
     if (!httpCustomerOpertion.hasOwnProperty("isShowLoading")) {
         httpCustomerOpertion.isShowLoading = true
     }
+
     if (!(window as any).token) {
       //判断是否登陆
       util.isLogin();

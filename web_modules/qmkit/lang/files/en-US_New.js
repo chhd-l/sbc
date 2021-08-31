@@ -2360,6 +2360,7 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
+        'Menu.Order monitor':'Order monitor'
 
     },
     Others: {
@@ -2481,6 +2482,16 @@ export default {
         'Log.Success': 'Success',
         'Log.Fail': 'fail',
         'Log.ResultMessage': 'Result message',
+
+        'OrderMonitor.OrderMonitor':'Order Monitor',
+        'OrderMonitor.OrderMonitorDetails':'Order Monitor Details',
+        'OrderMonitor.ExceptionType':'Exception type',
+        'OrderMonitor.OrderExportStatus':'Order export status',
+        'OrderMonitor.PlatformType':'Platform type',
+        'OrderMonitor.DisplayTimezone':'Display timezone',
+        'OrderMonitor.RequestBody':'Request body',
+        'OrderMonitor.ResponseBody':'Response body',
+        'OrderMonitor.ExportDetailList':'Export detail list'
 
     },
 

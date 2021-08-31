@@ -11,7 +11,7 @@ const enumType = {
 }
 export default function Step4({ setStep,userInfo,step }) {
   const [formData, setFormData] = useState({});
-
+  
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
   const [checkAllObj,setCheckAllObj] = useState({Cat:false,Dog:false})//cat或者dog是否全选
 
@@ -22,30 +22,28 @@ export default function Step4({ setStep,userInfo,step }) {
   const [subscriptionPercentage,setSubscriptionPercentage] = useState(1)
   const [percentageObj,setPercentageObj] = useState({salesPercentage:1,subscriptionPercentage:1})//用于点击apply
   const [roundOff,setRoundOff] = useState(false)
+ 
   useEffect(()=>{
     if(step === 3) getCateGory()
   },[step])
   const getCateGory = ()=>{
     setLoading(true)
-    listCategory().then(res=>{
-      let promises = []
-      res.context.categoryList.forEach((item,index)=>{
-        if(item.categoryValue === 'Cat'){
-          promises[0] = listGoodsByCategory({
-            categoryId: item.categoryId,
-            categoryValueId: item.categoryValueId
-          })
-        }
-        if(item.categoryValue === 'Dog'){
-          promises[1] = listGoodsByCategory({
-            categoryId: item.categoryId,
-            categoryValueId: item.categoryValueId
-          })
-        }
-      })
+    listCategory().then(({res})=>{
+      let animalTypeList=res.context.categoryList;
+      let dog=animalTypeList.find(item=>item.categoryValue==='Dog')
+      let cat=animalTypeList.find(item=>item.categoryValue==='Cat')
+      let promises = [listGoodsByCategory({
+        categoryId: cat.categoryId,
+        categoryValueId: cat.categoryValueId
+      }),listGoodsByCategory({
+        categoryId: dog.categoryId,
+        categoryValueId: dog.categoryValueId
+      })]
       console.log(promises)
       Promise.all(promises).then(function (posts) {
-        posts.forEach((post,index)=>{
+        console.log(posts);
+        posts.forEach((result,index)=>{
+          let post =result.res
           let spuList = {}
           let skuList = {}
           post.context.libGoodsList.forEach(it=>{
@@ -200,13 +198,11 @@ export default function Step4({ setStep,userInfo,step }) {
             <Row gutter={24}>
               <Col span={12}>
                 <ProductList dataSource={dataSource?.Cat?.array}
-                             allObj={allObj?.Cat?.array}
                              title="Cat"
                 />
               </Col>
               <Col span={12}>
                 <ProductList dataSource={dataSource?.Dog?.array}
-                             allObj={allObj?.Dog?.array}
                              title="Dog"
                 />
               </Col>

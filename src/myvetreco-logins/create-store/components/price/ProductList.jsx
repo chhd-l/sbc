@@ -2,9 +2,9 @@ import React, {useContext} from 'react';
 import {Row, Col, List, Checkbox} from 'antd';
 import CheckboxItem from "./checkboxItem";
 import { FormContext } from '../Step4';
+import {AutoSizer} from 'react-virtualized/dist/commonjs/AutoSizer';
 import VList from 'react-virtualized/dist/commonjs/List';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
-
+import 'react-virtualized/styles.css';
  function ProductList({dataSource=[], title}) {
 
      const Context = useContext(FormContext);

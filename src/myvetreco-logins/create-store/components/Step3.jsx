@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Radio, message, Image} from 'antd';
-import { CloudUploadOutlined } from '@ant-design/icons';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
 
@@ -192,14 +191,15 @@ export default function Step3({ setStep,userInfo,store={} }) {
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadProps}>
                 {
-                  imgUrl ? <Image
+                  imgUrl ? <img
                       src={imgUrl}
-                      width={90}
+                      width={90+'px'}
+                      height={90+'px'}
                       preview={false}
                   /> : (
                       <>
                         <p className="ant-upload-drag-icon">
-                          <CloudUploadOutlined className="word primary size24" />
+                          <Icon type="cloud" className="word primary size24"/>
                         </p>
                         <p className="ant-upload-hint">Upload the Shop logo</p>
                       </>
@@ -212,7 +212,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadIconProps}>
                 <p className="ant-upload-drag-icon">
-                  <CloudUploadOutlined className="word primary size24" />
+                <Icon type="cloud" className="word primary size24"/>
                 </p>
                 <p className="ant-upload-hint">Upload the Shop favicon</p>
               </Dragger>

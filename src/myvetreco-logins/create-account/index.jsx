@@ -22,50 +22,31 @@ function CreateAccount({ form }) {
     history.push('/login');
   };
 
-  const handleSubmit = async (values) => {
-    debugger
-    console.log('123123')
+  const handleSubmit =  (values) => {
     setLoading(true)
-    let res = await createStoreAccount({
+    createStoreAccount({
       email: base64.urlEncode(values.email),
       password: base64.urlEncode(values.password),
       confirmPassword: base64.urlEncode(values.confirmPassword),
       recommendationCode: values.recommendationCode ?  base64.urlEncode(values.confirmPassword) : values.recommendationCode
+    }).then(val=>{
+      if(val.code === 'K-000000'){
+        login(base64.urlEncode(values.email), base64.urlEncode(values.password)).then(res => {
+          sessionStorage.setItem('employeeInfo',JSON.stringify(res.context));
+          sessionStorage.setItem('storeToken', res.context?.token ?? '');
+          history.push('/create-store');
+        }).catch(() => {
+          setLoading(false);
+        });
+      }
+    }).catch(()=>{
+      setLoading(false);
     })
-    console.log(res)
-    console.log(123)
-    // createStoreAccount({
-    //   email: base64.urlEncode(values.email),
-    //   password: base64.urlEncode(values.password),
-    //   confirmPassword: base64.urlEncode(values.confirmPassword),
-    //   recommendationCode: values.recommendationCode ?  base64.urlEncode(values.confirmPassword) : values.recommendationCode
-    // }).then(val=>{
-    //   console.log(val)
-    //   if(val.code === 'K-000000'){
-    //     login(base64.urlEncode(values.email), base64.urlEncode(values.password)).then(res => {
-    //       sessionStorage.setItem('employeeInfo',JSON.stringify(res.context));
-    //       sessionStorage.setItem('storeToken', res.context?.token ?? '');
-    //       history.push('/create-store');
-    //     }).catch(() => {
-    //       setLoading(false);
-    //     });
-    //   }
-    // }).catch(()=>{
-    //   setLoading(false);
-    // })
 
   };
 
   const isMobile = isMobileApp();
 
-  const compareToFirstPassword = (rule, value, callback) => {
-    console.log(value)
-    if (value && value !== form.getFieldValue('password')) {
-      callback(RCi18n({id:'Login.confirm_password_vld1'}));
-    } else {
-      callback();
-    }
-  };
   return (
     <div className="login-container">
       <div className={`account-content ${isMobile ? 'bg-white' : ''}`}>
@@ -80,7 +61,7 @@ function CreateAccount({ form }) {
               <span>Create an Account</span>
             </div>}
 
-            <FormItem name="email">
+            <FormItem name="email" rules={[{required:true,message:RCi18n({id:'Login.email_address_vld'})},{type:'email',message:RCi18n({id:'Login.email_address_vld1'})}]}>
               {getFieldDecorator('email', {
                 rules: [{required:true,message:RCi18n({id:'Login.email_address_vld'})}],
                 initialValue: ''
@@ -104,8 +85,15 @@ function CreateAccount({ form }) {
             >
               {getFieldDecorator('confirmPassword', {
                 rules: [
-                  { required:true,message:RCi18n({id:'Login.confirm_password_vld'})},
-                  { validator:compareToFirstPassword }
+                  {required:true,message:RCi18n({id:'Login.confirm_password_vld'})},
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error(RCi18n({id:'Login.confirm_password_vld1'})));
+                    },
+                  })
                 ],
                 initialValue: ''
               })(
@@ -115,7 +103,7 @@ function CreateAccount({ form }) {
 
             <FormItem name="recommendationCode" className="password">
               {getFieldDecorator('recommendationCode', {
-                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+                rules: [{required:true,message:RCi18n({id:'Login.recommendation_code_opt'})}],
                 initialValue: ''
               })(
                 <Input size="large" placeholder={RCi18n({id:'Login.recommendation_code_opt'})} suffix={

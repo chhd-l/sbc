@@ -1106,10 +1106,10 @@ const homeRoutes = [
     path: '/create-account',
     asyncComponent: () => import('./myvetreco-logins/create-account')
   },
-  // {
-  //   path: '/create-store',
-  //   asyncComponent: () => import('./myvetreco-logins/create-store')
-  // },
+  {
+    path: '/create-store',
+    asyncComponent: () => import('./myvetreco-logins/create-store')
+  },
   {
     path: '/lackcompetence',
     asyncComponent: () => import('./lackcompetence')

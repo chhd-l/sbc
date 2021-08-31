@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Steps } from 'antd';
-import intl from 'react-intl-universal';
+import { RCi18n } from 'qmkit';
 
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
@@ -11,18 +11,17 @@ import Step5 from './components/Step5';
 import Create from './components/Creating';
 
 import './index.less';
-import logo from 'assets/images/login_logo.png';
+import logo from '../assets/images/login_logo.png';
 import {getUserStatus} from "../login/webapi";
 
 const { Step } = Steps;
-
 export default function CreateStore() {
   const userInfo = JSON.parse(sessionStorage.getItem('employeeInfo'))
   const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
-  },[])
+  },[]) 
   /**
    * 获取上次提交的数据进行回显
    */
@@ -38,14 +37,14 @@ export default function CreateStore() {
      <div className="vmargin-level-4 align-item-center">
        <img src={logo} width="166" alt="" />
      </div>
-     <div className="vmargin-level-4 align-item-center word large">{intl.get('Login.create_store_title')}</div>
+     <div className="vmargin-level-4 align-item-center word large">{RCi18n({id:'Login.create_store_title'})}</div>
      <div className="vmargin-level-4 align-item-center">
        <Steps current={current} size="small" labelPlacement="vertical" style={{width:960,margin:'0 auto'}}>
-         <Step title={intl.get('Login.create_store_step1')} />
-         <Step title={intl.get('Login.create_store_step2')} />
-         <Step title={intl.get('Login.create_store_step3')} />
-         <Step title={intl.get('Login.create_store_step4')} />
-         <Step title={intl.get('Login.create_store_step5')} />
+         <Step title={RCi18n({id:'Login.create_store_step1'})} />
+         <Step title={RCi18n({id:'Login.create_store_step2'})} />
+         <Step title={RCi18n({id:'Login.create_store_step3'})} />
+         <Step title={RCi18n({id:'Login.create_store_step4'})} />
+         <Step title={RCi18n({id:'Login.create_store_step5'})} />
        </Steps>
      </div>
      <div>
@@ -75,3 +74,4 @@ export default function CreateStore() {
 </>
   )
 }
+

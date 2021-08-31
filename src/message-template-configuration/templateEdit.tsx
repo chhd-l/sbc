@@ -1,7 +1,6 @@
 import React from 'react';
 import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Breadcrumb, Button, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin, Tag, Tooltip } from 'antd';
-import { FormattedMessage } from '_react-intl@5.6.8@react-intl';
 import _ from 'lodash';
 
 const FormItem = Form.Item;

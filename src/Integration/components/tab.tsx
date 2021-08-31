@@ -21,11 +21,7 @@ export default class Tab extends Component<any, any> {
       <Table
         {...this.props}
         onChange={this.onChange}
-        loading={{ spinning: this.props.loading,
-          indicator: <img className="spinner"
-                          src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-                          style={{ width: '90px', height: '90px' }} alt="" />
-        }}
+        loading={this.props.loading}
         style={{ paddingRight: 20 }}
         scroll={{ x: '100%' }}
       />

@@ -886,7 +886,7 @@ export default {
         'Order.Operation Category': 'Operation Category',
         'Order.Operation Log': 'Operation Log',
         'Order.PrerequisitesForAudit': 'Prerequisites for audit',
-        'Order.PetProfile': 'Operation Log',
+        'Order.PetProfile': 'Pet profile',
 
     },
     Subscription: {

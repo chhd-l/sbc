@@ -6,6 +6,7 @@ import './index.less';
 
 import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import logo from './../assets/images/logo-l.png';
+import { getUserStatus } from './webapi';
 
 const FormItem = Form.Item;
 
@@ -32,11 +33,26 @@ function CreateAccount( { form }) {
             localStorage.removeItem('account');
             localStorage.removeItem('password');
           }
+          if(![123456858,123457907,123457908,123457909,123457910,123457911,123457915].includes(res.storeId)){
+            getIsCreateStore(values.account);
+          }
           setLoading(false);
         });
       }
     });
   };
+
+  /**
+   * 获取当前用户是否开店
+   * @param email
+   */
+  const getIsCreateStore = (email)=>{
+    getUserStatus(email).then(({res})=>{
+      if(!res.context.createStoreSuccess){
+        history.push('/create-store');
+      }
+    })
+  }
 
   const handleSignUp = () => {
     history.push('/create-account');

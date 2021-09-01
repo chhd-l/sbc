@@ -2,8 +2,9 @@ import React, {useContext} from 'react';
 import {Row, Col, List, Checkbox} from 'antd';
 import CheckboxItem from "./checkboxItem";
 import { FormContext } from '../Step4';
-import VList from 'react-virtualized/dist/commonjs/List';
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+
+// import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
+// import VList from 'react-virtualized/dist/commonjs/List';
 
  function ProductList({dataSource=[], title}) {
 
@@ -47,7 +48,8 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
      const autoSize = () => (
          <AutoSizer disableHeight>
              {({ width }) =>
-                 vlist({height:600,width})
+               <div>xxxx</div>
+                 // vlist({height:600,width})
              }
          </AutoSizer>
      );
@@ -61,32 +63,32 @@ import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
                 <Col span={4}>Selling price(incl.VAT)</Col>
                 <Col span={5}>Subscription price(incl.VAT)</Col>
             </Row>
-            {/*<List*/}
-            {/*    className="store-p-list"*/}
-            {/*    style={{borderTop:'none'}}*/}
-            {/*    header={<Row gutter={8}>*/}
-            {/*        <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>*/}
-            {/*        <Col span={22} className="align-item-center word white">{title}</Col>*/}
-            {/*    </Row>}*/}
-            {/*    bordered*/}
-            {/*    dataSource={dataSource}*/}
-            {/*    renderItem={item => (<CheckboxItem item={item}*/}
-            {/*                                       isChecKedAll={isChecKedAll}*/}
-            {/*    />)}*/}
-            {/*/>*/}
-
-
             <List
-                className="store-p-list"
-                style={{borderTop:'none'}}
-                header={<Row gutter={8}>
-                    <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>
-                    <Col span={22} className="align-item-center word white">{title}</Col>
-                </Row>}
-                bordered
-            >
-                { dataSource.length > 0 && autoSize()}
-            </List>
+               className="store-p-list"
+               style={{borderTop:'none'}}
+               header={<Row gutter={8}>
+                   <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>
+                   <Col span={22} className="align-item-center word white">{title}</Col>
+               </Row>}
+               bordered
+               dataSource={dataSource}
+               renderItem={item => (<CheckboxItem item={item}
+                                                  isChecKedAll={isChecKedAll}
+               />)}
+            />
+
+
+        {/*    <List*/}
+        {/*        className="store-p-list"*/}
+        {/*        style={{borderTop:'none'}}*/}
+        {/*        header={<Row gutter={8}>*/}
+        {/*            <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>*/}
+        {/*            <Col span={22} className="align-item-center word white">{title}</Col>*/}
+        {/*        </Row>}*/}
+        {/*        bordered*/}
+        {/*    >*/}
+        {/*        { dataSource.length > 0 && autoSize()}*/}
+        {/*    </List>*/}
         </>
     );
 }

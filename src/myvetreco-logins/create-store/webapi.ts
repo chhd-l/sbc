@@ -52,13 +52,18 @@ export function listGoodsByCategory(params) {
 
 //保存price设置
 export function priceSetting(params) {
-
-  return Fetch<TResult>('/store/create/priceSetting', params);
+  return Fetch<TResult>(
+    '/store/create/priceSetting',
+    {
+      method: 'post',
+      body: JSON.stringify({
+        ...params
+      })
+    });
 }
 
 //保存payment
 export function savePaymentInfo(params) {
- 
   return Fetch<TResult>('/store/create/savePaymentInfo',{
     method: 'post',
     body: JSON.stringify({

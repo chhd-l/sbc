@@ -60,7 +60,7 @@ function PriceListItem({listItem,checkedList}){
 
     return (
         <ListItem className="flex"  style={{height:56}}>
-            <Row className="flex-item flex-main" gutter={8} align="middle">
+            <Row className="flex-item flex-main align-center" gutter={8} align="middle">
                 <Col span={2}><Checkbox value={listItem.sku}/></Col>
                 <Col span={6}>
                     <Tooltip placement="topLeft" title={listItem.skuName}>

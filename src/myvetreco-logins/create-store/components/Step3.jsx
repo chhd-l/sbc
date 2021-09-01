@@ -229,7 +229,7 @@ function Step3({ setStep,userInfo,store={},form }) {
                   /> : (
                     <>
                       <p className="ant-upload-drag-icon">
-                        <CloudUploadOutlined className="word primary size24" />
+                        <Icon type="cloud" className="word primary size24"/>
                       </p>
                       <p className="ant-upload-hint">Upload the Shop favicon</p>
                     </>

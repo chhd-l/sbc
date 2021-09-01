@@ -2,9 +2,10 @@ import React, {useContext} from 'react';
 import {Row, Col, List, Checkbox} from 'antd';
 import CheckboxItem from "./checkboxItem";
 import { FormContext } from '../Step4';
-// import {AutoSizer} from 'react-virtualized/dist/commonjs/AutoSizer';
+
+// import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer';
 // import VList from 'react-virtualized/dist/commonjs/List';
-// import 'react-virtualized/styles.css';
+
  function ProductList({dataSource=[], title}) {
 
      const Context = useContext(FormContext);
@@ -47,7 +48,8 @@ import { FormContext } from '../Step4';
      const autoSize = () => (
          <AutoSizer disableHeight>
              {({ width }) =>
-                 vlist({height:600,width})
+               <div>xxxx</div>
+                 // vlist({height:600,width})
              }
          </AutoSizer>
      );
@@ -76,17 +78,17 @@ import { FormContext } from '../Step4';
             />
 
 
-            {/* <List
-                className="store-p-list"
-                style={{borderTop:'none'}}
-                header={<Row gutter={8}>
-                    <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>
-                    <Col span={22} className="align-item-center word white">{title}</Col>
-                </Row>}
-                bordered
-            >
-                { dataSource.length > 0 && autoSize()}
-            </List> */}
+        {/*    <List*/}
+        {/*        className="store-p-list"*/}
+        {/*        style={{borderTop:'none'}}*/}
+        {/*        header={<Row gutter={8}>*/}
+        {/*            <Col span={2}><Checkbox onChange={onCheckAllChange} /></Col>*/}
+        {/*            <Col span={22} className="align-item-center word white">{title}</Col>*/}
+        {/*        </Row>}*/}
+        {/*        bordered*/}
+        {/*    >*/}
+        {/*        { dataSource.length > 0 && autoSize()}*/}
+        {/*    </List>*/}
         </>
     );
 }

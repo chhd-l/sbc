@@ -54,6 +54,16 @@ export default class LogTabs extends Component<any, any>{
         key: 'interfaceName',
       },
       {
+        title: RCi18n({ id: 'Interface.Provider' }),
+        dataIndex: 'providerName',
+        key: 'provider',
+      },
+      {
+        title: RCi18n({ id: 'Log.URL' }),
+        dataIndex: 'url',
+        key: 'url',
+      },
+      {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
@@ -96,6 +106,7 @@ export default class LogTabs extends Component<any, any>{
       {
         title: '',
         dataIndex: 'detail',
+        width:'6%',
         render: (text, record) => (
           <AuthWrapper functionName="f_log_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>

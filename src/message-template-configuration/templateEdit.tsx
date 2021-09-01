@@ -2,6 +2,7 @@ import React from 'react';
 import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Breadcrumb, Button, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

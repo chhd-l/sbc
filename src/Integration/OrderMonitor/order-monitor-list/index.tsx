@@ -87,7 +87,7 @@ export default class OrderMonitorList extends Component<any, any> {
         let monitorList = res.context.content
 
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage + 1
+        pagination.current = res.context.number + 1
         this.setState({
           monitorList,
           loading: false,
@@ -122,9 +122,6 @@ export default class OrderMonitorList extends Component<any, any> {
   }
   handleTableChange = (pagination) => {
     const { currentSearchForm } = this.state
-    this.setState({
-      pagination
-    })
     let params = {
       pageSize: pagination.pagesize,
       pageNum: pagination.current - 1,

@@ -69,7 +69,7 @@ export default class DashboardDetails extends Component<any, any> {
     this.setState({ detailsTabsKey: key }, () => {
       if (key === 'log' || key === 'error') {
         let params = {
-          interfaceId: +this.state.interfaceId,
+          interfaceIds: +this.state.interfaceId ? [+this.state.interfaceId] : [],
           resultFlag: key === 'log' ? null : 2,
           pageSize: 5,
           pageNum: 0,

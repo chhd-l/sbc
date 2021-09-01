@@ -2360,7 +2360,8 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
-        'Menu.Order monitor':'Order monitor'
+        'Menu.Order monitor':'Order monitor',
+        'Menu.Api document':'Api document'
 
     },
     Others: {
@@ -2491,7 +2492,9 @@ export default {
         'OrderMonitor.DisplayTimezone':'Display timezone',
         'OrderMonitor.RequestBody':'Request body',
         'OrderMonitor.ResponseBody':'Response body',
-        'OrderMonitor.ExportDetailList':'Export detail list'
+        'OrderMonitor.ExportDetailList':'Export detail list',
+
+        'ApiDocument.ApiName':'Api name',
 
     },
 

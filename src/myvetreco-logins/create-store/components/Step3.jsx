@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Upload, Form, Button, Row, Col, Input, Radio, message, Image} from 'antd';
-import { CloudUploadOutlined } from '@ant-design/icons';
+import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
+import { Const } from '../../../../web_modules/qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
-export default function Step3({ setStep,userInfo,store={} }) {
-  const [form] = Form.useForm();
+function Step3({ setStep,userInfo,store={},form }) {
+  const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
   const [faviconUrl, setFavicon] = useState('');
@@ -38,42 +38,51 @@ export default function Step3({ setStep,userInfo,store={} }) {
 
   },[store])
 
-  const toNext = async (values)=>{
+  const toNext = async (e)=>{
+    e.preventDefault();
     if(!imgUrl){
       message.warn('Please upload logo')
       return
     }
-    setLoading(true)
-    checkCompanyInfoExists({
-      storeName:values.storeName,
-      storeId:userInfo?.storeId,
-      companyInfoId: userInfo?.companyInfoId
-    }).then(res=>{
-      if(!res.context.storeNameExists){
-        saveStoreDetail({
-          email: userInfo?.accountName,
-          storeId: userInfo?.storeId,
-          storeLogo:imgUrl,
-          currentCompanyInfoId: userInfo?.companyInfoId,
-          currentStoreId: userInfo?.storeId,
-          sourceCompanyInfoId: 1062,
-          sourceStoreId: 123457915,
-          storeSign:faviconUrl,
-          ...values,
-          cityId:values.cityId.value,
-          cityName:values.cityId.label,
-        }).then(res=>{
-          setStep(3)
-        }).catch(err=>{
+    form.validateFields((err, values) => {
+      console.log(values)
+      if (!err) {
+        setLoading(true)
+        checkCompanyInfoExists({
+          storeName:values.storeName,
+          storeId:userInfo?.storeId,
+          companyInfoId: userInfo?.companyInfoId
+        }).then(({res,err})=>{
+          if(!res.context.storeNameExists){
+            saveStoreDetail({
+              email: userInfo?.accountName,
+              storeId: userInfo?.storeId,
+              storeLogo:imgUrl,
+              currentCompanyInfoId: userInfo?.companyInfoId,
+              currentStoreId: userInfo?.storeId,
+              sourceCompanyInfoId: 1062,
+              sourceStoreId: 123457915,
+              storeSign:faviconUrl,
+              ...values,
+              cityId:values.cityId.key,
+              cityName:values.cityId.label,
+            }).then(({res,err})=>{
+              if(err){
+                setLoading(false)
+              }else {
+                setStep(3)
+              }
+            })
+          }else {
+            form.setFields([
+              {name:'storeName',errors:['Store name number is repeated']}
+            ])
+          }
           setLoading(false)
         })
-      }else {
-        form.setFields([
-          {name:'storeName',errors:['Store name number is repeated']}
-        ])
       }
-      setLoading(false)
-    })
+    });
+
 
   }
   /**
@@ -88,7 +97,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
     name: 'uploadFile',
     maxCount:1,
     accept:'.jpg,.jpeg,.png,.gif',
-    action: `${process.env.REACT_APP_HOST}/store/uploadStoreResource?storeId=${userInfo?.storeId}&companyInfoId=${userInfo?.companyInfoId}&resourceType=IMAGE`,
+    action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
@@ -139,7 +148,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
     name: 'uploadFile',
     maxCount:1,
     accept:'.ico',
-    action: `${process.env.REACT_APP_HOST}/store/uploadStoreResource?storeId=${userInfo?.storeId}&companyInfoId=${userInfo?.companyInfoId}&resourceType=IMAGE`,
+    action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
@@ -178,7 +187,7 @@ export default function Step3({ setStep,userInfo,store={} }) {
     }
   };
   async function fetchUserList(cityName) {
-    return cityList({cityName,storeId:123457915}).then(res=>{
+    return cityList({cityName,storeId:123457915}).then(({res})=>{
       return res.context.systemCityVO
     })
   }
@@ -192,14 +201,14 @@ export default function Step3({ setStep,userInfo,store={} }) {
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadProps}>
                 {
-                  imgUrl ? <Image
+                  imgUrl ? <img
                       src={imgUrl}
-                      width={90}
-                      preview={false}
+                      width={90+'px'}
+                      height={90+'px'}
                   /> : (
                       <>
                         <p className="ant-upload-drag-icon">
-                          <CloudUploadOutlined className="word primary size24" />
+                          <Icon type="cloud" className="word primary size24"/>
                         </p>
                         <p className="ant-upload-hint">Upload the Shop logo</p>
                       </>
@@ -211,10 +220,21 @@ export default function Step3({ setStep,userInfo,store={} }) {
           <Col span={12}>
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadIconProps}>
-                <p className="ant-upload-drag-icon">
-                  <CloudUploadOutlined className="word primary size24" />
-                </p>
-                <p className="ant-upload-hint">Upload the Shop favicon</p>
+                {
+                  faviconUrl ? <Image
+                    src={faviconUrl}
+                    width={90}
+                    height={90}
+                    preview={false}
+                  /> : (
+                    <>
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="cloud" className="word primary size24"/>
+                      </p>
+                      <p className="ant-upload-hint">Upload the Shop favicon</p>
+                    </>
+                  )
+                }
               </Dragger>
             </div>
           </Col>
@@ -223,30 +243,45 @@ export default function Step3({ setStep,userInfo,store={} }) {
 
 
       <div style={{width:800,margin:'20px auto'}}>
-        <Form layout="vertical" onFinish={toNext} form={form}>
+        <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24,12]}>
             <Col span={12}>
-              <FormItem label="Store name" name="storeName"
-                        rules={[{ required: true, message: 'Please input Store name!' }]}>
-                <Input size="large" onChange={(e)=>{
-                  let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
-                  form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
-                }}/>
+              <FormItem label="Store name" name="storeName">
+                {getFieldDecorator('storeName', {
+                  rules: [{ required: true, message: 'Please input Store name!' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" onChange={(e)=>{
+                    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
+                    form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                  }}/>
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="Store domain" name="domainName">
-                <Input size="large" disabled/>
+                {getFieldDecorator('domainName', {
+                  initialValue: ''
+                })(
+                  <Input size="large" disabled/>
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
-                <Input size="large" />
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="City" name="cityId">
-                <DebounceSelect
+                {getFieldDecorator('cityId', {
+                  initialValue: {key:'',label:''}
+                })(
+                  <DebounceSelect
                     size="large"
                     placeholder="Select users"
                     fetchOptions={fetchUserList}
@@ -254,25 +289,34 @@ export default function Step3({ setStep,userInfo,store={} }) {
                     style={{
                       width: '100%',
                     }}
-                />
+                  />
+                )}
               </FormItem>
             </Col>
             <Col span={12}>
               <FormItem label="Postcode" name="postcode">
-                <Input size="large" />
+                {getFieldDecorator('postcode', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
               <div className='flex'>
-                <span style={{lineHeight:'32px'}}>
+                <span>
                   <span className='form-require'>Order audit setting</span>
                 </span>
-                <FormItem name="auditSetting" initialValue={0}
-                          rules={[{ required: true, message: 'Please choose Order audit setting!' }]}>
-                  <Radio.Group className="hmargin-level-4">
-                    <Radio value={0}>Auto audit</Radio>
-                    <Radio value={1}>Manual audit</Radio>
-                  </Radio.Group>
+                <FormItem name="auditSetting">
+                  {getFieldDecorator('auditSetting', {
+                    rules: [{ required: true, message: 'Please choose Order audit setting!' }],
+                    initialValue: 0
+                  })(
+                    <Radio.Group className="hmargin-level-4">
+                      <Radio value={0}>Auto audit</Radio>
+                      <Radio value={1}>Manual audit</Radio>
+                    </Radio.Group>
+                  )}
                 </FormItem>
               </div>
             </Col>
@@ -290,4 +334,4 @@ export default function Step3({ setStep,userInfo,store={} }) {
     </div>
   );
 }
-
+export default Form.create()(Step3);

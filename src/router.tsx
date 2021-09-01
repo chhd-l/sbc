@@ -1079,7 +1079,15 @@ const routes = [
   {
     path: '/log-response/:id',
     asyncComponent: () => import('./Integration/Log/log-response')
-  }
+  },
+  {
+    path: '/order-monitor',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-list')
+  },
+  {
+    path: '/order-monitor-details/:id',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-details')
+  },
 ];
 
 const homeRoutes = [
@@ -1116,10 +1124,10 @@ const homeRoutes = [
     path: '/create-account',
     asyncComponent: () => import('./myvetreco-logins/create-account')
   },
-  // {
-  //   path: '/create-store',
-  //   asyncComponent: () => import('./myvetreco-logins/create-store')
-  // },
+  {
+    path: '/create-store',
+    asyncComponent: () => import('./myvetreco-logins/create-store')
+  },
   {
     path: '/lackcompetence',
     asyncComponent: () => import('./lackcompetence')

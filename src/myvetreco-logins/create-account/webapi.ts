@@ -1,4 +1,3 @@
-import request from 'utils/request';
 import { Fetch } from 'qmkit';
 
 type TResult = {
@@ -7,9 +6,11 @@ type TResult = {
   context: any;
 };
 
-export function createStoreAccount(params) {
+export function createStoreAccount(filterParams) {
   return Fetch<TResult>('/store/create/account', {
     method: 'POST',
-    body: JSON.stringify({ params })
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }

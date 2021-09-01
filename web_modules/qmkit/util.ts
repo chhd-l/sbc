@@ -1,4 +1,4 @@
-import { cache, history } from 'qmkit';
+import { cache, Const, history } from 'qmkit';
 
 /**
  * 判断用户是否登陆
@@ -387,4 +387,24 @@ export const isMobileApp = () => {
   const devices = navigator.userAgent.toLowerCase();
   return /iphone/.test(devices) || /android/.test(devices);
 }
+//导出方法
+export const onExport = (params,downloadUrl) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      let base64 = new Base64();
+      const token = (window as any).token;
+      if (token) {
+        let result = JSON.stringify({ ...params, token: token });
+        let encrypted = base64.urlEncode(result);
+
+        // 新窗口下载
+        const exportHref = Const.HOST + `${downloadUrl}/${encrypted}`;
+        window.open(exportHref);
+      } 
+      resolve();
+    }, 500);
+  });
+};
+
+
 

@@ -22,27 +22,47 @@ function CreateAccount({ form }) {
     history.push('/login');
   };
 
-  const handleSubmit =  (values) => {
+  const handleSubmit =  (e) => {
+    e.preventDefault();
+    console.log(form)
     setLoading(true)
-    createStoreAccount({
-      email: base64.urlEncode(values.email),
-      password: base64.urlEncode(values.password),
-      confirmPassword: base64.urlEncode(values.confirmPassword),
-      recommendationCode: values.recommendationCode ?  base64.urlEncode(values.confirmPassword) : values.recommendationCode
-    }).then(val=>{
-      if(val.code === 'K-000000'){
-        login(base64.urlEncode(values.email), base64.urlEncode(values.password)).then(res => {
-          sessionStorage.setItem('employeeInfo',JSON.stringify(res.context));
-          sessionStorage.setItem('storeToken', res.context?.token ?? '');
-          history.push('/create-store');
-        }).catch(() => {
-          setLoading(false);
-        });
+    form.validateFields((errs, values) => {
+      console.log(values)
+      if(!errs){
+        createStoreAccount({
+          email: base64.urlEncode(values.email),
+          password: base64.urlEncode(values.password),
+          confirmPassword: base64.urlEncode(values.confirmPassword),
+          recommendationCode: values.recommendationCode && base64.urlEncode(values.recommendationCode)
+        }).then(val=>{
+          console.log(val)
+          if(val.res.code === 'K-000000'){
+            login(
+              {account: values.email, password: values.password},
+              '',
+              res => {
+                console.log(res)
+                  sessionStorage.setItem('storeToken', res?.token ?? '');
+                  history.push('/create-store');
+                }
+              );
+          }else {
+            if(val.err){
+              setLoading(false);
+            }
+          }
+        })
       }
-    }).catch(()=>{
-      setLoading(false);
     })
+  };
 
+  const compareToFirstPassword = (rule, value, callback) => {
+    console.log(value)
+    if (value && value !== form.getFieldValue('password')) {
+      callback(RCi18n({id:'Login.confirm_password_vld1'}));
+    } else {
+      callback();
+    }
   };
 
   const isMobile = isMobileApp();
@@ -53,7 +73,8 @@ function CreateAccount({ form }) {
         {isMobile ? <MobileHeader title={RCi18n({id:'Login.create_an_account'})} /> : <RunBoyForDesktop />}
 
         <Form name="regist"
-              onSubmit={handleSubmit}>
+              onSubmit={handleSubmit}
+        >
           <div className={`ca-main ${isMobile ? 'on-mobile' : ''}`}>
 
             {!isMobile && <div className="ca-logo space-between">
@@ -86,14 +107,7 @@ function CreateAccount({ form }) {
               {getFieldDecorator('confirmPassword', {
                 rules: [
                   {required:true,message:RCi18n({id:'Login.confirm_password_vld'})},
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error(RCi18n({id:'Login.confirm_password_vld1'})));
-                    },
-                  })
+                  { validator:compareToFirstPassword }
                 ],
                 initialValue: ''
               })(
@@ -102,8 +116,7 @@ function CreateAccount({ form }) {
             </FormItem>
 
             <FormItem name="recommendationCode" className="password">
-              {getFieldDecorator('password', {
-                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+              {getFieldDecorator('recommendationCode', {
                 initialValue: ''
               })(
                 <Input size="large" placeholder={RCi18n({id:'Login.recommendation_code_opt'})} suffix={

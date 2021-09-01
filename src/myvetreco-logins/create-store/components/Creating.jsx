@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from "react-router-dom";
-import intl from 'react-intl-universal';
+import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
-import { CheckOutlined,CloseOutlined } from '@ant-design/icons';
+import { util, RCi18n, history } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
+import { Icon } from 'antd';
 
 
 const STATUS = {
@@ -14,16 +14,7 @@ const STATUS = {
   PAYMENT_INFO:4,
   SETTING_INIT:5,
 }
-// let statusList =
-// [
-//     {title:'Contract Agreement', message: null, result: true},
-//     {title:'Legal Info', message: null, result: true},
-//     {title:'Store Details', message: null, result: true},
-//     {title:'Price Setting', message: null, result: true},
-//     {title:'Payment Info', message: null, result: true},
-// ]
 export default function Creating({userInfo,setStep}) {
-  let history = useHistory();
   let [statusList,setStatusList] = useState([
     {title:'Contract Agreement', message: null, result: false},
     {title:'Legal Info', message: null, result: false},
@@ -37,7 +28,7 @@ export default function Creating({userInfo,setStep}) {
   let [errorIndex, setErrorIndex] = useState(9);
   const [interval, setInterval] = useState(null);
 
-  const list = statusList.map((item,index) => ({ name: intl.get(`Login.create_store_step${index+1}`), top: -((index+1) * 31), result:item.result }));
+  const list = statusList.map((item,index) => ({ name: <FormattedMessage id={`Login.create_store_step${index+1}`}/>, top: -((index+1) * 31), result:item.result }));
 
   useEffect(()=>{
     getStatus()
@@ -48,11 +39,11 @@ export default function Creating({userInfo,setStep}) {
       if(errorIndex == 9){
         setLoadingText('Success');
         setClassText('ok');
-        // setInterval(null);
+        setInterval(null);
         finishCreateStore({
           email: userInfo.accountName,
           storeId: userInfo.storeId,
-        }).then(res=>{
+        }).then(({res})=>{
           if(res.code === 'K-000000'){
             history.push("/login")
           }
@@ -71,7 +62,7 @@ export default function Creating({userInfo,setStep}) {
   }, interval, { immediate: true });
 
   async function getStatus() {
-    queryStatus(userInfo.accountName).then(res=>{
+    queryStatus(userInfo.accountName).then(({res})=>{
       for(let i in res.context){
         console.log(statusList[STATUS[i]])
         if(statusList[STATUS[i]]){
@@ -104,7 +95,7 @@ export default function Creating({userInfo,setStep}) {
       <div className="step-list">
         <h1 style={{ color: '#30465a',minWidth: 400 }}>
           {
-            classText === '' ? intl.get(`Login.create_store_ing`) : (
+            classText === '' ? <FormattedMessage id={`Login.create_store_ing`}/> : (
               classText === 'ok' ? 'Success! You are ready to go' : 'Store creation failed. Please try again'
             )
           }
@@ -122,8 +113,8 @@ export default function Creating({userInfo,setStep}) {
                       {
                         count < item.top &&
                           (errorIndex === (_index+1) ?
-                              (<span style={{ color: '#ff7875',paddingLeft:5 }}><CloseOutlined /></span>) :
-                                  (<span style={{ color: '#3bff00',paddingLeft:5 }}><CheckOutlined/></span>)
+                              (<span style={{ color: '#ff7875',paddingLeft:5 }}><Icon type="close" /></span>) :
+                                  (<span style={{ color: '#3bff00',paddingLeft:5 }}><Icon type="check" /></span>)
                           )
                       }
                     </li>

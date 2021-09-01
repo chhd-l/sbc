@@ -45,7 +45,7 @@ podTemplate(label: label, cloud: 'kubernetes',
                     sh "node --version"
                     sh "npm --version"
                     sh "npm install"
-                    sh "npm run build"
+                    sh "npm run ${build}"
                     //sh "npm run build:myvetreco"
                 }
         }

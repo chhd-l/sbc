@@ -4,8 +4,8 @@ import {savePaymentInfo} from "../webapi";
 
 const FormItem = Form.Item;
 
-export default function Step5({ setStep,userInfo,paymentInfoRequest }) {
-  const [form] = Form.useForm();
+function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
+  const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
@@ -14,19 +14,26 @@ export default function Step5({ setStep,userInfo,paymentInfoRequest }) {
     }
   },[paymentInfoRequest])
 
-  const toNext = async (values)=>{
-    setLoading(true)
-    savePaymentInfo({
-      email: userInfo.accountName,
-      storeId: userInfo.storeId,
-      companyInfoId:userInfo.companyInfoId,
-      ...values
-    }).then(res=>{
-      setLoading(false)
-      setStep(5)
-    }).catch(err=>{
-      setLoading(false)
-    })
+  const toNext = async (e)=>{
+    e.preventDefault();
+    form.validateFields((err, values) => {
+      if (!err) {
+        setLoading(true)
+        savePaymentInfo({
+          email: userInfo.accountName,
+          storeId: userInfo.storeId,
+          companyInfoId:userInfo.companyInfoId,
+          ...values
+        }).then(({res,err})=>{
+          if(err){
+            setLoading(false)
+          }else {
+            setLoading(false)
+            setStep(5)
+          }
+        })
+      }
+    });
   }
 
 
@@ -39,32 +46,37 @@ export default function Step5({ setStep,userInfo,paymentInfoRequest }) {
         </Row>
       </div>
       <div style={{width:600,margin:'20px auto'}}>
-        <Form layout="vertical" onFinish={toNext} form={form}>
+        <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 24]}>
             <Col span={24}>
-              <FormItem label="IBAN"
-                        name="iban"
-                        rules={[
-                            { required: true, message: 'Please input IBAN!' },
-                            { type: "string", len: 16 }
-                        ]}>
-                <Input size="large" />
+              <FormItem label="IBAN">
+                {getFieldDecorator('iban', {
+                  rules: [
+                    { required: true, message: 'Please input IBAN!' },
+                    { type: "string", len: 16 }
+                  ],
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem label="Payout Summary Label"
-                        name="payoutSummaryLabel"
-                        // rules={[{ required: true, message: 'Please input Payout Summary Label!' }]}
-              >
-                <Input size="large" />
+              <FormItem label="Payout Summary Label">
+                {getFieldDecorator('payoutSummaryLabel', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem label="Debit Summary Label"
-                        name="debitSummaryLabel"
-                        // rules={[{ required: true, message: 'Please input Debit Summary Label!' }]}
-              >
-                <Input size="large" />
+              <FormItem label="Debit Summary Label">
+                {getFieldDecorator('debitSummaryLabel', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
               </FormItem>
             </Col>
             <Col span={12} className="align-item-right">
@@ -81,5 +93,6 @@ export default function Step5({ setStep,userInfo,paymentInfoRequest }) {
     </div>
   );
 }
+export default Form.create()(Step5);
 
 

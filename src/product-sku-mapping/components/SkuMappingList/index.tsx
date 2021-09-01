@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
 import {FormattedMessage} from 'react-intl';
-import { AntIcon, AntSpin } from 'biz';
+import { AntIcon } from 'biz';
 import SkuMappingModal from '../SkuMappingModal';
 import './index.less';
 
@@ -104,10 +104,7 @@ export default class SkuMappingList extends React.Component<any, any>{
             <div>
                 <Table
                     rowKey='goodsInfoId'
-                    loading={{
-                        spinning: loading,
-                        indicator: AntSpin.loadingImg
-                    }}
+                    loading={loading}
                     bordered
                     dataSource={data.content}
                     columns={columns}

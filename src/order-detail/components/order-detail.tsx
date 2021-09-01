@@ -281,7 +281,7 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '9%',
         render: (text, record) => {
           const productName =
-            text === 'individualization' ? record.petsName + '\'s personalized subscription' : text;
+            text === 'individualization' ? record.petsName + '\'s '+text : text;
           return (
             <Tooltip
               overlayStyle={{

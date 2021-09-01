@@ -12,10 +12,11 @@ import Create from './components/Creating';
 import './index.less';
 import '../assets/App.less'
 const { Step } = Steps;
-
- function CreateStores() {
+  const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909
+  const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053
+function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
-  const [current, setCurrent] = useState(4);
+  const [current, setCurrent] = useState(1);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
@@ -57,13 +58,16 @@ const { Step } = Steps;
           <Step1 setStep={setCurrent} userInfo={userInfo}/>
         </div>
         <div style={{display: current === 1 ? 'block' : 'none' }}>
-          <Step2 setStep={setCurrent} userInfo={userInfo} legalInfo={submitData?.legalInfo}/>
+          <Step2 setStep={setCurrent} userInfo={userInfo} legalInfo={submitData?.legalInfo}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 2 ? 'block' : 'none' }}>
-          <Step3 setStep={setCurrent} userInfo={userInfo} step={current} store={submitData?.store}/>
+          <Step3 setStep={setCurrent} userInfo={userInfo} step={current} store={submitData?.store}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 3 ? 'block' : 'none' }}>
-          <Step4 setStep={setCurrent} userInfo={userInfo} step={current}/>
+          <Step4 setStep={setCurrent} userInfo={userInfo} step={current}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 4 ? 'block' : 'none' }}>
           <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>

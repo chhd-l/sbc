@@ -10,7 +10,7 @@ const enumType = {
   0:'Cat',
   1:'Dog'
 }
-export default function Step4({ setStep,userInfo,step }) {
+export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [formData, setFormData] = useState({});
   
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
@@ -151,7 +151,7 @@ export default function Step4({ setStep,userInfo,step }) {
       priceSetting({
         email: userInfo.accountName,
         storeId: userInfo.storeId,
-        sourceStoreId: 123457915,
+        sourceStoreId: sourceStoreId,
         priceSettingList: array,
         companyInfoId:userInfo.companyInfoId
       }).then(res=>{

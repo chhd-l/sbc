@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { Select, Spin } from 'antd';
+import { Icon, Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 
 const { Option } = Select;
@@ -35,7 +35,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, defaultOptions=[]
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}
-            notFoundContent={fetching ? <Spin size="small"/> : null}
+            notFoundContent={fetching ? <Icon type="loading" /> : null}
             {...props}
         >
             {

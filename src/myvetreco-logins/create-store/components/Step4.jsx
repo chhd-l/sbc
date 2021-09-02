@@ -114,7 +114,6 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 保存价格设置
    */
   const savePrice = () => {
-    debugger
     let newChooseObj = {...formData}
     // if(checkAllObj.Cat){
     //   for(let i in allObj.cat){

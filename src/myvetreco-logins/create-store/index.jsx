@@ -16,7 +16,7 @@ const { Step } = Steps;
   const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()

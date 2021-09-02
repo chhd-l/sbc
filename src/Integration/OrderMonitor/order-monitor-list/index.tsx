@@ -133,7 +133,6 @@ export default class OrderMonitorList extends Component<any, any> {
     this.getOrderMonitorList(params)
   }
   handleDownload = () => {
-    debugger
     const { currentSearchForm } = this.state;
     let params = {
       beginTime: currentSearchForm.startDate ? currentSearchForm.startDate + " 00:00:00" : null,

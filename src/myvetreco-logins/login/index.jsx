@@ -33,7 +33,7 @@ function CreateAccount( { form }) {
             localStorage.removeItem('account');
             localStorage.removeItem('password');
           }
-          if(![123456858,123457907,123457908,123457909,123457910,123457911,123457915].includes(values.storeId)){
+          if(![123456858,123457907,123457908,123457909,123457910,123457911,123457915].includes(res.storeId)){
             getIsCreateStore(values.account);
           }
           setLoading(false);

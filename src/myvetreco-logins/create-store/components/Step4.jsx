@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Row, Col, Input, Checkbox, InputNumber, message, Spin} from 'antd';
 import ProductList from './price/ProductList';
 import {listCategory, listGoodsByCategory, priceSetting} from "../webapi";
+import {bignumber, multiply, round, format} from "mathjs";
 
 export const FormContext = React.createContext({});
 
@@ -9,7 +10,7 @@ const enumType = {
   0:'Cat',
   1:'Dog'
 }
-export default function Step4({ setStep,userInfo,step }) {
+export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [formData, setFormData] = useState({});
   
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
@@ -113,9 +114,32 @@ export default function Step4({ setStep,userInfo,step }) {
    * 保存价格设置
    */
   const savePrice = () => {
+    debugger
     let newChooseObj = {...formData}
-    checkAllObj.Cat ? newChooseObj = {...allObj.cat,...newChooseObj} : ''
-    checkAllObj.Dog ? newChooseObj = {...allObj.Dog,...newChooseObj} : ''
+    // if(checkAllObj.Cat){
+    //   for(let i in allObj.cat){
+    //     allObj.cat[i] = {
+    //       isChecked: allObj.cat[i].isChecked,
+    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
+    //       sku: allObj.cat[i].sku,
+    //       spu: allObj.cat[i].spu,
+    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
+    //     }
+    //   }
+    //   newChooseObj = {...allObj.cat,...newChooseObj}
+    // }
+    // if(checkAllObj.Dog){
+    //   for(let i in allObj.Dog){
+    //     allObj.Dog[i] = {
+    //       isChecked: allObj.Dog[i].isChecked,
+    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
+    //       sku: allObj.Dog[i].sku,
+    //       spu: allObj.Dog[i].spu,
+    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
+    //     }
+    //   }
+    //   newChooseObj = {...allObj.Dog,...newChooseObj}
+    // }
     let array = []
     for(let i in newChooseObj){
       if(newChooseObj[i].isChecked){
@@ -127,7 +151,7 @@ export default function Step4({ setStep,userInfo,step }) {
       priceSetting({
         email: userInfo.accountName,
         storeId: userInfo.storeId,
-        sourceStoreId: 123457915,
+        sourceStoreId: sourceStoreId,
         priceSettingList: array,
         companyInfoId:userInfo.companyInfoId
       }).then(res=>{
@@ -154,7 +178,7 @@ export default function Step4({ setStep,userInfo,step }) {
       >
         <Spin spinning={loading} size="large">
           <div className="vmargin-level-4 align-item-center word big">4 / 5 Set a price for your product</div>
-          <div style={{width:800,margin:'20px auto'}}>
+          <div style={{width:850,margin:'20px auto'}}>
             <Row gutter={24} style={{marginBottom:'10px'}}>
               <Col span={6}>
                 <div className="word small tip">Sales price percentage</div>
@@ -178,19 +202,19 @@ export default function Step4({ setStep,userInfo,step }) {
                              step={0.1}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
-              <Col span={4}>
+              <Col span={3}>
                 <Checkbox checked={roundOff} onChange={(e)=>{
                   setRoundOff(e.target.checked)
                 }}>
                   <span className="word small tip">round off</span>
                 </Checkbox>
               </Col>
-              <Col span={6}>
-                <>
-                  <Button type="primary" onClick={applyPercentage}>Apply</Button>
-                  <Button loading={loading} type="primary" onClick={savePrice}>Save and Next</Button>
+              <Col span={9}>
+                <div style={{display:'inline-flex'}}>
+                  <Button type="primary" onClick={applyPercentage} style={{marginRight:6}}>Apply</Button>
+                  <Button loading={loading} type="primary" onClick={savePrice} style={{marginRight:6}}>Save and Next</Button>
                   <Button onClick={() => setStep(2)}>back</Button>
-                </>
+                </div>
               </Col>
             </Row>
           </div>

@@ -248,9 +248,7 @@ export default class InterfaceView extends Component<any, any> {
 
     return (
       <AuthWrapper functionName="f_interface_details">
-        <Spin spinning={loading} indicator={<img className="spinner"
-          src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif"
-          style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
 
 
           <BreadCrumb thirdLevel={true}>

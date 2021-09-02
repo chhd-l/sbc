@@ -855,6 +855,16 @@ const routes = [
     path:'/message-template-configuration',
     asyncComponent: () => import('./message-template-configuration')
   },
+  //message-template-detail
+  {
+    path:'/template-details/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateDetail')
+  },
+  //message-template-edit
+  {
+    path:'/template-edit/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateEdit')
+  },
   //message-overview
   {
     path: '/message-overview',
@@ -1069,7 +1079,19 @@ const routes = [
   {
     path: '/log-response/:id',
     asyncComponent: () => import('./Integration/Log/log-response')
-  }
+  },
+  {
+    path: '/order-monitor',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-list')
+  },
+  {
+    path: '/order-monitor-details/:id',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-details')
+  },
+  {
+    path: '/api-document',
+    asyncComponent: () => import('./Integration/ApiDocument')
+  },
 ];
 
 const homeRoutes = [

@@ -873,7 +873,7 @@ export default {
         'Order.zeroOrderAuditMethod': 'Zero price order audit method ',
         'Order.pending': 'Pending',
         'Order.pendingAuditBasis': 'Audit Basis: Authorization, payment, product, order',
-        'Order.orderAutoAudit': 'Automatic audit:',
+        'Order.orderAutoAudit': 'Automatic audit',
         'Order.autoAuditExceptConditionTip1': 'Order meeting the following conditions require  ',
         'Order.autoAuditExceptConditionTip2': 'manual audit',
         'Order.autoAuditExceptCondition1': 'Orders with 0 price ',
@@ -885,6 +885,9 @@ export default {
         'Order.Operator Type': 'Operator Type',
         'Order.Operation Category': 'Operation Category',
         'Order.Operation Log': 'Operation Log',
+        'Order.PrerequisitesForAudit': 'Prerequisites for audit',
+        'Order.PetProfile': 'Pet profile',
+        'Order.Individualization':'Individualization',
 
     },
     Subscription: {
@@ -2357,6 +2360,8 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
+        'Menu.Order monitor':'Order monitor',
+        'Menu.Api document':'Api document'
 
     },
     Others: {
@@ -2478,6 +2483,18 @@ export default {
         'Log.Success': 'Success',
         'Log.Fail': 'fail',
         'Log.ResultMessage': 'Result message',
+
+        'OrderMonitor.OrderMonitor':'Order Monitor',
+        'OrderMonitor.OrderMonitorDetails':'Order Monitor Details',
+        'OrderMonitor.ExceptionType':'Exception type',
+        'OrderMonitor.OrderExportStatus':'Order export status',
+        'OrderMonitor.PlatformType':'Platform type',
+        'OrderMonitor.DisplayTimezone':'Display timezone',
+        'OrderMonitor.RequestBody':'Request body',
+        'OrderMonitor.ResponseBody':'Response body',
+        'OrderMonitor.ExportDetailList':'Export detail list',
+
+        'ApiDocument.ApiName':'Api name',
 
     },
 

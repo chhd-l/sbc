@@ -145,7 +145,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber defaultValue={rowInfo.depth} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'depth', e)}/>
+                <InputNumber value={rowInfo.depth} defaultValue={rowInfo.depth} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'depth', e)}/>
               </Col>
             </Row>
           )
@@ -158,7 +158,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select defaultValue={rowInfo.depthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'depthUnit', e)}>
+                <Select value={rowInfo.depthUnit || "mm"} defaultValue={rowInfo.depthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'depthUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>
@@ -174,7 +174,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber defaultValue={rowInfo.width} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'width', e)}/>
+                <InputNumber value={rowInfo.width} defaultValue={rowInfo.width} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'width', e)}/>
               </Col>
             </Row>
           )
@@ -187,7 +187,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select defaultValue={rowInfo.widthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'widthUnit', e)}>
+                <Select value={rowInfo.widthUnit || "mm"} defaultValue={rowInfo.widthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'widthUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>
@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber defaultValue={rowInfo.height} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'height', e)}/>
+                <InputNumber value={rowInfo.height} defaultValue={rowInfo.height} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'height', e)}/>
               </Col>
             </Row>
           )
@@ -216,7 +216,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select defaultValue={rowInfo.heightUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'heightUnit', e)}>
+                <Select value={rowInfo.heightUnit || "mm"} defaultValue={rowInfo.heightUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'heightUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const { Option } = Select;
- function Step2({ setStep, userInfo, legalInfo={} ,form}) {
+ function Step2({ setStep, userInfo, legalInfo={} ,form,sourceStoreId,sourceCompanyInfoId}) {
   const [loading, setLoading] = useState(false);
   const {getFieldDecorator}=form
  
@@ -29,7 +29,7 @@ const { Option } = Select;
           email: userInfo.accountName,
           storeId: userInfo.storeId,
           companyInfoId: userInfo.companyInfoId,
-          sourceStoreId: 123457915,
+          sourceStoreId: sourceStoreId,
           ...values
         }).then(res => {
           setStep(2)
@@ -62,7 +62,7 @@ const { Option } = Select;
                 {getFieldDecorator('tradeCategoryCode', {
                   rules: [{ required: true, message: 'Trader category code (MCC)' }],
                  initialValue: legalInfo?.tradeCategoryCode??''
-                })(<Input size="large" placeholder='Trader category code (MCC)' suffix={<i className="iconfont iconemail1" style={{ fontSize: 18, color: '#a0b0bb' }}></i>} />)}
+                })(<Input size="large" placeholder='Trader category code (MCC)' />)}
               </FormItem>
 
             </Col>

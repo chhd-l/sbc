@@ -3,7 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 import AppStore from '../store';
 import '../index.less';
 import { fromJS, Map } from 'immutable';
-import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Icon } from 'antd';
 import { Link } from 'react-router-dom';
@@ -85,7 +85,7 @@ export default class SeoForm extends Component<any, any> {
         {/*</Form.Item>*/}
         <Form.Item label="Title">
           {getFieldDecorator('titleSource', {
-            initialValue: seoObj.titleSource
+            initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.titleSource
           })(
             <Input
               onChange={(e) =>
@@ -121,7 +121,7 @@ export default class SeoForm extends Component<any, any> {
           <>
             <Form.Item label="Meta Keywords">
               {getFieldDecorator('metaKeywordsSource', {
-                initialValue: seoObj.metaKeywordsSource
+                initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaKeywordsSource
               })(
                 <TextArea
                   rows={4}
@@ -136,7 +136,7 @@ export default class SeoForm extends Component<any, any> {
             </Form.Item>
             <Form.Item label="Meta Description">
               {getFieldDecorator('metaDescriptionSource', {
-                initialValue: seoObj.metaDescriptionSource
+                initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaDescriptionSource
               })(
                 <TextArea
                   rows={4}

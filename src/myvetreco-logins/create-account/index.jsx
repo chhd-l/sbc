@@ -42,8 +42,8 @@ function CreateAccount({ form }) {
               '',
               res => {
                 console.log(res)
-                  // sessionStorage.setItem('storeToken', res.context?.token ?? '');
-                  // history.push('/create-store');
+                  sessionStorage.setItem('storeToken', res?.token ?? '');
+                  history.push('/create-store');
                 }
               );
           }else {

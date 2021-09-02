@@ -35,7 +35,7 @@ class MessageDetails extends Component<any, any> {
         taskId: '',
         emailCategory: '',
         templateId: '',
-        emailTemplate: '',
+        messageTemplate: '',
         objectType: '',
         objectNo: '',
         status: 0,
@@ -200,7 +200,7 @@ class MessageDetails extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList,
+          emailTemplateList: res.context.messageTemplateResponseList,
           templateFetching: false
         });
       }
@@ -220,7 +220,7 @@ class MessageDetails extends Component<any, any> {
           objectType: basicForm.objectType,
           objectNo: basicForm.objectNo,
           templateId: basicForm.templateId,
-          emailTemplate: basicForm.emailTemplate,
+          messageTemplate: basicForm.messageTemplate,
           category: basicForm.emailCategory,
           status: +basicForm.status === 1 ? basicForm.status : 0,
           sendType: basicForm.sendType,
@@ -256,7 +256,7 @@ class MessageDetails extends Component<any, any> {
           objectNo: basicForm.objectNo,
           baseUrl: basicForm.baseUrl,
           templateId: basicForm.templateId,
-          emailTemplate: basicForm.emailTemplate,
+          messageTemplate: basicForm.messageTemplate,
           category: basicForm.emailCategory,
           sendType: basicForm.sendType,
           sendTime: basicForm.sendTime || sessionStorage.getItem('defaultLocalDateTime'),
@@ -417,7 +417,7 @@ class MessageDetails extends Component<any, any> {
           taskId: taskDetail.taskId,
           emailCategory: taskDetail.category,
           templateId: taskDetail.templateId,
-          emailTemplate: taskDetail.emailTemplate,
+          messageTemplate: taskDetail.messageTemplate,
           objectType: taskDetail.objectType,
           objectNo: taskDetail.objectNo,
           status: taskDetail.status,
@@ -639,7 +639,7 @@ class MessageDetails extends Component<any, any> {
                             let name = option.props.children;
                             value = value === '' ? null : value;
                             this.onBasicFormChange({
-                              field: 'emailTemplate',
+                              field: 'messageTemplate',
                               value: name
                             });
                             this.onBasicFormChange({
@@ -653,8 +653,8 @@ class MessageDetails extends Component<any, any> {
                         >
                           {emailTemplateList &&
                             emailTemplateList.map((item, index) => (
-                              <Option title={item.emailTemplate && item.emailTemplate.length > 15 ? item.emailTemplate : ''} value={item.templateId} key={index}>
-                                {item.emailTemplate}
+                              <Option title={item.messageTemplate && item.messageTemplate.length > 15 ? item.messageTemplate : ''} value={item.templateId} key={index}>
+                                {item.messageTemplate}
                               </Option>
                             ))}
                         </Select>

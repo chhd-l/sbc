@@ -103,7 +103,6 @@ class AsyncLoader extends React.Component<any, any> {
 
   componentDidMount() {
     const { load } = this.props;
-
     const { handlePathMatched } = this.props;
     handlePathMatched(this.props.match.path);
 

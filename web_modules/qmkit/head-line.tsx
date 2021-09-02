@@ -11,11 +11,13 @@ export default class Headline extends React.PureComponent<any, any> {
     lineDisable?: Boolean;
     smallTitle?: string;
     extra?: any;
+    style?:{}
+    className?:string
   };
 
   render() {
     return (
-      <div className={this.props.lineDisable ? 'headlinewithnoline' : 'headline'}>
+      <div className={this.props.lineDisable ? 'headlinewithnoline' : 'headline' +' '+this.props.className} style={this.props.style}>
         <h3>
           {this.props.title}
           {(this.props.number || +this.props.number === 0 ) && <small>(<FormattedMessage id="Order.total" />{` ${+this.props.number}`})</small>}

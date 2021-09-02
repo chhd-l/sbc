@@ -2495,6 +2495,21 @@ export default {
         'OrderMonitor.ExportDetailList':'Export detail list',
 
         'ApiDocument.ApiName':'Api name',
+        'ApiDocument.Creater':'Creater',
+        'ApiDocument.UpdateTime':'Update time',
+        'ApiDocument.Tag':'Tag',
+        'ApiDocument.ApiPath':'Api path',
+        'ApiDocument.MockUrl':'Mock url',
+        'ApiDocument.RequestParameter':'Request parameter',
+        'ApiDocument.PathParameters':'Path parameters',
+        'ApiDocument.Headers':'Headers',
+        'ApiDocument.ParameterName':'Parameter name',
+        'ApiDocument.Example':'Example',
+        'ApiDocument.ParameterValue':'Parameter value	',
+        'ApiDocument.Required':'Required',
+
+        
+        
 
     },
 

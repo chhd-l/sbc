@@ -89,7 +89,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
       },
       {
         title: RCi18n({ id: 'Finance.Paymentamount' }),
-        dataIndex: 'paymentamount',
+        dataIndex: 'paymentAmount',
         key: 'paymentamount',
       },
       {

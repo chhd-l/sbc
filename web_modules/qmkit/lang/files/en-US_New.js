@@ -151,16 +151,16 @@ export default {
         'Product.Marketpricepercentage':'Market price percentage',
         'Product.Subscriptionpricepercentage':'Subscription price percentage',
         'Product.Roundoff':'round off',
-        'Product.PriceTableColumnImage':'IMAGE',
-        'Product.PriceTableColumnType':'PRODUCT TYPE',
-        'Product.PriceTableColumnName':'PRODUCT NAME',
+        'Product.PriceTableColumnImage':'Image',
+        'Product.PriceTableColumnType':'Product type',
+        'Product.PriceTableColumnName':'Product name',
         'Product.PriceTableColumnSKU':'SKU',
         'Product.PriceTableColumnSPU':'SPU',
-        'Product.PriceTableColumnCategory':'PRODUCT CATEGORY',
-        'Product.PriceTableColumnPurchasePrice':'PURCHASE PRICE',
-        'Product.PriceTableColumnMarketPrice':'MARKET PRICE',
-        'Product.PriceTableColumnSubscriptionPrice':'SUBSCRIPTION PRICE',
-        'Product.PriceTableColumnUpatatime':'UPDATED TIME',
+        'Product.PriceTableColumnCategory':'Product category',
+        'Product.PriceTableColumnPurchasePrice':'Purchase price(Incl. VAT)',
+        'Product.PriceTableColumnMarketPrice':'Market price',
+        'Product.PriceTableColumnSubscriptionPrice':'Subscription price',
+        'Product.PriceTableColumnUpatatime':'Updated time',
 
 
 
@@ -2360,7 +2360,8 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
-        'Menu.Order monitor':'Order monitor'
+        'Menu.Order monitor':'Order monitor',
+        'Menu.Api document':'Api document'
 
     },
     Others: {
@@ -2491,7 +2492,24 @@ export default {
         'OrderMonitor.DisplayTimezone':'Display timezone',
         'OrderMonitor.RequestBody':'Request body',
         'OrderMonitor.ResponseBody':'Response body',
-        'OrderMonitor.ExportDetailList':'Export detail list'
+        'OrderMonitor.ExportDetailList':'Export detail list',
+
+        'ApiDocument.ApiName':'Api name',
+        'ApiDocument.Creater':'Creater',
+        'ApiDocument.UpdateTime':'Update time',
+        'ApiDocument.Tag':'Tag',
+        'ApiDocument.ApiPath':'Api path',
+        'ApiDocument.MockUrl':'Mock url',
+        'ApiDocument.RequestParameter':'Request parameter',
+        'ApiDocument.PathParameters':'Path parameters',
+        'ApiDocument.Headers':'Headers',
+        'ApiDocument.ParameterName':'Parameter name',
+        'ApiDocument.Example':'Example',
+        'ApiDocument.ParameterValue':'Parameter value	',
+        'ApiDocument.Required':'Required',
+
+        
+        
 
     },
 

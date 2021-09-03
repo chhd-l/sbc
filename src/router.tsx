@@ -1088,6 +1088,10 @@ const routes = [
     path: '/order-monitor-details/:id',
     asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-details')
   },
+  {
+    path: '/api-document',
+    asyncComponent: () => import('./Integration/ApiDocument')
+  },
 ];
 
 const homeRoutes = [

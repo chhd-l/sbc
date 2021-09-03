@@ -214,7 +214,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           break;
         default:
           //申请开店
-          history.push('/shop-process');
+          history.push('/create-store');
       }
       callback(res.context)
     } else {
@@ -429,7 +429,7 @@ export async function switchLogin(params, callback?: Function) {
           break;
         default:
           //申请开店
-          history.push('/shop-process');
+          history.push('/create-store');
       }
       callback(res)
     } else {

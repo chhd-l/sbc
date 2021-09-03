@@ -1,6 +1,7 @@
-import { Breadcrumb, Button, Descriptions, Spin, Table } from 'antd'
+import { Breadcrumb, Button, Descriptions, Modal, Spin, Table } from 'antd'
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit'
 import React, { Component } from 'react'
+import ReactJson from 'react-json-view'
 import * as webapi from './../webapi'
 
 export default class OrderMonitorDetails extends Component<any, any> {
@@ -10,7 +11,10 @@ export default class OrderMonitorDetails extends Component<any, any> {
       loading: false,
       detailInfo: {},
       pspDetailList: [],
-      exportDetailList: []
+      exportDetailList: [],
+      visible:false, 
+      title:'', 
+      showJson:{}
 
     }
   }
@@ -65,7 +69,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
   }
 
   render() {
-    const { detailInfo, loading, pspDetailList, exportDetailList } = this.state
+    const { detailInfo, loading, pspDetailList, exportDetailList ,visible, title, showJson} = this.state
     const PSP_columns = [
       {
         title: RCi18n({ id: 'Order.Time' }),
@@ -89,7 +93,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
       },
       {
         title: RCi18n({ id: 'Finance.Paymentamount' }),
-        dataIndex: 'paymentamount',
+        dataIndex: 'paymentAmount',
         key: 'paymentamount',
       },
       {
@@ -131,7 +135,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
         key: 'requestBody',
         render: (text, record) => (
           <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'OrderMonitor.RequestBody' }), record.requestBody ? record.requestBody : {})
+            this.openJsonPage(RCi18n({ id: 'OrderMonitor.RequestBody' }), record.requestBody ? JSON.parse(record.requestBody) : {})
           }}>
             {RCi18n({ id: 'OrderMonitor.RequestBody' })}</Button>
         )
@@ -141,7 +145,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
         key: 'responseBody',
         render: (text, record) => (
           <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'OrderMonitor.ResponseBody' }), record.responseBody ? record.responseBody : {})
+            this.openJsonPage(RCi18n({ id: 'OrderMonitor.ResponseBody' }),  record.responseBody ? JSON.parse(record.responseBody) : {})
           }}>
             {RCi18n({ id: 'OrderMonitor.ResponseBody' })}</Button>
         )
@@ -211,6 +215,20 @@ export default class OrderMonitorDetails extends Component<any, any> {
               pagination={false}
               scroll={{ x: '100%' }} />
           </div>
+
+          <Modal
+          visible={visible}
+          width={1050}
+          title={title}
+          footer={null}
+          onCancel={() => this.setState({
+            visible: false
+          })}
+        >
+
+          <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+
+        </Modal>
 
         </Spin>
 

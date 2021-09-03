@@ -3,6 +3,7 @@ import { Steps } from 'antd';
 import { RCi18n,Const } from 'qmkit';
 import {getUserStatus} from '../login/webapi'
 import logo from '../assets/images/login_logo.png';
+import fgsLogo from '../../login-admin/img/logo.png';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
@@ -12,10 +13,12 @@ import Create from './components/Creating';
 import './index.less';
 import '../assets/App.less'
 const { Step } = Steps;
-
- function CreateStores() {
+  const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909
+  const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053
+  const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo
+function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
-  const [current, setCurrent] = useState(4);
+  const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()
@@ -35,7 +38,7 @@ const { Step } = Steps;
     {
       current<5?(<div className="create-store-page scrollbar">
       <div className="vmargin-level-4 align-item-center">
-        <img src={logo} width="166" alt="" />
+        <img src={Logo} width="166" alt="" />
       </div>
       <div className="vmargin-level-4 align-item-center word large">{RCi18n({id:'Login.create_store_title'})}</div>
       <div className="vmargin-level-4">
@@ -57,13 +60,16 @@ const { Step } = Steps;
           <Step1 setStep={setCurrent} userInfo={userInfo}/>
         </div>
         <div style={{display: current === 1 ? 'block' : 'none' }}>
-          <Step2 setStep={setCurrent} userInfo={userInfo} legalInfo={submitData?.legalInfo}/>
+          <Step2 setStep={setCurrent} userInfo={userInfo} legalInfo={submitData?.legalInfo}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 2 ? 'block' : 'none' }}>
-          <Step3 setStep={setCurrent} userInfo={userInfo} step={current} store={submitData?.store}/>
+          <Step3 setStep={setCurrent} userInfo={userInfo} step={current} store={submitData?.store}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 3 ? 'block' : 'none' }}>
-          <Step4 setStep={setCurrent} userInfo={userInfo} step={current}/>
+          <Step4 setStep={setCurrent} userInfo={userInfo} step={current}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 4 ? 'block' : 'none' }}>
           <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>

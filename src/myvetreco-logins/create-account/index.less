@@ -3,6 +3,16 @@
   color: var(--primary-color);
 }
 */
+.fgsBgc{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url(../../login-admin/img/bg_login.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
 .login-container {
   position: absolute;
   width: 100%;
@@ -36,24 +46,38 @@
       right: 0;
       top: 10%;
     }
-    .ca-logo {
-      width: 300px;
-      height: 60px;
+    .fgsLogo{
+      width: 350px;
+      height: 70px;
       margin: 0 auto;
-      padding-bottom: 70px;
       position: relative;
-
       img{
-        width: 33px;
-        height: 45px;
+        width: 80px;
+        height: 35px;
       }
-
       span {
         font-size: 30px;
         font-weight: 500;
         font-stretch: normal;
         letter-spacing: 0px;
-        color: #448bff;
+        color: var(--primary-color);
+      }
+    }
+    .ca-logo {
+      width: 300px;
+      height: 70px;
+      margin: 0 auto;
+      position: relative;
+      img{
+        width: 33px;
+        height: 45px;
+      }
+      span {
+        font-size: 30px;
+        font-weight: 500;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: var(--primary-color);
       }
 
       .jl {

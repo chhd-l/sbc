@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
-function Step3({ setStep,userInfo,store={},form }) {
+function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoId }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
@@ -60,8 +60,8 @@ function Step3({ setStep,userInfo,store={},form }) {
               storeLogo:imgUrl,
               currentCompanyInfoId: userInfo?.companyInfoId,
               currentStoreId: userInfo?.storeId,
-              sourceCompanyInfoId: 1062,
-              sourceStoreId: 123457915,
+              sourceCompanyInfoId: sourceCompanyInfoId,
+              sourceStoreId: sourceStoreId,
               storeSign:faviconUrl,
               ...values,
               cityId:values.cityId.key,
@@ -221,11 +221,10 @@ function Step3({ setStep,userInfo,store={},form }) {
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadIconProps}>
                 {
-                  faviconUrl ? <Image
+                  faviconUrl ? <img
                     src={faviconUrl}
                     width={90}
                     height={90}
-                    preview={false}
                   /> : (
                     <>
                       <p className="ant-upload-drag-icon">

@@ -19,6 +19,13 @@
   }
 
   .ant-select-lg{
+    .ant-select-selection{
+      height: 46px!important;
+    }
+    .ant-select-selection__rendered{
+      height: 44px!important;
+      line-height: 46px!important;
+    }
     .ant-select-selector{
       height: 46px!important;
       .ant-select-selection-search-input{
@@ -42,9 +49,9 @@
     color: rgba(48, 70, 90, 0.6);
   }
 
-  .ReactVirtualized__List{
-    //max-height: 600px;
-    //overflow-y: auto;
+  .ReactVirtualized__List, .ant-spin-container{
+    max-height: 600px;
+    overflow-y: auto;
     &::-webkit-scrollbar {
       height: 5px;
       width: 5px;

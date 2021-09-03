@@ -6,14 +6,23 @@ import ModalFormClub from './conponents/modal-form-club';
 import ModalFormIndividual from './conponents/modal-form-individual';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { querySysDictionary,delSysDictionary, defaultProductSetting, translateAddBatch, addSysDictionary } from './webapi';
+import {
+  querySysDictionary,
+  delSysDictionary,
+  defaultProductSetting,
+  translateAddBatch,
+  addSysDictionary
+} from './webapi';
+
 const { Option } = Select;
 const { confirm } = Modal;
+
 class ProductSearchSetting extends Component<any, any> {
   state = {
     visible: false,
     visibleClub: false,
     visibleIndividual: false,
+    loading: false,
 
     disabled: false,
     options: [],
@@ -26,8 +35,8 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionIndividualFrequencyId: '',
     language: [],
     purchaseType: [],
-    priceDisplayMethod:0,
-    basePricePDPShowedFlag:0
+    priceDisplayMethod: 0,
+    basePricePDPShowedFlag: 0
   };
 
   componentDidMount() {
@@ -95,16 +104,14 @@ class ProductSearchSetting extends Component<any, any> {
 
   handleIndividualSubmit = () => {
     this.setState(
-        {
-          visibleIndividual: false
-        },
-        () => {
-          this.querySysDictionary();
-        }
+      {
+        visibleIndividual: false
+      },
+      () => {
+        this.querySysDictionary();
+      }
     );
   };
-
-
 
 
   /**
@@ -123,7 +130,7 @@ class ProductSearchSetting extends Component<any, any> {
 
       querySysDictionary({ type: 'Frequency_day_individual' }),
       querySysDictionary({ type: 'Frequency_week_individual' }),
-      querySysDictionary({ type: 'Frequency_month_individual' }),
+      querySysDictionary({ type: 'Frequency_month_individual' })
 
     ]);
     let {
@@ -150,8 +157,8 @@ class ProductSearchSetting extends Component<any, any> {
     let weeksIndividual = result[9].res?.context?.sysDictionaryVOS ?? [];
     let monthsIndividual = result[10].res?.context?.sysDictionaryVOS ?? [];
 
-    let options = [...months, ...weeks,...day];
-    let optionsClub = [...monthsClub, ...weeksClub,...dayClub];
+    let options = [...months, ...weeks, ...day];
+    let optionsClub = [...monthsClub, ...weeksClub, ...dayClub];
     let optionsIndividual = [...monthsIndividual, ...weeksIndividual, ...dayIndividual];
 
     let d = languageId.split(',');
@@ -171,29 +178,30 @@ class ProductSearchSetting extends Component<any, any> {
       language,
       purchaseType,
       basePricePDPShowedFlag,
-      priceDisplayMethod,
+      priceDisplayMethod
 
     });
   }
 
-  async deleteDict(item,type){
-  const {res}=  await delSysDictionary({id:item.id})
-  this.querySysDictionary();
-   message.success(res.message)
-   this.props.form.setFieldsValue({
-    [type]:null
-   })
+  async deleteDict(item, type) {
+    const { res } = await delSysDictionary({ id: item.id });
+    this.querySysDictionary();
+    message.success(res.message);
+    this.props.form.setFieldsValue({
+      [type]: null
+    });
 
   }
 
-  showConfirm(item,type) {
-     const _this=this;
+  showConfirm(item, type) {
+    const _this = this;
     confirm({
       content: 'Are you sure you want to delete this frequency?',
-      onOk(){
-        _this.deleteDict(item,type);
+      onOk() {
+        _this.deleteDict(item, type);
       },
-      onCancel() {},
+      onCancel() {
+      }
     });
   }
 
@@ -203,8 +211,10 @@ class ProductSearchSetting extends Component<any, any> {
 
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        values.basePricePDPShowedFlag=values.basePricePDPShowedFlag?1:0;
+        this.setState({ loading: true });
+        values.basePricePDPShowedFlag = values.basePricePDPShowedFlag ? 1 : 0;
         const res: any = await defaultProductSetting(values);
+        this.setState({ loading: false });
         if (res.res.code === Const.SUCCESS_CODE) {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
@@ -217,6 +227,7 @@ class ProductSearchSetting extends Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const {
+      loading,
       disabled,
       defaultPurchaseType,
       visible,
@@ -239,20 +250,22 @@ class ProductSearchSetting extends Component<any, any> {
         <BreadCrumb />
         <div style={styles.formContainer}>
           <Form
-              name="complex"
-              onSubmit={this.onFinish}
-              labelAlign="left"
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 15 }}>
+            name='complex'
+            onSubmit={this.onFinish}
+            labelAlign='left'
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 15 }}
+          >
 
 
-            <Form.Item label={<span style={{ color: '#666' }}><FormattedMessage id="Product.Defaultpurchasetype" /></span>}>
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.Defaultpurchasetype' /></span>}>
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
                 rules: [
                   {
                     required: true,
-                    message: RCi18n({id:'Product.PleaseSelectPurchaseType'})
+                    message: RCi18n({ id: 'Product.PleaseSelectPurchaseType' })
                   }
                 ]
               })(
@@ -276,8 +289,8 @@ class ProductSearchSetting extends Component<any, any> {
 
             <Form.Item
               label={
-                <span className="ant-form-item-required" style={{ color: '#666' }}>
-                 <FormattedMessage id="Product.Defaultautoshipfrequency" />
+                <span className='ant-form-item-required' style={{ color: '#666' }}>
+                 <FormattedMessage id='Product.Defaultautoshipfrequency' />
                 </span>
               }
               style={{ marginBottom: 0 }}
@@ -286,56 +299,64 @@ class ProductSearchSetting extends Component<any, any> {
                 <Col span={8}>
                   <Form.Item>
                     {getFieldDecorator('defaultSubscriptionFrequencyId', {
-                      initialValue: defaultSubscriptionFrequencyId||'',
+                      initialValue: defaultSubscriptionFrequencyId || '',
                       rules: [
                         {
                           required: true,
-                          message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
+                          message: RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })
                         }
                       ]
                     })(
                       <Select
-                          disabled={disabled}
-                          optionLabelProp="label"
-                          placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
+                        disabled={disabled}
+                        optionLabelProp='label'
+                        placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
+                        style={{ width: 220 }}>
                         {options.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' ,position:'relative'}} >
-                              <span >{item.name}</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                              <span>{item.name}</span>
 
-                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',height:'90vh',padding:'5px 12px',position:'absolute',right:-10,top:-5}}>
-                            {/* <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
+                              <div onClick={e => e.stopPropagation()} style={{
+                                background: '#fff',
+                                height: '90vh',
+                                padding: '5px 12px',
+                                position: 'absolute',
+                                right: -10,
+                                top: -5
+                              }}>
+                                {/* <Popconfirm placement="topLeft" title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionFrequencyId')} okText="Confirm" cancelText="Cancel">
                               <Tooltip placement="top" title="Delete">
                                 <a>
                                   <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                 </a>
                               </Tooltip>
                             </Popconfirm> */}
-                            <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionFrequencyId')}>
-                                  <span className="icon iconfont iconDelete" style={{fontSize: 15}}/>
+                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionFrequencyId')}>
+                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }} />
                                 </a>
-                           </div>
-                          </div>
-                        </Option>
+                              </div>
+                            </div>
+                          </Option>
                         ))}
                       </Select>
                     )}
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Button type="primary" size="default" onClick={this.showModal} disabled={disabled}>
-                  <FormattedMessage id="Product.Addnewfrequency" />
-                </Button>
+                  <Button type='primary' size='default' onClick={this.showModal} disabled={disabled}>
+                    <FormattedMessage id='Product.Addnewfrequency' />
+                  </Button>
                 </Col>
               </Row>
 
 
             </Form.Item>
-            
+
             <Form.Item
               label={
-                <span className="ant-form-item-required" style={{ color: '#666' }}>
-                 <FormattedMessage id="Product.Defaultclubfrequency" />
+                <span className='ant-form-item-required' style={{ color: '#666' }}>
+                 <FormattedMessage id='Product.Defaultclubfrequency' />
                 </span>
               }
               style={{ marginBottom: 0 }}
@@ -345,35 +366,42 @@ class ProductSearchSetting extends Component<any, any> {
                   <Form.Item>
 
                     {getFieldDecorator('defaultSubscriptionClubFrequencyId', {
-                      initialValue: defaultSubscriptionClubFrequencyId||'',
+                      initialValue: defaultSubscriptionClubFrequencyId || '',
                       rules: [
                         {
                           required: true,
-                          message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
+                          message: RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })
                         }
-                      ],
-                     
+                      ]
+
                     })(
                       <Select disabled={disabled}
-                        optionLabelProp="label"
-                        placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
+                              optionLabelProp='label'
+                              placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
+                              style={{ width: 220 }}>
                         {optionsClub.map((item) => (
                           <Option key={item.id} value={item.id} label={item.name}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
-                              <span >{item.name}</span>
-  
-                              <div onClick={e=>e.stopPropagation()} style={{background:'#fff',padding:'5px 12px', position:'absolute',right:-10,top:-5}}>
-                              {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                              <span>{item.name}</span>
+
+                              <div onClick={e => e.stopPropagation()} style={{
+                                background: '#fff',
+                                padding: '5px 12px',
+                                position: 'absolute',
+                                right: -10,
+                                top: -5
+                              }}>
+                                {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                   </a>
                                 </Tooltip>
                               </Popconfirm> */}
-                               <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionClubFrequencyId')}>
-                                  <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
+                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionClubFrequencyId')}>
+                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }}></span>
                                 </a>
-                          </div>
+                              </div>
                             </div>
                           </Option>
                         ))}
@@ -381,9 +409,9 @@ class ProductSearchSetting extends Component<any, any> {
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                <Button type="primary" size="default" onClick={this.showClubModal} disabled={disabled}>
-                  <FormattedMessage id="Product.Addnewfrequency" />
-                </Button>
+                  <Button type='primary' size='default' onClick={this.showClubModal} disabled={disabled}>
+                    <FormattedMessage id='Product.Addnewfrequency' />
+                  </Button>
                 </Col>
               </Row>
 
@@ -391,123 +419,131 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-                label={
-                  <span className="ant-form-item-required" style={{ color: '#666' }}>
-                 <FormattedMessage id="Product.DefaultIndividualfrequency" />
+              label={<span style={{ color: '#666' }}>
+                  <FormattedMessage id='Product.DefaultIndividualfrequency' />
                 </span>
-                }
-                style={{ marginBottom: 0 }}
+              }
+              style={{ marginBottom: 0 }}
             >
               <Row gutter={20}>
                 <Col span={8}>
                   <Form.Item>
-
                     {getFieldDecorator('defaultSubscriptionIndividualFrequencyId', {
-                      initialValue: defaultSubscriptionIndividualFrequencyId||'',
-                      rules: [
-                        {
-                          required: true,
-                          message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
-                        }
-                      ],
-
+                      initialValue: defaultSubscriptionIndividualFrequencyId || ''
+                      // rules: [
+                      //   {
+                      //     required: true,
+                      //     message: RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})
+                      //   }
+                      // ],
                     })(
-                        <Select disabled={disabled}
-                                optionLabelProp="label"
-                                placeholder={RCi18n({id:'Product.PleaseSelectSubscriptionFrequency'})} style={{ width: 220 }}>
-                          {optionsIndividual.map((item) => (
-                              <Option key={item.id} value={item.id} label={item.name}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between',position:'relative' }} >
-                                  <span >{item.name}</span>
+                      <Select
+                        allowClear
+                        disabled={disabled}
+                        optionLabelProp='label'
+                        placeholder={RCi18n({ id: 'Product.PleaseSelectSubscriptionFrequency' })}
+                        style={{ width: 220 }}
+                      >
+                        {optionsIndividual.map((item) => (
+                          <Option key={item.id} value={item.id} label={item.name}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative' }}>
+                              <span>{item.name}</span>
 
-                                  <div onClick={e=>e.stopPropagation()} style={{background:'#fff',padding:'5px 12px', position:'absolute',right:-10,top:-5}}>
-                                    {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
+                              <div onClick={e => e.stopPropagation()} style={{
+                                background: '#fff',
+                                padding: '5px 12px',
+                                position: 'absolute',
+                                right: -10,
+                                top: -5
+                              }}>
+                                {/* <Popconfirm placement="right" style={{zIndex:9999999}} title="Are you sure you want to delete this frequency?" onConfirm={(e) => this.deleteDict(item,'defaultSubscriptionClubFrequencyId')} okText="Confirm" cancelText="Cancel">
                                 <Tooltip placement="top" title="Delete">
                                   <a>
                                     <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
                                   </a>
                                 </Tooltip>
                               </Popconfirm> */}
-                                    <a onClick={(e) => this.showConfirm(item,'defaultSubscriptionClubFrequencyId')}>
-                                      <span className="icon iconfont iconDelete" style={{ fontSize: 15 }}></span>
-                                    </a>
-                                  </div>
-                                </div>
-                              </Option>
-                          ))}
-                        </Select>
+                                <a onClick={(e) => this.showConfirm(item, 'defaultSubscriptionIndividualFrequencyId')}>
+                                  <span className='icon iconfont iconDelete' style={{ fontSize: 15 }} />
+                                </a>
+                              </div>
+                            </div>
+                          </Option>
+                        ))}
+                      </Select>
                     )}
                   </Form.Item></Col>
                 <Col span={4}>
-                  <Button type="primary" size="default" onClick={this.showIndividualModal} disabled={disabled}>
-                    <FormattedMessage id="Product.Addnewfrequency" />
+                  <Button type='primary' size='default' onClick={this.showIndividualModal} disabled={disabled}>
+                    <FormattedMessage id='Product.Addnewfrequency' />
                   </Button>
                 </Col>
               </Row>
             </Form.Item>
 
             <Form.Item label={<span style={{ color: '#666' }}>Price display method</span>}>
-                {getFieldDecorator('priceDisplayMethod', {
-                      initialValue: priceDisplayMethod||0,
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please select Price display method !'
-                        }
-                      ]
-                    })( <Select disabled={disabled}
-                      optionLabelProp="label"
-                      placeholder="Please select Price display method !" style={{ width: 220 }}>
-                      {["From the lowest to highest","Above the lowest","Lowest one-off and subscription price"].map((item,index) => (
-                        <Option key={index} title={item} value={index} label={item} >{item}</Option>
-                      ))}
-                    </Select>)}
-              </Form.Item>
-              
+              {getFieldDecorator('priceDisplayMethod', {
+                initialValue: priceDisplayMethod || 0,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select Price display method !'
+                  }
+                ]
+              })(<Select disabled={disabled}
+                         optionLabelProp='label'
+                         placeholder='Please select Price display method !' style={{ width: 220 }}>
+                {['From the lowest to highest', 'Above the lowest', 'Lowest one-off and subscription price'].map((item, index) => (
+                  <Option key={index} title={item} value={index} label={item}>{item}</Option>
+                ))}
+              </Select>)}
+            </Form.Item>
 
-              <Form.Item label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}>
-                {getFieldDecorator('basePricePDPShowedFlag', {
-                  valuePropName: 'checked',
-                      initialValue: basePricePDPShowedFlag===0?false:true,
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please select Base price showed in PDP !'
-                        }
-                      ]
-                    })(<Switch  />)}
-              </Form.Item>
 
-            <div className="bar-button" style={{ marginLeft: -40 }}>
-              <Button type="primary" htmlType="submit">
-              <FormattedMessage id="Product.Save" />
+            <Form.Item label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}>
+              {getFieldDecorator('basePricePDPShowedFlag', {
+                valuePropName: 'checked',
+                initialValue: basePricePDPShowedFlag === 0 ? false : true,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select Base price showed in PDP !'
+                  }
+                ]
+              })(<Switch />)}
+            </Form.Item>
+
+            <div className='bar-button' style={{ marginLeft: -40 }}>
+              <Button loading={loading} type='primary' htmlType='submit'>
+                <FormattedMessage id='Product.Save' />
               </Button>
             </div>
           </Form>
         </div>
 
         <ModalForm
-            visible={visible}
-            languageList={language}
-            handleOk={this.handleSubmit}
-            handleCancel={this.handleCancel}
+          visible={visible}
+          languageList={language}
+          handleOk={this.handleSubmit}
+          handleCancel={this.handleCancel}
         />
         <ModalFormClub
-            visibleClub={visibleClub}
-            languageList={language}
-            handleClubOk={this.handleClubSubmit}
-            handleClubCancel={this.handleClubCancel}
+          visibleClub={visibleClub}
+          languageList={language}
+          handleClubOk={this.handleClubSubmit}
+          handleClubCancel={this.handleClubCancel}
         />
         <ModalFormIndividual
-            visible={visibleIndividual}
-            languageList={language}
-            handleOk={this.handleIndividualSubmit}
-            handleCancel={this.handleIndividualCancel}
+          visible={visibleIndividual}
+          languageList={language}
+          handleOk={this.handleIndividualSubmit}
+          handleCancel={this.handleIndividualCancel}
         />
       </div>
     );
   }
 }
+
 export default Form.create()(ProductSearchSetting);
 const styles = {
   container: {

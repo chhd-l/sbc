@@ -10,7 +10,7 @@ const enumType = {
   0:'Cat',
   1:'Dog'
 }
-export default function Step4({ setStep,userInfo,step }) {
+export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [formData, setFormData] = useState({});
   
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
@@ -114,7 +114,6 @@ export default function Step4({ setStep,userInfo,step }) {
    * 保存价格设置
    */
   const savePrice = () => {
-    debugger
     let newChooseObj = {...formData}
     // if(checkAllObj.Cat){
     //   for(let i in allObj.cat){
@@ -146,24 +145,19 @@ export default function Step4({ setStep,userInfo,step }) {
         array.push(newChooseObj[i])
       }
     }
-    if(array.length > 0){
-      setLoading(true)
-      priceSetting({
-        email: userInfo.accountName,
-        storeId: userInfo.storeId,
-        sourceStoreId: 123457915,
-        priceSettingList: array,
-        companyInfoId:userInfo.companyInfoId
-      }).then(res=>{
-        setLoading(false)
-        setStep(4)
-      }).catch(err=>{
-        setLoading(false)
-      })
-    }else {
-      message.warn('You did not make any changes')
+    setLoading(true)
+    priceSetting({
+      email: userInfo.accountName,
+      storeId: userInfo.storeId,
+      sourceStoreId: 123457915,
+      priceSettingList: array,
+      companyInfoId:userInfo.companyInfoId
+    }).then(res=>{
+      setLoading(false)
       setStep(4)
-    }
+    }).catch(err=>{
+      setLoading(false)
+    })
   };
 
   return (

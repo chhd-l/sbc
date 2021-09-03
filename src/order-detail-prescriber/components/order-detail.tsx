@@ -252,7 +252,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '15%',
         render: (text,record) => {
-          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+          const productName=text==='individualization'?record.petsName+'\'s '+text:text
           return (
             <Tooltip
               overlayStyle={{
@@ -371,7 +371,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '20%',
         render: (text,record) => {
-          const productName=text==='individualization'?record.petsName+'\'s personalized subscription':text
+          const productName=text==='individualization'?record.petsName+'\'s '+text:text
           return (
             <Tooltip
               overlayStyle={{

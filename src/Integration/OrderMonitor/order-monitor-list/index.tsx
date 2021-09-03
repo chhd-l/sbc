@@ -87,7 +87,7 @@ export default class OrderMonitorList extends Component<any, any> {
         let monitorList = res.context.content
 
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage + 1
+        pagination.current = res.context.number + 1
         this.setState({
           monitorList,
           loading: false,
@@ -122,9 +122,6 @@ export default class OrderMonitorList extends Component<any, any> {
   }
   handleTableChange = (pagination) => {
     const { currentSearchForm } = this.state
-    this.setState({
-      pagination
-    })
     let params = {
       pageSize: pagination.pagesize,
       pageNum: pagination.current - 1,
@@ -188,6 +185,11 @@ export default class OrderMonitorList extends Component<any, any> {
         title: RCi18n({ id: 'OrderMonitor.OrderExportStatus' }),
         dataIndex: 'orderExportStatus',
         key: 'orderExportStatus',
+        render: (text) => (
+          <p>{
+            text === 0 ? 'PENDING' : text === 1 ? 'SUCCESS' : text === 2 ? 'FAILED' : ''
+          }</p>
+        )
       },
 
       {
@@ -291,11 +293,16 @@ export default class OrderMonitorList extends Component<any, any> {
             </Form>
           </div>
           <div className="container">
-            <Button icon="download" size="large"
-              style={{ margin: '10px 20px 10px',float:'right' }}
-              onClick={this.handleDownload} >
-              {RCi18n({ id: 'Finance.Download' })}
-            </Button>
+            <Row>
+              <Col span={24} style={{ textAlign: 'right' }}>
+                <Button icon="download" size="large"
+                  style={{ margin: '10px 20px 10px' }}
+                  onClick={this.handleDownload} >
+                  {RCi18n({ id: 'Finance.Download' })}
+                </Button>
+              </Col>
+            </Row>
+
             <Table style={{ paddingRight: 20 }}
               rowKey="id"
               columns={columns}

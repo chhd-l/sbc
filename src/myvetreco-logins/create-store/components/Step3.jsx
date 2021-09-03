@@ -221,11 +221,10 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
             <div style={{width:200,margin:'20px auto',height:120}}>
               <Dragger {...uploadIconProps}>
                 {
-                  faviconUrl ? <Image
+                  faviconUrl ? <img
                     src={faviconUrl}
                     width={90}
                     height={90}
-                    preview={false}
                   /> : (
                     <>
                       <p className="ant-upload-drag-icon">

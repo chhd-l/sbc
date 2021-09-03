@@ -1,8 +1,9 @@
-import { Col, Descriptions, Icon, Row, Spin, Tree } from "antd";
+import { Col, Descriptions, Icon, Row, Spin, Table, Tree } from "antd";
 import { isArray } from "lodash";
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from "qmkit";
 import React, { Component } from "react";
 import * as webapi from './webapi'
+import './index.less'
 
 const { TreeNode } = Tree
 
@@ -14,6 +15,8 @@ export default class ApiDocument extends Component<any, any> {
       documentMenu: [],
       detailInfo: {},
       expandedKeys: [],
+      pathParameterData:[],
+      headerData:[]
     }
   }
   componentDidMount() {
@@ -62,24 +65,68 @@ export default class ApiDocument extends Component<any, any> {
   };
 
   render() {
-    const { loading, documentMenu, expandedKeys,detailInfo } = this.state
+    const { loading, documentMenu, expandedKeys, detailInfo,pathParameterData,headerData } = this.state
+    const pathParameterColumns = [{
+      title: RCi18n({ id: 'ApiDocument.ParameterName' }),
+      dataIndex: 'parameterName',
+      key: 'parameterName',
+    },
+    {
+      title: RCi18n({ id: 'ApiDocument.Example' }),
+      dataIndex: 'example',
+      key: 'example',
+    },
+    {
+      title: RCi18n({ id: 'Order.remark' }),
+      dataIndex: 'remark',
+      key: 'remark',
+    }]
+    const headerColumns=[
+      {
+        title: RCi18n({ id: 'ApiDocument.ParameterName' }),
+        dataIndex: 'parameterName',
+        key: 'parameterName',
+      },
+      {
+        title: RCi18n({ id: 'ApiDocument.ParameterValue' }),
+        dataIndex: 'parameterValue',
+        key: 'parameterValue',
+      },
+      {
+        title: RCi18n({ id: 'ApiDocument.Required' }),
+        dataIndex: 'required',
+        key: 'required',
+      },
+      {
+        title: RCi18n({ id: 'ApiDocument.Example' }),
+        dataIndex: 'example',
+        key: 'example',
+      },
+      {
+        title: RCi18n({ id: 'Order.remark' }),
+        dataIndex: 'remark',
+        key: 'remark',
+      }
+    ]
     return (
       <AuthWrapper functionName="f_order_monitor_details">
         <Spin spinning={loading}>
           <BreadCrumb />
           <div className="container">
-            <Row>
-              <Col span={6}>
+            <Row className="apiDocument">
+              <Col span={4}>
 
-                <Tree showIcon onSelect={this.handleSelect}
+                <Tree showIcon
+                  onSelect={this.handleSelect}
                   expandedKeys={expandedKeys}
                   onExpand={this.onExpand}
-                  autoExpandParent={true}>
+                  autoExpandParent={true}
+                  style={{ maxWidth: 264 }}>
                   {
                     documentMenu && documentMenu.map((doucment, index) => (
-                      <TreeNode icon={<Icon type="folder-open" />} key={'P_' + doucment._id} title={doucment.name}>
+                      <TreeNode icon={<Icon type="folder-open" />} key={'P_' + doucment._id} title={<p className="apiTreeNode">{doucment.name}</p>}>
                         {doucment.list && doucment.list.map((item, i) => (
-                          <TreeNode key={item._id} title={item.title} />
+                          <TreeNode key={item._id} title={<p className="apiTreeNode" title={item.title}>{item.title}</p>} />
                         ))}
                       </TreeNode>
                     ))
@@ -87,40 +134,54 @@ export default class ApiDocument extends Component<any, any> {
                 </Tree>
               </Col>
               <Col span={18}>
-                <div className="container-search">
-                  <Headline title={RCi18n({ id: 'Subscription.basicInformation' })} />
-                  {/* 跳转后的数据展示 */}
-                  <Descriptions>
-                    {/* <Descriptions.Item label={RCi18n({ id: 'Order.OrderNumber' })}>
-                    {detailInfo.orderNumber || ''}
-                  </Descriptions.Item>
-                  <Descriptions.Item label={RCi18n({ id: 'Order.OrderStatus' })}>
-                    {detailInfo.orderStatus || ''}
-                  </Descriptions.Item>
 
-                  <Descriptions.Item label={RCi18n({ id: 'Order.OrderTime' })}>
-                    {detailInfo.orderDate || ''}
-                  </Descriptions.Item>
-                  <Descriptions.Item label={RCi18n({ id: 'Order.paymentStatus' })}>
-                    {detailInfo.orderPaymentStatus || ''}
-                  </Descriptions.Item>
+                <Headline className="interface-title" title={RCi18n({ id: 'Subscription.basicInformation' })} />
+                {/* 跳转后的数据展示 */}
+                <div className="apiBasicInformation">
+                  <Descriptions column={2} >
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.ApiName' })}</span>}>
+                      {detailInfo.apiName || ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.Creater' })}</span>}>
+                      {detailInfo.creater || ''}
+                    </Descriptions.Item>
 
-                  <Descriptions.Item label={RCi18n({ id: 'Order.OrderSource' })}>
-                    {detailInfo.orderSource || ''}
-                  </Descriptions.Item>
-                  <Descriptions.Item label={RCi18n({ id: 'Order.OrderType' })}>
-                    {detailInfo.orderType || ''}
-                  </Descriptions.Item>
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'PetOwner.Status' })}</span>}>
+                      {detailInfo.status || ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.UpdateTime' })}</span>}>
+                      {detailInfo.updateTime || ''}
+                    </Descriptions.Item>
 
-                  <Descriptions.Item label={RCi18n({ id: 'Order.subscriptionType' })}>
-                    {detailInfo.subscriptionType || ''}
-                  </Descriptions.Item>
-                  <Descriptions.Item label={RCi18n({ id: 'Order.paymentMethod' })}>
-                    {detailInfo.paymentMethod || ''}
-                  </Descriptions.Item> */}
+                  </Descriptions>
+                  <Descriptions column={1}>
+
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.Tag' })}</span>}>
+                      {detailInfo.tag || ''}
+                    </Descriptions.Item>
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.ApiPath' })}</span>}>
+                      {detailInfo.apiPath || ''}
+                    </Descriptions.Item>
+
+                    <Descriptions.Item label={<span className="label"> {RCi18n({ id: 'ApiDocument.MockUrl' })}</span>}>
+                      {detailInfo.mockUrl ? <a href={detailInfo.mockUrl}>{detailInfo.mockUrl}</a> : null}
+                    </Descriptions.Item>
                   </Descriptions>
 
                 </div>
+                <Headline className="interface-title" title={RCi18n({ id: 'ApiDocument.RequestParameter' })} />
+                <div className="apiRequestParameter">
+                  <div>
+                    <p>{RCi18n({ id: 'ApiDocument.PathParameters' })}:</p>
+                    <Table bordered dataSource={pathParameterData} pagination={false} columns={pathParameterColumns}></Table>
+                  </div>
+                  <div>
+                    <p>{RCi18n({ id: 'ApiDocument.Headers' })}:</p>
+                    <Table bordered dataSource={headerData} pagination={false} columns={headerColumns}></Table>
+                  </div>
+
+                </div>
+
               </Col>
             </Row>
 

@@ -114,7 +114,6 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 保存价格设置
    */
   const savePrice = () => {
-    debugger
     let newChooseObj = {...formData}
     // if(checkAllObj.Cat){
     //   for(let i in allObj.cat){
@@ -146,24 +145,19 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
         array.push(newChooseObj[i])
       }
     }
-    if(array.length > 0){
-      setLoading(true)
-      priceSetting({
-        email: userInfo.accountName,
-        storeId: userInfo.storeId,
-        sourceStoreId: sourceStoreId,
-        priceSettingList: array,
-        companyInfoId:userInfo.companyInfoId
-      }).then(res=>{
-        setLoading(false)
-        setStep(4)
-      }).catch(err=>{
-        setLoading(false)
-      })
-    }else {
-      message.warn('You did not make any changes')
+    setLoading(true)
+    priceSetting({
+      email: userInfo.accountName,
+      storeId: userInfo.storeId,
+      sourceStoreId: 123457915,
+      priceSettingList: array,
+      companyInfoId:userInfo.companyInfoId
+    }).then(res=>{
+      setLoading(false)
       setStep(4)
-    }
+    }).catch(err=>{
+      setLoading(false)
+    })
   };
 
   return (

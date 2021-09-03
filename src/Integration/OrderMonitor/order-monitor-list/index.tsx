@@ -22,7 +22,8 @@ export default class OrderMonitorList extends Component<any, any> {
         orderNumber: '',
         startDate: null,
         endDate: null,
-        exceptionType: null
+        exceptionType: null,
+        orderExportStatus:null
       },
       pagination: {
         current: 1,
@@ -114,6 +115,7 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       exceptionType: searchForm.exceptionType,
       orderNumber: searchForm.orderNumber,
+      orderExportStatus:searchForm.orderExportStatus
     }
     this.setState({
       currentSearchForm: searchForm
@@ -129,6 +131,7 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
+      orderExportStatus:currentSearchForm.orderExportStatus
     }
     this.getOrderMonitorList(params)
   }
@@ -139,12 +142,27 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
+      orderExportStatus:currentSearchForm.orderExportStatus
     };
     util.onExport(params, '/orderMonitor/exports');
   }
 
   render() {
     const { loading, pagination, exceptionTypeList, monitorList } = this.state
+    const orderExportStatusList = [
+      {
+        value:0,
+        name:'PENDING'
+      },
+      {
+        value:1,
+        name:'SUCCESS'
+      },
+      {
+        value:2,
+        name:'FAILED'
+      }
+    ]
     const columns = [
       {
         title: RCi18n({ id: 'Finance.OrderDate' }),
@@ -238,7 +256,7 @@ export default class OrderMonitorList extends Component<any, any> {
                   </FormItem>
                 </Col>
 
-                {/* Provider */}
+                {/* OrderDate */}
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
@@ -247,7 +265,7 @@ export default class OrderMonitorList extends Component<any, any> {
                     </InputGroup>
                   </FormItem>
                 </Col>
-                {/* Invoker */}
+                {/* ExceptionType */}
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
@@ -274,6 +292,37 @@ export default class OrderMonitorList extends Component<any, any> {
                   </FormItem>
 
                 </Col>
+
+                {/* ExceptionType */}
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.label} disabled defaultValue={ RCi18n({ id: 'OrderMonitor.ExportStatus' })} />
+                      <Select
+                        style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        allowClear
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'orderExportStatus',
+                            value
+                          });
+                        }}
+                      >
+                        {
+                          orderExportStatusList && orderExportStatusList.map(item => (
+                            <Option value={item.value}>{item.name}</Option>
+                          ))
+                        }
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+
+                </Col>
+
+
+               
               </Row>
 
 

@@ -2493,6 +2493,7 @@ export default {
         'OrderMonitor.RequestBody':'Request body',
         'OrderMonitor.ResponseBody':'Response body',
         'OrderMonitor.ExportDetailList':'Export detail list',
+        'OrderMonitor.ExportStatus':'Export status',
 
         'ApiDocument.ApiName':'Api name',
         'ApiDocument.Creater':'Creater',
@@ -2507,7 +2508,14 @@ export default {
         'ApiDocument.Example':'Example',
         'ApiDocument.ParameterValue':'Parameter value	',
         'ApiDocument.Required':'Required',
-
+        'ApiDocument.ReturnData':'Return data',
+        'ApiDocument.Defaults':'Defaults',
+        'ApiDocument.otherInformation':'Other information',
+        'ApiDocument.Completed':'Completed',
+        'ApiDocument.Uncompleted':'Uncompleted',
+        'ApiDocument.NotRequired':'Not required',
+        'ApiDocument.Body':'Body',
+        
         
         
 

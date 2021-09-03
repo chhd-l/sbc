@@ -3,6 +3,7 @@ import { Steps } from 'antd';
 import { RCi18n,Const } from 'qmkit';
 import {getUserStatus} from '../login/webapi'
 import logo from '../assets/images/login_logo.png';
+import fgsLogo from '../../login-admin/img/logo.png';
 import Step1 from './components/Step1';
 import Step2 from './components/Step2';
 import Step3 from './components/Step3';
@@ -14,6 +15,7 @@ import '../assets/App.less'
 const { Step } = Steps;
   const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909
   const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053
+  const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'))
   const [current, setCurrent] = useState(0);
@@ -36,7 +38,7 @@ function CreateStores() {
     {
       current<5?(<div className="create-store-page scrollbar">
       <div className="vmargin-level-4 align-item-center">
-        <img src={logo} width="166" alt="" />
+        <img src={Logo} width="166" alt="" />
       </div>
       <div className="vmargin-level-4 align-item-center word large">{RCi18n({id:'Login.create_store_title'})}</div>
       <div className="vmargin-level-4">

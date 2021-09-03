@@ -8,10 +8,12 @@ import './index.less';
 // import VIcon from '../../components/icon';
 
 import logo from '../assets/images/logo-s.png';
-import { util, RCi18n, history, login } from 'qmkit';
+import fgsLogo from '../../login-admin/img/logo.png';
+import { util, RCi18n, history, login, Const } from 'qmkit';
 
 const FormItem = Form.Item;
-
+const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo
+// const Logo = logo
 function CreateAccount({ form }) {
   const { getFieldDecorator } = form;
   const base64 = new util.Base64();
@@ -68,17 +70,19 @@ function CreateAccount({ form }) {
   const isMobile = isMobileApp();
 
   return (
-    <div className="login-container">
+    <div className={`${Const.SITE_NAME !== 'MYVETRECO' && 'fgsBgc'} login-container`}>
       <div className={`account-content ${isMobile ? 'bg-white' : ''}`}>
-        {isMobile ? <MobileHeader title={RCi18n({id:'Login.create_an_account'})} /> : <RunBoyForDesktop />}
+        {isMobile ? <MobileHeader title={RCi18n({id:'Login.create_an_account'})} /> :
+          (Const.SITE_NAME === 'MYVETRECO' && <RunBoyForDesktop />)}
 
         <Form name="regist"
               onSubmit={handleSubmit}
         >
           <div className={`ca-main ${isMobile ? 'on-mobile' : ''}`}>
 
-            {!isMobile && <div className="ca-logo space-between">
-              <img src={logo} alt=""/>
+            {!isMobile && <div
+              className={`${Const.SITE_NAME === 'MYVETRECO' ? 'ca-logo' : 'fgsLogo'} space-between`}>
+              <img src={Logo} alt=""/>
               <span>Create an Account</span>
             </div>}
 

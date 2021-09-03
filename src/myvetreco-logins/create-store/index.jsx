@@ -18,7 +18,7 @@ const { Step } = Steps;
   const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')) || {}
-  const [current, setCurrent] = useState(2);
+  const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(()=>{
     getData()

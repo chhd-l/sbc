@@ -200,7 +200,7 @@ class MessageDetails extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList,
+          emailTemplateList: res.context.messageTemplateResponseList,
           templateFetching: false
         });
       }
@@ -653,8 +653,8 @@ class MessageDetails extends Component<any, any> {
                         >
                           {emailTemplateList &&
                             emailTemplateList.map((item, index) => (
-                              <Option title={item.emailTemplate && item.emailTemplate.length > 15 ? item.emailTemplate : ''} value={item.templateId} key={index}>
-                                {item.emailTemplate}
+                              <Option title={item.messageTemplate && item.messageTemplate.length > 15 ? item.messageTemplate : ''} value={item.templateId} key={index}>
+                                {item.messageTemplate}
                               </Option>
                             ))}
                         </Select>

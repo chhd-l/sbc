@@ -9,12 +9,15 @@ const FormItem = Form.Item;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
-function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoId }) {
+function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInfoId }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
   const [imgUrl, setImgUrl] = useState('');
   const [faviconUrl, setFavicon] = useState('');
   const [defaultOptions, setDefaultOptions] = useState([]);
+
+  const [logoFileList,setLogoFileList] = useState([])
+  const [iconFileList,setIconFileList] = useState([])
 
   useEffect(()=>{
     if(store){
@@ -95,12 +98,13 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
       Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
-    maxCount:1,
+    fileList:logoFileList,
     accept:'.jpg,.jpeg,.png,.gif',
     action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
+      setLogoFileList([file])
       if (file.status === 'done') {
         if(
             file.status == 'done' &&
@@ -146,12 +150,13 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
       Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
-    maxCount:1,
+    fileList:iconFileList,
     accept:'.ico',
     action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
     onChange: (info) => {
       console.log(info)
       const { file } = info;
+      setIconFileList([file])
       if (file.status === 'done') {
         if(
             file.status == 'done' &&
@@ -208,7 +213,7 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
                   /> : (
                       <>
                         <p className="ant-upload-drag-icon">
-                          <Icon type="cloud" className="word primary size24"/>
+                          <Icon type="cloud-upload" className="word primary size24"/>
                         </p>
                         <p className="ant-upload-hint">Upload the Shop logo</p>
                       </>
@@ -228,7 +233,7 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
                   /> : (
                     <>
                       <p className="ant-upload-drag-icon">
-                        <Icon type="cloud" className="word primary size24"/>
+                        <Icon type="cloud-upload" className="word primary size24"/>
                       </p>
                       <p className="ant-upload-hint">Upload the Shop favicon</p>
                     </>
@@ -250,10 +255,12 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
                   rules: [{ required: true, message: 'Please input Store name!' }],
                   initialValue: ''
                 })(
-                  <Input size="large" onChange={(e)=>{
-                    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
-                    form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
-                  }}/>
+                  <Input size="large"
+                         // onChange={(e)=>{
+                         //    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
+                         //    form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                         //  }}
+                  />
                 )}
               </FormItem>
             </Col>
@@ -262,7 +269,7 @@ function Step3({ setStep,userInfo,store={},form,sourceStoreId,sourceCompanyInfoI
                 {getFieldDecorator('domainName', {
                   initialValue: ''
                 })(
-                  <Input size="large" disabled/>
+                  <Input size="large"/>
                 )}
               </FormItem>
             </Col>

@@ -74,6 +74,7 @@ const { Option } = Select;
                 })(
                   <Select size="large">
                     <Option value={1}>bussines</Option>
+                    <Option value={0}>individual</Option>
                   </Select>
                 )}
               </FormItem>

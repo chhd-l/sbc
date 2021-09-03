@@ -16,23 +16,22 @@ const STATUS = {
 }
 export default function Creating({userInfo,setStep}) {
   let [statusList,setStatusList] = useState([
-    {title:'Contract Agreement', message: null, result: false},
-    {title:'Legal Info', message: null, result: false},
-    {title:'Store Details', message: null, result: true},
-    {title:'Price Setting', message: null, result: false},
-    {title:'Payment Info', message: null, result: false},
+    {title:'Contract Agreement', message: null, result: 'pending'},
+    {title:'Legal Info', message: null, result: 'pending'},
+    {title:'Store Details', message: null, result: 'pending'},
+    {title:'Price Setting', message: null, result: 'pending'},
+    {title:'Payment Info', message: null, result: 'pending'},
   ])
   let [count, setCount] = useState(0);
   let [loadingText, setLoadingText] = useState('Create');
+  let [isPending, setIsPending] = useState(false);//是否有步骤在pending状态
   let [classText, setClassText] = useState('');
   let [errorIndex, setErrorIndex] = useState(9);
   const [interval, setInterval] = useState(null);
+  const [requestInterval, setRequestInterval] = useState(6000);
 
   const list = statusList.map((item,index) => ({ name: <FormattedMessage id={`Login.create_store_step${index+1}`}/>, top: -((index+1) * 31), result:item.result }));
 
-  useEffect(()=>{
-    getStatus()
-  },[])
 
   useInterval(() => {
     if (count < (errorIndex*-32) || count < -160) {
@@ -40,6 +39,7 @@ export default function Creating({userInfo,setStep}) {
         setLoadingText('Success');
         setClassText('ok');
         setInterval(null);
+        setRequestInterval(null)
         finishCreateStore({
           email: userInfo.accountName,
           storeId: userInfo.storeId,
@@ -48,6 +48,8 @@ export default function Creating({userInfo,setStep}) {
             history.push("/login")
           }
         })
+      }else if(isPending){
+        setInterval(null);
       }else {
         setLoadingText('Error');
         setClassText('danger');
@@ -61,10 +63,11 @@ export default function Creating({userInfo,setStep}) {
     }
   }, interval, { immediate: true });
 
-  async function getStatus() {
+
+  function getStatus() {
     queryStatus(userInfo.accountName).then(({res})=>{
+      debugger
       for(let i in res.context){
-        console.log(statusList[STATUS[i]])
         if(statusList[STATUS[i]]){
           //用两个值来判断 STORE_DETAIL 是否初始化成功
           if(STATUS[i] === 'STORE_DETAIL' || STATUS[i] === 'SETTING_INIT'){
@@ -74,19 +77,36 @@ export default function Creating({userInfo,setStep}) {
             statusList[STATUS[i]].result = res.context[i].result
             statusList[STATUS[i]].message = res.context[i].message
           }
-
         }
       }
-      console.log(statusList)
+      //轮询时初始值都为成功
+      setErrorIndex(9)
+      setIsPending(false)
       statusList.some((item,index)=>{
-        if(!item.result){
+        if(!item.result || item.result === 'pending'){
           setErrorIndex(index+1)
         }
-        return item.result === false
+        if(item.result === 'pending'){
+          setIsPending(true)
+        }
+        return !item.result || item.result === 'pending'
       })
       setStatusList(statusList)
       setInterval(30)
     })
+  }
+
+  useInterval(()=>{getStatus()},requestInterval,{ immediate: true })
+
+  const statusIcon = (status)=>{
+    switch (status){
+      case 'pending':
+        return <span style={{ color: 'var(--primary-color)',paddingLeft:5 }}><Icon type="loading" /></span>
+      case false:
+        return <span style={{ color: '#ff7875',paddingLeft:5 }}><Icon type="close" /></span>
+      case true:
+        return <span style={{ color: '#3bff00',paddingLeft:5 }}><Icon type="check" /></span>
+    }
   }
   return (
 
@@ -111,11 +131,7 @@ export default function Creating({userInfo,setStep}) {
                     <li key={_index}>
                       {_index + 1} of 5:{item.name}
                       {
-                        count < item.top &&
-                          (errorIndex === (_index+1) ?
-                              (<span style={{ color: '#ff7875',paddingLeft:5 }}><Icon type="close" /></span>) :
-                                  (<span style={{ color: '#3bff00',paddingLeft:5 }}><Icon type="check" /></span>)
-                          )
+                        count < item.top && statusIcon(item.result)
                       }
                     </li>
                 )

@@ -26,11 +26,9 @@ function CreateAccount({ form }) {
 
   const handleSubmit =  (e) => {
     e.preventDefault();
-    console.log(form)
-    setLoading(true)
     form.validateFields((errs, values) => {
-      console.log(values)
       if(!errs){
+        setLoading(true)
         createStoreAccount({
           email: base64.urlEncode(values.email),
           password: base64.urlEncode(values.password),

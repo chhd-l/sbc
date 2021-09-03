@@ -298,7 +298,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'emailReceiveStatus',
         key: 'emailReceiveStatus',
         width: '9%',
-        render: (text) => <span>{+text === null ? '': +text === 0 ? 'Success' : +text === 1 ? 'Failed' : ''}</span>
+        render: (text) => <span>{text === 0 ? 'Success' : text === 1 ? 'Failed' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,

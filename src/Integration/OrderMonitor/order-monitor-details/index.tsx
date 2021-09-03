@@ -154,6 +154,11 @@ export default class OrderMonitorDetails extends Component<any, any> {
         title: RCi18n({ id: 'Order.result' }),
         dataIndex: 'resultFlag',
         key: 'result',
+        render: (text) => (
+          <p>{
+            text === 0 ? 'PENDING' : text === 1 ? 'SUCCESS' : text === 2 ? 'FAILED' : ''
+          }</p>
+        )
       },
 
 

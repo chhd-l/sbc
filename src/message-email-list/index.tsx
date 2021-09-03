@@ -242,12 +242,8 @@ export default class ClinicList extends Component<any, any> {
         name: 'Sending'
       },
       {
-        value: '4',
-        name: 'Success'
-      },
-      {
-        value: '5',
-        name: 'Failed'
+        value: '4'||'5',
+        name: 'Finish'
       },
     ];
 
@@ -302,7 +298,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'emailReceiveStatus',
         key: 'emailReceiveStatus',
         width: '9%',
-        render: (text) => <span>{+text === null ? 'Success' : +text === 1 ? 'Failed' : ''}</span>
+        render: (text) => <span>{text === 0 ? 'Success' : text === 1 ? 'Failed' : ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Operation" />,
@@ -311,7 +307,7 @@ export default class ClinicList extends Component<any, any> {
         render: (text, record) => (
           <div>
             {+record.status === 0 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
@@ -321,10 +317,18 @@ export default class ClinicList extends Component<any, any> {
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
+              </>
+            ) : null}
+            {+record.emailReceiveStatus === 1 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
+                </Tooltip>
+                <Divider type="vertical" />
+              </>
             ) : null}
             {+record.status === 1 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
                 </Tooltip>
@@ -336,10 +340,10 @@ export default class ClinicList extends Component<any, any> {
                 </Tooltip>
 
 
-              </div>
+              </>
             ) : null}
             {+record.status === 2 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
@@ -351,28 +355,28 @@ export default class ClinicList extends Component<any, any> {
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
+              </>
             ) : null}
             {+record.status === 3 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
-              </div>
+              </>
             ) : null}
             {+record.status === 4 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
-              </div>
+              </>
             ) : null}
             {+record.status === 5 ? (
-              <div>
+              <>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
-              </div>
+              </>
             ) : null}
           </div>
         )

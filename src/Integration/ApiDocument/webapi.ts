@@ -6,9 +6,17 @@ type TResult = {
   context:any
 }
 
-// 获取Order Monitor列表
+// 获取Api Menu列表
 export function getDocumentMenu() {
   return Fetch<TResult>('/yapi/list_menu', {
     method: 'GET'
   });
 }
+
+// 获取Api Details
+export function getApiDetails(id) {
+  return Fetch<TResult>(`/yapi/detail/${id}`, {
+    method: 'GET'
+  });
+}
+

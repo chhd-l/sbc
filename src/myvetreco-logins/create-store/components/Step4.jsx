@@ -149,7 +149,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     priceSetting({
       email: userInfo.accountName,
       storeId: userInfo.storeId,
-      sourceStoreId: 123457915,
+      sourceStoreId: sourceStoreId,
       priceSettingList: array,
       companyInfoId:userInfo.companyInfoId
     }).then(res=>{

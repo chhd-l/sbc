@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history, RCi18n, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n, AuthWrapper, cache } from 'qmkit';
 import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
 
 import * as webapi from './webapi';
@@ -34,8 +34,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticConfirmationValue: 1,
         orderAutomaticTriggerStatus: false,
         orderAutomaticTriggerValue: 1,
-        orderAllowZonePriceStatus:false,
-        orderAllowZonePriceValue:1,
+        orderAllowZonePriceStatus: false,
+        orderAllowZonePriceValue: 1,
         paymentWhen: 'None'
       },
       paymentCashForm: {
@@ -71,6 +71,7 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticTriggerStatus: false,
         orderAutomaticTriggerValue: 1,
       },
+      sequenceRequestList: [],
       pcashList: [],
       ponlineList: [],
       unLimitedList: [],
@@ -83,6 +84,7 @@ class OrderSetting extends Component<any, any> {
   }
   componentDidMount() {
     this.getOrderSettingConfig();
+    this.getQueryOrderSequenceFn();
   }
 
   handleCategoryChange = (e) => {
@@ -90,7 +92,16 @@ class OrderSetting extends Component<any, any> {
       paymentCategory: e.target.value
     });
   };
-
+  //修改规则
+  getQueryOrderSequenceFn = async () => {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    const { res } = await webapi.getQueryOrderSequence(storeId)
+    if (res.code === Const.SUCCESS_CODE) {
+      this.setState({
+        sequenceRequestList: res.context
+      })
+    }
+  }
   paymentOnlineFormChange = ({ field, value }) => {
     let data = this.state.paymentOnlineForm;
     data[field] = value;
@@ -428,7 +439,7 @@ class OrderSetting extends Component<any, any> {
         }
       }
     });
-    if(!isVerify){
+    if (!isVerify) {
       return message.error(RCi18n({ id: 'Order.settingTips' }))
     }
 
@@ -532,7 +543,7 @@ class OrderSetting extends Component<any, any> {
         }
       }
     });
-    if(!isVerify){
+    if (!isVerify) {
       return message.error(RCi18n({ id: 'Order.settingTips' }))
     }
 
@@ -637,7 +648,7 @@ class OrderSetting extends Component<any, any> {
         }
       }
     });
-    if(!isVerify){
+    if (!isVerify) {
       return message.error(RCi18n({ id: 'Order.settingTips' }))
     }
 
@@ -672,8 +683,10 @@ class OrderSetting extends Component<any, any> {
       });
   };
 
+
+
   render() {
-    const { title, loading, btnLoading, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
+    const { title, loading, btnLoading, message, paymentOnlineForm, sequenceRequestList, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
     const description = (
       <div>
         <p><FormattedMessage id="Order.Ordersution" /></p>
@@ -683,6 +696,13 @@ class OrderSetting extends Component<any, any> {
         <p><FormattedMessage id="Order.TheMerchant" /></p>
       </div>
     );
+
+    const filedType = {
+      order: <FormattedMessage id="Order.OrderNumber" />,
+      subscription: <FormattedMessage id="Order.SubscriptionNumber" />,
+      return: <FormattedMessage id="Order.ReturnOrderNumber" />
+    }
+
 
     return (
       <AuthWrapper functionName="f_order_setting_1">
@@ -1542,16 +1562,28 @@ class OrderSetting extends Component<any, any> {
                 </Form>
               </TabPane>
               <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">
-                <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 4 }} labelAlign="right">
-                  <FormItem label={<FormattedMessage id="Order.OrderNumber" />}>
-                    <Input addonBefore="RCF" value={fieldForm.orderField} />
-                  </FormItem>
-                  <FormItem label={<FormattedMessage id="Order.SubscriptionNumber" />}>
+                <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }} labelAlign="right">
+                  {sequenceRequestList.map((item, index) => {
+
+                    return (
+                      <FormItem label={filedType[item.sequenceType]} key={item.sequenceType}>
+                        <div style={{ display: "flex" }}>
+                          <Input  addonBefore="Prefix" style={{ width: 200, }} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
+                          <InputNumber  style={{ width: 140, margin: '0 10px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
+                          <Input style={{ width: 200, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
+                        </div>
+                      </FormItem>
+                    )
+
+
+                  })}
+
+                  {/* <FormItem label={<FormattedMessage id="Order.SubscriptionNumber" />}>
                     <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
                   </FormItem>
                   <FormItem label={<FormattedMessage id="Order.ReturnOrderNumber" />}>
                     <Input addonBefore="RRCF" value={fieldForm.returnOrderField} />
-                  </FormItem>
+                  </FormItem> */}
                 </Form>
               </TabPane>
             </Tabs>
@@ -1565,6 +1597,17 @@ class OrderSetting extends Component<any, any> {
       </AuthWrapper>
     );
   }
+  changeInputValue = (e, key, index) => {
+    const { sequenceRequestList } = this.state;
+    let value = e.target && e.target.value || e
+    let findFiled = sequenceRequestList[index]
+    findFiled[key] = value;
+    this.setState({
+      sequenceRequestList
+    })
+  }
+
+
 }
 const styles = {
   inputStyle: {

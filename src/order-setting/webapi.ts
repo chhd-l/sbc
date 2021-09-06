@@ -24,6 +24,11 @@ export function getOrderSettingConfig() {
     method: 'GET'
   });
 }
+export function getQueryOrderSequence(storeId) {
+  return Fetch<TResult>(`/orderConfig/queryOrderSequence?storeId=${storeId}`, {
+    method: 'GET'
+  });
+}
 
 export function updateOrderSettingConfig(filterParams = {}) {
   return Fetch<TResult>('/orderConfig', {

@@ -3093,7 +3093,9 @@ export default {
   'Setting.shopLogo': 'Shop logo',
   'Setting.storeSettingInfo1':
     'PC mall home page logo, mobile terminal login page logo, management terminal logo, up to 1 can be added, only jpg, jpeg, png, gif, recommended size 100px * 100px, size not more than 1M',
-  'Setting.reviewStatus': 'Review status',
+  'Setting.storeSettingInfo1v':
+  'PC mall home page logo, mobile terminal login page logo, management terminal logo, up to 1 can be added, only jpg, jpeg, png, gif, recommended size 48px * 48px, size not more than 1M',
+    'Setting.reviewStatus': 'Review status',
   'Setting.accountStatus': 'Account status',
   'Setting.storeStatus': 'Shop status',
   'Setting.Reasonsforreviewrejection': 'Reasons for review rejection',

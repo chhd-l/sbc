@@ -1932,6 +1932,7 @@ export default {
     "Setting.storeInformationEdit": "Editar información de tienda",
     "Setting.shopLogo": "logo de la tienda",
     "Setting.storeSettingInfo1": "Logotipo de la página de inicio de PC Mall, logotipo de la página de inicio de sesión del terminal móvil, logotipo del terminal de administración, se puede agregar hasta 1, solo jpg, jpeg, png, gif, tamaño recomendado 100px * 100px, tamaño no más de 1M",
+    "Setting.storeSettingInfo1v": "Logotipo de la página de inicio de PC Mall, logotipo de la página de inicio de sesión del terminal móvil, logotipo del terminal de administración, se puede agregar hasta 1, solo jpg, jpeg, png, gif, tamaño recomendado 48px * 48px, tamaño no más de 1M",
     "Setting.reviewStatus": "revisar estatus",
     "Setting.accountStatus": "estatus de la cuenta",
     "Setting.storeStatus": "estatus de la tienda",

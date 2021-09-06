@@ -183,7 +183,7 @@ class StepOneEdit extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={16}>
-              <Tips title={<FormattedMessage id="Setting.storeSettingInfo1" />} />
+              {Const.SITE_NAME === 'MYVETRECO' ? <Tips title={<FormattedMessage id="Setting.storeSettingInfo1v" />} /> : <Tips title={<FormattedMessage id="Setting.storeSettingInfo1" />} />}
             </Col>
           </Row>
         </Form>

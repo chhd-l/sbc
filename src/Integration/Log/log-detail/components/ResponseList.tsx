@@ -29,13 +29,18 @@ export default class ResponseList extends Component<any, any>{
     }
   }
   componentDidMount() {
-    let params = {
-      requestId: this.props.requestId,
-      pageSize: 5,
-      pageNum: 0
-    }
 
-    this.getResponseList(params)
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.requestId !== prevProps.requestId) {
+      let params = {
+        requestIds: [this.props.requestId],
+        pageSize: 5,
+        pageNum: 0
+      }
+
+      this.getResponseList(params)
+    }
   }
 
   getResponseList = (params) => {
@@ -47,7 +52,7 @@ export default class ResponseList extends Component<any, any>{
       if (res.code === Const.SUCCESS_CODE) {
         const { pagination } = this.state
         pagination.total = res.context.total
-        pagination.current = res.context.currentPage+1
+        pagination.current = res.context.currentPage + 1
         let responseList = res.context.responseLogList
         this.setState({
           loading: false,
@@ -74,7 +79,7 @@ export default class ResponseList extends Component<any, any>{
       pagination
     })
     let params = {
-      requestId: this.props.requestId,
+      requestIds: [this.props.requestId],
       keys: keywords ? [keywords] : [],
       resultFlag: currentTabKey === 'all' ? null : 2,
       pageSize: pagination.pageSize,
@@ -90,7 +95,7 @@ export default class ResponseList extends Component<any, any>{
       currentTabKey: key
     })
     let params = {
-      requestId: this.props.requestId,
+      requestIds: [this.props.requestId],
       keys: keywords ? [keywords] : [],
       resultFlag: key === 'all' ? null : 2,
       pageSize: pagination.pageSize,
@@ -113,7 +118,7 @@ export default class ResponseList extends Component<any, any>{
       keywords: value
     })
     let params = {
-      requestId: this.props.requestId,
+      requestIds: [this.props.requestId],
       keys: value ? [value] : [],
       resultFlag: currentTabKey === 'all' ? null : 2,
       pageSize: 5,
@@ -166,7 +171,7 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.ResultMessage' }),
-              record.resultMessage? JSON.parse(record.resultMessage):{})
+                record.resultMessage ? JSON.parse(record.resultMessage) : {})
             }}>
             {RCi18n({ id: 'Log.ResultMessage' })}</Button>
 
@@ -180,39 +185,50 @@ export default class ResponseList extends Component<any, any>{
           <Button type="link"
             onClick={() => {
               this.openJsonPage(RCi18n({ id: 'Log.Log' }),
-              record.resultMessage?JSON.parse(record.payloadMessage):{})
+                record.resultMessage ? JSON.parse(record.payloadMessage) : {})
             }}>
             {RCi18n({ id: 'Log.Log' })}</Button>
         )
       }
     ]
     return (
-      <AuthWrapper functionName="f_pet_owner_tagging">
-      {/* <AuthWrapper functionName="f_log_detail_response"> */}
-        <div style={styles.info}>
-          <Collapse bordered={false} expandIconPosition="right" style={styles.ghost} defaultActiveKey={['0']} >
-            <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({ id: 'Log.ResponseList' })}</h3>} key="0" style={styles.panelStyle}>
-              <div className="container">
-                <Search
-                  placeholder="keywords"
-                  onSearch={value => this.searchResponse(value)}
-                  style={{ width: 200, marginBottom: 20 }}
-                />
+      <AuthWrapper functionName="f_log_details">
+        <div>
+          {
+            responseList && responseList.length > 0 ?
+              <Collapse bordered={false} expandIconPosition="right" defaultActiveKey={['0']} >
+                <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({ id: 'Log.ResponseList' })}</h3>} key="0">
+                  <div className="container">
+                    <Search
+                      placeholder="keywords"
+                      onSearch={value => this.searchResponse(value)}
+                      style={{ width: 200, marginBottom: 20 }}
+                    />
 
-                <Tabs defaultActiveKey={currentTabKey} onChange={this.onTabChange}>
-                  <TabPane tab={RCi18n({ id: 'Log.AllResponse' })} key="all" />
-                  <TabPane tab={RCi18n({ id: 'Log.Error' })} key="error" />
-                </Tabs>
-                <Tab
-                  rowKey={({ id }) => id}
-                  dataSource={responseList}
-                  pagination={pagination}
-                  onChange={this.handleTableChange}
-                  columns={columns}
-                />
-              </div>
-            </Panel>
-          </Collapse>
+                    <Tabs defaultActiveKey={currentTabKey} onChange={this.onTabChange}>
+                      <TabPane tab={RCi18n({ id: 'Log.AllResponse' })} key="all" />
+                      <TabPane tab={RCi18n({ id: 'Log.Error' })} key="error" />
+                    </Tabs>
+                    <Tab
+                      rowKey={({ id }) => id}
+                      dataSource={responseList}
+                      pagination={pagination}
+                      onChange={this.handleTableChange}
+                      columns={columns}
+                    />
+                  </div>
+                </Panel>
+              </Collapse> : <Collapse bordered={false} expandIconPosition="right" defaultActiveKey={['0']} >
+                <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({ id: 'Log.Response' })}</h3>} key="0">
+                  <ReactJson src={this.props.showJson}
+                    enableClipboard={false}
+                    displayObjectSize={false}
+                    displayDataTypes={false}
+                    style={{ wordBreak: 'break-all' }} />
+                </Panel>
+              </Collapse>
+          }
+
         </div>
 
         <Modal
@@ -225,7 +241,11 @@ export default class ResponseList extends Component<any, any>{
           })}
         >
 
-          <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
+          <ReactJson src={showJson}
+            enableClipboard={false}
+            displayObjectSize={false}
+            displayDataTypes={false}
+            style={{ wordBreak: 'break-all' }} />
 
         </Modal>
 
@@ -234,10 +254,3 @@ export default class ResponseList extends Component<any, any>{
     )
   }
 }
-
-const styles = {
-  label: {
-    width: 151,
-    textAlign: 'center'
-  }
-} as any

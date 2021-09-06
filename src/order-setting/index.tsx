@@ -323,7 +323,7 @@ class OrderSetting extends Component<any, any> {
 
 
   updateOrderSettingConfig = () => {
-    const { pcashList, ponlineList,sequenceRequestList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
+    const { pcashList, ponlineList, sequenceRequestList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
     let isVerify = true
     ponlineList.map((item) => {
       //订单失效时间
@@ -653,9 +653,11 @@ class OrderSetting extends Component<any, any> {
     }
 
     let params = {
-      pcashList: pcashList,
-      ponlineList: ponlineList,
-      unLimitedList: unLimitedList,
+      orderConfigModifyRequest: {
+        pcashList: pcashList,
+        ponlineList: ponlineList,
+        unLimitedList: unLimitedList,
+      },
       sequenceRequestList
     };
     this.setState({
@@ -1569,8 +1571,8 @@ class OrderSetting extends Component<any, any> {
                     return (
                       <FormItem label={filedType[item.sequenceType]} key={item.sequenceType}>
                         <div style={{ display: "flex" }}>
-                          <Input  addonBefore="Prefix" style={{ width: 200, }} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
-                          <InputNumber  style={{ width: 140, margin: '0 10px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
+                          <Input addonBefore="Prefix" style={{ width: 200, }} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
+                          <InputNumber style={{ width: 140, margin: '0 10px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
                           <Input style={{ width: 200, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
                         </div>
                       </FormItem>

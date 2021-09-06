@@ -110,8 +110,6 @@ export default class ApiDocument extends Component<any, any> {
     }
   }
   handleSelect = (key, info) => {
-    console.log(key);
-
     if (key.length > 0) {
       if (key[0].indexOf('P') !== -1) {
         this.setState({
@@ -327,7 +325,7 @@ export default class ApiDocument extends Component<any, any> {
                 </div>
 
                 <Headline className="interface-title" title={RCi18n({ id: 'ApiDocument.RequestParameter' })} />
-                {detailInfo.req_params ? <div className="apiTable">
+                {detailInfo.req_params&&pathParameterData.length>0 ? <div className="apiTable">
                   <h3>{RCi18n({ id: 'ApiDocument.PathParameters' })}:</h3>
                   <Table bordered
                     rowClassName={(record, index) => {
@@ -340,7 +338,8 @@ export default class ApiDocument extends Component<any, any> {
                     pagination={false}
                     columns={pathParameterColumns} ></Table>
                 </div> : null}
-                {detailInfo.req_headers ? <div className="apiTable">
+
+                {detailInfo.req_headers&&headerData.length>0 ? <div className="apiTable">
                   <h3>{RCi18n({ id: 'ApiDocument.Headers' })}:</h3>
                   <Table bordered
                     rowClassName={(record, index) => {
@@ -355,7 +354,7 @@ export default class ApiDocument extends Component<any, any> {
                 </div> : null}
 
                 {
-                  detailInfo.req_body_other ? (
+                  detailInfo.req_body_other&&bodyData.length>0 ? (
                     <div className="apiTable">
                       <h3>{RCi18n({ id: 'ApiDocument.Body' })}:</h3>
                       <Table bordered

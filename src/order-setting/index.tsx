@@ -323,7 +323,7 @@ class OrderSetting extends Component<any, any> {
 
 
   updateOrderSettingConfig = () => {
-    const { pcashList, ponlineList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
+    const { pcashList, ponlineList,sequenceRequestList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
     let isVerify = true
     ponlineList.map((item) => {
       //订单失效时间
@@ -655,7 +655,8 @@ class OrderSetting extends Component<any, any> {
     let params = {
       pcashList: pcashList,
       ponlineList: ponlineList,
-      unLimitedList: unLimitedList
+      unLimitedList: unLimitedList,
+      sequenceRequestList
     };
     this.setState({
       btnLoading: true

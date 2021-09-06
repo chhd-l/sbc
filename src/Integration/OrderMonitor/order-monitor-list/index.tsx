@@ -283,8 +283,8 @@ export default class OrderMonitorList extends Component<any, any> {
                         }}
                       >
                         {
-                          exceptionTypeList && exceptionTypeList.map(item => (
-                            <Option value={item}>{item}</Option>
+                          exceptionTypeList && exceptionTypeList.map((item,index) => (
+                            <Option value={item} key={index}>{item}</Option>
                           ))
                         }
                       </Select>
@@ -311,8 +311,8 @@ export default class OrderMonitorList extends Component<any, any> {
                         }}
                       >
                         {
-                          orderExportStatusList && orderExportStatusList.map(item => (
-                            <Option value={item.value}>{item.name}</Option>
+                          orderExportStatusList && orderExportStatusList.map((item,index) => (
+                            <Option value={item.value} key={index}>{item.name}</Option>
                           ))
                         }
                       </Select>

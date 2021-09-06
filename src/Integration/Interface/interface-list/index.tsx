@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Input, Row, Col, Select, Button, Tooltip, Spin } from 'antd';
-import Tab from '@/Integration/components/tab';
+import { Form, Input, Row, Col, Select, Button, Tooltip, Spin, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 
@@ -227,8 +226,8 @@ class InterfaceList extends Component<any, any> {
                         }}
                       >
                         {
-                          systemList && systemList.map(item => (
-                            <Option value={item.id}>{item.sysShort}</Option>
+                          systemList && systemList.map((item,index) => (
+                            <Option value={item.id} key={index}>{item.sysShort}</Option>
                           ))
                         }
                       </Select>
@@ -254,8 +253,8 @@ class InterfaceList extends Component<any, any> {
                         }}
                       >
                         {
-                          systemList && systemList.map(item => (
-                            <Option value={item.id}>{item.sysShort}</Option>
+                          systemList && systemList.map((item,index) => (
+                            <Option value={item.id} key={index}>{item.sysShort}</Option>
                           ))
                         }
                       </Select>
@@ -282,12 +281,12 @@ class InterfaceList extends Component<any, any> {
             </Form>
           </div>
           <div className="container">
-            <Tab
+            <Table
               dataSource={interfaceList}
               pagination={pagination}
               onChange={this.handlePageChange}
               columns={columns}
-              rowKey={(record) => record.goodsId}
+              rowKey="id"
             />
           </div>
         </Spin>

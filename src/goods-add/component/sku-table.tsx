@@ -599,7 +599,7 @@ class SkuForm extends React.Component<any, any> {
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
                   <Select 
-                    disabled={goods.get('subscriptionStatus') == 0 ? true : false || goodsList.toJS().length == 1? true : false }
+                    disabled={goods.get('subscriptionStatus') === 0 ? true : false || goodsList.toJS().length === 1? true : false }
                     getPopupContainer={() => document.getElementById('page-content')}
                     style={{ width: '81px' }}
                     placeholder="please select status"
@@ -636,7 +636,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('promotions') == 'autoship'}
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship'}
                          onFocus={() => this.onfocus()}
                          onBlur={() => this.onblur()}
                 >

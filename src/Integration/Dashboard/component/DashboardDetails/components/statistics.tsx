@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Spin, Button } from 'antd';
+import { Row, Col, Spin, Button, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import MyLineChart from '@/Integration/components/MyLineChart';
 import MyHeader from '@/Integration/components/myHeader';
@@ -141,30 +141,46 @@ export default class Statistics extends Component<any, any> {
           <MyHeader active={this.state.active} onChange={this.onChange} />
           <div>
             <Row gutter={24}>
-              <Col span={8}>
-                <MyLineChart
-                  nameData={serviceLoadDateTime}
-                  data={serviceLoadCount}
-                  title={RCi18n({ id: "Interface.Service Load (CPM - Calls per min)" })}
-                />
-              </Col>
-              <Col span={8}>
+              {serviceLoadCount && serviceLoadCount.length > 0 ?
+                <Col span={8}>
+                  <MyLineChart
+                    nameData={serviceLoadDateTime}
+                    data={serviceLoadCount}
+                    title={RCi18n({ id: "Interface.Service Load (CPM - Calls per min)" })}
+                  />
+                </Col> : null
+              }
+              {apdexCount && apdexCount.length > 0 ? <Col span={8}>
                 <MyLineChart
                   nameData={apdexDateTime}
                   data={apdexCount}
                   title={RCi18n({ id: "Interface.Apdex" })}
                 />
-              </Col>
-              <Col span={8}>
-                <MyLineChart
-                  show
-                  nameData={errorDateTime}
-                  data={errorCount}
-                  // getIndex={(index) => this.getIndex(index)}
-                  activeIndex={this.state.activeIndex}
-                  title={RCi18n({ id: "Interface.Error" })}
-                />
-              </Col>
+              </Col> : null
+              }
+              {errorCount && errorCount.length > 0 ?
+                <Col span={8}>
+                  <MyLineChart
+                    show
+                    nameData={errorDateTime}
+                    data={errorCount}
+                    // getIndex={(index) => this.getIndex(index)}
+                    activeIndex={this.state.activeIndex}
+                    title={RCi18n({ id: "Interface.Error" })}
+                  />
+                </Col> : null
+              }
+
+              {
+
+                serviceLoadCount.length === 0 &&
+                  apdexCount.length === 0 &&
+                  errorCount.length === 0
+                  ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null
+              }
+
+
+
             </Row>
             <AuthWrapper functionName="f_interface_details">
               <Button type="link"

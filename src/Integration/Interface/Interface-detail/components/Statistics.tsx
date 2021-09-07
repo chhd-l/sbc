@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Spin } from 'antd';
+import { Row, Col, Spin, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import MyLineChart from '@/Integration/components/MyLineChart';
 import MyHeader from '@/Integration/components/myHeader';
@@ -10,7 +10,7 @@ export default class Statistics extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      loading:false,
+      loading: false,
       activeIndex: 0,
       active: 'Hour',
       serviceLoadCount: [],
@@ -32,14 +32,14 @@ export default class Statistics extends Component<any, any> {
     const { active } = this.state
     let interfaceId = this.props.interfaceId
     let params = {
-      intInterfaceId:interfaceId,
+      intInterfaceId: interfaceId,
       statisticalType: active.toUpperCase()
     }
     this.init(params)
   }
   init = (params) => {
     this.setState({
-      loading:true
+      loading: true
     })
     this.getServiceLoad(params)
     this.getApdex(params)
@@ -49,7 +49,7 @@ export default class Statistics extends Component<any, any> {
     this.getResponseTimePercentile(params)
     setTimeout(() => {
       this.setState({
-        loading:false
+        loading: false
       })
     }, 2000);
   }
@@ -74,7 +74,7 @@ export default class Statistics extends Component<any, any> {
         let serviceLoadData = res.context.statisticalDTOs
         let serviceLoadCount = []
         let serviceLoadDateTime = []
-        serviceLoadData.forEach(element => {
+        serviceLoadData && serviceLoadData.forEach(element => {
           serviceLoadCount.push(element.count)
           serviceLoadDateTime.push(element.dateTime)
         });
@@ -94,7 +94,7 @@ export default class Statistics extends Component<any, any> {
         let apdexData = res.context.statisticalDTOs
         let apdexCount = []
         let apdexDateTime = []
-        apdexData.forEach(element => {
+        apdexData && apdexData.forEach(element => {
           apdexCount.push(element.count)
           apdexDateTime.push(element.dateTime)
         });
@@ -114,7 +114,7 @@ export default class Statistics extends Component<any, any> {
         let errorData = res.context.statisticalDTOs
         let errorCount = []
         let errorDateTime = []
-        errorData.forEach(element => {
+        errorData && errorData.forEach(element => {
           errorCount.push(element.count)
           errorDateTime.push(element.dateTime)
         });
@@ -134,7 +134,7 @@ export default class Statistics extends Component<any, any> {
         let sucessfulRateData = res.context.statisticalDTOs
         let sucessfulRateCount = []
         let sucessfulRateDateTime = []
-        sucessfulRateData.forEach(element => {
+        sucessfulRateData && sucessfulRateData.forEach(element => {
           sucessfulRateCount.push(element.count)
           sucessfulRateDateTime.push(element.dateTime)
         });
@@ -154,7 +154,7 @@ export default class Statistics extends Component<any, any> {
         let responseTimeData = res.context.statisticalDTOs
         let responseTimeCount = []
         let responseTimeDateTime = []
-        responseTimeData.forEach(element => {
+        responseTimeData && responseTimeData.forEach(element => {
           responseTimeCount.push(element.count)
           responseTimeDateTime.push(element.dateTime)
         });
@@ -174,7 +174,7 @@ export default class Statistics extends Component<any, any> {
         let responseTimePercentileData = res.context.statisticalDTOs
         let responseTimePercentileCount = []
         let responseTimePercentileDateTime = []
-        responseTimePercentileData.forEach(element => {
+        responseTimePercentileData && responseTimePercentileData.forEach(element => {
           responseTimePercentileCount.push(element.count)
           responseTimePercentileDateTime.push(element.dateTime)
         });
@@ -217,64 +217,91 @@ export default class Statistics extends Component<any, any> {
       responseTimeCount,
       responseTimeDateTime,
       responseTimePercentileCount,
-      responseTimePercentileDateTime,} = this.state
+      responseTimePercentileDateTime, } = this.state
     return (
       <Spin spinning={loading}>
+        <div className="container">
+          <MyHeader active={this.state.active} onChange={this.onChange} />
+          <div>
+            <Row gutter={24}>
+              {
+                serviceLoadCount && serviceLoadCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      nameData={serviceLoadDateTime}
+                      data={serviceLoadCount}
+                      title={<FormattedMessage id="Interface.Service Load (CPM - Calls per min)" />}
+                    />
+                  </Col> : null
+              }
+              {
+                apdexCount && apdexCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      nameData={apdexDateTime}
+                      data={apdexCount}
+                      title={<FormattedMessage id="Interface.Apdex" />}
+                    />
+                  </Col> : null
+              }
+              {
+                errorCount && errorCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      show
+                      nameData={errorDateTime}
+                      data={errorCount}
+                      // getIndex={(index) => this.getIndex(index)}
+                      // activeIndex={this.state.activeIndex}
+                      title={<FormattedMessage id="Interface.Error" />}
+                    />
+                  </Col> : null
+              }
+              {
+                sucessfulRateCount && sucessfulRateCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      nameData={sucessfulRateDateTime}
+                      data={sucessfulRateCount}
+                      title={<FormattedMessage id="Interface.Successful Rate (%)" />}
+                    />
+                  </Col> : null
+              }
+              {
+                responseTimeCount && responseTimeCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      nameData={responseTimeDateTime}
+                      data={responseTimeCount}
+                      title={<FormattedMessage id="Interface.Response Time (ms)" />}
+                    />
+                  </Col> : null
+              }
+              {
+                responseTimePercentileCount && responseTimePercentileCount.length > 0 ?
+                  <Col span={12}>
+                    <MyLineChart
+                      nameData={responseTimePercentileDateTime}
+                      data={responseTimePercentileCount}
+                      title={<FormattedMessage id="Interface.90th Response Time Percentile (ms)" />}
+                    />
+                  </Col> : null
+              }
+              {
 
-      
-      <div className="container">
-        <MyHeader active={this.state.active} onChange={this.onChange} />
-        <div>
-          <Row gutter={24}>
-            <Col span={12}>
-              <MyLineChart
-                nameData={serviceLoadDateTime}
-                data={serviceLoadCount}
-                title={<FormattedMessage id="Interface.Service Load (CPM - Calls per min)" />}
-              />
-            </Col>
-            <Col span={12}>
-              <MyLineChart
-                nameData={apdexDateTime}
-                data={apdexCount}
-                title={<FormattedMessage id="Interface.Apdex" />}
-              />
-            </Col>
-            <Col span={12}>
-              <MyLineChart
-                show
-                nameData={errorDateTime}
-                data={errorCount}
-                // getIndex={(index) => this.getIndex(index)}
-                // activeIndex={this.state.activeIndex}
-                title={<FormattedMessage id="Interface.Error" />}
-              />
-            </Col>
-            <Col span={12}>
-              <MyLineChart
-                nameData={sucessfulRateDateTime}
-                data={sucessfulRateCount}
-                title={<FormattedMessage id="Interface.Successful Rate (%)" />}
-              />
-            </Col>
-            <Col span={12}>
-              <MyLineChart
-                nameData={responseTimeDateTime}
-                data={responseTimeCount}
-                title={<FormattedMessage id="Interface.Response Time (ms)" />}
-              />
-            </Col>
-            <Col span={12}>
-              <MyLineChart
-                nameData={responseTimePercentileDateTime}
-                data={responseTimePercentileCount}
-                title={<FormattedMessage id="Interface.90th Response Time Percentile (ms)" />}
-              />
-            </Col>
-          </Row>
+                serviceLoadCount.length === 0 &&
+                  apdexCount.length === 0 &&
+                  errorCount.length === 0 &&
+                  sucessfulRateCount.length === 0 &&
+                  responseTimeCount.length === 0 &&
+                  responseTimePercentileCount.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null
+
+              }
+
+            </Row>
+          </div>
         </div>
-      </div>
       </Spin>
-   );
+    );
   }
 }

@@ -81,7 +81,6 @@ class LogSearch extends Component<any, any> {
     webapi.fetchInterfaceList(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
         let interfaceList = res.context.intInterfaceVOS.content
         this.setState({
           interfaceList

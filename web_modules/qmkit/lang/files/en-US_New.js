@@ -2494,6 +2494,9 @@ export default {
         'OrderMonitor.ResponseBody':'Response body',
         'OrderMonitor.ExportDetailList':'Export detail list',
         'OrderMonitor.ExportStatus':'Export status',
+        'OrderMonitor.PushAgain':'Push again',
+        'OrderMonitor.PushVerifyCode':'Please enter the verification code',
+
 
         'ApiDocument.ApiName':'Api name',
         'ApiDocument.Creater':'Creater',

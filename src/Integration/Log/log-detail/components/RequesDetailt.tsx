@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Row, Col, Input, Collapse, Descriptions, } from 'antd';
+import { Collapse, Descriptions, } from 'antd';
 import { AuthWrapper, RCi18n } from 'qmkit';
 import ReactJson from 'react-json-view';
 import moment from 'moment';
@@ -19,7 +19,7 @@ export default class RequestDetail extends Component<any, any>{
 
 
     return (
-      <AuthWrapper functionName="f_pet_owner_tagging">
+      <AuthWrapper functionName="f_log_details">
         {/* <AuthWrapper functionName="f_lod_detail"> */}
         <div className="container-search">
           <Descriptions>

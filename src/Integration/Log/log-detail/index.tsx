@@ -11,7 +11,8 @@ class LogDetail extends Component<any, any>{
     super(props);
     this.state = {
       detailInfo: {},
-      requestId:null
+      requestId:null,
+      responseJsonStr:null
     }
   }
   componentDidMount() {
@@ -34,9 +35,11 @@ class LogDetail extends Component<any, any>{
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
         let detailInfo = res.context
+        let responseJsonStr = res.context.result.content
         this.setState({
           loading: false,
-          detailInfo
+          detailInfo,
+          responseJsonStr
         })
       }
       else{
@@ -56,7 +59,7 @@ class LogDetail extends Component<any, any>{
 
 
   render() {
-    const { detailInfo, requestId,loading } = this.state
+    const { detailInfo, requestId,loading,responseJsonStr } = this.state
     return (
       <AuthWrapper functionName="f_log_details">
         <Spin spinning={loading}>
@@ -68,7 +71,7 @@ class LogDetail extends Component<any, any>{
             <Headline title={RCi18n({ id: 'Log.RequestDetail' })} />
             {/* 跳转后的数据展示 */}
             <RequestDetail detailInfo={detailInfo} />
-            <ResponseList  requestId={requestId}/>
+            <ResponseList  requestId={requestId} showJson={responseJsonStr?JSON.parse(responseJsonStr):{}}/>
           </div>
           
         </Spin>

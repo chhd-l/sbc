@@ -2004,6 +2004,7 @@ export default {
     "Setting.storeInformationEdit": "Dükkan Bilgilerini Düzenle",
     "Setting.shopLogo": "Dükkan Logosu",
     "Setting.storeSettingInfo1": "PC ana sayfa logosu, mobil giriş sayfası logosu ve yönetim terminali logosu en fazla 1 adet eklenebilir. Yalnızca jpg, jpeg, PNG biçimleri desteklenir. Önerilen boyut 100x100 pikseldir, dosya boyutu en fazla 1 MB olabilir.",
+    "Setting.storeSettingInfo1v": "PC ana sayfa logosu, mobil giriş sayfası logosu ve yönetim terminali logosu en fazla 1 adet eklenebilir. Yalnızca jpg, jpeg, PNG biçimleri desteklenir. Önerilen boyut 48x48 pikseldir, dosya boyutu en fazla 1 MB olabilir.",
     "Setting.reviewStatus": "İnceleme Durumu",
     "Setting.accountStatus": "Hesap Durumu",
     "Setting.storeStatus": "Mağaza Durumu",

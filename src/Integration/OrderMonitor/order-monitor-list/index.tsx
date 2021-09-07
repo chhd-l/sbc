@@ -188,7 +188,10 @@ export default class OrderMonitorList extends Component<any, any> {
           confirmLoading:false
         }, () => {
           message.success(res.message)
-          this.onRefresh()
+          setTimeout(() => {
+            this.onRefresh()
+          }, 3000);
+          
         })
 
       }

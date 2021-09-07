@@ -1,5 +1,5 @@
 import { left } from '@antv/x6/lib/registry/port-layout/line';
-import { Button, Col, DatePicker, Form, Input, Row, Select, Spin, Table, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Form, Input, message, Modal, Popconfirm, Row, Select, Spin, Table, Tooltip } from 'antd';
 import moment from 'moment';
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n, util } from 'qmkit';
 import React, { Component } from 'react';
@@ -23,7 +23,7 @@ export default class OrderMonitorList extends Component<any, any> {
         startDate: null,
         endDate: null,
         exceptionType: null,
-        orderExportStatus:null
+        orderExportStatus: null
       },
       pagination: {
         current: 1,
@@ -32,7 +32,10 @@ export default class OrderMonitorList extends Component<any, any> {
       },
       exceptionTypeList: [],
       monitorList: [],
-      currentSearchForm: {}
+      currentSearchForm: {},
+      visible: false,
+      pushVerifyCode: '',
+      currentOrderNumber:''
     }
   }
   componentDidMount() {
@@ -115,7 +118,7 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       exceptionType: searchForm.exceptionType,
       orderNumber: searchForm.orderNumber,
-      orderExportStatus:searchForm.orderExportStatus
+      orderExportStatus: searchForm.orderExportStatus
     }
     this.setState({
       currentSearchForm: searchForm
@@ -131,7 +134,7 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
-      orderExportStatus:currentSearchForm.orderExportStatus
+      orderExportStatus: currentSearchForm.orderExportStatus
     }
     this.getOrderMonitorList(params)
   }
@@ -142,25 +145,69 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
-      orderExportStatus:currentSearchForm.orderExportStatus
+      orderExportStatus: currentSearchForm.orderExportStatus
     };
     util.onExport(params, '/orderMonitor/exports');
   }
+  handleConfirm = (orderNumber) => {
+    this.setState({
+      visible: true,
+      pushVerifyCode: '',
+      currentOrderNumber:orderNumber
+    })
+  }
+  handleOk = () => {
+    const {currentOrderNumber,pushVerifyCode}= this.state
+    const base64 = new util.Base64();
+    let params = {
+      orderNumber: currentOrderNumber,
+      passWord: base64.urlEncode(pushVerifyCode)
+    }
+    webapi.toPushDownStream(params).then(data=>{
+      const {res} = data 
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message)
+      }
+      else {
+        message.error(res.message)
+      }
+      this.setState({
+        visible: false,
+      })
+    }).catch(err=>{
+      this.setState({
+        visible: false,
+      })
+    })
+    
+
+  }
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+    })
+  }
+
+  pushVerifyCodeChange = (e) => {
+    this.setState({
+      pushVerifyCode:e.target.value
+    })
+  }
 
   render() {
-    const { loading, pagination, exceptionTypeList, monitorList } = this.state
+    const { loading, pagination, exceptionTypeList, monitorList, visible,pushVerifyCode } = this.state
     const orderExportStatusList = [
       {
-        value:0,
-        name:'PENDING'
+        value: 0,
+        name: 'PENDING'
       },
       {
-        value:1,
-        name:'SUCCESS'
+        value: 1,
+        name: 'SUCCESS'
       },
       {
-        value:2,
-        name:'FAILED'
+        value: 2,
+        name: 'FAILED'
       }
     ]
     const columns = [
@@ -169,8 +216,6 @@ export default class OrderMonitorList extends Component<any, any> {
         dataIndex: 'orderDate',
         key: 'orderDate',
         render: (text) => (<p>{text ? moment(text).format('YYYY-MM-DD') : null}</p>)
-
-
       },
       {
         title: RCi18n({ id: 'Order.OrderNumber' }),
@@ -218,9 +263,21 @@ export default class OrderMonitorList extends Component<any, any> {
       {
         title: '',
         dataIndex: 'detail',
-        width: '6%',
+        width: '10%',
         render: (text, record) => (
           <AuthWrapper functionName="f_order_monitor_details">
+
+            <Tooltip placement="top" title={RCi18n({ id: "OrderMonitor.PushAgain" })}>
+              <Popconfirm placement="topLeft" title='Are you sure push again'
+                onConfirm={()=>this.handleConfirm(record.orderNumber)}
+                okText={RCi18n({ id: 'Subscription.Confirm' })} cancelText={RCi18n({ id: "Subscription.Cancel" })}>
+                <Button type="link">
+                  <i className="iconfont iconReset" />
+                </Button>
+              </Popconfirm>
+
+            </Tooltip>
+
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/order-monitor-details/${record.id}`} className="iconfont iconDetails" />
             </Tooltip>
@@ -283,7 +340,7 @@ export default class OrderMonitorList extends Component<any, any> {
                         }}
                       >
                         {
-                          exceptionTypeList && exceptionTypeList.map((item,index) => (
+                          exceptionTypeList && exceptionTypeList.map((item, index) => (
                             <Option value={item} key={index}>{item}</Option>
                           ))
                         }
@@ -297,7 +354,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={ RCi18n({ id: 'OrderMonitor.ExportStatus' })} />
+                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'OrderMonitor.ExportStatus' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -311,7 +368,7 @@ export default class OrderMonitorList extends Component<any, any> {
                         }}
                       >
                         {
-                          orderExportStatusList && orderExportStatusList.map((item,index) => (
+                          orderExportStatusList && orderExportStatusList.map((item, index) => (
                             <Option value={item.value} key={index}>{item.name}</Option>
                           ))
                         }
@@ -320,9 +377,6 @@ export default class OrderMonitorList extends Component<any, any> {
                   </FormItem>
 
                 </Col>
-
-
-               
               </Row>
 
 
@@ -359,6 +413,17 @@ export default class OrderMonitorList extends Component<any, any> {
               pagination={pagination}
               scroll={{ x: '100%' }}
               onChange={this.handleTableChange} />
+
+            <Modal
+              title={RCi18n({ id: "OrderMonitor.PushAgain" })}
+              visible={visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              maskClosable={false}
+              okText={RCi18n({ id: "Product.Submit" })} cancelText={RCi18n({ id: "Subscription.Cancel" })}
+            >
+              <Input.Password  placeholder={RCi18n({ id: 'OrderMonitor.PushVerifyCode' })} value={pushVerifyCode} onChange={this.pushVerifyCodeChange} />
+            </Modal>
           </div>
         </Spin>
       </AuthWrapper>

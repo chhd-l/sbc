@@ -28,3 +28,11 @@ export function getExceptionType() {
   });
 }
 
+///orderMonitor/toPushDownStream
+
+export function toPushDownStream(filterParams = {}) {
+  return Fetch<TResult>('/orderMonitor/toPushDownStream', {
+    method: 'POST',
+    body: JSON.stringify({...filterParams})
+  });
+}

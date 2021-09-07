@@ -69,6 +69,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               ...values,
               cityId:values.cityId.key,
               cityName:values.cityId.label,
+              introductionHtml:values.introduction ? encodeURIComponent(SplicingHtml(values.introduction)) : ''
             }).then(({res,err})=>{
               if(err){
                 setLoading(false)
@@ -104,7 +105,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     onChange: (info) => {
       console.log(info)
       const { file } = info;
-      setLogoFileList([file])
+      if(file.status !== 'removed'){
+        setLogoFileList([file])
+      }
       if (file.status === 'done') {
         if(
             file.status == 'done' &&
@@ -135,8 +138,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
         return false;
       }
     },
-    onRemove: ()=>{
+    onRemove: (promise)=>{
+      console.log(promise)
       setImgUrl('')
+      setLogoFileList([])
     }
   };
 
@@ -156,7 +161,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     onChange: (info) => {
       console.log(info)
       const { file } = info;
-      setIconFileList([file])
+      if(file.status !== 'removed'){
+        setIconFileList([file])
+      }
       if (file.status === 'done') {
         if(
             file.status == 'done' &&
@@ -187,14 +194,21 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
         return false;
       }
     },
-    onRemove: ()=>{
+    onRemove: (promise)=>{
+      console.log(promise)
       setFavicon('')
+      setIconFileList([])
     }
   };
   async function fetchUserList(cityName) {
     return cityList({cityName,storeId:123457915}).then(({res})=>{
       return res.context.systemCityVO
     })
+  }
+
+
+  const SplicingHtml = (val)=>{
+    return `<div style="border-color: inherit"> <div class="text-center max-w-6xl m-auto px-2" style="border-color: inherit" > <h1 class="text-32px pt-12 pb-9">Important Notice</h1> <p class="text-lg"> Due to an increase in demand, you preferred product may be currently unavailable. <br /> Yor pet's health is our top priority, and were working hard to ensure their formulas are Hack in stock soon. <br /> Thank you for your patience </p> <p class="py-10 text-lg" style="border-color: inherit"> <img class="inline-block" src="/aboutus/join_icon.png" alt="" /> <span class="px-1 lg:px-5"> 30% off first purchase + 5% off every autoship order </span> <button class="rounded-full py-1 px-5 border-solid border-2 mt-2" style="border-color: inherit" > Join the Club </button> </p> </div> <div class="bg-gray-100 h-2"></div> <div class="max-w-6xl m-auto grid grid-cols-12 flex items-center text-center lg:text-left pt-8 pb-6"> <div class="col-span-12 lg:col-span-9"> <h6 class="text-32px pb-7">Introduction</h6> <p class="pr-2 lg:pr-60 pl-2 lg:pl-0 text-lg pb-8 text-gary-999">${val}</p> <img src="/aboutus/shop_logo.png" alt="" /> </div> <div class="col-span-12 lg:col-span-3"> <img class="inline-block" src="/aboutus/cat.png" alt="" /> </div> </div> </div>`
   }
   return (
     <div>
@@ -203,7 +217,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
       <div style={{width:800,margin:'0 auto'}}>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <div style={{width:200,margin:'20px auto',height:120}}>
+            <div style={{width:240,margin:'20px auto',height:140}}>
               <Dragger {...uploadProps}>
                 {
                   imgUrl ? <img
@@ -215,7 +229,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                         <p className="ant-upload-drag-icon">
                           <Icon type="cloud-upload" className="word primary size24"/>
                         </p>
-                        <p className="ant-upload-hint">Upload the Shop logo</p>
+                        <p className="ant-upload-hint">
+                          Upload the Shop logo<br/>
+                          (recommended size 48px * 48px)
+                        </p>
                       </>
                   )
                 }
@@ -223,7 +240,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
             </div>
           </Col>
           <Col span={12}>
-            <div style={{width:200,margin:'20px auto',height:120}}>
+            <div style={{width:240,margin:'20px auto',height:140}}>
               <Dragger {...uploadIconProps}>
                 {
                   faviconUrl ? <img
@@ -306,6 +323,12 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 })(
                   <Input size="large" />
                 )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
+              <FormItem label="Introduction"
+                        name="introduction">
+                <Input.TextArea size="large" />
               </FormItem>
             </Col>
             <Col span={24}>

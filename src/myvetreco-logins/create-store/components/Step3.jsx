@@ -342,8 +342,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                     initialValue: 0
                   })(
                     <Radio.Group className="hmargin-level-4">
-                      <Radio value={0}>Auto audit</Radio>
-                      <Radio value={1}>Manual audit</Radio>
+                      <Radio value={1}>Auto audit</Radio>
+                      <Radio value={0}>Manual audit</Radio>
                     </Radio.Group>
                   )}
                 </FormItem>

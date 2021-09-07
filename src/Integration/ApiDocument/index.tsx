@@ -86,6 +86,7 @@ export default class ApiDocument extends Component<any, any> {
         pathParameterData,
         headerData,
         returnData,
+        bodyData,
         loading: false,
       })
     }).catch(err => {

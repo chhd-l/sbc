@@ -35,7 +35,8 @@ export default class OrderMonitorList extends Component<any, any> {
       currentSearchForm: {},
       visible: false,
       pushVerifyCode: '',
-      currentOrderNumber:''
+      currentOrderNumber: '',
+      confirmLoading:false
     }
   }
   componentDidMount() {
@@ -138,6 +139,19 @@ export default class OrderMonitorList extends Component<any, any> {
     }
     this.getOrderMonitorList(params)
   }
+  onRefresh = () => {
+    const { currentSearchForm, pagination } = this.state
+    let params = {
+      pageSize: pagination.pagesize,
+      pageNum: pagination.current - 1,
+      beginTime: currentSearchForm.startDate ? currentSearchForm.startDate + " 00:00:00" : null,
+      endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
+      exceptionType: currentSearchForm.exceptionType,
+      orderNumber: currentSearchForm.orderNumber,
+      orderExportStatus: currentSearchForm.orderExportStatus
+    }
+    this.getOrderMonitorList(params)
+  }
   handleDownload = () => {
     const { currentSearchForm } = this.state;
     let params = {
@@ -153,33 +167,46 @@ export default class OrderMonitorList extends Component<any, any> {
     this.setState({
       visible: true,
       pushVerifyCode: '',
-      currentOrderNumber:orderNumber
+      currentOrderNumber: orderNumber
     })
   }
   handleOk = () => {
-    const {currentOrderNumber,pushVerifyCode}= this.state
+    const { currentOrderNumber, pushVerifyCode } = this.state
     const base64 = new util.Base64();
     let params = {
       orderNumber: currentOrderNumber,
       passWord: base64.urlEncode(pushVerifyCode)
     }
-    webapi.toPushDownStream(params).then(data=>{
-      const {res} = data 
+    this.setState({
+      confirmLoading:true
+    })
+    webapi.toPushDownStream(params).then(data => {
+      const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        message.success(res.message)
+        this.setState({
+          visible: false,
+          confirmLoading:false
+        }, () => {
+          message.success(res.message)
+          this.onRefresh()
+        })
+
       }
       else {
+        this.setState({
+          visible: false,
+          confirmLoading:false
+        })
         message.error(res.message)
       }
+
+    }).catch(err => {
       this.setState({
         visible: false,
-      })
-    }).catch(err=>{
-      this.setState({
-        visible: false,
+        confirmLoading:false
       })
     })
-    
+
 
   }
   handleCancel = () => {
@@ -190,12 +217,12 @@ export default class OrderMonitorList extends Component<any, any> {
 
   pushVerifyCodeChange = (e) => {
     this.setState({
-      pushVerifyCode:e.target.value
+      pushVerifyCode: e.target.value
     })
   }
 
   render() {
-    const { loading, pagination, exceptionTypeList, monitorList, visible,pushVerifyCode } = this.state
+    const { loading, pagination, exceptionTypeList, monitorList, visible, pushVerifyCode,confirmLoading } = this.state
     const orderExportStatusList = [
       {
         value: 0,
@@ -269,7 +296,7 @@ export default class OrderMonitorList extends Component<any, any> {
 
             <Tooltip placement="top" title={RCi18n({ id: "OrderMonitor.PushAgain" })}>
               <Popconfirm placement="topLeft" title='Are you sure push again'
-                onConfirm={()=>this.handleConfirm(record.orderNumber)}
+                onConfirm={() => this.handleConfirm(record.orderNumber)}
                 okText={RCi18n({ id: 'Subscription.Confirm' })} cancelText={RCi18n({ id: "Subscription.Cancel" })}>
                 <Button type="link">
                   <i className="iconfont iconReset" />
@@ -420,9 +447,10 @@ export default class OrderMonitorList extends Component<any, any> {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
               maskClosable={false}
+              confirmLoading={confirmLoading}
               okText={RCi18n({ id: "Product.Submit" })} cancelText={RCi18n({ id: "Subscription.Cancel" })}
             >
-              <Input.Password  placeholder={RCi18n({ id: 'OrderMonitor.PushVerifyCode' })} value={pushVerifyCode} onChange={this.pushVerifyCodeChange} />
+              <Input.Password placeholder={RCi18n({ id: 'OrderMonitor.PushVerifyCode' })} value={pushVerifyCode} onChange={this.pushVerifyCodeChange} />
             </Modal>
           </div>
         </Spin>

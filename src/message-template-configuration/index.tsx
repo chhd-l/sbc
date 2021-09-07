@@ -27,70 +27,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
 
-const columns = [
-  {
-    title: 'Id',
-    dataIndex: 'id',
-    key: 'taskId',
-    width: '10%'
-  },
-  {
-    title: 'Template Id',
-    dataIndex: 'templateId',
-    key: 'objectType',
-    width: '10%',
-    ellipsis: true
-  },
-  {
-    title: 'Template Name',
-    dataIndex: 'messageTemplate',
-    key: 'objectNo',
-    width: '10%'
-  },
-  {
-    title: 'Template Type',
-    dataIndex: 'sendCategory',
-    key: 'objectType',
-    width: '10%',
-    ellipsis: true
-  },
-  {
-    title: 'Created Date',
-    dataIndex: 'createTime',
-    key: 'objectNo',
-    width: '10%'
-  },
-  {
-    title: 'Operation',
-    dataIndex: 'objectNo',
-    key: 'objectNo',
-    width: '10%',
-    render: (text, record) => (
-      <div>
-          <div>
 
-            <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
-              <Link to={'/template-details/' + record.templateId} className="iconfont iconDetails"></Link>
-            </Tooltip>
-
-            <Divider type="vertical" />
-            <Tooltip placement="top" title={RCi18n({id:'edit'})}>
-              <Link to={'/template-edit/' + record.templateId} className="iconfont iconEdit"></Link>
-            </Tooltip>
-
-            <Divider type="vertical" />
-
-            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />}  okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title={RCi18n({id:'delete'})}>
-                <a type="link" className="iconfont iconDelete"></a>
-              </Tooltip>
-            </Popconfirm>
-          </div>
-      </div>
-    )
-
-  },
-]
 
 //假数据
 const statusList = [
@@ -114,7 +51,70 @@ const MessageTemplateConfiguration=()=>{
     templateType: '',
   })
 
+  const columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'taskId',
+      width: '10%'
+    },
+    {
+      title: 'Template Id',
+      dataIndex: 'templateId',
+      key: 'objectType',
+      width: '10%',
+      ellipsis: true
+    },
+    {
+      title: 'Template Name',
+      dataIndex: 'messageTemplate',
+      key: 'objectNo',
+      width: '10%'
+    },
+    {
+      title: 'Template Type',
+      dataIndex: 'sendCategory',
+      key: 'objectType',
+      width: '10%',
+      ellipsis: true
+    },
+    {
+      title: 'Created Date',
+      dataIndex: 'createTime',
+      key: 'objectNo',
+      width: '10%'
+    },
+    {
+      title: 'Operation',
+      dataIndex: 'objectNo',
+      key: 'objectNo',
+      width: '10%',
+      render: (text, record) => (
+        <div>
+          <div>
 
+            <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+              <Link to={'/template-details/' + record.templateId} className="iconfont iconDetails"></Link>
+            </Tooltip>
+
+            <Divider type="vertical" />
+            <Tooltip placement="top" title={RCi18n({id:'edit'})}>
+              <Link to={'/template-edit/' + record.templateId} className="iconfont iconEdit"></Link>
+            </Tooltip>
+
+            <Divider type="vertical" />
+
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={()=>deleteTemplate(record.templateId)} okText="Confirm" cancelText="Cancel">
+              <Tooltip placement="top" title={RCi18n({id:'delete'})}>
+                <a type="link" className="iconfont iconDelete"></a>
+              </Tooltip>
+            </Popconfirm>
+          </div>
+        </div>
+      )
+
+    },
+  ]
 
   const onFormChange = ({ field, value }) => {
     let data = searchForm;
@@ -137,6 +137,24 @@ const MessageTemplateConfiguration=()=>{
       }
     })
   }
+
+
+  const deleteTemplate=(id:string)=>{
+    console.log(id,'id')
+    webapi
+      .deleteTemplateList(id)
+      .then((data)=>{
+        const { res } =data;
+        if(res.code ===Const.SUCCESS_CODE){
+          message.success('Operate successfully')
+          getEmailTemplateList();
+        }
+      })
+      .catch((err)=>{
+        console.log(err,'wrong')
+      })
+  }
+
 
   useEffect(()=>{
     getEmailTemplateList();
@@ -228,12 +246,15 @@ const MessageTemplateConfiguration=()=>{
                 </Button>
               </FormItem>
             </Col>
+
           </Row>
         </Form>
       </div>
 
       <div className="container">
-        {console.log(templateListData,'🐱')}
+        <Button type="primary" style={{ margin: '10px 10px 10px 0' }}>
+          <Link to={'/template-add'}><FormattedMessage id="add" /></Link>
+        </Button>
         <Table
           rowKey="id"
           columns={columns}

@@ -521,7 +521,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('promotions') == 'autoship'} >
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship'} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                   <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>

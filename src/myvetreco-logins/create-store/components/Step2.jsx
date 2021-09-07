@@ -37,12 +37,12 @@ const { Option } = Select;
           setLoading(false)
         })
       } else {
-        let errorArray = []
+        let errorArray = {}
         if (res.context.legalCompanyNameExists) {
-          errorArray.push({ name: 'legalCompanyName', errors: ['Legal company name is repeated'] },)
+          errorArray.legalCompanyName = { value: values.legalCompanyName, errors: [new Error('Legal company name is repeated')] }
         }
-        if (res.context.commerceNumber) {
-          errorArray.push({ name: 'commerceNumber', errors: ['Chamber of Commerce number is repeated'] },)
+        if (res.context.commerceNumberExists) {
+          errorArray.commerceNumber = { value: values.commerceNumber, errors: [new Error('Chamber of Commerce number is repeated')] }
         }
         form.setFields(errorArray)
       }

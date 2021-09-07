@@ -43,10 +43,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
 
   const toNext = async (e)=>{
     e.preventDefault();
-    if(!imgUrl){
-      message.warn('Please upload logo')
-      return
-    }
+    // if(!imgUrl){
+    //   message.warn('Please upload logo')
+    //   return
+    // }
     form.validateFields((err, values) => {
       console.log(values)
       if (!err) {
@@ -78,9 +78,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               }
             })
           }else {
-            form.setFields([
-              {name:'storeName',errors:['Store name number is repeated']}
-            ])
+            form.setFields({
+              storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}
+            })
           }
           setLoading(false)
         })

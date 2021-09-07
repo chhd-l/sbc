@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, message, Cascader } from 'antd';
-import { noop, AuthWrapper, checkAuth, Headline, history,RCi18n, SelectGroup } from 'qmkit';
+import { noop, AuthWrapper, checkAuth, Headline, history,RCi18n, SelectGroup, Const } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -246,7 +246,7 @@ class SearchHead extends Component<any, any> {
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
-                  {sessionStorage.getItem('PrescriberType') != null ? (
+                  {sessionStorage.getItem('PrescriberType') != null || Const.SITE_NAME === 'MYVETRECO' ? (
                     <Button
                       type="primary"
                       icon="plus"

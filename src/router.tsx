@@ -860,6 +860,11 @@ const routes = [
     path:'/template-edit/:id',
     asyncComponent:()=>import('./message-template-configuration/templateEdit')
   },
+  //message-template-add
+  {
+    path:'/template-add',
+    asyncComponent:()=>import('./message-template-configuration/templateAdd')
+  },
   //message-overview
   {
     path: '/message-overview',

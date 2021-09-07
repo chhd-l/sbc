@@ -4,6 +4,7 @@ import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider,
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
+import { resendEmailTask } from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -69,9 +70,22 @@ export default class ClinicList extends Component<any, any> {
       () => this.getEmailTaskList()
     );
   };
-  resendEmail=()=>{
+  resendEmail=(params)=>{
     const {resendParams}=this.state;
-    console.log(resendParams)
+    const fetchParams={
+      isReSend:true,
+      messageTaskId:params,
+      storeId:'123457910'
+    }
+    webapi
+      .resendEmailTask(fetchParams)
+      .then((data)=>{
+        const {res}=data;
+        console.log(res,'resend')
+      })
+      .catch((err)=>{
+        console.log(err,'resendWrong')
+      })
   }
 
   getEmailTaskList = () => {
@@ -192,6 +206,7 @@ export default class ClinicList extends Component<any, any> {
         });
       });
   };
+
 
   render() {
     const { title, searchForm, taskList, emailTemplateList } = this.state;
@@ -321,18 +336,21 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.emailReceiveStatus === 1 ? (
               <>
-                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.taskId)}>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />} >
                   <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
                 </Tooltip>
+                </div>
                 <Divider type="vertical" />
               </>
             ) : null}
             {+record.status === 1 ? (
               <>
+              <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.taskId)}>
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
-                  <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
+                  <a className="iconfont iconReset"></a>
                 </Tooltip>
-
+              </div>
                 <Divider type="vertical" />
 
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>

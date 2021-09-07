@@ -16,5 +16,9 @@ export function getEmailTemplateList(filterParams={}) {
   });
 }
 
-
-
+//删除该类型的模板
+export function deleteTemplateList(id:string){
+  return Fetch<TResult>('/messageTemplate/deleteTemplate/'+id,{
+    method:'DELETE'
+  })
+}

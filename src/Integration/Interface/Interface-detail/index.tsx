@@ -24,7 +24,7 @@ export default class InterfaceView extends Component<any, any> {
       tableTabsKey: 'all',
       pagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 5,
         total: 0
       },
       visible: false,
@@ -129,7 +129,7 @@ export default class InterfaceView extends Component<any, any> {
     })
     let params = {
       interfaceId: interfaceId,
-      keys: value ? [value] : [],
+      businessKeys: value ? [value] : [],
       resultFlag: tableTabsKey === 'all' ? null : 2,
       pageSize: 5,
       pageNum: 0,

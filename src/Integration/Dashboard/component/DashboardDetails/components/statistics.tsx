@@ -64,7 +64,7 @@ export default class Statistics extends Component<any, any> {
         let serviceLoadData = res.context.statisticalDTOs
         let serviceLoadCount = []
         let serviceLoadDateTime = []
-        serviceLoadData.forEach(element => {
+        serviceLoadData&&serviceLoadData.forEach(element => {
           serviceLoadCount.push(element.count)
           serviceLoadDateTime.push(element.dateTime)
         });
@@ -84,7 +84,7 @@ export default class Statistics extends Component<any, any> {
         let apdexData = res.context.statisticalDTOs
         let apdexCount = []
         let apdexDateTime = []
-        apdexData.forEach(element => {
+        apdexData&&apdexData.forEach(element => {
           apdexCount.push(element.count)
           apdexDateTime.push(element.dateTime)
         });
@@ -104,7 +104,7 @@ export default class Statistics extends Component<any, any> {
         let errorData = res.context.statisticalDTOs
         let errorCount = []
         let errorDateTime = []
-        errorData.forEach(element => {
+        errorData&&errorData.forEach(element => {
           errorCount.push(element.count)
           errorDateTime.push(element.dateTime)
         });

@@ -1552,6 +1552,9 @@ export default {
         "Finance.Settlement details": "Settlement details",
         "Finance.Guest": "Guest",
         "Finance.Member": "Member",
+        "Finance.SupportInvoice": "Support invoice",
+        "Finance.SupportPaperInvoice": "Support paper invoices",
+        "Finance.SupportVATInvoice": "Support VAT invoices",
     },
     Analysis: {
         "Analysis.ProductReport": "Product Report",

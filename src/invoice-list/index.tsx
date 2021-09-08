@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './index.less';
 import _ from 'lodash';
+import InvoiceSetting from './components/invoice-setting';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -699,15 +700,22 @@ class InvoiceList extends Component<any, any> {
           </Form>
         </div>
         <div className="container">
-          {/* <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
-            <span><FormattedMessage id="Finance.AddNew" /></span>
-          </Button> */}
-          <Dropdown overlay={menu} placement="bottomCenter" getPopupContainer={(trigger: any) => trigger.parentNode}>
-            <Button style={{ margin: '0px 10px 10px 0' }}> 
-              <span className="icon iconfont iconBatchInvoicing" style={{marginRight:5}}></span> 
-              <FormattedMessage id="Finance.BatchOperation" />
-            </Button>
-          </Dropdown>
+          <Row>
+            <Col span={8}>
+              {/* <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
+                <span><FormattedMessage id="Finance.AddNew" /></span>
+              </Button> */}
+              <Dropdown overlay={menu} placement="bottomCenter" getPopupContainer={(trigger: any) => trigger.parentNode}>
+                <Button style={{ margin: '0px 10px 10px 0' }}> 
+                  <span className="icon iconfont iconBatchInvoicing" style={{marginRight:5}}></span> 
+                  <FormattedMessage id="Finance.BatchOperation" />
+                </Button>
+              </Dropdown>
+            </Col>
+            <Col span={16}>
+              {Const.SITE_NAME === 'MYVETRECO' && <InvoiceSetting />}
+            </Col>
+          </Row>
           <Table
             rowKey="orderInvoiceId"
             rowSelection={rowSelection}

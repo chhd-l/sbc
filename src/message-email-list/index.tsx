@@ -74,8 +74,8 @@ export default class ClinicList extends Component<any, any> {
     const {resendParams}=this.state;
     const fetchParams={
       isReSend:true,
-      messageTaskId:params,
-      storeId:'123457910'
+      id:parseInt(params),
+      storeId: 123457907,
     }
     webapi
       .resendEmailTask(fetchParams)
@@ -336,8 +336,8 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.emailReceiveStatus === 1 ? (
               <>
-                <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.taskId)}>
-                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />} >
+                <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
+                <Tooltip placement="top" title={'Resend'} >
                   <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
                 </Tooltip>
                 </div>
@@ -346,8 +346,8 @@ export default class ClinicList extends Component<any, any> {
             ) : null}
             {+record.status === 1 ? (
               <>
-              <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.taskId)}>
-                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+              <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
+                <Tooltip placement="top" title={'Resend'}>
                   <a className="iconfont iconReset"></a>
                 </Tooltip>
               </div>

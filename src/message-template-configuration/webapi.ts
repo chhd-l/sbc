@@ -1,4 +1,5 @@
 import {Fetch} from 'qmkit'
+import { Simulate } from 'react-dom/test-utils';
 
 type TResult={
   code: string;
@@ -20,5 +21,15 @@ export function getEmailTemplateList(filterParams={}) {
 export function deleteTemplateList(id:string){
   return Fetch<TResult>('/messageTemplate/deleteTemplate/'+id,{
     method:'DELETE'
+  })
+}
+
+//添加该类型的模板
+export function addTemplateList(addParams={}){
+  return Fetch<TResult>('/messageTemplate/addTemplate',{
+    method:'POST',
+    body:JSON.stringify({
+      ...addParams
+    })
   })
 }

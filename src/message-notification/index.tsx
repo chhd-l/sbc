@@ -127,7 +127,7 @@ class Notification extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList
+          emailTemplateList: res.context.messageTemplateResponseList
         });
       }
     });
@@ -327,8 +327,8 @@ class Notification extends Component<any, any> {
                   <Select value={selectedForm.selectedTemplateId} onChange={(value, option) => this.templateChange(value, option)}>
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
-                        <Option title={item.emailTemplate} value={item.templateId} key={index}>
-                          {item.emailTemplate}
+                        <Option title={item.messageTemplate} value={item.templateId} key={index}>
+                          {item.messageTemplate}
                         </Option>
                       ))}
                   </Select>

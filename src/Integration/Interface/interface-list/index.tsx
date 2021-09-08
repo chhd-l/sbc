@@ -101,7 +101,7 @@ class InterfaceList extends Component<any, any> {
       apiProviderId: searchForm.provider,
       interfaceName: searchForm.interfaceName,
       pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum,
+      pageNum: pagination.current-1,
 
     }
     this.getInterfaceList(params)

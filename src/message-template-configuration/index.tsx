@@ -139,10 +139,11 @@ const MessageTemplateConfiguration=()=>{
   }
 
 
-  const deleteTemplate=(id:string)=>{
+  const deleteTemplate=(id)=>{
     console.log(id,'id')
+    const parmas={id:id}
     webapi
-      .deleteTemplateList(id)
+      .deleteTemplateList(parmas)
       .then((data)=>{
         const { res } =data;
         if(res.code ===Const.SUCCESS_CODE){

@@ -273,10 +273,12 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   initialValue: ''
                 })(
                   <Input size="large"
-                         // onChange={(e)=>{
-                         //    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
-                         //    form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
-                         //  }}
+                         onChange={(e)=>{
+                           if(Const.SITE_NAME === 'MYVETRECO'){
+                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
+                             form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                           }
+                          }}
                   />
                 )}
               </FormItem>
@@ -286,7 +288,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 {getFieldDecorator('domainName', {
                   initialValue: ''
                 })(
-                  <Input size="large"/>
+                  <Input size="large" disabled={Const.SITE_NAME === 'MYVETRECO'}/>
                 )}
               </FormItem>
             </Col>

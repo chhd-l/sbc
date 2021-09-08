@@ -297,7 +297,7 @@ export default class Task extends React.Component<any, any> {
                       });
                       this.onFormChange({
                         field: 'dueTimeEnd',
-                        value: dateString[1] ? dateString[1] + ' 00:00:00' : null
+                        value: dateString[1] ? dateString[1] + ' 23:59:59' : null
                       });
                     }}
                     value={taskForm.dueTimeStart && taskForm.dueTimeEnd ? [moment(taskForm.dueTimeStart), moment(taskForm.dueTimeEnd)] : null}

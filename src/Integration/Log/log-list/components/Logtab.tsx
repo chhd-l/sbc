@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Modal, Tabs, Tooltip } from 'antd';
+import { Button, Modal, Table, Tabs, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { AuthWrapper, RCi18n } from 'qmkit'
-import Tab from '@/Integration/components/tab';
+import JsonModal from '@/Integration/components/JsonModal';
 import ReactJson from 'react-json-view';
 
 const { TabPane } = Tabs;
@@ -106,7 +106,7 @@ export default class LogTabs extends Component<any, any>{
       {
         title: '',
         dataIndex: 'detail',
-        width:'6%',
+        width: '6%',
         render: (text, record) => (
           <AuthWrapper functionName="f_log_details">
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
@@ -122,26 +122,21 @@ export default class LogTabs extends Component<any, any>{
           <TabPane tab={RCi18n({ id: 'Log.AllLog' })} key="all" />
           <TabPane tab={RCi18n({ id: 'Log.Error' })} key="error" />
         </Tabs>
-        <Tab
+        <Table
           rowKey="requestId"
           dataSource={this.props.logList}
           pagination={this.props.pagination}
           onChange={this.handleTableChange}
           columns={columns}
         />
-        <Modal
+
+        <JsonModal
           visible={visible}
-          width={1050}
           title={title}
-          footer={null}
-          onCancel={() => this.setState({
+          showJson={showJson}
+          modalCancel={() => this.setState({
             visible: false
-          })}
-        >
-
-          <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
-
-        </Modal>
+          })} />
       </div>
     )
   }

@@ -9,6 +9,7 @@ import '@/Integration/components/index.less';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi'
 import ReactJson from 'react-json-view';
+import JsonModal from '@/Integration/components/JsonModal';
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -289,19 +290,13 @@ export default class InterfaceView extends Component<any, any> {
                   onChange={this.handlePageChange}
                   columns={columns}
                 />
-                <Modal
+                <JsonModal
                   visible={visible}
-                  width={1050}
                   title={title}
-                  footer={null}
-                  onCancel={() => this.setState({
+                  showJson={showJson}
+                  modalCancel={() => this.setState({
                     visible: false
-                  })}
-                >
-
-                  <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
-
-                </Modal>
+                  })} />
               </div>
             ) : null
           }

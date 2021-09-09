@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
 import { Table, Button, InputNumber, Modal, Form, Spin, Row, Timeline, Icon } from 'antd';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
+import { noop, Const, AuthWrapper, Logistics, cache } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -85,6 +85,7 @@ class OrderDelivery extends React.Component<any, any> {
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
@@ -189,6 +190,8 @@ class OrderDelivery extends React.Component<any, any> {
             : null}
         </Spin>
 
+        {storeId=='123457911'?this._renderStatusTip(detail):null}
+
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
           <div style={styles.expressOp}>
@@ -231,6 +234,141 @@ class OrderDelivery extends React.Component<any, any> {
         </Modal>
       </div>
     );
+  }
+
+  //渲染订单状态提示语
+  _renderStatusTip(orderDetail){
+    const orderStatus=orderDetail.getIn(['tradeState','flowState']);
+    const logisticsList=orderDetail.get('tradeDelivers')||[]
+    const RenderTip=(props)=>{
+      return (
+        <div className="row align-items-center text-left ml-1 mr-1 ml-md-0 mr-md-0">
+          <div className="col-3 col-md-1">{props.icon}</div>
+          <div className={`col-9 ${props.operation ? 'col-md-7' : 'col-md-11'}`}>
+          <span
+            className={`font-weight-normal color-444 ${props.titleColor || ''}`}
+          >
+            {props.title}
+          </span>
+            <br />
+            {props.tip}
+          </div>
+          {props.operation ? (
+            <div className="col-12 col-md-4 text-md-right text-center">
+            <span className="sticky-operation-btn rc-md-down">
+              {props.operation}
+            </span>
+              <span className="rc-md-up">{props.operation}</span>
+            </div>
+          ) : null}
+          {props.moreTip ? <>{props.moreTip}</> : null}
+        </div>
+      )
+    }
+    let ret = null;
+    switch (orderStatus) {
+      case 'INIT':
+        // order create订单创建
+        ret = (
+          <>
+            <RenderTip
+              icon={
+                <svg
+                  className="svg-icon"
+                  aria-hidden="true"
+                  style={{ width: '3.5em', height: '3.5em' }}
+                >
+                  <use xlinkHref="#iconTobepaid" />
+                </svg>
+              }
+              title={'Your order has not been paid, please pay as soon as possible'}
+              titleColor="text-info"
+            />
+            <hr />
+          </>
+        );
+        break;
+      case 'TO_BE_DELIVERED':
+        // waiting for shipping等待发货
+        ret = (
+          <>
+            <RenderTip
+              icon={
+                <svg
+                  className="svg-icon"
+                  aria-hidden="true"
+                  style={{ width: '3.5em', height: '3.5em' }}
+                >
+                  <use xlinkHref="#iconTobedelivered" />
+                </svg>
+              }
+              title={'Your order has been successfully paid and we are preparing to ship'}
+              titleColor="text-warning"
+            />
+            <hr />
+          </>
+        );
+        break;
+      case 'SHIPPED':
+        // order in shipping发货运输中
+        ret = (
+          <RenderTip
+            icon={
+              <svg
+                className="svg-icon"
+                aria-hidden="true"
+                style={{ width: '3.5em', height: '3.5em' }}
+              >
+                <use xlinkHref="#iconIntransit" />
+              </svg>
+            }
+            title={'Your order has been shipped and you will receive the products soon'}
+            titleColor="text-success"
+            tip={
+              <FormattedMessage
+                id="order.inTranistTip"
+                values={{
+                  val:
+                    logisticsList[0] && logisticsList[0].trackingUrl ? (
+                      <span>
+                        <a
+                          href={logisticsList[0].trackingUrl}
+                          target="_blank"
+                          rel="nofollow"
+                        >
+                          <FormattedMessage id="order.viewLogisticDetail" />
+                        </a>
+                        &gt;
+                      </span>
+                    ) : null
+                }}
+              />
+            }
+          />
+        );
+        break;
+      case 'COMPLETED':
+        // order completes完成订单
+        ret = (
+          <>
+            <RenderTip
+              icon={
+                <svg
+                  className="svg-icon"
+                  aria-hidden="true"
+                  style={{ width: '3.5em', height: '3.5em' }}
+                >
+                  <use xlinkHref="#iconCompleted" />
+                </svg>
+              }
+              title={'The package was delivered by hand to the delivery address"'}
+            />
+            <hr />
+          </>
+        );
+        break;
+    }
+    return ret;
   }
 
   _deliveryColumns = () => {

@@ -2486,6 +2486,8 @@ export default {
         'Log.Success': 'Success',
         'Log.Fail': 'fail',
         'Log.ResultMessage': 'Result message',
+        'Log.ResponseHeader':'Response - Header',
+        'Log.RequestUrl':'Request Url',
 
         'OrderMonitor.OrderMonitor':'Order Monitor',
         'OrderMonitor.OrderMonitorDetails':'Order Monitor Details',

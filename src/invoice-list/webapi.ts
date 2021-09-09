@@ -58,3 +58,19 @@ export function addInvoice(filterParams = {}) {
     })
   });
 }
+
+// invoice setting
+export function getInvoiceConfig() {
+  return Fetch<TResult>('/account/invoice/switch', {
+    method: 'GET',
+  });
+}
+
+export function setInvoiceConfig(params = {}) {
+  return Fetch<TResult>('/account/invoice/switch', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

@@ -1555,6 +1555,12 @@ export default {
         "Finance.SupportInvoice": "Support invoice",
         "Finance.SupportPaperInvoice": "Support paper invoices",
         "Finance.SupportVATInvoice": "Support VAT invoices",
+        "Finance.InvoiceSetting": "Invoice setting",
+        "Finance.InvoicePrefix": "Invoice prefix",
+        "Finance.InvoiceFormat": "Invoice format",
+        "Finance.InvoiceNumberExample": "Example of invoice numbers",
+        "Finance.InvoiceTips": "Use the 0000 to indicate the invoice number. You can increase this number step by step as you can see in the example. If there are not enough 0s, they will be added automatically. Use DD-MM-YYYYY (for example 01-01-2021) for the invoice format.",
+        "Finance.InvoiceFormatMustFill": "Invoice format cannot be blank",
     },
     Analysis: {
         "Analysis.ProductReport": "Product Report",

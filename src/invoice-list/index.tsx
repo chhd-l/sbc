@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import './index.less';
 import _ from 'lodash';
-import InvoiceSetting from './components/invoice-setting';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -701,7 +700,7 @@ class InvoiceList extends Component<any, any> {
         </div>
         <div className="container">
           <Row>
-            <Col span={8}>
+            <Col span={12}>
               {/* <Button type="primary" style={{ margin: '10px 10px 10px 0' }} onClick={() => this.openAddPage()}>
                 <span><FormattedMessage id="Finance.AddNew" /></span>
               </Button> */}
@@ -712,8 +711,8 @@ class InvoiceList extends Component<any, any> {
                 </Button>
               </Dropdown>
             </Col>
-            <Col span={16}>
-              {Const.SITE_NAME === 'MYVETRECO' && <InvoiceSetting />}
+            <Col span={12} style={{textAlign:'right'}}>
+              {Const.SITE_NAME === 'MYVETRECO' && <Link to="/invoice-setting"><FormattedMessage id="Finance.InvoiceSetting" /></Link>}
             </Col>
           </Row>
           <Table

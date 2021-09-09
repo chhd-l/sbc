@@ -74,3 +74,21 @@ export function setInvoiceConfig(params = {}) {
     })
   });
 }
+
+export function getInvoiceSysConfig(configType: string) {
+  return Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType
+    })
+  });
+}
+
+export function saveInvoiceSysConfig(params = []) {
+  return Fetch<TResult>('/system/config/batchModifyConfig', {
+    method: 'POST',
+    body: JSON.stringify({
+      configRequestList: params
+    })
+  });
+}

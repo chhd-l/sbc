@@ -4,6 +4,7 @@ import { AuthWrapper, Const, RCi18n } from 'qmkit';
 import ReactJson from 'react-json-view';
 import Tab from '@/Integration/components/tab'
 import * as webapi from '../webapi'
+import JsonModal from '@/Integration/components/JsonModal';
 
 
 const { Panel } = Collapse;
@@ -231,23 +232,13 @@ export default class ResponseList extends Component<any, any>{
 
         </div>
 
-        <Modal
+        <JsonModal
           visible={visible}
-          width={1050}
           title={title}
-          footer={null}
-          onCancel={() => this.setState({
+          showJson={showJson}
+          modalCancel={() => this.setState({
             visible: false
-          })}
-        >
-
-          <ReactJson src={showJson}
-            enableClipboard={false}
-            displayObjectSize={false}
-            displayDataTypes={false}
-            style={{ wordBreak: 'break-all' }} />
-
-        </Modal>
+          })} />
 
       </AuthWrapper>
 

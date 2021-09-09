@@ -104,7 +104,7 @@ const MessageTemplateConfiguration=()=>{
 
             <Divider type="vertical" />
 
-            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={()=>deleteTemplate(record.templateId)} okText="Confirm" cancelText="Cancel">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={()=>deleteTemplate(record.id)} okText="Confirm" cancelText="Cancel">
               <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                 <a type="link" className="iconfont iconDelete"></a>
               </Tooltip>
@@ -139,10 +139,11 @@ const MessageTemplateConfiguration=()=>{
   }
 
 
-  const deleteTemplate=(id:string)=>{
+  const deleteTemplate=(id)=>{
     console.log(id,'id')
+    const parmas={id:id}
     webapi
-      .deleteTemplateList(id)
+      .deleteTemplateList(parmas)
       .then((data)=>{
         const { res } =data;
         if(res.code ===Const.SUCCESS_CODE){

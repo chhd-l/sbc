@@ -71,7 +71,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getServiceLoad(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let serviceLoadData = res.context.statisticalDTOs
+        let serviceLoadData = res.context.statisticalVOS
         let serviceLoadCount = []
         let serviceLoadDateTime = []
         serviceLoadData && serviceLoadData.forEach(element => {
@@ -91,7 +91,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getApdex(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let apdexData = res.context.statisticalDTOs
+        let apdexData = res.context.statisticalVOS
         let apdexCount = []
         let apdexDateTime = []
         apdexData && apdexData.forEach(element => {
@@ -111,7 +111,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getError(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let errorData = res.context.statisticalDTOs
+        let errorData = res.context.statisticalVOS
         let errorCount = []
         let errorDateTime = []
         errorData && errorData.forEach(element => {
@@ -131,7 +131,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getSucessfulRate(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let sucessfulRateData = res.context.statisticalDTOs
+        let sucessfulRateData = res.context.statisticalVOS
         let sucessfulRateCount = []
         let sucessfulRateDateTime = []
         sucessfulRateData && sucessfulRateData.forEach(element => {
@@ -151,7 +151,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getResponseTime(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let responseTimeData = res.context.statisticalDTOs
+        let responseTimeData = res.context.statisticalVOS
         let responseTimeCount = []
         let responseTimeDateTime = []
         responseTimeData && responseTimeData.forEach(element => {
@@ -171,7 +171,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getResponseTimePercentile(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let responseTimePercentileData = res.context.statisticalDTOs
+        let responseTimePercentileData = res.context.statisticalVOS
         let responseTimePercentileCount = []
         let responseTimePercentileDateTime = []
         responseTimePercentileData && responseTimePercentileData.forEach(element => {

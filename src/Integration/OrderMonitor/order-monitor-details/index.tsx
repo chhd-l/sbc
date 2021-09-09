@@ -1,7 +1,7 @@
+import JsonModal from '@/Integration/components/JsonModal'
 import { Breadcrumb, Button, Descriptions, Modal, Spin, Table } from 'antd'
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit'
 import React, { Component } from 'react'
-import ReactJson from 'react-json-view'
 import * as webapi from './../webapi'
 
 export default class OrderMonitorDetails extends Component<any, any> {
@@ -12,9 +12,9 @@ export default class OrderMonitorDetails extends Component<any, any> {
       detailInfo: {},
       pspDetailList: [],
       exportDetailList: [],
-      visible:false, 
-      title:'', 
-      showJson:{}
+      visible: false,
+      title: '',
+      showJson: {}
 
     }
   }
@@ -69,7 +69,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
   }
 
   render() {
-    const { detailInfo, loading, pspDetailList, exportDetailList ,visible, title, showJson} = this.state
+    const { detailInfo, loading, pspDetailList, exportDetailList, visible, title, showJson } = this.state
     const PSP_columns = [
       {
         title: RCi18n({ id: 'Order.Time' }),
@@ -145,7 +145,7 @@ export default class OrderMonitorDetails extends Component<any, any> {
         key: 'responseBody',
         render: (text, record) => (
           <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'OrderMonitor.ResponseBody' }),  record.responseBody ? JSON.parse(record.responseBody) : {})
+            this.openJsonPage(RCi18n({ id: 'OrderMonitor.ResponseBody' }), record.responseBody ? JSON.parse(record.responseBody) : {})
           }}>
             {RCi18n({ id: 'OrderMonitor.ResponseBody' })}</Button>
         )
@@ -221,19 +221,13 @@ export default class OrderMonitorDetails extends Component<any, any> {
               scroll={{ x: '100%' }} />
           </div>
 
-          <Modal
-          visible={visible}
-          width={1050}
-          title={title}
-          footer={null}
-          onCancel={() => this.setState({
-            visible: false
-          })}
-        >
-
-          <ReactJson src={showJson} enableClipboard={false} displayObjectSize={false} displayDataTypes={false} style={{ wordBreak: 'break-all' }} />
-
-        </Modal>
+          <JsonModal
+            visible={visible}
+            title={title}
+            showJson={showJson}
+            modalCancel={() => this.setState({
+              visible: false
+            })} />
 
         </Spin>
 

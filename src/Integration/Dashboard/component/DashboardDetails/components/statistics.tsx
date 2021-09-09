@@ -61,7 +61,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getServiceLoad(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let serviceLoadData = res.context.statisticalDTOs
+        let serviceLoadData = res.context.statisticalVOS
         let serviceLoadCount = []
         let serviceLoadDateTime = []
         serviceLoadData&&serviceLoadData.forEach(element => {
@@ -81,7 +81,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getApdex(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let apdexData = res.context.statisticalDTOs
+        let apdexData = res.context.statisticalVOS
         let apdexCount = []
         let apdexDateTime = []
         apdexData&&apdexData.forEach(element => {
@@ -101,7 +101,7 @@ export default class Statistics extends Component<any, any> {
     webapi.getError(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
-        let errorData = res.context.statisticalDTOs
+        let errorData = res.context.statisticalVOS
         let errorCount = []
         let errorDateTime = []
         errorData&&errorData.forEach(element => {

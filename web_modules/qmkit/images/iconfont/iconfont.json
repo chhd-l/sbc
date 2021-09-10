@@ -6,6 +6,76 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "18080496",
+      "name": "Completed",
+      "font_class": "Completed",
+      "unicode": "e6b7",
+      "unicode_decimal": 59063
+    },
+    {
+      "icon_id": "18080500",
+      "name": "In transit",
+      "font_class": "Intransit",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    },
+    {
+      "icon_id": "18080502",
+      "name": "To be delivered",
+      "font_class": "Tobedelivered",
+      "unicode": "e6bd",
+      "unicode_decimal": 59069
+    },
+    {
+      "icon_id": "18080504",
+      "name": "To be paid",
+      "font_class": "Tobepaid",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
+      "icon_id": "6510093",
+      "name": "网络拓扑",
+      "font_class": "wangluotuopu",
+      "unicode": "e835",
+      "unicode_decimal": 59445
+    },
+    {
+      "icon_id": "7596049",
+      "name": "store",
+      "font_class": "Store",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "23500099",
+      "name": "LOGO1_My Vetreco",
+      "font_class": "a-LOGO1_MyVetreco",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "23500078",
+      "name": "LOGO2_My Vetreco",
+      "font_class": "a-LOGO2_MyVetreco",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "23459704",
+      "name": "pendingAudit",
+      "font_class": "shenhe",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "23333220",
+      "name": "西班牙",
+      "font_class": "xibanya",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
       "icon_id": "5300922",
       "name": "礼物",
       "font_class": "liwu-",

@@ -888,6 +888,11 @@ export default {
         'Order.PrerequisitesForAudit': 'Prerequisites for audit',
         'Order.PetProfile': 'Pet profile',
         'Order.Individualization':'Individualization',
+        'Order.inTranistTip':'Your order has been shipped and you will receive the products soon. {val}',
+        'Order.viewLogisticDetail':'View logistic detail',
+        'Order.createOrderTip':'Your order has not been paid, please pay as soon as possible.',
+        'Order.waitShipping':'Your order has been successfully paid and we are preparing to ship.',
+        'Order.completeTip':'The package was delivered by hand to the delivery address.'
 
     },
     Subscription: {
@@ -2521,9 +2526,9 @@ export default {
         'ApiDocument.Uncompleted':'Uncompleted',
         'ApiDocument.NotRequired':'Not required',
         'ApiDocument.Body':'Body',
-        
-        
-        
+
+
+
 
     },
 

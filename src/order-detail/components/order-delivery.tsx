@@ -242,26 +242,14 @@ class OrderDelivery extends React.Component<any, any> {
     const logisticsList=orderDetail.get('tradeDelivers')||[]
     const RenderTip=(props)=>{
       return (
-        <div className="row align-items-center text-left ml-1 mr-1 ml-md-0 mr-md-0">
-          <div className="col-3 col-md-1">{props.icon}</div>
-          <div className={`col-9 ${props.operation ? 'col-md-7' : 'col-md-11'}`}>
-          <span
-            className={`font-weight-normal color-444 ${props.titleColor || ''}`}
-          >
-            {props.title}
-          </span>
-            <br />
-            {props.tip}
-          </div>
+        <div style={{marginTop:'20px',display:'flex',flexDirection:'row',alignItems:'center'}}>
+          <div style={{ marginRight:'10px' }}>{props.icon}</div>
+          <div>{props.tip}</div>
           {props.operation ? (
-            <div className="col-12 col-md-4 text-md-right text-center">
-            <span className="sticky-operation-btn rc-md-down">
+            <div className="text-md-right text-center">
               {props.operation}
-            </span>
-              <span className="rc-md-up">{props.operation}</span>
             </div>
           ) : null}
-          {props.moreTip ? <>{props.moreTip}</> : null}
         </div>
       )
     }
@@ -270,63 +258,31 @@ class OrderDelivery extends React.Component<any, any> {
       case 'INIT':
         // order create订单创建
         ret = (
-          <>
             <RenderTip
               icon={
-                <svg
-                  className="svg-icon"
-                  aria-hidden="true"
-                  style={{ width: '3.5em', height: '3.5em' }}
-                >
-                  <use xlinkHref="#iconTobepaid" />
-                </svg>
+                <a className="iconfont iconTobepaid" style={{ fontSize:'20px' }} />
               }
-              title={'Your order has not been paid, please pay as soon as possible'}
-              titleColor="text-info"
+              tip={<FormattedMessage id="Order.createOrderTip"/>}
             />
-            <hr />
-          </>
         );
         break;
       case 'TO_BE_DELIVERED':
         // waiting for shipping等待发货
         ret = (
-          <>
             <RenderTip
-              icon={
-                <svg
-                  className="svg-icon"
-                  aria-hidden="true"
-                  style={{ width: '3.5em', height: '3.5em' }}
-                >
-                  <use xlinkHref="#iconTobedelivered" />
-                </svg>
-              }
-              title={'Your order has been successfully paid and we are preparing to ship'}
-              titleColor="text-warning"
+              icon={<a className="iconfont iconTobedelivered" style={{ fontSize:'24px' }}/>}
+              tip={<FormattedMessage id="Order.waitShipping"/>}
             />
-            <hr />
-          </>
         );
         break;
       case 'SHIPPED':
         // order in shipping发货运输中
         ret = (
           <RenderTip
-            icon={
-              <svg
-                className="svg-icon"
-                aria-hidden="true"
-                style={{ width: '3.5em', height: '3.5em' }}
-              >
-                <use xlinkHref="#iconIntransit" />
-              </svg>
-            }
-            title={'Your order has been shipped and you will receive the products soon'}
-            titleColor="text-success"
+            icon={<a className="iconfont iconIntransit" style={{ fontSize:'24px' }}/>}
             tip={
               <FormattedMessage
-                id="order.inTranistTip"
+                id="Order.inTranistTip"
                 values={{
                   val:
                     logisticsList[0] && logisticsList[0].trackingUrl ? (
@@ -336,7 +292,7 @@ class OrderDelivery extends React.Component<any, any> {
                           target="_blank"
                           rel="nofollow"
                         >
-                          <FormattedMessage id="order.viewLogisticDetail" />
+                          <FormattedMessage id="Order.viewLogisticDetail" />
                         </a>
                         &gt;
                       </span>
@@ -350,21 +306,10 @@ class OrderDelivery extends React.Component<any, any> {
       case 'COMPLETED':
         // order completes完成订单
         ret = (
-          <>
             <RenderTip
-              icon={
-                <svg
-                  className="svg-icon"
-                  aria-hidden="true"
-                  style={{ width: '3.5em', height: '3.5em' }}
-                >
-                  <use xlinkHref="#iconCompleted" />
-                </svg>
-              }
-              title={'The package was delivered by hand to the delivery address"'}
+              icon={<a className="iconfont iconCompleted" style={{ fontSize:'24px' }}/>}
+              tip={<FormattedMessage id="Order.completeTip"/>}
             />
-            <hr />
-          </>
         );
         break;
     }

@@ -198,10 +198,10 @@ class ValidationSetting extends Component<any, any> {
                               style={{
                                 fontSize: 30,
                                 fontWeight: 'bold',
-                                color: '#e2001a'
+                                color: 'var(--primary-color)'
                               }}
                             >
-                              FGS
+                              {item.name}
                             </h1>
                             <p><FormattedMessage id="Setting.Setupyourownrule" /></p>
                           </div>

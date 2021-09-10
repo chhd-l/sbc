@@ -2327,6 +2327,7 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
+        'Menu.Email Template Configuration':'Email Template Configuration',
 
     },
     Others: {

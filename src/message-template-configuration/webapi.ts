@@ -36,3 +36,13 @@ export function addTemplateList(addParams={}){
     })
   })
 }
+
+//编辑该类型的模板
+export function editTemplateList(editParams={}){
+  return Fetch<TResult>('/messageTemplate/editTemplate',{
+    method:'POST',
+    body:JSON.stringify({
+      ...editParams
+    })
+  })
+}

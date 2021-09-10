@@ -74,14 +74,16 @@ export default class ClinicList extends Component<any, any> {
     const {resendParams}=this.state;
     const fetchParams={
       isReSend:true,
-      id:parseInt(params),
+      messageTaskId:parseInt(params),
       storeId: 123457907,
     }
     webapi
       .resendEmailTask(fetchParams)
       .then((data)=>{
         const {res}=data;
-        console.log(res,'resend')
+        this.getEmailTaskList();
+        console.log(res,'resend');
+
       })
       .catch((err)=>{
         console.log(err,'resendWrong')

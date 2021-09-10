@@ -631,7 +631,7 @@ export default {
         "Order.estimatedDeliveryDate": "Estimated delivery date",
         "Order.estimatedDeliveryDateDesc": "Delivery time from {minDay} to {maxDay} working days",
         "Order.estimatedDeliveryDateDescEqual": "Delivery time {day} working days",
-        "Order.state": "State",
+        "Order.state": "State/Province",
         "Order.pet": "Pet",
         "Order.sensitivities": "Sensitivities",
         "Order.lifestyle": "Lifestyle",
@@ -859,7 +859,7 @@ export default {
         "Order.AfterDaysLogistics": "After days, the logistic information collection will be automatically dismissed",
         "Order.Automatictrigger": "Automatic trigger full amount refund ",
         "Order.AfterDaysFullrefund": "After days, the full amount refund will be automatically triggered",
-        'Order.region': 'Region',
+        'Order.region': 'Region/Area',
         "Order.timeSlot": "Time slot",
         "Order.deliveryDate": "Delivery date",
         "Order.gift": "Gift",
@@ -917,7 +917,7 @@ export default {
         "Subscription.Clinics2": "Clinics rating 2 of the last visiting clinic",
         "Subscription.Vet": "Vet clinic check-up",
         "Subscription.City": "City",
-        "Subscription.State": "State",
+        "Subscription.State": "State/Province",
         "Subscription.Country": "Country",
         "Subscription.shippingArea": "Address is not within shipping area",
         "Subscription.AddNew": "Add new",
@@ -2521,9 +2521,9 @@ export default {
         'ApiDocument.Uncompleted':'Uncompleted',
         'ApiDocument.NotRequired':'Not required',
         'ApiDocument.Body':'Body',
-        
-        
-        
+
+
+
 
     },
 

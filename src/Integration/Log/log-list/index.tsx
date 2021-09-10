@@ -21,7 +21,7 @@ export default class Loglist extends Component<any, any>{
       },
       pagination: {
         current: 1,
-        pageSize: 5,
+        pageSize: 10,
         total: 0
       },
       currentTabKey: 'all',
@@ -40,7 +40,7 @@ export default class Loglist extends Component<any, any>{
         currentTabKey: this.props.location.query.type === 'error' ? 'error' : 'all'
       }, () => {
         let params = {
-          pageSize: 5,
+          pageSize: 10,
           pageNum: 0,
           resultFlag: this.state.currentTabKey === 'all' ? null : 2,
         }
@@ -49,7 +49,7 @@ export default class Loglist extends Component<any, any>{
     }
     else{
       let params = {
-        pageSize: 5,
+        pageSize: 10,
         pageNum: 0,
         resultFlag: this.state.currentTabKey === 'all' ? null : 2,
       }
@@ -101,7 +101,7 @@ export default class Loglist extends Component<any, any>{
       startTime: searchForm.startDate ? searchForm.startDate + " 00:00:00" : null,
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       resultFlag: currentTabKey === 'all' ? null : 2,
-      pageSize: 5,
+      pageSize: 10,
       pageNum: 0
     }
     this.getLogList(params)
@@ -120,13 +120,13 @@ export default class Loglist extends Component<any, any>{
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       resultFlag: currentTabKey === 'all' ? null : 2,
       pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum,
+      pageNum: pagination.current - 1,
 
     }
     this.getLogList(params)
   }
   handleTabChange = (key) => {
-    const { searchForm } = this.state
+    const { searchForm,pagination } = this.state
     this.setState({ currentTabKey: key })
     let params = {
       businessKeys: searchForm.keywords ? [searchForm.keywords] : [],
@@ -136,8 +136,8 @@ export default class Loglist extends Component<any, any>{
       startTime: searchForm.startDate ? searchForm.startDate + " 00:00:00" : null,
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       resultFlag: key === 'all' ? null : 2,
-      pageSize: 5,
-      pageNum: 0
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current-1
     }
     this.getLogList(params)
   }

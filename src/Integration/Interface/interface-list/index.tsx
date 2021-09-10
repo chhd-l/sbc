@@ -17,7 +17,7 @@ class InterfaceList extends Component<any, any> {
       loading: false,
       pagination: {
         current: 1,
-        pageSize: 5,
+        pageSize: 10,
         total: 0
       },
       systemList: [],
@@ -86,7 +86,7 @@ class InterfaceList extends Component<any, any> {
       apiInvokerId: searchForm.invoker,
       apiProviderId: searchForm.provider,
       interfaceName: searchForm.interfaceName,
-      pageSize: 5,
+      pageSize: 10,
       pageNum: 0
     }
     this.getInterfaceList(params)

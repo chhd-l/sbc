@@ -46,7 +46,7 @@ export default class InterfaceView extends Component<any, any> {
     })
     this.getInterfaceDetail(+interfaceId)
     let params = {
-      interfaceId: +interfaceId,
+      interfaceIds: [interfaceId],
       pageSize: 5,
       pageNum: 0,
     }
@@ -129,7 +129,7 @@ export default class InterfaceView extends Component<any, any> {
       keywords: value
     })
     let params = {
-      interfaceId: interfaceId,
+      interfaceIds: [interfaceId],
       businessKeys: value ? [value] : [],
       resultFlag: tableTabsKey === 'all' ? null : 2,
       pageSize: 5,
@@ -144,7 +144,7 @@ export default class InterfaceView extends Component<any, any> {
     })
     let params = {
       businessKeys: keywords ? [keywords] : [],
-      interfaceId: interfaceId,
+      interfaceIds: [interfaceId],
       resultFlag: tableTabsKey === 'all' ? null : 2,
       pageSize: pagination.pageSize,
       pageNum: pagination.pageNum,
@@ -157,7 +157,7 @@ export default class InterfaceView extends Component<any, any> {
     this.setState({ tableTabsKey: key })
     let params = {
       businessKeys: keywords ? [keywords] : [],
-      interfaceId: interfaceId,
+      interfaceIds: [interfaceId],
       resultFlag: key === 'all' ? null : 2,
       pageSize: 5,
       pageNum: 0

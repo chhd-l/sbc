@@ -145,7 +145,7 @@ export default {
   'Public.Reminder100records':'Reminder: up to 100 records',
   "Public.GetDataFailed": 'Get Data Failed',
   /* -------- 已翻译 V2.0---------------*/
- 
+
 
 
   /*-----------------------------  Menu -----------------------------------------------*/
@@ -1328,8 +1328,8 @@ export default {
   'Order.No': 'No',
   'Order.inputLogisticsCompany': 'Please input logistics company',
   'Order.notLogisticsCompany': 'You have not set up a common logistics company',
-  'Order.LogisticsOrder': 'Logistics order',
-  'Order.inputLogisticsOrder': 'Please input logistics order',
+  'Order.LogisticsOrder': 'Logistics number',
+  'Order.inputLogisticsOrder': 'Please input logistics number',
   'Order.DeliverDate': 'Deliver Date',
   'Order.inputDeliverDate': 'Please input deliver date',
   'Order.operationLog': 'Operation log',
@@ -1551,8 +1551,8 @@ export default {
   'Order.logisticsInformation':'Logistics information',
   'Order.returnOrderStatus':'Return order status',
   'Order.remark':'Remark',
-  'Order.reviewRejected': 'Review rejected', 
-  'Order.receivedRejected': 'Received rejected', 
+  'Order.reviewRejected': 'Review rejected',
+  'Order.receivedRejected': 'Received rejected',
   'Order.refundRejected': 'Refund rejected',
   'Order.Selectreturnproducts': 'Select return products',
   'Order.Specification': 'Specification',
@@ -1580,7 +1580,7 @@ export default {
   'Order.NoData': 'No Data',
   'Order.cancel': 'Cancel',
   'Order.Addreturnorder': 'Add return order',
-  'Order.Thereisnoreasonforthereturn': 'There is no reason for the return', 
+  'Order.Thereisnoreasonforthereturn': 'There is no reason for the return',
   'Order.skipLogistics':'Skip logistics',
   'Order.skipLogisticsAlert':'Are you sure skip logistics?',
   'Order.fillLogistics':'Fill in logistics',
@@ -1842,7 +1842,7 @@ export default {
   'task.Edit': 'Edit',
   'task.SterilizationTimeOnlyKitten': 'Sterilization time 5 months (only kitten)',
 
-  
+
   /*-----------------------------  Subscription  ---------------------------------------*/
 
   'Subscription.SubscriptionList':'Subscription list',
@@ -2258,7 +2258,7 @@ export default {
   'Subscription.Billing information':'Billing information',
   'Subscription.On':'On',
   "Subscription.Off": 'Off',
-  "Subscription.Setting": 'Subscription Setting', 
+  "Subscription.Setting": 'Subscription Setting',
   "Subscription.Draft": 'Subscription Draft',
   'Subscription.Restart':'Restart',
   'Subscription.ReminderSwitchProduct':'Reminder to switch product (Club)',
@@ -2271,7 +2271,7 @@ export default {
   'Subscription.Operation Category':'Operation Category',
   'Subscription.Operation Log':'Operation Log',
   /* -------- 已翻译 V2.0---------------*/
-  
+
 
 
   /*-----------------------------  Pet owner  ----------------------------------------*/
@@ -2964,7 +2964,7 @@ export default {
   'Prescriber.EditPrescriberType':'Edit Prescriber Type',
   'Prescriber.NewPrescriberType':'New Prescriber type',
   /* -------- 已翻译 V1.0---------------*/
- 
+
 
 
   /*-----------------------------  Analysis  ----------------------------------------*/
@@ -3522,7 +3522,7 @@ export default {
 
 
   /*-------------------------------------Appointment-------------------------*/
- 
+
 
   /*---------------------------------------------------------------------*/
   name: 'Name',
@@ -4026,7 +4026,7 @@ export default {
 
   attachmentTips:
     'Please add your return receipt to the attachment, the supported picture formats: jpg, jpeg, png, gif, the file size does not exceed 5M, and the maximum upload is 10',
-  
+
   pointsRefundable: 'Points refundable',
   commodity: 'Commodity',
   refundList: 'Refund list',

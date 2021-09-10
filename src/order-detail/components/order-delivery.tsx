@@ -143,6 +143,7 @@ class OrderDelivery extends React.Component<any, any> {
                               <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
                               &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
                               <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
+                              <FormattedMessage id="Order.TraceabilityBagNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
                               {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
                               {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh

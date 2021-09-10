@@ -34,8 +34,8 @@ export default class DeliveryForm extends React.Component<any, any> {
     const formItemLayout = {
       labelCol: {
         span: 2,
-        xs: { span: 24 },
-        sm: { span: 8 }
+        xs: { span: 26 },
+        sm: { span: 9 }
       },
       wrapperCol: {
         span: 24,
@@ -116,6 +116,18 @@ export default class DeliveryForm extends React.Component<any, any> {
                     {
                       validator: (rule, value, callback) => {
                         QMMethod.validatorDeliveryCode(rule, value, callback, 'logistics order');
+                      }
+                    }
+                  ]
+                })(<Input placeholder="" />)}
+              </FormItem>
+              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Order.TraceabilityBagNumber"/>}>
+                {getFieldDecorator('deliverBagNo', {
+                  rules: [
+                    { required: true, message: <FormattedMessage id="Order.TraceabilityBagNumber"/> },
+                    {
+                      validator: (rule, value, callback) => {
+                        QMMethod.validatorDeliveryCode(rule, value, callback, 'traceability bag number');
                       }
                     }
                   ]

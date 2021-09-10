@@ -967,6 +967,10 @@ const routes = [
     asyncComponent: () => import('./invoice-list')
   },
   {
+    path: '/invoice-setting',
+    asyncComponent: () => import('./invoice-list/components/invoice-setting')
+  },
+  {
     path: '/subscription-setting',
     asyncComponent: () => import('./subscription-setting')
   },

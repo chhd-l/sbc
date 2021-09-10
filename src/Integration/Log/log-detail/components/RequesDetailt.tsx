@@ -32,6 +32,9 @@ export default class RequestDetail extends Component<any, any>{
             <Descriptions.Item label={RCi18n({ id: 'Log.Interface' })}>
               {detailInfo.interfaceName || ''}
             </Descriptions.Item>
+            <Descriptions.Item label={RCi18n({ id: 'Log.RequestUrl' })}>
+              {detailInfo.requestUrl || ''}
+            </Descriptions.Item>
           </Descriptions>
 
         </div>
@@ -56,6 +59,22 @@ export default class RequestDetail extends Component<any, any>{
             <Panel header={<h3 style={{ fontSize: 18 }}>{RCi18n({ id: 'Log.LogPayload' })}</h3>} key="0" style={styles.panelStyle}>
               <ReactJson
                 src={detailInfo.param && detailInfo.param.payload ? JSON.parse(detailInfo.param.payload) : {}}
+                name={false}
+                style={{ fontFamily: 'Sans-Serif' }}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                enableClipboard={false}
+                collapseStringsAfterLength={180}
+              />
+            </Panel>
+          </Collapse>
+        </div>
+
+        <div style={styles.info}>
+          <Collapse bordered={false} expandIconPosition="right" style={styles.ghost}>
+            <Panel header={<h3 style={{ fontSize: 18 }}>{ RCi18n({ id: 'Log.ResponseHeader' })}</h3>} key="0" style={styles.panelStyle}>
+              <ReactJson
+                src={detailInfo.responseHeaders ? detailInfo.responseHeaders : {}}
                 name={false}
                 style={{ fontFamily: 'Sans-Serif' }}
                 displayDataTypes={false}

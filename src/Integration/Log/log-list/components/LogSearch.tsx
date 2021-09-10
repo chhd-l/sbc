@@ -187,6 +187,10 @@ class LogSearch extends Component<any, any> {
                       field: 'interface',
                       value
                     });
+                    if(!value){
+                      this.searchInterface(value)
+                    }
+                    
                   }}
                 >
                   {

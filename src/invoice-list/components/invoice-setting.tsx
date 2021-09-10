@@ -46,7 +46,7 @@ export default function InvoiceSetting() {
   }, []);
 
   const submitInvoiceSetting = () => {
-    if (!invoiceFormat.context.trim()) {
+    if (isSupportInvoice === 1 && !invoiceFormat.context.trim()) {
       message.error(RCi18n({id:'Finance.InvoiceFormatMustFill'}));
       return;
     }
@@ -90,35 +90,37 @@ export default function InvoiceSetting() {
               }}
             />
           </FormItem>
-          <FormItem label={<FormattedMessage id="Finance.SupportPaperInvoice" />}>
-            <Switch
-              checked={isPaperInvoice === 1}
-              onChange={(checked) => {
-                setIsPaperInvoice(checked ? 1 : 0);
-              }}
-            />
-          </FormItem>
-          <FormItem label={<FormattedMessage id="Finance.SupportVATInvoice" />}>
-            <Switch
-              checked={isValueAddedTaxInvoice === 1}
-              onChange={(checked) => {
-                setIsValueAddedTaxInvoice(checked ? 1 : 0);
-              }}
-            />
-          </FormItem>
-          <FormItem label={<FormattedMessage id="Finance.InvoicePrefix" />}>
-            <Input value={invoicePrefix.context} onChange={(e) => setInvoicePrefix(Object.assign({}, invoicePrefix, {context:e.target.value}))} />
-          </FormItem>
-          <FormItem label={<FormattedMessage id="Finance.InvoiceFormat" />} required help={<FormattedMessage id="Finance.InvoiceTips" />}>
-            <Input value={invoiceFormat.context} onChange={(e) => setInvoiceFormat(Object.assign({}, invoiceFormat, {context:e.target.value}))} />
-          </FormItem>
-          <FormItem label={<FormattedMessage id="Finance.InvoiceNumberExample" />}>
-            <Input.TextArea
-              autoSize 
-              readOnly 
-              value={genExampleInvoiceNumber('1') + '\n' + genExampleInvoiceNumber('2') + '\n' + genExampleInvoiceNumber('3')}
-            />
-          </FormItem>
+          {isSupportInvoice === 1 && <>
+            <FormItem label={<FormattedMessage id="Finance.SupportPaperInvoice" />}>
+              <Switch
+                checked={isPaperInvoice === 1}
+                onChange={(checked) => {
+                  setIsPaperInvoice(checked ? 1 : 0);
+                }}
+              />
+            </FormItem>
+            <FormItem label={<FormattedMessage id="Finance.SupportVATInvoice" />}>
+              <Switch
+                checked={isValueAddedTaxInvoice === 1}
+                onChange={(checked) => {
+                  setIsValueAddedTaxInvoice(checked ? 1 : 0);
+                }}
+              />
+            </FormItem>
+            <FormItem label={<FormattedMessage id="Finance.InvoicePrefix" />}>
+              <Input value={invoicePrefix.context} onChange={(e) => setInvoicePrefix(Object.assign({}, invoicePrefix, {context:e.target.value}))} />
+            </FormItem>
+            <FormItem label={<FormattedMessage id="Finance.InvoiceFormat" />} required help={<FormattedMessage id="Finance.InvoiceTips" />}>
+              <Input value={invoiceFormat.context} onChange={(e) => setInvoiceFormat(Object.assign({}, invoiceFormat, {context:e.target.value}))} />
+            </FormItem>
+            <FormItem label={<FormattedMessage id="Finance.InvoiceNumberExample" />}>
+              <Input.TextArea
+                autoSize 
+                readOnly 
+                value={genExampleInvoiceNumber('1') + '\n' + genExampleInvoiceNumber('2') + '\n' + genExampleInvoiceNumber('3')}
+              />
+            </FormItem>
+          </>}
           <FormItem wrapperCol={{span:16,offset:4}}>
             <Button type="primary" onClick={submitInvoiceSetting}><FormattedMessage id="Finance.saveSettings" /></Button>
             <Button style={{marginLeft: 10}} onClick={() => history.go(-1)}><FormattedMessage id="Finance.back" /></Button>

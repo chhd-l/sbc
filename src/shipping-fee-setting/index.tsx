@@ -261,17 +261,17 @@ class ShippingFeeSetting extends Component<any, any> {
                 <Row style={{ marginBottom: 20 }}>
                   {shippingFeeList.map((item, index) => (
                     <Col span={8} key={index}>
-                      {item.type === 'fgs' ? (
+                      {item.type === 'fgs' || item.type === 'myvet' ? (
                         <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
                           <div style={{ textAlign: 'center', margin: '9px 0' }}>
                             <h1
                               style={{
                                 fontSize: 30,
                                 fontWeight: 'bold',
-                                color: '#e2001a'
+                                color: 'var(--primary-color)'
                               }}
                             >
-                              FGS
+                              {item.type === 'fgs' ? 'FGS' : 'MyVetReco'}
                             </h1>
                             <p>Set up your own rule</p>
                           </div>

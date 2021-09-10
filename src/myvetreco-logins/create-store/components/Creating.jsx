@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
 import { util, RCi18n, history } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
-import { Icon } from 'antd';
+import { Icon, message } from 'antd';
 
 
 const STATUS = {
@@ -54,7 +54,8 @@ export default function Creating({userInfo,setStep}) {
         setLoadingText('Error');
         setClassText('danger');
         setTimeout(()=>{
-          setStep(errorIndex-1)
+          setStep(errorIndex-1);
+          message.error(statusList[errorIndex-1].message);
         },1000)
       }
       setInterval(null);

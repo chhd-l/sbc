@@ -44,11 +44,10 @@ const statusList = [
 const MessageTemplateConfiguration=()=>{
 
 
-  const [emailTemplateList,setEmailTemplateList]=useState([]);
   const [templateListData,setTemplateListData]=useState([]);
   const [searchForm,setSearchForm]=useState({
-    emailTemplate: '',
-    templateType: '',
+    messageTemplate: '',
+    type: '',
   })
 
   const columns = [
@@ -129,9 +128,6 @@ const MessageTemplateConfiguration=()=>{
       const {res} =data;
       console.log(res.context,'hua')
       if(res.code===Const.SUCCESS_CODE){
-        //上方搜索框展示模板名
-        setEmailTemplateList(res.context.messageTemplateResponseList);
-
         //下方展示展示所有模板
         setTemplateListData(res.context.messageTemplateResponseList);
       }
@@ -172,30 +168,17 @@ const MessageTemplateConfiguration=()=>{
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
-                  <Select
+                  <Input style={styles.label} disabled defaultValue={'Template Name'} />
+                  <Input
                     style={styles.wrapper}
-                    getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onChange={(value)=>{
-                        value = value ===''?null:value;
-                        onFormChange(
-                          {
-                            field:'emailTemplate',
-                            value
-                          }
-                        )
-                      }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {emailTemplateList &&
-                    emailTemplateList.map((item, index) => (
-                      <Option value={item.messageTemplate} key={index}>
-                        {item.messageTemplate}
-                      </Option>
-                    ))}
-                  </Select>
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      onFormChange({
+                        field: 'messageTemplate',
+                        value
+                      });
+                    }}
+                  />
                 </InputGroup>
               </FormItem>
             </Col>
@@ -203,7 +186,7 @@ const MessageTemplateConfiguration=()=>{
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={'Template type'} />
+                  <Input style={styles.label} disabled defaultValue={'Template Type'} />
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -211,7 +194,7 @@ const MessageTemplateConfiguration=()=>{
                     onChange={(value)=>{
                       value = value === '' ? null : value;
                       onFormChange({
-                        field:'templateType',
+                        field:'type',
                         value
                       })
                     }}

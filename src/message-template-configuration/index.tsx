@@ -60,27 +60,27 @@ const MessageTemplateConfiguration=()=>{
     {
       title: 'Template Id',
       dataIndex: 'templateId',
-      key: 'objectType',
+      key: 'templateId',
       width: '10%',
       ellipsis: true
     },
     {
       title: 'Template Name',
       dataIndex: 'messageTemplate',
-      key: 'objectNo',
+      key: 'messageTemplate',
       width: '10%'
     },
     {
       title: 'Template Type',
       dataIndex: 'sendCategory',
-      key: 'objectType',
+      key: 'sendCategory',
       width: '10%',
       ellipsis: true
     },
     {
       title: 'Created Date',
       dataIndex: 'createTime',
-      key: 'objectNo',
+      key: 'createTime',
       width: '10%'
     },
     {
@@ -98,7 +98,7 @@ const MessageTemplateConfiguration=()=>{
 
             <Divider type="vertical" />
             <Tooltip placement="top" title={RCi18n({id:'edit'})}>
-              <Link to={'/template-edit/' + record.templateId} className="iconfont iconEdit"></Link>
+              <Link to={{pathname:'/template-edit/' + record.templateId,query:record.id}} className="iconfont iconEdit"></Link>
             </Tooltip>
 
             <Divider type="vertical" />

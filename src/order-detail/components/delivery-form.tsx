@@ -84,7 +84,8 @@ export default class DeliveryForm extends React.Component<any, any> {
                   this.props.form.setFieldsValue({
                     deliverId: null,
                     deliverNo: null,
-                    deliverTime: null
+                    deliverTime: null,
+                    deliverBagNo:null
                   });
                 });
               }}

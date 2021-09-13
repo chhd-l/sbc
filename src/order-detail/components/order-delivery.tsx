@@ -140,10 +140,11 @@ class OrderDelivery extends React.Component<any, any> {
                           <div>
                             <label style={styles.information} className="flex-start-align">
                               【<FormattedMessage id="Product.logisticsInformation" />】
-                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
-                              &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
+                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
+                              <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
                               <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
-                              <FormattedMessage id="Order.TraceabilityBagNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
+                              {logistic.get('deliverBagNo')?( <><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>):null}
+
                               {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
                               {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
@@ -191,7 +192,7 @@ class OrderDelivery extends React.Component<any, any> {
             : null}
         </Spin>
 
-        {storeId=='123457911'?this._renderStatusTip(detail):null}
+        {false&&storeId=='123457911'?this._renderStatusTip(detail):null}
 
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />

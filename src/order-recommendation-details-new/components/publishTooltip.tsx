@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Icon, Input, Checkbox, Button, message } from 'antd';
-import { cache, noop, util, RCi18n } from 'qmkit';
+import { cache, noop, util, RCi18n, Const } from 'qmkit';
 import { Relax } from 'plume2';
 import copy from 'copy-to-clipboard'; //拷贝插件
 
@@ -138,6 +138,7 @@ export default class DetailPublish extends React.Component<any, any> {
     const clear = this.state.clear;
     return (
       <div id="publishButton">
+        {Const.SITE_NAME !== 'MYVETRECO' && <>
         <div className="share">
           <div className="title">
             <span>*</span>{RCi18n({id:'Order.FirstName'})}
@@ -222,6 +223,7 @@ export default class DetailPublish extends React.Component<any, any> {
             }}
           />
         </div>
+        </>}
         <div className="link space-between">
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />

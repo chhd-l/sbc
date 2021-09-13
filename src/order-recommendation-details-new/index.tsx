@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, Tooltip, Icon, Input, Modal, Steps, Button, message } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb, history, RCi18n } from 'qmkit';
+import { Headline, BreadCrumb, history, RCi18n, Const } from 'qmkit';
 import Detail from './components/detail';
 import Detail2 from './components/detail2';
 import PublishButton from './components/publishButton';
@@ -97,7 +97,7 @@ export default class BillingDetails extends React.Component<any, any> {
         title: RCi18n({id:'Order.WriteReason'})
       },
       {
-        title: RCi18n({id:'Order.SendToRecipient'})
+        title: RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.CopyLink' : 'Order.SendToRecipient'})
       }
     ];
     return (

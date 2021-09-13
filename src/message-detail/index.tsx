@@ -125,6 +125,10 @@ class MessageDetails extends Component<any, any> {
       this.findEmailTask();
       this.getTaskDetail();
     }
+
+    debugger
+    let temp = this.props.match
+    console.log(temp);
   };
 
   onBasicFormChange = ({ field, value }) => {

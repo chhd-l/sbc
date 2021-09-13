@@ -2370,7 +2370,8 @@ export default {
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
         'Menu.Order monitor':'Order monitor',
-        'Menu.Api document':'Api document'
+        'Menu.Api document':'Api document',
+        'Menu.Email Template Configuration':'Email Template Configuration',
 
     },
     Others: {

@@ -258,6 +258,7 @@ class ListView extends React.Component<any, any> {
 
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, onValidateAudit } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
       dataList &&
@@ -485,7 +486,8 @@ class ListView extends React.Component<any, any> {
                           ) : null}
 
                           {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
-                          {(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='INSIDE_CHECKED' ? (
+                          {/*||(flowState === 'TO_BE_DELIVERED'&&storeId==='123457911')*/}
+                          {(flowState === 'PENDING_REVIEW')&&auditState==='INSIDE_CHECKED' ? (
                             // <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
                               <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>

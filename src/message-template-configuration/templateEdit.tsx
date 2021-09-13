@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Breadcrumb, Button, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin, Tag, Tooltip } from 'antd';
 import _ from 'lodash';
@@ -6,8 +6,41 @@ import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
+import * as webapi from './webapi';
 
-const TemplateEdit=()=>{
+
+const TemplateEdit=(props)=>{
+
+  useEffect(()=>{
+    console.log(props.location.query);
+  },[])
+
+  const [editForm,setEditForm]=useState({
+    id:props.location.query,
+    templateId: '',
+    type: 1,
+  })
+
+  const onFormChange = ({ field, value }) => {
+    let data = editForm;
+    data[field] = value;
+    setEditForm(data)
+    console.log(editForm)
+  };
+
+
+  const editTemplate=()=>{
+    console.log(editForm,'params')
+    webapi
+      .editTemplateList(editForm)
+      .then((data)=>{
+        const {res}=data;
+        if(res.code===Const.SUCCESS_CODE){
+          console.log(res,'edit')
+        }
+      })
+  }
+
   return(
     <div >
       <BreadCrumb thirdLevel={true}>
@@ -41,13 +74,13 @@ const TemplateEdit=()=>{
                 <FormItem label={'Template ID'}>
                     <Input
                       // disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
-                      // // onChange={(e) => {
-                      // //   const value = (e.target as any).value;
-                      // //   this.onDetailsFormChange({
-                      // //     field: 'email',
-                      // //     value
-                      // //   });
-                      // // }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        onFormChange({
+                          field: 'templateId',
+                          value
+                        });
+                      }}
                     />
                 </FormItem>
               </Col>
@@ -55,13 +88,13 @@ const TemplateEdit=()=>{
                 <FormItem label={'Template Type'}>
                   <Input
                     // disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
-                    // // onChange={(e) => {
-                    // //   const value = (e.target as any).value;
-                    // //   this.onDetailsFormChange({
-                    // //     field: 'email',
-                    // //     value
-                    // //   });
-                    // // }}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      onFormChange({
+                        field: 'type',
+                        value
+                      });
+                    }}
                   />
                 </FormItem>
               </Col>

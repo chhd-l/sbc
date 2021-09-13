@@ -240,6 +240,7 @@ export default class AppStore extends Store {
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
+    tradeDelivery = tradeDelivery.set('deliverBagNo', param.deliverBagNo);
     this.dispatch('detail-actor:setIsSavingShipment', true);
     const { res } = await webapi.deliver(tid, tradeDelivery);
     this.dispatch('detail-actor:setIsSavingShipment', false);

@@ -975,6 +975,10 @@ export default {
         'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
         'Subscription.Phone number': 'Phone number',
         'Subscription.Delivery address phone number': 'Delivery address phone number',
+        'Subscription.DeliveryMethods':'Delivery method',
+        'Subscription.HomeDelivery':'Home delivery',
+        'Subscription.PickupDelivery':'Pickup delivery',
+
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

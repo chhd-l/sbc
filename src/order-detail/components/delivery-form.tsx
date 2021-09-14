@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Select, DatePicker, Input, Radio } from 'antd';
 import { Store } from 'plume2';
-import { QMMethod } from 'qmkit';
+import { QMMethod, Const } from 'qmkit';
 import { fromJS } from 'immutable';
 
 import PropTypes from 'prop-types';
@@ -26,7 +26,7 @@ export default class DeliveryForm extends React.Component<any, any> {
     super(props);
     this._store = ctx['_plume$Store'];
     this.state = {
-      logistciIsMandotory: true
+      logistciIsMandotory: Const.SITE_NAME !== 'MYVETRECO'
     };
   }
 
@@ -78,6 +78,7 @@ export default class DeliveryForm extends React.Component<any, any> {
           <FormItem {...formRadioItemLayout} label={<FormattedMessage id="Order.LogisticMandotory"/>}>
             <Radio.Group
               value={this.state.logistciIsMandotory}
+              disabled={Const.SITE_NAME === 'MYVETRECO'}
               onChange={(e) => {
                 const value = (e.target as any).value;
                 this.setState({ logistciIsMandotory: value }, () => {

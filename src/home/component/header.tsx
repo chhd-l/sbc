@@ -2,7 +2,7 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { DatePicker, Icon, Select, Input, Button, message } from 'antd';
 import '../index.less';
-import { cache, noop, RCi18n } from 'qmkit';
+import { cache, noop, RCi18n, Const } from 'qmkit';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -226,7 +226,7 @@ class Header extends React.Component<any, any> {
           />
           <div className="Header-date-text">* <FormattedMessage id="Home.HeaderTip" /></div>
         </div>
-        <div className="home-prescriber flex-start-end">
+        {Const.SITE_NAME !== 'MYVETRECO' && <div className="home-prescriber flex-start-end">
           <span style={{ marginRight: 8 }}><FormattedMessage id="Home.Prescriber" />: </span>
           {this.state.prescriber == '' ? (
             this.state.searchType == false ? (
@@ -283,8 +283,8 @@ class Header extends React.Component<any, any> {
             )
           )}
           {this.state.prescriber == '' ? this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} /> : ''}
-        </div>
-        {this.state.prescriber.id ? (
+        </div>}
+        {this.state.prescriber.id && Const.SITE_NAME !== 'MYVETRECO' ? (
           <div>
             <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.id}>
               <FormattedMessage id="Home.ManagePrescriber" />

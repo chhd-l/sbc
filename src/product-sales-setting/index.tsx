@@ -258,7 +258,7 @@ class ProductSearchSetting extends Component<any, any> {
           >
 
 
-            <Form.Item
+            {Const.SITE_NAME !== 'MYVETRECO' && <Form.Item
               label={<span style={{ color: '#666' }}><FormattedMessage id='Product.Defaultpurchasetype' /></span>}>
               {getFieldDecorator('defaultPurchaseType', {
                 initialValue: defaultPurchaseType,
@@ -285,7 +285,7 @@ class ProductSearchSetting extends Component<any, any> {
                   </Radio.Button> */}
                 </Radio.Group>
               )}
-            </Form.Item>
+            </Form.Item>}
 
             <Form.Item
               label={
@@ -418,7 +418,7 @@ class ProductSearchSetting extends Component<any, any> {
 
             </Form.Item>
 
-            <Form.Item
+            {Const.SITE_NAME !== 'MYVETRECO' && <Form.Item
               label={<span style={{ color: '#666' }}>
                   <FormattedMessage id='Product.DefaultIndividualfrequency' />
                 </span>
@@ -479,9 +479,9 @@ class ProductSearchSetting extends Component<any, any> {
                   </Button>
                 </Col>
               </Row>
-            </Form.Item>
+            </Form.Item>}
 
-            <Form.Item label={<span style={{ color: '#666' }}>Price display method</span>}>
+            {Const.SITE_NAME !== 'MYVETRECO' && <Form.Item label={<span style={{ color: '#666' }}>Price display method</span>}>
               {getFieldDecorator('priceDisplayMethod', {
                 initialValue: priceDisplayMethod || 0,
                 rules: [
@@ -497,10 +497,10 @@ class ProductSearchSetting extends Component<any, any> {
                   <Option key={index} title={item} value={index} label={item}>{item}</Option>
                 ))}
               </Select>)}
-            </Form.Item>
+            </Form.Item>}
 
 
-            <Form.Item label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}>
+            {Const.SITE_NAME !== 'MYVETRECO' && <Form.Item label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}>
               {getFieldDecorator('basePricePDPShowedFlag', {
                 valuePropName: 'checked',
                 initialValue: basePricePDPShowedFlag === 0 ? false : true,
@@ -511,7 +511,7 @@ class ProductSearchSetting extends Component<any, any> {
                   }
                 ]
               })(<Switch />)}
-            </Form.Item>
+            </Form.Item>}
 
             <div className='bar-button' style={{ marginLeft: -40 }}>
               <Button loading={loading} type='primary' htmlType='submit'>

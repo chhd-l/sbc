@@ -18,7 +18,7 @@ import {
   Spin
 } from 'antd';
 const { Header } = Layout;
-import { history, cache, util, Const, AuthWrapper } from 'qmkit';
+import { history, cache, util, Const, AuthWrapper, checkAuth } from 'qmkit';
 import QRCode from 'qrcode';
 import copy from 'copy-to-clipboard';
 import OktaLogout from './okta/okta-logout';
@@ -69,7 +69,7 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount() {
-    if ((window as any).token) {
+    if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO' && checkAuth('f_petowner_task')) {
       this.getTaskList();
       // 获取切换店铺的下拉数据
       // this.getUserStoreList();
@@ -451,11 +451,11 @@ export default class MyHeader extends React.Component {
             <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item> */}
-        <Menu.Item key="1">
+        {Const.SITE_NAME !== 'MYVETRECO' && <Menu.Item key="1">
           <a onClick={() => this.setState({ modalVisible: true })}>
             <Icon type="global" /> Language
           </a>
-        </Menu.Item>
+        </Menu.Item>}
         <Menu.Item key="2">
           <OktaLogout type="link" text="Exit" />
         </Menu.Item>
@@ -532,7 +532,7 @@ export default class MyHeader extends React.Component {
             </div>
 
             <div style={styles.headerRight}>
-              <div style={{ paddingTop: 8}}>
+              {Const.SITE_NAME !== 'MYVETRECO' && <div style={{ paddingTop: 8}}>
                 <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover
@@ -558,7 +558,7 @@ export default class MyHeader extends React.Component {
                     </Popover>
                   </Badge>
                 </AuthWrapper>
-              </div>
+              </div>}
               {/* 暂时隐藏 */}
               {/*<div className='headerRight-shop'>*/}
               {/*    <div style={{ paddingLeft: 30}}>*/}

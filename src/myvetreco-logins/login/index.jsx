@@ -98,7 +98,7 @@ function CreateAccount( { form }) {
               <Button loading={loading} type="primary" size="large" block onClick={handleLogin}>{RCi18n({id:'Login.log_in'})}</Button>
 
                <div className="text">
-                 Don`&apos;t have an account?
+                 Don&apos;t have an account?
                  <span onClick={handleSignUp}>{RCi18n({id:'Login.sign_up'})}</span>
                </div>
             

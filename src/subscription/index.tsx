@@ -131,7 +131,7 @@ export default class SubscriptionList extends Component<any, any> {
       recipient: searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
       recipientPhone: searchForm.recipientOption === 'Recipient Phone' ? searchForm.recipient : '',
       prescriberId:
-        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
+        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null && Const.SITE_NAME !== 'MYVETRECO' ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
       prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
       status: activeKey,

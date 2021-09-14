@@ -114,6 +114,7 @@ export default class MyLineChart extends Component<any,any> {
             </div>
           </div>
         </div> */}
+        <div className="text-title">{title}</div>
         <ReactECharts
           option={options}
           style={{ height: 200 }}

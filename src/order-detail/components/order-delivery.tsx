@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
 import { Table, Button, InputNumber, Modal, Form, Spin, Row, Timeline, Icon } from 'antd';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, AuthWrapper, Logistics } from 'qmkit';
+import { noop, Const, AuthWrapper, Logistics, cache } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -85,6 +85,7 @@ class OrderDelivery extends React.Component<any, any> {
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
@@ -139,9 +140,11 @@ class OrderDelivery extends React.Component<any, any> {
                           <div>
                             <label style={styles.information} className="flex-start-align">
                               【<FormattedMessage id="Product.logisticsInformation" />】
-                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
-                              &nbsp;&nbsp; <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
+                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
+                              <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
                               <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
+                              {logistic.get('deliverBagNo')?( <><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>):null}
+
                               {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
                               {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
@@ -189,6 +192,8 @@ class OrderDelivery extends React.Component<any, any> {
             : null}
         </Spin>
 
+        {false&&storeId=='123457911'?this._renderStatusTip(detail):null}
+
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
           <div style={styles.expressOp}>
@@ -231,6 +236,86 @@ class OrderDelivery extends React.Component<any, any> {
         </Modal>
       </div>
     );
+  }
+
+  //渲染订单状态提示语
+  _renderStatusTip(orderDetail){
+    const orderStatus=orderDetail.getIn(['tradeState','flowState']);
+    const logisticsList=orderDetail.get('tradeDelivers')||[]
+    const RenderTip=(props)=>{
+      return (
+        <div style={{marginTop:'20px',display:'flex',flexDirection:'row',alignItems:'center'}}>
+          <div style={{ marginRight:'10px' }}>{props.icon}</div>
+          <div>{props.tip}</div>
+          {props.operation ? (
+            <div className="text-md-right text-center">
+              {props.operation}
+            </div>
+          ) : null}
+        </div>
+      )
+    }
+    let ret = null;
+    switch (orderStatus) {
+      case 'INIT':
+        // order create订单创建
+        ret = (
+            <RenderTip
+              icon={
+                <a className="iconfont iconTobepaid" style={{ fontSize:'20px' }} />
+              }
+              tip={<FormattedMessage id="Order.createOrderTip"/>}
+            />
+        );
+        break;
+      case 'TO_BE_DELIVERED':
+        // waiting for shipping等待发货
+        ret = (
+            <RenderTip
+              icon={<a className="iconfont iconTobedelivered" style={{ fontSize:'24px' }}/>}
+              tip={<FormattedMessage id="Order.waitShipping"/>}
+            />
+        );
+        break;
+      case 'SHIPPED':
+        // order in shipping发货运输中
+        ret = (
+          <RenderTip
+            icon={<a className="iconfont iconIntransit" style={{ fontSize:'24px' }}/>}
+            tip={
+              <FormattedMessage
+                id="Order.inTranistTip"
+                values={{
+                  val:
+                    logisticsList[0] && logisticsList[0].trackingUrl ? (
+                      <span>
+                        <a
+                          href={logisticsList[0].trackingUrl}
+                          target="_blank"
+                          rel="nofollow"
+                        >
+                          <FormattedMessage id="Order.viewLogisticDetail" />
+                        </a>
+                        &gt;
+                      </span>
+                    ) : null
+                }}
+              />
+            }
+          />
+        );
+        break;
+      case 'COMPLETED':
+        // order completes完成订单
+        ret = (
+            <RenderTip
+              icon={<a className="iconfont iconCompleted" style={{ fontSize:'24px' }}/>}
+              tip={<FormattedMessage id="Order.completeTip"/>}
+            />
+        );
+        break;
+    }
+    return ret;
   }
 
   _deliveryColumns = () => {

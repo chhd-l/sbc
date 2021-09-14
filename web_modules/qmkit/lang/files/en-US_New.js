@@ -569,8 +569,10 @@ export default {
         "Order.LogisticsCompany": "Logistics company",
         "Order.inputLogisticsCompany": "Please input logistics company",
         "Order.notLogisticsCompany": "You have not set up a common logistics company",
-        "Order.LogisticsOrder": "Logistics order",
-        "Order.inputLogisticsOrder": "Please input logistics order",
+        "Order.LogisticsOrder": "Logistics number",
+        "Order.inputLogisticsOrder": "Please input logistics number",
+        "Order.TraceabilityBagNumber": "Traceability bag number",
+        "Order.inputTraceabilityBagNumber": "Please input traceability bag number",
         "Order.DeliverDate": "Deliver Date",
         "Order.inputDeliverDate": "Please input deliver date",
         "Order.LogisticsSingleNumber": "Logistics single number",
@@ -888,6 +890,11 @@ export default {
         'Order.PrerequisitesForAudit': 'Prerequisites for audit',
         'Order.PetProfile': 'Pet profile',
         'Order.Individualization':'Individualization',
+        'Order.inTranistTip':'Your order has been shipped and you will receive the products soon. {val}',
+        'Order.viewLogisticDetail':'View logistic detail',
+        'Order.createOrderTip':'Your order has not been paid, please pay as soon as possible.',
+        'Order.waitShipping':'Your order has been successfully paid and we are preparing to ship.',
+        'Order.completeTip':'The package was delivered by hand to the delivery address.'
 
     },
     Subscription: {
@@ -968,6 +975,10 @@ export default {
         'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
         'Subscription.Phone number': 'Phone number',
         'Subscription.Delivery address phone number': 'Delivery address phone number',
+        'Subscription.DeliveryMethods':'Delivery method',
+        'Subscription.HomeDelivery':'Home delivery',
+        'Subscription.PickupDelivery':'Pickup delivery',
+
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

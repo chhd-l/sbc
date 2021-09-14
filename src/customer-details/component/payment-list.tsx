@@ -202,7 +202,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
           return (
               <span>
-                <AuthWrapper functionName="f_create_credit_card">
+                {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_create_credit_card">
                   <Popconfirm
                       placement="topRight"
                       title={RCi18n({id:"PetOwner.DeleteThisItem"})}
@@ -217,7 +217,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
                     </Tooltip>
                     <Divider type="vertical" />
                   </Popconfirm>
-                </AuthWrapper>
+                </AuthWrapper>}
                 <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />
               </span>
           );
@@ -228,13 +228,13 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        <AuthWrapper functionName="f_create_credit_card">
+        {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_create_credit_card">
           <Button type="primary">
             <Link to={`/credit-card/${customerId}/${customerAccount}`}>
               {RCi18n({id:'payment.add'})}
             </Link>
           </Button>
-        </AuthWrapper>
+        </AuthWrapper>}
         <Table
           rowKey="id"
           loading={loading}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Popconfirm, Button, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n } from 'qmkit';
+import { RCi18n, Const } from 'qmkit';
 import { getAddressListByType, delAddress } from '../webapi';
 
 interface Iprop {
@@ -75,7 +75,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
   render() {
     const { loading, list } = this.state;
     const { onEdit } = this.props;
-    const columns = [
+    let columns = [
       {
         title: RCi18n({id:"PetOwner.ReceiverName"}),
         dataIndex: 'consigneeName',
@@ -95,8 +95,11 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         title: RCi18n({id:"PetOwner.Address"}),
         dataIndex: 'address1',
         key: 'address'
-      },
-      {
+      }
+    ];
+
+    if (Const.SITE_NAME !== 'MYVETRECO') {
+      columns.push({
         title: RCi18n({id:"PetOwner.Operation"}),
         key: 'oper',
         render: (_, record) => (
@@ -115,14 +118,14 @@ export default class DeliveryList extends React.Component<Iprop, any> {
             </Popconfirm>}
           </div>
         )
-      }
-    ];
+      });
+    }
 
     return (
       <div>
-        <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
+        {Const.SITE_NAME !== 'MYVETRECO' && <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
           <FormattedMessage id="Subscription.AddNew" />
-        </Button>
+        </Button>}
         <Table
           rowKey="deliveryAddressId"
           loading={loading}

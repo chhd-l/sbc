@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n, cache } from 'qmkit';
 import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
@@ -54,6 +54,7 @@ export default class SubscriptionList extends Component<any, any> {
       prescriberIds: [],
       subscriptionType: '',
       subscriptionPlanType: '',
+      deliveryType:'',
 
       subscriptionPlanTypeListClone: [
         { value: 'Cat', name: RCi18n({ id: 'Order.cat' }) },
@@ -66,6 +67,10 @@ export default class SubscriptionList extends Component<any, any> {
         { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
         { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },
         { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) }
+      ],
+      subscriptionDeliveryMethodList: [
+        { value: '1', name: RCi18n({ id: 'Subscription.HomeDelivery' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.PickupDelivery' }) },
       ],
     };
   }
@@ -119,7 +124,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm, activeKey, subscriptionType, subscriptionPlanType } = this.state;
+    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
@@ -139,6 +144,7 @@ export default class SubscriptionList extends Component<any, any> {
       subscriptionPlanType,
       phoneNum: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
       consigneeNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
+      deliveryType
     };
     this.setState(
       () => {
@@ -160,6 +166,7 @@ export default class SubscriptionList extends Component<any, any> {
             subscriptionPlanType,
             phoneNum: param.phoneNum ? param.phoneNum : '',
             consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
+            deliveryType
           }
         };
       },
@@ -301,7 +308,7 @@ export default class SubscriptionList extends Component<any, any> {
     const { searchForm, subscriptionOption, productOption, consumerOption,phoneNumber,
       recipientOption, frequencyOption, frequencyList, frequencyListClub, activeKey,
       prescriberOption, prescriberList, subscriptionType,
-      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList } = this.state;
+      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList,subscriptionDeliveryMethodList,deliveryType } = this.state;
     // 将frequencyListClub和frequencyList存起来，以便导出页面使用
     sessionStorage.setItem('frequencyList', JSON.stringify((frequencyList || []).map(item => ({ value: item.id, name: item.name }))));
     sessionStorage.setItem('frequencyListClub', JSON.stringify((frequencyListClub || []).map(item => ({ value: item.id, name: item.name }))));
@@ -319,6 +326,8 @@ export default class SubscriptionList extends Component<any, any> {
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
 
     const clinicsIds = JSON.parse(sessionStorage.getItem('s2b-employee@data')) ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds : null;
+
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
       <AuthWrapper functionName="f_subscription_list">
@@ -648,6 +657,38 @@ export default class SubscriptionList extends Component<any, any> {
                     />
                   </FormItem>
                 </Col>
+
+                {/* Ru根据Delivery method搜索 */}
+                {
+                  storeId===123457907?(
+                    <Col span={8}>
+                      <FormItem>
+                        <InputGroup compact style={styles.formItemStyle}>
+                          <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.DeliveryMethods' })} disabled defaultValue={RCi18n({ id: 'Subscription.DeliveryMethods' })} />
+                          <Select
+                            style={styles.newWrapper}
+                            allowClear
+                            value={deliveryType}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                deliveryType: value
+                              });
+                            }}
+                          >
+                            {subscriptionDeliveryMethodList &&
+                            subscriptionDeliveryMethodList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        </InputGroup>
+                      </FormItem>
+                    </Col>
+                  ):null
+                }
+
 
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>

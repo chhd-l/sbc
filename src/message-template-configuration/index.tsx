@@ -21,6 +21,7 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import value from '*.json';
+import TemplateDetail from '@/message-template-configuration/templateDetail';
 
 
 const FormItem = Form.Item;
@@ -49,6 +50,8 @@ const MessageTemplateConfiguration=()=>{
     messageTemplate: '',
     type: '',
   })
+  const [showTab,setShowTab]=useState(false)
+  const [detailId,setDetailId]=useState()
 
   const columns = [
     {
@@ -93,7 +96,10 @@ const MessageTemplateConfiguration=()=>{
           <div>
 
             <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
-              <Link to={'/template-details/' + record.templateId} className="iconfont iconDetails"></Link>
+              <a className="iconfont iconDetails" onClick={()=> {
+                setShowTab(true);
+                setDetailId(record.id);
+              }}></a>
             </Tooltip>
 
             <Divider type="vertical" />
@@ -234,7 +240,7 @@ const MessageTemplateConfiguration=()=>{
           </Row>
         </Form>
       </div>
-
+      <TemplateDetail visibleTab={showTab} setVisibleTab={setShowTab} />
       <div className="container">
         <Button type="primary" style={{ margin: '10px 10px 10px 0' }}>
           <Link to={'/template-add'}><FormattedMessage id="add" /></Link>

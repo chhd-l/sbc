@@ -12,13 +12,13 @@ import * as webapi from './webapi';
 const TemplateEdit=(props)=>{
 
   useEffect(()=>{
-    console.log(props.location.query);
+    console.log(props.location.query,'xin');
   },[])
 
   const [editForm,setEditForm]=useState({
     id:props.location.query,
     templateId: '',
-    type: 1,
+    type: null,
   })
 
   const onFormChange = ({ field, value }) => {
@@ -106,7 +106,7 @@ const TemplateEdit=(props)=>{
 
 
       <div className="bar-button">
-          <Button type="primary" style={{ marginRight: 10 }} >
+          <Button type="primary" style={{ marginRight: 10 }} onClick={()=>editTemplate()}>
             {<FormattedMessage id="save" />}
           </Button>
         <Button onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>

@@ -98,7 +98,7 @@ const MessageTemplateConfiguration=()=>{
             <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
               <a className="iconfont iconDetails" onClick={()=> {
                 setShowTab(true);
-                setDetailId(record.id);
+                setDetailId(record.templateId);
               }}></a>
             </Tooltip>
 
@@ -240,7 +240,7 @@ const MessageTemplateConfiguration=()=>{
           </Row>
         </Form>
       </div>
-      <TemplateDetail visibleTab={showTab} setVisibleTab={setShowTab} />
+      <TemplateDetail visibleTab={showTab} setVisibleTab={setShowTab} detailId={detailId}/>
       <div className="container">
         <Button type="primary" style={{ margin: '10px 10px 10px 0' }}>
           <Link to={'/template-add'}><FormattedMessage id="add" /></Link>

@@ -28,6 +28,9 @@ const FormItem = Form.Item;
         emailPaymentStatus:0,
         emailpaymentValue:0,
       },
+      cardExpirationList:[
+        {name:'1',value:1},
+      ],
       loading:false,
     };
   }

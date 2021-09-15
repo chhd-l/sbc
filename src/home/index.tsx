@@ -5,6 +5,7 @@ import AppStore from './store';
 import Header from './component/header';
 import TodoItems from './component/todo-items';
 import Prescriber from './component/prescriber';
+import TodoItemsMyvet from './component/todo-items-myvetreco';
 import moment from 'moment';
 /*import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
@@ -88,7 +89,7 @@ export default class HelloApp extends React.Component<any, any> {
       return !this.state.prescriberId || Const.SITE_NAME === 'MYVETRECO' ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+          {Const.SITE_NAME === 'MYVETRECO' ? <TodoItemsMyvet /> : this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
 
           {/*<StatisticalReport />
           <Ranking /> */}

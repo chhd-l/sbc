@@ -123,10 +123,10 @@ export default class DeliveryForm extends React.Component<any, any> {
                   ]
                 })(<Input placeholder="" />)}
               </FormItem>
-              <FormItem {...formItemLayout} required={true} label={<FormattedMessage id="Order.TraceabilityBagNumber"/>}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.TraceabilityBagNumber"/>}>
                 {getFieldDecorator('deliverBagNo', {
                   rules: [
-                    { required: true, message: <FormattedMessage id="Order.TraceabilityBagNumber"/> },
+                    // { required: true, message: <FormattedMessage id="Order.TraceabilityBagNumber"/> },
                     {
                       validator: (rule, value, callback) => {
                         QMMethod.validatorDeliveryCode(rule, value, callback, 'traceability bag number');

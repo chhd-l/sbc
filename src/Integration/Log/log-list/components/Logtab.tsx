@@ -47,11 +47,13 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.Time' }),
         dataIndex: 'invokeTime',
         key: 'invokeTime',
+        width:'10%'
       },
       {
         title: RCi18n({ id: 'Log.InterfaceName' }),
         dataIndex: 'interfaceName',
         key: 'interfaceName',
+        width:'10%'
       },
       {
         title: RCi18n({ id: 'Interface.Provider' }),
@@ -62,7 +64,14 @@ export default class LogTabs extends Component<any, any>{
         title: RCi18n({ id: 'Log.URL' }),
         dataIndex: 'url',
         key: 'url',
+        width:'15%'
       },
+      {
+        title: RCi18n({ id: 'Interface.Method' }),
+        dataIndex: 'method',
+        key: 'method',
+      },
+
       {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
@@ -98,11 +107,11 @@ export default class LogTabs extends Component<any, any>{
             {RCi18n({ id: 'Log.Response' })}</Button>
         )
       },
-      {
-        title: RCi18n({ id: 'Log.ClientName' }),
-        dataIndex: 'clientName',
-        key: 'clientName',
-      },
+      // {
+      //   title: RCi18n({ id: 'Log.ClientName' }),
+      //   dataIndex: 'clientName',
+      //   key: 'clientName',
+      // },
       {
         title: '',
         dataIndex: 'detail',

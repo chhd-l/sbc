@@ -46,3 +46,13 @@ export function editTemplateList(editParams={}){
     })
   })
 }
+
+//查看模板详情
+export function getEmailTemplateById(detailParams={}){
+  return Fetch<TResult>('/message/getEmailTemplateById',{
+    method:'POST',
+    body:JSON.stringify({
+      ...detailParams
+    })
+  })
+}

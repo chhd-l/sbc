@@ -11,6 +11,7 @@ export default function FormModal(props) {
   return (
     <Modal
      title={props.title}
+     visible={props.visible}
      width={500}
      okText="Save"
      cancelText="Cancel"
@@ -19,7 +20,12 @@ export default function FormModal(props) {
      onCancel={props.onCancel}
     >
       <Form layout="horizontal">
-        <FormItem></FormItem>
+        <FormItem label="UOM category name">
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
+        </FormItem>
+        <FormItem label="Description">
+          <TextArea autoSize value={description} onChange={(e) => setDescription(e.target.value)} />
+        </FormItem>
       </Form>
     </Modal>
   );

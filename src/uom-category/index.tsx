@@ -4,6 +4,7 @@ import { Headline, BreadCrumb, RCi18n } from 'qmkit';
 import { useAntdTable } from 'ahooks';
 import { getUOMCategoryList } from './webapi';
 import { FormattedMessage } from 'react-intl';
+import FormModal from './components/form-modal';
 
 const FormItem = Form.Item;
 
@@ -16,6 +17,13 @@ const getTableData = ({ current, pageSize }, formData) => {
 };
 
 function UomCategory(props: any) {
+  const [modalProps, setModalProps] = useState({
+    visible: false,
+    name: '',
+    description: '',
+    title: 'Add',
+    onCancel: () => setModalProps({ ...modalProps, visible: false })
+  });
 
   const { tableProps, search, loading } = useAntdTable(getTableData, {
     defaultPageSize: 10,
@@ -40,7 +48,10 @@ function UomCategory(props: any) {
       render: (text, record) => (
         <div>
           <Tooltip placement="top" title={<FormattedMessage id="Product.Edit"/>}>
-            <a className="iconfont iconEdit"></a>
+            <a
+              className="iconfont iconEdit"
+              onClick={() => setModalProps({ ...modalProps, visible: true, name: record.name, description: record.description })}
+            ></a>
           </Tooltip>
           <Tooltip placement="top" title={<FormattedMessage id="Product.delete"/>}>
             <a className="iconfont iconDelete" style={{ marginLeft: 10 }}></a>
@@ -65,7 +76,12 @@ function UomCategory(props: any) {
       </div>
       <div className="container">
         <div style={{margin: '10px 0', textAlign:'right'}}>
-          <Button type="primary">Create new UOM category</Button>
+          <Button 
+            type="primary"
+            onClick={() => setModalProps({ ...modalProps, visible: true, name: '', description: '' })}
+          >
+            Create new UOM category
+          </Button>
         </div>
         <Table
           columns={columns}
@@ -74,6 +90,7 @@ function UomCategory(props: any) {
           {...tableProps}
         />
       </div>
+      {modalProps.visible && <FormModal {...modalProps} />}
     </div>
   );
 }

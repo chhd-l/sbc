@@ -63,7 +63,12 @@ export default class DetailPublish extends React.Component<any, any> {
   handleOk = (e) => {
     const { onSend, getLink, sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
-    if (
+    if (Const.SITE_NAME === 'MYVETRECO') {
+      onSend(
+        'send',
+        { base64Id: getLink }
+      );
+    } else if (
       sharingObj.consumerFirstName != '' &&
       sharingObj.consumerLastName != '' &&
       sharingObj.consumerEmail != '' &&

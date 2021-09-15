@@ -11,7 +11,9 @@ export function getUOMCategoryList(params: any = {}) {
     res: {
       code: Const.SUCCESS_CODE,
       message: '',
-      context: [
+      context: {
+        total: 3,
+        content:[
         {
           id: 1,
           name: 'Unit',
@@ -27,7 +29,7 @@ export function getUOMCategoryList(params: any = {}) {
           name: 'Length',
           description: 'description of length',
         }
-      ]
+      ]}
     }
   });
 }

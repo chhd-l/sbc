@@ -10,7 +10,7 @@ import moment from 'moment';
 import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';*/
 
-import { cache } from 'qmkit';
+import { cache, Const } from 'qmkit';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class HelloApp extends React.Component<any, any> {
@@ -85,7 +85,7 @@ export default class HelloApp extends React.Component<any, any> {
   render() {
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
     if (allFunctions.includes('f_home')) {
-      return !this.state.prescriberId ? (
+      return !this.state.prescriberId || Const.SITE_NAME === 'MYVETRECO' ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
           {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}

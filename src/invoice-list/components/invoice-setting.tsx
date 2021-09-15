@@ -19,9 +19,7 @@ export default function InvoiceSetting() {
   const [loading, setLoading] = useState(true);
   const [companyInfoId, setCompanyInfoId] = useState(0);
   const [invoiceProjectSwitchId, setInvoiceProjectSwitchId] = useState('');
-  const [isPaperInvoice, setIsPaperInvoice] = useState(0);
   const [isSupportInvoice, setIsSupportInvoice] = useState(0);
-  const [isValueAddedTaxInvoice, setIsValueAddedTaxInvoice] = useState(0);
   const [invoicePrefix, setInvoicePrefix] = useState(DEFAULT_PREFIX);
   const [invoiceFormat, setInvoiceFormat] = useState(DEFAULT_FORMAT);
 
@@ -31,9 +29,7 @@ export default function InvoiceSetting() {
         setLoading(false);
         setCompanyInfoId(data1.res.context?.companyInfoId ?? 0);
         setInvoiceProjectSwitchId(data1.res.context?.invoiceProjectSwitchId ?? '');
-        setIsPaperInvoice(data1.res.context?.isPaperInvoice ?? 0);
         setIsSupportInvoice(data1.res.context?.isSupportInvoice ?? 0);
-        setIsValueAddedTaxInvoice(data1.res.context?.isValueAddedTaxInvoice ?? 0);
 
         setInvoicePrefix(data2.res.context ? data2.res.context[0] : DEFAULT_PREFIX);
         setInvoiceFormat(data3.res.context ? data3.res.context[0] : DEFAULT_FORMAT);
@@ -55,9 +51,9 @@ export default function InvoiceSetting() {
       setInvoiceConfig({
         companyInfoId,
         invoiceProjectSwitchId,
-        isPaperInvoice,
+        isPaperInvoice: isSupportInvoice,
         isSupportInvoice,
-        isValueAddedTaxInvoice
+        isValueAddedTaxInvoice: isSupportInvoice
       }),
       saveInvoiceSysConfig([invoicePrefix, invoiceFormat])
     ]).then(([data1, data2]) => {
@@ -91,22 +87,6 @@ export default function InvoiceSetting() {
             />
           </FormItem>
           {isSupportInvoice === 1 && <>
-            <FormItem label={<FormattedMessage id="Finance.SupportPaperInvoice" />}>
-              <Switch
-                checked={isPaperInvoice === 1}
-                onChange={(checked) => {
-                  setIsPaperInvoice(checked ? 1 : 0);
-                }}
-              />
-            </FormItem>
-            <FormItem label={<FormattedMessage id="Finance.SupportVATInvoice" />}>
-              <Switch
-                checked={isValueAddedTaxInvoice === 1}
-                onChange={(checked) => {
-                  setIsValueAddedTaxInvoice(checked ? 1 : 0);
-                }}
-              />
-            </FormItem>
             <FormItem label={<FormattedMessage id="Finance.InvoicePrefix" />}>
               <Input value={invoicePrefix.context} onChange={(e) => setInvoicePrefix(Object.assign({}, invoicePrefix, {context:e.target.value}))} />
             </FormItem>

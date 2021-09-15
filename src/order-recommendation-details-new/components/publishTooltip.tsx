@@ -66,7 +66,7 @@ export default class DetailPublish extends React.Component<any, any> {
     if (Const.SITE_NAME === 'MYVETRECO') {
       onSend(
         'send',
-        { base64Id: getLink }
+        Object.assign({}, sharingObj, { base64Id: getLink })
       );
     } else if (
       sharingObj.consumerFirstName != '' &&

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, SelectGroup } from 'qmkit';
 import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
 
 import * as webapi from './webapi';
@@ -28,13 +28,16 @@ const FormItem = Form.Item;
         emailPaymentStatus:0,
         emailpaymentValue:0,
       },
-      cardExpirationList:[
-        {name:'1',value:1},
-      ],
+      cardExpirationList:[],
       loading:false,
     };
   }
   componentDidMount() {
+    let cardExpirationList=[];
+    for(let i=0;i<15;i++){
+      cardExpirationList.push({name:i+1,value:i+1})
+    }
+    this.setState({cardExpirationList:cardExpirationList})
     this.getSettingConfig();
   }
   settingFormChange = ({ field, value }) => {
@@ -158,7 +161,7 @@ const FormItem = Form.Item;
       });
   };
   render() {
-    const { title, settingForm } = this.state;
+    const { title, settingForm,cardExpirationList } = this.state;
     return (
       <Spin spinning={this.state.loading}>
         <BreadCrumb />
@@ -223,6 +226,21 @@ const FormItem = Form.Item;
                 {settingForm.cardExpirationStatus ? (
                   <Col span={20}>
                     <div style={styles.inputStyle}>
+                      {/*<Select*/}
+                      {/*  value={settingForm.cardExpirationValue}*/}
+                      {/*  onChange={(value) =>*/}
+                      {/*    this.settingFormChange({*/}
+                      {/*      field: 'cardExpirationValue',*/}
+                      {/*      value: value*/}
+                      {/*    })*/}
+                      {/*  }*/}
+                      {/*>*/}
+                      {/*  {cardExpirationList.map((item)=>(*/}
+                      {/*    <option value={item.value}>*/}
+                      {/*      {item.name}*/}
+                      {/*    </option>*/}
+                      {/*    ))}*/}
+                      {/*</Select>*/}
                       <InputNumber
                         precision={0}
                         min={1}

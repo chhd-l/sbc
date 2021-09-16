@@ -141,6 +141,10 @@ export default class DetailPublish extends React.Component<any, any> {
   render() {
     const { sharing, onSharing, getLink } = this.props.relaxProps;
     const clear = this.state.clear;
+    let linkBaseUrl = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG) || '{}').supplierWebsite ?? '';
+    if (!linkBaseUrl.endsWith('/')) {
+      linkBaseUrl += '/';
+    }
     return (
       <div id="publishButton">
         {Const.SITE_NAME !== 'MYVETRECO' && <>
@@ -233,11 +237,7 @@ export default class DetailPublish extends React.Component<any, any> {
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />
             <span style={{ marginLeft: 5, color: '#8f0101' }}>
-              {
-                JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
-                  .supplierWebsite
-              }
-              recommendation/{getLink}
+              {linkBaseUrl}recommendation/{getLink}
             </span>
           </div>
         </div>
@@ -245,10 +245,7 @@ export default class DetailPublish extends React.Component<any, any> {
           <Button
             onClick={() =>
               this.copyLink(
-                `${
-                  JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
-                    .supplierWebsite
-                }recommendation/${getLink}`
+                `${linkBaseUrl}recommendation/${getLink}`
               )
             }
           >

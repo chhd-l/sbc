@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Input, Form, Select } from 'antd';
+import { Modal, Input, Form, Select, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,7 +22,7 @@ export default function FormModal(props) {
      onOk={() => {}}
      onCancel={props.onCancel}
     >
-      <Form layout="horizontal">
+      <Form labelCol={{span: 8}} wrapperCol={{span: 16}} layout="horizontal">
         <FormItem label="UOM Code">
           <Input disabled />
         </FormItem>
@@ -33,6 +33,16 @@ export default function FormModal(props) {
           <Select value={category} onChange={(value) => setCategory(value)}>
             <Option value=""></Option>
           </Select>
+        </FormItem>
+        <FormItem label="Type">
+          <Select value={type} onChange={(value) => setType(value)}>
+            <Option value="1">Reference UOM for this category</Option>
+            <Option value="2">Bigger than the reference UOM</Option>
+            <Option value="3">Smaller than the reference UOM</Option>
+          </Select>
+        </FormItem>
+        <FormItem label="Ratio">
+          <InputNumber value={ratio} onChange={(value) => setRatio(value)} />
         </FormItem>
       </Form>
     </Modal>

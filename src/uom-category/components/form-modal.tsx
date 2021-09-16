@@ -19,7 +19,7 @@ export default function FormModal(props) {
      onOk={() => {}}
      onCancel={props.onCancel}
     >
-      <Form layout="horizontal">
+      <Form labelCol={{span: 8}} wrapperCol={{span: 16}} layout="horizontal">
         <FormItem label="UOM category name">
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </FormItem>

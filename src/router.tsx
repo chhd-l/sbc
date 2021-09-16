@@ -1062,6 +1062,10 @@ const routes = [
     path: '/uom-category',
     asyncComponent: () => import('./uom-category')
   },
+  {
+    path: '/uom-list',
+    asyncComponent: () => import('./uom-list')
+  },
     /**
      * Integration  -------------------------------------------------------
      * **/

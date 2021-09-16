@@ -3,12 +3,14 @@ import { Breadcrumb, Tabs, Card, Menu, Row, Col, Button, Input, Select, message,
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import { PostalCodeMsg } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
 import moment from 'moment';
 import PaymentMethod from './component/payment-method'
+
 
 
 const { Option } = Select;
@@ -1487,6 +1489,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
+                  {/*根据地址是否属于黑名单进而决定是否显示*/}
+                  <Col span={24}>
+                    <PostalCodeMsg/>
+                  </Col>
                 </Row>
               </Col>
               <Col span={8}>
@@ -1620,6 +1626,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Button>
                 </Col>
               </Row>
+              {/*如果是黑名单的地址，则不能选择*/}
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
                 value={this.state.deliveryAddressId}
@@ -1638,7 +1645,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
                     <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                      <Radio value={item.deliveryAddressId}>
+                      <Radio disabled value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + item.lastName}</p>
                           <p>{item.city}</p>
@@ -1647,8 +1654,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>{this.getDictValue(countryArr, item.countryId)}</p>
                           <p>{item.address1}</p>
                           <p>{item.address2}</p>
+                          <p><PostalCodeMsg/></p>
                         </div>
                       </Radio>
+
                       <div>
                         <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
                           <FormattedMessage id="Subscription.Edit" />
@@ -1667,6 +1676,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
+                            <p><PostalCodeMsg/></p>
                           </div>
                         </Radio>
                         <div>

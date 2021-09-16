@@ -69,7 +69,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               ...values,
               cityId:values.cityId.key,
               cityName:values.cityId.label,
-              introductionHtml:values.introduction ? encodeURIComponent(SplicingHtml(values.introduction)) : ''
+              introductionHtml:values.introduction // ? encodeURIComponent(SplicingHtml(values.introduction)) : ''
             }).then(({res,err})=>{
               if(err){
                 setLoading(false)
@@ -275,7 +275,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   <Input size="large"
                          onChange={(e)=>{
                            if(Const.SITE_NAME === 'MYVETRECO'){
-                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50)
+                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase()
                              form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
                            }
                           }}

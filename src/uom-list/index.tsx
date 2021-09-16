@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Table, Tooltip } from 'antd';
-import { Headline, BreadCrumb, RCi18n } from 'qmkit';
+import { Form, Input, Button, Table, Tooltip, Row, Col, Select } from 'antd';
+import { Headline, BreadCrumb, RCi18n, SelectGroup } from 'qmkit';
 import { useAntdTable } from 'ahooks';
-import { getUOMCategoryList } from './webapi';
+import { getUOMList } from './webapi';
 import { FormattedMessage } from 'react-intl';
 import FormModal from './components/form-modal';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 const getTableData = ({ current, pageSize }, formData) => {
-  return getUOMCategoryList({
+  return getUOMList({
     pageNum: current - 1,
     pageSize,
     ...formData
@@ -33,14 +34,29 @@ function UomList(props: any) {
   const { getFieldDecorator } = props.form;
   const columns = [
     {
-      title: 'UOM category name',
+      title: 'UOM Code',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: 'UOM Name',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'desc',
+      title: 'Category',
+      dataIndex: 'category',
+      key: 'category',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Ratio',
+      dataIndex: 'ratio',
+      key: 'ratio',
     },
     {
       title: 'Operation',
@@ -64,14 +80,47 @@ function UomList(props: any) {
     <div>
       <BreadCrumb />
       <div className="container-search">
-        <Headline title="UOM category" />
+        <Headline title="UOM list" />
         <Form className="filter-content" layout="inline">
-          <FormItem>
-            {getFieldDecorator('name')(<Input addonBefore="UOM category name" />)}
-          </FormItem>
-          <FormItem>
-            <Button type="primary" icon="search" onClick={submit}>Search</Button>
-          </FormItem>
+          <Row>
+            <Col span={8}>
+              <FormItem>
+                {getFieldDecorator('code')(
+                  <Input
+                    addonBefore="UOM Code"
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem>
+                {getFieldDecorator('name')(
+                  <Input
+                    addonBefore="UOM Name"
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={8}>
+              <FormItem>
+                {getFieldDecorator('category')(
+                  <SelectGroup
+                    label={<p style={styles.label}>UOM Category</p>}
+                    style={{ width: 195 }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="Subscription.all" />
+                    </Option>
+                  </SelectGroup>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={24} style={{textAlign:'center'}}>
+              <FormItem>
+                <Button type="primary" icon="search" onClick={submit}>Search</Button>
+              </FormItem>
+            </Col>
+          </Row>
         </Form>
       </div>
       <div className="container">
@@ -94,6 +143,16 @@ function UomList(props: any) {
     </div>
   );
 }
+
+const styles = {
+  label: {
+    width: 143,
+    textAlign: 'center'
+  },
+  wrapper: {
+    width: 157
+  }
+} as any;
 
 export default Form.create()(UomList);
 

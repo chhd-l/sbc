@@ -6,7 +6,7 @@ type TResult = {
   context: any;
 };
 
-export function getUOMCategoryList(params: any = {}) {
+export function getUOMList(params: any = {}) {
   return Promise.resolve({
     res: {
       code: Const.SUCCESS_CODE,
@@ -16,18 +16,27 @@ export function getUOMCategoryList(params: any = {}) {
         content:[
         {
           id: 1,
+          code: '001',
           name: 'Unit',
-          description: 'description of unit',
+          category: 'Unit',
+          type: 'xxx',
+          ratio: 1,
         },
         {
           id: 2,
-          name: 'Weight',
-          description: 'description of weight',
+          code: '001',
+          name: 'Unit',
+          category: 'Unit',
+          type: 'xxx',
+          ratio: 1,
         },
         {
           id: 3,
-          name: 'Length',
-          description: 'description of length',
+          code: '001',
+          name: 'Unit',
+          category: 'Unit',
+          type: 'xxx',
+          ratio: 1,
         }
       ]}
     }

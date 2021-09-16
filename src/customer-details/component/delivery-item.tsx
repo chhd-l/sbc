@@ -390,13 +390,26 @@ class DeliveryItem extends React.Component<Iprop, any> {
     }
   };
 
-  compareZip = (rule, value, callback) => {
+  // 邮编校验
+  compareZip =  async (rule, value, callback) => {
     if (!/^[0-9]{3,10}$/.test(value)) {
       callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
-      callback();
+      // 邮编黑名单校验
+      let res = await this.validateZipcode(value);
+      if (res){
+        callback();
+      }else {
+        callback('* Delivery not available in the area.');
+      }
     }
   };
+
+  validateZipcode = async (value) => {
+    return await new Promise<Promise<any>>(resolve => {
+      resolve(value)
+    })
+  }
 
   //俄罗斯address1校验
   ruAddress1Validator = (rule, value, callback) => {
@@ -432,22 +445,48 @@ class DeliveryItem extends React.Component<Iprop, any> {
       <div>
         <Spin spinning={this.state.loading}>
           <div className="container">
-            <Headline title={delivery.deliveryAddressId ? (addressType === 'delivery' ? RCi18n({id:"PetOwner.EditDeliveryInformation"}) : RCi18n({id:"PetOwner.EditBillingInformation"})) : (addressType === 'delivery' ? RCi18n({id:"PetOwner.AddDeliveryInformation"}) : RCi18n({id:"PetOwner.AddBillingInformation"}))} />
+            <Headline title={
+              delivery.deliveryAddressId
+                ? (addressType === 'delivery'
+                  ? RCi18n({id:"PetOwner.EditDeliveryInformation"})
+                  : RCi18n({id:"PetOwner.EditBillingInformation"}))
+                : (addressType === 'delivery'
+                  ? RCi18n({id:"PetOwner.AddDeliveryInformation"})
+                  : RCi18n({id:"PetOwner.AddBillingInformation"}))
+            }
+            />
             <Form>
               <Row>
                 {this.state.formFieldList.map((field, colIdx) => (
                   <Col span={12 * field.occupancyNum} key={colIdx}>
                     <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({id:`PetOwner.${field.fieldName}`})}>
-                      {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`, {
-                        initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
-                        rules: [
+                      {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`,
+                        {
+                          initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
+                          rules: [
                           { required: field.requiredFlag === 1, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
-                          field.fieldName != 'Country' ? { max: field.maxLength, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) } : undefined,
-                          { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1 ? this.comparePhone : (rule, value, callback) => callback() },
-                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1 ? this.compareZip : (rule, value, callback) => callback() },
-                          { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1 ? this.ruAddress1Validator : (rule, value, callback) => callback() }
+                          field.fieldName != 'Country'
+                            ? { max: field.maxLength, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) }
+                            : undefined,
+                          { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1
+                              ? this.comparePhone
+                              : (rule, value, callback) => callback()
+                          },
+                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1
+                              ? this.compareZip :
+                              (rule, value, callback) => callback()
+                          },
+                            { asyncValidator: field.fieldName === 'Postal code' && field.requiredFlag === 1
+                                ? this.compareZip :
+                                (rule, value, callback) => callback()
+                            },
+                          { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
+                              ? this.ruAddress1Validator
+                              : (rule, value, callback) => callback()
+                          }
                         ].filter((r) => !!r)
-                      })(this.renderField(field))}
+                      })(this.renderField(field))
+                      }
                     </Form.Item>
                   </Col>
                 ))}

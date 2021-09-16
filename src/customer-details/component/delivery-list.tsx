@@ -3,6 +3,8 @@ import { Table, Popconfirm, Button, Tooltip } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n, Const } from 'qmkit';
 import { getAddressListByType, delAddress } from '../webapi';
+import { PostalCodeMsg } from 'biz';
+
 
 interface Iprop {
   customerId: string;
@@ -94,7 +96,16 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       {
         title: RCi18n({id:"PetOwner.Address"}),
         dataIndex: 'address1',
-        key: 'address'
+        key: 'address',
+        render: (text, record) => {
+          return (
+            <div style={{color: '#e2001a'}}>
+              <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg/>}>
+                <span>{text}</span>
+              </Tooltip>
+            </div>
+          )
+        },
       }
     ];
 

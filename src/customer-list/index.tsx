@@ -1,8 +1,9 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n,cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import IMask from 'imask';
 import * as webapi from './webapi';
 
 const { confirm } = Modal;
@@ -154,12 +155,50 @@ export default class Customer extends React.Component<any, any> {
   };
 
   onFormChange = ({ field, value }) => {
+    if(field === "phoneNumber") {
+      this.setPhoneNumberReg()
+    }
     let data = this.state.searchForm;
     data[field] = value;
     this.setState({
       searchForm: data
     });
   };
+
+   // 设置手机号输入限制
+   setPhoneNumberReg = () => {
+    let element = document.getElementById('petOwnerPhoneNumber');
+    let phoneReg = [];
+    let country = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+    switch (country) {
+      case 'fr':
+        phoneReg = [
+          { mask: '(+33) 0 00 00 00 00' },
+          { mask: '(+33) 00 00 00 00 00' }
+        ];
+        break;
+      case 'us':
+        phoneReg = [{ mask: '000-000-0000' }];
+        break;
+      case 'ru':
+        phoneReg = [{ mask: '+{7} (000) 000-00-00' }];
+        break;
+      case 'mx':
+        phoneReg = [{ mask: '+(52) 000 000 0000' }];
+        break;
+      case 'tr':
+        phoneReg = [{ mask: '{0} (000) 000-00-00' }];
+        break;
+      default:
+        phoneReg = [{ mask: '00000000000' }];
+        break;
+    }
+    let maskOptions = {
+      mask: phoneReg
+    };
+    IMask(element, maskOptions);
+  };
+
   handleTableChange(pagination: any) {
     this.setState({
       pagination: pagination
@@ -382,6 +421,7 @@ export default class Customer extends React.Component<any, any> {
                           value
                         });
                       }}
+                      id="petOwnerPhoneNumber"
                     />
                   </FormItem>
                 </Col>

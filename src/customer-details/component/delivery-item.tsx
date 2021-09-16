@@ -397,7 +397,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
     } else {
       // 邮编黑名单校验
       let res = await this.validateZipcode(value);
-      if (res){
+      console.log('res', res);
+      if (!res){
         callback();
       }else {
         callback('* Delivery not available in the area.');
@@ -463,11 +464,15 @@ class DeliveryItem extends React.Component<Iprop, any> {
                       {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`,
                         {
                           initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
+                          validateTrigger: field.fieldName === 'Postal code' && field.requiredFlag === 1
+                            ? 'onBlur'
+                            : 'onchange',
                           rules: [
                           { required: field.requiredFlag === 1, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                           field.fieldName != 'Country'
                             ? { max: field.maxLength, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) }
                             : undefined,
+
                           { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1
                               ? this.comparePhone
                               : (rule, value, callback) => callback()
@@ -476,10 +481,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
                               ? this.compareZip :
                               (rule, value, callback) => callback()
                           },
-                            { asyncValidator: field.fieldName === 'Postal code' && field.requiredFlag === 1
-                                ? this.compareZip :
-                                (rule, value, callback) => callback()
-                            },
                           { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
                               ? this.ruAddress1Validator
                               : (rule, value, callback) => callback()

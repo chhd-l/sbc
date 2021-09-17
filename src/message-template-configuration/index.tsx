@@ -47,8 +47,8 @@ const MessageTemplateConfiguration=()=>{
 
   const [templateListData,setTemplateListData]=useState([]);
   const [searchForm,setSearchForm]=useState({
-    messageTemplate: '',
-    type: '',
+    keywords: '',
+    type: null,
   })
   const [showTab,setShowTab]=useState(false)
   const [detailId,setDetailId]=useState()
@@ -94,7 +94,6 @@ const MessageTemplateConfiguration=()=>{
       render: (text, record) => (
         <div>
           <div>
-
             <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
               <a className="iconfont iconDetails" onClick={()=> {
                 setShowTab(true);

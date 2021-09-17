@@ -134,7 +134,8 @@ export default class Customer extends React.Component<any, any> {
         }
       ],
       subscriptionTypeList: [],
-      loading: false
+      loading: false,
+      phoneReg:[]
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -144,7 +145,7 @@ export default class Customer extends React.Component<any, any> {
   componentDidMount() {
     this.init();
     //this.getSubscriptionTypeList();
-    // this.getPhoneNumberDefaultFormat();
+    this.getPhoneNumberDefaultFormat();
   }
 
   getSubscriptionTypeList = () => {
@@ -168,41 +169,47 @@ export default class Customer extends React.Component<any, any> {
 
   getPhoneNumberDefaultFormat = () =>{
     webapi.getPhoneNumberFormat().then((data) =>{
-      const phoneFormat = data.res.context.configVOList?.[0]?.context
-      // const phoneFormat.slice(",");
-      console.log(phoneFormat,'phomoe')
+      const phoneFormat = data.res.context.configVOList?.[0]?.context || "00000000000";
+      const phoneNumberFormat = phoneFormat?.split(",");
+      const phoneReg = phoneNumberFormat.map((item:string) =>{
+        return {mask:item}
+      })
+      this.setState({
+        phoneReg
+      })
     })
   }
    // 设置手机号输入限制
    setPhoneNumberReg = () => {
     let element = document.getElementById('petOwnerPhoneNumber');
-    let phoneReg = [];
-    let country = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
-    switch (country) {
-      case 'fr':
-        phoneReg = [
-          { mask: '(+33) 0 00 00 00 00' },
-          { mask: '(+33) 00 00 00 00 00' }
-        ];
-        break;
-      case 'us':
-        phoneReg = [{ mask: '000-000-0000' }];
-        break;
-      case 'ru':
-        phoneReg = [{ mask: '+{7} (000) 000-00-00' }];
-        break;
-      case 'mx':
-        phoneReg = [{ mask: '+(52) 000 000 0000' }];
-        break;
-      case 'tr':
-        phoneReg = [{ mask: '{0} (000) 000-00-00' }];
-        break;
-      default:
-        phoneReg = [{ mask: '00000000000' }];
-        break;
-    }
+    // 静态前端维护的电话格式改成接口获取
+    // let phoneReg = [];
+    // let country = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+    // switch (country) {
+    //   case 'fr':
+    //     phoneReg = [
+    //       { mask: '(+33) 0 00 00 00 00' },
+    //       { mask: '(+33) 00 00 00 00 00' }
+    //     ];
+    //     break;
+    //   case 'us':
+    //     phoneReg = [{ mask: '000-000-0000' }];
+    //     break;
+    //   case 'ru':
+    //     phoneReg = [{ mask: '+{7} (000) 000-00-00' }];
+    //     break;
+    //   case 'mx':
+    //     phoneReg = [{ mask: '+(52) 000 000 0000' }];
+    //     break;
+    //   case 'tr':
+    //     phoneReg = [{ mask: '{0} (000) 000-00-00' }];
+    //     break;
+    //   default:
+    //     phoneReg = [{ mask: '00000000000' }];
+    //     break;
+    // }
     let maskOptions = {
-      mask: phoneReg
+      mask: this.state.phoneReg
     };
     IMask(element, maskOptions);
   };

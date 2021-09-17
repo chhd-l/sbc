@@ -392,7 +392,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   // 邮编校验
   compareZip =  async (rule, value, callback) => {
-    if (!/^[0-9]{3,10}$/.test(value)) {
+    if (!/^[0-9A-Za-z]{3,10}$/.test(value)) {
       callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       // 邮编黑名单校验
@@ -466,7 +466,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
                           initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
                           validateTrigger: field.fieldName === 'Postal code' && field.requiredFlag === 1
                             ? 'onBlur'
-                            : 'onchange',
+                            : 'onChange',
                           rules: [
                           { required: field.requiredFlag === 1, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                           field.fieldName != 'Country'

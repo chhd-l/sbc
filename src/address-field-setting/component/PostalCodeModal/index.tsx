@@ -10,22 +10,13 @@ import {
     Divider,
     Alert,
   Button,
+  message,
 } from 'antd';
-import {Const, RCi18n} from 'qmkit';
+import { cache, RCi18n } from 'qmkit';
+const { TextArea } = Input;
 import './index.less';
 
-const styles = {
-    label: {
-        width: 151,
-        textAlign: 'center'
-    },
-    wrapper: {
-        width: 177
-    }
-} as any;
-
 const { Option } = Select;
-const alertText = 'If you add this filter to the blackList postal code, several subscription or orders will not be delivered to your customers. Are you sure you want to add it?               '
 
 // @ts-ignore
 @Form.create()
@@ -62,15 +53,16 @@ export default class PostalCodeModal extends React.Component<any, any>{
                         operator: '',
                         postalCode: '',
                     }
-                ]
-
+                ],
+                loading: false,
             })
-        }, 1500)
-        this.setState({ loading: false});
+        }, 2000)
     }
 
     handleOk = (values) => {
         console.log('handleOk', values);
+
+        message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         this.cancel();
         this.handleCancel();
     };
@@ -100,6 +92,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
         const dataSource = [...this.state.dataSource];
         this.setState({ dataSource: dataSource.filter(item => item.id !== key) });
     };
+
     getColumns = () => {
         const { getFieldDecorator } = this.props.form;
 
@@ -150,7 +143,9 @@ export default class PostalCodeModal extends React.Component<any, any>{
                 width: '35%',
                 render: (rowInfo, record, index) => {
                     return (
-                      <Form.Item key={record.id}>
+                      <Form.Item
+                        key={record.id}
+                      >
                           {
                               getFieldDecorator(`mappings[${index}].postalCode`, {
                                   rules: [
@@ -158,9 +153,13 @@ export default class PostalCodeModal extends React.Component<any, any>{
                                           required: true,
                                           message: 'Please input postalCode!'
                                       },
+                                      {
+                                          pattern: /^[0-9A-Za-z]{3,10}$/,
+                                          message: RCi18n({id:"PetOwner.theCorrectPostCode"})
+                                      },
                                   ],
                               })(
-                                <Input placeholder='Postal Code' />
+                                <Input  placeholder='Postal Code' />
                               )
                           }
                       </Form.Item>
@@ -199,12 +198,14 @@ export default class PostalCodeModal extends React.Component<any, any>{
 
     confirm = () => {
         this.props.form.validateFieldsAndScroll( async (err, values) => {
-
-            if (!err) {
-                this.handleOk(values);
-            }else {
-                return;
+            console.log('confirm err', err);
+            console.log('confirm values', values);
+            if (!err){
+                message.success(RCi18n({id:'Product.OperateSuccessfully'}));
+                this.cancel();
+                this.handleCancel();
             }
+
         });
 
     };
@@ -212,6 +213,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
     showPopconfirm = () => {
         this.setState({ popconfirmVisible: true });
     }
+
     cancel = () => {
         this.setState({ popconfirmVisible: false });
     };
@@ -226,15 +228,14 @@ export default class PostalCodeModal extends React.Component<any, any>{
             this.setState({ visible });
             return;
         }
+        const { setFields } = this.props.form;
 
         this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
-                console.log('values', values);
 
-                // 1 提交之前要 PostalCode 校验
+                // 1 提交之前校验添加的邮编黑名单，是否对已有订单产生影响
                 this.setState({confirmLoading: true});
                 setTimeout(() => {
-
                     this.setState({
                         condition: !this.state.condition,
                         confirmLoading: false,
@@ -242,11 +243,27 @@ export default class PostalCodeModal extends React.Component<any, any>{
                         // 1.1 校验成功直接提交
                         if (this.state.condition) {
                             this.handleOk(values); // next step
-                        } else {  // 1.2 校验失败显示确认框
+                        } else {
+                            // 1.2 校验失败显示确认框，TODO
+                            const orderPostalCodeBlacklist = ['9999', '8888'];
+                            const orderPostalCodeAlertArr = values.mappings.filter(item => orderPostalCodeBlacklist.includes(item.postalCode));
+                            if (orderPostalCodeAlertArr.length > 0){
+                                // 高亮影响order的postalCode
+                                orderPostalCodeAlertArr.forEach((item, index) => {
+                                    setFields({
+                                        [`mappings[${index}].postalCode`]: {
+                                            value: values.mappings[index].postalCode,
+                                            errors: [new Error('')],
+                                        }
+                                    })
+                                })
+                            }
+
                             this.showPopconfirm();
                         }
                     })
                 }, 2000)
+
 
             }else {
                 return;
@@ -254,6 +271,25 @@ export default class PostalCodeModal extends React.Component<any, any>{
         });
 
     };
+
+    getAlertText = () => {
+        // 当前国家
+        const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0];
+
+        const defaultAlertText = 'If you add this postal code to the blacklist postal code, several subscription or orders will not be delivered to your customers. Are you sure you want to add it ?';
+        const alertCountryText = {
+            en: defaultAlertText,
+            ru: 'Si vous ajoutez ce code postal à la liste noire, plusieurs souscriptions ou commandes ne pourront pas être livré à vos clients. Etes vous sûr de vouloir continuer ?'
+        }
+        switch (currentCountry) {
+            case 'en':
+                return defaultAlertText;
+            case 'ru':
+                return alertCountryText.ru;
+            default:
+                return defaultAlertText;
+        }
+    }
 
     render() {
         let {
@@ -266,6 +302,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
             dataSource,
             confirmLoading,
             popconfirmVisible,
+            condition,
         } = this.state;
 
         let columns = this.getColumns();
@@ -277,15 +314,17 @@ export default class PostalCodeModal extends React.Component<any, any>{
                 title={<strong><span>Validation Rule Setting</span></strong>}
                 visible={visible}
                 // onOk={this.handleOk}
-                // onCancel={this.handleCancel}
+                onCancel={this.handleCancel}
                 footer={[
                     <Button key="back" onClick={this.handleCancel}>
                         Cancel
                     </Button>,
                     <Popconfirm
                       overlayClassName='PostalCodeModal-popconfirm'
-                      title={<div style={{width: '250px'}}>"If you add this filter to the blacklist postal code, several subscription or orders will not be delivered to your customers. Are you sure you want to add it ?"</div>}
-                      visible={this.state.popconfirmVisible}
+                      title={
+                          <div style={{width: '250px'}}>{this.getAlertText()}</div>
+                      }
+                      visible={popconfirmVisible}
                       onVisibleChange={this.handleVisibleChange}
                       onConfirm={this.confirm}
                       onCancel={this.cancel}
@@ -316,22 +355,22 @@ export default class PostalCodeModal extends React.Component<any, any>{
                         <div className='msg-title'>Alert Message when validation fails:</div>
                         <div className='msg-input'>
                             {
-                                getFieldDecorator(`mappings.msg`, {
+                                getFieldDecorator('alertMessage', {
                                     rules: [
                                         {
                                             required: true,
-                                            message: 'Please input postalCode!'
+                                            message: 'Please input Alert Message!'
                                         },
                                     ],
                                     initialValue: 'Sorry we are not able to deliver your order in this area.',
                                 })(
-                                  <Input style={{width: '80%'}} placeholder='' />
+                                  <TextArea autoSize={{ minRows: 1, maxRows: 3 }} />
                                 )
                             }
                         </div>
                         <p>
                             {
-                                popconfirmVisible && (<Alert message={alertText} type='error'/>)
+                                !condition && (<Alert closable message={this.getAlertText()} type='error'/>)
                             }
                         </p>
                     </div>

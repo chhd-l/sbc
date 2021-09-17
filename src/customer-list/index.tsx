@@ -144,6 +144,7 @@ export default class Customer extends React.Component<any, any> {
   componentDidMount() {
     this.init();
     //this.getSubscriptionTypeList();
+    // this.getPhoneNumberDefaultFormat();
   }
 
   getSubscriptionTypeList = () => {
@@ -165,6 +166,13 @@ export default class Customer extends React.Component<any, any> {
     });
   };
 
+  getPhoneNumberDefaultFormat = () =>{
+    webapi.getPhoneNumberFormat().then((data) =>{
+      const phoneFormat = data.res.context.configVOList?.[0]?.context
+      // const phoneFormat.slice(",");
+      console.log(phoneFormat,'phomoe')
+    })
+  }
    // 设置手机号输入限制
    setPhoneNumberReg = () => {
     let element = document.getElementById('petOwnerPhoneNumber');

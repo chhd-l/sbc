@@ -1170,7 +1170,11 @@ const homeRoutes = [
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
   },
-
+  // pickup map
+  {
+    path: '/pickup-map',
+    asyncComponent: () => import('./pickup-map')
+  },
 
   { path: '/error', asyncComponent: () => import('./error') }
   //{ path: '*', asyncComponent: () => import('./error') }

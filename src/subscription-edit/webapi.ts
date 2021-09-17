@@ -123,6 +123,25 @@ export function queryCityById(filterParams = {}) {
   });
 }
 
+export function pickupQueryCity(city = '') {
+  return Fetch<TResult>(
+    '/pick-up-supplier/queryCity?keyword=' + city + '',
+    {
+      method: 'Get'
+    }
+  );
+}
+export function pickupQueryCityFee(filterParams = {}) {
+  return Fetch<TResult>('/pick-up-supplier/queryCityFee', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+
+
 /**
  *
  * @returns 获取地址输入类型

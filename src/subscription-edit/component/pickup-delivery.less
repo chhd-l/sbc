@@ -1,0 +1,367 @@
+// 解决文本框自动填充后背景蓝色黄色问题
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset !important;
+}
+.input, .input.rc-icon, .rc-input, .rc-input.rc-icon {
+  position: relative;
+}
+.input, .rc-input {
+  display: block;
+}
+.rc-input--full-width {
+  max-width: none;
+}
+.input__control:focus+.input__label, .input__control:focus+.rc-input__label, .input__control:not([value=""])+.input__label, .input__control:not([value=""])+.rc-input__label, .input__date:focus+.input__label, .input__date:focus+.rc-input__label, .input__date:not([value=""])+.input__label, .input__date:not([value=""])+.rc-input__label, .input__password:focus+.input__label, .input__password:focus+.rc-input__label, .input__password:not([value=""])+.input__label, .input__password:not([value=""])+.rc-input__label, .input__textarea:focus+.input__label, .input__textarea:focus+.rc-input__label, .input__textarea:not([value=""])+.input__label, .input__textarea:not([value=""])+.rc-input__label, .rc-input__control:focus+.input__label, .rc-input__control:focus+.rc-input__label, .rc-input__control:not([value=""])+.input__label, .rc-input__control:not([value=""])+.rc-input__label, .rc-input__date:focus+.input__label, .rc-input__date:focus+.rc-input__label, .rc-input__date:not([value=""])+.input__label, .rc-input__date:not([value=""])+.rc-input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.rc-input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.rc-input__label, .rc-input__password:focus+.input__label, .rc-input__password:focus+.rc-input__label, .rc-input__password:not([value=""])+.input__label, .rc-input__password:not([value=""])+.rc-input__label, .rc-input__textarea:focus+.input__label, .rc-input__textarea:focus+.rc-input__label, .rc-input__textarea:not([value=""])+.input__label, .rc-input__textarea:not([value=""])+.rc-input__label {
+  color: #666;
+}
+.input__control+.input__label::before, .input__control+.rc-input__label::before, .input__control:focus+.input__label::after, .input__control:focus+.rc-input__label::after, .input__control:not([value=""])~.input__label::after, .input__control:not([value=""])~.rc-input__label::after, .input__date+.input__label::before, .input__date+.rc-input__label::before, .input__date:focus+.input__label::after, .input__date:focus+.rc-input__label::after, .input__date:not([value=""])~.input__label::after, .input__date:not([value=""])~.rc-input__label::after, .input__password+.input__label::before, .input__password+.rc-input__label::before, .input__password:focus+.input__label::after, .input__password:focus+.rc-input__label::after, .input__password:not([value=""])~.input__label::after, .input__password:not([value=""])~.rc-input__label::after, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::before, .rc-input__control:focus+.input__label::after, .rc-input__control:focus+.rc-input__label::after, .rc-input__control:not([value=""])~.input__label::after, .rc-input__control:not([value=""])~.rc-input__label::after, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::before, .rc-input__date:focus+.input__label::after, .rc-input__date:focus+.rc-input__label::after, .rc-input__date:not([value=""])~.input__label::after, .rc-input__date:not([value=""])~.rc-input__label::after, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::before, .rc-input__password:focus+.input__label::after, .rc-input__password:focus+.rc-input__label::after, .rc-input__password:not([value=""])~.input__label::after, .rc-input__password:not([value=""])~.rc-input__label::after {
+  width: 100%;
+}
+.input__control+.input__label::after, .input__control+.input__label::before, .input__control+.rc-input__label::after, .input__control+.rc-input__label::before, .input__date+.input__label::after, .input__date+.input__label::before, .input__date+.rc-input__label::after, .input__date+.rc-input__label::before, .input__password+.input__label::after, .input__password+.input__label::before, .input__password+.rc-input__label::after, .input__password+.rc-input__label::before, .rc-input__control+.input__label::after, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::after, .rc-input__control+.rc-input__label::before, .rc-input__date+.input__label::after, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::after, .rc-input__date+.rc-input__label::before, .rc-input__password+.input__label::after, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::after, .rc-input__password+.rc-input__label::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  z-index: 2;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+.input__control+.input__label::before, .input__control+.rc-input__label::before, .input__date+.input__label::before, .input__date+.rc-input__label::before, .input__password+.input__label::before, .input__password+.rc-input__label::before, .input__textarea+.input__label::before, .input__textarea+.rc-input__label::before, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::before, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::before, .rc-input__number-picker-wrapper>.rc-input__number-picker+.input__label::before, .rc-input__number-picker-wrapper>.rc-input__number-picker+.rc-input__label::before, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::before, .rc-input__textarea+.input__label::before, .rc-input__textarea+.rc-input__label::before {
+  background-color: #d7d7d7;
+}
+.input--inline,
+.rc-input--inline {
+  position: relative;
+  display: inline-block;
+  margin-right: 1.5rem;
+  vertical-align: text-top;
+  max-width: none;
+}
+.input__label, .rc-input__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.input__control, .input__date, .input__password, .input__textarea, .rc-input__control, .rc-input__date, .rc-input__number-picker-wrapper>.rc-input__number-picker, .rc-input__password, .rc-input__textarea {
+  display: block;
+  line-height: 1.5rem;
+  font-family: "RC TYPE",Roboto,Avenir,Helvetica,Arial,sans-serif;
+  width: 100%;
+  margin-bottom: 0;
+  padding: .95rem 0;
+  font-weight: 300;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: #d7d7d7;
+  background-color: transparent;
+  color: #666;
+  padding-left: 30px;
+  padding-right: 20px;
+}
+
+.clnc-overlay {
+  background-color: #fff;
+  z-index: 99;
+  border-radius: .1875rem;
+}
+
+.clinic-item-container {
+  padding-inline-start: 0;
+  max-height: 15rem;
+  overflow-y: auto 
+}
+.clinic-item {
+  cursor: pointer;
+}
+.clinic-item:hover {
+  background-color: #fff3f3;
+}
+
+
+.rc_form_box {
+  .pickup_search_box {
+    .rc-input__control {
+      padding-left: 30px;
+      padding-right: 20px;
+    }
+  }
+
+  .rc-input__label {
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      z-index: 2;
+      -webkit-transition: .2s;
+      transition: .2s;
+    }
+
+    &::before {
+      height: 2px !important;
+      background-color: #d7d7d7;
+    }
+  }
+}
+
+
+.rc_form_box {
+  &.rc_pickup_box {
+    margin-bottom: 1rem;
+  }
+
+  .pickup_search_box {
+    &::before {
+      content: '';
+      display: block;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyBpZD0iSWNvbnMiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iNCAwIDI0IDMyIj48dGl0bGU+c2VhcmNoLS14czwvdGl0bGU+PHBhdGggaWQ9IlNlYXJjaC0yIiBkYXRhLW5hbWU9IlNlYXJjaCIgZD0iTTgsMTQuNWE2LjQ5LDYuNDksMCwwLDAsMTAuMzMsNS4yNGw0LDRhMSwxLDAsMCwwLDEuNDIsMCwxLDEsMCwwLDAsMC0xLjQybC00LTRBNi41LDYuNSwwLDEsMCw4LDE0LjVabTIsMEE0LjUsNC41LDAsMSwxLDE0LjUsMTksNC41MSw0LjUxLDAsMCwxLDEwLDE0LjVaIiBzdHlsZT0iZmlsbDojNzY3Njc2Ii8+PC9zdmc+');
+      background-size: cover;
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-66%);
+    }
+
+    &.pickup_search_box_errmsg {
+      input {
+        color: #c03344 !important;
+
+        &::-webkit-input-placeholder {
+          color: #c03344 !important;
+        }
+      }
+
+      .rc-input__label {
+        &::before {
+          background-color: #c03344 !important;
+        }
+
+        &::after {
+          background-color: #c03344 !important;
+        }
+      }
+
+      .close_search_errmsg {
+        width: 14px;
+        height: 14px;
+        line-height: 14px;
+        border: 2px solid #c03344;
+        border-radius: 50%;
+        background: none;
+        position: absolute;
+        cursor: pointer;
+        right: 0.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          height: 9px;
+          width: 1.5px;
+          top: 0;
+          left: 50%;
+          background: #c03344;
+        }
+
+        &::before {
+          transform: rotate(45deg) translateX(-50%);
+          top: 1px;
+        }
+
+        &::after {
+          transform: rotate(-45deg) translateX(-50%);
+        }
+      }
+    }
+
+    .rc-input__control {
+      padding-left: 30px;
+      padding-right: 20px;
+    }
+  }
+
+  .rc_row_line {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .rc-input__label {
+    &::before {
+      height: 2px !important;
+    }
+  }
+
+  .rc_input_textarea {
+    padding: .95rem;
+    resize: vertical;
+    min-height: 120px;
+    height: auto;
+    border-style: solid;
+    border-width: 2px;
+    display: block;
+    line-height: 1.5rem;
+    width: 100%;
+    margin-bottom: 0;
+    font-weight: 300;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #d7d7d7 !important;
+  }
+
+  .rc_first_noselect {
+    .choices__list.choices__list--dropdown {
+      .choices__item {
+        &:nth-child(1) {
+          cursor: not-allowed;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .fillcity_of_delivery {
+    border-bottom: 2px solid #d7d7d7;
+  }
+
+  .rc_radio_box {
+    margin-bottom: 1rem;
+
+    .rc-input {
+      position: relative;
+      width: 100%;
+
+      .delivery_date_price {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+
+    .need_delivery_date {
+      display: block;
+      margin-left: 2rem;
+    }
+
+  }
+
+}
+
+.pickup_box {
+  position: relative;
+
+  .pickup_iframe {
+    overflow: hidden;
+  }
+
+
+  .pickup_infos {
+    background-color: #fbfbfb;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    .info_tit {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+    }
+
+    .infos {
+      color: #ababab;
+      padding: 1rem 0;
+    }
+
+    .info_btn_box {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .pickup_detail_dialog {
+    position: relative;
+    width: 100%;
+    height: 505px;
+    background: #FFF;
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    font-size: 15px;
+    margin-bottom: 1.5rem;
+
+    .pk_detail_box {
+      padding: 4rem;
+
+      .pk_btn_close {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        width: 19px;
+        height: 19px;
+        background-size: contain;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAABwUlEQVQ4jaWUz4vOURSHn3doRrOZhUaa8Ny5jWxmskAWWCg/alYoCWWjWNixUfIXCGHDxkZSauR3VpidWaHIkNH5B5SyU9O18J36+nrft3den7qbc+557rmf7rmot9RUSuF/lrpZvT8APAOep5TG6FMppU3AI+DaEv2Y+lYd7aOzpC7knPeWUqgnTqlz6sgyYGPqfM75wFKsueGcOqsO9wAbVd+px+vxgboXEXEZeA3MpJQGu3g2AjwFbkbE3XquVUppV3AVWA8ciYjFRm4YeAE8iYhLzdqBZqDSWeAHcDul1KrBBoEHwGw7WEdgRBTgNDAE3KhgK4B7wOeIuNihkfZXbnQ0A3wAxoBF4GR14PKBFXQY+AR8B7Y1PW2qk4d1XQA+Ar/4Y0NXreyWzDmfB3YA08Aq4FVK6WdE3OlY1Onhjo+Pn1Hf1CdHXaPOqwc71bUN5pxPqO/V1W0mZJ36Vd3XEzDnfKjqYm2XsZtQv6k7uwLV/eqCuqGHWZ6qoFvaAtVdaqgbl/HbbK+uP/kXUN1awab6+A93q1/UiVIKLXUSeAwcjYi5Ht7lP0opTQNXgD0t9TrwMCJe9gOrQQ8DQ78Bk00qH1xy2KoAAAAASUVORK5CYII=);
+        background-repeat: no-repeat;
+        cursor: pointer;
+        z-index: 2;
+      }
+    }
+
+    .pk_tit_box {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      padding: 1.5rem 0;
+      font-size: 16px;
+    }
+  }
+
+  .pk_addandtime {
+    color: #7b7b7b;
+    margin-bottom: 0.5rem;
+  }
+
+  .pk_detail_dop_title {
+    font-weight: 600;
+    margin-top: 2rem;
+    padding: 2rem 0;
+    font-size: 16px;
+  }
+
+  .pk_detail_description {
+    word-break: break-all;
+    color: #7b7b7b;
+    line-height: 25px;
+    max-height: 300px;
+    overflow: auto;
+  }
+}
+
+.pickup_map_box {
+
+  #KaktusModalWrapper {
+    max-width: 100% !important;
+  }
+}
+
+
+@media (max-width: 960px) {
+  .rc_form_box {
+    .choices {
+      max-width: 100% !important;
+    }
+  }
+}

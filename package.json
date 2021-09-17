@@ -61,6 +61,7 @@
     "echarts-for-react": "^2.0.0",
     "gg-editor": "2.0.2",
     "i18next": "^19.8.4",
+    "imask": "^6.2.2",
     "immutability-helper": "^2.9.1",
     "json-loader": "^0.5.4",
     "lodash": "^4.17.10",

@@ -121,7 +121,7 @@ export default class NodeProperties extends Component<any, any> {
           this.setState({
             taggingSource: tagignRes.context.segmentList,
             goldenMomentList: goldenMomentRes.context.sysDictionaryVOS,
-            templateList: templateRes.context.emailTemplateResponseList ? templateRes.context.emailTemplateResponseList : []
+            templateList: templateRes.context.messageTemplateResponseList ? templateRes.context.messageTemplateResponseList : []
           });
         } else {
           message.error('Get data failed');

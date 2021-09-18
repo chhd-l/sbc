@@ -92,6 +92,10 @@ const routes = [
     path: '/subscription-benefit-setting-add/:marketingId?',
     asyncComponent: () => import('./benefit-setting/benefit-setting-add')
   },
+  {
+    path: '/subscription-welcome-box-add/:marketingId?',
+    asyncComponent: () => import('./benefit-setting/benefit-setting-add/welcome-box')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
-import { Form, DatePicker, Input } from 'antd';
+import { Form, DatePicker, Input, Radio } from 'antd';
 import './index.less';
 import {Const} from 'qmkit';
 import moment from 'moment';
+import config from '../../../configs';
 
 const { RangePicker } = DatePicker;
 
@@ -15,7 +16,7 @@ export default class BasicInformation extends Component<any, any>{
     
 
     render() {
-        const {initData, form} = this.props;
+        const {initData, form, benefitType} = this.props;
         const { getFieldDecorator, setFieldsValue } = form;
         const formItemLayout = {
             labelCol: {
@@ -59,10 +60,10 @@ export default class BasicInformation extends Component<any, any>{
         return (
             <div className='BasicInformation-wrap'>
                 <div className='BasicInformation-title'>
-                    <FormattedMessage id="Subscription.basicInformation" />
+                    <FormattedMessage id={ "Subscription.basicInformation"} />
                 </div>
                 <div>
-                    <Form.Item label={<FormattedMessage id={'Subscription.Campaign name'}/>}>
+                    <Form.Item label={<FormattedMessage id={benefitType === config.CONSUMPTION_GIFT ? 'Subscription.Campaign name' : 'Subscription.WelcomeboxName'}/>}>
                         {getFieldDecorator('marketingName', inputConfig)(<Input />)}
                     </Form.Item>
                     <Form.Item label={<FormattedMessage id={'Subscription.start and end time'} />}>
@@ -78,6 +79,14 @@ export default class BasicInformation extends Component<any, any>{
                                 ]}
                                 showTime={{ format: 'HH:mm' }} />)}
                     </Form.Item>
+                    {benefitType === config.WELCOME_BOX && <Form.Item label={<FormattedMessage id={'Subscription.SubscriptionType'} />}>
+                        {getFieldDecorator('type')(
+                            <Radio.Group>
+                                <Radio value="individual"><FormattedMessage id={'Product.Individual'} /></Radio>
+                                <Radio value="club"><FormattedMessage id={'Product.Club'} /></Radio>
+                            </Radio.Group>
+                        )}
+                    </Form.Item>}
                 </div>
             </div>
         );

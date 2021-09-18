@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { Form } from 'antd';
 
+import config from '../../../configs';
 import BasicInformation from '../basicInformation';
 import SetConditions from '../setConditions';
 import BenefitList from '../BenefitList';
+import ProductList from '../ProductList';
 
 
 class BenefitSettingAddFrom extends Component<any, any>{
     props: {
         form: any;
         initData: any;
+        benefitType: number;
     };
     constructor(props) {
         super(props);
@@ -18,7 +21,7 @@ class BenefitSettingAddFrom extends Component<any, any>{
 
 
     render() {
-        let { initData } = this.props;
+        let { initData, benefitType } = this.props;
 
         const formItemLayout = {
             labelCol: {
@@ -33,9 +36,12 @@ class BenefitSettingAddFrom extends Component<any, any>{
 
         return (<div>
             <Form {...formItemLayout}>
-                <BasicInformation initData={initData} form={this.props.form} />
+                <BasicInformation benefitType={benefitType} initData={initData} form={this.props.form} />
                 <SetConditions initData={initData} form={this.props.form} />
-                <BenefitList initData={initData} form={this.props.form}/>
+                {benefitType === config.CONSUMPTION_GIFT
+                  ? <BenefitList initData={initData} form={this.props.form}/>
+                  : <ProductList />
+                }
             </Form>
 
         </div>);

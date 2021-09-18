@@ -978,6 +978,12 @@ export default {
         'Subscription.DeliveryMethods':'Delivery method',
         'Subscription.HomeDelivery':'Home delivery',
         'Subscription.PickupDelivery':'Pickup delivery',
+        "Subscription.Welcomebox": "Welcome box",
+        "Subscription.WelcomeboxHint1": "Welcome box is set for order type is individual and Club",
+        "Subscription.WelcomeboxHint2": "Welcome box only delivered one time for the same product category",
+        "Subscription.WelcomeboxName": "Welcome box name",
+        "Subscription.SubscriptionType": "Subscription type",
+        "Subscription.AddWelcomebox": "Add welcome box",
 
     },
     Appointment: {

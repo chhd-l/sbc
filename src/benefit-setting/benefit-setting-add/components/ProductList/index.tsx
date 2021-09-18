@@ -1,0 +1,344 @@
+import * as React from 'react';
+import { fromJS, Set } from 'immutable';
+
+import { InputNumber, Input, Button, Select, Form } from 'antd';
+import { DataGrid, ValidConst, cache, noop } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { GoodsModal } from 'biz';
+
+const Option = Select.Option;
+import { Table } from 'antd';
+
+const Column = Table.Column;
+const FormItem = Form.Item;
+
+
+class ProductList extends React.Component<any, any> {
+  props: {
+    intl;
+    form;
+    selectedRows
+  }
+  constructor(props) {
+    super(props);
+    this.state = {
+      //公用的商品弹出框
+      goodsModal: {
+        _modalVisible: false,
+        _forIndex: 0
+      },
+    };
+  }
+
+
+  render() {
+    const { selectedRows } = this.props;
+    const { goodsModal } = this.state
+    const { form } = this.props;
+    const { getFieldDecorator } = form;
+    return (
+      <div>
+        <Button type="primary" icon="plus" onClick={this.openGoodsModal} style={{ marginTop: 3.5 }}>
+          <FormattedMessage id="Subscription.AddWelcomebox" />
+        </Button>
+
+        <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={selectedRows ? selectedRows : []} pagination={false}>
+          <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" />
+
+          <Column
+            title={<FormattedMessage id="Marketing.ProductName" />}
+            dataIndex="goodsInfoName"
+            key="goodsInfoName"
+            render={(value) => {
+              return <div className="line-two">{value}</div>;
+            }}
+          />
+
+          <Column
+            title={<FormattedMessage id="Marketing.Specification" />}
+            dataIndex="specText"
+            key="specText"
+            render={(value) => {
+              if (value) {
+                return <div>{value}</div>;
+              } else {
+                return '-';
+              }
+            }}
+          />
+
+          <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+
+          <Column
+            title={<FormattedMessage id="Marketing.Brand" />}
+            key="brandName"
+            dataIndex="brandName"
+            width="8%"
+            render={(value) => {
+              if (value) {
+                return value;
+              } else {
+                return '-';
+              }
+            }}
+          />
+
+          <Column
+            title={<FormattedMessage id="Marketing.Price" />}
+            key="marketPrice"
+            dataIndex="marketPrice"
+            render={(data) => {
+              return `¥${data}`;
+            }}
+          />
+
+          <Column
+            title={<FormattedMessage id="Marketing.Inventory" />}
+            key="stock"
+            dataIndex="stock"
+            render={(stock) => {
+              if (stock < 20) {
+                return (
+                  <div className="has-error">
+                    <p>{stock}</p>
+                    <div className="ant-form-explain">Inventory is too low</div>
+                  </div>
+                );
+              } else {
+                return stock;
+              }
+            }}
+          />
+
+          <Column
+            title={<FormattedMessage id="Marketing.GiveTheNumber" />}
+            className="centerItem"
+            key="count"
+            render={(row, _record, detailIndex) => {
+              return (
+                <FormItem>
+                  {getFieldDecorator(`${row.goodsInfoId}level_detail${detailIndex}`, {
+                    initialValue: _record.productNum ?? 1,
+                    rules: [
+                      { required: true, message:
+                          (window as any).RCi18n({
+                            id: 'Marketing.greaterthan0andlessthan999'
+                          })
+                      },
+                      {
+                        pattern: ValidConst.noZeroNumber,
+                        message: (window as any).RCi18n({
+                          id: 'Marketing.greaterthan0andlessthan999'
+                        })
+                      },
+                      {
+                        validator: (_rule, value, callback) => {
+                          if (value && ValidConst.noZeroNumber.test(value) && (value > 999 || value < 1)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.greaterthan0andlessthan999'
+                              })
+                            );
+                          }
+                          callback();
+                        }
+                      }
+                    ]
+                  })(
+                    <InputNumber
+                      min={0}
+                      onChange={(val: string) => {
+                        this.giftCountOnChange(detailIndex, val);
+                      }}
+                    />
+                  )}
+                </FormItem>
+              );
+            }}
+          />
+
+          <Column
+            title={<FormattedMessage id="Marketing.Operation" />}
+            key="operate"
+            render={(row) => {
+              return <a onClick={() => this.deleteRows(row.goodsInfoId)}>Delete</a>;
+            }}
+          />
+        </DataGrid>
+        <FormItem>{getFieldDecorator(`level`, {})(<div />)}</FormItem>
+              
+          
+        {goodsModal && goodsModal._modalVisible && (
+          <GoodsModal
+            skuLimit={20}
+            visible={goodsModal._modalVisible}
+            selectedSkuIds={this.getIdsFromLevel(selectedRows)}
+            selectedRows={fromJS(selectedRows)}
+            onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(selectedSkuIds, selectedRows)}
+            onCancelBackFun={this.closeGoodsModal}
+          />
+        )}
+      </div>
+    );
+  }
+
+  /**
+   * 删除已经绑定的商品
+   * @param index
+   * @param goodsInfoId
+   */
+  deleteRows = (goodsInfoId) => {
+  };
+
+  /**
+   * 删除等级
+   * @param index
+   */
+  deleteLevels = (index) => {
+    let { fullGiftLevelList, onChangeBack } = this.props;
+    //重置表单的值
+    this.props.form.setFieldsValue({
+      [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
+    });
+    fullGiftLevelList.splice(index, 1);
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
+    //传递到父页面
+    onChangeBack(fullGiftLevelList);
+  };
+
+  /**
+   * 添加多级促销
+   */
+  addLevels = () => {
+    const { fullGiftLevelList, onChangeBack } = this.props;
+    if (fullGiftLevelList.length >= 5) return;
+    fullGiftLevelList.push({
+      key: this.makeRandom(),
+      fullAmount: null,
+      fullCount: null,
+      giftType: 1,
+      fullGiftDetailList: []
+    });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
+
+    //传递到父页面
+    onChangeBack(fullGiftLevelList);
+  };
+
+  /**
+   * 初始化等级
+   */
+  initLevel = () => {
+    const initLevel = [
+      {
+        key: this.makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        giftType: 1,
+        fullGiftDetailList: []
+      }
+    ];
+    // this.setState({ fullGiftLevelList: initLevel });
+
+    const { onChangeBack } = this.props;
+    onChangeBack(initLevel);
+  };
+
+  /**
+   * 规则变更
+   * @param index
+   * @param value
+   */
+  ruleValueChange = (index, value) => {
+    const { isFullCount } = this.props;
+    this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
+  };
+
+  /**
+   * 整个表单内容变化方法
+   * @param index
+   * @param props
+   * @param value
+   */
+  onChange = (index, props, value) => {
+    const { fullGiftLevelList } = this.props;
+    fullGiftLevelList[index][props] = value;
+    if (props == 'fullAmount') {
+      fullGiftLevelList[index]['fullCount'] = null;
+    } else if (props == 'fullCount') {
+      fullGiftLevelList[index]['fullAmount'] = null;
+    }
+    this.setState({ fullGiftLevelList: fullGiftLevelList });
+
+    //传递到父页面
+    const { onChangeBack } = this.props;
+    onChangeBack(fullGiftLevelList);
+  };
+
+  /**
+   * sku选择之后的回调事件
+   * @param index
+   * @param selectedSkuIds
+   * @param selectedRows
+   */
+  skuSelectedBackFun = (selectedSkuIds, selectedRows) => {
+    
+  };
+
+  /**
+   * 满赠数量变化
+   * @param index
+   * @param goodsInfoId
+   * @param count
+   */
+  giftCountOnChange = (detailIndex, count) => {
+  };
+
+  /**
+   * 打开modal
+   * @param index
+   */
+  openGoodsModal = () => {
+    this.setState({ goodsModal: { _modalVisible: true } });
+  };
+
+  /**
+   * 关闭modal
+   */
+  closeGoodsModal = () => {
+    this.setState({ goodsModal: { _modalVisible: false } });
+  };
+
+  /**
+   * 工具方法：通过选择id获取rows
+   * @param ids
+   * @returns {Array}
+   */
+  getSelectedRowByIds = (ids) => {
+    const { selectedRows } = this.props;
+    const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
+    return rows && !rows.isEmpty() ? rows.toJS() : [];
+  };
+
+  /**
+   * 通过detailList获取id集合
+   * @param detailList
+   * @returns {Array}
+   */
+  getIdsFromLevel = (detailList) => {
+    return detailList
+      ? detailList.map((detail) => {
+          return detail.productId;
+        })
+      : [];
+  };
+
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
+}
+export default injectIntl(ProductList)

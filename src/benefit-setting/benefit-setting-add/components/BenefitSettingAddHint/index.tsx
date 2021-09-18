@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Alert} from 'antd';
+import config from '../../../configs';
 import './index.less';
 
 export default class BenefitSettingAddHint extends Component<any, any>{
@@ -15,11 +16,11 @@ export default class BenefitSettingAddHint extends Component<any, any>{
                             <div>
                                 <p>
                                     1、
-                                    <FormattedMessage id="Subscription.Consumption gift is set for order type is club, and subscription order is the recurrent by default" />
+                                    <FormattedMessage id={this.props.benefitType === config.CONSUMPTION_GIFT ? "Subscription.Consumption gift is set for order type is club, and subscription order is the recurrent by default" : "Subscription.WelcomeboxHint1"} />
                                 </p>
                                 <p>
                                     2、
-                                    <FormattedMessage id="Subscription.Consumption gift only delivered one time for the same conditions club" />
+                                    <FormattedMessage id={this.props.benefitType === config.CONSUMPTION_GIFT ? "Subscription.Consumption gift only delivered one time for the same conditions club" : "Subscription.WelcomeboxHint2"} />
                                 </p>
                             </div>
                         }

@@ -1820,6 +1820,8 @@ export default {
   'task.DueEndtime':'Due End time',
   'task.AddNewTask':'Add New Task',
   'task.AssociateSubscription':'Associate Subscription',
+  'task.DeliveryMethod':'Delivery method',
+  'task.DeliveryStatus':'Delivery status',
   'task.Taskcreation': 'Task creation',
   'task.Taskedition':'Task edition',
   'task.Back':'Back',
@@ -1841,7 +1843,10 @@ export default {
   'task.Search': 'Search',
   'task.Edit': 'Edit',
   'task.SterilizationTimeOnlyKitten': 'Sterilization time 5 months (only kitten)',
-
+  'task.homeDelivery': 'home delivery',
+  'task.pickupPointDelivery': 'pickup point delivery',
+  'task.active': 'active',
+  'task.inactive': 'inactive',
 
   /*-----------------------------  Subscription  ---------------------------------------*/
 

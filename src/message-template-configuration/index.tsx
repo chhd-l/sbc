@@ -48,7 +48,7 @@ const MessageTemplateConfiguration=()=>{
   const [templateListData,setTemplateListData]=useState([]);
   const [searchForm,setSearchForm]=useState({
     keywords: '',
-    type: null,
+    type: 0,
   })
   const [showTab,setShowTab]=useState(false)
   const [detailId,setDetailId]=useState()

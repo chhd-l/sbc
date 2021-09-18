@@ -421,7 +421,7 @@ class ListView extends React.Component<any, any> {
                           )}
 
                           {/*待发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                          {(auditState==='INSIDE_CHECKED'||auditState==='CHECKED')&&v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
                             // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
                             v.getIn(['tradeState', 'payState']) === 'PAID' && (

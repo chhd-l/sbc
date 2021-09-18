@@ -72,7 +72,7 @@ const columns = [
     title: RCi18n({ id: 'Task.SubscriptionNumber' }),
     dataIndex: 'subscriptionNumber',
     key: 'subscriptionNumber',
-    width: '18%',
+    width: '17%',
     render: text =>
       <Link
         to={`/subscription-detail/${text}`}
@@ -93,10 +93,10 @@ const columns = [
           nameAndDateVOList && nameAndDateVOList.map(data => (
             <Tooltip placement="topLeft" title={data.productName}>
               <p className="msg" style={{
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-                cursor: "pointer"
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                cursor: 'pointer'
               }} >{data.productName} </p>
             </Tooltip>
           ))
@@ -109,7 +109,7 @@ const columns = [
     title: RCi18n({ id: 'Task.ShipmentDate' }),
     // dataIndex: 'shipmentDate',
     key: 'shipmentDate',
-    width: '15%',
+    width: '14%',
     render: (text, record, index) => {
       // let html = text.replaceAll(",", "<br/>")
       // let productNames = text.split(',') 
@@ -124,9 +124,19 @@ const columns = [
     },
   },
   {
+    title: RCi18n({ id: 'Task.DeliveryMethod' }),
+    dataIndex: 'deliveryMethod',
+    key: 'deliveryMethod'
+  },
+  {
     title: RCi18n({ id: 'Task.DeliveryAddress' }),
     dataIndex: 'deliveryAddress',
     key: 'deliveryAddress'
+  },
+  {
+    title: RCi18n({ id: 'Task.DeliveryStatus' }),
+    dataIndex: 'deliveryStatus',
+    key: 'deliveryStatus'
   },
   {
     title: RCi18n({ id: 'Task.PaymentMethod' }),
@@ -161,6 +171,14 @@ class TaskUpdate extends Component<any, any> {
         { name: <FormattedMessage id="task.Low" />, value: 'Low' },
         { name: <FormattedMessage id="task.Medium" />, value: 'Medium' },
         { name: <FormattedMessage id="task.High" />, value: 'High' }
+      ],
+      deliveryMethodList:[
+        { name: <FormattedMessage id="task.homeDelivery" />, value: 'home delivery' },
+        { name: <FormattedMessage id="task.pickupPointDelivery" />, value: 'pickup point delivery' },
+      ],
+      deliveryStatusList:[
+        { name: <FormattedMessage id="task.active" />, value: 'active' },
+        { name: <FormattedMessage id="task.inactive" />, value: 'inactive' },
       ],
       associatedPetOwners: [],
       associatedPetList: [],
@@ -200,7 +218,7 @@ class TaskUpdate extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         console.log(res.context.sysDictionaryVOS);
-
+        console.log(res.context);
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
@@ -222,6 +240,9 @@ class TaskUpdate extends Component<any, any> {
         .getTaskById(id)
         .then((data) => {
           const res = data.res;
+          console.log('1111');
+          console.log(res.context);
+          console.log('2222');
           if (res.code === Const.SUCCESS_CODE) {
             let taskStatus = res.context.task.status;
             this.setState({
@@ -1042,6 +1063,10 @@ class TaskUpdate extends Component<any, any> {
                       </FormItem>
                     </Col>
                   </Row>
+
+                  {/******/}
+
+
                   <Row>
                     {
                       editable ? <Col span={12}>

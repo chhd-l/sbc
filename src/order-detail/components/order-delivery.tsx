@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
 import { Table, Button, InputNumber, Modal, Form, Spin, Row, Timeline, Icon } from 'antd';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, AuthWrapper, Logistics, cache } from 'qmkit';
+import { noop, Const, AuthWrapper, Logistics, cache, RCi18n } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -118,81 +118,94 @@ class OrderDelivery extends React.Component<any, any> {
         <Spin spinning={logisticsLoading}>
           {tradeDelivers.count() > 0
             ? tradeDelivers &&
-              tradeDelivers.map((v, i) => {
-                const logistic = v.get('logistics');
-                const tradeLogisticsData = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
-                const tradeLogisticsDetails = tradeLogisticsData
-                  .filter((x) => x.shown)
-                  .sort((a, b) => {
-                    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-                  });
-                const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
-                //处理赠品
-                const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`));
-                return (
-                  <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-                    <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
-                    <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryRecordColumns()} dataSource={v.get('shippingItems').concat(deliversGifts).toJS()} pagination={false} bordered />
+            tradeDelivers.map((v, i) => {
+              const logistic = v.get('logistics');
+              const tradeLogisticsData = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
+              const tradeLogisticsDetails = tradeLogisticsData
+                .filter((x) => x.shown)
+                .sort((a, b) => {
+                  return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+                });
+              const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
+              //处理赠品
+              const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`));
+              return (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
+                  <Table rowKey={(_record, index) => index.toString()}
+                    columns={this._deliveryRecordColumns()}
+                    dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
+                    pagination={false} bordered />
+                    {/* 土耳其跳转第三方物流 */}
+                    {
+                      storeId === 123457911 && v.get('trackingUrl')? <div>
+                      <p>
+                        <i className="iconfont iconIntransit" style={{color:'#e2001a',fontSize:40,marginRight:10}}/>
+                        <span>{RCi18n({ id: "Order.shipedLogisticTip" })}</span>
+                        <a href={v.get('trackingUrl')} style={{marginLeft:10}} target="_blank">{RCi18n({ id: "Order.viewLogisticDetail" })+' >'} </a>
+                      </p>
+                    </div>:null
+                    }
 
-                    <div style={styles.expressBox as any}>
-                      <div style={styles.stateBox}>
-                        {logistic ? (
-                          <div>
-                            <label style={styles.information} className="flex-start-align">
-                              【<FormattedMessage id="Product.logisticsInformation" />】
-                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
-                              <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
-                              <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
-                              {logistic.get('deliverBagNo')?( <><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>):null}
+                  <div style={styles.expressBox as any}>
+                    <div style={styles.stateBox}>
+                      {logistic ? (
+                        <div>
+                          <label style={styles.information} className="flex-start-align">
+                            【<FormattedMessage id="Product.logisticsInformation" />】
+                            <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
+                            <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
+                            <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
+                            {logistic.get('deliverBagNo') ? (<><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>) : null}
 
-                              {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
-                              {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                            {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
+                            {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
                           </Button> */}
-                              {v.get('trackingUrl') ? (
-                                <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
-                                  <FormattedMessage id="Order.Trackdelivery" />
-                                </Button>
-                              ) : (
-                                <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                                  <FormattedMessage id="Order.Refresh" />
-                                </Button>
-                              )}
-                            </label>
-                            <div style={{ marginTop: 20 }}>
-                              <Timeline>
-                                {tradeLogisticsDetails.map((item, index) => {
-                                  let color = index === 0 ? 'red' : 'gray';
-                                  return (
-                                    <Timeline.Item color={color}>
-                                      <p>
-                                        {moment(item.timestamp).format('YYYY-MM-DD HH:mm')} {item.longDescription}
-                                      </p>
-                                    </Timeline.Item>
-                                  );
-                                })}
-                              </Timeline>
-                            </div>
+                            {v.get('trackingUrl') ? (
+                              <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
+                                <FormattedMessage id="Order.Trackdelivery" />
+                              </Button>
+                            ) : (
+                              <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                                <FormattedMessage id="Order.Refresh" />
+                              </Button>
+                            )}
+                          </label>
+                          <div style={{ marginTop: 20 }}>
+                            <Timeline>
+                              {tradeLogisticsDetails.map((item, index) => {
+                                let color = index === 0 ? 'red' : 'gray';
+                                return (
+                                  <Timeline.Item color={color}>
+                                    <p>
+                                      {moment(item.timestamp).format('YYYY-MM-DD HH:mm')} {item.longDescription}
+                                    </p>
+                                  </Timeline.Item>
+                                );
+                              })}
+                            </Timeline>
                           </div>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                      {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
+                        </div>
+                      ) : (
+                        ''
+                      )}
+                    </div>
+                    {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
                         <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
                           Invalid
                         </a>
                       </AuthWrapper>
                     )}*/}
-                    </div>
                   </div>
-                );
-              })
+                </div>
+              );
+            })
             : null}
         </Spin>
 
-        {false&&storeId=='123457911'?this._renderStatusTip(detail):null}
+        {false && storeId == '123457911' ? this._renderStatusTip(detail) : null}
 
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
@@ -239,13 +252,13 @@ class OrderDelivery extends React.Component<any, any> {
   }
 
   //渲染订单状态提示语
-  _renderStatusTip(orderDetail){
-    const orderStatus=orderDetail.getIn(['tradeState','flowState']);
-    const logisticsList=orderDetail.get('tradeDelivers')||[]
-    const RenderTip=(props)=>{
+  _renderStatusTip(orderDetail) {
+    const orderStatus = orderDetail.getIn(['tradeState', 'flowState']);
+    const logisticsList = orderDetail.get('tradeDelivers') || []
+    const RenderTip = (props) => {
       return (
-        <div style={{marginTop:'20px',display:'flex',flexDirection:'row',alignItems:'center'}}>
-          <div style={{ marginRight:'10px' }}>{props.icon}</div>
+        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <div style={{ marginRight: '10px' }}>{props.icon}</div>
           <div>{props.tip}</div>
           {props.operation ? (
             <div className="text-md-right text-center">
@@ -260,28 +273,28 @@ class OrderDelivery extends React.Component<any, any> {
       case 'INIT':
         // order create订单创建
         ret = (
-            <RenderTip
-              icon={
-                <a className="iconfont iconTobepaid" style={{ fontSize:'20px' }} />
-              }
-              tip={<FormattedMessage id="Order.createOrderTip"/>}
-            />
+          <RenderTip
+            icon={
+              <a className="iconfont iconTobepaid" style={{ fontSize: '20px' }} />
+            }
+            tip={<FormattedMessage id="Order.createOrderTip" />}
+          />
         );
         break;
       case 'TO_BE_DELIVERED':
         // waiting for shipping等待发货
         ret = (
-            <RenderTip
-              icon={<a className="iconfont iconTobedelivered" style={{ fontSize:'24px' }}/>}
-              tip={<FormattedMessage id="Order.waitShipping"/>}
-            />
+          <RenderTip
+            icon={<a className="iconfont iconTobedelivered" style={{ fontSize: '24px' }} />}
+            tip={<FormattedMessage id="Order.waitShipping" />}
+          />
         );
         break;
       case 'SHIPPED':
         // order in shipping发货运输中
         ret = (
           <RenderTip
-            icon={<a className="iconfont iconIntransit" style={{ fontSize:'24px' }}/>}
+            icon={<a className="iconfont iconIntransit" style={{ fontSize: '24px' }} />}
             tip={
               <FormattedMessage
                 id="Order.inTranistTip"
@@ -308,10 +321,10 @@ class OrderDelivery extends React.Component<any, any> {
       case 'COMPLETED':
         // order completes完成订单
         ret = (
-            <RenderTip
-              icon={<a className="iconfont iconCompleted" style={{ fontSize:'24px' }}/>}
-              tip={<FormattedMessage id="Order.completeTip"/>}
-            />
+          <RenderTip
+            icon={<a className="iconfont iconCompleted" style={{ fontSize: '24px' }} />}
+            tip={<FormattedMessage id="Order.completeTip" />}
+          />
         );
         break;
     }
@@ -436,7 +449,7 @@ class OrderDelivery extends React.Component<any, any> {
       onOk() {
         obsoleteDeliver(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -457,7 +470,7 @@ class OrderDelivery extends React.Component<any, any> {
       onOk() {
         confirm(tid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 }

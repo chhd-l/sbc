@@ -211,3 +211,12 @@ export function deleteCard(storeId, paymentId) {
     method: 'DELETE'
   }, { isHandleResult: true, customerTip: true });
 }
+
+export function getTimeSlot(filterParams = {}) {
+  return Fetch<TResult>('/delivery/timeSlot-supplier', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

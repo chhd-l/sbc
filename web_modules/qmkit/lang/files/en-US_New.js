@@ -863,7 +863,6 @@ export default {
         "Order.AfterDaysFullrefund": "After days, the full amount refund will be automatically triggered",
         'Order.region': 'Region/Area',
         "Order.timeSlot": "Time slot",
-        "Order.deliveryDate": "Delivery date",
         "Order.gift": "Gift",
         "Order.Giveaway": "【Giveaway】",
         "Order.settingTips": "The configuration item does not meet the specification, please check and try again!",
@@ -894,7 +893,9 @@ export default {
         'Order.viewLogisticDetail':'View logistic detail',
         'Order.createOrderTip':'Your order has not been paid, please pay as soon as possible.',
         'Order.waitShipping':'Your order has been successfully paid and we are preparing to ship.',
-        'Order.completeTip':'The package was delivered by hand to the delivery address.'
+        'Order.completeTip':'The package was delivered by hand to the delivery address.',
+        'Order.shipedLogisticTip':'Your order has been shipped and you will receive the products soon.',
+
 
     },
     Subscription: {
@@ -978,6 +979,8 @@ export default {
         'Subscription.DeliveryMethods':'Delivery method',
         'Subscription.HomeDelivery':'Home delivery',
         'Subscription.PickupDelivery':'Pickup delivery',
+        'Subscription.MissDeliveryDateTip':'Please select delivery date',
+        'Subscription.MissTimeSlotTip':'Please select time slot',
 
     },
     Appointment: {
@@ -2312,7 +2315,7 @@ export default {
         "Setting.Friday": "Friday",
         "Setting.Saturday": "Saturday",
         "Setting.Sunday": "Sunday",
-        "Setting.timeSolt": "Time slot",
+        "Setting.timeSlot": "Time slot",
         "Setting.closedHours": "Closed Hours",
         "Setting.selectDay": "Select day",
         "Setting.before": "Before",

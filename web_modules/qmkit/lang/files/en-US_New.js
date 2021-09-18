@@ -2404,7 +2404,9 @@ export default {
         "Task.ProductName": "Product Name",
         "Task.ShipmentDate": "Shipment Date",
         "Task.DeliveryAddress": "Delivery Address",
-        "Task.PaymentMethod": "Payment Method"
+        "Task.PaymentMethod": "Payment Method",
+        "Task.DeliveryMethod":"Delivery method",
+        "Task.DeliveryStatus":"Pick-up-point Status",
     },
     integration: {
         'Dashboard.Dashboard': 'Dashboard',

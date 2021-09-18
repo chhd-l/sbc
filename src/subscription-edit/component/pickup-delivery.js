@@ -4,6 +4,7 @@ import IMask from 'imask';
 import SearchSelection from './search-selection';
 // import { validData, formatMoney, getDeviceType } from '@/utils/utils';
 import './pickup-delivery.less';
+import { Spin } from 'antd';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 
@@ -27,7 +28,8 @@ class DeliveryMethod extends React.Component {
       showPickupForm: false,
       pickUpBtnLoading: false,
       searchNoResult: false,
-      pickupCity: 'г Москва',
+      pickupCity: '',
+      currencySymbol: '',
       courierInfo: [], // 快递公司信息
       selectedItem: null, // 记录选择的内容
       pickupForm: {
@@ -40,6 +42,7 @@ class DeliveryMethod extends React.Component {
         address1: '',
         city: '',
         paymentMethods: '', // 支付方式
+        pickupPrice: '',
         pickupCode: '', // 快递公司code
         pickupName: '', // 快递公司
         workTime: '', // 快递公司上班时间
@@ -73,9 +76,7 @@ class DeliveryMethod extends React.Component {
     };
   }
   async componentDidMount() {
-
-
-    this.sendMsgToIframe();
+    // this.sendMsgToIframe();
 
     let initData = this.props.initData;
     this.setState(
@@ -207,7 +208,12 @@ class DeliveryMethod extends React.Component {
       );
     }
   }
-
+  getCurrencySymbol = () => {
+    let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
+    this.setState({
+      currencySymbol
+    });
+  };
   // 设置手机号输入限制
   setPickupTelNumberReg = () => {
     let telnum = document.getElementById('phoneNumberShippingPickup');
@@ -245,6 +251,7 @@ class DeliveryMethod extends React.Component {
     });
     try {
       console.log('666 >>> data: ', data);
+
       // 向子域发送数据
       this.sendMsgToIframe('close');
 
@@ -257,11 +264,11 @@ class DeliveryMethod extends React.Component {
       console.log('666 >>> data: ', data);
       // 根据不同的城市信息查询
       res = await webapi.pickupQueryCityFee(data);
-      console.log('666 >>> res: ', res);
-      if (res.context?.tariffs.length) {
+      console.log('666 >>> res: ', res.res);
+      if (res.res.context?.tariffs.length) {
 
         // 'COURIER'=> home delivery、'PVZ'=> pickup
-        let obj = res.context.tariffs;
+        let obj = res.res.context.tariffs;
 
         // 有地址的时候，单独展示pickup，如果查询到不支持pickup，给出错误提示
         if (this.props.pickupAddress.length) {
@@ -541,7 +548,7 @@ class DeliveryMethod extends React.Component {
             <>
               <textarea
                 className="rc_input_textarea"
-                placeholder={<FormattedMessage id="Order.Deliverycomment" />}
+                placeholder={<FormattedMessage id="Subscription.Deliverycomment" />}
                 id={`${item.fieldKey}ShippingPickup`}
                 value={pickupForm[item.fieldKey] || ''}
                 onChange={(e) => this.inputChange(e)}
@@ -569,7 +576,7 @@ class DeliveryMethod extends React.Component {
         {/* 输入电话号码提示 */}
         {item.fieldKey == 'phoneNumber' && (
           <span className="ui-lighter">
-            <FormattedMessage id="examplePhone" />
+            <FormattedMessage id="Subscription.examplePhone" />
           </span>
         )}
         {/* 输入提示 */}
@@ -594,6 +601,8 @@ class DeliveryMethod extends React.Component {
       pickupCity: ''
     });
   };
+
+
   render() {
     const {
       pickLoading,
@@ -604,210 +613,192 @@ class DeliveryMethod extends React.Component {
       pickupCity,
       courierInfo,
       searchNoResult,
+      currencySymbol,
       pickupForm
     } = this.state;
 
-    const _pickupDefaultCheckBox = (
-      <div className="rc-input rc-input--inline w-100 mw-100">
-        {
-          <input
-            id="addr-default-checkbox"
-            type="checkbox"
-            className="rc-input__checkbox"
-            onChange={this.handleDefaultChange}
-            value={pickupForm.isDefaltAddress}
-            checked={pickupForm.isDefaltAddress}
-          />
-        }
-        <label
-          className={`rc-input__label--inline text-break`}
-          htmlFor="addr-default-checkbox"
-        >
-          <FormattedMessage id="setDefaultAddress" />
-        </label>
-      </div>
-    );
     return (
       <>
-        {pickLoading && <Loading />}
-
-        {/* homeDelivery begin */}
-        <div className="row rc_form_box rc_pickup_box">
-          <div className="col-md-7">
-            {/* 城市搜索 begin */}
-            <div className="form-group rc-full-width rc-input--full-width">
-              <div
-                className={`rc-input rc-input--inline rc-full-width rc-input--full-width pickup_search_box ${searchNoResult ? 'pickup_search_box_errmsg' : null
-                  }`}
-              >
-                <SearchSelection
-                  queryList={async ({ inputVal }) => {
-                    let res = await webapi.pickupQueryCity(inputVal);
-                    let robj = (
-                      (res?.res?.context && res?.res?.context?.pickUpQueryCityDTOs) ||
-                      []
-                    ).map((ele) => Object.assign(ele, { name: ele.city }));
-                    return robj;
-                  }}
-                  selectedItemChange={(data) => this.handlePickupCitySelectChange(data)}
-                  key={pickupCity}
-                  defaultValue={pickupCity}
-                  value={pickupCity || ''}
-                  freeText={false}
-                  name="pickupCity"
-                  placeholder="Введите ваш город"
-                  isLoadingList={false}
-                  isBottomPaging={true}
-                />
+        <Spin spinning={pickLoading}>
+          {/* homeDelivery begin */}
+          <div className="row rc_form_box rc_pickup_box">
+            <div className="col-md-7">
+              {/* 城市搜索 begin */}
+              <div className="form-group rc-full-width rc-input--full-width">
+                <div
+                  className={`rc-input rc-input--inline rc-full-width rc-input--full-width pickup_search_box ${searchNoResult ? 'pickup_search_box_errmsg' : null
+                    }`}
+                >
+                  <SearchSelection
+                    queryList={async ({ inputVal }) => {
+                      let res = await webapi.pickupQueryCity(inputVal);
+                      let robj = (
+                        (res?.res?.context && res?.res?.context?.pickUpQueryCityDTOs) ||
+                        []
+                      ).map((ele) => Object.assign(ele, { name: ele.city }));
+                      return robj;
+                    }}
+                    selectedItemChange={(data) => this.handlePickupCitySelectChange(data)}
+                    key={pickupCity}
+                    defaultValue={pickupCity}
+                    value={pickupCity || ''}
+                    freeText={false}
+                    name="pickupCity"
+                    placeholder="Введите ваш город"
+                    isLoadingList={false}
+                    isBottomPaging={true}
+                  />
+                  {searchNoResult && (
+                    <span
+                      className="close_search_errmsg"
+                      onClick={this.closeSearchErrMsg}
+                    ></span>
+                  )}
+                </div>
                 {searchNoResult && (
-                  <span
-                    className="close_search_errmsg"
-                    onClick={this.closeSearchErrMsg}
-                  ></span>
+                  <div className="text-danger-2" style={{ paddingTop: '.5rem' }}>
+                    <FormattedMessage id="Subscription.noPickup" />
+                  </div>
                 )}
               </div>
-              {searchNoResult && (
-                <div className="text-danger-2" style={{ paddingTop: '.5rem' }}>
-                  <FormattedMessage id="Subscription.noPickup" />
-                </div>
-              )}
+              {/* 城市搜索 end */}
             </div>
-            {/* 城市搜索 end */}
           </div>
-        </div>
-        {/* homeDelivery end */}
+          {/* homeDelivery end */}
 
-        {/* pickup相关 begin */}
-        <div className={`pickup_box`}>
-          {/* 地图 */}
-          <div
-            className={`pickup_map_box ${showPickup ? 'flex' : 'hidden'
-              }`}
-          >
-            {/* <iframe
-              id="pickupIframe"
-              src={'pickup-map'}
-              className="pickup_iframe"
-              style={{ width: '100%', height: '100%' }}
-              width="100%"
-              height="100%"
-              scrolling="no"
-              frameBorder="0"
-            /> */}
-          </div>
-
-          {/* 显示地图上选择的点信息 */}
-          {showPickupDetail && courierInfo ? (
-            <div className="pickup_infos">
-              <div className="info_tit">
-                <div className="tit_left">{pickupForm.pickupName}</div>
-                <div className="tit_right">
-                  {formatMoney(pickupForm.pickupPrice)}
-                </div>
-              </div>
-              <div className="infos">
-                <div className="panel_address">{pickupForm.address1}</div>
-                <div className="panel_worktime">{pickupForm.workTime}</div>
-              </div>
-              <div className="info_btn_box">
-                <button
-                  className="rc-btn rc-btn--sm rc-btn--two mr-0"
-                  onClick={this.showPickupDetailDialog}
-                >
-                  <FormattedMessage id="Subscription.moreDetails" />
-                </button>
-                <button
-                  className="rc-btn rc-btn--sm rc-btn--one"
-                  onClick={this.editPickup}
-                >
-                  <FormattedMessage id="edit" />
-                </button>
-              </div>
+          {/* pickup相关 begin */}
+          <div className={`pickup_box`}>
+            {/* 地图 */}
+            <div
+              className={`pickup_map_box ${showPickup ? 'flex' : 'hidden'
+                }`}
+            >
+              <iframe
+                id="pickupIframe"
+                src="/pickup-map"
+                className="pickup_iframe"
+                style={{ width: '100%', height: '100%' }}
+                width="100%"
+                height="100%"
+                scrolling="no"
+                frameBorder="0"
+              />
+              {/* <div className="pickup_map_box"><div id="kaktusMap"></div></div> */}
             </div>
-          ) : null}
 
-          {/* pickup详细 */}
-          {showPickupDetailDialog && courierInfo ? (
-            <div className="pickup_detail_dialog">
-              <div className="pk_detail_box">
-                <span
-                  className="pk_btn_close"
-                  onClick={this.hidePickupDetailDialog}
-                ></span>
-                <div className="pk_tit_box">
-                  <div className="pk_detail_title">
-                    {pickupForm.pickupName} ({pickupForm.pickupCode})
-                  </div>
-                  <div className="pk_detail_price">
-                    {formatMoney(pickupForm.pickupPrice)}
+            {/* 显示地图上选择的点信息 */}
+            {showPickupDetail && courierInfo ? (
+              <div className="pickup_infos">
+                <div className="info_tit">
+                  <div className="tit_left">{pickupForm.pickupName}</div>
+                  <div className="tit_right">
+                    {currencySymbol+' '+pickupForm.pickupPrice}
                   </div>
                 </div>
-                <div className="pk_detail_address pk_addandtime">
-                  {pickupForm.address1}
+                <div className="infos">
+                  <div className="panel_address">{pickupForm.address1}</div>
+                  <div className="panel_worktime">{pickupForm.workTime}</div>
                 </div>
-                <div className="pk_detail_worktime pk_addandtime">
-                  {pickupForm.workTime}
-                </div>
-                <div className="pk_detail_dop_title">
-                  Дополнительная информация
-                </div>
-                <div className="pk_detail_description">
-                  {pickupForm.pickupDescription}
+                <div className="info_btn_box">
+                  <button
+                    className="rc-btn rc-btn--sm rc-btn--two mr-0"
+                    onClick={this.showPickupDetailDialog}
+                  >
+                    <FormattedMessage id="Subscription.moreDetails" />
+                  </button>
+                  <button
+                    className="rc-btn rc-btn--sm rc-btn--one"
+                    onClick={this.editPickup}
+                  >
+                    <FormattedMessage id="Subscription.Edit" />
+                  </button>
                 </div>
               </div>
-            </div>
-          ) : null}
+            ) : null}
 
-          {/* 表单 */}
-          <div
-            className={`row rc_form_box rc_pickup_form ${showPickupForm ? 'flex' : 'hidden'
-              }`}
-          >
-            <div className="col-md-7">
-              <div className="form-group required">
-                <label
-                  className="form-control-label"
-                  htmlFor="firstNameShipping"
-                >
-                  <FormattedMessage id="Subscription.firstName" />
-                </label>
-                {this.inputJSX('firstName')}
+            {/* pickup详细 */}
+            {showPickupDetailDialog && courierInfo ? (
+              <div className="pickup_detail_dialog">
+                <div className="pk_detail_box">
+                  <span
+                    className="pk_btn_close"
+                    onClick={this.hidePickupDetailDialog}
+                  ></span>
+                  <div className="pk_tit_box">
+                    <div className="pk_detail_title">
+                      {pickupForm.pickupName} ({pickupForm.pickupCode})
+                    </div>
+                    <div className="pk_detail_price">
+                      {currencySymbol+' '+pickupForm.pickupPrice}
+                    </div>
+                  </div>
+                  <div className="pk_detail_address pk_addandtime">
+                    {pickupForm.address1}
+                  </div>
+                  <div className="pk_detail_worktime pk_addandtime">
+                    {pickupForm.workTime}
+                  </div>
+                  <div className="pk_detail_dop_title">
+                    Дополнительная информация
+                  </div>
+                  <div className="pk_detail_description">
+                    {pickupForm.pickupDescription}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {/* 表单 */}
+            <div
+              className={`row rc_form_box rc_pickup_form ${showPickupForm ? 'flex' : 'hidden'
+                }`}
+            >
+              <div className="col-md-7 mb-2">
+                <div className="form-group required">
+                  <label
+                    className="form-control-label"
+                    htmlFor="firstNameShipping"
+                  >
+                    <FormattedMessage id="Order.FirstName" />
+                  </label>
+                  {this.inputJSX('firstName')}
+                </div>
+              </div>
+              <div className="col-md-7 mb-2">
+                <div className="form-group required">
+                  <label
+                    className="form-control-label"
+                    htmlFor="lastNameShipping"
+                  >
+                    <FormattedMessage id="Order.LastName" />
+                  </label>
+                  {this.inputJSX('lastName')}
+                </div>
+              </div>
+              <div className="col-md-7 mb-2">
+                <div className="form-group required">
+                  <label
+                    className="form-control-label"
+                    htmlFor="phoneNumberShipping"
+                  >
+                    <FormattedMessage id="Order.Phonenumber" />
+                  </label>
+                  {this.inputJSX('phoneNumber')}
+                </div>
+              </div>
+              <div className="col-md-12 mb-2">
+                <div className="form-group ">
+                  <label className="form-control-label" htmlFor="commentShipping">
+                    <FormattedMessage id="PetOwner.Comment" />
+                  </label>
+                  {this.inputJSX('comment')}
+                </div>
               </div>
             </div>
-            <div className="col-md-7">
-              <div className="form-group required">
-                <label
-                  className="form-control-label"
-                  htmlFor="lastNameShipping"
-                >
-                  <FormattedMessage id="Subscription.lastName" />
-                </label>
-                {this.inputJSX('lastName')}
-              </div>
-            </div>
-            <div className="col-md-7">
-              <div className="form-group required">
-                <label
-                  className="form-control-label"
-                  htmlFor="phoneNumberShipping"
-                >
-                  <FormattedMessage id="Subscription.phoneNumber" />
-                </label>
-                {this.inputJSX('phoneNumber')}
-              </div>
-            </div>
-            <div className="col-md-12">
-              <div className="form-group ">
-                <label className="form-control-label" htmlFor="commentShipping">
-                  <FormattedMessage id="Subscription.comment" />
-                </label>
-                {this.inputJSX('comment')}
-              </div>
-            </div>
-            <div className="col-md-12">{_pickupDefaultCheckBox}</div>
           </div>
-        </div>
-        {/* pickup相关 end */}
+          {/* pickup相关 end */}
+
+        </Spin>
       </>
     );
   }

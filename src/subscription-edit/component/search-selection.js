@@ -13,8 +13,8 @@ class SearchSelection extends React.Component {
     freeText: false,
     name: '',
     isCitySearchSelection: false,
-    searchSelectionBlur: () => {},
-    searchInputChange: () => {}
+    searchSelectionBlur: () => { },
+    searchInputChange: () => { }
   };
   constructor(props) {
     super(props);
@@ -33,7 +33,7 @@ class SearchSelection extends React.Component {
     this.otherValue = '';
     this.searchText = React.createRef();
   }
-  
+
   componentWillUnmount = () => {
     this.setState = (state, callback) => {
       return;
@@ -209,7 +209,7 @@ class SearchSelection extends React.Component {
             name={this.props.name}
           />
           <label className="rc-input__label" />
-          {/* {this.state.optionPanelVisible && ( */}
+          {this.state.optionPanelVisible && (
             <div className="clnc-overlay border mt-1 position-absolute w-100">
               <ul
                 className="m-0 clinic-item-container test-scroll"
@@ -217,9 +217,8 @@ class SearchSelection extends React.Component {
               >
                 {optionList.map((item, idx) => (
                   <li
-                    className={`clinic-item pl-2 pr-2 ${
-                      idx !== optionList.length - 1 ? 'border-bottom' : ''
-                    }`}
+                    className={`clinic-item pl-2 pr-2 ${idx !== optionList.length - 1 ? 'border-bottom' : ''
+                      }`}
                     key={idx}
                     onClick={(e) => this.handleClickClinicItem(e, item)}
                   >
@@ -233,7 +232,7 @@ class SearchSelection extends React.Component {
                 </div>
               )}
             </div>
-          {/* )} */}
+          )}
         </div>
         {!this.state.searchForNoResult &&
           optionList.length === 0 &&

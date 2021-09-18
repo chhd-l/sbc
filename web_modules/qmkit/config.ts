@@ -15,10 +15,9 @@ export default {
 
   /* sit */
   HOST: 'https://storesit.royalcanin.com/api',
-
+  
   /* stg */
-  // HOST: 'https://storestg.royalcanin.com/api',
-
+  //HOST: 'https://storestg.royalcanin.com/api',
   PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',

@@ -102,7 +102,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       payPspItemEnum: '',
       paymentMethod: '',
 
-      addOrEditPickup: true,
+      addOrEditPickup: false,
       deliveryType: 'homeDelivery',
       defaultCity: '',
       pickupEditNumber: 0,
@@ -894,13 +894,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   // 更新 pickup编辑次数
-  updatePickupEditNumber = (num:number) => {
+  updatePickupEditNumber = (num: number) => {
     // console.log('666 >>> 更新 pickupEditNumber: ', num);
     this.setState({
       pickupEditNumber: num
     });
   };
-  
+
   // 更新pickup数据
   updatePickupData = (data) => {
     // console.log('666 >>> updatePickupData: ', data);
@@ -935,6 +935,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupAddress,
       pickupFormData,
       pickupEditNumber,
+      defaultCity,
     } = this.state;
 
     const columns = [
@@ -1742,12 +1743,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               }}
             >
               <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
-                <Col>
+                <Col style={{ width: '100%' }}>
                   <PickupDelivery
-                    key={this.state.defaultCity}
+                    key={defaultCity}
                     initData={pickupFormData}
                     pickupAddress={pickupAddress}
-                    defaultCity={this.state.defaultCity}
+                    defaultCity={defaultCity}
                     updatePickupEditNumber={this.updatePickupEditNumber}
                     updateData={this.updatePickupData}
                     pickupEditNumber={pickupEditNumber}

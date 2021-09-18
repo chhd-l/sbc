@@ -1,23 +1,248 @@
+.hidden {
+  display: none !important;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
 // 解决文本框自动填充后背景蓝色黄色问题
 input:-webkit-autofill {
   box-shadow: 0 0 0px 1000px white inset !important;
 }
-.input, .input.rc-icon, .rc-input, .rc-input.rc-icon {
+
+@media (min-width: 769px) {
+  .col-md-7 {
+    flex: 0 0 58.33333%;
+    max-width: 58.33333%;
+  }
+}
+
+.col,
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12,
+.col-auto,
+.col-lg,
+.col-lg-1,
+.col-lg-2,
+.col-lg-3,
+.col-lg-4,
+.col-lg-5,
+.col-lg-6,
+.col-lg-7,
+.col-lg-8,
+.col-lg-9,
+.col-lg-10,
+.col-lg-11,
+.col-lg-12,
+.col-lg-auto,
+.col-md,
+.col-md-1,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6,
+.col-md-7,
+.col-md-8,
+.col-md-9,
+.col-md-10,
+.col-md-11,
+.col-md-12,
+.col-md-auto,
+.col-sm,
+.col-sm-1,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-sm-7,
+.col-sm-8,
+.col-sm-9,
+.col-sm-10,
+.col-sm-11,
+.col-sm-12,
+.col-sm-auto,
+.col-xl,
+.col-xl-1,
+.col-xl-2,
+.col-xl-3,
+.col-xl-4,
+.col-xl-5,
+.col-xl-6,
+.col-xl-7,
+.col-xl-8,
+.col-xl-9,
+.col-xl-10,
+.col-xl-11,
+.col-xl-12,
+.col-xl-auto,
+.col-xxl,
+.col-xxl-1,
+.col-xxl-2,
+.col-xxl-3,
+.col-xxl-4,
+.col-xxl-5,
+.col-xxl-6,
+.col-xxl-7,
+.col-xxl-8,
+.col-xxl-9,
+.col-xxl-10,
+.col-xxl-11,
+.col-xxl-12,
+.col-xxl-auto {
+  position: relative;
+  padding-right: 0.9375rem;
+  padding-left: 0.9375rem;
+}
+
+.input,
+.input.rc-icon,
+.rc-input,
+.rc-input.rc-icon {
   position: relative;
 }
-.input, .rc-input {
+
+.input,
+.rc-input {
   display: block;
 }
+
+input,
+textarea,
+.rc-input__control {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
 .rc-input--full-width {
   max-width: none;
 }
-.input__control:focus+.input__label, .input__control:focus+.rc-input__label, .input__control:not([value=""])+.input__label, .input__control:not([value=""])+.rc-input__label, .input__date:focus+.input__label, .input__date:focus+.rc-input__label, .input__date:not([value=""])+.input__label, .input__date:not([value=""])+.rc-input__label, .input__password:focus+.input__label, .input__password:focus+.rc-input__label, .input__password:not([value=""])+.input__label, .input__password:not([value=""])+.rc-input__label, .input__textarea:focus+.input__label, .input__textarea:focus+.rc-input__label, .input__textarea:not([value=""])+.input__label, .input__textarea:not([value=""])+.rc-input__label, .rc-input__control:focus+.input__label, .rc-input__control:focus+.rc-input__label, .rc-input__control:not([value=""])+.input__label, .rc-input__control:not([value=""])+.rc-input__label, .rc-input__date:focus+.input__label, .rc-input__date:focus+.rc-input__label, .rc-input__date:not([value=""])+.input__label, .rc-input__date:not([value=""])+.rc-input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.rc-input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.input__label, .rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.rc-input__label, .rc-input__password:focus+.input__label, .rc-input__password:focus+.rc-input__label, .rc-input__password:not([value=""])+.input__label, .rc-input__password:not([value=""])+.rc-input__label, .rc-input__textarea:focus+.input__label, .rc-input__textarea:focus+.rc-input__label, .rc-input__textarea:not([value=""])+.input__label, .rc-input__textarea:not([value=""])+.rc-input__label {
+
+.input__control:focus+.input__label,
+.input__control:focus+.rc-input__label,
+.input__control:not([value=""])+.input__label,
+.input__control:not([value=""])+.rc-input__label,
+.input__date:focus+.input__label,
+.input__date:focus+.rc-input__label,
+.input__date:not([value=""])+.input__label,
+.input__date:not([value=""])+.rc-input__label,
+.input__password:focus+.input__label,
+.input__password:focus+.rc-input__label,
+.input__password:not([value=""])+.input__label,
+.input__password:not([value=""])+.rc-input__label,
+.input__textarea:focus+.input__label,
+.input__textarea:focus+.rc-input__label,
+.input__textarea:not([value=""])+.input__label,
+.input__textarea:not([value=""])+.rc-input__label,
+.rc-input__control:focus+.input__label,
+.rc-input__control:focus+.rc-input__label,
+.rc-input__control:not([value=""])+.input__label,
+.rc-input__control:not([value=""])+.rc-input__label,
+.rc-input__date:focus+.input__label,
+.rc-input__date:focus+.rc-input__label,
+.rc-input__date:not([value=""])+.input__label,
+.rc-input__date:not([value=""])+.rc-input__label,
+.rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.input__label,
+.rc-input__number-picker-wrapper>.rc-input__number-picker:focus+.rc-input__label,
+.rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.input__label,
+.rc-input__number-picker-wrapper>.rc-input__number-picker:not([value=""])+.rc-input__label,
+.rc-input__password:focus+.input__label,
+.rc-input__password:focus+.rc-input__label,
+.rc-input__password:not([value=""])+.input__label,
+.rc-input__password:not([value=""])+.rc-input__label,
+.rc-input__textarea:focus+.input__label,
+.rc-input__textarea:focus+.rc-input__label,
+.rc-input__textarea:not([value=""])+.input__label,
+.rc-input__textarea:not([value=""])+.rc-input__label {
   color: #666;
 }
-.input__control+.input__label::before, .input__control+.rc-input__label::before, .input__control:focus+.input__label::after, .input__control:focus+.rc-input__label::after, .input__control:not([value=""])~.input__label::after, .input__control:not([value=""])~.rc-input__label::after, .input__date+.input__label::before, .input__date+.rc-input__label::before, .input__date:focus+.input__label::after, .input__date:focus+.rc-input__label::after, .input__date:not([value=""])~.input__label::after, .input__date:not([value=""])~.rc-input__label::after, .input__password+.input__label::before, .input__password+.rc-input__label::before, .input__password:focus+.input__label::after, .input__password:focus+.rc-input__label::after, .input__password:not([value=""])~.input__label::after, .input__password:not([value=""])~.rc-input__label::after, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::before, .rc-input__control:focus+.input__label::after, .rc-input__control:focus+.rc-input__label::after, .rc-input__control:not([value=""])~.input__label::after, .rc-input__control:not([value=""])~.rc-input__label::after, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::before, .rc-input__date:focus+.input__label::after, .rc-input__date:focus+.rc-input__label::after, .rc-input__date:not([value=""])~.input__label::after, .rc-input__date:not([value=""])~.rc-input__label::after, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::before, .rc-input__password:focus+.input__label::after, .rc-input__password:focus+.rc-input__label::after, .rc-input__password:not([value=""])~.input__label::after, .rc-input__password:not([value=""])~.rc-input__label::after {
+
+.input__control+.input__label::before,
+.input__control+.rc-input__label::before,
+.input__control:focus+.input__label::after,
+.input__control:focus+.rc-input__label::after,
+.input__control:not([value=""])~.input__label::after,
+.input__control:not([value=""])~.rc-input__label::after,
+.input__date+.input__label::before,
+.input__date+.rc-input__label::before,
+.input__date:focus+.input__label::after,
+.input__date:focus+.rc-input__label::after,
+.input__date:not([value=""])~.input__label::after,
+.input__date:not([value=""])~.rc-input__label::after,
+.input__password+.input__label::before,
+.input__password+.rc-input__label::before,
+.input__password:focus+.input__label::after,
+.input__password:focus+.rc-input__label::after,
+.input__password:not([value=""])~.input__label::after,
+.input__password:not([value=""])~.rc-input__label::after,
+.rc-input__control+.input__label::before,
+.rc-input__control+.rc-input__label::before,
+.rc-input__control:focus+.input__label::after,
+.rc-input__control:focus+.rc-input__label::after,
+.rc-input__control:not([value=""])~.input__label::after,
+.rc-input__control:not([value=""])~.rc-input__label::after,
+.rc-input__date+.input__label::before,
+.rc-input__date+.rc-input__label::before,
+.rc-input__date:focus+.input__label::after,
+.rc-input__date:focus+.rc-input__label::after,
+.rc-input__date:not([value=""])~.input__label::after,
+.rc-input__date:not([value=""])~.rc-input__label::after,
+.rc-input__password+.input__label::before,
+.rc-input__password+.rc-input__label::before,
+.rc-input__password:focus+.input__label::after,
+.rc-input__password:focus+.rc-input__label::after,
+.rc-input__password:not([value=""])~.input__label::after,
+.rc-input__password:not([value=""])~.rc-input__label::after {
   width: 100%;
 }
-.input__control+.input__label::after, .input__control+.input__label::before, .input__control+.rc-input__label::after, .input__control+.rc-input__label::before, .input__date+.input__label::after, .input__date+.input__label::before, .input__date+.rc-input__label::after, .input__date+.rc-input__label::before, .input__password+.input__label::after, .input__password+.input__label::before, .input__password+.rc-input__label::after, .input__password+.rc-input__label::before, .rc-input__control+.input__label::after, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::after, .rc-input__control+.rc-input__label::before, .rc-input__date+.input__label::after, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::after, .rc-input__date+.rc-input__label::before, .rc-input__password+.input__label::after, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::after, .rc-input__password+.rc-input__label::before {
+
+.input__control+.input__label::after,
+.input__control+.input__label::before,
+.input__control+.rc-input__label::after,
+.input__control+.rc-input__label::before,
+.input__date+.input__label::after,
+.input__date+.input__label::before,
+.input__date+.rc-input__label::after,
+.input__date+.rc-input__label::before,
+.input__password+.input__label::after,
+.input__password+.input__label::before,
+.input__password+.rc-input__label::after,
+.input__password+.rc-input__label::before,
+.rc-input__control+.input__label::after,
+.rc-input__control+.input__label::before,
+.rc-input__control+.rc-input__label::after,
+.rc-input__control+.rc-input__label::before,
+.rc-input__date+.input__label::after,
+.rc-input__date+.input__label::before,
+.rc-input__date+.rc-input__label::after,
+.rc-input__date+.rc-input__label::before,
+.rc-input__password+.input__label::after,
+.rc-input__password+.input__label::before,
+.rc-input__password+.rc-input__label::after,
+.rc-input__password+.rc-input__label::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -27,18 +252,39 @@ input:-webkit-autofill {
   -webkit-transition: .2s;
   transition: .2s;
 }
-.input__control+.input__label::before, .input__control+.rc-input__label::before, .input__date+.input__label::before, .input__date+.rc-input__label::before, .input__password+.input__label::before, .input__password+.rc-input__label::before, .input__textarea+.input__label::before, .input__textarea+.rc-input__label::before, .rc-input__control+.input__label::before, .rc-input__control+.rc-input__label::before, .rc-input__date+.input__label::before, .rc-input__date+.rc-input__label::before, .rc-input__number-picker-wrapper>.rc-input__number-picker+.input__label::before, .rc-input__number-picker-wrapper>.rc-input__number-picker+.rc-input__label::before, .rc-input__password+.input__label::before, .rc-input__password+.rc-input__label::before, .rc-input__textarea+.input__label::before, .rc-input__textarea+.rc-input__label::before {
+
+.input__control+.input__label::before,
+.input__control+.rc-input__label::before,
+.input__date+.input__label::before,
+.input__date+.rc-input__label::before,
+.input__password+.input__label::before,
+.input__password+.rc-input__label::before,
+.input__textarea+.input__label::before,
+.input__textarea+.rc-input__label::before,
+.rc-input__control+.input__label::before,
+.rc-input__control+.rc-input__label::before,
+.rc-input__date+.input__label::before,
+.rc-input__date+.rc-input__label::before,
+.rc-input__number-picker-wrapper>.rc-input__number-picker+.input__label::before,
+.rc-input__number-picker-wrapper>.rc-input__number-picker+.rc-input__label::before,
+.rc-input__password+.input__label::before,
+.rc-input__password+.rc-input__label::before,
+.rc-input__textarea+.input__label::before,
+.rc-input__textarea+.rc-input__label::before {
   background-color: #d7d7d7;
 }
+
 .input--inline,
 .rc-input--inline {
   position: relative;
-  display: inline-block;
-  margin-right: 1.5rem;
-  vertical-align: text-top;
+  // display: flex;
+  // margin-right: 1.5rem;
+  // vertical-align: text-top;
   max-width: none;
 }
-.input__label, .rc-input__label {
+
+.input__label,
+.rc-input__label {
   position: absolute;
   top: 0;
   left: 0;
@@ -46,10 +292,19 @@ input:-webkit-autofill {
   height: 100%;
   pointer-events: none;
 }
-.input__control, .input__date, .input__password, .input__textarea, .rc-input__control, .rc-input__date, .rc-input__number-picker-wrapper>.rc-input__number-picker, .rc-input__password, .rc-input__textarea {
+
+.input__control,
+.input__date,
+.input__password,
+.input__textarea,
+.rc-input__control,
+.rc-input__date,
+.rc-input__number-picker-wrapper>.rc-input__number-picker,
+.rc-input__password,
+.rc-input__textarea {
   display: block;
   line-height: 1.5rem;
-  font-family: "RC TYPE",Roboto,Avenir,Helvetica,Arial,sans-serif;
+  font-family: "RC TYPE", Roboto, Avenir, Helvetica, Arial, sans-serif;
   width: 100%;
   margin-bottom: 0;
   padding: .95rem 0;
@@ -59,8 +314,99 @@ input:-webkit-autofill {
   border: #d7d7d7;
   background-color: transparent;
   color: #666;
-  padding-left: 30px;
   padding-right: 20px;
+}
+
+.rc-btn {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: inherit;
+  font-size: inherit;
+  text-align: center;
+  overflow: hidden;
+  padding: 6px 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-transition: .2s;
+  transition: .2s;
+  font-weight: 300;
+  width: auto;
+}
+
+.rc-btn--sm {
+  padding: 6px 1.5rem;
+  font-size: .88rem;
+}
+
+.rc-btn--two {
+  background: none;
+  color: #e2001a;
+  border-color: #e2001a;
+}
+
+.rc-btn--one,
+.rc-btn--two {
+  font-weight: 500;
+}
+
+.rc-btn--one {
+  background-color: #e2001a;
+  color: #fff;
+  border-color: #e2001a;
+}
+
+.rc-baseline *,
+.rc-baseline ::after,
+.rc-baseline ::before {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+.shipping__address .form-group {
+  margin-bottom: 25px;
+}
+
+.shipping__address .form-group label {
+  display: block;
+}
+
+.form-control-label {
+  margin-top: 5px;
+}
+
+.required label:after {
+  content: '*';
+}
+
+.required label:after {
+  color: red;
+}
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+.rc_form_box {
+  .rc_input_textarea {
+    padding: 0.95rem;
+    resize: vertical;
+    min-height: 120px;
+    height: auto;
+    border-style: solid;
+    border-width: 2px;
+    display: block;
+    line-height: 1.5rem;
+    width: 100%;
+    margin-bottom: 0;
+    font-weight: 300;
+    box-shadow: none;
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #d7d7d7 !important;
+  }
 }
 
 .clnc-overlay {
@@ -72,11 +418,14 @@ input:-webkit-autofill {
 .clinic-item-container {
   padding-inline-start: 0;
   max-height: 15rem;
-  overflow-y: auto 
+  overflow-y: auto;
+  padding: 5px;
 }
+
 .clinic-item {
   cursor: pointer;
 }
+
 .clinic-item:hover {
   background-color: #fff3f3;
 }
@@ -351,6 +700,7 @@ input:-webkit-autofill {
 }
 
 .pickup_map_box {
+  height: 505px;
 
   #KaktusModalWrapper {
     max-width: 100% !important;

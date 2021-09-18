@@ -11,12 +11,6 @@ class PickupMap extends Component<any, any> {
     };
   }
   componentDidMount() {
-    let ptarr = (window.location.pathname).split('/');
-    if (ptarr.indexOf("pickup-map") > 0) {
-      console.log('666 >>> ptarr: ', ptarr);
-      // document.getElementsByClassName('my-header')
-    }
-
     // 初始化地图控件。在完全绘制页面后调用。
     document.addEventListener('DOMContentLoaded', () => {
       kaktusMap({
@@ -66,8 +60,9 @@ class PickupMap extends Component<any, any> {
       );
     });
   }
+
   // 打开地图
-  openKaktusWidget = (city:string) => {
+  openKaktusWidget = (city: string) => {
     console.log('666 >>> 打开地图city: ', city);
     window.kaktusMap.openWidget({
       city_from: 'Москва',
@@ -80,6 +75,7 @@ class PickupMap extends Component<any, any> {
       weight: 600
     });
   };
+
   // 页面加载完成后向父级发送数据
   sendMsgLoadComplete = () => {
     try {

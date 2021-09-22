@@ -1036,29 +1036,35 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
               </Col>
+              {/* 如果是俄罗斯 如果是HOME_DELIVERY 显示 timeSlot 信息(timeSlot没有也不显示),否则显示pickup 状态
+              如果是美国不显示内容 其他国家显示billingAddress */}
               <Col span={8}>
                 {
                   storeId === 123457907 ? <Row>
                     {deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? <>
-                      <Col span={12}>
-                        <label className="info-title">
-                          <FormattedMessage id="Setting.timeSlot" />
-                        </label>
-                      </Col>
-                      <Col span={24}>
-                        <p>{deliveryAddressInfo.deliveryDate}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p>{deliveryAddressInfo.timeSlot}</p>
-                      </Col>
+                      {
+                        deliveryAddressInfo.timeSlot ? <>
+                          <Col span={12}>
+                            <label className="info-title">
+                              <FormattedMessage id="Setting.timeSlot" />
+                            </label>
+                          </Col>
+                          <Col span={24}>
+                            <p>{deliveryAddressInfo.deliveryDate}</p>
+                          </Col>
+                          <Col span={24}>
+                            <p>{deliveryAddressInfo.timeSlot}</p>
+                          </Col>
+                        </> : null
+                      }
                     </> : <Col>
                       {
                         deliveryAddressInfo.pickupPointState ? <p>
-                          <FormattedMessage id="Subscription.TabPane.Active" /> 
-                          <span className= 'successPoint'></span>
+                          <FormattedMessage id="Subscription.TabPane.Active" />
+                          <span className='successPoint'></span>
                         </p> : <p>
-                          <FormattedMessage id="Subscription.TabPane.Inactive" /> 
-                          <span className= 'failedPoint'></span>
+                          <FormattedMessage id="Subscription.TabPane.Inactive" />
+                          <span className='failedPoint'></span>
                         </p>
                       }
                     </Col>

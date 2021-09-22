@@ -26,6 +26,7 @@ import {
   getStoreList,
 } from './okta/webapi';
 import { getHomeTaskListAndCount, getTaskRead, getHomeTaskTodoListTop5 } from '../../src/task/webapi';
+import {getLanguageList} from './lang/webapi'
 import { FormattedMessage } from 'react-intl';
 import msgImg from './images/icon/msg-icon.png'
 //import value from '*.json';
@@ -69,11 +70,13 @@ export default class MyHeader extends React.Component {
   }
 
   componentDidMount() {
-    if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO' && checkAuth('f_petowner_task')) {
-      this.getTaskList();
-      // 获取切换店铺的下拉数据
-      // this.getUserStoreList();
-
+    if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
+      // this.getLanguage()
+      if (checkAuth('f_petowner_task')) {
+        this.getTaskList();
+        // 获取切换店铺的下拉数据
+        // this.getUserStoreList();
+      }
     }
   }
 
@@ -86,6 +89,11 @@ export default class MyHeader extends React.Component {
       reminderTasks: data[0].res?.context?.reminderTasks ?? [],
       taskList: data[1].res?.context?.taskList ?? []
     });
+  }
+
+  async getLanguage() {
+    const res = await getLanguageList();
+    console.log(res,'langei=========')
   }
 
   returnTask(item, type) {

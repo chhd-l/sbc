@@ -200,7 +200,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
                 if (subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' && +storeId === 123457907) {
-                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.cityIdStr })
+                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.cityIdStr,subscribeId:subscriptionInfo.subscriptionNumber })
                 }
               }
 
@@ -589,7 +589,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
   deliveryOK = async () => {
-    let { deliveryList, deliveryAddressId } = this.state;
+    let { deliveryList, deliveryAddressId,subscriptionInfo } = this.state;
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
@@ -611,7 +611,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-        this.getTimeSlot({ cityNo: deliveryAddressInfo.cityIdStr })
+        this.getTimeSlot({ cityNo: deliveryAddressInfo.cityIdStr,subscribeId:subscriptionInfo.subscriptionNumber })
         this.setState({
           deliveryDate:undefined,
           timeSlot:undefined

@@ -256,6 +256,7 @@ const FormItem = Form.Item;
                       <span onMouseDown={(e) => { e.preventDefault(); return false; }}>
                         <Select
                           mode="multiple"
+                          ref="cardSelect"
                           showArrow={true}
                           maxTagPlaceholder={()=>{return null}}
                           style={{width:90}}
@@ -265,12 +266,12 @@ const FormItem = Form.Item;
                               <div style={{display:'flex',width:'100%',justifyContent:'center'}}>
                                 <Button type="primary" onClick={(e)=>
                                 {
-                                  console.log('1111111')
-                                  e.preventDefault()
+                                  const cardSelect=this.refs.cardSelect as any;
                                   this.settingFormChange({
                                     field: 'cardExpirationValues',
                                     value: settingForm.cardExpirationTempValues
                                   })
+                                  cardSelect.blur()
                                 }
                                 }>Save</Button>
                               </div>

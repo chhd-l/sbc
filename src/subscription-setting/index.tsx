@@ -15,15 +15,11 @@ import {
   InputNumber,
   Tabs,
   Spin,
-  Tag,
-  Checkbox,
 } from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage,injectIntl } from 'react-intl';
 import './index.css'
-import { string } from 'prop-types';
-const set = Reflect.set;
 
 const FormItem = Form.Item;
  class Subscription extends Component<any, any> {

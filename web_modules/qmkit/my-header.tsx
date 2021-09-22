@@ -60,18 +60,19 @@ export default class MyHeader extends React.Component {
       reminderTasks: [],
       visible: false,
       modalVisible: false,
-      English: util.requireLocalSrc(lan === 'en-US' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/English_act_blue.png' : 'sys/English_act.png' : 'sys/English.png'),
-      Russian: util.requireLocalSrc(lan === 'ru' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Russian_act_blue.png' : 'sys/Russian_act.png' : 'sys/Russian.png'),
-      Turkey: util.requireLocalSrc(lan === 'tr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Turkey_act_blue.png' : 'sys/Turkey_act.png' : 'sys/Turkey.png'),
-      France: util.requireLocalSrc(lan === 'fr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/France_act_blue.png' : 'sys/France_act.png' : 'sys/France.png'),
-      Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
+      // English: util.requireLocalSrc(lan === 'en-US' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/English_act_blue.png' : 'sys/English_act.png' : 'sys/English.png'),
+      // Russian: util.requireLocalSrc(lan === 'ru' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Russian_act_blue.png' : 'sys/Russian_act.png' : 'sys/Russian.png'),
+      // Turkey: util.requireLocalSrc(lan === 'tr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Turkey_act_blue.png' : 'sys/Turkey_act.png' : 'sys/Turkey.png'),
+      // France: util.requireLocalSrc(lan === 'fr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/France_act_blue.png' : 'sys/France_act.png' : 'sys/France.png'),
+      // Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
       storeList: [],
+      languageList:[]
     };
   }
 
   componentDidMount() {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
-      // this.getLanguage()
+      this.getLanguage()
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
         // 获取切换店铺的下拉数据
@@ -92,8 +93,16 @@ export default class MyHeader extends React.Component {
   }
 
   async getLanguage() {
-    const res = await getLanguageList();
-    console.log(res,'langei=========')
+    const {res} = await getLanguageList();
+    const languageList =  res?.context?.languageList || [];
+    languageList.map(item =>{
+      this.setState({
+        [item.lang]:item.image
+      })
+    })
+    this.setState({
+      languageList,
+    })
   }
 
   returnTask(item, type) {
@@ -126,6 +135,11 @@ export default class MyHeader extends React.Component {
     const siteFlag = type ? Const.SITE_NAME === 'MYVETRECO' ? '_blue' : '' : '';
     this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
   }
+  setLangImgSrc(type,lang,img,imgMyVet?:string) {
+    // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lang) return;
+    const imgSrc = type=== "active" && Const.SITE_NAME === 'MYVETRECO' ? imgMyVet : img;
+    this.setState({ [lang]:imgSrc });
+  }
 
   getLanguageItem() {
     const aLanguage = [
@@ -146,21 +160,23 @@ export default class MyHeader extends React.Component {
             </span>
           </p>
           <div className="space-around">
-            {aLanguage.map((item) => {
+            {this.state.languageList?.map((item) => {
               return (
                 <img
-                  key={item.name}
+                  key={item.lang}
                   style={{
                     cursor: 'pointer',
                     width: '30%'
                   }}
                   onMouseLeave={(e) => {
-                    this.setImgSrc(item.name, item.value, '');
+                    // this.setImgSrc(item.name, item.value, '');
+                    this.setLangImgSrc("default",item.lang,item.image)
                   }}
                   onMouseEnter={(e) => {
-                    this.setImgSrc(item.name, item.value, '_act');
+                    // this.setImgSrc(item.name, item.value, '_act');
+                    this.setLangImgSrc("active",item.lang,item.imageAct,item.imageActBlue)
                   }}
-                  src={this.state[item.name]}
+                  src={this.state[item.lang]}
                   onClick={() => this.languageChange(item.value)}
                 />
               );

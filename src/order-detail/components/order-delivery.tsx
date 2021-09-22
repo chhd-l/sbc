@@ -7,10 +7,14 @@ import { noop, Const, AuthWrapper, Logistics, cache, RCi18n } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { debug } from 'console';
 import moment from 'moment';
+import orderToBePaid from '../icon/order_to_be_paid.svg';
+import orderCompleted from '../icon/order_completed.svg';
+import orderInTransit from '../icon/order_in_transit.svg';
+import orderToBeDelivered from '../icon/order_to_be_delivered.svg';
 
 const DeliveryFormDetail = Form.create({})(DeliveryForm);
+
 
 /**
  * 订单发货记录
@@ -137,15 +141,15 @@ class OrderDelivery extends React.Component<any, any> {
                     dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
                     pagination={false} bordered />
                     {/* 土耳其跳转第三方物流 */}
-                    {
-                      storeId === 123457911 && v.get('trackingUrl')? <div>
-                      <p>
-                        <i className="iconfont iconIntransit" style={{color:'#e2001a',fontSize:40,marginRight:10}}/>
-                        <span>{RCi18n({ id: "Order.shipedLogisticTip" })}</span>
-                        <a href={v.get('trackingUrl')} style={{marginLeft:10}} target="_blank">{RCi18n({ id: "Order.viewLogisticDetail" })+' >'} </a>
-                      </p>
-                    </div>:null
-                    }
+                    {/*{*/}
+                    {/*  storeId === 123457911 && v.get('trackingUrl')? <div>*/}
+                    {/*  <p>*/}
+                    {/*    <i className="iconfont iconIntransit" style={{color:'#e2001a',fontSize:40,marginRight:10}}/>*/}
+                    {/*    <span>{RCi18n({ id: "Order.shipedLogisticTip" })}</span>*/}
+                    {/*    <a href={v.get('trackingUrl')} style={{marginLeft:10}} target="_blank">{RCi18n({ id: "Order.viewLogisticDetail" })+' >'} </a>*/}
+                    {/*  </p>*/}
+                    {/*</div>:null*/}
+                    {/*}*/}
 
                   <div style={styles.expressBox as any}>
                     <div style={styles.stateBox}>
@@ -205,7 +209,7 @@ class OrderDelivery extends React.Component<any, any> {
             : null}
         </Spin>
 
-        {false && storeId == '123457911' ? this._renderStatusTip(detail) : null}
+        { storeId == 123457911 ? this._renderStatusTip(detail) : null}
 
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
@@ -253,8 +257,9 @@ class OrderDelivery extends React.Component<any, any> {
 
   //渲染订单状态提示语
   _renderStatusTip(orderDetail) {
+    console.log('orderToBePaid',orderToBePaid)
     const orderStatus = orderDetail.getIn(['tradeState', 'flowState']);
-    const logisticsList = orderDetail.get('tradeDelivers') || []
+    const logisticsList = orderDetail.get('tradeDelivers').toJS() || []
     const RenderTip = (props) => {
       return (
         <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -275,7 +280,7 @@ class OrderDelivery extends React.Component<any, any> {
         ret = (
           <RenderTip
             icon={
-              <a className="iconfont iconTobepaid" style={{ fontSize: '20px' }} />
+              <Icon component={orderToBePaid} style={{ fontSize: '20px' }}/>
             }
             tip={<FormattedMessage id="Order.createOrderTip" />}
           />
@@ -285,7 +290,7 @@ class OrderDelivery extends React.Component<any, any> {
         // waiting for shipping等待发货
         ret = (
           <RenderTip
-            icon={<a className="iconfont iconTobedelivered" style={{ fontSize: '24px' }} />}
+            icon={<Icon component={orderToBeDelivered} style={{ fontSize: '24px' }}/>}
             tip={<FormattedMessage id="Order.waitShipping" />}
           />
         );
@@ -294,7 +299,7 @@ class OrderDelivery extends React.Component<any, any> {
         // order in shipping发货运输中
         ret = (
           <RenderTip
-            icon={<a className="iconfont iconIntransit" style={{ fontSize: '24px' }} />}
+            icon={<Icon component={orderInTransit} style={{ fontSize: '24px' }}/>}
             tip={
               <FormattedMessage
                 id="Order.inTranistTip"
@@ -307,9 +312,8 @@ class OrderDelivery extends React.Component<any, any> {
                           target="_blank"
                           rel="nofollow"
                         >
-                          <FormattedMessage id="Order.viewLogisticDetail" />
+                          <FormattedMessage id="Order.viewLogisticDetail" /> &gt;
                         </a>
-                        &gt;
                       </span>
                     ) : null
                 }}
@@ -322,7 +326,7 @@ class OrderDelivery extends React.Component<any, any> {
         // order completes完成订单
         ret = (
           <RenderTip
-            icon={<a className="iconfont iconCompleted" style={{ fontSize: '24px' }} />}
+            icon={<Icon component={orderCompleted} style={{ fontSize: '24px' }}/>}
             tip={<FormattedMessage id="Order.completeTip" />}
           />
         );

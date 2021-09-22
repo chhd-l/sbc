@@ -1,5 +1,6 @@
 import { cache, Const, history, util, Fetch } from 'qmkit';
 import * as webapi from './webapi';
+import {InitLanguage} from '../lang/webapi'
 import { fromJS } from 'immutable';
 import { message } from 'antd';
 
@@ -28,6 +29,7 @@ export function getRoutType(callbackUrl: string) {
 export async function login(routerType, oktaToken: string, callback?: Function) {
   var res = {} as TResult;
   if (oktaToken) {
+    console.log(oktaToken,'oktaTokenoktaToken===')
     sessionStorage.setItem(
       cache.OKTA_TOKEN,
       oktaToken
@@ -35,13 +37,16 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     if (routerType === 'prescriber') {
       const resOkta = await webapi.getJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
+      sessionStorage.setItem('loginType', 'Prescriber');
 
     } else if (routerType === 'staff') {
       const resOkta = await webapi.getRCJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
+      sessionStorage.setItem('loginType', 'Staff');
     }
   }
   else {
+    console.log(oktaToken,'oktaTokenoktaToken===22222')
     let base64 = new util.Base64();
     const account = routerType.account;
     const password = routerType.password;
@@ -50,7 +55,10 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       base64.urlEncode(password)
     ) as any;
     res = resLocal.res as TResult;
+    sessionStorage.setItem('loginType', 'Admin');
   }
+
+  
 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
@@ -80,10 +88,13 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       history.push('/login', { oktaLogout: true })
       return
     }
+
+
     window.token = res.context.token;
     window.companyType = res.context.companyType;
     sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
     sessionStorage.setItem('employeeId', res.context.employeeId);
+
     // 获取登录人拥有的菜单
     const menusRes = (await webapi.menusAndFunctions()) as any;
     if (menusRes.res.code === Const.SUCCESS_CODE) {
@@ -121,6 +132,13 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         menusRes.res.context.systemTaxSettingResponse &&
         menusRes.res.context.systemTaxSettingResponse.configVOList
         sessionStorage.setItem(cache.LANGUAGE, 'en-US');
+
+      // 初始化用户当前的语言
+      const langRes = await InitLanguage()
+      if (langRes.res.code === Const.SUCCESS_CODE) {
+        let lang = langRes?.res?.context?.replace('es-MX', 'es')
+        sessionStorage.setItem(cache.LANGUAGE, lang);
+      }
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
         if (element) {
@@ -299,6 +317,8 @@ export async function switchLogin(params, callback?: Function) {
     window.companyType = res.context.companyType;
     sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
     sessionStorage.setItem('employeeId', res.context.employeeId);
+
+
     // 获取登录人拥有的菜单
     const menusRes = (await webapi.menusAndFunctions()) as any;
     if (menusRes.res.code === Const.SUCCESS_CODE) {

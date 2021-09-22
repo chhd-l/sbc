@@ -1051,17 +1051,20 @@ class SubscriptionDetail extends React.Component<any, any> {
                       <Col span={24}>
                         <p>{deliveryAddressInfo.timeSlot}</p>
                       </Col>
-                    </> : <Col>
-                      {
-                        deliveryAddressInfo.pickupPointState ? <p>
-                          <FormattedMessage id="Subscription.TabPane.Active" /> 
-                          <span className= 'successPoint'></span>
-                        </p> : <p>
-                          <FormattedMessage id="Subscription.TabPane.Inactive" /> 
-                          <span className= 'failedPoint'></span>
-                        </p>
-                      }
-                    </Col>
+                    </> : <>
+                      <Col span={12}><p/></Col>
+                      <Col span={24}>
+                        {
+                          deliveryAddressInfo.pickupPointState ? <p>
+                            <FormattedMessage id="Subscription.TabPane.Active" />
+                            <span className="successPoint"/>
+                          </p> : <p>
+                            <FormattedMessage id="Subscription.TabPane.Inactive" />
+                            <span className="failedPoint"/>
+                          </p>
+                        }
+                      </Col>
+                    </>
                     }
 
 

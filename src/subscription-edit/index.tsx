@@ -372,15 +372,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   updateSubscription = () => {
-    const { subscriptionInfo, 
-      goodsInfo, 
-      deliveryAddressId, 
-      billingAddressId, 
+    const { subscriptionInfo,
+      goodsInfo,
+      deliveryAddressId,
+      billingAddressId,
       originalParams,
       deliveryAddressInfo,
       deliveryDateList,
       timeSlotList,
-      deliveryDate, 
+      deliveryDate,
       timeSlot } = this.state;
     this.setState({
       saveLoading: true
@@ -404,7 +404,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       message.error(RCi18n({ id: "Subscription.quantityAndFrequency" }));
       return;
     }
-    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值, 
+    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值,
     if(+storeId === 123457907 && deliveryAddressInfo.receiveType === 'HOME_DELIVERY' && deliveryDateList.length>0){
       //deliveryDate 没有选择 报错
       if(!deliveryDate){
@@ -438,7 +438,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     // if (params.cycleTypeId !== originalParams.cycleTypeId) {
     //   changeFieldArr.push('Frequency');
-    // 
+    //
     if (params.billingAddressId !== originalParams.billingAddressId) {
       changeFieldArr.push('Billing Address');
     }
@@ -471,7 +471,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           setTimeout(() => {
             this.getSubscriptionDetail();
           }, 1000);
-          
+
         } else {
           this.setState({
             saveLoading: false
@@ -630,7 +630,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     //     message.error(<FormattedMessage id="Subscription.shippingArea"/>);
     //     return;
     //   }
-    // }   
+    // }
 
     if (this.state.sameFlag) {
       this.setState({
@@ -1378,7 +1378,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '10%',
         render: (text, record) => <div>{!record.id ? 'Autoship skiped' : record.tradeState && record.tradeState.flowState ?
           <FormattedMessage id={getOrderStatusValue('OrderStatus', record.tradeState.flowState)} />
-          // deliverStatus(record.tradeItems[0].deliverStatus) 
+          // deliverStatus(record.tradeItems[0].deliverStatus)
           : '-'}</div>
       },
       {
@@ -1613,17 +1613,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                       </Col>
                     </> :
-                      <Col>
-                        {
-                          deliveryAddressInfo.pickupPointState ? <p>
-                          <FormattedMessage id="Subscription.TabPane.Active" /> 
-                          <span className= 'successPoint'></span>
-                        </p> : <p>
-                          <FormattedMessage id="Subscription.TabPane.Inactive" /> 
-                          <span className= 'failedPoint'></span>
-                        </p>
-                        }
-                      </Col>
+                      <>
+                        <Col span={12}><p/></Col>
+                        <Col span={24}>
+                          {
+                            deliveryAddressInfo.pickupPointState ? <p>
+                              <FormattedMessage id="Subscription.TabPane.Active" />
+                              <span className="successPoint"/>
+                            </p> : <p>
+                              <FormattedMessage id="Subscription.TabPane.Inactive" />
+                              <span className="failedPoint"/>
+                            </p>
+                          }
+                        </Col>
+                      </>
                   }
                 </Row> : storeId === 123457910 ? null : (
                   <Row>

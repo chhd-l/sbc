@@ -991,7 +991,11 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <Row>
                   <Col span={12}>
                     <label className="info-title">
-                      <FormattedMessage id="Subscription.DeliveryAddress" />
+                      {deliveryAddressInfo.receiveType==='PICK_UP'?(
+                        <FormattedMessage id="Subscription.PickupAddress" />
+                      ):(
+                        <FormattedMessage id="Subscription.DeliveryAddress" />
+                      )}
                     </label>
                   </Col>
 

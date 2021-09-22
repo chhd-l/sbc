@@ -980,6 +980,7 @@ export default {
         'Subscription.PickupDelivery': 'Pickup Delivery',
         'Subscription.DeliveryMethod': 'Delivery Method',
 
+        'Subscription.PickupAddress': 'Pickup Address',
         'Subscription.moreDetails': 'Подробнее',
         'Subscription.changePickup': 'Изменить пункт выдачи заказов',
         'Subscription.addPickup': 'Выбрать пункт выдачи заказов',

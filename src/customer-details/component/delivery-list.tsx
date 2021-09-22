@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table, Popconfirm, Button, Tooltip } from 'antd';
+import { Table, Popconfirm, Button, Radio, Tooltip, Tag, Modal, message, Row, Col, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n, Const } from 'qmkit';
-import { getAddressListByType, delAddress } from '../webapi';
-
+import { Headline, RCi18n, Const } from 'qmkit';
+import * as webapi from './webapi';
+import { getAddressListByType, addAddress, updateAddress, defaultAddress, delAddress } from '../webapi';
+import PickupDelivery from './pickup-delivery'
 interface Iprop {
   customerId: string;
   type: 'DELIVERY' | 'BILLING';
@@ -31,23 +32,50 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     super(props);
     this.state = {
       loading: false,
-      list: []
+      pickupIsOpen: false, // pickup开关
+      list: [],
+      homeDeliveryList: [],
+      selectAddressId: '',
+
+      countryArr: [],
+      pickupList: [],
+      addOrEditPickup: false,
+      defaultCity: '',
+      pickupEditNumber: 0,
+      pickupFormData: [], // pickup 表单数据
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getAddressList();
-  }
 
+    const countryArr = await webapi.getCountryList();
+    this.setState({
+      countryArr
+    });
+
+    let pickupIsOpen = JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || null;
+    if (pickupIsOpen) {
+      this.setState({
+        pickupIsOpen
+      })
+    }
+  }
+  // 读取地址列表
   getAddressList = () => {
     this.setState({
       loading: true
     });
     getAddressListByType(this.props.customerId, this.props.type)
       .then((data) => {
+        let list = data.res.context.customerDeliveryAddressVOList;
+        let hdList = list.filter((e: any) => e.receiveType !== 'PICK_UP');
+        let pkList = list.filter((e: any) => e.receiveType === 'PICK_UP');
         this.setState({
           loading: false,
-          list: data.res.context.customerDeliveryAddressVOList
+          list,
+          homeDeliveryList: hdList,
+          pickupList: pkList,
         });
       })
       .catch(() => {
@@ -56,7 +84,15 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         });
       });
   };
-
+  // 设置默认地址
+  setDefaultAddress = (item: any) => {
+    defaultAddress({ customerId: item.customerId, deliveryAddressId: item.deliveryAddressId })
+      .then((data) => {
+        this.getAddressList();
+      })
+      .catch(() => { });
+  }
+  // 删除地址
   onDeleteAddress = (id: string) => {
     this.setState({
       loading: true
@@ -72,45 +108,193 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       });
   };
 
+  // 修改pickup address
+  updatePickupAddress = (params: any) => {
+    updateAddress(params)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === 'K-000000') {
+          this.getAddressList();
+          message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
+        } else {
+          message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
+        }
+        this.setState({
+          addOrEditPickup: false,
+          pickupLoading: false
+        });
+      })
+      .catch((err) => {
+        message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
+        this.setState({
+          addOrEditPickup: false,
+          pickupLoading: false
+        });
+      });
+  };
+
+  // 保存pickup地址
+  pickupConfirm = async () => {
+    const { customerId } = this.props;
+    const { homeDeliveryList, pickupList, pickupFormData, countryArr } = this.state;
+
+    let tempPickup = Object.keys(homeDeliveryList[0]).reduce((pre, cur) => {
+      return Object.assign(pre, { [cur]: '' });
+    }, {});
+
+    let params = Object.assign(tempPickup, pickupFormData, {
+      customerId: customerId,
+      deliveryAddressId: pickupList[0]?.deliveryAddressId || '',
+      countryId: countryArr[0].id,
+      country: countryArr[0].value,
+      consigneeName: pickupFormData.firstName + ' ' + pickupFormData.lastName,
+      consigneeNumber: pickupFormData.phoneNumber,
+      deliveryAddress: pickupFormData.address1,
+      type: 'DELIVERY',
+      isDefaltAddress: pickupFormData.isDefaltAddress ? 1 : 0,
+    });
+    this.setState({
+      pickupLoading: true
+    });
+    if (pickupList.length) {
+      // 修改地址
+      await this.updatePickupAddress(params);
+    } else {
+      // 添加地址
+      const { res } = await addAddress({
+        ...params,
+        customerId
+      });
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
+      } else {
+        message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
+      }
+      this.setState({
+        addOrEditPickup: false,
+        pickupLoading: false
+      });
+    }
+  }
+  // 更新 pickup编辑次数
+  updatePickupLoading = (flag: boolean) => {
+    this.setState({
+      pickupLoading: flag
+    });
+  };
+  // 更新 pickup编辑次数
+  updatePickupEditNumber = (num: number) => {
+    this.setState({
+      pickupEditNumber: num
+    });
+  };
+
+  // 更新pickup数据
+  updatePickupData = (data) => {
+    this.setState({
+      pickupFormData: data
+    });
+  };
+
   render() {
-    const { loading, list } = this.state;
+    const {
+      loading,
+      pickupIsOpen,
+      homeDeliveryList,
+      selectAddressId,
+
+      pickupLoading,
+      addOrEditPickup,
+      defaultCity,
+      pickupEditNumber,
+      pickupList,
+      pickupFormData
+    } = this.state;
     const { onEdit } = this.props;
     let columns = [
       {
-        title: RCi18n({id:"PetOwner.ReceiverName"}),
+        title: RCi18n({ id: "PetOwner.ReceiverName" }),
         dataIndex: 'consigneeName',
         key: 'name'
       },
       {
-        title: RCi18n({id:"PetOwner.PhoneNumber"}),
+        title: RCi18n({ id: "PetOwner.PhoneNumber" }),
         dataIndex: 'consigneeNumber',
         key: 'phone'
       },
       {
-        title: RCi18n({id:"PetOwner.PostalCode"}),
+        title: RCi18n({ id: "PetOwner.PostalCode" }),
         dataIndex: 'postCode',
         key: 'postcode'
       },
       {
-        title: RCi18n({id:"PetOwner.Address"}),
+        title: RCi18n({ id: "PetOwner.Address" }),
         dataIndex: 'address1',
         key: 'address'
+      },
+      {
+        title: RCi18n({ id: "PetOwner.Default" }),
+        dataIndex: 'isDefaltAddress',
+        key: 'default',
+        render: (text: any, record: any) => (
+          <>
+            {record.isDefaltAddress == 1 ? (
+              <Tag style={{
+                backgroundColor: 'none', border: '1px solid #e2001a', color: '#e2001a', borderColor: '#e2001a', overflow: 'hidden',
+                padding: ' 5px 1.5rem', borderRadius: '999px'
+              }}>
+                <FormattedMessage id="PetOwner.Default" />
+              </Tag>
+            ) : (
+              <>
+                <Radio.Group
+                  value={selectAddressId}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    this.setState({
+                      selectAddressId: value
+                    }, () => {
+                      this.setDefaultAddress(record);
+                    });
+                  }}
+                >
+                  <Radio value={record.deliveryAddressId}></Radio>
+                </Radio.Group>
+              </>
+            )}
+          </>
+        )
       }
     ];
 
     if (Const.SITE_NAME !== 'MYVETRECO') {
       columns.push({
-        title: RCi18n({id:"PetOwner.Operation"}),
+        title: RCi18n({ id: "PetOwner.Operation" }),
+        dataIndex: '',
         key: 'oper',
         render: (_, record) => (
           <div>
-            <Tooltip title={RCi18n({id:"PetOwner.Edit"})}>
-              <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
-                <i className="iconfont iconEdit"></i>
-              </Button>
+            {/* 编辑地址 */}
+            <Tooltip title={RCi18n({ id: "PetOwner.Edit" })}>
+              {record.receiveType === 'PICK_UP' ? (
+                <Button type="link" size="small" onClick={() => {
+                  this.setState({
+                    addOrEditPickup: true,
+                    defaultCity: record.city
+                  });
+                }}>
+                  <i className="iconfont iconEdit"></i>
+                </Button>
+              ) : (
+                <Button type="link" size="small" onClick={() => onEdit({ ...NEW_ADDRESS_TEMPLATE, ...record })}>
+                  <i className="iconfont iconEdit"></i>
+                </Button>
+              )}
             </Tooltip>
-            {record.canDelFlag && <Popconfirm placement="topRight" title={RCi18n({id:"PetOwner.DeleteThisItem"})} onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText={RCi18n({id:"PetOwner.Confirm"})} cancelText={RCi18n({id:"PetOwner.Cancel"})}>
-              <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
+
+            {/* 删除地址 */}
+            {record.canDelFlag && <Popconfirm placement="topRight" title={RCi18n({ id: "PetOwner.DeleteThisItem" })} onConfirm={() => this.onDeleteAddress(record.deliveryAddressId)} okText={RCi18n({ id: "PetOwner.Confirm" })} cancelText={RCi18n({ id: "PetOwner.Cancel" })}>
+              <Tooltip title={RCi18n({ id: "PetOwner.Delete" })}>
                 <Button type="link" size="small">
                   <i className="iconfont iconDelete"></i>
                 </Button>
@@ -123,16 +307,79 @@ export default class DeliveryList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        {Const.SITE_NAME !== 'MYVETRECO' && <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
-          <FormattedMessage id="Subscription.AddNew" />
-        </Button>}
+        {/* homeDelivery address */}
+        <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+          <h3 style={{ marginRight: '1rem', display: 'inline-block', fontSize: '18px' }}><FormattedMessage id="Subscription.HomeDelivery" /></h3>
+          {Const.SITE_NAME !== 'MYVETRECO' && <Button type="primary" onClick={() => onEdit(NEW_ADDRESS_TEMPLATE)} style={{ marginBottom: 10 }}>
+            <FormattedMessage id="Subscription.AddNew" />
+          </Button>}
+        </div>
         <Table
           rowKey="deliveryAddressId"
           loading={loading}
           columns={columns}
-          dataSource={list}
+          dataSource={homeDeliveryList}
           pagination={false}
         />
+
+        {/* pickup address */}
+        {pickupIsOpen ? (
+          <>
+            <div style={{ marginTop: '2rem', marginBottom: '1rem' }}>
+              <h3 style={{ marginRight: '1rem', display: 'inline-block', fontSize: '18px' }}><FormattedMessage id="Subscription.PickupDelivery" /></h3>
+              {pickupList.length ? null : (
+                <Button type="primary" onClick={() => {
+                  this.setState({
+                    addOrEditPickup: true,
+                    defaultCity: ''
+                  });
+                }}>
+                  <FormattedMessage id="Subscription.AddPickup" />
+                </Button>
+              )}
+            </div>
+            <Table
+              rowKey="deliveryAddressId"
+              columns={columns}
+              dataSource={pickupList}
+              pagination={false}
+            />
+
+            {/* pickup弹框 */}
+            <Modal
+              width={650}
+              title={pickupList ? <FormattedMessage id="Subscription.ChangePickup" /> : <FormattedMessage id="Subscription.AddPickup" />}
+              visible={addOrEditPickup}
+              confirmLoading={pickupLoading}
+              onOk={() => this.pickupConfirm()}
+              onCancel={() => {
+                this.setState({
+                  addOrEditPickup: false
+                });
+              }}
+            >
+              {addOrEditPickup ? (
+                <Spin spinning={pickupLoading}>
+                  <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                    <Col style={{ width: '100%' }}>
+                      <PickupDelivery
+                        key={defaultCity}
+                        initData={pickupFormData}
+                        pickupAddress={pickupList}
+                        defaultCity={defaultCity}
+                        updatePickupLoading={this.updatePickupLoading}
+                        updatePickupEditNumber={this.updatePickupEditNumber}
+                        updateData={this.updatePickupData}
+                        pickupEditNumber={pickupEditNumber}
+                      />
+                    </Col>
+                  </Row>
+                </Spin>
+              ) : null}
+            </Modal>
+          </>
+        ) : null}
+
       </div>
     );
   }

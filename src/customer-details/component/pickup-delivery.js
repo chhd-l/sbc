@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import IMask from 'imask';
 import SearchSelection from './search-selection';
-// import { validData, formatMoney, getDeviceType } from '@/utils/utils';
-import './pickup-delivery.less';
 import { Spin } from 'antd';
-import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
-import * as webapi from '../webapi';
+import { cache, RCi18n } from 'qmkit';
+import * as webapi from './webapi';
+
+import './pickup-delivery.less';
 
 class DeliveryMethod extends React.Component {
   static defaultProps = {
     initData: null,
-    isLogin: true,
     defaultCity: '',
     pickupAddress: [],
     pickupEditNumber: 0,
+    updatePickupLoading: () => { },
     updatePickupEditNumber: () => { },
     updateData: () => { }
   };
@@ -76,8 +76,6 @@ class DeliveryMethod extends React.Component {
     };
   }
   async componentDidMount() {
-    // this.sendMsgToIframe();
-
     let initData = this.props.initData;
     this.setState(
       {
@@ -87,9 +85,6 @@ class DeliveryMethod extends React.Component {
 
     // 监听iframe的传值
     window.addEventListener('message', (e) => {
-      // console.log('666 ★ 地图返回 type: ', e?.data?.type);
-      // console.log('666 ★ 地图返回 loading: ', e?.data?.loading);
-
       // 地图上选择快递公司后返回
       if (e?.data?.type == 'get_delivery_point') {
         const { pickupForm } = this.state;
@@ -122,12 +117,12 @@ class DeliveryMethod extends React.Component {
           },
           () => {
             let sitem =
-              sessionStorage.getItem('rc-homeDeliveryAndPickup') || null;
+              sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
             if (sitem) {
               sitem = JSON.parse(sitem);
               sitem['pickup'] = obj;
               sessionStorage.setItem(
-                'rc-homeDeliveryAndPickup',
+                'rc-portal-homeDeliveryAndPickup',
                 JSON.stringify(sitem)
               );
             }
@@ -152,7 +147,7 @@ class DeliveryMethod extends React.Component {
       }
     });
 
-    let sitem = sessionStorage.getItem('rc-homeDeliveryAndPickup') || null;
+    let sitem = sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
     sitem = JSON.parse(sitem);
 
     let defaultCity = this.props.defaultCity;
@@ -160,17 +155,13 @@ class DeliveryMethod extends React.Component {
 
     // 有默认city且无缓存 或者 有缓存
     let pickupEditNumber = this.props.pickupEditNumber;
-    if (
-      (defaultCity && !sitem) ||
-      (defaultCity && pickupEditNumber == 0) ||
-      pickupEditNumber > 0
-    ) {
-      // 没有默认城市但是有缓存
+    if ((defaultCity && !sitem) || (defaultCity && pickupEditNumber == 0) || pickupEditNumber > 0) {
+      // 有默认城市但没有缓存
       defaultCity
         ? (defaultCity = defaultCity)
         : (defaultCity = sitem?.cityData?.city);
       let res = await webapi.pickupQueryCity(defaultCity);
-      let robj = res?.context?.pickUpQueryCityDTOs || [];
+      let robj = res?.res?.context?.pickUpQueryCityDTOs || [];
       if (robj) {
         this.handlePickupCitySelectChange(robj[0]);
       } else {
@@ -207,6 +198,7 @@ class DeliveryMethod extends React.Component {
         }
       );
     }
+    this.props.updatePickupLoading(false);
   }
   getCurrencySymbol = () => {
     let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
@@ -250,8 +242,6 @@ class DeliveryMethod extends React.Component {
       searchNoResult: false
     });
     try {
-      console.log('666 >>> data: ', data);
-
       // 向子域发送数据
       this.sendMsgToIframe('close');
 
@@ -261,11 +251,9 @@ class DeliveryMethod extends React.Component {
 
       data['dimensions'] = null;
       data['weight'] = null;
-      console.log('666 >>> data: ', data);
       // 根据不同的城市信息查询
       res = await webapi.pickupQueryCityFee(data);
-      console.log('666 >>> res: ', res.res);
-      if (res.res.context?.tariffs.length) {
+      if (res?.res?.context?.tariffs.length) {
 
         // 'COURIER'=> home delivery、'PVZ'=> pickup
         let obj = res.res.context.tariffs;
@@ -318,7 +306,7 @@ class DeliveryMethod extends React.Component {
                 selectedItem: Object.assign({}, item)
               },
               () => {
-                sessionStorage.setItem('rc-homeDeliveryAndPickup', JSON.stringify(item));
+                sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(item));
 
                 // 只显示pickup
                 this.setItemStatus('pickup');
@@ -348,6 +336,7 @@ class DeliveryMethod extends React.Component {
       this.setState({
         pickLoading: false
       });
+      this.props.updatePickupLoading(false);
     }
   };
   // 单选按钮选择
@@ -368,7 +357,7 @@ class DeliveryMethod extends React.Component {
         selectedItem: Object.assign({}, sitem)
       },
       () => {
-        sessionStorage.setItem('rc-homeDeliveryAndPickup', JSON.stringify(sitem));
+        sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(sitem));
         this.setItemStatus(val);
       }
     );
@@ -410,7 +399,7 @@ class DeliveryMethod extends React.Component {
 
     // 再次编辑地址的时候，从缓存中取city数据
     if (pickupEditNumber > 0) {
-      let sobj = sessionStorage.getItem('rc-homeDeliveryAndPickup') || null;
+      let sobj = sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
       sobj = JSON.parse(sobj);
       let cityData = sobj?.cityData;
       pkobj['provinceCode'] = cityData?.regionIsoCode || '';
@@ -548,7 +537,7 @@ class DeliveryMethod extends React.Component {
             <>
               <textarea
                 className="rc_input_textarea"
-                placeholder={<FormattedMessage id="Subscription.Deliverycomment" />}
+                placeholder={RCi18n({ id: 'Subscription.Deliverycomment' })}
                 id={`${item.fieldKey}ShippingPickup`}
                 value={pickupForm[item.fieldKey] || ''}
                 onChange={(e) => this.inputChange(e)}
@@ -576,7 +565,7 @@ class DeliveryMethod extends React.Component {
         {/* 输入电话号码提示 */}
         {item.fieldKey == 'phoneNumber' && (
           <span className="ui-lighter">
-            <FormattedMessage id="Subscription.examplePhone" />
+            <FormattedMessage id="Subscription.ExamplePhone" />
           </span>
         )}
         {/* 输入提示 */}
@@ -644,7 +633,7 @@ class DeliveryMethod extends React.Component {
                     value={pickupCity || ''}
                     freeText={false}
                     name="pickupCity"
-                    placeholder="Введите ваш город"
+                    placeholder={RCi18n({ id: 'Subscription.FillCityOfDelivery' })}
                     isLoadingList={false}
                     isBottomPaging={true}
                   />
@@ -657,7 +646,7 @@ class DeliveryMethod extends React.Component {
                 </div>
                 {searchNoResult && (
                   <div className="text-danger-2" style={{ paddingTop: '.5rem' }}>
-                    <FormattedMessage id="Subscription.noPickup" />
+                    <FormattedMessage id="Subscription.NoPickup" />
                   </div>
                 )}
               </div>
@@ -692,7 +681,7 @@ class DeliveryMethod extends React.Component {
                 <div className="info_tit">
                   <div className="tit_left">{pickupForm.pickupName}</div>
                   <div className="tit_right">
-                    {currencySymbol+' '+pickupForm.pickupPrice}
+                    {currencySymbol + ' ' + pickupForm.pickupPrice}
                   </div>
                 </div>
                 <div className="infos">
@@ -704,7 +693,7 @@ class DeliveryMethod extends React.Component {
                     className="rc-btn rc-btn--sm rc-btn--two mr-0"
                     onClick={this.showPickupDetailDialog}
                   >
-                    <FormattedMessage id="Subscription.moreDetails" />
+                    <FormattedMessage id="Subscription.MoreDetails" />
                   </button>
                   <button
                     className="rc-btn rc-btn--sm rc-btn--one"
@@ -729,7 +718,7 @@ class DeliveryMethod extends React.Component {
                       {pickupForm.pickupName} ({pickupForm.pickupCode})
                     </div>
                     <div className="pk_detail_price">
-                      {currencySymbol+' '+pickupForm.pickupPrice}
+                      {currencySymbol + ' ' + pickupForm.pickupPrice}
                     </div>
                   </div>
                   <div className="pk_detail_address pk_addandtime">

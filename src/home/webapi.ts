@@ -114,3 +114,17 @@ export const getPrescriberRecommentCodeUseView = (params) => {
 
 
 /* ================================================================================================================ */
+
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
+export function getDeliveryOptions() {
+  return Fetch<TResult>('/system/config/listByStoreIdAndKey', {
+    method: 'POST',
+    body: JSON.stringify({
+      configKey: 'delivery_option'
+    })
+  });
+}

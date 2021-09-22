@@ -99,8 +99,16 @@ class ShippingFeeSetting extends Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
+          let doptions = res.context.configVOList;
+          let pickupIsOpen = false;
+          doptions.map((e: any) => {
+            if (e.configType === 'pick_up_delivery') {
+              e.status === 1 ? pickupIsOpen = true : pickupIsOpen = false;
+            }
+          });
+          sessionStorage.setItem('portal-pickup-isopen', JSON.stringify(pickupIsOpen));
           this.setState({
-            deliveryOptions: res.context.configVOList,
+            deliveryOptions: doptions,
             deliveryLoading: false
           });
         } else {
@@ -222,9 +230,8 @@ class ShippingFeeSetting extends Component<any, any> {
                           <div className="status">
                             <Popconfirm
                               placement="topLeft"
-                              title={`Are you sure to ${
-                                item.status === 1 ? 'disbale' : 'enable'
-                              } this?`}
+                              title={`Are you sure to ${item.status === 1 ? 'disbale' : 'enable'
+                                } this?`}
                               disabled={disbaleDeliveryOption && item.status === 1}
                               onConfirm={() => this.enableDelivery(item.id)}
                               okText="Yes"

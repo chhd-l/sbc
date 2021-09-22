@@ -241,4 +241,26 @@ export function getTaggingList() {
   });
 }
 
+/**
+ * 根据关键字搜索城市列表
+ */
+export function pickupQueryCity(city = '') {
+  return Fetch<TResult>(
+    '/pick-up-supplier/queryCity?keyword=' + city + '',
+    {
+      method: 'Get'
+    }
+  );
+}
 
+/**
+ * 根据城市信息查询运费
+ */
+export function pickupQueryCityFee(filterParams = {}) {
+  return Fetch<TResult>('/pick-up-supplier/queryCityFee', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

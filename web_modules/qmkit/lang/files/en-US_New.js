@@ -981,14 +981,14 @@ export default {
         'Subscription.DeliveryMethod': 'Delivery Method',
 
         'Subscription.PickupAddress': 'Pickup Address',
-        'Subscription.moreDetails': 'Подробнее',
-        'Subscription.changePickup': 'Изменить пункт выдачи заказов',
-        'Subscription.addPickup': 'Выбрать пункт выдачи заказов',
-        'Subscription.pickupNoRusult': 'Пожалуйста, введите адрес, который находится в пределах зон доставки интернет-магазина. С зонами доставки Вы можете ознакомиться на странице "Условия доставки"',
-        'Subscription.noPickup': 'Для выбранного населённого пункта на данный момент ПВЗ недоступны',
-        'Subscription.fillCityOfDelivery': 'Введите ваш город',
-        'Subscription.examplePhone': 'Example: +7 (923) 456 78 90',
-        'Subscription.deliveryComment': 'Delivery comment',
+        'Subscription.MoreDetails': 'Подробнее',
+        'Subscription.ChangePickup': 'Изменить пункт выдачи заказов',
+        'Subscription.AddPickup': 'Выбрать пункт выдачи заказов',
+        'Subscription.PickupNoRusult': 'Пожалуйста, введите адрес, который находится в пределах зон доставки интернет-магазина. С зонами доставки Вы можете ознакомиться на странице "Условия доставки"',
+        'Subscription.NoPickup': 'Для выбранного населённого пункта на данный момент ПВЗ недоступны',
+        'Subscription.FillCityOfDelivery': 'Введите ваш город',
+        'Subscription.ExamplePhone': 'Example: +7 (923) 456 78 90',
+        'Subscription.Deliverycomment': 'Delivery comment',
 
     },
     Appointment: {
@@ -1524,7 +1524,8 @@ export default {
         'PetOwner.Subscription pause': 'Subscription pause',
         'PetOwner.Subscription cancel': 'Subscription cancel',
         'PetOwner.Dismiss': 'Dismiss',
-
+        'PetOwner.Default': 'Default',
+        
 
     },
     Finance: {

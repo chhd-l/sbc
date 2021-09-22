@@ -12,6 +12,7 @@ import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';*/
 
 import { cache, Const } from 'qmkit';
+import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class HelloApp extends React.Component<any, any> {
@@ -55,8 +56,26 @@ export default class HelloApp extends React.Component<any, any> {
         prescriberId: id
       });
     }
-  }
 
+    this.getDeliveryOption();
+  }
+  getDeliveryOption() {
+    webapi
+      .getDeliveryOptions()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          let doptions = res.context.configVOList;
+          let pickupIsOpen = false;
+          doptions.map((e: any) => {
+            if (e.configType === 'pick_up_delivery') {
+              e.status === 1 ? pickupIsOpen = true : pickupIsOpen = false;
+            }
+          });
+          sessionStorage.setItem('portal-pickup-isopen', JSON.stringify(pickupIsOpen));
+        }
+      }).catch(() => { });
+  }
   changePage(res) {
     this.setState(
       {

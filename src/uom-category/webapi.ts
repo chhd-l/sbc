@@ -7,29 +7,28 @@ type TResult = {
 };
 
 export function getUOMCategoryList(params: any = {}) {
-  return Promise.resolve({
-    res: {
-      code: Const.SUCCESS_CODE,
-      message: '',
-      context: {
-        total: 3,
-        content:[
-        {
-          id: 1,
-          name: 'Unit',
-          description: 'description of unit',
-        },
-        {
-          id: 2,
-          name: 'Weight',
-          description: 'description of weight',
-        },
-        {
-          id: 3,
-          name: 'Length',
-          description: 'description of length',
-        }
-      ]}
-    }
+  return Fetch<TResult>('/uomCategory/page', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function addUOMCategory(params: any = {}) {
+  return Fetch<TResult>('/uomCategory/add', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+} 
+
+export function editUOMCategory(params: any = {}) {
+  return Fetch<TResult>('/uomCategory/modify', {
+    method: 'PUT',
+    body: JSON.stringify(params)
+  });
+}
+
+export function delUOMCategory(id: number) {
+  return Fetch<TResult>(`/uomCategory/delete/${id}`, {
+    method: 'DELETE'
   });
 }

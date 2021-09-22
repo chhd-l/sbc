@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Table, Tooltip } from 'antd';
-import { Headline, BreadCrumb, RCi18n } from 'qmkit';
+import { Form, Input, Button, Table, Tooltip, Popconfirm, message } from 'antd';
+import { Headline, BreadCrumb, RCi18n, Const } from 'qmkit';
 import { useAntdTable } from 'ahooks';
-import { getUOMCategoryList } from './webapi';
+import { getUOMCategoryList, delUOMCategory } from './webapi';
 import { FormattedMessage } from 'react-intl';
 import FormModal from './components/form-modal';
 
@@ -13,28 +13,43 @@ const getTableData = ({ current, pageSize }, formData) => {
     pageNum: current - 1,
     pageSize,
     ...formData
-  }).then(data => ({ total: data.res.context?.total ?? 0, list: data.res.context?.content ?? [] }));
+  }).then(data => ({ total: data.res.context?.categories?.total ?? 0, list: data.res.context?.categories?.content ?? [] }));
 };
 
 function UomCategory(props: any) {
-  const [modalProps, setModalProps] = useState({
-    visible: false,
-    name: '',
-    description: '',
-    title: 'Add',
-    onCancel: () => setModalProps({ ...modalProps, visible: false })
-  });
-
   const { tableProps, search, loading } = useAntdTable(getTableData, {
     defaultPageSize: 10,
     form: props.form,
   });
   const { submit } = search;
+
+  const [modalProps, setModalProps] = useState({
+    visible: false,
+    id: 0,
+    name: '',
+    description: '',
+    type: 1,  //1 - add, 2 - edit
+    onCancel: () => setModalProps({ ...modalProps, visible: false }),
+    onConfirm: () => {
+      setModalProps({ ...modalProps, visible: false });
+      submit();
+    }
+  });
+
+  const deleteCategory = (id: number) => {
+    delUOMCategory(id).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        message.success('Operation successful');
+        submit();
+      }
+    });
+  };
+
   const { getFieldDecorator } = props.form;
   const columns = [
     {
       title: 'UOM category name',
-      dataIndex: 'name',
+      dataIndex: 'uomCategoryName',
       key: 'name',
     },
     {
@@ -50,12 +65,14 @@ function UomCategory(props: any) {
           <Tooltip placement="top" title={<FormattedMessage id="Product.Edit"/>}>
             <a
               className="iconfont iconEdit"
-              onClick={() => setModalProps({ ...modalProps, visible: true, name: record.name, description: record.description })}
+              onClick={() => setModalProps({ ...modalProps, visible: true, type: 2, id: record.id, name: record.uomCategoryName, description: record.description })}
             ></a>
           </Tooltip>
-          <Tooltip placement="top" title={<FormattedMessage id="Product.delete"/>}>
-            <a className="iconfont iconDelete" style={{ marginLeft: 10 }}></a>
-          </Tooltip>
+          <Popconfirm placement="topLeft" title="Are you sure you want to delete this item?" onConfirm={() => deleteCategory(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+            <Tooltip placement="top" title={<FormattedMessage id="Product.delete"/>}>
+              <a className="iconfont iconDelete" style={{ marginLeft: 10 }}></a>
+            </Tooltip>
+          </Popconfirm>
         </div>
       )
     }
@@ -78,7 +95,7 @@ function UomCategory(props: any) {
         <div style={{margin: '10px 0', textAlign:'right'}}>
           <Button 
             type="primary"
-            onClick={() => setModalProps({ ...modalProps, visible: true, name: '', description: '' })}
+            onClick={() => setModalProps({ ...modalProps, visible: true, type: 1, id: 0, name: '', description: '' })}
           >
             Create new UOM category
           </Button>

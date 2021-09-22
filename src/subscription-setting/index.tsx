@@ -23,7 +23,7 @@ import * as webapi from './webapi';
 import { FormattedMessage,injectIntl } from 'react-intl';
 import './index.css'
 import { string } from 'prop-types';
-import set = Reflect.set;
+const set = Reflect.set;
 
 const FormItem = Form.Item;
  class Subscription extends Component<any, any> {

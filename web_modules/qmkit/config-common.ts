@@ -138,6 +138,9 @@ const Common = {
 
   spuMaxSku: 100,
 
+  // PHRASE 远程拉取language项目id
+  PHRASE_PROJECT_ID: 'b16c5e4ed825ad40972b1d8379cb733e',
+
   // STG  Okta Config
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
   REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",

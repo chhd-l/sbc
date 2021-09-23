@@ -1,5 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 import React from 'react';
+import PostalCodeMsg from '../../../biz/PostalCodeMsg';
 
 /**
  * 多语言英文---新增
@@ -1513,7 +1514,7 @@ export default {
         'PetOwner.Subscription pause': 'Subscription pause',
         'PetOwner.Subscription cancel': 'Subscription cancel',
         'PetOwner.Dismiss': 'Dismiss',
-
+        'PetOwner.PostalCodeMsg': '* Delivery not available in the area.',
 
     },
     Finance: {
@@ -2353,6 +2354,8 @@ export default {
         "Setting.EditConsent": "Edit consent",
         "Setting.requiredFields": "Please fill in required field!",
         'Setting.Operator': 'Operator',
+        'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
+
     },
     Menu: {
         "Menu.Appointment": "Appointment",

@@ -12,8 +12,13 @@ import {
   Button,
   message,
 } from 'antd';
-import { cache, RCi18n } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 const { TextArea } = Input;
+import {
+    getPostCodeBlockList,
+    validPostCodeBlock,
+    editPostCodeBlockList,
+} from '../../webapi';
 import './index.less';
 
 const { Option } = Select;
@@ -26,8 +31,8 @@ export default class PostalCodeModal extends React.Component<any, any>{
         this.state = {
             confirmLoading: false,
             dataSource: [],
-            editList: [], // 已存在待编辑List
-            ruleNo: 0,
+            editData: {}, // 已存在黑名单对象
+            postalCodeAlert : '',
             count: 1,
             loading: false,
             popconfirmVisible: false,
@@ -36,35 +41,77 @@ export default class PostalCodeModal extends React.Component<any, any>{
     }
 
     componentDidMount() {
+        const {
+            addressDisplaySettingId
+        } = this.props;
         // init数据
-        this.initList();
+        this.initList(addressDisplaySettingId);
     }
 
     // 初始化数据
-    initList = async () => {
-
+    initList = async (addressDisplaySettingId) => {
+        if (!addressDisplaySettingId) return;
         this.setState({ loading: true});
-        await setTimeout(() => {
+        let { res } = await getPostCodeBlockList(addressDisplaySettingId);
+        this.setState({ loading: false});
+
+        if(res.code === Const.SUCCESS_CODE){
             this.setState({
-                editList: [],
-                dataSource: [
+                editData: res.context ?? {},
+                dataSource: res.context?.context?.list ?? [
                     {
                         id: 0,
                         operator: '',
                         postalCode: '',
                     }
-                ],
-                loading: false,
+                ], // 接口数据为空，默认添加一条数据
+                postalCodeAlert: res.context?.context?.alert ?? RCi18n({id: 'Setting.postalCodeAlert'}),
             })
-        }, 2000)
+        }
     }
 
-    handleOk = (values) => {
+    handleOk = async (values) => {
         console.log('handleOk', values);
+        const {
+            addressDisplaySettingId
+        } = this.props;
+        let {
+            editData,
+        } = this.state;
+        let context = JSON.stringify({
+            list: values.mappings,
+            alert: values.alert,
+        })
+        let params = {
+            addressDisplaySettingId,
+            context,
+            id: editData?.id || undefined
+        }
 
-        message.success(RCi18n({id:'Product.OperateSuccessfully'}));
-        this.cancel();
-        this.handleCancel();
+        this.setState({confirmLoading: true});
+
+        let {res} = await editPostCodeBlockList(params);
+
+        this.setState({confirmLoading: false});
+
+        if(res.code === Const.SUCCESS_CODE){
+            message.success(RCi18n({id:'Product.OperateSuccessfully'}));
+            this.cancel();
+            this.handleCancel();
+        }else{
+
+        }
+
+    };
+
+    confirm = () => {
+        this.props.form.validateFieldsAndScroll( async (err, values) => {
+            console.log('confirm err', err);
+            console.log('confirm values', values);
+            if (!err){
+                this.handleOk(values);
+            }
+        });
     };
 
     handleCancel = () => {
@@ -104,34 +151,34 @@ export default class PostalCodeModal extends React.Component<any, any>{
                 render: (rowInfo, record, index) => {
                     return (
                       <div>
-                          <Form.Item key={record.id}>
+                          <Form.Item key={index}>
                               {
-                                  getFieldDecorator(`mappings[${index}].operator`, {
+                                  getFieldDecorator(`mappings[${index}].rule`, {
                                       rules: [
                                           {
                                               required: true,
                                               message: 'Please input operator!'
                                           },
                                       ],
-                                      initialValue: record.operator || ''
+                                      initialValue: record.rule  || ''
                                   })(
                                     <Select style={{width: '120px'}}>
-                                        <Option value="equal">=</Option>
-                                        <Option value="beginWith">begin with</Option>
+                                        <Option value={1}>=</Option>
+                                        <Option value={2}>begin with</Option>
                                     </Select>
                                   )
                               }
 
                           </Form.Item>
-                          <Form.Item>
-                              {
-                                  getFieldDecorator(`mappings[${index}].id`, {
-                                      initialValue: record.id
-                                  })(
-                                    <Input hidden />
-                                  )
-                              }
-                          </Form.Item>
+                          {/*<Form.Item>*/}
+                          {/*    {*/}
+                          {/*        getFieldDecorator(`mappings[${index}].id`, {*/}
+                          {/*            initialValue: record.id*/}
+                          {/*        })(*/}
+                          {/*          <Input hidden />*/}
+                          {/*        )*/}
+                          {/*    }*/}
+                          {/*</Form.Item>*/}
 
                       </div>
                     );
@@ -147,7 +194,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                         key={record.id}
                       >
                           {
-                              getFieldDecorator(`mappings[${index}].postalCode`, {
+                              getFieldDecorator(`mappings[${index}].value`, {
                                   rules: [
                                       {
                                           required: true,
@@ -158,6 +205,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                                           message: RCi18n({id:"PetOwner.theCorrectPostCode"})
                                       },
                                   ],
+                                  initialValue: record.value  || ''
                               })(
                                 <Input  placeholder='Postal Code' />
                               )
@@ -196,20 +244,6 @@ export default class PostalCodeModal extends React.Component<any, any>{
         ]
     };
 
-    confirm = () => {
-        this.props.form.validateFieldsAndScroll( async (err, values) => {
-            console.log('confirm err', err);
-            console.log('confirm values', values);
-            if (!err){
-                message.success(RCi18n({id:'Product.OperateSuccessfully'}));
-                this.cancel();
-                this.handleCancel();
-            }
-
-        });
-
-    };
-
     showPopconfirm = () => {
         this.setState({ popconfirmVisible: true });
     }
@@ -223,7 +257,6 @@ export default class PostalCodeModal extends React.Component<any, any>{
     };
 
     handleVisibleChange = visible => {
-        console.log('visible', visible)
         if (!visible) {
             this.setState({ visible });
             return;
@@ -232,39 +265,66 @@ export default class PostalCodeModal extends React.Component<any, any>{
 
         this.props.form.validateFieldsAndScroll( async (err, values) => {
             if (!err) {
+                console.log('values', values);
+                this.setState({confirmLoading: true});
 
                 // 1 提交之前校验添加的邮编黑名单，是否对已有订单产生影响
-                this.setState({confirmLoading: true});
-                setTimeout(() => {
-                    this.setState({
-                        condition: !this.state.condition,
-                        confirmLoading: false,
-                    }, () => {
-                        // 1.1 校验成功直接提交
-                        if (this.state.condition) {
-                            this.handleOk(values); // next step
-                        } else {
-                            // 1.2 校验失败显示确认框，TODO
-                            const orderPostalCodeBlacklist = ['9999', '8888'];
-                            const orderPostalCodeAlertArr = values.mappings.filter(item => orderPostalCodeBlacklist.includes(item.postalCode));
-                            if (orderPostalCodeAlertArr.length > 0){
-                                // 高亮影响order的postalCode
-                                orderPostalCodeAlertArr.forEach((item, index) => {
-                                    setFields({
-                                        [`mappings[${index}].postalCode`]: {
-                                            value: values.mappings[index].postalCode,
-                                            errors: [new Error('')],
-                                        }
-                                    })
+                let { res } = await validPostCodeBlock({
+                    list: values.mappings,
+                })
+                this.setState({confirmLoading: false})
+                if(res.code === Const.SUCCESS_CODE){
+                    const isVerify = !!(res.context?.validFlag);
+                    // 1就是成功 0就是失败
+                    if (isVerify){
+                        this.handleOk(values); // next step
+                    }else {
+                        // 1.2 校验失败显示确认框
+                        const orderPostalCodeBlacklist = res.context?.list ?? [];
+                        const orderPostalCodeAlertArr = values.mappings.filter(item => orderPostalCodeBlacklist.includes(item.value));
+                        if (orderPostalCodeAlertArr.length > 0){
+                            // 高亮影响order的postalCode
+                            orderPostalCodeAlertArr.forEach((item, index) => {
+                                setFields({
+                                    [`mappings[${index}].value`]: {
+                                        value: values.mappings[index].value,
+                                        errors: [new Error('')],
+                                    }
                                 })
-                            }
-
-                            this.showPopconfirm();
+                            })
                         }
-                    })
-                }, 2000)
 
+                        this.showPopconfirm();
+                    }
+                    // this.setState({
+                    //     condition: !!(res.context?.validFlag),
+                    // }, () => {
+                    //     // 1.1 校验成功直接提交
+                    //     if (this.state.condition) {
+                    //         this.handleOk(values); // next step
+                    //     }
+                    //     else {
+                    //         // 1.2 校验失败显示确认框
+                    //         const orderPostalCodeBlacklist = res.context?.list ?? [];
+                    //         const orderPostalCodeAlertArr = values.mappings.filter(item => orderPostalCodeBlacklist.includes(item.value));
+                    //         if (orderPostalCodeAlertArr.length > 0){
+                    //             // 高亮影响order的postalCode
+                    //             orderPostalCodeAlertArr.forEach((item, index) => {
+                    //                 setFields({
+                    //                     [`mappings[${index}].value`]: {
+                    //                         value: values.mappings[index].value,
+                    //                         errors: [new Error('')],
+                    //                     }
+                    //                 })
+                    //             })
+                    //         }
+                    //
+                    //         this.showPopconfirm();
+                    //     }
+                    // })
+                }else {
 
+                }
             }else {
                 return;
             }
@@ -303,6 +363,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
             confirmLoading,
             popconfirmVisible,
             condition,
+            postalCodeAlert,
         } = this.state;
 
         let columns = this.getColumns();
@@ -355,14 +416,14 @@ export default class PostalCodeModal extends React.Component<any, any>{
                         <div className='msg-title'>Alert Message when validation fails:</div>
                         <div className='msg-input'>
                             {
-                                getFieldDecorator('alertMessage', {
+                                getFieldDecorator('alert', {
                                     rules: [
                                         {
                                             required: true,
                                             message: 'Please input Alert Message!'
                                         },
                                     ],
-                                    initialValue: 'Sorry we are not able to deliver your order in this area.',
+                                    initialValue: postalCodeAlert || '',
                                 })(
                                   <TextArea autoSize={{ minRows: 1, maxRows: 3 }} />
                                 )

@@ -91,12 +91,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       {
         title: RCi18n({id:"PetOwner.PostalCode"}),
         dataIndex: 'postCode',
-        key: 'postcode'
-      },
-      {
-        title: RCi18n({id:"PetOwner.Address"}),
-        dataIndex: 'address1',
-        key: 'address',
+        key: 'postcode',
         render: (text, record) => {
           return (
             <div style={{color: '#e2001a'}}>
@@ -106,6 +101,12 @@ export default class DeliveryList extends React.Component<Iprop, any> {
             </div>
           )
         },
+
+      },
+      {
+        title: RCi18n({id:"PetOwner.Address"}),
+        dataIndex: 'address1',
+        key: 'address',
       }
     ];
 

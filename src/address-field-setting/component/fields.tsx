@@ -56,7 +56,6 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
-
   onChangeModalField = (formField: any) => {
     const { field } = this.state;
     this.setState({
@@ -220,6 +219,8 @@ export default class Fields extends React.Component<any, any> {
       }
     };
 
+    const addressDisplaySettingId = manualFieldList.find(item => item.fieldKey === 'postCode')?.id;
+
     return (
       <div className='fields-wrap'>
         <Tabs activeKey={activeKey} onChange={onChangeActiveKey}>
@@ -274,6 +275,7 @@ export default class Fields extends React.Component<any, any> {
           visiblePostalCode
             ? (
               <PostalCodeModal
+                addressDisplaySettingId={addressDisplaySettingId}
                 visible={visiblePostalCode}
                 onCancel={this.handlePostalCodeCancel}
               />

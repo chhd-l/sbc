@@ -31,6 +31,7 @@ class PickupMap extends Component<any, any> {
 
     // 页面加载完后打开地图
     window.addEventListener('load', () => {
+      console.log('666 >>> 页面加载完后打开地图');
       this.setState({
         mapLoading: false
       });
@@ -40,7 +41,7 @@ class PickupMap extends Component<any, any> {
       window.addEventListener(
         'message',
         (e) => {
-          // console.log('666 ★ 接收组件发来的数据: ', e.data?.msg);
+          console.log('666 >>> 接收组件发来的数据: ', e.data?.msg);
           if (e?.data?.msg) {
             let msg = e.data.msg;
             if (msg == 'clearMap') {
@@ -89,7 +90,7 @@ class PickupMap extends Component<any, any> {
     return (
       <>
         <Spin spinning={mapLoading}>
-          <div className={`pickup_map_box`}>
+          <div className="pickup_map_box">
             <div id="kaktusMap"></div>
           </div>
         </Spin>

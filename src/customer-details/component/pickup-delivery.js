@@ -300,6 +300,7 @@ class PickupDelivery extends React.Component {
               cityData: data,
               homeAndPickup: hdpu
             };
+            
             this.setState(
               {
                 pickupCity: data.city,
@@ -437,6 +438,7 @@ class PickupDelivery extends React.Component {
         msg = pickupCity;
         break;
     }
+    
     childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
   };
   // 编辑pickup

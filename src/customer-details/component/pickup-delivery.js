@@ -8,7 +8,7 @@ import * as webapi from './webapi';
 
 import './pickup-delivery.less';
 
-class DeliveryMethod extends React.Component {
+class PickupDelivery extends React.Component {
   static defaultProps = {
     initData: null,
     defaultCity: '',
@@ -569,9 +569,9 @@ class DeliveryMethod extends React.Component {
           </span>
         )}
         {/* 输入提示 */}
-        {pickupErrMsgs[item.fieldKey] && item.requiredFlag == 1 ? (
+        {/* {pickupErrMsgs[item.fieldKey] && item.requiredFlag == 1 ? (
           <div className="text-danger-2">{pickupErrMsgs[item.fieldKey]}</div>
-        ) : null}
+        ) : null} */}
       </>
     );
   };
@@ -793,4 +793,4 @@ class DeliveryMethod extends React.Component {
   }
 }
 
-export default DeliveryMethod;
+export default PickupDelivery;

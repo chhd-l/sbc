@@ -1,9 +1,25 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
+import { BreadCrumb, Headline, Const, history, SelectGroup } from 'qmkit';
+import {
+  Switch,
+  Modal,
+  Button,
+  Form,
+  Input,
+  Row,
+  Col,
+  message,
+  Select,
+  Radio,
+  Alert,
+  InputNumber,
+  Tabs,
+  Spin,
+} from 'antd';
 
 import * as webapi from './webapi';
 import { FormattedMessage,injectIntl } from 'react-intl';
+import './index.css'
 
 const FormItem = Form.Item;
  class Subscription extends Component<any, any> {
@@ -18,6 +34,8 @@ const FormItem = Form.Item;
         cardExpirationId: null,
         cardExpirationStatus: 0,
         cardExpirationValue: 0,
+        cardExpirationTempValues:[],
+        cardExpirationValues:[],
         switchProductId:null,
         switchProductStatus:0,
         switchProductValue:0,
@@ -28,10 +46,16 @@ const FormItem = Form.Item;
         emailPaymentStatus:0,
         emailpaymentValue:0,
       },
+      cardExpirationList:[],
       loading:false,
     };
   }
   componentDidMount() {
+    let cardExpirationList=[];
+    for(let i=0;i<15;i++){
+      cardExpirationList.push({name:i+1,value:String(i+1)})
+    }
+    this.setState({cardExpirationList:cardExpirationList})
     this.getSettingConfig();
   }
   settingFormChange = ({ field, value }) => {
@@ -74,7 +98,8 @@ const FormItem = Form.Item;
           if (cardExpirationConfig) {
             settingForm.cardExpirationId = cardExpirationConfig.id;
             settingForm.cardExpirationStatus = cardExpirationConfig.status;
-            settingForm.cardExpirationValue = cardExpirationConfig.context;
+            settingForm.cardExpirationValues = cardExpirationConfig.context.split(',');
+            settingForm.cardExpirationTempValues = settingForm.cardExpirationValues;
           }
           if (switchProductConfig) {
             settingForm.switchProductId = switchProductConfig.id;
@@ -105,6 +130,14 @@ const FormItem = Form.Item;
   };
   updateSetting = () => {
     const { settingForm } = this.state;
+    let cardExpirationValue='';
+    for(let i=0;i<settingForm.cardExpirationValues.length;i++){
+      if(i==0){
+        cardExpirationValue=settingForm.cardExpirationValues[i]
+      }else{
+        cardExpirationValue +=','+settingForm.cardExpirationValues[i]
+      }
+    }
     let params = {
       requestList: [
         {
@@ -113,7 +146,7 @@ const FormItem = Form.Item;
           status: settingForm.newOrdersStatus ? 1 : 0
         },
         {
-          context: settingForm.cardExpirationValue,
+          context: cardExpirationValue,
           id: settingForm.cardExpirationId,
           status: settingForm.cardExpirationStatus ? 1 : 0
         },
@@ -155,7 +188,7 @@ const FormItem = Form.Item;
       });
   };
   render() {
-    const { title, settingForm } = this.state;
+    const { title, settingForm,cardExpirationList } = this.state;
     return (
       <Spin spinning={this.state.loading}>
         <BreadCrumb />
@@ -220,22 +253,65 @@ const FormItem = Form.Item;
                 {settingForm.cardExpirationStatus ? (
                   <Col span={20}>
                     <div style={styles.inputStyle}>
-                      <InputNumber
-                        precision={0}
-                        min={1}
-                        max={9999}
-                        value={settingForm.cardExpirationValue}
-                        onChange={(value) =>
-                          this.settingFormChange({
-                            field: 'cardExpirationValue',
+                      <span onMouseDown={(e) => { e.preventDefault(); return false; }}>
+                        <Select
+                          mode="multiple"
+                          ref="cardSelect"
+                          showArrow={true}
+                          maxTagPlaceholder={()=>{return null}}
+                          style={{width:90}}
+                          dropdownRender={menu => (
+                            <div>
+                              {menu}
+                              <div style={{display:'flex',width:'100%',justifyContent:'center'}}>
+                                <Button type="primary" onClick={(e)=>
+                                {
+                                  const cardSelect=this.refs.cardSelect as any;
+                                  this.settingFormChange({
+                                    field: 'cardExpirationValues',
+                                    value: settingForm.cardExpirationTempValues
+                                  })
+                                  cardSelect.blur()
+                                }
+                                }>Save</Button>
+                              </div>
+                            </div>
+                          )}
+                          value={settingForm.cardExpirationTempValues}
+                          maxTagCount={0}
+                          maxTagTextLength={0}
+                          onChange={(value) =>this.settingFormChange({
+                            field: 'cardExpirationTempValues',
                             value: value
-                          })
-                        }
-                      />
+                          })}
+                        >
+                          {cardExpirationList.map((item)=>(
+                            <Select.Option value={item.value}>{item.name}</Select.Option>
+                          ))}
+                        </Select>
+                      </span>
                       <span style={{ marginLeft: 10 }}>
                         <FormattedMessage id="Subscription.Days2" />
                       </span>
                     </div>
+                    {settingForm.cardExpirationValues.length>0?(
+                      <div className="card-tags-list">
+                        {settingForm.cardExpirationValues.map((item)=>(
+                          <div className="card-tags" >
+                            {item}<span  className="close_search_errmsg" onClick={(e)=>{
+                            const tags = settingForm.cardExpirationValues.filter(tag => tag !== item);
+                            this.settingFormChange({
+                              field: 'cardExpirationValues',
+                              value: tags
+                            })
+                            this.settingFormChange({
+                              field: 'cardExpirationTempValues',
+                              value: tags
+                            })
+                          }}/>
+                          </div>))}
+                      </div>
+                    ):null}
                   </Col>
                 ) : null}
               </Row>

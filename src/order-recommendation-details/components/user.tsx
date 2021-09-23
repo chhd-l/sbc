@@ -30,6 +30,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
 
   render() {
     const { detailProductList } = this.props.relaxProps;
+    let linkBaseUrl = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG) || '{}').supplierWebsite ?? '';
+    if (!linkBaseUrl.endsWith('/')) {
+      linkBaseUrl += '/';
+    }
 
     return (
       <div className="user">
@@ -51,7 +55,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           <span>
           {RCi18n({id:'Order.Link'})}:{' '}
             <p style={{ display: 'contents', wordBreak: 'break-all' }}>
-              {JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).supplierWebsite}
+              {linkBaseUrl}
               recommendation/
               {detailProductList.base64Id ? detailProductList.base64Id : '--'}
             </p>

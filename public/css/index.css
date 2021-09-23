@@ -1,38 +1,49 @@
 /*全局覆盖antd左对齐*/
-.ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table-self tbody td {
+
+.ant-table-thead>tr>th, .ant-table-tbody>tr>td, .ant-table-self tbody td {
     text-align: left;
 }
+
 /*覆盖面包屑颜色*/
-#root .ant-layout .ant-breadcrumb{
-    height:45px;
-    padding:12px 0 0 10px;
+
+#root .ant-layout .ant-breadcrumb {
+    height: 45px;
+    padding: 12px 0 0 10px;
     margin-bottom: 0;
     margin-left: 12px;
     margin-right: 12px;
     background-color: #fff;
 }
+
 /*表格checkBox的对其*/
-#root .ant-table-tbody > tr > td.ant-table-selection-column {
+
+#root .ant-table-tbody>tr>td.ant-table-selection-column {
     text-align: left;
 }
+
 /*全局表格表头颜色*/
-#root .ant-table-thead > tr > th {
+
+#root .ant-table-thead>tr>th {
     color: rgba(0, 0, 0, 1);
     /*padding: 10px 8px*/
 }
-.operation-box{
+
+.operation-box {
     text-align: right;
 }
-.operation-box a{
+
+.operation-box a {
     padding-left: 6px;
 }
+
 /*antd的tab样式*/
+
 #root .ant-tabs-nav .ant-tabs-tab {
     margin: 0;
     font-size: 14px;
     line-height: 12px;
     padding: 21px 20px;
-    color:#999;
+    color: #999;
 }
 
 #root .ant-tabs-nav .ant-tabs-tab-active {
@@ -40,12 +51,14 @@
     background: rgba(245, 108, 29, 0.06);
     border-radius: 4px 4px 0 0;
 }
-#root th,td{
+
+#root th, td {
     font-size: 14px;
 }
-#root .ant-table table{
+
+#root .ant-table table {
     border-radius: 4px;
-    border-collapse:separate
+    border-collapse: separate
 }
 
 #root .ant-tabs-ink-bar-animated {
@@ -61,9 +74,10 @@
     float: left;
     margin-right: 10px;
     border-radius: 3px
-  }
+}
 
 /* 输入框label选择 */
+
 .ant-input-group-addon {
     background-color: #ffffff !important;
     width: 150px;

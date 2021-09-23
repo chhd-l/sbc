@@ -55,7 +55,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
       }
     });
     updateValue('templateId', value);
-    updateValue('templateName', template.emailTemplate);
+    updateValue('templateName', template.messageTemplate);
   }
 
   handlePreview() {
@@ -115,7 +115,7 @@ export default class ChooseTemplataeForm extends Component<any, any> {
           >
             {templateList.map((item, index) => (
               <Option value={item.templateId} key={index}>
-                {item.emailTemplate}
+                {item.messageTemplate}
               </Option>
             ))}
           </Select>

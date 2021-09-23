@@ -147,6 +147,7 @@ class DeliveryInfomation extends React.Component<any, any> {
         message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
+  
   getSelectedClinic = (array) => {
     let clinics = [];
     if (array && array.length > 0) {

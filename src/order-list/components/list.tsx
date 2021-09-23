@@ -422,7 +422,7 @@ class ListView extends React.Component<any, any> {
                           )}
 
                           {/*待发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                          {(auditState==='INSIDE_CHECKED'||auditState==='CHECKED')&&v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
                             // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
                             v.getIn(['tradeState', 'payState']) === 'PAID' && (
@@ -480,7 +480,7 @@ class ListView extends React.Component<any, any> {
                           {isAutoAudit&&(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='NON_CHECKED' ? (
                             <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id,'ManualReview')} className="iconfont iconPendingAudit" style={{ marginLeft: 20 }}/>
+                              <a onClick={() => this._showAuditConfirm(id,'ManualReview')} className="iconfont iconshenhe" style={{ marginLeft: 20 }}/>
                             </Tooltip>
                             </AuthWrapper>
                           ) : null}

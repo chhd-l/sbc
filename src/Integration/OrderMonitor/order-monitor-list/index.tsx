@@ -36,7 +36,7 @@ export default class OrderMonitorList extends Component<any, any> {
       visible: false,
       pushVerifyCode: '',
       currentOrderNumber: '',
-      confirmLoading:false
+      confirmLoading: false
     }
   }
   componentDidMount() {
@@ -178,27 +178,27 @@ export default class OrderMonitorList extends Component<any, any> {
       passWord: base64.urlEncode(pushVerifyCode)
     }
     this.setState({
-      confirmLoading:true
+      confirmLoading: true
     })
     webapi.toPushDownStream(params).then(data => {
       const { res } = data
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           visible: false,
-          confirmLoading:false
+          confirmLoading: false
         }, () => {
           message.success(res.message)
           setTimeout(() => {
             this.onRefresh()
           }, 3000);
-          
+
         })
 
       }
       else {
         this.setState({
           visible: false,
-          confirmLoading:false
+          confirmLoading: false
         })
         message.error(res.message)
       }
@@ -206,7 +206,7 @@ export default class OrderMonitorList extends Component<any, any> {
     }).catch(err => {
       this.setState({
         visible: false,
-        confirmLoading:false
+        confirmLoading: false
       })
     })
 
@@ -225,7 +225,7 @@ export default class OrderMonitorList extends Component<any, any> {
   }
 
   render() {
-    const { loading, pagination, exceptionTypeList, monitorList, visible, pushVerifyCode,confirmLoading } = this.state
+    const { loading, pagination, exceptionTypeList, monitorList, visible, pushVerifyCode, confirmLoading } = this.state
     const orderExportStatusList = [
       {
         value: 0,
@@ -427,7 +427,12 @@ export default class OrderMonitorList extends Component<any, any> {
           </div>
           <div className="container">
             <Row>
-              <Col span={24} style={{ textAlign: 'right' }}>
+              <Col span={12} style={{ textAlign: 'left' }}>
+                <h3 style={{ marginTop: 15 }}>{RCi18n({ id: 'Subscription.Total' })}:
+                  <span style={{ fontWeight: 600 }}>{pagination.total}</span>
+                </h3>
+              </Col>
+              <Col span={12} style={{ textAlign: 'right' }}>
                 <Button icon="download" size="large"
                   style={{ margin: '10px 20px 10px' }}
                   onClick={this.handleDownload} >

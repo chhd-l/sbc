@@ -328,7 +328,10 @@ class InvoiceList extends Component<any, any> {
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
-          const exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
+          let exportHref = Const.HOST + `/account/orderInvoice/exportPDF/${encrypted}`;
+          if (Const.SITE_NAME === 'MYVETRECO') {
+            exportHref = Const.HOST + `/account/orderInvoice/myVetreco/exportPDF/${encrypted}`;
+          }
           window.open(exportHref);
           this.emptySelected();
         } else {

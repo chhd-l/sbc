@@ -97,7 +97,7 @@ export default class BillingDetails extends React.Component<any, any> {
         title: RCi18n({id:'Order.WriteReason'})
       },
       {
-        title: RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.CopyLink' : 'Order.SendToRecipient'})
+        title: RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.save' : 'Order.SendToRecipient'})
       }
     ];
     return (
@@ -129,7 +129,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 )}
               </div>
             ) : current == 3 ? (
-              <div className="btn">
+              <div className={Const.SITE_NAME === 'MYVETRECO' ? '' : 'btn'}>
                 <PublishTooltip onRef={this.onRef} />
               </div>
             ) : null}
@@ -147,7 +147,7 @@ export default class BillingDetails extends React.Component<any, any> {
             )}
             {current === steps.length - 1 && (
               <Button type="primary" shape="round" style={{ margin: '0 8px' }} onClick={this.handleSend}>
-                {RCi18n({id:'Order.Send'})}
+                {RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.save' : 'Order.Send'})}
               </Button>
             )}
             {current < steps.length - 2 && (

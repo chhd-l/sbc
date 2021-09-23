@@ -46,7 +46,7 @@ function ResetPassword(props) {
         setLoading(true);
         resetPassword(params).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
-            message.success(res.message)
+            message.success(data.res.message);
             setTimeout(() => {
               history.push('/login-admin');
             }, 3000);

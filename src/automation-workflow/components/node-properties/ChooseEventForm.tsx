@@ -50,12 +50,22 @@ export default class ChooseEventForm extends Component<any, any> {
         selectable: false,
         children: [
           {
-            title: RCi18n({id:'task.1stpurchasefororderconfirmation(Club)'}),
+            title: RCi18n({ id: 'task.1stpurchasefororderconfirmation(Club)' }),
             value: '1stPurchaseForOrderConfirmation',
             key: '0-0-1'
           },
-          { title: RCi18n({id:'task.After1stdelivery'}), value: 'after1stDelivery', key: '0-0-2' },
-          { title: RCi18n({id:'task.After4thdelivery'}), value: 'After4thDelivery', key: '0-0-3' }
+          {
+            title: RCi18n({ id: 'task.After1stdelivery' }),
+            value: 'after1stDelivery',
+            key: '0-0-2'
+          },
+          {
+            title: RCi18n({ id: 'task.After4thdelivery' }),
+            value: 'After4thDelivery',
+            key: '0-0-3'
+          },
+          { title: 'Promo offer Single Purchase', value: 'PromoOfferSinglePurchase', key: '0-1-4' },
+          { title: 'Push subscription', value: 'PushSubscription', key: '0-1-5' }
         ]
       },
       {
@@ -64,14 +74,48 @@ export default class ChooseEventForm extends Component<any, any> {
         key: '0-1',
         selectable: false,
         children: [
-          { title: RCi18n({id:'task.1stmonthofSubscription'}), value: '1stMonthOfSubscription', key: '0-1-1' },
-          { title: RCi18n({id:'task.Half-yearsubscription'}), value: 'halfYearSubscription', key: '0-1-2' },
-          { title: RCi18n({id:'task.1-yearsubscription'}), value: '1YearSubscription', key: '0-1-3' },
-          { title: RCi18n({id:'task.SubscriptionprogramcancelationbyPO'}), value: 'SubscriptionProgramCancelationByPO', key: '0-1-4' },
-          { title: RCi18n({id:'task.Foodtransition(newlife-stage)'}), value: 'foodTransition', key: '0-1-5' },
-          { title: RCi18n({id:'task.3daysbeforenextrefillorder'}), value: '3DaysBeforeNextRefillOrder', key: '0-1-6' },
+          {
+            title: RCi18n({ id: 'task.1stmonthofSubscription' }),
+            value: '1stMonthOfSubscription',
+            key: '0-1-1'
+          },
+          {
+            title: RCi18n({ id: 'task.Half-yearsubscription' }),
+            value: 'halfYearSubscription',
+            key: '0-1-2'
+          },
+          {
+            title: RCi18n({ id: 'task.1-yearsubscription' }),
+            value: '1YearSubscription',
+            key: '0-1-3'
+          },
+          {
+            title: RCi18n({ id: 'task.SubscriptionprogramcancelationbyPO' }),
+            value: 'SubscriptionProgramCancelationByPO',
+            key: '0-1-4'
+          },
+          {
+            title: RCi18n({ id: 'task.Foodtransition(newlife-stage)' }),
+            value: 'foodTransition',
+            key: '0-1-5'
+          },
+          {
+            title: RCi18n({ id: 'task.3daysbeforenextrefillorder' }),
+            value: '3DaysBeforeNextRefillOrder',
+            key: '0-1-6'
+          },
           { title: 'Create pet profile', value: 'createPetProfile', key: '0-1-7' },
-          { title: RCi18n({id:'task.SterilizationTimeOnlyKitten'}), value: 'SterilizationTime', key: '0-1-8' }
+          {
+            title: RCi18n({ id: 'task.SterilizationTimeOnlyKitten' }),
+            value: 'SterilizationTime',
+            key: '0-1-8'
+          },
+          { title: 'Promo offer Unsubscription', value: 'PromoOfferUnsubscription', key: '0-1-9' },
+          {
+            title: 'Reminder restart subscription',
+            value: 'ReminderRestartSubscription',
+            key: '0-1-10'
+          }
         ]
       },
       {
@@ -87,7 +131,34 @@ export default class ChooseEventForm extends Component<any, any> {
           }
         ]
       },
-
+      {
+        title: 'Cart',
+        value: '0-3',
+        key: '0-3',
+        selectable: false,
+        children: [
+          {
+            title: 'Abandoned Cart Club One',
+            value: 'AbandonedCartClubOne',
+            key: '0-3-1'
+          },
+          {
+            title: 'Abandoned Cart Club More',
+            value: 'AbandonedCartClubMore',
+            key: '0-3-2'
+          },
+          {
+            title: 'Abandoned Cart SP One',
+            value: 'AbandonedCartSPOne',
+            key: '0-3-3'
+          },
+          {
+            title: 'Abandoned Cart SP More',
+            value: 'AbandonedCartSPMore',
+            key: '0-3-4'
+          }
+        ]
+      }
     ];
     return (
       <FormItem label="Choose an event" colon={false}>

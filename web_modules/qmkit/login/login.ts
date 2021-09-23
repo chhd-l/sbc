@@ -218,12 +218,9 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           await fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
-            history.push('/');
-            // notification['info']({
-            //   message: RCi18n({ id: "Public.changeLanguageAlert" })
-            // });
-            // 页面刷新重新render用户语言
-            history.go(0);
+            // history.push('/');
+            // 需要重载整个dom树
+            window.location.href='/';
           } else {
             let url = _getUrl(allGradeMenus);
             history.push(url);

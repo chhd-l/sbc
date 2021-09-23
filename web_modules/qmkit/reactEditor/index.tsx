@@ -77,7 +77,7 @@ class ReactEditor extends Component<any, any> {
     };
 
     componentDidMount() {
-        let contentType=this.props?.contentType??'text';
+        let contentType='text'//this.props?.contentType??'text';
         if (this.props.id&&contentType.toUpperCase() !== 'JSON') {
             this.initEditor()
         }else{
@@ -192,7 +192,7 @@ class ReactEditor extends Component<any, any> {
     }
     render() {
         const {  height,contentType,disabled } = this.props
-        let _contentType=contentType||'text'
+        let _contentType='text'//contentType||'text'
         const {value,loading}=this.state;
         return (
             <div className="react-editor-cunstorm">

@@ -1040,58 +1040,93 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
               </Col>
+              {/* 如果是俄罗斯 如果是HOME_DELIVERY 显示 timeSlot 信息(timeSlot没有也不显示),否则显示pickup 状态
+              如果是美国不显示内容 其他国家显示billingAddress */}
               <Col span={8}>
-                {storeId === 123457907 || storeId === 123457910 ? null : (
-                  <Row>
-                    <Col span={12}>
-                      <label className="info-title">
-                        <FormattedMessage id="Subscription.BillingAddress" />
-                      </label>
-                    </Col>
+                {
+                  storeId === 123457907 ? <Row>
+                    {deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? <>
+                    {deliveryAddressInfo.timeSlot ? <>
+                      <Col span={12}>
+                        <label className="info-title">
+                          <FormattedMessage id="Setting.timeSlot" />
+                        </label>
+                      </Col>
+                      <Col span={24}>
+                        <p>{deliveryAddressInfo.deliveryDate}</p>
+                      </Col>
+                      <Col span={24}>
+                        <p>{deliveryAddressInfo.timeSlot}</p>
+                      </Col>
+                    </>:null}
+                    </> : <>
+                      <Col span={12}><p/></Col>
+                      <Col span={24}>
+                        {
+                          deliveryAddressInfo.pickupPointState ? <p>
+                            <FormattedMessage id="Subscription.TabPane.Active" />
+                            <span className="successPoint"/>
+                          </p> : <p>
+                            <FormattedMessage id="Subscription.TabPane.Inactive" />
+                            <span className="failedPoint"/>
+                          </p>
+                        }
+                      </Col>
+                    </>
+                    }
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Name" />:{' '}
-                      </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.City" />:{' '}
-                      </p>
-                      <p>{billingAddressInfo.city}</p>
-                    </Col>
-                    {billingAddressInfo.province ? (
+
+                  </Row> : storeId === 123457910 ? null : (
+                    <Row>
+                      <Col span={12}>
+                        <label className="info-title">
+                          <FormattedMessage id="Subscription.BillingAddress" />
+                        </label>
+                      </Col>
+
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.State" />:{' '}
+                          <FormattedMessage id="Subscription.Name" />:{' '}
                         </p>
-                        <p>{billingAddressInfo.province}</p>
+                        <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
                       </Col>
-                    ) : null}
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.City" />:{' '}
+                        </p>
+                        <p>{billingAddressInfo.city}</p>
+                      </Col>
+                      {billingAddressInfo.province ? (
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.State" />:{' '}
+                          </p>
+                          <p>{billingAddressInfo.province}</p>
+                        </Col>
+                      ) : null}
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Country" />:{' '}
-                      </p>
-                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
-                    </Col>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.Country" />:{' '}
+                        </p>
+                        <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                      </Col>
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address1" />:{' '}
-                      </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                    </Col>
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.Address1" />:{' '}
+                        </p>
+                        <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                      </Col>
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address2" />:{' '}
-                      </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
-                    </Col>
-                  </Row>
-                )}
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.Address2" />:{' '}
+                        </p>
+                        <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                      </Col>
+                    </Row>
+                  )}
               </Col>
               <Col span={8}>
                 <Row>
@@ -1206,5 +1241,6 @@ const styles = {
     marginRight: 10,
     background: '#fff',
     borderRadius: 3
-  }
+  },
+
 };

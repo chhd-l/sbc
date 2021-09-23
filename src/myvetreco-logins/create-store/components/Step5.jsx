@@ -52,8 +52,7 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
               <FormItem label="IBAN">
                 {getFieldDecorator('iban', {
                   rules: [
-                    { required: true, message: 'Please input IBAN!' },
-                    { type: "string", len: 16 }
+                    { required: true, message: 'Please input IBAN!' }
                   ],
                   initialValue: ''
                 })(

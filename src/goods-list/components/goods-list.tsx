@@ -6,6 +6,7 @@ import { Menu, Dropdown, Icon, Modal, Tooltip, Popconfirm } from 'antd';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 import { Table } from 'antd';
+import ImgWithFallback from './fallback-image';
 
 const Column = Table.Column;
 const confirm = Modal.confirm;
@@ -97,7 +98,7 @@ class CateList extends React.Component<any, any> {
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
         {/* Image */}
-        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <ImgWithFallback src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         {/* Product name */}
         <Column
           // title="商品名称"

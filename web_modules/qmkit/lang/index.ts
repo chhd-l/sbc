@@ -1,5 +1,5 @@
 
-import { cache } from 'qmkit';
+import { cache, Const } from 'qmkit';
 
 const context = (require as any).context('./files', true, /\.ts$/);
 const importAll = context => {
@@ -22,11 +22,8 @@ function RCi18n({ id }) {
   return language[id] || id;
 }
 
-
-const PHRASE_PROJECT_ID = 'b16c5e4ed825ad40972b1d8379cb733e';
-
 async function getDynamicLanguage() {
-  const url = `https://api.phrase.com/v2/projects/${PHRASE_PROJECT_ID}/locales/${key}/download?access_token=31950e3e49b165b8b2c604b65574e6cf279d9ea395e3718ce52b1ec335bef6e5&include_empty_translations=true&file_format=node_json`;
+  const url = `https://api.phrase.com/v2/projects/${Const.PHRASE_PROJECT_ID}/locales/${key}/download?access_token=31950e3e49b165b8b2c604b65574e6cf279d9ea395e3718ce52b1ec335bef6e5&include_empty_translations=true&file_format=node_json`;
 
   const res = await fetch(url, {
     method: 'get',

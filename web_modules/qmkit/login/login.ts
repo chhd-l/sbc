@@ -1,7 +1,8 @@
-import { cache, Const, history, util, Fetch } from 'qmkit';
+import { cache, Const, history, util, Fetch,RCi18n } from 'qmkit';
 import * as webapi from './webapi';
+import {InitLanguage} from '../lang/webapi'
 import { fromJS } from 'immutable';
-import { message } from 'antd';
+import { message,notification } from 'antd';
 
 type TResult = {
   code: string;
@@ -28,6 +29,7 @@ export function getRoutType(callbackUrl: string) {
 export async function login(routerType, oktaToken: string, callback?: Function) {
   var res = {} as TResult;
   if (oktaToken) {
+    console.log(oktaToken,'oktaTokenoktaToken===')
     sessionStorage.setItem(
       cache.OKTA_TOKEN,
       oktaToken
@@ -35,10 +37,12 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     if (routerType === 'prescriber') {
       const resOkta = await webapi.getJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
+      sessionStorage.setItem('loginType', 'Prescriber');
 
     } else if (routerType === 'staff') {
       const resOkta = await webapi.getRCJwtToken(oktaToken) as any;
       res = resOkta.res as TResult;
+      sessionStorage.setItem('loginType', 'Staff');
     }
   }
   else {
@@ -50,7 +54,10 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       base64.urlEncode(password)
     ) as any;
     res = resLocal.res as TResult;
+    sessionStorage.setItem('loginType', 'Admin');
   }
+
+  
 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
@@ -80,10 +87,13 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       history.push('/login', { oktaLogout: true })
       return
     }
+
+
     window.token = res.context.token;
     window.companyType = res.context.companyType;
     sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
     sessionStorage.setItem('employeeId', res.context.employeeId);
+
     // 获取登录人拥有的菜单
     const menusRes = (await webapi.menusAndFunctions()) as any;
     if (menusRes.res.code === Const.SUCCESS_CODE) {
@@ -121,6 +131,13 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         menusRes.res.context.systemTaxSettingResponse &&
         menusRes.res.context.systemTaxSettingResponse.configVOList
         sessionStorage.setItem(cache.LANGUAGE, 'en-US');
+
+      // 初始化用户当前的语言
+      const langRes = await InitLanguage()
+      if (langRes.res.code === Const.SUCCESS_CODE) {
+        const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US'
+        sessionStorage.setItem(cache.LANGUAGE, lang);
+      }
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
         if (element) {
@@ -201,7 +218,9 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           await fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
-            history.push('/');
+            // history.push('/');
+            // 需要重载整个dom树
+            window.location.href='/';
           } else {
             let url = _getUrl(allGradeMenus);
             history.push(url);
@@ -299,6 +318,8 @@ export async function switchLogin(params, callback?: Function) {
     window.companyType = res.context.companyType;
     sessionStorage.setItem(cache.LOGIN_DATA, JSON.stringify(res.context));
     sessionStorage.setItem('employeeId', res.context.employeeId);
+
+
     // 获取登录人拥有的菜单
     const menusRes = (await webapi.menusAndFunctions()) as any;
     if (menusRes.res.code === Const.SUCCESS_CODE) {

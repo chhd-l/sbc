@@ -26,7 +26,7 @@ import {
   getStoreList,
 } from './okta/webapi';
 import { getHomeTaskListAndCount, getTaskRead, getHomeTaskTodoListTop5 } from '../../src/task/webapi';
-import {getLanguageList} from './lang/webapi'
+import {getLanguageList,modifyLanguage,InitLanguage} from './lang/webapi'
 import { FormattedMessage } from 'react-intl';
 import msgImg from './images/icon/msg-icon.png'
 //import value from '*.json';
@@ -60,18 +60,20 @@ export default class MyHeader extends React.Component {
       reminderTasks: [],
       visible: false,
       modalVisible: false,
-      English: util.requireLocalSrc(lan === 'en-US' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/English_act_blue.png' : 'sys/English_act.png' : 'sys/English.png'),
-      Russian: util.requireLocalSrc(lan === 'ru' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Russian_act_blue.png' : 'sys/Russian_act.png' : 'sys/Russian.png'),
-      Turkey: util.requireLocalSrc(lan === 'tr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Turkey_act_blue.png' : 'sys/Turkey_act.png' : 'sys/Turkey.png'),
-      France: util.requireLocalSrc(lan === 'fr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/France_act_blue.png' : 'sys/France_act.png' : 'sys/France.png'),
-      Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
+      // English: util.requireLocalSrc(lan === 'en-US' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/English_act_blue.png' : 'sys/English_act.png' : 'sys/English.png'),
+      // Russian: util.requireLocalSrc(lan === 'ru' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Russian_act_blue.png' : 'sys/Russian_act.png' : 'sys/Russian.png'),
+      // Turkey: util.requireLocalSrc(lan === 'tr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Turkey_act_blue.png' : 'sys/Turkey_act.png' : 'sys/Turkey.png'),
+      // France: util.requireLocalSrc(lan === 'fr' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/France_act_blue.png' : 'sys/France_act.png' : 'sys/France.png'),
+      // Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
       storeList: [],
+      languageList:[],
+      lan:sessionStorage.getItem(cache.LANGUAGE) || 'en-US'
     };
   }
 
   componentDidMount() {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
-      // this.getLanguage()
+      this.getLanguage()
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
         // 获取切换店铺的下拉数据
@@ -90,10 +92,26 @@ export default class MyHeader extends React.Component {
       taskList: data[1].res?.context?.taskList ?? []
     });
   }
-
   async getLanguage() {
-    const res = await getLanguageList();
-    console.log(res,'langei=========')
+    let defaultLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
+
+    const { res } = await getLanguageList();
+    const languageList = res?.context?.languageList || [];
+    const _languageList = languageList.map(item => {
+      const _item = Object.assign(item, {
+        lang: item.lang === "es-MX" ? item.lang.replace('es-MX', 'es') : item.lang
+      })
+      return _item
+    })
+    _languageList.map(item => {
+      let defaultImg = item.lang === defaultLang ?  Const.SITE_NAME === 'MYVETRECO' ?item.imageActBlue: item.imageAct :item.image;
+      this.setState({
+        [item.lang]: defaultImg
+      })
+    })
+    this.setState({
+      languageList: _languageList,
+    })
   }
 
   returnTask(item, type) {
@@ -121,10 +139,14 @@ export default class MyHeader extends React.Component {
     this.setState({ visible });
   };
 
-  setImgSrc(val, lan, type) {
-    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lan) return;
-    const siteFlag = type ? Const.SITE_NAME === 'MYVETRECO' ? '_blue' : '' : '';
-    this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
+  // setImgSrc(val, lan, type) {
+  //   if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lan) return;
+  //   const siteFlag = type ? Const.SITE_NAME === 'MYVETRECO' ? '_blue' : '' : '';
+  //   this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
+  // }
+  setLangImgSrc(type,lang,img,imgMyVet?:string) {
+    const imgSrc = type=== "active" && Const.SITE_NAME === 'MYVETRECO' ? imgMyVet : img;
+    this.setState({ [lang]:imgSrc });
   }
 
   getLanguageItem() {
@@ -146,22 +168,24 @@ export default class MyHeader extends React.Component {
             </span>
           </p>
           <div className="space-around">
-            {aLanguage.map((item) => {
+            {this.state.languageList?.map((item) => {
               return (
                 <img
-                  key={item.name}
+                  key={item.lang}
                   style={{
                     cursor: 'pointer',
                     width: '30%'
                   }}
                   onMouseLeave={(e) => {
-                    this.setImgSrc(item.name, item.value, '');
+                    // this.setImgSrc(item.name, item.value, '');
+                    this.setLangImgSrc("default",item.lang,item.image)
                   }}
                   onMouseEnter={(e) => {
-                    this.setImgSrc(item.name, item.value, '_act');
+                    // this.setImgSrc(item.name, item.value, '_act');
+                    this.setLangImgSrc("active",item.lang,item.imageAct,item.imageActBlue)
                   }}
-                  src={this.state[item.name]}
-                  onClick={() => this.languageChange(item.value)}
+                  src={this.state[item.lang]}
+                  onClick={() => this.languageChange(item.lang)}
                 />
               );
             })}
@@ -249,15 +273,32 @@ export default class MyHeader extends React.Component {
   };
 
   languageChange = (value) => {
-    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
-    sessionStorage.setItem(cache.LANGUAGE, value);
+    // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
+    // sessionStorage.setItem(cache.LANGUAGE, value);
+    // history.go(0);
 
-    history.go(0);
+    // notification['info']({
+    //   message: RCi18n({id:"Public.changeLanguageAlert"})
+    // });
+   this.modifyLang(value)
 
-    notification['info']({
-      message: RCi18n({id:"Public.changeLanguageAlert"})
-    });
   };
+
+  modifyLang = async (value) => {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
+    let params = {
+      employeeId: sessionStorage.getItem('employeeId') || '',
+      language: value
+    }
+    const { res } = await modifyLanguage(params);
+    if (res.context) {
+      sessionStorage.setItem(cache.LANGUAGE, value);
+      history.go(0);
+      notification['info']({
+        message: RCi18n({ id: "Public.changeLanguageAlert" })
+      });
+    }
+  }
 
   getUserStoreList = async () => {
     const data = await getStoreList();

@@ -21,11 +21,13 @@ import 'moment/locale/tr';
 import 'moment/locale/fr';
 import 'moment/locale/es';
 import { IntlProvider } from 'react-intl';
+import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
 import configOkta from '../web_modules/qmkit/config-okta';
 
 moment.locale('zh-cn');
 
+let localeLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
 (window as any).RCi18n = RCi18n;
 
 const useDynamicLanguage = () => {
@@ -34,6 +36,7 @@ const useDynamicLanguage = () => {
 
   useEffect(() => {
     async function getLanguage() {
+      setLoading(true);
       const lang = await getDynamicLanguage();
       setDynamicLanguage(lang);
       setLoading(false);
@@ -76,24 +79,36 @@ const PrescriberRouter = () => {
   );
 };
 
-const RcRouter = () => (
-  <IntlProvider locale="es" messages={language}>
-    <ConfigProvider locale={antLanguage}>
-      <Provider store={store}>
-        <Router history={history}>
-          <Security {...configOkta.RcOidc}>
-            <div className="father">
-              <Switch>
-                {routeWithSubRoutes(homeRoutes, noop)}
-                <Route component={Main} />
-              </Switch>
-            </div>
-          </Security>
-        </Router>
-      </Provider>
-    </ConfigProvider>
-  </IntlProvider>
-);
+const RcRouter = () => {
+  const [loading, dynamicLanguage] = useDynamicLanguage();
+
+  if (loading) {
+    return (
+      <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Spin />
+      </div>
+    );
+  }
+
+  return (
+    <IntlProvider locale={localeLang} messages={dynamicLanguage}>
+      <ConfigProvider locale={antLanguage}>
+        <Provider store={store}>
+          <Router history={history}>
+            <Security {...configOkta.RcOidc}>
+              <div className="father">
+                <Switch>
+                  {routeWithSubRoutes(homeRoutes, noop)}
+                  <Route component={Main} />
+                </Switch>
+              </div>
+            </Security>
+          </Router>
+        </Provider>
+      </ConfigProvider>
+    </IntlProvider>
+  )
+};
 
 switchRouter();
 

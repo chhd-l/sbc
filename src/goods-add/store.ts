@@ -424,16 +424,12 @@ export default class AppStore extends Store {
 
       // 商品基本信息
       let goods = goodsDetail.get('goods');
-      if (!tmpContext.goodsDescriptionDetailList || tmpContext.goodsDescriptionDetailList.length === 0) {
         const cateId = goods.get('cateId');
-        this.changeDescriptionTab(cateId);
-      } else {
         _tempGoodsDescriptionDetailList={
           _cateId:goods.get('cateId'),
-          _list:tmpContext.goodsDescriptionDetailList
+          _list:tmpContext?.goodsDescriptionDetailList??[]
         }
-        this.editEditorContent(tmpContext.goodsDescriptionDetailList);
-      }
+        this.changeDescriptionTab(cateId);
       // 如果不是已审核状态，都可以编辑平台类目
       this.dispatch('goodsActor: disableCate', goods.get('auditStatus') == 1);
 
@@ -2194,16 +2190,16 @@ export default class AppStore extends Store {
    * 对应类目、商品下的所有属性信息
    */
   changeDescriptionTab = async (cateId) => {
-    // const {_cateId,_list}=_tempGoodsDescriptionDetailList
+    const {_list}=_tempGoodsDescriptionDetailList
     if (!cateId) return;
-    // if(_cateId===cateId){
-    //   this.editEditorContent(_list);
-    //   return
-    // }
     const result: any = await getDescriptionTab(cateId);
     if (result.res.code === Const.SUCCESS_CODE) {
       let content = result.res.context;
       let res = content.map((item) => {
+        const _obj=(_list&&_list.length>0&&_list.find(it=>it.descriptionId===item.id))||undefined
+        if(_obj){
+          return _obj;
+        }
         return {
           key: +new Date(),
           goodsCateId: cateId,

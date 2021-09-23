@@ -297,10 +297,6 @@ export default class MyHeader extends React.Component {
       notification['info']({
         message: RCi18n({ id: "Public.changeLanguageAlert" })
       });
-    } else {
-      notification['info']({
-        message: res.message
-      });
     }
   }
 

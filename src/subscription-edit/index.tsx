@@ -216,7 +216,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
                 if (subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' && +storeId === 123457907) {
-                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.cityIdStr,subscribeId:subscriptionInfo.subscriptionNumber })
+                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.cityIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
                 }
               }
             }
@@ -413,15 +413,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       message.error(RCi18n({ id: "Subscription.quantityAndFrequency" }));
       return;
     }
-    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值,
-    if(+storeId === 123457907 && deliveryAddressInfo.receiveType === 'HOME_DELIVERY' && deliveryDateList.length>0){
+    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值, 
+    if (+storeId === 123457907 && deliveryAddressInfo.receiveType === 'HOME_DELIVERY' && deliveryDateList.length > 0) {
       //deliveryDate 没有选择 报错
-      if(!deliveryDate){
+      if (!deliveryDate) {
         message.error(RCi18n({ id: "Subscription.MissDeliveryDateTip" }))
         return;
       }
       // timeSlotList存在，但是timeSlot没有值 报错
-      if(timeSlotList&&!timeSlot){
+      if (timeSlotList && !timeSlot) {
         message.error(RCi18n({ id: "Subscription.MissTimeSlotTip" }))
         return;
       }
@@ -674,7 +674,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   deliveryOK = async () => {
-    let { deliveryList, deliveryAddressId,subscriptionInfo } = this.state;
+    let { deliveryList, deliveryAddressId, subscriptionInfo } = this.state;
     let deliveryAddressInfo = deliveryList.find((item) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
@@ -696,10 +696,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-        this.getTimeSlot({ cityNo: deliveryAddressInfo.cityIdStr,subscribeId:subscriptionInfo.subscriptionNumber })
+        this.getTimeSlot({ cityNo: deliveryAddressInfo.cityIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
         this.setState({
-          deliveryDate:undefined,
-          timeSlot:undefined
+          deliveryDate: undefined,
+          timeSlot: undefined
         })
       }
     }
@@ -1043,12 +1043,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   deliveryDateChange = (value) => {
-    const { deliveryDateList,deliveryDate,timeSlot } = this.state
+    const { deliveryDateList, deliveryDate, timeSlot } = this.state
     let timeSlots = deliveryDateList.find(item => item.date === value).dateTimeInfos || []
     this.setState({
       deliveryDate: value,
       timeSlotList: timeSlots,
-      timeSlot:deliveryDate === value ?timeSlot:undefined
+      timeSlot: deliveryDate === value ? timeSlot : undefined
     })
   }
   //timeslot
@@ -1653,61 +1653,68 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                 </Row>
               </Col>
-              {/* 如果是俄罗斯 如果是HOME_DELIVERY 显示 timeSlot 信息,否则显示pickup 状态
+              {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
 
               <Col span={8} className="timeSlot">
                 {storeId === 123457907 ? <Row>
                   {
-                    deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? <>
-                      <Col span={12}>
-                        <label className="info-title">
-                          <FormattedMessage id="Setting.timeSlot" />
-                        </label>
-                      </Col>
-
-                      <Col span={24}>
-
-                        <Select value={deliveryDate}
-                          onChange={this.deliveryDateChange}
-                          placeholder={RCi18n({ id: 'Order.deliveryDate' })}>
-                          {
-                            deliveryDateList && deliveryDateList.map((item, index) => (
-                              <Option value={item.date} key={index}>{item.date}</Option>
-                            ))
-                          }
-                        </Select>
-
-                      </Col>
-
-                      <Col span={24}>
-                        <Select value={timeSlot}
-                          onChange={this.timeSlotChange}
-                          placeholder={RCi18n({ id: 'Setting.timeSlot' })}>
-                          {
-                            timeSlotList && timeSlotList.map((item, index) => (
-                              <Option value={item.startTime + '-' + item.endTime} key={index}>{item.startTime + '-' + item.endTime}</Option>
-                            ))
-                          }
-                        </Select>
-
-                      </Col>
-                    </> :
+                    deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ?
                       <>
-                        <Col span={12}><p/></Col>
-                        <Col span={24}>
-                          {
-                            deliveryAddressInfo.pickupPointState ? <p>
-                              <FormattedMessage id="Subscription.TabPane.Active" />
-                              <span className="successPoint"/>
-                            </p> : <p>
-                              <FormattedMessage id="Subscription.TabPane.Inactive" />
-                              <span className="failedPoint"/>
-                            </p>
-                          }
-                        </Col>
-                      </>
+                        {
+                          deliveryDateList && deliveryDateList.length > 0 ? <>
+                            <Col span={12}>
+                              <label className="info-title">
+                                <FormattedMessage id="Setting.timeSlot" />
+                              </label>
+                            </Col>
+
+                            <Col span={24}>
+
+                              <Select value={deliveryDate}
+                                onChange={this.deliveryDateChange}
+                                placeholder={RCi18n({ id: 'Order.deliveryDate' })}>
+                                {
+                                  deliveryDateList && deliveryDateList.map((item, index) => (
+                                    <Option value={item.date} key={index}>{item.date}</Option>
+                                  ))
+                                }
+                              </Select>
+
+                            </Col>
+
+                            <Col span={24}>
+                              <Select value={timeSlot}
+                                onChange={this.timeSlotChange}
+                                placeholder={RCi18n({ id: 'Setting.timeSlot' })}>
+                                {
+                                  timeSlotList && timeSlotList.map((item, index) => (
+                                    <Option value={item.startTime + '-' + item.endTime} key={index}>{item.startTime + '-' + item.endTime}</Option>
+                                  ))
+                                }
+                              </Select>
+
+                            </Col>
+                          </> : null
+                        }
+
+                      </> : deliveryAddressInfo.receiveType === 'PICK_UP' ?
+                        <>
+                          <Col span={12}><p /></Col>
+                          <Col span={24}>
+                            {
+                              deliveryAddressInfo.pickupPointState ? <p>
+                                <FormattedMessage id="Subscription.TabPane.Active" />
+                                <span className="successPoint" />
+                              </p> : <p>
+                                <FormattedMessage id="Subscription.TabPane.Inactive" />
+                                <span className="failedPoint" />
+                              </p>
+                            }
+                          </Col>
+                        </> : null
                   }
+
                 </Row> : storeId === 123457910 ? null : (
                   <Row>
                     <Col span={12}>

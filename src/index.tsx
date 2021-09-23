@@ -28,7 +28,7 @@ moment.locale('zh-cn');
 
 (window as any).RCi18n = RCi18n;
 
-const PrescriberRouter = () => {
+const useDynamicLanguage = () => {
   const [loading, setLoading] = useState(true);
   const [dynamicLanguage, setDynamicLanguage] = useState({});
 
@@ -41,6 +41,12 @@ const PrescriberRouter = () => {
 
     getLanguage();
   }, []);
+
+  return [loading, dynamicLanguage];
+};
+
+const PrescriberRouter = () => {
+  const [loading, dynamicLanguage] = useDynamicLanguage();
 
   if (loading) {
     return (

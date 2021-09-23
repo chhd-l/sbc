@@ -138,6 +138,7 @@ const Common = {
 
   spuMaxSku: 100,
 
+  // PHRASE 远程拉取language项目id
   PHRASE_PROJECT_ID: 'b16c5e4ed825ad40972b1d8379cb733e',
 
   // STG  Okta Config

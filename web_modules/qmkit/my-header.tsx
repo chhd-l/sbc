@@ -73,7 +73,7 @@ export default class MyHeader extends React.Component {
 
   componentDidMount() {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
-      this.getInitLanguage()
+      this.getLanguage()
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
         // 获取切换店铺的下拉数据
@@ -92,15 +92,9 @@ export default class MyHeader extends React.Component {
       taskList: data[1].res?.context?.taskList ?? []
     });
   }
+  async getLanguage() {
+    let defaultLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
 
-  async getInitLanguage() {
-    const {res} = await InitLanguage()
-    let lang = res?.context?.replace('es-MX', 'es')
-    sessionStorage.setItem(cache.LANGUAGE, lang);
-    console.log(lang,'lang++++++++=')
-    this.getLanguage(lang)
-  }
-  async getLanguage(defaultLang) {
     const { res } = await getLanguageList();
     const languageList = res?.context?.languageList || [];
     const _languageList = languageList.map(item => {

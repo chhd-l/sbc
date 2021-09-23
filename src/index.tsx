@@ -22,13 +22,14 @@ import 'moment/locale/fr';
 import 'moment/locale/es';
 import { IntlProvider } from 'react-intl';
 import {language,antLanguage} from '../web_modules/qmkit/lang';
+import { cache } from 'qmkit';
 import configOkta from '../web_modules/qmkit/config-okta';
 moment.locale('zh-cn');
 
+let localeLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
  (window as any).RCi18n=RCi18n;
-
 const PrescriberRouter = () => (
-  <IntlProvider locale="es" messages={language}>
+  <IntlProvider locale={localeLang} messages={language}>
     <ConfigProvider locale={antLanguage}>
       <Provider store={store}>
         <Router history={history}>
@@ -47,7 +48,7 @@ const PrescriberRouter = () => (
 );
 
 const RcRouter = () => (
-  <IntlProvider locale="es" messages={language}>
+  <IntlProvider locale={localeLang} messages={language}>
     <ConfigProvider locale={antLanguage}>
       <Provider store={store}>
         <Router history={history}>

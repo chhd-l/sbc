@@ -1,8 +1,8 @@
-import { cache, Const, history, util, Fetch } from 'qmkit';
+import { cache, Const, history, util, Fetch,RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import {InitLanguage} from '../lang/webapi'
 import { fromJS } from 'immutable';
-import { message } from 'antd';
+import { message,notification } from 'antd';
 
 type TResult = {
   code: string;
@@ -46,7 +46,6 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
     }
   }
   else {
-    console.log(oktaToken,'oktaTokenoktaToken===22222')
     let base64 = new util.Base64();
     const account = routerType.account;
     const password = routerType.password;
@@ -220,6 +219,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
             history.push('/');
+            // notification['info']({
+            //   message: RCi18n({ id: "Public.changeLanguageAlert" })
+            // });
+            // 页面刷新重新render用户语言
+            history.go(0);
           } else {
             let url = _getUrl(allGradeMenus);
             history.push(url);

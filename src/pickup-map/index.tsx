@@ -20,7 +20,7 @@ class PickupMap extends Component<any, any> {
     });
 
     // 地图控件点击事件
-    document.addEventListener('kaktusEvent', (e) => {
+    document.addEventListener('kaktusEvent', (e: any) => {
       try {
         // 传递给父页面
         window.parent.postMessage(e.detail, '*');
@@ -47,7 +47,8 @@ class PickupMap extends Component<any, any> {
             if (msg == 'clearMap') {
               // 关闭地图，避免下次打开地图数据异常
               if (document.getElementsByClassName('close-button')[0]) {
-                document.getElementsByClassName('close-button')[0].click();
+                let closeBtn: HTMLElement = document.getElementsByClassName('close-button')[0] as HTMLElement;
+                closeBtn.click();
               }
             } else {
               this.setState({

@@ -9,7 +9,7 @@ type TResult={
 
 //获取EmailTemplateList
 export function getEmailTemplateList(filterParams={}) {
-  return Fetch<TResult>('/message/listEmailTemplate', {
+  return Fetch<TResult>('/messageTemplate/pageList', {
     method: 'POST',
     body:JSON.stringify({
       ...filterParams

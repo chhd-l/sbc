@@ -255,6 +255,10 @@ export default class ClinicList extends Component<any, any> {
         name: 'Todo'
       },
       {
+        value:'6',
+        name:'Building'
+      },
+      {
         value: '3',
         name: 'Sending'
       },

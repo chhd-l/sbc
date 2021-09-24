@@ -145,6 +145,7 @@ export default class MyHeader extends React.Component {
   //   this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
   // }
   setLangImgSrc(type,lang,img,imgMyVet?:string) {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lang) return;
     const imgSrc = type=== "active" && Const.SITE_NAME === 'MYVETRECO' ? imgMyVet : img;
     this.setState({ [lang]:imgSrc });
   }

@@ -2,8 +2,8 @@ import React from 'react';
 import config from '../configs';
 import BenefitSettingAdd from './benefit-setting-item';
 
-export default function ConsumptionGift(props) {
+export default function WelcomeBox(props) {
   return (
-    <BenefitSettingAdd benefitType={config.CONSUMPTION_GIFT} {...props} />
+    <BenefitSettingAdd benefitType={config.WELCOME_BOX} {...props} />
   );
 }

@@ -970,7 +970,7 @@ export default {
         'Subscription.Cancel': 'Cancel',
         'Subscription.PleaseSelectDeliveryNumber': 'Please select delivery Number ',
         'Subscription.SureToDelete': 'Sure to delete ?',
-        'Subscription.PleaseInputCampaignName': 'Pleas Input Campaign name',
+        'Subscription.PleaseInputCampaignName': 'Please Input Campaign name',
         'Subscription.PleaseInputDeliveryNumber': 'Please Input Delivery Number',
         'Subscription.DebitOrCreditCard': 'Debit Card or Credit Card',
         'Subscription.CashOnDelivery': 'Cash on Delivery',
@@ -1003,6 +1003,14 @@ export default {
         'Subscription.PickupDelivery':'Pickup delivery',
         'Subscription.MissDeliveryDateTip':'Please select delivery date',
         'Subscription.MissTimeSlotTip':'Please select time slot',
+	"Subscription.Welcomebox": "Welcome box",
+        "Subscription.WelcomeboxHint1": "Welcome box is set for order type is individual and Club",
+        "Subscription.WelcomeboxHint2": "Welcome box only delivered one time for the same product category",
+        "Subscription.WelcomeboxName": "Welcome box name",
+        "Subscription.SubscriptionType": "Subscription type",
+        "Subscription.AddWelcomebox": "Add welcome box",
+        'Subscription.Creating welcome box': 'Creating welcome box',
+        'Subscription.PleaseInputWelcomeboxName': 'Please input welcome box name',
 
     },
     Appointment: {

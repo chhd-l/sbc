@@ -1038,7 +1038,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </Col>
                 {/*根据地址是否属于黑名单进而决定是否显示*/}
                 <Col span={24}>
-                  <PostalCodeMsg/>
+                  {
+                    !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                  }
                 </Col>
               </Col>
               <Col span={8}>

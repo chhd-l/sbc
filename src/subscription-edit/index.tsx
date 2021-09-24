@@ -13,6 +13,7 @@ import PaymentMethod from './component/payment-method'
 
 
 
+
 const { Option } = Select;
 
 const { TabPane } = Tabs;
@@ -1489,9 +1490,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
-                  {/*根据地址是否属于黑名单进而决定是否显示*/}
                   <Col span={24}>
-                    <PostalCodeMsg/>
+                    {
+                      !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                    }
                   </Col>
                 </Row>
               </Col>
@@ -1644,8 +1646,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               >
                 {this.state.isUnfoldedDelivery
                   ? deliveryList.map((item) => (
-                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                      <Radio disabled value={item.deliveryAddressId}>
+                    <Card
+                      style={{ width: 602, marginBottom: 10 }}
+                      bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + item.lastName}</p>
                           <p>{item.city}</p>
@@ -1654,7 +1658,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>{this.getDictValue(countryArr, item.countryId)}</p>
                           <p>{item.address1}</p>
                           <p>{item.address2}</p>
-                          <p><PostalCodeMsg/></p>
+                          {
+                            !item.validFlag
+                              ? <PostalCodeMsg text={item.alert} />
+                              : null
+                          }
                         </div>
                       </Radio>
 
@@ -1668,7 +1676,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   : deliveryList.map((item, index) =>
                     index < 2 ? (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                        <Radio value={item.deliveryAddressId}>
+                        <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + item.lastName}</p>
                             <p>{item.city}</p>
@@ -1676,7 +1684,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
-                            <p><PostalCodeMsg/></p>
+                            {
+                              !item.validFlag
+                                ? <PostalCodeMsg text={item.alert} />
+                                : null
+                            }
                           </div>
                         </Radio>
                         <div>

@@ -93,13 +93,17 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         dataIndex: 'postCode',
         key: 'postcode',
         render: (text, record) => {
-          return (
-            <div style={{color: '#e2001a'}}>
-              <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg/>}>
-                <span>{text}</span>
-              </Tooltip>
-            </div>
-          )
+          if (!!record?.validFlag){
+            return <span>{text}</span>
+          }else {
+            return (
+              <div style={{color: '#e2001a'}}>
+                <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg text={record?.alert}/>}>
+                  <span>{text}</span>
+                </Tooltip>
+              </div>
+            )
+          }
         },
 
       },

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const, RCi18n } from 'qmkit';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
-import { updateAddress, addAddress } from '../webapi';
+import { updateAddress, addAddress, validPostCodeBlock } from '../webapi';
 import _ from 'lodash';
 
 const { Option } = Select;
@@ -396,21 +396,23 @@ class DeliveryItem extends React.Component<Iprop, any> {
       callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       // 邮编黑名单校验
-      let res = await this.validateZipcode(value);
+      let res = await validPostCodeBlock(value);
       console.log('res', res);
-      if (!res){
+      if (res?.code === Const.SUCCESS_CODE){
+        const data = res?.context || {};
+        // validFlag 1 通过 0 不通过
+        if (!!data?.validFlag){
+          callback()
+        }else {
+          callback(new Error(data.alert))
+        }
+      }
+      else {
         callback();
-      }else {
-        callback('* Delivery not available in the area.');
       }
     }
   };
 
-  validateZipcode = async (value) => {
-    return await new Promise<Promise<any>>(resolve => {
-      resolve(value)
-    })
-  }
 
   //俄罗斯address1校验
   ruAddress1Validator = (rule, value, callback) => {
@@ -478,8 +480,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
                               : (rule, value, callback) => callback()
                           },
                           { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1
-                              ? this.compareZip :
-                              (rule, value, callback) => callback()
+                              ? this.compareZip
+                              : (rule, value, callback) => callback()
                           },
                           { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
                               ? this.ruAddress1Validator

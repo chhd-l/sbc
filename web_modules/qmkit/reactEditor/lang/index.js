@@ -75,9 +75,12 @@ export default  {
                         手势: language['Public.editor.gesture'],
                     },
                     image: {
+                        图片地址: language['Public.editor.imageLink'],
                         图片链接: language['Public.editor.imageLink'],
                         上传图片: language['Public.editor.uploadImage'],
-                        网络图片: language['Public.editor.networkImage'],
+                        网络图片: language['Public.editor.networkImage'], 
+                        跳转链接: language['Public.editor.target'], 
+                        图片文字说明: language['Public.editor.desc'],
                     },
                     link: {
                         链接: language['Public.editor.link'],

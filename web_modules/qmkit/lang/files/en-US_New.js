@@ -6,6 +6,8 @@ import React from 'react';
  */
 export default {
     Public: {
+        "Public.editor.target": "image target",
+        "Public.editor.desc": "image describe",
         "Public.editor.reset": "reset",
         "Public.editor.insert": "insert",
         "Public.editor.default": "default",

@@ -36,7 +36,7 @@ function UomCategory(props: any) {
     }
   });
 
-  const deleteCategory = (id: number) => {
+  const deleteCategory = (id: string) => {
     delUOMCategory(id).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         message.success('Operation successful');
@@ -84,7 +84,7 @@ function UomCategory(props: any) {
         <Headline title="UOM category" />
         <Form className="filter-content" layout="inline">
           <FormItem>
-            {getFieldDecorator('name')(<Input addonBefore="UOM category name" />)}
+            {getFieldDecorator('uomCategoryName')(<Input addonBefore="UOM category name" />)}
           </FormItem>
           <FormItem>
             <Button type="primary" icon="search" onClick={submit}>Search</Button>

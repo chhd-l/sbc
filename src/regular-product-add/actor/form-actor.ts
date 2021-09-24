@@ -12,6 +12,8 @@ export default class FormActor extends Actor {
       userPriceForm: {},
       areaPriceForm: {},
       logisticsForm: {},
+      inventoryForm: {}, //新的inventory form实体
+      priceForm: {}, //新的price form实体
       //分销 切换类型是否要提示
       checkFlag: false,
       //企业购提示按钮
@@ -87,5 +89,15 @@ export default class FormActor extends Actor {
   @Action('formActor:enterpriseFlag')
   setEnterpriseFlag(state, value) {
     return state.set('enterpriseFlag', value);
+  }
+
+  @Action('formActor:inventoryForm')
+  setInventoryForm(state, inventoryForm) {
+    return state.set('inventoryForm', inventoryForm);
+  }
+
+  @Action('formActor:priceForm')
+  setPriceForm(state, priceForm) {
+    return state.set('priceForm', priceForm);
   }
 }

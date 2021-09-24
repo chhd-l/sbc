@@ -27,7 +27,7 @@ export function editUOMCategory(params: any = {}) {
   });
 }
 
-export function delUOMCategory(id: number) {
+export function delUOMCategory(id: string) {
   return Fetch<TResult>(`/uomCategory/delete/${id}`, {
     method: 'DELETE'
   });

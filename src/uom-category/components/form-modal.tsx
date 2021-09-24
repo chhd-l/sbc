@@ -34,7 +34,8 @@ export default function FormModal(props) {
      okText="Save"
      cancelText="Cancel"
      confirmLoading={loading}
-     onOk={() => {}}
+     okButtonProps={{disabled: name === '' || description === ''}}
+     onOk={onConfirm}
      onCancel={props.onCancel}
     >
       <Form labelCol={{span: 8}} wrapperCol={{span: 16}} layout="horizontal">

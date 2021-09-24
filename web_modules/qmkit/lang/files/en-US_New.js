@@ -2406,9 +2406,12 @@ export default {
         'Menu.Dashboard': 'Dashboard',
         'Menu.Interface': 'Interface',
         'Menu.Log': 'Log',
-        'Menu.Order monitor': 'Order monitor',
-        'Menu.Api document': 'Api document',
-        'Menu.Email Template Configuration': 'Email Template Configuration',
+        'Menu.Order monitor':'Order monitor',
+        'Menu.Api document':'Api document',
+        'Menu.Email Template Configuration':'Email Template Configuration',
+        'Menu.UOM management': 'UOM management',
+        'Menu.UOM category': 'UOM category',
+        'Menu.UOM list': 'UOM list',
 
     },
     Others: {

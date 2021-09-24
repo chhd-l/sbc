@@ -54,6 +54,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateBasePrice: Function;
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
+      updatePriceForm: Function;
     };
   };
 
@@ -83,7 +84,8 @@ export default class ProductPrice extends React.Component<any, any> {
     updateBasePrice: noop,
     updateAllBasePrice: noop,
     setDefaultBaseSpecId: noop,
-    setSelectedBasePrice: noop
+    setSelectedBasePrice: noop,
+    updatePriceForm: noop
   };
 
   constructor(props) {
@@ -128,7 +130,8 @@ class SkuForm extends React.Component<any, any> {
 
   componentDidMount() {
     //this._handleBasePriceChange
-    const { goodsList } = this.props.relaxProps;
+    const { updatePriceForm } = this.props.relaxProps;
+    updatePriceForm(this.props.form);
   }
 
   render() {

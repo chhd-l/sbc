@@ -29,6 +29,7 @@ export default class GoodsSpecActor extends Actor {
           subscriptionPrice: 0,
           marketPrice: 0,
           promotions: 'autoship',
+          factor: 1,
           stock: 0,
           goodsInfoNo: defaultGoodsInfoNo,
           externalSku: defaultGoodsInfoNo,
@@ -365,6 +366,7 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
         goodsItem = goodsItem.set('externalSku', goodsInfoNo);
         goodsItem = goodsItem.set('stock', 0);
+        goodsItem = goodsItem.set('factor', 1);
         goodsItem = goodsItem.set('marketPrice', 0);
         goodsItem = goodsItem.set('subscriptionPrice', 0);
         goodsItem = goodsItem.set('subscriptionStatus', item2.get('subscriptionStatus'));
@@ -404,6 +406,7 @@ export default class GoodsSpecActor extends Actor {
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
         externalSku: goodsInfoNo,
+        factor: 1,
         stock: 0,
         marketPrice: 0,
         subscriptionPrice: 0,

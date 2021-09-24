@@ -1058,6 +1058,14 @@ const routes = [
     path: '/split-order-setting',
     asyncComponent: () => import('./order-split-setting')
   },
+  {
+    path: '/uom-category',
+    asyncComponent: () => import('./uom-category')
+  },
+  {
+    path: '/uom-list',
+    asyncComponent: () => import('./uom-list')
+  },
     /**
      * Integration  -------------------------------------------------------
      * **/

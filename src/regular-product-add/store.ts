@@ -139,6 +139,7 @@ export default class AppStore extends Store {
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
           this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
+          this.dispatch('goodsActor:uomList', fromJS((results[0].res as any).context.uomVOList));
 
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
@@ -984,6 +985,14 @@ export default class AppStore extends Store {
     this.dispatch('formActor:areaprice', areaPriceForm);
   };
 
+  updateInventoryForm = (inventoryForm) => {
+    this.dispatch('formActor:inventoryForm', inventoryForm);
+  };
+
+  updatePriceForm = (priceForm) => {
+    this.dispatch('formActor:priceForm', priceForm);
+  };
+
   refDetailEditor = (detailEditorObj) => {
     this.dispatch('goodsActor: detailEditor', detailEditorObj);
   };
@@ -1511,6 +1520,10 @@ export default class AppStore extends Store {
           widthUnit: item.get('widthUnit') || 'mm',
           height: item.get('height') || 0,
           heightUnit: item.get('heightUnit') || 'mm',
+          stockUomId: item.get('stockUomId'),
+          priceUomId: item.get('priceUomId'),
+          factor: item.get('factor'),
+          externalStock: item.get('externalStock')
         })
       );
     });
@@ -2022,12 +2035,12 @@ export default class AppStore extends Store {
   };
 
   onTabChanges = (nextKey) => {
-    if (nextKey === 'price') {
+    if (nextKey === 'inventory') {
       if (!this._validMainForms()) {
         return;
       }
-    } else if (nextKey === 'inventory') {
-      if (!this._validMainForms() || !this._validPriceFormsNew()) {
+    } else if (nextKey === 'price') {
+      if (!this._validMainForms() || !this._validInventoryFormsNew()) {
         return;
       }
     } else if (nextKey === 'related' || nextKey === 'shipping') {

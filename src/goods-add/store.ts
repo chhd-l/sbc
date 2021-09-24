@@ -2081,16 +2081,16 @@ export default class AppStore extends Store {
     });
   };
   onTabChanges = (nextKey) => {
-    if (nextKey === 'price') {
+    if (nextKey === 'inventory') {
       if (!this._validMainForms()) {
         return;
       }
-    } else if (nextKey === 'inventory') {
-      if (!this._validMainForms() || !this._validPriceFormsNew()) {
+      this.getSubSkuStockByAPI();
+    } else if (nextKey === 'price') {
+      if (!this._validMainForms() || !this._validInventoryFormsNew()) {
         return;
       }
       
-      this.getSubSkuStockByAPI();
     } else if (nextKey === 'related' || nextKey === 'shipping') {
       if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
         return;

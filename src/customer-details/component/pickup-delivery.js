@@ -8,7 +8,7 @@ import * as webapi from './webapi';
 
 import './pickup-delivery.less';
 
-class PickupDelivery extends React.Component {
+export default class PickupDelivery extends React.Component {
   static defaultProps = {
     initData: null,
     defaultCity: '',
@@ -300,7 +300,7 @@ class PickupDelivery extends React.Component {
               cityData: data,
               homeAndPickup: hdpu
             };
-            
+
             this.setState(
               {
                 pickupCity: data.city,
@@ -438,7 +438,7 @@ class PickupDelivery extends React.Component {
         msg = pickupCity;
         break;
     }
-    
+
     childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
   };
   // 编辑pickup
@@ -793,6 +793,4 @@ class PickupDelivery extends React.Component {
       </>
     );
   }
-}
-
-export default PickupDelivery;
+};

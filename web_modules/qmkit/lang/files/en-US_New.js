@@ -961,7 +961,7 @@ export default {
         'Subscription.Cancel': 'Cancel',
         'Subscription.PleaseSelectDeliveryNumber': 'Please select delivery Number ',
         'Subscription.SureToDelete': 'Sure to delete ?',
-        'Subscription.PleaseInputCampaignName': 'Pleas Input Campaign name',
+        'Subscription.PleaseInputCampaignName': 'Please Input Campaign name',
         'Subscription.PleaseInputDeliveryNumber': 'Please Input Delivery Number',
         'Subscription.DebitOrCreditCard': 'Debit Card or Credit Card',
         'Subscription.CashOnDelivery': 'Cash on Delivery',
@@ -984,6 +984,8 @@ export default {
         "Subscription.WelcomeboxName": "Welcome box name",
         "Subscription.SubscriptionType": "Subscription type",
         "Subscription.AddWelcomebox": "Add welcome box",
+        'Subscription.Creating welcome box': 'Creating welcome box',
+        'Subscription.PleaseInputWelcomeboxName': 'Please input welcome box name',
 
     },
     Appointment: {

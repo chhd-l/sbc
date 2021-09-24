@@ -46,7 +46,7 @@ export default class BasicInformation extends Component<any, any>{
                     required: true,
                     message:
                         (window as any).RCi18n({
-                            id: 'Subscription.PleaseInputCampaignName'
+                            id: benefitType === config.CONSUMPTION_GIFT ? 'Subscription.PleaseInputCampaignName' : 'Subscription.PleaseInputWelcomeboxName'
                         })
                 },
                 { min: 1, max: 40, message:
@@ -80,7 +80,7 @@ export default class BasicInformation extends Component<any, any>{
                                 showTime={{ format: 'HH:mm' }} />)}
                     </Form.Item>
                     {benefitType === config.WELCOME_BOX && <Form.Item label={<FormattedMessage id={'Subscription.SubscriptionType'} />}>
-                        {getFieldDecorator('type')(
+                        {getFieldDecorator('type', { initialValue: 'individual' })(
                             <Radio.Group>
                                 <Radio value="individual"><FormattedMessage id={'Product.Individual'} /></Radio>
                                 <Radio value="club"><FormattedMessage id={'Product.Club'} /></Radio>

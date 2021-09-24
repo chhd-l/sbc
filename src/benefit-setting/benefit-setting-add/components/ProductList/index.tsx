@@ -17,32 +17,97 @@ class ProductList extends React.Component<any, any> {
   props: {
     intl;
     form;
-    selectedRows
+    initData;
   }
   constructor(props) {
     super(props);
     this.state = {
       //公用的商品弹出框
       goodsModal: {
-        _modalVisible: false,
-        _forIndex: 0
+        _modalVisible: false
       },
+      selectedSkuIds: [],
+      selectedRows: []
     };
   }
 
+  componentDidMount() {
+    this.changeForm();
+  }
+
+  componentDidUpdate(prevProps) {
+    // 典型用法（不要忘记比较 props）：
+    if (this.props.initData && !prevProps.initData) {
+        this.initDataSource(this.props.initData);
+    }
+  }
+
+  changeForm = () => {
+    const { form } = this.props;
+    const { selectedRows } = this.state;
+    form.setFieldsValue({
+      benefitList: [{
+        gifts: selectedRows.map(item => ({ productId: item.goodsInfoId, productNum: item.productNum })),
+        deliveryNumber: 1,
+      }]
+    });
+  };
+
+  initDataSource = (initData) => {
+      if (!initData) return;
+      let {fullGiftLevelList} = initData;
+
+      if (Array.isArray(fullGiftLevelList) && fullGiftLevelList.length > 0) {
+          let initDataSource = fullGiftLevelList.map(item => {
+              let {
+                  giftLevelId,
+                  deliveryNumber,
+                  fullGiftDetailList
+              } = item;
+
+              let selectedSkuIds = fullGiftDetailList.map(item => item.productId)
+              let selectedRows = initData.goodsList.goodsInfoPage.content.filter(item => selectedSkuIds.includes(item.goodsInfoId));
+              // 添加数量属性
+              let gifts = selectedRows.map(item => {
+                  let productNum = fullGiftDetailList.find(gifItem => gifItem.productId === item.goodsInfoId).productNum;
+                  return {
+                      ...item,
+                      productNum,
+                  }
+              })
+
+              return {
+                  gifts,
+                  selectedSkuIds,
+                  selectedRows: selectedRows,
+                  key: giftLevelId,
+                  deliveryNumber: deliveryNumber,
+              }
+          })
+
+          this.setState({
+              selectedSkuIds: initDataSource[0].selectedSkuIds,
+              selectedRows: initDataSource[0].selectedRows
+          }, this.changeForm);
+      }
+
+  };
 
   render() {
-    const { selectedRows } = this.props;
-    const { goodsModal } = this.state
+    const { goodsModal, selectedSkuIds, selectedRows } = this.state;
     const { form } = this.props;
     const { getFieldDecorator } = form;
     return (
       <div>
-        <Button type="primary" icon="plus" onClick={this.openGoodsModal} style={{ marginTop: 3.5 }}>
+        <Button type="primary" icon="plus" onClick={this.openGoodsModal} style={{ marginBottom: 10 }}>
           <FormattedMessage id="Subscription.AddWelcomebox" />
         </Button>
 
-        <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={selectedRows ? selectedRows : []} pagination={false}>
+        <FormItem>
+          {getFieldDecorator('benefitList', {initialValue:[]})(<div></div>)}
+        </FormItem>
+
+        <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={selectedRows} pagination={false}>
           <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" />
 
           <Column
@@ -88,7 +153,7 @@ class ProductList extends React.Component<any, any> {
             key="marketPrice"
             dataIndex="marketPrice"
             render={(data) => {
-              return `¥${data}`;
+              return `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''}${data}`;
             }}
           />
 
@@ -165,14 +230,13 @@ class ProductList extends React.Component<any, any> {
             }}
           />
         </DataGrid>
-        <FormItem>{getFieldDecorator(`level`, {})(<div />)}</FormItem>
               
           
         {goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
             visible={goodsModal._modalVisible}
-            selectedSkuIds={this.getIdsFromLevel(selectedRows)}
+            selectedSkuIds={selectedSkuIds}
             selectedRows={fromJS(selectedRows)}
             onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(selectedSkuIds, selectedRows)}
             onCancelBackFun={this.closeGoodsModal}
@@ -188,92 +252,15 @@ class ProductList extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (goodsInfoId) => {
+    const { selectedRows } = this.state;
+    const index = selectedRows.findIndex(good => good.goodsInfoId === goodsInfoId);
+    selectedRows.splice(index, 1);
+    this.setState({
+      selectedRows
+    }, this.changeForm);
   };
 
-  /**
-   * 删除等级
-   * @param index
-   */
-  deleteLevels = (index) => {
-    let { fullGiftLevelList, onChangeBack } = this.props;
-    //重置表单的值
-    this.props.form.setFieldsValue({
-      [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
-    });
-    fullGiftLevelList.splice(index, 1);
-    // this.setState({ fullGiftLevelList: fullGiftLevelList });
-    //传递到父页面
-    onChangeBack(fullGiftLevelList);
-  };
-
-  /**
-   * 添加多级促销
-   */
-  addLevels = () => {
-    const { fullGiftLevelList, onChangeBack } = this.props;
-    if (fullGiftLevelList.length >= 5) return;
-    fullGiftLevelList.push({
-      key: this.makeRandom(),
-      fullAmount: null,
-      fullCount: null,
-      giftType: 1,
-      fullGiftDetailList: []
-    });
-    // this.setState({ fullGiftLevelList: fullGiftLevelList });
-
-    //传递到父页面
-    onChangeBack(fullGiftLevelList);
-  };
-
-  /**
-   * 初始化等级
-   */
-  initLevel = () => {
-    const initLevel = [
-      {
-        key: this.makeRandom(),
-        fullAmount: null,
-        fullCount: null,
-        giftType: 1,
-        fullGiftDetailList: []
-      }
-    ];
-    // this.setState({ fullGiftLevelList: initLevel });
-
-    const { onChangeBack } = this.props;
-    onChangeBack(initLevel);
-  };
-
-  /**
-   * 规则变更
-   * @param index
-   * @param value
-   */
-  ruleValueChange = (index, value) => {
-    const { isFullCount } = this.props;
-    this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
-  };
-
-  /**
-   * 整个表单内容变化方法
-   * @param index
-   * @param props
-   * @param value
-   */
-  onChange = (index, props, value) => {
-    const { fullGiftLevelList } = this.props;
-    fullGiftLevelList[index][props] = value;
-    if (props == 'fullAmount') {
-      fullGiftLevelList[index]['fullCount'] = null;
-    } else if (props == 'fullCount') {
-      fullGiftLevelList[index]['fullAmount'] = null;
-    }
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
-
-    //传递到父页面
-    const { onChangeBack } = this.props;
-    onChangeBack(fullGiftLevelList);
-  };
+  
 
   /**
    * sku选择之后的回调事件
@@ -282,7 +269,13 @@ class ProductList extends React.Component<any, any> {
    * @param selectedRows
    */
   skuSelectedBackFun = (selectedSkuIds, selectedRows) => {
-    
+    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return;
+
+    this.setState({
+      selectedSkuIds,
+      selectedRows: selectedRows.toJS()
+    }, this.changeForm);
+    this.closeGoodsModal();
   };
 
   /**
@@ -292,6 +285,11 @@ class ProductList extends React.Component<any, any> {
    * @param count
    */
   giftCountOnChange = (detailIndex, count) => {
+    const { selectedRows } = this.state;
+    selectedRows[detailIndex]['productNum'] = count;
+    this.setState({
+      selectedRows
+    }, this.changeForm);
   };
 
   /**
@@ -309,36 +307,6 @@ class ProductList extends React.Component<any, any> {
     this.setState({ goodsModal: { _modalVisible: false } });
   };
 
-  /**
-   * 工具方法：通过选择id获取rows
-   * @param ids
-   * @returns {Array}
-   */
-  getSelectedRowByIds = (ids) => {
-    const { selectedRows } = this.props;
-    const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
-    return rows && !rows.isEmpty() ? rows.toJS() : [];
-  };
 
-  /**
-   * 通过detailList获取id集合
-   * @param detailList
-   * @returns {Array}
-   */
-  getIdsFromLevel = (detailList) => {
-    return detailList
-      ? detailList.map((detail) => {
-          return detail.productId;
-        })
-      : [];
-  };
-
-  /**
-   * 生成随机数，作为key值
-   * @returns {string}
-   */
-  makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
-  };
 }
 export default injectIntl(ProductList)

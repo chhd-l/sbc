@@ -9,7 +9,7 @@ export default class BenefitSettingAddHint extends Component<any, any>{
     render() {
         return (
             <div className='BenefitSettingAdd-hint'>
-                <p><FormattedMessage id="Subscription.Creating Consumption gift" /></p>
+                <p><FormattedMessage id={this.props.benefitType === config.CONSUMPTION_GIFT ? "Subscription.Creating Consumption gift" : "Subscription.Creating welcome box"} /></p>
                 <div className='BenefitSettingAdd-hint-box'>
                     <Alert
                         message={

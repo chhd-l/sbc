@@ -103,6 +103,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
         let {
             initData
         } = this.state;
+        let { benefitType } = this.props;
         let errorObject = {};
 
         form.validateFields((err, values) => {
@@ -154,9 +155,9 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "marketingType":2,
                     "emailSuffixList":[],
                     "scopeType":0,
-                    "subType":12,
+                    "subType": benefitType === config.CONSUMPTION_GIFT ? 12 : 13,
                     "publicStatus":1,
-                    "promotionType": 0,
+                    "promotionType": benefitType === config.CONSUMPTION_GIFT ? 0 : values.type === 'individual' ? 4 : 2,
                 }
                 this.setState({loading: true});
                 this.store.submitFullGift(params).then(() => {

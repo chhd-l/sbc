@@ -219,6 +219,8 @@ class MarketingList extends React.Component<any, any> {
               url = `/marketing-full-reduction/${rowInfo['marketingId']}/${rowInfo['marketingType']}`;
             } else if (rowInfo.subType === 12){
                 url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
+            } else if (rowInfo.subType === 13){
+                url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`;
             }
             /**
              *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始

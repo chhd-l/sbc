@@ -41,9 +41,8 @@ class BenefitSettingAddFrom extends Component<any, any>{
                 {benefitType === config.CONSUMPTION_GIFT
                   ? <BenefitList initData={initData} form={this.props.form}/>
                   : <ProductList
+                        initData={initData}
                         form={this.props.form}
-                        selectedRows={[]}
-                        onChangeBack={() => {}}
                    />
                 }
             </Form>

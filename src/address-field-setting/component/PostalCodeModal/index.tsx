@@ -36,7 +36,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
             count: 1,
             loading: false,
             popconfirmVisible: false,
-            condition: true, // Whether meet the condition, if not show popconfirm.
+            condition: false,
         }
     }
 
@@ -58,14 +58,14 @@ export default class PostalCodeModal extends React.Component<any, any>{
         if(res.code === Const.SUCCESS_CODE){
             this.setState({
                 editData: res.context ?? {},
-                dataSource: res.context?.context?.list ?? [
+                dataSource: res.context?.addressDisplayValidJsonVO?.list ?? [
                     {
                         id: 0,
                         operator: '',
                         postalCode: '',
                     }
                 ], // 接口数据为空，默认添加一条数据
-                postalCodeAlert: res.context?.context?.alert ?? RCi18n({id: 'Setting.postalCodeAlert'}),
+                postalCodeAlert: res.context?.addressDisplayValidJsonVO?.alert ?? RCi18n({id: 'Setting.postalCodeAlert'}),
             })
         }
     }
@@ -87,16 +87,14 @@ export default class PostalCodeModal extends React.Component<any, any>{
             context,
             id: editData?.id || undefined
         }
-
+        this.cancel();
         this.setState({confirmLoading: true});
 
         let {res} = await editPostCodeBlockList(params);
-
         this.setState({confirmLoading: false});
 
         if(res.code === Const.SUCCESS_CODE){
             message.success(RCi18n({id:'Product.OperateSuccessfully'}));
-            this.cancel();
             this.handleCancel();
         }else{
 
@@ -135,9 +133,10 @@ export default class PostalCodeModal extends React.Component<any, any>{
         });
     };
 
-    handleDelete = key => {
+    handleDelete = index => {
         const dataSource = [...this.state.dataSource];
-        this.setState({ dataSource: dataSource.filter(item => item.id !== key) });
+        dataSource.splice(index, 1);
+        this.setState({ dataSource });
     };
 
     getColumns = () => {
@@ -151,7 +150,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                 render: (rowInfo, record, index) => {
                     return (
                       <div>
-                          <Form.Item key={index}>
+                          <Form.Item>
                               {
                                   getFieldDecorator(`mappings[${index}].rule`, {
                                       rules: [
@@ -173,13 +172,12 @@ export default class PostalCodeModal extends React.Component<any, any>{
                           {/*<Form.Item>*/}
                           {/*    {*/}
                           {/*        getFieldDecorator(`mappings[${index}].id`, {*/}
-                          {/*            initialValue: record.id*/}
+                          {/*            initialValue: index*/}
                           {/*        })(*/}
                           {/*          <Input hidden />*/}
                           {/*        )*/}
                           {/*    }*/}
                           {/*</Form.Item>*/}
-
                       </div>
                     );
                 }
@@ -190,9 +188,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                 width: '35%',
                 render: (rowInfo, record, index) => {
                     return (
-                      <Form.Item
-                        key={record.id}
-                      >
+                      <Form.Item>
                           {
                               getFieldDecorator(`mappings[${index}].value`, {
                                   rules: [
@@ -231,7 +227,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                               ? (
                                 <Popconfirm
                                   title={RCi18n({id: 'Subscription.SureToDelete'})}
-                                  onConfirm={() => this.handleDelete(record.id)}
+                                  onConfirm={() => this.handleDelete(index)}
                                 >
                                     <a style={{paddingLeft: 5}} className="iconfont iconDelete"/>
                                 </Popconfirm>
@@ -293,7 +289,9 @@ export default class PostalCodeModal extends React.Component<any, any>{
                                 })
                             })
                         }
-
+                        // this.setState({
+                        //     condition: !isVerify
+                        // })
                         this.showPopconfirm();
                     }
                     // this.setState({
@@ -343,7 +341,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
         }
         switch (currentCountry) {
             case 'en':
-                return defaultAlertText;
+                return alertCountryText.en;
             case 'ru':
                 return alertCountryText.ru;
             default:
@@ -429,11 +427,11 @@ export default class PostalCodeModal extends React.Component<any, any>{
                                 )
                             }
                         </div>
-                        <p>
-                            {
-                                !condition && (<Alert closable message={this.getAlertText()} type='error'/>)
-                            }
-                        </p>
+                        {/*<p>*/}
+                        {/*    {*/}
+                        {/*        popconfirmVisible && (<Alert closable message={this.getAlertText()} type='error'/>)*/}
+                        {/*    }*/}
+                        {/*</p>*/}
                     </div>
                 </div>
             </Modal>

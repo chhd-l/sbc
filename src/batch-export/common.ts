@@ -242,5 +242,10 @@ export const subscriptionSeachField:fieldDataType[] = [
       ]
     },
     optionLink: 'subscriptionType'
+  },
+  {
+    label: '',
+    key: 'beginTime',
+    type: 'rangePicker'
   }
 ];

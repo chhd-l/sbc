@@ -45,7 +45,7 @@ export default function Creating({userInfo,setStep}) {
           storeId: userInfo.storeId,
         }).then(({res})=>{
           if(res.code === 'K-000000'){
-            history.push("/login")
+            setStep(6);
           }
         })
       }else if(isPending){

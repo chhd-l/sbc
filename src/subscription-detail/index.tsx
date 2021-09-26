@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { PostalCodeMsg } from 'biz';
 import './index.less';
 import * as webapi from './webapi';
 const Panel = Collapse.Panel;
@@ -1038,6 +1039,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage id="Subscription.Address2" />:{' '}
                   </p>
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                </Col>
+                {/*根据地址是否属于黑名单进而决定是否显示*/}
+                <Col span={24}>
+                  {
+                    !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                  }
                 </Col>
               </Col>
                  {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态

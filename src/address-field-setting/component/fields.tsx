@@ -3,6 +3,7 @@ import { Headline, Const } from 'qmkit';
 import { Radio, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
 import SortFields from './sort-fields';
 import { getAddressSetting } from '../../validation-setting/webapi';
+import PostalCodeModal from '../component/PostalCodeModal';
 
 const Option = Select.Option;
 const INPUT_TYPE = [
@@ -26,7 +27,9 @@ export default class Fields extends React.Component<any, any> {
     this.state = {
       visible: false,
       field: {},
-      apiName: ''
+      apiName: '',
+      isEditPostalCode: false,
+      visiblePostalCode: false,
     };
   }
 
@@ -80,8 +83,32 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
+  handlePostalCode = (checked: boolean) => {
+    this.setState({
+      isEditPostalCode: checked,
+    })
+  }
+
+  handlePostalCodeCancel = () => {
+    this.setState({
+      visiblePostalCode: false,
+    });
+  };
+
+  handlePostalCodeShow = () => {
+    this.setState({
+      visiblePostalCode: true,
+    });
+  };
+
   render() {
-    const { visible, field, apiName } = this.state;
+    const {
+      visible,
+      field,
+      apiName,
+      isEditPostalCode,
+      visiblePostalCode,
+    } = this.state;
     const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange, onSortEnd } = this.props;
     const columns = [
       {
@@ -125,6 +152,34 @@ export default class Fields extends React.Component<any, any> {
         )
       },
       {
+        title: 'Validation',
+        dataIndex: 'Validation',
+        key: 'Validation',
+        render: (text, record) => {
+          let fieldName = record.fieldName || '';
+          if (fieldName === 'Postal code'){
+            return (
+              <div className='validation-wrap'>
+                <Switch
+                  defaultChecked={false}
+                  checked={isEditPostalCode}
+                  onChange={this.handlePostalCode}
+                />
+                {
+                  isEditPostalCode
+                    ? (
+                      <a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />
+                    )
+                    : null
+                }
+              </div>
+            );
+          }else {
+            return null;
+          }
+        }
+      },
+      {
         title: 'Max length',
         dataIndex: 'maxLength',
         key: 'c5'
@@ -163,8 +218,11 @@ export default class Fields extends React.Component<any, any> {
         sm: { span: 16 }
       }
     };
+
+    const addressDisplaySettingId = manualFieldList.find(item => item.fieldKey === 'postCode')?.id;
+
     return (
-      <div>
+      <div className='fields-wrap'>
         <Tabs activeKey={activeKey} onChange={onChangeActiveKey}>
           <Tabs.TabPane tab="Input manually" key="MANUALLY">
             {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
@@ -213,6 +271,17 @@ export default class Fields extends React.Component<any, any> {
             ) : null}
           </Form>
         </Modal>
+        {
+          visiblePostalCode
+            ? (
+              <PostalCodeModal
+                addressDisplaySettingId={addressDisplaySettingId}
+                visible={visiblePostalCode}
+                onCancel={this.handlePostalCodeCancel}
+              />
+            )
+            : null
+        }
       </div>
     );
   }

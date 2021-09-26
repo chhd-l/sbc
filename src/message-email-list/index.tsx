@@ -312,7 +312,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : +text === 6 ? 'Building' : '' }</span>
       },
       {
         title: 'Email Receive Status',

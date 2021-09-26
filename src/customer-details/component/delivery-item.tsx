@@ -408,7 +408,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         }
       }
       else {
-        callback();
+        callback(new Error(res?.message || 'err'));
       }
     }
   };

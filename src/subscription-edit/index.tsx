@@ -3,6 +3,7 @@ import { Breadcrumb, Tabs, Card, Menu, Row, Col, Button, Input, Select, message,
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import { PostalCodeMsg } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -412,7 +413,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       message.error(RCi18n({ id: "Subscription.quantityAndFrequency" }));
       return;
     }
-    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值, 
+    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值,
     if (+storeId === 123457907 && deliveryAddressInfo.receiveType === 'HOME_DELIVERY' && deliveryDateList.length > 0) {
       //deliveryDate 没有选择 报错
       if (!deliveryDate) {
@@ -1663,13 +1664,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
 
+
                   {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.WorkTime" />: </p>
                       <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
                     </Col>
                   ) : null}
-
+                  <Col span={24}>
+                    {
+                      !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                    }
+                  </Col>
                 </Row>
               </Col>
               {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
@@ -1905,6 +1911,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 )}
 
               </Row>
+              {/*如果是黑名单的地址，则不能选择*/}
 
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
@@ -1920,7 +1927,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
                   pickupAddress.map((item: any, index: any) => (
                     <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                      <Radio value={item.deliveryAddressId}>
+                      <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + '  ' + item.lastName}</p>
                           <p>{item.city}</p>
@@ -1929,6 +1936,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>{item.address1}</p>
                           <p>{item.address2}</p>
                           <p>{item.workTime}</p>
+                          {
+                            !item.validFlag
+                              ? <PostalCodeMsg text={item.alert} />
+                              : null
+                          }
                         </div>
                       </Radio>
                       <div>
@@ -1969,7 +1981,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     ))
                       : deliveryList.map((item: any, index: any) => index < 2 ? (
                         <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                          <Radio value={item.deliveryAddressId}>
+                          <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + '  ' + item.lastName}</p>
                               <p>{item.city}</p>
@@ -1977,6 +1989,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
+                              {
+                                !item.validFlag
+                                  ? <PostalCodeMsg text={item.alert} />
+                                  : null
+                              }
                             </div>
                           </Radio>
                           <div>

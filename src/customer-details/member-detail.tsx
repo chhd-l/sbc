@@ -14,6 +14,8 @@ import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import FeedbackList from './component/feedback-list';
 import BenefitsList from './component/benefits-list'
+import { PostalCodeMsg } from 'biz';
+
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
@@ -418,6 +420,12 @@ export default class CustomerDetails extends React.Component<any, any> {
                           </Col>
                         </>
                       ))}
+                      {
+                        !basic?.validFlag
+                          ? <Col span={24}><PostalCodeMsg text={basic.alert}/></Col>
+                          : null
+                      }
+
                     </Row>
                   </Col>
                 </Row>
@@ -584,9 +592,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab={RCi18n({id:"PetOwner.DeliveryInformation"})} key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">
-                  {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
-                </TabPane> : null}
+                {
+                  (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru'
+                  ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
+                  : null
+                }
                 <TabPane tab={RCi18n({id:"PetOwner.PaymentMethods"})} key="payment">
                   <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
                 </TabPane>

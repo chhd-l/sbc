@@ -422,15 +422,9 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id='Setting.avatar' />} required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='Setting.avatar' />}>
             {getFieldDecorator('employeeImage', {
               ...employeeImage,
-              rules: [
-                {
-                  required: true,
-                  message: 'Please upload user avatar'
-                }
-              ]
             })(<Input hidden={true} />)}
             <Upload
               name='uploadFile'

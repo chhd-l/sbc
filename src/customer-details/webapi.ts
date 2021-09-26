@@ -402,7 +402,7 @@ export function refreshPetLifeStage(petId: string) {
 
 // 校验 validPostCodeBlock
 export function validPostCodeBlock(postCode) {
-  return Fetch<TResult>(`/addressDisplaySetting/validPostCodeBlockForPortal??postCode=${postCode}`, {
+  return Fetch<TResult>(`/addressDisplaySetting/validPostCodeBlockForPortal?postCode=${postCode}`, {
     method: 'GET'
   });
 }

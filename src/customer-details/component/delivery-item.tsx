@@ -7,6 +7,7 @@ import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getSta
 import { updateAddress, addAddress, validPostCodeBlock } from '../webapi';
 import _ from 'lodash';
 
+
 const { Option } = Select;
 
 type TDelivery = {
@@ -398,8 +399,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
       // 邮编黑名单校验
       let res = await validPostCodeBlock(value);
       console.log('res', res);
-      if (res?.code === Const.SUCCESS_CODE){
-        const data = res?.context || {};
+      if (res?.res?.code === Const.SUCCESS_CODE){
+        const data = res?.res?.context || {};
         // validFlag 1 通过 0 不通过
         if (!!data?.validFlag){
           callback()
@@ -408,7 +409,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         }
       }
       else {
-        callback(new Error(res?.message || 'err'));
+        callback(new Error(RCi18n({ id: 'PetOwner.PostalCodeMsg' })));
       }
     }
   };

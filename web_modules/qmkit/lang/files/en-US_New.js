@@ -1548,7 +1548,7 @@ export default {
         'PetOwner.Subscription cancel': 'Subscription cancel',
         'PetOwner.Dismiss': 'Dismiss',
         'PetOwner.Default': 'Default',
-        
+        'PetOwner.PostalCodeMsg': '* Delivery not available in the area.',
 
     },
     Finance: {
@@ -2387,6 +2387,8 @@ export default {
         "Setting.AddConsent": "Add consent",
         "Setting.EditConsent": "Edit consent",
         "Setting.requiredFields": "Please fill in required field!",
+        'Setting.Operator': 'Operator',
+        'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
 
     },
     Menu: {

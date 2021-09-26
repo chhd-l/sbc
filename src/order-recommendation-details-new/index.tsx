@@ -97,7 +97,7 @@ export default class BillingDetails extends React.Component<any, any> {
         title: RCi18n({id:'Order.WriteReason'})
       },
       {
-        title: RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.save' : 'Order.SendToRecipient'})
+        title: RCi18n({id:'Order.SendToRecipient'})
       }
     ];
     return (
@@ -129,7 +129,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 )}
               </div>
             ) : current == 3 ? (
-              <div className={Const.SITE_NAME === 'MYVETRECO' ? '' : 'btn'}>
+              <div className="btn">
                 <PublishTooltip onRef={this.onRef} />
               </div>
             ) : null}

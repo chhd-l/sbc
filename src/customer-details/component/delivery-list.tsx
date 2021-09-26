@@ -5,6 +5,9 @@ import { Headline, RCi18n, Const } from 'qmkit';
 import * as webapi from './webapi';
 import { getAddressListByType, addAddress, updateAddress, defaultAddress, delAddress } from '../webapi';
 import PickupDelivery from './pickup-delivery'
+import { PostalCodeMsg } from 'biz';
+
+
 interface Iprop {
   customerId: string;
   type: 'DELIVERY' | 'BILLING';
@@ -225,7 +228,21 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       {
         title: RCi18n({ id: "PetOwner.PostalCode" }),
         dataIndex: 'postCode',
-        key: 'postcode'
+        key: 'postcode',
+        render: (text, record) => {
+          if (!!record?.validFlag){
+            return <span>{text}</span>
+          }else {
+            return (
+              <div style={{color: '#e2001a'}}>
+                <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg text={record?.alert}/>}>
+                  <span>{text}</span>
+                </Tooltip>
+              </div>
+            )
+          }
+        },
+
       },
       {
         title: RCi18n({ id: "PetOwner.Address" }),

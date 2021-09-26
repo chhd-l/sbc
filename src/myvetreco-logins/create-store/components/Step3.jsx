@@ -293,41 +293,6 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem label="Store address 1" name="addressDetail">
-                {getFieldDecorator('addressDetail', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="City" name="cityId">
-                {getFieldDecorator('cityId', {
-                  initialValue: {key:'',label:''}
-                })(
-                  <DebounceSelect
-                    size="large"
-                    placeholder="Select users"
-                    fetchOptions={fetchUserList}
-                    defaultOptions={defaultOptions}
-                    style={{
-                      width: '100%',
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Postcode" name="postcode">
-                {getFieldDecorator('postcode', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
               <FormItem label="Introduction"
                         name="introduction">
                 <Input.TextArea size="large" />
@@ -338,7 +303,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 <span>
                   <span className='form-require'>Order audit setting</span>
                 </span>
-                <FormItem name="auditSetting">
+                <FormItem name="auditSetting" style={{marginBottom:0}}>
                   {getFieldDecorator('auditSetting', {
                     rules: [{ required: true, message: 'Please choose Order audit setting!' }],
                     initialValue: 0
@@ -349,6 +314,13 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                     </Radio.Group>
                   )}
                 </FormItem>
+              </div>
+              <div className="flex word small tip">
+                <span className="flex-item">Instructions:</span>
+                <div className="flex-item flex-main hpadding-level-2">
+                  <div>Auto audit: Orders do not need to audit by clinic after payment successfully by PO</div>
+                  <div>Manual audit: Orders need to audit by clinic after payment successfully by PO</div>
+                </div>
               </div>
             </Col>
             <Col span={12} className="align-item-right">

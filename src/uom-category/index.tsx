@@ -50,15 +50,18 @@ function UomCategory(props: any) {
     {
       title: 'UOM category name',
       dataIndex: 'uomCategoryName',
+      width: '40%',
       key: 'name',
     },
     {
       title: 'Description',
       dataIndex: 'description',
+      width: '40%',
       key: 'desc',
     },
     {
       title: 'Operation',
+      width: '20%',
       key: 'oper',
       render: (text, record) => (
         <div>

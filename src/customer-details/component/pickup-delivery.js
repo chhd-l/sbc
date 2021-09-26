@@ -83,6 +83,14 @@ export default class PickupDelivery extends React.Component {
       }
     );
 
+    // 初始化地图控件。在完全绘制页面后调用。
+    document.addEventListener('DOMContentLoaded', () => {
+      kaktusMap({
+        domain: 'shop3505331',
+        host: '//app.kak2c.ru'
+      });
+    });
+
     // 监听iframe的传值
     window.addEventListener('message', (e) => {
       // 地图上选择快递公司后返回
@@ -116,15 +124,11 @@ export default class PickupDelivery extends React.Component {
             pickupForm
           },
           () => {
-            let sitem =
-              sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
+            let sitem = sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
             if (sitem) {
               sitem = JSON.parse(sitem);
               sitem['pickup'] = obj;
-              sessionStorage.setItem(
-                'rc-portal-homeDeliveryAndPickup',
-                JSON.stringify(sitem)
-              );
+              sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(sitem));
             }
             this.setState(
               {
@@ -152,14 +156,9 @@ export default class PickupDelivery extends React.Component {
 
     let defaultCity = this.props.defaultCity;
     console.log('666 >>> defaultCity : ', defaultCity);
-
-    // 有默认city且无缓存 或者 有缓存
-    let pickupEditNumber = this.props.pickupEditNumber;
-    if ((defaultCity && !sitem) || (defaultCity && pickupEditNumber == 0) || pickupEditNumber > 0) {
-      // 有默认城市但没有缓存
-      defaultCity
-        ? (defaultCity = defaultCity)
-        : (defaultCity = sitem?.cityData?.city);
+    defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
+    // 有默认城市但没有缓存
+    if (defaultCity) {
       let res = await webapi.pickupQueryCity(defaultCity);
       let robj = res?.res?.context?.pickUpQueryCityDTOs || [];
       if (robj) {
@@ -169,43 +168,9 @@ export default class PickupDelivery extends React.Component {
           searchNoResult: true
         });
       }
-    } else if (sitem?.homeAndPickup?.length && pickupEditNumber > 0) {
-      // 初始化数据，本地存储有数据（当前会话未结束）
-      let stype = '';
-      let newobj = [];
-      let isSelectedItem = false; // 是否有选中项
-      sitem?.homeAndPickup.forEach((v, i) => {
-        let tp = v.type;
-        if (v.selected) {
-          stype = tp;
-          isSelectedItem = true;
-        }
-        if (tp == 'pickup' || tp == 'homeDelivery') {
-          newobj.push(v);
-        }
-      });
-
-      sitem.homeAndPickup = newobj;
-      this.setState(
-        {
-          selectedItem: sitem,
-          pickupCity: sitem?.cityData?.city || defaultCity
-        },
-        () => {
-          if (isSelectedItem) {
-            this.setItemStatus(stype);
-          }
-        }
-      );
     }
     this.props.updatePickupLoading(false);
   }
-  getCurrencySymbol = () => {
-    let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
-    this.setState({
-      currencySymbol
-    });
-  };
   // 设置手机号输入限制
   setPickupTelNumberReg = () => {
     let telnum = document.getElementById('phoneNumberShippingPickup');
@@ -241,6 +206,8 @@ export default class PickupDelivery extends React.Component {
       pickLoading: true,
       searchNoResult: false
     });
+    console.log('666 >>> 搜索下拉选择 ~~');
+    // this.openKaktusWidget();
     try {
       // 向子域发送数据
       this.sendMsgToIframe('close');
@@ -258,10 +225,10 @@ export default class PickupDelivery extends React.Component {
         // 'COURIER'=> home delivery、'PVZ'=> pickup
         let obj = res.res.context.tariffs;
 
-        // 有地址的时候，单独展示pickup，如果查询到不支持pickup，给出错误提示
+        // 如果查询到不支持pickup，给出错误提示
+        obj = obj.filter((e) => e.type === 'PVZ');
         if (this.props.pickupAddress.length) {
-          let pvzobj = obj.filter((e) => e.type == 'PVZ');
-          if (!pvzobj.length) {
+          if (!obj.length) {
             this.setState({
               searchNoResult: true
             });
@@ -279,40 +246,32 @@ export default class PickupDelivery extends React.Component {
         pickupForm['cityIdStr'] = data.cityFias;
         pickupForm['settlementIdStr'] = data.settlementFias;
 
+        let hdpu = [];
+        obj.forEach((v, i) => {
+          let type = v.type;
+          v.selected = false;
+          if (type == 'PVZ') {
+            v.selected = true;
+            v.type = 'pickup';
+            hdpu.push(v);
+          }
+        });
+        selitem = {
+          cityData: data,
+          homeAndPickup: hdpu
+        };
+
         this.setState(
           {
-            pickupForm,
+            pickupForm: pickupForm,
+            pickupCity: data.city,
             selectedItem: Object.assign({}, selitem)
           },
           () => {
-            let hdpu = [];
-            obj.forEach((v, i) => {
-              let type = v.type;
-              v.selected = false;
-              // 显示pickup
-              if (type == 'PVZ') {
-                v.selected = true;
-                v.type = 'pickup';
-                hdpu.push(v);
-              }
-            });
-            let item = {
-              cityData: data,
-              homeAndPickup: hdpu
-            };
+            sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(selitem));
 
-            this.setState(
-              {
-                pickupCity: data.city,
-                selectedItem: Object.assign({}, item)
-              },
-              () => {
-                sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(item));
-
-                // 只显示pickup
-                this.setItemStatus('pickup');
-              }
-            );
+            // 只显示pickup
+            this.setItemStatus('pickup');
           }
         );
       } else {
@@ -331,6 +290,7 @@ export default class PickupDelivery extends React.Component {
           searchNoResult: true
         });
       }
+
     } catch (err) {
       console.warn(err);
     } finally {
@@ -340,29 +300,7 @@ export default class PickupDelivery extends React.Component {
       this.props.updatePickupLoading(false);
     }
   };
-  // 单选按钮选择
-  handleRadioChange = (e) => {
-    const { selectedItem } = this.state;
-    let val = e.currentTarget?.value;
-    let sitem = Object.assign({}, selectedItem);
 
-    sitem?.homeAndPickup.forEach((v, i) => {
-      if (v.type == val) {
-        v['selected'] = true;
-      } else {
-        v['selected'] = false;
-      }
-    });
-    this.setState(
-      {
-        selectedItem: Object.assign({}, sitem)
-      },
-      () => {
-        sessionStorage.setItem('rc-portal-homeDeliveryAndPickup', JSON.stringify(sitem));
-        this.setItemStatus(val);
-      }
-    );
-  };
   // 设置状态
   setItemStatus = (val) => {
     const { pickupEditNumber } = this.props;
@@ -377,25 +315,15 @@ export default class PickupDelivery extends React.Component {
         v.type == 'pickup' ? (pickupItem = v) : null;
       }
     });
-    let flag = false;
-    if (val == 'homeDelivery') {
-      flag = false;
-      this.setState({
-        showPickupForm: false,
-        showPickupDetailDialog: false,
-        showPickupDetail: false
-      });
-    } else if (val == 'pickup') {
-      flag = true;
-      this.sendMsgToIframe();
-    }
+
+    this.sendMsgToIframe();
 
     let pkobj = {
       city: sitem?.cityData?.city || [],
       calculation: pickupItem,
       maxDeliveryTime: pickupItem?.maxDeliveryTime || 0,
       minDeliveryTime: pickupItem?.minDeliveryTime || 0,
-      receiveType: flag ? 'PICK_UP' : 'HOME_DELIVERY'
+      receiveType: 'PICK_UP'
     };
 
     // 再次编辑地址的时候，从缓存中取city数据
@@ -412,7 +340,7 @@ export default class PickupDelivery extends React.Component {
 
     this.setState(
       {
-        showPickup: flag,
+        showPickup: true,
         pickLoading: false,
         pickupForm: Object.assign(pickupForm, pkobj)
       },
@@ -438,6 +366,7 @@ export default class PickupDelivery extends React.Component {
         msg = pickupCity;
         break;
     }
+    console.log('666 >>> 向iframe发送数据: ', msg);
 
     childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
   };
@@ -593,6 +522,20 @@ export default class PickupDelivery extends React.Component {
     });
   };
 
+  // 打开地图
+  openKaktusWidget = () => {
+    console.log('666 >>> 打开地图 ~~');
+    window.kaktusMap.openWidget({
+      city_from: 'Москва',
+      city_to: 'Москва',
+      dimensions: {
+        height: 10,
+        width: 10,
+        depth: 10
+      },
+      weight: 600
+    });
+  };
 
   render() {
     const {

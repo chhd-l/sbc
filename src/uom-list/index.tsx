@@ -68,6 +68,7 @@ function UomList(props: any) {
     {
       title: 'UOM Name',
       dataIndex: 'uomName',
+      width: '20%',
       key: 'name',
     },
     {

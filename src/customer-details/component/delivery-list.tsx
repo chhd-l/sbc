@@ -176,6 +176,8 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       this.setState({
         addOrEditPickup: false,
         pickupLoading: false
+      },()=>{
+        this.getAddressList();
       });
     }
   }

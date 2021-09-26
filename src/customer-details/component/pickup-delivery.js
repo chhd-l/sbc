@@ -158,7 +158,7 @@ export default class PickupDelivery extends React.Component {
     console.log('666 >>> defaultCity : ', defaultCity);
     defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
     // 有默认城市但没有缓存
-    if (defaultCity) {
+    if ((defaultCity && !sitem) ||(defaultCity && pickupEditNumber == 0) ||pickupEditNumber > 0) {
       let res = await webapi.pickupQueryCity(defaultCity);
       let robj = res?.res?.context?.pickUpQueryCityDTOs || [];
       if (robj) {
@@ -206,8 +206,6 @@ export default class PickupDelivery extends React.Component {
       pickLoading: true,
       searchNoResult: false
     });
-    console.log('666 >>> 搜索下拉选择 ~~');
-    // this.openKaktusWidget();
     try {
       // 向子域发送数据
       this.sendMsgToIframe('close');
@@ -519,21 +517,6 @@ export default class PickupDelivery extends React.Component {
     this.setState({
       searchNoResult: false,
       pickupCity: ''
-    });
-  };
-
-  // 打开地图
-  openKaktusWidget = () => {
-    console.log('666 >>> 打开地图 ~~');
-    window.kaktusMap.openWidget({
-      city_from: 'Москва',
-      city_to: 'Москва',
-      dimensions: {
-        height: 10,
-        width: 10,
-        depth: 10
-      },
-      weight: 600
     });
   };
 

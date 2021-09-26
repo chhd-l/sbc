@@ -2387,6 +2387,7 @@ export default {
         "Setting.AddConsent": "Add consent",
         "Setting.EditConsent": "Edit consent",
         "Setting.requiredFields": "Please fill in required field!",
+        "Setting.avatar": "Avatar"
 
     },
     Menu: {

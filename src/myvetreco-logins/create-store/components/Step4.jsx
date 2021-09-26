@@ -196,14 +196,14 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                              step={0.1}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
-              <Col span={3}>
+              {/* <Col span={3}>
                 <Checkbox checked={roundOff} onChange={(e)=>{
                   setRoundOff(e.target.checked)
                 }}>
                   <span className="word small tip">round off</span>
                 </Checkbox>
-              </Col>
-              <Col span={9}>
+              </Col> */}
+              <Col span={12}>
                 <div style={{display:'inline-flex'}}>
                   <Button type="primary" onClick={applyPercentage} style={{marginRight:6}}>Apply</Button>
                   <Button loading={loading} type="primary" onClick={savePrice} style={{marginRight:6}}>Save and Next</Button>

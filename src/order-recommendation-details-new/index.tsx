@@ -147,7 +147,7 @@ export default class BillingDetails extends React.Component<any, any> {
             )}
             {current === steps.length - 1 && (
               <Button type="primary" shape="round" style={{ margin: '0 8px' }} onClick={this.handleSend}>
-                {RCi18n({id: Const.SITE_NAME === 'MYVETRECO' ? 'Order.save' : 'Order.Send'})}
+                {RCi18n({id:'Order.Send'})}
               </Button>
             )}
             {current < steps.length - 2 && (

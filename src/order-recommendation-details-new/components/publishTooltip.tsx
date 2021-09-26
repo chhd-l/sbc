@@ -257,12 +257,12 @@ export default class DetailPublish extends React.Component<any, any> {
             {RCi18n({id:'Order.shareLinkTip'})}
           </span>
         </div>
-        <Button key="back" onClick={this.handleCancel}>
+        {/* <Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
-        </Button>
+        </Button> */}
       </div>
     );
   }

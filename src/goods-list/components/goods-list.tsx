@@ -98,7 +98,7 @@ class CateList extends React.Component<any, any> {
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
         {/* Image */}
-        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <ImgWithFallback src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img, record) => (img && record.weShareId ? <ImgWithFallback src={img} style={styles.imgItem} /> : <img src={img ?? defaultImg} style={styles.imgItem} />)} />
         {/* Product name */}
         <Column
           // title="商品名称"

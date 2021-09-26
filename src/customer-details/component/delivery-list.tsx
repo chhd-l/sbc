@@ -348,7 +348,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
             {/* pickup弹框 */}
             <Modal
               width={650}
-              title={pickupList ? <FormattedMessage id="Subscription.ChangePickup" /> : <FormattedMessage id="Subscription.AddPickup" />}
+              title={pickupList?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
               visible={addOrEditPickup}
               confirmLoading={pickupLoading}
               onOk={() => this.pickupConfirm()}

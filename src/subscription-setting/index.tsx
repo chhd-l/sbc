@@ -19,7 +19,7 @@ import {
 
 import * as webapi from './webapi';
 import { FormattedMessage,injectIntl } from 'react-intl';
-import './index.css'
+import './index.less'
 
 const FormItem = Form.Item;
  class Subscription extends Component<any, any> {
@@ -255,6 +255,7 @@ const FormItem = Form.Item;
                     <div style={styles.inputStyle}>
                       <span onMouseDown={(e) => { e.preventDefault(); return false; }}>
                         <Select
+                          className="card-expiration-select"
                           mode="multiple"
                           ref="cardSelect"
                           showArrow={true}

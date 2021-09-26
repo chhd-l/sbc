@@ -67,6 +67,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
+      allAddressList: [],
       deliveryList: [],
       billingList: [],
       customerAccount: '',
@@ -110,6 +111,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupEditNumber: 0,
       pickupAddress: null,
       pickupFormData: [], // pickup 表单数据
+      pickupPointState: false, // pickup 状态
+
       deliveryDate: undefined,
       timeSlot: undefined,
       deliveryDateList: [],
@@ -199,6 +202,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
               deliveryAddressInfo: subscriptionDetail.consignee,
+              pickupPointState: subscriptionDetail.consignee?.pickupPointState,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
               originalParams: originalParams,
@@ -539,6 +543,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
         let allAddress = res.context.customerDeliveryAddressVOList || [];
+        let allList = allAddress.filter((addr: any) => addr.type === 'DELIVERY');
         let addressList = allAddress.filter((addr: any) => addr.receiveType !== 'PICK_UP');
         let pickup = allAddress.filter((pk: any) => pk.receiveType === 'PICK_UP');
         let customerAccount = res.context.customerAccount;
@@ -554,8 +559,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.getCityNameById(cityIds, 'DELIVERY');
 
           this.setState({
-            pickupAddress: pickup,
+            allAddressList: allList,
             deliveryList: addressList,
+            pickupAddress: pickup,
             customerAccount: customerAccount,
             customerId: customerId,
             visibleShipping: showModal
@@ -683,12 +689,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   deliveryOK = async () => {
-    let { deliveryList, deliveryAddressId, subscriptionInfo } = this.state;
-    let deliveryAddressInfo = deliveryList.find((item) => {
+    const { deliveryList, allAddressList, pickupPointState, deliveryAddressId, subscriptionInfo } = this.state;
+    let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
-    //俄罗斯地址验证是否完整
-    if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
+    deliveryAddressInfo['pickupPointState'] = pickupPointState;
+
+    // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
+    if (deliveryAddressInfo.receiveType !== 'PICK_UP' && (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
       if (!deliveryAddressInfo.street ||
         !deliveryAddressInfo.postCode ||
         !deliveryAddressInfo.house ||
@@ -714,6 +722,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
 
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
+
     //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
     // if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
@@ -1066,7 +1075,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       timeSlot: value
     })
   }
-
 
   // 更新 pickup编辑次数
   updatePickupEditNumber = (num: number) => {
@@ -2043,21 +2051,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              <Spin spinning={pickupLoading}>
-                <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
-                  <Col style={{ width: '100%' }}>
-                    <PickupDelivery
-                      key={defaultCity}
-                      initData={pickupFormData}
-                      pickupAddress={pickupAddress}
-                      defaultCity={defaultCity}
-                      updatePickupEditNumber={this.updatePickupEditNumber}
-                      updateData={this.updatePickupData}
-                      pickupEditNumber={pickupEditNumber}
-                    />
-                  </Col>
-                </Row>
-              </Spin>
+              {/* <Spin spinning={pickupLoading}>
+              </Spin> */}
+              <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                <Col style={{ width: '100%' }}>
+                  <PickupDelivery
+                    key={defaultCity}
+                    initData={pickupFormData}
+                    pickupAddress={pickupAddress}
+                    defaultCity={defaultCity}
+                    updatePickupEditNumber={this.updatePickupEditNumber}
+                    updateData={this.updatePickupData}
+                    pickupEditNumber={pickupEditNumber}
+                  />
+                </Col>
+              </Row>
 
             </Modal>
 

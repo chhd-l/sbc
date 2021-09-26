@@ -90,11 +90,11 @@ class PickupMap extends Component<any, any> {
     const { mapLoading } = this.state;
     return (
       <>
-        <Spin spinning={mapLoading}>
+        {/* <Spin spinning={mapLoading}>
+        </Spin> */}
           <div className="pickup_map_box">
             <div id="kaktusMap"></div>
           </div>
-        </Spin>
       </>
     );
   }

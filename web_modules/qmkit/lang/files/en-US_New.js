@@ -989,6 +989,7 @@ export default {
         'Subscription.PickupDelivery': 'Pickup Delivery',
         'Subscription.DeliveryMethod': 'Delivery Method',
 
+        'Subscription.WorkTime': 'Work Time',
         'Subscription.PickupAddress': 'Pickup Address',
         'Subscription.MoreDetails': 'More details',
         'Subscription.ChangePickup': 'Change pick up delivery',

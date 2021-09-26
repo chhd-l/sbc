@@ -1109,6 +1109,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupEditNumber,
       defaultCity,
       addOrEditPickup,
+      pickupLoading,
 
       deliveryDate,
       deliveryDateList,
@@ -1534,6 +1535,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           {' '}
           <div className="container-search">
             <Headline title={<FormattedMessage id="Subscription.edit" />} />
+
             {/* subscription 基本信息 */}
             <Row className="subscription-basic-info">
               <Col span={24}>
@@ -1568,6 +1570,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </p>
               </Col>
             </Row>
+
             {/* subscription 和 total */}
             <Row style={{ marginTop: 20 }} gutter={16}>
               <Col span={24}>
@@ -1659,6 +1662,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
                     <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
+
+                  {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.WorkTime" />: </p>
+                      <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                    </Col>
+                  ) : null}
+
                 </Row>
               </Col>
               {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
@@ -1820,6 +1831,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Col>
             </Row>
+
             {/* 修改收货地址弹窗 */}
             <Modal
               width={650}
@@ -1916,6 +1928,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>{this.getDictValue(countryArr, item.countryId)}</p>
                           <p>{item.address1}</p>
                           <p>{item.address2}</p>
+                          <p>{item.workTime}</p>
                         </div>
                       </Radio>
                       <div>
@@ -1999,41 +2012,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Modal>
 
             {/* pickup弹框 */}
-            {pickupIsOpen && (
-              <Modal
-                width={650}
-                title={pickupAddress ? <FormattedMessage id="Subscription.ChangePickup" /> : <FormattedMessage id="Subscription.AddPickup" />}
-                visible={addOrEditPickup}
-                confirmLoading={this.state.pickupLoading}
-                onOk={() => this.pickupConfirm()}
-                onCancel={() => {
-                  this.setState({
-                    deliveryAddressId: this.state.originalParams.deliveryAddressId,
-                    addOrEditPickup: false,
-                    visibleShipping: true
-                  });
-                }}
-              >
-                {addOrEditPickup ? (
-                  <Spin spinning={this.state.pickupLoading}>
-                    <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
-                      <Col style={{ width: '100%' }}>
-                        <PickupDelivery
-                          key={defaultCity}
-                          initData={pickupFormData}
-                          pickupAddress={pickupAddress}
-                          defaultCity={defaultCity}
-                          updatePickupEditNumber={this.updatePickupEditNumber}
-                          updateData={this.updatePickupData}
-                          pickupEditNumber={pickupEditNumber}
-                        />
-                      </Col>
-                    </Row>
-                  </Spin>
-                ) : null}
+            <Modal
+              width={650}
+              title={pickupAddress?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
+              visible={pickupIsOpen && addOrEditPickup}
+              confirmLoading={pickupLoading}
+              onOk={() => this.pickupConfirm()}
+              onCancel={() => {
+                this.setState({
+                  deliveryAddressId: this.state.originalParams.deliveryAddressId,
+                  addOrEditPickup: false,
+                  visibleShipping: true
+                });
+              }}
+            >
+              <Spin spinning={pickupLoading}>
+                <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                  <Col style={{ width: '100%' }}>
+                    <PickupDelivery
+                      key={defaultCity}
+                      initData={pickupFormData}
+                      pickupAddress={pickupAddress}
+                      defaultCity={defaultCity}
+                      updatePickupEditNumber={this.updatePickupEditNumber}
+                      updateData={this.updatePickupData}
+                      pickupEditNumber={pickupEditNumber}
+                    />
+                  </Col>
+                </Row>
+              </Spin>
 
-              </Modal>
-            )}
+            </Modal>
 
             {/* billingAddress弹框 */}
             <Modal
@@ -2117,18 +2126,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           </div>
           <div className="container-search" style={{ marginBottom: 20 }}>
-            <Headline
-              title={<FormattedMessage id="Subscription.AutoshipOrder" />}
-            // extra={
-            //   <div>
-            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-            //       <Option value="2020">2020</Option>
-            //       <Option value="2019">2019</Option>
-            //       <Option value="2018">2018</Option>
-            //     </Select>
-            //   </div>
-            // }
-            />
+            <Headline title={<FormattedMessage id="Subscription.AutoshipOrder" />} />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>

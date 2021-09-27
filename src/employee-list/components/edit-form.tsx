@@ -271,6 +271,31 @@ export default class EditForm extends React.Component<any, any> {
     return (
       <Form>
         <Row>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='Setting.avatar' />} style={{marginBottom: 0}}>
+            {getFieldDecorator('employeeImage', {
+              ...employeeImage,
+            })(<Input hidden={true} />)}
+            <Upload
+              name='uploadFile'
+              headers={{
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + (window as any).token
+              }}
+              listType='picture-card'
+              className='avatar-uploader'
+              accept='.jpg,.jpeg,.png,.gif'
+              showUploadList={false}
+              action={`${Const.HOST}/store/uploadStoreResource??resourceType=IMAGE`}
+              onChange={this.handleUpload}
+            >
+              {
+                getFieldValue('employeeImage') ? (
+                  <img src={getFieldValue('employeeImage')} alt="avatar" style={{ width: '100%' }} />
+                ) : (<Icon type={this.state.uploadLoading ? 'loading' : 'plus'} />)
+              }
+            </Upload>
+          </FormItem>
+
           <FormItem
             {...formItemLayout}
             label={<FormattedMessage id='email' />}
@@ -420,31 +445,6 @@ export default class EditForm extends React.Component<any, any> {
                 </Radio>
               </RadioGroup>
             )}
-          </FormItem>
-
-          <FormItem {...formItemLayout} label={<FormattedMessage id='Setting.avatar' />}>
-            {getFieldDecorator('employeeImage', {
-              ...employeeImage,
-            })(<Input hidden={true} />)}
-            <Upload
-              name='uploadFile'
-              headers={{
-                Accept: 'application/json',
-                Authorization: 'Bearer ' + (window as any).token
-              }}
-              listType='picture-card'
-              className='avatar-uploader'
-              accept='.jpg,.jpeg,.png,.gif'
-              showUploadList={false}
-              action={`${Const.HOST}/store/uploadStoreResource??resourceType=IMAGE`}
-              onChange={this.handleUpload}
-            >
-              {
-                getFieldValue('employeeImage') ? (
-                  <img src={getFieldValue('employeeImage')} alt="avatar" style={{ width: '100%' }} />
-                ) : (<Icon type={this.state.uploadLoading ? 'loading' : 'plus'} />)
-              }
-            </Upload>
           </FormItem>
 
           <FormItem {...formItemLayout} label={<FormattedMessage id='attributionDepartment' />}>

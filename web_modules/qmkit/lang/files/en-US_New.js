@@ -675,6 +675,7 @@ export default {
         "Order.offline.paymentType": "Payment type",
         "Order.offline.creditCard": "Credit card",
         "Order.offline.productOverview": "Product overview",
+        "Order.offline.searchByProductName": "Search By Product name/EAN/SKU",
         "Order.offline.success": "Successfully",
         "Order.offline.refillAlert": "Do you want to refill your order?",
         "Order.offline.complete": "Complete",

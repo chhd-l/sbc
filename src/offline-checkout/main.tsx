@@ -23,6 +23,7 @@ class Checkout extends React.Component<any, any> {
       scanedInfo: {},
       products: [],
       list: [],
+      cateList: [],
       consents: [],
       selectedConsents: [],
       orderId: ''
@@ -30,6 +31,7 @@ class Checkout extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    this.getCategoryList();
     this.getAllProducts();
     webapi.getConsent().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
@@ -54,7 +56,8 @@ class Checkout extends React.Component<any, any> {
             goodsInfoName: goods.goodsInfoName,
             goodsInfoBarcode: goods.goodsInfoBarcode,
             goodsImg: goods.goods.goodsImg,
-            marketPrice: goods.marketPrice
+            marketPrice: goods.marketPrice,
+            cateId: goods.cateId,
           }))
         });
       } else {
@@ -63,6 +66,34 @@ class Checkout extends React.Component<any, any> {
     }).catch(() => {
       this.setState({ loading: false });
     });
+  }
+
+  getCategoryList = () => {
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          res: {
+            code: Const.SUCCESS_CODE,
+            context: [
+              { 'cateId': 1133, 'cateName': 'France Dog SPT food' },
+              { 'cateId': 1134, 'cateName': 'France Cat SPT food' },
+              { 'cateId': 1153, 'cateName': 'France Dog VET food' },
+              { 'cateId': 1154, 'cateName': 'France Cat VET Food' },
+            ]
+          }
+        })
+      }, 1000)
+    }).then((data: any) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          cateList: data.res.context.map(cate => ({
+            cateId: cate.cateId,
+            cateName: cate.cateName,
+            childProducts: [],
+          }))
+        })
+      }
+    })
   }
 
   onSelect = (memberInfo: any = {}, memberType: 'Member' | 'Guest' = 'Guest') => {
@@ -290,6 +321,10 @@ class Checkout extends React.Component<any, any> {
     }
   }
 
+  handleProductSearch = (val) => {
+    this.getAllProducts()
+  }
+
   render() {
     const { onClose } = this.props;
     return (
@@ -304,6 +339,7 @@ class Checkout extends React.Component<any, any> {
                 onSelectMember={this.onSelect}
                 products={this.state.products}
                 list={this.state.list}
+                cateList={this.state.cateList}
                 onAddProduct={this.onAddProduct}
                 onRemoveProduct={this.onRemoveProduct}
                 onSetQuantity={this.onSetProductQty}
@@ -313,6 +349,7 @@ class Checkout extends React.Component<any, any> {
                 consents={this.state.consents}
                 selectedConsents={this.state.selectedConsents}
                 onSelectConsent={this.onSelectConsent}
+                onSearch={this.handleProductSearch}
               />
             : this.state.step === 3 
               ? <Payment onCancel={() => this.switchStep(2)} onPay={this.onConfirmCheckout} /> 

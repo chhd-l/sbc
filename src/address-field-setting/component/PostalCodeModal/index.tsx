@@ -197,7 +197,7 @@ export default class PostalCodeModal extends React.Component<any, any>{
                                           message: 'Please input postalCode!'
                                       },
                                       {
-                                          pattern: /^[0-9A-Za-z]{3,10}$/,
+                                          pattern: /^[0-9A-Za-z]+$/,
                                           message: RCi18n({id:"PetOwner.theCorrectPostCode"})
                                       },
                                   ],

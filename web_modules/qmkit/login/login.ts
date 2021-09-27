@@ -133,10 +133,12 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         sessionStorage.setItem(cache.LANGUAGE, 'en-US');
 
       // 初始化用户当前的语言
-      const langRes = await InitLanguage()
-      if (langRes.res.code === Const.SUCCESS_CODE) {
-        const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US'
-        sessionStorage.setItem(cache.LANGUAGE, lang);
+      if (Const.SITE_NAME !== 'MYVETRECO') {
+        const langRes = await InitLanguage()
+        if (langRes.res.code === Const.SUCCESS_CODE) {
+          const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US'
+          sessionStorage.setItem(cache.LANGUAGE, lang);
+        }
       }
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');

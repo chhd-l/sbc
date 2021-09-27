@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BreadCrumb, Const, Headline, history } from 'qmkit';
-import { Breadcrumb, Button, Col, Form, Input, Row, Select, Spin } from 'antd';
+import { Breadcrumb, Button, Col, Form, Input, message, Row, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addTemplateList } from '@/message-template-configuration/webapi';
 import * as webapi from './webapi';
@@ -25,16 +25,18 @@ const TemplateAdd=()=>{
 
   const [addForm,setAddForm]=useState({
     templateId: '',
-    type: '1',
+    type: '',
   })
 
   const addTemplate=()=>{
+
     console.log(addForm,'params')
     webapi
       .addTemplateList(addForm)
       .then((data)=>{
         const {res} =data;
         if(res.code===Const.SUCCESS_CODE){
+          message.success('Operate successfully')
           console.log(res,'add')
         }
       })

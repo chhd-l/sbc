@@ -1689,6 +1689,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
 
+              {/* timeSlot和pickup point status */}
               <Col span={8} className="timeSlot">
                 {storeId === 123457907 ? <Row>
                   {
@@ -1791,6 +1792,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Row>
                 )}
               </Col>
+              
               {/* 显示支付信息 */}
               <Col span={8}>
                 <Row>
@@ -2051,8 +2053,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 });
               }}
             >
-              {/* <Spin spinning={pickupLoading}>
-              </Spin> */}
               <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                 <Col style={{ width: '100%' }}>
                   <PickupDelivery

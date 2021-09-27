@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
-import { Breadcrumb, Button, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin, Tag, Tooltip } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Icon,
+  Input,
+  message,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Tag,
+  Tooltip
+} from 'antd';
 import _ from 'lodash';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
@@ -47,7 +62,8 @@ const TemplateEdit=(props)=>{
       .then((data)=>{
         const {res}=data;
         if(res.code===Const.SUCCESS_CODE){
-          console.log(res,'edit')
+          message.success('Operate successfully')
+          history.push('/message-template-configuration')
         }
       })
   }
@@ -129,9 +145,7 @@ const TemplateEdit=(props)=>{
 
       <div className="bar-button">
           <Button type="primary" style={{ marginRight: 10 }} onClick={()=>editTemplate()}>
-            <Link to={'/message-template-configuration'}>
             {<FormattedMessage id="save" />}
-            </Link>
           </Button>
         <Button onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
           {<FormattedMessage id="back" />}

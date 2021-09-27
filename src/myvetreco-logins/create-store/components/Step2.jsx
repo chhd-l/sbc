@@ -1,22 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Input, Row, Col, Spin, Select, DatePicker } from 'antd';
+import { Form, Button, Input, Row, Col, Spin, Select, DatePicker, Upload, message, Icon } from 'antd';
 import { checkCompanyInfoExists, saveLegalInfo, cityList } from "../webapi";
 import DebounceSelect from './debounceSelect';
 import moment from 'moment';
+import { Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+
+const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { Dragger } = Upload;
  function Step2({ setStep, userInfo, legalInfo={} ,form,sourceStoreId,sourceCompanyInfoId}) {
   const [loading, setLoading] = useState(false);
   const [defaultOptions, setDefaultOptions] = useState([]);
+  const [idCardImg, setIdCardImg] = useState('');
+  const [idCardFileList, setIdCardFileList] = useState([]);
   const {getFieldDecorator}=form
+
+  useEffect(() => {
+    if (legalInfo.idCardImg) {
+      setIdCardImg(legalInfo.idCardImg);
+    }
+  }, []);
  
   const toNext = async (e) => {
     e.preventDefault();
    
     form.validateFields(async(errs, values) => {
-      console.log(values)
+      if (idCardImg === '') {
+        message.error('Please upload your password or identity card picture');
+        return;
+      }
+      console.log('yyyy', values);
       // return
       if (!errs) {
         setLoading(true)
@@ -33,7 +49,13 @@ const { Option } = Select;
           storeId: userInfo.storeId,
           companyInfoId: userInfo.companyInfoId,
           sourceStoreId: sourceStoreId,
-          ...values
+          idCardImg: idCardImg,
+          ...values,
+          legalCityId: values.legalCityId.key,
+          legalCityName: values.legalCityId.label,
+          contactCityId: values.contactCityId.key,
+          contactCityName: values.contactCityId.label,
+          birthday: values.birthday ? values.birthday.format(Const.DAY_FORMAT) : ''
         }).then(res => {
           setStep(2)
         }).catch(err => {
@@ -55,10 +77,65 @@ const { Option } = Select;
   })
   };
 
+  const uploadProps = {
+    headers:{
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
+    },
+    name: 'uploadFile',
+    fileList:idCardFileList,
+    accept:'.jpg,.jpeg,.png,.gif',
+    action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
+    onChange: (info) => {
+      console.log(info)
+      const { file } = info;
+      if(file.status !== 'removed'){
+        setIdCardFileList([file])
+      }
+      if (file.status === 'done') {
+        if(
+            file.status == 'done' &&
+            file.response &&
+            file.response.code &&
+            file.response.code !== 'K-000000'
+        ){
+          message.error(info.file.response.message);
+        }else{
+          setIdCardImg(file.response.length > 0 && file.response[0])
+        }
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    beforeUpload: (file)=>{
+      let fileName = file.name.toLowerCase();
+      // 支持的图片格式：jpg、jpeg、png、gif
+      if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
+        if (file.size <= FILE_MAX_SIZE) {
+          return true;
+        } else {
+          message.error('file size cannot exceed 2M');
+          return false;
+        }
+      } else {
+        message.error('file format error');
+        return false;
+      }
+    },
+    onRemove: (promise)=>{
+      console.log(promise)
+      setIdCardImg('')
+      setIdCardFileList([])
+    }
+  };
+
   const onChangePhoneNumber = (e) => {
     if (e && !e.target.value.startsWith('+31')) {
-      form.setFieldsValue({
-        contactPhone: `+31${e.target.value.replace(/^[+|+3|+31]/, '')}`
+      const temp = e.target.value;
+      setTimeout(() => {
+        form.setFieldsValue({
+          'contactPhone': `+31${temp.replace(/^[+|+3|+31]/, '')}`
+        });
       });
     }
   };
@@ -154,7 +231,7 @@ const { Option } = Select;
             </Col>
             <Col span={12}>
               <FormItem label="City" name="cityId">
-                {getFieldDecorator('legalcityId', {
+                {getFieldDecorator('legalCityId', {
                   rules: [
                     { required: true, message: 'Please select city' }
                   ],
@@ -194,13 +271,26 @@ const { Option } = Select;
               <div className="word big">Contact person</div>
             </Col>
             <Col span={24}>
-              <FormItem label="Passport/Identity card">
-                {getFieldDecorator('contactCardNo', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
+              <div style={{width:240,margin:'20px 0',height:140}}>
+                <Dragger {...uploadProps}>
+                  {
+                    idCardImg ? <img
+                        src={idCardImg}
+                        width={90+'px'}
+                        height={90+'px'}
+                    /> : (
+                        <>
+                          <p className="ant-upload-drag-icon">
+                            <Icon type="cloud-upload" className="word primary size24"/>
+                          </p>
+                          <p className="ant-upload-hint">
+                            Upload passport/identity card picture
+                          </p>
+                        </>
+                    )
+                  }
+                </Dragger>
+              </div>
             </Col>
             <Col span={12}>
               <FormItem label="First name">
@@ -252,7 +342,7 @@ const { Option } = Select;
               <FormItem label="Street">
                 {getFieldDecorator('contactStreet', {
                   rules:[{ required: true, message: 'Please input street' }],
-                 initialValue: legalInfo?.legalStreet??''
+                 initialValue: legalInfo?.contactStreet??''
                 })(<Input size="large"/>)}
               </FormItem>
             </Col>
@@ -260,7 +350,7 @@ const { Option } = Select;
               <FormItem label="House number">
                 {getFieldDecorator('contactHouseNumber', {
                   rules:[{ required: true, message: 'Please input house number' }],
-                 initialValue: legalInfo?.legalHouseNumber??''
+                 initialValue: legalInfo?.contactHouseNumber??''
                 })(<Input size="large"/>)}
               </FormItem>
             </Col>
@@ -291,7 +381,7 @@ const { Option } = Select;
             </>}
             <Col span={12}>
               <FormItem label="Birthday">
-                {getFieldDecorator('contactHouseNumber', {
+                {getFieldDecorator('birthday', {
                   rules:[{ required: true, message: 'Please select birth day' }],
                  initialValue: null
                 })(

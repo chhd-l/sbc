@@ -21,16 +21,16 @@ function PriceListItem({listItem,checkedList}){
     useEffect(()=>{
         if(checkedList.indexOf(listItem.sku) !== -1){
             console.log(Context)
-            let sell = format(multiply(bignumber(listItem.marketPrice), bignumber(percentageObj.salesPercentage)))
+            let sell = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
             sell = format(multiply(bignumber(sell), bignumber(1.21)))
             sell = bignumber(sell)
             sell = format(round(sell,roundOff))
             setSell(sell)
-            let sale = format(multiply(bignumber(listItem.marketPrice), bignumber(percentageObj.salesPercentage)))
+            let sale = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
             sale = bignumber(sale)
             sale = format(round(sale,roundOff))
             setSales(sale)
-            let subscription = format(multiply(bignumber(listItem.marketPrice), bignumber(percentageObj.subscriptionPercentage)))
+            let subscription = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.subscriptionPercentage, bignumber(0.01))))))
             subscription = format(multiply(bignumber(subscription), bignumber(1.21)))
             subscription = bignumber(subscription)
             subscription = format(round(subscription,roundOff))
@@ -60,7 +60,7 @@ function PriceListItem({listItem,checkedList}){
 
     return (
         <ListItem className="flex"  style={{height:56}}>
-            <Row className="flex-item flex-main align-center" gutter={8} align="middle">
+            <Row type="flex" className="flex-item flex-main align-center" gutter={8} align="middle">
                 <Col span={2}><Checkbox value={listItem.sku}/></Col>
                 <Col span={6}>
                     <Tooltip placement="topLeft" title={listItem.skuName}>

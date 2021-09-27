@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const } from '../../../../web_modules/qmkit';
+import { Const } from 'qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -96,7 +96,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:logoFileList,
@@ -315,7 +315,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   )}
                 </FormItem>
               </div>
-              <div className="flex word small tip">
+              <div className="flex word small" style={{color:'red'}}>
                 <span className="flex-item">Instructions:</span>
                 <div className="flex-item flex-main hpadding-level-2">
                   <div>Auto audit: Orders do not need to audit by clinic after payment successfully by PO</div>

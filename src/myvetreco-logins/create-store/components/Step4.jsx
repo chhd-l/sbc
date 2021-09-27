@@ -19,9 +19,9 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [dataSource,setDataSource] = useState({})
   const [loading, setLoading] = useState(false);
 
-  const [salesPercentage,setSalesPercentage] = useState(1)
-  const [subscriptionPercentage,setSubscriptionPercentage] = useState(1)
-  const [percentageObj,setPercentageObj] = useState({salesPercentage:1,subscriptionPercentage:1})//用于点击apply
+  const [salesPercentage,setSalesPercentage] = useState(100)
+  const [subscriptionPercentage,setSubscriptionPercentage] = useState(100)
+  const [percentageObj,setPercentageObj] = useState({salesPercentage:100,subscriptionPercentage:100})//用于点击apply
   const [roundOff,setRoundOff] = useState(false)
  
   useEffect(()=>{
@@ -115,30 +115,31 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    */
   const savePrice = () => {
     let newChooseObj = {...formData}
-    // if(checkAllObj.Cat){
-    //   for(let i in allObj.cat){
-    //     allObj.cat[i] = {
-    //       isChecked: allObj.cat[i].isChecked,
-    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
-    //       sku: allObj.cat[i].sku,
-    //       spu: allObj.cat[i].spu,
-    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
-    //     }
-    //   }
-    //   newChooseObj = {...allObj.cat,...newChooseObj}
-    // }
-    // if(checkAllObj.Dog){
-    //   for(let i in allObj.Dog){
-    //     allObj.Dog[i] = {
-    //       isChecked: allObj.Dog[i].isChecked,
-    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
-    //       sku: allObj.Dog[i].sku,
-    //       spu: allObj.Dog[i].spu,
-    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
-    //     }
-    //   }
-    //   newChooseObj = {...allObj.Dog,...newChooseObj}
-    // }
+    if(checkAllObj.Cat){
+      for(let i in allObj.cat){
+        allObj.cat[i] = {
+          isChecked: allObj.cat[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.cat[i].sku,
+          spu: allObj.cat[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+        }
+      }
+      newChooseObj = {...allObj.cat,...newChooseObj}
+    }
+    if(checkAllObj.Dog){
+      for(let i in allObj.Dog){
+        allObj.Dog[i] = {
+          isChecked: allObj.Dog[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.Dog[i].sku,
+          spu: allObj.Dog[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+        }
+      }
+      newChooseObj = {...allObj.Dog,...newChooseObj}
+    }
+    console.log('alllllll', newChooseObj);
     let array = []
     for(let i in newChooseObj){
       if(newChooseObj[i].isChecked){
@@ -186,14 +187,14 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                 <InputNumber min={0}
                              value={salesPercentage}
                              style={{width:180}}
-                             step={0.1}
+                             step={10}
                              onChange={(value)=>setSalesPercentage(value)} />
               </Col>
               <Col span={6}>
                 <InputNumber min={0}
                              style={{width:180}}
                              value={subscriptionPercentage}
-                             step={0.1}
+                             step={10}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
               {/* <Col span={3}>

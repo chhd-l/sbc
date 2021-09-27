@@ -275,7 +275,10 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     });
                   }}
                 >
-                  <Radio value={record.deliveryAddressId}></Radio>
+                  <Radio
+                    disabled={!record.validFlag}
+                    value={record.deliveryAddressId}
+                  />
                 </Radio.Group>
               </>
             )}

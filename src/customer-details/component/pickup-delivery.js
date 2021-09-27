@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Spin } from 'antd';
 import IMask from 'imask';
 import SearchSelection from './search-selection';
-import { Spin } from 'antd';
 import { cache, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 
@@ -14,6 +14,7 @@ export default class PickupDelivery extends React.Component {
     defaultCity: '',
     pickupAddress: [],
     pickupEditNumber: 0,
+    updateConfirmPickupDisabled: () => { },
     updatePickupLoading: () => { },
     updatePickupEditNumber: () => { },
     updateData: () => { }
@@ -48,24 +49,24 @@ export default class PickupDelivery extends React.Component {
         workTime: '', // 快递公司上班时间
         receiveType: '', // HOME_DELIVERY , PICK_UP
         formRule: [
-          //   {
-          //     regExp: /\S/,
-          //     errMsg: CURRENT_LANGFILE['payment.errorInfo2'],
-          //     key: 'firstName',
-          //     require: true
-          //   },
-          //   {
-          //     regExp: /\S/,
-          //     errMsg: CURRENT_LANGFILE['payment.errorInfo2'],
-          //     key: 'lastName',
-          //     require: true
-          //   },
-          //   {
-          //     regExp: /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
-          //     errMsg: CURRENT_LANGFILE['payment.errorInfo2'],
-          //     key: 'phoneNumber',
-          //     require: true
-          //   }
+          {
+            regExp: /\S/,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
+            key: 'firstName',
+            require: true
+          },
+          {
+            regExp: /\S/,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
+            key: 'lastName',
+            require: true
+          },
+          {
+            regExp: /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
+            key: 'phoneNumber',
+            require: true
+          }
         ]
       },
       pickupErrMsgs: {
@@ -77,18 +78,8 @@ export default class PickupDelivery extends React.Component {
   }
   async componentDidMount() {
     let initData = this.props.initData;
-    this.setState(
-      {
-        pickupForm: Object.assign(this.state.pickupForm, initData)
-      }
-    );
-
-    // 初始化地图控件。在完全绘制页面后调用。
-    document.addEventListener('DOMContentLoaded', () => {
-      kaktusMap({
-        domain: 'shop3505331',
-        host: '//app.kak2c.ru'
-      });
+    this.setState({
+      pickupForm: Object.assign(this.state.pickupForm, initData)
     });
 
     // 监听iframe的传值
@@ -154,11 +145,12 @@ export default class PickupDelivery extends React.Component {
     let sitem = sessionStorage.getItem('rc-portal-homeDeliveryAndPickup') || null;
     sitem = JSON.parse(sitem);
 
+    // 有默认city且无缓存 或者 有缓存
+    let pickupEditNumber = this.props.pickupEditNumber;
     let defaultCity = this.props.defaultCity;
-    console.log('666 >>> defaultCity : ', defaultCity);
     defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
     // 有默认城市但没有缓存
-    if ((defaultCity && !sitem) ||(defaultCity && pickupEditNumber == 0) ||pickupEditNumber > 0) {
+    if ((defaultCity && !sitem) || (defaultCity && pickupEditNumber == 0) || pickupEditNumber > 0) {
       let res = await webapi.pickupQueryCity(defaultCity);
       let robj = res?.res?.context?.pickUpQueryCityDTOs || [];
       if (robj) {
@@ -298,7 +290,6 @@ export default class PickupDelivery extends React.Component {
       this.props.updatePickupLoading(false);
     }
   };
-
   // 设置状态
   setItemStatus = (val) => {
     const { pickupEditNumber } = this.props;
@@ -314,7 +305,7 @@ export default class PickupDelivery extends React.Component {
       }
     });
 
-    this.sendMsgToIframe();
+    this.sendMsgToIframe('city');
 
     let pkobj = {
       city: sitem?.cityData?.city || [],
@@ -364,7 +355,6 @@ export default class PickupDelivery extends React.Component {
         msg = pickupCity;
         break;
     }
-    console.log('666 >>> 向iframe发送数据: ', msg);
 
     childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
   };
@@ -372,7 +362,7 @@ export default class PickupDelivery extends React.Component {
   editPickup = () => {
     const { courierInfo } = this.state;
     if (courierInfo) {
-      this.sendMsgToIframe();
+      this.sendMsgToIframe('city');
     }
     this.setState({
       showPickupForm: false,
@@ -396,12 +386,31 @@ export default class PickupDelivery extends React.Component {
       showPickupDetail: true
     });
   };
+  validData = async (rule, data) => {
+    for (let key in data) {
+      const val = data[key];
+      const targetRule = rule.filter((ele) => ele.key === key)[0];
+      if (targetRule) {
+        if (targetRule.require && !val) {
+          throw new Error(targetRule.errMsg);
+        }
+        if (
+          targetRule.require &&
+          targetRule.regExp &&
+          val &&
+          !targetRule.regExp.test(val)
+        ) {
+          throw new Error(targetRule.errMsg);
+        }
+      }
+    }
+  }
   // pickup表单验证
   pickupValidvalidat = async (tname, tvalue) => {
     const { pickupForm, pickupErrMsgs } = this.state;
     let targetRule = pickupForm.formRule.filter((e) => e.key === tname);
     try {
-      await validData(targetRule, { [tname]: tvalue });
+      await this.validData(targetRule, { [tname]: tvalue });
       this.setState({
         pickupErrMsgs: Object.assign({}, pickupErrMsgs, {
           [tname]: ''
@@ -409,6 +418,7 @@ export default class PickupDelivery extends React.Component {
       });
       this.validFormAllPickupData();
     } catch (err) {
+      this.props.updateConfirmPickupDisabled(true);
       this.setState({
         pickupErrMsgs: Object.assign({}, pickupErrMsgs, {
           [tname]: err.message
@@ -420,8 +430,9 @@ export default class PickupDelivery extends React.Component {
   validFormAllPickupData = async () => {
     const { pickupForm } = this.state;
     try {
-      await validData(pickupForm.formRule, pickupForm);
+      await this.validData(pickupForm.formRule, pickupForm);
       pickupForm.consigneeNumber = pickupForm.phoneNumber;
+      this.props.updateConfirmPickupDisabled(false);
       this.props.updateData(pickupForm);
     } catch {
     }
@@ -498,9 +509,9 @@ export default class PickupDelivery extends React.Component {
           </span>
         )}
         {/* 输入提示 */}
-        {/* {pickupErrMsgs[item.fieldKey] && item.requiredFlag == 1 ? (
-          <div className="text-danger-2">{pickupErrMsgs[item.fieldKey]}</div>
-        ) : null} */}
+        {pickupErrMsgs[item.fieldKey] && item.requiredFlag == 1 ? (
+          <div style={{ color: '#f5222d' }}>{pickupErrMsgs[item.fieldKey]}</div>
+        ) : null}
       </>
     );
   };
@@ -600,7 +611,6 @@ export default class PickupDelivery extends React.Component {
                 scrolling="no"
                 frameBorder="0"
               />
-              {/* <div className="pickup_map_box"><div id="kaktusMap"></div></div> */}
             </div>
 
             {/* 显示地图上选择的点信息 */}
@@ -666,10 +676,7 @@ export default class PickupDelivery extends React.Component {
             ) : null}
 
             {/* 表单 */}
-            <div
-              className={`row rc_form_box rc_pickup_form ${showPickupForm ? 'flex' : 'hidden'
-                }`}
-            >
+            <div className={`row rc_form_box rc_pickup_form ${showPickupForm ? 'flex' : 'hidden'}`}>
               <div className="col-md-7 mb-2">
                 <div className="form-group required">
                   <label

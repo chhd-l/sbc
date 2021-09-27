@@ -176,7 +176,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       this.setState({
         addOrEditPickup: false,
         pickupLoading: false
-      },()=>{
+      }, () => {
         this.getAddressList();
       });
     }
@@ -232,12 +232,12 @@ export default class DeliveryList extends React.Component<Iprop, any> {
         dataIndex: 'postCode',
         key: 'postcode',
         render: (text, record) => {
-          if (!!record?.validFlag){
+          if (!!record?.validFlag) {
             return <span>{text}</span>
-          }else {
+          } else {
             return (
-              <div style={{color: '#e2001a'}}>
-                <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg text={record?.alert}/>}>
+              <div style={{ color: '#e2001a' }}>
+                <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg text={record?.alert} />}>
                   <span>{text}</span>
                 </Tooltip>
               </div>
@@ -277,10 +277,17 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     });
                   }}
                 >
-                  <Radio
-                    disabled={!record.validFlag}
-                    value={record.deliveryAddressId}
-                  />
+                  {record.receiveType === 'PICK_UP' ? (
+                    <Radio
+                      value={record.deliveryAddressId}
+                    />
+                  ) : (
+                    <Radio
+                      disabled={!record.validFlag}
+                      value={record.deliveryAddressId}
+                    />
+                  )}
+
                 </Radio.Group>
               </>
             )}

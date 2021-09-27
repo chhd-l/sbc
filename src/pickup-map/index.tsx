@@ -31,11 +31,12 @@ class PickupMap extends Component<any, any> {
     this.setState({
       mapLoading: false
     });
-    this.sendMsgLoadComplete();
+    setTimeout(()=>{
+      this.sendMsgLoadComplete();
+    },500);
 
     // 接收父页面发来的数据
     window.addEventListener('message', (e) => {
-      console.log('666 >>> 接收组件发来的数据: ', e.data?.msg);
       if (e?.data?.msg) {
         let msg = e.data.msg;
         if (msg == 'clearMap') {

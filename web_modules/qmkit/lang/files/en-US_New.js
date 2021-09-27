@@ -2614,5 +2614,16 @@ export default {
         "Login.create_store_success": "Success! You are ready to go",
         "Login.create_store_error": "Store creation failed. Please try again",
         "Login.password_length": "Password length should between 6-32 characters",
+    },
+    Resources: {
+        'Resources.list':'Resources List',
+        'Resources.name':'Name',
+        'Resources.service_type':'Service Type',
+        'Resources.email':'Email',
+        'Resources.bulk_planning':'Bulk Planning',
+        'Resources.calendar_view':'Calendar View',
+        'Resources.appointment_type':'Appointment Type',
+        'Resources.planned_status':'Planned Status',
+        'Resources.planning_time':'Planning Time',
     }
 }

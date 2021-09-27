@@ -37,7 +37,6 @@ class PickupMap extends Component<any, any> {
 
     // 接收父页面发来的数据
     window.addEventListener('message', (e) => {
-      console.log('666 >>> 接收组件发来的数据: ', e.data);
       if (e?.data?.msg) {
         let msg = e.data.msg;
         if (msg == 'clearMap') {

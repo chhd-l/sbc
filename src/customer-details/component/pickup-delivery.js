@@ -14,6 +14,7 @@ export default class PickupDelivery extends React.Component {
     defaultCity: '',
     pickupAddress: [],
     pickupEditNumber: 0,
+    updateConfirmPickupDisabled: () => { },
     updatePickupLoading: () => { },
     updatePickupEditNumber: () => { },
     updateData: () => { }
@@ -50,19 +51,19 @@ export default class PickupDelivery extends React.Component {
         formRule: [
           {
             regExp: /\S/,
-            errMsg: <FormattedMessage id="PetOwner.ThisFieldIsRequired" />,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
             key: 'firstName',
             require: true
           },
           {
             regExp: /\S/,
-            errMsg: <FormattedMessage id="PetOwner.ThisFieldIsRequired" />,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
             key: 'lastName',
             require: true
           },
           {
             regExp: /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/,
-            errMsg: <FormattedMessage id="PetOwner.ThisFieldIsRequired" />,
+            errMsg: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }),
             key: 'phoneNumber',
             require: true
           }
@@ -304,7 +305,6 @@ export default class PickupDelivery extends React.Component {
       }
     });
 
-    console.log('666 >>> 设置状态 setItemStatus ');
     this.sendMsgToIframe('city');
 
     let pkobj = {
@@ -355,7 +355,6 @@ export default class PickupDelivery extends React.Component {
         msg = pickupCity;
         break;
     }
-    console.log('666 >>> 向iframe发送数据: ', msg);
 
     childFrameObj.contentWindow.postMessage({ msg: msg }, '*');
   };
@@ -390,7 +389,7 @@ export default class PickupDelivery extends React.Component {
   validData = async (rule, data) => {
     for (let key in data) {
       const val = data[key];
-      const targetRule = find(rule, (ele) => ele.key === key);
+      const targetRule = rule.filter((ele) => ele.key === key)[0];
       if (targetRule) {
         if (targetRule.require && !val) {
           throw new Error(targetRule.errMsg);
@@ -410,9 +409,6 @@ export default class PickupDelivery extends React.Component {
   pickupValidvalidat = async (tname, tvalue) => {
     const { pickupForm, pickupErrMsgs } = this.state;
     let targetRule = pickupForm.formRule.filter((e) => e.key === tname);
-
-    // console.log('666 >>> ', tname + '  : ' + tvalue+ '   targetRule: ',targetRule);
-
     try {
       await this.validData(targetRule, { [tname]: tvalue });
       this.setState({
@@ -422,6 +418,7 @@ export default class PickupDelivery extends React.Component {
       });
       this.validFormAllPickupData();
     } catch (err) {
+      this.props.updateConfirmPickupDisabled(true);
       this.setState({
         pickupErrMsgs: Object.assign({}, pickupErrMsgs, {
           [tname]: err.message
@@ -435,6 +432,7 @@ export default class PickupDelivery extends React.Component {
     try {
       await this.validData(pickupForm.formRule, pickupForm);
       pickupForm.consigneeNumber = pickupForm.phoneNumber;
+      this.props.updateConfirmPickupDisabled(false);
       this.props.updateData(pickupForm);
     } catch {
     }
@@ -512,7 +510,7 @@ export default class PickupDelivery extends React.Component {
         )}
         {/* 输入提示 */}
         {pickupErrMsgs[item.fieldKey] && item.requiredFlag == 1 ? (
-          <div className="text-danger-2">{pickupErrMsgs[item.fieldKey]}</div>
+          <div style={{ color: '#f5222d' }}>{pickupErrMsgs[item.fieldKey]}</div>
         ) : null}
       </>
     );

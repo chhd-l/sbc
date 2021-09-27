@@ -80,7 +80,7 @@ export default class BasicInformation extends Component<any, any>{
                                 showTime={{ format: 'HH:mm' }} />)}
                     </Form.Item>
                     {benefitType === config.WELCOME_BOX && <Form.Item label={<FormattedMessage id={'Subscription.SubscriptionType'} />}>
-                        {getFieldDecorator('type', { initialValue: 'individual' })(
+                        {getFieldDecorator('type', { initialValue: !!initData && initData.promotionType === 2 ? 'club' : 'individual' })(
                             <Radio.Group>
                                 <Radio value="individual"><FormattedMessage id={'Product.Individual'} /></Radio>
                                 <Radio value="club"><FormattedMessage id={'Product.Club'} /></Radio>

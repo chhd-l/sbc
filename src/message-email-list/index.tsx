@@ -71,6 +71,9 @@ export default class ClinicList extends Component<any, any> {
     );
   };
   resendEmail=(params)=>{
+    this.setState({
+      loading: true
+    });
     const {resendParams}=this.state;
     const fetchParams={
       isReSend:true,
@@ -81,9 +84,14 @@ export default class ClinicList extends Component<any, any> {
       .resendEmailTask(fetchParams)
       .then((data)=>{
         const {res}=data;
-        this.getEmailTaskList();
-        console.log(res,'resend');
-
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully')
+          this.setState({
+            loading:false
+          })
+          this.getEmailTaskList();
+          console.log(res,'resend');
+        }
       })
       .catch((err)=>{
         console.log(err,'resendWrong')

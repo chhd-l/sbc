@@ -29,15 +29,13 @@ const TemplateAdd=()=>{
   })
 
   const addTemplate=()=>{
-
-    console.log(addForm,'params')
     webapi
       .addTemplateList(addForm)
       .then((data)=>{
         const {res} =data;
         if(res.code===Const.SUCCESS_CODE){
           message.success('Operate successfully')
-          console.log(res,'add')
+          history.push('/message-template-configuration')
         }
       })
       .catch((err)=>{
@@ -137,9 +135,7 @@ const TemplateAdd=()=>{
 
       <div className="bar-button">
         <Button type="primary" style={{ marginRight: 10 }} onClick={()=>addTemplate()} >
-          <Link to={'/message-template-configuration'}>
           {<FormattedMessage id="save" />}
-          </Link>
         </Button>
         <Button onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
           {<FormattedMessage id="back" />}

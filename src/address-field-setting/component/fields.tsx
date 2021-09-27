@@ -83,10 +83,11 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
-  handlePostalCode = (checked: boolean) => {
+  handlePostalCode = (id:number, field: any, checked: boolean) => {
     this.setState({
       isEditPostalCode: checked,
     })
+    this.onChangeField(id, field)
   }
 
   handlePostalCodeCancel = () => {
@@ -153,23 +154,21 @@ export default class Fields extends React.Component<any, any> {
       },
       {
         title: 'Validation',
-        dataIndex: 'Validation',
-        key: 'Validation',
+        dataIndex: 'validationFlag',
+        key: 'validationFlag',
         render: (text, record) => {
           let fieldName = record.fieldName || '';
           if (fieldName === 'Postal code'){
             return (
               <div className='validation-wrap'>
                 <Switch
-                  defaultChecked={false}
-                  checked={isEditPostalCode}
-                  onChange={this.handlePostalCode}
+                  // checked={isEditPostalCode}
+                  defaultChecked={text === 1}
+                  onChange={(checked) => this.handlePostalCode(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
                 />
                 {
-                  isEditPostalCode
-                    ? (
-                      <a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />
-                    )
+                  isEditPostalCode || (text === 1)
+                    ? (<a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />)
                     : null
                 }
               </div>
@@ -208,6 +207,77 @@ export default class Fields extends React.Component<any, any> {
         render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked ? 1 : 0 })} />
       }
     ];
+    const columns2 = [
+      {
+        title: 'Sequence',
+        dataIndex: 'sequence',
+        key: 'c1'
+      },
+      {
+        title: 'Field name',
+        dataIndex: 'fieldName',
+        key: 'c2'
+      },
+      {
+        title: 'Field type',
+        dataIndex: 'filedType',
+        key: 'c3',
+        render: (text, record) => <div>{text === 0 ? 'Text' : 'Number'}</div>
+      },
+      {
+        title: 'Input type',
+        dataIndex: 'fieldName',
+        key: 'c4',
+        render: (text, record) => (
+          <div>
+            {INPUT_TYPE.reduce((prev, curr) => {
+              if (record[curr.key] === 1) {
+                prev.push(curr.value);
+              }
+              return prev;
+            }, []).join('+')}{' '}
+            {text === 'City' ? (
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onOpenModal(record);
+                }}
+                className="iconfont iconEdit"
+              ></a>
+            ) : null}
+          </div>
+        )
+      },
+      {
+        title: 'Max length',
+        dataIndex: 'maxLength',
+        key: 'c5'
+      },
+      {
+        title: 'Field columns',
+        dataIndex: 'occupancyNum',
+        key: 'c8',
+        render: (text, record) => (
+          <Radio.Group buttonStyle="solid" value={text} onChange={(e) => this.onChangeField(record.id, { occupancyNum: e.target.value })}>
+            <Radio.Button value={1}>1</Radio.Button>
+            <Radio.Button value={2}>2</Radio.Button>
+          </Radio.Group>
+        )
+      },
+      {
+        title: 'Required',
+        dataIndex: 'requiredFlag',
+        key: 'c6',
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { requiredFlag: checked ? 1 : 0 })} />
+      },
+      {
+        title: 'Enable',
+        dataIndex: 'enableFlag',
+        key: 'c7',
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked ? 1 : 0 })} />
+      }
+    ];
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -234,7 +304,7 @@ export default class Fields extends React.Component<any, any> {
             {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
               Display
             </Button> */}
-            <SortFields columns={columns} dataList={autoFieldList} onSortEnd={onSortEnd} />
+            <SortFields columns={columns2} dataList={autoFieldList} onSortEnd={onSortEnd} />
           </Tabs.TabPane>
         </Tabs>
 

@@ -1050,6 +1050,20 @@ const routes = [
     path: '/appointment-update/:id',
     asyncComponent: () => import('./appointment-list/new')
   },
+
+  {
+    path: '/appointmention-list',
+    asyncComponent: () => import('./appointmention-list')
+  },
+  {
+    path: '/appointmention-add',
+    asyncComponent: () => import('./appointmention-list/new')
+  },
+  {
+    path: '/appointmention-update/:id',
+    asyncComponent: () => import('./appointmention-list/new')
+  },
+
   {
     path: '/offline-checkout',
     asyncComponent: () => import('./offline-checkout')

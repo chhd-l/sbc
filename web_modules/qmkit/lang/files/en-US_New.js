@@ -1006,6 +1006,8 @@ export default {
 
     },
     Appointment: {
+        'Appointment.type':'Appointment type',
+
         'Appointment.list': 'Appointment list',
         'Appointment.No.': 'Appointment no.',
         'Appointment.PON': 'Pet owner name',
@@ -1098,7 +1100,7 @@ export default {
         'Prescriber.apptNowasnotfind': 'scan error,apptNo was not find.',
         'Prescriber.Date': 'Date:',
         'Prescriber.selectfillDate': 'Please select fillDate!',
-        'Prescriber.Expert name': 'Expert name：',
+        'Prescriber.Expert name': 'Expert name',
         'Prescriber.pour': 'pour:',
         'Prescriber.Informationsurlechat': 'Information sur le chat:',
         'Prescriber.Name：': 'Name:',

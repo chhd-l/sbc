@@ -695,7 +695,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return item.deliveryAddressId === deliveryAddressId;
     });
     deliveryAddressInfo['pickupPointState'] = pickupPointState;
-    debugger
+    
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (deliveryAddressInfo.receiveType !== 'PICK_UP' && (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
       if (!deliveryAddressInfo.street ||

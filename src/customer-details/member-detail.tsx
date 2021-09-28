@@ -426,7 +426,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                       ))}
                       {
                         !basic?.validFlag
-                          ? <Col span={24}><PostalCodeMsg text={basic.alert}/></Col>
+                          ?basic.alert && <Col span={24}><PostalCodeMsg text={basic.alert}/></Col>
                           : null
                       }
 

@@ -1696,9 +1696,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
                     </Col>
                   ) : null}
+
                   <Col span={24}>
                     {
-                      !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                      deliveryAddressInfo.validFlag && (deliveryAddressInfo.receiveType !== 'PICK_UP')
+                        ? null
+                        : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
                     }
                   </Col>
                 </Row>
@@ -1994,9 +1997,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Button>
                       </div>
                     </Card>
-                  ))
-                ) : (
-                  <>
+                    )))
+                  : (<>
                     {/* homeDelivery地址列表 */}
                     {this.state.isUnfoldedDelivery ? deliveryList.map((item: any) => (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
@@ -2043,8 +2045,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Card>
                       ) : null
                       )}
-                  </>
-                )}
+                  </>)
+                }
               </Radio.Group>
 
               {/* 显示更多地址按钮 */}

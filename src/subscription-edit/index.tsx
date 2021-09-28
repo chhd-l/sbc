@@ -1701,9 +1701,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     {
-                      deliveryAddressInfo.validFlag && (deliveryAddressInfo.receiveType !== 'PICK_UP')
+                      deliveryAddressInfo.receiveType === 'PICK_UP'
                         ? null
-                        : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                        :  deliveryAddressInfo.validFlag
+                          ? null
+                          : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
                     }
                   </Col>
                 </Row>

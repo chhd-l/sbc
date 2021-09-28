@@ -1862,7 +1862,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {/* 修改收货地址弹窗 */}
             <Modal
               width={650}
-              title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress" />}
+              title={RCi18n({ id: "Subscription.ChooseDeliveryAddress" })}
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
               onOk={() => this.deliveryOK()}

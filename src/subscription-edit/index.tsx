@@ -622,7 +622,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          this.getAddressList(customerId, 'DELIVERY');
+          this.getAddressList(customerId, 'DELIVERY', true);
           message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
         } else {
           message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
@@ -683,6 +683,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         addOrEditPickup: false,
         pickupLoading: false,
         visibleShipping: true
+      },()=>{
+        this.getAddressList(customerId, 'DELIVERY', true);
       });
     }
   }

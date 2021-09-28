@@ -126,7 +126,7 @@ class MessageDetails extends Component<any, any> {
       this.getTaskDetail();
     }
 
-    debugger
+    
     let temp = this.props.match
     console.log(temp);
   };

@@ -67,7 +67,7 @@ export default function Creating({userInfo,setStep}) {
 
   function getStatus() {
     queryStatus(userInfo.accountName).then(({res})=>{
-      debugger
+      
       for(let i in res.context){
         if(statusList[STATUS[i]]){
           //用两个值来判断 STORE_DETAIL 是否初始化成功

@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
 
 import './index.less';
+import WeekCalender from './components/week-calender';
 
 class NewAppointment extends React.Component<any, any> {
   constructor(props: any) {
@@ -153,6 +154,12 @@ class NewAppointment extends React.Component<any, any> {
         </Breadcrumb>
         <div className="container">
           <Headline title={this.props.match.params.id ? RCi18n({id:'Appointment.Update appointment'}) : RCi18n({id:'Appointment.ANA'})} />
+          
+          
+          <WeekCalender />
+          
+          
+          
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
             <Form.Item label={RCi18n({id:'Appointment.SAType'})}>
               {getFieldDecorator('type', {

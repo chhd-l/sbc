@@ -51,6 +51,7 @@ export default class ProductOverview extends React.Component<any, any> {
                 <img src={product.goodsImg} alt='product' />
                 <div className='name'>{product.goodsInfoName}</div>
                 <div className='ean'>EAN:{product.goodsInfoBarcode}</div>
+                <div className='ean'>SKU:{product.goodsInfoNo}</div>
               </div>
             </Col>
           ))

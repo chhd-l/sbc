@@ -293,6 +293,7 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
+  { path: '/service-product-add', asyncComponent: () => import('./service-product-add/main') },
 
   // goods-regular-edit > 审核通过的商品编辑
   {

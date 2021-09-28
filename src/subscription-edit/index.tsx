@@ -1679,9 +1679,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
                     </Col>
                   ) : null}
+
                   <Col span={24}>
                     {
-                      !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                      deliveryAddressInfo.validFlag && (deliveryAddressInfo.receiveType !== 'PICK_UP')
+                        ? null
+                        : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
                     }
                   </Col>
                 </Row>
@@ -1934,10 +1937,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 }}
               >
                 {/* pickup 地址列表 */}
-                {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
-                  pickupAddress.map((item: any, index: any) => (
-                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                      <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                {deliveryType === 'pickupDelivery' && pickupIsOpen
+                  ? (
+                    pickupAddress.map((item: any, index: any) => (
+                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                      <Radio  value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + '  ' + item.lastName}</p>
                           <p>{item.city}</p>
@@ -1946,11 +1950,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>{item.address1}</p>
                           <p>{item.address2}</p>
                           <p>{item.workTime}</p>
-                          {
-                            !item.validFlag
-                              ? <PostalCodeMsg text={item.alert} />
-                              : null
-                          }
+                          {/*{*/}
+                          {/*  !item.validFlag*/}
+                          {/*    ? <PostalCodeMsg text={item.alert} />*/}
+                          {/*    : null*/}
+                          {/*}*/}
                         </div>
                       </Radio>
                       <div>
@@ -1965,9 +1969,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Button>
                       </div>
                     </Card>
-                  ))
-                ) : (
-                  <>
+                    )))
+                  : (<>
                     {/* homeDelivery地址列表 */}
                     {this.state.isUnfoldedDelivery ? deliveryList.map((item: any) => (
                       <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
@@ -2014,8 +2017,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Card>
                       ) : null
                       )}
-                  </>
-                )}
+                  </>)
+                }
               </Radio.Group>
 
               {/* 显示更多地址按钮 */}

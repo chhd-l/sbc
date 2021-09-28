@@ -231,15 +231,15 @@ export default class GoodsSpecActor extends Actor {
    * 添加规格
    */
   @Action('goodsSpecActor: addSpec')
-  addSpec(state, promotions) {
+  addSpec(state, { promotions, id, name }) {
     let goodsSpecs = state.get('goodsSpecs');
     const random = this._getRandom();
     const spec = fromJS({
-      specId: random,
-      mockSpecId: random,
+      specId: id || random,
+      mockSpecId: id || random,
       isMock: true,
       promotions,
-      specName: 'specification' + (goodsSpecs.count() + 1),
+      specName: name || 'specification' + (goodsSpecs.count() + 1),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

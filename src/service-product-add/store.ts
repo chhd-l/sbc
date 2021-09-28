@@ -235,6 +235,82 @@ export default class AppStore extends Store {
   };
 
   /**
+   * 初始化service的spec form
+   */
+  initServiceSpec = () => {
+    //新增service产品，设置默认spec
+    [{ id: 100001, name: 'Duration' }, { id: 100002, name: 'Expert type' }].forEach(item => {
+      this.dispatch('goodsSpecActor: addSpec', {
+        promotions: this.state().get('goods'),
+        id: item.id,
+        name: item.name
+      });
+    });
+    this.dispatch('goodsSpecActor: editSpecValues', {
+      specId: 100001,
+      priceOpt: this.state().get('priceOpt'),
+      mtkPrice: this.state().get('mtkPrice') || 0,
+      specValues: fromJS([
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000001,
+          mockSpecDetailId: 1000001,
+          detailName: '15min',
+          subscriptionStatus: 1
+        },
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000002,
+          mockSpecDetailId: 1000002,
+          detailName: '30min',
+          subscriptionStatus: 1
+        },
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000003,
+          mockSpecDetailId: 1000003,
+          detailName: '45min',
+          subscriptionStatus: 1
+        }
+      ])
+    });
+    this.dispatch('goodsSpecActor: editSpecValues', {
+      specId: 100002,
+      priceOpt: 2,
+      mtkPrice: 0,
+      specValues: fromJS([
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000004,
+          mockSpecDetailId: 1000004,
+          detailName: 'Behaviorist',
+          subscriptionStatus: 1
+        },
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000005,
+          mockSpecDetailId: 1000005,
+          detailName: 'Nutritionist',
+          subscriptionStatus: 1
+        },
+        {
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 1000006,
+          mockSpecDetailId: 1000006,
+          detailName: 'Osteopathist',
+          subscriptionStatus: 1
+        }
+      ])
+    });
+  };
+
+  /**
    * 初始化
    */
   initVideo = async (
@@ -819,7 +895,7 @@ export default class AppStore extends Store {
    */
   addSpec = () => {
     console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
-    this.dispatch('goodsSpecActor: addSpec', this.state().get('goods'));
+    this.dispatch('goodsSpecActor: addSpec', { promotions: this.state().get('goods'), id: 0, name: '' });
   };
   
   updateSpecValues = (specId, key, value) => {
@@ -1440,7 +1516,7 @@ export default class AppStore extends Store {
             mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
-            mockSpecDetailId: specValueItem.get('specDetailId'),
+            mockSpecDetailId: specValueItem.get('mockSpecDetailId') || specValueItem.get('specDetailId'),
             detailName: specValueItem.get('detailName').trim()
           })
         );

@@ -26,7 +26,8 @@ export default class Spec extends React.Component<any, any> {
       setDefaultBaseSpecId: Function;
       editGoodsItem: Function;
       baseSpecId: any;
-      goods: any
+      goods: any;
+      initServiceSpec: Function;
     };
   };
 
@@ -48,7 +49,8 @@ export default class Spec extends React.Component<any, any> {
     deleteSpec: noop,
     updateSpecForm: noop,
     setDefaultBaseSpecId: noop,
-    editGoodsItem: noop
+    editGoodsItem: noop,
+    initServiceSpec: noop
   };
 
   constructor(props) {
@@ -73,7 +75,8 @@ export default class Spec extends React.Component<any, any> {
 class SpecForm extends React.Component<any, any> {
   componentDidMount() {
     const { updateSpecForm, setDefaultBaseSpecId } = this.props.relaxProps;
-    this._addSpec();
+    //this._addSpec();
+    this._initSpec();
     updateSpecForm(this.props.form);
   }
 
@@ -86,24 +89,13 @@ class SpecForm extends React.Component<any, any> {
           <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>
             <FormattedMessage id="product.specificationSetting" />
           </div>
-          <div style={styles.box}>
+          {/* <div style={styles.box}>
             <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
               <span>
-                {/* <span
-                  style={{
-                    color: 'red',
-                    fontFamily: 'SimSun',
-                    marginRight: '4px',
-                    fontSize: '12px'
-                    // float: 'left'
-                  }}
-                >
-                  *
-                </span> */}
                 <FormattedMessage id="product.setMultipleSpecificationOfProducts" />
               </span>
             </Checkbox>
-          </div>
+          </div> */}
           <div style={styles.bg}>
             {specSingleFlag ? null : (
               <Row>
@@ -167,7 +159,7 @@ class SpecForm extends React.Component<any, any> {
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
                               initialValue: item.get('specName')
-                            })(<Input placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} />)}
+                            })(<Input placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} disabled={item.get('mockSpecId') === 100001 || item.get('mockSpecId') === 100002} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -251,7 +243,7 @@ class SpecForm extends React.Component<any, any> {
                           </FormItem>
                         </Col>
                         <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
+                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }} disabled={item.get('mockSpecId') === 100001 || item.get('mockSpecId') === 100002}>
                             <FormattedMessage id="delete" />
                           </Button>
                         </Col>
@@ -272,6 +264,12 @@ class SpecForm extends React.Component<any, any> {
     );
   }
 
+  _initSpec = () => {
+    const { initServiceSpec, updateSpecForm } = this.props.relaxProps;
+    updateSpecForm(this.props.form);
+    initServiceSpec();
+  };
+
   /**
    * 获取规格值转为option
    */
@@ -279,7 +277,7 @@ class SpecForm extends React.Component<any, any> {
     const children = [];
     specValues.forEach((item) => {
       //let a = item.get('detailName').replace(/[^\d.]/g, '');
-      children.push(<Option key={item.get('detailName')}>{item.get('detailName')}</Option>);
+      children.push(<Option key={item.get('detailName')} disabled={[1000001,1000002,1000003,1000004,1000005,1000006].indexOf(item.get('mockSpecDetailId')) > -1}>{item.get('detailName')}</Option>);
     });
     return children;
   };
@@ -317,10 +315,12 @@ class SpecForm extends React.Component<any, any> {
       const ov = oldSpecValues.find((ov) => ov.get('detailName') == item);
       const isMock = !ov || ov.get('isMock') === true;
       const valueId = ov ? ov.get('specDetailId') : this._getRandom();
+      const mockId = ov ? ov.get('mockSpecDetailId') : valueId;
       return Map({
         goodsPromotions: goods.get('promotions'),
         isMock: isMock,
         specDetailId: valueId,
+        mockSpecDetailId: mockId,
         detailName: item,
         subscriptionStatus: goods.get('subscriptionStatus'),
       });

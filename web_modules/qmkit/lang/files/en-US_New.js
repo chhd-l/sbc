@@ -1013,6 +1013,7 @@ export default {
         'Subscription.Creating welcome box': 'Creating welcome box',
         'Subscription.PleaseInputWelcomeboxName': 'Please input welcome box name',
         'Subscription.ChooseDeliveryAddress': 'Choose Delivery Address',
+        'Subscription.foldedAll':'folded all delivery addresses',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

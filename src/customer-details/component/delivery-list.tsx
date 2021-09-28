@@ -39,6 +39,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       list: [],
       homeDeliveryList: [],
       selectAddressId: '',
+      confirmPickupDisabled: true, // pickup地址确认按钮状态
 
       countryArr: [],
       pickupList: [],
@@ -201,12 +202,20 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     });
   };
 
+  // 更新 pickup 按钮状态
+  updateConfirmPickupDisabled = (flag: boolean) => {
+    this.setState({
+      confirmPickupDisabled: flag
+    });
+  };
+
   render() {
     const {
       loading,
       pickupIsOpen,
       homeDeliveryList,
       selectAddressId,
+      confirmPickupDisabled,
 
       pickupLoading,
       addOrEditPickup,
@@ -380,6 +389,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
               title={pickupList?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
               visible={addOrEditPickup}
               confirmLoading={pickupLoading}
+              okButtonProps={{ disabled: confirmPickupDisabled }}
               onOk={() => this.pickupConfirm()}
               onCancel={() => {
                 this.setState({
@@ -396,6 +406,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                         initData={pickupFormData}
                         pickupAddress={pickupList}
                         defaultCity={defaultCity}
+                        updateConfirmPickupDisabled={this.updateConfirmPickupDisabled}
                         updatePickupLoading={this.updatePickupLoading}
                         updatePickupEditNumber={this.updatePickupEditNumber}
                         updateData={this.updatePickupData}

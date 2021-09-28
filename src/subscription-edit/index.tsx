@@ -111,7 +111,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupEditNumber: 0,
       pickupAddress: null,
       pickupFormData: [], // pickup 表单数据
-      pickupPointState: false, // pickup 状态
       confirmPickupDisabled: true, // pickup地址确认按钮状态
 
       deliveryDate: undefined,
@@ -203,7 +202,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
               deliveryAddressInfo: subscriptionDetail.consignee,
-              pickupPointState: subscriptionDetail.consignee?.pickupPointState,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
               originalParams: originalParams,
@@ -624,7 +622,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          this.getAddressList(customerId, 'DELIVERY');
+          this.getAddressList(customerId, 'DELIVERY', true);
           message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
         } else {
           message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
@@ -685,17 +683,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         addOrEditPickup: false,
         pickupLoading: false,
         visibleShipping: true
+      },()=>{
+        this.getAddressList(customerId, 'DELIVERY', true);
       });
     }
   }
 
   deliveryOK = async () => {
-    const { deliveryList, allAddressList, pickupPointState, deliveryAddressId, subscriptionInfo } = this.state;
+    const { deliveryList, allAddressList, deliveryAddressId, subscriptionInfo } = this.state;
     let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
-    deliveryAddressInfo['pickupPointState'] = pickupPointState;
-    
+
+    // 切换pickup地址时，获取pick point 状态
+    if (deliveryAddressInfo.receiveType === 'PICK_UP') {
+      await webapi.getPickupPointStatus(deliveryAddressId).then(data => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          deliveryAddressInfo['pickupPointState'] = res.context;
+        }
+      })
+    }
+
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (deliveryAddressInfo.receiveType !== 'PICK_UP' && (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
       if (!deliveryAddressInfo.street ||
@@ -1049,7 +1058,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-  getTimeSlot = (params:any) => {
+  getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then(data => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
@@ -1061,7 +1070,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
 
-  deliveryDateChange = (value:any) => {
+  deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state
     let timeSlots = deliveryDateList.find(item => item.date === value).dateTimeInfos || []
     this.setState({
@@ -1071,7 +1080,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
   //timeslot
-  timeSlotChange = (value:any) => {
+  timeSlotChange = (value: any) => {
     this.setState({
       timeSlot: value
     })
@@ -1092,7 +1101,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   // 更新pickup数据
-  updatePickupData = (data:any) => {
+  updatePickupData = (data: any) => {
     this.setState({
       pickupFormData: data
     });
@@ -1128,6 +1137,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryList,
       pickupAddress,
       confirmPickupDisabled,
+      isUnfoldedDelivery,
 
       deliveryDate,
       deliveryDateList,
@@ -1688,9 +1698,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
                     </Col>
                   ) : null}
+
                   <Col span={24}>
                     {
-                      !deliveryAddressInfo.validFlag ? <PostalCodeMsg text={deliveryAddressInfo.alert} /> : null
+                      deliveryAddressInfo.validFlag && (deliveryAddressInfo.receiveType !== 'PICK_UP')
+                        ? null
+                        : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
                     }
                   </Col>
                 </Row>
@@ -1729,7 +1742,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                             <Col span={24}>
                               <Select value={timeSlot}
-                              getPopupContainer={(trigger: any) => trigger.parentNode}
+                                getPopupContainer={(trigger: any) => trigger.parentNode}
                                 onChange={this.timeSlotChange}
                                 placeholder={RCi18n({ id: 'Setting.timeSlot' })}>
                                 {
@@ -1960,9 +1973,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 }}
               >
                 {/* pickup 地址列表 pickup地址不需要校验postCode */}
-                {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
-                  pickupAddress.map((item: any, index: any) => (
-                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                {
+                  deliveryType === 'pickupDelivery' && pickupIsOpen
+                    ? (
+                      pickupAddress.map((item: any, index: any) => (
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
                       <Radio value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + '  ' + item.lastName}</p>
@@ -1986,13 +2004,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Button>
                       </div>
                     </Card>
-                  ))
-                ) : (
-                  <>
+                      )))
+                  : (<>
                     {/* homeDelivery地址列表 */}
-                    {this.state.isUnfoldedDelivery ? deliveryList.map((item: any) => (
-                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                        <Radio value={item.deliveryAddressId}>
+                    {this.state.isUnfoldedDelivery
+                      ? deliveryList.map((item: any) => (
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
+                        <Radio
+                          disabled={!item.validFlag}
+                          value={item.deliveryAddressId}
+                        >
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + '  ' + item.lastName}</p>
                             <p>{item.city}</p>
@@ -2001,6 +2025,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
+                            {
+                              !item.validFlag
+                                ? item.alert && <PostalCodeMsg text={item.alert} />
+                                : null
+                            }
                           </div>
                         </Radio>
                         <div>
@@ -2009,9 +2038,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           </Button>
                         </div>
                       </Card>
-                    ))
+                      ))
                       : deliveryList.map((item: any, index: any) => index < 2 ? (
-                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
                           <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + '  ' + item.lastName}</p>
@@ -2022,7 +2054,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{item.address2}</p>
                               {
                                 !item.validFlag
-                                  ? <PostalCodeMsg text={item.alert} />
+                                  ? item.alert && <PostalCodeMsg text={item.alert} />
                                   : null
                               }
                             </div>
@@ -2035,8 +2067,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Card>
                       ) : null
                       )}
-                  </>
-                )}
+                  </>)
+                }
               </Radio.Group>
 
               {/* 显示更多地址按钮 */}
@@ -2052,7 +2084,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       );
                     }}
                   >
-                    <FormattedMessage id="Subscription.UnfoldedAll" />
+                    {isUnfoldedDelivery ? (
+                      <FormattedMessage id="Subscription.foldedAll" />
+                    ) : (
+                      <FormattedMessage id="Subscription.UnfoldedAll" />
+                    )}
                   </Button>
                 ) : null
               ) : null}

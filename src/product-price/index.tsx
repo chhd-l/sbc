@@ -354,12 +354,12 @@ class ProductPrice extends Component<any, any> {
                     onChange: (e) => this.checkFomeInput(e, 'subscriptionPricePercentage')
                   })(<InputNumber min={0} />)}
                 </Form.Item>
-                <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
+                {/* <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
                   {getFieldDecorator('roundOff', {
                     initialValue: false,
                     valuePropName: 'checked',
                   })(<Checkbox />)}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item>
                   <Button type="primary" htmlType="submit" disabled={isDisabled}>
                     apply

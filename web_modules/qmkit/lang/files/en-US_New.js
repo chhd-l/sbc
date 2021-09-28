@@ -992,8 +992,8 @@ export default {
         'Subscription.WorkTime': 'Work Time',
         'Subscription.PickupAddress': 'Pickup Address',
         'Subscription.MoreDetails': 'More details',
-        'Subscription.ChangePickup': 'Change pick up delivery',
-        'Subscription.AddPickup': 'Add pick up point',
+        'Subscription.ChangePickup': 'Edit pickup delivery',
+        'Subscription.AddPickup': 'Add pickup delivery',
         'Subscription.PickupNoRusult': 'Пожалуйста, введите адрес, который находится в пределах зон доставки интернет-магазина. С зонами доставки Вы можете ознакомиться на странице "Условия доставки"',
         'Subscription.NoPickup': 'Для выбранного населённого пункта на данный момент ПВЗ недоступны',
         'Subscription.FillCityOfDelivery': 'Fill city of delivery',
@@ -1014,6 +1014,7 @@ export default {
         'Subscription.PleaseInputWelcomeboxName': 'Please input welcome box name',
         'Subscription.ChooseDeliveryAddress': 'Choose Delivery Address',
         'Subscription.foldedAll':'folded all delivery addresses',
+        'Subscription.SelectPickpoint':'Select',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

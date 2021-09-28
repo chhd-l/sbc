@@ -372,7 +372,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     defaultCity: ''
                   });
                 }}>
-                  <FormattedMessage id="Subscription.AddPickup" />
+                  <FormattedMessage id="Subscription.AddNew" />
                 </Button>
               )}
             </div>
@@ -391,6 +391,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
               confirmLoading={pickupLoading}
               okButtonProps={{ disabled: confirmPickupDisabled }}
               onOk={() => this.pickupConfirm()}
+              okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
               onCancel={() => {
                 this.setState({
                   addOrEditPickup: false

@@ -2104,6 +2104,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 confirmLoading={pickupLoading}
                 okButtonProps={{ disabled: confirmPickupDisabled }}
                 onOk={() => this.pickupConfirm()}
+                okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
                 onCancel={() => {
                   this.setState({
                     deliveryAddressId: this.state.originalParams.deliveryAddressId,

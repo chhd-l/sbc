@@ -1973,9 +1973,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 }}
               >
                 {/* pickup 地址列表 pickup地址不需要校验postCode */}
-                {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
-                  pickupAddress.map((item: any, index: any) => (
-                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                {
+                  deliveryType === 'pickupDelivery' && pickupIsOpen
+                    ? (
+                      pickupAddress.map((item: any, index: any) => (
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
                       <Radio value={item.deliveryAddressId}>
                         <div style={{ display: 'inline-grid' }}>
                           <p>{item.firstName + '  ' + item.lastName}</p>
@@ -1999,12 +2004,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </Button>
                       </div>
                     </Card>
-                    )))
+                      )))
                   : (<>
                     {/* homeDelivery地址列表 */}
-                    {this.state.isUnfoldedDelivery ? deliveryList.map((item: any) => (
-                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                        <Radio value={item.deliveryAddressId}>
+                    {this.state.isUnfoldedDelivery
+                      ? deliveryList.map((item: any) => (
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
+                        <Radio
+                          disabled={!item.validFlag}
+                          value={item.deliveryAddressId}
+                        >
                           <div style={{ display: 'inline-grid' }}>
                             <p>{item.firstName + '  ' + item.lastName}</p>
                             <p>{item.city}</p>
@@ -2013,6 +2025,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <p>{this.getDictValue(countryArr, item.countryId)}</p>
                             <p>{item.address1}</p>
                             <p>{item.address2}</p>
+                            {
+                              !item.validFlag
+                                ? item.alert && <PostalCodeMsg text={item.alert} />
+                                : null
+                            }
                           </div>
                         </Radio>
                         <div>
@@ -2021,9 +2038,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           </Button>
                         </div>
                       </Card>
-                    ))
+                      ))
                       : deliveryList.map((item: any, index: any) => index < 2 ? (
-                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
                           <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + '  ' + item.lastName}</p>
@@ -2034,7 +2054,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{item.address2}</p>
                               {
                                 !item.validFlag
-                                  ? <PostalCodeMsg text={item.alert} />
+                                  ? item.alert && <PostalCodeMsg text={item.alert} />
                                   : null
                               }
                             </div>

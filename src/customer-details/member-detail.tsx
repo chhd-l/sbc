@@ -42,7 +42,7 @@ export const FORM_FIELD_MAP = {
   Address1: 'address1',
   Address2: 'address2',
   'Phone number': 'contactPhone',
-  'Postal code': 'postCode',
+  'Postal code': 'postalCode',
   Entrance: 'entrance',
   Apartment: 'apartment',
   Comment: 'rfc'
@@ -416,7 +416,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <>
                           <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${field.fieldName}`})}</Col>
                           <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
-                            {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
+                            {
+                              field.fieldName === 'Country'
+                              ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)
+                              : (basic[FORM_FIELD_MAP[field.fieldName]])
+                            }
                           </Col>
                         </>
                       ))}

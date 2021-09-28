@@ -2625,5 +2625,8 @@ export default {
         'Resources.appointment_type':'Appointment Type',
         'Resources.planned_status':'Planned Status',
         'Resources.planning_time':'Planning Time',
+        'Resources.set_by_day':'Set By Day',
+        'Resources.time_slot':'Time Slot',
+        'Resources.bulk_planning_btn_warning':'Please select one or more items in the resources list below before clicking.'
     }
 }

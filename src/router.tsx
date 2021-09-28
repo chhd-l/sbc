@@ -1107,9 +1107,13 @@ const routes = [
     asyncComponent: () => import('./Integration/ApiDocument')
   },
   {
-    path: '/resources-planning',
-    asyncComponent: () => import('./resources-planning')
-  }
+    path: '/resources-list',
+    asyncComponent: () => import('./resources-list')
+  },
+  // {
+  //   path: '/resources-list/:id',
+  //   asyncComponent: () => import('./resources-list-setting')
+  // }
 ];
 
 const homeRoutes = [

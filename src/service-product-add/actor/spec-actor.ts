@@ -9,7 +9,7 @@ export default class GoodsSpecActor extends Actor {
     let defaultGoodsInfoNo = this._randomGoodsInfoNo();
     return {
       // 是否为单规格
-      specSingleFlag: true,
+      specSingleFlag: false,
       // 规格列表
       goodsSpecs: [
         // {

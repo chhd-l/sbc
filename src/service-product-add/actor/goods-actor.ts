@@ -22,6 +22,8 @@ export default class GoodsActor extends Actor {
         brandId: '',
         // 商品名称
         goodsName: '',
+        // service type
+        serviceType: '',
         // SPU编码
         goodsNo: '',
         internalGoodsNo: '',

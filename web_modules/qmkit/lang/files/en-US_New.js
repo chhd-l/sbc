@@ -503,6 +503,16 @@ export default {
         "Product.SynonymsAreRepeated": "Synonyms are repeated",
         "Product.EditAttribute": "Edit attribute",
 
+        "Product.Bundleproduct": "Bundle product",
+        "Product.Serviceproduct": "Service product",
+        "Product.Addproducttip1": "1. Regular product is individual good like French Bulldog Puppy Dry Dog Food.",
+        "Product.Addproducttip2": "2. Bundle product is several individual goods that are sold to consumers as one combined package.",
+        "Product.Addproducttip3": "3. Service is consisted of activities, benefits or satisfactions offered for sale that are intangible like vet clinics.",
+        "Product.Servicetype": "Service type",
+        "Product.Pleaseselectservicetype": "Please select service type",
+        "Product.Addserviceproduct": "New product (Service product)",
+        "Product.Editserviceproduct": "Edit product (Service product)",
+
     },
 
     Order: {

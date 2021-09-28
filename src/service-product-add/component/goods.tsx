@@ -306,6 +306,48 @@ class GoodsForm extends React.Component<any, any> {
         {/* The first line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Servicetype" />}>
+              {getFieldDecorator('serviceType', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'serviceType'),
+                // initialValue: 'Y'
+                initialValue: goods.get('serviceType')
+              })(
+                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.Pleaseselectservicetype'})}>
+                  <Option value={1}>Grooming</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            {/* productName */}
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
+              {getFieldDecorator('goodsName', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: RCi18n({id:'Product.PleaseInputProductName'})
+                  },
+                  {
+                    min: 1,
+                    max: 225,
+                    message: '1-225 characters'
+                  },
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(rule, value, callback, 'product name');
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsName'),
+                initialValue: goods.get('goodsName')
+              })(<Input placeholder={RCi18n({id:'Product.morethanwords'})}/>)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" justify="start">
+          <Col span={8}>
             {/* SPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
@@ -359,35 +401,9 @@ class GoodsForm extends React.Component<any, any> {
           </Col>
         </Row>
         {/* The second line */}
-        <Row type="flex" justify="start">
+        {/* <Row type="flex" justify="start">
+          
           <Col span={8}>
-            {/* productName */}
-            <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
-              {getFieldDecorator('goodsName', {
-                rules: [
-                  {
-                    required: true,
-                    whitespace: true,
-                    message: RCi18n({id:'Product.PleaseInputProductName'})
-                  },
-                  {
-                    min: 1,
-                    max: 225,
-                    message: '1-225 characters'
-                  },
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorEmoji(rule, value, callback, 'product name');
-                    }
-                  }
-                ],
-                onChange: this._editGoods.bind(this, 'goodsName'),
-                initialValue: goods.get('goodsName')
-              })(<Input placeholder={RCi18n({id:'Product.morethanwords'})}/>)}
-            </FormItem>
-          </Col>
-          <Col span={8}>
-            {/* onOrOffShelves */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
@@ -406,16 +422,11 @@ class GoodsForm extends React.Component<any, any> {
                   <Radio value={0}>
                     <FormattedMessage id="product.offShelves" />
                   </Radio>
-                  {/* {isEditGoods && (
-                    <Radio value={2} disabled={true}>
-                      <FormattedMessage id="product.partialOnShelves" />
-                    </Radio>
-                  )} */}
                 </RadioGroup>
               )}
             </FormItem>
           </Col>
-        </Row>
+        </Row> */}
         {/* The third line */}
         <Row type="flex" justify="start">
           <Col span={8}>

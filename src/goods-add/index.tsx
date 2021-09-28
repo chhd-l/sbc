@@ -31,17 +31,17 @@ export default class ReleaseProducts extends React.Component<any, any> {
             <div className="release-content space-around" style={{width: 900}}>
               <Link to="/regular-product-add" style={styles.linkContainer}>
                 <i className="iconfont iconicon_Regular" style={styles.linkIcon}></i>
-                <span style={styles.linkText}>Regular product</span>
+                <span style={styles.linkText}><FormattedMessage id="Product.Regularproduct" /></span>
               </Link>
 
               <Link to="/goods-main" style={styles.linkContainer}>
                 <i className="iconfont iconicon_Bundle" style={styles.linkIcon}></i>
-                <span style={styles.linkText}>Bundle product</span>
+                <span style={styles.linkText}><FormattedMessage id="Product.Bundleproduct" /></span>
               </Link>
 
               <Link to="/service-product-add" style={styles.linkContainer}>
                 <i className="iconfont icona-icon_Service" style={styles.linkIcon}></i>
-                <span style={styles.linkText}>Service product</span>
+                <span style={styles.linkText}><FormattedMessage id="Product.Serviceproduct" /></span>
               </Link>
             </div>
           </div>
@@ -50,10 +50,10 @@ export default class ReleaseProducts extends React.Component<any, any> {
               type="info"
               message={
                 <div>
-                  <p>Operation instruction:</p>
-                  <p>1. Regular product is individual good like French Bulldog Puppy Dry Dog Food.</p>
-                  <p>2. Bundle product is several individual goods that are sold to consumers as one combined package.</p>
-                  <p>3. Service is consisted of activities, benefits or satisfactions offered for sale that are intangible like vet clinics.</p>
+                  <p><FormattedMessage id="Product.operationInstruction" />:</p>
+                  <p><FormattedMessage id="Product.Addproducttip1" /></p>
+                  <p><FormattedMessage id="Product.Addproducttip2" /></p>
+                  <p><FormattedMessage id="Product.Addproducttip3" /></p>
                 </div>
               }
             />

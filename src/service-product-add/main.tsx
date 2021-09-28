@@ -129,11 +129,11 @@ export default class Main extends React.Component<any, any> {
       <div>
         {/* BreadCrumb */}
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? <FormattedMessage id="Product.Editserviceproduct" /> : <FormattedMessage id="Product.Addserviceproduct" />}</Breadcrumb.Item>
         </BreadCrumb>
         {/* Headline */}
         <div className="container-search">
-          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
+          <Headline title={gid ? <FormattedMessage id="Product.Editserviceproduct" /> : <FormattedMessage id="Product.Addserviceproduct" />} />
         </div>
         {/* Tabs */}
         <div className="container">

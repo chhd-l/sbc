@@ -352,7 +352,7 @@ export default class ClinicList extends Component<any, any> {
               <>
                 <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
                 <Tooltip placement="top" title={'Resend'} >
-                  <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
+                  <a className="iconfont iconReset"></a>
                 </Tooltip>
                 </div>
                 <Divider type="vertical" />

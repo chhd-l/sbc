@@ -28,6 +28,7 @@ export function petsById(filterParams = {}) {
     })
   });
 }
+
 // 根据ID查找Address信息
 export function addressById(id: String) {
   return Fetch<TResult>('/customer/addressList/id/' + id, {
@@ -218,5 +219,12 @@ export function getTimeSlot(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
+  });
+}
+
+// 获取pick point状态
+export function getPickupPointStatus(id: String) {
+  return Fetch<TResult>('/sub/getPPoinState/' + id, {
+    method: 'POST'
   });
 }

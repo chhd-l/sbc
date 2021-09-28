@@ -111,7 +111,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupEditNumber: 0,
       pickupAddress: null,
       pickupFormData: [], // pickup 表单数据
-      pickupPointState: false, // pickup 状态
       confirmPickupDisabled: true, // pickup地址确认按钮状态
 
       deliveryDate: undefined,
@@ -203,7 +202,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
               deliveryAddressInfo: subscriptionDetail.consignee,
-              pickupPointState: subscriptionDetail.consignee?.pickupPointState,
               billingAddressId: subscriptionDetail.billingAddressId,
               billingAddressInfo: subscriptionDetail.invoice,
               originalParams: originalParams,
@@ -690,12 +688,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   deliveryOK = async () => {
-    const { deliveryList, allAddressList, pickupPointState, deliveryAddressId, subscriptionInfo } = this.state;
+    const { deliveryList, allAddressList, deliveryAddressId, subscriptionInfo } = this.state;
     let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
-    deliveryAddressInfo['pickupPointState'] = pickupPointState;
-    
+
+    // 切换pickup地址时，获取pick point 状态
+    if (deliveryAddressInfo.receiveType === 'PICK_UP') {
+      await webapi.getPickupPointStatus(deliveryAddressId).then(data => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          deliveryAddressInfo['pickupPointState'] = res.context;
+        }
+      })
+    }
+
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (deliveryAddressInfo.receiveType !== 'PICK_UP' && (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
       if (!deliveryAddressInfo.street ||
@@ -1049,7 +1056,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-  getTimeSlot = (params:any) => {
+  getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then(data => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
@@ -1061,7 +1068,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
 
-  deliveryDateChange = (value:any) => {
+  deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state
     let timeSlots = deliveryDateList.find(item => item.date === value).dateTimeInfos || []
     this.setState({
@@ -1071,7 +1078,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
   //timeslot
-  timeSlotChange = (value:any) => {
+  timeSlotChange = (value: any) => {
     this.setState({
       timeSlot: value
     })
@@ -1092,7 +1099,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   // 更新pickup数据
-  updatePickupData = (data:any) => {
+  updatePickupData = (data: any) => {
     this.setState({
       pickupFormData: data
     });
@@ -1128,6 +1135,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryList,
       pickupAddress,
       confirmPickupDisabled,
+      isUnfoldedDelivery,
 
       deliveryDate,
       deliveryDateList,
@@ -1729,7 +1737,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                             <Col span={24}>
                               <Select value={timeSlot}
-                              getPopupContainer={(trigger: any) => trigger.parentNode}
+                                getPopupContainer={(trigger: any) => trigger.parentNode}
                                 onChange={this.timeSlotChange}
                                 placeholder={RCi18n({ id: 'Setting.timeSlot' })}>
                                 {
@@ -2052,7 +2060,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       );
                     }}
                   >
-                    <FormattedMessage id="Subscription.UnfoldedAll" />
+                    {isUnfoldedDelivery ? (
+                      <FormattedMessage id="Subscription.foldedAll" />
+                    ) : (
+                      <FormattedMessage id="Subscription.UnfoldedAll" />
+                    )}
                   </Button>
                 ) : null
               ) : null}

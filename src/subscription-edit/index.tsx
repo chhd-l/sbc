@@ -1063,11 +1063,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { deliveryDate, timeSlot } = this.state
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let timeSlots = res.context.timeSlots
+        let deliveryDateList = res.context.timeSlots
         this.setState({
-          deliveryDateList: timeSlots,
-          deliveryDate: deliveryDate ? deliveryDate : timeSlots[0] && timeSlots[0].date,
-          timeSlot: timeSlot ? timeSlot : timeSlots[0] && timeSlots[0].dateTimeInfos[0].startTime + '-' + timeSlots[0].dateTimeInfos[0].endTime
+          deliveryDateList: deliveryDateList,
+          timeSlotList:deliveryDateList[0].dateTimeInfos||[],
+          deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
+          timeSlot: timeSlot ? timeSlot : deliveryDateList[0] && 
+          deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
         })
       }
     })

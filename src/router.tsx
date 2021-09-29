@@ -166,6 +166,14 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-return-edit')
   },
+  
+  // service order
+  {
+    path: '/service-order',
+    exact: true,
+    asyncComponent: () => import('./service-order')
+  },
+
   //推荐列表
   {
     path: '/recommendation',

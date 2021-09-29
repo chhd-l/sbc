@@ -145,7 +145,7 @@ class DictionaryForm extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
-            countryArr: res.context.sysDictionaryVOS
+            countryArr: res.context.goodsDictionaryVOS
           });
         }
       })

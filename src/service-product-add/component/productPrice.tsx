@@ -425,80 +425,80 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
-    columns = columns.push({
-      title: (
-        <div>
-         <FormattedMessage id="Product.Baseprice" />
-          {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange} allowClear>
-            {goodsSpecs.map((item, i) =>
-              item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (
-                <Option key={i} value={item.get('mockSpecId')}>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
-                </Option>
-              ) : null
-            )}
-            <Option value={'weightValue'}>Weight value</Option>
-            <Option value={'None'}>None</Option>
-          </Select>*/}
-        </div>
-      ),
-      key: 'basePrice',
-      render: (rowInfo, a, b) => {
-        const { goodsList, goods } = this.props.relaxProps;
-        if (goodsList.toJS()[b].goodsInfoWeight) {
-          this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight);
-        } else {
-          this._handleBasePriceChange('None');
-        }
+    // columns = columns.push({
+    //   title: (
+    //     <div>
+    //      <FormattedMessage id="Product.Baseprice" />
+    //       {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange} allowClear>
+    //         {goodsSpecs.map((item, i) =>
+    //           item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? (
+    //             <Option key={i} value={item.get('mockSpecId')}>
+    //               {sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}
+    //             </Option>
+    //           ) : null
+    //         )}
+    //         <Option value={'weightValue'}>Weight value</Option>
+    //         <Option value={'None'}>None</Option>
+    //       </Select>*/}
+    //     </div>
+    //   ),
+    //   key: 'basePrice',
+    //   render: (rowInfo, a, b) => {
+    //     const { goodsList, goods } = this.props.relaxProps;
+    //     if (goodsList.toJS()[b].goodsInfoWeight) {
+    //       this._handleBasePriceChange(goodsList.toJS()[b].goodsInfoWeight);
+    //     } else {
+    //       this._handleBasePriceChange('None');
+    //     }
 
-        return (
-          <Row>
-            <Col span={12}>
-              {goods.get('subscriptionStatus') == 1 ? (
-                <FormItem style={styles.tableFormItem}>
-                  {getFieldDecorator('basePrice_' + rowInfo.id, {
-                    rules: [
-                      {
-                        pattern: ValidConst.number,
-                        message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
-                      }
-                    ],
-                    onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
-                    initialValue: rowInfo.basePrice || 0
-                  })(
-                    goodsList.toJS()[b].goodsInfoWeight != 0 ? (
-                      <div>
-                        <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + rowInfo.basePrice : ''}</p>
-                        <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
-                      </div>
-                    ) : (
-                      <p/>
-                    )
-                  )}
-                </FormItem>
-              ) : (
-                <FormItem style={styles.tableFormItem}>
-                  {getFieldDecorator('basePrice_' + rowInfo.id, {
-                    rules: [
-                      {
-                        pattern: ValidConst.number,
-                        message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
-                      }
-                    ],
-                    onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
-                    initialValue: rowInfo.basePrice || 0
-                  })(
-                    <div>
-                      <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.basePrice : ''}</p>
-                    </div>
-                  )}
-                </FormItem>
-              )}
-            </Col>
-          </Row>
-        );
-      }
-    });
+    //     return (
+    //       <Row>
+    //         <Col span={12}>
+    //           {goods.get('subscriptionStatus') == 1 ? (
+    //             <FormItem style={styles.tableFormItem}>
+    //               {getFieldDecorator('basePrice_' + rowInfo.id, {
+    //                 rules: [
+    //                   {
+    //                     pattern: ValidConst.number,
+    //                     message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
+    //                   }
+    //                 ],
+    //                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
+    //                 initialValue: rowInfo.basePrice || 0
+    //               })(
+    //                 goodsList.toJS()[b].goodsInfoWeight != 0 ? (
+    //                   <div>
+    //                     <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + rowInfo.basePrice : ''}</p>
+    //                     <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
+    //                   </div>
+    //                 ) : (
+    //                   <p/>
+    //                 )
+    //               )}
+    //             </FormItem>
+    //           ) : (
+    //             <FormItem style={styles.tableFormItem}>
+    //               {getFieldDecorator('basePrice_' + rowInfo.id, {
+    //                 rules: [
+    //                   {
+    //                     pattern: ValidConst.number,
+    //                     message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
+    //                   }
+    //                 ],
+    //                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
+    //                 initialValue: rowInfo.basePrice || 0
+    //               })(
+    //                 <div>
+    //                   <p>{rowInfo.basePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.basePrice : ''}</p>
+    //                 </div>
+    //               )}
+    //             </FormItem>
+    //           )}
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
     columns = columns.push({
       title: '',
       key: 'goodsNo',

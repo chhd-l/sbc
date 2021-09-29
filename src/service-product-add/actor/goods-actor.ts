@@ -51,7 +51,8 @@ export default class GoodsActor extends Actor {
         goodsId: null,
         defaultPurchaseType: null,
         defaultFrequencyId: null,
-        resource: 1 //商品来源
+        resource: 1, //商品来源
+        assignType: 1 //service product - assign type
       },
       // 是否编辑商品
       isEditGoods: false,

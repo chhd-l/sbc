@@ -512,6 +512,10 @@ export default {
         "Product.Pleaseselectservicetype": "Please select service type",
         "Product.Addserviceproduct": "New product (Service product)",
         "Product.Editserviceproduct": "Edit product (Service product)",
+        "Product.Resources": "Resources",
+        "Product.Assigntheresources": "Assign the resources",
+        "Product.Assignrandomly": "Assign randomly",
+        "Product.Assignprioritized": "Prioritized",
 
     },
 

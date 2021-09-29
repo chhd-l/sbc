@@ -2101,22 +2101,22 @@ export default class AppStore extends Store {
   };
 
   onTabChanges = (nextKey) => {
-    if (nextKey === 'price') {
+    if (nextKey === 'inventory') {
       if (!this._validMainForms()) {
         return;
       }
-    } else if (nextKey === 'inventory') {
-      if (!this._validMainForms() || !this._validPriceFormsNew()) {
+    } else if (nextKey === 'price') {
+      if (!this._validMainForms()) {
         return;
       }
-    } else if (nextKey === 'related' || nextKey === 'shipping') {
-      if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
+    } else if (nextKey === 'related') {
+      if (!this._validMainForms() || !this._validPriceFormsNew()) {
         return;
-      } else if (nextKey === 'related') {
+      } else {
         this.saveAll();
       }
     } else if (nextKey === 'seo') {
-      if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew() || !this.state().get('getGoodsId')) {
+      if (!this._validMainForms() || !this._validPriceFormsNew() || !this.state().get('getGoodsId')) {
         return;
       } else {
         this.saveAll('seo');

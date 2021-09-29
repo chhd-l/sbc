@@ -25,7 +25,8 @@ import VideoModal from './component/video-modal';
 import { FormattedMessage } from 'react-intl';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
-import ProductInventory from './component/productInventory';
+//import ProductInventory from './component/productInventory';
+import ProductResource from './component/productResource';
 import ShippingInformation from './component/shippingInformation';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -67,14 +68,12 @@ export default class Main extends React.Component<any, any> {
 
   onPrev = (res) => {
     let type = '';
-    if (res == 'price') {
+    if (res == 'inventory') {
       type = 'main';
-    } else if (res == 'inventory') {
-      type = 'price';
-    } else if (res == 'shipping') {
+    } else if (res == 'price') {
       type = 'inventory';
     } else if (res == 'related') {
-      type = 'shipping';
+      type = 'price';
     } else if (res == 'seo') {
       type = 'related';
     }
@@ -87,13 +86,11 @@ export default class Main extends React.Component<any, any> {
   onNext = (res) => {
     let type = res || 'main';
     if (res == 'main' && this.store._validMainForms()) {
-      type = 'price';
-    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
-    } else if (res == 'inventory' && this.store._validInventoryFormsNew()) {
-      type = 'shipping';
-    } else if (res == 'shipping') {
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'related';
+    } else if (res == 'inventory') {
+      type = 'price';
     } else if (res == 'related') {
       type = 'seo';
     }
@@ -172,24 +169,24 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
+            {/* Product inventory */}
+            <Tabs.TabPane tab={<FormattedMessage id="Product.Resources" />} key="inventory">
+              <AlertInfo />
+
+              <ProductResource />
+            </Tabs.TabPane>
             {/* Product price */}
             <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
               <AlertInfo />
 
               <ProductPrice />
             </Tabs.TabPane>
-            {/* Product inventory */}
-            <Tabs.TabPane tab={<FormattedMessage id="Product.Productinventory" />} key="inventory">
-              <AlertInfo />
-
-              <ProductInventory />
-            </Tabs.TabPane>
             {/* shipping information */}
-            <Tabs.TabPane tab={<FormattedMessage id="Product.shippingInformation" />} key="shipping">
+            {/* <Tabs.TabPane tab={<FormattedMessage id="Product.shippingInformation" />} key="shipping">
               <AlertInfo />
 
               <ShippingInformation />
-            </Tabs.TabPane>
+            </Tabs.TabPane> */}
             {/* Related product */}
             <Tabs.TabPane
               tab={<FormattedMessage id="Product.Relatedproduct" />}

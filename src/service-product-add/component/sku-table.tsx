@@ -337,88 +337,88 @@ class SkuForm extends React.Component<any, any> {
     });
 
     //EAN
-    columns = columns.push({
-      title: RCi18n({id:'Product.EAN'}),
-      key: 'goodsInfoBarcode',
-      render: (rowInfo) => {
-        return (
-          <Row>
-            <Col span={8}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
-                  rules: [
-                    /*{
-                      required: true,
-                      message: 'Please input EAN code'
-                    },*/
-                    /*{
-                      pattern: ValidConst.noMinus,
-                      message: 'Please enter the correct value'
-                    }*/
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
-                  initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '116px' }} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });
+    // columns = columns.push({
+    //   title: RCi18n({id:'Product.EAN'}),
+    //   key: 'goodsInfoBarcode',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={8}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('goodsInfoBarcode' + rowInfo.id, {
+    //               rules: [
+    //                 /*{
+    //                   required: true,
+    //                   message: 'Please input EAN code'
+    //                 },*/
+    //                 /*{
+    //                   pattern: ValidConst.noMinus,
+    //                   message: 'Please enter the correct value'
+    //                 }*/
+    //               ],
+    //               onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
+    //               initialValue: rowInfo.goodsInfoBarcode
+    //             })(<Input style={{ width: '116px' }} />)}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
 
-    columns = columns.push({
-      title: RCi18n({id:'Product.Weightvalue'}),
-      key: 'goodsInfoWeight',
-      render: (rowInfo) => {
-        return (
-          <Row>
-            <Col span={8}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsInfoWeight' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      message: RCi18n({id:'Product.Inputweightvalue'})
-                    }
-                    /*{
-                      pattern: ValidConst.number,
-                      message: 'Please enter the correct value'
-                    }*/
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
-                  initialValue: rowInfo.goodsInfoWeight || 0
-                })(<InputNumber formatter={limitDecimals} parser={limitDecimals} style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });
+    // columns = columns.push({
+    //   title: RCi18n({id:'Product.Weightvalue'}),
+    //   key: 'goodsInfoWeight',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={8}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('goodsInfoWeight' + rowInfo.id, {
+    //               rules: [
+    //                 {
+    //                   required: true,
+    //                   message: RCi18n({id:'Product.Inputweightvalue'})
+    //                 }
+    //                 /*{
+    //                   pattern: ValidConst.number,
+    //                   message: 'Please enter the correct value'
+    //                 }*/
+    //               ],
+    //               onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
+    //               initialValue: rowInfo.goodsInfoWeight || 0
+    //             })(<InputNumber formatter={limitDecimals} parser={limitDecimals} style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
 
-    columns = columns.push({
-      title: RCi18n({id:'Product.Weightunit'}),
-      key: 'goodsInfoUnit',
-      render: (rowInfo) => {
-        return (
-          <Row>
-            <Col span={6}>
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
-                  initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
-                })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} >
-                    <Option value="kg">kg</Option>
-                    <Option value="g">g</Option>
-                    <Option value="lb">lb</Option>
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-        );
-      }
-    });
+    // columns = columns.push({
+    //   title: RCi18n({id:'Product.Weightunit'}),
+    //   key: 'goodsInfoUnit',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={6}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('goodsInfoUnit' + rowInfo.id, {
+    //               onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
+    //               initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
+    //             })(
+    //               <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} >
+    //                 <Option value="kg">kg</Option>
+    //                 <Option value="g">g</Option>
+    //                 <Option value="lb">lb</Option>
+    //               </Select>
+    //             )}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
 
     /*columns = columns.push({
       title: 'Pack size',

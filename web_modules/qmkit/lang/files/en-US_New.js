@@ -503,6 +503,17 @@ export default {
         "Product.SynonymsAreRepeated": "Synonyms are repeated",
         "Product.EditAttribute": "Edit attribute",
 
+        "Product.UOMCategory": "UOM Category",
+        "Product.UOMCategoryName": "UOM Category Name",
+        "Product.Description": "Description",
+        "Product.Areyousuretodelete": "Are you sure you want to delete this item?",
+        "Product.Createnewuomcategory": "Create new UOM category",
+        "Product.UOMcode": "UOM Code",
+        "Product.UOMname": "UOM Name",
+        "Product.Ratio": "Ratio",
+        "Product.UOMlist": "UOM list",
+        "Product.Createnewuom": "Create new UOM",
+
     },
 
     Order: {

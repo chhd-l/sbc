@@ -96,6 +96,7 @@ export default class TablePage extends React.Component<TablePageProps> {
             last: last
           });
           this.props.onFetchEnd?.(data);
+          this.redirectPrev(content, total);
         }
 
         this.setState({
@@ -129,6 +130,12 @@ export default class TablePage extends React.Component<TablePageProps> {
         this.search();
       }
     );
+  };
+
+  redirectPrev = (content, total) => {
+    if (content.length === 0 && total > 0 && this.state.pageNum > 0) {
+      this.handleCurrentChange({ current: this.state.pageNum });
+    }
   };
 
   render() {

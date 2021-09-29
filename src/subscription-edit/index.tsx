@@ -112,6 +112,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupAddress: null,
       pickupFormData: [], // pickup 表单数据
       confirmPickupDisabled: true, // pickup地址确认按钮状态
+      subscribeGoods: null, // 订阅商品数据，传给pickup组件
 
       deliveryDate: undefined,
       timeSlot: undefined,
@@ -176,11 +177,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let paymentInfo = subscriptionDetail.payPaymentInfo;
           let paymentMethod = subscriptionDetail.paymentMethod
 
+          let subscribeGoods = [];
           let subscribeNumArr = [];
           let periodTypeArr = [];
           for (let i = 0; i < goodsInfo.length; i++) {
-            subscribeNumArr.push(goodsInfo[i].subscribeNum);
-            periodTypeArr.push(goodsInfo[i].periodTypeId);
+            let ginfo = goodsInfo[i];
+            subscribeNumArr.push(ginfo.subscribeNum);
+            periodTypeArr.push(ginfo.periodTypeId);
+            
+            // 组装订阅商品goodsInfoId和数量
+            let goodsInfoId = ginfo?.goodsInfoVO?.goodsInfoId;
+            subscribeGoods.push({
+              goodsInfoId: goodsInfoId,
+              quantity: ginfo.subscribeNum
+            });
           }
           let originalParams = {
             billingAddressId: subscriptionDetail.billingAddressId,
@@ -190,9 +200,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode
           };
-
+          console.log('666 >>> subscribeGoods: ', subscribeGoods);
           this.setState(
             {
+              subscribeGoods: subscribeGoods,
               subscriptionType: subscriptionDetail.subscriptionType,
               subscriptionInfo: subscriptionInfo,
               orderInfo: orderInfo,
@@ -537,7 +548,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getAddressList = (customerId, type, showModal = false) => {
-    const { deliveryAddressInfo } = this.state;
+    const { deliveryAddressInfo, pickupIsOpen } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
@@ -567,7 +578,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           }, () => {
             // 根据 receiveType 设置默认选中
             let rctype = deliveryAddressInfo?.receiveType || '';
-            let dltype = rctype === 'PICK_UP' ? 'pickupDelivery' : 'homeDelivery';
+            let dltype = (rctype === 'PICK_UP' && pickupIsOpen) ? 'pickupDelivery' : 'homeDelivery';
             this.setState({
               deliveryType: dltype
             })
@@ -1066,10 +1077,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         let deliveryDateList = res.context.timeSlots
         this.setState({
           deliveryDateList: deliveryDateList,
-          timeSlotList:deliveryDateList[0].dateTimeInfos||[],
+          timeSlotList: deliveryDateList[0].dateTimeInfos || [],
           deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
-          timeSlot: timeSlot ? timeSlot : deliveryDateList[0] && 
-          deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
+          timeSlot: timeSlot ? timeSlot : deliveryDateList[0] &&
+            deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
         })
       }
     })
@@ -1967,8 +1978,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 )}
 
               </Row>
-              {/*如果是黑名单的地址，则不能选择*/}
 
+              {/*如果是黑名单的地址，则不能选择*/}
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
                 value={this.state.deliveryAddressId}
@@ -2125,7 +2136,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <PickupDelivery
                       key={defaultCity}
                       initData={pickupFormData}
+                      from="subscription"
                       pickupAddress={pickupAddress}
+                      subscribeGoods={this.state.subscribeGoods}
                       defaultCity={defaultCity}
                       updateConfirmPickupDisabled={this.updateConfirmPickupDisabled}
                       updatePickupEditNumber={this.updatePickupEditNumber}

@@ -242,6 +242,18 @@ export function getTaggingList() {
 }
 
 /**
+ * 合并包裹
+ */
+export function dimensionsByPackage(filterParams = {}) {
+  return Fetch<TResult>('/pick-up-supplier/dimensionsByPackage-supplier', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
  * 根据关键字搜索城市列表
  */
 export function pickupQueryCity(city = '') {

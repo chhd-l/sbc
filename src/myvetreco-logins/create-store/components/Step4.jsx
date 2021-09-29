@@ -137,12 +137,15 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           spu: allObj.Dog[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
+        allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
+        allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
-    console.log('alllllll', newChooseObj);
     let array = []
     for(let i in newChooseObj){
+      newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
+      newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }

@@ -302,6 +302,16 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={12}>
+              <FormItem label="Postcode" name="postcode">
+                {getFieldDecorator('postcode', {
+                  rules: [{ pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
               <FormItem label="City" name="cityId">
                 {getFieldDecorator('cityId', {
                   initialValue: {key:'',label:''}
@@ -315,15 +325,6 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                       width: '100%',
                     }}
                   />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label="Postcode" name="postcode">
-                {getFieldDecorator('postcode', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
                 )}
               </FormItem>
             </Col>

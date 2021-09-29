@@ -74,6 +74,7 @@ function UomList(props: any) {
     {
       title: RCi18n({id:'Setting.Category'}),
       dataIndex: 'uomCategoryName',
+      width: '20%',
       key: 'category',
     },
     {

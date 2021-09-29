@@ -184,7 +184,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             let ginfo = goodsInfo[i];
             subscribeNumArr.push(ginfo.subscribeNum);
             periodTypeArr.push(ginfo.periodTypeId);
-            
+
             // 组装订阅商品goodsInfoId和数量
             let goodsInfoId = ginfo?.goodsInfoVO?.goodsInfoId;
             subscribeGoods.push({
@@ -200,7 +200,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode
           };
-          console.log('666 >>> subscribeGoods: ', subscribeGoods);
+
           this.setState(
             {
               subscribeGoods: subscribeGoods,
@@ -486,6 +486,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+
           this.setState({
             saveLoading: false,
             payPspItemEnum: '',
@@ -548,7 +549,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getAddressList = (customerId, type, showModal = false) => {
-    const { deliveryAddressInfo, pickupIsOpen } = this.state;
+    const { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
@@ -576,9 +577,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             customerId: customerId,
             visibleShipping: showModal
           }, () => {
-            // 根据 receiveType 设置默认选中
-            let rctype = deliveryAddressInfo?.receiveType || '';
-            let dltype = (rctype === 'PICK_UP' && pickupIsOpen) ? 'pickupDelivery' : 'homeDelivery';
+            console.log('666 >>> pickupEditNumber: ', pickupEditNumber);
+            let dltype = '';
+            if (pickupEditNumber > 0) {
+              dltype = sessionStorage.getItem('portal-delivery-method') ?? 'homeDelivery';
+              if (addressList?.length === 1 || pickup?.length) {
+                let daId = '';
+                if (dltype === 'homeDelivery') {
+                  daId = addressList[0].deliveryAddressId;
+                } else if (dltype === 'pickupDelivery') {
+                  daId = pickup[0].deliveryAddressId;
+                }
+                this.setState({
+                  deliveryAddressId: daId
+                });
+              }
+            } else {
+              // 根据 receiveType 设置默认选中
+              let rctype = deliveryAddressInfo?.receiveType || '';
+              dltype = (rctype === 'PICK_UP' && pickupIsOpen) ? 'pickupDelivery' : 'homeDelivery';
+            }
             this.setState({
               deliveryType: dltype
             })
@@ -1122,6 +1140,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupFormData: data
     });
   };
+
+  // 选择配送类型
+  handleSelectDeliveryMethod = (e: any) => {
+    const { deliveryList, pickupAddress } = this.state;
+    let value = e.target.value;
+    if (deliveryList?.length === 1 || pickupAddress?.length) {
+      let daId = '';
+      if (value === 'homeDelivery') {
+        daId = deliveryList[0].deliveryAddressId;
+      } else if (value === 'pickupDelivery') {
+        daId = pickupAddress[0].deliveryAddressId;
+      }
+      this.setState({
+        deliveryAddressId: daId
+      });
+    }
+    sessionStorage.setItem('portal-delivery-method', value);
+    this.setState({
+      deliveryType: value
+    })
+  }
 
   render() {
     const {
@@ -1913,27 +1952,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </span>
                   <Radio.Group
                     value={deliveryType}
-                    onChange={(e) => {
-                      let value = e.target.value;
-                      if (deliveryList?.length === 1 || pickupAddress?.length) {
-                        let daId = '';
-                        if (value === 'homeDelivery') {
-                          if (deliveryList?.length === 1) {
-                            daId = deliveryList[0].deliveryAddressId;
-                          }
-                        } else if (value === 'pickupDelivery') {
-                          if (pickupAddress?.length) {
-                            daId = pickupAddress[0].deliveryAddressId;
-                          }
-                        }
-                        this.setState({
-                          deliveryAddressId: daId
-                        })
-                      }
-                      this.setState({
-                        deliveryType: value
-                      })
-                    }}
+                    onChange={(e) => { this.handleSelectDeliveryMethod(e) }}
                   >
                     <Radio value='homeDelivery'><FormattedMessage id="Subscription.HomeDelivery" /></Radio>
                     {pickupIsOpen && (

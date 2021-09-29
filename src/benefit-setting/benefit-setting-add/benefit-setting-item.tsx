@@ -157,7 +157,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
                     "scopeType":0,
                     "subType": benefitType === config.CONSUMPTION_GIFT ? 12 : 13,
                     "publicStatus":1,
-                    "promotionType": benefitType === config.CONSUMPTION_GIFT ? 0 : values.type === 'individual' ? 4 : 2,
+                    "promotionType": benefitType === config.CONSUMPTION_GIFT || values.type === 'all' ? 0 : values.type === 'individual' ? 4 : 2,
                 }
                 this.setState({loading: true});
                 this.store.submitFullGift(params).then(() => {

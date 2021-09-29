@@ -683,7 +683,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         addOrEditPickup: false,
         pickupLoading: false,
         visibleShipping: true
-      },()=>{
+      }, () => {
         this.getAddressList(customerId, 'DELIVERY', true);
       });
     }
@@ -1060,11 +1060,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
   getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then(data => {
+      const { deliveryDate, timeSlot } = this.state
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let timeSlots = res.context.timeSlots
+        let deliveryDateList = res.context.timeSlots
         this.setState({
-          deliveryDateList: timeSlots
+          deliveryDateList: deliveryDateList,
+          timeSlotList:deliveryDateList[0].dateTimeInfos||[],
+          deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
+          timeSlot: timeSlot ? timeSlot : deliveryDateList[0] && 
+          deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
         })
       }
     })
@@ -1701,9 +1706,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     {
-                      deliveryAddressInfo.validFlag && (deliveryAddressInfo.receiveType !== 'PICK_UP')
+                      deliveryAddressInfo.receiveType === 'PICK_UP'
                         ? null
-                        : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                        : deliveryAddressInfo.validFlag
+                          ? null
+                          : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
                     }
                   </Col>
                 </Row>
@@ -1981,70 +1988,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           style={{ width: 602, marginBottom: 10 }}
                           bodyStyle={{ padding: 10 }}
                           key={item.deliveryAddressId}>
-                      <Radio value={item.deliveryAddressId}>
-                        <div style={{ display: 'inline-grid' }}>
-                          <p>{item.firstName + '  ' + item.lastName}</p>
-                          <p>{item.city}</p>
-                          {item.province ? <p>{item.province}</p> : null}
-                          <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                          <p>{item.address1}</p>
-                          <p>{item.address2}</p>
-                          <p>{item.workTime}</p>
-                        </div>
-                      </Radio>
-                      <div>
-                        <Button type="link" size="small" onClick={() => {
-                          this.setState({
-                            visibleShipping: false,
-                            addOrEditPickup: true,
-                            defaultCity: item.city
-                          });
-                        }}>
-                          <FormattedMessage id="Subscription.Edit" />
-                        </Button>
-                      </div>
-                    </Card>
-                      )))
-                  : (<>
-                    {/* homeDelivery地址列表 */}
-                    {this.state.isUnfoldedDelivery
-                      ? deliveryList.map((item: any) => (
-                        <Card
-                          style={{ width: 602, marginBottom: 10 }}
-                          bodyStyle={{ padding: 10 }}
-                          key={item.deliveryAddressId}>
-                        <Radio
-                          disabled={!item.validFlag}
-                          value={item.deliveryAddressId}
-                        >
-                          <div style={{ display: 'inline-grid' }}>
-                            <p>{item.firstName + '  ' + item.lastName}</p>
-                            <p>{item.city}</p>
-                            {item.province ? <p>{item.province}</p> : null}
-
-                            <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                            <p>{item.address1}</p>
-                            <p>{item.address2}</p>
-                            {
-                              !item.validFlag
-                                ? item.alert && <PostalCodeMsg text={item.alert} />
-                                : null
-                            }
-                          </div>
-                        </Radio>
-                        <div>
-                          <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
-                            <FormattedMessage id="Subscription.Edit" />
-                          </Button>
-                        </div>
-                      </Card>
-                      ))
-                      : deliveryList.map((item: any, index: any) => index < 2 ? (
-                        <Card
-                          style={{ width: 602, marginBottom: 10 }}
-                          bodyStyle={{ padding: 10 }}
-                          key={item.deliveryAddressId}>
-                          <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                          <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + '  ' + item.lastName}</p>
                               <p>{item.city}</p>
@@ -2052,22 +1996,85 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
-                              {
-                                !item.validFlag
-                                  ? item.alert && <PostalCodeMsg text={item.alert} />
-                                  : null
-                              }
+                              <p>{item.workTime}</p>
                             </div>
                           </Radio>
                           <div>
-                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                            <Button type="link" size="small" onClick={() => {
+                              this.setState({
+                                visibleShipping: false,
+                                addOrEditPickup: true,
+                                defaultCity: item.city
+                              });
+                            }}>
                               <FormattedMessage id="Subscription.Edit" />
                             </Button>
                           </div>
                         </Card>
-                      ) : null
-                      )}
-                  </>)
+                      )))
+                    : (<>
+                      {/* homeDelivery地址列表 */}
+                      {this.state.isUnfoldedDelivery
+                        ? deliveryList.map((item: any) => (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}>
+                            <Radio
+                              disabled={!item.validFlag}
+                              value={item.deliveryAddressId}
+                            >
+                              <div style={{ display: 'inline-grid' }}>
+                                <p>{item.firstName + '  ' + item.lastName}</p>
+                                <p>{item.city}</p>
+                                {item.province ? <p>{item.province}</p> : null}
+
+                                <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                <p>{item.address1}</p>
+                                <p>{item.address2}</p>
+                                {
+                                  !item.validFlag
+                                    ? item.alert && <PostalCodeMsg text={item.alert} />
+                                    : null
+                                }
+                              </div>
+                            </Radio>
+                            <div>
+                              <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ))
+                        : deliveryList.map((item: any, index: any) => index < 2 ? (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}>
+                            <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                              <div style={{ display: 'inline-grid' }}>
+                                <p>{item.firstName + '  ' + item.lastName}</p>
+                                <p>{item.city}</p>
+                                {item.province ? <p>{item.province}</p> : null}
+                                <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                <p>{item.address1}</p>
+                                <p>{item.address2}</p>
+                                {
+                                  !item.validFlag
+                                    ? item.alert && <PostalCodeMsg text={item.alert} />
+                                    : null
+                                }
+                              </div>
+                            </Radio>
+                            <div>
+                              <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ) : null
+                        )}
+                    </>)
                 }
               </Radio.Group>
 

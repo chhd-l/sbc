@@ -149,7 +149,7 @@ class ProductDictionary extends Component<any, any> {
           render: (text, record) => (
             <span>
               <Tooltip placement='top' title={`${RCi18n({ id: 'Setting.Edit' })}`}>
-                <Link to={'/dictionary-edit/' + record.id} className='iconfont iconEdit' />
+                <Link to={'/product-dictionary-edit/' + record.id} className='iconfont iconEdit' />
               </Tooltip>
 
               <Divider type='vertical' />
@@ -207,7 +207,7 @@ class ProductDictionary extends Component<any, any> {
           <WrappedSearchForm onSearch={this.handleSearch} />
 
           <Button type='primary' htmlType='submit' style={{ marginBottom: '10px' }}>
-            <Link to='/dictionary-add'><FormattedMessage id='Setting.Add' /></Link>
+            <Link to='/product-dictionary-add'><FormattedMessage id='Setting.Add' /></Link>
           </Button>
         </div>
 

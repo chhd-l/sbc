@@ -930,6 +930,14 @@ const routes = [
     asyncComponent: () => import('./product-dictionary')
   },
   {
+    path: '/product-dictionary-add',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
+    path: '/product-dictionary-edit/:id',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
     path: '/product-price',
     asyncComponent: () => import('./product-price')
   },

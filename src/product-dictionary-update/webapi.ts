@@ -11,7 +11,7 @@ type TResult = {
  * @param filterParams
  */
 export function getDictionaryDetails(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/querySysDictionaryById', {
+  return Fetch<TResult>('/goodsDictionary/queryGoodsDictionaryById', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -26,7 +26,7 @@ export function addDictionary(filterParams = {}) {
   let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
   let storeIdObject = { storeId: loginInfo.storeId };
   let param = { ...storeIdObject, ...filterParams };
-  return Fetch<TResult>('/sysdict/addSysDictionary', {
+  return Fetch<TResult>('/goodsDictionary/addGoodsDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...param
@@ -42,7 +42,7 @@ export function updateDictionary(filterParams = {}) {
   let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
   let storeIdObject = { storeId: loginInfo.storeId };
   let param = { ...storeIdObject, ...filterParams };
-  return Fetch<TResult>('/sysdict/updateSysDictionary', {
+  return Fetch<TResult>('/goodsDictionary/updateGoodsDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...param
@@ -51,7 +51,7 @@ export function updateDictionary(filterParams = {}) {
 }
 
 export function querySysDictionary(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/querySysDictionary', {
+  return Fetch<TResult>('/goodsDictionary/queryGoodsDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

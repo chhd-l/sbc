@@ -49,7 +49,7 @@ class DictionaryForm extends Component<any, any> {
       id: id
     });
     if (res.code === Const.SUCCESS_CODE) {
-      let response = res.context.sysDictionaryVO;
+      let response = res.context.goodsDictionaryVO;
       let dictionaryForm = {
         id: response.id,
         name: response.name,
@@ -121,7 +121,7 @@ class DictionaryForm extends Component<any, any> {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-      history.push('/dictionary');
+      history.push('/product-dictionary');
     }
   };
   onUpdate = async () => {
@@ -132,7 +132,7 @@ class DictionaryForm extends Component<any, any> {
     });
     if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-      history.push('/dictionary');
+      history.push('/product-dictionary');
     }
   };
 
@@ -304,7 +304,7 @@ class DictionaryForm extends Component<any, any> {
             </Button>
           )}
           <Button style={{ marginLeft: '20px' }}>
-            <Link to="/dictionary">Back List</Link>
+            <Link to="/product-dictionary">Back List</Link>
           </Button>
         </FormItem>
       </Form>

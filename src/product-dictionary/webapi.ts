@@ -10,7 +10,7 @@ type TResult = {
  * @param filterParams
  */
 export function fetchDictionaryList(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/pageView', {
+  return Fetch<TResult>('/goodsDictionary/pageView', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -22,7 +22,7 @@ export function fetchDictionaryList(filterParams = {}) {
  * @param filterParams
  */
 export function getDictionaryTypes(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/queryTypeList', {
+  return Fetch<TResult>('/goodsDictionary/queryTypeList', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
@@ -35,7 +35,7 @@ export function getDictionaryTypes(filterParams = {}) {
  * @param filterParams
  */
 export function deleteDictionary(filterParams = {}) {
-  return Fetch<TResult>('/sysdict/delSysDictionary', {
+  return Fetch<TResult>('/goodsDictionary/delGoodsDictionary', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

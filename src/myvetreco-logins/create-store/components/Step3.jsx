@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const } from 'qmkit';
+import { Const } from '../../../../web_modules/qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -96,7 +96,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:logoFileList,
@@ -289,6 +289,41 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   initialValue: ''
                 })(
                   <Input size="large" disabled={Const.SITE_NAME === 'MYVETRECO'}/>
+                )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
+              <FormItem label="Store address 1" name="addressDetail">
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="City" name="cityId">
+                {getFieldDecorator('cityId', {
+                  initialValue: {key:'',label:''}
+                })(
+                  <DebounceSelect
+                    size="large"
+                    placeholder="Select users"
+                    fetchOptions={fetchUserList}
+                    defaultOptions={defaultOptions}
+                    style={{
+                      width: '100%',
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Postcode" name="postcode">
+                {getFieldDecorator('postcode', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
                 )}
               </FormItem>
             </Col>

@@ -361,7 +361,7 @@ class ProductSearchSetting extends Component<any, any> {
                  <FormattedMessage id='Product.Defaultclubfrequency' />
                 </span>
               }
-              style={{ marginBottom: 0 }}
+              style={{ marginBottom: 0, display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               <Row gutter={20}>
                 <Col span={8}>

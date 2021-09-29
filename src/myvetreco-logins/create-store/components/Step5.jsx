@@ -49,18 +49,6 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 24]}>
             <Col span={24}>
-              <FormItem label="Owner name">
-                {getFieldDecorator('owner', {
-                  rules: [
-                    { required: true, message: 'Please input owner name!' }
-                  ],
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
               <FormItem label="IBAN">
                 {getFieldDecorator('iban', {
                   rules: [

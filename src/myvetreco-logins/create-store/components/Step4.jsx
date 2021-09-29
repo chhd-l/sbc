@@ -79,7 +79,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           allObj[enumType[index]] = skuList
         })
         console.log(allObj)
-        setAllObj(allObj)
+        setAllObj(Object.assign({}, {...allObj}))
         setDataSource({...dataSource})
         setLoading(false)
       })
@@ -114,18 +114,18 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 保存价格设置
    */
   const savePrice = () => {
-    let newChooseObj = {...formData}
+    let newChooseObj = {...formData};
     if(checkAllObj.Cat){
-      for(let i in allObj.cat){
-        allObj.cat[i] = {
-          isChecked: allObj.cat[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
-          sku: allObj.cat[i].sku,
-          spu: allObj.cat[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+      for(let i in allObj.Cat){
+        allObj.Cat[i] = {
+          isChecked: allObj.Cat[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.Cat[i].sku,
+          spu: allObj.Cat[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
       }
-      newChooseObj = {...allObj.cat,...newChooseObj}
+      newChooseObj = {...allObj.Cat,...newChooseObj}
     }
     if(checkAllObj.Dog){
       for(let i in allObj.Dog){
@@ -139,7 +139,6 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
-    console.log('alllllll', newChooseObj);
     let array = []
     for(let i in newChooseObj){
       if(newChooseObj[i].isChecked){

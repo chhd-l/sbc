@@ -172,7 +172,7 @@ class ProductDictionary extends Component<any, any> {
     const { res } = await webapi.fetchDictionaryList(params);
 
     if (res.code === Const.SUCCESS_CODE) {
-      return res.context.sysDictionaryPage;
+      return res.context.goodsDictionaryPage;
     } else {
       return false;
     }

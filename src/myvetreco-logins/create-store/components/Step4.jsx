@@ -32,10 +32,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     listCategory().then(({res})=>{
       let animalTypeList=res.context.categoryList;
       let dog=animalTypeList.find(item=>item.categoryValue==='Dog')
-      let cat=animalTypeList.find(item=>item.categoryValue==='Cat')
+      let Cat=animalTypeList.find(item=>item.categoryValue==='Cat')
       let promises = [listGoodsByCategory({
-        categoryId: cat.categoryId,
-        categoryValueId: cat.categoryValueId
+        categoryId: Cat.categoryId,
+        categoryValueId: Cat.categoryValueId
       }),listGoodsByCategory({
         categoryId: dog.categoryId,
         categoryValueId: dog.categoryValueId
@@ -114,7 +114,8 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 保存价格设置
    */
   const savePrice = () => {
-    let newChooseObj = {...formData};
+    let newChooseObj = {...formData}
+    //点击全选时插入所有数据
     if(checkAllObj.Cat){
       for(let i in allObj.Cat){
         allObj.Cat[i] = {
@@ -139,6 +140,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
+    console.log('alllllll', newChooseObj);
     let array = []
     for(let i in newChooseObj){
       if(newChooseObj[i].isChecked){

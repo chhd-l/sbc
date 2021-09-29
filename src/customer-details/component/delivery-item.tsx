@@ -243,6 +243,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
           this.setState({ loading: false });
           return;
         }
+
+        delivery['receiveType']= "HOME_DELIVERY"; // 必须字段
+
         handlerFunc({
           ...delivery,
           ...rFields,

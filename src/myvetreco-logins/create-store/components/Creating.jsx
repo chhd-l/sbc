@@ -45,7 +45,10 @@ export default function Creating({userInfo,setStep}) {
           storeId: userInfo.storeId,
         }).then(({res})=>{
           if(res.code === 'K-000000'){
-            setStep(6);
+            setClassText('finished');
+            setTimeout(() => {
+              history.push('/login-admin');
+            }, 3000);
           }
         })
       }else if(isPending){
@@ -112,12 +115,14 @@ export default function Creating({userInfo,setStep}) {
   return (
 
     <div className="create-transition">
-      <div className={"loading " + classText}>{loadingText}</div>
+      <div className={`loading ${classText === 'finished' ? 'ok' : classText}`}>{loadingText}</div>
       <div className="step-list">
         <h1 style={{ color: '#30465a',minWidth: 400 }}>
           {
             classText === '' ? <FormattedMessage id={`Login.create_store_ing`}/> : (
-              classText === 'ok' ? 'Success! You are ready to go' : 'Store creation failed. Please try again'
+              classText === 'ok' ? 'Success! You are ready to go' : (
+                classText === 'finished' ? 'You should enter your account and passwords again for logging in' : 'Store creation failed. Please try again'
+              )
             )
           }
           {/*{*/}

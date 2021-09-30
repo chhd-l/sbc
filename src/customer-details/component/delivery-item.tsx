@@ -23,6 +23,10 @@ type TDelivery = {
   address2?: string;
   rfc?: string;
   isDefaltAddress?: number;
+  provinceIdStr?: string;
+  areaIdStr?: string;
+  cityIdStr?: string;
+  settlementIdStr?: string;
 };
 
 interface Iprop extends FormComponentProps {
@@ -210,6 +214,13 @@ class DeliveryItem extends React.Component<Iprop, any> {
         const rFields = { ...fields, ...sugAddr };
         //俄罗斯地址修改了才去调是否在配送范围的验证
         if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
+          
+          // 保存DuData中的各种Id
+          delivery.provinceIdStr = dadataAddress?.provinceId;
+          delivery.areaIdStr = dadataAddress?.areaId;
+          delivery.cityIdStr = dadataAddress?.cityId;
+          delivery.settlementIdStr = dadataAddress?.settlementId;
+
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
             areaFias: dadataAddress.areaId || null,

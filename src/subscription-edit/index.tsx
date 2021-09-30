@@ -588,6 +588,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               } else if (dltype === 'pickupDelivery' && pickup?.length) {
                 daId = pickup[0].deliveryAddressId;
               }
+              
               this.setState({
                 deliveryAddressId: daId
               });
@@ -1592,7 +1593,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{this.state.addressType === 'delivery' ? <FormattedMessage id="Subscription.Delivery information" /> : <FormattedMessage id="Subscription.Billing information" />}</Breadcrumb.Item>
           </Breadcrumb>
-          <DeliveryItem customerId={this.state.customerId} delivery={this.state.addressItem} addressType={this.state.addressType} backToDetail={this.backToSubscriptionEdit} />
+          
+          <DeliveryItem
+            customerId={this.state.customerId}
+            delivery={this.state.addressItem}
+            addressType={this.state.addressType}
+            backToDetail={this.backToSubscriptionEdit}
+            fromPage="subscription"
+            pickupEditNumber={pickupEditNumber}
+            updatePickupEditNumber={this.updatePickupEditNumber}
+          />
         </div>
       );
     }

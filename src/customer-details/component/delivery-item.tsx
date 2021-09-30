@@ -30,6 +30,9 @@ interface Iprop extends FormComponentProps {
   customerId: string;
   addressType: string;
   backToDetail?: Function;
+  fromPage?: string;
+  pickupEditNumber?: number;
+  updatePickupEditNumber?: (num: number) => void;
 }
 
 export const FORM_FIELD_MAP = {
@@ -182,8 +185,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
         });
       }
     });
-    if(this.props.form.getFieldValue('region')) {
-      this.props.form.setFieldsValue({region: ''});
+    if (this.props.form.getFieldValue('region')) {
+      this.props.form.setFieldsValue({ region: '' });
     }
   };
 
@@ -218,7 +221,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             this.props.form.setFields({
               address1: {
                 value: fields['address1'],
-                errors: [new Error(RCi18n({id:"PetOwner.addressWithinAlert"}))]
+                errors: [new Error(RCi18n({ id: "PetOwner.addressWithinAlert" }))]
               }
             });
             this.setState({ loading: false });
@@ -227,13 +230,13 @@ class DeliveryItem extends React.Component<Iprop, any> {
         }
         //俄罗斯地址验证地址是否齐全
         if (addressInputType === 'AUTOMATICALLY' && delivery.address1 === fields.address1 && (!delivery.street || !delivery.postCode || !delivery.house || !delivery.city)) {
-          const errTip = !delivery.street 
-            ? new Error(RCi18n({id:'PetOwner.AddressStreetTip'})) 
-            : !delivery.postCode 
-            ? new Error(RCi18n({id:'PetOwner.AddressPostCodeTip'})) 
-            : !delivery.house 
-            ? new Error(RCi18n({id:'PetOwner.AddressHouseTip'})) 
-            : new Error(RCi18n({id:'PetOwner.AddressCityTip'}));
+          const errTip = !delivery.street
+            ? new Error(RCi18n({ id: 'PetOwner.AddressStreetTip' }))
+            : !delivery.postCode
+              ? new Error(RCi18n({ id: 'PetOwner.AddressPostCodeTip' }))
+              : !delivery.house
+                ? new Error(RCi18n({ id: 'PetOwner.AddressHouseTip' }))
+                : new Error(RCi18n({ id: 'PetOwner.AddressCityTip' }));
           this.props.form.setFields({
             address1: {
               value: fields['address1'],
@@ -244,7 +247,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           return;
         }
 
-        delivery['receiveType']= "HOME_DELIVERY"; // 必须字段
+        delivery['receiveType'] = "HOME_DELIVERY"; // 必须字段
 
         handlerFunc({
           ...delivery,
@@ -274,6 +277,13 @@ class DeliveryItem extends React.Component<Iprop, any> {
           type: this.props.addressType.toUpperCase()
         })
           .then((data) => {
+
+            if (this.props.fromPage === 'subscription') {
+              // 更新pickup编辑次数
+              let pknum = Number(this.props.pickupEditNumber) + 1;
+              this.props.updatePickupEditNumber(pknum);
+            }
+
             message.success(data.res.message);
             this.setState({ loading: false, validationModalVisisble: false });
             this.backToCustomerDetail();
@@ -388,26 +398,26 @@ class DeliveryItem extends React.Component<Iprop, any> {
   //手机校验
   comparePhone = (rule, value, callback) => {
     if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
-      callback(RCi18n({id:"PetOwner.theCorrectPhone"}));
+      callback(RCi18n({ id: "PetOwner.theCorrectPhone" }));
     } else {
       callback();
     }
   };
 
   // 邮编校验
-  compareZip =  async (rule, value, callback) => {
+  compareZip = async (rule, value, callback) => {
     if (!/^[0-9A-Za-z]{3,10}$/.test(value)) {
-      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
+      callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));
     } else {
       // 邮编黑名单校验
       let res = await validPostCodeBlock(value);
       console.log('res', res);
-      if (res?.res?.code === Const.SUCCESS_CODE){
+      if (res?.res?.code === Const.SUCCESS_CODE) {
         const data = res?.res?.context || {};
         // validFlag 1 通过 0 不通过
-        if (!!data?.validFlag){
+        if (!!data?.validFlag) {
           callback()
-        }else {
+        } else {
           callback(new Error(data.alert))
         }
       }
@@ -422,13 +432,13 @@ class DeliveryItem extends React.Component<Iprop, any> {
   ruAddress1Validator = (rule, value, callback) => {
     const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === value);
     if (address && !address.street) {
-      callback(RCi18n({id:'PetOwner.AddressStreetTip'}));
+      callback(RCi18n({ id: 'PetOwner.AddressStreetTip' }));
     } else if (address && !address.postCode) {
-      callback(RCi18n({id:'PetOwner.AddressPostCodeTip'}));
+      callback(RCi18n({ id: 'PetOwner.AddressPostCodeTip' }));
     } else if (address && !address.house) {
-      callback(RCi18n({id:'PetOwner.AddressHouseTip'}));
+      callback(RCi18n({ id: 'PetOwner.AddressHouseTip' }));
     } else if (address && !address.city) {
-      callback(RCi18n({id:'PetOwner.AddressCityTip'}));
+      callback(RCi18n({ id: 'PetOwner.AddressCityTip' }));
     } else {
       callback();
     }
@@ -455,18 +465,18 @@ class DeliveryItem extends React.Component<Iprop, any> {
             <Headline title={
               delivery.deliveryAddressId
                 ? (addressType === 'delivery'
-                  ? RCi18n({id:"PetOwner.EditDeliveryInformation"})
-                  : RCi18n({id:"PetOwner.EditBillingInformation"}))
+                  ? RCi18n({ id: "PetOwner.EditDeliveryInformation" })
+                  : RCi18n({ id: "PetOwner.EditBillingInformation" }))
                 : (addressType === 'delivery'
-                  ? RCi18n({id:"PetOwner.AddDeliveryInformation"})
-                  : RCi18n({id:"PetOwner.AddBillingInformation"}))
+                  ? RCi18n({ id: "PetOwner.AddDeliveryInformation" })
+                  : RCi18n({ id: "PetOwner.AddBillingInformation" }))
             }
             />
             <Form>
               <Row>
                 {this.state.formFieldList.map((field, colIdx) => (
                   <Col span={12 * field.occupancyNum} key={colIdx}>
-                    <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({id:`PetOwner.${field.fieldName}`})}>
+                    <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({ id: `PetOwner.${field.fieldName}` })}>
                       {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`,
                         {
                           initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],
@@ -474,25 +484,28 @@ class DeliveryItem extends React.Component<Iprop, any> {
                             ? 'onBlur'
                             : 'onChange',
                           rules: [
-                          { required: field.requiredFlag === 1, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
-                          field.fieldName != 'Country'
-                            ? { max: field.maxLength, message: RCi18n({id:"PetOwner.ExceedMaximumLength"}) }
-                            : undefined,
+                            { required: field.requiredFlag === 1, message: RCi18n({ id: "PetOwner.ThisFieldIsRequired" }) },
+                            field.fieldName != 'Country'
+                              ? { max: field.maxLength, message: RCi18n({ id: "PetOwner.ExceedMaximumLength" }) }
+                              : undefined,
 
-                          { validator: field.fieldName === 'Phone number' && field.requiredFlag === 1
-                              ? this.comparePhone
-                              : (rule, value, callback) => callback()
-                          },
-                          { validator: field.fieldName === 'Postal code' && field.requiredFlag === 1
-                              ? this.compareZip
-                              : (rule, value, callback) => callback()
-                          },
-                          { validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
-                              ? this.ruAddress1Validator
-                              : (rule, value, callback) => callback()
-                          }
-                        ].filter((r) => !!r)
-                      })(this.renderField(field))
+                            {
+                              validator: field.fieldName === 'Phone number' && field.requiredFlag === 1
+                                ? this.comparePhone
+                                : (rule, value, callback) => callback()
+                            },
+                            {
+                              validator: field.fieldName === 'Postal code' && field.requiredFlag === 1
+                                ? this.compareZip
+                                : (rule, value, callback) => callback()
+                            },
+                            {
+                              validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
+                                ? this.ruAddress1Validator
+                                : (rule, value, callback) => callback()
+                            }
+                          ].filter((r) => !!r)
+                        })(this.renderField(field))
                       }
                     </Form.Item>
                   </Col>
@@ -508,8 +521,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
               <FormattedMessage id="PetOwner.Cancel" />
             </Button>
           </div>
-          <Modal width={920} title={RCi18n({id:"PetOwner.verifyYourAddress"})} visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
-            <Alert type="warning" message={RCi18n({id:"PetOwner.verifyAddressAlert"})} />
+          <Modal width={920} title={RCi18n({ id: "PetOwner.verifyYourAddress" })} visible={this.state.validationModalVisisble} confirmLoading={this.state.loading} onCancel={this.onCancelSuggestionModal} onOk={this.saveAddress}>
+            <Alert type="warning" message={RCi18n({ id: "PetOwner.verifyAddressAlert" })} />
             <Row gutter={32} style={{ marginTop: 20 }}>
               <Col span={12}>
                 <Radio disabled={!validationSuccess} checked={checkedAddress === 0} onClick={() => this.onChangeCheckedAddress(0)}>

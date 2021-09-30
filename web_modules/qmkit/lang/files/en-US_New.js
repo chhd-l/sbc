@@ -1991,6 +1991,8 @@ export default {
         "Marketing.CodeType": "Code type",
         "Marketing.Promotion": "Promotion",
         "Marketing.Coupon": "Coupon",
+
+        "Marketing.Individualpromotion": "Individual promotion",
     },
     Content: {
         "Content.Prompt": "Prompt",

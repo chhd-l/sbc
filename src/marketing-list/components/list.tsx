@@ -28,7 +28,8 @@ const PROMOTION_TYPE = {
   0: RCi18n({id: 'Marketing.All'}),
   1: RCi18n({id: 'Marketing.Autoship'}),
   2: RCi18n({id: 'Marketing.Clubpromotion'}),
-  3: RCi18n({id: 'Marketing.Singlepurchase'})
+  3: RCi18n({id: 'Marketing.Singlepurchase'}),
+  4: RCi18n({id: 'Marketing.Individualpromotion'})
 };
 
 //默认每页展示的数量

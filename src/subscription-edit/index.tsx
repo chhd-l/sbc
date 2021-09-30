@@ -581,17 +581,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             let dltype = '';
             if (pickupEditNumber > 0) {
               dltype = sessionStorage.getItem('portal-delivery-method') ?? 'homeDelivery';
-              if (addressList?.length === 1 || pickup?.length) {
-                let daId = '';
-                if (dltype === 'homeDelivery') {
-                  daId = addressList[0].deliveryAddressId;
-                } else if (dltype === 'pickupDelivery') {
-                  daId = pickup[0].deliveryAddressId;
-                }
-                this.setState({
-                  deliveryAddressId: daId
-                });
+
+              let daId = '';
+              if (dltype === 'homeDelivery' && addressList?.length === 1) {
+                daId = addressList[0].deliveryAddressId;
+              } else if (dltype === 'pickupDelivery' && pickup?.length) {
+                daId = pickup[0].deliveryAddressId;
               }
+              this.setState({
+                deliveryAddressId: daId
+              });
+
             } else {
               // 根据 receiveType 设置默认选中
               let rctype = deliveryAddressInfo?.receiveType || '';
@@ -1145,17 +1145,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   handleSelectDeliveryMethod = (e: any) => {
     const { deliveryList, pickupAddress } = this.state;
     let value = e.target.value;
-    if (deliveryList?.length === 1 || pickupAddress?.length) {
-      let daId = '';
-      if (value === 'homeDelivery') {
-        daId = deliveryList[0].deliveryAddressId;
-      } else if (value === 'pickupDelivery') {
-        daId = pickupAddress[0].deliveryAddressId;
-      }
-      this.setState({
-        deliveryAddressId: daId
-      });
+
+    let daId = '';
+    if (value === 'homeDelivery' && deliveryList?.length === 1) {
+      daId = deliveryList[0].deliveryAddressId;
+    } else if (value === 'pickupDelivery' && pickupAddress?.length) {
+      daId = pickupAddress[0].deliveryAddressId;
     }
+    this.setState({
+      deliveryAddressId: daId
+    });
+
     sessionStorage.setItem('portal-delivery-method', value);
     this.setState({
       deliveryType: value

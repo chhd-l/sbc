@@ -87,7 +87,7 @@ class ProductList extends React.Component<any, any> {
 
           this.setState({
               selectedSkuIds: initDataSource[0].selectedSkuIds,
-              selectedRows: initDataSource[0].selectedRows
+              selectedRows: initDataSource[0].gifts
           }, this.changeForm);
       }
 
@@ -256,7 +256,8 @@ class ProductList extends React.Component<any, any> {
     const index = selectedRows.findIndex(good => good.goodsInfoId === goodsInfoId);
     selectedRows.splice(index, 1);
     this.setState({
-      selectedRows
+      selectedRows,
+      selectedSkuIds: selectedRows.map(item => item.goodsInfoId)
     }, this.changeForm);
   };
 

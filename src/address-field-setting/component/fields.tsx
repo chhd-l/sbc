@@ -1,5 +1,5 @@
 import React from 'react';
-import { Headline, Const } from 'qmkit';
+import { Headline, Const, AuthWrapper } from 'qmkit';
 import { Radio, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
 import SortFields from './sort-fields';
 import { getAddressSetting } from '../../validation-setting/webapi';
@@ -160,18 +160,20 @@ export default class Fields extends React.Component<any, any> {
           let fieldName = record.fieldName || '';
           if (fieldName === 'Postal code'){
             return (
-              <div className='validation-wrap'>
-                <Switch
-                  // checked={isEditPostalCode}
-                  defaultChecked={text === 1}
-                  onChange={(checked) => this.handlePostalCode(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
-                />
-                {
-                  isEditPostalCode || (text === 1)
-                    ? (<a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />)
-                    : null
-                }
-              </div>
+              <AuthWrapper functionName='f-postCodeBlockList-edit'>
+                <div className='validation-wrap'>
+                  <Switch
+                    // checked={isEditPostalCode}
+                    defaultChecked={text === 1}
+                    onChange={(checked) => this.handlePostalCode(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
+                  />
+                  {
+                    isEditPostalCode || (text === 1)
+                      ? (<a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />)
+                      : null
+                  }
+                </div>
+              </AuthWrapper>
             );
           }else {
             return null;

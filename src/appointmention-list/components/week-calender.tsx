@@ -2,60 +2,85 @@
 
 import React, { Component } from 'react'
 import moment from 'moment'
-import { Icon } from 'antd'
-
-const weekTitle = ['日', '一', '二', '三', '四', '五', '六']
+import { Button, Icon } from 'antd'
 import './index.less';
 class WeekCalender extends Component {
-
+    index:number
     constructor(props) {
         super(props)
-        this.state = {
-            date: new Date()
+        this.index=-1;
+    }
+    state = {
+        weekDate: []
+    }
+    componentDidMount() {
+        this.getCurrentWeek()
+    }
+    getCurrentWeek = (date = undefined) => {
+        let weekOfDay: any = moment(date).format("E") // 指定日期的周的第几天
+        let weekDate = []
+        for (let i = 1; i <= 7; i++) {
+            let _date = moment(date).subtract(weekOfDay - i, 'days');
+            weekDate.push({
+                weekDay: _date.format('dddd'),
+                date: _date.format('YYYY-MM-DD')
+            })
         }
-    }
-
-    _onPress(date) {
-        this.setState({
-            date
-        })
-    }
-    getCurrentWeek=()=>{
-        const start=moment().weekday(1).format('YYYY-MM-DD')
-        const end=moment().weekday(7).format('YYYY-MM-DD');
-        return [start,end]
+        this.setState({ weekDate})
     }
     lastWeek = () => {
-
+        if(this.index===-1)return
+        this.index++;
+        const cc= this.getWeek();
+        this.getCurrentWeek(cc[0])
     }
 
     nextWeek = () => {
-
+        this.index--;
+        const cc= this.getWeek();
+        this.getCurrentWeek(cc[0])
     }
-
+    getWeek = () => {
+        let i=this.index;
+        let begin=  moment().week(moment().week() - i).startOf('week').format('YYYY-MM-DD')
+        let end=  moment().week(moment().week() - i).endOf('week').format('YYYY-MM-DD')
+        return [begin, end]
+    }
     render() {
-
+        const { weekDate } = this.state;
         return (
-            <>
+            <div className="week-calender">
                 <div className="week-head">
-                    <div className="week-head-left"><Icon type="left" /></div>
+                    <div className="week-head-left" onClick={this.lastWeek}><Icon type="left" /></div>
                     <div className="week-head-content" style={{ flex: 1 }}>
                         <ul>
-                            <li>周日</li>
-                            <li>周一</li>
-                            <li>周二</li>
-                            <li>周三</li>
-                            <li>周四</li>
-                            <li>周五</li>
-                            <li>周六</li>
+                            {weekDate.map((item, index) => {
+
+                                return (<li key={index}>
+                                    <span>{item.weekDay}</span>
+                                    <span>{item.date}</span>
+                                </li>)
+
+
+                            })}
+
                         </ul>
                     </div>
-                    <div className="week-head-right"><Icon type="right" /></div>
+                    <div className="week-head-right" onClick={this.nextWeek}><Icon type="right" /></div>
                 </div>
                 <div className="week-content">
+                    <ul>
+                        {weekDate.map((item, index) => (
+                            <li key={index}>
+                                <Button style={{ marginTop: 5 }}>09:00</Button>
+                                <Button style={{ marginTop: 5 }}>09:15</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                            </li>))
+                        }
 
+                    </ul>
                 </div>
-            </>
+            </div>
         )
     }
 

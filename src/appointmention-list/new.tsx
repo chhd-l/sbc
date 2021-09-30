@@ -155,11 +155,6 @@ class NewAppointment extends React.Component<any, any> {
         <div className="container">
           <Headline title={this.props.match.params.id ? RCi18n({id:'Appointment.Update appointment'}) : RCi18n({id:'Appointment.ANA'})} />
           
-          
-          <WeekCalender />
-          
-          
-          
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
             <Form.Item label={RCi18n({id:'Appointment.SAType'})}>
               {getFieldDecorator('type', {
@@ -175,7 +170,12 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('apptDateTime', {
                 initialValue: [moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
                 rules: [{ validator: this.validateDateTime }]
-              })(<AppointmentDatePicker onFetching={(state) => this.setState({ loading: state })} />)}
+              })( <WeekCalender />)
+              
+              }
+           
+          
+           {/* <AppointmentDatePicker onFetching={(state) => this.setState({ loading: state })} /> */}
             </Form.Item>
             <Form.Item label={RCi18n({id:'Appointment.Consumer information'})}>
               <Radio.Group value={this.state.memberType} onChange={this.onSelectMemberType}>

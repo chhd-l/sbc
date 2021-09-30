@@ -79,6 +79,7 @@ export default class PickupDelivery extends React.Component {
     };
   }
   async componentDidMount() {
+    this.props.updateConfirmPickupDisabled(true);
     let initData = this.props.initData;
     this.setState({
       pickupForm: Object.assign(this.state.pickupForm, initData)
@@ -132,6 +133,7 @@ export default class PickupDelivery extends React.Component {
               },
               () => {
                 this.setPickupTelNumberReg();
+                this.validFormAllPickupData();
               }
             );
           }
@@ -379,6 +381,7 @@ export default class PickupDelivery extends React.Component {
     if (courierInfo) {
       this.sendMsgToIframe('city');
     }
+    this.props.updateConfirmPickupDisabled(true);
     this.setState({
       showPickupForm: false,
       showPickupDetail: false,
@@ -734,6 +737,7 @@ export default class PickupDelivery extends React.Component {
                 </div>
               </div>
             </div>
+
           </div>
           {/* pickup相关 end */}
 

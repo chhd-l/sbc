@@ -384,21 +384,21 @@ export default class DeliveryList extends React.Component<Iprop, any> {
             />
 
             {/* pickup弹框 */}
-            <Modal
-              width={650}
-              title={pickupList?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
-              visible={addOrEditPickup}
-              confirmLoading={pickupLoading}
-              okButtonProps={{ disabled: confirmPickupDisabled }}
-              onOk={() => this.pickupConfirm()}
-              okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
-              onCancel={() => {
-                this.setState({
-                  addOrEditPickup: false
-                });
-              }}
-            >
-              {addOrEditPickup ? (
+            {addOrEditPickup ? (
+              <Modal
+                width={650}
+                title={pickupList?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
+                visible={addOrEditPickup}
+                confirmLoading={pickupLoading}
+                okButtonProps={{ disabled: confirmPickupDisabled }}
+                onOk={() => this.pickupConfirm()}
+                okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
+                onCancel={() => {
+                  this.setState({
+                    addOrEditPickup: false
+                  });
+                }}
+              >
                 <Spin spinning={pickupLoading}>
                   <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                     <Col style={{ width: '100%' }}>
@@ -416,8 +416,8 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     </Col>
                   </Row>
                 </Spin>
-              ) : null}
-            </Modal>
+              </Modal>
+            ) : null}
           </>
         ) : null}
 

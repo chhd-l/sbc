@@ -52,7 +52,7 @@ function UomList(props: any) {
   const deleteUOM = (id: string) => {
     delUom(id).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        message.success('Operation successful');
+        message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         submit();
       }
     });
@@ -61,28 +61,29 @@ function UomList(props: any) {
   const { getFieldDecorator } = props.form;
   const columns = [
     {
-      title: 'UOM Code',
+      title: RCi18n({id:'Product.UOMcode'}),
       dataIndex: 'uomCode',
       key: 'code',
     },
     {
-      title: 'UOM Name',
+      title: RCi18n({id:'Product.UOMname'}),
       dataIndex: 'uomName',
       width: '20%',
       key: 'name',
     },
     {
-      title: 'Category',
+      title: RCi18n({id:'Setting.Category'}),
       dataIndex: 'uomCategoryName',
+      width: '20%',
       key: 'category',
     },
     {
-      title: 'Type',
+      title: RCi18n({id:'Setting.Type'}),
       dataIndex: 'type',
       key: 'type',
     },
     {
-      title: 'Ratio',
+      title: RCi18n({id:'Product.Ratio'}),
       dataIndex: 'ratio',
       key: 'ratio',
     },
@@ -97,7 +98,7 @@ function UomList(props: any) {
               onClick={() => setModalProps({ ...modalProps, visible: true, formType: 2, id: record.id, uomCode: record.uomCode, uomName: record.uomName, categoryId: record.categoryId, categories: uomCategoryList, type: record.type, ratio: record.ratio })}
             ></a>
           </Tooltip>
-          <Popconfirm placement="topLeft" title="Are you sure you want to delete this item?" onConfirm={() => deleteUOM(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+          <Popconfirm placement="topLeft" title={RCi18n({id:'Product.Areyousuretodelete'})} onConfirm={() => deleteUOM(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
             <Tooltip placement="top" title={<FormattedMessage id="Product.delete"/>}>
               <a className="iconfont iconDelete" style={{ marginLeft: 10 }}></a>
             </Tooltip>
@@ -110,14 +111,14 @@ function UomList(props: any) {
     <div>
       <BreadCrumb />
       <div className="container-search">
-        <Headline title="UOM list" />
+        <Headline title={RCi18n({id:'Product.UOMlist'})} />
         <Form className="filter-content" layout="inline">
           <Row>
             <Col span={8}>
               <FormItem>
                 {getFieldDecorator('uomCode')(
                   <Input
-                    addonBefore="UOM Code"
+                    addonBefore={RCi18n({id:'Product.UOMcode'})}
                   />
                 )}
               </FormItem>
@@ -126,7 +127,7 @@ function UomList(props: any) {
               <FormItem>
                 {getFieldDecorator('uomName')(
                   <Input
-                    addonBefore="UOM Name"
+                    addonBefore={RCi18n({id:'Product.UOMname'})}
                   />
                 )}
               </FormItem>
@@ -135,7 +136,7 @@ function UomList(props: any) {
               <FormItem>
                 {getFieldDecorator('categoryId')(
                   <SelectGroup
-                    label={<p style={styles.label}>UOM Category</p>}
+                    label={<p style={styles.label}><FormattedMessage id="Product.UOMCategory"/></p>}
                     style={{ width: 195 }}
                     allowClear
                   >
@@ -148,7 +149,7 @@ function UomList(props: any) {
             </Col>
             <Col span={24} style={{textAlign:'center'}}>
               <FormItem>
-                <Button type="primary" icon="search" onClick={submit}>Search</Button>
+                <Button type="primary" icon="search" onClick={submit}><FormattedMessage id="Product.search"/></Button>
               </FormItem>
             </Col>
           </Row>
@@ -160,7 +161,7 @@ function UomList(props: any) {
             type="primary"
             onClick={() => setModalProps({ ...modalProps, visible: true, formType: 1, id: null, uomCode: '', uomName: '', categoryId: null, categories: uomCategoryList, type: '', ratio: null })}
           >
-            Create new UOM
+            <FormattedMessage id="Product.Createnewuom"/>
           </Button>
         </div>
         <Table

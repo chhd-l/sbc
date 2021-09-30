@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Input, Form } from 'antd';
 import { addUOMCategory, editUOMCategory } from '../webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const TextArea = Input.TextArea;
 const FormItem = Form.Item;
@@ -28,21 +29,21 @@ export default function FormModal(props) {
 
   return (
     <Modal
-     title={props.type === 1 ? 'Add' : 'Edit'}
+     title={props.type === 1 ? RCi18n({id:'Setting.Add'}) : RCi18n({id:'Setting.Edit'})}
      visible={props.visible}
      width={500}
-     okText="Save"
-     cancelText="Cancel"
+     okText={RCi18n({id:'Product.Save'})}
+     cancelText={RCi18n({id:'Product.Cancel'})}
      confirmLoading={loading}
      okButtonProps={{disabled: name === '' || description === ''}}
      onOk={onConfirm}
      onCancel={props.onCancel}
     >
       <Form labelCol={{span: 8}} wrapperCol={{span: 16}} layout="horizontal">
-        <FormItem label="UOM category name">
+        <FormItem label={RCi18n({id:'Product.UOMCategoryName'})}>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </FormItem>
-        <FormItem label="Description">
+        <FormItem label={RCi18n({id:'Product.Description'})}>
           <TextArea autoSize value={description} onChange={(e) => setDescription(e.target.value)} />
         </FormItem>
       </Form>

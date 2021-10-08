@@ -14,10 +14,10 @@ export default {
   // HOST: 'http://121.36.199.41:8390',
 
   /* sit */
-  // HOST: 'https://storesit.royalcanin.com/api',
+  HOST: 'https://storesit.royalcanin.com/api',
   
   /* uat */
-  HOST: 'https://storeuat.royalcanin.com/api',
+  // HOST: 'https://storeuat.royalcanin.com/api',
 
   /* stg */
   // HOST: 'https://storestg.royalcanin.com/api',

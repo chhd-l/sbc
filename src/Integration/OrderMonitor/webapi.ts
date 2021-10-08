@@ -37,9 +37,9 @@ export function toPushDownStream(filterParams = {}) {
   });
 }
 
-// 获取ExceptionType列表
+// 获取pay status列表
 export function getOrderStatus() {
-  return Fetch<TResult>('/orderMonitor/findOrderStatus', {
+  return Fetch<TResult>('/orderMonitor/pay-status', {
     method: 'GET'
   });
 }

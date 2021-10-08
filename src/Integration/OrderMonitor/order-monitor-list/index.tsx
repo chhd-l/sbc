@@ -52,6 +52,7 @@ export default class OrderMonitorList extends Component<any, any> {
     }
     this.getOrderMonitorList(params)
     this.getExceptionType()
+    this.getOrderStatus()
   }
 
   onFormChange = ({ field, value }) => {
@@ -88,7 +89,7 @@ export default class OrderMonitorList extends Component<any, any> {
       const { res } = data
       let orderStatusList = []
       if (res.code === Const.SUCCESS_CODE) {
-        orderStatusList = res.context.orderStatusList
+        orderStatusList = res.context.payStatusList
       }
       this.setState({
         orderStatusList
@@ -134,7 +135,8 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       exceptionType: searchForm.exceptionType,
       orderNumber: searchForm.orderNumber,
-      orderExportStatus: searchForm.orderExportStatus
+      orderExportStatus: searchForm.orderExportStatus,
+      orderStatus:[searchForm.orderStatus]
     }
     this.setState({
       currentSearchForm: searchForm
@@ -442,7 +444,7 @@ export default class OrderMonitorList extends Component<any, any> {
                       >
                         {
                           orderStatusList && orderStatusList.map((item, index) => (
-                            <Option value={item.value} key={index}>{item.name}</Option>
+                            <Option value={item} key={index}>{item}</Option>
                           ))
                         }
                       </Select>

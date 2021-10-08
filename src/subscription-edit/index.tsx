@@ -1096,7 +1096,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         let deliveryDateList = res.context.timeSlots
         this.setState({
           deliveryDateList: deliveryDateList,
-          timeSlotList: deliveryDateList[0].dateTimeInfos || [],
+          timeSlotList:deliveryDateList[0]&&deliveryDateList[0].dateTimeInfos || [],
           deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
           timeSlot: timeSlot ? timeSlot : deliveryDateList[0] &&
             deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime

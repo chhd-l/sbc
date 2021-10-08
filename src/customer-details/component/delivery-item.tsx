@@ -6,6 +6,7 @@ import { Headline, cache, Const, RCi18n } from 'qmkit';
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
 import { updateAddress, addAddress, validPostCodeBlock } from '../webapi';
 import _ from 'lodash';
+import IMask from 'imask';
 
 
 const { Option } = Select;
@@ -122,6 +123,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
       cityList: cities,
       regionList: regions,
       isAddressValidation: isAddressValidation
+    }, () => {
+      // this.setPhoneNumberReg();
     });
   };
 
@@ -207,19 +210,22 @@ class DeliveryItem extends React.Component<Iprop, any> {
     const { delivery } = this.props;
     const { checkedAddress, suggestionAddress, dadataAddress, addressInputType } = this.state;
     const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
+
+    if (dadataAddress) {
+      // 保存DuData中的各种Id
+      delivery.provinceIdStr = dadataAddress?.provinceId;
+      delivery.areaIdStr = dadataAddress?.areaId;
+      delivery.cityIdStr = dadataAddress?.cityId;
+      delivery.settlementIdStr = dadataAddress?.settlementId;
+    }
     this.props.form.validateFields(async (err, fields) => {
       if (!err) {
         this.setState({ loading: true });
         const handlerFunc = delivery.deliveryAddressId ? updateAddress : addAddress;
         const rFields = { ...fields, ...sugAddr };
+
         //俄罗斯地址修改了才去调是否在配送范围的验证
         if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
-          
-          // 保存DuData中的各种Id
-          delivery.provinceIdStr = dadataAddress?.provinceId;
-          delivery.areaIdStr = dadataAddress?.areaId;
-          delivery.cityIdStr = dadataAddress?.cityId;
-          delivery.settlementIdStr = dadataAddress?.settlementId;
 
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
@@ -344,6 +350,41 @@ class DeliveryItem extends React.Component<Iprop, any> {
     }
   };
 
+  // 设置手机号输入限制
+  setPhoneNumberReg = () => {
+    const { storeId } = this.state;
+    let element = document.getElementById('consigneeNumber');
+    let maskOptions: any;
+    let phoneReg = null;
+    switch (storeId) {
+      case 123457909:
+        phoneReg = [
+          { mask: '(+33) 0 00 00 00 00' },
+          { mask: '(+33) 00 00 00 00 00' }
+        ];
+        break;
+      case 123457910:
+        phoneReg = [{ mask: '000-000-0000' }];
+        break;
+      case 123457907:
+        phoneReg = [{ mask: '+{7} (000) 000-00-00' }];
+        break;
+      case 123456858:
+        phoneReg = [{ mask: '+(52) 000 000 0000' }];
+        break;
+      case 123457911:
+        phoneReg = [{ mask: '{0} (000) 000-00-00' }];
+        break;
+      default:
+        phoneReg = [{ mask: '00000000000' }];
+        break;
+    }
+    maskOptions = {
+      mask: phoneReg
+    };
+    IMask(element, maskOptions);
+  };
+
   renderField = (field: any) => {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
@@ -407,8 +448,39 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   //手机校验
-  comparePhone = (rule, value, callback) => {
-    if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
+  comparePhone = (rule: any, value: any, callback: any) => {
+    const { storeId } = this.state;
+    //  MEX(123456858
+    //   FR(123457909
+    //   DE(123457908
+    //   US(123457910
+    //   UK(123457916
+    //   SE(123457915
+    //   RU(123457907
+    //   TR(123457911
+    let regExp = null;
+    if (storeId == 123457909) {
+      // 法国
+      regExp = /^\(\+[3][3]\)[\s](([0][1-9])|[1-9])[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
+    } else if (storeId == 123457910) {
+      // 美国
+      regExp = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    } else if (storeId == 123456858) {
+      // 墨西哥
+      regExp = /^\+\([5][2]\)[\s\-][0-9]{3}[\s\-][0-9]{3}[\s\-][0-9]{4}$/;
+    } else if (storeId == 123457907) {
+      // 俄罗斯
+      regExp = /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+    } else if (storeId == 123457911) {
+      // 土耳其
+      regExp = /^0\s\(?([2-9][0-8][0-9])\)?\s([1-9][0-9]{2})[\-\. ]?([0-9]{2})[\-\. ]?([0-9]{2})(\s*x[0-9]+)?$/;
+    } else {
+      // 其他国家
+      // regExp = /\S/;
+      regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
+    }
+
+    if (!regExp.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPhone" }));
     } else {
       callback();
@@ -437,7 +509,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
       }
     }
   };
-
 
   //俄罗斯address1校验
   ruAddress1Validator = (rule, value, callback) => {

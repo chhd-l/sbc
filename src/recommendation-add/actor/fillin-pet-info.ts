@@ -5,28 +5,35 @@ import moment from 'moment';
 export default class FillInPetInfoActor extends Actor {
   defaultState() {
     return {
+      currentStep: 0,
       goodsQuantity: [],//产品新
       felinReco: {
-        felinRecoId: null,
-        storeId: null,
-        apptId: null,
-        expert: '',
+        felinRecoId: undefined,
+        storeId: undefined,
+        apptId: undefined,
+        expert: undefined,
         paris: true,
-        suggest: '',
-        optimal: '',
+        suggest: undefined,
+        optimal: undefined,
         pickup: true,
-        fillDate: null
+        fillDate: undefined
       },//基础
       appointmentVO: {},//扫码信息
-      customerPet: {
-        measure:0,
-        measureUnit:'Kg'
-      },//宠物信息
+      customerPet: [{
+        uuid:(+new Date()),
+        measure: 0,
+        measureUnit: 'Kg'
+      }],//宠物信息
       funType: false,
       petsList: [],
-      goodsInfoPage:[]
-
+      goodsInfoPage: []
     }
+  }
+
+ 
+  @Action('pets:step')
+  petsStep(state, step) {
+    return state.set('currentStep', step)
   }
 
   @Action('pets:felinReco')
@@ -46,11 +53,11 @@ export default class FillInPetInfoActor extends Actor {
 
   @Action('pets:customerPet')
   petsCustomerPet(state, customerPet) {
-    customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
+    customerPet.birthOfPets = moment(customerPet.birthOfPets).format('YYYY-MM-DD')
     return state.set('customerPet', customerPet);
   }
 
-//产品信息
+  //产品信息
   @Action('goods:infoPage')
   goodsInfoPage(state, list) {
     return state.set('goodsInfoPage', list);
@@ -70,13 +77,13 @@ export default class FillInPetInfoActor extends Actor {
 
 
 
-    @Action('loading:start')
-    start(state:IMap) {
-      return state.set('loading', true);
-    }
+  @Action('loading:start')
+  start(state: IMap) {
+    return state.set('loading', true);
+  }
 
-    @Action('loading:end')
-    end(state:IMap) {
-      return state.set('loading', false);
-    }
+  @Action('loading:end')
+  end(state: IMap) {
+    return state.set('loading', false);
+  }
 }

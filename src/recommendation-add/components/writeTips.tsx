@@ -5,9 +5,8 @@ import React from 'react';
 import { RCi18n } from 'qmkit';
 
 @Relax
-export default class PaymentInformation extends React.Component<any, any> {
+ class PaymentInformation extends React.Component<any, any> {
   props: {
-    form: any,
     relaxProps?: {
       felinReco: any
       onChangePestsForm: Function,
@@ -121,3 +120,5 @@ export default class PaymentInformation extends React.Component<any, any> {
     );
   }
 }
+
+export default Form.create()(PaymentInformation)

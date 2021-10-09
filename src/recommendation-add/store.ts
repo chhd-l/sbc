@@ -18,20 +18,29 @@ export default class AppStore extends Store {
   bindActor() {
     return [new SettleDetailActor(), new FillInPetInfoActor()];
   }
-
+  uuid=()=> {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
   init = async (param?: any) => {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchFindById(param);
     if (res.code === Const.SUCCESS_CODE) {
-      const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      let { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      let _tempWeight = customerPet.weight?JSON.parse(customerPet.weight):{}
-      let { measure = 0, measureUnit = '' } = _tempWeight
-      
-      customerPet.measure = measure;
-      customerPet.measureUnit = measureUnit;
-      customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
-      console.log(measure, measureUnit, 'customerPet', felinReco)
+      customerPet= customerPet&&customerPet.map(item=>{
+        let _tempWeight = item.weight?JSON.parse(item.weight):{}
+        let { measure = 0, measureUnit = '' } = _tempWeight
+        item.measure = measure;
+        item.measureUnit = measureUnit;
+        item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
+        item.uuid=this.uuid()
+        return item;
+      })||[]
+
       this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
       this.dispatch('loading:end');
@@ -63,6 +72,12 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     }
   };
+
+  //步骤
+  onChangeStep=(step)=>{
+    this.dispatch(`pets:step`, step)
+  }
+
 
   onChangePestsForm = (params, type?: any) => {
     this.dispatch('loading:start');

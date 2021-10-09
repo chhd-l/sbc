@@ -158,7 +158,11 @@ class NewAppointment extends React.Component<any, any> {
           <Form wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
             <Form.Item label={RCi18n({id:'Appointment.SAType'})}>
               {getFieldDecorator('type', {
-                initialValue: '1'
+                initialValue: '1',
+                rules:[ {
+                  required: true,
+                  message: 'Please Select appointment type',
+                },]
               })(
                 <Radio.Group>
                   <Radio value="1"><FormattedMessage id="Appointment.Offline" /></Radio>
@@ -166,7 +170,44 @@ class NewAppointment extends React.Component<any, any> {
                 </Radio.Group>
               )}
             </Form.Item>
-            <Form.Item label={RCi18n({id:'Appointment.Update appointment'})}>
+
+
+            <Form.Item label={RCi18n({id:'Appointment.Select.expert.type'})}>
+              {getFieldDecorator('type', {
+                initialValue: '1',
+                rules:[ {
+                  required: true,
+                  message: 'Please Select expert type',
+                },]
+              })(
+                <Radio.Group>
+                  <Radio value="1"><FormattedMessage id="Appointment.Behaviorist" /></Radio>
+                  <Radio value="0"><FormattedMessage id="Appointment.Nutritionist" /></Radio>
+                  <Radio value="2"><FormattedMessage id="Appointment.Orthopedist" /></Radio>
+
+                </Radio.Group>
+              )}
+            </Form.Item>
+
+                        
+            <Form.Item label={RCi18n({id:'Appointment.Duration'})}>
+              {getFieldDecorator('type', {
+                initialValue: '1',
+               rules:[ {
+                required: true,
+                message: 'Please Select Duration',
+              },]
+              })(
+                <Radio.Group>
+                  <Radio value="1"><FormattedMessage id="Appointment.min15" /></Radio>
+                  <Radio value="0"><FormattedMessage id="Appointment.min30" /></Radio>
+                  <Radio value="2"><FormattedMessage id="Appointment.min45" /></Radio>
+                </Radio.Group>
+              )}
+            </Form.Item>
+
+
+            <Form.Item label={RCi18n({id:'Appointment.Select.time.slot'})}>
               {getFieldDecorator('apptDateTime', {
                 initialValue: [moment() < moment('2021-04-20', 'YYYY-MM-DD').startOf('day') ? '2021-04-20' : moment().day() === 1 ? moment().add(1, 'days').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'), ''],
                 rules: [{ validator: this.validateDateTime }]
@@ -177,6 +218,9 @@ class NewAppointment extends React.Component<any, any> {
           
            {/* <AppointmentDatePicker onFetching={(state) => this.setState({ loading: state })} /> */}
             </Form.Item>
+
+            <div style={{fontWeight:'bolder'}}>PO’s Info:</div>
+
             <Form.Item label={RCi18n({id:'Appointment.Consumer information'})}>
               <Radio.Group value={this.state.memberType} onChange={this.onSelectMemberType}>
                 <Radio value="member"><FormattedMessage id="Appointment.Member" /></Radio>

@@ -5,10 +5,10 @@ import moment from 'moment'
 import { Button, Icon } from 'antd'
 import './index.less';
 class WeekCalender extends Component {
-    index:number
+    index: number
     constructor(props) {
         super(props)
-        this.index=-1;
+        this.index = -1;
     }
     state = {
         weekDate: []
@@ -26,24 +26,24 @@ class WeekCalender extends Component {
                 date: _date.format('YYYY-MM-DD')
             })
         }
-        this.setState({ weekDate})
+        this.setState({ weekDate })
     }
     lastWeek = () => {
-        if(this.index===-1)return
+        if (this.index === -1) return
         this.index++;
-        const cc= this.getWeek();
+        const cc = this.getWeek();
         this.getCurrentWeek(cc[0])
     }
 
     nextWeek = () => {
         this.index--;
-        const cc= this.getWeek();
+        const cc = this.getWeek();
         this.getCurrentWeek(cc[0])
     }
     getWeek = () => {
-        let i=this.index;
-        let begin=  moment().week(moment().week() - i).startOf('week').format('YYYY-MM-DD')
-        let end=  moment().week(moment().week() - i).endOf('week').format('YYYY-MM-DD')
+        let i = this.index;
+        let begin = moment().week(moment().week() - i).startOf('week').format('YYYY-MM-DD')
+        let end = moment().week(moment().week() - i).endOf('week').format('YYYY-MM-DD')
         return [begin, end]
     }
     render() {
@@ -74,6 +74,14 @@ class WeekCalender extends Component {
                             <li key={index}>
                                 <Button style={{ marginTop: 5 }}>09:00</Button>
                                 <Button style={{ marginTop: 5 }}>09:15</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                                <Button style={{ marginTop: 5 }}>09:30</Button>
                                 <Button style={{ marginTop: 5 }}>09:30</Button>
                             </li>))
                         }

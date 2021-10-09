@@ -1,24 +1,26 @@
 import React from 'react';
-import { Row, Col, Form, Input, Select, Spin } from 'antd';
+import { Row, Col, Form, Input, Select, Spin, Button } from 'antd';
 import { noop, SelectGroup } from 'qmkit';
 import { Relax } from 'plume2';
 import { RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const { Option } = Select;
 
 @Relax
-export default class ChooseYourRole extends React.Component<any, any> {
+class ChooseYourRole extends React.Component<any, any> {
   props: {
-    form: any,
     relaxProps?: {
-        felinReco:any,
-        onChangePestsForm:Function,
-        getGoodsInfoPage:Function
-      };
-}
-static relaxProps = {
+      felinReco: any,
+      onChangeStep: Function
+      onChangePestsForm: Function,
+      getGoodsInfoPage: Function
+    };
+  }
+  static relaxProps = {
     felinReco: 'felinReco',
-    onChangePestsForm:noop,
-    getGoodsInfoPage:noop
+    onChangeStep: noop,
+    onChangePestsForm: noop,
+    getGoodsInfoPage: noop
   };
   state = {
     options: [
@@ -43,21 +45,24 @@ static relaxProps = {
   constructor(props) {
     super(props);
   }
- async componentDidMount() {
-  const { felinReco,onChangePestsForm ,getGoodsInfoPage} = this.props.relaxProps;
-    if(!felinReco.expert){
-      onChangePestsForm({...felinReco,expert:this.state.options[0]},'felinReco')
+  async componentDidMount() {
+    const { felinReco, onChangePestsForm, getGoodsInfoPage } = this.props.relaxProps;
+    if (!felinReco.expert) {
+      onChangePestsForm({ ...felinReco, expert: this.state.options[0] }, 'felinReco')
     }
     getGoodsInfoPage()
- }
- _onChange(e) {
-  const { felinReco,onChangePestsForm } = this.props.relaxProps;
-  if (e && e.target) {
-      e = e.target.value;
   }
-  onChangePestsForm({...felinReco,expert:e},'felinReco')
-}
-
+  submit = (e) => {
+    const { felinReco, onChangePestsForm } = this.props.relaxProps;
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        onChangePestsForm({ ...felinReco, ...values }, 'felinReco')
+        this.props.relaxProps.onChangeStep(1);
+      }
+    });
+  }
   render() {
     const { felinReco } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
@@ -68,28 +73,13 @@ static relaxProps = {
     ));
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 50 }}>
-      
-        <Form  style={{ width: 300 }}>
-          {/* <Form.Item>
-            {getFieldDecorator('storeName', {
-              initialValue:storeName||'L’Atelier Felin',
-            })(<SelectGroup
-              label="Role"
-              getPopupContainer={(trigger: any) => trigger.parentNode}
-              style={{ width: 180 }}
-            >
-              <Option value="L’Atelier Felin">
-                L’Atelier Felin
-                </Option>
-            </SelectGroup>)}
 
-          </Form.Item> */}
+        <Form style={{ width: 300 }} onSubmit={this.submit}>
           <Form.Item>
             {getFieldDecorator('expert', {
-              initialValue:felinReco.expert||"Marion Ruffié",
-              onChange:(e)=>this._onChange(e)
+              initialValue: felinReco.expert || "Marion Ruffié",
             })(<SelectGroup
-              label={RCi18n({id:'Prescriber.Role'})}
+              label={RCi18n({ id: 'Prescriber.Role' })}
               getPopupContainer={(trigger: any) => trigger.parentNode}
               style={{ width: 180 }}
             >
@@ -97,9 +87,17 @@ static relaxProps = {
             </SelectGroup>)}
 
           </Form.Item>
+          <Form.Item>
+          <div className="steps-action">
+            <Button type="primary" htmlType="submit">
+              <FormattedMessage id="Prescriber.Next" />
+            </Button>
+          </div>
+          </Form.Item>
         </Form>
       </div>
 
     );
   }
 }
+export default Form.create()(ChooseYourRole)

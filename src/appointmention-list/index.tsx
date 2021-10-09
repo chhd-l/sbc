@@ -211,7 +211,7 @@ class Appointment extends React.Component<any, any> {
         key: 'd1'
       },
       {
-        title: RCi18n({ id: 'Appointment.Time' }),
+        title: RCi18n({ id: 'Appointmention.Time' }),
         dataIndex: 'apptTime',
         key: 'd2',
         render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
@@ -232,19 +232,32 @@ class Appointment extends React.Component<any, any> {
         key: 'd8'
       },
       {
-        title: RCi18n({ id: 'Appointment.Type' }),
+        title: RCi18n({ id: 'Appointmention.Type' }),
         dataIndex: 'type',
         key: 'd5',
         render: (text) => <div>{text === '0' ? RCi18n({ id: 'Appointment.Online' }) : text === '1' ? RCi18n({ id: 'Appointment.Offline' }) : ''}</div>
       },
       {
-        title: RCi18n({ id: 'Appointment.Operation' }),
+        title: RCi18n({ id: 'Appointmention.Status' }),
         dataIndex: 'status',
         key: 'd6',
         render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
       },
       {
-        title: RCi18n({ id: 'Appointment.Operatio' }),
+        title: RCi18n({ id: 'Appointmention.Expert.type' }),
+        dataIndex: 'status',
+        key: 'd6',
+        render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
+      },
+      {
+        title: RCi18n({ id: 'Appointmention.Expert.name' }),
+        dataIndex: 'status',
+        key: 'd6',
+        render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
+      },
+
+      {
+        title: RCi18n({ id: 'Appointment.Operation' }),
         dataIndex: 'status',
         key: 'd7',
         render: (text, record) => (

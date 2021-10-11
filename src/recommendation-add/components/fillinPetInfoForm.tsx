@@ -7,19 +7,21 @@ import { Relax } from 'plume2';
 import moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 const { Search } = Input;
+
 class FillinPetInfoForm extends Component {
     props: {
-
-        felinReco: any
-        customerPet:any
-        appointmentVO: any
-        onChangePestsForm: Function,
-        findByApptNo: Function,
+        form: any
+        recommendParams: any
+        savepetsRecommendParams: Function
+        findByApptNo: Function
+        onChangeStep:Function
         funType: boolean,
         petsList: any
     }
 
     state = {
+        stateCustomPet: {},
+        sourceKeys: [],
         lifeList: [],
         activityList: [],
         specialNeedsList: [],
@@ -30,20 +32,27 @@ class FillinPetInfoForm extends Component {
         weightList: [
             { value: 'kg', name: 'kg' }
         ],
+        currentPet:{}
+
     }
 
     componentDidMount() {
-        const { felinReco, onChangePestsForm, customerPet } = this.props;
+        const { recommendParams } = this.props;
         this.getDictAlllist('Lifestyle', 'lifeList');
         this.getDictAlllist('Activity', 'activityList');
         this.getDictAlllist('specialNeeds', 'specialNeedsList');
         this.getDictAlllist('CatBreed', 'petsBreedList')
-        if (!felinReco?.fillDate) {
-            onChangePestsForm({ ...felinReco, fillDate: moment().format('YYYY-MM-DD') }, 'felinReco')
-        }
-      
-       
+        let _c = recommendParams?.customerPet ?? []
+        let stateCustomPet = {};
+        _c.map(item => {
+            stateCustomPet[item.uuid] = item
+        })
+        this.setState({
+            sourceKeys: _c.map(item => item.uuid),
+            stateCustomPet
+        }, () => {
 
+        })
     }
     /**
      * 获取数据字典
@@ -79,75 +88,104 @@ class FillinPetInfoForm extends Component {
 
     //选择下拉宠物
     _onChangePets = (e) => {
-        const { onChangePestsForm, petsList } = this.props;
+        const { petsList } = this.props;
         let pets = petsList.find(item => item.petsId === e)
-        // onChangePestsForm(pets, 'customerPet')
-    }
-
-    remove = index => {
-        const { getFieldValue,setFieldsValue } = this.props.form;
-        let cc=getFieldValue('customerPet')
-        setFieldsValue({
-            customerPet:cc.filter((item, key) => key !== index),
+        this.setState({
+            currentPet:pets||{}
         })
-       
+    }
+    //删除
+    remove = (k, index) => {
+        const { getFieldValue, setFieldsValue } = this.props.form;
+        let keys = getFieldValue('keys')
+        if (keys.length === 1) return
+        setFieldsValue({
+            keys: keys.filter((item) => item !== k),
+        })
     };
-     uuid=()=> {
+    //生成唯一id
+    uuid = () => {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
+    //添加宠物
     addPet = () => {
-        const {getFieldValue,setFieldsValue } = this.props.form;
-        const customerPet = getFieldValue('customerPet');
-        const nextKeys = [...customerPet,{ uuid:this.uuid()}]
-       setFieldsValue({
-            customerPet: nextKeys,
+        const { getFieldValue, setFieldsValue } = this.props.form;
+        const {currentPet,stateCustomPet}:any=this.state
+        const keys = getFieldValue('keys');
+        let uuid = this.uuid();
+        let nextKeys = []
+        if(keys.includes(currentPet.petsId)){
+            message.warning('You have added the pet!')
+            return
+        }
+        if(currentPet&&currentPet.petsId){
+            this.setState({
+                stateCustomPet:{...stateCustomPet,[currentPet.petsId]:currentPet}
             })
+            nextKeys=[...keys,currentPet.petsId]
+        }else{
+            nextKeys=[...keys,uuid]
+        }
+        setFieldsValue({
+            keys: nextKeys,
+        })
     };
-
+    //上一步
+    previous=()=>{
+        const { onChangeStep, } = this.props;
+        onChangeStep(0)
+    }
+    //下一步
     next = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                const { recommendParams, savepetsRecommendParams,onChangeStep } = this.props;
+                let customerPet = [];
+                for (let item in values.customerPet) {
+                    customerPet.push(values.customerPet[item])
+                }
+                savepetsRecommendParams(Object.assign({},recommendParams,{...values,customerPet}))
+
+                setTimeout(() => {
+                    onChangeStep(2)
+                }, 300);
+
             }
         });
     }
 
 
-    renderMorePetsForm = (customerPet) => {
-        const { getFieldDecorator,getFieldValue } = this.props.form;
-        const { petsList, funType } = this.props;
-        const { lifeList, activityList, specialNeedsList, petsBreedList, weightList, fetching } = this.state
-        
-       // const customerPet = getFieldValue('customerPet');
-        console.log(customerPet,'=======')
-    //   return
-        return customerPet.length>0&&customerPet.map((item, index) => (
-            <Col span={12} key={item.uuid+index}>
-                <Row gutter={20} >
+    renderMorePetsForm = () => {
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        const { lifeList, activityList, specialNeedsList, stateCustomPet, petsBreedList, weightList, fetching } = this.state
+        const keys = getFieldValue('keys');
+        return keys.length > 0 && keys.map((item, index) => (
+            <Col span={12} key={item}>
+                <Row gutter={20} key={item}>
                     <div style={{ display: "flex", justifyContent: "space-around" }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
-                        <Button type="primary" onClick={() => this.remove(index)}>删除{item.uuid}</Button>
+                        <Button type="primary" onClick={() => this.remove(item, index)}>删除</Button>
                     </div>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Name' })}>
-                            {getFieldDecorator(`customerPet[${index}].petsName`, {
-                                initialValue: item.petsName || '',
+                            {getFieldDecorator(`customerPet[${item}].petsName`, {
+                                initialValue: stateCustomPet[item]?.petsName ?? '',
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.inputpetName' }) }],
-                            })(<Input disabled={petsList.length > 0 || funType} />)}
+                            })(<Input disabled={stateCustomPet[item]?.petsId?true:false} />)}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Gender' })}>
-                            {getFieldDecorator(`customerPet[${index}].petsSex`, {
-                                initialValue: item.petsSex,
+                            {getFieldDecorator(`customerPet[${item}].petsSex`, {
+                                initialValue: stateCustomPet[item]?.petsSex ?? 1,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectGender' }) }],
 
-                            })(<Radio.Group disabled={petsList.length > 0 || funType}>
+                            })(<Radio.Group disabled={stateCustomPet[item]?.petsId?true:false}>
                                 <Radio value={1}><FormattedMessage id="Prescriber.Female" /></Radio>
                                 <Radio value={0}><FormattedMessage id="Prescriber.Male" /></Radio>
                             </Radio.Group>)}
@@ -155,17 +193,17 @@ class FillinPetInfoForm extends Component {
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Dateofbirth' })}>
-                            {getFieldDecorator(`customerPet[${index}].birthOfPets`, {
-                                initialValue: item.birthOfPets && moment(item.birthOfPets, 'YYYY-MM-DD') || null,
+                            {getFieldDecorator(`customerPet[${item}].birthOfPets`, {
+                                initialValue: stateCustomPet[item]?.birthOfPets && moment(stateCustomPet[item]?.birthOfPets ?? null, 'YYYY-MM-DD') || null,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectDateofbirth' }) }],
 
-                            })(<DatePicker disabled={petsList.length > 0 || funType} style={{ width: '100%' }} />)}
+                            })(<DatePicker disabled={stateCustomPet[item]?.petsId?true:false} style={{ width: '100%' }} />)}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Breed' })}>
-                            {getFieldDecorator(`customerPet[${index}].petsBreed`, {
-                                initialValue: item.petsBreed || "",
+                            {getFieldDecorator(`customerPet[${item}].petsBreed`, {
+                                initialValue: stateCustomPet[item]?.petsBreed ?? "",
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectBreed' }) }],
 
                             })(<Select
@@ -176,10 +214,10 @@ class FillinPetInfoForm extends Component {
                                 defaultActiveFirstOption={false}
                                 filterOption={false}
                                 onSearch={this.onSearch}
-                                disabled={petsList.length > 0 || funType}
+                                disabled={stateCustomPet[item]?.petsId?true:false}
                             >
                                 {
-                                    petsBreedList.map(((item) => (<Option key={item.id} value={item.valueEn} label={item.valueEn}>{item.valueEn}</Option>)))
+                                    petsBreedList.map(((it) => (<Option key={it.id} value={it.valueEn} label={it.valueEn}>{it.valueEn}</Option>)))
                                 }
                             </Select>)}
                         </Form.Item>
@@ -187,12 +225,12 @@ class FillinPetInfoForm extends Component {
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Special needs' })}>
-                            {getFieldDecorator(`customerPet[${index}].needs`, {
-                                initialValue: item.needs || '',
+                            {getFieldDecorator(`customerPet[${item}].needs`, {
+                                initialValue: stateCustomPet[item]?.needs ?? '',
                                 //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
 
                             })(<Select
-                                disabled={petsList.length > 0 || funType}
+                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
@@ -206,29 +244,29 @@ class FillinPetInfoForm extends Component {
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Sensitvities' })}>
-                            {getFieldDecorator(`customerPet[${index}].lifestyle`, {
-                                initialValue: item.lifestyle || '',
+                            {getFieldDecorator(`customerPet[${item}].lifestyle`, {
+                                initialValue: stateCustomPet[item]?.lifestyle ?? '',
                                 // rules: [{ required: true, message: 'Please select Lifestyle!' }],
 
                             })(<Select
-                                disabled={petsList.length > 0 || funType}
+                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
                                 {
-                                    lifeList.map(((item) => (<Option key={item.id} value={item.valueEn} label={item.valueEn}>{item.name}</Option>)))
+                                    lifeList.map(((it) => (<Option key={it.id} value={it.valueEn} label={it.valueEn}>{it.name}</Option>)))
                                 }
                             </Select>)}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Activity' })}>
-                            {getFieldDecorator(`customerPet[${index}].activity`, {
-                                initialValue: item.activity || '',
+                            {getFieldDecorator(`customerPet[${item}].activity`, {
+                                initialValue: stateCustomPet[item]?.activity ?? '',
                                 // rules: [{ required: true, message: 'Please selectActivity!' }],
 
                             })(<Select
-                                disabled={petsList.length > 0 || funType}
+                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
@@ -238,24 +276,24 @@ class FillinPetInfoForm extends Component {
                             </Select>)}
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} >
 
                         <Row gutter={20}>
 
                             <Col span={12}>
                                 <Form.Item label={RCi18n({ id: 'Prescriber.Weight' })}>
-                                    {getFieldDecorator(`customerPet[${index}].measure`, {
-                                        initialValue: item.measure || 0,
+                                    {getFieldDecorator(`customerPet[${item}].measure`, {
+                                        initialValue: stateCustomPet[item]?.measure ?? 0,
                                         rules: [{ required: true, message: RCi18n({ id: 'Prescriber.inputWeight' }) }],
-                                    })(<Input disabled={petsList.length > 0 || funType} />)}
+                                    })(<Input disabled={stateCustomPet[item]?.petsId?true:false} />)}
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
                                 <Form.Item label="  ">
-                                    {getFieldDecorator(`customerPet[${index}].measureUnit`, {
-                                        initialValue: item.measureUnit || 'Kg',
+                                    {getFieldDecorator(`customerPet[${item}].measureUnit`, {
+                                        initialValue: stateCustomPet[item]?.measureUnit ?? 'Kg',
                                     })(<Select
-                                        disabled={petsList.length > 0 || funType}
+                                        disabled={stateCustomPet[item]?.petsId?true:false}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                     >
 
@@ -266,16 +304,14 @@ class FillinPetInfoForm extends Component {
                                 </Form.Item>
                             </Col>
                         </Row>
-
-
                     </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Sterilzed' })}>
-                            {getFieldDecorator(`customerPet[${index}].sterilized`, {
+                            {getFieldDecorator(`customerPet[${item}].sterilized`, {
                                 defaultValue: 0,
-                                initialValue: item.sterilized,
+                                initialValue: stateCustomPet[item]?.sterilized ?? 1,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectSterilzed' }) }],
-                            })(<Radio.Group disabled={petsList.length > 0 || funType}>
+                            })(<Radio.Group disabled={stateCustomPet[item]?.petsId?true:false}>
                                 <Radio value={1}><FormattedMessage id="Prescriber.Yes" /></Radio>
                                 <Radio value={0}><FormattedMessage id="Prescriber.No" /></Radio>
                             </Radio.Group>)}
@@ -289,14 +325,14 @@ class FillinPetInfoForm extends Component {
     }
 
 
-
     render() {
-        const { getFieldDecorator,getFieldValue } = this.props.form
-        const { felinReco, appointmentVO, petsList, funType ,customerPet} = this.props;
-        const { loading } = this.state
-        getFieldDecorator('customerPet', { initialValue: customerPet.toJS()||[] });
-        const customer = getFieldValue('customerPet');
-        console.log(customer,'=======',customerPet.toJS())
+        const { getFieldDecorator } = this.props.form
+        let { recommendParams, petsList, funType } = this.props;
+        const { appointmentVO } = recommendParams
+        const { loading, sourceKeys } = this.state
+        getFieldDecorator('keys', { initialValue: sourceKeys || [] });
+        // getFieldDecorator('customerPet', { initialValue: {} });
+
         return (
             <Spin spinning={loading}>
                 <Form onSubmit={this.next}>
@@ -304,7 +340,7 @@ class FillinPetInfoForm extends Component {
                         <Col span={6}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Date' })}>
                                 {getFieldDecorator('fillDate', {
-                                    initialValue: moment(felinReco.fillDate, 'YYYY-MM-DD'),
+                                    initialValue: moment(recommendParams?.fillDate ?? null, 'YYYY-MM-DD'),
                                     rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
                                 })(<DatePicker style={{ width: '100%' }} />)}
                             </Form.Item>
@@ -312,14 +348,14 @@ class FillinPetInfoForm extends Component {
                         <Col span={6}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Expert name' })}>
                                 {getFieldDecorator('expert', {
-                                    initialValue: felinReco.expert,
+                                    initialValue: recommendParams?.expert ?? '',
                                 })(<Input disabled />)}
                             </Form.Item>
                         </Col>
                         <Col span={6}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.pour' })}>
                                 {getFieldDecorator('consumerName', {
-                                    initialValue: appointmentVO.consumerName || '',
+                                    initialValue: appointmentVO?.consumerName ?? '',
                                 })(<Input disabled={petsList.length > 0 || funType} />)}
                             </Form.Item>
                         </Col>
@@ -349,7 +385,7 @@ class FillinPetInfoForm extends Component {
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Pet.owner.name' })}>
                                 {getFieldDecorator('appointmentVO.consumerName', {
-                                    initialValue: appointmentVO.consumerName || '',
+                                    initialValue: appointmentVO?.consumerName ?? '',
                                 })(<Input disabled={petsList.length > 0 || funType} />)}
                             </Form.Item>
                         </Col>
@@ -357,14 +393,14 @@ class FillinPetInfoForm extends Component {
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Phone.number' })}>
                                 {getFieldDecorator('appointmentVO.consumerPhone', {
-                                    initialValue: appointmentVO.consumerPhone || '',
+                                    initialValue: appointmentVO?.consumerPhone ?? '',
                                 })(<Input disabled={petsList.length > 0 || funType} />)}
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Email' })}>
                                 {getFieldDecorator('appointmentVO.consumerEmail', {
-                                    initialValue: appointmentVO.consumerEmail || '',
+                                    initialValue: appointmentVO?.consumerEmail ?? '',
                                 })(<Input disabled={petsList.length > 0 || funType} />)}
                             </Form.Item>
                         </Col>
@@ -373,6 +409,8 @@ class FillinPetInfoForm extends Component {
                         <Col span={8}>
                             <Form.Item>
                                 <Select style={{ width: '100%' }}
+                                disabled={funType}
+                                allowClear
                                     onChange={this._onChangePets}
                                 >
                                     {petsList.length > 0 && petsList.map(item => {
@@ -382,20 +420,20 @@ class FillinPetInfoForm extends Component {
                                 </Select>
                             </Form.Item>
                         </Col>
-                        <Col span={2}>
+                       {!funType&&<Col span={2} >
                             <Form.Item>
                                 <Button type="primary" onClick={this.addPet}>+ Add Pets</Button>
                             </Form.Item>
-                        </Col>
+                        </Col>} 
 
                     </Row>
                     <Row gutter={20}>
-         
-                        {this.renderMorePetsForm(customer)}
+
+                        {this.renderMorePetsForm()}
                     </Row>
                     <div className="steps-action">
 
-                        <Button style={{ marginRight: 15 }}>
+                        <Button style={{ marginRight: 15 }} onClick={this.previous}>
                             <FormattedMessage id="Prescriber.Previous" />
                         </Button>
                         <Button type="primary" htmlType="submit" >

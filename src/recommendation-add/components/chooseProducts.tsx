@@ -40,6 +40,7 @@ export default class ChooseProducts extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      getGoodsInfoPage: Function
       settlement: IMap;
       setName: IList;
       onSharing: Function;
@@ -47,8 +48,8 @@ export default class ChooseProducts extends React.Component<any, any> {
       linkStatus: any;
       detailProductList: any;
       createLinkType: any;
-      goodsQuantity:any
       loading:boolean
+      onChangeStep: Function
     };
   };
 
@@ -60,12 +61,13 @@ export default class ChooseProducts extends React.Component<any, any> {
     detailProductList: 'detailProductList',
     linkStatus: 'linkStatus',
     createLinkType: 'createLinkType',
-    goodsQuantity:'goodsQuantity',
-    loading:'loading'
+    loading:'loading',
+    getGoodsInfoPage: noop,
+    onChangeStep: noop
   };
 
   componentDidMount() {
-    const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
+    const { onSharing, detailProductList, linkStatus,getGoodsInfoPage } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     if (employee.prescribers && employee.prescribers.length > 0) {
       onSharing({
@@ -73,6 +75,7 @@ export default class ChooseProducts extends React.Component<any, any> {
         value: employee.prescribers[0].id
       });
     }
+    getGoodsInfoPage()
   }
 
   showProduct = (res) => {
@@ -111,6 +114,7 @@ export default class ChooseProducts extends React.Component<any, any> {
   render() {
     const {
       loading,
+      onChangeStep
     } = this.props.relaxProps;
 
 
@@ -140,6 +144,15 @@ export default class ChooseProducts extends React.Component<any, any> {
          <Spin spinning={loading}>
 
         <DetailList />
+        <div className="steps-action">
+
+                        <Button style={{ marginRight: 15 }} onClick={()=>onChangeStep(1)}>
+                            <FormattedMessage id="Prescriber.Previous" />
+                        </Button>
+                        <Button type="primary"  onClick={()=>onChangeStep(3)} >
+                            <FormattedMessage id="Prescriber.Next" />
+                        </Button>
+                    </div>
 </Spin>
         {this.state.visible == true ? (
           <ProductTooltip

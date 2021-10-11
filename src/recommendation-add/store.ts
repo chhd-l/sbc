@@ -18,40 +18,43 @@ export default class AppStore extends Store {
   bindActor() {
     return [new SettleDetailActor(), new FillInPetInfoActor()];
   }
-  uuid=()=> {
+  uuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
+      var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
     });
-}
+  }
   init = async (param?: any) => {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchFindById(param);
     if (res.code === Const.SUCCESS_CODE) {
       let { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      customerPet= customerPet&&customerPet.map(item=>{
-        let _tempWeight = item.weight?JSON.parse(item.weight):{}
+      customerPet = customerPet && customerPet.map(item => {
+        let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
         let { measure = 0, measureUnit = '' } = _tempWeight
         item.measure = measure;
         item.measureUnit = measureUnit;
-        item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
-        item.uuid=this.uuid()
+        item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
         return item;
-      })||[]
+      }) || []
 
       this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
       this.dispatch('loading:end');
     }
   };
+
+  savepetsRecommendParams = (all) => {
+    this.dispatch('pets:recommendParams', all)
+  }
+
+
+
   initDistaptch = ({ felinReco, goodsQuantity, appointmentVO, customerPet, list }) => {
     this.transaction(() => {
-      this.dispatch('pets:felinReco', felinReco)
-      this.dispatch('pets:goodsQuantity', goodsQuantity);
-      this.dispatch('pets:appointmentVO', appointmentVO);
-      this.dispatch('pets:customerPet', customerPet);
+      this.savepetsRecommendParams({ appointmentVO, goodsQuantity, ...felinReco, customerPet })
       this.dispatch('pets:list', list)
 
       this.dispatch('loading:end');
@@ -74,7 +77,7 @@ export default class AppStore extends Store {
   };
 
   //步骤
-  onChangeStep=(step)=>{
+  onChangeStep = (step) => {
     this.dispatch(`pets:step`, step)
   }
 
@@ -106,26 +109,38 @@ export default class AppStore extends Store {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =item.weight?JSON.parse(item.weight):{}
-        item.measure = _tempWeight?.measure??0;
-        item.measureUnit = _tempWeight?.measureUnit??'Kg';
+        let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
+        item.measure = _tempWeight?.measure ?? 0;
+        item.measureUnit = _tempWeight?.measureUnit ?? 'Kg';
         return item
       })
-      if(list.length>0){
-        list.map(item=>{
-          item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
+      if (list.length > 0) {
+        list.map(item => {
+          item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
         })
       }
-      felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
-      let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
-      this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
-     if(settingVO.apptNo){
-      message.success(res.message)
-     }else{
-      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
-     }
-      
+      let _recommendParams = this.state().get('recommendParams')
+      this.savepetsRecommendParams({ ..._recommendParams, appointmentVO: settingVO, goodsQuantity })
+      this.dispatch('pets:list', list)
+      // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
+      // let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
+      // this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
+      if (settingVO.apptNo) {
+        message.success(res.message)
+      } else {
+        message.error((window as any).RCi18n({ id: 'Prescriber.appointmentIdNotExist' }))
+      }
+
     }
+  }
+  //查询全部
+  getFillAutofindAllTitle = async () => {
+    this.dispatch('loading:start');
+    const { res } = await webapi.fetchFindFillAutoAllTitle()
+    if ((res as any).code == Const.SUCCESS_CODE) {
+      this.dispatch('pets:fillAutoList', res.context)
+    }
+    this.dispatch('loading:end');
   }
 
 
@@ -137,22 +152,23 @@ export default class AppStore extends Store {
     if ((res as any).code == Const.SUCCESS_CODE) {
       let goodsInfoList = (res as any).context.goodsInfoList;
       this.dispatch('goods:infoPage', goodsInfoList)
-      let goods = this.state().get('goodsQuantity')
+      // let goods = this.state().get('goodsQuantity')
+      let goods = this.state().get('recommendParams').get('goodsQuantity')
       let obj = {}, productSelect = []
       goodsInfoList.map(item => {
         obj[item.goodsInfoNo] = item
       })
       goods.map(item => {
-       let goodsInfoWeight:any=0,goodsInfoUnit=(obj[item.goodsInfoNo]?.goodsInfoUnit??'').toLowerCase();
-       obj[item.goodsInfoNo].goodsInfoWeight=obj[item.goodsInfoNo]?.goodsInfoWeight??0
-       if(goodsInfoUnit==='g'){
-          goodsInfoWeight=item.quantity*obj[item.goodsInfoNo].goodsInfoWeight
-       }else if(goodsInfoUnit==='kg'){
-          let d:any=(item.quantity*obj[item.goodsInfoNo].goodsInfoWeight)/1000
-          goodsInfoWeight=parseInt(d)
-       }
+        let goodsInfoWeight: any = 0, goodsInfoUnit = (obj[item.goodsInfoNo]?.goodsInfoUnit ?? '').toLowerCase();
+        obj[item.goodsInfoNo].goodsInfoWeight = obj[item.goodsInfoNo]?.goodsInfoWeight ?? 0
+        if (goodsInfoUnit === 'g') {
+          goodsInfoWeight = item.quantity * obj[item.goodsInfoNo].goodsInfoWeight
+        } else if (goodsInfoUnit === 'kg') {
+          let d: any = (item.quantity * obj[item.goodsInfoNo].goodsInfoWeight) / 1000
+          goodsInfoWeight = parseInt(d)
+        }
 
-        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity ,goodsInfoWeight})
+        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity, goodsInfoWeight })
       })
       this.onProductselect(productSelect)
     }

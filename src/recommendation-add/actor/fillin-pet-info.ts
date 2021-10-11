@@ -5,9 +5,9 @@ import moment from 'moment';
 export default class FillInPetInfoActor extends Actor {
   defaultState() {
     return {
-      currentStep: 0,
-      goodsQuantity: [],//产品新
-      felinReco: {
+      currentStep: 3,
+      recommendParams:{
+        goodsQuantity: [],//产品新
         felinRecoId: undefined,
         storeId: undefined,
         apptId: undefined,
@@ -16,46 +16,45 @@ export default class FillInPetInfoActor extends Actor {
         suggest: undefined,
         optimal: undefined,
         pickup: true,
-        fillDate: undefined
-      },//基础
-      appointmentVO: {},//扫码信息
-      customerPet: [{
-        uuid:(+new Date()),
-        measure: 0,
-        measureUnit: 'Kg'
-      }],//宠物信息
+        fillDate: null,
+        appointmentVO: {},//扫码信息
+        customerPet: [{
+          petsName: 'name',
+          birthOfPets: null,
+          petsSex: 1,
+          petsBreed: undefined,
+          lifestyle: undefined,
+          needs: undefined,
+          sterilized: 1,
+          type: undefined,
+          uuid: (+new Date())+'',
+          measure: 0,
+          measureUnit: 'Kg'
+        }]
+      },
       funType: false,
       petsList: [],
-      goodsInfoPage: []
+      goodsInfoPage: [],
+      fillAutoList:[]
     }
   }
 
- 
+
   @Action('pets:step')
   petsStep(state, step) {
     return state.set('currentStep', step)
   }
 
-  @Action('pets:felinReco')
-  petsFelinReco(state, felinReco) {
-    delete felinReco['goodsIds'];
-    return state.set('felinReco', felinReco)
+  @Action('pets:fillAutoList')
+  petsFillAutoList(state, list:IList) {
+    return state.set('fillAutoList', fromJS(list))
   }
-  @Action('pets:goodsQuantity')
-  petsGoodsQuantity(state, goodsQuantity) {
-    return state.set('goodsQuantity', goodsQuantity);
-  }
-
-  @Action('pets:appointmentVO')
-  petsAppointmentVO(state, appointmentVO) {
-    return state.set('appointmentVO', appointmentVO);
+ 
+  @Action('pets:recommendParams')
+  petsRecommendParams(state, all) {
+    return state.set('recommendParams', fromJS(all));
   }
 
-  @Action('pets:customerPet')
-  petsCustomerPet(state, customerPet) {
-    customerPet.birthOfPets = moment(customerPet.birthOfPets).format('YYYY-MM-DD')
-    return state.set('customerPet', customerPet);
-  }
 
   //产品信息
   @Action('goods:infoPage')

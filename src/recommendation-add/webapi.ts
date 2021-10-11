@@ -115,7 +115,7 @@ export function fetchFindById(param = {}) {
   });
 }
 
-export function fetchproductTooltip(param?={}) {
+export function fetchproductTooltip(param={}) {
   return Fetch<TResult>(`/felinReco/products`/*'/recommendation/listGoodsInfo'*/, {
     method: 'POST',
     body: JSON.stringify(param)
@@ -173,3 +173,21 @@ export function fetchFelinRecoProducts(param = {}) {
     });
    }
 
+ /**
+ * 查询全部的问答
+ */
+  export function fetchFindFillAutoAllTitle(param={}){
+    return Fetch<TResult>('/fill-auto/findAllTitle', {
+      method: 'POST',
+      body: JSON.stringify(param)
+    });
+   }
+
+    /**
+ * 查询单个的问答
+ */
+  export function fetchFindFillAutoById(id){
+    return Fetch<TResult>(`/fill-auto/findById/${id}`, {
+      method: 'POST'
+    });
+   }

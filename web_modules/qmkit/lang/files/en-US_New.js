@@ -1075,7 +1075,7 @@ export default {
         'Prescriber.Pet.owner.name':'Pet owner name',
         'Prescriber.Phone.number':' Phone number',
         'Prescriber.Email':'Email',
-
+        'Prescriber.Auto.fill.answers':'+ Auto-fill answers',
         'Prescriber.PO E-mail': 'PO E-mail',
         'Prescriber.Amount': 'Amount',
         'Prescriber.Expert': 'Expert',

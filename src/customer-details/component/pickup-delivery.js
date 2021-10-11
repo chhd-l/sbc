@@ -11,6 +11,8 @@ import './pickup-delivery.less';
 export default class PickupDelivery extends React.Component {
   static defaultProps = {
     initData: null,
+    subscribeGoods: null,
+    from: '',
     defaultCity: '',
     pickupAddress: [],
     pickupEditNumber: 0,
@@ -77,6 +79,7 @@ export default class PickupDelivery extends React.Component {
     };
   }
   async componentDidMount() {
+    this.props.updateConfirmPickupDisabled(true);
     let initData = this.props.initData;
     this.setState({
       pickupForm: Object.assign(this.state.pickupForm, initData)
@@ -130,6 +133,7 @@ export default class PickupDelivery extends React.Component {
               },
               () => {
                 this.setPickupTelNumberReg();
+                this.validFormAllPickupData();
               }
             );
           }
@@ -206,8 +210,21 @@ export default class PickupDelivery extends React.Component {
       let pknum = Number(pickupEditNumber) + 1;
       this.props.updatePickupEditNumber(pknum);
 
-      data['dimensions'] = null;
-      data['weight'] = null;
+      if (this.props.from === 'subscription') {
+        // 合并包裹
+        let ckg = await webapi.dimensionsByPackage({
+          goodsInfoDetails: this.props.subscribeGoods
+        });
+        if (ckg.context?.dimensions) {
+          let ckgobj = ckg.context;
+          data['dimensions'] = ckgobj?.dimensions;
+          data['weight'] = ckgobj?.weight;
+        }
+      } else {
+        data['dimensions'] = null;
+        data['weight'] = null;
+      }
+
       // 根据不同的城市信息查询
       res = await webapi.pickupQueryCityFee(data);
       if (res?.res?.context?.tariffs.length) {
@@ -364,6 +381,7 @@ export default class PickupDelivery extends React.Component {
     if (courierInfo) {
       this.sendMsgToIframe('city');
     }
+    this.props.updateConfirmPickupDisabled(true);
     this.setState({
       showPickupForm: false,
       showPickupDetail: false,
@@ -584,7 +602,7 @@ export default class PickupDelivery extends React.Component {
                   )}
                 </div>
                 {searchNoResult && (
-                  <div className="text-danger-2" style={{ paddingTop: '.5rem' }}>
+                  <div style={{ paddingTop: '.5rem', color: '#e2001a' }}>
                     <FormattedMessage id="Subscription.NoPickup" />
                   </div>
                 )}
@@ -719,6 +737,7 @@ export default class PickupDelivery extends React.Component {
                 </div>
               </div>
             </div>
+
           </div>
           {/* pickup相关 end */}
 

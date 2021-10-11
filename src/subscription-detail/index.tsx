@@ -992,9 +992,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <Row>
                   <Col span={12}>
                     <label className="info-title">
-                      {deliveryAddressInfo.receiveType==='PICK_UP'?(
+                      {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                         <FormattedMessage id="Subscription.PickupAddress" />
-                      ):(
+                      ) : (
                         <FormattedMessage id="Subscription.DeliveryAddress" />
                       )}
                     </label>
@@ -1040,6 +1040,14 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                   <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
+
+                {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                  <Col span={24}>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.WorkTime" />: </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                  </Col>
+                ) : null}
+
                 {/*根据地址是否属于黑名单进而决定是否显示*/}
                 <Col span={24}>
                   {
@@ -1049,7 +1057,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   }
                 </Col>
               </Col>
-                 {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
+              {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
               <Col span={8}>
                 {

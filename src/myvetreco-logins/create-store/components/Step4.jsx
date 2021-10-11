@@ -32,10 +32,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     listCategory().then(({res})=>{
       let animalTypeList=res.context.categoryList;
       let dog=animalTypeList.find(item=>item.categoryValue==='Dog')
-      let cat=animalTypeList.find(item=>item.categoryValue==='Cat')
+      let Cat=animalTypeList.find(item=>item.categoryValue==='Cat')
       let promises = [listGoodsByCategory({
-        categoryId: cat.categoryId,
-        categoryValueId: cat.categoryValueId
+        categoryId: Cat.categoryId,
+        categoryValueId: Cat.categoryValueId
       }),listGoodsByCategory({
         categoryId: dog.categoryId,
         categoryValueId: dog.categoryValueId
@@ -79,7 +79,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           allObj[enumType[index]] = skuList
         })
         console.log(allObj)
-        setAllObj(allObj)
+        setAllObj(Object.assign({}, {...allObj}))
         setDataSource({...dataSource})
         setLoading(false)
       })
@@ -115,17 +115,18 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    */
   const savePrice = () => {
     let newChooseObj = {...formData}
+    //点击全选时插入所有数据
     if(checkAllObj.Cat){
-      for(let i in allObj.cat){
-        allObj.cat[i] = {
-          isChecked: allObj.cat[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
-          sku: allObj.cat[i].sku,
-          spu: allObj.cat[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+      for(let i in allObj.Cat){
+        allObj.Cat[i] = {
+          isChecked: allObj.Cat[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.Cat[i].sku,
+          spu: allObj.Cat[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
       }
-      newChooseObj = {...allObj.cat,...newChooseObj}
+      newChooseObj = {...allObj.Cat,...newChooseObj}
     }
     if(checkAllObj.Dog){
       for(let i in allObj.Dog){
@@ -136,12 +137,15 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           spu: allObj.Dog[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
+        allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
+        allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
-    console.log('alllllll', newChooseObj);
     let array = []
     for(let i in newChooseObj){
+      newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
+      newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }

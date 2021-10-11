@@ -23,7 +23,8 @@ export default class OrderMonitorList extends Component<any, any> {
         startDate: null,
         endDate: null,
         exceptionType: null,
-        orderExportStatus: null
+        orderExportStatus: null,
+        orderStatus:null,
       },
       pagination: {
         current: 1,
@@ -36,7 +37,8 @@ export default class OrderMonitorList extends Component<any, any> {
       visible: false,
       pushVerifyCode: '',
       currentOrderNumber: '',
-      confirmLoading: false
+      confirmLoading: false,
+      orderStatusList:[]
     }
   }
   componentDidMount() {
@@ -50,6 +52,7 @@ export default class OrderMonitorList extends Component<any, any> {
     }
     this.getOrderMonitorList(params)
     this.getExceptionType()
+    this.getOrderStatus()
   }
 
   onFormChange = ({ field, value }) => {
@@ -77,6 +80,19 @@ export default class OrderMonitorList extends Component<any, any> {
       }
       this.setState({
         exceptionTypeList
+      })
+    })
+  }
+
+  getOrderStatus = () => {
+    webapi.getOrderStatus().then(data => {
+      const { res } = data
+      let orderStatusList = []
+      if (res.code === Const.SUCCESS_CODE) {
+        orderStatusList = res.context.payStatusList
+      }
+      this.setState({
+        orderStatusList
       })
     })
   }
@@ -119,7 +135,8 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: searchForm.endDate ? searchForm.endDate + " 23:59:59" : null,
       exceptionType: searchForm.exceptionType,
       orderNumber: searchForm.orderNumber,
-      orderExportStatus: searchForm.orderExportStatus
+      orderExportStatus: searchForm.orderExportStatus,
+      orderStatus:[searchForm.orderStatus]
     }
     this.setState({
       currentSearchForm: searchForm
@@ -225,7 +242,7 @@ export default class OrderMonitorList extends Component<any, any> {
   }
 
   render() {
-    const { loading, pagination, exceptionTypeList, monitorList, visible, pushVerifyCode, confirmLoading } = this.state
+    const { loading, pagination, exceptionTypeList, monitorList, visible, pushVerifyCode, confirmLoading,orderStatusList } = this.state
     const orderExportStatusList = [
       {
         value: 0,
@@ -407,6 +424,36 @@ export default class OrderMonitorList extends Component<any, any> {
                   </FormItem>
 
                 </Col>
+
+                {/* OrderStatus */}
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Order.OrderStatus' })} />
+                      <Select
+                        style={styles.wrapper}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        allowClear
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'orderStatus',
+                            value
+                          });
+                        }}
+                      >
+                        {
+                          orderStatusList && orderStatusList.map((item, index) => (
+                            <Option value={item} key={index}>{item}</Option>
+                          ))
+                        }
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+
+                </Col>
+
+                
               </Row>
 
 

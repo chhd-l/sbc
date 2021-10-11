@@ -175,7 +175,7 @@ export default class MyHeader extends React.Component {
                   key={item.lang}
                   style={{
                     cursor: 'pointer',
-                    width: '30%'
+                    width: '25%'
                   }}
                   onMouseLeave={(e) => {
                     // this.setImgSrc(item.name, item.value, '');

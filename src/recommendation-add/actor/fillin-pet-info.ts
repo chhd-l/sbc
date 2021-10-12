@@ -5,7 +5,7 @@ import moment from 'moment';
 export default class FillInPetInfoActor extends Actor {
   defaultState() {
     return {
-      currentStep: 3,
+      currentStep: 0,
       recommendParams:{
         goodsQuantity: [],//产品新
         felinRecoId: undefined,
@@ -17,6 +17,7 @@ export default class FillInPetInfoActor extends Actor {
         optimal: undefined,
         pickup: true,
         fillDate: null,
+        isSend:true,
         appointmentVO: {},//扫码信息
         customerPet: [{
           petsName: 'name',

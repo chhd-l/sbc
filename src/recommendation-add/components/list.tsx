@@ -47,7 +47,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   inputNumberChange = (value, row, index) => {
     if(!value)return;
     const { productselect, onProductselect } = this.props.relaxProps;
-    let _clone = JSON.parse(JSON.stringify(productselect))
+    let _clone = JSON.parse(JSON.stringify(productselect.toJS()))
     let goodsInfoWeight:any=0,goodsInfoUnit=( row?.goodsInfoUnit??'').toLowerCase();
     if(goodsInfoUnit==='g'){
        goodsInfoWeight= value * (row.goodsInfoWeight/row.quantity)
@@ -65,12 +65,13 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   //删除
   deleteCartsGood = (index) => {
     const { productselect, onProductselect } = this.props.relaxProps;
-    let _clone = JSON.parse(JSON.stringify(productselect))
+    let _clone = JSON.parse(JSON.stringify(productselect.toJS()))
     _clone.splice(index, 1)
     onProductselect(_clone)
   }
   render() {
-    const { productselect } = this.props.relaxProps;
+    let { productselect } = this.props.relaxProps;
+    productselect=productselect.toJS()
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey="goodsInfoNo" dataSource={productselect instanceof Array ? productselect : []} pagination={false}>

@@ -40,11 +40,14 @@ export default class ChooseProducts extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      recommendParams:IMap,
       getGoodsInfoPage: Function
       settlement: IMap;
       setName: IList;
+      productselect:IList
       onSharing: Function;
       onLinkStatus: Function;
+      savepetsRecommendParams: Function,
       linkStatus: any;
       detailProductList: any;
       createLinkType: any;
@@ -54,8 +57,11 @@ export default class ChooseProducts extends React.Component<any, any> {
   };
 
   static relaxProps = {
+    recommendParams:'recommendParams',
     settlement: 'settlement',
     setName: 'setName',
+    productselect:'productselect',
+    savepetsRecommendParams: noop,
     onSharing: noop,
     onLinkStatus: noop,
     detailProductList: 'detailProductList',
@@ -111,6 +117,14 @@ export default class ChooseProducts extends React.Component<any, any> {
   cancel = () => {
     //message.info('canceled');
   };
+  next=()=>{
+    const { productselect,recommendParams, onChangeStep,savepetsRecommendParams} = this.props.relaxProps;
+    savepetsRecommendParams({...recommendParams.toJS(),goodsQuantity:productselect.toJS()})
+   
+    setTimeout(() => {
+      onChangeStep(3)
+    }, 300);
+  }
   render() {
     const {
       loading,
@@ -149,7 +163,7 @@ export default class ChooseProducts extends React.Component<any, any> {
                         <Button style={{ marginRight: 15 }} onClick={()=>onChangeStep(1)}>
                             <FormattedMessage id="Prescriber.Previous" />
                         </Button>
-                        <Button type="primary"  onClick={()=>onChangeStep(3)} >
+                        <Button type="primary"  onClick={()=>this.next()} >
                             <FormattedMessage id="Prescriber.Next" />
                         </Button>
                     </div>

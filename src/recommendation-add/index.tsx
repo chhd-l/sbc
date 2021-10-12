@@ -31,36 +31,6 @@ export default class RecommendationAdd extends Component<any, any> {
     this.store.onSettingAddOrEdit(id ? true : false);
     id && this.store.init({ felinRecoId: id })
   }
-
- 
-  done(e) {
-    // const felinReco = this.store.state().get('felinReco')
-
-    // //  const goodsQuantity=this.store.state().get('goodsQuantity')
-    // const appointmentVO = this.store.state().get('appointmentVO')
-    // const customerPet = this.store.state().get('customerPet')
-    // const productselect = this.store.state().get('productselect')
-    // let goodsQuantity = productselect.map(({ goodsInfoNo, quantity }) => {
-    //   return { goodsInfoNo, quantity }
-    // })
-    // delete felinReco['_root']
-    // delete customerPet['_root']
-    // delete appointmentVO['_root']
-    // delete felinReco['size']
-    // delete customerPet['size']
-    // delete appointmentVO['size']
-    // delete felinReco['__altered']
-    // delete customerPet['__altered']
-    // delete appointmentVO['__altered']
-    // let weight={
-    //   measure:customerPet.measure||0,
-    //   measureUnit:customerPet.measureUnit||'Kg',
-    //   type:2
-    // }
-    // customerPet.weight=JSON.stringify(weight);
-    // let p={ ...felinReco, goodsQuantity, appointmentVO, customerPet };
-    // this.store.fetchFelinSave(p)
-  }
   render() {
     const {  title } = this.state;
     const current = this.store.state().get('currentStep')

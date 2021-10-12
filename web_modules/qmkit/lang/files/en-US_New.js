@@ -1076,6 +1076,7 @@ export default {
         'Prescriber.Phone.number':' Phone number',
         'Prescriber.Email':'Email',
         'Prescriber.Auto.fill.answers':'+ Auto-fill answers',
+        'Prescriber.Auto.fill.question':'Auto-fill question',
         'Prescriber.PO E-mail': 'PO E-mail',
         'Prescriber.Amount': 'Amount',
         'Prescriber.Expert': 'Expert',

@@ -76,14 +76,14 @@ class ResourceForm extends React.Component<any, any> {
         <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Assigntheresources" />}>
-              {getFieldDecorator('assignType', {
+              {getFieldDecorator('assignResources', {
                 rules: [],
-                onChange: this._editGoods.bind(this, 'assignType'),
-                initialValue: goods.get('assignType')
+                onChange: this._editGoods.bind(this, 'assignResources'),
+                initialValue: goods.get('assignResources')
               })(
                 <RadioGroup>
-                  <Radio value={1}><FormattedMessage id="Product.Assignrandomly" /></Radio>
-                  <Radio value={2}><FormattedMessage id="Product.Assignprioritized" /></Radio>
+                  <Radio value={0}><FormattedMessage id="Product.Assignrandomly" /></Radio>
+                  <Radio value={1}><FormattedMessage id="Product.Assignprioritized" /></Radio>
                 </RadioGroup>
               )}
             </FormItem>

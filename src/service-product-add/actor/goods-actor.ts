@@ -23,7 +23,7 @@ export default class GoodsActor extends Actor {
         // 商品名称
         goodsName: '',
         // service type
-        serviceType: '',
+        serviceTypeId: '',
         // SPU编码
         goodsNo: '',
         internalGoodsNo: '',
@@ -52,7 +52,7 @@ export default class GoodsActor extends Actor {
         defaultPurchaseType: null,
         defaultFrequencyId: null,
         resource: 1, //商品来源
-        assignType: 1 //service product - assign type
+        assignResources: 0 //service product - assign type
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -81,7 +81,9 @@ export default class GoodsActor extends Actor {
       resourceCates: [],
       purchaseTypeList: [],
       frequencyList: '',
-      goodsDescriptionDetailList: []
+      goodsDescriptionDetailList: [],
+      serviceTypeList: [],
+      expertTypeList: []
     };
   }
 
@@ -266,6 +268,14 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:descriptionTab')
   goodsDescriptionTab(state, tabList) {
     return state.set('goodsDescriptionDetailList', tabList);
+  }
+  @Action('goodsActor:serviceTypeList')
+  serviceTypeList(state, serviceTypeList) {
+    return state.set('serviceTypeList', serviceTypeList);
+  }
+  @Action('goodsActor:expertTypeList')
+  expertTypeList(state, expertTypeList) {
+    return state.set('expertTypeList', expertTypeList);
   }
 }
 

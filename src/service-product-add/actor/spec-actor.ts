@@ -231,7 +231,7 @@ export default class GoodsSpecActor extends Actor {
    * 添加规格
    */
   @Action('goodsSpecActor: addSpec')
-  addSpec(state, { promotions, id, name }) {
+  addSpec(state, { promotions, id, name, editable }) {
     let goodsSpecs = state.get('goodsSpecs');
     const random = this._getRandom();
     const spec = fromJS({
@@ -240,6 +240,7 @@ export default class GoodsSpecActor extends Actor {
       isMock: true,
       promotions,
       specName: name || 'specification' + (goodsSpecs.count() + 1),
+      editable,
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));

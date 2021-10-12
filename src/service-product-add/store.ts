@@ -139,6 +139,8 @@ export default class AppStore extends Store {
           this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
           this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
           this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
+          this.dispatch('goodsActor:serviceTypeList',(results[0].res as any).context.service_type?.goodsDictionaryPage?.content ?? []);
+          this.dispatch('goodsActor:expertTypeList', (results[0].res as any).context.expert_type?.goodsDictionaryPage?.content ?? []);
 
           this.dispatch('related:goodsId', goodsId);
           this.dispatch('goodsActor:getGoodsId', goodsId);
@@ -220,6 +222,7 @@ export default class AppStore extends Store {
           this.editGoodsItem(item.id, 'subscriptionPrice', '0');
         });
       }
+      this.initServiceSpec();
     }
     //初始化素材
     this.initImg({
@@ -238,12 +241,14 @@ export default class AppStore extends Store {
    * 初始化service的spec form
    */
   initServiceSpec = () => {
+    const expertTypeList = this.state().get('expertTypeList');
     //新增service产品，设置默认spec
     [{ id: 100001, name: 'Duration' }, { id: 100002, name: 'Expert type' }].forEach(item => {
       this.dispatch('goodsSpecActor: addSpec', {
         promotions: this.state().get('goods'),
         id: item.id,
-        name: item.name
+        name: item.name,
+        editable: false
       });
     });
     this.dispatch('goodsSpecActor: editSpecValues', {
@@ -257,7 +262,8 @@ export default class AppStore extends Store {
           specDetailId: 1000001,
           mockSpecDetailId: 1000001,
           detailName: '15min',
-          subscriptionStatus: 1
+          subscriptionStatus: 1,
+          editable: false
         },
         {
           goodsPromotions: 'autoship',
@@ -265,7 +271,8 @@ export default class AppStore extends Store {
           specDetailId: 1000002,
           mockSpecDetailId: 1000002,
           detailName: '30min',
-          subscriptionStatus: 1
+          subscriptionStatus: 1,
+          editable: false
         },
         {
           goodsPromotions: 'autoship',
@@ -273,7 +280,8 @@ export default class AppStore extends Store {
           specDetailId: 1000003,
           mockSpecDetailId: 1000003,
           detailName: '45min',
-          subscriptionStatus: 1
+          subscriptionStatus: 1,
+          editable: false
         }
       ])
     });
@@ -281,32 +289,15 @@ export default class AppStore extends Store {
       specId: 100002,
       priceOpt: 2,
       mtkPrice: 0,
-      specValues: fromJS([
-        {
-          goodsPromotions: 'autoship',
-          isMock: true,
-          specDetailId: 1000004,
-          mockSpecDetailId: 1000004,
-          detailName: 'Behaviorist',
-          subscriptionStatus: 1
-        },
-        {
-          goodsPromotions: 'autoship',
-          isMock: true,
-          specDetailId: 1000005,
-          mockSpecDetailId: 1000005,
-          detailName: 'Nutritionist',
-          subscriptionStatus: 1
-        },
-        {
-          goodsPromotions: 'autoship',
-          isMock: true,
-          specDetailId: 1000006,
-          mockSpecDetailId: 1000006,
-          detailName: 'Osteopathist',
-          subscriptionStatus: 1
-        }
-      ])
+      specValues: fromJS(expertTypeList.map(expertItem => ({
+        goodsPromotions: 'autoship',
+        isMock: true,
+        specDetailId: 2000000 + parseInt(expertItem.id),
+        mockSpecDetailId: 2000000 + parseInt(expertItem.id),
+        detailName: expertItem.name,
+        subscriptionStatus: 1,
+        editable: false
+      })))
     });
   };
 
@@ -894,8 +885,8 @@ export default class AppStore extends Store {
    * 添加规格
    */
   addSpec = () => {
-    console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
-    this.dispatch('goodsSpecActor: addSpec', { promotions: this.state().get('goods'), id: 0, name: '' });
+    //console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
+    this.dispatch('goodsSpecActor: addSpec', { promotions: this.state().get('goods'), id: 0, name: '', editable: true });
   };
   
   updateSpecValues = (specId, key, value) => {
@@ -1374,7 +1365,7 @@ export default class AppStore extends Store {
    * 保存基本信息和价格
    */
   saveAll = async (nextTab = null) => {
-    if (!this._validMainForms() || !this._validPriceFormsNew() || !this._validInventoryFormsNew()) {
+    if (!this._validMainForms() || !this._validPriceFormsNew()) {
       return false;
     }
     const data = this.state();
@@ -1456,7 +1447,7 @@ export default class AppStore extends Store {
     // }
 
     param = param.set('goodsTabRelas', tabs);
-    goods = goods.set('goodsType', goods.get('goodsType') == 3 ? goods.get('goodsType') : 0);
+    goods = goods.set('goodsType', 5);
     goods = goods.set('goodsSource', 1);
     goods = goods.set('freightTempId', '62');
     goods = goods.set('goodsWeight', '1');
@@ -1501,7 +1492,8 @@ export default class AppStore extends Store {
         // specId: item.get('isMock') == true ? null : item.get('specId'),
         specId: item.get('isMock') == true ? null : item.get('specId'),
         mockSpecId: item.get('mockSpecId'),
-        specName: item.get('specName').trim()
+        specName: item.get('specName').trim(),
+        editable: item.get('editable')
       });
     });
     param = param.set('goodsSpecs', goodsSpecs);
@@ -1517,7 +1509,8 @@ export default class AppStore extends Store {
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
             mockSpecDetailId: specValueItem.get('mockSpecDetailId') || specValueItem.get('specDetailId'),
-            detailName: specValueItem.get('detailName').trim()
+            detailName: specValueItem.get('detailName').trim(),
+            editable: specValueItem.get('editable')
           })
         );
       });

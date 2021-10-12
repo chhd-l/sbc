@@ -306,6 +306,12 @@ const routes = [
     path: '/goods-bundle-edit/:gid',
     asyncComponent: () => import('./goods-add/main')
   },
+
+  //service goods edit
+  {
+    path: '/goods-service-edit/:gid',
+    asyncComponent: () => import('./service-product-add/main')
+  },
   //Related product
   {
     path: '/related-product',

@@ -85,6 +85,7 @@ export default class Info extends React.Component<any, any> {
       purchaseTypeList: IList;
       frequencyList: any;
       changeDescriptionTab: Function;
+      serviceTypeList: IList;
     };
   };
 
@@ -138,7 +139,8 @@ export default class Info extends React.Component<any, any> {
     purchaseTypeList: 'purchaseTypeList',
     frequencyList: 'frequencyList',
     goodsSpecs: 'goodsSpecs',
-    updateSpecValues: noop
+    updateSpecValues: noop,
+    serviceTypeList: 'serviceTypeList'
   };
 
   constructor(props) {
@@ -246,7 +248,7 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
+    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList, serviceTypeList } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
@@ -307,14 +309,17 @@ class GoodsForm extends React.Component<any, any> {
         <Row type="flex" justify="start">
           <Col span={8}>
             <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Servicetype" />}>
-              {getFieldDecorator('serviceType', {
-                rules: [],
-                onChange: this._editGoods.bind(this, 'serviceType'),
-                // initialValue: 'Y'
-                initialValue: goods.get('serviceType')
+              {getFieldDecorator('serviceTypeId', {
+                rules: [{ required: true, message: RCi18n({id:'Product.Pleaseselectservicetype'}) }],
+                onChange: this._editGoods.bind(this, 'serviceTypeId'),
+                initialValue: goods.get('serviceTypeId')
               })(
                 <Select getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.Pleaseselectservicetype'})}>
-                  <Option value={1}>Grooming</Option>
+                  {serviceTypeList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
                 </Select>
               )}
             </FormItem>

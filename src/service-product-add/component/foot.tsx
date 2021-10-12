@@ -72,7 +72,7 @@ class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
@@ -82,15 +82,6 @@ class Foot extends React.Component<any, any> {
             <FormattedMessage id="Product.Prev" />
             </Button>
             <Button type="primary" disabled={this.props.loading} onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-            <FormattedMessage id="Product.Next" />
-            </Button>
-          </AuthWrapper>
-        ) : this.props.tabType == 'shipping' ? (
-          <AuthWrapper key="007" functionName={this.props.goodsFuncName}>
-            <Button type="primary" disabled={this.props.loading} onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-            <FormattedMessage id="Product.Prev" />
-            </Button>
-            <Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>

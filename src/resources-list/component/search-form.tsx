@@ -7,35 +7,57 @@ const styles = {
   label: {
     width: 151,
     textAlign: 'center'
-  },
-  wrapper: {
-    width: 177
   }
 } as any;
 
 const { Option } = Select;
 const FormItem = Form.Item;
 
+const optionTest = [{
+  label: '1',
+  value: 'a',
+}, {
+  label: '2',
+  value: 'b',
+}, {
+  label: '3',
+  value: 'c',
+},]
+
 // @ts-ignore
 @Form.create()
 export default class SearchForm extends React.Component<any, any>{
   constructor(props) {
     super(props);
+    this.state={
+      formValues:{}
+    }
   }
 
-  // handleSubmit = e => {
-  //     e.preventDefault();
-  //     this.props.form.validateFields((err, values) => {
-  //         if (!err) {
-  //             console.log('Received values of form: ', values);
-  //             this.props.onSearch({
-  //                 pageNum: 0,
-  //                 pageSize: 10,
-  //                 ...values,
-  //             });
-  //         }
-  //     });
-  // };
+  handleSelectChange = (key, value) =>{
+    const formVal = Object.assign(this.state.formValues,{
+      [key]:value
+    })
+    this.setState({
+      formValues:formVal
+    })
+  }
+  handleSubmit = (e) => {
+      e.preventDefault();
+      this.props.form.validateFields((err, values) => {
+        const params = Object.assign(this.state.formValues,{
+          ...values
+        })
+        console.log(params,'ppppppp')
+          if (!err) {
+              this.props.onSearch({
+                  pageNum: 0,
+                  pageSize: 10,
+                  ...params,
+              });
+          }
+      });
+  };
 
   render() {
     let {
@@ -45,12 +67,12 @@ export default class SearchForm extends React.Component<any, any>{
     return (
       <div>
         <Form
-          // onSubmit={this.handleSubmit}
+          onSubmit={this.handleSubmit}
           className="filter-content"
           layout="inline"
         >
           <Row>
-          <Col span={8}>
+            <Col span={8}>
               <FormItem>
                 {
                   getFieldDecorator('email')(
@@ -84,68 +106,56 @@ export default class SearchForm extends React.Component<any, any>{
             </Col>
             <Col span={8}>
               <FormItem >
-                <SelectGroup
-                style={{ width: 177 }}
+              <SelectGroup
+                  style={{ width: 177 }}
+                  id="service-type"
                   allowClear
-                  // getPopupContainer={() => document.getElementById('page-content')}
-                  // style={styles.wrapper}
+                  getPopupContainer={() => document.getElementById('service-type')}
                   label={
                     <p style={styles.label}>
                       <FormattedMessage id="Resources.service_type" />
                     </p>
                   }
-                  // showSearch
-                  optionFilterProp="children"
-                  // onChange={(value) => {
-                  //   onFormFieldChange({ key: 'brandId', value });
-                  // }}
+                onChange={(value) =>this.handleSelectChange('serviceType', value ) }
                 >
-                 <Option  value='all'>all</Option>
+                  {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
                 </SelectGroup>
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem >
                 <SelectGroup
-                style={{ width: 177 }}
+                  style={{ width: 177 }}
                   allowClear
-                  // getPopupContainer={() => document.getElementById('page-content')}
-                  // style={styles.wrapper}
+                  id="appointment-type"
+                  getPopupContainer={() => document.getElementById('appointment-type')}
                   label={
                     <p style={styles.label}>
                       <FormattedMessage id="Resources.appointment_type" />
                     </p>
                   }
-                  // showSearch
-                  optionFilterProp="children"
-                  // onChange={(value) => {
-                  //   onFormFieldChange({ key: 'brandId', value });
-                  // }}
+                  onChange={(value) =>this.handleSelectChange('appointmentType', value ) }
                 >
-                 <Option  value='all'>all</Option>
+                    {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
                 </SelectGroup>
               </FormItem>
             </Col>
             <Col span={8}>
               <FormItem >
                 <SelectGroup
-                style={{ width: 177 }}
+                  style={{ width: 177 }}
                   allowClear
-                  // getPopupContainer={() => document.getElementById('page-content')}
-                  // style={styles.wrapper}
+                  id="planned-status"
+                  getPopupContainer={() => document.getElementById('planned-status')}
                   label={
                     <p style={styles.label}>
                       <FormattedMessage id="Resources.planned_status" />
                     </p>
                   }
-                  // showSearch
-                  optionFilterProp="children"
-                  // onChange={(value) => {
-                  //   onFormFieldChange({ key: 'brandId', value });
-                  // }}
+                  onChange={(value) =>this.handleSelectChange('plannedStatus', value ) }
                 >
-                 <Option  value='yes'>Yes</Option>
-                 <Option  value='no'>No</Option>
+                  <Option value='yes'>Yes</Option>
+                  <Option value='no'>No</Option>
                 </SelectGroup>
               </FormItem>
             </Col>

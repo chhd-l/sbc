@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
-// import * as webapi from './webapi'
+import { Modal, Button, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import SearchForm from './component/search-form'

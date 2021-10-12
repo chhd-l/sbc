@@ -31,7 +31,6 @@ class Checkout extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.getCategoryList();
     this.getAllProducts();
     webapi.getConsent().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
@@ -43,13 +42,14 @@ class Checkout extends React.Component<any, any> {
     });
   }
 
-  getAllProducts = () => {
+  getAllProducts = (keywords = '') => {
     this.setState({ loading: true });
-    webapi.getProductList().then(data => {
+    webapi.getAllProductList(keywords).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
+        const context = data.res.context;
         this.setState({
           loading: false,
-          products: data.res.context.goodsInfoList.map(goods => ({
+          products: context.goodsInfos.map(goods => ({
             goodsId: goods.goodsId,
             goodsInfoId: goods.goodsInfoId,
             goodsInfoNo: goods.goodsInfoNo,
@@ -58,6 +58,11 @@ class Checkout extends React.Component<any, any> {
             goodsImg: goods.goods.goodsImg,
             marketPrice: goods.marketPrice,
             cateId: goods.cateId,
+          })),
+          cateList: context.goodsCates.map(cate => ({
+            cateId: cate.cateId,
+            cateName: cate.cateName,
+            childProducts: [],
           }))
         });
       } else {
@@ -66,34 +71,6 @@ class Checkout extends React.Component<any, any> {
     }).catch(() => {
       this.setState({ loading: false });
     });
-  }
-
-  getCategoryList = () => {
-    new Promise(resolve => {
-      setTimeout(() => {
-        resolve({
-          res: {
-            code: Const.SUCCESS_CODE,
-            context: [
-              { 'cateId': 1133, 'cateName': 'France Dog SPT food' },
-              { 'cateId': 1134, 'cateName': 'France Cat SPT food' },
-              { 'cateId': 1153, 'cateName': 'France Dog VET food' },
-              { 'cateId': 1154, 'cateName': 'France Cat VET Food' },
-            ]
-          }
-        })
-      }, 1000)
-    }).then((data: any) => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          cateList: data.res.context.map(cate => ({
-            cateId: cate.cateId,
-            cateName: cate.cateName,
-            childProducts: [],
-          }))
-        })
-      }
-    })
   }
 
   onSelect = (memberInfo: any = {}, memberType: 'Member' | 'Guest' = 'Guest') => {
@@ -165,7 +142,7 @@ class Checkout extends React.Component<any, any> {
 
   onAddProduct = (product: any) => {
     const { list } = this.state;
-    if (list.findIndex(p => p.goodsId === product.goodsId) === -1) {
+    if (list.findIndex(p => p.goodsInfoId === product.goodsInfoId) === -1) {
       list.push({
         ...product,
         quantity: 1
@@ -176,7 +153,7 @@ class Checkout extends React.Component<any, any> {
 
   onRemoveProduct = (product: any) => {
     const { list } = this.state;
-    const pIdx = list.findIndex(p => p.goodsId === product.goodsId);
+    const pIdx = list.findIndex(p => p.goodsInfoId === product.goodsInfoId);
     if (pIdx > -1) {
       list.splice(pIdx, 1);
     }
@@ -185,7 +162,7 @@ class Checkout extends React.Component<any, any> {
 
   onSetProductQty = (product: any, qty: number) => {
     const { list } = this.state;
-    const targetProduct = list.find(p => p.goodsId === product.goodsId);
+    const targetProduct = list.find(p => p.goodsInfoId === product.goodsInfoId);
     if (targetProduct) {
       targetProduct.quantity = qty;
     }
@@ -322,7 +299,7 @@ class Checkout extends React.Component<any, any> {
   }
 
   handleProductSearch = (val) => {
-    this.getAllProducts()
+    this.getAllProducts(val)
   }
 
   render() {

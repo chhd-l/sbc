@@ -370,7 +370,7 @@ class SkuForm extends React.Component<any, any> {
 
     //pricing uom
     columns = columns.push({
-      title: 'Pricing UOM',
+      title: <FormattedMessage id="Product.PricingUOM" />,
       key: 'priceUomId',
       width: 150,
       render: (rowInfo) => {
@@ -385,7 +385,7 @@ class SkuForm extends React.Component<any, any> {
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                   </Select>
                 )}

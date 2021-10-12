@@ -513,6 +513,13 @@ export default {
         "Product.Ratio": "Ratio",
         "Product.UOMlist": "UOM list",
         "Product.Createnewuom": "Create new UOM",
+        "Product.NewRegularProduct": "New product (Regular product)",
+        "Product.EditRegularProduct": "Edit product (Regular product)",
+        "Product.StockingUOM": "Stocking UOM",
+        "Product.ConversionFactor": "Conversion factor",
+        "Product.PricingUOM": "Pricing UOM",
+        "Product.StockingInventory": "Stocking inventory",
+        "Product.PricingInventory": "Pricing inventory",
 
     },
 

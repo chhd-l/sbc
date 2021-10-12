@@ -3,6 +3,7 @@ import { Fetch } from 'qmkit';
 type TResult = {
   code: string;
   message: string;
+  context: any;
 };
 
 /**
@@ -23,3 +24,16 @@ export const editSetting = (params = {}) => {
     })
   });
 };
+
+//城市列表
+export function cityList(params) {
+
+  return Fetch<TResult>('/system-city/query-system-city-by-name',{
+    method: 'post',
+    body: JSON.stringify({
+      pageSize: 1000,
+      pages: 0,
+      ...params
+    })
+  });
+}

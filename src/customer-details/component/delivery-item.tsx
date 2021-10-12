@@ -218,6 +218,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       delivery.cityIdStr = dadataAddress?.cityId;
       delivery.settlementIdStr = dadataAddress?.settlementId;
     }
+
     this.props.form.validateFields(async (err, fields) => {
       if (!err) {
         this.setState({ loading: true });

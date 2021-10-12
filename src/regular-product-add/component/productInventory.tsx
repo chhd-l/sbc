@@ -154,8 +154,9 @@ class SkuForm extends React.Component<any, any> {
 
     //Stocking UOM
     columns = columns.push({
-      title: 'Stocking UOM',
+      title: <FormattedMessage id="Product.StockingUOM" />,
       key: 'stockUomId',
+      width: '10%',
       render: (rowInfo) => {
         return (
           <Row>
@@ -168,7 +169,7 @@ class SkuForm extends React.Component<any, any> {
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                   </Select>
                 )}
@@ -193,7 +194,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          Conversion factor
+          <FormattedMessage id="Product.ConversionFactor" />
         </div>
       ),
       key: 'factor',
@@ -218,8 +219,9 @@ class SkuForm extends React.Component<any, any> {
 
     //Pricing UOM -disabled
     columns = columns.push({
-      title: 'Pricing UOM',
+      title: <FormattedMessage id="Product.PricingUOM" />,
       key: 'priceUomId',
+      width: '10%',
       render: (rowInfo) => {
         return (
           <Row>
@@ -227,7 +229,7 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 <Select value={rowInfo.priceUomId} disabled style={{ width: 100 }}>
                    {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                 </Select>
               </FormItem>
@@ -250,7 +252,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          Stocking inventory{/* <FormattedMessage id="product.inventory" /> */}
+          <FormattedMessage id="Product.StockingInventory" />
           <br />
           {/*<Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
@@ -293,7 +295,7 @@ class SkuForm extends React.Component<any, any> {
 
     //Stocking inventory
     columns = columns.push({
-      title: 'Pricing inventory',
+      title: <FormattedMessage id="Product.PricingInventory" />,
       key: 'stock',
       render: (rowInfo) => {
         let stock = 0;

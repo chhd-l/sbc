@@ -2623,6 +2623,7 @@ export default {
         'Resources.bulk_planning':'Bulk Planning',
         'Resources.calendar_view':'Calendar View',
         'Resources.appointment_type':'Appointment Type',
+        'Resources.expert_type':'Expert Type',
         'Resources.planned_status':'Planned Status',
         'Resources.planning_time':'Planning Time',
         'Resources.set_by_day':'Set By Day',

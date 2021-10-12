@@ -1110,10 +1110,10 @@ const routes = [
     path: '/resources-list',
     asyncComponent: () => import('./resources-list')
   },
-  // {
-  //   path: '/resources-list/:id',
-  //   asyncComponent: () => import('./resources-list-setting')
-  // }
+  {
+    path: '/resources-setting/:id',
+    asyncComponent: () => import('./resources-list/planning-setting')
+  }
 ];
 
 const homeRoutes = [

@@ -137,15 +137,13 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           spu: allObj.Dog[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
-        allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
-        allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
     let array = []
     for(let i in newChooseObj){
-      newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
-      newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
+      newChooseObj[i]['salePrice'] = parseFloat(format(round(bignumber(newChooseObj[i]['salePrice']), 2)));
+      newChooseObj[i]['subscriptionPrice'] = parseFloat(format(round(bignumber(newChooseObj[i]['subscriptionPrice']), 2)));
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }
@@ -172,7 +170,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
             saveCheckAll: saveCheckAll,
             formData,
             percentageObj,
-            roundOff:roundOff ? 0 : 6
+            roundOff:roundOff ? 0 : 2
           }}
       >
         <Spin spinning={loading} size="large">

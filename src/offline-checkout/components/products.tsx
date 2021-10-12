@@ -43,7 +43,7 @@ export default class ProductOverview extends React.Component<any, any> {
           products.map((product, idx) => (
             <Col span={12} key={idx}>
               <div
-                className={`c-product-item ${list.findIndex(p => p.goodsId === product.goodsId) > -1 ? 'selected' : ''}`}
+                className={`c-product-item ${list.findIndex(p => p.goodsInfoId === product.goodsInfoId) > -1 ? 'selected' : ''}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onAddProduct(product);

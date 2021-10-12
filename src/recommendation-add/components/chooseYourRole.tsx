@@ -62,7 +62,6 @@ class ChooseYourRole extends React.Component<any, any> {
       if (!err) {
         const { recommendParams, savepetsRecommendParams,onChangeStep } = this.props.relaxProps;
         let _re=recommendParams.toJS();
-        console.log('Received values of form: ', { ..._re, ...values});
         savepetsRecommendParams({ ..._re, ...values})
        setTimeout(() => {
         onChangeStep(1);
@@ -91,6 +90,7 @@ class ChooseYourRole extends React.Component<any, any> {
               label={RCi18n({ id: 'Prescriber.Role' })}
               getPopupContainer={(trigger: any) => trigger.parentNode}
               style={{ width: 180 }}
+              disabled={recommendParams.get('felinRecoId')}
             >
               {options}
             </SelectGroup>)}

@@ -158,7 +158,7 @@ export default class AppStore extends Store {
       goodsInfoList.map(item => {
         obj[item.goodsInfoNo] = item
       })
-      goods.map(item => {
+      goods.toJS().map(item => {
         let goodsInfoWeight: any = 0, goodsInfoUnit = (obj[item.goodsInfoNo]?.goodsInfoUnit ?? '').toLowerCase();
         obj[item.goodsInfoNo].goodsInfoWeight = obj[item.goodsInfoNo]?.goodsInfoWeight ?? 0
         if (goodsInfoUnit === 'g') {

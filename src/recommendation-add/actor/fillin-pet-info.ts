@@ -72,7 +72,7 @@ export default class FillInPetInfoActor extends Actor {
   }
   @Action('pets:list')
   petsList(state, value) {
-    return state.set('petsList', value);
+    return state.set('petsList', fromJS(value));
   }
 
 

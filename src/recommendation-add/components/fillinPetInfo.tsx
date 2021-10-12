@@ -49,7 +49,7 @@ class FillinPetInfo extends Component {
                     savepetsRecommendParams={savepetsRecommendParams}
                     findByApptNo={findByApptNo}
                     recommendParams={_c}
-                    petsList={petsList}
+                    petsList={petsList.toJS()}
                     funType={funType} />
 
 

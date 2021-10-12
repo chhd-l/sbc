@@ -43,12 +43,13 @@ class FillinPetInfoForm extends Component {
         this.getDictAlllist('specialNeeds', 'specialNeedsList');
         this.getDictAlllist('CatBreed', 'petsBreedList')
         let _c = recommendParams?.customerPet ?? []
+        console.log(_c,'===============')
         let stateCustomPet = {};
         _c.map(item => {
-            stateCustomPet[item.uuid] = item
+            stateCustomPet[item.petsId] = item
         })
         this.setState({
-            sourceKeys: _c.map(item => item.uuid),
+            sourceKeys: _c.map(item => item.petsId),
             stateCustomPet
         }, () => {
 
@@ -169,7 +170,7 @@ class FillinPetInfoForm extends Component {
                 <Row gutter={20} key={item}>
                     <div style={{ display: "flex", justifyContent: "space-around" }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
-                        <Button type="primary" onClick={() => this.remove(item, index)}>删除</Button>
+                        {!stateCustomPet[item]?.petsId&&<Button type="primary" onClick={() => this.remove(item, index)}>删除</Button>}
                     </div>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Name' })}>
@@ -342,7 +343,7 @@ class FillinPetInfoForm extends Component {
                                 {getFieldDecorator('fillDate', {
                                     initialValue: moment(recommendParams?.fillDate ?? null, 'YYYY-MM-DD'),
                                     rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
-                                })(<DatePicker style={{ width: '100%' }} />)}
+                                })(<DatePicker style={{ width: '100%' }} disabled={recommendParams.felinRecoId?true:false}/>)}
                             </Form.Item>
                         </Col>
                         <Col span={6}>
@@ -356,7 +357,7 @@ class FillinPetInfoForm extends Component {
                             <Form.Item label={RCi18n({ id: 'Prescriber.pour' })}>
                                 {getFieldDecorator('consumerName', {
                                     initialValue: appointmentVO?.consumerName ?? '',
-                                })(<Input disabled={petsList.length > 0 || funType} />)}
+                                })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
                         </Col>
                         <Col span={6} style={{ textAlign: 'center' }}>
@@ -386,7 +387,7 @@ class FillinPetInfoForm extends Component {
                             <Form.Item label={RCi18n({ id: 'Prescriber.Pet.owner.name' })}>
                                 {getFieldDecorator('appointmentVO.consumerName', {
                                     initialValue: appointmentVO?.consumerName ?? '',
-                                })(<Input disabled={petsList.length > 0 || funType} />)}
+                                })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
                         </Col>
 
@@ -394,14 +395,14 @@ class FillinPetInfoForm extends Component {
                             <Form.Item label={RCi18n({ id: 'Prescriber.Phone.number' })}>
                                 {getFieldDecorator('appointmentVO.consumerPhone', {
                                     initialValue: appointmentVO?.consumerPhone ?? '',
-                                })(<Input disabled={petsList.length > 0 || funType} />)}
+                                })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
                         </Col>
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Email' })}>
                                 {getFieldDecorator('appointmentVO.consumerEmail', {
                                     initialValue: appointmentVO?.consumerEmail ?? '',
-                                })(<Input disabled={petsList.length > 0 || funType} />)}
+                                })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -409,7 +410,7 @@ class FillinPetInfoForm extends Component {
                         <Col span={8}>
                             <Form.Item>
                                 <Select style={{ width: '100%' }}
-                                disabled={funType}
+                               disabled={recommendParams.felinRecoId?true:false}
                                 allowClear
                                     onChange={this._onChangePets}
                                 >
@@ -420,7 +421,7 @@ class FillinPetInfoForm extends Component {
                                 </Select>
                             </Form.Item>
                         </Col>
-                       {!funType&&<Col span={2} >
+                       {!recommendParams.felinRecoId&&<Col span={2} >
                             <Form.Item>
                                 <Button type="primary" onClick={this.addPet}>+ Add Pets</Button>
                             </Form.Item>

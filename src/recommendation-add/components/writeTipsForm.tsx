@@ -39,18 +39,23 @@ class WriteTipsForm extends React.Component<any, any> {
   componentDidMount() {
     const { recommendParams }: any = this.props;
     const { setFieldsValue } = this.props.form;
+
+    let o = this.state['optimal'] || '';
+      o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
+      o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
+    let _type = `${o || ''}`
     this.setState({
       index: +new Date(),
       suggest: recommendParams.suggest || '',
       disabled: recommendParams.isSend,
-      optimal: RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + (recommendParams.optimal || ''),
+      optimal: _type,
     }, () => {
       setFieldsValue({
         suggest: recommendParams.suggest || '',
-        optimal: RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + (recommendParams.optimal || ''),
+        optimal: _type,
         paris: recommendParams.paris,
         pickup: recommendParams.pickup,
-        isSend: recommendParams.isSend
+        isSend: recommendParams.isSend||false
       })
     })
 

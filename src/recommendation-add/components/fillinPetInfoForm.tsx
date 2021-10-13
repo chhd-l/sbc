@@ -46,10 +46,10 @@ class FillinPetInfoForm extends Component {
         console.log(_c,'===============')
         let stateCustomPet = {};
         _c.map(item => {
-            stateCustomPet[item.petsId] = item
+            stateCustomPet[item.petsId||item.uuid] = item
         })
         this.setState({
-            sourceKeys: _c.map(item => item.petsId),
+            sourceKeys: _c.map(item => (item.petsId||item.uuid)),
             stateCustomPet
         }, () => {
 

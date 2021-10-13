@@ -118,7 +118,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    */
   const saveCheckStatus = (title,spu,list)=>{
     if(spu==='clear'){
-      checkedObject[title] = []
+      checkedObject[title] = {}
     }else {
       checkedObject[title][spu] = [...list]
       console.log(checkedObject)

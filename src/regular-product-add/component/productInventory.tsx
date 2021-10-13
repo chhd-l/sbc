@@ -301,8 +301,8 @@ class SkuForm extends React.Component<any, any> {
         let stock = 0;
         if (rowInfo.externalStock && rowInfo.factor) {
           stock = Math.floor(rowInfo.externalStock / rowInfo.factor);
-          this._editGoodsItem(rowInfo.id, 'stock', stock);
         }
+        this._editGoodsItem(rowInfo.id, 'stock', stock);
         return (
           <Row>
             <Col span={12}>

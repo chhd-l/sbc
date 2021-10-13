@@ -1,6 +1,7 @@
 import React from 'react';
 import { BreadCrumb, Headline } from 'qmkit';
 import { Tabs } from 'antd';
+import BasicInformation from './basic';
 
 export default class MyvetrecoStoreSetting extends React.Component<any, any> {
 

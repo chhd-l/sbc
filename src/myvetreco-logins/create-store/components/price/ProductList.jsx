@@ -9,7 +9,7 @@ import VList from 'react-virtualized/dist/es/List';
  function ProductList({dataSource=[], title}) {
 
      const Context = useContext(FormContext);
-     const {saveCheckAll} = Context
+     const {saveCheckAll,saveCheckStatus} = Context
 
      const [isChecKedAll, setIsChecKedAll] = React.useState(false);
 
@@ -17,6 +17,9 @@ import VList from 'react-virtualized/dist/es/List';
     const onCheckAllChange = (e)=>{
         setIsChecKedAll(e.target.checked)
         saveCheckAll(e.target.checked,title)
+        if(!e.target.checked){
+          saveCheckStatus(title,'clear',[])
+        }
     }
 
     const renderItem = ({index, key, style}) => {
@@ -25,6 +28,7 @@ import VList from 'react-virtualized/dist/es/List';
              <div key={key} style={style}>
                  <CheckboxItem item={item}
                                isChecKedAll={isChecKedAll}
+                               title={title}
                  />
              </div>
 

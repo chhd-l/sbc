@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect,useState} from 'react';
 import {Checkbox, Col, InputNumber, List, Row, Tooltip} from "antd";
 import {bignumber, multiply, round, format} from "mathjs";
 
@@ -11,46 +11,56 @@ function PriceListItem({listItem,checkedList}){
     const Context = useContext(FormContext);
 
     const {percentageObj,changeFormData,formData,roundOff} = Context
-    const [isInit, setIsInit] = React.useState(true);
-    const [sales, setSales] = React.useState(listItem.marketPrice);
-    const [subscription, setSubscription] = React.useState(format(multiply(bignumber(listItem.marketPrice), bignumber(1.21))));
-    const [sell, setSell] = React.useState(format(multiply(bignumber(listItem.marketPrice), bignumber(1.21))));
+    const [isInit, setIsInit] = useState(true);
+    const [sales, setSales] = useState(listItem.marketPrice);
+    const [subscription, setSubscription] = useState(format(multiply(bignumber(listItem.marketPrice), bignumber(1.21)),{notation: 'fixed', precision: roundOff}));
+    const [sell, setSell] = useState(format(multiply(bignumber(listItem.marketPrice), bignumber(1.21)),{notation: 'fixed', precision: roundOff}));
+    /**
+     * 初始化时 取到用户改变的值
+     */
+    useEffect(()=>{
+        if(formData[listItem.sku]){
+            setSales(formData[listItem.sku].salePriceExclVat)
+            setSubscription(formData[listItem.sku].subscriptionPrice)
+            setSell(formData[listItem.sku].salePrice)
+        }
+    },[])
     /**
      * apply修改价格
      */
     useEffect(()=>{
         if(checkedList.indexOf(listItem.sku) !== -1){
-            console.log(Context)
             let sell = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
             sell = format(multiply(bignumber(sell), bignumber(1.21)))
             sell = bignumber(sell)
-            sell = format(round(sell,roundOff))
+            sell = format(sell,{notation: 'fixed', precision: roundOff})
             setSell(sell)
             let sale = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
             sale = bignumber(sale)
-            sale = format(round(sale,roundOff))
+            sale = format(sale,{notation: 'fixed', precision: roundOff})
             setSales(sale)
             let subscription = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.subscriptionPercentage, bignumber(0.01))))))
             subscription = format(multiply(bignumber(subscription), bignumber(1.21)))
             subscription = bignumber(subscription)
-            subscription = format(round(subscription,roundOff))
+            subscription = format(subscription,{notation: 'fixed', precision: roundOff})
             setSubscription(subscription)
         }
     },[percentageObj])
 
+
     /**
-     *
+     * 数据变化去更新数据
      */
     useEffect(()=>{
         //初始化不做处理
-        console.log(isInit)
         if(!isInit){
             let isChecked = checkedList.indexOf(listItem.sku) !== -1
             changeFormData(listItem.sku,{
-                salePrice: sales,
+                salePrice: sell,//含税价格
                 sku: listItem.sku,
                 spu: listItem.spu,
                 subscriptionPrice: subscription,
+                salePriceExclVat:sales,//不含税价格
                 isChecked
             })
         }else {
@@ -58,6 +68,14 @@ function PriceListItem({listItem,checkedList}){
         }
     },[sales,subscription,checkedList])
 
+    const changeSalesPrice = (value)=>{
+        setSales(value)
+        let sell = format(multiply(bignumber(value), bignumber(1.21)))
+        sell = bignumber(sell)
+        // sell = format(round(sell,roundOff))
+        sell = format(sell,{notation: 'fixed', precision: roundOff})
+        setSell(sell)
+    }
     return (
         <ListItem className="flex"  style={{height:56}}>
             <Row type="flex" className="flex-item flex-main align-center" gutter={8} align="middle">
@@ -73,17 +91,13 @@ function PriceListItem({listItem,checkedList}){
                 <Col span={5}>
                     <InputNumber
                         value={sales}
-                        precision={2}
-                        step={0.01}
-                        onChange={(value)=>setSales(value)}
+                        onChange={(value)=>changeSalesPrice(value)}
                     />
                 </Col>
                 <Col span={4}>{sell}</Col>
                 <Col span={5}>
                     <InputNumber
                         value={subscription}
-                        precision={2}
-                        step={0.01}
                         onChange={(value)=>setSubscription(value)}
                     />
                 </Col>

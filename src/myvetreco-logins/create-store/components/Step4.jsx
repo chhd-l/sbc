@@ -12,7 +12,8 @@ const enumType = {
 }
 export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [formData, setFormData] = useState({});
-  
+  const [checkedObject,setCheckedObject] = useState({Cat:{},Dog:{}})//选中状态{Cat:{},Dog:{}}
+
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
   const [checkAllObj,setCheckAllObj] = useState({Cat:false,Dog:false})//cat或者dog是否全选
 
@@ -22,7 +23,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [salesPercentage,setSalesPercentage] = useState(100)
   const [subscriptionPercentage,setSubscriptionPercentage] = useState(100)
   const [percentageObj,setPercentageObj] = useState({salesPercentage:100,subscriptionPercentage:100})//用于点击apply
-  const [roundOff,setRoundOff] = useState(false)
+  const [roundOff,setRoundOff] = useState(true)
  
   useEffect(()=>{
     if(step === 3) getCateGory()
@@ -111,6 +112,20 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     setCheckAllObj(checkAllObj)
   };
   /**
+   * 保存选中状态（虚拟列表会重刷组件，导致状态丢失）
+   * @param spu
+   * @param list
+   */
+  const saveCheckStatus = (title,spu,list)=>{
+    if(spu==='clear'){
+      checkedObject[title] = []
+    }else {
+      checkedObject[title][spu] = [...list]
+      console.log(checkedObject)
+      setCheckedObject(checkedObject)
+    }
+  }
+  /**
    * 保存价格设置
    */
   const savePrice = () => {
@@ -137,13 +152,15 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           spu: allObj.Dog[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
         }
+        allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
+        allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
       }
       newChooseObj = {...allObj.Dog,...newChooseObj}
     }
     let array = []
     for(let i in newChooseObj){
-      newChooseObj[i]['salePrice'] = parseFloat(format(round(bignumber(newChooseObj[i]['salePrice']), 2)));
-      newChooseObj[i]['subscriptionPrice'] = parseFloat(format(round(bignumber(newChooseObj[i]['subscriptionPrice']), 2)));
+      newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
+      newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }
@@ -168,9 +185,11 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           value={{
             changeFormData: changeFormData,
             saveCheckAll: saveCheckAll,
+            saveCheckStatus: saveCheckStatus,
+            checkedObject:checkedObject,
             formData,
             percentageObj,
-            roundOff:roundOff ? 0 : 2
+            roundOff:roundOff ? 2 : 6
           }}
       >
         <Spin spinning={loading} size="large">

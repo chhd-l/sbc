@@ -23,9 +23,7 @@ export default class List extends React.Component<any, any>{
     }
 
     handleChange = (page) => {
-        console.log('pagination', page);
-        // 更新列表
-        this.props.getListData({
+        this.props.updateListData({
             pageNum: page - 1,
         });
     }
@@ -128,6 +126,166 @@ export default class List extends React.Component<any, any>{
             email:1,
             name:2,
             serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
+          },{
+            email:1,
+            name:2,
+            serviceType:3
           },]
         }
         return (
@@ -135,34 +293,19 @@ export default class List extends React.Component<any, any>{
                 <Table
                     rowKey='goodsInfoId'
                     // loading={loading}
-                    // bordered
                     dataSource={_data.content}
                     columns={columns}
                     rowSelection={{
-                        // selectedRowKeys: selectedSpuKeys.toJS(),
                         onChange: (selectedRowKeys) => {
                           onSelectChange(selectedRowKeys);
                         }
                       }}
-                    // pagination={{
-                    //     total: data.total || 0,
-                    //     current: data.number + 1 || 0,
-                    //     onChange: this.handleChange
-                    // }}
+                    pagination={{
+                        // total: data.total || 0,
+                        // current: data.number + 1 || 0,
+                        onChange: this.handleChange
+                    }}
                 />
-                {/* {
-                    visible
-                        ? (
-                            <SkuMappingModal
-                                sku={currentRecord.sku}
-                                goodsInfoId={currentRecord.goodsInfoId}
-                                visible={visible}
-                                onOk={this.handleOk}
-                                onCancel={this.handleCancel}
-                            />
-                        )
-                        : null
-                } */}
             </div>
         );
     }

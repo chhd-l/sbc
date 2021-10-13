@@ -1,49 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, Headline, Const } from 'qmkit';
+import { BreadCrumb, Headline } from 'qmkit';
 import SearchForm from './component/search-form'
 import ListTable from './component/list'
 import BulkPlanningModal from './component/bulk-planning';
 
 const styles = {
   planningBtn: {
-      marginRight: 12
+    marginRight: 12
   }
 };
 const ResourcesList = () => {
-  const [showBulkPlanningModal,setShowBulkPlanningModal] = useState(false);
-  const [selectedRowKeys,setSelectedRowKeys] = useState([])
+  const [showBulkPlanningModal, setShowBulkPlanningModal] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
-  const listSelect = (selectedRowKeys) =>{
-    console.log(selectedRowKeys,'selectedRowKeysselectedRowKeys')
+  // 列表复选框选择
+  const listSelect = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys)
   }
-  const handlePlanningBtn = () =>{
-    if(selectedRowKeys.length) {
+
+  // 点击bulk planning按钮,进行批量设置
+  const handlePlanningBtn = () => {
+    if (selectedRowKeys.length) {
       setShowBulkPlanningModal(true)
-    }else {
+    } else {
       Modal.info({
-        // title: 'Notification',
-        content: ((window as any).RCi18n({id:'Resources.bulk_planning_btn_warning'})),
-        onOk() {},
+        content: ((window as any).RCi18n({ id: 'Resources.bulk_planning_btn_warning' })),
+        onOk() { },
       });
     }
   }
+
+  // 搜索查询
+  const handleSearch = (data) => {
+    console.log(data, 'data=====')
+    // todo:表格list接口请求
+  }
+
+  // 翻页处理
+  const changePageNum = (pageNum) => {
+    console.log(pageNum, '99999')
+    // todo:翻页时，更新表格list接口请求
+  }
+
   return (
     <div>
       <BreadCrumb />
       <div className="container-search">
         <Headline title={<FormattedMessage id="Resources.list" />} />
-        <SearchForm />
+        <SearchForm onSearch={handleSearch} />
         <Row>
           <Col span={6} offset={18}>
             <Button
               type="primary"
               style={styles.planningBtn}
-              // htmlType="submit"
-              // icon="search"
-            onClick={handlePlanningBtn}
+              onClick={handlePlanningBtn}
             >
               <span>
                 <FormattedMessage id="Resources.bulk_planning" />
@@ -51,9 +63,6 @@ const ResourcesList = () => {
             </Button>
             <Button
               type="primary"
-              // htmlType="submit"
-              // icon="search"
-              // shape="round"
             // onClick={(e) => {
             //   e.preventDefault();
             //   onSearch();
@@ -67,10 +76,14 @@ const ResourcesList = () => {
         </Row>
       </div>
       <div className="container">
-      <ListTable onSelectChange={(selectedRowKeys)=>listSelect(selectedRowKeys)}/>
-
-          </div>
-          <BulkPlanningModal visible={showBulkPlanningModal} onCancel={()=>{setShowBulkPlanningModal(false)}}/>
+        <ListTable
+          onSelectChange={(selectedRowKeys) => listSelect(selectedRowKeys)}
+          updateListData={changePageNum}
+        />
+      </div>
+      <BulkPlanningModal
+        visible={showBulkPlanningModal}
+        onCancel={() => { setShowBulkPlanningModal(false) }} />
     </div>
   )
 };

@@ -31,7 +31,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 800, defaultOptions=[]
         <Select
             ref={ref}
             labelInValue
-            size="large"
+            size={props.size || 'large'}
             showSearch
             filterOption={false}
             onSearch={debounceFetcher}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, message } from 'antd';
+import { Upload, Icon, message } from 'antd';
 import { Const } from 'qmkit';
 
 const FILE_MAX_SIZE = 4 * 1024 * 1024;
@@ -7,22 +7,36 @@ const FILE_MAX_SIZE = 4 * 1024 * 1024;
 export default class FileItem extends React.Component<any, any> {
   constructor(props) {
     super(props);
+    this.state = {
+      fileList: []
+    };
+  }
+
+  setFileList = (fileList) => {
+    this.setState({
+      fileList: fileList
+    });
   }
 
   render() {
     const { value, onChange } = this.props;
+    let { fileList } = this.state;
     const uploadOption = {
       headers:{
         Accept: 'application/json',
         Authorization: 'Bearer ' + (sessionStorage.getItem('token') || ''),
       },
       name: 'uploadFile',
-      fileList: [value],
+      defaultFileList: value ? [{ id: 0, name: value, url: value, status: 'done' }] : [],
+      fileList: fileList,
       accept:'.jpg,.jpeg,.png,.pdf',
       action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
       onChange: (info) => {
         console.log(info)
         const { file } = info;
+        if(file.status !== 'removed'){
+          this.setFileList([file]);
+        }
         if (file.status === 'done') {
           if(
               file.status == 'done' &&
@@ -55,12 +69,17 @@ export default class FileItem extends React.Component<any, any> {
       },
       onRemove: (promise)=>{
         console.log(promise)
-        onChange('')
+        onChange('');
+        this.setFileList([]);
       }
     };
 
     return (
-      <Upload {...uploadOption} />
+      <Upload {...uploadOption}>
+        <div style={{padding: '20px 25px', backgroundColor: '#f4f4f4', border: '1px solid #eeeeee'}}>
+          <Icon style={{fontSize: 20}} type="plus" />
+        </div>
+      </Upload>
     );
   }
 }

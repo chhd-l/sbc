@@ -37,3 +37,35 @@ export function cityList(params) {
     })
   });
 }
+
+//myvetreco
+export function getStoreInfo() {
+  return Fetch<TResult>('/store/audit/query-store-audit', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}
+
+//save basic information
+export function saveBasicInfo(params = {}, isBusiness = true) {
+  return Fetch<TResult>(isBusiness ? '/store/audit/business/basic' : '/store/audit/individual/basic', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+//save representative
+export function saveRepresentative(params = {}) {
+  return Fetch<TResult>('/store/audit/representative', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+//save bank information
+export function saveBankInfo(params = {}) {
+  return Fetch<TResult>('/store/audit/bank', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

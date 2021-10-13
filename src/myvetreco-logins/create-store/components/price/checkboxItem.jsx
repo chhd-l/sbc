@@ -25,7 +25,7 @@ function CheckboxItem({item,isChecKedAll=false,title}){
             //当checkAll为true的时候执行（为了优化代码速度）
             if(checkAll){
                 setCheckedList([])
-                saveCheckStatus(title,item.spu,[])
+                // saveCheckStatus(title,item.spu,[])
                 setCheckAll(false);
             }else {
                 let list = checkedObject[title][item.spu] || []

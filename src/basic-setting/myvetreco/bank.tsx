@@ -5,6 +5,7 @@ import { FormComponentProps } from 'antd/es/form';
 
 interface BankFormProps extends FormComponentProps {
   isBusiness: boolean;
+  adyenAuditState: number;
 }
 
 const FormItem = Form.Item;
@@ -15,8 +16,20 @@ class BankInformation extends React.Component<BankFormProps, any> {
     super(props);
   }
 
+  validateForm = () => {
+    return new Promise((resolve, reject) => {
+      this.props.form.validateFields((errors, values) => {
+        if (!errors) {
+          resolve(values);
+        } else {
+          reject('3');
+        }
+      });
+    });
+  };
+
   render() {
-    const { form: { getFieldDecorator }, isBusiness } = this.props;
+    const { form: { getFieldDecorator }, isBusiness, adyenAuditState } = this.props;
     const formLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 12 }
@@ -42,7 +55,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
                 rules: [{ required: isBusiness, message: 'Please input IBAN' }],
                 initialValue: ''
               })(
-              <Input disabled={!isBusiness} />
+              <Input disabled={adyenAuditState <= 1} />
               )}
             </FormItem>
           </Col>
@@ -80,7 +93,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
               <div>The document needs to contain the following information: Bank logo or bank name in a unique font，bank account details  and name of the account holder.</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: isBusiness, message: 'Please upload supported document!' }]
+                rules: [{ required: isBusiness, type: 'array', message: 'Please upload supported document!' }]
               })(
                 <FileItem />
               )}

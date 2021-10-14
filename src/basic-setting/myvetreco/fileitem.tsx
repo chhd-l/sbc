@@ -7,35 +7,23 @@ const FILE_MAX_SIZE = 4 * 1024 * 1024;
 export default class FileItem extends React.Component<any, any> {
   constructor(props) {
     super(props);
-    this.state = {
-      fileList: []
-    };
-  }
-
-  setFileList = (fileList) => {
-    this.setState({
-      fileList: fileList
-    });
   }
 
   render() {
     const { value, onChange } = this.props;
-    let { fileList } = this.state;
     const uploadOption = {
       headers:{
         Accept: 'application/json',
-        Authorization: 'Bearer ' + (sessionStorage.getItem('token') || ''),
+        Authorization: 'Bearer ' + ((window as any).token || ''),
       },
       name: 'uploadFile',
-      defaultFileList: value ? [{ id: 0, name: value, url: value, status: 'done' }] : [],
-      fileList: fileList,
+      fileList: value && value.length ? value.map(item => ({ uid: -1, name: item, url: item, status: 'done' })) : [],
       accept:'.jpg,.jpeg,.png,.pdf',
       action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
       onChange: (info) => {
-        console.log(info)
         const { file } = info;
         if(file.status !== 'removed'){
-          this.setFileList([file]);
+          onChange([file]);
         }
         if (file.status === 'done') {
           if(
@@ -45,11 +33,13 @@ export default class FileItem extends React.Component<any, any> {
               file.response.code !== Const.SUCCESS_CODE
           ){
             message.error(info.file.response.message);
+            onChange([]);
           }else{
-            onChange(file.response.length > 0 && file.response[0])
+            onChange(file.response.length > 0 && file.response[0] ? [file.response[0]] : []);
           }
         } else if (file.status === 'error') {
           message.error(`${file.name} file upload failed.`);
+          onChange([]);
         }
       },
       beforeUpload: (file)=>{
@@ -68,9 +58,7 @@ export default class FileItem extends React.Component<any, any> {
         }
       },
       onRemove: (promise)=>{
-        console.log(promise)
-        onChange('');
-        this.setFileList([]);
+        onChange([]);
       }
     };
 

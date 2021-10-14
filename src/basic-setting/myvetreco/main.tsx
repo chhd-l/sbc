@@ -1,6 +1,6 @@
 import React from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
-import { Tabs, Spin, Button, Row, Col, message } from 'antd';
+import { Tabs, Spin, Button, Row, Col, message, Modal } from 'antd';
 import { getStoreInfo, saveBasicInfo, saveRepresentative, saveBankInfo, submitForAudit } from '../webapi';
 import { BusinessBasicInformationForm, IndividualBasicInformationForm } from './basic';
 import { ShareHolderForm, SignatoriesForm } from './repre';
@@ -27,6 +27,8 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           signatories: {}
         },
         bankRequest: {},
+        adyenAuditState: 3, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
+        errorList: []
       }
     }
   }
@@ -86,47 +88,19 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   onSave = () => {
     const { current, typeOfBusiness } = this.state;
     if (current === '1') {
-      this.basiForm.props.form.validateFields((errors, values) => {
-        if (!errors) {
-          this.setState({loading: true});
-          saveBasicInfo({
-            ...values,
-            cityId: values.cityId.key,
-            city: values.cityId.label,
-            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
-          }, typeOfBusiness === 1).then(data => {
-            if (data.res.code === Const.SUCCESS_CODE) {
-              message.success('Operate successful');
-            }
-            this.setState({loading: false});
-          });
-        }
-      });
+      this.basiForm.validateForm().then(values => {
+        this.setState({loading: true});
+        saveBasicInfo(values, typeOfBusiness === 1).then(data => {
+          if (data.res.code === Const.SUCCESS_CODE) {
+            message.success('Operate successful');
+          }
+          this.setState({loading: false});
+        });
+      }).catch(() => {});
     } else if (current === '2') {
       Promise.all([
-        new Promise((resolve, reject) => {
-          this.shodForm.props.form.validateFields((errors, values) => {
-            if (!errors) {
-              resolve(values);
-            } else {
-              reject();
-            }
-          })
-        }),
-        new Promise((resolve, reject) => {
-          this.signForm.props.form.validateFields((errors, values) => {
-            if (!errors) {
-              resolve({
-                ...values,
-                cityId: values.cityId.key,
-                city: values.cityId.label,
-                dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : null
-              });
-            } else {
-              reject();
-            }
-          })
-        })
+        this.shodForm.validateForm(),
+        this.signForm.validateForm()
       ]).then(([values1, values2]) => {
         this.setState({loading: true});
         saveRepresentative({
@@ -138,28 +112,58 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           }
           this.setState({loading: false});
         });
-      })
+      }).catch(() => {});
     } else {
-      this.bankForm.props.form.validateFields((errors, values) => {
-        if (!errors) {
-          this.setState({loading: true});
-          saveBankInfo(values).then(data => {
-            if (data.res.code === Const.SUCCESS_CODE) {
-              message.success('Operate successful');
-            }
-            this.setState({loading: false});
-          });
-        }
-      });
+      this.bankForm.validateForm().then(values => {
+        this.setState({loading: true});
+        saveBankInfo(values).then(data => {
+          if (data.res.code === Const.SUCCESS_CODE) {
+            message.success('Operate successful');
+          }
+          this.setState({loading: false});
+        });
+      }).catch(() => {});
     }
   }
 
   onAudit = () => {
-    
+    const { typeOfBusiness, storeInfo } = this.state;
+    Promise.all([
+      this.basiForm.validateForm(),
+      typeOfBusiness === 1 ? this.shodForm.validateForm() : new Promise(resolve => resolve({})),
+      typeOfBusiness === 1 ? this.signForm.validateForm() : new Promise(resolve => resolve({})),
+      this.bankForm.validateForm()
+    ]).then(([values1, values2, values3, values4]) => {
+      this.setState({ loading: true });
+      submitForAudit({
+        [typeOfBusiness === 1 ? 'businessBasicRequest' : 'individualBasicRequest']: values1,
+        representativeRequest: typeOfBusiness === 1 ? { shareholder: values2, signatories: values3 } : null,
+        bankRequest: values4
+      }).then(data => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfull');
+          this.setState({
+            loading: false,
+            storeInfo: Object.assign({}, storeInfo, { adyenAuditState: 0 })
+          });
+        }
+      });
+    }).catch((step: string) => {
+      this.onTabChange(step);
+    });
+  }
+
+  showError = () => {
+    const { storeInfo: { errorList } } = this.state;
+    Modal.error({
+      title: 'errors',
+      content: <div style={{color:'red'}}>{errorList.map(err => <div>{err}</div>)}</div>,
+      okText: 'OK'
+    });
   }
 
   render() {
-    const { current, loading, typeOfBusiness } = this.state;
+    const { current, loading, typeOfBusiness, storeInfo: { adyenAuditState } } = this.state;
     return (
       <Spin spinning={loading}>
         <BreadCrumb />
@@ -169,9 +173,9 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               <Headline title="Store information" />
             </Col>
             <Col span={12} style={{textAlign:'right',paddingRight:20}}>
-              <Button type="danger">Submit for auditing</Button>
-              <Button type="link">Fail?</Button>
-              <div>You can submit Ayden account once fill all required fields</div>
+              {adyenAuditState > 1 && <Button type="danger" onClick={this.onAudit}>Submit for auditing</Button>}
+              {adyenAuditState === 2 && <Button type="link" onClick={this.showError}>Fail?</Button>}
+              {adyenAuditState > 1 && <div>You can submit Ayden account once fill all required fields</div>}
             </Col>
           </Row>
         </div>
@@ -188,7 +192,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               <SignatoriesForm wrappedComponentRef={formRef => this.signForm = formRef} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Bank information" key="3" forceRender>
-              <BankInformation isBusiness={typeOfBusiness === 1} wrappedComponentRef={formRef => this.bankForm = formRef} />
+              <BankInformation isBusiness={typeOfBusiness === 1} adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.bankForm = formRef} />
             </Tabs.TabPane>
           </Tabs>
         </div>

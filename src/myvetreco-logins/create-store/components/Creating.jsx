@@ -47,7 +47,7 @@ export default function Creating({userInfo,setStep}) {
           if(res.code === 'K-000000'){
             setClassText('finished');
             setTimeout(() => {
-              history.push('/login-admin');
+              history.push('/login');
             }, 3000);
           }
         })

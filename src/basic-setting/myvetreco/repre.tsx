@@ -33,6 +33,18 @@ class ShareHolder extends React.Component<any, any> {
     }
   };
 
+  validateForm = () => {
+    return new Promise((resolve, reject) => {
+      this.props.form.validateFields((errors, values) => {
+        if (!errors) {
+          resolve(values);
+        } else {
+          reject('2');
+        }
+      });
+    });
+  };
+
   render() {
     const { form: { getFieldDecorator }, form } = this.props;
     const formLayout = {
@@ -118,7 +130,7 @@ class ShareHolder extends React.Component<any, any> {
               <div>Maximum allowed size: 4 MB</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: true, message: 'Please upload supported document!' }]
+                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }]
               })(
                 <FileItem />
               )}
@@ -158,6 +170,23 @@ class Signatories extends React.Component<any, any> {
       cityName: cityObj.label
     };
     this.setState({ defaultOptions });
+  };
+
+  validateForm = () => {
+    return new Promise((resolve, reject) => {
+      this.props.form.validateFields((errors, values) => {
+        if (!errors) {
+          resolve({
+            ...values,
+            cityId: values.cityId.key,
+            city: values.cityId.label,
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
+          });
+        } else {
+          reject('2');
+        }
+      });
+    });
   };
 
   render() {
@@ -245,6 +274,16 @@ class Signatories extends React.Component<any, any> {
           <Col span={12}>
             <FormItem label="City" required>
               {getFieldDecorator('cityId', {
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      if (!value || !value.key) {
+                        callback('Please select city');
+                      }
+                      callback();
+                    }
+                  }
+                ],
                 initialValue: {key:'',value:'',label:''}
               })(
                 <DebounceSelect
@@ -285,7 +324,7 @@ class Signatories extends React.Component<any, any> {
               <div>Maximum allowed size: 4 MB</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: true, message: 'Please upload supported document!' }]
+                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }]
               })(
                 <FileItem />
               )}

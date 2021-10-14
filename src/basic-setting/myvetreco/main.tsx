@@ -1,7 +1,7 @@
 import React from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
-import { Tabs, Spin, Button, message } from 'antd';
-import { getStoreInfo, saveBasicInfo, saveRepresentative, saveBankInfo } from '../webapi';
+import { Tabs, Spin, Button, Row, Col, message } from 'antd';
+import { getStoreInfo, saveBasicInfo, saveRepresentative, saveBankInfo, submitForAudit } from '../webapi';
 import { BusinessBasicInformationForm, IndividualBasicInformationForm } from './basic';
 import { ShareHolderForm, SignatoriesForm } from './repre';
 import BankInformation from './bank';
@@ -154,13 +154,26 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
     }
   }
 
+  onAudit = () => {
+    
+  }
+
   render() {
     const { current, loading, typeOfBusiness } = this.state;
     return (
       <Spin spinning={loading}>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title="Store information" />
+          <Row>
+            <Col span={12}>
+              <Headline title="Store information" />
+            </Col>
+            <Col span={12} style={{textAlign:'right',paddingRight:20}}>
+              <Button type="danger">Submit for auditing</Button>
+              <Button type="link">Fail?</Button>
+              <div>You can submit Ayden account once fill all required fields</div>
+            </Col>
+          </Row>
         </div>
         <div className="container">
           <Tabs activeKey={current} onChange={this.onTabChange}>

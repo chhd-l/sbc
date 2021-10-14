@@ -69,3 +69,11 @@ export function saveBankInfo(params = {}) {
     body: JSON.stringify(params)
   });
 }
+
+//submit for auditing
+export function submitForAudit(params = {}) {
+  return Fetch<TResult>('/store/audit/submit-audit', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  })
+}

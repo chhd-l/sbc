@@ -122,6 +122,8 @@ class CustomerList extends React.Component<any, any> {
             );
           }}
         />
+        {/*TODO Product Type字段添加*/}
+        <Column title={'Product Type'} key="goodsType" dataIndex="goodsType" width={150} render={(goodsType) => (goodsType ? goodsType : '-')} />
         <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}

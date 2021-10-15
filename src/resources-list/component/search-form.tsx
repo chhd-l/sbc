@@ -116,7 +116,7 @@ export default class SearchForm extends React.Component<any, any>{
                       <FormattedMessage id="Resources.service_type" />
                     </p>
                   }
-                onChange={(value) =>this.handleSelectChange('serviceType', value ) }
+                onChange={(value) =>this.handleSelectChange('serviceTypeId', value ) }
                 >
                   {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
                 </SelectGroup>
@@ -134,7 +134,7 @@ export default class SearchForm extends React.Component<any, any>{
                       <FormattedMessage id="Resources.appointment_type" />
                     </p>
                   }
-                  onChange={(value) =>this.handleSelectChange('appointmentType', value ) }
+                  onChange={(value) =>this.handleSelectChange('appointmentTypeId', value ) }
                 >
                     {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
                 </SelectGroup>
@@ -152,10 +152,10 @@ export default class SearchForm extends React.Component<any, any>{
                       <FormattedMessage id="Resources.planned_status" />
                     </p>
                   }
-                  onChange={(value) =>this.handleSelectChange('plannedStatus', value ) }
+                  onChange={(value) =>this.handleSelectChange('arranged', value ) }
                 >
-                  <Option value='yes'>Yes</Option>
-                  <Option value='no'>No</Option>
+                  <Option value={1}>Yes</Option>
+                  <Option value={0}>No</Option>
                 </SelectGroup>
               </FormItem>
             </Col>

@@ -19,8 +19,17 @@ const ResourcesList = () => {
 
   useEffect(()=>{
     getResourcesPageLists()
+    getTypeDict()
   },[])
- 
+
+  const getTypeDict = async () => {
+    const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
+    const appointmentTypeRes = await webapi.goodsDict({ type: 'apprintment_type' })
+    const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
+    const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
+    console.log(serviceTypeDict,appointmentTypeDict,'===dict')
+  }
+
   const getResourcesPageLists = async () => {
     const {res} = await webapi.getResourcesList();
     console.log(res,'res===')

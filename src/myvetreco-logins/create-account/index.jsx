@@ -95,7 +95,7 @@ function CreateAccount({ form }) {
 
             <FormItem name="password" className="password">
               {getFieldDecorator('password', {
-                rules: [{required:true,message:RCi18n({id:'Login.password_vld'})}],
+                rules: [{required:true,pattern:/^(?=.*[a-z])(?=.*[A-Z])[^]{8,}$/,message:'Password should contain upper and lower case letters, at least 8 characters'}],
                 initialValue: ''
               })(
                 <Input.Password size="large" placeholder={RCi18n({id:'Login.password'})} />

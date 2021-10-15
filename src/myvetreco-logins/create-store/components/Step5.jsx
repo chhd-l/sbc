@@ -60,24 +60,24 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
-              <FormItem label="Payout Summary Label">
-                {getFieldDecorator('payoutSummaryLabel', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label="Debit Summary Label">
-                {getFieldDecorator('debitSummaryLabel', {
-                  initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
+            {/*<Col span={24}>*/}
+            {/*  <FormItem label="Payout Summary Label">*/}
+            {/*    {getFieldDecorator('payoutSummaryLabel', {*/}
+            {/*      initialValue: ''*/}
+            {/*    })(*/}
+            {/*      <Input size="large" />*/}
+            {/*    )}*/}
+            {/*  </FormItem>*/}
+            {/*</Col>*/}
+            {/*<Col span={24}>*/}
+            {/*  <FormItem label="Debit Summary Label">*/}
+            {/*    {getFieldDecorator('debitSummaryLabel', {*/}
+            {/*      initialValue: ''*/}
+            {/*    })(*/}
+            {/*      <Input size="large" />*/}
+            {/*    )}*/}
+            {/*  </FormItem>*/}
+            {/*</Col>*/}
             <Col span={12} className="align-item-right">
               <Button size="large" onClick={() => setStep(3)}>Back</Button>
             </Col>

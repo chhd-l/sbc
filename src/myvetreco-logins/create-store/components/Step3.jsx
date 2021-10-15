@@ -293,6 +293,16 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
+              <FormItem label="Sell to clinic" name="sellToClinic">
+                {getFieldDecorator('sellToClinic', {
+                  rules: [{ required: true, message: 'Please input Sell to clinic!' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
                 {getFieldDecorator('addressDetail', {
                   initialValue: ''

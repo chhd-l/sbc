@@ -1,6 +1,6 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
-import { login, cache, getRoutType } from 'qmkit';
+import { login, cache, getRoutType, Const } from 'qmkit';
 import { Row, Col, Spin } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
@@ -8,6 +8,8 @@ const role_Perscriber = require('../img/role-Perscriber.png');
 let switchedRouter = false;
 import { switchRouter } from '@/index';
 import { FormattedMessage } from 'react-intl';
+
+import MyvetrecoLoginForm from '../../myvetreco-logins/login';
 
 let LoginHome = (props) => {
   let { authState, authService } = useOktaAuth();
@@ -51,7 +53,7 @@ let LoginHome = (props) => {
         <Spin spinning={true}></Spin>
       </div>
     </div>
-  ) : (
+  ) : Const.SITE_NAME === 'MYVETRECO' ? (<MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />) : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>

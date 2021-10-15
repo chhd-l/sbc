@@ -136,7 +136,7 @@ export default class OrderMonitorList extends Component<any, any> {
       exceptionType: searchForm.exceptionType,
       orderNumber: searchForm.orderNumber,
       orderExportStatus: searchForm.orderExportStatus,
-      orderStatus:[searchForm.orderStatus]
+      orderStatus:searchForm.orderStatus?[searchForm.orderStatus]:[]
     }
     this.setState({
       currentSearchForm: searchForm

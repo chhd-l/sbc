@@ -21,13 +21,20 @@ class ShareHolder extends React.Component<any, any> {
     super(props);
   }
 
+  validateJobTitle = () => {
+    const { form } = this.props;
+    setTimeout(() => {
+      form.validateFields(['jobTitle'], { force: true });
+    });
+  };
+
   onChangePhoneNumber = (e) => {
     const { form } = this.props;
     if (e && !e.target.value.startsWith('+31')) {
       const temp = e.target.value;
       setTimeout(() => {
         form.setFieldsValue({
-          contactPhone: `+31${temp.replace(/^[+|+3|+31]/, '')}`
+          phoneNumber: `+31${temp.replace(/^[+|+3|+31]/, '')}`
         });
       });
     }
@@ -62,11 +69,11 @@ class ShareHolder extends React.Component<any, any> {
           <Col span={12}>
             <FormItem label="Shareholder type" required>
               {getFieldDecorator('shareholderType', {
-                initialValue: 1
+                initialValue: "1"
               })(
-              <Select>
-                <Option value={0}>Owner</Option>
-                <Option value={1}>Controller</Option>
+              <Select onChange={this.validateJobTitle}>
+                <Option value="0">Owner</Option>
+                <Option value="1">Controller</Option>
               </Select>
               )}
             </FormItem>
@@ -116,7 +123,7 @@ class ShareHolder extends React.Component<any, any> {
           <Col span={24}>
             <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>Only needed if shareholder type is controller</div>}>
               {getFieldDecorator('jobTitle', {
-                rules: [{ required: form.getFieldValue('shareholderType') === 1, message: 'Please input job title' }]
+                rules: [{ required: form.getFieldValue('shareholderType') === "1", message: 'Please input job title' }]
               })(
                 <Input />
               )}

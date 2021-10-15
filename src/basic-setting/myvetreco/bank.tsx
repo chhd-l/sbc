@@ -61,28 +61,6 @@ class BankInformation extends React.Component<BankFormProps, any> {
           </Col>
         </Row>
         <Row gutter={[24,12]}>
-          <Col span={12}>
-            <FormItem label="Payout Summary Label">
-              {getFieldDecorator('payoutSummaryLabel', {
-                initialValue: ''
-              })(
-              <Input />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={[24,12]}>
-          <Col span={12}>
-            <FormItem label="Debit Summary Label">
-              {getFieldDecorator('debitSummaryLabel', {
-                initialValue: ''
-              })(
-              <Input />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={[24,12]}>
           <Col span={24}>
             <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
               <div>You can upload Bank Statement, Letter from bank, Screenshot online banking environment</div>

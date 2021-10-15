@@ -28,6 +28,7 @@ const getOktaAppConfig = () => {
   } else if (host.indexOf('myvetreco') > -1) {
     return Object.assign({}, OKTA_APP_CONFIG, {
       REACT_APP_PRESCRIBER_CLIENT_ID: "0oabra5gsP9KS9cgX0x6",
+      REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
     });
   } else {
     return OKTA_APP_CONFIG;

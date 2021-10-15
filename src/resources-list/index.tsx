@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { BreadCrumb, Headline } from 'qmkit';
+import * as webapi from './webapi';
 import SearchForm from './component/search-form'
 import ListTable from './component/list'
 import BulkPlanningModal from './component/bulk-planning';
@@ -12,9 +13,18 @@ const styles = {
   }
 };
 const ResourcesList = () => {
+
   const [showBulkPlanningModal, setShowBulkPlanningModal] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
+  useEffect(()=>{
+    getResourcesPageLists()
+  },[])
+ 
+  const getResourcesPageLists = async () => {
+    const {res} = await webapi.getResourcesList();
+    console.log(res,'res===')
+  }
   // 列表复选框选择
   const listSelect = (selectedRowKeys) => {
     setSelectedRowKeys(selectedRowKeys)

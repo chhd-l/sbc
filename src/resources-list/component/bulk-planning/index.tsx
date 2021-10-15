@@ -8,7 +8,7 @@ import {
   Popconfirm,
   Icon,
   Divider, message,
-  Row, Col, Button, Select,TimePicker,
+  Row, Col, Button, Select, TimePicker,
   Checkbox
 } from 'antd';
 
@@ -18,6 +18,7 @@ import moment from 'moment';
 import { HighlightSpanKind } from '_@ts-morph_common@0.9.2@@ts-morph/common/lib/typescript';
 import form from '@/order-return-edit/components/form';
 import SetDayTable from '../set-day-table';
+import ServiceSetting from '../service-setting';
 
 const styles = {
   label: {
@@ -25,11 +26,11 @@ const styles = {
     textAlign: 'center'
   },
   title: {
-    display:'flex',
-    alignItems:'center',
-    marginTop:25,
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: 25,
     fontSize: 13,
-    fontWeight:600,
+    fontWeight: 600,
   },
 } as any;
 const { RangePicker } = DatePicker;
@@ -48,14 +49,14 @@ export default class BulkPlanningModal extends React.Component<any, any>{
       ruleNo: 0,
       count: 0,
       loading: false,
-      columns:[],
-      allDays:[0,1,2,3,4,5,6,7,8,9,10,11,12,13],
-      days:[],
-      daysList:[{
-        days:[],
+      columns: [],
+      allDays: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+      days: [],
+      daysList: [{
+        days: [],
         times: [{ startTime: '00:00', endTime: '23:59', sort: 1 }]
       }],
-     deliveryForm:{
+      deliveryForm: {
         deliveryOption: 1,
         city: [],
         rangeDays: 5,
@@ -74,7 +75,8 @@ export default class BulkPlanningModal extends React.Component<any, any>{
           }
         ]
       },
-      visible:props.visible,
+      planningSetCounts:[1],
+      visible: props.visible,
     }
   }
 
@@ -83,12 +85,12 @@ export default class BulkPlanningModal extends React.Component<any, any>{
     let days = this.state.allDays.map(item => _date.day(item).format('M.DD'));
     console.log(days, 'foremd')
     this.setState({
-      daysList:[{
+      daysList: [{
         days,
         times: [{ startTime: '00:00', endTime: '23:59', sort: 1 }]
       }]
-    },()=>{
-      console.log(this.state.daysList,'daysList')
+    }, () => {
+      console.log(this.state.daysList, 'daysList')
     })
 
 
@@ -171,12 +173,13 @@ export default class BulkPlanningModal extends React.Component<any, any>{
     onCancel();
   };
 
-  handleAddSetting =()=>{
+  handleAddSetting = () => {
 
   }
 
   render() {
     let allDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    const {planningSetCounts} = this.state;
     return (
       <Modal
         width={1100}
@@ -186,52 +189,9 @@ export default class BulkPlanningModal extends React.Component<any, any>{
         maskClosable={false}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
-        okText={ <FormattedMessage id="save" />}
+        okText={<FormattedMessage id="save" />}
       >
-        <div>
-          <Row>
-            <Col span={8}>
-              <SelectGroup
-                allowClear
-                // getPopupContainer={() => document.getElementById('page-content')}
-                // style={styles.wrapper}
-                label={
-                  <p style={styles.label}>
-                    <FormattedMessage id="Resources.service_type" />
-                  </p>
-                }
-                // showSearch
-                optionFilterProp="children"
-              // onChange={(value) => {
-              //   onFormFieldChange({ key: 'brandId', value });
-              // }}
-              >
-                <Option value='all'>all</Option>
-              </SelectGroup>
-            </Col>
-          </Row>
-          <Row style={styles.title}>
-            <Col span={3}>
-              <p>
-                <FormattedMessage id="Resources.set_by_day" />
-              </p>
-            </Col>
-            <Col span={2}>
-              <Button type="primary" onClick={this.handleAddSetting}>
-                <FormattedMessage id="Setting.add" />
-              </Button>
-            </Col>
-          </Row>
-          {this.state.deliveryForm.openDate.map((item, index) => (
-              <SetDayTable
-                // allSelectWeeks={allSelectWeeks}
-                openDate={item}
-                key={index}
-                // editOpenTable={editOpenTable}
-                // deleteOpenTable={deleteOpenTable}
-              />
-            ))}
-        </div>
+        <ServiceSetting addCounts={planningSetCounts}/>
       </Modal>
     );
   }

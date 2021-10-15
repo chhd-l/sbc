@@ -1107,13 +1107,17 @@ const routes = [
     asyncComponent: () => import('./Integration/ApiDocument')
   },
   {
-    path: '/resources-list',
+    path: '/resources-planning',
     asyncComponent: () => import('./resources-list')
   },
   {
     path: '/resources-setting/:id',
     asyncComponent: () => import('./resources-list/planning-setting')
-  }
+  },
+  {
+    path: '/schedular',
+    asyncComponent: () => import('./resources-list/schedular')
+  },
 ];
 
 const homeRoutes = [

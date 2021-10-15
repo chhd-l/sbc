@@ -6,6 +6,7 @@ import { BusinessBasicInformationForm, IndividualBasicInformationForm } from './
 import { ShareHolderForm, SignatoriesForm } from './repre';
 import BankInformation from './bank';
 import moment from 'moment';
+import { ThisExpression } from 'ts-morph';
 
 export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   basiForm: any;
@@ -88,7 +89,10 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   onSave = () => {
     const { current, typeOfBusiness } = this.state;
     if (current === '1') {
-      this.basiForm.validateForm().then(values => {
+      this.basiForm.validateForm(
+        typeOfBusiness === 1 ? () => { this.setState({loading: true}); } : null,
+        typeOfBusiness === 1 ? () => { this.setState({loading: false}); } : null
+      ).then(values => {
         this.setState({loading: true});
         saveBasicInfo(values, typeOfBusiness === 1).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
@@ -129,7 +133,10 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   onAudit = () => {
     const { typeOfBusiness, storeInfo } = this.state;
     Promise.all([
-      this.basiForm.validateForm(),
+      this.basiForm.validateForm(
+        typeOfBusiness === 1 ? () => { this.setState({loading: true}); } : null,
+        typeOfBusiness === 1 ? () => { this.setState({loading: false}); } : null
+      ),
       typeOfBusiness === 1 ? this.shodForm.validateForm() : new Promise(resolve => resolve({})),
       typeOfBusiness === 1 ? this.signForm.validateForm() : new Promise(resolve => resolve({})),
       this.bankForm.validateForm()

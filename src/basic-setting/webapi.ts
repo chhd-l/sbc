@@ -77,3 +77,13 @@ export function submitForAudit(params = {}) {
     body: JSON.stringify(params)
   })
 }
+
+//检查店铺名是否重复
+export function checkCompanyInfoExists(params) {
+  return Fetch<TResult>('/store/create/checkCompanyInfoExists',{
+    method: 'post',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

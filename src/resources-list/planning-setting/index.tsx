@@ -4,6 +4,7 @@ import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row,
 import { FormattedMessage } from 'react-intl';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import { SelectGroup } from 'qmkit';
+import * as webapi from '../webapi';
 import ServiceSetting from '../component/service-setting'
 import './index.less'
 
@@ -33,6 +34,31 @@ const optionTest = [{
 export default class PlanningSetting extends React.Component<any, any>{
   constructor(props) {
     super(props);
+    this.state={
+      serviceTypeDict:[],
+      appointmentTypeDict:[],
+      expertTypeDict:[]
+    }
+  }
+
+  componentDidMount() {
+    this.getTypeDict()
+  }
+
+  getTypeDict = async () => {
+    const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
+    const appointmentTypeRes = await webapi.goodsDict({ type: 'apprintment_type' })
+    const expertTypeRes = await webapi.goodsDict({ type: 'expert_type' })
+    
+    const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
+    const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
+    const expertTypeDict = expertTypeRes?.res?.context?.goodsDictionaryVOS || []
+    console.log(serviceTypeDict,appointmentTypeDict,'===dict')
+    this.setState({
+      serviceTypeDict,
+      appointmentTypeDict,
+      expertTypeDict
+    })
   }
 
   render() {
@@ -49,6 +75,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
+    const {serviceTypeDict, appointmentTypeDict, expertTypeDict} =this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
@@ -109,34 +136,26 @@ export default class PlanningSetting extends React.Component<any, any>{
             </FormItem>
           </Col>
           <Col span={14}>
-            <FormItem  label={ <FormattedMessage id="Resources.service_type" />}>
+            <FormItem label={ <FormattedMessage id="Resources.service_type" />}>
               {getFieldDecorator('serviceType', {
                 rules: [
                   {
                     required: true,
                   },
-                  // {
-                  //   min: 1,
-                  //   max: 20,
-                  //   message: '1-20 characters'
-                  // },
-                  // {
-                  //   validator: (rule, value, callback) => {
-                  //     QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
-                  //   }
-                  // }
                 ],
-                // onChange: this._editGoods.bind(this, 'goodsNo'),
+                // onChange: this.typeChange(value),
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
+                className="service-type-setting"
+                getPopupContainer={() => document.getElementsByClassName('service-type-setting')[0]}
                 >
-                  {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
+                  {serviceTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
                 </Select>)}
             </FormItem>
           </Col>
           <Col span={14}>
-            <FormItem  label={ <FormattedMessage id="Resources.expert_type" />}>
+            <FormItem label={ <FormattedMessage id="Resources.expert_type" />}>
               {getFieldDecorator('expertType', {
                 rules: [
                   {
@@ -157,13 +176,15 @@ export default class PlanningSetting extends React.Component<any, any>{
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
+                className="expert-type-setting"
+                getPopupContainer={() => document.getElementsByClassName('expert-type-setting')[0]}
                 >
-                  {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
+                  {expertTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
                 </Select>)}
             </FormItem>
           </Col>
           <Col span={14}>
-            <FormItem  label={ <FormattedMessage id="Resources.appointment_type" />}>
+            <FormItem label={ <FormattedMessage id="Resources.appointment_type" />}>
               {getFieldDecorator('appointmentType', {
                 rules: [
                   {
@@ -184,8 +205,10 @@ export default class PlanningSetting extends React.Component<any, any>{
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
+                className='appointment-type-setting'
+                getPopupContainer={() => document.getElementsByClassName('appointment-type-setting')[0]}
                 >
-                  {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
+                  {appointmentTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
                 </Select>)}
             </FormItem>
           </Col>
@@ -193,7 +216,6 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Form>
           <div className="availability-title">Availability:</div>
           <ServiceSetting/>
-         
         </div>
       </div>
     )

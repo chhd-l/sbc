@@ -31,10 +31,10 @@ const ServiceTypeOptionsMock = [{
 const format = 'HH:mm';
 const { Option } = Select;
 const FormItem = Form.Item;
-const ServiceSetting = ({ addCounts }) => {
+const ServiceSetting = ({ addCounts,serviceTypeDict }) => {
 
   const [showAddBtn, setShowAddBtn] = useState(false)
-  const [settingCounts, setSettingCounts] = useState(addCounts)
+  const [settingCounts, setSettingCounts] = useState(addCounts || [1])
 
   const [deliveryForm, setDeliveryForm] = useState({
     deliveryOption: 1,
@@ -92,7 +92,7 @@ const ServiceSetting = ({ addCounts }) => {
                 }
                 onChange={handleServiceType}
               >
-                {ServiceTypeOptionsMock.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)}
+                {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </SelectGroup>
             </Col>
             {showAddBtn && idx===0 ? <Col span={2} offset={1}>

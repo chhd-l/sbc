@@ -22,11 +22,11 @@ export default class List extends React.Component<any, any>{
     })
   }
 
-  handleChange = (page) => {
-    this.props.updateListData({
-      pageNum: page - 1,
-    });
-  }
+  // handleChange = (page) => {
+  //   this.props.updateListData({
+  //     pageNum: page - 1,
+  //   });
+  // }
 
   getColumns = () => {
     return [

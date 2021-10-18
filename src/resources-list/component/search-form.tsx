@@ -48,11 +48,10 @@ export default class SearchForm extends React.Component<any, any>{
         const params = Object.assign(this.state.formValues,{
           ...values
         })
-        console.log(params,'ppppppp')
           if (!err) {
               this.props.onSearch({
-                  pageNum: 0,
-                  pageSize: 10,
+                  // pageNum: 0,
+                  // pageSize: 10,
                   ...params,
               });
           }
@@ -63,7 +62,7 @@ export default class SearchForm extends React.Component<any, any>{
     let {
       getFieldDecorator,
     } = this.props.form;
-
+    const {serviceTypeDict,appointmentTypeDict} = this.props;
     return (
       <div>
         <Form
@@ -118,7 +117,7 @@ export default class SearchForm extends React.Component<any, any>{
                   }
                 onChange={(value) =>this.handleSelectChange('serviceTypeId', value ) }
                 >
-                  {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
+                  {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
                 </SelectGroup>
               </FormItem>
             </Col>
@@ -136,7 +135,7 @@ export default class SearchForm extends React.Component<any, any>{
                   }
                   onChange={(value) =>this.handleSelectChange('appointmentTypeId', value ) }
                 >
-                    {optionTest.map(item => <Option key={item.value}>{item.label}</Option>)}
+                    {appointmentTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
                 </SelectGroup>
               </FormItem>
             </Col>

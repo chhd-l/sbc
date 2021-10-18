@@ -180,6 +180,7 @@ export default class BulkPlanningModal extends React.Component<any, any>{
   render() {
     let allDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     const {planningSetCounts} = this.state;
+    const {serviceTypeDict} = this.props;
     return (
       <Modal
         width={1100}
@@ -191,7 +192,7 @@ export default class BulkPlanningModal extends React.Component<any, any>{
         onCancel={this.handleCancel}
         okText={<FormattedMessage id="save" />}
       >
-        <ServiceSetting addCounts={planningSetCounts}/>
+        <ServiceSetting addCounts={planningSetCounts} serviceTypeDict={serviceTypeDict}/>
       </Modal>
     );
   }

@@ -11,7 +11,7 @@ import { Fetch } from 'qmkit';
   arranged?: number
 };
 export const getResourcesList = (params={}) => {
-  return Fetch(`/resouceSetting/list`, {
+  return Fetch(`/resourceSetting/list`, {
     method: 'POST',
     body: JSON.stringify(params)
   });

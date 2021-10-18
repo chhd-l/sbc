@@ -96,7 +96,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:logoFileList,
@@ -152,7 +152,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadIconProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:iconFileList,

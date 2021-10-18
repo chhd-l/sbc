@@ -15,17 +15,17 @@ import './index.less';
 import Main from './main';
 import { ConfigProvider, Spin } from 'antd';
 import moment from 'moment';
-import 'moment/locale/zh-cn';
 import 'moment/locale/ru';
 import 'moment/locale/tr';
 import 'moment/locale/fr';
 import 'moment/locale/es';
+import 'moment/locale/de';
 import { IntlProvider } from 'react-intl';
 import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
 import configOkta from '../web_modules/qmkit/config-okta';
 
-moment.locale('zh-cn');
+//moment.locale('zh-cn');
 
 let localeLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
 (window as any).RCi18n = RCi18n;

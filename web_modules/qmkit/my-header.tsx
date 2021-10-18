@@ -33,7 +33,7 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
-import iconEengland from './images/icon/iconEengland.svg';
+import iconEngland from './images/icon/iconEengland.svg';
 import iconFrance from './images/icon/iconFrance.svg';
 import iconMexico from './images/icon/iconMexico.svg';
 import iconRussia from './images/icon/iconRussia.svg';
@@ -319,8 +319,8 @@ export default class MyHeader extends React.Component {
    * 123457909   法国
    * 123457910   美国
    * 123457911   土耳其
-   * 123457915   瑞典   缺失
-   * 123457916   英国   缺失
+   * 123457915   瑞典   缺失 TODO
+   * 123457916   英国
    **/
   getStoreIcon = (storeId) => {
 
@@ -331,6 +331,8 @@ export default class MyHeader extends React.Component {
       case '123457909': return  <Icon component={iconFrance} className='logo'/>;
       case '123457910': return  <Icon component={iconAmerica} className='logo'/>;
       case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      case '123457916': return  <Icon component={iconEngland} className='logo'/>;
+
       default: return  <IconFont className='logo' type='iconfangjian1' />;
     }
   }

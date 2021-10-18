@@ -28,6 +28,7 @@ const optionTest = [{
   value:'3',
 },]
 
+let AvailServiceType = [];
 
 // @ts-ignore
 @Form.create()
@@ -37,7 +38,9 @@ export default class PlanningSetting extends React.Component<any, any>{
     this.state={
       serviceTypeDict:[],
       appointmentTypeDict:[],
-      expertTypeDict:[]
+      expertTypeDict:[],
+      AvailServiceTypeDict:[],
+      AvailServiceTypeDisabled:true,
     }
   }
 
@@ -53,12 +56,22 @@ export default class PlanningSetting extends React.Component<any, any>{
     const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
     const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
     const expertTypeDict = expertTypeRes?.res?.context?.goodsDictionaryVOS || []
-    console.log(serviceTypeDict,appointmentTypeDict,'===dict')
     this.setState({
       serviceTypeDict,
       appointmentTypeDict,
       expertTypeDict
     })
+  }
+
+  handleSelectChange =(type,value)=>{
+    if(type == 'serviceTypeId') {
+     let avail =  this.state.serviceTypeDict.filter(item=>item.id === value.slice(-1).toString()) || []
+     AvailServiceType.push(avail?.[0])
+      this.setState({
+        AvailServiceTypeDict:AvailServiceType,
+        AvailServiceTypeDisabled:false
+      })
+    }
   }
 
   render() {
@@ -75,7 +88,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
-    const {serviceTypeDict, appointmentTypeDict, expertTypeDict} =this.state;
+    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict} =this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
@@ -143,7 +156,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                     required: true,
                   },
                 ],
-                // onChange: this.typeChange(value),
+                onChange: (value)=>{this.handleSelectChange('serviceTypeId', value ) },
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
@@ -172,7 +185,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                   //   }
                   // }
                 ],
-                // onChange: this._editGoods.bind(this, 'goodsNo'),
+                onChange: (value)=>{this.handleSelectChange('expertTypeId', value ) },
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
@@ -201,7 +214,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                   //   }
                   // }
                 ],
-                // onChange: this._editGoods.bind(this, 'goodsNo'),
+                onChange: (value)=>{this.handleSelectChange('appointmentTypeId', value ) },
                 // initialValue: goods.get('goodsNo')
               })(<Select
                 mode="multiple"
@@ -215,7 +228,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Row>
           </Form>
           <div className="availability-title">Availability:</div>
-          <ServiceSetting/>
+          <ServiceSetting serviceTypeDict={AvailServiceTypeDict} selectDisabled={AvailServiceTypeDisabled}/>
         </div>
       </div>
     )

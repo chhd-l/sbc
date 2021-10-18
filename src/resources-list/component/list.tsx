@@ -38,20 +38,20 @@ export default class List extends React.Component<any, any>{
       },
       {
         title: <FormattedMessage id="Resources.name" />,
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'employeeName',
+        key: 'employeeName',
         width: 230,
       },
       {
         title: <FormattedMessage id="Resources.service_type" />,
-        dataIndex: 'serviceTypeId',
-        key: 'serviceTypeId',
+        dataIndex: 'serviceTypeNames',
+        key: 'serviceTypeNames',
         width: 150,
       },
       {
         title: <FormattedMessage id="Resources.appointment_type" />,
-        dataIndex: 'appointmentTypeId',
-        key: 'appointmentTypeId',
+        dataIndex: 'appointmentTypeNames',
+        key: 'appointmentTypeNames',
         width: 150,
       },
       {
@@ -111,194 +111,12 @@ export default class List extends React.Component<any, any>{
       currentRecord,
     } = this.state;
     let columns = this.getColumns();
-    const _data = {
-      content: [{
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      }, {
-        email: 1,
-        name: 2,
-        serviceType: 3
-      },]
-    }
+
     return (
       <Table
         rowKey='goodsInfoId'
         // loading={loading}
-        dataSource={_data.content}
+        dataSource={this.props.resourceList}
         columns={columns}
         rowSelection={{
           onChange: (selectedRowKeys) => {

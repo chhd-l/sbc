@@ -18,6 +18,7 @@ const ResourcesList = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([])
   const [serviceTypeDict,setServiceTypeDict] = useState([])
   const [appointmentTypeDict,setAppointmentTypeDict] = useState([])
+  const [resourceList,setResourceList] = useState([])
 
   useEffect(()=>{
     getResourcesPageLists({})
@@ -35,7 +36,7 @@ const ResourcesList = () => {
 
   const getResourcesPageLists = async (params) => {
     const {res} = await webapi.getResourcesList(params);
-    console.log(res,'res===')
+    setResourceList(res?.context?.resourceVOList)
   }
   // 列表复选框选择
   const listSelect = (selectedRowKeys) => {
@@ -100,6 +101,7 @@ const ResourcesList = () => {
       </div>
       <div className="container">
         <ListTable
+        resourceList={resourceList}
           onSelectChange={(selectedRowKeys) => listSelect(selectedRowKeys)}
           // updateListData={changePageNum}
         />

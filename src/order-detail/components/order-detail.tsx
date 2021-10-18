@@ -266,14 +266,14 @@ class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text,
-        width: '11%'
+        width: '9%'
       },
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
         dataIndex: 'externalSkuNo',
         key: 'externalSkuNo',
         render: (text) => text,
-        width: '11%'
+        width: '9%'
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
@@ -323,14 +323,14 @@ class OrderDetailTab extends React.Component<any, any> {
         ),
         dataIndex: 'num',
         key: 'num',
-        width: '9%',
+        width: '6%',
         render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
-        width: '9%',
+        width: '8%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
           record.subscriptionStatus === 1 &&
@@ -363,7 +363,7 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
-        width: '9%',
+        width: '8%',
         render: (row) => (
           <span>
             {SYSTEM_GET_CONFIG}
@@ -376,7 +376,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '9%',
+        width: '8%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -392,7 +392,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Subscriptionumber" />,
         dataIndex: 'subscriptionSourceList',
         key: 'subscriptionSourceList',
-        width: '11%',
+        width: '9%',
         render: (text, record) =>
           record.subscriptionSourceList && record.subscriptionSourceList.length > 0
             ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
@@ -423,6 +423,30 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       }
     ];
+
+    if(storeId===123457907){
+      //ru
+      columns.splice(7,0,{
+        title: <FormattedMessage id="Order.RegulationDiscount" />,
+        width: '8%',
+        render: (row) => (
+          <span>
+            {SYSTEM_GET_CONFIG}
+            {row.price && row.price.toFixed(2)}
+          </span>
+        )
+      },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => (
+            <span>
+            {SYSTEM_GET_CONFIG}
+              {row.price && row.price.toFixed(2)}
+          </span>
+          )
+        })
+    }
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 
@@ -631,6 +655,7 @@ class OrderDetailTab extends React.Component<any, any> {
             dataSource={tradeItems.concat(gifts, giftList)}
             pagination={false}
             bordered
+            rowClassName={()=>'order-detail-row'}
           />
 
           <Modal

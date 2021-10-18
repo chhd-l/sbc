@@ -33,7 +33,7 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
-import iconEengland from './images/icon/iconEengland.svg';
+import iconEngland from './images/icon/iconEengland.svg';
 import iconFrance from './images/icon/iconFrance.svg';
 import iconMexico from './images/icon/iconMexico.svg';
 import iconRussia from './images/icon/iconRussia.svg';
@@ -74,12 +74,13 @@ export default class MyHeader extends React.Component {
   componentDidMount() {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
       this.getLanguage()
+      // 获取切换店铺的下拉数据
+      this.getUserStoreList();
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
-        // 获取切换店铺的下拉数据
-        // this.getUserStoreList();
       }
     }
+
   }
 
   async getTaskList() {
@@ -314,10 +315,12 @@ export default class MyHeader extends React.Component {
    *
    * 123456858   墨西哥
    * 123457907   俄罗斯
-   * 123457908   德国  // 缺失
+   * 123457908   德国
    * 123457909   法国
-   * 123457910   美国  // 缺失
+   * 123457910   美国
    * 123457911   土耳其
+   * 123457915   瑞典   缺失 TODO
+   * 123457916   英国
    **/
   getStoreIcon = (storeId) => {
 
@@ -328,6 +331,8 @@ export default class MyHeader extends React.Component {
       case '123457909': return  <Icon component={iconFrance} className='logo'/>;
       case '123457910': return  <Icon component={iconAmerica} className='logo'/>;
       case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      case '123457916': return  <Icon component={iconEngland} className='logo'/>;
+
       default: return  <IconFont className='logo' type='iconfangjian1' />;
     }
   }
@@ -609,27 +614,30 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
-              {/* 暂时隐藏 */}
-              {/*<div className='headerRight-shop'>*/}
-              {/*    <div style={{ paddingLeft: 30}}>*/}
-              {/*      <AuthWrapper functionName='f_home_switch_store'>*/}
-              {/*        {*/}
-              {/*          isExistStoreList*/}
-              {/*              ? (*/}
-              {/*                  <Dropdown*/}
-              {/*                      placement={'bottomRight'}*/}
-              {/*                      overlay={shopMenu}*/}
-              {/*                      trigger={['click']}*/}
-              {/*                      overlayClassName='shop-list-box'*/}
-              {/*                  >*/}
-              {/*                    <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />*/}
-              {/*                  </Dropdown>*/}
-              {/*              )*/}
-              {/*              : null*/}
-              {/*        }*/}
-              {/*      </AuthWrapper>*/}
-              {/*    </div>*/}
-              {/*</div>*/}
+              {
+                Const.SITE_NAME !== 'MYVETRECO' ? (
+                  <div className='headerRight-shop'>
+                    <div style={{ paddingLeft: 30}}>
+                      <AuthWrapper functionName='f_home_switch_store'>
+                        {
+                          isExistStoreList
+                            ? (
+                              <Dropdown
+                                placement={'bottomRight'}
+                                overlay={shopMenu}
+                                trigger={['click']}
+                                overlayClassName='shop-list-box'
+                              >
+                                <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                              </Dropdown>
+                            )
+                            : null
+                        }
+                      </AuthWrapper>
+                    </div>
+                  </div>
+                ): null
+              }
               <div >
                 <div>
                   <Dropdown overlay={menu} trigger={['click']}>

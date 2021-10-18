@@ -23,7 +23,7 @@ export default class FileItem extends React.Component<any, any> {
       onChange: (info) => {
         const { file } = info;
         if(file.status !== 'removed'){
-          onChange([file]);
+          onChange([file.name]);
         }
         if (file.status === 'done') {
           if(

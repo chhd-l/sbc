@@ -11,7 +11,6 @@ export default class FileItem extends React.Component<any, any> {
 
   render() {
     const { value, onChange } = this.props;
-    console.log('receive value', value);
     const uploadOption = {
       headers:{
         Accept: 'application/json',
@@ -22,7 +21,6 @@ export default class FileItem extends React.Component<any, any> {
       accept:'.jpg,.jpeg,.png,.pdf',
       action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
       onChange: (info) => {
-        console.log('xxxxx', info.file);
         let fileList = [...info.fileList];
         fileList = fileList.slice(-1);
         fileList = fileList.map(file => {

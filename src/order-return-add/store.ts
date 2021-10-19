@@ -327,10 +327,10 @@ export default class AppStore extends Store {
     param = param.set('returnItems', tradeItems);
 
     // 只保存退货赠品数量大于0的赠品
-    const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
-    if (gifts.size > 0) {
-      param = param.set('returnItems', tradeItems.push(gifts));
-    }
+    // const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
+    // if (gifts.size > 0) {
+    //   param = param.set('returnItems', tradeItems.push(gifts));
+    // }
 
     // 退款金额，退货是商品总额，退款是应付金额
     console.log(data.get('isReturn'));

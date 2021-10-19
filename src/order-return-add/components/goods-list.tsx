@@ -4,9 +4,9 @@ import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
 import { noop, ValidConst, QMFloat, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-
-import './goods-list-style.css';
 import Amount from './amount';
+import './goods-list-style.css';
+
 const FormItem = Form.Item;
 
 @Relax
@@ -120,7 +120,11 @@ export default class GoodsList extends React.Component<any, any> {
         width: 100,
         className: 'centerItem',
         render: (_text, rowInfo: any, index) => {
-          return <FormItem>
+          return itemType == 1 ? (
+            <div style={{ display: 'inline-block', width: '90px' }}>
+              {rowInfo.num || 0}
+            </div>
+          ) : (<FormItem>
               {getFieldDecorator(rowInfo.skuId + index, {
                 initialValue: rowInfo.num,
                 rules: [
@@ -152,7 +156,7 @@ export default class GoodsList extends React.Component<any, any> {
                 />
               )}
               <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
-            </FormItem>
+            </FormItem>)
         }
       },
       {

@@ -293,6 +293,7 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
+  { path: '/service-product-add', asyncComponent: () => import('./service-product-add/main') },
 
   // goods-regular-edit > 审核通过的商品编辑
   {
@@ -304,6 +305,12 @@ const routes = [
   {
     path: '/goods-bundle-edit/:gid',
     asyncComponent: () => import('./goods-add/main')
+  },
+
+  //service goods edit
+  {
+    path: '/goods-service-edit/:gid',
+    asyncComponent: () => import('./service-product-add/main')
   },
   //Related product
   {
@@ -923,6 +930,18 @@ const routes = [
   {
     path: '/product-category',
     asyncComponent: () => import('./product-category')
+  },
+  {
+    path: '/product-dictionary',
+    asyncComponent: () => import('./product-dictionary')
+  },
+  {
+    path: '/product-dictionary-add',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
+    path: '/product-dictionary-edit/:id',
+    asyncComponent: () => import('./product-dictionary-update')
   },
   {
     path: '/product-price',

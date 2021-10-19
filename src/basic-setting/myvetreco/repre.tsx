@@ -5,6 +5,7 @@ import { cityList } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 import FileItem from './fileitem';
 import moment from 'moment';
+import { SupportedDocumentUtil } from './main';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -44,7 +45,10 @@ class ShareHolder extends React.Component<any, any> {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
         if (!errors) {
-          resolve(values);
+          resolve({
+            ...values,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+          });
         } else {
           reject('2');
         }
@@ -137,7 +141,8 @@ class ShareHolder extends React.Component<any, any> {
               <div>Maximum allowed size: 4 MB</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }]
+                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }],
+                initialValue: []
               })(
                 <FileItem />
               )}
@@ -187,7 +192,8 @@ class Signatories extends React.Component<any, any> {
             ...values,
             cityId: values.cityId.key,
             city: values.cityId.label,
-            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
           });
         } else {
           reject('2');

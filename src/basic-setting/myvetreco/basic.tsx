@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import FileItem from './fileitem';
 import { FormComponentProps } from 'antd/es/form';
 import moment from 'moment';
+import { SupportedDocumentUtil } from './main';
 
 interface BasicFormProps extends FormComponentProps {
   onChangeName: Function;
@@ -279,7 +280,8 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
             ...values,
             cityId: values.cityId.key,
             city: values.cityId.label,
-            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
           });
         } else {
           reject('1');

@@ -339,9 +339,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem label="Introduction"
-                        name="introduction">
-                <Input.TextArea size="large" />
+              <FormItem label="Introduction" name="introduction">
+                {getFieldDecorator('introduction', {
+                  initialValue: ''
+                })(<Input.TextArea size="large" />)}
               </FormItem>
             </Col>
             <Col span={24}>

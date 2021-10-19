@@ -11,36 +11,29 @@ export default class FileItem extends React.Component<any, any> {
 
   render() {
     const { value, onChange } = this.props;
+    console.log('receive value', value);
     const uploadOption = {
       headers:{
         Accept: 'application/json',
         Authorization: 'Bearer ' + ((window as any).token || ''),
       },
       name: 'uploadFile',
-      fileList: value && value.length ? value.map(item => ({ uid: -1, name: item, url: item, status: 'done' })) : [],
+      fileList: value,
       accept:'.jpg,.jpeg,.png,.pdf',
       action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
       onChange: (info) => {
-        const { file } = info;
-        if(file.status !== 'removed'){
-          onChange([file.name]);
-        }
-        if (file.status === 'done') {
-          if(
-              file.status == 'done' &&
-              file.response &&
-              file.response.code &&
-              file.response.code !== Const.SUCCESS_CODE
-          ){
-            message.error(info.file.response.message);
-            onChange([]);
-          }else{
-            onChange(file.response.length > 0 && file.response[0] ? [file.response[0]] : []);
+        console.log('xxxxx', info.file);
+        let fileList = [...info.fileList];
+        fileList = fileList.slice(-1);
+        fileList = fileList.map(file => {
+          if (file.response && file.response.code && file.response.code !== Const.SUCCESS_CODE) {
+            message.error(`${file.name} upload failed`);
+          } else if (file.response && file.response[0]) {
+            file.url = file.response[0];
           }
-        } else if (file.status === 'error') {
-          message.error(`${file.name} file upload failed.`);
-          onChange([]);
-        }
+          return file;
+        }).filter(file => file.status !== 'error');
+        onChange(fileList);
       },
       beforeUpload: (file)=>{
         let fileName = file.name.toLowerCase();
@@ -56,9 +49,6 @@ export default class FileItem extends React.Component<any, any> {
           message.error('file format error');
           return false;
         }
-      },
-      onRemove: (promise)=>{
-        onChange([]);
       }
     };
 

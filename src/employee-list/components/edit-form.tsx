@@ -144,7 +144,7 @@ export default class EditForm extends React.Component<any, any> {
           //生日
           birthday: null,
           //头像
-          avatar: ''
+          employeeImage: ''
         };
         this._store.initEmployeeByEmail({
           ...employeeForm,

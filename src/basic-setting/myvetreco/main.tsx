@@ -37,7 +37,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           signatories: {}
         },
         bankRequest: {},
-        adyenAuditState: 3, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
+        adyenAuditState: 0, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
         errorList: []
       }
     }

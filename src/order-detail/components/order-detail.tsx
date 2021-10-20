@@ -306,7 +306,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
         key: 'petsName',
-        width: '7%',
+        width: '6%',
         render: (text, record) => (
           <a onClick={() => this._openPetDetails(record.petsInfo)}>
             {record.petsInfo ? record.petsInfo.petsName : ''}
@@ -315,7 +315,7 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: '',
-        width: '6%',
+        width: storeId === 123457907?'8%':'6%',
         render: (text, record) => {
           return record.isGift ? null : (
             <a onClick={() => this._openMoreFields(record)}>

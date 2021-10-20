@@ -11,6 +11,7 @@ import { SupportedDocumentUtil } from './main';
 
 interface BasicFormProps extends FormComponentProps {
   onChangeName: Function;
+  adyenAuditState: number;
 }
 
 const FormItem = Form.Item;

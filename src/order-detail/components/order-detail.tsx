@@ -205,7 +205,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
-          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
+          const productName = text === 'individualization' ? record.petsName + "'s" + text : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -274,7 +274,7 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.Subtotal" />,
         width: '8%',
-        render: (row) => <span>{this._handlePriceFormat(row.price)}</span>
+        render: (row) => <span>{this._handlePriceFormat(storeId === 123457907?row.adaptedSubtotalPrice:row.price)}</span>
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
@@ -315,7 +315,7 @@ class OrderDetailTab extends React.Component<any, any> {
       },
       {
         title: '',
-        width: storeId === 123457907?'8%':'6%',
+        width:  '8%',
         render: (text, record) => {
           return record.isGift ? null : (
             <a onClick={() => this._openMoreFields(record)}>
@@ -326,24 +326,21 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       }
     ];
-
-    if (storeId === 123457907) {
-      //ru
-      columns.splice(
-        7,
-        0,
-        {
-          title: <FormattedMessage id="Order.RegulationDiscount" />,
-          width: '8%',
-          render: (row) => <span>{this._handlePriceFormat(row.regulationDiscount)}</span>
-        },
-        {
-          title: <FormattedMessage id="Order.RealSubtotal" />,
-          width: '7%',
-          render: (row) => <span>{this._handlePriceFormat(row.adaptedSubtotalPrice)}</span>
-        }
-      );
-    }
+    //ru
+    columns.splice(
+      7,
+      0,
+      {
+        title: <FormattedMessage id="Order.RegulationDiscount" />,
+        width: '8%',
+        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
+      },
+      {
+        title: <FormattedMessage id="Order.RealSubtotal" />,
+        width: '7%',
+        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
+      }
+    );
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 
@@ -641,7 +638,6 @@ class OrderDetailTab extends React.Component<any, any> {
             </div>
           </div>
         </div>
-
 
         <Row gutter={30}>
           {/*deliveryAddress panel*/}

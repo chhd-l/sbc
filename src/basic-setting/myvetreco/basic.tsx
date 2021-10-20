@@ -317,7 +317,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
           <Col span={12}>
             <FormItem label="First name">
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name' }],
+                rules: [{ required: true, message: 'Please input first name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
                 <Input
                   onChange={(e) => {
@@ -330,7 +330,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
           <Col span={12}>
             <FormItem label="Last name">
               {getFieldDecorator('lastName', {
-                rules:[{ required: true, message: 'Please input last name' }],
+                rules:[{ required: true, message: 'Please input last name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
                 <Input
                   onChange={(e) => {

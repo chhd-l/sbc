@@ -4,6 +4,7 @@ import { Radio, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
 import SortFields from './sort-fields';
 import { getAddressSetting } from '../../validation-setting/webapi';
 import PostalCodeModal from '../component/PostalCodeModal';
+import AddressSettingModal from '../component/AddressSettingModal';
 
 const Option = Select.Option;
 const INPUT_TYPE = [
@@ -30,6 +31,7 @@ export default class Fields extends React.Component<any, any> {
       apiName: '',
       isEditPostalCode: false,
       visiblePostalCode: false,
+      visibleAddressSetting: false
     };
   }
 
@@ -78,9 +80,9 @@ export default class Fields extends React.Component<any, any> {
   };
 
   onSortManualEnd = (sortList) => {
-    this.setState({
-      manu
-    });
+    // this.setState({
+    //   manu
+    // });
   };
 
   handlePostalCode = (id:number, field: any, checked: boolean) => {
@@ -102,6 +104,18 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
+  handleAddressSettingModalOpen = () => {
+    this.setState({
+      visibleAddressSetting: true
+    });
+  };
+
+  handleAddressSettingModalClose = () => {
+    this.setState({
+      visibleAddressSetting: false
+    });
+  };
+
   render() {
     const {
       visible,
@@ -109,6 +123,7 @@ export default class Fields extends React.Component<any, any> {
       apiName,
       isEditPostalCode,
       visiblePostalCode,
+      visibleAddressSetting
     } = this.state;
     const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange, onSortEnd } = this.props;
     const columns = [
@@ -251,6 +266,16 @@ export default class Fields extends React.Component<any, any> {
         )
       },
       {
+        title: 'Validation',
+        dataIndex: 'validationFlag',
+        key: 'validationFlag',
+        render: (_, record) => (
+          record.fieldName === 'Address1'
+            ? <a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"></a>
+            : null
+        )
+      },
+      {
         title: 'Max length',
         dataIndex: 'maxLength',
         key: 'c5'
@@ -352,6 +377,11 @@ export default class Fields extends React.Component<any, any> {
                 onCancel={this.handlePostalCodeCancel}
               />
             )
+            : null
+        }
+        {
+          visibleAddressSetting
+            ? (<AddressSettingModal visible={visibleAddressSetting} onCancel={this.handleAddressSettingModalClose} />)
             : null
         }
       </div>

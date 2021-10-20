@@ -122,7 +122,7 @@ class ReturnOrderForm extends React.Component<any, any> {
       tradeDetail,
       canApplyPrice
     } = this.props.relaxProps;
-    
+
 
     const { getFieldDecorator } = this.props.form;
     let images = this.props.relaxProps.images.toJS();
@@ -233,16 +233,18 @@ class ReturnOrderForm extends React.Component<any, any> {
             htmlType="submit"
             size="large"
             onClick={() => {
-              this.props.form.validateFieldsAndScroll(null, (errs) => {
-                //如果校验通过
-                if (!errs) {
-                  add();
-                } else {
-                  this.setState({
-                    flushState: Math.random()
-                  });
-                }
-              });
+              if(this._checkReturnNum()){
+                this.props.form.validateFieldsAndScroll(null, (errs) => {
+                  //如果校验通过
+                  if (!errs) {
+                    add();
+                  } else {
+                    this.setState({
+                      flushState: Math.random()
+                    });
+                  }
+                });
+              }
             }}
           >
             <FormattedMessage id="Order.save" />
@@ -388,6 +390,22 @@ class ReturnOrderForm extends React.Component<any, any> {
       return false;
     }
   };
+  /**
+   * 检查是否只退了赠品没退商品的情况
+   */
+  _checkReturnNum=()=>{
+    // const {tradeDetail}=this.props.relaxProps;
+    // // 退货商品数量大于0的商品
+    // const tradeItems = tradeDetail.get( 'tradeItems').filter((item) => item.get('num') > 0);
+    // // 退货赠品数量大于0的赠品
+    // const gifts = tradeDetail.get('gifts').filter((item) => item.get('num') > 0);
+    // // 如果所有商品的退货数量都为0但是gift的数量有不为0的
+    // if (tradeItems.size == 0&&gifts.size>0) {
+    //   message.error(RCi18n({id: 'Order.returnOrder.checkReturnNum'}));
+    //   return false;
+    // }
+    return true;
+  }
 }
 export default injectIntl(ReturnOrderForm)
 const styles = {

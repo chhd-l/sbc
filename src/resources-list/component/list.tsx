@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
+import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { AntIcon } from 'biz';
 // import SkuMappingModal from '../SkuMappingModal';
@@ -69,9 +70,9 @@ export default class List extends React.Component<any, any>{
         className: 'SkuMappingList-action',
         render: (text, record) => (
           <span>
-            <a onClick={() => this.handleEdit(record)}>
-              <AntIcon className='SkuMappingList-action-icon' type='iconEdit' />
-            </a>
+            <Link to={`/resources-setting/${record.employeeId}`}>
+            <AntIcon className='SkuMappingList-action-icon' type='iconEdit' />
+            </Link>
           </span>
         ),
       },

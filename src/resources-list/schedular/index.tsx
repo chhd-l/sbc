@@ -69,6 +69,7 @@ const columns = [{
 
 
 const Schedular = () => {
+  const [showAllPerson,setShowAllPerson]=useState(false)
   const changePersonName = (value) => {
     console.log(value, 'value==')
   }
@@ -115,7 +116,7 @@ const Schedular = () => {
         {/* </div> */}
       </div>
       <div className="container">
-        <div className="schedular-time-table">
+        {!showAllPerson?  <div className="schedular-time-table">
           <div className='time-planning-wrap'>
             <div className="time-hour"><span>11</span></div>
             <ul className="time-minute">
@@ -205,7 +206,99 @@ const Schedular = () => {
             </ul>
           </div>
         </div>
-      </div>
+       :
+          <div className="schedular-time-table">
+          <div className='time-planning-wrap'>
+            <div className="time-hour"><span>11</span></div>
+            <ul className="time-minute">
+              <li><span>00</span></li>
+              <li><span>15</span></li>
+              <li><span>30</span></li>
+              <li><span>45</span></li>
+            </ul>
+            <ul className="planning-content">
+              <li> </li>
+              <li> </li>
+              <li className="block-item">
+                <span>Blocked 11:30-11:45</span>
+              </li>
+              <li className="appointed-item">
+                <span> Appointed 11:45-12:00</span>
+              </li>
+            </ul>
+          </div>
+          <div className='time-planning-wrap'>
+            {/* <div></div> */}
+            <div className="time-hour"><span>12</span></div>
+            <ul className="time-minute">
+              <li><span>00</span></li>
+              <li><span>15</span></li>
+              <li><span>30</span></li>
+              <li><span>45</span></li>
+            </ul>
+            <ul className="planning-content">
+              <li> </li>
+              <li> </li>
+              <li className="block-item">
+                <span>Blocked 11:30-11:45</span>
+              </li>
+              <li> </li>
+            </ul>
+          </div>
+          <div className='time-planning-wrap'>
+            <div className="time-hour"><span>13</span></div>
+            <ul className="time-minute">
+              <li><span>00</span></li>
+              <li><span>15</span></li>
+              <li><span>30</span></li>
+              <li><span>45</span></li>
+            </ul>
+            <ul className="planning-content">
+              <li> </li>
+              <li> </li>
+              <li className="block-item">
+                <span>Blocked 11:30-11:45</span>
+              </li>
+              <li></li>
+            </ul>
+          </div>
+          <div className='time-planning-wrap'>
+            <div className="time-hour"><span>14</span></div>
+            <ul className="time-minute">
+              <li><span>00</span></li>
+              <li><span>15</span></li>
+              <li><span>30</span></li>
+              <li><span>45</span></li>
+            </ul>
+            <ul className="planning-content">
+              <li> </li>
+              <li> </li>
+              <li className="block-item">
+                <span>Blocked 11:30-11:45</span>
+              </li>
+              <li></li>
+            </ul>
+          </div>
+          <div className='time-planning-wrap'>
+            <div className="time-hour"><span>15</span></div>
+            <ul className="time-minute">
+              <li><span>00</span></li>
+              <li><span>15</span></li>
+              <li><span>30</span></li>
+              <li><span>45</span></li>
+            </ul>
+            <ul className="planning-content">
+              <li> </li>
+              <li> </li>
+              <li className="block-item">
+                <span>Blocked 11:30-11:45</span>
+              </li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
+        }
+       </div>
     </>
   )
 }

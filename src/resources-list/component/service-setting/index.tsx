@@ -31,10 +31,11 @@ const ServiceTypeOptionsMock = [{
 const format = 'HH:mm';
 const { Option } = Select;
 const FormItem = Form.Item;
-const ServiceSetting = ({ addCounts,serviceTypeDict }) => {
+const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
 
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [settingCounts, setSettingCounts] = useState(addCounts || [1])
+  const [changeData,setChangeData]= useState({})
 
   const [deliveryForm, setDeliveryForm] = useState({
     deliveryOption: 1,
@@ -69,6 +70,7 @@ const ServiceSetting = ({ addCounts,serviceTypeDict }) => {
       setShowAddBtn(false)
     setSettingCounts([1])
     }
+    
   }
 
   // 新增服务类型和setDay
@@ -90,6 +92,7 @@ const ServiceSetting = ({ addCounts,serviceTypeDict }) => {
                     <FormattedMessage id="Resources.service_type" />
                   </p>
                 }
+                disabled={selectDisabled}
                 onChange={handleServiceType}
               >
                 {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}

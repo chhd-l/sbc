@@ -7,6 +7,7 @@ import { SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
 import ServiceSetting from '../component/service-setting'
 import './index.less'
+import { async } from '_@antv_x6@1.26.2@@antv/x6/lib/registry/marker/async';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -28,7 +29,7 @@ const optionTest = [{
   value:'3',
 },]
 
-let AvailServiceType = [];
+let AvailServiceType = [{id:'all',name:'all'}];
 
 // @ts-ignore
 @Form.create()
@@ -41,18 +42,21 @@ export default class PlanningSetting extends React.Component<any, any>{
       expertTypeDict:[],
       AvailServiceTypeDict:[],
       AvailServiceTypeDisabled:true,
+      settingDetailData:{},
+      saveDetailData:{}
     }
   }
 
   componentDidMount() {
     this.getTypeDict()
+    this.getDetailData()
   }
 
   getTypeDict = async () => {
     const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
     const appointmentTypeRes = await webapi.goodsDict({ type: 'apprintment_type' })
     const expertTypeRes = await webapi.goodsDict({ type: 'expert_type' })
-    
+
     const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
     const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
     const expertTypeDict = expertTypeRes?.res?.context?.goodsDictionaryVOS || []
@@ -63,15 +67,62 @@ export default class PlanningSetting extends React.Component<any, any>{
     })
   }
 
-  handleSelectChange =(type,value)=>{
-    if(type == 'serviceTypeId') {
-     let avail =  this.state.serviceTypeDict.filter(item=>item.id === value.slice(-1).toString()) || []
-     AvailServiceType.push(avail?.[0])
+  // 获取当前详情数据
+  getDetailData = async() =>{
+    const employeeId = this.props.match.params?.id
+    const {res} = await webapi.findByEmployeeId({employeeId})
+    const data = res?.context?.resourceSetting
+    this.setState({
+      settingDetailData: data,
+      saveDetailData: {
+        id: data.id,
+        employeeId:data.employeeId,
+      }
+    })
+
+
+  }
+
+  saveResourceData = async()=>{
+    await webapi.saveOrUpdateResource({})
+  }
+
+  handleSelectChange = (type, value) => {
+    if (type == 'serviceTypeId') {
+      let avail = this.state.serviceTypeDict.filter(item => item.id === value.slice(-1).toString()) || []
+      AvailServiceType.push(avail?.[0])
       this.setState({
-        AvailServiceTypeDict:AvailServiceType,
-        AvailServiceTypeDisabled:false
+        AvailServiceTypeDict: AvailServiceType,
+        AvailServiceTypeDisabled: false
       })
     }
+    // const values = Object.assign(this.state.saveDetailData, {
+    //   [type]: value
+    // })
+    // this.setState({
+    //   saveDetailData: values
+    // })
+  }
+
+  handleSaveBtn = ()=>{
+
+  }
+
+  saveSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      const params = Object.assign(this.state.saveDetailData,{
+        ...values
+      })
+        // if (!err) {
+        //     this.props.onSearch({
+        //         // pageNum: 0,
+        //         // pageSize: 10,
+        //         ...params,
+        //     });
+        // }
+        console.log(params,'ffff=')
+    });
   }
 
   render() {
@@ -88,7 +139,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
-    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict} =this.state;
+    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,AvailServiceTypeDisabled,settingDetailData} =this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
@@ -99,7 +150,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           <Form
           className="planning-setting-form"
           {...formItemLayout}
-            // onSubmit={this.handleSubmit}
+            onSubmit={this.saveSubmit}
           >
           <Row >
               <Col span={14}>
@@ -121,7 +172,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                   // }
                 ],
                 // onChange: this._editGoods.bind(this, 'goodsNo'),
-                // initialValue: goods.get('goodsNo')
+                initialValue: settingDetailData?.account
               })(<Input disabled/>)}
             </FormItem>
           </Col>
@@ -132,19 +183,9 @@ export default class PlanningSetting extends React.Component<any, any>{
                   {
                     required: true,
                   },
-                  // {
-                  //   min: 1,
-                  //   max: 20,
-                  //   message: '1-20 characters'
-                  // },
-                  // {
-                  //   validator: (rule, value, callback) => {
-                  //     QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
-                  //   }
-                  // }
                 ],
                 // onChange: this._editGoods.bind(this, 'goodsNo'),
-                // initialValue: goods.get('goodsNo')
+                initialValue: settingDetailData?.name
               })(<Input disabled/>)}
             </FormItem>
           </Col>
@@ -174,16 +215,6 @@ export default class PlanningSetting extends React.Component<any, any>{
                   {
                     required: true,
                   },
-                  // {
-                  //   min: 1,
-                  //   max: 20,
-                  //   message: '1-20 characters'
-                  // },
-                  // {
-                  //   validator: (rule, value, callback) => {
-                  //     QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
-                  //   }
-                  // }
                 ],
                 onChange: (value)=>{this.handleSelectChange('expertTypeId', value ) },
                 // initialValue: goods.get('goodsNo')
@@ -226,9 +257,17 @@ export default class PlanningSetting extends React.Component<any, any>{
             </FormItem>
           </Col>
           </Row>
-          </Form>
           <div className="availability-title">Availability:</div>
           <ServiceSetting serviceTypeDict={AvailServiceTypeDict} selectDisabled={AvailServiceTypeDisabled}/>
+          <Row>
+            <Col span={2} offset={9}>
+            <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
+            </Col>
+            <Col span={2} >
+            <Button type="primary"><FormattedMessage id="cancel" /></Button>
+            </Col>
+          </Row>
+          </Form>
         </div>
       </div>
     )

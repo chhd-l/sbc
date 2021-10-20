@@ -26,3 +26,23 @@ export const goodsDict = (type) =>{
     body: JSON.stringify(type)
   });
 }
+
+/**
+ * 编辑单条数据时查询resource信息
+ */
+ export const findByEmployeeId = (params) =>{
+  return Fetch("/resourceSetting/findByEmployeeId", {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+/**
+ * 保存单条resource信息
+ */
+ export const saveOrUpdateResource = (params) =>{
+  return Fetch(`/resourceSetting/saveOrUpdate`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

@@ -4,9 +4,9 @@ import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
 import { noop, ValidConst, QMFloat, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-
-import './goods-list-style.css';
 import Amount from './amount';
+import './goods-list-style.css';
+
 const FormItem = Form.Item;
 
 @Relax
@@ -124,8 +124,7 @@ export default class GoodsList extends React.Component<any, any> {
             <div style={{ display: 'inline-block', width: '90px' }}>
               {rowInfo.num || 0}
             </div>
-          ) : (
-            <FormItem>
+          ) : (<FormItem>
               {getFieldDecorator(rowInfo.skuId + index, {
                 initialValue: rowInfo.num,
                 rules: [
@@ -153,12 +152,11 @@ export default class GoodsList extends React.Component<any, any> {
                 <InputNumber
                   min={0}
                   max={rowInfo.canReturnNum}
-                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
+                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId,itemType)}
                 />
               )}
               <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
-            </FormItem>
-          );
+            </FormItem>)
         }
       },
       {
@@ -168,7 +166,7 @@ export default class GoodsList extends React.Component<any, any> {
         render: (rowInfo) => {
           // if (itemType == 1) {
           //   return <div>${(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
-          // } 
+          // }
           // else {
           //   return this._getRowTotalPrice(rowInfo);
           // }
@@ -182,10 +180,11 @@ export default class GoodsList extends React.Component<any, any> {
   /**
    * 修改数量
    */
-  _editGoodsNum = (skuId: string, returnNum) => {
+  _editGoodsNum = (skuId: string,itemType, returnNum) => {
+    console.log(skuId,returnNum,itemType)
     const { editGoodsNum } = this.props.relaxProps;
 
-    editGoodsNum(skuId, returnNum || 0);
+    editGoodsNum(skuId, returnNum || 0,itemType);
   };
 
   /**

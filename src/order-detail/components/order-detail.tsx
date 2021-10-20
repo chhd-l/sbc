@@ -1,28 +1,24 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
+import { Col, Form, Input, Modal, Row, Table, Tooltip } from 'antd';
 import {
   AuthWrapper,
   Const,
   noop,
   cache,
-  util,
   getOrderStatusValue,
   getFormatDeliveryDateStr,
   RCi18n,
   checkAuth
 } from 'qmkit';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
-
 import moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PetItem from '@/customer-details/component/pet-item';
-
-import './style.less';
 import OrderMoreFields from './order_more_field';
-import details from '@/subscription-plan-update/components/details';
-import { add } from '@/groupon-add/webapi';
+import './style.less';
+import { Consignee, Invoice } from '@/order-detail/components/type';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -30,7 +26,7 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
-const showRealStock = false&&checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
+const showRealStock = false && checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
 
 /**
  * 拒绝表单，只为校验体验
@@ -38,7 +34,6 @@ const showRealStock = false&&checkAuth('f_order_show_realtime_stock'); //增加�
 class RejectForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
-
     return (
       <Form>
         <FormItem>
@@ -52,7 +47,6 @@ class RejectForm extends React.Component<any, any> {
                 max: 100,
                 message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
-              // { validator: this.checkComment }
             ]
           })(
             <Input.TextArea
@@ -70,7 +64,6 @@ class RejectForm extends React.Component<any, any> {
       callback();
       return;
     }
-
     if (value.length > 100) {
       callback(new Error((window as any).RCi18n({ id: 'Order.100charactersLimitTip' })));
       return;
@@ -114,7 +107,6 @@ class OrderDetailTab extends React.Component<any, any> {
     onAudit: noop,
     confirm: noop,
     retrial: noop,
-
     orderRejectModalVisible: 'orderRejectModalVisible',
     remedySellerRemark: noop,
     setSellerRemark: noop,
@@ -138,19 +130,6 @@ class OrderDetailTab extends React.Component<any, any> {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
-    let orderSource = detail.get('orderSource');
-    let orderType = '';
-    if (orderSource == 'WECHAT') {
-      orderType = 'H5 Order';
-    } else if (orderSource == 'APP') {
-      orderType = 'APP Order';
-    } else if (orderSource == 'PC') {
-      orderType = 'PC Order';
-    } else if (orderSource == 'LITTLEPROGRAM') {
-      orderType = '小程序订单';
-    } else {
-      orderType = '代客下单';
-    }
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
     //订阅赠品信息
     let giftList = detail.get('subscriptionPlanGiftList')
@@ -167,7 +146,6 @@ class OrderDetailTab extends React.Component<any, any> {
       };
       return tempGift;
     });
-
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
     gifts = gifts
@@ -180,70 +158,17 @@ class OrderDetailTab extends React.Component<any, any> {
 
     //收货人信息
     const consignee = detail.get('consignee')
-      ? (detail.get('consignee').toJS() as {
-          detailAddress: string;
-          name: string;
-          phone: string;
-          countryId: string;
-          city: string;
-          province: string;
-          cityId: number;
-          address: string;
-          detailAddress1: string;
-          detailAddress2: string;
-          rfc: string;
-          postCode: string;
-          firstName: string;
-          lastName: string;
-          comment: string;
-          entrance: string;
-          apartment: string;
-          area: string;
-          timeSlot: string;
-          deliveryDate: string;
-          workTime: string;
-        } | null)
+      ? (detail.get('consignee').toJS() as Consignee | null)
       : null;
 
     //发票信息
-    const invoice = detail.get('invoice')
-      ? (detail.get('invoice').toJS() as {
-          open: boolean; //是否需要开发票
-          type: number; //发票类型
-          title: string; //发票抬头
-          projectName: string; //开票项目名称
-          generalInvoice: IMap; //普通发票
-          specialInvoice: IMap; //增值税专用发票
-          address: string;
-          address1: string;
-          address2: string;
-          contacts: string; //联系人
-          phone: string; //联系方式
-          provinceId: number;
-          cityId: number;
-          province: string;
-          countryId: number;
-          // city:string;
-          // province:string;
-          firstName: string;
-          lastName: string;
-          postCode: string;
-          city: string;
-          comment: string;
-          entrance: string;
-          apartment: string;
-          area: string;
-        } | null)
-      : null;
+    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : null;
 
-    //附件信息
-    const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
     //交易状态
     const tradeState = detail.get('tradeState');
 
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
-    const discount = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 1);
     tradeItems.forEach((tradeItems) => {
       if (tradeItems.isFlashSaleGoods) {
         tradeItems.levelPrice = tradeItems.price;
@@ -252,7 +177,6 @@ class OrderDetailTab extends React.Component<any, any> {
     let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
     const installmentPrice = tradePrice.installmentPrice;
 
-    const SYSTEM_GET_CONFIG = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG);
     const deliverWay = detail.get('deliverWay');
     const deliveryMethod =
       deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
@@ -266,14 +190,14 @@ class OrderDetailTab extends React.Component<any, any> {
         dataIndex: 'skuNo',
         key: 'skuNo',
         render: (text) => text,
-        width: '11%'
+        width: '9%'
       },
       {
         title: <FormattedMessage id="Order.externalSKuCode" />,
         dataIndex: 'externalSkuNo',
         key: 'externalSkuNo',
         render: (text) => text,
-        width: '11%'
+        width: '9%'
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
@@ -281,8 +205,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
-          const productName =
-            text === 'individualization' ? record.petsName + '\'s '+text : text;
+          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -304,17 +227,6 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'specDetails',
         width: '8%'
       },
-      // {
-      //   title: 'Price',
-      //   dataIndex: 'levelPrice',
-      //   key: 'levelPrice',
-      //   render: (levelPrice) => (
-      //     <span>
-      //       {SYSTEM_GET_CONFIG}
-      //       {levelPrice && levelPrice.toFixed(2)}
-      //     </span>
-      //   )
-      // },
       {
         title: showRealStock ? (
           <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
@@ -323,60 +235,52 @@ class OrderDetailTab extends React.Component<any, any> {
         ),
         dataIndex: 'num',
         key: 'num',
-        width: '9%',
+        width: '6%',
         render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
         dataIndex: 'originalPrice',
         key: 'originalPrice',
-        width: '9%',
+        width: '8%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
           record.subscriptionStatus === 1 &&
           record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
-                {SYSTEM_GET_CONFIG}
-                {record.subscriptionPrice.toFixed(
+                {this._handlePriceFormat(
+                  record.subscriptionPrice,
                   detail.get('subscriptionType') === 'Individualization' ? 4 : 2
                 )}
               </span>
               <br />
               <span style={{ textDecoration: 'line-through' }}>
-                {SYSTEM_GET_CONFIG}
-                {originalPrice &&
-                  originalPrice.toFixed(
-                    detail.get('subscriptionType') === 'Individualization' ? 4 : 2
-                  )}
+                {this._handlePriceFormat(
+                  originalPrice,
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
               </span>
             </div>
           ) : (
             <span>
-              {SYSTEM_GET_CONFIG}
-              {originalPrice &&
-                originalPrice.toFixed(
-                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
-                )}
+              {this._handlePriceFormat(
+                originalPrice,
+                detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+              )}
             </span>
           )
       },
       {
         title: <FormattedMessage id="Order.Subtotal" />,
-        width: '9%',
-        render: (row) => (
-          <span>
-            {SYSTEM_GET_CONFIG}
-            {row.price && row.price.toFixed(2)}
-            {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
-          </span>
-        )
+        width: '8%',
+        render: (row) => <span>{this._handlePriceFormat(row.price)}</span>
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '9%',
+        width: '8%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -392,13 +296,12 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Subscriptionumber" />,
         dataIndex: 'subscriptionSourceList',
         key: 'subscriptionSourceList',
-        width: '11%',
+        width: '9%',
         render: (text, record) =>
           record.subscriptionSourceList && record.subscriptionSourceList.length > 0
             ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
             : null
       },
-
       {
         title: <FormattedMessage id="Order.petName" />,
         dataIndex: 'petsName',
@@ -424,27 +327,38 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
 
+    if (storeId === 123457907) {
+      //ru
+      columns.splice(
+        7,
+        0,
+        {
+          title: <FormattedMessage id="Order.RegulationDiscount" />,
+          width: '8%',
+          render: (row) => <span>{this._handlePriceFormat(row.regulationDiscount)}</span>
+        },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => <span>{this._handlePriceFormat(row.adaptedSubtotalPrice)}</span>
+        }
+      );
+    }
+
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 
     return (
       <div className="orderDetail">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            marginBottom: 20,
-            justifyContent: 'space-between'
-          }}
-        >
+        <div className="display-flex direction-row justify-between mb-20">
           <label style={styles.greenText}>
             <FormattedMessage
               id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
             />
           </label>
-
           {this._renderBtnAction(tid)}
         </div>
         <Row gutter={30}>
+          {/*order panel*/}
           <Col span={12}>
             <div className="headBox">
               <h4>
@@ -500,6 +414,7 @@ class OrderDetailTab extends React.Component<any, any> {
               </Row>
             </div>
           </Col>
+          {/*PetOwner panel*/}
           <Col span={12}>
             <div className="headBox">
               <h4>
@@ -518,6 +433,8 @@ class OrderDetailTab extends React.Component<any, any> {
             </div>
           </Col>
         </Row>
+
+        {/*Subscription panel*/}
         {detail.get('subscribeId') ||
         detail.get('clinicsId') ||
         firstTradeItems.recommendationId ? (
@@ -616,21 +533,14 @@ class OrderDetailTab extends React.Component<any, any> {
           </Row>
         ) : null}
 
-        <div
-          style={{
-            display: 'flex',
-            marginTop: 20,
-            marginBottom: 20,
-            flexDirection: 'column',
-            wordBreak: 'break-word'
-          }}
-        >
+        <div className="display-flex mb-20 mt-20 direction-column word-break-break">
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={columns}
             dataSource={tradeItems.concat(gifts, giftList)}
             pagination={false}
             bordered
+            rowClassName={() => 'order-detail-row'}
           />
 
           <Modal
@@ -652,6 +562,7 @@ class OrderDetailTab extends React.Component<any, any> {
               <OrderMoreFields data={this.state.moreData} />
             </Row>
           </Modal>
+
           <Modal
             title={<FormattedMessage id="PetOwner.PetInformation" />}
             width={1100}
@@ -672,46 +583,20 @@ class OrderDetailTab extends React.Component<any, any> {
             </Row>
           </Modal>
 
+          {/*订单相关价格 panel*/}
           <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
-
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.Productamount" />}:</span>
-                <strong>
-                  {SYSTEM_GET_CONFIG}
-                  {(tradePrice.goodsPrice || 0).toFixed(2)}
-                </strong>
+                <strong>{this._handlePriceFormat(tradePrice.goodsPrice)}</strong>
               </label>
-
-              {/* {discount && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
-                  <strong>
-                    -{SYSTEM_GET_CONFIG}
-                    {discount.discounts.toFixed(2)}
-                  </strong>
-                </label>
-              )} */}
-
-              {/* {tradePrice.firstOrderOnThePlatformDiscountPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>First Order Discount:</span>
-                  <strong>
-                    -{SYSTEM_GET_CONFIG}
-                    {tradePrice.firstOrderOnThePlatformDiscountPrice.toFixed(2)}
-                  </strong>
-                </label>
-              ) : null} */}
 
               {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (
                     <label style={styles.priceItem as any}>
                       <span style={styles.name}>{promotion.marketingName}</span>
-                      <strong>
-                        -{SYSTEM_GET_CONFIG}
-                        {(promotion.discountPrice || 0).toFixed(2)}
-                      </strong>
+                      <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
                     </label>
                   ))
                 : null}
@@ -721,51 +606,35 @@ class OrderDetailTab extends React.Component<any, any> {
                   <span style={styles.name}>
                     <FormattedMessage id="Order.subscriptionDiscount" />:
                   </span>
-                  <strong>
-                    -{SYSTEM_GET_CONFIG}
-                    {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
-                  </strong>
+                  <strong>-{this._handlePriceFormat(tradePrice.subscriptionDiscountPrice)}</strong>
                 </label>
               ) : null}
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
-                <strong>
-                  {SYSTEM_GET_CONFIG}
-                  {(tradePrice.deliveryPrice || 0).toFixed(2)}
-                </strong>
+                <strong>{this._handlePriceFormat(tradePrice.deliveryPrice)}</strong>
               </label>
               {tradePrice.freeShippingFlag ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     {<FormattedMessage id="Order.shippingFeesDiscount" />}:{' '}
                   </span>
-                  <strong>
-                    -{SYSTEM_GET_CONFIG}
-                    {(tradePrice.freeShippingDiscountPrice || 0).toFixed(2)}
-                  </strong>
+                  <strong>-{this._handlePriceFormat(tradePrice.freeShippingDiscountPrice)}</strong>
                 </label>
               ) : null}
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
-                  <strong>
-                    {SYSTEM_GET_CONFIG}
-                    {(tradePrice.taxFeePrice || 0).toFixed(2)}
-                  </strong>
+                  <strong>{this._handlePriceFormat(tradePrice.taxFeePrice)}</strong>
                 </label>
               ) : null}
 
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>{<FormattedMessage id="Order.Total" />}: </span>
                 <strong>
-                  {SYSTEM_GET_CONFIG}
-                  {(tradePrice.totalPrice || 0).toFixed(2)}
+                  {this._handlePriceFormat(tradePrice.totalPrice)}
                   {installmentPrice && installmentPrice.additionalFee
-                    ? ' +(' +
-                      SYSTEM_GET_CONFIG +
-                      (installmentPrice.additionalFee || 0).toFixed(2) +
-                      ')'
+                    ? ' +(' + this._handlePriceFormat(installmentPrice.additionalFee) + ')'
                     : null}
                 </strong>
               </label>
@@ -773,7 +642,9 @@ class OrderDetailTab extends React.Component<any, any> {
           </div>
         </div>
 
+
         <Row gutter={30}>
+          {/*deliveryAddress panel*/}
           <Col span={12}>
             <div className="headBox" style={{ height: 250 }}>
               <h4>
@@ -931,6 +802,7 @@ class OrderDetailTab extends React.Component<any, any> {
               </Row>
             </div>
           </Col>
+          {/*billingAddress panel*/}
           {storeId !== 123457907 ? (
             <Col span={12}>
               <div className="headBox" style={{ height: 220 }}>
@@ -1050,39 +922,19 @@ class OrderDetailTab extends React.Component<any, any> {
     );
   }
 
+  _handlePriceFormat(price, num = 2) {
+    return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (price || 0).toFixed(num);
+  }
+
   //刷新商品实时库存
   _refreshRealtimeStock = async (tid: string) => {
-    // this.setState({ tableLoading: true });
     const { refreshGoodsRealtimeStock } = this.props.relaxProps;
     await refreshGoodsRealtimeStock(tid);
     this.setState({ tableLoading: false });
   };
 
-  //附件
-  _renderEncloses(encloses) {
-    if (encloses.size == 0 || encloses[0] === '') {
-      return <span>{<FormattedMessage id="none" />}</span>;
-    }
-
-    return encloses.map((v, k) => {
-      return (
-        <Popover
-          key={'pp-' + k}
-          placement="topRight"
-          title={''}
-          trigger="click"
-          content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}
-        >
-          <a href="#">
-            <img key={k} style={styles.attachment} src={v.get('url')} />
-          </a>
-        </Popover>
-      );
-    });
-  }
-
   _renderBtnAction(tid: string) {
-    const { detail, verify, onDelivery } = this.props.relaxProps;
+    const { detail, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
@@ -1093,38 +945,8 @@ class OrderDetailTab extends React.Component<any, any> {
     if (flowState === 'INIT' || flowState === 'AUDIT') {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {payState === 'NOT_PAID' &&
-            // <AuthWrapper functionName="edit_order_f_001">
-            //   <Tooltip placement="top" title="Modify">
-            //     <a
-            //       style={styles.pr20}
-            //       onClick={() => {
-            //         verify(tid);
-            //       }}
-            //     >
-            //       Modify
-            //     </a>
-            //   </Tooltip>
-            // </AuthWrapper>
-            null}
           {flowState === 'AUDIT' && (
             <div>
-              {payState === 'PAID' || payState === 'UNCONFIRMED'
-                ? null
-                : // <AuthWrapper functionName="fOrderList002">
-                  //   <Tooltip placement="top" title="Re-review">
-                  //     <a
-                  //       onClick={() => {
-                  //         this._showRetrialConfirm(tid);
-                  //       }}
-                  //       href="javascript:void(0)"
-                  //       style={styles.pr20}
-                  //     >
-                  //       Re-review
-                  //     </a>
-                  //   </Tooltip>
-                  // </AuthWrapper>
-                  null}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
                   <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
@@ -1135,9 +957,7 @@ class OrderDetailTab extends React.Component<any, any> {
                         onDelivery();
                       }}
                       className="iconfont iconbtn-shipping"
-                    >
-                      {/*{<FormattedMessage id="Order.ship" />}*/}
-                    </a>
+                    />
                   </Tooltip>
                 </AuthWrapper>
               )}
@@ -1161,9 +981,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   onDelivery();
                 }}
                 className="iconfont iconbtn-shipping"
-              >
-                {/*{<FormattedMessage id="Order.ship" />}*/}
-              </a>
+              />
             </Tooltip>
           </AuthWrapper>
         </div>

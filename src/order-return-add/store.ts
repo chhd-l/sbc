@@ -49,7 +49,7 @@ export default class AppStore extends Store {
 
     if (isReturn) {
       let orderReturnListRes = await fetchOrderReturnList(tid);
-     
+
       if (orderReturnListRes.res && orderReturnListRes.res['context']) {
         returnOrderList = orderReturnListRes.res['context'];
       }
@@ -123,10 +123,10 @@ export default class AppStore extends Store {
   /**
    * 修改数量
    */
-  editGoodsNum = (skuId: string, value: number) => {
+  editGoodsNum = (skuId: string, value: number,itemType:number|null) => {
     this.transaction(() => {
       // 1.修改退货商品数量
-      this.dispatch('tradeActor: editGoodsNum', { skuId, value });
+      this.dispatch('tradeActor: editGoodsNum', { skuId, value,itemType });
       // 2.判断是否更新勾选的赠品,以及赠品数量(若修改数量的sku已被勾选,则计算并更新赠品数量)
       const skuIndex = this.state()
         .get('tradeDetail')
@@ -326,9 +326,15 @@ export default class AppStore extends Store {
 
     param = param.set('returnItems', tradeItems);
 
+    // 只保存退货赠品数量大于0的赠品
+    // const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
+    // if (gifts.size > 0) {
+    //   param = param.set('returnItems', tradeItems.push(gifts));
+    // }
+
     // 退款金额，退货是商品总额，退款是应付金额
     console.log(data.get('isReturn'));
-    
+
     let totalPrice = data.get('isReturn')
       ? tradeItems
         .map((sku) => {
@@ -385,8 +391,8 @@ export default class AppStore extends Store {
       // if (data.get('isOnLine')) {
         let title = RCi18n({id: 'Order.refundableAmountTips'}) + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data.get('canApplyPrice')
         let content = RCi18n({id: 'Order.refundableAmountTips2'})
-        let okText=RCi18n({id: 'Order.btnConfirm'}) 
-        let cancelText = RCi18n({id: 'Order.btnCancel'}) 
+        let okText=RCi18n({id: 'Order.btnConfirm'})
+        let cancelText = RCi18n({id: 'Order.btnCancel'})
         Modal.warning({
           title: title,
           content: content,
@@ -394,7 +400,7 @@ export default class AppStore extends Store {
           cancelText: cancelText
         });
         return;
-      // } 
+      // }
       // else {
       //   let onAdd = this.onAdd;
       //   // 线下，给出提示

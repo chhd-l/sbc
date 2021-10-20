@@ -335,12 +335,12 @@ class OrderDetailTab extends React.Component<any, any> {
         {
           title: <FormattedMessage id="Order.RegulationDiscount" />,
           width: '8%',
-          render: (row) => <span>{this._handlePriceFormat(row.price)}</span>
+          render: (row) => <span>{this._handlePriceFormat(row.regulationDiscount)}</span>
         },
         {
           title: <FormattedMessage id="Order.RealSubtotal" />,
           width: '7%',
-          render: (row) => <span>{this._handlePriceFormat(row.price)}</span>
+          render: (row) => <span>{this._handlePriceFormat(row.adaptedSubtotalPrice)}</span>
         }
       );
     }

@@ -17,6 +17,7 @@ import DetailList from './list';
 import ProductTooltip from './productTooltip';
 import { cache, history, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import GoodsModal from './selected-sku-modal';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -40,6 +41,7 @@ export default class ChooseProducts extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      onProductselect:Function
       recommendParams:IMap,
       getGoodsInfoPage: Function
       settlement: IMap;
@@ -60,6 +62,7 @@ export default class ChooseProducts extends React.Component<any, any> {
     recommendParams:'recommendParams',
     settlement: 'settlement',
     setName: 'setName',
+    onProductselect: noop,
     productselect:'productselect',
     savepetsRecommendParams: noop,
     onSharing: noop,
@@ -125,13 +128,25 @@ export default class ChooseProducts extends React.Component<any, any> {
       onChangeStep(3)
     }, 300);
   }
+  selectProduct=(select)=>{
+    const {
+      onProductselect,
+      productselect
+    } = this.props.relaxProps;
+
+    onProductselect(select);
+    this.setState({
+      visible:false
+    })
+  }
   render() {
     const {
       loading,
-      onChangeStep
+      onChangeStep,
+      productselect,
     } = this.props.relaxProps;
-
-
+    let _productselect=productselect.toJS()
+    let selectedSkuIds=_productselect.map(item=>item.goodsInfoId)
     return (
       <div style={styles.main}>
      
@@ -169,11 +184,17 @@ export default class ChooseProducts extends React.Component<any, any> {
                     </div>
 </Spin>
         {this.state.visible == true ? (
-          <ProductTooltip
-            onCancelBackFun={() => this.showProduct(false)}
-            visible={this.state.visible}
-            showModal={this.showProduct}
-          />
+
+          <GoodsModal selectedRows={_productselect} selectedSkuIds={selectedSkuIds}  onCancelBackFun={()=>{
+            this.setState({
+              visible:false
+            })
+          }}  onOkBackFun={(e,select)=>{this.selectProduct(select)}} visible={this.state.visible}></GoodsModal>
+          // <ProductTooltip
+          //   onCancelBackFun={() => this.showProduct(false)}
+          //   visible={this.state.visible}
+          //   showModal={this.showProduct}
+          // />
         ) : (
           <React.Fragment />
         )}

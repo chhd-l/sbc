@@ -123,8 +123,8 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
           <Column
             title={RCi18n({id:'Prescriber.SPU'})}
-            dataIndex="goods.goodsNo"
-            key="goods.goodsNo"
+            dataIndex="goodsNo"
+            key="goodsNo"
             width="20%"
             //ellipsis
           />

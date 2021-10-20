@@ -116,7 +116,7 @@ export function fetchFindById(param = {}) {
 }
 
 export function fetchproductTooltip(param={}) {
-  return Fetch<TResult>(`/felinReco/products`/*'/recommendation/listGoodsInfo'*/, {
+  return Fetch<TResult>(`/goods/skus`/*'/recommendation/listGoodsInfo'*/, {
     method: 'POST',
     body: JSON.stringify(param)
   });
@@ -191,3 +191,11 @@ export function fetchFelinRecoProducts(param = {}) {
       method: 'POST'
     });
    }
+
+
+   export function fetchlistGoodsInfo(param) {
+    return Fetch<TResult>('/goodsInfos/bundelPage', {
+      method: 'POST',
+      body: JSON.stringify(param)
+    });
+  }

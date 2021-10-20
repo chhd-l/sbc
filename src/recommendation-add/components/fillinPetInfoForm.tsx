@@ -338,7 +338,7 @@ class FillinPetInfoForm extends Component {
             <Spin spinning={loading}>
                 <Form onSubmit={this.next}>
                     <Row gutter={20}>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Date' })}>
                                 {getFieldDecorator('fillDate', {
                                     initialValue: moment(recommendParams?.fillDate ?? null, 'YYYY-MM-DD'),
@@ -346,21 +346,21 @@ class FillinPetInfoForm extends Component {
                                 })(<DatePicker style={{ width: '100%' }} disabled={recommendParams.felinRecoId?true:false}/>)}
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Expert name' })}>
                                 {getFieldDecorator('expert', {
                                     initialValue: recommendParams?.expert ?? '',
                                 })(<Input disabled />)}
                             </Form.Item>
                         </Col>
-                        <Col span={6}>
+                        {/* <Col span={6}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.pour' })}>
                                 {getFieldDecorator('consumerName', {
                                     initialValue: appointmentVO?.consumerName ?? '',
                                 })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
-                        </Col>
-                        <Col span={6} style={{ textAlign: 'center' }}>
+                        </Col> */}
+                        <Col span={8} style={{ textAlign: 'center' }}>
                             {!funType && <div >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span>{(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}</span>

@@ -6,7 +6,7 @@ import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
 import FillInPetInfoActor from './actor/fillin-pet-info'
 import moment from 'moment';
-
+import { fromJS, Set } from 'immutable';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -148,36 +148,47 @@ export default class AppStore extends Store {
 
   getGoodsInfoPage = async () => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchproductTooltip();
-    if ((res as any).code == Const.SUCCESS_CODE) {
-      let goodsInfoList = (res as any).context.goodsInfoList;
-      this.dispatch('goods:infoPage', goodsInfoList)
-      // let goods = this.state().get('goodsQuantity')
-      let goods = this.state().get('recommendParams').get('goodsQuantity')
-      let obj = {}, productSelect = []
-      goodsInfoList.map(item => {
-        obj[item.goodsInfoNo] = item
-      })
-      goods.toJS().map(item => {
-        let goodsInfoWeight: any = 0, goodsInfoUnit = (obj[item.goodsInfoNo]?.goodsInfoUnit ?? '').toLowerCase();
-        obj[item.goodsInfoNo].goodsInfoWeight = obj[item.goodsInfoNo]?.goodsInfoWeight ?? 0
-        if (goodsInfoUnit === 'g') {
-          goodsInfoWeight = item.quantity * obj[item.goodsInfoNo].goodsInfoWeight
-        } else if (goodsInfoUnit === 'kg') {
-          let d: any = (item.quantity * obj[item.goodsInfoNo].goodsInfoWeight) / 1000
-          goodsInfoWeight = parseInt(d)
-        }
 
-        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity, goodsInfoWeight })
-      })
-      this.onProductselect(productSelect)
-    }
+    let goods = this.state().get('recommendParams').get('goodsQuantity')
+
+     const list=await Promise.all(['86xx39244834699636'].map(async(item)=>{
+     let {res}=await  webapi.fetchproductTooltip({likeGoodsInfoNo:item})
+      if ((res as any).code == Const.SUCCESS_CODE) {
+        res = (res as any).context;
+        res['goodsInfoPage'].content.map((goodInfo) => {
+          const cId = fromJS(res['goodses'])
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('cateId');
+          const cate = fromJS(res['cates']).find((s) => s.get('cateId') === cId);
+          goodInfo['cateName'] = cate ? cate.get('cateName') : '';
+  
+          const bId = fromJS(res['goodses'])
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('brandId');
+          const brand =
+            res['brands'] == null
+              ? ''
+              : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
+          goodInfo['brandName'] = brand ? brand.get('brandName') : '';
+  
+          return goodInfo;
+        });        
+
+      let goodsInfoList = res['goodsInfoPage']['content']
+          if(goodsInfoList.length>0){
+            goodsInfoList[0].quantity=1
+            return goodsInfoList[0]
+          }
+       
+     }
+     }))
+     this.onProductselect(list)
     this.dispatch('loading:end');
   }
 
   //productselect
   onProductselect = (addProduct) => {
-    this.dispatch('product:productselect', addProduct);
+   this.dispatch('product:productselect', addProduct);
   };
 
   //Create Link

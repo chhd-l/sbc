@@ -77,7 +77,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
               {getFieldDecorator('supportedDocument', {
                 rules: [{ required: isBusiness, type: 'array', message: 'Please upload supported document!' }]
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>

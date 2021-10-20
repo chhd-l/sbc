@@ -624,7 +624,7 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue, editGoods, goodsList, goods } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, editGoods, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
@@ -633,7 +633,8 @@ class SkuForm extends React.Component<any, any> {
     editGoodsItem(id, key, e);
 
     //新增产品时，修改skuno，同步修改externalskuno
-    if(key === 'goodsInfoNo' && !goods.get('goodsId')) {
+    const targetSkuItem = goodsList.find(sku => sku.get('id') === id);
+    if(key === 'goodsInfoNo' && !targetSkuItem.get('goodsInfoId')) {
       editGoodsItem(id, 'externalSku', e);
     }
 

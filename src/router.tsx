@@ -576,6 +576,11 @@ const routes = [
     path: '/marketing-center',
     asyncComponent: () => import('./marketing-center')
   },
+  //营销中心
+  {
+    path: '/create-promotion',
+    asyncComponent: () => import('./marketing-setting/create-promotion')
+  },
   // 商品库导入
   {
     path: '/goods-library',

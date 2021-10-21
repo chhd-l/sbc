@@ -5,6 +5,12 @@ import { cityList } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 import FileItem from './fileitem';
 import moment from 'moment';
+import { SupportedDocumentUtil } from './main';
+import { FormComponentProps } from 'antd/es/form';
+
+interface RepreFormProps extends FormComponentProps {
+  adyenAuditState: number;
+}
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -15,9 +21,9 @@ const fetchUserList = async (cityName) => {
   })
 }
 
-class ShareHolder extends React.Component<any, any> {
+class ShareHolder extends React.Component<RepreFormProps, any> {
 
-  constructor(props) {
+  constructor(props: RepreFormProps) {
     super(props);
   }
 
@@ -44,7 +50,10 @@ class ShareHolder extends React.Component<any, any> {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
         if (!errors) {
-          resolve(values);
+          resolve({
+            ...values,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+          });
         } else {
           reject('2');
         }
@@ -53,7 +62,7 @@ class ShareHolder extends React.Component<any, any> {
   };
 
   render() {
-    const { form: { getFieldDecorator }, form } = this.props;
+    const { form: { getFieldDecorator }, form, adyenAuditState } = this.props;
     const formLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 12 }
@@ -71,7 +80,7 @@ class ShareHolder extends React.Component<any, any> {
               {getFieldDecorator('shareholderType', {
                 initialValue: "1"
               })(
-              <Select onChange={this.validateJobTitle}>
+              <Select onChange={this.validateJobTitle} disabled={adyenAuditState === 0}>
                 <Option value="0">Owner</Option>
                 <Option value="1">Controller</Option>
               </Select>
@@ -83,18 +92,18 @@ class ShareHolder extends React.Component<any, any> {
           <Col span={12}>
             <FormItem label="First name">
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name!' }],
+                rules: [{ required: true, message: 'Please input first name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
             <FormItem label="Last name">
               {getFieldDecorator('lastName', {
-                rules: [{ required: true, message: 'Please input last name!' }],
+                rules: [{ required: true, message: 'Please input last name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -105,7 +114,7 @@ class ShareHolder extends React.Component<any, any> {
                   { required: true, message: 'Please input your Email!' },
                   { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
-              })(<Input />)}
+              })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
@@ -113,10 +122,9 @@ class ShareHolder extends React.Component<any, any> {
               {getFieldDecorator('phoneNumber', {
                 rules:[
                   { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
-                ],
-                onChange: this.onChangePhoneNumber
+                ]
               })(
-                <Input maxLength={12} />
+                <Input maxLength={12} disabled={adyenAuditState === 0} onChange={this.onChangePhoneNumber} />
               )}
             </FormItem>
           </Col>
@@ -125,7 +133,7 @@ class ShareHolder extends React.Component<any, any> {
               {getFieldDecorator('jobTitle', {
                 rules: [{ required: form.getFieldValue('shareholderType') === "1", message: 'Please input job title' }]
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -137,9 +145,10 @@ class ShareHolder extends React.Component<any, any> {
               <div>Maximum allowed size: 4 MB</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }]
+                rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }],
+                initialValue: []
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -149,9 +158,9 @@ class ShareHolder extends React.Component<any, any> {
   }
 }
 
-class Signatories extends React.Component<any, any> {
+class Signatories extends React.Component<RepreFormProps, any> {
 
-  constructor(props) {
+  constructor(props: RepreFormProps) {
     super(props);
     this.state = {
       defaultOptions: []
@@ -187,7 +196,8 @@ class Signatories extends React.Component<any, any> {
             ...values,
             cityId: values.cityId.key,
             city: values.cityId.label,
-            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
           });
         } else {
           reject('2');
@@ -197,7 +207,7 @@ class Signatories extends React.Component<any, any> {
   };
 
   render() {
-    const { form: { getFieldDecorator }, form } = this.props;
+    const { form: { getFieldDecorator }, adyenAuditState } = this.props;
     const { defaultOptions } = this.state;
     const formLayout = {
       labelCol: { span: 8 },
@@ -214,18 +224,18 @@ class Signatories extends React.Component<any, any> {
           <Col span={12}>
             <FormItem label="First name">
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name!' }],
+                rules: [{ required: true, message: 'Please input first name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
             <FormItem label="Last name">
               {getFieldDecorator('lastName', {
-                rules: [{ required: true, message: 'Please input last name!' }],
+                rules: [{ required: true, message: 'Please input last name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -236,7 +246,7 @@ class Signatories extends React.Component<any, any> {
                   { required: true, message: 'Please input your Email!' },
                   { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
-              })(<Input />)}
+              })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
@@ -244,10 +254,9 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('phoneNumber', {
                 rules:[
                   { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
-                ],
-                onChange: this.onChangePhoneNumber
+                ]
               })(
-                <Input maxLength={12} />
+                <Input maxLength={12} onChange={this.onChangePhoneNumber} disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -256,7 +265,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('jobTitle', {
                 rules: [{ required: true, message: 'Please input job title' }]
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -265,7 +274,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('address1', {
                 rules: [{ required: true, message: 'Please input address' }]
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -274,7 +283,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('postCode', {
                 rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -294,6 +303,7 @@ class Signatories extends React.Component<any, any> {
                 initialValue: {key:'',value:'',label:''}
               })(
                 <DebounceSelect
+                  disabled={adyenAuditState === 0}
                   size="default"
                   placeholder="Select city"
                   fetchOptions={fetchUserList}
@@ -310,7 +320,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('province', {
                 rules: [{ required: true, message: 'Please input province' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -319,7 +329,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('dateOfBirth', {
                 rules: [{ required: true, message: 'Please select birthday' }],
               })(
-                <DatePicker format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
+                <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
               )}
             </FormItem>
           </Col>
@@ -333,7 +343,7 @@ class Signatories extends React.Component<any, any> {
               {getFieldDecorator('supportedDocument', {
                 rules: [{ required: true, type: 'array', message: 'Please upload supported document!' }]
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -343,6 +353,6 @@ class Signatories extends React.Component<any, any> {
   }
 }
 
-export const ShareHolderForm = Form.create()(ShareHolder);
-export const SignatoriesForm = Form.create()(Signatories);
+export const ShareHolderForm = Form.create<RepreFormProps>()(ShareHolder);
+export const SignatoriesForm = Form.create<RepreFormProps>()(Signatories);
 

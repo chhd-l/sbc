@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Row, Col } from 'antd';
 import FileItem from './fileitem';
+import { SupportedDocumentUtil } from './main';
 import { FormComponentProps } from 'antd/es/form';
 
 interface BankFormProps extends FormComponentProps {
@@ -20,7 +21,10 @@ class BankInformation extends React.Component<BankFormProps, any> {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
         if (!errors) {
-          resolve(values);
+          resolve({
+            ...values,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+          });
         } else {
           reject('3');
         }
@@ -73,7 +77,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
               {getFieldDecorator('supportedDocument', {
                 rules: [{ required: isBusiness, type: 'array', message: 'Please upload supported document!' }]
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>

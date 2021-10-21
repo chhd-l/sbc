@@ -929,13 +929,10 @@ export default {
         'Order.createOrderTip': 'Your order has not been paid, please pay as soon as possible.',
         'Order.waitShipping': 'Your order has been successfully paid and we are preparing to ship.',
         'Order.completeTip': 'The package was delivered by hand to the delivery address.',
-        'Order.Individualization': 'Individualization',
-        'Order.inTranistTip': 'Your order has been shipped and you will receive the products soon. {val}',
-        'Order.viewLogisticDetail': 'View logistic detail',
-        'Order.createOrderTip': 'Your order has not been paid, please pay as soon as possible.',
-        'Order.waitShipping': 'Your order has been successfully paid and we are preparing to ship.',
-        'Order.completeTip': 'The package was delivered by hand to the delivery address.',
         'Order.shipedLogisticTip': 'Your order has been shipped and you will receive the products soon.',
+        'Order.RegulationDiscount':'Regulation discount',
+        'Order.RealSubtotal':'Real subtotal',
+        'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
 
 
     },

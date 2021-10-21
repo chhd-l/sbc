@@ -31,6 +31,7 @@ function ResetPassword(props) {
   const form = props.form;
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
+  const [confirmDirty, setConfirmDirty] = useState(false);
   const paramObj = getParamsFromSearchStr(props.location.search);
 
   const handleReset = () => {
@@ -62,7 +63,7 @@ function ResetPassword(props) {
 
 
   const handleLogin = () => {
-    history.push('/login');
+    history.push('/login-admin');
   };
 
   const handleSignUp = () => {
@@ -74,6 +75,18 @@ function ResetPassword(props) {
   // const onForgot = (e) => {
   //   console.log(`checked = ${e.target.checked}`);
   // }
+
+  const handleConfirmBlur = (e) => {
+    const { value } = e.target;
+    setConfirmDirty(confirmDirty || !!value);
+  };
+
+  const validateNextPassword = (rule, value, callback) => {
+    if (value && confirmDirty) {
+      form.validateFields(['confirmPassword'], { force: true });
+    }
+    callback();
+  };
 
   const compareToFirstPassword = (rule, value, callback) => {
     if (value && value !== form.getFieldValue('password')) {
@@ -101,7 +114,7 @@ function ResetPassword(props) {
 
             <FormItem className="login-input">
               {getFieldDecorator('password', {
-                rules: [{required:true,message:RCi18n({id:'Login.new_password_vld'})}, { max: 32, min: 6, message:RCi18n({id:'Login.password_length'}) }],
+                rules: [{required:true,message:RCi18n({id:'Login.new_password_vld'})}, { max: 32, min: 6, message:RCi18n({id:'Login.password_length'}) }, {validator: validateNextPassword}],
                 initialValue: ''
               })(
                 <Input.Password size="large" placeholder={RCi18n({id:'Login.new_password'})} />
@@ -113,7 +126,7 @@ function ResetPassword(props) {
                 rules: [{required:true,message:RCi18n({id:'Login.confirm_password_vld'})}, {validator:compareToFirstPassword}],
                 initialValue: ''
               })(
-                <Input.Password size="large" placeholder={RCi18n({id:'Login.confirm_password'})} />
+                <Input.Password size="large" placeholder={RCi18n({id:'Login.confirm_password'})} onBlur={handleConfirmBlur} />
               )}
             </FormItem>
 

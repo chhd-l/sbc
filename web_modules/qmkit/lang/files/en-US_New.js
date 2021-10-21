@@ -521,6 +521,20 @@ export default {
         "Product.StockingInventory": "Stocking inventory",
         "Product.PricingInventory": "Pricing inventory",
 
+        "Product.Bundleproduct": "Bundle product",
+        "Product.Serviceproduct": "Service product",
+        "Product.Addproducttip1": "1. Regular product is individual good like French Bulldog Puppy Dry Dog Food.",
+        "Product.Addproducttip2": "2. Bundle product is several individual goods that are sold to consumers as one combined package.",
+        "Product.Addproducttip3": "3. Service is consisted of activities, benefits or satisfactions offered for sale that are intangible like vet clinics.",
+        "Product.Servicetype": "Service type",
+        "Product.Pleaseselectservicetype": "Please select service type",
+        "Product.Addserviceproduct": "New product (Service product)",
+        "Product.Editserviceproduct": "Edit product (Service product)",
+        "Product.Resources": "Resources",
+        "Product.Assigntheresources": "Assign the resources",
+        "Product.Assignrandomly": "Assign randomly",
+        "Product.Assignprioritized": "Prioritized",
+
     },
 
     Order: {
@@ -693,6 +707,7 @@ export default {
         "Order.offline.paymentType": "Payment type",
         "Order.offline.creditCard": "Credit card",
         "Order.offline.productOverview": "Product overview",
+        "Order.offline.searchByProductName": "Search By Product name/EAN/SKU",
         "Order.offline.success": "Successfully",
         "Order.offline.refillAlert": "Do you want to refill your order?",
         "Order.offline.complete": "Complete",
@@ -914,13 +929,10 @@ export default {
         'Order.createOrderTip': 'Your order has not been paid, please pay as soon as possible.',
         'Order.waitShipping': 'Your order has been successfully paid and we are preparing to ship.',
         'Order.completeTip': 'The package was delivered by hand to the delivery address.',
-        'Order.Individualization': 'Individualization',
-        'Order.inTranistTip': 'Your order has been shipped and you will receive the products soon. {val}',
-        'Order.viewLogisticDetail': 'View logistic detail',
-        'Order.createOrderTip': 'Your order has not been paid, please pay as soon as possible.',
-        'Order.waitShipping': 'Your order has been successfully paid and we are preparing to ship.',
-        'Order.completeTip': 'The package was delivered by hand to the delivery address.',
         'Order.shipedLogisticTip': 'Your order has been shipped and you will receive the products soon.',
+        'Order.RegulationDiscount':'Regulation discount',
+        'Order.RealSubtotal':'Real subtotal',
+        'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
 
 
     },
@@ -2428,6 +2440,7 @@ export default {
         "Setting.requiredFields": "Please fill in required field!",
         'Setting.Operator': 'Operator',
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
+        "Setting.avatar": "Avatar",
 
     },
     Menu: {

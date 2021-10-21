@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Row, Col } from 'antd';
 import FileItem from './fileitem';
+import { SupportedDocumentUtil } from './main';
 import { FormComponentProps } from 'antd/es/form';
 
 interface BankFormProps extends FormComponentProps {
@@ -20,7 +21,10 @@ class BankInformation extends React.Component<BankFormProps, any> {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
         if (!errors) {
-          resolve(values);
+          resolve({
+            ...values,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+          });
         } else {
           reject('3');
         }
@@ -61,28 +65,6 @@ class BankInformation extends React.Component<BankFormProps, any> {
           </Col>
         </Row>
         <Row gutter={[24,12]}>
-          <Col span={12}>
-            <FormItem label="Payout Summary Label">
-              {getFieldDecorator('payoutSummaryLabel', {
-                initialValue: ''
-              })(
-              <Input />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={[24,12]}>
-          <Col span={12}>
-            <FormItem label="Debit Summary Label">
-              {getFieldDecorator('debitSummaryLabel', {
-                initialValue: ''
-              })(
-              <Input />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={[24,12]}>
           <Col span={24}>
             <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
               <div>You can upload Bank Statement, Letter from bank, Screenshot online banking environment</div>
@@ -95,7 +77,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
               {getFieldDecorator('supportedDocument', {
                 rules: [{ required: isBusiness, type: 'array', message: 'Please upload supported document!' }]
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>

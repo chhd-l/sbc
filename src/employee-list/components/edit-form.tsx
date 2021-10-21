@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Store } from 'plume2';
-import { Row, Form, Input, Select, Radio, Switch, DatePicker, TreeSelect, message } from 'antd';
+import { Row, Form, Input, Select, Radio, Switch, DatePicker, TreeSelect, message, Upload, Icon } from 'antd';
 import { List } from 'immutable';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import moment from 'moment';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 
@@ -35,16 +35,16 @@ const debounce = (fn, delay = 500) => {
   // timer 是在闭包中的
   let timer = null;
   return function() {
-    if(timer) {
+    if (timer) {
       clearTimeout(timer);
     }
     timer = setTimeout(() => {
       fn.apply(this, arguments);
       // 清空定时器
       timer = null;
-    }, delay)
-  }
-}
+    }, delay);
+  };
+};
 
 export default class EditForm extends React.Component<any, any> {
   _store: any;
@@ -68,6 +68,7 @@ export default class EditForm extends React.Component<any, any> {
       selectRoleNames: '',
       prescriberIds: {},
       loading: false,
+      uploadLoading: false
     };
     this._store = ctx['_plume$Store'];
     this.getClinicsLites();
@@ -104,63 +105,89 @@ export default class EditForm extends React.Component<any, any> {
   }
 
   findEmployeeByEmail = async (value) => {
-    if(!value) return;
-    if(!ValidConst.email.test(value)) return; // 邮箱正则
+    if (!value) return;
+    if (!ValidConst.email.test(value)) return; // 邮箱正则
 
-    this.setState({loading: true})
-    let {res} = await getUserInfo(value);
-    this.setState({loading: false});
+    this.setState({ loading: true });
+    let { res } = await getUserInfo(value);
+    this.setState({ loading: false });
     //  改变为编辑状态， 更新form数据 TO DO
     if (res.code === Const.SUCCESS_CODE) {
       let {
-        employeeId,
+        employeeId
       } = res.context;
       if (!!employeeId) {
         // initEmployeeByEmail
         const employeeForm = {
-              //员工名称
-              employeeName: '',
-              //员工手机
-              employeeMobile: '',
-              //角色id,逗号分隔
-              roleIds: '',
-              //账户名
-              accountName: '',
-              //账户手机
-              accountPassword: '',
-              //是否是业务员
-              isEmployee: null,
-              //邮箱
-              email: null,
-              //工号
-              jobNo: '',
-              //职位
-              position: null,
-              //性别，默认0，保密
-              sex: 0,
-              //归属部门，逗号分隔
-              departmentIds: '',
-              //生日
-              birthday: null
-            };
+          //员工名称
+          employeeName: '',
+          //员工手机
+          employeeMobile: '',
+          //角色id,逗号分隔
+          roleIds: '',
+          //账户名
+          accountName: '',
+          //账户手机
+          accountPassword: '',
+          //是否是业务员
+          isEmployee: null,
+          //邮箱
+          email: null,
+          //工号
+          jobNo: '',
+          //职位
+          position: null,
+          //性别，默认0，保密
+          sex: 0,
+          //归属部门，逗号分隔
+          departmentIds: '',
+          //生日
+          birthday: null,
+          //头像
+          employeeImage: ''
+        };
         this._store.initEmployeeByEmail({
           ...employeeForm,
-          ...res.context,
+          ...res.context
         });
 
       }
-    }else {
+    } else {
 
     }
-  }
+  };
 
-  onEmailChange = (value: any ) => {
+  onEmailChange = (value: any) => {
     this.findEmployeeByEmail(value);
-  }
+  };
+
+  handleUpload = ({ file }) => {
+    const status = file.status;
+    if (status === 'uploading') {
+      this.setState({ uploadLoading: true });
+      return;
+    }
+    if (status === 'done') {
+      if (file.response && file.response.code &&file.response.code !== Const.SUCCESS_CODE) {
+        message.error(`${file.name} ${RCi18n({id:"Public.Upload.uploadfailed"})}`);
+      } else {
+        message.success(`${file.name} ${RCi18n({id:"Public.Upload.uploadsuccess"})}`);
+
+        const { setFieldsValue } = this.props.form;
+
+        setFieldsValue({
+          employeeImage: file.response[0]
+        });
+      }
+    } else if (status === 'error') {
+      message.error(`${file.name} ${RCi18n({ id: 'Public.Upload.uploadfailed' })}`);
+    }
+    this.setState({ uploadLoading: false });
+  };
 
   render() {
-    let {loading} = this.state;
-    const { getFieldDecorator } = this.props.form;
+    let { loading } = this.state;
+    const { getFieldDecorator, getFieldValue } = this.props.form;
 
     const _state = this._store.state();
     const roles = _state.get('roles');
@@ -179,6 +206,7 @@ export default class EditForm extends React.Component<any, any> {
     let sex = {
       initialValue: 0
     };
+    let employeeImage = {};
     let departmentIdList = {};
 
     let roleIdList = {};
@@ -226,6 +254,10 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('sex') || 0
       };
 
+      employeeImage = {
+        initialValue: employeeForm.get('employeeImage')
+      };
+
       isEmployee = {
         initialValue: employeeForm.get('isEmployee')
       };
@@ -235,14 +267,40 @@ export default class EditForm extends React.Component<any, any> {
         initialValue: employeeForm.get('roleIds')
       };
     }
+
     return (
       <Form>
         <Row>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='Setting.avatar' />} style={{marginBottom: 0}}>
+            {getFieldDecorator('employeeImage', {
+              ...employeeImage,
+            })(<Input hidden={true} />)}
+            <Upload
+              name='uploadFile'
+              headers={{
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + (window as any).token
+              }}
+              listType='picture-card'
+              className='avatar-uploader'
+              accept='.jpg,.jpeg,.png,.gif'
+              showUploadList={false}
+              action={`${Const.HOST}/store/uploadStoreResource??resourceType=IMAGE`}
+              onChange={this.handleUpload}
+            >
+              {
+                getFieldValue('employeeImage') ? (
+                  <img src={getFieldValue('employeeImage')} alt="avatar" style={{ width: '100%' }} />
+                ) : (<Icon type={this.state.uploadLoading ? 'loading' : 'plus'} />)
+              }
+            </Upload>
+          </FormItem>
+
           <FormItem
-              {...formItemLayout}
-              label={<FormattedMessage id="email" />}
-              // required={true}
-              // hasFeedback
+            {...formItemLayout}
+            label={<FormattedMessage id='email' />}
+            // required={true}
+            // hasFeedback
           >
             {getFieldDecorator('email', {
               ...email,
@@ -259,14 +317,14 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input.Search
-                loading={loading}
-                onSearch={this.onEmailChange}
-                disabled={_state.get('edit')}
-                placeholder="0-50 characters"
+              loading={loading}
+              onSearch={this.onEmailChange}
+              disabled={_state.get('edit')}
+              placeholder='0-50 characters'
             />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" />} hasFeedback>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='firstName' />} hasFeedback>
             {getFieldDecorator('firstName', {
               ...firstName,
               rules: [
@@ -286,10 +344,10 @@ export default class EditForm extends React.Component<any, any> {
                   }
                 }
               ]
-            })(<Input disabled={editDisable} placeholder="Only 1-20 characters" />)}
+            })(<Input disabled={editDisable} placeholder='Only 1-20 characters' />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="lastName" />} hasFeedback>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='lastName' />} hasFeedback>
             {getFieldDecorator('lastName', {
               ...lastName,
               rules: [
@@ -309,10 +367,10 @@ export default class EditForm extends React.Component<any, any> {
                   }
                 }
               ]
-            })(<Input disabled={editDisable} placeholder="Only 1-20 characters" />)}
+            })(<Input disabled={editDisable} placeholder='Only 1-20 characters' />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="employeePhone" />} hasFeedback required={false}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='employeePhone' />} hasFeedback required={false}>
             {getFieldDecorator('employeeMobile', {
               ...employeeMobile,
               rules: [
@@ -363,13 +421,14 @@ export default class EditForm extends React.Component<any, any> {
             })(<Input disabled={editDisable} placeholder="仅限0-20位字符" />)}
           </FormItem> */}
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="birthday" />}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='birthday' />}>
             {getFieldDecorator('birthday', {
               ...birthday
-            })(<DatePicker disabled={editDisable} getCalendarContainer={() => document.getElementById('page-content')} allowClear={true} format={Const.DAY_FORMAT} placeholder={'birthday'} />)}
+            })(<DatePicker disabled={editDisable} getCalendarContainer={() => document.getElementById('page-content')}
+                           allowClear={true} format={Const.DAY_FORMAT} placeholder={'birthday'} />)}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="gender" />}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='gender' />}>
             {getFieldDecorator('sex', {
               ...sex
             })(
@@ -388,17 +447,20 @@ export default class EditForm extends React.Component<any, any> {
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="attributionDepartment" />}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='attributionDepartment' />}>
             {getFieldDecorator('departmentIdList', {
               ...departmentIdList
             })(
-              <TreeSelect disabled={editDisable} treeCheckable={true} showSearch={false} style={{ width: '100%' }} dropdownStyle={{ maxHeight: 550, overflow: 'auto' }} placeholder="Please select, Multiple choice" allowClear treeDefaultExpandAll onChange={this.onChange}>
+              <TreeSelect disabled={editDisable} treeCheckable={true} showSearch={false} style={{ width: '100%' }}
+                          dropdownStyle={{ maxHeight: 550, overflow: 'auto' }}
+                          placeholder='Please select, Multiple choice' allowClear treeDefaultExpandAll
+                          onChange={this.onChange}>
                 {this._loop(departTree)}
               </TreeSelect>
             )}
           </FormItem>
 
-          <FormItem {...formItemLayout} label={<FormattedMessage id="systemRole" />} hasFeedback required={true}>
+          <FormItem {...formItemLayout} label={<FormattedMessage id='systemRole' />} hasFeedback required={true}>
             {getFieldDecorator('roleIdList', {
               ...roleIdList,
               rules: [
@@ -410,7 +472,7 @@ export default class EditForm extends React.Component<any, any> {
               ]
             })(
               <Select
-                placeholder="Please choose"
+                placeholder='Please choose'
                 disabled={editDisable}
                 // mode="multiple"
                 showSearch
@@ -428,14 +490,14 @@ export default class EditForm extends React.Component<any, any> {
           </FormItem>
 
           {this.state.selectRoleNames && this.state.selectRoleNames.indexOf('Prescriber') > -1 ? (
-            <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber" />} hasFeedback>
+            <FormItem {...formItemLayout} label={<FormattedMessage id='Prescriber' />} hasFeedback>
               {getFieldDecorator('prescriberIds', {
                 ...this.state.prescriberIds,
                 rules: [{ required: true, message: 'Please Select Prescribers!' }]
               })(
                 <Select
-                  mode="tags"
-                  placeholder="Please Select Prescribers"
+                  mode='tags'
+                  placeholder='Please Select Prescribers'
                   disabled={editDisable}
                   // onChange={this.clinicChange}
                   showSearch
@@ -570,13 +632,13 @@ export default class EditForm extends React.Component<any, any> {
    * @private
    */
   _renderOption(roles: List<any>) {
-    return roles&&roles.map((option) => {
+    return roles && roles.map((option) => {
       return (
         <Option value={option.get('roleInfoId').toString()} key={option.get('roleInfoId')}>
           {option.get('roleName')}
         </Option>
       );
-    })||[];
+    }) || [];
   }
 
   filterOption = (input, option: { props }) => {
@@ -598,6 +660,7 @@ export default class EditForm extends React.Component<any, any> {
       );
     });
   }
+
   roleChange = (value) => {
     // let roleStringIds = value.join(',');
 
@@ -615,9 +678,9 @@ export default class EditForm extends React.Component<any, any> {
     let roleIdList = rolesIds.split(',');
     let roleNames = [];
     roleIdList.map((x) => {
-      let role = roles&&roles.find((r) => r.get('roleInfoId').toString() === x)||undefined;
+      let role = roles && roles.find((r) => r.get('roleInfoId').toString() === x) || undefined;
       if (role) {
-        roleNames.push(role.get('roleName')||'');
+        roleNames.push(role.get('roleName') || '');
       }
     });
     return roleNames.join(',');
@@ -659,7 +722,8 @@ export default class EditForm extends React.Component<any, any> {
           </TreeNode>
         );
       }
-      return <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')} key={dep.get('departmentId')} />;
+      return <TreeNode value={dep.get('departmentId')} title={dep.get('departmentName')}
+                       key={dep.get('departmentId')} />;
     });
   };
 }

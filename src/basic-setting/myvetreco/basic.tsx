@@ -1,14 +1,17 @@
 import React from 'react';
 import { Form, Input, Select, Row, Col, DatePicker } from 'antd';
+import { Const, cache } from 'qmkit';
 import DebounceSelect from '../../myvetreco-logins/create-store/components/debounceSelect';
-import { cityList } from '../webapi';
+import { cityList, checkCompanyInfoExists } from '../webapi';
 import { FormattedMessage } from 'react-intl';
 import FileItem from './fileitem';
 import { FormComponentProps } from 'antd/es/form';
 import moment from 'moment';
+import { SupportedDocumentUtil } from './main';
 
 interface BasicFormProps extends FormComponentProps {
   onChangeName: Function;
+  adyenAuditState: number;
 }
 
 const FormItem = Form.Item;
@@ -50,16 +53,44 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
     this.setState({ defaultOptions });
   };
 
-  validateForm = () => {
+  validateForm = (preHandler? : Function, postHandler? : Function) => {
+    const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}');
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
         if (!errors) {
-          resolve({
-            ...values,
-            cityId: values.cityId.key,
-            city: values.cityId.label,
+          if (preHandler) {
+            preHandler();
+          }
+          checkCompanyInfoExists({
+            storeName: values.storeName,
+            companyInfoId: loginInfo.companyInfoId,
+            storeId: loginInfo.storeId
+          }).then(data => {
+            if (postHandler) {
+              postHandler();
+            }
+            if (data.res.code === Const.SUCCESS_CODE && !data.res.context.storeNameExists) {
+              resolve({
+                ...values,
+                cityId: values.cityId.key,
+                city: values.cityId.label,
+              });
+            } else {
+              this.props.form.setFields({
+                storeName:{value: values.storeName,errors:[new Error('Store name is repeated')]}
+              });
+              reject('1');
+            }
+          }).catch(() => {
+            if (postHandler) {
+              postHandler();
+            }
+            reject('1');
           });
         } else {
+          if (postHandler) {
+            postHandler();
+          }
           reject('1');
         }
       });
@@ -250,7 +281,8 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
             ...values,
             cityId: values.cityId.key,
             city: values.cityId.label,
-            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
           });
         } else {
           reject('1');
@@ -286,7 +318,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
           <Col span={12}>
             <FormItem label="First name">
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name' }],
+                rules: [{ required: true, message: 'Please input first name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
                 <Input
                   onChange={(e) => {
@@ -299,7 +331,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
           <Col span={12}>
             <FormItem label="Last name">
               {getFieldDecorator('lastName', {
-                rules:[{ required: true, message: 'Please input last name' }],
+                rules:[{ required: true, message: 'Please input last name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
                 <Input
                   onChange={(e) => {

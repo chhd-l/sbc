@@ -24,6 +24,23 @@ const isShowFunction = (status) => {
   }
 };
 
+
+const goodsTypes = [
+  {label: 'Virtual goods', value: 1},
+  {label: 'Bundle goods', value: 2},
+  {label: 'VET goods', value: 3},
+  {label: 'Gift goods', value: 4},
+  {label: 'Service goods', value: 5},
+];
+
+const getEnum = (value, arr) => {
+  const item = arr.find(item => {
+    return item.value == value
+  })
+
+  return item?.label || '-'
+}
+
 @withRouter
 @Relax
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -122,6 +139,8 @@ class CustomerList extends React.Component<any, any> {
             );
           }}
         />
+        {/*TODO Product Type字段添加*/}
+        <Column title={'Product Type'} key="goodsType" dataIndex="goodsType" width={150} render={(goodsType) => getEnum(goodsType, goodsTypes)} />
         <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}

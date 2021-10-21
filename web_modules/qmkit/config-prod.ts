@@ -25,6 +25,10 @@ const getOktaAppConfig = () => {
       REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
       PAYMENT_ENVIRONMENT:'live',
     });
+  } else if (host.indexOf('myvetreco') > -1) {
+    return Object.assign({}, OKTA_APP_CONFIG, {
+      REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
+    });
   } else {
     return OKTA_APP_CONFIG;
   }

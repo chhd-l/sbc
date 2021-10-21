@@ -6,8 +6,29 @@ import './index.less'
 
 const format = 'HH:mm';
 const SetDayTable = (props) => {
-  const [allWeeks] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+  const {weekList,updateTableData} = props
+  console.log(weekList,'WeekList')
+  const [allWeeks] = useState([0,1, 2, 3, 4, 5, 6,7,8,9,10,11,12,13]);
+  const [daysList,setDaysList] = useState({
+    days:[],
+    dates:[]
+  })
 
+  useEffect(()=>{
+    // times:'00:00-23:59'
+    // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
+    let dates = allWeeks.map(item => moment(new Date()).day(item).format('YYYYMMDD'));
+    let days = dates.map(item => moment(item).format('M.DD'))
+      setDaysList({
+        days,
+        dates
+      })
+  },[])
+
+  const dayCheck = (e,day)=>{
+    console.log(e,day,'ddd')
+
+  }
   function weekCheck(e, value) {
     let newWeeks = [];
     if (e.target.checked === true) {
@@ -45,20 +66,47 @@ const SetDayTable = (props) => {
     });
     changeTime(newTime);
   }
-  function timeChange(isStartTime, timeString, sort) {
-    var newTime = [];
-    props.openDate.times.map((item) => {
-      if (item.sort === sort) {
-        newTime.push({
-          startTime: isStartTime ? timeString : item.startTime,
-          endTime: !isStartTime ? timeString : item.endTime,
-          sort: item.sort
-        });
-      } else {
-        newTime.push(item);
-      }
-    });
-    changeTime(newTime);
+  // const timeChange =(isStartTime, timeString, sort) =>{
+  //   var newTime = [];
+  //   props.openDate.times.map((item) => {
+  //     if (item.sort === sort) {
+  //       newTime.push({
+  //         startTime: isStartTime ? timeString : item.startTime,
+  //         endTime: !isStartTime ? timeString : item.endTime,
+  //         sort: item.sort
+  //       });
+  //     } else {
+  //       newTime.push(item);
+  //     }
+  //   });
+  //   changeTime(newTime);
+  // }
+
+  const timeChange = (timeStr,type,sort) =>{
+    console.log(timeStr,type,'ttt======')
+    
+    weekList.map(item => {
+      let newTime = '';
+      // if(item.sort === sort) {
+        if(type=="start") {
+          item.timeSlotVO.timeSlot.split('-')[0]=timeStr
+        }
+        // item.timeSlotVO.timeSlot:type
+      // }
+    })
+    updateTableData(weekList)
+  }
+
+  const handleTimeFormat = (timeSlot, type) => {
+    let formatTime = ''
+    if (timeSlot.includes('|')) {
+      let times = timeSlot.split('|');
+      let _time = times.map(item => item.split('-'))
+    } else {
+      let singleTime = timeSlot.split('-')
+      type === 'start' ? formatTime = singleTime[0] : formatTime = singleTime[1]
+    }
+    return formatTime
   }
 
   function changeTime(newTime) {
@@ -124,14 +172,14 @@ const SetDayTable = (props) => {
       key: '10.09'
     },
   ];
-
   return (
-    <table className="set-day-table">
+    <>
+     <table className="set-day-table">
       <thead>
         <tr>
-          {columnData.map(item =>
-            <th style={{ width: '4.5%' }}>
-            {item.title}
+          {daysList.days?.map((item,idx) =>
+            <th key={idx} style={{ width: '4.5%' }}>
+            {item}
           </th>
             )}
           <th style={{ width: '31%' }}>
@@ -144,36 +192,39 @@ const SetDayTable = (props) => {
       </thead>
       <tbody>
         <tr>
-          {allWeeks.map((day) => (
+          {daysList.dates.map((day,idx) => (
             <td>
               <Checkbox
-                key={day}
+                key={idx}
                 // disabled={props.allSelectWeeks.includes(day) && !props.openDate.weeks.includes(day)}
-                onChange={(e) => weekCheck(e, day)}
+                onChange={(e) => dayCheck(e, day)}
                 // checked={props.openDate.weeks.includes(day)}
               ></Checkbox>
             </td>
           ))}
           <td style={{ paddingTop: 0 }}>
-            {props.openDate.times.map((time, index) => (
+            {weekList.map((item, index) => (
               <div key={index} className="time">
                 <TimePicker
                   format={format}
-                  value={moment(time.startTime, format)}
-                  onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
+                  minuteStep={15}
+                  value={moment(handleTimeFormat(item.timeSlotVO.timeSlot,'start'), format)}
+                  onChange={(time,timeStr) =>{timeChange(timeStr,'start',item.sort)}}
+                  // onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
                   allowClear={false}
                 />
                 <span>-</span>
                 <TimePicker
                   format={format}
-                  value={moment(time.endTime, format)}
-                  onChange={(timeObject, timeString) => timeChange(false, timeString, time.sort)}
+                  minuteStep={15}
+                  value={moment(handleTimeFormat(item.timeSlotVO.timeSlot,'end'), format)}
+                  // onChange={(timeObject, timeString) => timeChange(false, timeString, time.sort)}
                   allowClear={false}
                 />
                 <Icon type="plus-square" onClick={() => addTime()} />
-                {props.openDate.times.length > 1 ? (
+                {/* {props.openDate.times.length > 1 ? (
                   <Icon type="minus-square" onClick={() => deleteTime(time.sort)} />
-                ) : null}
+                ) : null} */}
               </div>
             ))}
           </td>
@@ -187,7 +238,9 @@ const SetDayTable = (props) => {
         </tr>
       </tbody>
     </table>
-  );
+
+    </>
+     );
 };
 
 export default SetDayTable;

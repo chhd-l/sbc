@@ -29,7 +29,8 @@ const optionTest = [{
   value:'3',
 },]
 
-let AvailServiceType = [{id:'all',name:'all'}];
+// let AvailServiceType = [{id:'all',name:'all'}];
+let AvailServiceType = [];
 
 // @ts-ignore
 @Form.create()
@@ -43,7 +44,25 @@ export default class PlanningSetting extends React.Component<any, any>{
       AvailServiceTypeDict:[],
       AvailServiceTypeDisabled:true,
       settingDetailData:{},
-      saveDetailData:{}
+      saveDetailData: {
+        isAll: 1,
+        resourceServicePlanVOList: [{
+          serviceTypeId: "",
+          serviceSort: "1",//serviceType的设置顺序
+          resourceWeekPlanVOList: [{
+            sort: "1",//一个serviceType下,日期选择行的顺序
+            timeSlotVO: {
+              id: "",
+              // timeSlot: "00:00-23:59|00:00-23:59",
+              timeSlot: "01:00-22:59",
+            },
+            resourceDatePlanVOS: [{
+              id: "",
+              dateNo: ""
+            }]
+          }]
+        }]
+      }
     }
   }
 
@@ -74,13 +93,11 @@ export default class PlanningSetting extends React.Component<any, any>{
     const data = res?.context?.resourceSetting
     this.setState({
       settingDetailData: data,
-      saveDetailData: {
-        id: data.id,
-        employeeId:data.employeeId,
-      }
+      saveDetailData: Object.assign(this.state.saveDetailData,{
+      id: data.id,
+      employeeId:data.employeeId,
+      }),
     })
-
-
   }
 
   saveResourceData = async()=>{
@@ -96,12 +113,6 @@ export default class PlanningSetting extends React.Component<any, any>{
         AvailServiceTypeDisabled: false
       })
     }
-    // const values = Object.assign(this.state.saveDetailData, {
-    //   [type]: value
-    // })
-    // this.setState({
-    //   saveDetailData: values
-    // })
   }
 
   handleSaveBtn = ()=>{
@@ -139,7 +150,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
-    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,AvailServiceTypeDisabled,settingDetailData} =this.state;
+    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,AvailServiceTypeDisabled,settingDetailData,saveDetailData} =this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
@@ -258,7 +269,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           </Row>
           <div className="availability-title">Availability:</div>
-          <ServiceSetting serviceTypeDict={AvailServiceTypeDict} selectDisabled={AvailServiceTypeDisabled}/>
+          <ServiceSetting serviceData={saveDetailData} serviceTypeDict={AvailServiceTypeDict} selectDisabled={AvailServiceTypeDisabled}/>
           <Row>
             <Col span={2} offset={9}>
             <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>

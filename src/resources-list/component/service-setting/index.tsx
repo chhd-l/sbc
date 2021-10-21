@@ -31,11 +31,13 @@ const ServiceTypeOptionsMock = [{
 const format = 'HH:mm';
 const { Option } = Select;
 const FormItem = Form.Item;
-const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
-
+let resourceList = [];
+const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled }) => {
+ console.log(serviceData,'serviceData====')
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [settingCounts, setSettingCounts] = useState(addCounts || [1])
   const [changeData,setChangeData]= useState({})
+  const [resourceList,setResourceList] = useState([])
 
   const [deliveryForm, setDeliveryForm] = useState({
     deliveryOption: 1,
@@ -56,21 +58,75 @@ const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
       }
     ]
   })
+  const [servicePlanData,setServicePlanData] = useState({
+    isAll:1,
+    resourceServicePlanVOList: [{
+      serviceTypeId: "",
+      serviceSort: "1",//serviceType的设置顺序
+      resourceWeekPlanVOList: [{
+        sort: "1",//一个serviceType下,日期选择行的顺序
+        timeSlotVO: {
+          id: "",
+          timeSlot: "",
+        },
+        resourceDatePlanVOS: [{
+          id: "",
+          dateNo: "yyyymmdd 20210101"
+        }]
+      }]
+    }]
+  })
+
+  const [allWeeks] = useState([0,1, 2, 3, 4, 5, 6,7,8,9,10,11,12,13]);
+  const [daysList,setDaysList] = useState([{
+    days:[],
+    times:'00:00-23:59'
+  }])
+
+  useEffect(()=>{
+    // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
+    let days = allWeeks.map(item => moment(new Date()).day(item).format('M.DD'));
+    console.log(days, 'foremd')
+      setDaysList([{
+        days:days,
+        times:'00:00-23:59'
+      }])
+  },[])
+
+
   const AddSetByDay = () => {
-    
   }
 
   // serviceType下拉选择
   const handleServiceType = (value) => {
+    let isAll = 0;
+    let resourceServicePlanVOList = []
     console.log(value, 'ServiceTypeValue')
     // todo:下拉码值value:all需根据接口更改
     if (value !== 'all') {
       setShowAddBtn(true)
+      // setServicePlanData(Object.assign(servicePlanData,{
+      //   isAll:0,
+      //   resourceServicePlanVOList:
+      // }))
     } else {
       setShowAddBtn(false)
     setSettingCounts([1])
+    setServicePlanData(Object.assign(servicePlanData,{
+      isAll:1
+    }))
     }
-    
+    // resourceList.push({
+    //   serviceTypeId: value,
+    //   serviceSort:'1',
+    //   "resourceWeekPlanVOList": [{
+
+    //   }]
+    // })
+    // setChangeData({
+    //   isAll,
+    //   resourceServicePlanVOList:resourceList
+    // })
   }
 
   // 新增服务类型和setDay
@@ -79,10 +135,14 @@ const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
     counts.push(1)
     setSettingCounts(counts)
   }
+
+  const updateTableData = (data) =>{
+    console.log(data,'dddd')
+  }
   return (
     <div>
-      {settingCounts.map((item, idx) =>
-        <div className="setting-outside-warp" key={idx}>
+      {/* {settingCounts.map((item, idx) => */}
+        <div className="setting-outside-warp">
           <Row>
             <Col span={8} >
               <SelectGroup
@@ -92,17 +152,19 @@ const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
                     <FormattedMessage id="Resources.service_type" />
                   </p>
                 }
-                disabled={selectDisabled}
+                // disabled={selectDisabled}
                 onChange={handleServiceType}
               >
                 {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </SelectGroup>
             </Col>
-            {showAddBtn && idx===0 ? <Col span={2} offset={1}>
+            {/* {showAddBtn && idx===0 ?  */}
+            <Col span={2} offset={1}>
               <Button type="primary" onClick={addServiceType}>
                 <FormattedMessage id="Setting.add" />
               </Button>
-            </Col> : null}
+            </Col> 
+            {/* : null} */}
           </Row>
           <Row className="set-by-day-title">
             <Col span={3} >
@@ -116,17 +178,18 @@ const ServiceSetting = ({ addCounts,serviceTypeDict,selectDisabled }) => {
               </Button>
             </Col>
           </Row>
-          {deliveryForm.openDate.map((item, index) => (
+          {serviceData.resourceServicePlanVOList.map((item, index) => (
             <SetDayTable
               // allSelectWeeks={allSelectWeeks}
-              openDate={item}
+              weekList={item.resourceWeekPlanVOList}
               key={index}
+              updateTableData={updateTableData}
             // editOpenTable={editOpenTable}
             // deleteOpenTable={deleteOpenTable}
             />
           ))}
         </div>
-      )}
+      {/* )} */}
 
     </div>
   );

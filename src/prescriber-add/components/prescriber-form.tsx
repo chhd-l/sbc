@@ -923,6 +923,9 @@ class ClinicForm extends React.Component<any, any> {
                   <Option value="Year" key="year">
                     <FormattedMessage id="Prescriber.Year" />
                   </Option>
+                  <Option value="Quarterly" key="quarter">
+                    <FormattedMessage id="Prescriber.Quarter" />
+                  </Option>
                   <Option value="Month" key="month">
                     <FormattedMessage id="Prescriber.Month" />
                   </Option>

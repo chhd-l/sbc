@@ -125,7 +125,7 @@ export default class Fields extends React.Component<any, any> {
       visiblePostalCode,
       visibleAddressSetting
     } = this.state;
-    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange, onSortEnd } = this.props;
+    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onFieldChange, onSortEnd } = this.props;
     const columns = [
       {
         title: 'Sequence',
@@ -317,6 +317,7 @@ export default class Fields extends React.Component<any, any> {
     };
 
     const addressDisplaySettingId = manualFieldList.find(item => item.fieldKey === 'postCode')?.id;
+    const address1InAutoTable = autoFieldList.find(item => item.fieldKey === 'address1') ?? {};
 
     return (
       <div className='fields-wrap'>
@@ -381,7 +382,16 @@ export default class Fields extends React.Component<any, any> {
         }
         {
           visibleAddressSetting
-            ? (<AddressSettingModal visible={visibleAddressSetting} onCancel={this.handleAddressSettingModalClose} />)
+            ? (
+            <AddressSettingModal
+              fieldId={address1InAutoTable.id}
+              suggestionFlag={address1InAutoTable.suggestionFlag}
+              validationFlag={address1InAutoTable.validationFlag}
+              onChangeField={onFieldChange}
+              visible={visibleAddressSetting}
+              onCancel={this.handleAddressSettingModalClose} 
+            />
+            )
             : null
         }
       </div>

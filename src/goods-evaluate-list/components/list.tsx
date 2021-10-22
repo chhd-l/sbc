@@ -26,11 +26,8 @@ const isShowFunction = (status) => {
 
 
 const goodsTypes = [
-  {label: 'Virtual goods', value: 1},
-  {label: 'Bundle goods', value: 2},
-  {label: 'VET goods', value: 3},
-  {label: 'Gift goods', value: 4},
-  {label: 'Service goods', value: 5},
+  {label: <FormattedMessage id="Product.Regularproduct" />, value: 0},
+  {label: <FormattedMessage id="Product.Serviceproduct" />, value: 1},
 ];
 
 const getEnum = (value, arr) => {
@@ -38,7 +35,7 @@ const getEnum = (value, arr) => {
     return item.value == value
   })
 
-  return item?.label || '-'
+  return item?.label || <FormattedMessage id="Product.Regularproduct" />
 }
 
 @withRouter
@@ -139,8 +136,7 @@ class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        {/*TODO Product Type字段添加*/}
-        <Column title={'Product Type'} key="goodsType" dataIndex="goodsType" width={150} render={(goodsType) => getEnum(goodsType, goodsTypes)} />
+        <Column title={<FormattedMessage id="Product.PriceTableColumnType" />} key="goodsTypeRelateEvaluate" dataIndex="goodsTypeRelateEvaluate" width={150} render={(goodsTypeRelateEvaluate) => getEnum(goodsTypeRelateEvaluate, goodsTypes)} />
         <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}

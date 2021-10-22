@@ -58,6 +58,7 @@ export default class Fields extends React.Component<any, any> {
 
   onChangeModalField = (formField: any) => {
     const { field } = this.state;
+    console.log('666 >>> formField: ', formField);
     this.setState({
       field: { ...field, ...formField }
     });
@@ -83,7 +84,7 @@ export default class Fields extends React.Component<any, any> {
     });
   };
 
-  handlePostalCode = (id:number, field: any, checked: boolean) => {
+  handlePostalCode = (id: number, field: any, checked: boolean) => {
     this.setState({
       isEditPostalCode: checked,
     })
@@ -126,7 +127,23 @@ export default class Fields extends React.Component<any, any> {
         title: 'Field type',
         dataIndex: 'filedType',
         key: 'c3',
-        render: (text, record) => <div>{text === 0 ? 'Text' : 'Number'}</div>
+        render: (text, record) => (
+          <>
+            <div>
+              {text === 0 ? 'Text' : text === 1 ? 'Number' : 'Letter & Number'}
+              {' '}
+              {record.fieldKey === "postCode" ? (
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onOpenModal(record);
+                  }}
+                  className="iconfont iconEdit"
+                ></a>
+              ) : null}
+            </div>
+          </>
+        )
       },
       {
         title: 'Input type',
@@ -158,7 +175,7 @@ export default class Fields extends React.Component<any, any> {
         key: 'validationFlag',
         render: (text, record) => {
           let fieldName = record.fieldName || '';
-          if (fieldName === 'Postal code'){
+          if (fieldName === 'Postal code') {
             return (
               <AuthWrapper functionName='f-postCodeBlockList-edit'>
                 <div className='validation-wrap'>
@@ -175,7 +192,7 @@ export default class Fields extends React.Component<any, any> {
                 </div>
               </AuthWrapper>
             );
-          }else {
+          } else {
             return null;
           }
         }
@@ -224,7 +241,23 @@ export default class Fields extends React.Component<any, any> {
         title: 'Field type',
         dataIndex: 'filedType',
         key: 'c3',
-        render: (text, record) => <div>{text === 0 ? 'Text' : 'Number'}</div>
+        render: (text, record) => (
+          <>
+            <div>
+              {text === 0 ? 'Text' : text === 1 ? 'Number' : 'Letter & Number'}
+              {' '}
+              {record.fieldKey === "postCode" ? (
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onOpenModal(record);
+                  }}
+                  className="iconfont iconEdit"
+                ></a>
+              ) : null}
+            </div>
+          </>
+        )
       },
       {
         title: 'Input type',
@@ -334,6 +367,26 @@ export default class Fields extends React.Component<any, any> {
                     Search box
                   </Option>
                 </Select>
+              )}
+              {field.fieldKey === 'postCode' && (
+                <>
+                  <Select
+                    value={field.filedType}
+                    onChange={(v: any) => {
+                      this.onChangeModalField({ filedType: v })
+                    }}
+                  >
+                    <Option value={0} key={0}>
+                      text
+                    </Option>
+                    <Option value={1} key={1}>
+                      number
+                    </Option>
+                    <Option value={2} key={2}>
+                      Letter & Number
+                    </Option>
+                  </Select>
+                </>
               )}
             </Form.Item>
             {field.fieldName === 'City' ? (

@@ -1659,6 +1659,7 @@ export default {
   "Prescriber.disabled": "Неактивные",
   "Prescriber.search": "Поиск",
   "Prescriber.export": "Экспорт",
+  "Prescriber.Upload": "Загрузить",
   "Prescriber.add": "Добавить",
   "Prescriber.BasicInfomation": "Базовая Информация",
   "Prescriber.Save": "Сохранить",

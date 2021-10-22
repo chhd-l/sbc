@@ -41,6 +41,7 @@ import iconSpain from './images/icon/iconSpain.svg';
 import iconTurkey from './images/icon/iconTurkey.svg';
 import iconAmerica from './images/icon/iconAmerica.svg';
 import iconGermany from './images/icon/iconGermany.svg';
+import iconSweden from './images/icon/iconSweden.png';
 
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';
@@ -319,7 +320,7 @@ export default class MyHeader extends React.Component {
    * 123457909   法国
    * 123457910   美国
    * 123457911   土耳其
-   * 123457915   瑞典   缺失 TODO
+   * 123457915   瑞典
    * 123457916   英国
    **/
   getStoreIcon = (storeId) => {
@@ -331,6 +332,7 @@ export default class MyHeader extends React.Component {
       case '123457909': return  <Icon component={iconFrance} className='logo'/>;
       case '123457910': return  <Icon component={iconAmerica} className='logo'/>;
       case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      case '123457915': return  <Icon component={iconSweden} className='logo'/>;
       case '123457916': return  <Icon component={iconEngland} className='logo'/>;
 
       default: return  <IconFont className='logo' type='iconfangjian1' />;

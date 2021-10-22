@@ -42,7 +42,7 @@ export default class HelloApp extends React.Component<any, any> {
       prescriberId: id
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
-    if (id == null) {
+    if (Const.SITE_NAME === 'MYVETRECO' || id == null) {
       this.store.newInit({
         companyId: 2,
         weekNum: moment(date).week(),

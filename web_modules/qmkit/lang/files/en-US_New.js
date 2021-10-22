@@ -1216,6 +1216,7 @@ export default {
         "Prescriber.Period": "Period",
         "Prescriber.Every": "Every",
         "Prescriber.Year": "Year",
+        "Prescriber.Quarter":"Quarter",
         "Prescriber.Month": "Month",
         "Prescriber.Week": "Week",
         "Prescriber.RewardMode": "Reward mode",

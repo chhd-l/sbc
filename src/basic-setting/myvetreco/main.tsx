@@ -8,6 +8,15 @@ import BankInformation from './bank';
 import moment from 'moment';
 import { ThisExpression } from 'ts-morph';
 
+export const SupportedDocumentUtil = {
+  mapPropsToFormData: (props) => {
+    return props && props.length ? props.map(item => ({ uid: '-1', name: item, url: item, status: 'done' })) : [];
+  },
+  mapFormDataToProps: (formData) => {
+    return formData && formData.length ? formData.map(item => item.url) : [];
+  }
+};
+
 export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   basiForm: any;
   shodForm: any;
@@ -28,7 +37,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           signatories: {}
         },
         bankRequest: {},
-        adyenAuditState: 3, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
+        adyenAuditState: 1, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
         errorList: []
       }
     }
@@ -56,23 +65,31 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               cityId: { key: storeInfoResp.businessBasicRequest.cityId ?? '', value: storeInfoResp.businessBasicRequest.cityId ?? '', label: storeInfoResp.businessBasicRequest.city ?? '' }
             });
             //business的话，初始化representative form
-            this.shodForm.props.form.setFieldsValue(storeInfoResp.representativeRequest?.shareholder ?? {});
+            this.shodForm.props.form.setFieldsValue({
+              ...(storeInfoResp.representativeRequest?.shareholder ?? {}),
+              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument)
+            });
             this.signForm.props.form.setFieldsValue({
               ...(storeInfoResp.representativeRequest?.signatories ?? {}),
               cityId: { key: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', value: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', label: storeInfoResp.representativeRequest?.signatories?.city ?? '' },
-              dateOfBirth: storeInfoResp.representativeRequest?.signatories?.dateOfBirth ? moment(storeInfoResp.representativeRequest.signatories.dateOfBirth, 'YYYY-MM-DD') : null
+              dateOfBirth: storeInfoResp.representativeRequest?.signatories?.dateOfBirth ? moment(storeInfoResp.representativeRequest.signatories.dateOfBirth, 'YYYY-MM-DD') : null,
+              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument)
             });
             this.signForm.setDefaultOptions();
           } else {
             this.basiForm.props.form.setFieldsValue({
               ...storeInfoResp.individualBasicRequest,
               cityId: { key: storeInfoResp.individualBasicRequest.cityId ?? '', value: storeInfoResp.individualBasicRequest.cityId ?? '', label: storeInfoResp.individualBasicRequest.city ?? '' },
-              dateOfBirth: storeInfoResp.individualBasicRequest.dateOfBirth ? moment(storeInfoResp.individualBasicRequest.dateOfBirth, 'YYYY-MM-DD') : null
+              dateOfBirth: storeInfoResp.individualBasicRequest.dateOfBirth ? moment(storeInfoResp.individualBasicRequest.dateOfBirth, 'YYYY-MM-DD') : null,
+              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.individualBasicRequest?.supportedDocument)
             });
           }
           this.basiForm.setDefaultOptions();
           //初始化bank information
-          this.bankForm.props.form.setFieldsValue(storeInfoResp.bankRequest);
+          this.bankForm.props.form.setFieldsValue({
+            ...(storeInfoResp.bankRequest ?? {}),
+            supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.bankRequest?.supportedDocument)
+          });
         });
       }
     });
@@ -180,7 +197,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               <Headline title="Store information" />
             </Col>
             <Col span={12} style={{textAlign:'right',paddingRight:20}}>
-              {adyenAuditState > 1 && <Button type="primary" onClick={this.onAudit}>Submit for auditing</Button>}
+              {adyenAuditState === 0 ? <Button type="primary" disabled>Wait for auditing</Button> : adyenAuditState > 1 ? <Button type="primary" onClick={this.onAudit}>Submit for auditing</Button> : null}
               {adyenAuditState === 2 && <Button type="link" onClick={this.showError}>Fail?</Button>}
               {adyenAuditState > 1 && <div>You can submit Ayden account once fill all required fields</div>}
             </Col>
@@ -190,13 +207,13 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           <Tabs activeKey={current} onChange={this.onTabChange}>
             <Tabs.TabPane tab="Basic information" key="1" forceRender>
               {typeOfBusiness === 1 ?
-               <BusinessBasicInformationForm onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} /> :
-               <IndividualBasicInformationForm onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} />
+               <BusinessBasicInformationForm adyenAuditState={adyenAuditState} onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} /> :
+               <IndividualBasicInformationForm adyenAuditState={adyenAuditState} onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} />
               }
             </Tabs.TabPane>
             <Tabs.TabPane tab="Representative" key="2" forceRender={typeOfBusiness === 1} disabled={typeOfBusiness === 0}>
-              <ShareHolderForm wrappedComponentRef={formRef => this.shodForm = formRef} />
-              <SignatoriesForm wrappedComponentRef={formRef => this.signForm = formRef} />
+              <ShareHolderForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.shodForm = formRef} />
+              <SignatoriesForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.signForm = formRef} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="Bank information" key="3" forceRender>
               <BankInformation isBusiness={typeOfBusiness === 1} adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.bankForm = formRef} />

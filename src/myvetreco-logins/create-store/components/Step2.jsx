@@ -112,7 +112,7 @@ const { Option } = Select;
             <Col span={12}>
               <FormItem label="First name">
                 {getFieldDecorator('firstName', {
-                  rules:[{ required: true, message: 'Please input First name!' }],
+                  rules:[{ required: true, message: 'Please input First name!' },{ pattern: /^((?![0-9]).)*$/, message: 'First name should not contain numbers' }],
                  initialValue: legalInfo?.firstName??''
                 })(<Input size="large"/>)}
               </FormItem>
@@ -120,7 +120,7 @@ const { Option } = Select;
             <Col span={12}>
               <FormItem label="Last name">
                 {getFieldDecorator('lastName', {
-                  rules:[{ required: true, message: 'Please input Last name!' }],
+                  rules:[{ required: true, message: 'Please input Last name!' },{ pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
                   initialValue: legalInfo?.lastName??''
                 })(<Input size="large"/>)}
               </FormItem>

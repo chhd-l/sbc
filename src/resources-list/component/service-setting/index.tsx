@@ -32,8 +32,8 @@ const format = 'HH:mm';
 const { Option } = Select;
 const FormItem = Form.Item;
 let resourceList = [];
-const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled }) => {
- console.log(serviceData,'serviceData====')
+const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,updateServiceData }) => {
+ console.log(serviceData,'serviceData1111')
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [settingCounts, setSettingCounts] = useState(addCounts || [1])
   const [changeData,setChangeData]= useState({})
@@ -86,7 +86,6 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled }
   useEffect(()=>{
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
     let days = allWeeks.map(item => moment(new Date()).day(item).format('M.DD'));
-    console.log(days, 'foremd')
       setDaysList([{
         days:days,
         times:'00:00-23:59'
@@ -137,7 +136,11 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled }
   }
 
   const updateTableData = (data) =>{
-    console.log(data,'dddd')
+    serviceData.resourceServicePlanVOList.map(item =>{
+      item.sort ==data.sort
+      item =data
+    })
+    updateServiceData(serviceData)
   }
   return (
     <div>
@@ -159,11 +162,11 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled }
               </SelectGroup>
             </Col>
             {/* {showAddBtn && idx===0 ?  */}
-            <Col span={2} offset={1}>
+            {/* <Col span={2} offset={1}>
               <Button type="primary" onClick={addServiceType}>
                 <FormattedMessage id="Setting.add" />
               </Button>
-            </Col> 
+            </Col> */}
             {/* : null} */}
           </Row>
           <Row className="set-by-day-title">

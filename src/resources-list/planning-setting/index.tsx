@@ -45,7 +45,7 @@ export default class PlanningSetting extends React.Component<any, any>{
       AvailServiceTypeDisabled:true,
       settingDetailData:{},
       saveDetailData: {
-        isAll: 1,
+        isAll: 0,
         resourceServicePlanVOList: [{
           serviceTypeId: "",
           serviceSort: "1",//serviceType的设置顺序
@@ -54,7 +54,7 @@ export default class PlanningSetting extends React.Component<any, any>{
             timeSlotVO: {
               id: "",
               // timeSlot: "00:00-23:59|00:00-23:59",
-              timeSlot: "01:00-22:59",
+              timeSlot: "00:00-23:59",
             },
             resourceDatePlanVOS: [{
               id: "",
@@ -100,8 +100,8 @@ export default class PlanningSetting extends React.Component<any, any>{
     })
   }
 
-  saveResourceData = async()=>{
-    await webapi.saveOrUpdateResource({})
+  saveResourceData = async(params)=>{
+    await webapi.saveOrUpdateResource(params)
   }
 
   handleSelectChange = (type, value) => {
@@ -115,25 +115,23 @@ export default class PlanningSetting extends React.Component<any, any>{
     }
   }
 
-  handleSaveBtn = ()=>{
-
-  }
-
   saveSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       const params = Object.assign(this.state.saveDetailData,{
         ...values
       })
-        // if (!err) {
-        //     this.props.onSearch({
-        //         // pageNum: 0,
-        //         // pageSize: 10,
-        //         ...params,
-        //     });
-        // }
+        if (!err) {
+          this.saveResourceData(params)
+        }
         console.log(params,'ffff=')
     });
+  }
+
+  updateServiceData = (data) =>{
+    this.setState({
+      saveDetailData:data
+    })
   }
 
   render() {
@@ -269,7 +267,12 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           </Row>
           <div className="availability-title">Availability:</div>
-          <ServiceSetting serviceData={saveDetailData} serviceTypeDict={AvailServiceTypeDict} selectDisabled={AvailServiceTypeDisabled}/>
+          <ServiceSetting 
+          serviceData={saveDetailData} 
+          serviceTypeDict={AvailServiceTypeDict} 
+          selectDisabled={AvailServiceTypeDisabled}
+          updateServiceData={(data)=>this.updateServiceData(data)}
+          />
           <Row>
             <Col span={2} offset={9}>
             <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>

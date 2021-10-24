@@ -35,6 +35,8 @@ function Step4({setStep,form}){
     _selectedSkuIds: [],
     _selectedRows: []
   })
+  const [selectedSkuIds,setSelectedSkuIds] = useState<any>([])
+  const [selectedRows,setSelectedRows] = useState<any>(fromJS([]))
 
   useEffect(()=>{
     getGroupsList()
@@ -79,6 +81,47 @@ function Step4({setStep,form}){
       setAttributeList(fromJS(res.context.attributesList))
     }
   };
+  const selectGroupOnChange = ()=>{
+
+  }
+
+  /**
+   * 关闭货品选择modal
+   */
+  const closeGoodsModal = () => {
+    setGoodsModal({...goodsModal,_modalVisible: false})
+  };
+  /**
+   * 货品选择方法的回调事件
+   * @param selectedSkuIds
+   * @param selectedRows
+   */
+  const skuSelectedBackFun = async (selectedSkuIds, selectedRows) => {
+    console.log(selectedSkuIds)
+    console.log(selectedRows)
+    form.resetFields('goods');
+    setSelectedSkuIds(selectedSkuIds);
+    setSelectedRows(selectedRows);
+    setGoodsModal({...goodsModal,_modalVisible: false});
+  };
+  /**
+   * 已选商品的删除方法
+   * @param skuId
+   */
+  const deleteSelectedSku = (skuId) => {
+    console.log(selectedSkuIds)
+    console.log(selectedRows)
+    selectedSkuIds.splice(
+      selectedSkuIds.findIndex((item) => item == skuId),
+      1
+    );
+    let SelectedRows = selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId));
+    setSelectedSkuIds(selectedSkuIds);
+    setSelectedRows(SelectedRows);
+  };
+
+
+  //展示相关
   /**
    * 店铺分类树形下拉框
    * @param storeCateList
@@ -117,11 +160,6 @@ function Step4({setStep,form}){
       })
     );
   };
-
-  const selectGroupOnChange = ()=>{
-
-  }
-
 
   /**
    * Group of customer
@@ -360,12 +398,12 @@ function Step4({setStep,form}){
                 )(
                   <div>
                     <Button type="primary" icon="plus"
-                            // onClick={this.openGoodsModal}
+                            onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
                     >
                       <FormattedMessage id="Marketing.AddProducts" />
                     </Button>
                     &nbsp;&nbsp;
-                    {/*<SelectedGoodsGrid selectedRows={selectedRows} skuExists={skuExists} deleteSelectedSku={deleteSelectedSku} />*/}
+                    <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
                   </div>
                 )}
               </Form.Item>
@@ -497,7 +535,7 @@ function Step4({setStep,form}){
       <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}/>
 
 
-      <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={this.skuSelectedBackFun} onCancelBackFun={this.closeGoodsModal} />
+      <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
     </div>
   )
 }

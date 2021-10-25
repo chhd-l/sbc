@@ -52,6 +52,7 @@ class GiftLevels extends React.Component<any, any> {
 
 
   componentDidMount() {
+    console.log(this.props.isFullCount)
     // if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
     //   this.initLevel();
     // }

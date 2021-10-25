@@ -2029,7 +2029,11 @@ export default {
         "Marketing.GroupOfCustomer": "Group of customer",
         "Marketing.CartLimit": "Cart limit",
         "Marketing.Conditions":"Conditions",
-        "Marketing.PleaseSelectOne":"Please select One "
+        "Marketing.PleaseSelectOne":"Please select One",
+        "Marketing.Advantage":"Advantage",
+        "Marketing.Gifts":"Gifts",
+        "Marketing.PromotionValue":"Promotion value",
+        "Marketing.Summary":"Summary",
     },
     Content: {
         "Content.Prompt": "Prompt",

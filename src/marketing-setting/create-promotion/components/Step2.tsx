@@ -1,8 +1,9 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { Form, Input, DatePicker, Button } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { Const, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import { FormContext } from '../index';
 
 const { RangePicker } = DatePicker;
 const formItemLayout = {
@@ -10,6 +11,7 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 function Step2({setStep,form}) {
+  const Context = useContext(FormContext);
   const {getFieldDecorator,validateFields} = form
 
   return (

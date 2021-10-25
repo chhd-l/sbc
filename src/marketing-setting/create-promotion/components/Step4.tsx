@@ -161,135 +161,6 @@ function Step4({setStep,form}){
     );
   };
 
-  /**
-   * Group of customer
-   */
-  const Group = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      {getFieldDecorator('segmentIds', {
-        initialValue: '',
-        rules: [
-          {
-            validator: (_rule, value, callback) => {
-              if (!value) {
-                callback(
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseselectgroup'
-                  })
-                );
-              }
-              callback();
-            }
-          }
-        ]
-      })(
-        <Select style={{ width: 520 }} onChange={selectGroupOnChange}>
-          {allGroups.map((item) => (
-            <Select.Option key={item.id} value={item.id}>
-              {item.name}
-            </Select.Option>
-          ))}
-        </Select>
-      )}
-    </Form.Item>
-  )
-  const ByEmail = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      {getFieldDecorator('emailSuffixList', {
-        initialValue: '',
-        rules: [
-          {
-            validator: (_rule, value, callback) => {
-              if (!value) {
-                callback(
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseenteremailsuffix'
-                  })
-                );
-              }
-              callback();
-            }
-          }
-        ]
-      })(
-        <Input
-          style={{ width: 300 }}
-          maxLength={30}
-        />
-      )}
-    </Form.Item>
-  )
-  /**
-   * cartLimit
-   */
-  const cartLimitQuantity = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      <span>Full&nbsp;</span>
-      {getFieldDecorator('time', {
-        rules: [
-          {
-            required: true,
-            message:
-              (window as any).RCi18n({
-                id: 'Marketing.ustenterrules',
-              })
-          },
-          {
-            validator: (_rule, value, callback) => {
-              if (value) {
-                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                  callback(
-                    (window as any).RCi18n({
-                      id: 'Marketing.1-9999',
-                    })
-                  );
-                }
-              }
-              callback();
-            }
-          }
-        ],
-      })(
-        <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
-          id: 'Marketing.1-9999',
-        })}/>,
-      )}
-      <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
-    </Form.Item>
-  )
-  const cartLimitAmount = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      <span>Full&nbsp;</span>
-      {getFieldDecorator('time', {
-        rules: [
-          {
-            required: true,
-            message:
-              (window as any).RCi18n({
-                id: 'Marketing.ustenterrules',
-              })
-          },
-          {
-            validator: (_rule, value, callback) => {
-              if (value) {
-                if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                  callback(
-                    (window as any).RCi18n({
-                      id: 'Marketing.0-99999999.99',
-                    })
-                  );
-                }
-              }
-              callback();
-            }
-          }
-        ],
-      })(
-        <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0-99999999.99' })}/>,
-      )}
-      <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-    </Form.Item>
-  )
   return (
     <div>
       <div className="step-title">
@@ -349,8 +220,61 @@ function Step4({setStep,form}){
             </Radio.Group>
           )}
         </Form.Item>
-        {customerType === -3 && Group}
-        {customerType === -4 && ByEmail}
+        {customerType === -3 && (
+          <Form.Item wrapperCol={{offset: 6,span:18}}>
+            {getFieldDecorator('segmentIds', {
+              initialValue: '',
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value) {
+                      callback(
+                        (window as any).RCi18n({
+                          id: 'Marketing.Pleaseselectgroup'
+                        })
+                      );
+                    }
+                    callback();
+                  }
+                }
+              ]
+            })(
+              <Select style={{ width: 520 }} onChange={selectGroupOnChange}>
+                {allGroups.map((item) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
+          </Form.Item>
+        )}
+        {customerType === -4 && (
+          <Form.Item wrapperCol={{offset: 6,span:18}}>
+            {getFieldDecorator('emailSuffixList', {
+              initialValue: '',
+              rules: [
+                {
+                  validator: (_rule, value, callback) => {
+                    if (!value) {
+                      callback(
+                        (window as any).RCi18n({
+                          id: 'Marketing.Pleaseenteremailsuffix'
+                        })
+                      );
+                    }
+                    callback();
+                  }
+                }
+              ]
+            })(
+              <Input
+                style={{ width: 300 }}
+                maxLength={30}
+              />
+            )}
+          </Form.Item>
+        )}
 
         {/*Products in the cart*/}
         <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
@@ -525,14 +449,80 @@ function Step4({setStep,form}){
           )}
         </Form.Item>
         {
-          cartLimits === 1 && (cartLimitQuantity)
+          cartLimits === 1 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              <span>Full&nbsp;</span>
+              {getFieldDecorator('fullItem', {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.ustenterrules',
+                      })
+                  },
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (value) {
+                        if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.1-9999',
+                            })
+                          );
+                        }
+                      }
+                      callback();
+                    }
+                  }
+                ],
+              })(
+                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
+                  id: 'Marketing.1-9999',
+                })}/>,
+              )}
+              <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
+            </Form.Item>
+          )
         }
         {
-          cartLimits === 2 && (cartLimitAmount)
+          cartLimits === 2 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              <span>Full&nbsp;</span>
+              {getFieldDecorator('fullMoney', {
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.ustenterrules',
+                      })
+                  },
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (value) {
+                        if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.0-99999999.99',
+                            })
+                          );
+                        }
+                      }
+                      callback();
+                    }
+                  }
+                ],
+              })(
+                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0-99999999.99' })}/>,
+              )}
+              <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+            </Form.Item>
+          )
         }
       </Form>
 
-      <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}/>
+      <ButtonLayer setStep={setStep} step={3} validateFields={validateFields}/>
 
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />

@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react';
 import { Button } from 'antd';
+import { FormContext } from '../index';
 export default function ButtonLayer({setStep,step,validateFields}) {
+  const { changeFormData } = useContext<any>(FormContext);
   const toNext = ()=>{
     validateFields((err, values) => {
       if (!err) {
         console.log(values)
+        changeFormData(step,values)
         setStep(step + 1)
       }
     });

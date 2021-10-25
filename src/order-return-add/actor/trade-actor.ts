@@ -52,9 +52,9 @@ export default class TradeActor extends Actor {
 
   @Action('tradeActor: editGoodsNum')
   editGoodsNum(state, { skuId, value,itemType }: { skuId: string; value: number,itemType:number }) {
-    if(itemType===1){
-     //赠品
-      return state.updateIn(['tradeDetail', 'gifts'], gifts => {
+    if(itemType===2){
+     //订阅订单赠品
+      return state.updateIn(['tradeDetail', 'subscriptionPlanGiftList'], gifts => {
         const index = gifts.findIndex(item => item.get('skuId') == skuId);
         return gifts.update(index, item => item.set('num', value));
       });

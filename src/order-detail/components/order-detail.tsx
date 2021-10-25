@@ -222,7 +222,7 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
         width: '8%'
@@ -289,6 +289,8 @@ class OrderDetailTab extends React.Component<any, any> {
               return <FormattedMessage id="Order.autoship" />;
             case 2:
               return <FormattedMessage id="Order.club" />;
+            case 4:
+              return <FormattedMessage id="Order.peawee" />;
           }
         }
       },

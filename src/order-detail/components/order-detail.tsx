@@ -225,7 +225,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '8%'
+        width: '9%'
       },
       {
         title: showRealStock ? (
@@ -280,7 +280,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '8%',
+        width: '7%',
         render: (text) => {
           switch (text) {
             case 0:

@@ -329,20 +329,23 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     //ru
-    columns.splice(
-      7,
-      0,
-      {
-        title: <FormattedMessage id="Order.RegulationDiscount" />,
-        width: '8%',
-        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
-      },
-      {
-        title: <FormattedMessage id="Order.RealSubtotal" />,
-        width: '7%',
-        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
-      }
-    );
+    if(storeId!==123457934){
+      columns.splice(
+        7,
+        0,
+        {
+          title: <FormattedMessage id="Order.RegulationDiscount" />,
+          width: '8%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
+        },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
+        }
+      );
+    }
+
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 

@@ -1,13 +1,16 @@
 import React, { useContext } from 'react';
 import { Button } from 'antd';
 import { FormContext } from '../index';
-export default function ButtonLayer({setStep,step,validateFields}) {
+import { enumConst } from '../enum'
+export default function ButtonLayer({setStep,step,validateFields,noForm=false}:any) {
   const { changeFormData } = useContext<any>(FormContext);
   const toNext = ()=>{
     validateFields((err, values) => {
       if (!err) {
         console.log(values)
-        changeFormData(step,values)
+        console.log(step)
+        console.log(enumConst.stepEnum[step])
+        changeFormData(enumConst.stepEnum[step],values)
         setStep(step + 1)
       }
     });

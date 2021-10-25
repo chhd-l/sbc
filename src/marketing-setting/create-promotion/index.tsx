@@ -14,7 +14,7 @@ const { Step } = Steps;
 export const FormContext = React.createContext({});
 
 export default function index() {
-  const [step,setStep] = useState<number>(5)
+  const [step,setStep] = useState<number>(0)
   const [formData, setFormData] = useState<any>({});
   /**
    * 保存每一步的值

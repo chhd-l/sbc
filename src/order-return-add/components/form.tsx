@@ -3,15 +3,12 @@ import { Relax } from 'plume2';
 import { Form, Input, Select, Button, Icon, message, InputNumber } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload, cache, RCi18n } from 'qmkit';
+import { noop, Const, history, Tips, QMUpload, cache, RCi18n } from 'qmkit';
+import GoodsList from './goods-list';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
-import GoodsList from './goods-list';
-import RefundAmount from './refund-amount';
-import { FormattedMessage,injectIntl } from 'react-intl';
-
 const formItemLayout = {
   labelCol: {
     sm: { span: 4 }
@@ -20,7 +17,6 @@ const formItemLayout = {
     sm: { span: 6 }
   } as any
 };
-
 const FILE_MAX_SIZE = 5 * 1024 * 1024;
 
 /**
@@ -49,7 +45,6 @@ class ReturnOrderForm extends React.Component<any, any> {
       add: Function;
       // 是否为退货
       isReturn: Boolean;
-
       applyStatus: boolean;
       applyPrice: number;
       applyIntegral: number;
@@ -59,8 +54,6 @@ class ReturnOrderForm extends React.Component<any, any> {
       isOnLine: boolean;
       // 可申请退款金额
       canApplyPrice: number;
-
-
       refundableAmount: string;
     };
   };
@@ -86,12 +79,10 @@ class ReturnOrderForm extends React.Component<any, any> {
     add: noop,
     // 是否为退货
     isReturn: 'isReturn',
-
     // 申请金额
     applyPrice: 'applyPrice',
     // 申请积分
     applyIntegral: 'applyIntegral',
-
     // 订单详情
     tradeDetail: 'tradeDetail',
     // 是否是在线支付  true 是  false 否
@@ -116,14 +107,8 @@ class ReturnOrderForm extends React.Component<any, any> {
       selectedReturnReason,
       selectedReturnWay,
       isReturn,
-      applyStatus,
-      applyPrice,
-      applyIntegral,
-      tradeDetail,
       canApplyPrice
     } = this.props.relaxProps;
-
-
     const { getFieldDecorator } = this.props.form;
     let images = this.props.relaxProps.images.toJS();
     return (
@@ -353,7 +338,6 @@ class ReturnOrderForm extends React.Component<any, any> {
         })
       );
     }
-
     const { editImages } = this.props.relaxProps;
     editImages(fromJS(fileList));
   };
@@ -381,7 +365,6 @@ class ReturnOrderForm extends React.Component<any, any> {
         return false;
       }
     } else {
-
       message.error(
         (window as any).RCi18n({
           id: 'Order.Fileformaterror'

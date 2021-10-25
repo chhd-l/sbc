@@ -196,13 +196,6 @@ export default class GoodsList extends React.Component<any, any> {
         key: 'total',
         width: 100,
         render: (rowInfo) => {
-          // if (itemType == 1) {
-          //   return <div>${(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
-          // }
-          // else {
-          //   return this._getRowTotalPrice(rowInfo);
-          // }
-
           return (
             <div>
               {' '}
@@ -219,9 +212,7 @@ export default class GoodsList extends React.Component<any, any> {
    * 修改数量
    */
   _editGoodsNum = (skuId: string, itemType, returnNum) => {
-    console.log(skuId, returnNum, itemType);
     const { editGoodsNum } = this.props.relaxProps;
-
     editGoodsNum(skuId, returnNum || 0, itemType);
   };
 

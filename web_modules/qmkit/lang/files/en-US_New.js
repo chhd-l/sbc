@@ -2412,6 +2412,10 @@ export default {
         'Setting.Operator': 'Operator',
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
 
+        'Setting.suggestionSetting': 'Suggestion setting',
+        'Setting.domain': 'Domain',
+        'Setting.domainRequired': 'Domain is required',
+
     },
     Menu: {
         "Menu.Appointment": "Appointment",

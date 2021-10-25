@@ -157,7 +157,7 @@ export default class Fields extends React.Component<any, any> {
               }
               return prev;
             }, []).join('+')}{' '}
-            {(text === 'City' || text === 'State') ? (
+            {text === 'City' ? (
               <a
                 onClick={(e) => {
                   e.preventDefault();
@@ -271,7 +271,7 @@ export default class Fields extends React.Component<any, any> {
               }
               return prev;
             }, []).join('+')}{' '}
-            {(text === 'City' || text === 'State') ? (
+            {text === 'City' ? (
               <a
                 onClick={(e) => {
                   e.preventDefault();
@@ -349,7 +349,7 @@ export default class Fields extends React.Component<any, any> {
               <Input value={field.fieldName} disabled />
             </Form.Item>
             <Form.Item label="Input type">
-              {(field.fieldName === 'City' || field.fieldName === 'State') && (
+              {field.fieldName === 'City' && (
                 <Select
                   value={field.inputSearchBoxFlag === 1 && field.inputFreeTextFlag === 1 ? '1' : field.inputSearchBoxFlag === 1 ? '3' : field.inputDropDownBoxFlag === 1 ? '2' : '0'}
                   onChange={(v) => this.onChangeModalField(v === '0' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 0 } : v === '1' ? { inputFreeTextFlag: 1, inputSearchBoxFlag: 1, inputDropDownBoxFlag: 0 } : v === '2' ? { inputFreeTextFlag: 0, inputSearchBoxFlag: 0, inputDropDownBoxFlag: 1 } : { inputFreeTextFlag: 0, inputSearchBoxFlag: 1, inputDropDownBoxFlag: 0 })}

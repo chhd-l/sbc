@@ -222,10 +222,10 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '8%'
+        width: '9%'
       },
       {
         title: showRealStock ? (
@@ -280,7 +280,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '8%',
+        width: '7%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -289,6 +289,8 @@ class OrderDetailTab extends React.Component<any, any> {
               return <FormattedMessage id="Order.autoship" />;
             case 2:
               return <FormattedMessage id="Order.club" />;
+            case 4:
+              return <FormattedMessage id="Order.peawee" />;
           }
         }
       },
@@ -327,20 +329,23 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     //ru
-    columns.splice(
-      7,
-      0,
-      {
-        title: <FormattedMessage id="Order.RegulationDiscount" />,
-        width: '8%',
-        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
-      },
-      {
-        title: <FormattedMessage id="Order.RealSubtotal" />,
-        width: '7%',
-        render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
-      }
-    );
+    if(storeId!==123457934){
+      columns.splice(
+        7,
+        0,
+        {
+          title: <FormattedMessage id="Order.RegulationDiscount" />,
+          width: '8%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
+        },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
+        }
+      );
+    }
+
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 

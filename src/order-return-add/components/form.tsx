@@ -394,16 +394,16 @@ class ReturnOrderForm extends React.Component<any, any> {
    * 检查是否只退了赠品没退商品的情况
    */
   _checkReturnNum=()=>{
-    // const {tradeDetail}=this.props.relaxProps;
-    // // 退货商品数量大于0的商品
-    // const tradeItems = tradeDetail.get( 'tradeItems').filter((item) => item.get('num') > 0);
-    // // 退货赠品数量大于0的赠品
-    // const gifts = tradeDetail.get('gifts').filter((item) => item.get('num') > 0);
-    // // 如果所有商品的退货数量都为0但是gift的数量有不为0的
-    // if (tradeItems.size == 0&&gifts.size>0) {
-    //   message.error(RCi18n({id: 'Order.returnOrder.checkReturnNum'}));
-    //   return false;
-    // }
+    const {tradeDetail}=this.props.relaxProps;
+    // 退货商品数量大于0的商品
+    const tradeItems = tradeDetail.get( 'tradeItems').filter((item) => item.get('num') > 0);
+    // 退货赠品数量大于0的赠品
+    const subGifts = tradeDetail.get('subscriptionPlanGiftList').filter((item) => item.get('num') > 0);
+    // 如果所有商品的退货数量都为0但是gift的数量有不为0的
+    if (tradeItems.size == 0&&subGifts.size>0) {
+      message.error(RCi18n({id: 'Order.returnOrder.checkReturnNum'}));
+      return false;
+    }
     return true;
   }
 }

@@ -410,7 +410,7 @@ class ListView extends React.Component<any, any> {
                           )}
 
                           {/*待发货状态显示*/}
-                          {(auditState==='INSIDE_CHECKED'||auditState==='CHECKED')&&v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                          {Const.SITE_NAME !== 'MYVETRECO' && (auditState==='INSIDE_CHECKED'||auditState==='CHECKED') && v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
                             v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
                             // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
                             v.getIn(['tradeState', 'payState']) === 'PAID' && (
@@ -423,7 +423,7 @@ class ListView extends React.Component<any, any> {
                               </AuthWrapper>
                             )}
                           {/*部分发货状态显示*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
+                          {Const.SITE_NAME !== 'MYVETRECO' && (v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
                             (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
                             (v.getIn(['tradeState', 'payState']) === 'PAID' || v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (
                               <AuthWrapper functionName="fOrderDetail002">

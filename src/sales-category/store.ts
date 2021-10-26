@@ -118,6 +118,9 @@ export default class AppStore extends Store {
       formDataJs.periodBeginTime = formDataJs.period[0].format(Const.TIME_FORMAT);
       formDataJs.periodEndTime = formDataJs.period[1].format(Const.TIME_FORMAT);
       delete formDataJs.period;
+    } else {
+      formDataJs.periodBeginTime = null;
+      formDataJs.periodEndTime = null;
     }
     // filterStatus
     formDataJs.filterStatus = formDataJs.filterStatus ? 1 : 0;

@@ -2035,6 +2035,12 @@ export default {
         "Marketing.Gifts":"Gifts",
         "Marketing.PromotionValue":"Promotion value",
         "Marketing.Summary":"Summary",
+        "Marketing.ActivitiesInfo":"Activities Info",
+        "Marketing.lssuanceTime":"lssuance time",
+        "Marketing.validPeriod":"valid period",
+        "Marketing.totalNumber":"total number of coupon codes",
+        "Marketing.status":"Status",
+        "Marketing.generate":"generate",
     },
     Content: {
         "Content.Prompt": "Prompt",

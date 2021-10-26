@@ -64,18 +64,20 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               ...storeInfoResp.businessBasicRequest,
               cityId: { key: storeInfoResp.businessBasicRequest.cityId ?? '', value: storeInfoResp.businessBasicRequest.cityId ?? '', label: storeInfoResp.businessBasicRequest.city ?? '' }
             });
-            //business的话，初始化representative form
-            this.shodForm.props.form.setFieldsValue({
-              ...(storeInfoResp.representativeRequest?.shareholder ?? {}),
-              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument)
-            });
-            this.signForm.props.form.setFieldsValue({
-              ...(storeInfoResp.representativeRequest?.signatories ?? {}),
-              cityId: { key: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', value: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', label: storeInfoResp.representativeRequest?.signatories?.city ?? '' },
-              dateOfBirth: storeInfoResp.representativeRequest?.signatories?.dateOfBirth ? moment(storeInfoResp.representativeRequest.signatories.dateOfBirth, 'YYYY-MM-DD') : null,
-              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument)
-            });
-            this.signForm.setDefaultOptions();
+            //business 并且不是审核通过的状态的话，初始化representative form
+            if (storeInfoResp.adyenAuditState !== 1) {
+              this.shodForm.props.form.setFieldsValue({
+                ...(storeInfoResp.representativeRequest?.shareholder ?? {}),
+                supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument)
+              });
+              this.signForm.props.form.setFieldsValue({
+                ...(storeInfoResp.representativeRequest?.signatories ?? {}),
+                cityId: { key: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', value: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', label: storeInfoResp.representativeRequest?.signatories?.city ?? '' },
+                dateOfBirth: storeInfoResp.representativeRequest?.signatories?.dateOfBirth ? moment(storeInfoResp.representativeRequest.signatories.dateOfBirth, 'YYYY-MM-DD') : null,
+                supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument)
+              });
+              this.signForm.setDefaultOptions();
+            }
           } else {
             this.basiForm.props.form.setFieldsValue({
               ...storeInfoResp.individualBasicRequest,
@@ -211,10 +213,10 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
                <IndividualBasicInformationForm adyenAuditState={adyenAuditState} onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} />
               }
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Representative" key="2" forceRender={typeOfBusiness === 1} disabled={typeOfBusiness === 0}>
+            {typeOfBusiness === 1 && adyenAuditState !== 1 ? <Tabs.TabPane tab="Representative" key="2" forceRender={typeOfBusiness === 1}>
               <ShareHolderForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.shodForm = formRef} />
               <SignatoriesForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.signForm = formRef} />
-            </Tabs.TabPane>
+            </Tabs.TabPane> : null}
             <Tabs.TabPane tab="Bank information" key="3" forceRender>
               <BankInformation isBusiness={typeOfBusiness === 1} adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.bankForm = formRef} />
             </Tabs.TabPane>

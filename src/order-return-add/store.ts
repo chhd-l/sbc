@@ -77,6 +77,17 @@ export default class AppStore extends Store {
         });
       }
 
+      if (tradeDetail.res.context.subscriptionPlanGiftList) {
+        tradeDetail.res.context.subscriptionPlanGiftList.forEach((v) => {
+            v.skuNo= v.goodsInfoNo;
+            v.skuName=v.goodsInfoName;
+            v.specDetails='';
+            v.unitPrice=0;
+            v.num=0;//初始化默认的退货数量
+            v.skuId=v.goodsInfoId
+        });
+      }
+
       // 默认退货数量为0
       tradeDetail.res.context.tradeItems.forEach((v) => {
         v.totalNum = v.num;
@@ -326,11 +337,28 @@ export default class AppStore extends Store {
 
     param = param.set('returnItems', tradeItems);
 
-    // 只保存退货赠品数量大于0的赠品
-    // const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
-    // if (gifts.size > 0) {
-    //   param = param.set('returnItems', tradeItems.push(gifts));
-    // }
+    // 只保存退货赠品数量大于0的订阅赠品
+    const subGifts = data.getIn(['tradeDetail', 'subscriptionPlanGiftList']).filter((item) => item.get('num') > 0);
+    if (subGifts.size > 0) {
+      let returnSubGifts=[]
+      subGifts.toJS().forEach((v) => {
+        const obj={
+          canReturnNum:v.canReturnNum,
+          num:v.num,
+          orderSplitPrice:0,
+          pic:v.goodsInfoImg,
+          price:0,
+          skuId:v.goodsInfoId,
+          skuName:v.goodsInfoName,
+          skuNo:v.goodsInfoNo,
+          specDetails:'',
+          splitPrice:0,
+          unit:'',
+        }
+        returnSubGifts.push(obj)
+      });
+      param = param.set('returnSubscriptionPlanGift', returnSubGifts);
+    }
 
     // 退款金额，退货是商品总额，退款是应付金额
     console.log(data.get('isReturn'));

@@ -933,6 +933,7 @@ export default {
         'Order.RegulationDiscount':'Regulation discount',
         'Order.RealSubtotal':'Real subtotal',
         'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
+        'Order.peawee':'Peawee'
 
 
     },
@@ -2029,7 +2030,11 @@ export default {
         "Marketing.GroupOfCustomer": "Group of customer",
         "Marketing.CartLimit": "Cart limit",
         "Marketing.Conditions":"Conditions",
-        "Marketing.PleaseSelectOne":"Please select One ",
+        "Marketing.PleaseSelectOne":"Please select One",
+        "Marketing.Advantage":"Advantage",
+        "Marketing.Gifts":"Gifts",
+        "Marketing.PromotionValue":"Promotion value",
+        "Marketing.Summary":"Summary",
         "Marketing.ActivitiesInfo":"Activities Info",
         "Marketing.lssuanceTime":"lssuance time",
         "Marketing.validPeriod":"valid period",

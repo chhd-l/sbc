@@ -25,7 +25,7 @@ function Step4({setStep,form}){
   const {getFieldDecorator,validateFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
-  const [customerType,setCustomerType] = useState<number>(-1)
+  const [customerType,setCustomerType] = useState<number>(0)
   const [scopeType,setScopeType] = useState<number>(0)
   const [cartLimits,setCartLimits] = useState<number>(0)
 

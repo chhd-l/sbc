@@ -2037,6 +2037,12 @@ export default {
         "Marketing.Summary":"Summary",
         "Marketing.public":"public",
         "Marketing.private":"private",
+        "Marketing.ActivitiesInfo":"Activities Info",
+        "Marketing.lssuanceTime":"lssuance time",
+        "Marketing.validPeriod":"valid period",
+        "Marketing.totalNumber":"total number of coupon codes",
+        "Marketing.status":"Status",
+        "Marketing.generate":"generate",
     },
     Content: {
         "Content.Prompt": "Prompt",
@@ -2449,6 +2455,10 @@ export default {
         'Setting.Operator': 'Operator',
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
         "Setting.avatar": "Avatar",
+
+        'Setting.suggestionSetting': 'Suggestion setting',
+        'Setting.domain': 'Domain',
+        'Setting.domainRequired': 'Domain is required',
 
     },
     Menu: {

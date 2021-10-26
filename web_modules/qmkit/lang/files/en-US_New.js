@@ -2041,6 +2041,8 @@ export default {
         "Marketing.totalNumber":"total number of coupon codes",
         "Marketing.status":"Status",
         "Marketing.generate":"generate",
+        "Marketing.ActivityTime":"Activity time",
+        "Marketing.numberCodes":"Number of codes",
     },
     Content: {
         "Content.Prompt": "Prompt",

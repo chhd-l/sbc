@@ -32,12 +32,12 @@ export default class CouponInfo extends Component<any, any> {
 
         <div className="container">
           <Headline title={<FormattedMessage id="Marketing.Coupon" />} />
-          <Tabs>
+          <Tabs defaultActiveKey={this.props.match.params.key}>
             <Tabs.TabPane tab={<FormattedMessage id="Marketing.CouponInfo" />} key="1">
               <CouponBasicInfo />
             </Tabs.TabPane>
             <Tabs.TabPane tab={<FormattedMessage id="Marketing.ActivitiesInfo" />} key="2">
-              <ActivitiesInfo />
+              <ActivitiesInfo couponId={this.props.match.params.cid}/>
             </Tabs.TabPane>
           </Tabs>
         </div>

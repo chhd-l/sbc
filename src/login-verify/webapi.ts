@@ -28,6 +28,14 @@ export function verifyUser(filterParams = {}) {
     })
   });
 }
+export function findPrescriberIdAndStoreBy(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/findAccountAndStore', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
 
 export function saveConsent(filterParams = {}) {
   return Fetch<TResult>('/prescriber/saveConsent', {

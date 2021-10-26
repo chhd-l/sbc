@@ -2029,7 +2029,13 @@ export default {
         "Marketing.GroupOfCustomer": "Group of customer",
         "Marketing.CartLimit": "Cart limit",
         "Marketing.Conditions":"Conditions",
-        "Marketing.PleaseSelectOne":"Please select One "
+        "Marketing.PleaseSelectOne":"Please select One ",
+        "Marketing.ActivitiesInfo":"Activities Info",
+        "Marketing.lssuanceTime":"lssuance time",
+        "Marketing.validPeriod":"valid period",
+        "Marketing.totalNumber":"total number of coupon codes",
+        "Marketing.status":"Status",
+        "Marketing.generate":"generate",
     },
     Content: {
         "Content.Prompt": "Prompt",

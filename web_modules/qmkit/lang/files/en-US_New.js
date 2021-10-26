@@ -2035,6 +2035,8 @@ export default {
         "Marketing.Gifts":"Gifts",
         "Marketing.PromotionValue":"Promotion value",
         "Marketing.Summary":"Summary",
+        "Marketing.public":"public",
+        "Marketing.private":"private",
     },
     Content: {
         "Content.Prompt": "Prompt",

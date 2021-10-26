@@ -2492,6 +2492,9 @@ export default {
         'Menu.UOM category': 'UOM category',
         'Menu.UOM list': 'UOM list',
 
+        'Menu.Address setting': 'Address setting',
+        'Menu.Inventory management': 'Inventory management',
+
     },
     Others: {
         "import": "Import",

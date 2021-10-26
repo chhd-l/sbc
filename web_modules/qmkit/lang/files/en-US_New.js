@@ -2454,6 +2454,10 @@ export default {
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
         "Setting.avatar": "Avatar",
 
+        'Setting.suggestionSetting': 'Suggestion setting',
+        'Setting.domain': 'Domain',
+        'Setting.domainRequired': 'Domain is required',
+
     },
     Menu: {
         "Menu.Appointment": "Appointment",

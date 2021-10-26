@@ -25,12 +25,16 @@ export default withOktaAuth(
     async componentDidMount() {
       // this.search('123457908-098111')
      let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
-     let {res} = await webApi.findPrescriberIdAndStoreBy({userId})
-     console.info('/......',res)
-     debugger
-     let {storeId,prescriberId} = res.context
-     let storeIdAndPrescriberId = `${storeId}-${prescriberId}`
-     this.search(storeIdAndPrescriberId)
+     if(userId){
+      let {res} = await webApi.findPrescriberIdAndStoreBy({userId})
+      console.info('/......',res)
+      debugger
+      let {storeId,prescriberId} = res.context
+      if(prescriberId){
+        let storeIdAndPrescriberId = `${storeId}-${prescriberId}`
+        this.search(storeIdAndPrescriberId)
+      }
+     }
 
       document.getElementById('consents').addEventListener('click', (e) => {
         if (e.target.localName === 'span') {

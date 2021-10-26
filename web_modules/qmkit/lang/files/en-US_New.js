@@ -2035,6 +2035,8 @@ export default {
         "Marketing.Gifts":"Gifts",
         "Marketing.PromotionValue":"Promotion value",
         "Marketing.Summary":"Summary",
+        "Marketing.public":"public",
+        "Marketing.private":"private",
         "Marketing.ActivitiesInfo":"Activities Info",
         "Marketing.lssuanceTime":"lssuance time",
         "Marketing.validPeriod":"valid period",
@@ -2455,6 +2457,10 @@ export default {
         'Setting.Operator': 'Operator',
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
         "Setting.avatar": "Avatar",
+
+        'Setting.suggestionSetting': 'Suggestion setting',
+        'Setting.domain': 'Domain',
+        'Setting.domainRequired': 'Domain is required',
 
     },
     Menu: {

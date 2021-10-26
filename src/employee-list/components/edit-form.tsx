@@ -317,12 +317,14 @@ export default class EditForm extends React.Component<any, any> {
                 }
               ]
             })(<Input.Search
+              enterButton
               loading={loading}
               onSearch={this.onEmailChange}
               disabled={_state.get('edit')}
               placeholder='0-50 characters'
             />)}
           </FormItem>
+          <p style={{color: '#999', paddingLeft: '140px'}}>* If the account has been added to other store, you can click the button to refresh the information</p>
 
           <FormItem {...formItemLayout} label={<FormattedMessage id='firstName' />} hasFeedback>
             {getFieldDecorator('firstName', {

@@ -14,8 +14,15 @@ const { Step } = Steps;
 export const FormContext = React.createContext({});
 
 export default function index() {
-  const [step,setStep] = useState<number>(0)
-  const [formData, setFormData] = useState<any>({});
+  const [step,setStep] = useState<number>(3)
+  const [formData, setFormData] = useState<any>({
+    PromotionType:{ publicStatus: 1,isNotLimit: 1 },
+    Conditions:{
+      isSuperimposeSubscription:1,
+      segmentIds:[],
+      storeCateIds:[],
+    }
+  });
   /**
    * 保存每一步的值
    * @param id
@@ -23,7 +30,9 @@ export default function index() {
    */
   const changeFormData = (id, data) => {
     let obj = {}
-    obj[id] = data;
+    obj[id] = {}
+    console.log(formData[id])
+    Object.assign(obj[id],formData[id] ? formData[id] : {},data);
     console.log({...formData,...obj})
     setFormData({...formData,...obj});
   };

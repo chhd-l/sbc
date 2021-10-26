@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
-import { useSafeState } from 'ahooks';
+import { FormContext } from '../index';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
 function Step3({setStep,form}){
+  const { changeFormData } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
   const [publicStatus,setPublicStatus] = useState(true)
-  const [limitStatus,setLimitStatus] = useState(true)
+  const [limitStatus,setLimitStatus] = useState(false)
 
   useEffect(()=>{
     getPromotionCode()
@@ -72,7 +74,10 @@ function Step3({setStep,form}){
           <Checkbox
             checked={publicStatus}
             style={{ marginLeft: 20 }}
-            onChange={(e)=>setPublicStatus(e.target.checked)}
+            onChange={(e)=>{
+              setPublicStatus(e.target.checked)
+              changeFormData(enumConst.stepEnum[2],{publicStatus: e.target.checked ? 1 : 0})
+            }}
           >
             <FormattedMessage id="Marketing.Public" />
           </Checkbox>
@@ -86,7 +91,10 @@ function Step3({setStep,form}){
           <Checkbox
             checked={limitStatus}
             style={{ marginLeft: 20 }}
-            onChange={(e)=>setLimitStatus(e.target.checked)}
+            onChange={(e)=>{
+              setLimitStatus(e.target.checked)
+              changeFormData(enumConst.stepEnum[2],{isNotLimit: e.target.checked ? 0 : 1})
+            }}
           >
             <FormattedMessage id="Marketing.LimitTheUsagePerCustomer" />
           </Checkbox>

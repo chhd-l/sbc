@@ -141,3 +141,15 @@ export const updateFreeShipping = (shippingBean) => {
     body: JSON.stringify(shippingBean)
   });
 };
+
+
+/**
+ * 新增优惠券
+ * @param params
+ */
+export const addCoupon = (params) => {
+  return Fetch('/coupon-info', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};

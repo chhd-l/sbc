@@ -943,7 +943,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
     //修改状态的修改
     //创建订单状态
-    if (flowState === 'INIT' || flowState === 'AUDIT') {
+    if (Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'INIT' || flowState === 'AUDIT')) {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {flowState === 'AUDIT' && (
@@ -967,6 +967,7 @@ class OrderDetailTab extends React.Component<any, any> {
         </div>
       );
     } else if (
+      Const.SITE_NAME !== 'MYVETRECO' &&
       (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
       (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
       payState === 'PAID'

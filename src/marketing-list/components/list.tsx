@@ -204,10 +204,10 @@ class MarketingList extends React.Component<any, any> {
             console.log(publicStatus)
             switch (publicStatus) {
               case '0':
-                return <span><FormattedMessage id="Marketing.public" /></span>
+                return <span><FormattedMessage id="Marketing.private" /></span>
                 break;
               case '1':
-                return <span><FormattedMessage id="Marketing.private" /></span>
+                return <span><FormattedMessage id="Marketing.public" /></span>
                 break;
             }
 

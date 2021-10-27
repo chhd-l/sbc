@@ -179,14 +179,14 @@ class SearchForm extends React.Component<any, any> {
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
-                    field: 'publicStatic',
+                    field: 'publicStatus',
                     value
                   });
                 }}
               >
                 <Option value=""><FormattedMessage id="Marketing.All" /></Option>
-                <Option value="0"><FormattedMessage id="Marketing.public" /></Option>
-                <Option value="1"><FormattedMessage id="Marketing.private" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.private" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.public" /></Option>
               </SelectGroup>
             </FormItem>
           </Col>

@@ -455,7 +455,7 @@ function Step4({setStep,form}){
           )}
         </Form.Item>
         {
-          cartLimits === 1 && (
+          cartLimits === 2 && (
             <Form.Item wrapperCol={{offset: 6,span:18}}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullItem', {
@@ -492,7 +492,7 @@ function Step4({setStep,form}){
           )
         }
         {
-          cartLimits === 2 && (
+          cartLimits === 1 && (
             <Form.Item wrapperCol={{offset: 6,span:18}}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullMoney', {

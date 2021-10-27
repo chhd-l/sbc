@@ -5,8 +5,8 @@ import { getStoreInfo, saveBasicInfo, saveRepresentative, saveBankInfo, submitFo
 import { BusinessBasicInformationForm, IndividualBasicInformationForm } from './basic';
 import { ShareHolderForm, SignatoriesForm } from './repre';
 import BankInformation from './bank';
+import MapKeyToDisplayName from '../tools';
 import moment from 'moment';
-import { ThisExpression } from 'ts-morph';
 
 export const SupportedDocumentUtil = {
   mapPropsToFormData: (props) => {
@@ -183,7 +183,11 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
     const { storeInfo: { errorList } } = this.state;
     Modal.error({
       title: 'errors',
-      content: <div style={{color:'red'}}>{errorList.map(err => <div>{err}</div>)}</div>,
+      content: <div style={{color:'red'}}>
+        {errorList.map((err, idx) => <div key={idx}>
+          {Object.keys(err).map((item, sidx) => <div key={sidx}>{MapKeyToDisplayName(item)}: {err[item]}</div>)}
+        </div>)}
+      </div>,
       okText: 'OK'
     });
   }

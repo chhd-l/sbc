@@ -44,7 +44,7 @@ export default class ForcastList extends React.Component<any, any> {
       });
       const encrypted = base64.urlEncode(result);
       // 新窗口下载
-      const exportHref = Const.HOST + `/inventory/forecast/export/${encrypted}`;
+      const exportHref = Const.HOST + `/sub/inventory/forecast/export/${encrypted}`;
       window.open(exportHref);
     } else {
       message.error('Please login in');

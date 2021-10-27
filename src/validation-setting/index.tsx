@@ -242,11 +242,11 @@ class ValidationSetting extends Component<any, any> {
       });
     });
   };
-  changeSettingStatus = (id) => {
+  changeSettingStatus = (id: number, addressApiType: number) => {
     let params = {
       id,
       isOpen: 1,
-      addressApiType: 0
+      addressApiType: addressApiType
     };
     webapi
       .changeAddressApiSettingStatus(params)
@@ -273,7 +273,7 @@ class ValidationSetting extends Component<any, any> {
             <BreadCrumb />
             <div className="container">
               <Headline title={RCi18n({id:"Setting.suggestionSetting"})} />
-              <Row style={{ marginBottom: 10 }}>
+              <Row gutter={[24,24]} style={{ marginBottom: 10 }}>
                 {addressApiSettings.filter(item => item.addressApiType === 1).map((item, index) => (
                     <Col span={8} key={item.id}>
                       {+item.isCustom ? (
@@ -291,7 +291,7 @@ class ValidationSetting extends Component<any, any> {
                             <p><FormattedMessage id="Setting.Setupyourownrule" /></p>
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id, 1)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -302,7 +302,7 @@ class ValidationSetting extends Component<any, any> {
                             <img src={item.imgUrl} style={{ marginTop: 15, height: '60px' }} />
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id, 1)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                             {item.isOpen ? (
@@ -328,7 +328,7 @@ class ValidationSetting extends Component<any, any> {
               <div style={{marginTop: 40}}></div>
 
               <Headline title={RCi18n({id:"Menu.Validation setting"})} />
-              <Row style={{ marginBottom: 10 }}>
+              <Row gutter={[24,24]} style={{ marginBottom: 10 }}>
                 {addressApiSettings.filter(item => item.addressApiType === 0).map((item, index) => (
                     <Col span={8} key={item.id}>
                       {+item.isCustom ? (
@@ -346,7 +346,7 @@ class ValidationSetting extends Component<any, any> {
                             <p><FormattedMessage id="Setting.Setupyourownrule" /></p>
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id, 0)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                           </div>
@@ -357,7 +357,7 @@ class ValidationSetting extends Component<any, any> {
                             <img src={item.imgUrl} style={{ marginTop: 15, height: '60px' }} />
                           </div>
                           <div className="bar" style={{ float: 'right' }}>
-                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
+                            <Popconfirm title={RCi18n({id:"Setting.EnableTips"})} disabled={+item.isOpen === 1} onConfirm={() => this.changeSettingStatus(item.id, 0)} okText={RCi18n({id:"Setting.Yes"})} cancelText={RCi18n({id:"Setting.No"})}>
                               <Switch checked={item.isOpen === 1} disabled={+item.isOpen === 1} size="small" />
                             </Popconfirm>
                             {item.isOpen ? (

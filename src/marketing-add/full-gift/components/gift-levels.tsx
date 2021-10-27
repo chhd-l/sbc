@@ -175,7 +175,7 @@ class GiftLevels extends React.Component<any, any> {
                       </span>
                     </div>
                   )}
-                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
+                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5,marginBottom:24 }}>
                     <FormattedMessage id="Marketing.Addgift" />
                   </Button>
                   {/*&nbsp;&nbsp;*/}

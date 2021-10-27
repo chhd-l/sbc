@@ -76,8 +76,8 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
         customProductsType: formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
         startTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),//改版用到的字段
         endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),//改版用到的字段
-        fullBuyPrice: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullMoney : null,
-        fullbuyCount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+        fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+        fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
         scopeIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : []
       })
     }else {
@@ -88,8 +88,8 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
           fullReductionLevelList: [{
             key: makeRandom(),
-            fullAmount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullItem : null,
-            fullCount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullMoney : null,
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Advantage.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Advantage.fullItem || 1 : null,
             reduction: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
           }],
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
@@ -120,8 +120,8 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
           fullReductionLevelList: [{
-            fullAmount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullItem : null,
-            fullCount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullMoney : null,
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Advantage.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Advantage.fullItem || 1 : null,
           }],
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
           joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
@@ -152,8 +152,8 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
           fullDiscountLevelList: [{
             key: makeRandom(),
-            fullAmount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullItem : null,
-            fullCount: formData.Conditions.CartLimit === 2 ? formData.Advantage.fullMoney : null,
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Advantage.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Advantage.fullItem || 1 : null,
             discount: formData.Advantage.couponDiscount/100,
             limitAmount:formData.Advantage.limitAmount,
           }],
@@ -165,7 +165,7 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           promotionType: formData.Conditions.promotionType,
           publicStatus: formData.PromotionType.publicStatus,
           scopeType: formData.Conditions.scopeType,
-          subType: formData.Conditions.CartLimit === 1 ? 0 : 1,
+          subType: formData.Conditions.CartLimit === 1 ? 2 : 3,
           segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
           storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
 
@@ -180,21 +180,39 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
         })
       }
       if(formData.Advantage.couponPromotionType === 4){
+        let fullGiftLevelList = [...formData.Advantage.fullGiftLevelList]
+        if(formData.Conditions.CartLimit === 0){
+          fullGiftLevelList[0].fullCount = '1'
+        }
+        if(formData.Conditions.CartLimit === 1){
+          fullGiftLevelList[0].fullCount = formData.Conditions.fullItem
+        }
+        if(formData.Conditions.CartLimit === 2){
+          fullGiftLevelList[0].fullAmount = formData.Conditions.fullMoney
+        }
         await webapi.addFullDiscount({
-          beginTime: "2021-10-27 02:52:00",
-          customProductsType: 0,
-          endTime: "2021-11-30 02:52:00",
-          fullGiftLevelList: formData.Advantage.fullGiftLevelList,
+          marketingType: 2,//送礼固定为2
+          fullGiftLevelList: fullGiftLevelList,
+          attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : [],
+          beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
+          endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
+          marketingName: formData?.BasicSetting?.marketingName,
+          emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
+          isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
+          joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
+          promotionCode: formData.PromotionType.promotionCode,
+          promotionType: formData.Conditions.promotionType,
+          publicStatus: formData.PromotionType.publicStatus,
+          customProductsType: formData.Conditions.customProductsType,
+          scopeType: formData.Conditions.scopeType,
+          segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
+          storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
+          subType: formData.Conditions.CartLimit === 1 ? 4 : 5,
+          skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
+
+
           isClub: false,
-          isSuperimposeSubscription: 1,
-          joinLevel: -1,
-          marketingName: "123",
-          marketingType: 2,
-          promotionCode: "dlio1tr85256337373",
-          promotionType: 0,
-          publicStatus: 1,
-          scopeType: 0,
-          subType: 5,
+
         })
       }
     }

@@ -45,7 +45,7 @@ export default function index() {
     >
       <div className="create-promotion">
         <BreadCrumb/>
-        <div className="container-search marketing-container" style={{flex:1,position:'relative'}}>
+        <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
           <Steps current={step} className="step-container">
             <Step title="Create promotion" />
             <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />

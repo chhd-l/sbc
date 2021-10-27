@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input, InputNumber, Radio, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
@@ -10,6 +10,8 @@ import * as commonWebapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
 import SelectedGoodsGrid from '@/marketing-add/common-components/selected-goods-grid';
 import { GoodsModal } from 'biz';
+import { FormContext } from '@/marketing-setting/create-promotion';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
@@ -19,10 +21,11 @@ const formItemLayout = {
 };
 
 function Step4({setStep,form}){
+  const { changeFormData,formData } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
-  const [customerType,setCustomerType] = useState<number>(-1)
+  const [customerType,setCustomerType] = useState<number>(0)
   const [scopeType,setScopeType] = useState<number>(0)
   const [cartLimits,setCartLimits] = useState<number>(0)
 
@@ -97,11 +100,10 @@ function Step4({setStep,form}){
    * @param selectedRows
    */
   const skuSelectedBackFun = async (selectedSkuIds, selectedRows) => {
-    console.log(selectedSkuIds)
-    console.log(selectedRows)
     form.resetFields('goods');
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(selectedRows);
+    changeFormData(enumConst.stepEnum[3],{scopeIds: selectedSkuIds})//保存到公共formData中
     setGoodsModal({...goodsModal,_modalVisible: false});
   };
   /**
@@ -109,8 +111,6 @@ function Step4({setStep,form}){
    * @param skuId
    */
   const deleteSelectedSku = (skuId) => {
-    console.log(selectedSkuIds)
-    console.log(selectedRows)
     selectedSkuIds.splice(
       selectedSkuIds.findIndex((item) => item == skuId),
       1
@@ -191,7 +191,9 @@ function Step4({setStep,form}){
           {
             purchaseType !== 1 &&  (
               <div>
-                <Checkbox>
+                <Checkbox onChange={(e=>{
+                  changeFormData(enumConst.stepEnum[3],{isSuperimposeSubscription: e.target.checked ? 0 : 1})
+                })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
                 </Checkbox>
               </div>
@@ -214,9 +216,13 @@ function Step4({setStep,form}){
             ],
           })(
             <Radio.Group onChange={(e)=>setCustomerType(e.target.value)}>
-              <Radio value={-1}><FormattedMessage id="Marketing.all" /></Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={-3}><FormattedMessage id="Marketing.Group" /></Radio>
-              <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
+              {
+                formData?.PromotionType?.typeOfPromotion !== 1 &&
+                <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
+              }
+
             </Radio.Group>
           )}
         </Form.Item>

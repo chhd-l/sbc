@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormContext } from '../index';
+import { enumConst } from '../enum'
 
 export default function Step6({ setStep }) {
   const { formData } = useContext<any>(FormContext);
@@ -32,19 +33,19 @@ export default function Step6({ setStep }) {
             <div className="step-summary-title"><FormattedMessage id="Marketing.Conditions" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.TypeOfPurchase" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{enumConst.promotionType[formData?.Conditions?.promotionType]}</div>
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.GroupOfCustomer" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{enumConst.joinLevel[formData?.Conditions?.joinLevel]}</div>
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{enumConst.scopeType[formData?.Conditions?.scopeType]}</div>
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{enumConst.CartLimit[formData?.Conditions?.CartLimit]}</div>
             </div>
           </div>
 
@@ -54,7 +55,7 @@ export default function Step6({ setStep }) {
             <div className="step-summary-title"><FormattedMessage id="Marketing.PromotionType" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.TypeOfPromotion" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{enumConst.typeOfPromotion[formData?.PromotionType?.typeOfPromotion]}</div>
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title">Type of coupon:</div>
@@ -66,7 +67,7 @@ export default function Step6({ setStep }) {
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title">Number of use:</div>
-              <div className="step-summary-item-text">1</div>
+              <div className="step-summary-item-text">{formData?.PromotionType?.perCustomer}</div>
             </div>
           </div>
 
@@ -78,7 +79,7 @@ export default function Step6({ setStep }) {
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.PromotionValue" />:</div>
-              <div className="step-summary-item-text">xxxx</div>
+              <div className="step-summary-item-text">{formData?.Advantage?.denomination}</div>
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title">Selected products:</div>
@@ -86,7 +87,7 @@ export default function Step6({ setStep }) {
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title">Discount Limit:</div>
-              <div className="step-summary-item-text">100</div>
+              <div className="step-summary-item-text">{formData?.Advantage?.limitAmount}</div>
             </div>
           </div>
         </div>

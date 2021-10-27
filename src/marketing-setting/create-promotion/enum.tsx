@@ -10,24 +10,24 @@ export const enumConst = {
   },
   typeOfPromotion:{
     0: <FormattedMessage id="Order.PromotionCode" />,
-    1: <FormattedMessage id="Order.PromotionCode" />
+    1: <FormattedMessage id="Order.CouponCode" />
   },
   promotionType:{
-    0: <FormattedMessage id="Order.All" />,
-    1: <FormattedMessage id="Order.Autoship" />,
-    2: <FormattedMessage id="Order.Club" />,
-    3: <FormattedMessage id="Order.Singlepurchase" />
+    0: <FormattedMessage id="Marketing.All" />,
+    1: <FormattedMessage id="Marketing.Autoship" />,
+    2: <FormattedMessage id="Marketing.Club" />,
+    3: <FormattedMessage id="Marketing.Singlepurchase" />
   },
   joinLevel:{
-    '-1': <FormattedMessage id="Order.all" />,
-    '-2': <FormattedMessage id="Order.Group" />,
-    '-3': <FormattedMessage id="Order.Byemail" />,
+    '-1': <FormattedMessage id="Marketing.all" />,
+    '-2': <FormattedMessage id="Marketing.Group" />,
+    '-3': <FormattedMessage id="Marketing.Byemail" />,
   },
   scopeType:{
-    0: <FormattedMessage id="Order.all" />,
-    1: <FormattedMessage id="Order.Category" />,
-    2: <FormattedMessage id="Order.Custom" />,
-    3: <FormattedMessage id="Order.Attribute" />
+    0: <FormattedMessage id="Marketing.all" />,
+    1: <FormattedMessage id="Marketing.Category" />,
+    2: <FormattedMessage id="Marketing.Custom" />,
+    3: <FormattedMessage id="Marketing.Attribute" />
   },
   CartLimit:{
     0: <FormattedMessage id="Order.none" />,

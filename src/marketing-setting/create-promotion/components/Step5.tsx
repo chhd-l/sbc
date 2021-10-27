@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Input, Button, Radio, Row } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormattedMessage } from 'react-intl';
 import { cache, ValidConst } from 'qmkit';
 import GiftLevels from '@/marketing-add/full-gift/components/gift-levels';
 import { fromJS } from 'immutable';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
+import { FormContext } from '@/marketing-setting/create-promotion';
 
 
 const formItemLayout = {
@@ -13,17 +15,21 @@ const formItemLayout = {
 };
 
 function Step5({ setStep, form }) {
+  const { changeFormData,formData } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
   const [selectedRows,setSelectedRows] = useState<any>(fromJS([]))
-  const [fullGiftLevelList,setFullGiftLevelList]  = useState<any>([{
-    key: 1,
-    fullAmount: null,
-    fullCount: null,
-    giftType: 1,
-    fullGiftDetailList: []
-  }])
+  const [fullGiftLevelList,setFullGiftLevelList]  = useState<any>()
+  useEffect(()=>{
+    setFullGiftLevelList([{
+      key: makeRandom(),
+      fullAmount: null,
+      fullCount: null,
+      giftType: 1,
+      fullGiftDetailList: []
+    }])
+  },[])
   /**
    * 规则变化方法
    * @param rules
@@ -32,6 +38,7 @@ function Step5({ setStep, form }) {
     form.resetFields('rules');
     console.log(rules)
     setFullGiftLevelList(rules)
+    changeFormData(enumConst.stepEnum[4],{fullGiftLevelList: rules})
     let errorObject = {};
     //满赠规则具体内容校验
     rules.forEach((level, index) => {
@@ -55,6 +62,14 @@ function Step5({ setStep, form }) {
     console.log(rows)
     setSelectedRows(rows)
   }
+
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  const makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
   return (
     <div>
       <div className="step-title">
@@ -85,9 +100,13 @@ function Step5({ setStep, form }) {
               <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
-              <Radio value={4}>
-                <FormattedMessage id="Marketing.Gifts" />
-              </Radio>
+              {
+                formData?.PromotionType?.typeOfPromotion !== 1 &&
+                  <Radio value={4}>
+                    <FormattedMessage id="Marketing.Gifts" />
+                  </Radio>
+              }
+
             </Radio.Group>
           )}
         </Form.Item>
@@ -211,7 +230,7 @@ function Step5({ setStep, form }) {
         )}
         {
          couponPromotionType === 4 && (
-           <Form.Item {...formItemLayout} label='' required={true} labelAlign="left">
+           <Form.Item wrapperCol={{offset: 6,span:18}} required={true} labelAlign="left">
              {
                getFieldDecorator(
                  'rules',
@@ -225,6 +244,7 @@ function Step5({ setStep, form }) {
                    onChangeBack={onRulesChange}
                    isFullCount={5 % 2}
                    GiftRowsOnChange={GiftRowsOnChange}
+                   noMulti={true}
                  />
                )}
            </Form.Item>

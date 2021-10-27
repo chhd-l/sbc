@@ -98,7 +98,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
   };
 
   render() {
-    const { form: { getFieldDecorator }, form, onChangeName } = this.props;
+    const { form: { getFieldDecorator }, form, onChangeName, adyenAuditState } = this.props;
     const { defaultOptions } = this.state;
     const formLayout = {
       labelCol: { span: 8 },
@@ -130,6 +130,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
                   onChange={(e) => {
                     onChangeName(e.target.value);
                   }}
+                  disabled={adyenAuditState === 0}
                 />
               )}
             </FormItem>
@@ -158,6 +159,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
                     let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase();
                     form.setFieldsValue({storeDomain:'https://'+value+'.myvetreco.co'});
                   }}
+                  disabled={adyenAuditState === 0}
                 />
               )}
             </FormItem>
@@ -176,7 +178,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('storeAddress1', {
                 rules: [{ required: true, message: 'Please input address' }]
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -185,7 +187,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('postCode', {
                 rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -209,6 +211,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
                   placeholder="Select city"
                   fetchOptions={fetchUserList}
                   defaultOptions={defaultOptions}
+                  disabled={adyenAuditState === 0}
                   style={{
                     width: '100%',
                   }}
@@ -223,7 +226,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
                   { required: true, message: 'Please input your Email!' },
                   { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
-              })(<Input />)}
+              })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
@@ -233,7 +236,7 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
                   { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
                 ],
               })(
-                <Input maxLength={12} onChange={this.onChangePhoneNumber} />
+                <Input maxLength={12} onChange={this.onChangePhoneNumber} disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -292,7 +295,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
   };
 
   render() {
-    const { form: { getFieldDecorator }, form, onChangeName } = this.props;
+    const { form: { getFieldDecorator }, form, onChangeName, adyenAuditState } = this.props;
     const { defaultOptions } = this.state;
     const formLayout = {
       labelCol: { span: 8 },
@@ -324,6 +327,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
                   onChange={(e) => {
                     onChangeName(`${e.target.value} ${form.getFieldValue('lastName')}`)
                   }}
+                  disabled={adyenAuditState === 0}
                 />
               )}
             </FormItem>
@@ -337,6 +341,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
                   onChange={(e) => {
                     onChangeName(`${form.getFieldValue('firstName')} ${e.target.value}`);
                   }}
+                  disabled={adyenAuditState === 0}
                 />
               )}
             </FormItem>
@@ -347,7 +352,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
                 rules:[
                   { required: true, type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
-              })(<Input />)}
+              })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
@@ -357,7 +362,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
                   { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
                 ],
               })(
-                <Input maxLength={12} onChange={this.onChangePhoneNumber} />
+                <Input maxLength={12} onChange={this.onChangePhoneNumber} disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -368,7 +373,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('address1', {
                 rules: [{ required: true, message: 'Please input address' }]
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -377,7 +382,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('postCode', {
                 rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
               })(
-                <Input />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -401,6 +406,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
                   placeholder="Select city"
                   fetchOptions={fetchUserList}
                   defaultOptions={defaultOptions}
+                  disabled={adyenAuditState === 0}
                   style={{
                     width: '100%',
                   }}
@@ -413,7 +419,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('dateOfBirth', {
                 rules: [{ required: true, message: 'Please select birthday' }],
               })(
-                <DatePicker format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
+                <DatePicker format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -427,7 +433,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('supportedDocument', {
                 rules: [{ required: true, type: 'array', message: 'Please upload supported document' }]
               })(
-                <FileItem />
+                <FileItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>

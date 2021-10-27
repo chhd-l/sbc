@@ -1,6 +1,6 @@
 import React from 'react';
-import { Table, Alert, Button, Tooltip } from 'antd';
-import { Const, cache } from 'qmkit';
+import { Table, Alert, Button, Tooltip, message } from 'antd';
+import { Const, cache, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getForcastList } from '../webapi';
 
@@ -35,6 +35,22 @@ export default class ForcastList extends React.Component<any, any> {
     });
   }
 
+  handleExport = () => {
+    const base64 = new util.Base64();
+    const token = (window as any).token;
+    if (token) {
+      const result = JSON.stringify({
+        token: token
+      });
+      const encrypted = base64.urlEncode(result);
+      // 新窗口下载
+      const exportHref = Const.HOST + `/inventory/forecast/export/${encrypted}`;
+      window.open(exportHref);
+    } else {
+      message.error('Please login in');
+    }
+  };
+
   render() {
     const { loading, list } = this.state;
     const columns = [
@@ -43,7 +59,7 @@ export default class ForcastList extends React.Component<any, any> {
         dataIndex: 'skuImgUrl',
         key: 'skuImgUrl',
         width: 80,
-        fixed: 'left',
+        fixed: true,
         render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
@@ -51,8 +67,19 @@ export default class ForcastList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        fixed: 'left',
-        align: 'left'
+        fixed: true,
+        align: "left" as "left" | "right" | "center",
+        render: (text) => (
+          <Tooltip
+            overlayStyle={{
+              overflowY: 'auto'
+            }}
+            placement="bottomLeft"
+            title={<div>{text}</div>}
+          >
+            <p style={styles.text}>{text}</p>
+          </Tooltip>
+        )
       },
       {
         title: <FormattedMessage id="Product.SKU" />,
@@ -84,102 +111,104 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'salesCate'
       },
       {
-        title: 'Current inventory',
+        title:  <FormattedMessage id="Product.CurrentInventory" />,
         dataIndex: 'inventory',
         key: 'inventory'
       },
       {
-        title: 'The first day in the future',
+        title:  <FormattedMessage id="Product.The1stDay" />,
         dataIndex: 'futureListArr[0]',
         width: 150,
         key: 'f1'
       },
       {
-        title: 'The second day in the future',
+        title:  <FormattedMessage id="Product.The2ndDay" />,
         dataIndex: 'futureListArr[1]',
         width: 150,
         key: 'f2'
       },
       {
-        title: 'The third day in the future',
+        title:  <FormattedMessage id="Product.The3rdDay" />,
         dataIndex: 'futureListArr[2]',
         width: 150,
         key: 'f3'
       },
       {
-        title: 'The fourth day in the future',
+        title:  <FormattedMessage id="Product.The4thDay" />,
         dataIndex: 'futureListArr[3]',
         width: 150,
         key: 'f4'
       },
       {
-        title: 'The fifth day in the future',
+        title:  <FormattedMessage id="Product.The5thDay" />,
         dataIndex: 'futureListArr[4]',
         width: 150,
         key: 'f5'
       },
       {
-        title: 'The sixth day in the future',
+        title:  <FormattedMessage id="Product.The6thDay" />,
         dataIndex: 'futureListArr[5]',
         width: 150,
         key: 'f6'
       },
       {
-        title: 'The seventh day in the future',
+        title:  <FormattedMessage id="Product.The7thDay" />,
         dataIndex: 'futureListArr[6]',
         width: 150,
         key: 'f7'
       },
       {
-        title: 'The eighth day in the future',
+        title:  <FormattedMessage id="Product.The8thDay" />,
         dataIndex: 'futureListArr[7]',
         width: 150,
         key: 'f8'
       },
       {
-        title: 'The nineth day in the future',
+        title:  <FormattedMessage id="Product.The9thDay" />,
         dataIndex: 'futureListArr[8]',
         width: 150,
         key: 'f9'
       },
       {
-        title: 'The tenth day in the future',
+        title:  <FormattedMessage id="Product.The10thDay" />,
         dataIndex: 'futureListArr[9]',
         width: 150,
         key: 'f10'
       },
       {
-        title: 'The eleventh day in the future',
+        title:  <FormattedMessage id="Product.The11thDay" />,
         dataIndex: 'futureListArr[10]',
         width: 150,
         key: 'f11'
       },
       {
-        title: 'The twelfth day in the future',
+        title:  <FormattedMessage id="Product.The12thDay" />,
         dataIndex: 'futureListArr[11]',
         width: 150,
         key: 'f12'
       },
       {
-        title: 'The thirteenth day in the future',
+        title:  <FormattedMessage id="Product.The13thDay" />,
         dataIndex: 'futureListArr[12]',
         width: 150,
         key: 'f13'
       },
       {
-        title: 'The fourteenth day in the future',
+        title:  <FormattedMessage id="Product.The14thDay" />,
         dataIndex: 'futureListArr[13]',
         width: 150,
         key: 'f14',
-        align: 'left'
+        align: "left" as "left" | "right" | "center"
       }
     ];
     return (
       <div className="table-overflow">
         <Alert message={<FormattedMessage id="Product.SetQuantity" />} type="info" />
-        <Button type="primary">
-          <FormattedMessage id="Product.bulkExport" />
-        </Button>
+        <div className="inventory flex-start-align">
+          <Button type="primary" onClick={this.handleExport}>
+            <FormattedMessage id="Product.bulkExport" />
+          </Button>
+        </div>
         <Table
           rowKey="skuId"
           columns={columns}

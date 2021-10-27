@@ -87,7 +87,7 @@ export default class AppStore extends Store {
           const exportHref = Const.HOST + `/inventory/export/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('请登录');
+          message.error('Please login in');
         }
         resolve();
       }, 500);

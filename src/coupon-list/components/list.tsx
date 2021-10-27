@@ -6,6 +6,7 @@ import { IList } from 'typings/globalType';
 import { Popconfirm, Table as DataGrid, Tooltip } from 'antd';
 import '../index.less';
 import { FormattedMessage } from 'react-intl';
+import CouponModal from '@/coupon-list/components/couponModal';
 
 const PROMOTION_TYPE = {
   0: RCi18n({ id: 'Marketing.All' }),
@@ -18,6 +19,7 @@ export default class List extends React.Component<any, any> {
   props: {
     relaxProps?: {
       total: number;
+      couponId: string;
       pageNum: number;
       pageSize: number;
       couponList: IList;
@@ -25,12 +27,15 @@ export default class List extends React.Component<any, any> {
       init: Function;
       copyCoupon: Function;
       couponExport: Function;
+      handleAdd: Function;
+      setModalVisible: Function;
       loading: boolean;
+      isModalVisible: boolean;
     };
   };
-
   static relaxProps = {
     total: 'total',
+    couponId: 'couponId',
     pageNum: 'pageNum',
     pageSize: 'pageSize',
     couponList: 'couponList',
@@ -38,9 +43,11 @@ export default class List extends React.Component<any, any> {
     init: noop,
     copyCoupon: noop,
     couponExport: noop,
-    loading: 'loading'
+    handleAdd: noop,
+    setModalVisible: noop,
+    loading: 'loading',
+    isModalVisible: 'isModalVisible',
   };
-
   render() {
     const {
       total,
@@ -51,10 +58,18 @@ export default class List extends React.Component<any, any> {
       init,
       copyCoupon,
       couponExport,
-      loading
+      handleAdd,
+      loading,
+      isModalVisible,
+      setModalVisible,
+      couponId
     } = this.props.relaxProps;
     return (
       <>
+        <CouponModal
+          isModalVisible={isModalVisible}
+          setVisible={setModalVisible}
+          couponId={couponId}/>
         <DataGrid
           loading={loading}
           rowKey={(record) => record.couponId}
@@ -102,7 +117,7 @@ export default class List extends React.Component<any, any> {
                     <span
                       className="link"
                       onClick={() => {
-                        couponExport((record as any).couponId);
+                        handleAdd((record as any).couponId);
                       }}
                       style={{ marginRight: 10 }}
                     >
@@ -127,7 +142,7 @@ export default class List extends React.Component<any, any> {
                     )}
                   </AuthWrapper>
                   <AuthWrapper functionName={'f_coupon_detail'}>
-                    <Link to={`/coupon-detail/${(record as any).couponId}`} style={{ marginRight: 10, paddingLeft: 0 }}>
+                    <Link to={`/coupon-detail/${(record as any).couponId}/1`} style={{ marginRight: 10, paddingLeft: 0 }}>
                       <Tooltip placement="top" title={<FormattedMessage id="Marketing.View" />}>
                         <span className="icon iconfont iconView" style={{ fontSize: 20 }}></span>
                       </Tooltip>
@@ -185,7 +200,9 @@ export default class List extends React.Component<any, any> {
               );
             }}
           />
+
         </DataGrid>
+
       </>
     );
   }

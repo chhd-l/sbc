@@ -169,6 +169,29 @@ class SearchForm extends React.Component<any, any> {
           </Col>
         </Row>
         <Row id="input-lable-wwidth">
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<FormattedMessage id="Marketing.CodeType" />}
+                // style={{ width: 170 }}
+                defaultValue=""
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'publicStatus',
+                    value
+                  });
+                }}
+              >
+                <Option value=""><FormattedMessage id="Marketing.All" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.private" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.public" /></Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row id="input-lable-wwidth">
           <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
               <Button

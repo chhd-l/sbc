@@ -26,3 +26,10 @@ export const getAllGroups = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
+
+export const getAactivity = (params) => {
+  return Fetch('/coupon-info/activity', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};

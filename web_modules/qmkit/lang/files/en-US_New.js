@@ -534,6 +534,23 @@ export default {
         "Product.Assigntheresources": "Assign the resources",
         "Product.Assignrandomly": "Assign randomly",
         "Product.Assignprioritized": "Prioritized",
+        "Product.InventoryAlert": "Inventory alert",
+        "Product.InventoryForecast": "Inventory forecast",
+        "Product.CurrentInventory": "Current inventory",
+        "Product.The1stDay": "The first day in the future",
+        "Product.The2ndDay": "The second day in the future",
+        "Product.The3rdDay": "The third day in the future",
+        "Product.The4thDay": "The fourth day in the future",
+        "Product.The5thDay": "The fifth day in the future",
+        "Product.The6thDay": "The sixth day in the future",
+        "Product.The7thDay": "The seventh day in the future",
+        "Product.The8thDay": "The eighth day in the future",
+        "Product.The9thDay": "The nineth day in the future",
+        "Product.The10thDay": "The tenth day in the future",
+        "Product.The11thDay": "The eleventh day in the future",
+        "Product.The12thDay": "The twelfth day in the future",
+        "Product.The13thDay": "The thirteenth day in the future",
+        "Product.The14thDay": "The fourteenth day in the future",
 
     },
 
@@ -2035,12 +2052,17 @@ export default {
         "Marketing.Gifts":"Gifts",
         "Marketing.PromotionValue":"Promotion value",
         "Marketing.Summary":"Summary",
+        "Marketing.public":"public",
+        "Marketing.private":"private",
         "Marketing.ActivitiesInfo":"Activities Info",
         "Marketing.lssuanceTime":"lssuance time",
         "Marketing.validPeriod":"valid period",
         "Marketing.totalNumber":"total number of coupon codes",
         "Marketing.status":"Status",
         "Marketing.generate":"generate",
+        "Marketing.ActivityTime":"Activity time",
+        "Marketing.numberCodes":"Number of codes",
+
     },
     Content: {
         "Content.Prompt": "Prompt",
@@ -2454,6 +2476,10 @@ export default {
         'Setting.postalCodeAlert': 'Sorry we are not able to deliver your order in this area.',
         "Setting.avatar": "Avatar",
 
+        'Setting.suggestionSetting': 'Suggestion setting',
+        'Setting.domain': 'Domain',
+        'Setting.domainRequired': 'Domain is required',
+
     },
     Menu: {
         "Menu.Appointment": "Appointment",
@@ -2487,6 +2513,9 @@ export default {
         'Menu.UOM management': 'UOM management',
         'Menu.UOM category': 'UOM category',
         'Menu.UOM list': 'UOM list',
+
+        'Menu.Address setting': 'Address setting',
+        'Menu.Inventory management': 'Inventory management',
 
     },
     Others: {

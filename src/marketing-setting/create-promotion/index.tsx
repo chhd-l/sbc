@@ -14,8 +14,15 @@ const { Step } = Steps;
 export const FormContext = React.createContext({});
 
 export default function index() {
-  const [step,setStep] = useState<number>(0)
-  const [formData, setFormData] = useState<any>({});
+  const [step,setStep] = useState<number>(5)
+  const [formData, setFormData] = useState<any>({
+    PromotionType:{ publicStatus: 1,isNotLimit: 1 },
+    Conditions:{
+      isSuperimposeSubscription:1,
+      segmentIds:[],
+      storeCateIds:[],
+    }
+  });
   /**
    * 保存每一步的值
    * @param id
@@ -23,7 +30,9 @@ export default function index() {
    */
   const changeFormData = (id, data) => {
     let obj = {}
-    obj[id] = data;
+    obj[id] = {}
+    console.log(formData[id])
+    Object.assign(obj[id],formData[id] ? formData[id] : {},data);
     console.log({...formData,...obj})
     setFormData({...formData,...obj});
   };
@@ -36,7 +45,7 @@ export default function index() {
     >
       <div className="create-promotion">
         <BreadCrumb/>
-        <div className="container-search marketing-container" style={{flex:1,position:'relative'}}>
+        <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
           <Steps current={step} className="step-container">
             <Step title="Create promotion" />
             <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />
@@ -62,9 +71,9 @@ export default function index() {
             <div style={{display: step === 4 ? 'block' : 'none'}}>
               <Step5 setStep={setStep}/>
             </div>
-            <div style={{display: step === 5 ? 'block' : 'none'}}>
-              <Step6 setStep={setStep}/>
-            </div>
+            {
+              step === 5 && <Step6 setStep={setStep}/>
+            }
           </div>
 
         </div>

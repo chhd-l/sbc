@@ -105,7 +105,7 @@ function CreateAccount({ form, useOkta, onLogin }) {
 
                <div className="text">
                  Don&apos;t have an account?
-                 <span onClick={handleSignUp}>{RCi18n({id:'Login.sign_up'})}</span>
+                 <span onClick={handleSignUp}>Get started here!</span>
                </div>
             
           </div>

@@ -3,11 +3,14 @@ import { Button } from 'antd';
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import * as webapi from '../../webapi';
-export default function ButtonLayer({setStep,step,validateFields,noForm=false}:any) {
+export default function ButtonLayer({setStep,step,validateFields,noForm=false,setLoading}:any) {
   const { changeFormData,formData } = useContext<any>(FormContext);
   const toNext = ()=>{
     if(step === 5){
-
+      setLoading(true)
+      createPromotion()
+      setLoading(false)
+      setStep(step + 1)
     }else {
       validateFields((err, values) => {
         if (!err) {
@@ -57,7 +60,7 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
     if(formData?.PromotionType?.typeOfPromotion === 1){
       await webapi.addCoupon({
         couponName: formData?.BasicSetting?.marketingName,//改版用到的字段
-        couponType: "1",
+        couponType: '1',
         cateIds: [],
         storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],//改版用到的字段
         couponJoinLevel: formData.Conditions.joinLevel,
@@ -109,7 +112,10 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           customProductsType: formData.Conditions.customProductsType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
 
-          marketingSubscriptionReduction: {},//未知 有什么作用
+          marketingSubscriptionReduction: {
+            firstSubscriptionOrderReduction:formData.Advantage.firstSubscriptionOrderReduction,
+            restSubscriptionOrderReduction:formData.Advantage.restSubscriptionOrderReduction,
+          },//订阅打折
 
           isClub: false,//未用到
         })
@@ -154,7 +160,7 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
             key: makeRandom(),
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Advantage.fullMoney : null,
             fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Advantage.fullItem || 1 : null,
-            discount: formData.Advantage.couponDiscount/100,
+            discount: parseInt(formData.Advantage.couponDiscount)/100,
             limitAmount:formData.Advantage.limitAmount,
           }],
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
@@ -174,7 +180,12 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
           customProductsType: formData.Conditions.customProductsType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
 
-          marketingSubscriptionReduction: {},//未知 有什么作用
+          marketingSubscriptionDiscount: {
+            firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
+            firstSubscriptionOrderDiscount: parseInt(formData.Advantage.firstSubscriptionOrderDiscount)/100 ,
+            restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
+            restSubscriptionOrderDiscount: parseInt(formData.Advantage.restSubscriptionOrderDiscount)/100,
+          },
 
           isClub: false,//未用到
         })
@@ -216,6 +227,7 @@ export default function ButtonLayer({setStep,step,validateFields,noForm=false}:a
         })
       }
     }
+
   }
 
   /**

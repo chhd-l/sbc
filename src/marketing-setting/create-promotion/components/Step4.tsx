@@ -189,7 +189,7 @@ function Step4({setStep,form}){
             </Radio.Group>
           )}
           {
-            purchaseType !== 1 &&  (
+            purchaseType !== 2 &&  (
               <div>
                 <Checkbox onChange={(e=>{
                   changeFormData(enumConst.stepEnum[3],{isSuperimposeSubscription: e.target.checked ? 0 : 1})
@@ -449,7 +449,10 @@ function Step4({setStep,form}){
           })(
             <Radio.Group onChange={(e)=>{setCartLimits(e.target.value)}}>
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
-              <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
+
+              {
+                formData.PromotionType.typeOfPromotion === 0 && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
+              }
               <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
             </Radio.Group>
           )}

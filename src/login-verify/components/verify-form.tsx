@@ -24,8 +24,10 @@ export default withOktaAuth(
 
     async componentDidMount() {
       // this.search('123457908-098111')
+      debugger
      let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
      if(userId){
+      debugger
       let {res} = await webApi.findPrescriberIdAndStoreBy({userId})
       console.info('/......',res)
       debugger

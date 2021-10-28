@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
-import { util, RCi18n, history } from 'qmkit';
+import { util, RCi18n, history, login, switchLogin, cache } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
 import { Icon, message } from 'antd';
 
@@ -14,6 +14,18 @@ const STATUS = {
   PAYMENT_INFO:4,
   SETTING_INIT:5,
 }
+
+const autoLogin = () => {
+  if (sessionStorage.getItem('storeToken')) { //如果是从create account过来的
+    login('prescriber', sessionStorage.getItem('storeToken'), (res) => {});
+  } else {  //从login过来的，直接修改logindata中的auditStatus为1
+    let loginData = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}');
+    switchLogin({
+      storeId: loginData.storeId
+    }, (res) => {});
+  }
+};
+
 export default function Creating({userInfo,setStep}) {
   let [statusList,setStatusList] = useState([
     {title:'Contract Agreement', message: null, result: 'pending'},
@@ -47,7 +59,7 @@ export default function Creating({userInfo,setStep}) {
           if(res.code === 'K-000000'){
             setClassText('finished');
             setTimeout(() => {
-              history.push('/login');
+              autoLogin();  //自动登录
             }, 3000);
           }
         })
@@ -121,7 +133,7 @@ export default function Creating({userInfo,setStep}) {
           {
             classText === '' ? <FormattedMessage id={`Login.create_store_ing`}/> : (
               classText === 'ok' ? 'Success! You are ready to go' : (
-                classText === 'finished' ? 'You should enter your account and passwords again for logging in' : 'Store creation failed. Please try again'
+                classText === 'finished' ? 'Logging...' : 'Store creation failed. Please try again'
               )
             )
           }

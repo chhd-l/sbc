@@ -2,8 +2,28 @@ import React from 'react';
 import { Const } from 'qmkit';
 import { Form, Modal, Input, Radio, Switch, Row, Col, message, Button } from 'antd';
 import { getAddressSetting, saveAddressInputTypeSetting, editAddressApiSetting } from '../webapi';
+import styled from 'styled-components';
 
 const FormItem = Form.Item;
+
+const TitleBox = styled.div`
+  background: #fafafa;
+  height: 60px;
+  padding-left: 10px;
+  padding-right: 20px;
+  line-height: 60px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .ant-radio-group {
+    width: calc(100% - 400px);
+    margin-left: 20px;
+    .ant-radio-wrapper:last-child {
+      margin-left: 40px;
+    }
+  }
+`;
 
 class RuleSetting extends React.Component<any, any> {
   constructor(props: any) {
@@ -104,21 +124,15 @@ class RuleSetting extends React.Component<any, any> {
     //   }
     // };
     return (
-      <Row gutter={24} type="flex" align="middle">
-        <Col span={6}>
-          <span>Address rule setting:</span>
-        </Col>
-        <Col span={12}>
-          <Radio.Group value={setting.findIndex(item => item.context === '1')} onChange={(e) => onChange(e.target.value, '1')}>
-            {setting.map((setItem, idx) => (
-              <Radio key={idx} value={idx}>{setItem.configKey === 'address_input_type_manually' ? 'Input manually' : 'Input automatically'}</Radio>
-            ))}
-          </Radio.Group>
-        </Col>
-        <Col span={6}>
-          <Button type="primary" loading={loading} onClick={this.onSave}>Save setting</Button>
-        </Col>
-      </Row>
+      <TitleBox>
+        <span>Address rule setting:</span>
+        <Radio.Group value={setting.findIndex(item => item.context === '1')} onChange={(e) => onChange(e.target.value, '1')}>
+          {setting.map((setItem, idx) => (
+            <Radio key={idx} value={idx}>{setItem.configKey === 'address_input_type_manually' ? 'Input manually' : 'Input automatically'}</Radio>
+          ))}
+        </Radio.Group>
+        <Button type="primary" loading={loading} onClick={this.onSave}>Save setting</Button>
+      </TitleBox>
     );
     // return (
     //   <Modal width={1200} visible={visible} title="Address rule setting" confirmLoading={loading} okText="Submit" cancelText="Cancel" onOk={this.onSave} onCancel={this.onCancel}>

@@ -76,7 +76,7 @@ function Step5({ setStep, form }) {
         <FormattedMessage id="Marketing.Advantage" />
       </div>
 
-      <Form {...formItemLayout} labelAlign="left" className="marketing-form-container" style={{width:'80%'}}>
+      <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
 
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('couponPromotionType', {
@@ -201,7 +201,7 @@ function Step5({ setStep, form }) {
                   couponPromotionType === 1 &&
                   (
                     <>
-                      <Form.Item labelCol={{span: 6}} wrapperCol={{span:18}} label={<FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left" >
+                      <Form.Item labelCol={{span: 8}} wrapperCol={{span:16}} label={<FormattedMessage id="Marketing.Forthefirstsubscription" />} required={true} labelAlign="left" >
                         <div style={{ display: 'flex' }}>
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
@@ -273,7 +273,7 @@ function Step5({ setStep, form }) {
                               initialValue: ''
                             })(
                               <Input
-                                // style={{ width: 200 }}
+                                style={{ width: 150 }}
                                 className="input-width"
                                 title={
                                   (window as any).RCi18n({
@@ -294,7 +294,7 @@ function Step5({ setStep, form }) {
                           </Form.Item>
                         </div>
                       </Form.Item>
-                      <Form.Item labelCol={{span: 6}} wrapperCol={{span:18}} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={false} labelAlign="left">
+                      <Form.Item labelCol={{span: 8}} wrapperCol={{span:16}} label={<FormattedMessage id="Marketing.Fortherestsubscription" />} required={false} labelAlign="left">
                         <div style={{ display: 'flex' }}>
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
@@ -342,7 +342,7 @@ function Step5({ setStep, form }) {
                                     })
                                 }
                                 onChange={(e) => {
-                                  this.onBeanChange({ restSubscriptionOrderDiscount: e.target.value });
+                                  changeFormData(enumConst.stepEnum[4],{restSubscriptionOrderDiscount: e.target.value})
                                 }}
                               />
                             )}
@@ -371,7 +371,7 @@ function Step5({ setStep, form }) {
                               initialValue: ''
                             })(
                               <Input
-                                // style={{ width: 200 }}
+                                style={{ width: 150 }}
                                 className="input-width"
                                 title={
                                   (window as any).RCi18n({

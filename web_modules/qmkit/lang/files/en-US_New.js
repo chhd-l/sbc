@@ -2062,6 +2062,7 @@ export default {
         "Marketing.generate":"generate",
         "Marketing.ActivityTime":"Activity time",
         "Marketing.numberCodes":"Number of codes",
+
     },
     Content: {
         "Content.Prompt": "Prompt",

@@ -19,9 +19,9 @@ export const enumConst = {
     3: <FormattedMessage id="Marketing.Singlepurchase" />
   },
   joinLevel:{
-    '-1': <FormattedMessage id="Marketing.all" />,
-    '-2': <FormattedMessage id="Marketing.Group" />,
-    '-3': <FormattedMessage id="Marketing.Byemail" />,
+    0: <FormattedMessage id="Marketing.all" />,
+    '-3': <FormattedMessage id="Marketing.Group" />,
+    '-4': <FormattedMessage id="Marketing.Byemail" />,
   },
   scopeType:{
     0: <FormattedMessage id="Marketing.all" />,
@@ -34,4 +34,11 @@ export const enumConst = {
     1: <FormattedMessage id="Order.Amount" />,
     2: <FormattedMessage id="Order.Quantity" />,
   },
+
+  couponPromotionType:{
+    0: <FormattedMessage id="Marketing.Amount" />,
+    1: <FormattedMessage id="Marketing.Percentage" />,
+    3: <FormattedMessage id="Marketing.Freeshipping" />,
+    4: <FormattedMessage id="Marketing.Gifts" />
+  }
 }

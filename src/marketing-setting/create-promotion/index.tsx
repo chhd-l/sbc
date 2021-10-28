@@ -14,7 +14,7 @@ const { Step } = Steps;
 export const FormContext = React.createContext({});
 
 export default function index() {
-  const [step,setStep] = useState<number>(3)
+  const [step,setStep] = useState<number>(5)
   const [formData, setFormData] = useState<any>({
     PromotionType:{ publicStatus: 1,isNotLimit: 1 },
     Conditions:{
@@ -71,9 +71,9 @@ export default function index() {
             <div style={{display: step === 4 ? 'block' : 'none'}}>
               <Step5 setStep={setStep}/>
             </div>
-            <div style={{display: step === 5 ? 'block' : 'none'}}>
-              <Step6 setStep={setStep}/>
-            </div>
+            {
+              step === 5 && <Step6 setStep={setStep}/>
+            }
           </div>
 
         </div>

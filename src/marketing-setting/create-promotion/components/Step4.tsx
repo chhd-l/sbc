@@ -21,10 +21,12 @@ const formItemLayout = {
 };
 
 function Step4({setStep,form}){
-  const { changeFormData,formData } = useContext<any>(FormContext);
+  const { formData } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
+  const [isSuperimposeSubscription,setIsSuperimposeSubscription] = useState<boolean>(false)
+
   const [customerType,setCustomerType] = useState<number>(0)
   const [scopeType,setScopeType] = useState<number>(0)
   const [cartLimits,setCartLimits] = useState<number>(0)
@@ -103,7 +105,7 @@ function Step4({setStep,form}){
     form.resetFields('goods');
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(selectedRows);
-    changeFormData(enumConst.stepEnum[3],{scopeIds: selectedSkuIds})//保存到公共formData中
+    // changeFormData(enumConst.stepEnum[3],{scopeIds: selectedSkuIds})//保存到公共formData中
     setGoodsModal({...goodsModal,_modalVisible: false});
   };
   /**
@@ -189,10 +191,10 @@ function Step4({setStep,form}){
             </Radio.Group>
           )}
           {
-            purchaseType !== 2 &&  (
+            purchaseType === 0 &&  (
               <div>
                 <Checkbox onChange={(e=>{
-                  changeFormData(enumConst.stepEnum[3],{isSuperimposeSubscription: e.target.checked ? 0 : 1})
+                  setIsSuperimposeSubscription(e.target.checked)
                 })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
                 </Checkbox>
@@ -451,9 +453,12 @@ function Step4({setStep,form}){
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
 
               {
-                formData.PromotionType.typeOfPromotion === 0 && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
+                (formData.PromotionType.typeOfPromotion === 0 && purchaseType !== 1 && purchaseType !==2) && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
               }
-              <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
+              {
+                (formData.PromotionType.typeOfPromotion !== 0 || (purchaseType !== 1 && purchaseType !==2)) && <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
+              }
+
             </Radio.Group>
           )}
         </Form.Item>
@@ -531,7 +536,9 @@ function Step4({setStep,form}){
         }
       </Form>
 
-      <ButtonLayer setStep={setStep} step={3} validateFields={validateFields}/>
+      <ButtonLayer setStep={setStep} step={3} validateFields={validateFields}
+                   isSuperimposeSubscription={isSuperimposeSubscription}
+                   scopeIds={selectedSkuIds}/>
 
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />

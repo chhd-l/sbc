@@ -24,25 +24,26 @@ export default function index() {
       segmentIds:[],
       storeCateIds:[],
     }
-  });
+  })
+  const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
   /**
    * 保存每一步的值
    * @param id
    * @param data
    */
   const changeFormData = (id, data) => {
-    let obj = {}
-    obj[id] = {}
+    formData[id]= {...data}
     console.log(formData[id])
-    Object.assign(obj[id],formData[id] ? formData[id] : {},data);
-    console.log({...formData,...obj})
-    setFormData({...formData,...obj});
+    console.log(formData)
+    setFormData({...formData});
   };
   return (
     <FormContext.Provider
       value={{
         changeFormData: changeFormData,
-        formData
+        formData,
+        detail:detail,
+        setDetail:setDetail
       }}
     >
       <Spin spinning={loading}>
@@ -58,13 +59,13 @@ export default function index() {
               <Step title={<FormattedMessage id="Marketing.Summary" />} />
             </Steps>
 
+            <div style={{display: step === 0 ? 'block' : 'none'}}>
+              <Step1 setStep={setStep}/>
+            </div>
             <div>
               {
-                step !== 6 && (
+                (step !== 6 && step !== 0) && (
                   <>
-                    <div style={{display: step === 0 ? 'block' : 'none'}}>
-                      <Step1 setStep={setStep}/>
-                    </div>
                     <div style={{display: step === 1 ? 'block' : 'none'}}>
                       <Step2 setStep={setStep}/>
                     </div>

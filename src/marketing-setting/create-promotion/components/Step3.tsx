@@ -2,15 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
-import { FormContext } from '../index';
-import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
 function Step3({setStep,form}){
-  const { changeFormData } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
@@ -52,36 +49,40 @@ function Step3({setStep,form}){
             </Radio.Group>,
           )}
         </Form.Item>
-        { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.CodesName" />}>
-          {getFieldDecorator('promotionCode', {
-            initialValue:promotionCode,
-            rules: [
-              {
-                required: true,
-                whitespace: true,
-                message:
-                  (window as any).RCi18n({
-                    id: 'Marketing.PleaseInputCodeName'
-                  })
-              },
-            ],
-          })(
-            <Input size="large"
-                   disabled={publicStatus}
-                   style={{ width: 360 }}
-                   placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseInputCodeName' })}/>,
-          )}
-          <Checkbox
-            checked={publicStatus}
-            style={{ marginLeft: 20 }}
-            onChange={(e)=>{
-              setPublicStatus(e.target.checked)
-              changeFormData(enumConst.stepEnum[2],{publicStatus: e.target.checked ? 1 : 0})
-            }}
-          >
-            <FormattedMessage id="Marketing.Public" />
-          </Checkbox>
-        </Form.Item>)}
+        { typeOfPromotion === 0 && (
+          <>
+            <Form.Item label={<FormattedMessage id="Marketing.CodesName" />}>
+              {getFieldDecorator('promotionCode', {
+                initialValue:promotionCode,
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.PleaseInputCodeName'
+                      })
+                  },
+                ],
+              })(
+                <Input size="large"
+                       disabled={publicStatus}
+                       style={{ width: 360 }}
+                       placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseInputCodeName' })}/>,
+              )}
+              <Checkbox
+                checked={publicStatus}
+                style={{ marginLeft: 20 }}
+                onChange={(e)=>{
+                  setPublicStatus(e.target.checked)
+                }}
+              >
+                <FormattedMessage id="Marketing.Public" />
+              </Checkbox>
+            </Form.Item>
+          </>
+
+        )}
         { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
           {getFieldDecorator('perCustomer', {
             initialValue: 1,
@@ -93,7 +94,6 @@ function Step3({setStep,form}){
             style={{ marginLeft: 20 }}
             onChange={(e)=>{
               setLimitStatus(e.target.checked)
-              changeFormData(enumConst.stepEnum[2],{isNotLimit: e.target.checked ? 0 : 1})
             }}
           >
             <FormattedMessage id="Marketing.LimitTheUsagePerCustomer" />
@@ -102,7 +102,10 @@ function Step3({setStep,form}){
 
       </Form>
 
-      <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}/>
+      <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}
+                   publicStatus={publicStatus}
+                   isNotLimit={limitStatus}
+      />
     </div>
   )
 }

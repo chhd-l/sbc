@@ -154,9 +154,6 @@ function Step5({ setStep, form }) {
                                 id: 'Marketing.0.01-99999999.99',
                               })
                             }
-                            onChange={(e) => {
-                              changeFormData(enumConst.stepEnum[4],{firstSubscriptionOrderReduction: e.target.value})
-                            }}
                           />
                         )}
                       </Form.Item>
@@ -188,9 +185,6 @@ function Step5({ setStep, form }) {
                                 id: 'Marketing.0.01-99999999.99',
                               })
                             }
-                            onChange={(e) => {
-                              changeFormData(enumConst.stepEnum[4],{restSubscriptionOrderReduction: e.target.value})
-                            }}
                           />
                         )}
                       </Form.Item>
@@ -242,9 +236,6 @@ function Step5({ setStep, form }) {
                                     id: 'Marketing.InputValuefrom1to99'
                                   })
                                 }
-                                onChange={(e) => {
-                                  changeFormData(enumConst.stepEnum[4],{firstSubscriptionOrderDiscount: e.target.value})
-                                }}
                               />
                             )}
                             <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
@@ -285,9 +276,6 @@ function Step5({ setStep, form }) {
                                     id: 'Marketing.1-9999'
                                   })
                                 }
-                                onChange={(e) => {
-                                  changeFormData(enumConst.stepEnum[4],{firstSubscriptionLimitAmount: e.target.value})
-                                }}
                               />
                             )}
                             &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -341,9 +329,6 @@ function Step5({ setStep, form }) {
                                       id: 'Marketing.InputValuefrom1to100'
                                     })
                                 }
-                                onChange={(e) => {
-                                  changeFormData(enumConst.stepEnum[4],{restSubscriptionOrderDiscount: e.target.value})
-                                }}
                               />
                             )}
                             <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
@@ -383,9 +368,6 @@ function Step5({ setStep, form }) {
                                     id: 'Marketing.1-9999'
                                   })
                                 }
-                                onChange={(e) => {
-                                  changeFormData(enumConst.stepEnum[4],{restSubscriptionLimitAmount: e.target.value})
-                                }}
                               />
                             )}
                             &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
@@ -414,13 +396,20 @@ function Step5({ setStep, form }) {
                         },
                         {
                           validator: (_rule, value, callback) => {
-                            if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
-                              callback(
-                                (window as any).RCi18n({
-                                  id: 'Marketing.IntegersBetweenAreAllowed'
-                                })
-                              );
-                              return;
+                            if(value){
+                              if (!ValidConst.noZeroNumber.test(value) || value < 1 || value > 99999) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.IntegersBetweenAreAllowed'
+                                  })
+                                );
+                                return;
+                              }
+                              if(formData.Conditions.fullMoney &&  Number(value) > Number(formData.Conditions.fullMoney)) {
+                                callback(
+                                  'Value cannot be greater than the previous value.'
+                                );
+                              }
                             }
                             callback();
                           }
@@ -547,7 +536,7 @@ function Step5({ setStep, form }) {
 
       </Form>
 
-      <ButtonLayer setStep={setStep} step={4} validateFields={validateFields} />
+      <ButtonLayer setStep={setStep} step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList}/>
     </div>
   );
 }

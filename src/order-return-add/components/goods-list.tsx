@@ -107,7 +107,7 @@ export default class GoodsList extends React.Component<any, any> {
 
   /**
    * 商品与赠品公用(通过itemType区分展示个性内容)
-   * itemType=0表示商品 , itemType=1表示赠品
+   * itemType=0表示商品 , itemType=1表示赠品,itemType=2表示订阅
    */
   _getColumns = (itemType) => {
     const { getFieldDecorator } = this.props.form;
@@ -124,7 +124,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ? '[Gift]' : ''}${text}`
+        render: (text) => `${itemType == 1 ||itemType == 2 ? '[Gift]' : ''}${text}`
       },
       {
         title: <FormattedMessage id="Order.Specification" />,

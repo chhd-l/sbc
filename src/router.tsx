@@ -638,7 +638,7 @@ const routes = [
   },
   // 优惠券详情
   {
-    path: '/coupon-detail/:cid',
+    path: '/coupon-detail/:cid/:key',
     asyncComponent: () => import('./coupon-detail')
   },
   // 营销中心 - 创建优惠券

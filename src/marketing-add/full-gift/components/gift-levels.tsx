@@ -33,7 +33,8 @@ class GiftLevels extends React.Component<any, any> {
     isFullCount;
     fullGiftLevelList;
     isNormal;
-    selectedRows
+    selectedRows;
+    noMulti;
   }
   constructor(props) {
     super(props);
@@ -90,7 +91,7 @@ class GiftLevels extends React.Component<any, any> {
   // }
 
   render() {
-    const { isFullCount, fullGiftLevelList, isNormal, selectedRows } = this.props;
+    const { isFullCount, fullGiftLevelList, isNormal, selectedRows,noMulti = false } = this.props;
     const { goodsModal } = this.state
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -174,7 +175,7 @@ class GiftLevels extends React.Component<any, any> {
                       </span>
                     </div>
                   )}
-                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5 }}>
+                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5,marginBottom:24 }}>
                     <FormattedMessage id="Marketing.Addgift" />
                   </Button>
                   {/*&nbsp;&nbsp;*/}
@@ -320,10 +321,15 @@ class GiftLevels extends React.Component<any, any> {
               </div>
             );
           })}
-        <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
-          <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
-        </Button>
-        &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
+        {
+          !noMulti && (<>
+              <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
+                <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
+              </Button>
+              &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
+          </>)
+        }
+
         {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}

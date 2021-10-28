@@ -84,3 +84,11 @@ export function validPostCodeBlock(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+// 设置address1的suggestionFlag和validationFlag
+export function setFlagForAddress1(params = {}) {
+  return Fetch<TResult>('/addressDisplaySetting/edit-address-switch-setting', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  })
+}

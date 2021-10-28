@@ -61,6 +61,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
+      window.token = res.context.token; 
       sessionStorage.setItem(
         cache.LOGIN_ACCOUNT_NAME,
         res.context.accountName

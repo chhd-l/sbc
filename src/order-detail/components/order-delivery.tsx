@@ -109,7 +109,7 @@ class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
+          {Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>

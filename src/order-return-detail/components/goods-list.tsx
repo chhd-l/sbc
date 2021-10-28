@@ -42,6 +42,14 @@ class GoodsList extends React.Component<any, any> {
       return gift;
     });
 
+    //赠品信息
+    let returnSubscriptionPlanGift = detailObj.returnSubscriptionPlanGift ? detailObj.returnSubscriptionPlanGift : [];
+    returnSubscriptionPlanGift = returnSubscriptionPlanGift.map((gift) => {
+      gift.skuName = '[Gift] ' + gift.skuName;
+      gift.splitPrice = 0;
+      return gift;
+    });
+
     // 总额
     const totalPrice = detail.getIn(['returnPrice', 'totalPrice']);
     // 改价金额
@@ -76,10 +84,10 @@ class GoodsList extends React.Component<any, any> {
     if (returnLogistics) {
       logisticInfo =
         ' Delivery date: ' +
-        (moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT)? 
-        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT):' - ') + 
-        ' Logistics company: ' + 
-        (returnLogistics.get('company')?returnLogistics.get('company'):' - ') + 
+        (moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT)?
+        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT):' - ') +
+        ' Logistics company: ' +
+        (returnLogistics.get('company')?returnLogistics.get('company'):' - ') +
         ' Tracking number: ' +
         (returnLogistics.get('no')?returnLogistics.get('no'):'-');
 
@@ -147,7 +155,7 @@ class GoodsList extends React.Component<any, any> {
         <Table
           rowKey={(_record, index) => index.toString()}
           columns={columns}
-          dataSource={returnItems.concat(returnGifts)}
+          dataSource={returnItems.concat(returnGifts).concat(returnSubscriptionPlanGift)}
           pagination={false}
           bordered
         />
@@ -158,7 +166,7 @@ class GoodsList extends React.Component<any, any> {
               <FormattedMessage id="Order.Total amount" />:{' '}
               </span>
               <strong>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
                 {totalPrice
                   ? parseFloat(totalPrice).toFixed(2)
                   : Number(0).toFixed(2)}
@@ -170,7 +178,7 @@ class GoodsList extends React.Component<any, any> {
                 <FormattedMessage id="Order.refundableAmount" />:{' '}
               </span>
               <strong>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
                 {applyPrice
                   ? parseFloat(applyPrice).toFixed(2)
                   : Number(0).toFixed(2)}
@@ -188,7 +196,7 @@ class GoodsList extends React.Component<any, any> {
                   <FormattedMessage id="Order.actualRefundAmount" />:{' '}
                 </span>
                 <strong>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'} 
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
                   {actualReturnPrice
                     ? parseFloat(actualReturnPrice).toFixed(2)
                     : Number(0).toFixed(2)}
@@ -211,10 +219,10 @@ class GoodsList extends React.Component<any, any> {
             {Object.getOwnPropertyNames(returnReason).map(
               (key) => returnReason[key]
             )}
-           
+
           </label>
           <label style={styles.inforItem}>
-            
+
             <FormattedMessage id="Order.returnDescription" />:{' '}
             {detail.get('description')}
           </label>
@@ -260,7 +268,7 @@ class GoodsList extends React.Component<any, any> {
           {returnType == 'RETURN' && returnWay['1'] ? (
             <label style={styles.inforItem}>
               <FormattedMessage id="Order.logisticsInformation" />
-              : <p>{logisticInfo}</p> 
+              : <p>{logisticInfo}</p>
               {/* {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}

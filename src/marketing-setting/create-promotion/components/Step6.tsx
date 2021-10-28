@@ -4,7 +4,7 @@ import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonL
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
 
-export default function Step6({ setStep }) {
+export default function Step6({ setStep,setLoading }) {
   const { formData } = useContext<any>(FormContext);
   return (
     <div>
@@ -52,10 +52,8 @@ export default function Step6({ setStep }) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
               <div className="step-summary-item-text">
                 {enumConst.CartLimit[formData.Conditions.CartLimit]}
-                (
-                  { formData.Conditions.CartLimit === 1 && formData.Conditions.fullMoney }
-                  { formData.Conditions.CartLimit === 2 && formData.Conditions.fullItem }
-                )
+                { formData.Conditions.CartLimit === 1 && (formData.Conditions.fullMoney) }
+                { formData.Conditions.CartLimit === 2 && (formData.Conditions.fullItem) }
               </div>
             </div>
           </div>
@@ -119,7 +117,7 @@ export default function Step6({ setStep }) {
           </div>
         </div>
       </div>
-      <ButtonLayer setStep={setStep} step={5} noForm={true}/>
+      <ButtonLayer setStep={setStep} step={5} noForm={true} setLoading={setLoading}/>
     </div>
   );
 }

@@ -76,7 +76,9 @@ export default class MyHeader extends React.Component {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
       this.getLanguage()
       // 获取切换店铺的下拉数据
-      this.getUserStoreList();
+      if (checkAuth('f_home_switch_store')) {
+        this.getUserStoreList();
+      }
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
       }

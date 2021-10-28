@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "18442498",
+      "name": "copy",
+      "font_class": "copy",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
       "icon_id": "23366576",
       "name": "icon_ Service",
       "font_class": "a-icon_Service",

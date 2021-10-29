@@ -354,7 +354,7 @@ class OrderDelivery extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '50%'
+        width: '40%'
       },
       {
         title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,

@@ -186,7 +186,8 @@ export function searchCity(searchTxt: string) {
     body: JSON.stringify({
       cityName: searchTxt,
       pageNum: 0,
-      pageSize: 30
+      pageSize: 30,
+      storeId: Const.SITE_NAME === 'MYVETRECO' ? 123457915 : undefined
     })
   });
 }

@@ -354,6 +354,7 @@ export default class AppStore extends Store {
           specDetails:'',
           splitPrice:0,
           unit:'',
+          externalSkuNo:v.externalSkuNo
         }
         returnSubGifts.push(obj)
       });

@@ -337,6 +337,7 @@ class OrderDelivery extends React.Component<any, any> {
 
   _deliveryColumns = () => {
     const { changeDeliverNum } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return [
       {
@@ -356,7 +357,7 @@ class OrderDelivery extends React.Component<any, any> {
         width: '50%'
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
@@ -391,6 +392,7 @@ class OrderDelivery extends React.Component<any, any> {
   };
 
   _deliveryRecordColumns = () => {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     return [
       {
         title: <FormattedMessage id="Order.No." />,
@@ -408,7 +410,7 @@ class OrderDelivery extends React.Component<any, any> {
         key: 'itemName'
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },

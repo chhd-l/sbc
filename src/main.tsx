@@ -38,6 +38,7 @@ export default class Main extends React.Component<any, any> {
       123457910: 20,
       123457911: 10
     };
+    (window as any).rchistory = history;
   }
 
   UNSAFE_componentWillMount() {

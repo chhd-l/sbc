@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Spin, Steps } from 'antd';
 import { BreadCrumb } from 'qmkit';
 import './index.less'
@@ -10,11 +10,13 @@ import Step5 from '@/marketing-setting/create-promotion/components/Step5';
 import Step6 from '@/marketing-setting/create-promotion/components/Step6';
 import CreateSuccess from '@/marketing-setting/create-promotion/components/createSuccess';
 import { FormattedMessage } from 'react-intl';
+import * as webapi from '../webapi';
 
 const { Step } = Steps;
 export const FormContext = React.createContext({});
 
-export default function index() {
+export default function index({...props}) {
+  console.log(props)
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(false)
   const [formData, setFormData] = useState<any>({
@@ -26,6 +28,15 @@ export default function index() {
     }
   })
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
+
+  useEffect(()=>{
+
+  },[])
+  const getDetail = async ()=>{
+    if(props.match.type == 'promotion'){
+      await webapi.getMarketingInfo(props.match.id)
+    }
+  }
   /**
    * 保存每一步的值
    * @param id

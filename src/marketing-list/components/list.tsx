@@ -226,21 +226,22 @@ class MarketingList extends React.Component<any, any> {
           width="15%"
           className={'operation-th'}
           render={(rowInfo) => {
-            let url = '';
-            if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1 || rowInfo['subType'] === 6) {
-              url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
-            } else if (rowInfo['subType'] === 2 || rowInfo['subType'] === 3 || rowInfo['subType'] === 7) {
-              url = `/marketing-full-discount/${rowInfo['marketingId']}`;
-            } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
-              url = `/marketing-full-gift/${rowInfo['marketingId']}`;
-            } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
-              // url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
-              url = `/marketing-full-reduction/${rowInfo['marketingId']}/${rowInfo['marketingType']}`;
-            } else if (rowInfo.subType === 12){
-                url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
-            } else if (rowInfo.subType === 13){
-                url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`;
-            }
+            // let url = '';
+            // if (rowInfo['subType'] === 0 || rowInfo['subType'] === 1 || rowInfo['subType'] === 6) {
+            //   url = `/marketing-full-reduction/${rowInfo['marketingId']}`;
+            // } else if (rowInfo['subType'] === 2 || rowInfo['subType'] === 3 || rowInfo['subType'] === 7) {
+            //   url = `/marketing-full-discount/${rowInfo['marketingId']}`;
+            // } else if (rowInfo['subType'] === 4 || rowInfo['subType'] === 5) {
+            //   url = `/marketing-full-gift/${rowInfo['marketingId']}`;
+            // } else if (rowInfo['subType'] === 10 || rowInfo['subType'] === 11) {
+            //   // url = `/marketing-free-shipping/${rowInfo['marketingId']}`;
+            //   url = `/marketing-full-reduction/${rowInfo['marketingId']}/${rowInfo['marketingType']}`;
+            // } else if (rowInfo.subType === 12){
+            //     url = `/subscription-benefit-setting-add/${rowInfo['marketingId']}`;
+            // } else if (rowInfo.subType === 13){
+            //     url = `/subscription-welcome-box-add/${rowInfo['marketingId']}`;
+            // }
+            let url = `/create-promotion/promotion/${rowInfo['marketingId']}`
             /**
              *  marketingStatus 0 全部 ，1 进行中，2 暂停中， 3 未开始， 4已结束， 5 进行中&未开始
              *  注意： subType为12 时，marketingStatus为任何值，都可以编辑

@@ -25,8 +25,8 @@ export const enumConst = {
   },
   scopeType:{
     0: <FormattedMessage id="Marketing.all" />,
-    1: <FormattedMessage id="Marketing.Category" />,
-    2: <FormattedMessage id="Marketing.Custom" />,
+    2: <FormattedMessage id="Marketing.Category" />,
+    1: <FormattedMessage id="Marketing.Custom" />,
     3: <FormattedMessage id="Marketing.Attribute" />
   },
   CartLimit:{

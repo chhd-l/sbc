@@ -585,7 +585,7 @@ const routes = [
   },
   //营销中心
   {
-    path: '/create-promotion',
+    path: '/create-promotion/:type?/:id?',
     asyncComponent: () => import('./marketing-setting/create-promotion')
   },
   // 商品库导入

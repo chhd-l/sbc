@@ -490,12 +490,12 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   // 邮编校验
   compareZip = async (rule, value, callback) => {
-    if (!/^[0-9A-Za-z]{3,10}$/.test(value)) {
+    if (!/^[0-9A-Za-z]{3,10}$/.test(value) && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));
     } else {
       // 邮编黑名单校验
       let res = await validPostCodeBlock(value);
-      console.log('res', res);
+      //console.log('res', res);
       if (res?.res?.code === Const.SUCCESS_CODE) {
         const data = res?.res?.context || {};
         // validFlag 1 通过 0 不通过

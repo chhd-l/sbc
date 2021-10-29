@@ -180,9 +180,11 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   }
 
   showError = () => {
-    const { storeInfo: { errorList } } = this.state;
+    let { storeInfo: { errorList } } = this.state;
+    errorList = JSON.parse(JSON.parse(errorList));
     Modal.error({
-      title: 'errors',
+      title: 'Please check these fields',
+      width: 600,
       content: <div style={{color:'red'}}>
         {errorList.map((err, idx) => <div key={idx}>
           {Object.keys(err).map((item, sidx) => <div key={sidx}>{MapKeyToDisplayName(item)}: {err[item]}</div>)}

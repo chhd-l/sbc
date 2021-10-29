@@ -122,7 +122,7 @@ export default class List extends React.Component<any, any> {
                       style={{ marginRight: 10 }}
                     >
                          <Tooltip placement="top" title={<FormattedMessage id="Marketing.generate" />}>
-                        <span className="icon iconfont iconcontactAdd" style={{ fontSize: 20 }}></span>
+                        <span className="icon iconfont iconcopy" style={{ fontSize: 20 }}></span>
                       </Tooltip>
                       </span>
                   )}

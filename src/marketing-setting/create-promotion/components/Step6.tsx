@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
+import { cache } from 'qmkit';
 
 export default function Step6({ setStep,setLoading }) {
   const { formData } = useContext<any>(FormContext);
@@ -52,8 +53,8 @@ export default function Step6({ setStep,setLoading }) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
               <div className="step-summary-item-text">
                 {enumConst.CartLimit[formData.Conditions.CartLimit]}
-                { formData.Conditions.CartLimit === 1 && (formData.Conditions.fullMoney) }
-                { formData.Conditions.CartLimit === 2 && (formData.Conditions.fullItem) }
+                { formData.Conditions.CartLimit === 1 && '('+formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+')' }
+                { formData.Conditions.CartLimit === 2 && '('+formData.Conditions.fullItem+' Item)' }
               </div>
             </div>
           </div>
@@ -93,27 +94,27 @@ export default function Step6({ setStep,setLoading }) {
               <div className="step-summary-item-text">{enumConst.couponPromotionType[formData.Advantage.couponPromotionType]}</div>
             </div>
 
-            {
-              formData.PromotionType.typeOfPromotion === 1 && (
-                <div className="step-summary-item">
-                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CouponValue" />:</div>
-                  <div className="step-summary-item-text">
-                    {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination }
-                    {formData.Advantage.couponPromotionType === 1 && formData.Advantage.firstSubscriptionOrderDiscount+'%' }
-                  </div>
-                </div>
-              )
-            }
+            <div className="step-summary-item">
+              <div className="step-summary-sub-title">
+                {
+                  formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
+                    : <FormattedMessage id="Marketing.PromotionValue" />
+                }
+                :</div>
+              <div className="step-summary-item-text">
+                {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
+              </div>
+            </div>
 
             {
-              (formData.PromotionType.typeOfPromotion === 1 && formData.Advantage.couponPromotionType === 1)&& (
+             formData.Advantage.couponPromotionType === 1 && (
                 <div className="step-summary-item">
                   <div className="step-summary-sub-title">Discount Limit:</div>
-                  <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionLimitAmount}</div>
+                  <div className="step-summary-item-text">{formData.Advantage.limitAmount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</div>
                 </div>
               )
             }
-
           </div>
         </div>
       </div>

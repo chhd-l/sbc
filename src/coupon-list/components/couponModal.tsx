@@ -122,21 +122,4 @@ class CouponModal extends Component<any, any> {
   }
 }
 
-
-const styles = {
-  formItemStyle: {
-    width: 335
-  },
-  label: {
-    width: 135,
-    textAlign: 'center',
-    color: 'rgba(0, 0, 0, 0.65)',
-    backgroundColor: '#fff',
-    cursor: 'text'
-  },
-  wrapper: {
-    width: 200
-  }
-} as any;
-
 export default Form.create()(CouponModal);

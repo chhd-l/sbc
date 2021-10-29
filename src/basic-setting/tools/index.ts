@@ -3,10 +3,10 @@ type TMapping = {
 }
 
 const tabNameMapping: TMapping = {
-  "basicInformation": "Basic information",
-  "hareholder": "Shareholder",
-  "ignatories": "Signatories",
-  "bankInformation": "Bank information"
+  "basic": "Basic information",
+  "shareholders": "Shareholder",
+  "signatories": "Signatories",
+  "bank": "Bank information"
 };
 
 const fieldNameMapping: TMapping = {
@@ -25,7 +25,7 @@ const fieldNameMapping: TMapping = {
   "lastName": "Last name",
   "address1": "Address 1",
   "dateOfBirth": "Date of birth",
-  "supportedDocument": "Supported document",
+  "document": "Supported document",
   "shareholderType": "Shareholder type",
   "jobTitle": "Job title",
   "province": "Province",
@@ -35,7 +35,7 @@ const fieldNameMapping: TMapping = {
 
 export default function MapKeyToDisplayName(key: string) {
   if (key.indexOf('.') > -1) {
-    return key.split('.').map((item, idx) => idx === 0 ? tabNameMapping[item] : fieldNameMapping[item]).join(' -- ');
+    return key.split('.').map((item, idx) => idx === 0 ? (tabNameMapping[item] ?? 'Others') : (fieldNameMapping[item] ?? 'Others')).join(' -- ');
   }
   return fieldNameMapping[key];
 };

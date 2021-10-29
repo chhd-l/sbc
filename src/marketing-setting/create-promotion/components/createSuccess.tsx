@@ -46,7 +46,7 @@ export default function createSuccess({setStep}) {
       <Icon type="notification" className="success-icon"/>
       <div className="success-title">
         {
-          formData.PromotionType.typeOfPromotion === 0 ? 'Your Coupon template is created!' : 'Your promotion is created!'
+          formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is created!' : 'Your promotion is created!'
         }
       </div>
       {
@@ -65,7 +65,7 @@ export default function createSuccess({setStep}) {
       <CouponModal
         isModalVisible={isModalVisible}
         setVisible={()=>setIsModalVisible(false)}
-        couponId={detail.marketingId}/>
+        couponId={detail.couponId}/>
     </div>
   );
 }

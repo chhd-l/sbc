@@ -24,7 +24,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
               obj = {...obj,publicStatus: publicStatus ? 1 : 0,isNotLimit:isNotLimit ? 0 : 1}
               break;
             case 3:
-              obj = {...obj,isSuperimposeSubscription:isSuperimposeSubscription  ? 0 : 1,scopeIds}
+              obj = {...obj,isSuperimposeSubscription:isSuperimposeSubscription ? 0 : 1,scopeIds}
               break;
             case 4:
               obj = {...obj,fullGiftLevelList}
@@ -105,6 +105,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
         scopeIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : []
       })
+      setDetail(detail.res.context.couponInfoVO)
     }else {
       if(formData.Advantage.couponPromotionType === 0){
         if(formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2){
@@ -123,7 +124,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           fullReductionLevelList: [{
             key: makeRandom(),
             fullAmount: formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
-            fullCount: formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || 1 : null,
+            fullCount: formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             reduction: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
           }],
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
@@ -151,7 +152,6 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           restSubscriptionOrderReduction:formData.Advantage.restSubscriptionOrderReduction,
           isClub: false,//未用到
         })
-        setDetail(detail.res.context.couponInfoVO)
       }
       if(formData.Advantage.couponPromotionType === 3){
         if(formData.Conditions.CartLimit === 1){
@@ -165,7 +165,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
           marketingFreeShippingLevel: {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
-            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || 1 : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
           },
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
           joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
@@ -206,7 +206,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           fullDiscountLevelList: [{
             key: makeRandom(),
             fullAmount:  formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
-            fullCount:  formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || 1 : null,
+            fullCount:  formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             discount: parseInt(formData.Advantage.couponDiscount)/100,
             limitAmount:formData.Advantage.limitAmount,
           }],

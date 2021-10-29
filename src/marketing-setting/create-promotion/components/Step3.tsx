@@ -2,12 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
+import { FormContext } from '@/marketing-setting/create-promotion';
 
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
 function Step3({setStep,form}){
+  const Context:any = useContext(FormContext);
+  const { formData } = Context
   const {getFieldDecorator,validateFields} = form
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
@@ -15,7 +18,13 @@ function Step3({setStep,form}){
   const [limitStatus,setLimitStatus] = useState(false)
 
   useEffect(()=>{
-    getPromotionCode()
+    if(formData.PromotionType.promotionCode){
+      setPromotionCode(formData.PromotionType.promotionCode)
+    }else {
+      getPromotionCode()
+    }
+    setPublicStatus(formData.PromotionType.publicStatus === 1 ? true : false)
+    setLimitStatus(formData?.PromotionType?.isNotLimit === 0 ? true : false)
   },[])
   const getPromotionCode = () => {
     let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
@@ -32,7 +41,7 @@ function Step3({setStep,form}){
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.TypeOfPromotion" />}>
           {getFieldDecorator('typeOfPromotion', {
-            initialValue:0,
+            initialValue: formData.PromotionType.typeOfPromotion,
             rules: [
               {
                 required: true,
@@ -85,7 +94,7 @@ function Step3({setStep,form}){
         )}
         { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
           {getFieldDecorator('perCustomer', {
-            initialValue: 1,
+            initialValue: formData?.PromotionType.perCustomer ? formData.PromotionType.perCustomer : 1,
           })(
             <InputNumber  size="large" min={1} disabled={!limitStatus}/>
           )}

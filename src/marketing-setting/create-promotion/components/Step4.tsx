@@ -20,7 +20,7 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 
-function Step4({setStep,form}){
+function Step4({setStep,form,match}){
   const { formData } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
 
@@ -47,7 +47,11 @@ function Step4({setStep,form}){
     getGroupsList()
     getGoodsCateList()
     getAllAttribute()
+    if(match.params.id){
+      editInit()
+    }
   },[])
+
   const getGroupsList = async () => {
     const { res }:any = await webapi.getAllGroups({
       pageNum: 0,
@@ -86,10 +90,17 @@ function Step4({setStep,form}){
       setAttributeList(fromJS(res.context.attributesList))
     }
   };
-  const selectGroupOnChange = ()=>{
 
+  /**
+   * 当时编辑进入时初始化所有的值
+   */
+  const editInit = async ()=>{
+    setPurchaseType(formData.Conditions.promotionType)
+    setIsSuperimposeSubscription(formData.Conditions.isSuperimposeSubscription === 0 ? true : false)
+    setCustomerType(formData.Conditions.joinLevel)
+    setScopeType(formData.Conditions.scopeType)
+    setCartLimits(formData.Conditions.CartLimit)
   }
-
   /**
    * 关闭货品选择modal
    */
@@ -172,7 +183,7 @@ function Step4({setStep,form}){
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.TypeOfPurchase" />}>
           {getFieldDecorator('promotionType', {
-            initialValue: 0,
+            initialValue: formData.Conditions.promotionType,
             rules: [
               {
                 required: true,
@@ -193,7 +204,7 @@ function Step4({setStep,form}){
           {
             purchaseType === 0 &&  (
               <div>
-                <Checkbox onChange={(e=>{
+                <Checkbox value={{isSuperimposeSubscription}} onChange={(e=>{
                   setIsSuperimposeSubscription(e.target.checked)
                 })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
@@ -206,7 +217,7 @@ function Step4({setStep,form}){
         {/*Group of customer*/}
         <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />}>
           {getFieldDecorator('joinLevel', {
-            initialValue: customerType,
+            initialValue: formData.Conditions.joinLevel,
             rules: [
               {
                 required: true,
@@ -231,7 +242,7 @@ function Step4({setStep,form}){
         {customerType === -3 && (
           <Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('segmentIds', {
-              initialValue: '',
+              initialValue: formData.Conditions.segmentIds?.[0],
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -247,7 +258,7 @@ function Step4({setStep,form}){
                 }
               ]
             })(
-              <Select style={{ width: 520 }} onChange={selectGroupOnChange}>
+              <Select style={{ width: 520 }}>
                 {allGroups.map((item) => (
                   <Select.Option key={item.id} value={item.id}>
                     {item.name}
@@ -287,7 +298,7 @@ function Step4({setStep,form}){
         {/*Products in the cart*/}
         <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
           {getFieldDecorator('scopeType', {
-            initialValue: scopeType,
+            initialValue: formData.Conditions.scopeType,
             rules: [
               {
                 required: true,
@@ -345,6 +356,7 @@ function Step4({setStep,form}){
         {
           scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
               {getFieldDecorator('storeCateIds', {
+                initialValue: [],
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
@@ -438,7 +450,7 @@ function Step4({setStep,form}){
         {/*CartLimit*/}
         <Form.Item label={<FormattedMessage id="Marketing.CartLimit" />}>
           {getFieldDecorator('CartLimit', {
-            initialValue: 0,
+            initialValue: formData.Conditions.CartLimit,
             rules: [
               {
                 required: true,
@@ -450,7 +462,7 @@ function Step4({setStep,form}){
             ],
           })(
             <Radio.Group onChange={(e)=>{setCartLimits(e.target.value)}}>
-              <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
+               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
               {
                 formData.PromotionType.typeOfPromotion === 0 && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
               }

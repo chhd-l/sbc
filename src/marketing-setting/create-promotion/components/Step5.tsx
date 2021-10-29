@@ -102,7 +102,7 @@ function Step5({ setStep, form }) {
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
               {
-                formData?.PromotionType?.typeOfPromotion !== 1 &&
+                (formData?.PromotionType?.typeOfPromotion !== 1 && formData?.Conditions?.promotionType === 0 ) &&
                 <Radio value={4}>
                   <FormattedMessage id="Marketing.Gifts" />
                 </Radio>

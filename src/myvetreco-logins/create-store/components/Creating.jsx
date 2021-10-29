@@ -16,14 +16,10 @@ const STATUS = {
 }
 
 const autoLogin = () => {
-  if (sessionStorage.getItem('storeToken')) { //如果是从create account过来的
-    login('prescriber', sessionStorage.getItem('storeToken'), (res) => {});
-  } else {  //从login过来的，直接修改logindata中的auditStatus为1
-    let loginData = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}');
-    switchLogin({
-      storeId: loginData.storeId
-    }, (res) => {});
-  }
+  let loginData = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}');
+  switchLogin({
+    storeId: loginData.storeId
+  }, (res) => {});
 };
 
 export default function Creating({userInfo,setStep}) {

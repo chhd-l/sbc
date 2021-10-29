@@ -163,10 +163,10 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           marketingType: 3,//免运费时固定为3
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
-          fullReductionLevelList: [{
+          marketingFreeShippingLevel: {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
             fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || 1 : null,
-          }],
+          },
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
           joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
           marketingName: formData?.BasicSetting?.marketingName,

@@ -521,7 +521,7 @@ function Step5({ setStep, form }) {
                             isNormal={false}
                             fullGiftLevelList={fullGiftLevelList}
                             onChangeBack={onRulesChange}
-                            isFullCount={form.Conditions.CartLimit === 1 ? 0 : 1}
+                            isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
                             GiftRowsOnChange={GiftRowsOnChange}
                             noMulti={true}
                           />

@@ -84,9 +84,9 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         couponName: formData?.BasicSetting?.marketingName,//改版用到的字段
         couponType: '1',
         cateIds: [],
-        storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],//改版用到的字段
+        storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],//改版用到的字段
         couponJoinLevel: formData.Conditions.joinLevel,
-        segmentIds:  formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],//改版用到的字段
+        segmentIds:  formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],//改版用到的字段
         rangeDayType: 0,
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
         fullBuyType: formData.Conditions.CartLimit,
@@ -135,8 +135,8 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           publicStatus: formData.PromotionType.publicStatus,
           scopeType: formData.Conditions.scopeType,
           subType: subType,
-          segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
-          storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
+          segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
+          storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],
 
           attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : [],
           emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
@@ -163,10 +163,10 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           marketingType: 3,//免运费时固定为3
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
-          fullReductionLevelList: [{
+          marketingFreeShippingLevel: {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
             fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || 1 : null,
-          }],
+          },
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
           joinLevel: formData.Conditions.joinLevel === 0 ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
           marketingName: formData?.BasicSetting?.marketingName,
@@ -176,8 +176,8 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           publicStatus: formData.PromotionType.publicStatus,
           scopeType: formData.Conditions.scopeType,
           subType: subType,
-          segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
-          storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
+          segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
+          storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],
 
           attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : [],
           emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
@@ -219,8 +219,8 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           publicStatus: formData.PromotionType.publicStatus,
           scopeType: formData.Conditions.scopeType,
           subType: subType,
-          segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
-          storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
+          segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
+          storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],
 
           attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : [],
           emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
@@ -268,8 +268,8 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           publicStatus: formData.PromotionType.publicStatus,
           customProductsType: formData.Conditions.customProductsType,
           scopeType: formData.Conditions.scopeType,
-          segmentIds: formData.Conditions.joinLevel === -3 ? formData.Conditions.segmentIds : [],
-          storeCateIds: formData.Conditions.scopeType === 2 ? formData.Conditions.storeCateIds : [],
+          segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
+          storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],
           subType: subType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
 

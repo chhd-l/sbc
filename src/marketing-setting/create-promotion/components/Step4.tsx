@@ -451,13 +451,10 @@ function Step4({setStep,form}){
           })(
             <Radio.Group onChange={(e)=>{setCartLimits(e.target.value)}}>
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
-
               {
-                (formData.PromotionType.typeOfPromotion === 0 && purchaseType !== 1 && purchaseType !==2) && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
+                formData.PromotionType.typeOfPromotion === 0 && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
               }
-              {
-                (formData.PromotionType.typeOfPromotion !== 0 || (purchaseType !== 1 && purchaseType !==2)) && <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
-              }
+              <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
 
             </Radio.Group>
           )}

@@ -33,12 +33,11 @@ const { Option } = Select;
 const FormItem = Form.Item;
 let resourceList = [];
 const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,updateServiceData }) => {
- console.log(serviceData,'serviceData1111')
+  console.log(serviceData,'dddddse')
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [settingCounts, setSettingCounts] = useState(addCounts || [1])
   const [changeData,setChangeData]= useState({})
   const [resourceList,setResourceList] = useState([])
-
   const [deliveryForm, setDeliveryForm] = useState({
     deliveryOption: 1,
     city: [],
@@ -66,12 +65,12 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
       resourceWeekPlanVOList: [{
         sort: "1",//一个serviceType下,日期选择行的顺序
         timeSlotVO: {
-          id: "",
+          id: null,
           timeSlot: "",
         },
         resourceDatePlanVOS: [{
-          id: "",
-          dateNo: "yyyymmdd 20210101"
+          id: null,
+          dateNo: ""
         }]
       }]
     }]
@@ -97,17 +96,28 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
   }
 
   // serviceType下拉选择
-  const handleServiceType = (value) => {
+  const handleServiceType = (value,sort) => {
+    // updateServiceData(serviceData)
+    console.log(value,serviceData,'valuvaluevalue')
     let isAll = 0;
     let resourceServicePlanVOList = []
-    console.log(value, 'ServiceTypeValue')
     // todo:下拉码值value:all需根据接口更改
     if (value !== 'all') {
-      setShowAddBtn(true)
-      // setServicePlanData(Object.assign(servicePlanData,{
-      //   isAll:0,
-      //   resourceServicePlanVOList:
-      // }))
+      // setShowAddBtn(true)
+      // 这个set应该无用了
+      setServicePlanData(Object.assign(servicePlanData,{
+        isAll:1,//目前只有felin,因此传1，后期再调整
+        resourceServicePlanVOList:[]
+      }))
+      
+      serviceData.resourceServicePlanVOList.map(el =>{
+        if(el.serviceSort === sort) {
+          el.serviceTypeId = value
+        }
+      })
+      updateServiceData(Object.assign(serviceData,{
+        isAll:1,//目前只有felin,因此传1，后期再调整
+      }))
     } else {
       setShowAddBtn(false)
     setSettingCounts([1])
@@ -135,17 +145,24 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
     setSettingCounts(counts)
   }
 
-  const updateTableData = (data) =>{
-    serviceData.resourceServicePlanVOList.map(item =>{
+  const updateTableData = (data) => {
+    serviceData.resourceServicePlanVOList[0].resourceWeekPlanVOList.map(item =>{
       item.sort ==data.sort
       item =data
     })
     updateServiceData(serviceData)
   }
+
+  const serviceTypeSelect = ()=>{
+    return (
+      <div></div>
+    )
+  }
+
   return (
     <div>
-      {/* {settingCounts.map((item, idx) => */}
-        <div className="setting-outside-warp">
+      {serviceData?.resourceServicePlanVOList?.map((el, idx) =>
+        <div key={idx} className="setting-outside-warp">
           <Row>
             <Col span={8} >
               <SelectGroup
@@ -156,7 +173,8 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
                   </p>
                 }
                 // disabled={selectDisabled}
-                onChange={handleServiceType}
+                value={el.serviceTypeId}
+                onChange={(value)=>handleServiceType(value,el.serviceSort)}
               >
                 {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </SelectGroup>
@@ -181,10 +199,10 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
               </Button>
             </Col>
           </Row>
-          {serviceData.resourceServicePlanVOList.map((item, index) => (
+          {el.resourceWeekPlanVOList.map((itemWeekList,index) => (
             <SetDayTable
               // allSelectWeeks={allSelectWeeks}
-              weekList={item.resourceWeekPlanVOList}
+              weekList={itemWeekList}
               key={index}
               updateTableData={updateTableData}
             // editOpenTable={editOpenTable}
@@ -192,7 +210,7 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
             />
           ))}
         </div>
-      {/* )} */}
+      )}
 
     </div>
   );

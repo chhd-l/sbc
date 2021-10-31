@@ -3,10 +3,10 @@ import { Checkbox, TimePicker, Icon } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import './index.less'
-const format = 'HH:mm';
+const timeFormat = 'HH:mm';
 const SetDayTable = (props) => {
   const { weekList, updateTableData } = props
-  console.log(weekList, 'WeekList')
+  console.log(weekList, 'WeekList5666666')
   const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   const [daysList, setDaysList] = useState({
     days: [],
@@ -16,19 +16,22 @@ const SetDayTable = (props) => {
 
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
-    let dates = allWeeks.map(item => moment(new Date()).day(item).format('YYYYMMDD'));
-    let days = dates.map(item => moment(item).format('M.DD'))
+    let dates = []
+     allWeeks.map(item => dates.push({
+      date:moment(new Date()).day(item).format('YYYYMMDD')
+     }));
+    let days = dates.map(item => moment(item.date).format('M.DD'))
     setDaysList({
       days,
       dates
     })
-    weekList.map(item => Object.assign(item, {
-      defaultDays: {
-        days,
-        dates
-      }
-    }))
-    setDefaultWeekList(weekList)
+    // weekList.map(item => Object.assign(item, {
+    //   defaultDays: {
+    //     days,
+    //     dates
+    //   }
+    // }))
+    // setDefaultWeekList(weekList)
   }, [])
 
   function addTime() {
@@ -42,6 +45,10 @@ const SetDayTable = (props) => {
       }
     ];
     changeTime(newTime);
+  }
+
+  const handleAddTime=()=> {
+
   }
 
   function deleteTime(sort) {
@@ -84,28 +91,58 @@ const SetDayTable = (props) => {
     props.editOpenTable(newOpenDateItem);
   }
 
-  const dayCheck = (e, day, sort) => {
-    let newDays = []
-    if (e.target.checked === true) {
-      weekList.forEach(el => {
-        if (el.sort === sort) {
-          newDays = [].concat(el.resourceDatePlanVOS)
-          newDays.push({
-            id: '',
-            dateNo: day
-          })
-          // el.resourceDatePlanVOs.map(date => {
-          //   if(date.dateNo =   )
-          // })
-          el.resourceDatePlanVOS = newDays
-        }
-      });
+  // 日期的复选框选择事件
+  const dateCheck = (e, date,_daysList,dateChecked) => {
+    console.log(e.target.checked, date,dateChecked,'e, date====')
+    console.log(props.weekList,'dateChekckConsole')
+    let _resourceDatePlanVOS = []
+    props.weekList.resourceDatePlanVOS.map(item => _resourceDatePlanVOS.push({
+      id:item.id,
+      dateNo:item.dateNo
+    }))
+    console.log(_resourceDatePlanVOS,'_resourceDatePlanVOS==')
+    if(e.target.checked == true) {
+      _resourceDatePlanVOS.push({
+        id:null,//新选择的复选框，没有id，后端建议传null
+        dateNo:date
+      })
+
+    }else if(e.target.checked == false){
+      // debugger
+      console.log(_daysList,'_daysList_daysList')
+      _daysList.dates.map(item => {
+        if(item.date ==date) item.dateChecked = false
+      })
+      console.log(_daysList,'_daysList-_____')
+      _resourceDatePlanVOS = props.weekList.resourceDatePlanVOS.filter(el => el.dateNo !== date)
+      console.log(_resourceDatePlanVOS,'newCheckedData==')
+      // setDaysList(Object.assign(daysList,{
+      //   dates:_daysList.dates
+      // }))
     }
-    updateTableData(weekList)
+    // let newDays = []
+    // if (e.target.checked === true) {
+    //   weekList.forEach(el => {
+    //     if (el.sort === sort) {
+    //       newDays = [].concat(el.resourceDatePlanVOS)
+    //       newDays.push({
+    //         id: '',
+    //         dateNo: day
+    //       })
+    //       // el.resourceDatePlanVOs.map(date => {
+    //       //   if(date.dateNo =   )
+    //       // })
+    //       el.resourceDatePlanVOS = newDays
+    //     }
+    //   });
+    // }
+    props.weekList.resourceDatePlanVOS = _resourceDatePlanVOS
+    updateTableData(props.weekList)
 
   }
 
   const timeChange = (timeStr, type, sort) => {
+    
     weekList.forEach(item => {
       if (item.sort === sort) {
         let times = item.timeSlotVO.timeSlot.split('-')
@@ -122,6 +159,18 @@ const SetDayTable = (props) => {
     updateTableData(weekList)
   }
 
+  // 时间区间的显示处理
+  const handleTimeSlotFormat = (weekList) => {
+    const timeSlot = weekList.timeSlotVO.timeSlot || ''
+    if (timeSlot.includes('|')) {
+
+    } else {
+      let singleTime = timeSlot.split('-');
+      return (
+        <TimeRangePicker TimeRange={singleTime} />
+      )
+    }
+  }
 
 
   const handleTimeFormat = (timeSlot, type) => {
@@ -147,16 +196,123 @@ const SetDayTable = (props) => {
     props.editOpenTable(newOpenDateItem);
   }
 
+  const TimeComponent = ({ idx, item }) => {
+    // "09:00-09:15|09:15-09:30" || 
+    const timeSlot =item.timeSlotVO.timeSlot;
+    let times = [timeSlot]
+    if(timeSlot.includes('|')) {
+       times = timeSlot.split('|');
+    }
+    return (
+      <>
+      {times.map(el =>
+         <div key={idx} className="time">
+         <TimePicker
+           format={format}
+           className={'start-time-picker'}
+           minuteStep={15}
+           value={moment(handleTimeFormat(el, 'start'), format)}
+           onChange={(time, timeStr) => { timeChange(timeStr, 'start', item.sort) }}
+           allowClear={false}
+          //  getPopupContainer={() => document.getElementsByClassName('start-time-picker')[idx]}
+         />
+         <span>-</span>
+         <TimePicker
+           format={format}
+           className={'end-time-picker'}
+           minuteStep={15}
+           value={moment(handleTimeFormat(el, 'end'), format)}
+           onChange={(time, timeStr) => { timeChange(timeStr, 'end', item.sort) }}
+           getPopupContainer={() => document.getElementsByClassName('end-time-picker')[idx]}
+           allowClear={false}
+         />
+         <Icon type="plus-square" onClick={handleAddTime} />
+         {times.length > 1 ? (
+     <Icon type="minus-square"
+      // onClick={() => deleteTime(time.sort)}
+       />
+   ) : null}
+       </div>
+        
+        )}
+      </>
+     
+    )
+
+  }
+
+  // 时间区间组件
+  const TimeRangePicker = ({TimeRange}) => {
+    // "09:00-09:15|09:15-09:30"
+    return (
+      <div className="time">
+        <TimePicker
+          format={timeFormat}
+          className={'start-time-picker'}
+          minuteStep={15}
+          value={moment(TimeRange[0],timeFormat)}
+          //  onChange={(time, timeStr) => { timeChange(timeStr, 'start', item.sort) }}
+          allowClear={false}
+        //  getPopupContainer={() => document.getElementsByClassName('start-time-picker')[idx]}
+        />
+        <span>-</span>
+        <TimePicker
+          format={timeFormat}
+          className={'end-time-picker'}
+          minuteStep={15}
+          value={moment(TimeRange[1],timeFormat)}
+          //  onChange={(time, timeStr) => { timeChange(timeStr, 'end', item.sort) }}
+          //  getPopupContainer={() => document.getElementsByClassName('end-time-picker')[idx]}
+          allowClear={false}
+        />
+        <Icon type="plus-square" onClick={handleAddTime} />
+      </div>
+    )
+  }
+
+  // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
+  const handlePlanDatesChecked = (daysList) => {
+    daysList.dates?.map(dateItem => {
+      props.weekList.resourceDatePlanVOS?.map(planItem => {
+        if (dateItem.date === planItem.dateNo){
+          dateItem.dateChecked = true
+        } 
+        // else {
+        //   dateItem.dateChecked = false
+        // }
+      })
+    })
+    console.log(daysList,props.weekList.resourceDatePlanVOS,'daysList===33')
+
+    return (
+      <>
+        {daysList.dates.map((dateItem, idx) =>
+          <td>
+            <Checkbox
+              key={idx}
+              // disabled={props.allSelectWeeks.includes(day) && !props.openDate.weeks.includes(day)}
+              // onChange={(e) => dayCheck(e, dateItem.date, dateItem.sort)}
+              onChange={(e) => dateCheck(e, dateItem.date,daysList,dateItem.dateChecked)}
+              //  checked={handleCheckedDaysFormat(item.resourceDatePlanVOS,day)}
+              checked={dateItem.dateChecked}
+            ></Checkbox>
+          </td>
+        )}
+      </>
+    )
+  }
+
+
   return (
     <>
       <table className="set-day-table">
         <thead>
           <tr>
-            {defaultWeekList.map(item => item?.defaultDays?.days.map((item, idx) =>
+            {daysList.days.map((day,idx) =>
               <th key={idx} style={{ width: '4.5%' }}>
-                {item}
+                {day}
               </th>
-            ))}
+            )}
             <th style={{ width: '31%' }}>
               <FormattedMessage id="Setting.timeSlot" />
             </th>
@@ -167,45 +323,9 @@ const SetDayTable = (props) => {
         </thead>
         <tbody>
           <tr>
-            {defaultWeekList.map(item => item?.defaultDays?.dates.map((day, idx) =>
-              <td>
-                <Checkbox
-                  key={idx}
-                  // disabled={props.allSelectWeeks.includes(day) && !props.openDate.weeks.includes(day)}
-                  onChange={(e) => dayCheck(e, day, item.sort)}
-                 checked={handleCheckedDaysFormat(item.resourceDatePlanVOS,day)}
-                ></Checkbox>
-              </td>
-            ))}
+           {handlePlanDatesChecked(daysList)}
             <td style={{ paddingTop: 0 }}>
-              {weekList.map((item, index) => (
-                <div key={index} className="time">
-                  <TimePicker
-                    format={format}
-                    className={'start-time-picker'}
-                    minuteStep={15}
-                    value={moment(handleTimeFormat(item.timeSlotVO.timeSlot, 'start'), format)}
-                    onChange={(time, timeStr) => { timeChange(timeStr, 'start', item.sort) }}
-                    // onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
-                    allowClear={false}
-                    getPopupContainer={() => document.getElementsByClassName('start-time-picker')[index]}
-                  />
-                  <span>-</span>
-                  <TimePicker
-                    format={format}
-                    className={'end-time-picker'}
-                    minuteStep={15}
-                    value={moment(handleTimeFormat(item.timeSlotVO.timeSlot, 'end'), format)}
-                    onChange={(time, timeStr) => { timeChange(timeStr, 'end', item.sort) }}
-                    getPopupContainer={() => document.getElementsByClassName('end-time-picker')[index]}
-                    allowClear={false}
-                  />
-                  <Icon type="plus-square" onClick={() => addTime()} />
-                  {/* {props.openDate.times.length > 1 ? (
-                  <Icon type="minus-square" onClick={() => deleteTime(time.sort)} />
-                ) : null} */}
-                </div>
-              ))}
+               {handleTimeSlotFormat(props.weekList)}
             </td>
             <td>
               <a

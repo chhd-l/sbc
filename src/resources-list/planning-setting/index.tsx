@@ -45,58 +45,72 @@ export default class PlanningSetting extends React.Component<any, any>{
       AvailServiceTypeDisabled:true,
       settingDetailData:{},
       saveDetailData: {
-        isAll: 0,
-        resourceServicePlanVOList: [{
-          serviceTypeId: "",
-          serviceSort: "1",//serviceType的设置顺序
-          resourceWeekPlanVOList: [{
-            sort: "1",//一个serviceType下,日期选择行的顺序
-            timeSlotVO: {
-              id: "",
-              // timeSlot: "00:00-23:59|00:00-23:59",
-              timeSlot: "00:00-23:59",
-            },
-            resourceDatePlanVOS: [{
-              id: "",
-              dateNo: ""
-            }]
-          }]
+        isAll: 1,
+      },
+      resourceServicePlanVOList: [{
+        serviceTypeId: null,
+        serviceSort: "1",//serviceType的设置顺序
+        resourceWeekPlanVOList: [{
+          sort: "1",//一个serviceType下,日期选择行的顺序
+          timeSlotVO: {
+            id: null,
+            // timeSlot: "00:00-23:59|00:00-23:59",
+            timeSlot: "00:00-23:59",
+          },
+          resourceDatePlanVOS: []
         }]
-      }
+      }]
     }
   }
 
-  componentDidMount() {
-    this.getTypeDict()
+  async componentDidMount() {
+    await this.getTypeDict()
     this.getDetailData()
   }
 
-  getTypeDict = async () => {
-    const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
-    const appointmentTypeRes = await webapi.goodsDict({ type: 'apprintment_type' })
-    const expertTypeRes = await webapi.goodsDict({ type: 'expert_type' })
-
-    const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
-    const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
-    const expertTypeDict = expertTypeRes?.res?.context?.goodsDictionaryVOS || []
-    this.setState({
-      serviceTypeDict,
-      appointmentTypeDict,
-      expertTypeDict
+  // 字典枚举
+  getTypeDict = () => {
+    Promise.all([
+      webapi.goodsDict({ type: 'service_type' }),
+      webapi.goodsDict({ type: 'apprintment_type' }),
+      webapi.goodsDict({ type: 'expert_type' })
+    ]).then((dictArr) => {
+      const serviceTypeDict = dictArr[0].res?.context?.goodsDictionaryVOS || []
+      const appointmentTypeDict = dictArr[1]?.res?.context?.goodsDictionaryVOS || []
+      const expertTypeDict = dictArr[2]?.res?.context?.goodsDictionaryVOS || []
+      this.setState({
+        serviceTypeDict,
+        appointmentTypeDict,
+        expertTypeDict
+      })
     })
   }
 
   // 获取当前详情数据
-  getDetailData = async() =>{
+  getDetailData = async () => {
     const employeeId = this.props.match.params?.id
-    const {res} = await webapi.findByEmployeeId({employeeId})
+    const { res } = await webapi.findByEmployeeId({ employeeId })
     const data = res?.context?.resourceSetting
+    // const defaultData = Object.assign(data,{
+    //   resourceServicePlanVOList:this.state.resourceServicePlanVOList
+    //   });
+      console.log(data.resourceServicePlanVOList,'data.resourceServicePlanVOList888')
+    let settingData = data;
+    if(!data.resourceServicePlanVOList?.length) {
+      settingData =  Object.assign(data,{
+        resourceServicePlanVOList:this.state.resourceServicePlanVOList
+        });
+    }
+    // const settingData =  data.resourceServicePlanVOList?.length ? data : defaultData
     this.setState({
-      settingDetailData: data,
-      saveDetailData: Object.assign(this.state.saveDetailData,{
-      id: data.id,
-      employeeId:data.employeeId,
-      }),
+      settingDetailData: settingData,//往下传的数据
+      saveDetailData:data,
+    }, () => {
+      const AvailServiceTypeId = data.resourceServicePlanVOList?.[0].serviceTypeId
+      const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
+      this.setState({
+        AvailServiceTypeDict
+      })
     })
   }
 
@@ -105,11 +119,15 @@ export default class PlanningSetting extends React.Component<any, any>{
   }
 
   handleSelectChange = (type, value) => {
-    if (type == 'serviceTypeId') {
-      let avail = this.state.serviceTypeDict.filter(item => item.id === value.slice(-1).toString()) || []
-      AvailServiceType.push(avail?.[0])
+    if (type == 'serviceTypeIds') {
+     let AvailServiceTypeDict = []
+      value.forEach(val => {
+         this.state.serviceTypeDict.map(item =>{
+           if( item.id ==val) AvailServiceTypeDict.push(item)
+         })
+      })
       this.setState({
-        AvailServiceTypeDict: AvailServiceType,
+        AvailServiceTypeDict,
         AvailServiceTypeDisabled: false
       })
     }
@@ -128,10 +146,17 @@ export default class PlanningSetting extends React.Component<any, any>{
     });
   }
 
-  updateServiceData = (data) =>{
+  updateServiceData = (data) => {
     this.setState({
-      saveDetailData:data
+      saveDetailData: data
     })
+  }
+
+  dictFormat = (dataSource) => {
+    console.log(dataSource,'dataSource===')
+    if(!dataSource) return [];
+    let dictIds = dataSource?.map(item => item.dictId)
+    return dictIds
   }
 
   render() {
@@ -200,14 +225,14 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           <Col span={14}>
             <FormItem label={ <FormattedMessage id="Resources.service_type" />}>
-              {getFieldDecorator('serviceType', {
+              {getFieldDecorator('serviceTypeIds', {
                 rules: [
                   {
                     required: true,
                   },
                 ],
-                onChange: (value)=>{this.handleSelectChange('serviceTypeId', value ) },
-                // initialValue: goods.get('goodsNo')
+                onChange: (value)=>{this.handleSelectChange('serviceTypeIds', value ) },
+                initialValue:this.dictFormat(settingDetailData?.serviceType)
               })(<Select
                 mode="multiple"
                 className="service-type-setting"
@@ -219,14 +244,14 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           <Col span={14}>
             <FormItem label={ <FormattedMessage id="Resources.expert_type" />}>
-              {getFieldDecorator('expertType', {
+              {getFieldDecorator('expertTypeIds', {
                 rules: [
                   {
                     required: true,
                   },
                 ],
-                onChange: (value)=>{this.handleSelectChange('expertTypeId', value ) },
-                // initialValue: goods.get('goodsNo')
+                onChange: (value)=>{this.handleSelectChange('expertTypeIds', value ) },
+                initialValue:this.dictFormat(settingDetailData?.expertType)
               })(<Select
                 mode="multiple"
                 className="expert-type-setting"
@@ -238,24 +263,14 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           <Col span={14}>
             <FormItem label={ <FormattedMessage id="Resources.appointment_type" />}>
-              {getFieldDecorator('appointmentType', {
+              {getFieldDecorator('appointmentTypeIds', {
                 rules: [
                   {
                     required: true,
-                  },
-                  // {
-                  //   min: 1,
-                  //   max: 20,
-                  //   message: '1-20 characters'
-                  // },
-                  // {
-                  //   validator: (rule, value, callback) => {
-                  //     QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
-                  //   }
-                  // }
+                  }
                 ],
-                onChange: (value)=>{this.handleSelectChange('appointmentTypeId', value ) },
-                // initialValue: goods.get('goodsNo')
+                onChange: (value)=>{this.handleSelectChange('appointmentTypeIds', value ) },
+                initialValue:this.dictFormat(settingDetailData?.appointmentType)
               })(<Select
                 mode="multiple"
                 className='appointment-type-setting'
@@ -268,7 +283,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Row>
           <div className="availability-title">Availability:</div>
           <ServiceSetting 
-          serviceData={saveDetailData} 
+          serviceData={settingDetailData} 
           serviceTypeDict={AvailServiceTypeDict} 
           selectDisabled={AvailServiceTypeDisabled}
           updateServiceData={(data)=>this.updateServiceData(data)}

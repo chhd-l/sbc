@@ -32,7 +32,8 @@ export default function index({...props}) {
       isSuperimposeSubscription:1,
       segmentIds:[],
       storeCateIds:[],
-    }
+    },
+    Advantage:{},
   })
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
 
@@ -70,6 +71,59 @@ export default function index({...props}) {
         return 2;
     }
   }
+  const switchFullMoney = (detail:any)=>{
+    switch (detail.subType) {
+      case 0:
+        return detail.fullReductionLevelList?.[0]?.fullAmount;
+      case 2:
+        return detail.fullDiscountLevelList?.[0].fullAmount;
+      case 4:
+        return detail.fullGiftLevelList?.[0].fullAmount;
+      case 10:
+        return detail.marketingFreeShippingLevel?.fullAmount;
+      default :
+        return ''
+    }
+  }
+  const switchFullItem = (detail:any)=>{
+    switch (detail.subType) {
+      case 1:
+        return detail.fullReductionLevelList?.[0]?.fullCount;
+      case 3:
+        return detail.fullDiscountLevelList?.[0].fullCount;
+      case 5:
+        return detail.fullGiftLevelList?.[0].fullCount;
+      case 11:
+        return detail.marketingFreeShippingLevel?.fullCount;
+      default :
+        return ''
+    }
+  }
+  const switchCouponPromotionType = (detail:any)=>{
+    switch (detail.subType) {
+      case 0:
+        return 0;
+      case 1:
+        return 0;
+      case 2:
+        return 1;
+      case 3:
+        return 1;
+      case 4:
+        return 4;
+      case 5:
+        return 4;
+      case 6:
+        return 0;
+      case 7:
+        return 1;
+      case 10:
+        return 3;
+      case 11:
+        return 3;
+    }
+  }
+
   const getDetail = async ()=>{
     let result:any  = {}
     if(props.match.params.type == 'promotion'){
@@ -92,11 +146,35 @@ export default function index({...props}) {
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           segmentIds:detail.segmentIds || [],
           storeCateIds:detail.storeCateIds || [],
+          emailSuffixList:detail.emailSuffixList || [],
+          customProductsType:detail.customProductsType,
+
+          skuIds:detail.goodsInfoIdList,
+          selectedRows:detail.goodsList?.goodsInfoPage?.content,
+          attributeValueIds:detail.attributeValueIds,
+
+          fullMoney:switchFullMoney(detail),
+          fullItem:switchFullItem(detail),
+        },
+        Advantage:{
+          couponPromotionType:switchCouponPromotionType(detail),
+          denomination: (detail.subType === 0 || detail.subType === 1) ? detail.fullReductionLevelList?.[0]?.reduction : '',
+          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].discount : '',
+          limitAmount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].limitAmount : '',
+          firstSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].firstSubscriptionOrderReduction :'',
+          restSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].restSubscriptionOrderReduction :'',
+          firstSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionLimitAmount :'',
+          firstSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount :'',
+          restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
+          restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
+          fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : {},
+          selectedRows:detail.goodsList?.goodsInfoPage?.content,
         },
         BasicSetting: {
           marketingName: detail.marketingName,
           time:[moment(detail.beginTime),moment(detail.endTime)]
-        }
+        },
+        subType:detail.subType,
       })
     }
   }
@@ -150,7 +228,7 @@ export default function index({...props}) {
                       <Step4 setStep={setStep} match={props.match}/>
                     </div>
                     <div style={{display: step === 4 ? 'block' : 'none'}}>
-                      <Step5 setStep={setStep}/>
+                      <Step5 setStep={setStep} match={props.match}/>
                     </div>
                   </>
                 )

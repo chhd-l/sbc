@@ -100,6 +100,9 @@ function Step4({setStep,form,match}){
     setCustomerType(formData.Conditions.joinLevel)
     setScopeType(formData.Conditions.scopeType)
     setCartLimits(formData.Conditions.CartLimit)
+
+    setSelectedSkuIds(formData.Conditions.skuIds || [])
+    setSelectedRows(fromJS(formData.Conditions.selectedRows) || fromJS([]))
   }
   /**
    * 关闭货品选择modal
@@ -133,7 +136,17 @@ function Step4({setStep,form,match}){
     setSelectedRows(SelectedRows);
   };
 
-
+  /**
+   * 回显StoreCateIds
+   * @param storeCateIds
+   */
+  const ReStoreCateIds = (storeCateIds)=>{
+    let array = []
+    storeCateIds.forEach(item=>{
+      array.push({value:item})
+    })
+    return array
+  }
   //展示相关
   /**
    * 店铺分类树形下拉框
@@ -271,7 +284,7 @@ function Step4({setStep,form,match}){
         {customerType === -4 && (
           <Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('emailSuffixList', {
-              initialValue: '',
+              initialValue: formData.Conditions.emailSuffixList?.[0],
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -322,7 +335,7 @@ function Step4({setStep,form,match}){
             <>
               <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
                 {getFieldDecorator('customProductsType', {
-                  initialValue: 0,
+                  initialValue: formData.Conditions.customProductsType || 0,
                   // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
                 })(<RadioGroup >
                   <Radio value={0}>
@@ -356,7 +369,7 @@ function Step4({setStep,form,match}){
         {
           scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
               {getFieldDecorator('storeCateIds', {
-                initialValue: [],
+                initialValue: ReStoreCateIds(formData.Conditions.storeCateIds),
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
@@ -402,7 +415,7 @@ function Step4({setStep,form,match}){
         {
           scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('attributeValueIds', {
-              // initialValue: attributeDefaultValue,
+              initialValue: ReStoreCateIds(formData.Conditions.attributeValueIds),
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -476,6 +489,7 @@ function Step4({setStep,form,match}){
             <Form.Item wrapperCol={{offset: 6,span:18}}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullItem', {
+                initialValue: formData.Conditions.fullItem,
                 rules: [
                   {
                     required: true,
@@ -513,6 +527,7 @@ function Step4({setStep,form,match}){
             <Form.Item wrapperCol={{offset: 6,span:18}}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullMoney', {
+                initialValue: formData.Conditions.fullMoney,
                 rules: [
                   {
                     required: true,

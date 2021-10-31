@@ -14,7 +14,7 @@ const formItemLayout = {
   wrapperCol: { span: 14 }
 };
 
-function Step5({ setStep, form }) {
+function Step5({ setStep, form, match }) {
   const { changeFormData,formData } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
@@ -29,6 +29,13 @@ function Step5({ setStep, form }) {
       giftType: 1,
       fullGiftDetailList: []
     }])
+    if(match.params.id){
+      setCouponPromotionType(formData.Advantage.couponPromotionType)
+      if(formData.subType === 4 || formData.subType === 5){
+        setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
+        setSelectedRows(fromJS(formData.Advantage.selectedRows))
+      }
+    }
   },[])
   /**
    * 规则变化方法
@@ -80,7 +87,7 @@ function Step5({ setStep, form }) {
 
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('couponPromotionType', {
-            initialValue: 0,
+            initialValue: formData.Advantage.couponPromotionType,
             rules: [
               {
                 required: true,
@@ -123,6 +130,7 @@ function Step5({ setStep, form }) {
                       <Form.Item labelCol={{span: 8}} wrapperCol={{span:16}} label="For the first subscription order,reduction">
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.reduction" />&nbsp;&nbsp;</span>
                         {getFieldDecorator('firstSubscriptionOrderReduction', {
+                          initialValue: formData.Advantage.firstSubscriptionOrderReduction,
                           rules: [
                             {
                               required: true, message:
@@ -145,7 +153,6 @@ function Step5({ setStep, form }) {
                               }
                             }
                           ],
-                          initialValue: ''
                         })(
                           <Input
                             style={{ width: 200 }}
@@ -160,6 +167,7 @@ function Step5({ setStep, form }) {
                       <Form.Item labelCol={{span: 8}} wrapperCol={{span:16}} label="For the rest subscription order,reduction" required={false} labelAlign="left" >
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.reduction" />&nbsp;&nbsp;</span>
                         {getFieldDecorator('restSubscriptionOrderReduction', {
+                          initialValue: formData.Advantage.restSubscriptionOrderReduction,
                           rules: [
                             {
                               validator: (_rule, value, callback) => {
@@ -176,7 +184,6 @@ function Step5({ setStep, form }) {
                               }
                             }
                           ],
-                          initialValue: ''
                         })(
                           <Input
                             style={{ width: 200 }}
@@ -200,6 +207,7 @@ function Step5({ setStep, form }) {
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('firstSubscriptionOrderDiscount', {
+                              initialValue: formData.Advantage.firstSubscriptionOrderDiscount*100,
                               rules: [
                                 {
                                   required: true, message:
@@ -222,7 +230,6 @@ function Step5({ setStep, form }) {
                                   }
                                 }
                               ],
-                              initialValue: ''
                             })(
                               <Input
                                 style={{ width: 150 }}
@@ -243,6 +250,7 @@ function Step5({ setStep, form }) {
                           <Form.Item>
                             <span>&nbsp;discount limit&nbsp;&nbsp;</span>
                             {getFieldDecorator('firstSubscriptionLimitAmount', {
+                              initialValue: formData.Advantage.firstSubscriptionLimitAmount,
                               rules: [
                                 // { required: true, message: 'Must enter rules' },
                                 {
@@ -261,7 +269,6 @@ function Step5({ setStep, form }) {
                                   // callback();
                                 }
                               ],
-                              initialValue: ''
                             })(
                               <Input
                                 style={{ width: 150 }}
@@ -287,6 +294,7 @@ function Step5({ setStep, form }) {
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('restSubscriptionOrderDiscount', {
+                              initialValue: formData.Advantage.restSubscriptionOrderDiscount*100,
                               rules: [
                                 {
                                   validator: (_rule, value, callback) => {
@@ -309,7 +317,6 @@ function Step5({ setStep, form }) {
                                   }
                                 }
                               ],
-                              initialValue: ''
                             })(
                               <Input
                                 style={{ width: 150 }}
@@ -337,6 +344,7 @@ function Step5({ setStep, form }) {
                           <Form.Item>
                             <span>&nbsp;discount limit&nbsp;&nbsp;</span>
                             {getFieldDecorator('restSubscriptionLimitAmount', {
+                              initialValue: formData.Advantage.restSubscriptionLimitAmount,
                               rules: [
                                 {
                                   validator: (_rule, value, callback) => {
@@ -353,7 +361,6 @@ function Step5({ setStep, form }) {
                                   }
                                 }
                               ],
-                              initialValue: ''
                             })(
                               <Input
                                 style={{ width: 150 }}
@@ -385,7 +392,7 @@ function Step5({ setStep, form }) {
                 {couponPromotionType === 0 && (
                   <Form.Item {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionValue" />} required={true}>
                     {getFieldDecorator('denomination', {
-                      initialValue: '',
+                      initialValue: formData.Advantage.denomination,
                       rules: [
                         {
                           required: true,
@@ -434,7 +441,7 @@ function Step5({ setStep, form }) {
                     <div style={{ display: 'flex' }}>
                       <Form.Item>
                         {getFieldDecorator('couponDiscount', {
-                          initialValue: '',
+                          initialValue: formData.Advantage.couponDiscount*100,
                           rules: [
                             {
                               required: true,
@@ -469,7 +476,7 @@ function Step5({ setStep, form }) {
                       <Form.Item>
                         <span>&nbsp;discount limit&nbsp;&nbsp;</span>
                         {getFieldDecorator('limitAmount', {
-                          initialValue: '',
+                          initialValue: formData.Advantage.limitAmount,
                           rules: [
                             {
                               validator: (_rule, value, callback) => {

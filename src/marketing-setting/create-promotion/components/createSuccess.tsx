@@ -12,7 +12,7 @@ export default function createSuccess({setStep}) {
     const token = (window as any).token;
     if (token) {
       const result = JSON.stringify({
-        marketingId:detail.marketingId,
+        marketingId:detail.marketingId || match.params.id,
         token
       });
       const encrypted = base64.urlEncode(result);

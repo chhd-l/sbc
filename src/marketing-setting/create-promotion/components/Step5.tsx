@@ -201,17 +201,6 @@ function Step5({ setStep, form }) {
     setSelectedRows(SelectedRows);
   };
 
-  /**
-   * 回显StoreCateIds
-   * @param storeCateIds
-   */
-  const ReStoreCateIds = (storeCateIds)=>{
-    let array = []
-    storeCateIds.forEach(item=>{
-      array.push({value:item})
-    })
-    return array
-  }
   //展示相关
   /**
    * 店铺分类树形下拉框
@@ -871,7 +860,7 @@ function Step5({ setStep, form }) {
         {
           scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('storeCateIds', {
-              initialValue: ReStoreCateIds(formData.Advantage.storeCateIds),
+              initialValue: formData.Advantage.storeCateIds,
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -917,7 +906,7 @@ function Step5({ setStep, form }) {
         {
           scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('attributeValueIds', {
-              initialValue: ReStoreCateIds(formData.Advantage.attributeValueIds || []),
+              initialValue: formData.Advantage.attributeValueIds,
               rules: [
                 {
                   validator: (_rule, value, callback) => {

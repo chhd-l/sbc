@@ -203,8 +203,8 @@ export default function index({...props}) {
           emailSuffixList:detail.emailSuffixList || [],
           scopeType: detail.scopeType,
           customProductsType:detail.customProductsType,
-          storeCateIds:detail.storeCateIds || [],
-          attributeValueIds:detail.attributeValueIds,
+          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
+          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
 
           skuIds:detail.goodsInfoIdList,
           selectedRows:detail.goodsList?.goodsInfoPage?.content,
@@ -240,8 +240,8 @@ export default function index({...props}) {
           segmentIds:detail.segmentIds || [],
           scopeType: switchScopeType(detail.scopeType),
           customProductsType:detail.customProductsType,
-          storeCateIds:detail.storeCateIds || [],
-          attributeValueIds:detail.attributeValueIds,
+          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
+          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
 
           skuIds:detail.scopeIds,
           selectedRows:goodsList?.goodsInfoPage?.content,
@@ -253,6 +253,17 @@ export default function index({...props}) {
       })
     }
     setLoading(false)
+  }
+  /**
+   * 回显StoreCateIds
+   * @param storeCateIds
+   */
+  const ReStoreCateIds = (storeCateIds)=>{
+    let array = []
+    storeCateIds.forEach(item=>{
+      array.push({value:item})
+    })
+    return array
   }
   /**
    * 保存每一步的值
@@ -309,11 +320,11 @@ export default function index({...props}) {
                     <div style={{display: step === 4 ? 'block' : 'none'}}>
                       <Step5 setStep={setStep}/>
                     </div>
+                    <div style={{display: step === 5 ? 'block' : 'none'}}>
+                      <Step6 setStep={setStep} setLoading={setLoading}/>
+                    </div>
                   </>
                 )
-              }
-              {
-                step === 5 && <Step6 setStep={setStep} setLoading={setLoading}/>
               }
               {
                 step === 6 && <CreateSuccess setStep={setStep}/>

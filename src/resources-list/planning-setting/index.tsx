@@ -43,7 +43,21 @@ export default class PlanningSetting extends React.Component<any, any>{
       expertTypeDict:[],
       AvailServiceTypeDict:[],
       AvailServiceTypeDisabled:true,
-      settingDetailData:{},
+      settingDetailData:{
+        resourceServicePlanVOList: [{
+          serviceTypeId: null,
+          serviceSort: "1",//serviceType的设置顺序
+          resourceWeekPlanVOList: [{
+            sort: "1",//一个serviceType下,日期选择行的顺序
+            timeSlotVO: {
+              id: null,
+              // timeSlot: "00:00-23:59|00:00-23:59",
+              timeSlot: "00:00-23:59",
+            },
+            resourceDatePlanVOS: []
+          }]
+        }]
+      },
       saveDetailData: {
         isAll: 1,
       },
@@ -90,11 +104,7 @@ export default class PlanningSetting extends React.Component<any, any>{
   getDetailData = async () => {
     const employeeId = this.props.match.params?.id
     const { res } = await webapi.findByEmployeeId({ employeeId })
-    const data = res?.context?.resourceSetting
-    // const defaultData = Object.assign(data,{
-    //   resourceServicePlanVOList:this.state.resourceServicePlanVOList
-    //   });
-      console.log(data.resourceServicePlanVOList,'data.resourceServicePlanVOList888')
+    const data = res?.context?.resourceSetting;
     let settingData = data;
     if(!data.resourceServicePlanVOList?.length) {
       settingData =  Object.assign(data,{

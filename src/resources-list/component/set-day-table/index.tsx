@@ -17,9 +17,9 @@ const SetDayTable = (props) => {
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
     let dates = []
-     allWeeks.map(item => dates.push({
-      date:moment(new Date()).day(item).format('YYYYMMDD')
-     }));
+    allWeeks.map(item => dates.push({
+      date: moment(new Date()).day(item).format('YYYYMMDD')
+    }));
     let days = dates.map(item => moment(item.date).format('M.DD'))
     setDaysList({
       days,
@@ -47,127 +47,135 @@ const SetDayTable = (props) => {
     changeTime(newTime);
   }
 
-  const handleAddTime=()=> {
-
+  // 时间段的添加按钮事件
+  const handleAddTime = () => {
+    const defaultTime = "00:00-23:59";
+    let newTime = weekList.timeSlotVO.timeSlot + "|" + defaultTime;
+    weekList.timeSlotVO.timeSlot = newTime;
+    updateTableData(weekList)
   }
 
-  function deleteTime(sort) {
-    var newTime = [];
-    props.openDate.times.map((item) => {
-      if (item.sort !== sort) {
-        newTime.push(item);
-      }
-    });
-    changeTime(newTime);
-  }
-  // const timeChange =(isStartTime, timeString, sort) =>{
-  //   var newTime = [];
-  //   props.openDate.times.map((item) => {
-  //     if (item.sort === sort) {
-  //       newTime.push({
-  //         startTime: isStartTime ? timeString : item.startTime,
-  //         endTime: !isStartTime ? timeString : item.endTime,
-  //         sort: item.sort
-  //       });
-  //     } else {
-  //       newTime.push(item);
-  //     }
-  //   });
-  //   changeTime(newTime);
-  // }
-
-  function weekCheck(e, value) {
-    let newWeeks = [];
-    if (e.target.checked === true) {
-      newWeeks = [...props.openDate.weeks, value];
-    } else {
-      props.openDate.weeks.map((item) => {
-        if (item !== value) {
-          newWeeks.push(item);
-        }
-      });
-    }
-    const newOpenDateItem = { ...props.openDate, weeks: newWeeks };
-    props.editOpenTable(newOpenDateItem);
+  // 时间段的删除按钮事件
+  const handleDeleteTime = (idx) => {
+    const timeSlot = weekList.timeSlotVO.timeSlot || ''
+    const times = timeSlot.split('|');
+    const _time = times.map(item => item.split('-'))
+    const newTimeArr = _time.filter((el, index) => idx !== index)
+    const newTimeStr = newTimeArr.map(el => el.join('-')).join('|')
+    weekList.timeSlotVO.timeSlot = newTimeStr
+    updateTableData(weekList)
   }
 
   // 日期的复选框选择事件
-  const dateCheck = (e, date,_daysList,dateChecked) => {
-    console.log(e.target.checked, date,dateChecked,'e, date====')
-    console.log(props.weekList,'dateChekckConsole')
+  const dateCheck = (e, date, _daysList, dateChecked) => {
     let _resourceDatePlanVOS = []
     props.weekList.resourceDatePlanVOS.map(item => _resourceDatePlanVOS.push({
-      id:item.id,
-      dateNo:item.dateNo
+      id: item.id,
+      dateNo: item.dateNo
     }))
-    console.log(_resourceDatePlanVOS,'_resourceDatePlanVOS==')
-    if(e.target.checked == true) {
+    if (e.target.checked == true) {
       _resourceDatePlanVOS.push({
-        id:null,//新选择的复选框，没有id，后端建议传null
-        dateNo:date
+        id: null,//新选择的复选框，没有id，后端建议传null
+        dateNo: date
       })
-
-    }else if(e.target.checked == false){
-      // debugger
-      console.log(_daysList,'_daysList_daysList')
+    } else if (e.target.checked == false) {
       _daysList.dates.map(item => {
-        if(item.date ==date) item.dateChecked = false
+        if (item.date == date) item.dateChecked = false
       })
-      console.log(_daysList,'_daysList-_____')
       _resourceDatePlanVOS = props.weekList.resourceDatePlanVOS.filter(el => el.dateNo !== date)
-      console.log(_resourceDatePlanVOS,'newCheckedData==')
-      // setDaysList(Object.assign(daysList,{
-      //   dates:_daysList.dates
-      // }))
     }
-    // let newDays = []
-    // if (e.target.checked === true) {
-    //   weekList.forEach(el => {
-    //     if (el.sort === sort) {
-    //       newDays = [].concat(el.resourceDatePlanVOS)
-    //       newDays.push({
-    //         id: '',
-    //         dateNo: day
-    //       })
-    //       // el.resourceDatePlanVOs.map(date => {
-    //       //   if(date.dateNo =   )
-    //       // })
-    //       el.resourceDatePlanVOS = newDays
-    //     }
-    //   });
-    // }
     props.weekList.resourceDatePlanVOS = _resourceDatePlanVOS
     updateTableData(props.weekList)
 
   }
 
-  const timeChange = (timeStr, type, sort) => {
-    
-    weekList.forEach(item => {
-      if (item.sort === sort) {
-        let times = item.timeSlotVO.timeSlot.split('-')
+  // 更改时间区间操作事件
+  const timeChange = (timeStr, type, sort, idx) => {
+    if (weekList.sort == sort) {
+      const timeSlot = weekList.timeSlotVO.timeSlot || ''
+      if (timeSlot.includes('|')) {
+        let times = timeSlot.split('|');
+        let _time = times.map(item => item.split('-'))
+        _time.map((el, index) => {
+          if (index === idx) {
+            type == "start" ? el[0] = timeStr : el[1] = timeStr
+          }
+        })
+        const newTimesStr = _time.map(el => el.join('-')).join('|')
+        weekList.timeSlotVO.timeSlot = newTimesStr
+      } else {
+        let times = timeSlot.split('-')
         if (type == "start") {
           let newTimeStr = `${timeStr}-${times[1]}`
-          item.timeSlotVO.timeSlot = newTimeStr
+          weekList.timeSlotVO.timeSlot = newTimeStr
         } else {
           let _newTimeStr = `${times[0]}-${timeStr}`
-          item.timeSlotVO.timeSlot = _newTimeStr
+          weekList.timeSlotVO.timeSlot = _newTimeStr
         }
-        // item.timeSlotVO.timeSlot:type
       }
-    })
+    }
     updateTableData(weekList)
   }
 
   // 时间区间的显示处理
   const handleTimeSlotFormat = (weekList) => {
     const timeSlot = weekList.timeSlotVO.timeSlot || ''
+    // 多个时间组
     if (timeSlot.includes('|')) {
-
+      let times = timeSlot.split('|');
+      let _time = times.map(item => item.split('-'))
+      return (_time.map((timeRange, idx) => {
+        return (
+          <>
+            <div style={{ marginTop: "6px" }}>
+              <TimePicker
+                format={timeFormat}
+                className={'start-time-picker'}
+                minuteStep={15}
+                value={moment(timeRange[0], timeFormat)}
+                onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
+                allowClear={false}
+              />
+              <span>-</span>
+              <TimePicker
+                format={timeFormat}
+                className={'end-time-picker'}
+                minuteStep={15}
+                value={moment(timeRange[1], timeFormat)}
+                onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
+                allowClear={false}
+              />
+              <Icon type="plus-square" onClick={handleAddTime} />
+              <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />
+            </div>
+          </>
+        )
+      })
+      )
     } else {
+      // 单条数据组
       let singleTime = timeSlot.split('-');
       return (
-        <TimeRangePicker TimeRange={singleTime} />
+        <>
+          <TimePicker
+            format={timeFormat}
+            className={'start-time-picker'}
+            minuteStep={15}
+            value={moment(singleTime[0], timeFormat)}
+            onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, -1) }}
+            allowClear={false}
+          />
+          <span>-</span>
+          <TimePicker
+            format={timeFormat}
+            className={'end-time-picker'}
+            minuteStep={15}
+            value={moment(singleTime[1], timeFormat)}
+            onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, -1) }}
+            allowClear={false}
+          />
+          <Icon type="plus-square" onClick={handleAddTime} />
+        </>
       )
     }
   }
@@ -196,93 +204,18 @@ const SetDayTable = (props) => {
     props.editOpenTable(newOpenDateItem);
   }
 
-  const TimeComponent = ({ idx, item }) => {
-    // "09:00-09:15|09:15-09:30" || 
-    const timeSlot =item.timeSlotVO.timeSlot;
-    let times = [timeSlot]
-    if(timeSlot.includes('|')) {
-       times = timeSlot.split('|');
-    }
-    return (
-      <>
-      {times.map(el =>
-         <div key={idx} className="time">
-         <TimePicker
-           format={format}
-           className={'start-time-picker'}
-           minuteStep={15}
-           value={moment(handleTimeFormat(el, 'start'), format)}
-           onChange={(time, timeStr) => { timeChange(timeStr, 'start', item.sort) }}
-           allowClear={false}
-          //  getPopupContainer={() => document.getElementsByClassName('start-time-picker')[idx]}
-         />
-         <span>-</span>
-         <TimePicker
-           format={format}
-           className={'end-time-picker'}
-           minuteStep={15}
-           value={moment(handleTimeFormat(el, 'end'), format)}
-           onChange={(time, timeStr) => { timeChange(timeStr, 'end', item.sort) }}
-           getPopupContainer={() => document.getElementsByClassName('end-time-picker')[idx]}
-           allowClear={false}
-         />
-         <Icon type="plus-square" onClick={handleAddTime} />
-         {times.length > 1 ? (
-     <Icon type="minus-square"
-      // onClick={() => deleteTime(time.sort)}
-       />
-   ) : null}
-       </div>
-        
-        )}
-      </>
-     
-    )
-
-  }
-
-  // 时间区间组件
-  const TimeRangePicker = ({TimeRange}) => {
-    // "09:00-09:15|09:15-09:30"
-    return (
-      <div className="time">
-        <TimePicker
-          format={timeFormat}
-          className={'start-time-picker'}
-          minuteStep={15}
-          value={moment(TimeRange[0],timeFormat)}
-          //  onChange={(time, timeStr) => { timeChange(timeStr, 'start', item.sort) }}
-          allowClear={false}
-        //  getPopupContainer={() => document.getElementsByClassName('start-time-picker')[idx]}
-        />
-        <span>-</span>
-        <TimePicker
-          format={timeFormat}
-          className={'end-time-picker'}
-          minuteStep={15}
-          value={moment(TimeRange[1],timeFormat)}
-          //  onChange={(time, timeStr) => { timeChange(timeStr, 'end', item.sort) }}
-          //  getPopupContainer={() => document.getElementsByClassName('end-time-picker')[idx]}
-          allowClear={false}
-        />
-        <Icon type="plus-square" onClick={handleAddTime} />
-      </div>
-    )
-  }
-
   // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
   const handlePlanDatesChecked = (daysList) => {
     daysList.dates?.map(dateItem => {
       props.weekList.resourceDatePlanVOS?.map(planItem => {
-        if (dateItem.date === planItem.dateNo){
+        if (dateItem.date === planItem.dateNo) {
           dateItem.dateChecked = true
-        } 
+        }
         // else {
         //   dateItem.dateChecked = false
         // }
       })
     })
-    console.log(daysList,props.weekList.resourceDatePlanVOS,'daysList===33')
 
     return (
       <>
@@ -292,7 +225,7 @@ const SetDayTable = (props) => {
               key={idx}
               // disabled={props.allSelectWeeks.includes(day) && !props.openDate.weeks.includes(day)}
               // onChange={(e) => dayCheck(e, dateItem.date, dateItem.sort)}
-              onChange={(e) => dateCheck(e, dateItem.date,daysList,dateItem.dateChecked)}
+              onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked)}
               //  checked={handleCheckedDaysFormat(item.resourceDatePlanVOS,day)}
               checked={dateItem.dateChecked}
             ></Checkbox>
@@ -308,7 +241,7 @@ const SetDayTable = (props) => {
       <table className="set-day-table">
         <thead>
           <tr>
-            {daysList.days.map((day,idx) =>
+            {daysList.days.map((day, idx) =>
               <th key={idx} style={{ width: '4.5%' }}>
                 {day}
               </th>
@@ -323,9 +256,9 @@ const SetDayTable = (props) => {
         </thead>
         <tbody>
           <tr>
-           {handlePlanDatesChecked(daysList)}
+            {handlePlanDatesChecked(daysList)}
             <td style={{ paddingTop: 0 }}>
-               {handleTimeSlotFormat(props.weekList)}
+              {handleTimeSlotFormat(props.weekList)}
             </td>
             <td>
               <a

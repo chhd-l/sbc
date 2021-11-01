@@ -11,6 +11,7 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 function Step2({setStep,form}) {
+  console.log('shuaixn')
   const Context:any = useContext(FormContext);
   const { formData } = Context
   const {getFieldDecorator,validateFields,} = form
@@ -24,7 +25,7 @@ function Step2({setStep,form}) {
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('marketingName', {
-            initialValue: formData?.BasicSetting?.marketingName,
+            initialValue: formData.BasicSetting.marketingName,
             rules: [
               {
                 required: true,
@@ -56,7 +57,7 @@ function Step2({setStep,form}) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
           {getFieldDecorator('time', {
-            initialValue: formData?.BasicSetting?.time,
+            initialValue: formData.BasicSetting.time,
             rules: [
               {
                 required: true,

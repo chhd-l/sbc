@@ -20,13 +20,8 @@ let initFormData = {
   PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
   Conditions:{
     promotionType:0,
-    joinLevel:0,
-    scopeType:0,
     CartLimit:0,
-
     isSuperimposeSubscription:1,
-    segmentIds:[],
-    storeCateIds:[],
   },
   Advantage:{
     denomination:'',
@@ -39,28 +34,38 @@ let initFormData = {
     firstSubscriptionLimitAmount:'',
     restSubscriptionOrderDiscount:'',
     restSubscriptionLimitAmount:'',
+
+
+    joinLevel:0,
+    segmentIds:[],
+    scopeType:0,
+    storeCateIds:[],
   },
-  marketingName: '',
-  time:[]
+  BasicSetting:{
+    marketingName: '',
+    time:[]
+  }
+
 }
 export default function index({...props}) {
   console.log(props)
   const [step,setStep] = useState<number>(0)
-  const [loading,setLoading] = useState<boolean>(false)
+  const [loading,setLoading] = useState<boolean>(true)
   const [formData, setFormData] = useState<any>(initFormData)
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
-
   useEffect(()=>{
     if(props.match.params.id){
       getDetail()
       setStep(1)
+    }else {
+      setLoading(false)
     }
 
   },[])
 
   const cancelOperate = ()=>{
     setStep(0)
-    setFormData(initFormData)
+    setFormData({...initFormData})
   }
   /**
    * 通过subType判断CartLimit
@@ -174,20 +179,8 @@ export default function index({...props}) {
         },
         Conditions:{
           promotionType: detail.promotionType,
-          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
-          scopeType: detail.scopeType,
           CartLimit: switchCartLimit(detail.subType),
-
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
-          segmentIds:detail.segmentIds || [],
-          storeCateIds:detail.storeCateIds || [],
-          emailSuffixList:detail.emailSuffixList || [],
-          customProductsType:detail.customProductsType,
-
-          skuIds:detail.goodsInfoIdList,
-          selectedRows:detail.goodsList?.goodsInfoPage?.content,
-          attributeValueIds:detail.attributeValueIds,
-
           fullMoney:switchFullMoney(detail),
           fullItem:switchFullItem(detail),
         },
@@ -203,6 +196,17 @@ export default function index({...props}) {
           restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
           restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : {},
+          selectedGiftRows:detail.goodsList?.goodsInfoPage?.content,
+
+          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
+          segmentIds:detail.segmentIds || [],
+          emailSuffixList:detail.emailSuffixList || [],
+          scopeType: detail.scopeType,
+          customProductsType:detail.customProductsType,
+          storeCateIds:detail.storeCateIds || [],
+          attributeValueIds:detail.attributeValueIds,
+
+          skuIds:detail.goodsInfoIdList,
           selectedRows:detail.goodsList?.goodsInfoPage?.content,
         },
         BasicSetting: {
@@ -221,28 +225,26 @@ export default function index({...props}) {
         },
         Conditions:{
           promotionType: detail.couponPurchaseType,
-          joinLevel: parseInt(detail.couponJoinLevel),
-          scopeType: switchScopeType(detail.scopeType),
-
           CartLimit: detail.fullBuyType,
-
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
-          segmentIds:detail.segmentIds || [],
-          storeCateIds:detail.storeCateIds || [],
-          customProductsType:detail.customProductsType,
-
-          skuIds:detail.scopeIds,
-          selectedRows:goodsList?.goodsInfoPage?.content,
-          attributeValueIds:detail.attributeValueIds,
-
-          fullMoney:detail.fullBuyPrice,
-
+          fullMoney: detail.fullBuyPrice,
+          fullItem: detail.fullBuyCount,
         },
         Advantage:{
           couponPromotionType: detail.couponPromotionType,
           denomination: detail.denomination,
           couponDiscount: detail.couponDiscount,
           limitAmount: detail.limitAmount,
+
+          joinLevel: parseInt(detail.couponJoinLevel),
+          segmentIds:detail.segmentIds || [],
+          scopeType: switchScopeType(detail.scopeType),
+          customProductsType:detail.customProductsType,
+          storeCateIds:detail.storeCateIds || [],
+          attributeValueIds:detail.attributeValueIds,
+
+          skuIds:detail.scopeIds,
+          selectedRows:goodsList?.goodsInfoPage?.content,
         },
         BasicSetting: {
           marketingName: detail.couponName,
@@ -250,6 +252,7 @@ export default function index({...props}) {
         },
       })
     }
+    setLoading(false)
   }
   /**
    * 保存每一步的值
@@ -292,7 +295,7 @@ export default function index({...props}) {
             </div>
             <div>
               {
-                (step !== 6 && step !== 0) && (
+                (step !== 6 && step !== 0 && !loading) && (
                   <>
                     <div style={{display: step === 1 ? 'block' : 'none'}}>
                       <Step2 setStep={setStep}/>

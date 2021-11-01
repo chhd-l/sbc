@@ -48,11 +48,11 @@ export default function createSuccess({setStep}) {
         {
           match.params.id ? (
             <>
-              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is created!' : 'Your promotion is created!'}
+              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
             </>
           ) : (
             <>
-              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
+              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is created!' : 'Your promotion is created!'}
             </>
           )
         }

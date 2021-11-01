@@ -234,7 +234,7 @@ export default function index({...props}) {
                 )
               }
               {
-                step === 5 && <Step6 setStep={setStep} setLoading={setLoading}/>
+                step === 5 && <Step6 setStep={setStep} setLoading={setLoading} match={props.match}/>
               }
               {
                 step === 6 && <CreateSuccess setStep={setStep}/>

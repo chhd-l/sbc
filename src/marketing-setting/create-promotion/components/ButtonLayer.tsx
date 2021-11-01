@@ -3,7 +3,8 @@ import { Button } from 'antd';
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import * as webapi from '../../webapi';
-export default function ButtonLayer({setStep,step,validateFields,setLoading,
+import Step6 from '@/marketing-setting/create-promotion/components/Step6';
+export default function ButtonLayer({setStep,step,validateFields,setLoading, match,
                                       publicStatus,isNotLimit,
                                       isSuperimposeSubscription,scopeIds,
                                       fullGiftLevelList,
@@ -117,7 +118,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         }else {
           subType = 6
         }
-        detail = await webapi.addFullReduction({
+        let params = {
           marketingType: 0,//满减金额时固定为0
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
@@ -151,7 +152,12 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           firstSubscriptionOrderReduction:formData.Advantage.firstSubscriptionOrderReduction,
           restSubscriptionOrderReduction:formData.Advantage.restSubscriptionOrderReduction,
           isClub: false,//未用到
-        })
+        }
+        if(match.params.id){
+          detail = await webapi.updateFullReduction({...params,marketingId:match.params.id})
+        }else {
+          detail = await webapi.addFullReduction(params)
+        }
       }
       if(formData.Advantage.couponPromotionType === 3){
         if(formData.Conditions.CartLimit === 1){
@@ -159,7 +165,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         }else {
           subType = 11
         }
-        detail = await webapi.addFreeShipping({
+        let params = {
           marketingType: 3,//免运费时固定为3
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
@@ -187,7 +193,13 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           marketingSubscriptionReduction: {},//未知 有什么作用
 
           isClub: false,//未用到
-        })
+        }
+        if(match.params.id){
+          detail =  await webapi.updateFreeShipping({...params,marketingId:match.params.id})
+        }else {
+          detail = await webapi.addFreeShipping(params)
+        }
+
       }
       if(formData.Advantage.couponPromotionType === 1){
         if(formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2){
@@ -199,7 +211,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         }else {
           subType = 7
         }
-        detail = await webapi.addFullDiscount({
+        let params = {
           marketingType: 1,//满折固定为3
           beginTime: formData?.BasicSetting?.time[0]?.format('YYYY-MM-DD HH:mm:ss'),
           endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),
@@ -235,7 +247,12 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           },
 
           isClub: false,//未用到
-        })
+        }
+        if(match.params.id){
+          detail = await webapi.updateFullDiscount({...params,marketingId:match.params.id})
+        }else {
+          detail = await webapi.addFullDiscount(params)
+        }
       }
       if(formData.Advantage.couponPromotionType === 4){
         if(formData.Conditions.CartLimit === 1){
@@ -253,7 +270,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         if(formData.Conditions.CartLimit === 2){
           fullGiftLevelList[0].fullCount = formData.Conditions.fullItem
         }
-        detail = await webapi.addFullGift({
+        let params =  {
           marketingType: 2,//送礼固定为2
           fullGiftLevelList: fullGiftLevelList,
           attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : [],
@@ -275,8 +292,12 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
 
 
           isClub: false,
-
-        })
+        }
+        if(match.params.id){
+          detail = await webapi.updateFullGift({...params,marketingId:match.params.id})
+        }else {
+          detail = await webapi.addFullGift(params)
+        }
       }
       setDetail(detail.res.context.marketingVO)
     }

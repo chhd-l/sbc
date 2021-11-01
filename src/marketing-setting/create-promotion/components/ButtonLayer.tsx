@@ -106,7 +106,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
         scopeIds: formData.Advantage.scopeType === 1 ? formData.Conditions.scopeIds : []
       })
-      setDetail(detail.res.context.couponInfoVO)
+      setDetail(detail?.res?.context?.couponInfoVO)
     }else {
       if(formData.Advantage.couponPromotionType === 0){
         if(formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2){
@@ -299,7 +299,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading,
           detail = await webapi.addFullGift(params)
         }
       }
-      setDetail(detail.res.context.marketingVO)
+      setDetail(detail?.res?.context?.marketingVO)
     }
     console.log(detail)
     setLoading(false)

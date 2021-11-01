@@ -736,7 +736,7 @@ function Step5({ setStep, form }) {
               <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={-3}><FormattedMessage id="Marketing.Group" /></Radio>
               {
-                formData?.PromotionType?.typeOfPromotion !== 1 &&
+                formData?.PromotionType?.typeOfPromotion !== 1 && couponPromotionType !== 3 &&
                 <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
               }
 
@@ -800,158 +800,163 @@ function Step5({ setStep, form }) {
         )}
 
         {/*Products in the cart*/}
-        <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
-          {getFieldDecorator('scopeType', {
-            initialValue: formData.Advantage.scopeType,
-            rules: [
-              {
-                required: true,
-                message:
-                  (window as any).RCi18n({
-                    id: 'Marketing.PleaseSelectOne'
-                  })
-              },
-            ],
-          })(
-            <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
-              <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
-              <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
-              <Radio value={3}><FormattedMessage id="Marketing.Attribute" /></Radio>
-            </Radio.Group>
-          )}
-        </Form.Item>
         {
-          scopeType === 1 && (
+          couponPromotionType !== 3 && (
             <>
-              <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
-                {getFieldDecorator('customProductsType', {
-                  initialValue: formData.Advantage.customProductsType || 0,
-                  // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
-                })(<RadioGroup >
-                  <Radio value={0}>
-                    <FormattedMessage id="Marketing.Includeproduct" />
-                  </Radio>
-                  <Radio value={1}>
-                    <FormattedMessage id="Marketing.Excludeproduct" />
-                  </Radio>
-                </RadioGroup>)}
-
-              </Form.Item>
-              <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
-                {getFieldDecorator(
-                  'goods',
-                  {}
-                )(
-                  <div>
-                    <Button type="primary" icon="plus"
-                            onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
-                    >
-                      <FormattedMessage id="Marketing.AddProducts" />
-                    </Button>
-                    &nbsp;&nbsp;
-                    <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
-                  </div>
+              <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
+                {getFieldDecorator('scopeType', {
+                  initialValue: formData.Advantage.scopeType,
+                  rules: [
+                    {
+                      required: true,
+                      message:
+                        (window as any).RCi18n({
+                          id: 'Marketing.PleaseSelectOne'
+                        })
+                    },
+                  ],
+                })(
+                  <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
+                    <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
+                    <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
+                    <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
+                    <Radio value={3}><FormattedMessage id="Marketing.Attribute" /></Radio>
+                  </Radio.Group>
                 )}
               </Form.Item>
-            </>
-          )
-        }
-        {
-          scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
-            {getFieldDecorator('storeCateIds', {
-              initialValue: formData.Advantage.storeCateIds,
-              rules: [
-                {
-                  validator: (_rule, value, callback) => {
-                    if ((!value)) {
-                      callback(
+              {
+                scopeType === 1 && (
+                  <>
+                    <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                      {getFieldDecorator('customProductsType', {
+                        initialValue: formData.Advantage.customProductsType || 0,
+                        // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
+                      })(<RadioGroup >
+                        <Radio value={0}>
+                          <FormattedMessage id="Marketing.Includeproduct" />
+                        </Radio>
+                        <Radio value={1}>
+                          <FormattedMessage id="Marketing.Excludeproduct" />
+                        </Radio>
+                      </RadioGroup>)}
+
+                    </Form.Item>
+                    <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                      {getFieldDecorator(
+                        'goods',
+                        {}
+                      )(
+                        <div>
+                          <Button type="primary" icon="plus"
+                                  onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
+                          >
+                            <FormattedMessage id="Marketing.AddProducts" />
+                          </Button>
+                          &nbsp;&nbsp;
+                          <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
+                        </div>
+                      )}
+                    </Form.Item>
+                  </>
+                )
+              }
+              {
+                scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+                  {getFieldDecorator('storeCateIds', {
+                    initialValue: formData.Advantage.storeCateIds,
+                    rules: [
+                      {
+                        validator: (_rule, value, callback) => {
+                          if ((!value)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.Pleaseselectcategory'
+                              })
+                            );
+                          }
+                          callback();
+                        }
+                      }
+                    ],
+                  })(
+                    <TreeSelect
+                      id="storeCateIds"
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      treeCheckable={true}
+                      showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                      treeCheckStrictly={true}
+                      placeholder={
                         (window as any).RCi18n({
                           id: 'Marketing.Pleaseselectcategory'
                         })
-                      );
-                    }
-                    callback();
-                  }
-                }
-              ],
-            })(
-              <TreeSelect
-                id="storeCateIds"
-                getPopupContainer={() => document.getElementById('page-content')}
-                treeCheckable={true}
-                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                treeCheckStrictly={true}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseselectcategory'
-                  })
-                }
-                notFoundContent={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Nosalescategory'
-                  })
-                }
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
-                showSearch={false}
-                // onChange={this.storeCateChange}
-                style={{ width: 500 }}
-                treeDefaultExpandAll
-              >
-                {generateStoreCateTree(storeCateList)}
-              </TreeSelect>
-            )}
-          </Form.Item>)
-        }
-        {
-          scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
-            {getFieldDecorator('attributeValueIds', {
-              initialValue: formData.Advantage.attributeValueIds,
-              rules: [
-                {
-                  validator: (_rule, value, callback) => {
-                    if (!value) {
-                      callback(
+                      }
+                      notFoundContent={
+                        (window as any).RCi18n({
+                          id: 'Marketing.Nosalescategory'
+                        })
+                      }
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
+                      showSearch={false}
+                      // onChange={this.storeCateChange}
+                      style={{ width: 500 }}
+                      treeDefaultExpandAll
+                    >
+                      {generateStoreCateTree(storeCateList)}
+                    </TreeSelect>
+                  )}
+                </Form.Item>)
+              }
+              {
+                scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+                  {getFieldDecorator('attributeValueIds', {
+                    initialValue: formData.Advantage.attributeValueIds,
+                    rules: [
+                      {
+                        validator: (_rule, value, callback) => {
+                          if (!value) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.Pleaseselectattribute'
+                              })
+                            );
+                          }
+                          callback();
+                        }
+                      }
+                    ]
+                  })(
+                    <TreeSelect
+                      id="attributeValueIds"
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      treeCheckable={true}
+                      showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                      treeCheckStrictly={true}
+                      //treeData ={getGoodsCate}
+                      // showCheckedStrategy = {SHOW_PARENT}
+                      placeholder={
                         (window as any).RCi18n({
                           id: 'Marketing.Pleaseselectattribute'
                         })
-                      );
-                    }
-                    callback();
-                  }
-                }
-              ]
-            })(
-              <TreeSelect
-                id="attributeValueIds"
-                getPopupContainer={() => document.getElementById('page-content')}
-                treeCheckable={true}
-                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                treeCheckStrictly={true}
-                //treeData ={getGoodsCate}
-                // showCheckedStrategy = {SHOW_PARENT}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseselectattribute'
-                  })
-                }
-                notFoundContent={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Noattribute'
-                  })
-                }
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                showSearch={false}
-                // onChange={this.attributeChange}
-                style={{ width: 500 }}
-                treeDefaultExpandAll
-              >
-                {generateAttributeTree(attributeList)}
-              </TreeSelect>
-            )}
-          </Form.Item>)
+                      }
+                      notFoundContent={
+                        (window as any).RCi18n({
+                          id: 'Marketing.Noattribute'
+                        })
+                      }
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                      showSearch={false}
+                      // onChange={this.attributeChange}
+                      style={{ width: 500 }}
+                      treeDefaultExpandAll
+                    >
+                      {generateAttributeTree(attributeList)}
+                    </TreeSelect>
+                  )}
+                </Form.Item>)
+              }
+            </>
+          )
         }
-
       </Form>
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />

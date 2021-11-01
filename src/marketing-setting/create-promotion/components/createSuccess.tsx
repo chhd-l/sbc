@@ -12,7 +12,7 @@ export default function createSuccess({setStep}) {
     const token = (window as any).token;
     if (token) {
       const result = JSON.stringify({
-        marketingId:detail.marketingId || match.params.id,
+        marketingId:detail?.marketingId || match.params.id,
         token
       });
       const encrypted = base64.urlEncode(result);
@@ -73,7 +73,7 @@ export default function createSuccess({setStep}) {
       <CouponModal
         isModalVisible={isModalVisible}
         setVisible={()=>setIsModalVisible(false)}
-        couponId={detail.couponId}/>
+        couponId={detail?.couponId || match.params.id}/>
     </div>
   );
 }

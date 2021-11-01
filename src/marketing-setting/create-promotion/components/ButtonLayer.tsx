@@ -3,12 +3,12 @@ import { Button } from 'antd';
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import * as webapi from '../../webapi';
-export default function ButtonLayer({setStep,step,validateFields,setLoading,
+export default function ButtonLayer({ step,validateFields,setLoading,
                                       publicStatus,isNotLimit,
                                       isSuperimposeSubscription,scopeIds,
                                       fullGiftLevelList,
   }:any) {
-  const { changeFormData,formData,setDetail,cancelOperate,match,setFormData } = useContext<any>(FormContext);
+  const { changeFormData,formData,setDetail,cancelOperate,match,setFormData,setStep } = useContext<any>(FormContext);
   const toNext = ()=>{
     if(step === 5){
       createPromotion()

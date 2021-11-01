@@ -284,6 +284,7 @@ export default function index({...props}) {
         detail:detail,
         setDetail:setDetail,
         setFormData:setFormData,
+        setStep:setStep,
         cancelOperate: cancelOperate,
         match:props.match
       }}
@@ -302,32 +303,32 @@ export default function index({...props}) {
             </Steps>
 
             <div style={{display: step === 0 ? 'block' : 'none'}}>
-              <Step1 setStep={setStep}/>
+              <Step1/>
             </div>
             <div>
               {
                 (step !== 6 && step !== 0 && !loading) && (
                   <>
                     <div style={{display: step === 1 ? 'block' : 'none'}}>
-                      <Step2 setStep={setStep}/>
+                      <Step2/>
                     </div>
                     <div style={{display: step === 2 ? 'block' : 'none'}}>
-                      <Step3 setStep={setStep}/>
+                      <Step3/>
                     </div>
                     <div style={{display: step === 3 ? 'block' : 'none'}}>
-                      <Step4 setStep={setStep}/>
+                      <Step4/>
                     </div>
                     <div style={{display: step === 4 ? 'block' : 'none'}}>
-                      <Step5 setStep={setStep}/>
+                      <Step5/>
                     </div>
                     <div style={{display: step === 5 ? 'block' : 'none'}}>
-                      <Step6 setStep={setStep} setLoading={setLoading}/>
+                      <Step6 setLoading={setLoading}/>
                     </div>
                   </>
                 )
               }
               {
-                step === 6 && <CreateSuccess setStep={setStep}/>
+                step === 6 && <CreateSuccess/>
               }
             </div>
 

@@ -20,8 +20,8 @@ const formItemLayout = {
   wrapperCol: { span: 14 }
 };
 
-function Step5({ setStep, form }) {
-  const { changeFormData,formData,match } = useContext<any>(FormContext);
+function Step5({ form }) {
+  const { changeFormData,formData,match,setFormData } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
@@ -250,7 +250,7 @@ function Step5({ setStep, form }) {
 
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('couponPromotionType', {
-            initialValue: formData.Advantage.couponPromotionType,
+            initialValue: couponPromotionType,
             rules: [
               {
                 required: true,
@@ -261,7 +261,11 @@ function Step5({ setStep, form }) {
               },
             ]
           })(
-            <Radio.Group onChange={(e)=>{setCouponPromotionType(e.target.value)}}>
+            <Radio.Group onChange={(e)=>{
+              setCouponPromotionType(e.target.value)
+              formData.Advantage.couponPromotionType = e.target.value
+              setFormData({...formData})
+            }}>
               {
                 !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2) &&
                   (
@@ -960,7 +964,7 @@ function Step5({ setStep, form }) {
       </Form>
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
-      <ButtonLayer setStep={setStep} step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList} scopeIds={selectedSkuIds}/>
+      <ButtonLayer step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList} scopeIds={selectedSkuIds}/>
     </div>
   );
 }

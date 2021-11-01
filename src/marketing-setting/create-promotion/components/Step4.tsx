@@ -14,8 +14,8 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 
-function Step4({setStep,form}){
-  const { formData,setFormData,match } = useContext<any>(FormContext);
+function Step4({form}){
+  const { formData,match } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
@@ -99,14 +99,6 @@ function Step4({setStep,form}){
           })(
             <Radio.Group onChange={(e)=>{
               setCartLimits(e.target.value)
-              if(e.target.value === 2 && formData.PromotionType.typeOfPromotion === 1){
-                console.log('xx')
-                formData.Advantage.couponPromotionType = 3
-                setFormData({...formData})
-              }else {
-                formData.Advantage.couponPromotionType = 0
-                setFormData({...formData})
-              }
             }}>
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
               <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
@@ -190,7 +182,7 @@ function Step4({setStep,form}){
         }
       </Form>
 
-      <ButtonLayer setStep={setStep} step={3} validateFields={validateFields}
+      <ButtonLayer step={3} validateFields={validateFields}
                    isSuperimposeSubscription={isSuperimposeSubscription}
                    />
     </div>

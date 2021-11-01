@@ -5,7 +5,7 @@ import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import { cache } from 'qmkit';
 
-export default function Step6({ setStep,setLoading }) {
+export default function Step6({ setLoading }) {
   const { formData } = useContext<any>(FormContext);
   return (
     <div>
@@ -22,7 +22,7 @@ export default function Step6({ setStep,setLoading }) {
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.StartAndEndTime" />:</div>
-              <div className="step-summary-item-text">{formData.BasicSetting.time[0].format('YYYY-MM-DD HH:mm')} - {formData.BasicSetting.time[1].format('YYYY-MM-DD HH:mm')}</div>
+              <div className="step-summary-item-text">{formData.BasicSetting.time?.[0]?.format('YYYY-MM-DD HH:mm')} - {formData.BasicSetting.time?.[1]?.format('YYYY-MM-DD HH:mm')}</div>
             </div>
           </div>
 
@@ -163,7 +163,7 @@ export default function Step6({ setStep,setLoading }) {
           </div>
         </div>
       </div>
-      <ButtonLayer setStep={setStep} step={5} noForm={true} setLoading={setLoading}/>
+      <ButtonLayer step={5} noForm={true} setLoading={setLoading}/>
     </div>
   );
 }

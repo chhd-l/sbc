@@ -1030,6 +1030,9 @@ export default class AppStore extends Store {
       }
     } else {
       if (data.consentId != '' && data.consentCode != '' && data.consentTitleType != '' && data.consentTitle != '') {
+        if(data.consentCategory=="Prescriber"){
+          data.consentGroup = 'default'
+        }
         const { res } = await webApi.fetchNewConsent(data);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {

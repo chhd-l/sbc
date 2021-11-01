@@ -91,14 +91,28 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
       }])
   },[])
 
-
-  const AddSetByDay = () => {
+// 添加新的一条日期表格
+  const AddSetByDay = (serviceSort) => {
+    serviceData.resourceServicePlanVOList.map(el =>{
+      if(el.serviceSort === serviceSort){
+        let newList = [].concat(el.resourceWeekPlanVOList)
+        const _idx = el.resourceWeekPlanVOList.length
+        newList.push({
+          sort: _idx + 1,
+          timeSlotVO: {
+            id: null,
+            timeSlot: "00:00-23:59",
+          },
+          resourceDatePlanVOS: []
+        })
+        el.resourceWeekPlanVOList = newList
+      }
+    })
+    updateServiceData(serviceData)
   }
 
   // serviceType下拉选择
   const handleServiceType = (value,sort) => {
-    // updateServiceData(serviceData)
-    console.log(value,serviceData,'valuvaluevalue')
     let isAll = 0;
     let resourceServicePlanVOList = []
     // todo:下拉码值value:all需根据接口更改
@@ -109,7 +123,6 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
         isAll:1,//目前只有felin,因此传1，后期再调整
         resourceServicePlanVOList:[]
       }))
-      
       serviceData.resourceServicePlanVOList.map(el =>{
         if(el.serviceSort === sort) {
           el.serviceTypeId = value
@@ -159,6 +172,14 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
     )
   }
 
+  const deleteLinePlanList = (sort)=>{
+    serviceData.resourceServicePlanVOList.map(item =>{
+      let remainData = item.resourceWeekPlanVOList.filter(el => el.sort !==sort)
+      item.resourceWeekPlanVOList = remainData
+    })
+    updateServiceData(serviceData)
+  }
+
   return (
     <div>
       {serviceData?.resourceServicePlanVOList?.map((el, idx) =>
@@ -179,13 +200,6 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
                 {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </SelectGroup>
             </Col>
-            {/* {showAddBtn && idx===0 ?  */}
-            {/* <Col span={2} offset={1}>
-              <Button type="primary" onClick={addServiceType}>
-                <FormattedMessage id="Setting.add" />
-              </Button>
-            </Col> */}
-            {/* : null} */}
           </Row>
           <Row className="set-by-day-title">
             <Col span={3} >
@@ -194,7 +208,7 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
               </p>
             </Col>
             <Col span={2}>
-              <Button type="primary" onClick={AddSetByDay}>
+              <Button type="primary" onClick={()=>AddSetByDay(el.serviceSort)}>
                 <FormattedMessage id="Setting.add" />
               </Button>
             </Col>
@@ -205,6 +219,7 @@ const ServiceSetting = ({serviceData, addCounts,serviceTypeDict,selectDisabled,u
               weekList={itemWeekList}
               key={index}
               updateTableData={updateTableData}
+              deleteLinePlanList={deleteLinePlanList}
             // editOpenTable={editOpenTable}
             // deleteOpenTable={deleteOpenTable}
             />

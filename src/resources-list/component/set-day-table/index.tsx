@@ -5,7 +5,7 @@ import moment from 'moment';
 import './index.less'
 const timeFormat = 'HH:mm';
 const SetDayTable = (props) => {
-  const { weekList, updateTableData } = props
+  const { weekList, updateTableData,deleteLinePlanList } = props
   console.log(weekList, 'WeekList5666666')
   const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   const [daysList, setDaysList] = useState({
@@ -126,7 +126,6 @@ const SetDayTable = (props) => {
       let _time = times.map(item => item.split('-'))
       return (_time.map((timeRange, idx) => {
         return (
-          <>
             <div style={{ marginTop: "6px" }}>
               <TimePicker
                 format={timeFormat}
@@ -148,7 +147,6 @@ const SetDayTable = (props) => {
               <Icon type="plus-square" onClick={handleAddTime} />
               <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />
             </div>
-          </>
         )
       })
       )
@@ -156,7 +154,7 @@ const SetDayTable = (props) => {
       // 单条数据组
       let singleTime = timeSlot.split('-');
       return (
-        <>
+        <div style={{ marginTop: "6px" }}>
           <TimePicker
             format={timeFormat}
             className={'start-time-picker'}
@@ -175,7 +173,7 @@ const SetDayTable = (props) => {
             allowClear={false}
           />
           <Icon type="plus-square" onClick={handleAddTime} />
-        </>
+        </div>
       )
     }
   }
@@ -235,7 +233,6 @@ const SetDayTable = (props) => {
     )
   }
 
-
   return (
     <>
       <table className="set-day-table">
@@ -264,7 +261,7 @@ const SetDayTable = (props) => {
               <a
                 type="link"
                 className="iconfont iconDelete"
-                onClick={() => props.deleteOpenTable(props.openDate.sort)}
+                onClick={() =>deleteLinePlanList(props.weekList.sort)}
               ></a>
             </td>
           </tr>

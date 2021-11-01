@@ -5,7 +5,7 @@ import { Const, util } from 'qmkit';
 import CouponModal from '@/coupon-list/components/couponModal';
 
 export default function createSuccess({setStep}) {
-  const { formData,detail } = useContext<any>(FormContext);
+  const { formData,detail,match } = useContext<any>(FormContext);
   const [isModalVisible,setIsModalVisible] = useState<boolean>(false)
   const downloadPromotion = async () => {
     const base64 = new util.Base64();
@@ -46,7 +46,15 @@ export default function createSuccess({setStep}) {
       <Icon type="notification" className="success-icon"/>
       <div className="success-title">
         {
-          formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is created!' : 'Your promotion is created!'
+          match.params.id ? (
+            <>
+              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is created!' : 'Your promotion is created!'}
+            </>
+          ) : (
+            <>
+              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
+            </>
+          )
         }
       </div>
       {

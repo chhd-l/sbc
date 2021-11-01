@@ -20,8 +20,8 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 
-function Step4({setStep,form,match}){
-  const { formData } = useContext<any>(FormContext);
+function Step4({setStep,form}){
+  const { formData,setFormData,match } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
@@ -415,7 +415,7 @@ function Step4({setStep,form,match}){
         {
           scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
             {getFieldDecorator('attributeValueIds', {
-              initialValue: ReStoreCateIds(formData.Conditions.attributeValueIds),
+              initialValue: ReStoreCateIds(formData.Conditions.attributeValueIds || []),
               rules: [
                 {
                   validator: (_rule, value, callback) => {
@@ -474,13 +474,19 @@ function Step4({setStep,form,match}){
               },
             ],
           })(
-            <Radio.Group onChange={(e)=>{setCartLimits(e.target.value)}}>
-               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
-              {
-                formData.PromotionType.typeOfPromotion === 0 && <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
+            <Radio.Group onChange={(e)=>{
+              setCartLimits(e.target.value)
+              if(e.target.value === 2 && formData.PromotionType.typeOfPromotion === 1){
+                formData.Advantage.couponPromotionType = 3
+                setFormData({...formData})
+              }else {
+                formData.Advantage.couponPromotionType = 0
+                setFormData({...formData})
               }
+            }}>
+              <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
+              <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
               <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
-
             </Radio.Group>
           )}
         </Form.Item>

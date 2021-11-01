@@ -5,7 +5,9 @@ type TResult = {
   message: string;
   context: any;
 };
-
+export const fetchCouponInfo = (couponId: string) => {
+  return Fetch<TResult>(`/coupon-info/${couponId}`);
+};
 /**
  * 查询商家店铺品牌
  * @returns {Promise<IAsyncResult<T>>}

@@ -154,7 +154,8 @@ export default class List extends React.Component<any, any> {
                         className="createMarket link"
                         onClick={() =>
                           history.push({
-                            pathname: `/coupon-edit/${(record as any).couponId}`,
+                            // pathname: `/coupon-edit/${(record as any).couponId}`,
+                            pathname: `/create-promotion/coupon/${(record as any).couponId}`,
                             state: {
                               couponType: '1'
                             }

@@ -14,8 +14,8 @@ const formItemLayout = {
   wrapperCol: { span: 14 }
 };
 
-function Step5({ setStep, form, match }) {
-  const { changeFormData,formData } = useContext<any>(FormContext);
+function Step5({ setStep, form }) {
+  const { changeFormData,formData,match } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
@@ -37,6 +37,10 @@ function Step5({ setStep, form, match }) {
       }
     }
   },[])
+  useEffect(()=>{
+    console.log(formData.Advantage.couponPromotionType)
+    setCouponPromotionType(formData.Advantage.couponPromotionType)
+  },[formData])
   /**
    * 规则变化方法
    * @param rules
@@ -99,12 +103,22 @@ function Step5({ setStep, form, match }) {
             ]
           })(
             <Radio.Group onChange={(e)=>{setCouponPromotionType(e.target.value)}}>
-              <Radio value={0}>
-                <FormattedMessage id="Marketing.Amount" />
-              </Radio>
-              <Radio value={1}>
-                <FormattedMessage id="Marketing.Percentage" />
-              </Radio>
+              {
+                !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2) &&
+                  (
+                    <Radio value={0}>
+                      <FormattedMessage id="Marketing.Amount" />
+                    </Radio>
+                  )
+              }
+              {
+                !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2) &&
+                (
+                  <Radio value={1}>
+                    <FormattedMessage id="Marketing.Percentage" />
+                  </Radio>
+                )
+              }
               <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>

@@ -16,30 +16,52 @@ import * as webapi from '../webapi';
 
 const { Step } = Steps;
 export const FormContext = React.createContext({});
+let initFormData = {
+  PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
+  Conditions:{
+    promotionType:0,
+    joinLevel:0,
+    scopeType:0,
+    CartLimit:0,
 
+    isSuperimposeSubscription:1,
+    segmentIds:[],
+    storeCateIds:[],
+  },
+  Advantage:{
+    denomination:'',
+    couponPromotionType:0,
+    couponDiscount:'',
+    limitAmount:'',
+    firstSubscriptionOrderReduction:'',
+    restSubscriptionOrderReduction:'',
+    firstSubscriptionOrderDiscount:'',
+    firstSubscriptionLimitAmount:'',
+    restSubscriptionOrderDiscount:'',
+    restSubscriptionLimitAmount:'',
+  },
+  marketingName: '',
+  time:[]
+}
 export default function index({...props}) {
   console.log(props)
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(false)
-  const [formData, setFormData] = useState<any>({
-    PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
-    Conditions:{
-      promotionType:0,
-      joinLevel:0,
-      scopeType:0,
-      CartLimit:0,
-
-      isSuperimposeSubscription:1,
-      segmentIds:[],
-      storeCateIds:[],
-    },
-    Advantage:{},
-  })
+  const [formData, setFormData] = useState<any>(initFormData)
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
 
   useEffect(()=>{
-    getDetail()
+    if(props.match.params.id){
+      getDetail()
+      setStep(1)
+    }
+
   },[])
+
+  const cancelOperate = ()=>{
+    setStep(0)
+    setFormData(initFormData)
+  }
   /**
    * 通过subType判断CartLimit
    * SubType 0：满金额减 1：满数量减 2：满金额折 3：满数量折 4：满金额赠 5：满数量赠 6：Subscription减
@@ -123,6 +145,19 @@ export default function index({...props}) {
         return 3;
     }
   }
+  const switchScopeType = (ScopeType)=>{
+    //coupon ScopeType  to Promotion ScopeType
+    switch (ScopeType) {
+      case 0:
+        return 0;
+      case 4:
+        return 1;
+      case 5:
+        return 2;
+      case 6:
+        return 3;
+    }
+  }
 
   const getDetail = async ()=>{
     let result:any  = {}
@@ -176,6 +211,44 @@ export default function index({...props}) {
         },
         subType:detail.subType,
       })
+    }else {
+      result = await webapi.fetchCouponInfo(props.match.params.id)
+      let detail = result.res.context.couponInfo
+      let goodsList = result.res.context.goodsList
+      setFormData({
+        PromotionType:{
+          typeOfPromotion: 1,
+        },
+        Conditions:{
+          promotionType: detail.couponPurchaseType,
+          joinLevel: parseInt(detail.couponJoinLevel),
+          scopeType: switchScopeType(detail.scopeType),
+
+          CartLimit: detail.fullBuyType,
+
+          isSuperimposeSubscription: detail.isSuperimposeSubscription,
+          segmentIds:detail.segmentIds || [],
+          storeCateIds:detail.storeCateIds || [],
+          customProductsType:detail.customProductsType,
+
+          skuIds:detail.scopeIds,
+          selectedRows:goodsList?.goodsInfoPage?.content,
+          attributeValueIds:detail.attributeValueIds,
+
+          fullMoney:detail.fullBuyPrice,
+
+        },
+        Advantage:{
+          couponPromotionType: detail.couponPromotionType,
+          denomination: detail.denomination,
+          couponDiscount: detail.couponDiscount,
+          limitAmount: detail.limitAmount,
+        },
+        BasicSetting: {
+          marketingName: detail.couponName,
+          time:[moment(detail.startTime),moment(detail.endTime)]
+        },
+      })
     }
   }
   /**
@@ -195,7 +268,10 @@ export default function index({...props}) {
         changeFormData: changeFormData,
         formData,
         detail:detail,
-        setDetail:setDetail
+        setDetail:setDetail,
+        setFormData:setFormData,
+        cancelOperate: cancelOperate,
+        match:props.match
       }}
     >
       <Spin spinning={loading}>
@@ -225,16 +301,16 @@ export default function index({...props}) {
                       <Step3 setStep={setStep}/>
                     </div>
                     <div style={{display: step === 3 ? 'block' : 'none'}}>
-                      <Step4 setStep={setStep} match={props.match}/>
+                      <Step4 setStep={setStep}/>
                     </div>
                     <div style={{display: step === 4 ? 'block' : 'none'}}>
-                      <Step5 setStep={setStep} match={props.match}/>
+                      <Step5 setStep={setStep}/>
                     </div>
                   </>
                 )
               }
               {
-                step === 5 && <Step6 setStep={setStep} setLoading={setLoading} match={props.match}/>
+                step === 5 && <Step6 setStep={setStep} setLoading={setLoading}/>
               }
               {
                 step === 6 && <CreateSuccess setStep={setStep}/>

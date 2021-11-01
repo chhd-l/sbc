@@ -4,12 +4,12 @@ import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import * as webapi from '../../webapi';
 import Step6 from '@/marketing-setting/create-promotion/components/Step6';
-export default function ButtonLayer({setStep,step,validateFields,setLoading, match,
+export default function ButtonLayer({setStep,step,validateFields,setLoading,
                                       publicStatus,isNotLimit,
                                       isSuperimposeSubscription,scopeIds,
                                       fullGiftLevelList,
   }:any) {
-  const { changeFormData,formData,setDetail } = useContext<any>(FormContext);
+  const { changeFormData,formData,setDetail,cancelOperate,match } = useContext<any>(FormContext);
   const toNext = ()=>{
     if(step === 5){
       createPromotion()
@@ -290,7 +290,7 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading, mat
           subType: subType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
 
-
+          marketingUseLimit: {perCustomer: formData.PromotionType.perCustomer, isNotLimit: formData.PromotionType.isNotLimit},
           isClub: false,
         }
         if(match.params.id){
@@ -314,16 +314,25 @@ export default function ButtonLayer({setStep,step,validateFields,setLoading, mat
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
   };
 
+  const btnText = ()=>{
+    if(step === 5){
+      if(match.params.id){
+        return 'Save'
+      }else {
+        return 'Create'
+      }
+    }else {
+      return 'Next'
+    }
+  }
 
   return (
     <div className="button-layer">
       <Button size="large" onClick={()=>{setStep(step - 1)}}>Back</Button>
       <div>
-        <Button size="large" onClick={()=>{
-            setStep(0)
-        }} style={{marginRight:20}}>Cancel</Button>
+        <Button size="large" onClick={()=>cancelOperate()} style={{marginRight:20}}>Cancel</Button>
         <Button type="primary" size="large" onClick={toNext}>
-          { step === 5 ? 'Create' : 'Next'}
+          { btnText() }
         </Button>
       </div>
     </div>

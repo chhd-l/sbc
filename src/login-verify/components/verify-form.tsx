@@ -111,7 +111,7 @@ export default withOktaAuth(
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                            <Checkbox value={x.id} key={x.id}></Checkbox>
+                            <span style={{color:'#ff4d4f'}}>{`* `}</span><Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
                             <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
@@ -128,7 +128,7 @@ export default withOktaAuth(
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                            <Checkbox value={x.id} key={x.id}></Checkbox>
+                          <span style={{color:'#fff'}}>{`* `}</span> <Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
                             <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>

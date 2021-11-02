@@ -18,7 +18,7 @@ export default {
   PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
-
+  SHOPDOMINDE: 'https://shopsit.royalcanin.com/de',
   PAYMENT: {
     "ru": {
       "app_id": "com.razorfish.sit_ms_ru",

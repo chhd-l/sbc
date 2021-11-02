@@ -15,7 +15,7 @@ const formItemLayout = {
 
 function Step5({ form }) {
   const { changeFormData,formData,match,setFormData } = useContext<any>(FormContext);
-  const { getFieldDecorator, validateFields, setFieldsValue, setFields } = form;
+  const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
   const [selectedGiftRows,setSelectedGiftRows] = useState<any>(fromJS([]))
@@ -31,7 +31,7 @@ function Step5({ form }) {
       fullGiftDetailList: []
     }])
     if(match.params.id){
-      editInit()
+      // editInit()
       setCouponPromotionType(formData.Advantage.couponPromotionType)
       if(formData.subType === 4 || formData.subType === 5){
         setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
@@ -45,6 +45,10 @@ function Step5({ form }) {
     setCouponPromotionType(formData.Advantage.couponPromotionType)
   },[formData])
 
+  // 目的： 修改 step4 中 Cart limit- Amount 对 Promotion value 进行校验
+  useEffect(()=>{
+    setFieldsValue(getFieldsValue(['denomination']))
+  },[formData.Conditions.fullMoney])
   /**
    * 规则变化方法
    * @param rules
@@ -56,8 +60,6 @@ function Step5({ form }) {
     changeFormData(enumConst.stepEnum[4],{
       fullGiftLevelList: rules,
       couponPromotionType:couponPromotionType,
-      joinLevel:customerType,
-      scopeType:scopeType,
     })
     let errorObject = {};
     //满赠规则具体内容校验

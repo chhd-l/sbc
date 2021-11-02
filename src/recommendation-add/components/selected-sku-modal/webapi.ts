@@ -26,7 +26,7 @@ export const fetchCateList = () => {
 };
 
 /**
- * 查询商品列表
+ * 查询FGS商品列表
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const fetchGoodsList = (params) => {
@@ -35,3 +35,14 @@ export const fetchGoodsList = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
+/**
+ * 查询商品felin列表
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const fetchGoodsListSku = (params) => {
+  return Fetch('/felinReco/products', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};
+ 

@@ -12,7 +12,7 @@ const Option = Select.Option;
 
 enum LIKE_TYPE {
   LIKE_GOODS_NO = 'likeGoodsNo',
-  LIKE_GOODS_INFO_NO = 'likeGoodsInfoNo'
+  LIKE_GOODS_INFO_NO = 'goodsSku'
 }
 
 export default class SearchForm extends React.Component<any, any> {
@@ -22,17 +22,17 @@ export default class SearchForm extends React.Component<any, any> {
       cates: [],
       brands: [],
       searchParams: {
-        brandId: 0,
-        cateId: 0,
-        likeValue: '',
-        likeGoodsName: ''
+        brandId: undefined,
+        cateId: undefined,
+        likeValue: undefined,
+        likeGoodsName: undefined
       },
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
     };
   }
 
   componentDidMount() {
-    this.init();
+   // this.init();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: any) {
@@ -78,11 +78,11 @@ export default class SearchForm extends React.Component<any, any> {
             </div>
           </FormItem>
 
-          <FormItem>
+          {/* <FormItem>
             <Input addonBefore="Product Name" value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
-          </FormItem>
+          </FormItem> */}
 
-          <FormItem>
+          {/* <FormItem>
             <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Product category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
               <TreeNode key="0" value="0" title="All">
                 {this.loop(fromJS(cates), fromJS(cates), 0)}
@@ -101,7 +101,7 @@ export default class SearchForm extends React.Component<any, any> {
                 </Option>
               ))}
             </SelectGroup>
-          </FormItem>
+          </FormItem> */}
 
           <FormItem>
             <Button
@@ -157,7 +157,7 @@ export default class SearchForm extends React.Component<any, any> {
       }}
       getPopupContainer={() => document.getElementById('modal-head')}
     >
-      <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option>
+      {/* <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option> */}
       <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU Code</Option>
     </Select>
   );

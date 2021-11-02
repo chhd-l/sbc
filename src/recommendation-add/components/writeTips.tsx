@@ -37,8 +37,13 @@ class WriteTips extends React.Component<any, any> {
 
   done = (e) => {
     const {recommendParams,fetchFelinSave}=this.props.relaxProps;
-    const _re=recommendParams.toJS()
-    fetchFelinSave({..._re,...e})
+    let _re=recommendParams.toJS()
+     let cc= _re.goodsQuantity.map(item=>({
+        goodsInfoNo:item.goodsInfoNo,
+        quantity:item.quantity||1
+      }))
+      _re.goodsQuantity=cc; 
+   fetchFelinSave({..._re,...e})
   }
 
   render() {

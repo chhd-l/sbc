@@ -2,7 +2,7 @@ import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
-import { getAppointmentList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
+import { apptList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
@@ -55,7 +55,7 @@ class Appointment extends React.Component<any, any> {
   getAppointmentList = () => {
     const { searchForm, pagination } = this.state;
     this.setState({ loading: true });
-    getAppointmentList({ ...searchForm, pageNum: pagination.current - 1, pageSize: pagination.pageSize })
+    apptList({ ...searchForm, pageNum: pagination.current - 1, pageSize: pagination.pageSize })
       .then((data) => {
         this.setState({
           loading: false,

@@ -64,6 +64,58 @@ export function updateAppointmentById(params = {}) {
   });
 }
 
+
+export function queryDate(params = {}) {
+  return Fetch<TResult>('/resourceDatePlan/queryDate', {
+    method: 'POST',
+    body: JSON.stringify({
+      "serviceTypeId":"6",
+     ...params
+    })
+  });
+}
+//查询字典
+export const goodsDict = (type) =>{
+  return Fetch(`/goodsDictionary/queryGoodsDictionary`, {
+    method: 'POST',
+    body: JSON.stringify(type)
+  });
+}
+
+
+
+//list
+export const apptList = (params={}) =>{
+  return Fetch(`/appt/list`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+//update
+export const apptUpdate = (params={}) =>{
+  return Fetch(`/appt/update`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+//find
+export const apptFindById = (id) =>{
+  return Fetch(`/appt/find?id=${id}`, {
+    method: 'get',
+  });
+}
+
+//保存
+export const apptSave = (params={}) =>{
+  return Fetch(`/appt/save`, {
+    method: 'POST',
+    body: JSON.stringify({...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
+  });
+}
+
+
 export function exportAppointmentList(params = {}) {
   params['storeId'] = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
   return new Promise((resolve) => {

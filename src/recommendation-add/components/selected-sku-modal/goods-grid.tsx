@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid, cache } from 'qmkit';
+import { Const, DataGrid, cache, RCi18n } from 'qmkit';
 
 import SearchForm from './search-form';
 import * as webapi from './webapi';
@@ -113,7 +113,44 @@ export default class GoodsGrid extends React.Component<any, any> {
             })
           }}
         >
+           <Column
+            title={RCi18n({id:'Prescriber.Product Name'})}
+            dataIndex="goodsInfoName"
+            key="goodsInfoName"
+            width="15%"
+          />
           <Column
+            title={RCi18n({id:'Prescriber.SPU'})}
+            dataIndex="goods.goodsNo"
+            key="goodsNo"
+            width="20%"
+            //ellipsis
+          />
+          <Column
+            title={RCi18n({id:'Prescriber.SKU'})}
+            dataIndex="goodsInfoNo"
+            key="goodsInfoNo"
+            width="20%"
+            //ellipsis
+          />
+
+          <Column
+            title={RCi18n({id:'Prescriber.Product category'})}
+            dataIndex="goods.cateName"
+            key="goods.cateName"
+            width="20%"
+            // ellipsis
+           
+          />
+          <Column title={RCi18n({id:'Prescriber.Sales category'})} key="goods.brandName" dataIndex="goods.brandName" />
+
+          <Column title={RCi18n({id:'Prescriber.Price'})} key="marketPrice" dataIndex="marketPrice"  
+           render={(data) => {
+              return data ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+ '0.00';
+            }}/>
+
+
+          {/* <Column
             title="SKU Code"
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
@@ -143,13 +180,13 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="Product category" key="goodsCate" dataIndex="cateName"  width="15%"
+          <Column title="Product category" key="goodsCate" dataIndex="goods.cateName"  width="15%"
           />
 
           <Column
             title="Brand"
             key="goodsBrand"
-            dataIndex="brandName"
+            dataIndex="goods.brandName"
             render={(value) => {
               if (value) {
                 return value;
@@ -166,7 +203,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             render={(data) => {
               return data ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+ '0.00';
             }}
-          />
+          /> */}
         </DataGrid>
       </div>
     );
@@ -188,30 +225,30 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
-    params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
+   // params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
     this.setState({loading: true});
-    let { res } = await webapi.fetchGoodsList({ ...params });
+    let { res } = await webapi.fetchGoodsListSku({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
       res = (res as any).context;
-      res['goodsInfoPage'].content.map((goodInfo) => {
-        const cId = fromJS(res['goodses'])
-          .find((s) => s.get('goodsId') === goodInfo.goodsId)
-          .get('cateId');
-        const cate = fromJS(res['cates']).find((s) => s.get('cateId') === cId);
-        goodInfo['cateName'] = cate ? cate.get('cateName') : '';
+      // res['goodsInfoPage'].content.map((goodInfo) => {
+      //   const cId = fromJS(res['goodses'])
+      //     .find((s) => s.get('goodsId') === goodInfo.goodsId)
+      //     .get('cateId');
+      //   const cate = fromJS(res['cates']).find((s) => s.get('cateId') === cId);
+      //   goodInfo['cateName'] = cate ? cate.get('cateName') : '';
 
-        const bId = fromJS(res['goodses'])
-          .find((s) => s.get('goodsId') === goodInfo.goodsId)
-          .get('brandId');
-        const brand =
-          res['brands'] == null
-            ? ''
-            : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
-        goodInfo['brandName'] = brand ? brand.get('brandName') : '';
+      //   const bId = fromJS(res['goodses'])
+      //     .find((s) => s.get('goodsId') === goodInfo.goodsId)
+      //     .get('brandId');
+      //   const brand =
+      //     res['brands'] == null
+      //       ? ''
+      //       : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
+      //   goodInfo['brandName'] = brand ? brand.get('brandName') : '';
 
-        return goodInfo;
-      });
+      //   return goodInfo;
+      // });
 
       this.setState({
         goodsInfoPage: res['goodsInfoPage'],

@@ -54,6 +54,8 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     }else if(goodsInfoUnit==='kg'){
        let d:any=(value * (row.goodsInfoWeight/row.quantity))/1000
        goodsInfoWeight=parseInt(d)
+    }else{
+      goodsInfoWeight=0;
     }
     
     row.goodsInfoWeight=goodsInfoWeight;
@@ -77,10 +79,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
         <DataGrid scroll={{ y: 500 }} size="small" rowKey="goodsInfoNo" dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
 
           <Column title={RCi18n({id:'Prescriber.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title={RCi18n({id:'Prescriber.SPU'})} dataIndex="goodsNo" key="goodsNo" />
+          <Column title={RCi18n({id:'Prescriber.SPU'})} dataIndex="goods.goodsNo" key="goodsNo" />
           <Column title={RCi18n({id:'Prescriber.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title={RCi18n({id:'Prescriber.Product category'})} dataIndex="cateName" key="cateName" />
-          <Column title={RCi18n({id:'Prescriber.Sales category'})} dataIndex="brandName" key="brandName" />
+          <Column title={RCi18n({id:'Prescriber.Product category'})} dataIndex="goods.cateName" key="cateName" />
+          <Column title={RCi18n({id:'Prescriber.Sales category'})} dataIndex="goods.brandName" key="brandName" />
           <Column
             title={RCi18n({id:'Prescriber.Price'})}
             dataIndex="marketPrice"

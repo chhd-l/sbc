@@ -131,7 +131,6 @@ export default class ChooseProducts extends React.Component<any, any> {
   selectProduct=(select)=>{
     const {
       onProductselect,
-      productselect
     } = this.props.relaxProps;
 
     onProductselect(select);

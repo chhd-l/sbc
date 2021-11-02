@@ -63,7 +63,7 @@ export default class AppStore extends Store {
   onProductForm = async (param?: any) => {
     param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchproductTooltip();
+    const res1 = await webapi.fetchFelinRecoProducts(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
       this.transaction(() => {
@@ -144,15 +144,37 @@ export default class AppStore extends Store {
   }
 
 
-  //goods info 
-
   getGoodsInfoPage = async () => {
     this.dispatch('loading:start');
 
-    let goods = this.state().get('recommendParams').get('goodsQuantity')
+    let goods = this.state().get('recommendParams').get('goodsQuantity').toJS()
+     const list=await Promise.all(goods.map(async(item)=>{
+     let {res}=await  webapi.fetchFelinRecoProducts({goodsSku:item.goodsInfoNo})
+      if ((res as any).code == Const.SUCCESS_CODE) {
+        let _item=res.context.goodsInfoPage.content;
+        if(_item.length>0){
+          
+          return {..._item[0],quantity:item.quantity}
+        }
+       return undefined;
+      }
+    }))
+    let _list=list.filter(item=>item!==undefined)
+    this.onProductselect(_list)
+    this.dispatch('loading:end');
+  }
 
-     const list=await Promise.all(['86xx39244834699636'].map(async(item)=>{
-     let {res}=await  webapi.fetchproductTooltip({likeGoodsInfoNo:item})
+     
+
+  //goods info 
+//这个是查询全部fgs 的数据
+ /* getGoodsInfoPage = async () => {
+    this.dispatch('loading:start');
+
+    let goods = this.state().get('recommendParams').get('goodsQuantity').toJS()
+
+     const list=await Promise.all(goods.map(async(item)=>{
+     let {res}=await  webapi.fetchFelinRecoProducts({likeGoodsInfoNo:item.goodsInfoNo})
       if ((res as any).code == Const.SUCCESS_CODE) {
         res = (res as any).context;
         res['goodsInfoPage'].content.map((goodInfo) => {
@@ -185,9 +207,9 @@ export default class AppStore extends Store {
      this.onProductselect(list)
     this.dispatch('loading:end');
   }
-
+*/
   //productselect
-  onProductselect = (addProduct) => {
+  onProductselect = (addProduct=[]) => {
    this.dispatch('product:productselect', addProduct);
   };
 

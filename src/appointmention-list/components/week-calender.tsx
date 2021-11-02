@@ -6,28 +6,55 @@ import { Button, Icon } from 'antd'
 import './index.less';
 class WeekCalender extends Component {
     index: number
+    props: {
+        data: any
+        onChange?:Function
+    }
     constructor(props) {
         super(props)
         this.index = -1;
     }
     state = {
-        weekDate: []
+        weekDate: [],
+        selectedIndex:''
     }
     componentDidMount() {
         this.getCurrentWeek()
     }
-    getCurrentWeek = (date = undefined) => {
+    getCurrentWeek = async (date = undefined) => {
         let weekOfDay: any = moment(date).format("E") // 指定日期的周的第几天
         let weekDate = []
+        let dateList = await this.getEnmbeData();
         for (let i = 1; i <= 7; i++) {
             let _date = moment(date).subtract(weekOfDay - i, 'days');
+            let nowDate: string = moment(_date).format('YYYYMMDD');
+            let currentDate = dateList[nowDate] || {};
+            let list = await this.intervals(moment(_date).format('YYYYMMDD 09:00'), moment(_date).format('YYYYMMDD 22:00'), currentDate)
             weekDate.push({
                 weekDay: _date.format('dddd'),
-                date: _date.format('YYYY-MM-DD')
+                date: _date.format('YYYY-MM-DD'),
+                times: list
             })
         }
         this.setState({ weekDate })
     }
+    getEnmbeData = () => {
+        return new Promise((reslove) => {
+            let _data = this.props.data;
+            let _dataObj = {};
+            _data.map(item => {
+                _dataObj[item.date] = item;
+                _dataObj[item.date]['minuteList'] = {};
+                item.minuteSlotVOList.map(list => {
+                    _dataObj[item.date]['minuteList'][list.startTime] =list;
+                })
+
+            })
+            reslove(_dataObj)
+        })
+
+    }
+
     lastWeek = () => {
         if (this.index === -1) return
         this.index++;
@@ -46,8 +73,30 @@ class WeekCalender extends Component {
         let end = moment().week(moment().week() - i).endOf('week').format('YYYY-MM-DD')
         return [begin, end]
     }
+    intervals = async (startString, endString, currentDate) => {
+        return new Promise(reslove => {
+            let start = moment(startString, 'YYYYMMDD HH:mm');
+            let end = moment(endString, 'YYYYMMDD HH:mm');
+            start.minutes(Math.ceil(start.minutes() / 15) * 15);
+            let result = [];
+            let current = moment(start);
+            while (current <= end) {
+                let dateNo= current.format('YYYYMMDD')
+                let cc = (currentDate.minuteList && currentDate.minuteList[current.format('YYYYMMDD HH:mm')]) || { disabled: true,type:'default' }
+                let time =cc.startTime&&(moment(cc.startTime,'YYYYMMDD HH:mm').format('HH:mm'))
+                let ccc = { ...cc, time: (time ? time : current.format('HH:mm')) ,dateNo}
+                result.push(ccc);
+                current.add(15, 'minutes');
+            }
+            reslove(result);
+        })
+    }
+    clickAppointItem=(item,index)=>{
+        this.setState({selectedIndex:(item.dateNo+'_'+index)})
+        this.props.onChange(item)
+    }
     render() {
-        const { weekDate } = this.state;
+        const { weekDate,selectedIndex } = this.state;
         return (
             <div className="week-calender">
                 <div className="week-head">
@@ -70,19 +119,11 @@ class WeekCalender extends Component {
                 </div>
                 <div className="week-content">
                     <ul>
-                        {weekDate.map((item, index) => (
-                            <li key={index}>
-                                <Button style={{ marginTop: 5 }}>09:00</Button>
-                                <Button style={{ marginTop: 5 }}>09:15</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
-                                <Button style={{ marginTop: 5 }}>09:30</Button>
+                        {weekDate.map((item,index) => (
+                            <li key={index + 1}>
+                                {item.times.map((it,idx) => (<Button onClick={()=>this.clickAppointItem(it,idx)} key={it.time + 1} type={(selectedIndex===(it.dateNo+'_'+idx))?'primary':it.type} disabled={it.disabled} style={{ marginTop: 5 }}>{it.time}</Button>))}
+
+
                             </li>))
                         }
 

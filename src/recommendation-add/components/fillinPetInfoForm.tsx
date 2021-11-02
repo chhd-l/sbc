@@ -43,7 +43,6 @@ class FillinPetInfoForm extends Component {
         this.getDictAlllist('specialNeeds', 'specialNeedsList');
         this.getDictAlllist('CatBreed', 'petsBreedList')
         let _c = recommendParams?.customerPet ?? []
-        console.log(_c,'===============')
         let stateCustomPet = {};
         _c.map(item => {
             stateCustomPet[item.petsId||item.uuid] = item
@@ -168,7 +167,7 @@ class FillinPetInfoForm extends Component {
         return keys.length > 0 && keys.map((item, index) => (
             <Col span={12} key={item}>
                 <Row gutter={20} key={item}>
-                    <div style={{ display: "flex", justifyContent: "space-around" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between",padding:'0 20px' }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
                         {!stateCustomPet[item]?.petsId&&<Button type="primary" onClick={() => this.remove(item, index)}>删除</Button>}
                     </div>

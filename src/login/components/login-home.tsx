@@ -110,6 +110,12 @@ let LoginHome = (props) => {
           </Row>
         </Row>
       </div>
+      <div className="ot-sdk-show-settings-wrapper w-full">
+        <button id="ot-sdk-btn" className="ot-sdk-show-settings text-xs">
+          {' '}
+          Cookie Settings
+        </button>
+      </div>
     </div>
   );
 };

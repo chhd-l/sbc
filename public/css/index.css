@@ -85,6 +85,7 @@
 
 #mars-footer-panel {
     position: fixed!important;
+    z-index: 0;
   }
   #mars-footer-panel .mars-footer-legal,#mars-footer-panel .mars-footer-label{
     /* color: #fff!important; */
@@ -98,6 +99,7 @@
   .ot-sdk-show-settings-wrapper{
     position: absolute;
     bottom: 0;
+    z-index:10;
     left: 0;
     background-color: #212CDB;
   }

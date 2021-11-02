@@ -46,3 +46,15 @@ export const goodsDict = (type) =>{
     body: JSON.stringify(params)
   });
 }
+
+/**
+ * 批量保存resource信息
+ */
+ export const batchSaveOrUpdate = (params) =>{
+  return Fetch(`/resourceSetting/batchSaveOrUpdate`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+

@@ -120,8 +120,8 @@ export default class List extends React.Component<any, any>{
         dataSource={this.props.resourceList}
         columns={columns}
         rowSelection={{
-          onChange: (selectedRowKeys) => {
-            onSelectChange(selectedRowKeys);
+          onChange: (selectedRowKeys,selectedRows) => {
+            onSelectChange(selectedRowKeys,selectedRows);
           }
         }}
         pagination={false}

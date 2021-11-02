@@ -15,7 +15,7 @@ const styles = {
 const ResourcesList = () => {
 
   const [showBulkPlanningModal, setShowBulkPlanningModal] = useState(false);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+  const [selectedEmployeeIds, setSelectedEmployeeIds] = useState([])
   const [serviceTypeDict,setServiceTypeDict] = useState([])
   const [appointmentTypeDict,setAppointmentTypeDict] = useState([])
   const [resourceList,setResourceList] = useState([])
@@ -38,14 +38,17 @@ const ResourcesList = () => {
     const {res} = await webapi.getResourcesList(params);
     setResourceList(res?.context?.resourceVOList)
   }
+
   // 列表复选框选择
-  const listSelect = (selectedRowKeys) => {
-    setSelectedRowKeys(selectedRowKeys)
+  const listSelect = (selectedRowKeys,selectedRows) => {
+    let employeeIds = []
+    selectedRows.map(item => employeeIds.push(item.employeeId))
+    setSelectedEmployeeIds(employeeIds)
   }
 
   // 点击bulk planning按钮,进行批量设置
   const handlePlanningBtn = () => {
-    if (selectedRowKeys.length) {
+    if (selectedEmployeeIds.length) {
       setShowBulkPlanningModal(true)
     } else {
       Modal.info({
@@ -67,7 +70,6 @@ const ResourcesList = () => {
   //   console.log(pageNum, '99999')
   //   // todo:翻页时，更新表格list接口请求
   // }
-
   return (
     <div>
       <BreadCrumb />
@@ -102,12 +104,13 @@ const ResourcesList = () => {
       <div className="container">
         <ListTable
         resourceList={resourceList}
-          onSelectChange={(selectedRowKeys) => listSelect(selectedRowKeys)}
+          onSelectChange={(selectedRowKeys,selectedRows) => listSelect(selectedRowKeys,selectedRows)}
           // updateListData={changePageNum}
         />
       </div>
       <BulkPlanningModal
         visible={showBulkPlanningModal}
+        selectedEmployeeIds={selectedEmployeeIds}
         serviceTypeDict={serviceTypeDict}
         onCancel={() => { setShowBulkPlanningModal(false) }} />
     </div>

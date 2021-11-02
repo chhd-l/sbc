@@ -5,14 +5,13 @@ import moment from 'moment';
 import './index.less'
 const timeFormat = 'HH:mm';
 const SetDayTable = (props) => {
-  const { weekList, updateTableData,deleteLinePlanList } = props
+  const { weekList, updateTableData, deleteLinePlanList, selectedDateNos } = props
   console.log(weekList, 'WeekList5666666')
   const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   const [daysList, setDaysList] = useState({
     days: [],
     dates: []
   })
-  const [defaultWeekList, setDefaultWeekList] = useState(weekList)
 
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
@@ -25,27 +24,7 @@ const SetDayTable = (props) => {
       days,
       dates
     })
-    // weekList.map(item => Object.assign(item, {
-    //   defaultDays: {
-    //     days,
-    //     dates
-    //   }
-    // }))
-    // setDefaultWeekList(weekList)
   }, [])
-
-  function addTime() {
-    const maxSort = Math.max(...props.openDate.times.map((x) => [x.sort]));
-    var newTime = [
-      ...props.openDate.times,
-      {
-        startTime: '00:00',
-        endTime: '23:59',
-        sort: maxSort + 1
-      }
-    ];
-    changeTime(newTime);
-  }
 
   // 时间段的添加按钮事件
   const handleAddTime = () => {
@@ -68,6 +47,7 @@ const SetDayTable = (props) => {
 
   // 日期的复选框选择事件
   const dateCheck = (e, date, _daysList, dateChecked) => {
+    
     let _resourceDatePlanVOS = []
     props.weekList.resourceDatePlanVOS.map(item => _resourceDatePlanVOS.push({
       id: item.id,
@@ -126,27 +106,27 @@ const SetDayTable = (props) => {
       let _time = times.map(item => item.split('-'))
       return (_time.map((timeRange, idx) => {
         return (
-            <div style={{ marginTop: "6px" }}>
-              <TimePicker
-                format={timeFormat}
-                className={'start-time-picker'}
-                minuteStep={15}
-                value={moment(timeRange[0], timeFormat)}
-                onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
-                allowClear={false}
-              />
-              <span>-</span>
-              <TimePicker
-                format={timeFormat}
-                className={'end-time-picker'}
-                minuteStep={15}
-                value={moment(timeRange[1], timeFormat)}
-                onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
-                allowClear={false}
-              />
-              <Icon type="plus-square" onClick={handleAddTime} />
-              <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />
-            </div>
+          <div style={{ marginTop: "6px" }}>
+            <TimePicker
+              format={timeFormat}
+              className={'start-time-picker'}
+              minuteStep={15}
+              value={moment(timeRange[0], timeFormat)}
+              onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
+              allowClear={false}
+            />
+            <span>-</span>
+            <TimePicker
+              format={timeFormat}
+              className={'end-time-picker'}
+              minuteStep={15}
+              value={moment(timeRange[1], timeFormat)}
+              onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
+              allowClear={false}
+            />
+            <Icon type="plus-square" onClick={handleAddTime} />
+            <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />
+          </div>
         )
       })
       )
@@ -178,42 +158,19 @@ const SetDayTable = (props) => {
     }
   }
 
-
-  const handleTimeFormat = (timeSlot, type) => {
-    let formatTime = ''
-    if (timeSlot.includes('|')) {
-      let times = timeSlot.split('|');
-      let _time = times.map(item => item.split('-'))
-    } else {
-      let singleTime = timeSlot.split('-')
-      type === 'start' ? formatTime = singleTime[0] : formatTime = singleTime[1]
-    }
-    return formatTime
-  }
-
-  const handleCheckedDaysFormat = (data, day) => {
-    let dates = []
-    data.map(item => dates.push(item?.dateNo))
-    return dates.includes(day) ? true : false
-  }
-
-  function changeTime(newTime) {
-    const newOpenDateItem = { ...props.openDate, times: newTime };
-    props.editOpenTable(newOpenDateItem);
-  }
-
   // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
   const handlePlanDatesChecked = (daysList) => {
+    // let selectedDates = []
+    // props.weekList.resourceDatePlanVOS?.map(planItem => selectedDates.push(planItem.dateNo))
     daysList.dates?.map(dateItem => {
       props.weekList.resourceDatePlanVOS?.map(planItem => {
+        // selectedDates.push(planItem.dateNo)
         if (dateItem.date === planItem.dateNo) {
           dateItem.dateChecked = true
         }
-        // else {
-        //   dateItem.dateChecked = false
-        // }
       })
     })
+    // console.log(selectedDates,'selectedDates')
 
     return (
       <>
@@ -221,10 +178,8 @@ const SetDayTable = (props) => {
           <td>
             <Checkbox
               key={idx}
-              // disabled={props.allSelectWeeks.includes(day) && !props.openDate.weeks.includes(day)}
-              // onChange={(e) => dayCheck(e, dateItem.date, dateItem.sort)}
+              disabled={selectedDateNos.includes(dateItem.date)}
               onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked)}
-              //  checked={handleCheckedDaysFormat(item.resourceDatePlanVOS,day)}
               checked={dateItem.dateChecked}
             ></Checkbox>
           </td>
@@ -261,7 +216,7 @@ const SetDayTable = (props) => {
               <a
                 type="link"
                 className="iconfont iconDelete"
-                onClick={() =>deleteLinePlanList(props.weekList.sort)}
+                onClick={() => deleteLinePlanList(props.weekList.sort)}
               ></a>
             </td>
           </tr>

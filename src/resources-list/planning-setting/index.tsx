@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
-// import * as webapi from './webapi'
+import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, Headline, Const } from 'qmkit';
-import { SelectGroup } from 'qmkit';
 import * as webapi from '../webapi';
 import ServiceSetting from '../component/service-setting'
 import './index.less'
-import { async } from '_@antv_x6@1.26.2@@antv/x6/lib/registry/marker/async';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -292,7 +288,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Col>
           </Row>
           <div className="availability-title">Availability:</div>
-          <ServiceSetting 
+          <ServiceSetting
           serviceData={settingDetailData} 
           serviceTypeDict={AvailServiceTypeDict} 
           selectDisabled={AvailServiceTypeDisabled}

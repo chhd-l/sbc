@@ -3,6 +3,7 @@ import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormContext } from '@/marketing-setting/create-promotion';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const formItemLayout = {
   labelCol: { span: 6 },
@@ -10,7 +11,7 @@ const formItemLayout = {
 };
 function Step3({form}){
   const Context:any = useContext(FormContext);
-  const { initFormData,match } = Context
+  const { match,changeFormData,setStep,formData } = Context
   const {getFieldDecorator,validateFields} = form
 
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
@@ -20,15 +21,29 @@ function Step3({form}){
 
   useEffect(()=>{
     if(match.params.id){
-      setPromotionCode(initFormData.promotionCode)
-      setPublicStatus(initFormData.publicStatus === 0 ? false : true)
-      setLimitStatus(initFormData.isNotLimit === 0 ? true : false)
-      setTypeOfPromotion(initFormData.typeOfPromotion)
+      setPromotionCode(formData.PromotionType.promotionCode)
+      setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
+      setLimitStatus(formData.PromotionType.isNotLimit === 0 ? true : false)
+      setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
     }else {
       getPromotionCode()
     }
-
   },[])
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if (!err) {
+        changeFormData(enumConst.stepEnum[2],{
+          ...values,
+          publicStatus: publicStatus ? 1 : 0,
+          isNotLimit:limitStatus ? 0 : 1
+        })
+        setStep(3)
+      }
+    });
+  }
+  /**
+   * 随机生成PromotionCode
+   */
   const getPromotionCode = () => {
     let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
     let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
@@ -44,7 +59,7 @@ function Step3({form}){
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.TypeOfPromotion" />}>
           {getFieldDecorator('typeOfPromotion', {
-            initialValue: initFormData.typeOfPromotion,
+            initialValue: formData.PromotionType.typeOfPromotion,
             rules: [
               {
                 required: true,
@@ -97,7 +112,7 @@ function Step3({form}){
         )}
         { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
           {getFieldDecorator('perCustomer', {
-            initialValue: initFormData.perCustomer,
+            initialValue: formData.PromotionType.perCustomer,
           })(
             <InputNumber  size="large" min={1} disabled={!limitStatus}/>
           )}
@@ -114,10 +129,7 @@ function Step3({form}){
 
       </Form>
 
-      <ButtonLayer step={2} validateFields={validateFields}
-                   publicStatus={publicStatus}
-                   isNotLimit={limitStatus}
-      />
+      <ButtonLayer step={2} toNext={toNext} />
     </div>
   )
 }

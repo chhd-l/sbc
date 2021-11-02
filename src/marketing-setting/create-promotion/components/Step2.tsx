@@ -1,9 +1,10 @@
-import React,{useContext,memo} from 'react'
+import React,{useContext} from 'react'
 import { Form, Input, DatePicker, Button } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { Const, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { FormContext } from '../index';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const { RangePicker } = DatePicker;
 const formItemLayout = {
@@ -11,10 +12,18 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 function Step2({form}) {
+  console.log('重绘了')
   const Context:any = useContext(FormContext);
-  const { initFormData } = Context
+  const { formData,changeFormData,setStep } = Context
   const {getFieldDecorator,validateFields,} = form
-
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if (!err) {
+        changeFormData(enumConst.stepEnum[1],values)
+        setStep(2)
+      }
+    });
+  }
   return (
     <div>
       <div className="step-title">
@@ -24,7 +33,7 @@ function Step2({form}) {
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('marketingName', {
-            initialValue: initFormData.marketingName,
+            initialValue: formData.BasicSetting.marketingName,
             rules: [
               {
                 required: true,
@@ -56,7 +65,7 @@ function Step2({form}) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
           {getFieldDecorator('time', {
-            initialValue: initFormData.time,
+            initialValue: formData.BasicSetting.time,
             rules: [
               {
                 required: true,
@@ -81,8 +90,8 @@ function Step2({form}) {
         </Form.Item>
       </Form>
 
-      <ButtonLayer step={1} validateFields={validateFields}/>
+      <ButtonLayer step={1} toNext={toNext}/>
     </div>
   );
 }
-export default memo(Form.create<any>()(Step2));
+export default Form.create<any>()(Step2);

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Form, Input, Button, Radio, Tree, Select, TreeSelect } from 'antd';
+import { Form, Input, Radio } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormattedMessage } from 'react-intl';
 import { cache, Const, ValidConst } from 'qmkit';
@@ -14,7 +14,7 @@ const formItemLayout = {
 };
 
 function Step5({ form }) {
-  const { changeFormData,formData,match,setFormData } = useContext<any>(FormContext);
+  const { changeFormData,formData,match,setStep } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
@@ -33,17 +33,33 @@ function Step5({ form }) {
     if(match.params.id){
       // editInit()
       setCouponPromotionType(formData.Advantage.couponPromotionType)
-      if(formData.subType === 4 || formData.subType === 5){
-        setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
-        setFullGiftLevelList(fromJS(formData.Advantage.selectedRows))
-      }
+      // if(formData.subType === 4 || formData.subType === 5){
+      //   setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
+      //   setFullGiftLevelList(fromJS(formData.Advantage.selectedRows))
+      // }
     }
   },[])
-  useEffect(()=>{
-    console.log(formData)
-    console.log(formData.Advantage.couponPromotionType)
-    setCouponPromotionType(formData.Advantage.couponPromotionType)
-  },[formData])
+
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if(couponPromotionType === 4 && selectedGiftRows.length === 0){
+        setFields({
+          rules:{
+            value: null,
+            errors: [new Error('Please setting rules')]
+          }
+        })
+        return
+      }
+      if (!err) {
+        changeFormData(enumConst.stepEnum[4],{
+          ...values,
+          fullGiftLevelList,
+        })
+        setStep(5)
+      }
+    });
+  }
 
   // 目的： 修改 step4 中 Cart limit- Amount 对 Promotion value 进行校验
   useEffect(()=>{
@@ -54,35 +70,49 @@ function Step5({ form }) {
    * @param rules
    */
   const onRulesChange = (rules) => {
-    form.resetFields('rules');
-    console.log(rules)
     setFullGiftLevelList(rules)
     changeFormData(enumConst.stepEnum[4],{
       fullGiftLevelList: rules,
       couponPromotionType:couponPromotionType,
     })
-    let errorObject = {};
-    //满赠规则具体内容校验
-    rules.forEach((level, index) => {
-      //校验赠品是否为空
-      if (!level.fullGiftDetailList || level.fullGiftDetailList.length == 0) {
-        errorObject[`level_${index}`] = {
-          value: null,
-          errors: [new Error('A full gift cannot be empty')]
-        };
-      } else {
-        errorObject[`level_${index}`] = {
-          value: null,
-          errors: null
-        };
-      }
-    });
-    form.setFields(errorObject);
+    // let errorObject = {};
+    // //满赠规则具体内容校验
+    // rules.forEach((level, index) => {
+    //   //校验赠品是否为空
+    //   if (!level.fullGiftDetailList || level.fullGiftDetailList.length == 0) {
+    //     errorObject[`level_${index}`] = {
+    //       value: null,
+    //       errors: [new Error('A full gift cannot be empty')]
+    //     };
+    //   } else {
+    //     errorObject[`level_${index}`] = {
+    //       value: null,
+    //       errors: null
+    //     };
+    //   }
+    // });
+    // form.setFields(errorObject);
   };
 
   const GiftRowsOnChange = (rows) => {
     console.log(rows)
     setSelectedGiftRows(rows)
+
+    if (rows.length == 0) {
+      setFields({
+        rules:{
+          value: null,
+          errors: [new Error('Please setting rules')]
+        }
+      })
+    } else {
+      setFields({
+        rules:{
+          value: null,
+          errors: null
+        }
+      })
+    }
   }
   /**
    * 生成随机数，作为key值
@@ -112,42 +142,18 @@ function Step5({ form }) {
               },
             ]
           })(
-            <Radio.Group onChange={(e)=>{
-              setCouponPromotionType(e.target.value)
-              formData.Advantage.couponPromotionType = e.target.value
-              setFormData({...formData})
-              if(e.target.value === 3 && customerType === -4){
-                setCustomerType(0)
-                setFieldsValue({joinLevel:0})
-              }
-            }}>
-              {
-                !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2) &&
-                !(formData.PromotionType.typeOfPromotion === 0 &&
-                  (formData.Conditions.promotionType === 1 || formData.Conditions.promotionType === 2) &&
-                  (formData.Conditions.CartLimit === 1 || formData.Conditions.CartLimit === 2)
-                )
-                &&
-                  (
-                    <Radio value={0}>
-                      <FormattedMessage id="Marketing.Amount" />
-                    </Radio>
-                  )
-              }
-              {
-                !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2)
-                &&
-                (
-                  <Radio value={1}>
-                    <FormattedMessage id="Marketing.Percentage" />
-                  </Radio>
-                )
-              }
+            <Radio.Group onChange={(e)=> setCouponPromotionType(e.target.value)}>
+              <Radio value={0}>
+                <FormattedMessage id="Marketing.Amount" />
+              </Radio>
+              <Radio value={1}>
+                <FormattedMessage id="Marketing.Percentage" />
+              </Radio>
               <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
               {
-                (formData?.PromotionType?.typeOfPromotion !== 1 && formData?.Conditions?.promotionType === 0 ) &&
+                (formData.PromotionType.typeOfPromotion !== 1 && formData.Conditions.promotionType === 0 ) &&
                 <Radio value={4}>
                   <FormattedMessage id="Marketing.Gifts" />
                 </Radio>
@@ -245,7 +251,7 @@ function Step5({ form }) {
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('firstSubscriptionOrderDiscount', {
-                              initialValue: formData.Advantage.firstSubscriptionOrderDiscount ?  formData.Advantage.firstSubscriptionOrderDiscount*100 : '',
+                              initialValue: formData.Advantage.firstSubscriptionOrderDiscount,
                               rules: [
                                 {
                                   required: true, message:
@@ -332,7 +338,7 @@ function Step5({ form }) {
                           <Form.Item>
                             <span>&nbsp;&nbsp;&nbsp;&nbsp;<FormattedMessage id="Marketing.discount" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('restSubscriptionOrderDiscount', {
-                              initialValue: formData.Advantage.restSubscriptionOrderDiscount ?  formData.Advantage.restSubscriptionOrderDiscount*100 : '',
+                              initialValue: formData.Advantage.restSubscriptionOrderDiscount,
                               rules: [
                                 {
                                   validator: (_rule, value, callback) => {
@@ -581,7 +587,7 @@ function Step5({ form }) {
 
       </Form>
 
-     <ButtonLayer step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList} setFields={setFields}/>
+     <ButtonLayer step={4} toNext={toNext} fullGiftLevelList={fullGiftLevelList} setFields={setFields}/>
     </div>
   );
 }

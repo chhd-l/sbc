@@ -18,42 +18,49 @@ const { Step } = Steps;
 export const FormContext = React.createContext({});
 
 export default function index({...props}) {
-  console.log(props)
   const InitFormData = {
     /**
      * 第二步
      */
-    marketingName: '',
-    time:[],
-
+    BasicSetting:{
+      marketingName: '',
+      time:[],
+    },
     /**
      * 第三步
      */
-    typeOfPromotion: 0,//0:promotion 1: coupon
-    publicStatus: 1,
-    isNotLimit: 1,
-    perCustomer:1,
+    PromotionType:{
+      typeOfPromotion: 0,//0:promotion 1: coupon
+      publicStatus: 1,
+      isNotLimit: 1,
+      perCustomer:1,
+    },
+    /**
+     * 第四步
+     */
+    Conditions:{
+      promotionType:0,
+      CartLimit:0,
+      fullItem:'',
+      fullMoney:'',
+      isSuperimposeSubscription:1,
+      joinLevel:0,
+      segmentIds:[],
+      emailSuffixList:[],
+      attributeValueIds:[],
+      scopeType:0,
+      storeCateIds:[],
+      customProductsType:0,
+      skuIds:[],//custom product id集合
+      selectedRows:[],//custom product 所有数据集合
+    },
 
     /**
      * 第四步
      */
-    promotionType:0,
-    CartLimit:0,
-    isSuperimposeSubscription:1,
-    joinLevel:0,
-    segmentIds:[],
-    scopeType:0,
-    storeCateIds:[],
-    customProductsType:0,
-    skuIds:[],//custom product id集合
-    selectedRows:[],//custom product 所有数据集合
-
-
-
-
     Advantage:{
-      denomination:'',
       couponPromotionType:0,
+      denomination:'',
       couponDiscount:'',
       limitAmount:'',
       firstSubscriptionOrderReduction:'',
@@ -62,19 +69,12 @@ export default function index({...props}) {
       firstSubscriptionLimitAmount:'',
       restSubscriptionOrderDiscount:'',
       restSubscriptionLimitAmount:'',
-
-
-
     },
-    BasicSetting:{
-
-    }
   }
 
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(true)
-  const [formData, setFormData] = useState<any>({}) //编辑或创建时候的数组
-  const [initFormData, setInitFormData] = useState<any>(InitFormData)//初始化数组
+  const [formData, setFormData] = useState<any>(InitFormData) //编辑或创建时候的数组
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
   useEffect(()=>{
     if(props.match.params.id){
@@ -83,12 +83,10 @@ export default function index({...props}) {
     }else {
       setLoading(false)
     }
-
   },[])
 
   const initForm = ()=>{
-    console.log(222)
-    setFormData({...initFormData})
+    setFormData({...InitFormData})
   }
   /**
    * 通过subType判断CartLimit
@@ -193,20 +191,45 @@ export default function index({...props}) {
       result = await webapi.getMarketingInfo(props.match.params.id)
       let detail = result.res.context
       setFormData({
+        /**
+         * 第二步
+         */
+        BasicSetting:{
+          marketingName: detail.marketingName,
+          time:[moment(detail.beginTime),moment(detail.endTime)],
+        },
+        /**
+         * 第三步
+         */
         PromotionType:{
           typeOfPromotion: 0,
           promotionCode: detail.promotionCode,
           publicStatus: parseInt(detail.publicStatus),
           isNotLimit: detail?.marketingUseLimit?.isNotLimit,
-          perCustomer: detail?.marketingUseLimit?.perCustomer
+          perCustomer: detail?.marketingUseLimit?.perCustomer,
         },
+        /**
+         * 第四步
+         */
         Conditions:{
           promotionType: detail.promotionType,
           CartLimit: switchCartLimit(detail.subType),
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney:switchFullMoney(detail),
           fullItem:switchFullItem(detail),
+          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
+          segmentIds:detail.segmentIds || [],
+          emailSuffixList:detail.emailSuffixList || [],
+          scopeType: detail.scopeType,
+          customProductsType:detail.customProductsType,
+          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
+          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
+          skuIds:detail.goodsInfoIdList,//custom product id集合
+          selectedRows:detail.goodsList?.goodsInfoPage?.content,//custom product 所有数据集合
         },
+        /**
+         * 第四步
+         */
         Advantage:{
           couponPromotionType:switchCouponPromotionType(detail),
           denomination: (detail.subType === 0 || detail.subType === 1) ? detail.fullReductionLevelList?.[0]?.reduction : '',
@@ -220,22 +243,10 @@ export default function index({...props}) {
           restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
           selectedGiftRows:detail.goodsList?.goodsInfoPage?.content,
-
-          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
-          segmentIds:detail.segmentIds || [],
-          emailSuffixList:detail.emailSuffixList || [],
-          scopeType: detail.scopeType,
-          customProductsType:detail.customProductsType,
-          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
-          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
-
-          skuIds:detail.goodsInfoIdList,
-          selectedRows:detail.goodsList?.goodsInfoPage?.content,
         },
-        BasicSetting: {
-          marketingName: detail.marketingName,
-          time:[moment(detail.beginTime),moment(detail.endTime)]
-        },
+        /**
+         * 类型
+         */
         subType:detail.subType,
       })
     }else {
@@ -243,35 +254,45 @@ export default function index({...props}) {
       let detail = result.res.context.couponInfo
       let goodsList = result.res.context.goodsList
       setFormData({
+        /**
+         * 第二步
+         */
+        BasicSetting:{
+          marketingName: detail.couponName,
+          time:[moment(detail.startTime),moment(detail.endTime)],
+        },
+        /**
+         * 第三步
+         */
         PromotionType:{
           typeOfPromotion: 1,
         },
+        /**
+         * 第四步
+         */
         Conditions:{
           promotionType: detail.couponPurchaseType,
           CartLimit: detail.fullBuyType,
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney: detail.fullBuyPrice,
-          fullItem: detail.fullBuyCount,
-        },
-        Advantage:{
-          couponPromotionType: detail.couponPromotionType,
-          denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount,
-          limitAmount: detail.limitAmount,
-
+          fullItem: detail.fullbuyCount,
           joinLevel: parseInt(detail.couponJoinLevel),
           segmentIds:detail.segmentIds || [],
           scopeType: switchScopeType(detail.scopeType),
           customProductsType:detail.customProductsType,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
-
           skuIds:detail.scopeIds,
           selectedRows:goodsList?.goodsInfoPage?.content,
         },
-        BasicSetting: {
-          marketingName: detail.couponName,
-          time:[moment(detail.startTime),moment(detail.endTime)]
+        /**
+         * 第五步
+         */
+        Advantage:{
+          couponPromotionType: detail.couponPromotionType,
+          denomination: detail.denomination,
+          couponDiscount: detail.couponDiscount,
+          limitAmount: detail.limitAmount,
         },
       })
     }
@@ -304,13 +325,12 @@ export default function index({...props}) {
       value={{
         changeFormData: changeFormData,
         formData,
-        initFormData,
-        detail:detail,
-        setDetail:setDetail,
         setFormData:setFormData,
         setStep:setStep,
         initForm: initForm,
-        match:props.match
+        match:props.match,
+        setDetail:setDetail,
+        detail,
       }}
     >
       <Spin spinning={loading}>
@@ -342,17 +362,17 @@ export default function index({...props}) {
                     <div style={{display: step === 3 ? 'block' : 'none'}}>
                       <Step4/>
                     </div>
-                    {/*<div style={{display: step === 4 ? 'block' : 'none'}}>*/}
-                    {/*  <Step5/>*/}
-                    {/*</div>*/}
-                    {/*<div style={{display: step === 5 ? 'block' : 'none'}}>*/}
-                    {/*  <Step6 setLoading={setLoading}/>*/}
-                    {/*</div>*/}
+                    <div style={{display: step === 4 ? 'block' : 'none'}}>
+                      <Step5/>
+                    </div>
+                    <div style={{display: step === 5 ? 'block' : 'none'}}>
+                      <Step6 setLoading={setLoading}/>
+                    </div>
                   </>
                 )
               }
               {
-                // step === 6 && <CreateSuccess/>
+                step === 6 && <CreateSuccess/>
               }
             </div>
 

@@ -477,6 +477,7 @@ module.exports = function (webpackEnv, envCode) {
             cdnName: env.raw.CDN_PATH.replace(/^\"|\"$/g, ''),
             dllName: isEnvProduction ? require('./compile-env.json').prodDll : require('./compile-env.json').testDll,
             inject: true,
+            oneTrustID: isEnvProduction?'18097cd9-5541-4f5f-98dc-f59b2b2d5730':'18097cd9-5541-4f5f-98dc-f59b2b2d5730-test',
             template: paths.appHtml,
             icoFile: icoFile,
           },

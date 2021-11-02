@@ -36,6 +36,7 @@ const getOktaAppConfig = () => {
 };
 const _config={
   'storesit.royalcanin.com':{
+    ISPRODUCT: false,
     PAYMENT: {
       "ru": {
         "app_id": "com.razorfish.sit_ms_ru",
@@ -56,6 +57,7 @@ const _config={
     }
   },
   'storestg.royalcanin.com':{
+    ISPRODUCT: false,
     PAYMENT: {
       "ru": {
         "app_id": "com.razorfish.stg_ms_ru",
@@ -76,6 +78,7 @@ const _config={
     }
   },
   'storeuat.royalcanin.com':{
+    ISPRODUCT: false,
     PAYMENT: {
       "ru": {
         "app_id": "com.razorfish.uat_ru_ms",
@@ -96,6 +99,7 @@ const _config={
     }
   },
   "eurostore.royalcanin.com":{
+    ISPRODUCT: true,
     PAYMENT: {
       "ru": {
         "app_id": "com.razorfish.fgs_ru",

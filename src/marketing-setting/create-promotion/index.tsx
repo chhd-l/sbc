@@ -43,6 +43,7 @@ export default function index({...props}) {
       segmentIds:[],
       scopeType:0,
       storeCateIds:[],
+      attributeValueIds: [],
     },
     BasicSetting:{
       marketingName: '',

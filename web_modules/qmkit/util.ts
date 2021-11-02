@@ -405,6 +405,68 @@ export const onExport = (params,downloadUrl) => {
     }, 500);
   });
 };
+/**
+ * 加载js
+ * @param fn 执行函数
+ * @param url 加载链接
+ *
+ */
+interface PropsLoadJS  {
+  url:string,
+  callback?:()=>void,
+  dataSets?:any,
+  code?:string,
+  className?:string,
+  type?:string,
+  id?:string
+}
+ export const loadJS = ({
+  url,
+  callback = function () {},
+  dataSets,
+  code,
+  className,
+  type,
+  id
+}:PropsLoadJS) => {
+  var script = document.createElement('script');
+
+  if (className) {
+    script.className = className;
+  }
+  script.type = type || 'text/javascript';
+
+  if (id) {
+    script.id = id;
+  }
+
+  if (dataSets) {
+    for (let key in dataSets) {
+      script.dataset[key] = dataSets[key];
+    }
+  }
+  if (code) {
+    script.innerHTML = code;
+  }
+  //IE
+  if (script.readyState) {
+    script.onreadystatechange = function () {
+      if (script.readyState === 'loaded' || script.readyState === 'complete') {
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  } else {
+    //其他浏览器
+    script.onload = function () {
+      callback();
+    };
+  }
+  if (url) {
+    script.src = url;
+  }
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
 
 
 

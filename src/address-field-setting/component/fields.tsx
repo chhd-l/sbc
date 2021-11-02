@@ -302,11 +302,32 @@ export default class Fields extends React.Component<any, any> {
         title: 'Validation',
         dataIndex: 'validationFlag',
         key: 'validationFlag',
-        render: (_, record) => (
-          record.fieldName === 'Address1'
-            ? <a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"></a>
-            : null
-        )
+        render: (text, record) => {
+          let fieldName = record.fieldName || '';
+
+          switch (fieldName) {
+            case 'Postal code':
+              return (
+              <AuthWrapper functionName='f-postCodeBlockList-edit'>
+                <div className='validation-wrap'>
+                  <Switch
+                    // checked={isEditPostalCode}
+                    defaultChecked={text === 1}
+                    onChange={(checked) => this.handlePostalCode(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
+                  />
+                  {
+                    isEditPostalCode || (text === 1)
+                      ? (<a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />)
+                      : null
+                  }
+                </div>
+              </AuthWrapper>
+            );
+            case 'Address1':
+              return (<a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"/>)
+            default: return null
+          }
+        },
       },
       {
         title: 'Max length',

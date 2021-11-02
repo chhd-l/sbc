@@ -10,7 +10,7 @@ const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
-function Step2({setStep,form}) {
+function Step2({form}) {
   console.log('shuaixn')
   const Context:any = useContext(FormContext);
   const { formData } = Context
@@ -82,7 +82,7 @@ function Step2({setStep,form}) {
         </Form.Item>
       </Form>
 
-      <ButtonLayer setStep={setStep} step={1} validateFields={validateFields}/>
+      <ButtonLayer step={1} validateFields={validateFields}/>
     </div>
   );
 }

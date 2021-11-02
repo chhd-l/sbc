@@ -4,8 +4,8 @@ import { FormContext } from '@/marketing-setting/create-promotion';
 import { Const, util } from 'qmkit';
 import CouponModal from '@/coupon-list/components/couponModal';
 
-export default function createSuccess({setStep}) {
-  const { formData,detail,match } = useContext<any>(FormContext);
+export default function createSuccess() {
+  const { formData,detail,match,setStep } = useContext<any>(FormContext);
   const [isModalVisible,setIsModalVisible] = useState<boolean>(false)
   const downloadPromotion = async () => {
     const base64 = new util.Base64();

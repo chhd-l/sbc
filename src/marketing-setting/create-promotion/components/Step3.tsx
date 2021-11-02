@@ -8,7 +8,7 @@ const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
-function Step3({setStep,form}){
+function Step3({form}){
   const Context:any = useContext(FormContext);
   const { formData } = Context
   const {getFieldDecorator,validateFields} = form
@@ -111,7 +111,7 @@ function Step3({setStep,form}){
 
       </Form>
 
-      <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}
+      <ButtonLayer step={2} validateFields={validateFields}
                    publicStatus={publicStatus}
                    isNotLimit={limitStatus}
       />

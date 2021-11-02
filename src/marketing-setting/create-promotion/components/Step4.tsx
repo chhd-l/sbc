@@ -164,7 +164,7 @@ function Step4({form}){
                         if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
                           callback(
                             (window as any).RCi18n({
-                              id: 'Marketing.0-99999999.99',
+                              id: 'Marketing.0.01-99999999.99',
                             })
                           );
                         }
@@ -174,7 +174,7 @@ function Step4({form}){
                   }
                 ],
               })(
-                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0-99999999.99' })}/>,
+                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })}/>,
               )}
               <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
             </Form.Item>

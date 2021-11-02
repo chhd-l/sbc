@@ -23,6 +23,7 @@ const { Option } = Select;
 const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServiceData }) => {
   console.log(serviceData,'dddddse')
   const [showAddBtn, setShowAddBtn] = useState(false)
+  const [cannotSelect,setCannotSelect] = useState([])
   const [selectedDateNos,setSelectedDateNos] = useState([])
 
   useEffect(()=>{
@@ -70,6 +71,9 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
       // setShowAddBtn(false)
     }
   }
+  useEffect(()=>{
+    console.info('cannotSelect',cannotSelect)
+  },[cannotSelect])
 
   const updateTableData = (data) => {
     let selectedDateNo = []
@@ -80,8 +84,13 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
         item.resourceDatePlanVOS.map(_item =>selectedDateNo.push(_item.dateNo))
       })
     })
-    // setSelectedDateNos(selectedDateNo)
+    setSelectedDateNos(selectedDateNo)
     updateServiceData(serviceData)
+    console.log(cannotSelect,'cannotSelect==')
+  }
+
+  const updatedDisableCheckedDate = (date) =>{
+    console.log(date,'dddate888')
   }
 
   const deleteLinePlanList = (sort)=>{
@@ -128,9 +137,12 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
             <SetDayTable
               weekList={itemWeekList}
               key={index}
+              cannotSelect={cannotSelect}
+              setCannotSelect={setCannotSelect}
               updateTableData={updateTableData}
               deleteLinePlanList={deleteLinePlanList}
               selectedDateNos={selectedDateNos}
+              updatedDisableCheckedDate={updatedDisableCheckedDate}
             />
           ))}
         </div>

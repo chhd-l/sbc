@@ -3,9 +3,10 @@ import { Checkbox, TimePicker, Icon } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 import './index.less'
+import { update } from '_@types_lodash@4.14.172@@types/lodash';
 const timeFormat = 'HH:mm';
 const SetDayTable = (props) => {
-  const { weekList, updateTableData, deleteLinePlanList, selectedDateNos } = props
+  let { weekList, updateTableData, deleteLinePlanList,updatedDisableCheckedDate,cannotSelect,setCannotSelect } = props
   console.log(weekList, 'WeekList5666666')
   const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
   const [daysList, setDaysList] = useState({
@@ -46,8 +47,7 @@ const SetDayTable = (props) => {
   }
 
   // 日期的复选框选择事件
-  const dateCheck = (e, date, _daysList, dateChecked) => {
-    
+  const dateCheck = (e, date, _daysList, dateChecked, selecetedIdx) => {
     let _resourceDatePlanVOS = []
     props.weekList.resourceDatePlanVOS.map(item => _resourceDatePlanVOS.push({
       id: item.id,
@@ -58,15 +58,19 @@ const SetDayTable = (props) => {
         id: null,//新选择的复选框，没有id，后端建议传null
         dateNo: date
       })
+      cannotSelect = [...cannotSelect,selecetedIdx]
     } else if (e.target.checked == false) {
       _daysList.dates.map(item => {
         if (item.date == date) item.dateChecked = false
       })
+      let deleteIndx = cannotSelect.findIndex(selecetedIdx)
+      cannotSelect.splice(deleteIndx,1)
+      cannotSelect = cannotSelect
       _resourceDatePlanVOS = props.weekList.resourceDatePlanVOS.filter(el => el.dateNo !== date)
     }
     props.weekList.resourceDatePlanVOS = _resourceDatePlanVOS
     updateTableData(props.weekList)
-
+    setCannotSelect(cannotSelect)
   }
 
   // 更改时间区间操作事件
@@ -160,17 +164,15 @@ const SetDayTable = (props) => {
 
   // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
   const handlePlanDatesChecked = (daysList) => {
-    // let selectedDates = []
-    // props.weekList.resourceDatePlanVOS?.map(planItem => selectedDates.push(planItem.dateNo))
+    let selectedDates = []
     daysList.dates?.map(dateItem => {
       props.weekList.resourceDatePlanVOS?.map(planItem => {
-        // selectedDates.push(planItem.dateNo)
+        selectedDates.push(planItem.dateNo)
         if (dateItem.date === planItem.dateNo) {
           dateItem.dateChecked = true
         }
       })
     })
-    // console.log(selectedDates,'selectedDates')
 
     return (
       <>
@@ -178,8 +180,8 @@ const SetDayTable = (props) => {
           <td>
             <Checkbox
               key={idx}
-              disabled={selectedDateNos.includes(dateItem.date)}
-              onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked)}
+              disabled={!selectedDates.includes(dateItem.date) && cannotSelect.includes(idx)}
+              onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked, idx)}
               checked={dateItem.dateChecked}
             ></Checkbox>
           </td>

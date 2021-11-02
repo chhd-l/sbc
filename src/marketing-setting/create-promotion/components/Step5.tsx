@@ -248,7 +248,7 @@ function Step5({ setStep, form }) {
 
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
 
-        <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
+        <Form.Item label={<FormattedMessage id="Marketing.AdvantageType" />}>
           {getFieldDecorator('couponPromotionType', {
             initialValue: formData.Advantage.couponPromotionType,
             rules: [
@@ -552,9 +552,6 @@ function Step5({ setStep, form }) {
                             )}
                             &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </Form.Item>
-
-
-
                         </div>
                       </Form.Item>
                     </>

@@ -2062,7 +2062,7 @@ export default {
         "Marketing.generate":"generate",
         "Marketing.ActivityTime":"Activity time",
         "Marketing.numberCodes":"Number of codes",
-
+        "Marketing.AdvantageType": "Advantage type"
     },
     Content: {
         "Content.Prompt": "Prompt",

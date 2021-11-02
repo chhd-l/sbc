@@ -31,6 +31,8 @@ export default class Fields extends React.Component<any, any> {
       apiName: '',
       isEditPostalCode: false,
       visiblePostalCode: false,
+      isEditPostalCode2: false,
+      visiblePostalCode2: false,
       visibleAddressSetting: false
     };
   }
@@ -93,6 +95,13 @@ export default class Fields extends React.Component<any, any> {
     this.onChangeField(id, field)
   }
 
+  handlePostalCode2 = (id: number, field: any, checked: boolean) => {
+    this.setState({
+      isEditPostalCode2: checked,
+    })
+    this.onChangeField(id, field)
+  }
+
   handlePostalCodeCancel = () => {
     this.setState({
       visiblePostalCode: false,
@@ -102,6 +111,18 @@ export default class Fields extends React.Component<any, any> {
   handlePostalCodeShow = () => {
     this.setState({
       visiblePostalCode: true,
+    });
+  };
+
+  handlePostalCodeCancel2 = () => {
+    this.setState({
+      visiblePostalCode2: false,
+    });
+  };
+
+  handlePostalCodeShow2 = () => {
+    this.setState({
+      visiblePostalCode2: true,
     });
   };
 
@@ -123,7 +144,9 @@ export default class Fields extends React.Component<any, any> {
       field,
       apiName,
       isEditPostalCode,
+      isEditPostalCode2,
       visiblePostalCode,
+      visiblePostalCode2,
       visibleAddressSetting
     } = this.state;
     const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onFieldChange, onSortEnd } = this.props;
@@ -302,11 +325,32 @@ export default class Fields extends React.Component<any, any> {
         title: 'Validation',
         dataIndex: 'validationFlag',
         key: 'validationFlag',
-        render: (_, record) => (
-          record.fieldName === 'Address1'
-            ? <a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"></a>
-            : null
-        )
+        render: (text, record) => {
+          let fieldName = record.fieldName || '';
+
+          switch (fieldName) {
+            case 'Postal code':
+              return (
+              <AuthWrapper functionName='f-postCodeBlockList-edit'>
+                <div className='validation-wrap'>
+                  <Switch
+                    // checked={isEditPostalCode}
+                    defaultChecked={text === 1}
+                    onChange={(checked) => this.handlePostalCode2(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
+                  />
+                  {
+                    isEditPostalCode2 || (text === 1)
+                      ? (<a onClick={this.handlePostalCodeShow2} className='iconfont iconEdit' />)
+                      : null
+                  }
+                </div>
+              </AuthWrapper>
+            );
+            case 'Address1':
+              return (<a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"/>)
+            default: return null
+          }
+        },
       },
       {
         title: 'Max length',
@@ -350,6 +394,8 @@ export default class Fields extends React.Component<any, any> {
     };
 
     const addressDisplaySettingId = manualFieldList.find(item => item.fieldKey === 'postCode')?.id;
+    const addressDisplaySettingId2 = autoFieldList.find(item => item.fieldKey === 'postCode')?.id;
+
     const address1InAutoTable = autoFieldList.find(item => item.fieldKey === 'address1') ?? {};
 
     return (
@@ -429,6 +475,17 @@ export default class Fields extends React.Component<any, any> {
                 addressDisplaySettingId={addressDisplaySettingId}
                 visible={visiblePostalCode}
                 onCancel={this.handlePostalCodeCancel}
+              />
+            )
+            : null
+        }
+        {
+          visiblePostalCode2
+            ? (
+              <PostalCodeModal
+                addressDisplaySettingId={addressDisplaySettingId2}
+                visible={visiblePostalCode2}
+                onCancel={this.handlePostalCodeCancel2}
               />
             )
             : null

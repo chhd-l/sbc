@@ -7,10 +7,14 @@ const FILE_MAX_SIZE = 4 * 1024 * 1024;
 export default class FileItem extends React.Component<any, any> {
   constructor(props) {
     super(props);
+    this.state = {
+      url: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`
+    };
   }
 
   render() {
     const { value, onChange, disabled } = this.props;
+    const { url } = this.state;
     const uploadOption = {
       headers:{
         Accept: 'application/json',
@@ -19,7 +23,7 @@ export default class FileItem extends React.Component<any, any> {
       name: 'uploadFile',
       fileList: value,
       accept:'.jpg,.jpeg,.png,.pdf',
-      action: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`,
+      action: url,
       disabled: disabled,
       onChange: (info) => {
         let fileList = [...info.fileList];
@@ -38,6 +42,15 @@ export default class FileItem extends React.Component<any, any> {
         let fileName = file.name.toLowerCase();
         // 支持的图片格式：jpg、jpeg、png、pdf
         if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.pdf')) {
+          if (fileName.endsWith('.pdf')) {
+            this.setState({
+              url: `${Const.HOST}/store/uploadStoreResource?resourceType=PDF`
+            });
+          } else {
+            this.setState({
+              url: `${Const.HOST}/store/uploadStoreResource?resourceType=IMAGE`
+            });
+          }
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {

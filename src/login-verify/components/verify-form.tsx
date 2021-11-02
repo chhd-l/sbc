@@ -96,7 +96,7 @@ export default withOktaAuth(
               })(<Input size="large"  type="hidden" placeholder={RCi18n({id:'Public.ClientID'})} />)}
             </FormItem>
             <label style={styles.labelClientName}>
-              <span style={{ color: '#E1021A' }}>*</span> Ich erkläre mich mit den <a href="">Nutzungsbedingungen</a> einverstanden und habe die <a href="">Datenschutzerklärung</a> zur Kenntnis genommen. 
+              <span style={{ color: '#E1021A' }}>*</span> Ich erkläre mich mit den <a href={`${Const.SHOPDOMINDE}/Terms-And-Conditions`}>Nutzungsbedingungen</a> einverstanden und habe die <a href="https://www.royalcanin.com/de/about-us/data-protection">Datenschutzerklärung</a> zur Kenntnis genommen. 
             </label>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberName', {

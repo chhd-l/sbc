@@ -886,7 +886,7 @@ function Step5({ form }) {
                     rules: [
                       {
                         validator: (_rule, value, callback) => {
-                          if ((!value)) {
+                          if (!value || value.length === 0) {
                             callback(
                               (window as any).RCi18n({
                                 id: 'Marketing.Pleaseselectcategory'
@@ -932,7 +932,7 @@ function Step5({ form }) {
                     rules: [
                       {
                         validator: (_rule, value, callback) => {
-                          if (!value) {
+                          if (!value || value.length === 0) {
                             callback(
                               (window as any).RCi18n({
                                 id: 'Marketing.Pleaseselectattribute'

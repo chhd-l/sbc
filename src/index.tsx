@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
 import { Provider } from 'react-redux';
-import { routeWithSubRoutes, history, noop, getRoutType, RCi18n } from 'qmkit';
+import { routeWithSubRoutes, history, util, noop, getRoutType, RCi18n } from 'qmkit';
 import { homeRoutes } from './router';
 import store from './redux/store';
 import './index.less';
@@ -29,7 +29,18 @@ import configOkta from '../web_modules/qmkit/config-okta';
 
 let localeLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
 (window as any).RCi18n = RCi18n;
-
+const getMarsFooter = ()=>{
+  return
+  // 未登录不能区分国家，先不区分
+  // let country =  (window as any)?.countryEnum[JSON.parse(sessionStorage?.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0]||''
+  // let footerParamsMap ={
+  //   'mx':'shop-royalcanin-mx',
+  //   'de':'shop-royalcanin-de',
+  // } 
+  // let footerParams = footerParamsMap[country]||'store-royalcanin-com'
+  // util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?${footerParams}`})
+  util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?store-royalcanin-com`})
+}
 const useDynamicLanguage = () => {
   const [loading, setLoading] = useState(true);
   const [dynamicLanguage, setDynamicLanguage] = useState({});
@@ -41,7 +52,6 @@ const useDynamicLanguage = () => {
       setDynamicLanguage(lang);
       setLoading(false);
     }
-
     getLanguage();
   }, []);
 
@@ -50,7 +60,9 @@ const useDynamicLanguage = () => {
 
 const PrescriberRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
-
+  useEffect(()=>{
+    getMarsFooter()
+  },[])
   if (loading) {
     return (
       <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -81,7 +93,9 @@ const PrescriberRouter = () => {
 
 const RcRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
-
+  useEffect(()=>{
+    getMarsFooter()
+  },[])
   if (loading) {
     return (
       <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -89,7 +103,7 @@ const RcRouter = () => {
       </div>
     );
   }
-
+  
   return (
     <IntlProvider locale={localeLang} messages={dynamicLanguage}>
       <ConfigProvider locale={antLanguage}>

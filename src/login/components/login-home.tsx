@@ -1,6 +1,6 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
-import { login, cache, getRoutType, Const } from 'qmkit';
+import { login, cache, getRoutType, Const, util } from 'qmkit';
 import { Row, Col, Spin } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
@@ -25,7 +25,31 @@ let LoginHome = (props) => {
     switchRouter();
     switchedRouter = true;
   };
-
+  const getMarsFooter = ()=>{
+    // 未登录不能区分国家，先不区分
+    // let country =  (window as any)?.countryEnum[JSON.parse(sessionStorage?.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0]||''
+    // let footerParamsMap ={
+    //   'mx':'shop-royalcanin-mx',
+    //   'de':'shop-royalcanin-de',
+    // } 
+    // let footerParams = footerParamsMap[country]||'store-royalcanin-com'
+    // util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?${footerParams}`})
+    util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?store-royalcanin-com`})
+  }
+  const getCookieBanner = ()=>{
+    util.loadJS({
+      url: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
+      dataSets: {
+        domainScript: Const.ISPRODUCT?'18097cd9-5541-4f5f-98dc-f59b2b2d5730':'18097cd9-5541-4f5f-98dc-f59b2b2d5730-test',
+        documentLanguage: 'true'
+      }
+    });
+  }
+  useEffect(()=>{
+    console.info('.................................')
+    getCookieBanner()
+    getMarsFooter()
+  },[])
   useEffect(() => {
     if (!authState.isAuthenticated) {
       if (switchedRouter) {
@@ -85,6 +109,12 @@ let LoginHome = (props) => {
             <Col span={2}></Col>
           </Row>
         </Row>
+      </div>
+      <div className="ot-sdk-show-settings-wrapper w-full">
+        <button id="ot-sdk-btn" className="ot-sdk-show-settings text-xs">
+          {' '}
+          Cookie Settings
+        </button>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ export default {
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
   SHOPDOMINDE: 'https://shopsit.royalcanin.com/de',
+  ISPRODUCT: false,
   PAYMENT: {
     "ru": {
       "app_id": "com.razorfish.sit_ms_ru",

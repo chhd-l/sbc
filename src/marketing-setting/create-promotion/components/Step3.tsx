@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, memo } from 'react';
 import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
@@ -10,22 +10,24 @@ const formItemLayout = {
 };
 function Step3({form}){
   const Context:any = useContext(FormContext);
-  const { formData } = Context
+  const { initFormData,match } = Context
   const {getFieldDecorator,validateFields} = form
+
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
   const [publicStatus,setPublicStatus] = useState(true)
   const [limitStatus,setLimitStatus] = useState(false)
 
   useEffect(()=>{
-    if(formData.PromotionType.promotionCode){
-      setPromotionCode(formData.PromotionType.promotionCode)
+    if(match.params.id){
+      setPromotionCode(initFormData.promotionCode)
+      setPublicStatus(initFormData.publicStatus === 0 ? false : true)
+      setLimitStatus(initFormData.isNotLimit === 0 ? true : false)
+      setTypeOfPromotion(initFormData.typeOfPromotion)
     }else {
       getPromotionCode()
     }
-    setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
-    setLimitStatus(formData?.PromotionType?.isNotLimit === 0 ? true : false)
-    setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
+
   },[])
   const getPromotionCode = () => {
     let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
@@ -42,7 +44,7 @@ function Step3({form}){
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.TypeOfPromotion" />}>
           {getFieldDecorator('typeOfPromotion', {
-            initialValue: formData.PromotionType.typeOfPromotion,
+            initialValue: initFormData.typeOfPromotion,
             rules: [
               {
                 required: true,
@@ -95,7 +97,7 @@ function Step3({form}){
         )}
         { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
           {getFieldDecorator('perCustomer', {
-            initialValue: formData?.PromotionType.perCustomer ? formData.PromotionType.perCustomer : 1,
+            initialValue: initFormData.perCustomer,
           })(
             <InputNumber  size="large" min={1} disabled={!limitStatus}/>
           )}
@@ -119,4 +121,4 @@ function Step3({form}){
     </div>
   )
 }
-export default Form.create<any>()(Step3);
+export default memo(Form.create<any>()(Step3));

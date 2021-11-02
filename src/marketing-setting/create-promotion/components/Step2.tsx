@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React,{useContext,memo} from 'react'
 import { Form, Input, DatePicker, Button } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { Const, QMMethod } from 'qmkit';
@@ -11,9 +11,8 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 function Step2({form}) {
-  console.log('shuaixn')
   const Context:any = useContext(FormContext);
-  const { formData } = Context
+  const { initFormData } = Context
   const {getFieldDecorator,validateFields,} = form
 
   return (
@@ -25,7 +24,7 @@ function Step2({form}) {
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('marketingName', {
-            initialValue: formData.BasicSetting.marketingName,
+            initialValue: initFormData.marketingName,
             rules: [
               {
                 required: true,
@@ -57,7 +56,7 @@ function Step2({form}) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
           {getFieldDecorator('time', {
-            initialValue: formData.BasicSetting.time,
+            initialValue: initFormData.time,
             rules: [
               {
                 required: true,
@@ -86,4 +85,4 @@ function Step2({form}) {
     </div>
   );
 }
-export default Form.create<any>()(Step2);
+export default memo(Form.create<any>()(Step2));

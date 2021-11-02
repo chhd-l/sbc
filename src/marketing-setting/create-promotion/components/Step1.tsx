@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext,memo } from 'react';
 import { Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { FormContext } from '@/marketing-setting/create-promotion';
-export default function Step1() {
+function Step1() {
   const Context:any = useContext(FormContext);
   const { setStep } = Context
   return (
@@ -18,3 +18,4 @@ export default function Step1() {
     </div>
   );
 }
+export default memo(Step1)

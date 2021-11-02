@@ -19,13 +19,38 @@ export const FormContext = React.createContext({});
 
 export default function index({...props}) {
   console.log(props)
-  let initFormData = {
-    PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
-    Conditions:{
-      promotionType:0,
-      CartLimit:0,
-      isSuperimposeSubscription:1,
-    },
+  const InitFormData = {
+    /**
+     * 第二步
+     */
+    marketingName: '',
+    time:[],
+
+    /**
+     * 第三步
+     */
+    typeOfPromotion: 0,//0:promotion 1: coupon
+    publicStatus: 1,
+    isNotLimit: 1,
+    perCustomer:1,
+
+    /**
+     * 第四步
+     */
+    promotionType:0,
+    CartLimit:0,
+    isSuperimposeSubscription:1,
+    joinLevel:0,
+    segmentIds:[],
+    scopeType:0,
+    storeCateIds:[],
+    customProductsType:0,
+    skuIds:[],//custom product id集合
+    selectedRows:[],//custom product 所有数据集合
+
+
+
+
     Advantage:{
       denomination:'',
       couponPromotionType:0,
@@ -39,20 +64,17 @@ export default function index({...props}) {
       restSubscriptionLimitAmount:'',
 
 
-      joinLevel:0,
-      segmentIds:[],
-      scopeType:0,
-      storeCateIds:[],
+
     },
     BasicSetting:{
-      marketingName: '',
-      time:[]
+
     }
   }
 
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(true)
-  const [formData, setFormData] = useState<any>(initFormData)
+  const [formData, setFormData] = useState<any>({}) //编辑或创建时候的数组
+  const [initFormData, setInitFormData] = useState<any>(InitFormData)//初始化数组
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
   useEffect(()=>{
     if(props.match.params.id){
@@ -282,6 +304,7 @@ export default function index({...props}) {
       value={{
         changeFormData: changeFormData,
         formData,
+        initFormData,
         detail:detail,
         setDetail:setDetail,
         setFormData:setFormData,
@@ -319,17 +342,17 @@ export default function index({...props}) {
                     <div style={{display: step === 3 ? 'block' : 'none'}}>
                       <Step4/>
                     </div>
-                    <div style={{display: step === 4 ? 'block' : 'none'}}>
-                      <Step5/>
-                    </div>
-                    <div style={{display: step === 5 ? 'block' : 'none'}}>
-                      <Step6 setLoading={setLoading}/>
-                    </div>
+                    {/*<div style={{display: step === 4 ? 'block' : 'none'}}>*/}
+                    {/*  <Step5/>*/}
+                    {/*</div>*/}
+                    {/*<div style={{display: step === 5 ? 'block' : 'none'}}>*/}
+                    {/*  <Step6 setLoading={setLoading}/>*/}
+                    {/*</div>*/}
                   </>
                 )
               }
               {
-                step === 6 && <CreateSuccess/>
+                // step === 6 && <CreateSuccess/>
               }
             </div>
 

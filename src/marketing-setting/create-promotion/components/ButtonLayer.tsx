@@ -113,7 +113,7 @@ export default function ButtonLayer({ step,validateFields,setLoading,
         formData.Conditions.fullItem = '1'
         formData.Conditions.CartLimit = 2
       }
-      detail = await webapi.addCoupon({
+      let params = {
         couponName: formData?.BasicSetting?.marketingName,//改版用到的字段
         couponType: '1',
         cateIds: [],
@@ -137,7 +137,13 @@ export default function ButtonLayer({ step,validateFields,setLoading,
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
         scopeIds: formData.Advantage.scopeType === 1 ? formData.Advantage.scopeIds : []
-      })
+      }
+      if(match.params.id){
+        detail = await webapi.editCoupon({...params,couponId:match.params.id})
+      }else {
+        detail = await webapi.addCoupon(params)
+      }
+
       setDetail(detail?.res?.context?.couponInfoVO)
     }else {
       if(formData.Advantage.couponPromotionType === 0){

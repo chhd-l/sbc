@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Button, Icon, message } from 'antd';
 import { FormContext } from '@/marketing-setting/create-promotion';
-import { Const, util } from 'qmkit';
+import { Const, util, history } from 'qmkit';
 import CouponModal from '@/coupon-list/components/couponModal';
 
 export default function createSuccess() {
@@ -48,7 +48,7 @@ export default function createSuccess() {
         {
           match.params.id ? (
             <>
-              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
+              {formData.PromotionType.typeOfPromotion === 0 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
             </>
           ) : (
             <>
@@ -69,7 +69,10 @@ export default function createSuccess() {
 
         )
       }
-      <Button type="primary" style={{margin:'30px 0'}} onClick={()=>setStep(0)}>create a new promotion</Button>
+      <Button type="primary" style={{margin:'30px 0'}} onClick={()=>{
+        setStep(0)
+        history.push('/create-promotion')
+      }}>create a new promotion</Button>
       <CouponModal
         isModalVisible={isModalVisible}
         setVisible={()=>setIsModalVisible(false)}

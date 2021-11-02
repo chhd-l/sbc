@@ -23,8 +23,9 @@ function Step3({form}){
     }else {
       getPromotionCode()
     }
-    setPublicStatus(formData.PromotionType.publicStatus === 1 ? true : false)
+    setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
     setLimitStatus(formData?.PromotionType?.isNotLimit === 0 ? true : false)
+    setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
   },[])
   const getPromotionCode = () => {
     let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);

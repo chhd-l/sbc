@@ -22,11 +22,11 @@ const formItemLayout = {
 
 function Step5({ form }) {
   const { changeFormData,formData,match,setFormData } = useContext<any>(FormContext);
-  const { getFieldDecorator, validateFields } = form;
+  const { getFieldDecorator, validateFields, setFieldsValue, setFields } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
   const [selectedGiftRows,setSelectedGiftRows] = useState<any>(fromJS([]))
-  const [fullGiftLevelList,setFullGiftLevelList]  = useState<any>()
+  const [fullGiftLevelList,setFullGiftLevelList]  = useState<any>([])
 
 
   const [customerType,setCustomerType] = useState<number>(0)
@@ -89,7 +89,12 @@ function Step5({ form }) {
     form.resetFields('rules');
     console.log(rules)
     setFullGiftLevelList(rules)
-    changeFormData(enumConst.stepEnum[4],{fullGiftLevelList: rules,couponPromotionType:couponPromotionType})
+    changeFormData(enumConst.stepEnum[4],{
+      fullGiftLevelList: rules,
+      couponPromotionType:couponPromotionType,
+      joinLevel:customerType,
+      scopeType:scopeType,
+    })
     let errorObject = {};
     //满赠规则具体内容校验
     rules.forEach((level, index) => {
@@ -265,6 +270,10 @@ function Step5({ form }) {
               setCouponPromotionType(e.target.value)
               formData.Advantage.couponPromotionType = e.target.value
               setFormData({...formData})
+              if(e.target.value === 3 && customerType === -4){
+                setCustomerType(0)
+                setFieldsValue({joinLevel:0})
+              }
             }}>
               {
                 !(formData.PromotionType.typeOfPromotion === 1 && formData.Conditions.CartLimit === 2) &&
@@ -722,7 +731,7 @@ function Step5({ form }) {
         {/*Group of customer*/}
         <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />}>
           {getFieldDecorator('joinLevel', {
-            initialValue: formData.Advantage.joinLevel,
+            initialValue: customerType,
             rules: [
               {
                 required: true,
@@ -740,7 +749,6 @@ function Step5({ form }) {
                 formData?.PromotionType?.typeOfPromotion !== 1 && couponPromotionType !== 3 &&
                 <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
               }
-
             </Radio.Group>
           )}
         </Form.Item>
@@ -817,7 +825,11 @@ function Step5({ form }) {
                     },
                   ],
                 })(
-                  <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
+                  <Radio.Group onChange={(e:RadioChangeEvent)=>{
+                    setScopeType(e.target.value)
+                    formData.Advantage.scopeType = e.target.value
+                    setFormData({...formData})
+                  }}>
                     <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
                     <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
                     <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
@@ -961,7 +973,7 @@ function Step5({ form }) {
       </Form>
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
-      <ButtonLayer step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList} scopeIds={selectedSkuIds}/>
+      <ButtonLayer step={4} validateFields={validateFields} fullGiftLevelList={fullGiftLevelList} scopeIds={selectedSkuIds} setFields={setFields}/>
     </div>
   );
 }

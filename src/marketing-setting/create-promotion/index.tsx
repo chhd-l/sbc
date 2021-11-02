@@ -16,39 +16,40 @@ import * as webapi from '../webapi';
 
 const { Step } = Steps;
 export const FormContext = React.createContext({});
-let initFormData = {
-  PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
-  Conditions:{
-    promotionType:0,
-    CartLimit:0,
-    isSuperimposeSubscription:1,
-  },
-  Advantage:{
-    denomination:'',
-    couponPromotionType:0,
-    couponDiscount:'',
-    limitAmount:'',
-    firstSubscriptionOrderReduction:'',
-    restSubscriptionOrderReduction:'',
-    firstSubscriptionOrderDiscount:'',
-    firstSubscriptionLimitAmount:'',
-    restSubscriptionOrderDiscount:'',
-    restSubscriptionLimitAmount:'',
 
-
-    joinLevel:0,
-    segmentIds:[],
-    scopeType:0,
-    storeCateIds:[],
-  },
-  BasicSetting:{
-    marketingName: '',
-    time:[]
-  }
-
-}
 export default function index({...props}) {
   console.log(props)
+  let initFormData = {
+    PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
+    Conditions:{
+      promotionType:0,
+      CartLimit:0,
+      isSuperimposeSubscription:1,
+    },
+    Advantage:{
+      denomination:'',
+      couponPromotionType:0,
+      couponDiscount:'',
+      limitAmount:'',
+      firstSubscriptionOrderReduction:'',
+      restSubscriptionOrderReduction:'',
+      firstSubscriptionOrderDiscount:'',
+      firstSubscriptionLimitAmount:'',
+      restSubscriptionOrderDiscount:'',
+      restSubscriptionLimitAmount:'',
+
+
+      joinLevel:0,
+      segmentIds:[],
+      scopeType:0,
+      storeCateIds:[],
+    },
+    BasicSetting:{
+      marketingName: '',
+      time:[]
+    }
+  }
+
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(true)
   const [formData, setFormData] = useState<any>(initFormData)
@@ -63,8 +64,8 @@ export default function index({...props}) {
 
   },[])
 
-  const cancelOperate = ()=>{
-    setStep(0)
+  const initForm = ()=>{
+    console.log(222)
     setFormData({...initFormData})
   }
   /**
@@ -195,7 +196,7 @@ export default function index({...props}) {
           firstSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount :'',
           restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
           restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
-          fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : {},
+          fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
           selectedGiftRows:detail.goodsList?.goodsInfoPage?.content,
 
           joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
@@ -285,7 +286,7 @@ export default function index({...props}) {
         setDetail:setDetail,
         setFormData:setFormData,
         setStep:setStep,
-        cancelOperate: cancelOperate,
+        initForm: initForm,
         match:props.match
       }}
     >

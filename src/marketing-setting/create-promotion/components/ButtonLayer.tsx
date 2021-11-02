@@ -1,18 +1,43 @@
 import React, { useContext } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { FormContext } from '../index';
 import { enumConst } from '../enum'
 import * as webapi from '../../webapi';
+import { Const, history } from 'qmkit';
 export default function ButtonLayer({ step,validateFields,setLoading,
                                       publicStatus,isNotLimit,
                                       isSuperimposeSubscription,scopeIds,
-                                      fullGiftLevelList,
+                                      fullGiftLevelList,setFields
   }:any) {
-  const { changeFormData,formData,setDetail,cancelOperate,match,setFormData,setStep } = useContext<any>(FormContext);
+  const { changeFormData,formData,setDetail,initForm,match,setFormData,setStep } = useContext<any>(FormContext);
   const toNext = ()=>{
     if(step === 5){
       createPromotion()
     }else {
+      if(step === 4){
+        console.log(formData.Advantage)
+        //如果gift商品为空 校验
+        if(formData.Advantage.couponPromotionType === 4 &&
+          (formData.Advantage.fullGiftLevelList.length === 0 || formData.Advantage.fullGiftLevelList?.[0]?.fullGiftDetailList.length === 0)){
+          setFields({
+            rules:{
+              value:null,
+              errors:[new Error('Please add gifts')]
+            }
+          })
+          return
+        }
+        //如果custom商品为空 校验
+        if(formData.Advantage.scopeType === 1 && formData.Advantage.scopeIds){
+          setFields({
+            goods:{
+              value:null,
+              errors:[new Error('Please add products')]
+            }
+          })
+          return
+        }
+      }
       validateFields((err, values) => {
         if (!err) {
           let obj = {...values}
@@ -57,6 +82,8 @@ export default function ButtonLayer({ step,validateFields,setLoading,
         return 5;
       case 3:
         return 6;
+      default:
+        return 0;
     }
   }
   /**
@@ -81,6 +108,11 @@ export default function ButtonLayer({ step,validateFields,setLoading,
     let subType = 0
     setLoading(true)
     if(formData?.PromotionType?.typeOfPromotion === 1){
+      //当coupon 选择无门槛免邮时 变换成为 1件商品免邮
+      if(formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0){
+        formData.Conditions.fullItem = '1'
+        formData.Conditions.CartLimit = 2
+      }
       detail = await webapi.addCoupon({
         couponName: formData?.BasicSetting?.marketingName,//改版用到的字段
         couponType: '1',
@@ -92,7 +124,7 @@ export default function ButtonLayer({ step,validateFields,setLoading,
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
         fullBuyType: formData.Conditions.CartLimit,
         scopeType: switchFile(formData.Advantage.scopeType),//改版用到的字段
-        couponDesc: "",
+        couponDesc: '',
         couponPromotionType: formData.Advantage.couponPromotionType,//改版用到的字段
         couponDiscount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.couponDiscount : 0,
         attributeValueIds: formData.Advantage.scopeType === 3 ? getAttributeValue(formData.Advantage.attributeValueIds) : null,//改版用到的字段
@@ -104,7 +136,7 @@ export default function ButtonLayer({ step,validateFields,setLoading,
         endTime: formData?.BasicSetting?.time[1]?.format('YYYY-MM-DD HH:mm:ss'),//改版用到的字段
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
-        scopeIds: formData.Advantage.scopeType === 1 ? formData.Conditions.scopeIds : []
+        scopeIds: formData.Advantage.scopeType === 1 ? formData.Advantage.scopeIds : []
       })
       setDetail(detail?.res?.context?.couponInfoVO)
     }else {
@@ -237,7 +269,7 @@ export default function ButtonLayer({ step,validateFields,setLoading,
           attributeValueIds: formData.Advantage.scopeType === 3 ? getAttributeValue(formData.Advantage.attributeValueIds) : [],
           emailSuffixList: formData.Advantage.joinLevel === -4 ? [formData.Advantage.emailSuffixList] : [],
           customProductsType: formData.Advantage.customProductsType,
-          skuIds: formData.Advantage.scopeType === 1 ? formData.Conditions.scopeIds : [],
+          skuIds: formData.Advantage.scopeType === 1 ? formData.Advantage.scopeIds : [],
 
           marketingSubscriptionDiscount: {
             firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
@@ -288,7 +320,7 @@ export default function ButtonLayer({ step,validateFields,setLoading,
           segmentIds: formData.Advantage.joinLevel === -3 ? [formData.Advantage.segmentIds] : [],
           storeCateIds: formData.Advantage.scopeType === 2 ? getAttributeValue(formData.Advantage.storeCateIds) : [],
           subType: subType,
-          skuIds: formData.Advantage.scopeType === 1 ? formData.Conditions.scopeIds : [],
+          skuIds: formData.Advantage.scopeType === 1 ? formData.Advantage.scopeIds : [],
 
           marketingUseLimit: {perCustomer: formData.PromotionType.perCustomer, isNotLimit: formData.PromotionType.isNotLimit},
           isClub: false,
@@ -301,9 +333,21 @@ export default function ButtonLayer({ step,validateFields,setLoading,
       }
       setDetail(detail?.res?.context?.marketingVO)
     }
-    console.log(detail)
     setLoading(false)
-    setStep(step + 1)
+    if(detail.res && detail.res.code === Const.SUCCESS_CODE) {
+      message.success((window as any).RCi18n({
+        id: 'Marketing.OperateSuccessfully'
+      }))
+      initForm()
+      // history.push('/marketing-list');
+      setStep(step+1)
+    } else if(detail.res && detail.res.code === 'K-080217') {
+      message.error((window as any).RCi18n({
+        id: 'Marketing.PomotionCodehasexited'
+      }))
+    }else {
+      message.error(detail.res.message)
+    }
   }
 
   /**
@@ -330,7 +374,10 @@ export default function ButtonLayer({ step,validateFields,setLoading,
     <div className="button-layer">
       <Button size="large" onClick={()=>{setStep(step - 1)}}>Back</Button>
       <div>
-        <Button size="large" onClick={()=>cancelOperate()} style={{marginRight:20}}>Cancel</Button>
+        <Button size="large" onClick={()=>{
+          initForm()
+          setStep(0)
+        }} style={{marginRight:20}}>Cancel</Button>
         <Button type="primary" size="large" onClick={toNext}>
           { btnText() }
         </Button>

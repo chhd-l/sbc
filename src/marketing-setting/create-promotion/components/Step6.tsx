@@ -45,10 +45,15 @@ export default function Step6({ setLoading }) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.GroupOfCustomer" />:</div>
               <div className="step-summary-item-text">{enumConst.joinLevel[formData.Advantage.joinLevel]}</div>
             </div>
-            <div className="step-summary-item">
-              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
-              <div className="step-summary-item-text">{enumConst.scopeType[formData.Advantage.scopeType]}</div>
-            </div>
+            {
+              formData.Advantage.couponPromotionType !== 3 && (
+                <div className="step-summary-item">
+                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
+                  <div className="step-summary-item-text">{enumConst.scopeType[formData.Advantage.scopeType]}</div>
+                </div>
+              )
+            }
+
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
               <div className="step-summary-item-text">
@@ -146,6 +151,8 @@ export default function Step6({ setLoading }) {
                     <div className="step-summary-item-text">
                       {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && formData.Conditions.fullItem+'Item' }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                     </div>
                   </div>
 

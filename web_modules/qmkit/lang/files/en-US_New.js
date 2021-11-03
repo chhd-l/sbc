@@ -2519,7 +2519,8 @@ export default {
 
         'Menu.Address setting': 'Address setting',
         'Menu.Inventory management': 'Inventory management',
-
+        'Menu.Coupon Code List': 'Coupon Code List',
+        'Menu.Promotion Code List': 'Promotion Code List',
     },
     Others: {
         "import": "Import",

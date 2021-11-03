@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Const, history } from 'qmkit';
+import { Const, history, ValidConst } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Input, DatePicker, Modal, message } from 'antd';
 import * as webapi from '../webapi';
@@ -110,8 +110,14 @@ class CouponModal extends Component<any, any> {
               rules: [
                 {
                   required: true,
-                  whitespace: true,
-                  message: 'Please fill in the Number of codes'
+                  validator: (_rule, value, callback) => {
+                    if (value) {
+                      if (!ValidConst.noZeroNumber.test(value)) {
+                        callback('Please fill in the Number of codes');
+                      }
+                    }
+                    callback();
+                  }
                 }
               ]
             })(<Input />)}

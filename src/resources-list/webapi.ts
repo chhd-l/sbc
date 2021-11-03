@@ -57,4 +57,13 @@ export const goodsDict = (type) =>{
   });
 }
 
+/**
+ * 每日排版计划表
+ */
+ export const calendarByDay = (params) =>{
+  return Fetch(`/resourceDatePlan/calendarByDay`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, Headline } from 'qmkit';
+import { BreadCrumb, Headline,history } from 'qmkit';
 import * as webapi from './webapi';
 import SearchForm from './component/search-form'
 import ListTable from './component/list'
@@ -65,6 +65,10 @@ const ResourcesList = () => {
     // todo:表格list接口请求
   }
 
+  const handleViewCalendar = () =>{
+    history.push('/schedular')
+  }
+
   // 翻页处理
   // const changePageNum = (pageNum) => {
   //   console.log(pageNum, '99999')
@@ -89,10 +93,7 @@ const ResourcesList = () => {
             </Button>
             <Button
               type="primary"
-            // onClick={(e) => {
-            //   e.preventDefault();
-            //   onSearch();
-            // }}
+            onClick={handleViewCalendar}
             >
               <span>
                 <FormattedMessage id="Resources.calendar_view" />

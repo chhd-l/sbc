@@ -1038,7 +1038,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <p style={{ width: 140 }}>
                     <FormattedMessage id="Subscription.Address2" />:{' '}
                   </p>
-                  <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                  <p className="delivery_detail_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
 
                 {deliveryAddressInfo?.county ? (
@@ -1149,7 +1149,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.Address2" />:{' '}
                         </p>
-                        <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                        <p className="billing_detail_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                       </Col>
 
                       {billingAddressInfo?.county ? (

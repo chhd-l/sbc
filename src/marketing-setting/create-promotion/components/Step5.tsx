@@ -8,13 +8,9 @@ import { fromJS } from 'immutable';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
 import { FormContext } from '@/marketing-setting/create-promotion';
 
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 }
-};
 
 function Step5({ form }) {
-  const { changeFormData,formData,match,setStep } = useContext<any>(FormContext);
+  const { changeFormData,formData,match,setStep,formItemLayout } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType,setCouponPromotionType] = useState(0)
 
@@ -64,6 +60,27 @@ function Step5({ form }) {
   useEffect(()=>{
     setFieldsValue(getFieldsValue(['denomination']))
   },[formData.Conditions.fullMoney])
+
+  //当前面选项影响到gift时，处理默认选中项
+  useEffect(()=>{
+    if(couponPromotionType === 4){
+      if(formData.PromotionType.typeOfPromotion === 1){
+        console.log('切换coupon')
+        setFieldsValue({
+          couponPromotionType:0
+        })
+        setCouponPromotionType(0)
+      }else {
+        if(formData.Conditions.promotionType !== 0){
+          setFieldsValue({
+            couponPromotionType:0
+          })
+          setCouponPromotionType(0)
+        }
+      }
+    }
+
+  },[formData.PromotionType.typeOfPromotion,formData.Conditions.promotionType])
   /**
    * 规则变化方法
    * @param rules
@@ -559,7 +576,7 @@ function Step5({ form }) {
                 )}
                 {
                   couponPromotionType === 4 && (
-                    <Form.Item wrapperCol={{offset: 6,span:18}} required={true} labelAlign="left">
+                    <Form.Item wrapperCol={{offset: 0,span:24}} required={true} labelAlign="left">
                       {
                         getFieldDecorator(
                           'rules',

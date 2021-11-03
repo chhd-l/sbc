@@ -7,14 +7,11 @@ import { FormContext } from '../index';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const { RangePicker } = DatePicker;
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
+
 function Step2({form}) {
   console.log('重绘了')
   const Context:any = useContext(FormContext);
-  const { formData,changeFormData,setStep } = Context
+  const { formData,changeFormData,setStep,formItemLayout } = Context
   const {getFieldDecorator,validateFields,} = form
   const toNext =() =>{
     validateFields((err, values) => {
@@ -60,7 +57,8 @@ function Step2({form}) {
               }
             ],
           })(
-            <Input size="large" placeholder={(window as any).RCi18n({ id: 'Marketing.noMoreThan40Words' })}/>,
+            <Input size="large" placeholder={(window as any).RCi18n({ id: 'Marketing.noMoreThan40Words' })}
+                   style={{width:350}}/>,
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>

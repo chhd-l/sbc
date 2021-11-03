@@ -1906,7 +1906,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod" /></label>
+                    <label className="info-title subscription_edit_payment"><FormattedMessage id="Subscription.PaymentMethod" /></label>
                   </Col>
                   <AuthWrapper functionName="f_change_payment_method">
                     <>
@@ -1923,7 +1923,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             paymentId, payPspItemEnum, paymentInfo: selectCard
                           })
                         }}
-                        paymentMethodVisible={this.state.paymentMethodVisible} />
+                        paymentMethodVisible={this.state.paymentMethodVisible}
+                        subscriptionType={this.state.subscriptionType}
+                      />
                     </>
                   </AuthWrapper>
                   {paymentInfo ?

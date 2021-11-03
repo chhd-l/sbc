@@ -1,12 +1,12 @@
 import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal } from 'antd';
+import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal, Icon } from 'antd';
 import { apptList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
-const {RangePicker}=DatePicker;
+const { RangePicker } = DatePicker;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
@@ -56,7 +56,7 @@ class Appointment extends React.Component<any, any> {
     const { searchForm, pagination } = this.state;
     this.setState({ loading: true });
     apptList({ ...searchForm, pageNum: pagination.current - 1, pageSize: pagination.pageSize })
-      .then((data) => {
+      .then((data:any) => {
         this.setState({
           loading: false,
           list: data.res.context.page.content,
@@ -208,7 +208,7 @@ class Appointment extends React.Component<any, any> {
       {
         title: 'Order No',//RCi18n({id:'Appointment.No.'}),
         dataIndex: 'apptNo',
-        key: 'd1'
+        key: 'd52'
       },
       {
         title: RCi18n({ id: 'Appointmention.Time' }),
@@ -239,46 +239,52 @@ class Appointment extends React.Component<any, any> {
       },
       {
         title: RCi18n({ id: 'Appointmention.Status' }),
-        dataIndex: 'status',
-        key: 'd6',
+        dataIndex: 'status3',
+        key: 'status3',
         render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.type' }),
-        dataIndex: 'status',
-        key: 'd6',
+        dataIndex: 'status2',
+        key: 'status3',
         render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.name' }),
-        dataIndex: 'status',
-        key: 'd6',
+        dataIndex: 'status1',
+        key: 'status',
         render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
       },
 
       {
         title: RCi18n({ id: 'Appointment.Operation' }),
         dataIndex: 'status',
+        with: 200,
         key: 'd7',
         render: (text, record) => (
           <>
             <Tooltip title={RCi18n({ id: 'Appointment.Edit' })}>
-              <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
+              <Link to={`/appointmention-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
             </Tooltip>
-            {text === 0 && (
-              <Tooltip title={RCi18n({ id: 'Appointment.Arrived' })}>
-                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
-                  <i className="iconfont iconEnabled"></i>
-                </Button>
-              </Tooltip>
-            )}
-            {text === 0 && (
-              <Tooltip title={RCi18n({ id: 'Appointment.Cancel' })}>
-                <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 2)} style={{ padding: '0 5px' }}>
-                  <i className="iconfont iconbtn-disable"></i>
-                </Button>
-              </Tooltip>
-            )}
+            <Tooltip title={RCi18n({ id: 'Appointment.Details' })}>
+              <Link to={`/appointmention-details/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
+            </Tooltip>
+            <Tooltip title={RCi18n({ id: 'Appointment.Details' })}>
+              <Icon type="eye" />
+            </Tooltip>
+
+            <Tooltip title={RCi18n({ id: 'Appointment.Arrived' })}>
+              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
+                <i className="iconfont iconEnabled"></i>
+              </Button>
+            </Tooltip>
+            
+            <Tooltip title={RCi18n({ id: 'Appointment.Cancel' })}>
+              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 2)} style={{ padding: '0 5px' }}>
+                <Icon type="vertical-right" />
+              </Button>
+            </Tooltip>
+
           </>
         )
       }
@@ -293,8 +299,8 @@ class Appointment extends React.Component<any, any> {
         <BreadCrumb />
         <div className="container-search">
           <Headline title={<FormattedMessage id="Appointment.list" />} />
-          <Form className="filter-content"  onSubmit={this.onSearch}>
-            <Row style={{display:"flex",flexWrap:"wrap"}} gutter={30}>
+          <Form className="filter-content" onSubmit={this.onSearch}>
+            <Row style={{ display: "flex", flexWrap: "wrap" }} gutter={30}>
               <Col span={8}>
                 <FormItem >
                   {getFieldDecorator('apptNo', {})(
@@ -303,7 +309,7 @@ class Appointment extends React.Component<any, any> {
                     />
                   )}
 
-                </FormItem> 
+                </FormItem>
               </Col>
               <Col span={8}>
                 <FormItem>
@@ -385,7 +391,7 @@ class Appointment extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   {getFieldDecorator('apptDate', {})(
-                   <RangePicker format="YYYYMMDD"  style={{ width: '100%' }} placeholder={RCi18n({ id: 'Appointment.Start time' })} />
+                    <RangePicker format="YYYYMMDD" style={{ width: '100%' }} placeholder={RCi18n({ id: 'Appointment.Start time' })} />
                   )}
                 </FormItem>
               </Col>

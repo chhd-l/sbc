@@ -1063,6 +1063,11 @@ const routes = [
     path: '/appointmention-update/:id',
     asyncComponent: () => import('./appointmention-list/new')
   },
+  {
+    path: '/appointmention-details/:id',
+    asyncComponent: () => import('./appointmention-list/details')
+  },
+  
 
   {
     path: '/offline-checkout',

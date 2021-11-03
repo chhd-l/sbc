@@ -1048,6 +1048,7 @@ export default {
         'Appointment.Online': 'Online',
         'Appointment.Offline': 'Offline',
         'Appointment.Edit': 'Edit',
+        'Appointment.Details':'Details',
         'Appointment.Cancel': 'Cancel',
         'Appointment.NRHF': 'No record has found',
         'Appointment.NAHBS': 'No appointment has been selected',

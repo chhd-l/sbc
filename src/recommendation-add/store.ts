@@ -134,11 +134,11 @@ export default class AppStore extends Store {
     }
   }
   //查询全部
-  getFillAutofindAllTitle = async () => {
+  getFillAutofindAllTitle = async (param) => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchFindFillAutoAllTitle()
+    const { res } = await webapi.fetchFindAllCate(param)
     if ((res as any).code == Const.SUCCESS_CODE) {
-      this.dispatch('pets:fillAutoList', res.context)
+      this.dispatch('pets:fillAutoList', res.context?.result??[])
     }
     this.dispatch('loading:end');
   }

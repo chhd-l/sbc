@@ -127,3 +127,19 @@ export function fetchFelinRecoProducts(param = {}) {
       body: JSON.stringify(param)
     });
   }
+
+  //查找产品树和问题树
+  export function fetchFindAllCate(param) {
+    return Fetch<TResult>('/fill-auto/findAllCate', {
+      method: 'POST',
+      body: JSON.stringify(param)
+    });
+  }
+ //查找所选
+  export function acquireContent(param) {
+    return Fetch<TResult>('/fill-auto/acquireContent', {
+      method: 'POST',
+      body: JSON.stringify(param)
+    });
+  }
+    

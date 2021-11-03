@@ -1,10 +1,11 @@
 import { Button, Checkbox, Collapse, Form, Input, Modal, Spin } from 'antd';
 import { Relax } from 'plume2';
-import { noop, ReactEditor } from 'qmkit';
+import { Const, noop, ReactEditor } from 'qmkit';
 import React from 'react';
 import { RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
+import { acquireContent } from '../webapi'
 const { Panel } = Collapse;
 
 class WriteTipsForm extends React.Component<any, any> {
@@ -41,8 +42,8 @@ class WriteTipsForm extends React.Component<any, any> {
     const { setFieldsValue } = this.props.form;
 
     let o = this.state['optimal'] || '';
-      o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
-      o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
+    o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
+    o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
     let _type = `${o || ''}`
     this.setState({
       index: +new Date(),
@@ -55,22 +56,36 @@ class WriteTipsForm extends React.Component<any, any> {
         optimal: _type,
         paris: recommendParams.paris,
         pickup: recommendParams.pickup,
-        isSend: recommendParams.isSend||false
+        isSend: recommendParams.isSend || false
       })
     })
 
   }
-  showTipModal = (type) => {
+  showTipModal = (type, fillAutoType) => {
     const { getFillAutofindAllTitle } = this.props;
     this.setState({ visible: true, type }, () => {
-      getFillAutofindAllTitle();
+      getFillAutofindAllTitle({ fillAutoType });
     })
   }
-  handleOk = () => {
+  handleOk = async() => {
     const { setFieldsValue } = this.props.form;
     const { type } = this.state;
     if (!type) return;
-    let html: any = this.chooseItems.map(item => (`<p>${item.tipContent}</p>`))
+    let html:string='';
+    const {res}=await acquireContent({categoryId:this.chooseItems,fillAutoType:1})
+    if(res.code===Const.SUCCESS_CODE){
+      const result=res.context.content;
+        this.chooseItems.map((item)=>{
+          let _hh=result[item];
+          for (let dd in _hh){
+          html+=`
+          <p>${dd}.</p>
+          <p>${_hh[dd]}</p>
+          `
+          }
+        })
+    }
+
     let o = this.state[type] || '';
     if (type === 'optimal') {
       o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
@@ -110,7 +125,7 @@ class WriteTipsForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { loading, fillAutoList, onChangeStep } = this.props;
-    const { suggest, optimal, index, disabled,activeKey } = this.state;
+    const { suggest, optimal, index, disabled, type } = this.state;
     const formItemLayout = {
       labelCol: {
         sm: { span: 2 },
@@ -122,7 +137,7 @@ class WriteTipsForm extends React.Component<any, any> {
     return (
       <div>
         <Form onSubmit={this.done}>
-          <Form.Item label={<>{RCi18n({ id: 'Prescriber.suggestforyourcat' })}&nbsp;&nbsp;<Button type="primary" size="small" onClick={() => this.showTipModal('suggest')}>{RCi18n({ id: 'Prescriber.Auto.fill.answers' })}</Button></>}>
+          <Form.Item label={<>{RCi18n({ id: 'Prescriber.suggestforyourcat' })}&nbsp;&nbsp;<Button type="primary" size="small" onClick={() => this.showTipModal('suggest', 1)}>{RCi18n({ id: 'Prescriber.Auto.fill.answers' })}</Button></>}>
             {getFieldDecorator('suggest')(
               <ReactEditor
                 key={index}
@@ -135,7 +150,7 @@ class WriteTipsForm extends React.Component<any, any> {
             )}
 
           </Form.Item>
-          <Form.Item label={<>{RCi18n({ id: 'Prescriber.followingoptimalnutrition' })}&nbsp;&nbsp;<Button type="primary" size="small" onClick={() => this.showTipModal('optimal')}>{RCi18n({ id: 'Prescriber.Auto.fill.answers' })}</Button></>}>
+          <Form.Item label={<>{RCi18n({ id: 'Prescriber.followingoptimalnutrition' })}&nbsp;&nbsp;<Button type="primary" size="small" onClick={() => this.showTipModal('optimal', 0)}>{RCi18n({ id: 'Prescriber.Auto.fill.answers' })}</Button></>}>
             {getFieldDecorator('optimal')(
               <ReactEditor
                 key={index}
@@ -195,14 +210,40 @@ class WriteTipsForm extends React.Component<any, any> {
         >
           <Spin spinning={loading}>
             <div style={{ maxHeight: 400, overflow: 'auto', minHeight: 300 }}>
-              <Checkbox.Group style={{ width: '100%' }} onChange={this._onChangeCheckBox}>
+              {type === 'optimal' ? <Collapse>
+                {fillAutoList && fillAutoList.toJS().map((item, index) => (
+                  <Panel key={item.id} header={<span>{index + 1}、{item.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;</span>} >
+                    <Checkbox.Group style={{ width: '100%' }} onChange={this._onChangeCheckBox}>
+                      {item.children && item.children.length > 0 && item.children.map(child => {
+                        return <div style={{ padding: 10 }}><Checkbox value={child.categoryId}>{child.categoryName}</Checkbox> </div>
+                      })}
+
+                    </Checkbox.Group>
+                  </Panel>))}
+              </Collapse> : <div>
                 <Collapse>
                   {fillAutoList && fillAutoList.toJS().map((item, index) => (
-                    <Panel key={item.id} header={<span>{index + 1}、{item.tipTitle}&nbsp;&nbsp;&nbsp;&nbsp;<Checkbox value={item}></Checkbox></span>} >
-                      {item.tipContent}
+                    <Panel key={item.id} header={<span>{index + 1}、{item.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;</span>} >
+
+                      {item.children && item.children.length > 0 && item.children.map(child => {
+                        return <Collapse bordered={false}>
+                          <Panel key={child.id} header={<span>{child.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;</span>} >
+                            <Checkbox.Group style={{ width: '100%' }} onChange={this._onChangeCheckBox}>
+                              {child.children && child.children.length > 0 && child.children.map(_child => {
+                                return <div style={{ padding: 10 }}><Checkbox value={_child.categoryId}>{_child.categoryName}</Checkbox> </div>
+                              })}
+
+                            </Checkbox.Group>
+                          </Panel>
+
+                        </Collapse>
+                      })}
+
                     </Panel>))}
                 </Collapse>
-              </Checkbox.Group>
+
+
+              </div>}
 
             </div>
           </Spin>

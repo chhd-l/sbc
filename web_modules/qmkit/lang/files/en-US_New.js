@@ -663,6 +663,7 @@ export default {
         "Order.address1": "Address 1",
         "Order.address2": "Address 2",
         "Order.country": "Country",
+        "Order.county": "County",
         "Order.city": "City",
         "Order.estimatedDeliveryDate": "Estimated delivery date",
         "Order.estimatedDeliveryDateDesc": "Delivery time from {minDay} to {maxDay} working days",
@@ -1046,6 +1047,7 @@ export default {
         'Subscription.ChooseDeliveryAddress': 'Choose Delivery Address',
         'Subscription.foldedAll':'folded all delivery addresses',
         'Subscription.SelectPickpoint':'Select',
+        'Subscription.County':'County',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',

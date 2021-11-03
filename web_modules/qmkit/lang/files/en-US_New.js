@@ -1930,7 +1930,7 @@ export default {
         "Marketing.Download": "Download",
         "Marketing.Club": "Club",
         "Marketing.Percentage": "Percentage",
-        "Marketing.BasicSetting": "Basic Setting",
+        "Marketing.BasicSetting": "Basic setting",
         "Marketing.Nomorethanonehundredwords": "No more than one hundred words",
         "Marketing.Coupondiscount": "Coupon discount",
         "Marketing.integerfrom1to99999": "integer from 1 to 99999",
@@ -2036,7 +2036,7 @@ export default {
         "Marketing.Individualpromotion": "Individual promotion",
         "Marketing.CreateANewPromotion": "Create a new promotion",
         "Marketing.ToCreateMarketingActivityConsumers": "To create marketing activity for consumers",
-        "Marketing.start": "start",
+        "Marketing.start": "Start",
         "Marketing.TypeOfPromotion": "Type of promotion",
         "Marketing.CodesName": "Codes name",
         "Marketing.UsageLimit": "Usage limit",
@@ -2519,7 +2519,8 @@ export default {
 
         'Menu.Address setting': 'Address setting',
         'Menu.Inventory management': 'Inventory management',
-
+        'Menu.Coupon Code List': 'Coupon Code List',
+        'Menu.Promotion Code List': 'Promotion Code List',
     },
     Others: {
         "import": "Import",

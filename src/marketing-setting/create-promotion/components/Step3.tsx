@@ -5,13 +5,10 @@ import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonL
 import { FormContext } from '@/marketing-setting/create-promotion';
 import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
+
 function Step3({form}){
   const Context:any = useContext(FormContext);
-  const { match,changeFormData,setStep,formData } = Context
+  const { match,changeFormData,setStep,formData,formItemLayout } = Context
   const {getFieldDecorator,validateFields} = form
 
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)

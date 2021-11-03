@@ -16,7 +16,10 @@ import * as webapi from '../webapi';
 
 const { Step } = Steps;
 export const FormContext = React.createContext({});
-
+const formItemLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
+};
 export default function index({...props}) {
   const InitFormData = {
     /**
@@ -325,6 +328,7 @@ export default function index({...props}) {
   return (
     <FormContext.Provider
       value={{
+        formItemLayout,
         changeFormData: changeFormData,
         formData,
         setFormData:setFormData,
@@ -340,7 +344,7 @@ export default function index({...props}) {
           <BreadCrumb/>
           <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
             <Steps current={step} className="step-container">
-              <Step title="Create promotion" />
+              <Step title="Create" />
               <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />
               <Step title={<FormattedMessage id="Marketing.PromotionType" />} />
               <Step title={<FormattedMessage id="Marketing.Conditions" />} />

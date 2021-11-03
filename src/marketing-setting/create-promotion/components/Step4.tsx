@@ -15,13 +15,9 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
-
+const WrapperCol = {offset: 4,span:20}
 function Step4({form}){
-  const { match,formData,changeFormData,setStep } = useContext<any>(FormContext);
+  const { match,formData,changeFormData,setStep,formItemLayout } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields,setFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
@@ -278,7 +274,7 @@ function Step4({form}){
         </Form.Item>
         <>
           {customerType === -3 && (
-            <Form.Item wrapperCol={{offset: 6,span:18}}>
+            <Form.Item wrapperCol={WrapperCol}>
               {getFieldDecorator('segmentIds', {
                 initialValue: formData.Conditions.segmentIds?.[0],
                 rules: [
@@ -307,7 +303,7 @@ function Step4({form}){
             </Form.Item>
           )}
           {customerType === -4 && (
-            <Form.Item wrapperCol={{offset: 6,span:18}}>
+            <Form.Item wrapperCol={WrapperCol}>
               {getFieldDecorator('emailSuffixList', {
                 initialValue: formData.Conditions.emailSuffixList?.[0],
                 rules: [
@@ -362,7 +358,7 @@ function Step4({form}){
             {
               scopeType === 1 && (
                 <>
-                  <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                  <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator('customProductsType', {
                       initialValue: formData.Conditions.customProductsType,
                       // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
@@ -376,7 +372,7 @@ function Step4({form}){
                     </RadioGroup>)}
 
                   </Form.Item>
-                  <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                  <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator(
                       'goods',
                       {}
@@ -396,7 +392,7 @@ function Step4({form}){
               )
             }
             {
-              scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+              scopeType === 2 && (<Form.Item wrapperCol={WrapperCol}>
                 {getFieldDecorator('storeCateIds', {
                   initialValue: formData.Conditions.storeCateIds,
                   rules: [
@@ -442,7 +438,7 @@ function Step4({form}){
               </Form.Item>)
             }
             {
-              scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+              scopeType === 3 && (<Form.Item wrapperCol={WrapperCol}>
                 {getFieldDecorator('attributeValueIds', {
                   initialValue: formData.Conditions.attributeValueIds,
                   rules: [
@@ -520,7 +516,7 @@ function Step4({form}){
         </Form.Item>
         {
           cartLimits === 2 && (
-            <Form.Item wrapperCol={{offset: 6,span:18}}>
+            <Form.Item wrapperCol={WrapperCol}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullItem', {
                 initialValue: formData.Conditions.fullItem,
@@ -558,7 +554,7 @@ function Step4({form}){
         }
         {
           cartLimits === 1 && (
-            <Form.Item wrapperCol={{offset: 6,span:18}}>
+            <Form.Item wrapperCol={WrapperCol}>
               <span>Full&nbsp;</span>
               {getFieldDecorator('fullMoney', {
                 initialValue: formData.Conditions.fullMoney,

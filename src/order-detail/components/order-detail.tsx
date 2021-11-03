@@ -705,7 +705,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   </p>
                   {consignee?.county ? (
                     <p>
-                      <FormattedMessage id="Order.county" />:{consignee.county}
+                      <FormattedMessage id="Order.county" />: {consignee.county}
                     </p>
                   ) : null}
                   <p>
@@ -871,7 +871,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                     {invoice?.county ? (
                       <p>
-                        <FormattedMessage id="Order.county" />:{invoice.county}
+                        <FormattedMessage id="Order.county" />: {invoice.county}
                       </p>
                     ) : null}
                     <p>

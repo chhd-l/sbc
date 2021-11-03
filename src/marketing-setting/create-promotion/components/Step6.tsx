@@ -473,18 +473,30 @@ export default function Step6({setLoading}) {
                           <div className="step-summary-sub-title">First subscription order discount:</div>
                           <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionOrderDiscount + '%' }</div>
                         </div>
-                        <div className="step-summary-item">
-                          <div className="step-summary-sub-title">First subscription limit amount:</div>
-                          <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
-                        </div>
-                        <div className="step-summary-item">
-                          <div className="step-summary-sub-title">Rest subscription order discount:</div>
-                          <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderDiscount + '%' }</div>
-                        </div>
-                        <div className="step-summary-item">
-                          <div className="step-summary-sub-title">Rest subscription limit amount:</div>
-                          <div className="step-summary-item-text">{formData.Advantage.restSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
-                        </div>
+                        {
+                          formData.Advantage.firstSubscriptionLimitAmount && (
+                            <div className="step-summary-item">
+                              <div className="step-summary-sub-title">First subscription limit amount:</div>
+                              <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
+                            </div>
+                          )
+                        }
+                        {
+                          formData.Advantage.restSubscriptionOrderDiscount && (
+                            <div className="step-summary-item">
+                              <div className="step-summary-sub-title">Rest subscription order discount:</div>
+                              <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderDiscount + '%' }</div>
+                            </div>
+                          )
+                        }
+                        {
+                          formData.Advantage.restSubscriptionLimitAmount && (
+                            <div className="step-summary-item">
+                              <div className="step-summary-sub-title">Rest subscription limit amount:</div>
+                              <div className="step-summary-item-text">{formData.Advantage.restSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
+                            </div>
+                          )
+                        }
                       </>
                     )
                   }
@@ -501,10 +513,12 @@ export default function Step6({setLoading}) {
                     <div className="step-summary-item-text">
                       {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && formData.Conditions.fullItem+'Item' }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && formData.Conditions.fullItem+' Item' }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && '1 Item' }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem+'Item' }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem+' Item' }
                       {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && '1 Item' }
                     </div>
                   </div>
 

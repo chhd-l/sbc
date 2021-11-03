@@ -4,18 +4,6 @@ import { FormContext } from '@/marketing-setting/create-promotion';
 import { Const, util, history } from 'qmkit';
 import CouponModal from '@/coupon-list/components/couponModal';
 import * as webapi from '@/marketing-setting/webapi';
-/**
- * 第二步
- */
-/**
- * 第三步
- */
-/**
- * 第四步
- */
-/**
- * 第五步
- */
 export default function createSuccess() {
   const { formData,match,setStep,initForm,detail } = useContext<any>(FormContext);
   const [isModalVisible,setIsModalVisible] = useState<boolean>(false)
@@ -61,7 +49,7 @@ export default function createSuccess() {
         {
           match.params.id ? (
             <>
-              {formData.PromotionType.typeOfPromotion === 0 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
+              {formData.PromotionType.typeOfPromotion === 1 ? 'Your Coupon template is updated!' : 'Your promotion is updated!'}
             </>
           ) : (
             <>

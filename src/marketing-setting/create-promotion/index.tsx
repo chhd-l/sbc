@@ -233,7 +233,7 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType:switchCouponPromotionType(detail),
           denomination: (detail.subType === 0 || detail.subType === 1) ? detail.fullReductionLevelList?.[0]?.reduction : '',
-          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].discount : '',
+          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? (detail.fullDiscountLevelList?.[0].discount && detail.fullDiscountLevelList?.[0].discount*100) : '',
           limitAmount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].limitAmount : '',
           firstSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].firstSubscriptionOrderReduction :'',
           restSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].restSubscriptionOrderReduction :'',
@@ -292,7 +292,7 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType: detail.couponPromotionType,
           denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount ? detail.couponDiscount*100 : '',
+          couponDiscount: detail.couponDiscount || '',
           limitAmount: detail.limitAmount,
         },
         storeId:detail.storeId,

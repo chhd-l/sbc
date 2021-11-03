@@ -133,13 +133,6 @@ function Step4({form}){
       setAttributeList(fromJS(res.context.attributesList))
     }
   };
-  /**
-   * 生成随机数，作为key值
-   * @returns {string}
-   */
-  const makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
-  };
 
   /**
    * 关闭货品选择modal

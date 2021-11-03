@@ -329,19 +329,19 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     //ru
-    if(storeId!==123457934){
+    if (storeId !== 123457934) {
       columns.splice(
         7,
         0,
         {
           title: <FormattedMessage id="Order.RegulationDiscount" />,
           width: '8%',
-          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
+          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
         },
         {
           title: <FormattedMessage id="Order.RealSubtotal" />,
           width: '7%',
-          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
+          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
         }
       );
     }
@@ -699,11 +699,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   </Tooltip>
                   <p>
                     <FormattedMessage id="Order.country" />:{' '}
-                    {countryDict
-                      ? countryDict.find((c) => c.id == consignee.countryId)
-                        ? countryDict.find((c) => c.id == consignee.countryId).name
-                        : consignee.countryId
-                      : ''}
+                    {consignee.countryId ? (
+                      <>{countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}</>
+                    ) : consignee.country}
                   </p>
                   {consignee?.county ? (
                     <p>
@@ -863,9 +861,13 @@ class OrderDetailTab extends React.Component<any, any> {
                     </Tooltip>
                     <p>
                       <FormattedMessage id="Order.country" />:{' '}
-                      {countryDict.find((c) => c.id == invoice.countryId)
-                        ? countryDict.find((c) => c.id == invoice.countryId).name
-                        : invoice.countryId}
+                      {invoice.countryId ? (
+                        <>
+                          {countryDict.find((c) => c.id == invoice.countryId)
+                            ? countryDict.find((c) => c.id == invoice.countryId).name
+                            : invoice.countryId}
+                        </>
+                      ) : invoice.country}
                     </p>
                     {invoice?.county ? (
                       <p>

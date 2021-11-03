@@ -1549,6 +1549,7 @@ export default {
         "PetOwner.fatherLofNumber": "Father lof number",
         "PetOwner.size": "Size",
         "PetOwner.tagging": "Tagging",
+        "PetOwner.County": "County",
 
         //===========begin payments Method================
         "payment.createPaymentMethod": "Create payment method",

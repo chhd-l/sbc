@@ -224,7 +224,7 @@ export default function index({...props}) {
           segmentIds:detail.segmentIds || [],
           emailSuffixList:detail.emailSuffixList || [],
           scopeType: detail.scopeType,
-          customProductsType:detail.customProductsType,
+          customProductsType:detail.customProductsType || 0 ,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
           skuIds:detail.goodsInfoIdList,//custom product id集合
@@ -283,7 +283,7 @@ export default function index({...props}) {
           joinLevel: parseInt(detail.couponJoinLevel),
           segmentIds:detail.segmentIds || [],
           scopeType: switchScopeType(detail.scopeType),
-          customProductsType:detail.customProductsType,
+          customProductsType:detail.customProductsType || 0 ,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
           skuIds:detail.scopeIds,
@@ -344,7 +344,7 @@ export default function index({...props}) {
           <BreadCrumb/>
           <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
             <Steps current={step} className="step-container">
-              <Step title="Create" />
+              <Step title={<FormattedMessage id="Marketing.Create" />} />
               <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />
               <Step title={<FormattedMessage id="Marketing.PromotionType" />} />
               <Step title={<FormattedMessage id="Marketing.Conditions" />} />

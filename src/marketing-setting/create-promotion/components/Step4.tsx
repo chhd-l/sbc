@@ -57,7 +57,11 @@ function Step4({form}){
         setFields({
           goods:{
             value:null,
-            errors:[new Error('Please add products')]
+            errors:[
+              new Error((window as any).RCi18n({
+                id: 'Marketing.PleaseAddProducts'
+              }))
+            ]
           }
         })
         return
@@ -149,7 +153,11 @@ function Step4({form}){
       setFields({
         goods:{
           value:null,
-          errors:[new Error('Please add products')]
+          errors:[
+            new Error((window as any).RCi18n({
+              id: 'Marketing.PleaseAddProducts'
+            }))
+          ]
         }
       })
     }else {

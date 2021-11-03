@@ -381,7 +381,7 @@ export default function Step6({setLoading}) {
             {
               formData.Conditions.promotionType !== 2 && (
                 <div className="step-summary-item">
-                  <div className="step-summary-sub-title">Does it cummulate?:</div>
+                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.DoesItCummulate" />:</div>
                   <div className="step-summary-item-text">{formData.Conditions.isSuperimposeSubscription === 0 ? 'Yes' : 'No'}</div>
                 </div>
               )
@@ -405,7 +405,7 @@ export default function Step6({setLoading}) {
               <div className="step-summary-item-text">
                 {enumConst.CartLimit[formData.Conditions.CartLimit]}
                 { formData.Conditions.CartLimit === 1 && '('+formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+')' }
-                { formData.Conditions.CartLimit === 2 && '('+formData.Conditions.fullItem+' Item)' }
+                { formData.Conditions.CartLimit === 2 && `(${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })})` }
               </div>
             </div>
           </div>
@@ -428,7 +428,7 @@ export default function Step6({setLoading}) {
                   {
                     formData.PromotionType.isNotLimit === 0 && (
                       <div className="step-summary-item">
-                        <div className="step-summary-sub-title">Number of use:</div>
+                        <div className="step-summary-sub-title"><FormattedMessage id="Marketing.NumberOfUse" />:</div>
                         <div className="step-summary-item-text">{formData.PromotionType.perCustomer}</div>
                       </div>
                     )
@@ -441,7 +441,7 @@ export default function Step6({setLoading}) {
           <div>
             <div className="step-summary-title"><FormattedMessage id="Marketing.Advantage" /></div>
             <div className="step-summary-item">
-              <div className="step-summary-sub-title">Advantage type:</div>
+              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.AdvantageType" />:</div>
               <div className="step-summary-item-text">{enumConst.couponPromotionType[formData.Advantage.couponPromotionType]}</div>
             </div>
 
@@ -470,13 +470,13 @@ export default function Step6({setLoading}) {
                     (
                       <>
                         <div className="step-summary-item">
-                          <div className="step-summary-sub-title">First subscription order discount:</div>
+                          <div className="step-summary-sub-title"><FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:</div>
                           <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionOrderDiscount + '%' }</div>
                         </div>
                         {
                           formData.Advantage.firstSubscriptionLimitAmount && (
                             <div className="step-summary-item">
-                              <div className="step-summary-sub-title">First subscription limit amount:</div>
+                              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.FirstSubscriptionLimitAmount" />:</div>
                               <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                             </div>
                           )
@@ -484,7 +484,7 @@ export default function Step6({setLoading}) {
                         {
                           formData.Advantage.restSubscriptionOrderDiscount && (
                             <div className="step-summary-item">
-                              <div className="step-summary-sub-title">Rest subscription order discount:</div>
+                              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.RestSubscriptionOrderDiscount" />:</div>
                               <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderDiscount + '%' }</div>
                             </div>
                           )
@@ -492,7 +492,7 @@ export default function Step6({setLoading}) {
                         {
                           formData.Advantage.restSubscriptionLimitAmount && (
                             <div className="step-summary-item">
-                              <div className="step-summary-sub-title">Rest subscription limit amount:</div>
+                              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.RestSubscriptionLimitAmount" />:</div>
                               <div className="step-summary-item-text">{formData.Advantage.restSubscriptionLimitAmount + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                             </div>
                           )
@@ -513,19 +513,19 @@ export default function Step6({setLoading}) {
                     <div className="step-summary-item-text">
                       {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && formData.Conditions.fullItem+' Item' }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && '1 Item' }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem+' Item' }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem + <FormattedMessage id="Marketing.items" /> }
                       {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && '1 Item' }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                     </div>
                   </div>
 
                   {
                     formData.Advantage.couponPromotionType === 1 && (
                       <div className="step-summary-item">
-                        <div className="step-summary-sub-title">Discount Limit:</div>
+                        <div className="step-summary-sub-title"><FormattedMessage id="Marketing.DiscountLimit" />:</div>
                         <div className="step-summary-item-text">{formData.Advantage.limitAmount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</div>
                       </div>
                     )

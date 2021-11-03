@@ -2065,7 +2065,16 @@ export default {
         "Marketing.generate":"generate",
         "Marketing.ActivityTime":"Activity time",
         "Marketing.numberCodes":"Number of codes",
-        "Marketing.AdvantageType": "Advantage type"
+        "Marketing.AdvantageType": "Advantage type",
+        "Marketing.PleaseAddProducts": "Please add products",
+        "Marketing.DoesItCummulate": "Does it cummulate?",
+        "Marketing.NumberOfUse": "Number of use?",
+        "Marketing.limit": "limit",
+        "Marketing.DiscountLimit": "Discount Limit",
+        "Marketing.FirstSubscriptionOrderDiscount":"First subscription order discount",
+        "Marketing.FirstSubscriptionLimitAmount":"First subscription limit amount",
+        "Marketing.RestSubscriptionOrderDiscount":"Rest subscription order discount",
+        "Marketing.RestSubscriptionLimitAmount":"Rest subscription limit amount",
     },
     Content: {
         "Content.Prompt": "Prompt",

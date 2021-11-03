@@ -41,7 +41,13 @@ function Step5({ form }) {
         setFields({
           rules:{
             value: null,
-            errors: [new Error('Please setting rules')]
+            errors: [
+              new Error(
+                (window as any).RCi18n({
+                  id: 'Marketing.PleaseSettingRules'
+                })
+              )
+            ]
           }
         })
         return
@@ -118,7 +124,13 @@ function Step5({ form }) {
       setFields({
         rules:{
           value: null,
-          errors: [new Error('Please setting rules')]
+          errors: [
+            new Error(
+              (window as any).RCi18n({
+                id: 'Marketing.PleaseSettingRules'
+              })
+            )
+          ]
         }
       })
     } else {
@@ -308,7 +320,7 @@ function Step5({ form }) {
                             <span>&nbsp;<FormattedMessage id="Marketing.percent" />&nbsp;<FormattedMessage id="Marketing.ofOrginalPrice" />,&nbsp;</span>
                           </Form.Item>
                           <Form.Item>
-                            <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                            <span>&nbsp;<FormattedMessage id="Marketing.discount" /> <FormattedMessage id="Marketing.limit" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('firstSubscriptionLimitAmount', {
                               initialValue: formData.Advantage.firstSubscriptionLimitAmount,
                               rules: [
@@ -402,7 +414,7 @@ function Step5({ form }) {
                           </Form.Item>
 
                           <Form.Item>
-                            <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                            <span>&nbsp;<FormattedMessage id="Marketing.discount" /> <FormattedMessage id="Marketing.limit" />&nbsp;&nbsp;</span>
                             {getFieldDecorator('restSubscriptionLimitAmount', {
                               initialValue: formData.Advantage.restSubscriptionLimitAmount,
                               rules: [
@@ -534,7 +546,7 @@ function Step5({ form }) {
                         )} %,
                       </Form.Item>
                       <Form.Item>
-                        <span>&nbsp;discount limit&nbsp;&nbsp;</span>
+                        <span>&nbsp;<FormattedMessage id="Marketing.discount" /> <FormattedMessage id="Marketing.limit" />&nbsp;&nbsp;</span>
                         {getFieldDecorator('limitAmount', {
                           initialValue: formData.Advantage.limitAmount,
                           rules: [

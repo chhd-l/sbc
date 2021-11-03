@@ -1746,7 +1746,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>
+                      {deliveryAddressInfo.countryId ? this.getDictValue(countryArr, deliveryAddressInfo.countryId) : deliveryAddressInfo.country}
+                    </p>
                   </Col>
 
                   <Col span={24}>
@@ -1879,7 +1881,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                      <p>
+                        {billingAddressInfo.countryId ? this.getDictValue(countryArr, billingAddressInfo.countryId) : billingAddressInfo.country}
+                      </p>
                     </Col>
 
                     <Col span={24}>

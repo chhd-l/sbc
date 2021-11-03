@@ -1245,7 +1245,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'subscribeNum',
         width: '15%',
         render: (text, record) => (
-          <div>
+          <div className="subscription_edit_quantity">
             {subscriptionType == 'Individualization' ? 1 : (
               <InputNumber
                 min={1}
@@ -1259,6 +1259,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   });
                 }}
                 value={record.subscribeNum}
+                disabled={subscriptionType === 'Peawee' ? true : false}
               />
             )}
           </div>
@@ -1270,7 +1271,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'frequency',
         width: '15%',
         render: (text: any, record: any) => (
-          <div className="subscription_delivery_frequency">
+          <div className="subscription_edit_frequency">
             <Select
               style={{ width: '70%' }}
               value={record.periodTypeId}
@@ -1278,6 +1279,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value = value === '' ? null : value;
                 this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
+              disabled={subscriptionType === 'Peawee' ? true : false}
             >
               {/* individualFrequencyList */}
               {subscriptionType == 'Individualization' ? (
@@ -1753,7 +1755,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                    <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                    <p className="delivery_edit_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
 
                   {deliveryAddressInfo?.county ? (
@@ -1886,7 +1888,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </Col>
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                      <p className="billing_edit_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                     </Col>
 
                     {billingAddressInfo?.county ? (

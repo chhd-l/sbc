@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input, InputNumber, Radio, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
@@ -6,10 +6,12 @@ import { RadioChangeEvent } from 'antd/es/radio';
 import { cache, Const, ValidConst } from 'qmkit';
 import * as webapi from '../../webapi';
 import { treeNesting } from '../../../../web_modules/qmkit/utils/utils';
-import * as commonWebapi from '@/marketing-add/webapi';
 import { fromJS } from 'immutable';
+import { FormContext } from '@/marketing-setting/create-promotion';
 import SelectedGoodsGrid from '@/marketing-add/common-components/selected-goods-grid';
 import { GoodsModal } from 'biz';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
+
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
@@ -18,18 +20,19 @@ const formItemLayout = {
   wrapperCol: { span: 14 },
 };
 
-function Step4({setStep,form}){
-  const {getFieldDecorator,validateFields} = form
+function Step4({form}){
+  const { match,formData,changeFormData,setStep } = useContext<any>(FormContext);
+  const {getFieldDecorator,validateFields,setFields} = form
 
   const [purchaseType,setPurchaseType] = useState<number>(0)
-  const [customerType,setCustomerType] = useState<number>(-1)
-  const [scopeType,setScopeType] = useState<number>(0)
-  const [cartLimits,setCartLimits] = useState<number>(0)
+  const [isSuperimposeSubscription,setIsSuperimposeSubscription] = useState<boolean>(false)
 
+
+  const [customerType,setCustomerType] = useState<number>(0)
+  const [scopeType,setScopeType] = useState<number>(0)
   const [storeCateList,setStoreCateList] = useState<any>([])
   const [attributeList,setAttributeList] = useState<any>([])
   const [allGroups,setAllGroups] = useState<any>([])
-
   const [goodsModal,setGoodsModal] = useState({
     _modalVisible: false,
     _selectedSkuIds: [],
@@ -38,11 +41,61 @@ function Step4({setStep,form}){
   const [selectedSkuIds,setSelectedSkuIds] = useState<any>([])
   const [selectedRows,setSelectedRows] = useState<any>(fromJS([]))
 
+
+  const [cartLimits,setCartLimits] = useState<number>(0)
+
+
+
   useEffect(()=>{
     getGroupsList()
     getGoodsCateList()
     getAllAttribute()
+    if(match.params.id){
+      editInit()
+    }
   },[])
+
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if(scopeType === 1 && selectedSkuIds.length === 0){
+        setFields({
+          goods:{
+            value:null,
+            errors:[new Error('Please add products')]
+          }
+        })
+        return
+      }
+      if (!err) {
+        changeFormData(enumConst.stepEnum[3],{
+          ...values,
+          isSuperimposeSubscription:isSuperimposeSubscription ? 0 : 1,//判断是有选中isSuperimposeSubscription
+          scopeIds:selectedSkuIds,
+        })
+        setStep(4)
+      }
+    });
+  }
+
+  /**
+   * 当时编辑进入时初始化所有的值
+   */
+  const editInit = async ()=>{
+    setPurchaseType(formData.Conditions.promotionType)
+    setIsSuperimposeSubscription(formData.Conditions.isSuperimposeSubscription === 0 ? true : false)
+    setCartLimits(formData.Conditions.CartLimit)
+    setCustomerType(formData.Conditions.joinLevel)
+    setScopeType(formData.Conditions.scopeType)
+
+    setSelectedSkuIds(formData.Conditions.skuIds || [])
+    setSelectedRows(fromJS(formData.Conditions.selectedRows) || fromJS([]))
+  }
+
+
+
+  /**
+   * 后添加进入方法
+   */
   const getGroupsList = async () => {
     const { res }:any = await webapi.getAllGroups({
       pageNum: 0,
@@ -50,7 +103,6 @@ function Step4({setStep,form}){
       segmentType: 0,
       isPublished: 1
     });
-
     setAllGroups(res.context.segmentList)
   }
   const getGoodsCateList = async () => {
@@ -81,9 +133,13 @@ function Step4({setStep,form}){
       setAttributeList(fromJS(res.context.attributesList))
     }
   };
-  const selectGroupOnChange = ()=>{
-
-  }
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  const makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
 
   /**
    * 关闭货品选择modal
@@ -97,11 +153,20 @@ function Step4({setStep,form}){
    * @param selectedRows
    */
   const skuSelectedBackFun = async (selectedSkuIds, selectedRows) => {
-    console.log(selectedSkuIds)
-    console.log(selectedRows)
     form.resetFields('goods');
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(selectedRows);
+    if(selectedSkuIds.length === 0){
+      setFields({
+        goods:{
+          value:null,
+          errors:[new Error('Please add products')]
+        }
+      })
+    }else {
+      setFields({ goods:{ value:null }})
+    }
+    // changeFormData(enumConst.stepEnum[3],{scopeIds: selectedSkuIds})//保存到公共formData中
     setGoodsModal({...goodsModal,_modalVisible: false});
   };
   /**
@@ -109,8 +174,6 @@ function Step4({setStep,form}){
    * @param skuId
    */
   const deleteSelectedSku = (skuId) => {
-    console.log(selectedSkuIds)
-    console.log(selectedRows)
     selectedSkuIds.splice(
       selectedSkuIds.findIndex((item) => item == skuId),
       1
@@ -119,7 +182,6 @@ function Step4({setStep,form}){
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(SelectedRows);
   };
-
 
   //展示相关
   /**
@@ -160,136 +222,6 @@ function Step4({setStep,form}){
       })
     );
   };
-
-  /**
-   * Group of customer
-   */
-  const Group = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      {getFieldDecorator('segmentIds', {
-        initialValue: '',
-        rules: [
-          {
-            validator: (_rule, value, callback) => {
-              if (!value) {
-                callback(
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseselectgroup'
-                  })
-                );
-              }
-              callback();
-            }
-          }
-        ]
-      })(
-        <Select style={{ width: 520 }} onChange={selectGroupOnChange}>
-          {allGroups.map((item) => (
-            <Select.Option key={item.id} value={item.id}>
-              {item.name}
-            </Select.Option>
-          ))}
-        </Select>
-      )}
-    </Form.Item>
-  )
-  const ByEmail = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      {getFieldDecorator('emailSuffixList', {
-        initialValue: '',
-        rules: [
-          {
-            validator: (_rule, value, callback) => {
-              if (!value) {
-                callback(
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseenteremailsuffix'
-                  })
-                );
-              }
-              callback();
-            }
-          }
-        ]
-      })(
-        <Input
-          style={{ width: 300 }}
-          maxLength={30}
-        />
-      )}
-    </Form.Item>
-  )
-  /**
-   * cartLimit
-   */
-  const cartLimitQuantity = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      <span>Full&nbsp;</span>
-      {getFieldDecorator('time', {
-        rules: [
-          {
-            required: true,
-            message:
-              (window as any).RCi18n({
-                id: 'Marketing.ustenterrules',
-              })
-          },
-          {
-            validator: (_rule, value, callback) => {
-              if (value) {
-                if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                  callback(
-                    (window as any).RCi18n({
-                      id: 'Marketing.1-9999',
-                    })
-                  );
-                }
-              }
-              callback();
-            }
-          }
-        ],
-      })(
-        <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
-          id: 'Marketing.1-9999',
-        })}/>,
-      )}
-      <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
-    </Form.Item>
-  )
-  const cartLimitAmount = (
-    <Form.Item wrapperCol={{offset: 6,span:18}}>
-      <span>Full&nbsp;</span>
-      {getFieldDecorator('time', {
-        rules: [
-          {
-            required: true,
-            message:
-              (window as any).RCi18n({
-                id: 'Marketing.ustenterrules',
-              })
-          },
-          {
-            validator: (_rule, value, callback) => {
-              if (value) {
-                if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                  callback(
-                    (window as any).RCi18n({
-                      id: 'Marketing.0-99999999.99',
-                    })
-                  );
-                }
-              }
-              callback();
-            }
-          }
-        ],
-      })(
-        <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0-99999999.99' })}/>,
-      )}
-      <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-    </Form.Item>
-  )
   return (
     <div>
       <div className="step-title">
@@ -299,7 +231,7 @@ function Step4({setStep,form}){
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.TypeOfPurchase" />}>
           {getFieldDecorator('promotionType', {
-            initialValue: 0,
+            initialValue: formData.Conditions.promotionType,
             rules: [
               {
                 required: true,
@@ -318,9 +250,11 @@ function Step4({setStep,form}){
             </Radio.Group>
           )}
           {
-            purchaseType !== 1 &&  (
+            purchaseType === 0 &&  (
               <div>
-                <Checkbox>
+                <Checkbox value={{isSuperimposeSubscription}} onChange={(e=>{
+                  setIsSuperimposeSubscription(e.target.checked)
+                })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
                 </Checkbox>
               </div>
@@ -343,170 +277,235 @@ function Step4({setStep,form}){
             ],
           })(
             <Radio.Group onChange={(e)=>setCustomerType(e.target.value)}>
-              <Radio value={-1}><FormattedMessage id="Marketing.all" /></Radio>
+              <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={-3}><FormattedMessage id="Marketing.Group" /></Radio>
               <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
             </Radio.Group>
           )}
         </Form.Item>
-        {customerType === -3 && Group}
-        {customerType === -4 && ByEmail}
-
-        {/*Products in the cart*/}
-        <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
-          {getFieldDecorator('scopeType', {
-            initialValue: scopeType,
-            rules: [
-              {
-                required: true,
-                message:
-                  (window as any).RCi18n({
-                    id: 'Marketing.PleaseSelectOne'
-                  })
-              },
-            ],
-          })(
-            <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
-              <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
-              <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
-              <Radio value={3}><FormattedMessage id="Marketing.Attribute" /></Radio>
-            </Radio.Group>
-          )}
-        </Form.Item>
-        {
-          scopeType === 1 && (
-            <>
-              <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
-                {getFieldDecorator('customProductsType', {
-                  initialValue: 0,
-                  // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
-                })(<RadioGroup >
-                  <Radio value={0}>
-                    <FormattedMessage id="Marketing.Includeproduct" />
-                  </Radio>
-                  <Radio value={1}>
-                    <FormattedMessage id="Marketing.Excludeproduct" />
-                  </Radio>
-                </RadioGroup>)}
-
-              </Form.Item>
-              <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
-                {getFieldDecorator(
-                  'goods',
-                  {}
-                )(
-                  <div>
-                    <Button type="primary" icon="plus"
-                            onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
-                    >
-                      <FormattedMessage id="Marketing.AddProducts" />
-                    </Button>
-                    &nbsp;&nbsp;
-                    <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
-                  </div>
-                )}
-              </Form.Item>
-            </>
-          )
-        }
-        {
-          scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
-              {getFieldDecorator('storeCateIds', {
+        <>
+          {customerType === -3 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              {getFieldDecorator('segmentIds', {
+                initialValue: formData.Conditions.segmentIds?.[0],
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
-                      if ((!value)) {
+                      if (!value) {
                         callback(
                           (window as any).RCi18n({
-                            id: 'Marketing.Pleaseselectcategory'
+                            id: 'Marketing.Pleaseselectgroup'
                           })
                         );
                       }
                       callback();
                     }
                   }
-                ],
+                ]
               })(
-                <TreeSelect
-                  id="storeCateIds"
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
-                  placeholder={
-                    (window as any).RCi18n({
-                      id: 'Marketing.Pleaseselectcategory'
-                    })
-                  }
-                  notFoundContent={
-                    (window as any).RCi18n({
-                      id: 'Marketing.Nosalescategory'
-                    })
-                  }
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
-                  showSearch={false}
-                  // onChange={this.storeCateChange}
-                  style={{ width: 500 }}
-                  treeDefaultExpandAll
-                >
-                  {generateStoreCateTree(storeCateList)}
-                </TreeSelect>
+                <Select style={{ width: 520 }}>
+                  {allGroups.map((item) => (
+                    <Select.Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+                </Select>
               )}
-            </Form.Item>)
-        }
-        {
-          scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
-            {getFieldDecorator('attributeValueIds', {
-              // initialValue: attributeDefaultValue,
+            </Form.Item>
+          )}
+          {customerType === -4 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              {getFieldDecorator('emailSuffixList', {
+                initialValue: formData.Conditions.emailSuffixList?.[0],
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (!value || value.length === 0) {
+                        callback(
+                          (window as any).RCi18n({
+                            id: 'Marketing.Pleaseenteremailsuffix'
+                          })
+                        );
+                      }
+                      callback();
+                    }
+                  }
+                ]
+              })(
+                <Input
+                  style={{ width: 300 }}
+                  maxLength={30}
+                />
+              )}
+            </Form.Item>
+          )}
+        </>
+
+        {/*Products in the cart*/}
+        <>
+          <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
+            {getFieldDecorator('scopeType', {
+              initialValue: formData.Conditions.scopeType,
               rules: [
                 {
-                  validator: (_rule, value, callback) => {
-                    if (!value) {
-                      callback(
-                        (window as any).RCi18n({
-                          id: 'Marketing.Pleaseselectattribute'
-                        })
-                      );
-                    }
-                    callback();
-                  }
-                }
-              ]
+                  required: true,
+                  message:
+                    (window as any).RCi18n({
+                      id: 'Marketing.PleaseSelectOne'
+                    })
+                },
+              ],
             })(
-              <TreeSelect
-                id="attributeValueIds"
-                getPopupContainer={() => document.getElementById('page-content')}
-                treeCheckable={true}
-                showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                treeCheckStrictly={true}
-                //treeData ={getGoodsCate}
-                // showCheckedStrategy = {SHOW_PARENT}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Pleaseselectattribute'
-                  })
-                }
-                notFoundContent={
-                  (window as any).RCi18n({
-                    id: 'Marketing.Noattribute'
-                  })
-                }
-                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                showSearch={false}
-                // onChange={this.attributeChange}
-                style={{ width: 500 }}
-                treeDefaultExpandAll
-              >
-                {generateAttributeTree(attributeList)}
-              </TreeSelect>
+              <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)
+              }>
+                <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
+                <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
+                <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
+                <Radio value={3}><FormattedMessage id="Marketing.Attribute" /></Radio>
+              </Radio.Group>
             )}
-          </Form.Item>)
-        }
+          </Form.Item>
+          <>
+            {
+              scopeType === 1 && (
+                <>
+                  <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                    {getFieldDecorator('customProductsType', {
+                      initialValue: formData.Conditions.customProductsType,
+                      // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
+                    })(<RadioGroup >
+                      <Radio value={0}>
+                        <FormattedMessage id="Marketing.Includeproduct" />
+                      </Radio>
+                      <Radio value={1}>
+                        <FormattedMessage id="Marketing.Excludeproduct" />
+                      </Radio>
+                    </RadioGroup>)}
+
+                  </Form.Item>
+                  <Form.Item wrapperCol={{offset: 6,span:18}} required={true}>
+                    {getFieldDecorator(
+                      'goods',
+                      {}
+                    )(
+                      <div>
+                        <Button type="primary" icon="plus"
+                                onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
+                        >
+                          <FormattedMessage id="Marketing.AddProducts" />
+                        </Button>
+                        &nbsp;&nbsp;
+                        <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
+                      </div>
+                    )}
+                  </Form.Item>
+                </>
+              )
+            }
+            {
+              scopeType === 2 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+                {getFieldDecorator('storeCateIds', {
+                  initialValue: formData.Conditions.storeCateIds,
+                  rules: [
+                    {
+                      validator: (_rule, value, callback) => {
+                        if ((!value || value.length === 0)) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.Pleaseselectcategory'
+                            })
+                          );
+                        }
+                        callback();
+                      }
+                    }
+                  ],
+                })(
+                  <TreeSelect
+                    id="storeCateIds"
+                    getPopupContainer={() => document.getElementById('page-content')}
+                    treeCheckable={true}
+                    showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                    treeCheckStrictly={true}
+                    placeholder={
+                      (window as any).RCi18n({
+                        id: 'Marketing.Pleaseselectcategory'
+                      })
+                    }
+                    notFoundContent={
+                      (window as any).RCi18n({
+                        id: 'Marketing.Nosalescategory'
+                      })
+                    }
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
+                    showSearch={false}
+                    // onChange={this.storeCateChange}
+                    style={{ width: 500 }}
+                    treeDefaultExpandAll
+                  >
+                    {generateStoreCateTree(storeCateList)}
+                  </TreeSelect>
+                )}
+              </Form.Item>)
+            }
+            {
+              scopeType === 3 && (<Form.Item wrapperCol={{offset: 6,span:18}}>
+                {getFieldDecorator('attributeValueIds', {
+                  initialValue: formData.Conditions.attributeValueIds,
+                  rules: [
+                    {
+                      validator: (_rule, value, callback) => {
+                        console.log(value)
+                        if (!value || value.length === 0) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.Pleaseselectattribute'
+                            })
+                          );
+                        }
+                        callback();
+                      }
+                    }
+                  ]
+                })(
+                  <TreeSelect
+                    id="attributeValueIds"
+                    getPopupContainer={() => document.getElementById('page-content')}
+                    treeCheckable={true}
+                    showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                    treeCheckStrictly={true}
+                    //treeData ={getGoodsCate}
+                    // showCheckedStrategy = {SHOW_PARENT}
+                    placeholder={
+                      (window as any).RCi18n({
+                        id: 'Marketing.Pleaseselectattribute'
+                      })
+                    }
+                    notFoundContent={
+                      (window as any).RCi18n({
+                        id: 'Marketing.Noattribute'
+                      })
+                    }
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    showSearch={false}
+                    // onChange={this.attributeChange}
+                    style={{ width: 500 }}
+                    treeDefaultExpandAll
+                  >
+                    {generateAttributeTree(attributeList)}
+                  </TreeSelect>
+                )}
+              </Form.Item>)
+            }
+          </>
+
+        </>
+
+
         {/*CartLimit*/}
         <Form.Item label={<FormattedMessage id="Marketing.CartLimit" />}>
           {getFieldDecorator('CartLimit', {
-            initialValue: 0,
+            initialValue: formData.Conditions.CartLimit,
             rules: [
               {
                 required: true,
@@ -517,7 +516,9 @@ function Step4({setStep,form}){
               },
             ],
           })(
-            <Radio.Group onChange={(e)=>{setCartLimits(e.target.value)}}>
+            <Radio.Group onChange={(e)=>{
+              setCartLimits(e.target.value)
+            }}>
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
               <Radio value={2}><FormattedMessage id="Order.Quantity" /></Radio>
               <Radio value={1}><FormattedMessage id="Order.Amount" /></Radio>
@@ -525,17 +526,84 @@ function Step4({setStep,form}){
           )}
         </Form.Item>
         {
-          cartLimits === 1 && (cartLimitQuantity)
+          cartLimits === 2 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              <span>Full&nbsp;</span>
+              {getFieldDecorator('fullItem', {
+                initialValue: formData.Conditions.fullItem,
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.ustenterrules',
+                      })
+                  },
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (value) {
+                        if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.1-9999',
+                            })
+                          );
+                        }
+                      }
+                      callback();
+                    }
+                  }
+                ],
+              })(
+                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
+                  id: 'Marketing.1-9999',
+                })}/>,
+              )}
+              <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
+            </Form.Item>
+          )
         }
         {
-          cartLimits === 2 && (cartLimitAmount)
+          cartLimits === 1 && (
+            <Form.Item wrapperCol={{offset: 6,span:18}}>
+              <span>Full&nbsp;</span>
+              {getFieldDecorator('fullMoney', {
+                initialValue: formData.Conditions.fullMoney,
+                rules: [
+                  {
+                    required: true,
+                    message:
+                      (window as any).RCi18n({
+                        id: 'Marketing.ustenterrules',
+                      })
+                  },
+                  {
+                    validator: (_rule, value, callback) => {
+                      if (value) {
+                        if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.0.01-99999999.99',
+                            })
+                          );
+                        }
+                      }
+                      callback();
+                    }
+                  }
+                ],
+              })(
+                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })}/>,
+              )}
+              <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+            </Form.Item>
+          )
         }
       </Form>
 
-      <ButtonLayer setStep={setStep} step={2} validateFields={validateFields}/>
-
 
       <GoodsModal visible={goodsModal._modalVisible} selectedSkuIds={goodsModal._selectedSkuIds} selectedRows={goodsModal._selectedRows} onOkBackFun={skuSelectedBackFun} onCancelBackFun={closeGoodsModal} />
+      <ButtonLayer step={3} toNext={toNext} />
     </div>
   )
 }

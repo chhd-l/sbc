@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext,memo } from 'react';
 import { Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
-export default function Step1({setStep}) {
+import { FormContext } from '@/marketing-setting/create-promotion';
+function Step1() {
+  const Context:any = useContext(FormContext);
+  const { setStep } = Context
   return (
     <div className="step1">
       <div className="step-title"><FormattedMessage id="Marketing.CreateANewPromotion" /></div>
@@ -15,3 +18,4 @@ export default function Step1({setStep}) {
     </div>
   );
 }
+export default memo(Step1)

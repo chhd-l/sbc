@@ -205,7 +205,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
-          const productName = text === 'individualization' ? record.petsName + "'s" + text : text;
+          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -225,7 +225,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: storeId === 123457934 ? <FormattedMessage id="Order.Specification" /> : <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '8%'
+        width: '9%'
       },
       {
         title: showRealStock ? (
@@ -280,7 +280,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: <FormattedMessage id="Order.purchaseType" />,
         dataIndex: 'goodsInfoFlag',
         key: 'goodsInfoFlag',
-        width: '8%',
+        width: '7%',
         render: (text) => {
           switch (text) {
             case 0:
@@ -329,20 +329,23 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     //ru
-    columns.splice(
-      7,
-      0,
-      {
-        title: <FormattedMessage id="Order.RegulationDiscount" />,
-        width: '8%',
-        render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
-      },
-      {
-        title: <FormattedMessage id="Order.RealSubtotal" />,
-        width: '7%',
-        render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
-      }
-    );
+    if(storeId!==123457934){
+      columns.splice(
+        7,
+        0,
+        {
+          title: <FormattedMessage id="Order.RegulationDiscount" />,
+          width: '8%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.regulationDiscount):''}</span>
+        },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => <span>{storeId === 123457907?this._handlePriceFormat(row.price):''}</span>
+        }
+      );
+    }
+
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 
@@ -950,7 +953,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
     //修改状态的修改
     //创建订单状态
-    if (flowState === 'INIT' || flowState === 'AUDIT') {
+    if (Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'INIT' || flowState === 'AUDIT')) {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {flowState === 'AUDIT' && (
@@ -974,6 +977,7 @@ class OrderDetailTab extends React.Component<any, any> {
         </div>
       );
     } else if (
+      Const.SITE_NAME !== 'MYVETRECO' &&
       (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
       (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
       payState === 'PAID'

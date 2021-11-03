@@ -572,9 +572,6 @@ export default class ClinicList extends Component<any, any> {
         <div className="container">
           <div style={{ textAlign: 'left', marginBottom: 10 }}>
             <Button
-              style={{
-                marginRight: '20px'
-              }}
               icon="download"
               onClick={(e) => {
                 e.preventDefault();
@@ -583,6 +580,10 @@ export default class ClinicList extends Component<any, any> {
             >
               <FormattedMessage id="Prescriber.export" />
             </Button>
+            {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de'?<span
+            style={{
+              marginLeft: '20px'
+            }}>
             <Upload
               showUploadList={false}
               name="file"
@@ -600,6 +601,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormattedMessage id="Prescriber.Upload" />
               </Button>
             </Upload>
+            </span>:null}
             <Button
               style={{
                 backgroundColor: 'var(--primary-color)',

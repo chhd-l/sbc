@@ -5,7 +5,9 @@ type TResult = {
   message: string;
   context: any;
 };
-
+export const fetchCouponInfo = (couponId: string) => {
+  return Fetch<TResult>(`/coupon-info/${couponId}`);
+};
 /**
  * 查询商家店铺品牌
  * @returns {Promise<IAsyncResult<T>>}
@@ -139,5 +141,72 @@ export const updateFreeShipping = (shippingBean) => {
   return Fetch<TResult>('/marketing/freeShipping', {
     method: 'PUT',
     body: JSON.stringify(shippingBean)
+  });
+};
+
+
+/**
+ * 新增优惠券
+ * @param params
+ */
+export const addCoupon = (params) => {
+  return Fetch('/coupon-info', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+/**
+ * 修改优惠券
+ * @param params
+ */
+export const editCoupon = (params) => {
+  return Fetch('/coupon-info', {
+    method: 'PUT',
+    body: JSON.stringify(params)
+  });
+};
+
+/**
+ * 新增满折
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const addFullDiscount = (discountBean) => {
+  return Fetch<TResult>('/marketing/fullDiscount', {
+    method: 'POST',
+    body: JSON.stringify(discountBean)
+  });
+};
+
+/**
+ * 编辑满折
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const updateFullDiscount = (discountBean) => {
+  return Fetch<TResult>('/marketing/fullDiscount', {
+    method: 'PUT',
+    body: JSON.stringify(discountBean)
+  });
+};
+
+/**
+ * 新增满赠
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const addFullGift = (giftBean) => {
+  return Fetch<TResult>('/marketing/fullGift', {
+    method: 'POST',
+    body: JSON.stringify(giftBean)
+  });
+};
+
+/**
+ * 编辑满赠
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const updateFullGift = (giftBean) => {
+  return Fetch<TResult>('/marketing/fullGift', {
+    method: 'PUT',
+    body: JSON.stringify(giftBean)
   });
 };

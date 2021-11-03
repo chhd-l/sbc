@@ -1,17 +1,29 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { Form, Input, DatePicker, Button } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { Const, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import { FormContext } from '../index';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const { RangePicker } = DatePicker;
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 14 },
 };
-function Step2({setStep,form}) {
-  const {getFieldDecorator,validateFields} = form
-
+function Step2({form}) {
+  console.log('重绘了')
+  const Context:any = useContext(FormContext);
+  const { formData,changeFormData,setStep } = Context
+  const {getFieldDecorator,validateFields,} = form
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if (!err) {
+        changeFormData(enumConst.stepEnum[1],values)
+        setStep(2)
+      }
+    });
+  }
   return (
     <div>
       <div className="step-title">
@@ -21,6 +33,7 @@ function Step2({setStep,form}) {
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
         <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
           {getFieldDecorator('marketingName', {
+            initialValue: formData.BasicSetting.marketingName,
             rules: [
               {
                 required: true,
@@ -52,6 +65,7 @@ function Step2({setStep,form}) {
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
           {getFieldDecorator('time', {
+            initialValue: formData.BasicSetting.time,
             rules: [
               {
                 required: true,
@@ -76,7 +90,7 @@ function Step2({setStep,form}) {
         </Form.Item>
       </Form>
 
-      <ButtonLayer setStep={setStep} step={1} validateFields={validateFields}/>
+      <ButtonLayer step={1} toNext={toNext}/>
     </div>
   );
 }

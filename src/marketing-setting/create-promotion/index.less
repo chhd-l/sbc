@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100% - 56px);
+  .container-search{
+    padding-bottom: 70px!important;
+  }
 
   .button-layer {
     position: absolute;
@@ -40,5 +43,52 @@
   .step1 {
     padding: 100px 0;
     text-align: center;
+  }
+
+  .step-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .step-summary-title {
+    font-size: 20px;
+    color: #e2001a;
+    padding-bottom: 10px;
+    padding-top: 20px;
+  }
+
+  .step-summary-item{
+    display: flex;
+    padding: 6px 0;
+  }
+
+  .step-summary-sub-title {
+    font-size: 16px;
+    font-weight: 600;
+    width: 220px;
+  }
+
+  .step-summary-item-text {
+    font-size: 16px;
+  }
+
+  .success-icon {
+    font-size: 60px;
+    color: #E2001A;
+  }
+
+  .success-title {
+    font-size: 30px;
+    padding: 30px;
+  }
+
+  .success-a {
+    color: #E2001A;
+    text-decoration: underline;
+    font-size: 14px;
+    padding: 6px 0;
+    margin: 0 auto;
+    cursor: pointer;
   }
 }

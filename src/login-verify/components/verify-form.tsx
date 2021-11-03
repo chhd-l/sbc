@@ -23,6 +23,21 @@ export default withOktaAuth(
     }
 
     async componentDidMount() {
+      // this.search('123457908-098111')
+      debugger
+     let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
+     if(userId){
+      debugger
+      let {res} = await webApi.findPrescriberIdAndStoreBy({userId})
+      console.info('/......',res)
+      debugger
+      let {storeId,prescriberId} = res.context
+      if(prescriberId){
+        let storeIdAndPrescriberId = `${storeId}-${prescriberId}`
+        this.search(storeIdAndPrescriberId)
+      }
+     }
+
       document.getElementById('consents').addEventListener('click', (e) => {
         if (e.target.localName === 'span') {
           let parentId = Number(e.target.parentNode.parentNode.id);
@@ -78,15 +93,15 @@ export default withOktaAuth(
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberId', {
                 rules: [{ required: true, message: RCi18n({id:'Public.InputClinetID'}) }]
-              })(<Search size="large" placeholder={RCi18n({id:'Public.ClientID'})} onSearch={(value, e) => this.search(value, e)} />)}
+              })(<Input size="large"  type="hidden" placeholder={RCi18n({id:'Public.ClientID'})} />)}
             </FormItem>
             <label style={styles.labelClientName}>
-              <span style={{ color: '#E1021A' }}>*</span> <FormattedMessage id="Public.YourclientID" />
+              <span style={{ color: '#E1021A' }}>*</span> Ich erkläre mich mit den <a href={`${Const.SHOPDOMINDE}/Terms-And-Conditions`}>Nutzungsbedingungen</a> einverstanden und habe die <a href="https://www.royalcanin.com/de/about-us/data-protection">Datenschutzerklärung</a> zur Kenntnis genommen. 
             </label>
             <FormItem style={{ marginTop: 10 }}>
               {getFieldDecorator('prescriberName', {
                 rules: [{ required: false }]
-              })(<Input size="large" disabled={true} placeholder={RCi18n({id:'Public.ClientName'})} />)}
+              })(<Input type="hidden" size="large" disabled={true} placeholder={RCi18n({id:'Public.ClientName'})} />)}
             </FormItem>
             <FormItem style={{ marginTop: 10 }}>
               <Checkbox.Group style={{ width: '100%', maxHeight: '200px', overflowY: 'auto' }} onChange={this.consentChange}>
@@ -96,7 +111,7 @@ export default withOktaAuth(
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                            <Checkbox value={x.id} key={x.id}></Checkbox>
+                            <span style={{color:'#ff4d4f'}}>{`* `}</span><Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
                             <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
@@ -113,7 +128,7 @@ export default withOktaAuth(
                       <Col span={24} key={index}>
                         <Row>
                           <Col span={2}>
-                            <Checkbox value={x.id} key={x.id}></Checkbox>
+                          <span style={{color:'#fff'}}>{`* `}</span> <Checkbox value={x.id} key={x.id}></Checkbox>
                           </Col>
                           <Col span={22}>
                             <div id={x.id} dangerouslySetInnerHTML={{ __html: x.consentTitle }}></div>
@@ -159,9 +174,9 @@ export default withOktaAuth(
       return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? <div style={styles.requiredLable}>This is required field</div> : null;
     }
 
-    search = async (value, e) => {
-      e.preventDefault();
+    search = async (value) => {
       const form = this.props.form as WrappedFormUtils;
+      form.setFieldsValue({ prescriberId: value });
       const ids = value.split('-');
       if (ids && ids.length < 2) {
         message.error(RCi18n({id:'Public.NoPrescriber'}));
@@ -218,6 +233,7 @@ export default withOktaAuth(
         }
       });
       form.validateFields(null, async (errs, values) => {
+      console.info('errs', errs)
         if (!errs && consentValid) {
           let ids = values.prescriberId.split('-');
           if (ids && ids.length < 2) {

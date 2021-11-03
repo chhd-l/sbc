@@ -8,6 +8,7 @@ import AppStore from './store';
 import SearchHead from './components/search-head';
 import SearchList from './components/search-list';
 import ButtonGroup from './components/button-group';
+import CouponModal from './components/couponModal';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class CouponActivityList extends React.Component<any, any> {

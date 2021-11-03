@@ -248,6 +248,7 @@ export default function index({...props}) {
          * 类型
          */
         subType:detail.subType,
+        storeId:detail.storeId,
       })
     }else {
       result = await webapi.fetchCouponInfo(props.match.params.id)
@@ -291,9 +292,10 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType: detail.couponPromotionType,
           denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount,
+          couponDiscount: detail.couponDiscount ? detail.couponDiscount*100 : '',
           limitAmount: detail.limitAmount,
         },
+        storeId:detail.storeId,
       })
     }
     setLoading(false)

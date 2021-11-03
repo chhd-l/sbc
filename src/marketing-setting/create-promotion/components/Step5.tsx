@@ -485,7 +485,7 @@ function Step5({ form }) {
                     <div style={{ display: 'flex' }}>
                       <Form.Item>
                         {getFieldDecorator('couponDiscount', {
-                          initialValue: formData.Advantage.couponDiscount > 1 ?  (formData.Advantage.couponDiscount || '') : formData.Advantage.couponDiscount*100,
+                          initialValue: formData.Advantage.couponDiscount,
                           rules: [
                             {
                               required: true,

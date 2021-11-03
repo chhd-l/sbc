@@ -81,7 +81,7 @@ export default function Step6({setLoading}) {
         isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,//改版用到的字段
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
-        couponJoinLevel: formData.Conditions.joinLevel,
+        couponJoinLevel: formData.Conditions.joinLevel === -4 ? 0 : formData.Conditions.joinLevel,
         segmentIds:  formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],//改版用到的字段
         scopeType: switchFile(formData.Conditions.scopeType),//改版用到的字段
         storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],//改版用到的字段
@@ -104,7 +104,7 @@ export default function Step6({setLoading}) {
         couponDesc: '',
       }
       if(match.params.id){
-        detail = await webapi.editCoupon({...params,couponId:match.params.id})
+        detail = await webapi.editCoupon({...params,couponId:match.params.id,storeId:formData.storeId})
       }else {
         detail = await webapi.addCoupon(params)
       }
@@ -183,7 +183,7 @@ export default function Step6({setLoading}) {
           isClub: false,//未用到
         }
         if(match.params.id){
-          detail = await webapi.updateFullReduction({...params,marketingId:match.params.id})
+          detail = await webapi.updateFullReduction({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
           detail = await webapi.addFullReduction(params)
         }
@@ -211,6 +211,7 @@ export default function Step6({setLoading}) {
           isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
           joinLevel: (formData.Conditions.joinLevel === 0 || formData.Conditions.joinLevel === -4) ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
           segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
+          scopeType: formData.Conditions.scopeType,
 
           marketingFreeShippingLevel: {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
@@ -225,7 +226,7 @@ export default function Step6({setLoading}) {
           isClub: false,//未用到
         }
         if(match.params.id){
-          detail =  await webapi.updateFreeShipping({...params,marketingId:match.params.id})
+          detail =  await webapi.updateFreeShipping({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
           detail = await webapi.addFreeShipping(params)
         }
@@ -276,7 +277,7 @@ export default function Step6({setLoading}) {
           isClub: false,//未用到
         }
         if(match.params.id){
-          detail = await webapi.updateFullDiscount({...params,marketingId:match.params.id})
+          detail = await webapi.updateFullDiscount({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
           detail = await webapi.addFullDiscount(params)
         }
@@ -320,7 +321,7 @@ export default function Step6({setLoading}) {
           isClub: false,
         }
         if(match.params.id){
-          detail = await webapi.updateFullGift({...params,marketingId:match.params.id})
+          detail = await webapi.updateFullGift({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
           detail = await webapi.addFullGift(params)
         }
@@ -495,6 +496,8 @@ export default function Step6({setLoading}) {
                       {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && formData.Conditions.fullItem+'Item' }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem+'Item' }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                     </div>
                   </div>
 

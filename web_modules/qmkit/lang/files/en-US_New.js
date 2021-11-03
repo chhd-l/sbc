@@ -2034,7 +2034,7 @@ export default {
 
         "Marketing.Individualpromotion": "Individual promotion",
         "Marketing.CreateANewPromotion": "Create a new promotion",
-        "Marketing.ToCreateMarketingActivityConsumers": "To create marketing activity consumers",
+        "Marketing.ToCreateMarketingActivityConsumers": "To create marketing activity for consumers",
         "Marketing.start": "start",
         "Marketing.TypeOfPromotion": "Type of promotion",
         "Marketing.CodesName": "Codes name",

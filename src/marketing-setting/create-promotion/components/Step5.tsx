@@ -31,12 +31,11 @@ function Step5({ form }) {
       fullGiftDetailList: []
     }])
     if(match.params.id){
-      // editInit()
       setCouponPromotionType(formData.Advantage.couponPromotionType)
-      // if(formData.subType === 4 || formData.subType === 5){
-      //   setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
-      //   setFullGiftLevelList(fromJS(formData.Advantage.selectedRows))
-      // }
+      if(formData.subType === 4 || formData.subType === 5){
+        setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
+        setSelectedGiftRows(fromJS(formData.Advantage.selectedGiftRows) || fromJS([]))
+      }
     }
   },[])
 

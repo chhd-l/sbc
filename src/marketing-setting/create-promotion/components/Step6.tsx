@@ -108,8 +108,6 @@ export default function Step6({setLoading}) {
       }else {
         detail = await webapi.addCoupon(params)
       }
-
-      setDetail(detail?.res?.context?.couponInfoVO)
     }else {
       let commonParams = {
         BasicSetting:{
@@ -326,10 +324,15 @@ export default function Step6({setLoading}) {
           detail = await webapi.addFullGift(params)
         }
       }
-      setDetail(detail?.res?.context?.marketingVO)
     }
     setLoading(false)
     if(detail.res && detail.res.code === Const.SUCCESS_CODE) {
+      //把返回值保存下来
+      if(formData?.PromotionType?.typeOfPromotion === 1){
+        setDetail(detail?.res?.context?.couponInfoVO)
+      }else {
+        setDetail(detail?.res?.context?.marketingVO)
+      }
       message.success((window as any).RCi18n({
         id: 'Marketing.OperateSuccessfully'
       }))
@@ -452,10 +455,14 @@ export default function Step6({setLoading}) {
                           <div className="step-summary-sub-title">First subscription order reduction:</div>
                           <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                         </div>
-                        <div className="step-summary-item">
-                          <div className="step-summary-sub-title">Rest subscription order reduction:</div>
-                          <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
-                        </div>
+                        {
+                          formData.Advantage.restSubscriptionOrderReduction && (
+                            <div className="step-summary-item">
+                              <div className="step-summary-sub-title">Rest subscription order reduction:</div>
+                              <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
+                            </div>
+                          )
+                        }
                       </>
                     )
                   }

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
+import { GetDelivery } from '../delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery'
 import PaymentMethod from './component/payment-method'
@@ -117,7 +118,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDate: undefined,
       timeSlot: undefined,
       deliveryDateList: [],
-      timeSlotList: []
+      timeSlotList: [],
+      deliverDateStatus: 0
     };
   }
 
@@ -125,6 +127,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     this.getDict();
     this.getSubscriptionDetail();
     this.getCurrencySymbol();
+    this.getDeliveryDateStatus();
 
     let pickupIsOpen = JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || null;
     if (pickupIsOpen) {
@@ -132,6 +135,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         pickupIsOpen
       })
     }
+  }
+
+  // 获取 deliveryState 状态
+  getDeliveryDateStatus = () => {
+    GetDelivery()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          // deliveryDate 状态
+          if (res?.context?.systemConfigVO) {
+            let scon = res.context.systemConfigVO;
+            this.setState({
+              deliverDateStatus: scon.status
+            });
+          }
+        }
+        this.setState({
+          loading: false
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
   }
 
   getSubscriptionDetail = () => {
@@ -1198,7 +1226,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDate,
       deliveryDateList,
       timeSlotList,
-      timeSlot
+      timeSlot,
+      deliverDateStatus
       // operationLog
     } = this.state;
 
@@ -1791,8 +1820,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               如果是美国不显示内容 其他国家显示billingAddress */}
 
               {/* timeSlot和pickup point status */}
-              <Col span={8} className="timeSlot">
-                {storeId === 123457907 ? <Row>
+              <Col span={8} className="timeSlot subscription_edit_timeSlot">
+                {/* {storeId === 123457907 && deliverDateStatus === 1 ? <Row> */}
+                {deliverDateStatus === 1 ? <Row>
                   {
                     deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ?
                       <>

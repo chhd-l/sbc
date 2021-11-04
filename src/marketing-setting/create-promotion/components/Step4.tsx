@@ -97,13 +97,15 @@ function Step4({form}){
    * @constructor
    */
   const Tips = (Tips,top=-10)=>{
-    return (
-      <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
-        <div style={{fontSize:12,marginTop:top}}>
-          {Tips}
-        </div>
-      </Form.Item>
-    )
+    if(formData.PromotionType.typeOfPromotion === 0){
+      return (
+        <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
+          <div style={{fontSize:12,marginTop:top}}>
+            {Tips}
+          </div>
+        </Form.Item>
+      )
+    }
   }
 
   /**

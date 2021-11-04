@@ -75,7 +75,7 @@ export default function index({...props}) {
     },
   }
 
-  const [step,setStep] = useState<number>(3)
+  const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(true)
   const [formData, setFormData] = useState<any>(InitFormData) //编辑或创建时候的数组
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据

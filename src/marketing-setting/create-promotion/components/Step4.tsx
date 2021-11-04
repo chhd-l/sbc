@@ -97,13 +97,15 @@ function Step4({form}){
    * @constructor
    */
   const Tips = (Tips,top=-10)=>{
-    return (
-      <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
-        <div style={{fontSize:12,marginTop:top}}>
-          {Tips}
-        </div>
-      </Form.Item>
-    )
+    if(formData.PromotionType.typeOfPromotion === 0){
+      return (
+        <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
+          <div style={{fontSize:12,marginTop:top}}>
+            {Tips}
+          </div>
+        </Form.Item>
+      )
+    }
   }
 
   /**
@@ -277,7 +279,9 @@ function Step4({form}){
         {
           purchaseType === 2 && Tips(<FormattedMessage id="Marketing.ClubTips" />,-20)
         }
-
+        {
+          purchaseType === 3 && Tips(<FormattedMessage id="Marketing.SpTips" />,-20)
+        }
 
         {/*Group of customer*/}
         <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />} >

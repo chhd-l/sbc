@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Icon, message } from 'antd';
 import { FormContext } from '@/marketing-setting/create-promotion';
-import { Const, util } from 'qmkit';
+import { Const, util, history } from 'qmkit';
 import CouponModal from '@/coupon-list/components/couponModal';
-
+import * as webapi from '@/marketing-setting/webapi';
 export default function createSuccess() {
-  const { formData,detail,match,setStep } = useContext<any>(FormContext);
+  const { formData,match,setStep,initForm,detail } = useContext<any>(FormContext);
   const [isModalVisible,setIsModalVisible] = useState<boolean>(false)
+
   const downloadPromotion = async () => {
     const base64 = new util.Base64();
     const token = (window as any).token;
@@ -69,7 +70,11 @@ export default function createSuccess() {
 
         )
       }
-      <Button type="primary" style={{margin:'30px 0'}} onClick={()=>setStep(0)}>create a new promotion</Button>
+      <Button type="primary" style={{margin:'30px 0'}} onClick={()=>{
+        initForm()
+        setStep(0)
+        history.push('/create-promotion')
+      }}>create a new promotion</Button>
       <CouponModal
         isModalVisible={isModalVisible}
         setVisible={()=>setIsModalVisible(false)}

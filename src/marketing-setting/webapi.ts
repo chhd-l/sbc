@@ -157,6 +157,17 @@ export const addCoupon = (params) => {
 };
 
 /**
+ * 修改优惠券
+ * @param params
+ */
+export const editCoupon = (params) => {
+  return Fetch('/coupon-info', {
+    method: 'PUT',
+    body: JSON.stringify(params)
+  });
+};
+
+/**
  * 新增满折
  * @returns {Promise<IAsyncResult<T>>}
  */

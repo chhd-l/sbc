@@ -5,8 +5,10 @@ export interface Consignee {
   name: string;
   phone: string;
   countryId: string;
+  country?: string;
   city: string;
   province: string;
+  county: string;
   cityId: number;
   address: string;
   detailAddress1: string;
@@ -39,7 +41,9 @@ export interface Invoice{
   provinceId: number;
   cityId: number;
   province: string;
+  county: string;
   countryId: number;
+  country?: string;
   // city:string;
   // province:string;
   firstName: string;

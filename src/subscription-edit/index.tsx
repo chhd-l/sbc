@@ -588,7 +588,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               } else if (dltype === 'pickupDelivery' && pickup?.length) {
                 daId = pickup[0].deliveryAddressId;
               }
-              
+
               this.setState({
                 deliveryAddressId: daId
               });
@@ -1096,7 +1096,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         let deliveryDateList = res.context.timeSlots
         this.setState({
           deliveryDateList: deliveryDateList,
-          timeSlotList:deliveryDateList[0]&&deliveryDateList[0].dateTimeInfos || [],
+          timeSlotList: deliveryDateList[0] && deliveryDateList[0].dateTimeInfos || [],
           deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
           timeSlot: timeSlot ? timeSlot : deliveryDateList[0] &&
             deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
@@ -1245,7 +1245,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'subscribeNum',
         width: '15%',
         render: (text, record) => (
-          <div>
+          <div className="subscription_edit_quantity">
             {subscriptionType == 'Individualization' ? 1 : (
               <InputNumber
                 min={1}
@@ -1259,6 +1259,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   });
                 }}
                 value={record.subscribeNum}
+                disabled={subscriptionType === 'Peawee' ? true : false}
               />
             )}
           </div>
@@ -1270,7 +1271,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'frequency',
         width: '15%',
         render: (text: any, record: any) => (
-          <div className="subscription_delivery_frequency">
+          <div className="subscription_edit_frequency">
             <Select
               style={{ width: '70%' }}
               value={record.periodTypeId}
@@ -1278,6 +1279,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value = value === '' ? null : value;
                 this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
+              disabled={subscriptionType === 'Peawee' ? true : false}
             >
               {/* individualFrequencyList */}
               {subscriptionType == 'Individualization' ? (
@@ -1593,7 +1595,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{this.state.addressType === 'delivery' ? <FormattedMessage id="Subscription.Delivery information" /> : <FormattedMessage id="Subscription.Billing information" />}</Breadcrumb.Item>
           </Breadcrumb>
-          
+
           <DeliveryItem
             customerId={this.state.customerId}
             delivery={this.state.addressItem}
@@ -1714,7 +1716,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">
+                    <label className="info-title info_title_edit_delivery_address">
                       {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                         <FormattedMessage id="Subscription.PickupAddress" />
                       ) : (
@@ -1744,7 +1746,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>
+                      {deliveryAddressInfo.countryId ? this.getDictValue(countryArr, deliveryAddressInfo.countryId) : deliveryAddressInfo.country}
+                    </p>
                   </Col>
 
                   <Col span={24}>
@@ -1753,9 +1757,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                    <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                    <p className="delivery_edit_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                   </Col>
 
+                  {deliveryAddressInfo?.county ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.County" />:{' '}
+                      </p>
+                      <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                    </Col>
+                  ) : null}
 
                   {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                     <Col span={24}>
@@ -1843,7 +1855,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row> : storeId === 123457910 ? null : (
                   <Row>
                     <Col span={12}>
-                      <label className="info-title"><FormattedMessage id="Subscription.BillingAddress" /></label>
+                      <label className="info-title info_title_edit_billing_address"><FormattedMessage id="Subscription.BillingAddress" /></label>
                     </Col>
                     <Col span={12}>
                       <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change" />}>
@@ -1869,7 +1881,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                      <p>
+                        {billingAddressInfo.countryId ? this.getDictValue(countryArr, billingAddressInfo.countryId) : billingAddressInfo.country}
+                      </p>
                     </Col>
 
                     <Col span={24}>
@@ -1878,8 +1892,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </Col>
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                      <p className="billing_edit_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                     </Col>
+
+                    {billingAddressInfo?.county ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.County" />: </p>
+                        <p>{billingAddressInfo ? billingAddressInfo.county : ''}</p>
+                      </Col>
+                    ) : null}
+
                   </Row>
                 )}
               </Col>
@@ -1888,7 +1910,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod" /></label>
+                    <label className="info-title subscription_edit_payment"><FormattedMessage id="Subscription.PaymentMethod" /></label>
                   </Col>
                   <AuthWrapper functionName="f_change_payment_method">
                     <>
@@ -1905,7 +1927,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             paymentId, payPspItemEnum, paymentInfo: selectCard
                           })
                         }}
-                        paymentMethodVisible={this.state.paymentMethodVisible} />
+                        paymentMethodVisible={this.state.paymentMethodVisible}
+                        subscriptionType={this.state.subscriptionType}
+                      />
                     </>
                   </AuthWrapper>
                   {paymentInfo ?

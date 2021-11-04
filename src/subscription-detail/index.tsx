@@ -991,7 +991,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">
+                    <label className="info-title info_title_detail_delivery_address">
                       {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                         <FormattedMessage id="Subscription.PickupAddress" />
                       ) : (
@@ -1025,7 +1025,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}>
                       <FormattedMessage id="Subscription.Country" />:{' '}
                     </p>
-                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>
+                      {deliveryAddressInfo.countryId ? this.getDictValue(countryArr, deliveryAddressInfo.countryId) : deliveryAddressInfo.country}
+                    </p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>
@@ -1038,8 +1040,17 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <p style={{ width: 140 }}>
                     <FormattedMessage id="Subscription.Address2" />:{' '}
                   </p>
-                  <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                  <p className="delivery_detail_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
                 </Col>
+
+                {deliveryAddressInfo?.county ? (
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.County" />:{' '}
+                    </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                  </Col>
+                ) : null}
 
                 {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                   <Col span={24}>
@@ -1096,7 +1107,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </Row> : storeId === 123457910 ? null : (
                     <Row>
                       <Col span={12}>
-                        <label className="info-title">
+                        <label className="info-title info_title_detail_billing_address">
                           <FormattedMessage id="Subscription.BillingAddress" />
                         </label>
                       </Col>
@@ -1126,7 +1137,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.Country" />:{' '}
                         </p>
-                        <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                        <p>
+                          {billingAddressInfo.countryId ? this.getDictValue(countryArr, billingAddressInfo.countryId) : billingAddressInfo.country}
+                        </p>
                       </Col>
 
                       <Col span={24}>
@@ -1140,8 +1153,18 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.Address2" />:{' '}
                         </p>
-                        <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                        <p className="billing_detail_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                       </Col>
+
+                      {billingAddressInfo?.county ? (
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.County" />:{' '}
+                          </p>
+                          <p>{billingAddressInfo ? billingAddressInfo.county : ''}</p>
+                        </Col>
+                      ) : null}
+
                     </Row>
                   )}
               </Col>

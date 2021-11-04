@@ -16,19 +16,54 @@ import * as webapi from '../webapi';
 
 const { Step } = Steps;
 export const FormContext = React.createContext({});
-
+const formItemLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
+};
 export default function index({...props}) {
-  console.log(props)
-  let initFormData = {
-    PromotionType:{ publicStatus: 1,isNotLimit: 1,typeOfPromotion: 0, },
+  const InitFormData = {
+    /**
+     * 第二步
+     */
+    BasicSetting:{
+      marketingName: '',
+      time:[],
+    },
+    /**
+     * 第三步
+     */
+    PromotionType:{
+      typeOfPromotion: 0,//0:promotion 1: coupon
+      publicStatus: 1,
+      isNotLimit: 1,
+      perCustomer:1,
+    },
+    /**
+     * 第四步
+     */
     Conditions:{
       promotionType:0,
       CartLimit:0,
+      fullItem:'',
+      fullMoney:'',
       isSuperimposeSubscription:1,
+      joinLevel:0,
+      segmentIds:[],
+      emailSuffixList:[],
+      attributeValueIds:[],
+      scopeType:0,
+      storeCateIds:[],
+      customProductsType:0,
+      skuIds:[],//custom product id集合
+      selectedRows:[],//custom product 所有数据集合
     },
+
+    /**
+     * 第四步
+     */
     Advantage:{
-      denomination:'',
       couponPromotionType:0,
+      denomination:'',
       couponDiscount:'',
       limitAmount:'',
       firstSubscriptionOrderReduction:'',
@@ -37,23 +72,12 @@ export default function index({...props}) {
       firstSubscriptionLimitAmount:'',
       restSubscriptionOrderDiscount:'',
       restSubscriptionLimitAmount:'',
-
-
-      joinLevel:0,
-      segmentIds:[],
-      scopeType:0,
-      storeCateIds:[],
-      attributeValueIds: [],
     },
-    BasicSetting:{
-      marketingName: '',
-      time:[]
-    }
   }
 
   const [step,setStep] = useState<number>(0)
   const [loading,setLoading] = useState<boolean>(true)
-  const [formData, setFormData] = useState<any>(initFormData)
+  const [formData, setFormData] = useState<any>(InitFormData) //编辑或创建时候的数组
   const [detail,setDetail] = useState<any>({})//创建完成过后保存当前优惠卷数据
   useEffect(()=>{
     if(props.match.params.id){
@@ -62,12 +86,10 @@ export default function index({...props}) {
     }else {
       setLoading(false)
     }
-
   },[])
 
   const initForm = ()=>{
-    console.log(222)
-    setFormData({...initFormData})
+    setFormData({...InitFormData})
   }
   /**
    * 通过subType判断CartLimit
@@ -172,24 +194,49 @@ export default function index({...props}) {
       result = await webapi.getMarketingInfo(props.match.params.id)
       let detail = result.res.context
       setFormData({
+        /**
+         * 第二步
+         */
+        BasicSetting:{
+          marketingName: detail.marketingName,
+          time:[moment(detail.beginTime),moment(detail.endTime)],
+        },
+        /**
+         * 第三步
+         */
         PromotionType:{
           typeOfPromotion: 0,
           promotionCode: detail.promotionCode,
           publicStatus: parseInt(detail.publicStatus),
           isNotLimit: detail?.marketingUseLimit?.isNotLimit,
-          perCustomer: detail?.marketingUseLimit?.perCustomer
+          perCustomer: detail?.marketingUseLimit?.perCustomer,
         },
+        /**
+         * 第四步
+         */
         Conditions:{
           promotionType: detail.promotionType,
           CartLimit: switchCartLimit(detail.subType),
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney:switchFullMoney(detail),
           fullItem:switchFullItem(detail),
+          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
+          segmentIds:detail.segmentIds || [],
+          emailSuffixList:detail.emailSuffixList || [],
+          scopeType: detail.scopeType,
+          customProductsType:detail.customProductsType || 0 ,
+          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
+          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
+          skuIds:detail.goodsInfoIdList,//custom product id集合
+          selectedRows:detail.goodsList?.goodsInfoPage?.content,//custom product 所有数据集合
         },
+        /**
+         * 第四步
+         */
         Advantage:{
           couponPromotionType:switchCouponPromotionType(detail),
           denomination: (detail.subType === 0 || detail.subType === 1) ? detail.fullReductionLevelList?.[0]?.reduction : '',
-          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].discount : '',
+          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? (detail.fullDiscountLevelList?.[0].discount && detail.fullDiscountLevelList?.[0].discount*100) : '',
           limitAmount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].limitAmount : '',
           firstSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].firstSubscriptionOrderReduction :'',
           restSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].restSubscriptionOrderReduction :'',
@@ -199,59 +246,59 @@ export default function index({...props}) {
           restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
           selectedGiftRows:detail.goodsList?.goodsInfoPage?.content,
-
-          joinLevel: detail.joinLevel == -1 ? 0 : parseInt(detail.joinLevel),
-          segmentIds:detail.segmentIds || [],
-          emailSuffixList:detail.emailSuffixList || [],
-          scopeType: detail.scopeType,
-          customProductsType:detail.customProductsType,
-          storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
-          attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
-
-          skuIds:detail.goodsInfoIdList,
-          selectedRows:detail.goodsList?.goodsInfoPage?.content,
         },
-        BasicSetting: {
-          marketingName: detail.marketingName,
-          time:[moment(detail.beginTime),moment(detail.endTime)]
-        },
+        /**
+         * 类型
+         */
         subType:detail.subType,
+        storeId:detail.storeId,
       })
     }else {
       result = await webapi.fetchCouponInfo(props.match.params.id)
       let detail = result.res.context.couponInfo
       let goodsList = result.res.context.goodsList
       setFormData({
+        /**
+         * 第二步
+         */
+        BasicSetting:{
+          marketingName: detail.couponName,
+          time:[moment(detail.startTime),moment(detail.endTime)],
+        },
+        /**
+         * 第三步
+         */
         PromotionType:{
           typeOfPromotion: 1,
         },
+        /**
+         * 第四步
+         */
         Conditions:{
           promotionType: detail.couponPurchaseType,
           CartLimit: detail.fullBuyType,
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney: detail.fullBuyPrice,
-          fullItem: detail.fullBuyCount,
-        },
-        Advantage:{
-          couponPromotionType: detail.couponPromotionType,
-          denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount,
-          limitAmount: detail.limitAmount,
-
+          fullItem: detail.fullbuyCount,
           joinLevel: parseInt(detail.couponJoinLevel),
           segmentIds:detail.segmentIds || [],
           scopeType: switchScopeType(detail.scopeType),
-          customProductsType:detail.customProductsType,
+          customProductsType:detail.customProductsType || 0 ,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
-
           skuIds:detail.scopeIds,
           selectedRows:goodsList?.goodsInfoPage?.content,
         },
-        BasicSetting: {
-          marketingName: detail.couponName,
-          time:[moment(detail.startTime),moment(detail.endTime)]
+        /**
+         * 第五步
+         */
+        Advantage:{
+          couponPromotionType: detail.couponPromotionType,
+          denomination: detail.denomination,
+          couponDiscount: detail.couponDiscount || '',
+          limitAmount: detail.limitAmount,
         },
+        storeId:detail.storeId,
       })
     }
     setLoading(false)
@@ -281,14 +328,15 @@ export default function index({...props}) {
   return (
     <FormContext.Provider
       value={{
+        formItemLayout,
         changeFormData: changeFormData,
         formData,
-        detail:detail,
-        setDetail:setDetail,
         setFormData:setFormData,
         setStep:setStep,
         initForm: initForm,
-        match:props.match
+        match:props.match,
+        setDetail:setDetail,
+        detail,
       }}
     >
       <Spin spinning={loading}>
@@ -296,7 +344,7 @@ export default function index({...props}) {
           <BreadCrumb/>
           <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
             <Steps current={step} className="step-container">
-              <Step title="Create promotion" />
+              <Step title={<FormattedMessage id="Marketing.Create" />} />
               <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />
               <Step title={<FormattedMessage id="Marketing.PromotionType" />} />
               <Step title={<FormattedMessage id="Marketing.Conditions" />} />

@@ -680,6 +680,7 @@ export default {
         "Order.address1": "Address 1",
         "Order.address2": "Address 2",
         "Order.country": "Country",
+        "Order.county": "County",
         "Order.city": "City",
         "Order.estimatedDeliveryDate": "Estimated delivery date",
         "Order.estimatedDeliveryDateDesc": "Delivery time from {minDay} to {maxDay} working days",
@@ -1063,6 +1064,7 @@ export default {
         'Subscription.ChooseDeliveryAddress': 'Choose Delivery Address',
         'Subscription.foldedAll':'folded all delivery addresses',
         'Subscription.SelectPickpoint':'Select',
+        'Subscription.County':'County',
     },
     Appointment: {
         'Appointment.list': 'Appointment list',
@@ -1547,6 +1549,7 @@ export default {
         "PetOwner.fatherLofNumber": "Father lof number",
         "PetOwner.size": "Size",
         "PetOwner.tagging": "Tagging",
+        "PetOwner.County": "County",
 
         //===========begin payments Method================
         "payment.createPaymentMethod": "Create payment method",
@@ -1927,7 +1930,7 @@ export default {
         "Marketing.Download": "Download",
         "Marketing.Club": "Club",
         "Marketing.Percentage": "Percentage",
-        "Marketing.BasicSetting": "Basic Setting",
+        "Marketing.BasicSetting": "Basic setting",
         "Marketing.Nomorethanonehundredwords": "No more than one hundred words",
         "Marketing.Coupondiscount": "Coupon discount",
         "Marketing.integerfrom1to99999": "integer from 1 to 99999",
@@ -2032,8 +2035,8 @@ export default {
 
         "Marketing.Individualpromotion": "Individual promotion",
         "Marketing.CreateANewPromotion": "Create a new promotion",
-        "Marketing.ToCreateMarketingActivityConsumers": "To create marketing activity consumers",
-        "Marketing.start": "start",
+        "Marketing.ToCreateMarketingActivityConsumers": "To create marketing activity for consumers",
+        "Marketing.start": "Start",
         "Marketing.TypeOfPromotion": "Type of promotion",
         "Marketing.CodesName": "Codes name",
         "Marketing.UsageLimit": "Usage limit",
@@ -2062,7 +2065,16 @@ export default {
         "Marketing.generate":"generate",
         "Marketing.ActivityTime":"Activity time",
         "Marketing.numberCodes":"Number of codes",
-        "Marketing.AdvantageType": "Advantage type"
+        "Marketing.AdvantageType": "Advantage type",
+        "Marketing.PleaseAddProducts": "Please add products",
+        "Marketing.DoesItCummulate": "Does it cummulate?",
+        "Marketing.NumberOfUse": "Number of use?",
+        "Marketing.limit": "limit",
+        "Marketing.DiscountLimit": "Discount Limit",
+        "Marketing.FirstSubscriptionOrderDiscount":"First subscription order discount",
+        "Marketing.FirstSubscriptionLimitAmount":"First subscription limit amount",
+        "Marketing.RestSubscriptionOrderDiscount":"Rest subscription order discount",
+        "Marketing.RestSubscriptionLimitAmount":"Rest subscription limit amount",
     },
     Content: {
         "Content.Prompt": "Prompt",
@@ -2516,7 +2528,8 @@ export default {
 
         'Menu.Address setting': 'Address setting',
         'Menu.Inventory management': 'Inventory management',
-
+        'Menu.Coupon Code List': 'Coupon Code List',
+        'Menu.Promotion Code List': 'Promotion Code List',
     },
     Others: {
         "import": "Import",

@@ -1,32 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, memo } from 'react';
 import { Checkbox, Form, Input, InputNumber, Radio } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { FormContext } from '@/marketing-setting/create-promotion';
+import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
-const formItemLayout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 14 },
-};
+
 function Step3({form}){
   const Context:any = useContext(FormContext);
-  const { formData } = Context
+  const { match,changeFormData,setStep,formData,formItemLayout } = Context
   const {getFieldDecorator,validateFields} = form
+
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
   const [publicStatus,setPublicStatus] = useState(true)
   const [limitStatus,setLimitStatus] = useState(false)
 
   useEffect(()=>{
-    if(formData.PromotionType.promotionCode){
+    if(match.params.id){
       setPromotionCode(formData.PromotionType.promotionCode)
+      setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
+      setLimitStatus(formData.PromotionType.isNotLimit === 0 ? true : false)
+      setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
     }else {
       getPromotionCode()
     }
-    setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
-    setLimitStatus(formData?.PromotionType?.isNotLimit === 0 ? true : false)
-    setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
   },[])
+  const toNext =() =>{
+    validateFields((err, values) => {
+      if (!err) {
+        changeFormData(enumConst.stepEnum[2],{
+          ...values,
+          publicStatus: publicStatus ? 1 : 0,
+          isNotLimit:limitStatus ? 0 : 1
+        })
+        setStep(3)
+      }
+    });
+  }
+  /**
+   * 随机生成PromotionCode
+   */
   const getPromotionCode = () => {
     let randomNumber = ('0'.repeat(8) + parseInt(Math.pow(2, 40) * Math.random()).toString(32)).slice(-8);
     let timeStamp = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(-10);
@@ -95,7 +109,7 @@ function Step3({form}){
         )}
         { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
           {getFieldDecorator('perCustomer', {
-            initialValue: formData?.PromotionType.perCustomer ? formData.PromotionType.perCustomer : 1,
+            initialValue: formData.PromotionType.perCustomer,
           })(
             <InputNumber  size="large" min={1} disabled={!limitStatus}/>
           )}
@@ -112,11 +126,8 @@ function Step3({form}){
 
       </Form>
 
-      <ButtonLayer step={2} validateFields={validateFields}
-                   publicStatus={publicStatus}
-                   isNotLimit={limitStatus}
-      />
+      <ButtonLayer step={2} toNext={toNext} />
     </div>
   )
 }
-export default Form.create<any>()(Step3);
+export default memo(Form.create<any>()(Step3));

@@ -12,7 +12,7 @@ const importAll = context => {
   return map;
 };
 
-let key = sessionStorage.getItem(cache.LANGUAGE) || 'en-US';
+let key = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 let langFile = importAll(context);
 let language: any = langFile[key];
 let antLanguage: any = langFile[key + '_antd'];

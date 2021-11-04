@@ -2079,6 +2079,7 @@ export default {
         "Marketing.ProductsCommonTips":"The free shipping option is not available because you selected uncompatible option: Products in the cart: ",
         "Marketing.AutoShipTips":"The gift option is not available because you selected uncompatible option: Type of purchase: autoship.",
         "Marketing.ClubTips":"The gift option is not available because you selected uncompatible option: Type of purchase: club.",
+        "Marketing.SpTips":"The gift option is not available because you selected uncompatible option: Type of purchase: Single purchase.",
         "Marketing.IncludeProductTips":"The gift option is not available because you selected uncompatible option: Products in the cart: include.",
         "Marketing.ExcludeProductTips":"The gift option is not available because you selected uncompatible option: Products in the cart: exclude.",
         "Marketing.AmountTips":"The amount/ percentage is not available because you selected uncompatible option: Cart limit: amount.",

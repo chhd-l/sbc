@@ -279,7 +279,9 @@ function Step4({form}){
         {
           purchaseType === 2 && Tips(<FormattedMessage id="Marketing.ClubTips" />,-20)
         }
-
+        {
+          purchaseType === 3 && Tips(<FormattedMessage id="Marketing.SpTips" />,-20)
+        }
 
         {/*Group of customer*/}
         <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />} >

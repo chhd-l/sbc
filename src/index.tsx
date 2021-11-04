@@ -27,7 +27,7 @@ import configOkta from '../web_modules/qmkit/config-okta';
 
 //moment.locale('zh-cn');
 
-let localeLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
+let localeLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
 (window as any).RCi18n = RCi18n;
 const getMarsFooter = ()=>{
   return

@@ -2499,6 +2499,7 @@ export default {
         'Setting.suggestionSetting': 'Suggestion setting',
         'Setting.domain': 'Domain',
         'Setting.domainRequired': 'Domain is required',
+        'Setting.enableDeliveryDate': 'Enable Delivery Date',
 
     },
     Menu: {

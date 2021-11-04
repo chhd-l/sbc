@@ -67,3 +67,13 @@ export const goodsDict = (type) =>{
   });
 }
 
+/**
+ * 人员列表
+ */
+ export const AllEmployeePerson = (params={}) =>{
+  return Fetch(`/resourceSetting/getAllEmployeeForResource`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+

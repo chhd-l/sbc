@@ -1,42 +1,11 @@
 .width-full {
   width: 100%;
 }
-// .schedular-time-table {
-//   margin-top: 20px;
-//   .ant-table-thead {
-//     display: none;
-//   }
-//   .ant-table-tbody > tr > td {
-//     padding: 4px 4px;
-//     text-align: center;
-//     &:last-child {
-//       text-align: left !important;
-//     }
-//   }
-//   .ant-table-bordered .ant-table-tbody > tr:not(:last-child) > td:first-child {
-//     border-right: 0;
-//     border-bottom: 0;
-//   }
-//   .ant-table-bordered .ant-table-tbody > tr:nth-child(2n) > td:first-child {
-//     border-right: 1px solid #e8e8e8;
-//   }
-//   .ant-table-bordered .ant-table-tbody > tr:nth-child(3n) > td:first-child {
-//     border-right: 1px solid #e8e8e8;
-//   }
-  // .ant-table-bordered .ant-table-tbody > tr:nth-child(n+1) > td:first-child {
-  //   border-right: 1px solid #e8e8e8;
-  // }
-  // .ant-table-bordered .ant-table-tbody > tr:nth-last-child(4) > td:first-child {
-  //   border-bottom: 1px solid #e8e8e8;
-    
-  // }
-  // .ant-table-bordered .ant-table-tbody > tr:last-child {
-  //   border-bottom: 1px solid #e8e8e8;
-  // }
-// }
 
 .schedular-time-table {
+  display: flex;
   margin-top: 20px;
+  border-right: 1px solid #e8e8e8;
   .time-planning-wrap {
     display: flex;
     border-left: 1px solid #e8e8e8;
@@ -81,46 +50,78 @@
         }
       }
     }
-    .planning-content {
+   
+    }
+    .booked-type-wrap {
       width: 100%;
-      li {
-        border-bottom: 1px solid #e8e8e8;
-        height: 35px;
-        line-height: 35px;
-        &:last-child {
+      display: flex;
+      .item-person-booked {
+      border-top: 1px solid #e8e8e8;
+      border-right: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+        // display: flex;
+      }
+    }
+    .planning-content {
+      height: 35px;
+      line-height: 35px;
+      width: 100%;
+      border-bottom: 1px solid #e8e8e8;
+      .each-duration {
+        height: 100%;
+        display: inline-block;
+        // padding-left: 18px;
+      }
+      &:last-child {
         border-bottom: 0;
         }
-      }
-      .block-item,.appointed-item {
-        position: relative;
-        &::before {
-          position: absolute;
-          display: block;
-          content: ' ';
-          height: 100%;
-          width: 6px;
-          border-top-left-radius: 2px;
-          border-bottom-left-radius: 2px;
-        }
-        span {
-          padding-left: 18px;
-        }
-      }
-      .block-item {
+
+
+
+      // li {
+      //   border-bottom: 1px solid #e8e8e8;
+      //   height: 35px;
+      //   line-height: 35px;
+      //   &:last-child {
+      //   border-bottom: 0;
+      //   }
+      // }
+      // .block-item,.appointed-item {
+      //   position: relative;
+      //   &::before {
+      //     position: absolute;
+      //     display: block;
+      //     content: ' ';
+      //     height: 100%;
+      //     width: 6px;
+      //     border-top-left-radius: 2px;
+      //     border-bottom-left-radius: 2px;
+      //   }
+      //   span {
+      //     padding-left: 18px;
+      //   }
+      // }
+      // .block-item {
+      //   background: #dddd;
+      //   &::before {
+      //     background: #7d7d7d;
+      //   }
+      // }
+      // .appointed-item {
+      //   background: #ffe7e5;
+      //   &::before {
+      //     background: #eb4456;
+      //   }
+      //   span {
+      //     color: #e2001a;
+      //   }
+      // }
+    }
+
+         .block-item {
         background: #dddd;
-        &::before {
-          background: #7d7d7d;
-        }
+        // &::before {
+        //   background: #7d7d7d;
+        // }
       }
-      .appointed-item {
-        background: #ffe7e5;
-        &::before {
-          background: #eb4456;
-        }
-        span {
-          color: #e2001a;
-        }
-      }
-    }
-    }
   }

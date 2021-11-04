@@ -5,14 +5,12 @@ import { FormattedMessage } from 'react-intl';
 import { BreadCrumb, Headline, cache } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
-import ServiceSetting from '../component/service-setting'
-import './index.less'
-import { ellipse } from '_@antv_x6@1.26.2@@antv/x6/lib/registry/port-layout/ellipse';
+import _ from 'lodash';
+import './index.less';
 
 const { Option } = Select;
-const FormItem = Form.Item;
-
-const currentDate = sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date();
+// const currentDate = sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date();
+const currentDate = new Date();
 const dayOrWeek = [{
   label: 'Day',
   value: '1',
@@ -87,7 +85,80 @@ const Schedular = () => {
             bookType: "1"
           },
         ]
-      }
+      },
+      {
+        employeeId: "uduw985jn4ij4udnrb",
+        employeeName: "Tom",
+        bookedTimeSlot: [
+          {
+            dateNo: "20210101",
+            startTime: "20210101 9:00",
+            endTime: "20210101 9:30",
+            bookType: "1"
+          },
+          {
+            dateNo: "20210101",
+            startTime: "20210101 16:30",
+            endTime: "20210101 17:00",
+            bookType: "0"
+          },
+        ]
+      },
+      {
+        employeeId: "uduw985jn4ij4udnrb",
+        employeeName: "Tom",
+        bookedTimeSlot: [
+          {
+            dateNo: "20210101",
+            startTime: "20210101 9:00",
+            endTime: "20210101 9:30",
+            bookType: "1"
+          },
+          {
+            dateNo: "20210101",
+            startTime: "20210101 16:30",
+            endTime: "20210101 17:00",
+            bookType: "0"
+          },
+        ]
+      },
+      {
+        employeeId: "uduw985jn4ij4udnrb",
+        employeeName: "Tom",
+        bookedTimeSlot: [
+          {
+            dateNo: "20210101",
+            startTime: "20210101 9:00",
+            endTime: "20210101 9:30",
+            bookType: "1"
+          },
+          {
+            dateNo: "20210101",
+            startTime: "20210101 16:30",
+            endTime: "20210101 17:00",
+            bookType: "0"
+          },
+        ]
+      },
+      {
+        employeeId: "uduw985jn4ij4udnrb",
+        employeeName: "Tom",
+        bookedTimeSlot: [
+          {
+            dateNo: "20210101",
+            startTime: "20210101 9:00",
+            endTime: "20210101 9:30",
+            bookType: "1"
+          },
+          {
+            dateNo: "20210101",
+            startTime: "20210101 16:30",
+            endTime: "20210101 17:00",
+            bookType: "0"
+          },
+        ]
+      },
+
     ]
   })
   const [timeRange] = useState([{
@@ -109,36 +180,80 @@ const Schedular = () => {
   }, {
     hour: "17",
   }]) //时间段的数据暂未定，目前写死。等ba
+  const [timePeriod,setTimePeriod] = useState([])
+  const [bookedTypeList, setBookedTypeList] = useState([])
+  const [tableData, setTableData] = useState([])
   useEffect(() => {
 
-    bookedDataFormat()
+    getAllEmployeePerson()
 
+    const current = moment(currentDate).format('YYYYMMDD')
+    let params = {
+      dateNo: current,
+      employeeIds: [
+        {
+          employeeId: "2c918085762bc87901762d88fb110010",
+          employeeName: "mingjuan tang"
+        }
+      ]
+    }
+    getCalendarByDay(params)
+
+    bookedDataFormat()
   }, [])
 
-  const bookedDataFormat = () => {
+  // 获取所有人
+  const getAllEmployeePerson = async () => {
+    const { res } = await webapi.AllEmployeePerson()
+    // const AllEmployeePersonList = res;
+    console.log(res, 'ress=f-')
+  }
+  // 组装页面表格所需的数据结构
+  const bookedDataFormat = async () => {
+    const allTimeArr = await intervals("20210101 09:00", "20210101 17:00");
+    setTimePeriod(allTimeArr)
+    console.log(allTimeArr, 'all000')
+    let bookedTypeAllList = Promise.all(dayPlanList.calendarByDayVOList.map(async (el) =>
+      el.bookedTimeSlot.map(item => {
+        let _itemBookedTypeList = []
+        intervals(item.startTime, item.endTime).then((specificTime) => {
+          specificTime.map((el, idx) => {
+            idx !== specificTime.length - 1 && _itemBookedTypeList.push({
+              time: el,
+              bookType: item.bookType === '1' ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
+            })
+          })
+        })
+        return _itemBookedTypeList
+      }
+      )
+    ))
 
-    dayPlanList.calendarByDayVOList.map(el => el.bookedTimeSlot.map(item => {
-      intervals(item.startTime, item.endTime).then((specificTime) => {
-        console.log(specificTime, item, 'rrree==00')
-    let bookedTypeList = []
-    specificTime.map((el,idx) =>{
-      idx !== specificTime.length -1  && bookedTypeList.push({
-        time:el,
-        bookType: item.bookType === '1' ? `Blocked ${el}-${specificTime[idx+1]}` : `Appointed ${el}-${specificTime[idx+1]}`
-      })
+    bookedTypeAllList.then((list) => {
+      let _bookedList = list.map(item => _.flatten(item))
+      console.log(_bookedList, '_bookedList555')
+      let allTimeBookedList = _bookedList.map((el) =>
+        allTimeArr.map(_time => {
+          let item = { time: _time, bookType: '' }
+          item.bookType = el.find(_el => _el.time === _time)?.bookType
+          return item
+        })
+      )
+      // let allTimeBookedList = allTimeArr.map(_time => {
+      //   let item = { time: _time, bookType: '' }
+      //   item.bookType = _bookedList[0].find(el => el.time == _time)?.bookType
+      //   return item
+      // })
+      console.log(allTimeBookedList, 'allTimeBookedListalal')
+      setTableData(allTimeBookedList)
     })
-    console.log(bookedTypeList,'bookedTypeList==')
-      })
-    }
-    )
-    )
   }
 
-  const getCalendarByDay = async () => {
-    const params = {
-      dateNo: "",
-      employeeIds: []
-    }
+  const getCalendarByDay = async (params) => {
+    // const params = {
+    //   dateNo: "",
+    //   employeeIds: []
+    // }
     const { res } = await webapi.calendarByDay(params)
     console.log(res, 'calendarbydaydaydayday')
   }
@@ -159,6 +274,32 @@ const Schedular = () => {
       }
       reslove(result);
     })
+  }
+
+  const rowWidth = (tableData) => {
+    if (!tableData.length) return;
+    let width = '100%';
+    switch (tableData.length) {
+      case 1:
+        width = "100%";
+        break;
+      case 2:
+        width = "50%";
+        break;
+      case 3:
+        width = "33.33%";
+        break;
+      case 4:
+        width = "25%";
+        break;
+      case 5:
+        width = "20%";
+        break;
+      default:
+        width = "180px";
+        break;
+    }
+    return width
   }
 
   return (
@@ -197,121 +338,40 @@ const Schedular = () => {
         </Row>
       </div>
       <div className="container">
-        {!showAllPerson ? <div className="schedular-time-table">
-          {timeRange.map((el, idx) =>
-            <div key={idx} className='time-planning-wrap'>
-              <div className="time-hour"><span>{el.hour}</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              {/* <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li className="appointed-item">
-                  <span> Appointed 11:45-12:00</span>
-                </li>
-              </ul> */}
-            </div>
-          )}
-        </div>
-          :
-          <div className="schedular-time-table">
-            <div className='time-planning-wrap'>
-              <div className="time-hour"><span>11</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li className="appointed-item">
-                  <span> Appointed 11:45-12:00</span>
-                </li>
-              </ul>
-            </div>
-            <div className='time-planning-wrap'>
-              {/* <div></div> */}
-              <div className="time-hour"><span>12</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li> </li>
-              </ul>
-            </div>
-            <div className='time-planning-wrap'>
-              <div className="time-hour"><span>13</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li></li>
-              </ul>
-            </div>
-            <div className='time-planning-wrap'>
-              <div className="time-hour"><span>14</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li></li>
-              </ul>
-            </div>
-            <div className='time-planning-wrap'>
-              <div className="time-hour"><span>15</span></div>
-              <ul className="time-minute">
-                <li><span>00</span></li>
-                <li><span>15</span></li>
-                <li><span>30</span></li>
-                <li><span>45</span></li>
-              </ul>
-              <ul className="planning-content">
-                <li> </li>
-                <li> </li>
-                <li className="block-item">
-                  <span>Blocked 11:30-11:45</span>
-                </li>
-                <li></li>
-              </ul>
-            </div>
+        <div className="schedular-time-table">
+          <div>
+            {timeRange.map((el, idx) =>
+              <div key={idx} className='time-planning-wrap'>
+                {idx !== timeRange.length - 1 && <>
+                  <div className="time-hour"><span>{el.hour}</span></div>
+                  <ul className="time-minute">
+                    <li><span>00</span></li>
+                    <li><span>15</span></li>
+                    <li><span>30</span></li>
+                    <li><span>45</span></li>
+                  </ul>
+                </>}
+              </div>
+            )}
           </div>
-        }
+          <Row className="booked-type-wrap">
+            {tableData.map((el, idx) =>
+              <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
+                {el.map((_el, idx) =>
+                <>
+                  {idx !== timeRange.length - 1 &&<div className={`${_el.bookType?.includes("Blocked")?"block-item":""} planning-content`}>
+                    <span className={`each-duration`}>
+                      <span>
+                      {_el.bookType}
+                    </span>
+                    </span>
+                  </div>}
+                  </>
+                )}
+              </Col>
+            )}
+          </Row>
+        </div>
       </div>
     </>
   )

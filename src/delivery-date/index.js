@@ -64,6 +64,7 @@ const index = () => {
             let scon = res.context.systemConfigVO;
             setDeliverDateId(scon.id);
             setDeliverDateStatus(scon.status);
+            setDateSwitch(scon.status === 1 ? true : false);
           }
           setCities(res.context.city);
           setLoading(false);
@@ -264,6 +265,7 @@ const index = () => {
         const { res } = data;
         if (res.code === 'K-000000') {
           message.success('Operate successfully');
+          console.log('666 >>> checked: ', checked);
           setDateSwitch(checked);
         } else {
           message.error(res.message || 'Update Failed');

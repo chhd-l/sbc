@@ -44,14 +44,17 @@ class FillinPetInfoForm extends Component {
         this.getDictAlllist('CatBreed', 'petsBreedList')
         let _c = recommendParams?.customerPet ?? []
         let stateCustomPet = {};
+        let uuid=this.uuid();
         _c.map(item => {
+            item.uuid=item.petsId||item.uuid||uuid;
             stateCustomPet[item.petsId||item.uuid] = item
         })
+        console.log(_c,'======cccc====')
         this.setState({
             sourceKeys: _c.map(item => (item.petsId||item.uuid)),
             stateCustomPet
         }, () => {
-
+            console.log(this.state.sourceKeys,'==========')
         })
     }
     /**
@@ -103,13 +106,12 @@ class FillinPetInfoForm extends Component {
             keys: keys.filter((item) => item !== k),
         })
     };
+    S4=() =>{
+        return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    }
     //生成唯一id
     uuid = () => {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+        return ('uuid_'+(this.S4()+"-"+this.S4()+"-"+this.S4()+"-"+this.S4())+'-'+(+new Date()));
     }
     //添加宠物
     addPet = () => {
@@ -147,8 +149,13 @@ class FillinPetInfoForm extends Component {
                 const { recommendParams, savepetsRecommendParams,onChangeStep } = this.props;
                 let customerPet = [];
                 for (let item in values.customerPet) {
-                    customerPet.push(values.customerPet[item])
+                    let petsId=undefined;
+                    if(item.indexOf('uuid_')===-1){
+                        petsId=item;
+                    }
+                    customerPet.push({...values.customerPet[item],petsId,uuid:item})
                 }
+             
                 savepetsRecommendParams(Object.assign({},recommendParams,{...values,customerPet}))
 
                 setTimeout(() => {

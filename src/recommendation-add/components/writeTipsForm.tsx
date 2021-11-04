@@ -67,23 +67,23 @@ class WriteTipsForm extends React.Component<any, any> {
       getFillAutofindAllTitle({ fillAutoType });
     })
   }
-  handleOk = async() => {
+  handleOk = async () => {
     const { setFieldsValue } = this.props.form;
     const { type } = this.state;
     if (!type) return;
-    let html:string='';
-    const {res}=await acquireContent({categoryId:this.chooseItems,fillAutoType:1})
-    if(res.code===Const.SUCCESS_CODE){
-      const result=res.context.content;
-        this.chooseItems.map((item)=>{
-          let _hh=result[item];
-          for (let dd in _hh){
-          html+=`
+    let html: string = '';
+    const { res } = await acquireContent({ categoryId: this.chooseItems, fillAutoType: 1 })
+    if (res.code === Const.SUCCESS_CODE) {
+      const result = res.context.content;
+      this.chooseItems.map((item) => {
+        let _hh = result[item];
+        for (let dd in _hh) {
+          html += `
           <p>${dd}.</p>
           <p>${_hh[dd]}</p>
           `
-          }
-        })
+        }
+      })
     }
 
     let o = this.state[type] || '';

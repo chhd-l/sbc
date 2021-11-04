@@ -158,7 +158,7 @@ export default class SearchForm extends React.Component<any, any> {
       getPopupContainer={() => document.getElementById('modal-head')}
     >
       {/* <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option> */}
-      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU Code</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU</Option>
     </Select>
   );
 }

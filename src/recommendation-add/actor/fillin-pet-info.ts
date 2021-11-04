@@ -20,7 +20,8 @@ export default class FillInPetInfoActor extends Actor {
         isSend:true,
         appointmentVO: {},//扫码信息
         customerPet: [{
-          petsName: 'name',
+          petsId:undefined,
+          petsName: '',
           birthOfPets: null,
           petsSex: 1,
           petsBreed: undefined,
@@ -28,7 +29,6 @@ export default class FillInPetInfoActor extends Actor {
           needs: undefined,
           sterilized: 1,
           type: undefined,
-          uuid: (+new Date())+'',
           measure: 0,
           measureUnit: 'Kg'
         }]

@@ -26,6 +26,7 @@ function Step4({form}){
 
   const [customerType,setCustomerType] = useState<number>(0)
   const [scopeType,setScopeType] = useState<number>(0)
+  const [customProductsType,setCustomProductsType] = useState<number>(0)
   const [storeCateList,setStoreCateList] = useState<any>([])
   const [attributeList,setAttributeList] = useState<any>([])
   const [allGroups,setAllGroups] = useState<any>([])
@@ -88,13 +89,22 @@ function Step4({form}){
     setScopeType(formData.Conditions.scopeType)
 
     setSelectedSkuIds(formData.Conditions.skuIds || [])
-    if(formData.subType !== 4 && formData.subType !== 5){
-      setSelectedRows(fromJS(formData.Conditions.selectedRows) || fromJS([]))
-    }
-
+    setSelectedRows(fromJS(formData.Conditions.selectedRows) || fromJS([]))
   }
-
-
+  /**
+   * 选项提示
+   * @param Tips
+   * @constructor
+   */
+  const Tips = (Tips,top=-10)=>{
+    return (
+      <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
+        <div style={{fontSize:12,marginTop:top}}>
+          {Tips}
+        </div>
+      </Form.Item>
+    )
+  }
 
   /**
    * 后添加进入方法
@@ -261,9 +271,16 @@ function Step4({form}){
             )
           }
         </Form.Item>
+        {
+          purchaseType === 1 && Tips(<FormattedMessage id="Marketing.AutoShipTips" />,-20)
+        }
+        {
+          purchaseType === 2 && Tips(<FormattedMessage id="Marketing.ClubTips" />,-20)
+        }
+
 
         {/*Group of customer*/}
-        <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />}>
+        <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />} >
           {getFieldDecorator('joinLevel', {
             initialValue: customerType,
             rules: [
@@ -314,36 +331,42 @@ function Step4({form}){
             </Form.Item>
           )}
           {customerType === -4 && (
-            <Form.Item wrapperCol={WrapperCol}>
-              {getFieldDecorator('emailSuffixList', {
-                initialValue: formData.Conditions.emailSuffixList?.[0],
-                rules: [
-                  {
-                    validator: (_rule, value, callback) => {
-                      if (!value || value.length === 0) {
-                        callback(
-                          (window as any).RCi18n({
-                            id: 'Marketing.Pleaseenteremailsuffix'
-                          })
-                        );
+            <>
+              <Form.Item wrapperCol={WrapperCol}>
+                {getFieldDecorator('emailSuffixList', {
+                  initialValue: formData.Conditions.emailSuffixList?.[0],
+                  rules: [
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (!value || value.length === 0) {
+                          callback(
+                            (window as any).RCi18n({
+                              id: 'Marketing.Pleaseenteremailsuffix'
+                            })
+                          );
+                        }
+                        callback();
                       }
-                      callback();
                     }
-                  }
-                ]
-              })(
-                <Input
-                  style={{ width: 300 }}
-                  maxLength={30}
-                />
-              )}
-            </Form.Item>
+                  ]
+                })(
+                  <Input
+                    style={{ width: 300 }}
+                    maxLength={30}
+                  />
+                )}
+              </Form.Item>
+              {
+                Tips(<FormattedMessage id="Marketing.ByEmailTips" />)
+              }
+            </>
+
           )}
         </>
 
         {/*Products in the cart*/}
         <>
-          <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />}>
+          <Form.Item label={<FormattedMessage id="Marketing.ProductsInTheCart" />} >
             {getFieldDecorator('scopeType', {
               initialValue: formData.Conditions.scopeType,
               rules: [
@@ -356,8 +379,7 @@ function Step4({form}){
                 },
               ],
             })(
-              <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)
-              }>
+              <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
                 <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
                 <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
                 <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
@@ -373,7 +395,7 @@ function Step4({form}){
                     {getFieldDecorator('customProductsType', {
                       initialValue: formData.Conditions.customProductsType,
                       // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
-                    })(<RadioGroup >
+                    })(<RadioGroup onChange={(e:RadioChangeEvent)=>setCustomProductsType(e.target.value)}>
                       <Radio value={0}>
                         <FormattedMessage id="Marketing.Includeproduct" />
                       </Radio>
@@ -381,8 +403,13 @@ function Step4({form}){
                         <FormattedMessage id="Marketing.Excludeproduct" />
                       </Radio>
                     </RadioGroup>)}
-
                   </Form.Item>
+                  {
+                    customProductsType === 0 && Tips(<FormattedMessage id="Marketing.IncludeProductTips" />)
+                  }
+                  {
+                    customProductsType === 1 && Tips(<FormattedMessage id="Marketing.ExcludeProductTips" />)
+                  }
                   <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator(
                       'goods',
@@ -399,103 +426,114 @@ function Step4({form}){
                       </div>
                     )}
                   </Form.Item>
+                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Custom' })}.`)}
                 </>
               )
             }
             {
-              scopeType === 2 && (<Form.Item wrapperCol={WrapperCol}>
-                {getFieldDecorator('storeCateIds', {
-                  initialValue: formData.Conditions.storeCateIds,
-                  rules: [
-                    {
-                      validator: (_rule, value, callback) => {
-                        if ((!value || value.length === 0)) {
-                          callback(
-                            (window as any).RCi18n({
-                              id: 'Marketing.Pleaseselectcategory'
-                            })
-                          );
+              scopeType === 2 && (
+                <>
+                  <Form.Item wrapperCol={WrapperCol}>
+                    {getFieldDecorator('storeCateIds', {
+                      initialValue: formData.Conditions.storeCateIds,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            if ((!value || value.length === 0)) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.Pleaseselectcategory'
+                                })
+                              );
+                            }
+                            callback();
+                          }
                         }
-                        callback();
-                      }
-                    }
-                  ],
-                })(
-                  <TreeSelect
-                    id="storeCateIds"
-                    getPopupContainer={() => document.getElementById('page-content')}
-                    treeCheckable={true}
-                    showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                    treeCheckStrictly={true}
-                    placeholder={
-                      (window as any).RCi18n({
-                        id: 'Marketing.Pleaseselectcategory'
-                      })
-                    }
-                    notFoundContent={
-                      (window as any).RCi18n({
-                        id: 'Marketing.Nosalescategory'
-                      })
-                    }
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
-                    showSearch={false}
-                    // onChange={this.storeCateChange}
-                    style={{ width: 500 }}
-                    treeDefaultExpandAll
-                  >
-                    {generateStoreCateTree(storeCateList)}
-                  </TreeSelect>
-                )}
-              </Form.Item>)
+                      ],
+                    })(
+                      <TreeSelect
+                        id="storeCateIds"
+                        getPopupContainer={() => document.getElementById('page-content')}
+                        treeCheckable={true}
+                        showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                        treeCheckStrictly={true}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.Pleaseselectcategory'
+                          })
+                        }
+                        notFoundContent={
+                          (window as any).RCi18n({
+                            id: 'Marketing.Nosalescategory'
+                          })
+                        }
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto', top: '390' }}
+                        showSearch={false}
+                        // onChange={this.storeCateChange}
+                        style={{ width: 500 }}
+                        treeDefaultExpandAll
+                      >
+                        {generateStoreCateTree(storeCateList)}
+                      </TreeSelect>
+                    )}
+                  </Form.Item>
+                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Category' })}.`)}
+                </>
+              )
             }
             {
-              scopeType === 3 && (<Form.Item wrapperCol={WrapperCol}>
-                {getFieldDecorator('attributeValueIds', {
-                  initialValue: formData.Conditions.attributeValueIds,
-                  rules: [
-                    {
-                      validator: (_rule, value, callback) => {
-                        console.log(value)
-                        if (!value || value.length === 0) {
-                          callback(
-                            (window as any).RCi18n({
-                              id: 'Marketing.Pleaseselectattribute'
-                            })
-                          );
+              scopeType === 3 && (
+                <>
+                  <Form.Item wrapperCol={WrapperCol}>
+                    {getFieldDecorator('attributeValueIds', {
+                      initialValue: formData.Conditions.attributeValueIds,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            console.log(value)
+                            if (!value || value.length === 0) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.Pleaseselectattribute'
+                                })
+                              );
+                            }
+                            callback();
+                          }
                         }
-                        callback();
-                      }
-                    }
-                  ]
-                })(
-                  <TreeSelect
-                    id="attributeValueIds"
-                    getPopupContainer={() => document.getElementById('page-content')}
-                    treeCheckable={true}
-                    showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                    treeCheckStrictly={true}
-                    //treeData ={getGoodsCate}
-                    // showCheckedStrategy = {SHOW_PARENT}
-                    placeholder={
-                      (window as any).RCi18n({
-                        id: 'Marketing.Pleaseselectattribute'
-                      })
-                    }
-                    notFoundContent={
-                      (window as any).RCi18n({
-                        id: 'Marketing.Noattribute'
-                      })
-                    }
-                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    showSearch={false}
-                    // onChange={this.attributeChange}
-                    style={{ width: 500 }}
-                    treeDefaultExpandAll
-                  >
-                    {generateAttributeTree(attributeList)}
-                  </TreeSelect>
-                )}
-              </Form.Item>)
+                      ]
+                    })(
+                      <TreeSelect
+                        id="attributeValueIds"
+                        getPopupContainer={() => document.getElementById('page-content')}
+                        treeCheckable={true}
+                        showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                        treeCheckStrictly={true}
+                        //treeData ={getGoodsCate}
+                        // showCheckedStrategy = {SHOW_PARENT}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.Pleaseselectattribute'
+                          })
+                        }
+                        notFoundContent={
+                          (window as any).RCi18n({
+                            id: 'Marketing.Noattribute'
+                          })
+                        }
+                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                        showSearch={false}
+                        // onChange={this.attributeChange}
+                        style={{ width: 500 }}
+                        treeDefaultExpandAll
+                      >
+                        {generateAttributeTree(attributeList)}
+                      </TreeSelect>
+                    )}
+                  </Form.Item>
+                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Attribute' })}.`)}
+                </>
+              )
             }
           </>
 
@@ -527,76 +565,86 @@ function Step4({form}){
         </Form.Item>
         {
           cartLimits === 2 && (
-            <Form.Item wrapperCol={WrapperCol}>
-              <span>Full&nbsp;</span>
-              {getFieldDecorator('fullItem', {
-                initialValue: formData.Conditions.fullItem,
-                rules: [
-                  {
-                    required: true,
-                    message:
-                      (window as any).RCi18n({
-                        id: 'Marketing.ustenterrules',
-                      })
-                  },
-                  {
-                    validator: (_rule, value, callback) => {
-                      if (value) {
-                        if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
-                          callback(
-                            (window as any).RCi18n({
-                              id: 'Marketing.1-9999',
-                            })
-                          );
+            <>
+              <Form.Item wrapperCol={WrapperCol}>
+                <span>Full&nbsp;</span>
+                {getFieldDecorator('fullItem', {
+                  initialValue: formData.Conditions.fullItem,
+                  rules: [
+                    {
+                      required: true,
+                      message:
+                        (window as any).RCi18n({
+                          id: 'Marketing.ustenterrules',
+                        })
+                    },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.1-9999',
+                              })
+                            );
+                          }
                         }
+                        callback();
                       }
-                      callback();
                     }
-                  }
-                ],
-              })(
-                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
-                  id: 'Marketing.1-9999',
-                })}/>,
-              )}
-              <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
-            </Form.Item>
+                  ],
+                })(
+                  <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
+                    id: 'Marketing.1-9999',
+                  })}/>,
+                )}
+                <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
+              </Form.Item>
+              {
+                (purchaseType === 1 || purchaseType === 2) && Tips(<FormattedMessage id="Marketing.QuantityTips" />)
+              }
+            </>
           )
         }
         {
           cartLimits === 1 && (
-            <Form.Item wrapperCol={WrapperCol}>
-              <span>Full&nbsp;</span>
-              {getFieldDecorator('fullMoney', {
-                initialValue: formData.Conditions.fullMoney,
-                rules: [
-                  {
-                    required: true,
-                    message:
-                      (window as any).RCi18n({
-                        id: 'Marketing.ustenterrules',
-                      })
-                  },
-                  {
-                    validator: (_rule, value, callback) => {
-                      if (value) {
-                        if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
-                          callback(
-                            (window as any).RCi18n({
-                              id: 'Marketing.0.01-99999999.99',
-                            })
-                          );
+            <>
+              <Form.Item wrapperCol={WrapperCol}>
+                <span>Full&nbsp;</span>
+                {getFieldDecorator('fullMoney', {
+                  initialValue: formData.Conditions.fullMoney,
+                  rules: [
+                    {
+                      required: true,
+                      message:
+                        (window as any).RCi18n({
+                          id: 'Marketing.ustenterrules',
+                        })
+                    },
+                    {
+                      validator: (_rule, value, callback) => {
+                        if (value) {
+                          if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                            callback(
+                              (window as any).RCi18n({
+                                id: 'Marketing.0.01-99999999.99',
+                              })
+                            );
+                          }
                         }
+                        callback();
                       }
-                      callback();
                     }
-                  }
-                ],
-              })(
-                <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })}/>,
-              )}
-              <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
-            </Form.Item>
+                  ],
+                })(
+                  <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })}/>,
+                )}
+                <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
+              </Form.Item>
+              {
+                (purchaseType === 1 || purchaseType === 2) && Tips(<FormattedMessage id="Marketing.AmountTips" />)
+              }
+            </>
           )
         }
       </Form>

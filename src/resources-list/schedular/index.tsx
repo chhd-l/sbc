@@ -357,16 +357,14 @@ const Schedular = () => {
           <Row className="booked-type-wrap">
             {tableData.map((el, idx) =>
               <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
-                {el.map((_el, idx) =>
-                <>
-                  {idx !== timeRange.length - 1 &&<div className={`${_el.bookType?.includes("Blocked")?"block-item":""} planning-content`}>
-                    <span className={`each-duration`}>
+                {el.map((_el, _idx) =>
+                  <div key={_idx} className={`${_el.bookType?.includes("Blocked")?"block-item":""} ${_el.bookType?.includes("Appointed")?"appointed-item":""} planning-content`}>
+                  <span className={`each-duration`}>
                       <span>
                       {_el.bookType}
                     </span>
                     </span>
-                  </div>}
-                  </>
+                  </div>
                 )}
               </Col>
             )}

@@ -2075,6 +2075,15 @@ export default {
         "Marketing.FirstSubscriptionLimitAmount":"First subscription limit amount",
         "Marketing.RestSubscriptionOrderDiscount":"Rest subscription order discount",
         "Marketing.RestSubscriptionLimitAmount":"Rest subscription limit amount",
+        "Marketing.ByEmailTips":"The free shipping option is not available because you selected uncompatible option: Group of customer: by email.",
+        "Marketing.ProductsCommonTips":"The free shipping option is not available because you selected uncompatible option: Products in the cart: ",
+        "Marketing.AutoShipTips":"The gift option is not available because you selected uncompatible option: Type of purchase: autoship.",
+        "Marketing.ClubTips":"The gift option is not available because you selected uncompatible option: Type of purchase: club.",
+        "Marketing.SpTips":"The gift option is not available because you selected uncompatible option: Type of purchase: Single purchase.",
+        "Marketing.IncludeProductTips":"The gift option is not available because you selected uncompatible option: Products in the cart: include.",
+        "Marketing.ExcludeProductTips":"The gift option is not available because you selected uncompatible option: Products in the cart: exclude.",
+        "Marketing.AmountTips":"The amount/ percentage is not available because you selected uncompatible option: Cart limit: amount.",
+        "Marketing.QuantityTips":"The amount/ percentage is not available because you selected uncompatible option: Cart limit: quantity.",
     },
     Content: {
         "Content.Prompt": "Prompt",
@@ -2491,6 +2500,7 @@ export default {
         'Setting.suggestionSetting': 'Suggestion setting',
         'Setting.domain': 'Domain',
         'Setting.domainRequired': 'Domain is required',
+        'Setting.enableDeliveryDate': 'Enable Delivery Date',
 
     },
     Menu: {

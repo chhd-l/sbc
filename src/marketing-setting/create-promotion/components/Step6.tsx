@@ -361,7 +361,7 @@ export default function Step6({setLoading}) {
       <div className="step-summary">
         <div>
           <div>
-            <div className="step-summary-title"><FormattedMessage id="Marketing.BasicSetting" /></div>
+            <div className="step-summary-title" onClick={()=>setStep(1)}><FormattedMessage id="Marketing.BasicSetting" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.PromotionName" />:</div>
               <div className="step-summary-item-text">{formData.BasicSetting.marketingName}</div>
@@ -373,7 +373,7 @@ export default function Step6({setLoading}) {
           </div>
 
           <div>
-            <div className="step-summary-title"><FormattedMessage id="Marketing.Conditions" /></div>
+            <div className="step-summary-title" onClick={()=>setStep(3)}><FormattedMessage id="Marketing.Conditions" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.TypeOfPurchase" />:</div>
               <div className="step-summary-item-text">{enumConst.promotionType[formData.Conditions.promotionType]}</div>
@@ -413,7 +413,7 @@ export default function Step6({setLoading}) {
         </div>
         <div>
           <div>
-            <div className="step-summary-title"><FormattedMessage id="Marketing.PromotionType" /></div>
+            <div className="step-summary-title" onClick={()=>setStep(2)}><FormattedMessage id="Marketing.PromotionType" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.TypeOfPromotion" />:</div>
               <div className="step-summary-item-text">{enumConst.typeOfPromotion[formData.PromotionType.typeOfPromotion]}</div>
@@ -439,7 +439,7 @@ export default function Step6({setLoading}) {
           </div>
 
           <div>
-            <div className="step-summary-title"><FormattedMessage id="Marketing.Advantage" /></div>
+            <div className="step-summary-title" onClick={()=>setStep(4)}><FormattedMessage id="Marketing.Advantage" /></div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.AdvantageType" />:</div>
               <div className="step-summary-item-text">{enumConst.couponPromotionType[formData.Advantage.couponPromotionType]}</div>

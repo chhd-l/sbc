@@ -193,6 +193,24 @@ export default function index({...props}) {
     if(props.match.params.type == 'promotion'){
       result = await webapi.getMarketingInfo(props.match.params.id)
       let detail = result.res.context
+      let giftIds = [] //gift product id 集合
+      let customIds = [] //custom product id 集合
+      let customRowList = [] //custom product 集合
+      //当为gift时 去筛选custom和gift的product
+      if(detail.subType === 4 || detail.subType === 5){
+        detail?.fullGiftLevelList?.[0].fullGiftDetailList.forEach(item=>{
+          giftIds.push(item.productId)
+        })
+        customIds = detail.goodsInfoIdList.filter(item=>{
+          return !giftIds.includes(item)
+        })
+        customRowList = detail.goodsList?.goodsInfoPage?.content.filter(item=>{
+          return customIds.includes(item.goodsInfoId)
+        })
+      }else {
+        customIds = detail.goodsInfoIdList
+        customRowList = detail.goodsList?.goodsInfoPage?.content
+      }
       setFormData({
         /**
          * 第二步
@@ -227,8 +245,8 @@ export default function index({...props}) {
           customProductsType:detail.customProductsType || 0 ,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
-          skuIds:detail.goodsInfoIdList,//custom product id集合
-          selectedRows:detail.goodsList?.goodsInfoPage?.content,//custom product 所有数据集合
+          skuIds:customIds,//custom product id集合
+          selectedRows: customRowList,//custom product 所有数据集合
         },
         /**
          * 第四步
@@ -245,7 +263,9 @@ export default function index({...props}) {
           restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
           restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
-          selectedGiftRows:detail.goodsList?.goodsInfoPage?.content,
+          selectedGiftRows:detail.goodsList?.goodsInfoPage?.content.filter(item=>{
+            return giftIds.includes(item.goodsInfoId)
+          }),
         },
         /**
          * 类型

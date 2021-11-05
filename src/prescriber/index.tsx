@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col, Upload } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -188,7 +188,18 @@ export default class ClinicList extends Component<any, any> {
   //   document.body.appendChild(link);
   //   link.click();
   // }
-
+  onUpload = (info)=>{
+    const {file} = info
+    if (file.status !== 'uploading') {
+    }
+    console.info('infoinfoinfo', info)
+    if (file.status === 'done'&&file.response&&file.response.code=='K-000000') {
+        this.init()
+        message.success(`${file.name} file uploaded successfully`);
+    } else if (file.status === 'error' || file.status === 'done') {
+      message.error(`${file.name} file upload failed:${file.response.message}`);
+    }
+  }
   onExport = () => {
     const params = this.state.searchForm;
     return new Promise((resolve) => {
@@ -561,7 +572,6 @@ export default class ClinicList extends Component<any, any> {
         <div className="container">
           <div style={{ textAlign: 'left', marginBottom: 10 }}>
             <Button
-              style={{}}
               icon="download"
               onClick={(e) => {
                 e.preventDefault();
@@ -570,6 +580,28 @@ export default class ClinicList extends Component<any, any> {
             >
               <FormattedMessage id="Prescriber.export" />
             </Button>
+            {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de'?<span
+            style={{
+              marginLeft: '20px'
+            }}>
+            <Upload
+              showUploadList={false}
+              name="file"
+              action={`${Const.HOST}/prescriber/list/excelImport`}
+              headers={{ 
+              authorization:
+              'Bearer' + ((window as any).token ? ' ' + (window as any).token : '') }}
+              onChange={this.onUpload}
+              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              // accept='.xlsx'
+            >
+              <Button
+                icon="upload"
+              >
+                <FormattedMessage id="Prescriber.Upload" />
+              </Button>
+            </Upload>
+            </span>:null}
             <Button
               style={{
                 backgroundColor: 'var(--primary-color)',

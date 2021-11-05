@@ -11,8 +11,12 @@ type TResult = {
 /**
  *
  * @returns 获取地址输入类型
+ * 法国暂时不使用配置，直接条用MANUALLY的设置
  */
 export async function getAddressInputTypeSetting() {
+  if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId] === 'fr') {
+    return Promise.resolve('MANUALLY');
+  }
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
     method: 'POST',
     body: JSON.stringify({
@@ -53,9 +57,13 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
 
 /**
  * 获取是否进行地址验证的设置
+ * 法国暂时不进行验证
  * @returns
  */
 export async function getIsAddressValidation() {
+  if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId] === 'fr') {
+    return Promise.resolve(false);
+  }
   return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
     body: JSON.stringify({})
@@ -178,7 +186,8 @@ export function searchCity(searchTxt: string) {
     body: JSON.stringify({
       cityName: searchTxt,
       pageNum: 0,
-      pageSize: 30
+      pageSize: 30,
+      storeId: Const.SITE_NAME === 'MYVETRECO' ? 123457915 : undefined
     })
   });
 }

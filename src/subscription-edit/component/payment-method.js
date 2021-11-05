@@ -13,10 +13,12 @@ const PaymentMethod = (props) => {
   const [cards, setCards] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
 
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
-      if(props.cardId) {
+      if (props.cardId) {
         setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
       } else {
         setPaymentType('PAYU_RUSSIA_COD');
@@ -25,12 +27,12 @@ const PaymentMethod = (props) => {
   }, [props.paymentMethodVisible]);
 
   useEffect(() => {
-    if(!props.paymentMethodVisible) {
+    if (!props.paymentMethodVisible) {
       return;
     }
     if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
       getCards();
-      if(props.cardId) {
+      if (props.cardId) {
         setSelectCardId(props.cardId);
       }
     } else {
@@ -50,25 +52,25 @@ const PaymentMethod = (props) => {
   function getCards() {
     setLoading(true);
     webapi
-    .getCards(props.customerId)
-    .then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        setCards(res.context);
+      .getCards(props.customerId)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          setCards(res.context);
+          setLoading(false);
+        } else {
+          message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        message.error(RCi18n({ id: 'Public.GetDataFailed' }));
         setLoading(false);
-      } else {
-        message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
-        setLoading(false);
-      }
-    })
-    .catch(() => {
-      message.error(RCi18n({ id: 'Public.GetDataFailed' }));
-      setLoading(false);
-    });
+      });
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find(x=>x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.find(x => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -79,22 +81,22 @@ const PaymentMethod = (props) => {
 
   function deleteCard(paymentId) {
     setLoading(true);
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    // const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
-    .deleteCard(storeId, paymentId)
-    .then((data) => {
-      const res = data.res;
-      if (res.code === Const.SUCCESS_CODE) {
-        message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
-        getCards();
-        setLoading(false);
-      } else if(res.code ==='K-100209') {
-        showError(paymentId);
-        setLoading(false);
-      }
-    })
-    .catch(() => {
-    });
+      .deleteCard(storeId, paymentId)
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+          getCards();
+          setLoading(false);
+        } else if (res.code === 'K-100209') {
+          showError(paymentId);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+      });
   }
 
   function showError(paymentId) {
@@ -112,7 +114,7 @@ const PaymentMethod = (props) => {
       visible={visible}
       title={RCi18n({ id: 'Subscription.Active.PaymentMethod' })}
       onOk={() => changePaymentMethod()}
-      okButtonProps={{disabled: disabled }}
+      okButtonProps={{ disabled: disabled }}
       onCancel={() => {
         clear();
       }}
@@ -121,11 +123,16 @@ const PaymentMethod = (props) => {
         <Radio value={'PAYU_RUSSIA_AUTOSHIP2'}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
-        <AuthWrapper functionName="f_cod_payment">
-          <Radio value={'PAYU_RUSSIA_COD'}>
-            <FormattedMessage id="Subscription.CashOnDelivery" />
-          </Radio>
-        </AuthWrapper>
+
+        {props.subscriptionType === 'Peawee' ? null : (
+          storeId === 123457907 ? (
+            <AuthWrapper functionName="f_cod_payment">
+              <Radio value={'PAYU_RUSSIA_COD'}>
+                <FormattedMessage id="Subscription.CashOnDelivery" />
+              </Radio>
+            </AuthWrapper>
+          ) : null
+        )}
       </Radio.Group>
       {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
         <Row className="paymentDoor">
@@ -169,7 +176,7 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_add_card">
-            <Button onClick={()=>history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
+            <Button onClick={() => history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>

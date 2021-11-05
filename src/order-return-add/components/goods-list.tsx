@@ -4,9 +4,9 @@ import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
 import { noop, ValidConst, QMFloat, cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-
-import './goods-list-style.css';
 import Amount from './amount';
+import './goods-list-style.css';
+
 const FormItem = Form.Item;
 
 @Relax
@@ -34,9 +34,14 @@ export default class GoodsList extends React.Component<any, any> {
     const giftDataSource = this._getGiftDataSource(); // 订单赠品
     const giftColumns = this._getColumns(1);
 
+    const subGiftDataSource = this._getSubGiftDataSource(); // 订阅订单赠品
+    const subGiftColumns = this._getColumns(2);
+
     return (
       <div>
-        <h3 style={styles.title}><FormattedMessage id="Order.Selectreturnproducts" /></h3>
+        <h3 style={styles.title}>
+          <FormattedMessage id="Order.Selectreturnproducts" />
+        </h3>
         <Table
           bordered
           dataSource={dataSource}
@@ -51,6 +56,17 @@ export default class GoodsList extends React.Component<any, any> {
             bordered
             dataSource={giftDataSource}
             columns={giftColumns}
+            pagination={false}
+            rowKey="skuId"
+          />
+        )}
+
+        {subGiftDataSource && subGiftDataSource.length > 0 && (
+          <Table
+            showHeader={false}
+            bordered
+            dataSource={subGiftDataSource}
+            columns={subGiftColumns}
             pagination={false}
             rowKey="skuId"
           />
@@ -79,8 +95,19 @@ export default class GoodsList extends React.Component<any, any> {
   };
 
   /**
+   * 获取订阅订单赠品数据源
+   */
+  _getSubGiftDataSource = () => {
+    const { tradeDetail } = this.props.relaxProps;
+    if (tradeDetail.get('subscriptionPlanGiftList')) {
+      return tradeDetail.get('subscriptionPlanGiftList').toJS();
+    }
+    return null;
+  };
+
+  /**
    * 商品与赠品公用(通过itemType区分展示个性内容)
-   * itemType=0表示商品 , itemType=1表示赠品
+   * itemType=0表示商品 , itemType=1表示赠品,itemType=2表示订阅
    */
   _getColumns = (itemType) => {
     const { getFieldDecorator } = this.props.form;
@@ -97,7 +124,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ? '[Gift]' : ''}${text}`
+        render: (text) => `${itemType == 1 ||itemType == 2 ? '[Gift]' : ''}${text}`
       },
       {
         title: <FormattedMessage id="Order.Specification" />,
@@ -110,8 +137,12 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'unitPrice',
         key: 'price',
         width: 100,
-        render: (text,rowInfo) => {
-          return <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rowInfo.unitPrice.toFixed(2)}</div>
+        render: (text, rowInfo) => {
+          return (
+            <div>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (rowInfo.unitPrice||0).toFixed(2)}
+            </div>
+          );
         }
       },
       {
@@ -140,7 +171,6 @@ export default class GoodsList extends React.Component<any, any> {
                   {
                     validator: (_rule, value, callback) => {
                       const canReturnNum = rowInfo.canReturnNum;
-
                       if (value > canReturnNum) {
                         callback(<FormattedMessage id="Order.Theamountreturnedmustnotexceed" />);
                       }
@@ -153,7 +183,7 @@ export default class GoodsList extends React.Component<any, any> {
                 <InputNumber
                   min={0}
                   max={rowInfo.canReturnNum}
-                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
+                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId,itemType)}
                 />
               )}
               <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
@@ -166,14 +196,13 @@ export default class GoodsList extends React.Component<any, any> {
         key: 'total',
         width: 100,
         render: (rowInfo) => {
-          // if (itemType == 1) {
-          //   return <div>${(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
-          // } 
-          // else {
-          //   return this._getRowTotalPrice(rowInfo);
-          // }
-
-          return <div> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {(rowInfo.unitPrice * rowInfo.num).toFixed(2)}</div>;
+          return (
+            <div>
+              {' '}
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
+              {(rowInfo.unitPrice * rowInfo.num).toFixed(2)}
+            </div>
+          );
         }
       }
     ];
@@ -182,10 +211,9 @@ export default class GoodsList extends React.Component<any, any> {
   /**
    * 修改数量
    */
-  _editGoodsNum = (skuId: string, returnNum) => {
+  _editGoodsNum = (skuId: string, itemType, returnNum) => {
     const { editGoodsNum } = this.props.relaxProps;
-
-    editGoodsNum(skuId, returnNum || 0);
+    editGoodsNum(skuId, returnNum || 0, itemType);
   };
 
   /**

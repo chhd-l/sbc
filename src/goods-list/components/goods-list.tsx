@@ -254,37 +254,22 @@ class CateList extends React.Component<any, any> {
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale, spuDelete } = this.props.relaxProps;
+    const editPath = rowInfo.goodsType == 5 ? `/goods-service-edit/${rowInfo.goodsId}` : rowInfo.goodsType == 2 ? `/goods-bundle-edit/${rowInfo.goodsId}` : `/goods-regular-edit/${rowInfo.goodsId}`;
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
           <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
-            {rowInfo.goodsType != 2 ? (
-              <a
-                onClick={() =>
-                  history.push({
-                    pathname: `/goods-regular-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main', goodsType: 'edit' }
-                  })
-                }
-                style={{ marginRight: 5 }}
-              >
-                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
-                {/* <FormattedMessage id="edit" /> */}
-              </a>
-            ) : (
-              <a
-                onClick={() =>
-                  history.push({
-                    pathname: `/goods-bundle-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main', goodsType: 'edit' }
-                  })
-                }
-                style={{ marginRight: 5 }}
-              >
-                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
-                {/* <FormattedMessage id="edit" /> */}
-              </a>
-            )}
+            <a
+              onClick={() =>
+                history.push({
+                  pathname: editPath,
+                  state: { tab: 'main', goodsType: 'edit' }
+                })
+              }
+              style={{ marginRight: 5 }}
+            >
+              <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+            </a>
           </Tooltip>
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">

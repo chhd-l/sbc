@@ -61,6 +61,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
+      window.token = res.context.token; 
       sessionStorage.setItem(
         cache.LOGIN_ACCOUNT_NAME,
         res.context.accountName
@@ -132,12 +133,19 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         menusRes.res.context.systemTaxSettingResponse.configVOList
         sessionStorage.setItem(cache.LANGUAGE, 'en-US');
 
+      let shouldChangeLanguageSetting = false;
+
       // 初始化用户当前的语言
       if (Const.SITE_NAME !== 'MYVETRECO') {
         const langRes = await InitLanguage()
         if (langRes.res.code === Const.SUCCESS_CODE) {
-          const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US'
+          const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US';
+          const initLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
+          if (lang !== initLang) {
+            shouldChangeLanguageSetting = true;
+          }
           sessionStorage.setItem(cache.LANGUAGE, lang);
+          localStorage.setItem(cache.LANGUAGE, lang);
         }
       }
       if (settingConfigList) {
@@ -220,9 +228,12 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           await fetchStore();
           let hasHomeFunction = functionsRes.includes('f_home');
           if (hasHomeFunction) {
-            // history.push('/');
-            // 需要重载整个dom树
-            window.location.href='/';
+            //如果设置语言和默认语言不同，则需要刷新页面
+            if (shouldChangeLanguageSetting) {
+              window.location.href='/';
+            } else {
+              history.push('/');
+            }
           } else {
             let url = _getUrl(allGradeMenus);
             history.push(url);

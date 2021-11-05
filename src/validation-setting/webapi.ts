@@ -6,12 +6,12 @@ type TResult = {
   context: any;
 };
 
-export function getAddressSetting(param = {}) {
+//查询地址api配置，1 - suggestion  0 - validation
+export function getAddressSetting(addressApiType : number = 0) {
   return Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
     body: JSON.stringify({
-      ...param,
-      addressApiType: 0
+      addressApiType
     })
   });
 }

@@ -755,6 +755,12 @@ class SkuForm extends React.Component<any, any> {
       editGoodsItem(id, key, e);
     }
 
+    //新增sku时，修改skuno，同步修改externalskuno
+    const targetSkuItem = goodsList.find(sku => sku.get('id') === id);
+    if(key === 'goodsInfoNo' && !targetSkuItem.get('goodsInfoId')) {
+      editGoodsItem(id, 'externalSku', e);
+    }
+
 
     if(key == "addedFlag") {
       if(goodsList.toJS().length >1) {

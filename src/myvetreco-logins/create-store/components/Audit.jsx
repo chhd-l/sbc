@@ -6,7 +6,7 @@ import auditImg from '../../assets/images/store-audit.png';
 export default function StoreAudit() {
 
   const backToLogin = () => {
-    history.push("/login-admin");
+    history.push("/login");
   };
 
   return (

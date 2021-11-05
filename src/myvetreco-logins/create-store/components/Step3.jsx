@@ -96,7 +96,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:logoFileList,
@@ -152,7 +152,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadIconProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:iconFileList,
@@ -293,6 +293,16 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
+              <FormItem label="Sell to clinic" name="sellToClinic">
+                {getFieldDecorator('sellToClinic', {
+                  rules: [{ required: true, message: 'Please input Sell to clinic!' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
                 {getFieldDecorator('addressDetail', {
                   initialValue: ''
@@ -329,12 +339,13 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem label="Introduction"
-                        name="introduction">
-                <Input.TextArea size="large" />
+              <FormItem label="Introduction" name="introduction">
+                {getFieldDecorator('introduction', {
+                  initialValue: ''
+                })(<Input.TextArea size="large" />)}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:'none'}}>
               <div className='flex'>
                 <span>
                   <span className='form-require'>Order audit setting</span>
@@ -342,7 +353,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 <FormItem name="auditSetting" style={{marginBottom:0}}>
                   {getFieldDecorator('auditSetting', {
                     rules: [{ required: true, message: 'Please choose Order audit setting!' }],
-                    initialValue: 0
+                    initialValue: 1
                   })(
                     <Radio.Group className="hmargin-level-4">
                       <Radio value={1}>Auto audit</Radio>

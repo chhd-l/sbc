@@ -1900,6 +1900,7 @@ export default {
     "Prescriber.disabled": "Devredışı",
     "Prescriber.search": "Ara",
     "Prescriber.export": "Dışa aktar",
+    "Prescriber.Upload": "Yükle",
     "Prescriber.add": "Ekle",
     "Prescriber.BasicInfomation": "Temel Bilgiler",
     "Prescriber.Save": "Kaydet",

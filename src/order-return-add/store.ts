@@ -49,7 +49,7 @@ export default class AppStore extends Store {
 
     if (isReturn) {
       let orderReturnListRes = await fetchOrderReturnList(tid);
-     
+
       if (orderReturnListRes.res && orderReturnListRes.res['context']) {
         returnOrderList = orderReturnListRes.res['context'];
       }
@@ -74,6 +74,17 @@ export default class AppStore extends Store {
         // 默认赠品退货数量为0
         tradeDetail.res.context.gifts.forEach((v) => {
           v.num = 0; //初始化默认的退货数量
+        });
+      }
+
+      if (tradeDetail.res.context.subscriptionPlanGiftList) {
+        tradeDetail.res.context.subscriptionPlanGiftList.forEach((v) => {
+            v.skuNo= v.goodsInfoNo;
+            v.skuName=v.goodsInfoName;
+            v.specDetails='';
+            v.unitPrice=0;
+            v.num=0;//初始化默认的退货数量
+            v.skuId=v.goodsInfoId
         });
       }
 
@@ -123,10 +134,10 @@ export default class AppStore extends Store {
   /**
    * 修改数量
    */
-  editGoodsNum = (skuId: string, value: number) => {
+  editGoodsNum = (skuId: string, value: number,itemType:number|null) => {
     this.transaction(() => {
       // 1.修改退货商品数量
-      this.dispatch('tradeActor: editGoodsNum', { skuId, value });
+      this.dispatch('tradeActor: editGoodsNum', { skuId, value,itemType });
       // 2.判断是否更新勾选的赠品,以及赠品数量(若修改数量的sku已被勾选,则计算并更新赠品数量)
       const skuIndex = this.state()
         .get('tradeDetail')
@@ -326,9 +337,35 @@ export default class AppStore extends Store {
 
     param = param.set('returnItems', tradeItems);
 
+    if(data.getIn(['tradeDetail', 'subscriptionPlanGiftList'])){
+      // 只保存退货赠品数量大于0的订阅赠品
+      const subGifts = data.getIn(['tradeDetail', 'subscriptionPlanGiftList']).filter((item) => item.get('num') > 0);
+      if (subGifts.size > 0) {
+        let returnSubGifts=[]
+        subGifts.toJS().forEach((v) => {
+          const obj={
+            canReturnNum:v.canReturnNum,
+            num:v.num,
+            orderSplitPrice:0,
+            pic:v.goodsInfoImg,
+            price:0,
+            skuId:v.goodsInfoId,
+            skuName:v.goodsInfoName,
+            skuNo:v.goodsInfoNo,
+            specDetails:'',
+            splitPrice:0,
+            unit:'',
+            externalSkuNo:v.externalSkuNo
+          }
+          returnSubGifts.push(obj)
+        });
+        param = param.set('returnSubscriptionPlanGift', returnSubGifts);
+      }
+    }
+
     // 退款金额，退货是商品总额，退款是应付金额
     console.log(data.get('isReturn'));
-    
+
     let totalPrice = data.get('isReturn')
       ? tradeItems
         .map((sku) => {
@@ -385,8 +422,8 @@ export default class AppStore extends Store {
       // if (data.get('isOnLine')) {
         let title = RCi18n({id: 'Order.refundableAmountTips'}) + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data.get('canApplyPrice')
         let content = RCi18n({id: 'Order.refundableAmountTips2'})
-        let okText=RCi18n({id: 'Order.btnConfirm'}) 
-        let cancelText = RCi18n({id: 'Order.btnCancel'}) 
+        let okText=RCi18n({id: 'Order.btnConfirm'})
+        let cancelText = RCi18n({id: 'Order.btnCancel'})
         Modal.warning({
           title: title,
           content: content,
@@ -394,7 +431,7 @@ export default class AppStore extends Store {
           cancelText: cancelText
         });
         return;
-      // } 
+      // }
       // else {
       //   let onAdd = this.onAdd;
       //   // 线下，给出提示

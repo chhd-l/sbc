@@ -17,7 +17,7 @@ export default class Order extends React.Component<any, any> {
   };
 
   render() {
-    const { memberType, memberInfo, products, list, onAddProduct, onRemoveProduct, onSetQuantity, onClear, onCheckout, onScanEnd, consents, selectedConsents, onSelectConsent } = this.props;
+    const { memberType, memberInfo, products, list, cateList, onAddProduct, onRemoveProduct, onSetQuantity, onClear, onCheckout, onScanEnd, consents, selectedConsents, onSelectConsent, onSearch } = this.props;
     return (
       <>
         <Header />
@@ -32,7 +32,7 @@ export default class Order extends React.Component<any, any> {
           </Col>
           <Col span={8} style={{height: '100%'}}>
             <div className="c-full-box c-order">
-              <ProductOverview products={products} list={list} onAddProduct={onAddProduct} />
+              <ProductOverview products={products} list={list} cateList={cateList} onAddProduct={onAddProduct} onSearch={onSearch}/>
             </div>
             <div className="c-full-box c-foot">
               <CheckoutAction list={list} onClear={onClear} onCheckout={onCheckout} />

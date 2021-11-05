@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Icon, Table, Tooltip, Divider, DatePicker, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
-// import * as webapi from './webapi'
+import { DatePicker, Button, Input, Row, Col, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, Headline, cache } from 'qmkit';
+import { Headline, history } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
 import _ from 'lodash';
@@ -211,6 +210,12 @@ const Schedular = () => {
     getCalendarByDay(params)
   }
 
+  // 跳转到list
+  const goViewList = () =>{
+    history.push("/resources-planning")
+  }
+  console.log(dayPlanList,'dddalist')
+
   return (
     <>
       <div className="container-search">
@@ -244,7 +249,7 @@ const Schedular = () => {
             </Select>
           </Col>
           <Col span={2} offset={4}>
-            <Button type="primary">
+            <Button type="primary" onClick={goViewList}>
               <FormattedMessage id="Resources.list_view" />
             </Button>
           </Col>

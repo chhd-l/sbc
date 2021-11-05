@@ -264,7 +264,7 @@ function Step4({form}){
           {
             purchaseType === 0 &&  (
               <div>
-                <Checkbox checked={{isSuperimposeSubscription}} onChange={(e=>{
+                <Checkbox checked={isSuperimposeSubscription} onChange={(e=>{
                   setIsSuperimposeSubscription(e.target.checked)
                 })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />

@@ -148,7 +148,6 @@ export default class PlanningSetting extends React.Component<any, any>{
         if (!err) {
           this.saveResourceData(params)
         }
-        console.log(params,'ffff=')
     });
   }
 
@@ -159,7 +158,6 @@ export default class PlanningSetting extends React.Component<any, any>{
   }
 
   dictFormat = (dataSource) => {
-    console.log(dataSource,'dataSource===')
     if(!dataSource) return [];
     let dictIds = dataSource?.map(item => item.dictId)
     return dictIds
@@ -200,18 +198,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                   {
                     required: true,
                   },
-                  // {
-                  //   min: 1,
-                  //   max: 20,
-                  //   message: '1-20 characters'
-                  // },
-                  // {
-                  //   validator: (rule, value, callback) => {
-                  //     QMMethod.validatorEmoji(rule, value, callback, 'SPU encoding');
-                  //   }
-                  // }
                 ],
-                // onChange: this._editGoods.bind(this, 'goodsNo'),
                 initialValue: settingDetailData?.account
               })(<Input disabled/>)}
             </FormItem>
@@ -224,7 +211,6 @@ export default class PlanningSetting extends React.Component<any, any>{
                     required: true,
                   },
                 ],
-                // onChange: this._editGoods.bind(this, 'goodsNo'),
                 initialValue: settingDetailData?.name
               })(<Input disabled/>)}
             </FormItem>

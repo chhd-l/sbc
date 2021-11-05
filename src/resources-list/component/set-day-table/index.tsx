@@ -6,26 +6,40 @@ import './index.less'
 import { update } from '_@types_lodash@4.14.172@@types/lodash';
 const timeFormat = 'HH:mm';
 const SetDayTable = (props) => {
-  let { weekList, updateTableData, deleteLinePlanList,updatedDisableCheckedDate,cannotSelect,setCannotSelect } = props
+  let { weekList, updateTableData, deleteLinePlanList,cannotSelect,setCannotSelect,daysList } = props
   console.log(weekList, 'WeekList5666666')
   const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
-  const [daysList, setDaysList] = useState({
-    days: [],
-    dates: []
-  })
+  // const [daysList, setDaysList] = useState({
+  //   days: [],
+  //   dates: []
+  // })
 
-  useEffect(() => {
-    // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
-    let dates = []
-    allWeeks.map(item => dates.push({
-      date: moment(new Date()).day(item).format('YYYYMMDD')
-    }));
-    let days = dates.map(item => moment(item.date).format('M.DD'))
-    setDaysList({
-      days,
-      dates
-    })
-  }, [])
+  // useEffect(() => {
+  //   // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
+  //   let dates = []
+  //   allWeeks.map(item => dates.push({
+  //     date: moment(new Date()).day(item).format('YYYYMMDD')
+  //   }));
+  //   let days = dates.map(item => moment(item.date).format('M.DD'))
+  //   setDaysList({
+  //     days,
+  //     dates
+  //   })
+  // }, [])
+
+  // useEffect(()=>{
+  //   let cannotSelectIdx = []
+  //   if(daysList.dates.length) {
+  //     daysList.dates?.map((dateItem,idx) => {
+  //       props.weekList.resourceDatePlanVOS?.map(planItem => {
+  //         if (dateItem.date === planItem.dateNo) {
+  //           cannotSelectIdx.push(idx)
+  //         }
+  //       })
+  //     })
+  //   }
+  //   setCannotSelect(cannotSelectIdx)
+  // },[props.weekList])
 
   // 时间段的添加按钮事件
   const handleAddTime = () => {
@@ -48,6 +62,8 @@ const SetDayTable = (props) => {
 
   // 日期的复选框选择事件
   const dateCheck = (e, date, _daysList, dateChecked, selecetedIdx) => {
+    console.log(cannotSelect,'cantcaontcaont')
+    // debugger
     let _resourceDatePlanVOS = []
     props.weekList.resourceDatePlanVOS.map(item => _resourceDatePlanVOS.push({
       id: item.id,
@@ -60,10 +76,11 @@ const SetDayTable = (props) => {
       })
       cannotSelect = [...cannotSelect,selecetedIdx]
     } else if (e.target.checked == false) {
+      // debugger
       _daysList.dates.map(item => {
         if (item.date == date) item.dateChecked = false
       })
-      let deleteIndx = cannotSelect.findIndex(selecetedIdx)
+      let deleteIndx = cannotSelect?.findIndex((el)=> el ===selecetedIdx)
       cannotSelect.splice(deleteIndx,1)
       cannotSelect = cannotSelect
       _resourceDatePlanVOS = props.weekList.resourceDatePlanVOS.filter(el => el.dateNo !== date)
@@ -165,14 +182,9 @@ const SetDayTable = (props) => {
   // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
   const handlePlanDatesChecked = (daysList) => {
     let selectedDates = []
-    daysList.dates?.map(dateItem => {
       props.weekList.resourceDatePlanVOS?.map(planItem => {
         selectedDates.push(planItem.dateNo)
-        if (dateItem.date === planItem.dateNo) {
-          dateItem.dateChecked = true
-        }
       })
-    })
 
     return (
       <>
@@ -182,7 +194,7 @@ const SetDayTable = (props) => {
               key={idx}
               disabled={!selectedDates.includes(dateItem.date) && cannotSelect.includes(idx)}
               onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked, idx)}
-              checked={dateItem.dateChecked}
+              checked={selectedDates.includes(dateItem.date)}
             ></Checkbox>
           </td>
         )}

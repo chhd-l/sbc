@@ -1,44 +1,62 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Input,
-  Modal,
-  Table,
-  Form,
-  DatePicker,
-  Popconfirm,
-  Icon,
-  Divider, message,
-  Row, Col, Button, Select, TimePicker,
-  Checkbox
-} from 'antd';
+import { Row, Col, Button, Select } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { SelectGroup, cache } from 'qmkit';
 import moment from 'moment';
-import { Const, RCi18n, SelectGroup, cache } from 'qmkit';
 import SetDayTable from '../set-day-table';
 
 import './index.less'
 
 const { Option } = Select;
 
-const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServiceData }) => {
-  console.log(serviceData,'dddddse')
+const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateServiceData }) => {
+  console.log(serviceData, 'dddddse')
   const [showAddBtn, setShowAddBtn] = useState(false)
-  const [cannotSelect,setCannotSelect] = useState([])
-  const [selectedDateNos,setSelectedDateNos] = useState([])
+  const [cannotSelect, setCannotSelect] = useState([])
+  const [selectedDateNos, setSelectedDateNos] = useState([])
+  const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  const [daysList, setDaysList] = useState({
+    days: [],
+    dates: []
+  })
 
-  useEffect(()=>{
-    // let selectedDateNo = []
-    // serviceData.resourceServicePlanVOList.map(el =>{
-    //   el.resourceWeekPlanVOList.map(item => item.resourceDatePlanVOS.map(_item =>selectedDateNo.push(_item.dateNo)))
-    // })
-    // console.log(selectedDateNo,'selectedDateNoselectedDateNo')
-    // setSelectedDateNos(selectedDateNo)
-  },[serviceData])
+  useEffect(() => {
+    // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
+    let dates = []
+    allWeeks.map(item => dates.push({
+      date: moment(new Date()).day(item).format('YYYYMMDD')
+    }));
+    let days = dates.map(item => moment(item.date).format('M.DD'))
+    setDaysList({
+      days,
+      dates
+    })
+  }, [])
 
-// 添加新的一条日期表格
+  useEffect(() => {
+    let cannotSelectIdx = []
+    if (daysList.dates.length) {
+      daysList.dates?.map((dateItem, idx) => {
+        serviceData.resourceServicePlanVOList.map(_weekList =>
+          _weekList.resourceWeekPlanVOList.map(el => {
+            el.resourceDatePlanVOS?.map(planItem => {
+              if (dateItem.date === planItem.dateNo) {
+                cannotSelectIdx.push(idx)
+              }
+            })
+          })
+        )
+      })
+    }
+    console.log(cannotSelectIdx, '87878')
+    setCannotSelect(cannotSelectIdx)
+  }, [daysList, serviceData])
+
+
+  // 添加新的一条日期表格
   const AddSetByDay = (serviceSort) => {
-    serviceData.resourceServicePlanVOList.map(el =>{
-      if(el.serviceSort === serviceSort){
+    serviceData.resourceServicePlanVOList.map(el => {
+      if (el.serviceSort === serviceSort) {
         let newList = [].concat(el.resourceWeekPlanVOList)
         const _idx = el.resourceWeekPlanVOList.length
         newList.push({
@@ -71,35 +89,32 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
       // setShowAddBtn(false)
     }
   }
-  useEffect(()=>{
-    console.info('cannotSelect',cannotSelect)
-  },[cannotSelect])
+  useEffect(() => {
+    console.info('cannotSelect', cannotSelect)
+  }, [cannotSelect])
 
   const updateTableData = (data) => {
     let selectedDateNo = []
-    serviceData.resourceServicePlanVOList.map(el =>{
+    serviceData.resourceServicePlanVOList.map(el => {
       el.resourceWeekPlanVOList.map(item => {
-        item.sort ==data.sort
-        item =data
-        item.resourceDatePlanVOS.map(_item =>selectedDateNo.push(_item.dateNo))
+        item.sort == data.sort
+        item = data
+        item.resourceDatePlanVOS.map(_item => selectedDateNo.push(_item.dateNo))
       })
     })
     setSelectedDateNos(selectedDateNo)
     updateServiceData(serviceData)
-    console.log(cannotSelect,'cannotSelect==')
+    console.log(cannotSelect, 'cannotSelect==')
   }
 
-  const updatedDisableCheckedDate = (date) =>{
-    console.log(date,'dddate888')
-  }
-
-  const deleteLinePlanList = (sort)=>{
-    serviceData.resourceServicePlanVOList.map(item =>{
-      let remainData = item.resourceWeekPlanVOList.filter(el => el.sort !==sort)
+  const deleteLinePlanList = (sort) => {
+    serviceData.resourceServicePlanVOList.map(item => {
+      let remainData = item.resourceWeekPlanVOList.filter(el => el.sort !== sort)
       item.resourceWeekPlanVOList = remainData
     })
     updateServiceData(serviceData)
   }
+
   return (
     <div>
       {serviceData?.resourceServicePlanVOList?.map((el, idx) =>
@@ -115,7 +130,7 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
                 }
                 // disabled={selectDisabled}
                 value={el.serviceTypeId}
-                onChange={(value)=>handleServiceType(value,el.serviceSort)}
+                onChange={(value) => handleServiceType(value, el.serviceSort)}
               >
                 {serviceTypeDict?.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
               </SelectGroup>
@@ -128,26 +143,25 @@ const ServiceSetting = ({serviceData,serviceTypeDict,selectDisabled,updateServic
               </p>
             </Col>
             <Col span={2}>
-              <Button type="primary" onClick={()=>AddSetByDay(el.serviceSort)}>
+              <Button type="primary" onClick={() => AddSetByDay(el.serviceSort)}>
                 <FormattedMessage id="Setting.add" />
               </Button>
             </Col>
           </Row>
-          {el.resourceWeekPlanVOList.map((itemWeekList,index) => (
+          {el.resourceWeekPlanVOList.map((itemWeekList, index) => (
             <SetDayTable
               weekList={itemWeekList}
               key={index}
+              daysList={daysList}
               cannotSelect={cannotSelect}
               setCannotSelect={setCannotSelect}
               updateTableData={updateTableData}
               deleteLinePlanList={deleteLinePlanList}
               selectedDateNos={selectedDateNos}
-              updatedDisableCheckedDate={updatedDisableCheckedDate}
             />
           ))}
         </div>
       )}
-
     </div>
   );
 };

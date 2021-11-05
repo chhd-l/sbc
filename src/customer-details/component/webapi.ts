@@ -14,7 +14,8 @@ type TResult = {
  * 法国暂时不使用配置，直接条用MANUALLY的设置
  */
 export async function getAddressInputTypeSetting() {
-  if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId] === 'fr') {
+  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
+  if (currentCountry === 'fr' || currentCountry === 'uk') {
     return Promise.resolve('MANUALLY');
   }
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
@@ -61,7 +62,8 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
  * @returns
  */
 export async function getIsAddressValidation() {
-  if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId] === 'fr') {
+  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
+  if (currentCountry === 'fr' || currentCountry === 'uk') {
     return Promise.resolve(false);
   }
   return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {

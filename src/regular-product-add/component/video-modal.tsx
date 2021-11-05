@@ -163,7 +163,7 @@ export default class VideoModal extends React.Component<any, any> {
         this.setState({
           successCount: this.state.successCount + 1
         });
-        message.success(`${file.name} 上传成功！`);
+        message.success(`${file.name} upload successful!`);
       }
     } else if (status === 'error') {
       this.setState({
@@ -198,7 +198,7 @@ export default class VideoModal extends React.Component<any, any> {
     });
     if (fileList.length > 1) {
       if (fileList.filter((f) => f.uid).length == fileList.length) {
-        message.error('最多一次性上传一个文件');
+        message.error('Support one file at one time!');
       }
       return false;
     }
@@ -208,11 +208,11 @@ export default class VideoModal extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过50M');
+        message.error('File size cannot exceed 50M!');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error!');
       return false;
     }
   };
@@ -239,7 +239,7 @@ export default class VideoModal extends React.Component<any, any> {
     if (videoCateId) {
       cleanChooseVideo();
     } else {
-      message.error('请选择图片分类');
+      message.error('Please choose category!');
     }
   };
   _videoDetail = (videoUrl: string) => {

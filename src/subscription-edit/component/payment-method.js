@@ -13,6 +13,8 @@ const PaymentMethod = (props) => {
   const [cards, setCards] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
 
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
@@ -79,7 +81,7 @@ const PaymentMethod = (props) => {
 
   function deleteCard(paymentId) {
     setLoading(true);
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    // const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
       .deleteCard(storeId, paymentId)
       .then((data) => {
@@ -123,11 +125,13 @@ const PaymentMethod = (props) => {
         </Radio>
 
         {props.subscriptionType === 'Peawee' ? null : (
-          <AuthWrapper functionName="f_cod_payment">
-            <Radio value={'PAYU_RUSSIA_COD'}>
-              <FormattedMessage id="Subscription.CashOnDelivery" />
-            </Radio>
-          </AuthWrapper>
+          storeId === 123457907 ? (
+            <AuthWrapper functionName="f_cod_payment">
+              <Radio value={'PAYU_RUSSIA_COD'}>
+                <FormattedMessage id="Subscription.CashOnDelivery" />
+              </Radio>
+            </AuthWrapper>
+          ) : null
         )}
       </Radio.Group>
       {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (

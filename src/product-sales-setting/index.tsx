@@ -252,9 +252,9 @@ class ProductSearchSetting extends Component<any, any> {
           <Form
             name='complex'
             onSubmit={this.onFinish}
-            labelAlign='left'
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 15 }}
+            labelAlign='right'
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 16 }}
           >
 
 

@@ -1,32 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import _ from 'lodash';
 import * as webapi from '../webapi';
 import ServiceSetting from '../component/service-setting'
 import './index.less'
-
 const { Option } = Select;
 const FormItem = Form.Item;
-
-const styles = {
-  planningBtn: {
-    marginRight: 12
-  }
-};
-
-const optionTest = [{
-  label:'1',
-  value:'1',
-},{
-  label:'2',
-  value:'2',
-},{
-  label:'3',
-  value:'3',
-},]
-
-// let AvailServiceType = [{id:'all',name:'all'}];
-let AvailServiceType = [];
 
 // @ts-ignore
 @Form.create()
@@ -39,32 +19,15 @@ export default class PlanningSetting extends React.Component<any, any>{
       expertTypeDict:[],
       AvailServiceTypeDict:[],
       AvailServiceTypeDisabled:true,
-      settingDetailData:{
-        resourceServicePlanVOList: [{
-          serviceTypeId: null,
-          serviceSort: "1",//serviceType的设置顺序
-          resourceWeekPlanVOList: [{
-            sort: "1",//一个serviceType下,日期选择行的顺序
-            timeSlotVO: {
-              id: null,
-              // timeSlot: "00:00-23:59|00:00-23:59",
-              timeSlot: "00:00-23:59",
-            },
-            resourceDatePlanVOS: []
-          }]
-        }]
-      },
-      saveDetailData: {
-        isAll: 1,
-      },
+      settingDetailData:{},
+      // saveDetailData: {},
       resourceServicePlanVOList: [{
         serviceTypeId: null,
-        serviceSort: "1",//serviceType的设置顺序
+        serviceSort:1,//serviceType的设置顺序
         resourceWeekPlanVOList: [{
-          sort: "1",//一个serviceType下,日期选择行的顺序
+          sort:1,//一个serviceType下,日期选择行的顺序
           timeSlotVO: {
             id: null,
-            // timeSlot: "00:00-23:59|00:00-23:59",
             timeSlot: "00:00-23:59",
           },
           resourceDatePlanVOS: []
@@ -107,10 +70,9 @@ export default class PlanningSetting extends React.Component<any, any>{
         resourceServicePlanVOList:this.state.resourceServicePlanVOList
         });
     }
-    // const settingData =  data.resourceServicePlanVOList?.length ? data : defaultData
     this.setState({
-      settingDetailData: settingData,//往下传的数据
-      saveDetailData:data,
+      settingDetailData: settingData,//往下传的数据,也是传给接口的数据
+      // saveDetailData:data,
     }, () => {
       const AvailServiceTypeId = data.resourceServicePlanVOList?.[0].serviceTypeId
       const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
@@ -142,7 +104,7 @@ export default class PlanningSetting extends React.Component<any, any>{
   saveSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      const params = Object.assign(this.state.saveDetailData,{
+      const params = Object.assign(this.state.settingDetailData,{
         ...values
       })
         if (!err) {
@@ -152,8 +114,14 @@ export default class PlanningSetting extends React.Component<any, any>{
   }
 
   updateServiceData = (data) => {
+    let _data = _.cloneDeep(data)
+    console.log(data,'dadate---')
+    // const params = Object.assign(this.state.saveDetailData,{
+    //   ..._data
+    // })
     this.setState({
-      saveDetailData: data
+      // saveDetailData: params,
+      settingDetailData:_data,
     })
   }
 
@@ -177,7 +145,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
-    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,AvailServiceTypeDisabled,settingDetailData,saveDetailData} =this.state;
+    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,settingDetailData} =this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
@@ -275,9 +243,8 @@ export default class PlanningSetting extends React.Component<any, any>{
           </Row>
           <div className="availability-title">Availability:</div>
           <ServiceSetting
-          serviceData={settingDetailData} 
-          serviceTypeDict={AvailServiceTypeDict} 
-          selectDisabled={AvailServiceTypeDisabled}
+          serviceData={settingDetailData}
+          serviceTypeDict={AvailServiceTypeDict}
           updateServiceData={(data)=>this.updateServiceData(data)}
           />
           <Row>

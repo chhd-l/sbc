@@ -1,41 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Input,
-  Modal,
-  Table,
-  Form,
-  DatePicker,
-  Popconfirm,
-  Icon,
-  Divider, message,
-  Row, Col, Button, Select, TimePicker,
-  Checkbox
-} from 'antd';
+import React from 'react';
+import { Modal } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
-import { Const, RCi18n, SelectGroup, cache } from 'qmkit';
-import moment from 'moment';
-import form from '@/order-return-edit/components/form';
-import SetDayTable from '../set-day-table';
+import { Const } from 'qmkit';
+import _ from 'lodash';
 import ServiceSetting from '../service-setting';
 import * as webapi from '../../webapi';
-
-const styles = {
-  label: {
-    width: 151,
-    textAlign: 'center'
-  },
-  title: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: 25,
-    fontSize: 13,
-    fontWeight: 600,
-  },
-} as any;
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-
 export default class BulkPlanningModal extends React.Component<any, any>{
   constructor(props) {
     super(props);
@@ -43,9 +13,9 @@ export default class BulkPlanningModal extends React.Component<any, any>{
       batchSettingData: {
         resourceServicePlanVOList: [{
           serviceTypeId: null,
-          serviceSort: "1",//serviceType的设置顺序
+          serviceSort: 1,//serviceType的设置顺序
           resourceWeekPlanVOList: [{
-            sort: "1",//一个serviceType下,日期选择行的顺序
+            sort: 1,//一个serviceType下,日期选择行的顺序
             timeSlotVO: {
               id: null,
               // timeSlot: "00:00-23:59|00:00-23:59",
@@ -55,7 +25,7 @@ export default class BulkPlanningModal extends React.Component<any, any>{
           }]
         }]
       },
-      saveData: {}
+      // saveData: {}
     }
   }
 
@@ -63,26 +33,23 @@ export default class BulkPlanningModal extends React.Component<any, any>{
     this.batchSaveData()
   };
 
-  batchSaveData = async() => {
-    const {selectedEmployeeIds} = this.props
-    console.log(this.state.saveData,'saveData66')
+  batchSaveData = async () => {
+    const { selectedEmployeeIds } = this.props
     let params = {
-      employeeIds:selectedEmployeeIds,
-      ...this.state.saveData,
+      employeeIds: selectedEmployeeIds,
+      ...this.state.batchSettingData,
     }
-    const {res} = await webapi.batchSaveOrUpdate(params)
-    console.log(res,'ressssucc')
-    if(res.code == Const.SUCCESS_CODE) {
+    const { res } = await webapi.batchSaveOrUpdate(params)
+    if (res.code == Const.SUCCESS_CODE) {
       this.setState({
-        batchSettingData:{
+        batchSettingData: {
           resourceServicePlanVOList: [{
             serviceTypeId: null,
-            serviceSort: "1",//serviceType的设置顺序
+            serviceSort: 1,//serviceType的设置顺序
             resourceWeekPlanVOList: [{
-              sort: "1",//一个serviceType下,日期选择行的顺序
+              sort: 1,//一个serviceType下,日期选择行的顺序
               timeSlotVO: {
                 id: null,
-                // timeSlot: "00:00-23:59|00:00-23:59",
                 timeSlot: "00:00-23:59",
               },
               resourceDatePlanVOS: []
@@ -99,8 +66,10 @@ export default class BulkPlanningModal extends React.Component<any, any>{
   };
 
   updateServiceData = (data) => {
+    let _data = _.cloneDeep(data)
     this.setState({
-      saveData: data
+      // saveData: data,
+      batchSettingData: _data
     })
   }
 

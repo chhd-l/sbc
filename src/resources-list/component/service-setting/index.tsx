@@ -9,8 +9,7 @@ import './index.less'
 
 const { Option } = Select;
 
-const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateServiceData }) => {
-  console.log(serviceData, 'dddddse')
+const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => {
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [cannotSelect, setCannotSelect] = useState([])
   const [selectedDateNos, setSelectedDateNos] = useState([])
@@ -34,11 +33,22 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateSe
   }, [])
 
   useEffect(() => {
+    updateCannotSelected()
+  }, [daysList, serviceData])
+
+  const handleUpdateServiceData = (data, type?: string) => {
+    updateServiceData(data)
+    if (type === "delete") {
+      updateCannotSelected()
+    }
+  }
+
+  const updateCannotSelected = () => {
     let cannotSelectIdx = []
     if (daysList.dates.length) {
       daysList.dates?.map((dateItem, idx) => {
-        serviceData.resourceServicePlanVOList.map(_weekList =>
-          _weekList.resourceWeekPlanVOList.map(el => {
+        serviceData.resourceServicePlanVOList?.map(_weekList =>
+          _weekList.resourceWeekPlanVOList?.map(el => {
             el.resourceDatePlanVOS?.map(planItem => {
               if (dateItem.date === planItem.dateNo) {
                 cannotSelectIdx.push(idx)
@@ -48,10 +58,8 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateSe
         )
       })
     }
-    console.log(cannotSelectIdx, '87878')
     setCannotSelect(cannotSelectIdx)
-  }, [daysList, serviceData])
-
+  }
 
   // 添加新的一条日期表格
   const AddSetByDay = (serviceSort) => {
@@ -70,7 +78,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateSe
         el.resourceWeekPlanVOList = newList
       }
     })
-    updateServiceData(serviceData)
+    handleUpdateServiceData(serviceData)
   }
 
   // serviceType下拉选择
@@ -82,16 +90,13 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateSe
           el.serviceTypeId = value
         }
       })
-      updateServiceData(Object.assign(serviceData, {
+      handleUpdateServiceData(Object.assign(serviceData, {
         isAll: 0,//目前只有felin,因此传0，后期再调整
       }))
     } else {
       // setShowAddBtn(false)
     }
   }
-  useEffect(() => {
-    console.info('cannotSelect', cannotSelect)
-  }, [cannotSelect])
 
   const updateTableData = (data) => {
     let selectedDateNo = []
@@ -103,16 +108,16 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, selectDisabled, updateSe
       })
     })
     setSelectedDateNos(selectedDateNo)
-    updateServiceData(serviceData)
-    console.log(cannotSelect, 'cannotSelect==')
+    handleUpdateServiceData(serviceData)
   }
 
   const deleteLinePlanList = (sort) => {
+
     serviceData.resourceServicePlanVOList.map(item => {
       let remainData = item.resourceWeekPlanVOList.filter(el => el.sort !== sort)
       item.resourceWeekPlanVOList = remainData
     })
-    updateServiceData(serviceData)
+    handleUpdateServiceData(serviceData, 'delete')
   }
 
   return (

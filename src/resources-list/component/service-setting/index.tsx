@@ -112,9 +112,16 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
   }
 
   const deleteLinePlanList = (sort) => {
-
     serviceData.resourceServicePlanVOList.map(item => {
       let remainData = item.resourceWeekPlanVOList.filter(el => el.sort !== sort)
+      if(!remainData.length) remainData =[{
+        sort: 1,
+        timeSlotVO: {
+          id: null,
+          timeSlot: "00:00-23:59",
+        },
+        resourceDatePlanVOS: []
+      }]
       item.resourceWeekPlanVOList = remainData
     })
     handleUpdateServiceData(serviceData, 'delete')

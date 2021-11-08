@@ -67,8 +67,8 @@ export default class PlanningSetting extends React.Component<any, any>{
     const { res } = await webapi.findByEmployeeId({ employeeId })
     const data = res?.context?.resourceSetting;
     let settingData = data;
-    if (!data.resourceServicePlanVOList?.length) {
-      settingData = Object.assign(data, {
+    if (!data?.resourceServicePlanVOList?.length) {
+      settingData = Object.assign(data || {}, {
         resourceServicePlanVOList: this.state.resourceServicePlanVOList
       });
     }
@@ -76,7 +76,7 @@ export default class PlanningSetting extends React.Component<any, any>{
       settingDetailData: settingData,//往下传的数据,也是传给接口的数据
       // saveDetailData:data,
     }, () => {
-      const AvailServiceTypeId = data.resourceServicePlanVOList?.[0].serviceTypeId
+      const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
       const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
       this.setState({
         AvailServiceTypeDict

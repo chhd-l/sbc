@@ -1,73 +1,21 @@
-#kaktusMap {
-  display: none;
+.order-con .ant-table-tbody > tr > td {
+  border-bottom: none;
 }
 
-// PC端地图
-.pickup_map_box {
-  display: block;
-  height: 505px;
-  margin-bottom: 1.5rem !important;
+.line-ellipse {
+  // max-width: 200px;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  // white-space: nowrap;
+  width: 100%;
+  max-width: none;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
+  word-break: break-word;
+}
 
-  #kaktusMap {
-    height: 505px;
-    display: block !important;
-
-    #kaktusGlobalWrapper {
-      background: none;
-
-      #KaktusModalWrapper {
-        box-shadow: none;
-        padding: 0;
-
-        .modals-wrapper {
-          height: 505px !important;
-
-          .ymaps-2-1-78-controls__control {
-            display: none !important;
-          }
-
-          .ymaps-2-1-78-copyrights-pane {
-            display: none !important;
-          }
-        }
-      }
-
-      .close-button {
-        display: none;
-      }
-
-      // .map-top-panel {
-      //   display: none;
-      // }
-
-      .map-bottom-panel {
-        .map-bottom-panel-buttons {
-          button {
-            border-radius: 30px;
-            border-color: #e2001a;
-
-            &.secondary {
-              background-color: #fff;
-              color: #e2001a;
-            }
-
-            &.primary {
-              background-color: #e2001a;
-              color: #fff;
-            }
-          }
-        }
-      }
-
-      .map-bottom-panel-address {
-        color: #b0b0b0;
-      }
-
-      .map-bottom-panel-worktime {
-        color: #b0b0b0;
-      }
-
-    }
-  }
+.rang-picker-width {
+  width: 354px;
 }

@@ -1030,7 +1030,7 @@ export default {
         'Subscription.Gift': 'Gift',
         'Subscription.Operation': 'Operation',
         'Subscription.PleaseSelectYourTags!': 'Please Select your tags!',
-        'Subscription.EmailPaymentIntervalsDesc': 'Attemtps between first and last emails due to payment issues',
+        'Subscription.EmailPaymentIntervalsDesc': 'Attempts between first and last emails due to payment issues',
         'Subscription.Phone number': 'Phone number',
         'Subscription.Delivery address phone number': 'Delivery address phone number',
         'Subscription.DeliveryMethods': 'Delivery method',

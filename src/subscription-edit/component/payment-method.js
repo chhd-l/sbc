@@ -124,7 +124,7 @@ const PaymentMethod = (props) => {
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
-        {props.subscriptionType === 'Peawee' ? null : (
+        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : (
           storeId === 123457907 ? (
             <AuthWrapper functionName="f_cod_payment">
               <Radio value={'PAYU_RUSSIA_COD'}>

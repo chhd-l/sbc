@@ -86,7 +86,7 @@ export default class PetOwnerActivity extends Component<any, any> {
                 <p style={{ color: '#e2001a' }}>Quick Send</p>
               </Button> */}
               <AuthWrapper functionName="f_petowner_create_order_button">
-                {petOwner.customerName ? (
+                {petOwner.customerName && Const.SITE_NAME !== 'MYVETRECO' ? (
                   <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
                     {RCi18n({ id: 'PetOwner.createOrder' })}
                   </Button>

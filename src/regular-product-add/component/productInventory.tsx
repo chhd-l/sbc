@@ -4,7 +4,7 @@ import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon,
 const { Option } = Select;
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst, RCi18n } from 'qmkit';
+import { cache, noop, ValidConst, RCi18n, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -286,7 +286,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalStock'),
                 initialValue: rowInfo.externalStock
-              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={Const.SITE_NAME === 'MYVETRECO' || (rowInfo.index > 1 && stockChecked)} />)}
             </FormItem>
           </Col>
         </Row>

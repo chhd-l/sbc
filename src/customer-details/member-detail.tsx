@@ -45,7 +45,8 @@ export const FORM_FIELD_MAP = {
   'Postal code': 'postalCode',
   Entrance: 'entrance',
   Apartment: 'apartment',
-  Comment: 'rfc'
+  Comment: 'rfc',
+  County: 'county'
 };
 
 export async function getPetsBreedListByType(type: string) {

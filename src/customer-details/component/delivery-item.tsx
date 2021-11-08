@@ -53,7 +53,8 @@ export const FORM_FIELD_MAP = {
   'Postal code': 'postCode',
   Entrance: 'entrance',
   Apartment: 'apartment',
-  Comment: 'rfc'
+  Comment: 'rfc',
+  County: 'county'
 };
 
 class DeliveryItem extends React.Component<Iprop, any> {

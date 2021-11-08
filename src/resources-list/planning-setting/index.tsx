@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
+import { history, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
 import * as webapi from '../webapi';
@@ -13,19 +14,20 @@ const FormItem = Form.Item;
 export default class PlanningSetting extends React.Component<any, any>{
   constructor(props) {
     super(props);
-    this.state={
-      serviceTypeDict:[],
-      appointmentTypeDict:[],
-      expertTypeDict:[],
-      AvailServiceTypeDict:[],
-      AvailServiceTypeDisabled:true,
-      settingDetailData:{},
+    this.state = {
+      serviceTypeDict: [],
+      appointmentTypeDict: [],
+      expertTypeDict: [],
+      AvailServiceTypeDict: [],
+      AvailServiceTypeDisabled: true,
+      settingDetailData: {},
       // saveDetailData: {},
+      spinLoading: false,
       resourceServicePlanVOList: [{
         serviceTypeId: null,
-        serviceSort:1,//serviceType的设置顺序
+        serviceSort: 1,//serviceType的设置顺序
         resourceWeekPlanVOList: [{
-          sort:1,//一个serviceType下,日期选择行的顺序
+          sort: 1,//一个serviceType下,日期选择行的顺序
           timeSlotVO: {
             id: null,
             timeSlot: "00:00-23:59",
@@ -65,10 +67,10 @@ export default class PlanningSetting extends React.Component<any, any>{
     const { res } = await webapi.findByEmployeeId({ employeeId })
     const data = res?.context?.resourceSetting;
     let settingData = data;
-    if(!data.resourceServicePlanVOList?.length) {
-      settingData =  Object.assign(data,{
-        resourceServicePlanVOList:this.state.resourceServicePlanVOList
-        });
+    if (!data.resourceServicePlanVOList?.length) {
+      settingData = Object.assign(data, {
+        resourceServicePlanVOList: this.state.resourceServicePlanVOList
+      });
     }
     this.setState({
       settingDetailData: settingData,//往下传的数据,也是传给接口的数据
@@ -82,17 +84,36 @@ export default class PlanningSetting extends React.Component<any, any>{
     })
   }
 
-  saveResourceData = async(params)=>{
-    await webapi.saveOrUpdateResource(params)
+  saveResourceData = async (params) => {
+    try {
+      const { res } = await webapi.saveOrUpdateResource(params)
+      this.setState({
+        spinLoading: true
+      })
+      if (res.code == Const.SUCCESS_CODE) {
+        this.setState({
+          spinLoading: false
+        },()=>{
+        history.push('/resources-planning')
+        })
+      } else {
+        this.setState({
+          spinLoading: false
+        })
+      }
+
+    } catch (err) {
+      // err
+    }
   }
 
   handleSelectChange = (type, value) => {
     if (type == 'serviceTypeIds') {
-     let AvailServiceTypeDict = []
+      let AvailServiceTypeDict = []
       value.forEach(val => {
-         this.state.serviceTypeDict.map(item =>{
-           if( item.id ==val) AvailServiceTypeDict.push(item)
-         })
+        this.state.serviceTypeDict.map(item => {
+          if (item.id == val) AvailServiceTypeDict.push(item)
+        })
       })
       this.setState({
         AvailServiceTypeDict,
@@ -104,31 +125,31 @@ export default class PlanningSetting extends React.Component<any, any>{
   saveSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      const params = Object.assign(this.state.settingDetailData,{
+      const params = Object.assign(this.state.settingDetailData, {
         ...values
       })
-        if (!err) {
-          this.saveResourceData(params)
-        }
+      if (!err) {
+        this.saveResourceData(params)
+      }
     });
   }
 
   updateServiceData = (data) => {
     let _data = _.cloneDeep(data)
-    console.log(data,'dadate---')
-    // const params = Object.assign(this.state.saveDetailData,{
-    //   ..._data
-    // })
     this.setState({
       // saveDetailData: params,
-      settingDetailData:_data,
+      settingDetailData: _data,
     })
   }
 
   dictFormat = (dataSource) => {
-    if(!dataSource) return [];
+    if (!dataSource) return [];
     let dictIds = dataSource?.map(item => item.dictId)
     return dictIds
+  }
+
+  handleCancel = () => {
+    history.push('/resources-planning')
   }
 
   render() {
@@ -145,117 +166,119 @@ export default class PlanningSetting extends React.Component<any, any>{
         sm: { span: 12 },
       },
     };
-    const {serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict,settingDetailData} =this.state;
+    const { serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict, settingDetailData } = this.state;
     return (
       <div className="planning-setting-wrap">
         {/* <BreadCrumb /> */}
         <div className="container">
-          <div className="title-box">
-            <span className="title-text">Planning Setting</span>
-          </div>
-          <Form
-          className="planning-setting-form"
-          {...formItemLayout}
-            onSubmit={this.saveSubmit}
-          >
-          <Row >
-              <Col span={14}>
-            <FormItem  label={ <FormattedMessage id="Resources.email" />}>
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-                initialValue: settingDetailData?.account
-              })(<Input disabled/>)}
-            </FormItem>
-          </Col>
-          <Col span={14}>
-            <FormItem  label={ <FormattedMessage id="Resources.name" />}>
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-                initialValue: settingDetailData?.name
-              })(<Input disabled/>)}
-            </FormItem>
-          </Col>
-          <Col span={14}>
-            <FormItem label={ <FormattedMessage id="Resources.service_type" />}>
-              {getFieldDecorator('serviceTypeIds', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-                onChange: (value)=>{this.handleSelectChange('serviceTypeIds', value ) },
-                initialValue:this.dictFormat(settingDetailData?.serviceType)
-              })(<Select
-                mode="multiple"
-                className="service-type-setting"
-                getPopupContainer={() => document.getElementsByClassName('service-type-setting')[0]}
-                >
-                  {serviceTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
-                </Select>)}
-            </FormItem>
-          </Col>
-          <Col span={14}>
-            <FormItem label={ <FormattedMessage id="Resources.expert_type" />}>
-              {getFieldDecorator('expertTypeIds', {
-                rules: [
-                  {
-                    required: true,
-                  },
-                ],
-                onChange: (value)=>{this.handleSelectChange('expertTypeIds', value ) },
-                initialValue:this.dictFormat(settingDetailData?.expertType)
-              })(<Select
-                mode="multiple"
-                className="expert-type-setting"
-                getPopupContainer={() => document.getElementsByClassName('expert-type-setting')[0]}
-                >
-                  {expertTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
-                </Select>)}
-            </FormItem>
-          </Col>
-          <Col span={14}>
-            <FormItem label={ <FormattedMessage id="Resources.appointment_type" />}>
-              {getFieldDecorator('appointmentTypeIds', {
-                rules: [
-                  {
-                    required: true,
-                  }
-                ],
-                onChange: (value)=>{this.handleSelectChange('appointmentTypeIds', value ) },
-                initialValue:this.dictFormat(settingDetailData?.appointmentType)
-              })(<Select
-                mode="multiple"
-                className='appointment-type-setting'
-                getPopupContainer={() => document.getElementsByClassName('appointment-type-setting')[0]}
-                >
-                  {appointmentTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
-                </Select>)}
-            </FormItem>
-          </Col>
-          </Row>
-          <div className="availability-title">Availability:</div>
-          <ServiceSetting
-          serviceData={settingDetailData}
-          serviceTypeDict={AvailServiceTypeDict}
-          updateServiceData={(data)=>this.updateServiceData(data)}
-          />
-          <Row>
-            <Col span={2} offset={9}>
-            <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
-            </Col>
-            <Col span={2} >
-            <Button type="primary"><FormattedMessage id="cancel" /></Button>
-            </Col>
-          </Row>
-          </Form>
+          <Spin spinning={this.state.spinLoading}>
+            <div className="title-box">
+              <span className="title-text">Planning Setting</span>
+            </div>
+            <Form
+              className="planning-setting-form"
+              {...formItemLayout}
+              onSubmit={this.saveSubmit}
+            >
+              <Row >
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Resources.email" />}>
+                    {getFieldDecorator('email', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                      initialValue: settingDetailData?.account
+                    })(<Input disabled />)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Resources.name" />}>
+                    {getFieldDecorator('name', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                      initialValue: settingDetailData?.name
+                    })(<Input disabled />)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Resources.service_type" />}>
+                    {getFieldDecorator('serviceTypeIds', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                      onChange: (value) => { this.handleSelectChange('serviceTypeIds', value) },
+                      initialValue: this.dictFormat(settingDetailData?.serviceType)
+                    })(<Select
+                      mode="multiple"
+                      className="service-type-setting"
+                      getPopupContainer={() => document.getElementsByClassName('service-type-setting')[0]}
+                    >
+                      {serviceTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Resources.expert_type" />}>
+                    {getFieldDecorator('expertTypeIds', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                      onChange: (value) => { this.handleSelectChange('expertTypeIds', value) },
+                      initialValue: this.dictFormat(settingDetailData?.expertType)
+                    })(<Select
+                      mode="multiple"
+                      className="expert-type-setting"
+                      getPopupContainer={() => document.getElementsByClassName('expert-type-setting')[0]}
+                    >
+                      {expertTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Resources.appointment_type" />}>
+                    {getFieldDecorator('appointmentTypeIds', {
+                      rules: [
+                        {
+                          required: true,
+                        }
+                      ],
+                      onChange: (value) => { this.handleSelectChange('appointmentTypeIds', value) },
+                      initialValue: this.dictFormat(settingDetailData?.appointmentType)
+                    })(<Select
+                      mode="multiple"
+                      className='appointment-type-setting'
+                      getPopupContainer={() => document.getElementsByClassName('appointment-type-setting')[0]}
+                    >
+                      {appointmentTypeDict.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)}
+                    </Select>)}
+                  </FormItem>
+                </Col>
+              </Row>
+              <div className="availability-title">Availability:</div>
+              <ServiceSetting
+                serviceData={settingDetailData}
+                serviceTypeDict={AvailServiceTypeDict}
+                updateServiceData={(data) => this.updateServiceData(data)}
+              />
+              <Row>
+                <Col span={2} offset={9}>
+                  <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
+                </Col>
+                <Col span={2} >
+                  <Button onClick={this.handleCancel} type="primary"><FormattedMessage id="cancel" /></Button>
+                </Col>
+              </Row>
+            </Form>
+          </Spin>
         </div>
       </div>
     )

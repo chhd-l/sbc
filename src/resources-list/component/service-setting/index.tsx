@@ -71,7 +71,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
           sort: _idx + 1,
           timeSlotVO: {
             id: null,
-            timeSlot: "00:00-23:59",
+            timeSlot: '',
           },
           resourceDatePlanVOS: []
         })
@@ -118,7 +118,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
         sort: 1,
         timeSlotVO: {
           id: null,
-          timeSlot: "00:00-23:59",
+          timeSlot: "",
         },
         resourceDatePlanVOS: []
       }]

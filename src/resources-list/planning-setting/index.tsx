@@ -30,7 +30,7 @@ export default class PlanningSetting extends React.Component<any, any>{
           sort: 1,//一个serviceType下,日期选择行的顺序
           timeSlotVO: {
             id: null,
-            timeSlot: "00:00-23:59",
+            timeSlot: "",
           },
           resourceDatePlanVOS: []
         }]

@@ -5,12 +5,13 @@ import moment from 'moment';
 import './index.less'
 import { update } from '_@types_lodash@4.14.172@@types/lodash';
 const timeFormat = 'HH:mm';
+
 const SetDayTable = (props) => {
   let { weekList, updateTableData, deleteLinePlanList, cannotSelect, setCannotSelect, daysList } = props
 
   // 时间段的添加按钮事件
   const handleAddTime = () => {
-    const defaultTime = "00:00-23:59";
+    const defaultTime = '';
     let newTime = weekList.timeSlotVO.timeSlot + "|" + defaultTime;
     weekList.timeSlotVO.timeSlot = newTime;
     updateTableData(weekList)
@@ -75,6 +76,7 @@ const SetDayTable = (props) => {
           let newTimeStr = `${timeStr}-${times[1]}`
           weekList.timeSlotVO.timeSlot = newTimeStr
         } else {
+
           let _newTimeStr = `${times[0]}-${timeStr}`
           weekList.timeSlotVO.timeSlot = _newTimeStr
         }
@@ -92,12 +94,14 @@ const SetDayTable = (props) => {
       let _time = times.map(item => item.split('-'))
       return (_time.map((timeRange, idx) => {
         return (
-          <div style={{ marginTop: "6px" }}>
+          <div key={idx} style={{ marginTop: "6px" }}>
             <TimePicker
               format={timeFormat}
               className={'start-time-picker'}
               minuteStep={15}
-              value={moment(timeRange[0], timeFormat)}
+              placeholder={'Start time'}
+              // value={moment(timeRange[0], timeFormat)}
+              value={timeRange[0].length ? moment(timeRange[0], timeFormat) : undefined}
               onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
               allowClear={false}
             />
@@ -106,7 +110,9 @@ const SetDayTable = (props) => {
               format={timeFormat}
               className={'end-time-picker'}
               minuteStep={15}
-              value={moment(timeRange[1], timeFormat)}
+              placeholder={'End time'}
+              // value={moment(timeRange[1], timeFormat)}
+              value={timeRange[1] && timeRange[1] !== "undefined" ? moment(timeRange[1], timeFormat) : undefined}
               onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
               allowClear={false}
             />
@@ -125,7 +131,8 @@ const SetDayTable = (props) => {
             format={timeFormat}
             className={'start-time-picker'}
             minuteStep={15}
-            value={moment(singleTime[0], timeFormat)}
+            value={singleTime[0].length ? moment(singleTime[0], timeFormat) : undefined}
+            placeholder={'Start time'}
             onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, -1) }}
             allowClear={false}
           />
@@ -134,7 +141,8 @@ const SetDayTable = (props) => {
             format={timeFormat}
             className={'end-time-picker'}
             minuteStep={15}
-            value={moment(singleTime[1], timeFormat)}
+            placeholder={'End time'}
+            value={singleTime[1] && singleTime[1] !== "undefined" ? moment(singleTime[1], timeFormat) : undefined}
             onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, -1) }}
             allowClear={false}
           />

@@ -491,7 +491,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   // 邮编校验
   compareZip = async (rule, value, callback) => {
-    if (!/^[0-9A-Za-z]{3,10}$/.test(value) && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
+    if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));
     } else {
       // 邮编黑名单校验

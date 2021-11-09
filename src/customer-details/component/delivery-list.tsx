@@ -5,6 +5,9 @@ import { Headline, RCi18n, Const } from 'qmkit';
 import * as webapi from './webapi';
 import { getAddressListByType, addAddress, updateAddress, defaultAddress, delAddress } from '../webapi';
 import PickupDelivery from './pickup-delivery'
+import { PostalCodeMsg } from 'biz';
+
+
 interface Iprop {
   customerId: string;
   type: 'DELIVERY' | 'BILLING';
@@ -36,6 +39,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       list: [],
       homeDeliveryList: [],
       selectAddressId: '',
+      confirmPickupDisabled: true, // pickup地址确认按钮状态
 
       countryArr: [],
       pickupList: [],
@@ -173,6 +177,8 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       this.setState({
         addOrEditPickup: false,
         pickupLoading: false
+      }, () => {
+        this.getAddressList();
       });
     }
   }
@@ -196,12 +202,20 @@ export default class DeliveryList extends React.Component<Iprop, any> {
     });
   };
 
+  // 更新 pickup 按钮状态
+  updateConfirmPickupDisabled = (flag: boolean) => {
+    this.setState({
+      confirmPickupDisabled: flag
+    });
+  };
+
   render() {
     const {
       loading,
       pickupIsOpen,
       homeDeliveryList,
       selectAddressId,
+      confirmPickupDisabled,
 
       pickupLoading,
       addOrEditPickup,
@@ -225,7 +239,21 @@ export default class DeliveryList extends React.Component<Iprop, any> {
       {
         title: RCi18n({ id: "PetOwner.PostalCode" }),
         dataIndex: 'postCode',
-        key: 'postcode'
+        key: 'postcode',
+        render: (text, record) => {
+          if (!!record?.validFlag) {
+            return <span>{text}</span>
+          } else {
+            return (
+              <div style={{ color: '#e2001a' }}>
+                <Tooltip overlayClassName='address-Tooltip-wrap' title={<PostalCodeMsg text={record?.alert} />}>
+                  <span>{text}</span>
+                </Tooltip>
+              </div>
+            )
+          }
+        },
+
       },
       {
         title: RCi18n({ id: "PetOwner.Address" }),
@@ -258,7 +286,17 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     });
                   }}
                 >
-                  <Radio value={record.deliveryAddressId}></Radio>
+                  {record.receiveType === 'PICK_UP' ? (
+                    <Radio
+                      value={record.deliveryAddressId}
+                    />
+                  ) : (
+                    <Radio
+                      disabled={!record.validFlag}
+                      value={record.deliveryAddressId}
+                    />
+                  )}
+
                 </Radio.Group>
               </>
             )}
@@ -334,7 +372,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     defaultCity: ''
                   });
                 }}>
-                  <FormattedMessage id="Subscription.AddPickup" />
+                  <FormattedMessage id="Subscription.AddNew" />
                 </Button>
               )}
             </div>
@@ -346,19 +384,21 @@ export default class DeliveryList extends React.Component<Iprop, any> {
             />
 
             {/* pickup弹框 */}
-            <Modal
-              width={650}
-              title={pickupList ? <FormattedMessage id="Subscription.ChangePickup" /> : <FormattedMessage id="Subscription.AddPickup" />}
-              visible={addOrEditPickup}
-              confirmLoading={pickupLoading}
-              onOk={() => this.pickupConfirm()}
-              onCancel={() => {
-                this.setState({
-                  addOrEditPickup: false
-                });
-              }}
-            >
-              {addOrEditPickup ? (
+            {addOrEditPickup ? (
+              <Modal
+                width={650}
+                title={pickupList?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
+                visible={addOrEditPickup}
+                confirmLoading={pickupLoading}
+                okButtonProps={{ disabled: confirmPickupDisabled }}
+                onOk={() => this.pickupConfirm()}
+                okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
+                onCancel={() => {
+                  this.setState({
+                    addOrEditPickup: false
+                  });
+                }}
+              >
                 <Spin spinning={pickupLoading}>
                   <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
                     <Col style={{ width: '100%' }}>
@@ -367,6 +407,7 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                         initData={pickupFormData}
                         pickupAddress={pickupList}
                         defaultCity={defaultCity}
+                        updateConfirmPickupDisabled={this.updateConfirmPickupDisabled}
                         updatePickupLoading={this.updatePickupLoading}
                         updatePickupEditNumber={this.updatePickupEditNumber}
                         updateData={this.updatePickupData}
@@ -375,8 +416,8 @@ export default class DeliveryList extends React.Component<Iprop, any> {
                     </Col>
                   </Row>
                 </Spin>
-              ) : null}
-            </Modal>
+              </Modal>
+            ) : null}
           </>
         ) : null}
 

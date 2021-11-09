@@ -4,7 +4,7 @@ import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon,
 const { Option } = Select;
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst, RCi18n } from 'qmkit';
+import { cache, noop, ValidConst, RCi18n, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -154,8 +154,9 @@ class SkuForm extends React.Component<any, any> {
 
     //Stocking UOM
     columns = columns.push({
-      title: 'Stocking UOM',
+      title: <FormattedMessage id="Product.StockingUOM" />,
       key: 'stockUomId',
+      width: '10%',
       render: (rowInfo) => {
         return (
           <Row>
@@ -168,7 +169,7 @@ class SkuForm extends React.Component<any, any> {
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                   </Select>
                 )}
@@ -193,7 +194,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          Conversion factor
+          <FormattedMessage id="Product.ConversionFactor" />
         </div>
       ),
       key: 'factor',
@@ -218,8 +219,9 @@ class SkuForm extends React.Component<any, any> {
 
     //Pricing UOM -disabled
     columns = columns.push({
-      title: 'Pricing UOM',
+      title: <FormattedMessage id="Product.PricingUOM" />,
       key: 'priceUomId',
+      width: '10%',
       render: (rowInfo) => {
         return (
           <Row>
@@ -227,7 +229,7 @@ class SkuForm extends React.Component<any, any> {
               <FormItem style={styles.tableFormItem}>
                 <Select value={rowInfo.priceUomId} disabled style={{ width: 100 }}>
                    {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                 </Select>
               </FormItem>
@@ -250,7 +252,7 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          Stocking inventory{/* <FormattedMessage id="product.inventory" /> */}
+          <FormattedMessage id="Product.StockingInventory" />
           <br />
           {/*<Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
@@ -263,12 +265,12 @@ class SkuForm extends React.Component<any, any> {
           </Checkbox>*/}
         </div>
       ),
-      key: 'stock',
+      key: 'externalStock',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('stock_' + rowInfo.id, {
+              {getFieldDecorator('externalStock_' + rowInfo.id, {
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
@@ -282,9 +284,9 @@ class SkuForm extends React.Component<any, any> {
                     }
                   }
                 ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                initialValue: rowInfo.stock
-              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalStock'),
+                initialValue: rowInfo.externalStock
+              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={Const.SITE_NAME === 'MYVETRECO' || (rowInfo.index > 1 && stockChecked)} />)}
             </FormItem>
           </Col>
         </Row>
@@ -293,19 +295,19 @@ class SkuForm extends React.Component<any, any> {
 
     //Stocking inventory
     columns = columns.push({
-      title: 'Pricing inventory',
-      key: 'externalStock',
+      title: <FormattedMessage id="Product.PricingInventory" />,
+      key: 'stock',
       render: (rowInfo) => {
-        let externalStock = null;
-        if (rowInfo.stock && rowInfo.factor) {
-          externalStock = Math.floor(rowInfo.stock / rowInfo.factor);
-          this._editGoodsItem(rowInfo.id, 'externalStock', externalStock);
+        let stock = 0;
+        if (rowInfo.externalStock && rowInfo.factor) {
+          stock = Math.floor(rowInfo.externalStock / rowInfo.factor);
         }
+        this._editGoodsItem(rowInfo.id, 'stock', stock);
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                <InputNumber value={externalStock} disabled />
+                <InputNumber value={stock} disabled />
               </FormItem>
             </Col>
           </Row>

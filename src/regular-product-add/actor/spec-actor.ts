@@ -30,6 +30,7 @@ export default class GoodsSpecActor extends Actor {
           marketPrice: 0,
           promotions: 'autoship',
           factor: 1,
+          externalStock: 0,
           stock: 0,
           goodsInfoNo: defaultGoodsInfoNo,
           externalSku: defaultGoodsInfoNo,
@@ -366,6 +367,7 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
         goodsItem = goodsItem.set('externalSku', goodsInfoNo);
         goodsItem = goodsItem.set('stock', 0);
+        goodsItem = goodsItem.set('externalStock', 0);
         goodsItem = goodsItem.set('factor', 1);
         goodsItem = goodsItem.set('marketPrice', 0);
         goodsItem = goodsItem.set('subscriptionPrice', 0);
@@ -407,6 +409,7 @@ export default class GoodsSpecActor extends Actor {
         goodsInfoNo: goodsInfoNo,
         externalSku: goodsInfoNo,
         factor: 1,
+        externalStock: 0,
         stock: 0,
         marketPrice: 0,
         subscriptionPrice: 0,

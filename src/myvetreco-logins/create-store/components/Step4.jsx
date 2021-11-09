@@ -12,17 +12,18 @@ const enumType = {
 }
 export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
   const [formData, setFormData] = useState({});
-  
+  const [checkedObject,setCheckedObject] = useState({Cat:{},Dog:{}})//选中状态{Cat:{},Dog:{}}
+
   const [allObj,setAllObj] = useState({})//平铺所有sku选项结构{Cat:{},Dog:{}}
   const [checkAllObj,setCheckAllObj] = useState({Cat:false,Dog:false})//cat或者dog是否全选
 
   const [dataSource,setDataSource] = useState({})
   const [loading, setLoading] = useState(false);
 
-  const [salesPercentage,setSalesPercentage] = useState(1)
-  const [subscriptionPercentage,setSubscriptionPercentage] = useState(1)
-  const [percentageObj,setPercentageObj] = useState({salesPercentage:1,subscriptionPercentage:1})//用于点击apply
-  const [roundOff,setRoundOff] = useState(false)
+  const [salesPercentage,setSalesPercentage] = useState(100)
+  const [subscriptionPercentage,setSubscriptionPercentage] = useState(100)
+  const [percentageObj,setPercentageObj] = useState({salesPercentage:100,subscriptionPercentage:100})//用于点击apply
+  const [roundOff,setRoundOff] = useState(true)
  
   useEffect(()=>{
     if(step === 3) getCateGory()
@@ -32,10 +33,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     listCategory().then(({res})=>{
       let animalTypeList=res.context.categoryList;
       let dog=animalTypeList.find(item=>item.categoryValue==='Dog')
-      let cat=animalTypeList.find(item=>item.categoryValue==='Cat')
+      let Cat=animalTypeList.find(item=>item.categoryValue==='Cat')
       let promises = [listGoodsByCategory({
-        categoryId: cat.categoryId,
-        categoryValueId: cat.categoryValueId
+        categoryId: Cat.categoryId,
+        categoryValueId: Cat.categoryValueId
       }),listGoodsByCategory({
         categoryId: dog.categoryId,
         categoryValueId: dog.categoryValueId
@@ -79,7 +80,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           allObj[enumType[index]] = skuList
         })
         console.log(allObj)
-        setAllObj(allObj)
+        setAllObj(Object.assign({}, {...allObj}))
         setDataSource({...dataSource})
         setLoading(false)
       })
@@ -111,36 +112,55 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     setCheckAllObj(checkAllObj)
   };
   /**
+   * 保存选中状态（虚拟列表会重刷组件，导致状态丢失）
+   * @param spu
+   * @param list
+   */
+  const saveCheckStatus = (title,spu,list)=>{
+    if(spu==='clear'){
+      checkedObject[title] = {}
+    }else {
+      checkedObject[title][spu] = [...list]
+      console.log(checkedObject)
+      setCheckedObject(checkedObject)
+    }
+  }
+  /**
    * 保存价格设置
    */
   const savePrice = () => {
     let newChooseObj = {...formData}
-    // if(checkAllObj.Cat){
-    //   for(let i in allObj.cat){
-    //     allObj.cat[i] = {
-    //       isChecked: allObj.cat[i].isChecked,
-    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
-    //       sku: allObj.cat[i].sku,
-    //       spu: allObj.cat[i].spu,
-    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.cat[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
-    //     }
-    //   }
-    //   newChooseObj = {...allObj.cat,...newChooseObj}
-    // }
-    // if(checkAllObj.Dog){
-    //   for(let i in allObj.Dog){
-    //     allObj.Dog[i] = {
-    //       isChecked: allObj.Dog[i].isChecked,
-    //       salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(salesPercentage)))), bignumber(1.21))),
-    //       sku: allObj.Dog[i].sku,
-    //       spu: allObj.Dog[i].spu,
-    //       subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(subscriptionPercentage)))), bignumber(1.21))),
-    //     }
-    //   }
-    //   newChooseObj = {...allObj.Dog,...newChooseObj}
-    // }
+    //点击全选时插入所有数据
+    if(checkAllObj.Cat){
+      for(let i in allObj.Cat){
+        allObj.Cat[i] = {
+          isChecked: allObj.Cat[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.Cat[i].sku,
+          spu: allObj.Cat[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+        }
+      }
+      newChooseObj = {...allObj.Cat,...newChooseObj}
+    }
+    if(checkAllObj.Dog){
+      for(let i in allObj.Dog){
+        allObj.Dog[i] = {
+          isChecked: allObj.Dog[i].isChecked,
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          sku: allObj.Dog[i].sku,
+          spu: allObj.Dog[i].spu,
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+        }
+        allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
+        allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
+      }
+      newChooseObj = {...allObj.Dog,...newChooseObj}
+    }
     let array = []
     for(let i in newChooseObj){
+      newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
+      newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }
@@ -165,9 +185,11 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           value={{
             changeFormData: changeFormData,
             saveCheckAll: saveCheckAll,
+            saveCheckStatus: saveCheckStatus,
+            checkedObject:checkedObject,
             formData,
             percentageObj,
-            roundOff:roundOff ? 0 : 6
+            roundOff:roundOff ? 2 : 6
           }}
       >
         <Spin spinning={loading} size="large">
@@ -186,24 +208,24 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                 <InputNumber min={0}
                              value={salesPercentage}
                              style={{width:180}}
-                             step={0.1}
+                             step={10}
                              onChange={(value)=>setSalesPercentage(value)} />
               </Col>
               <Col span={6}>
                 <InputNumber min={0}
                              style={{width:180}}
                              value={subscriptionPercentage}
-                             step={0.1}
+                             step={10}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
-              <Col span={3}>
+              {/* <Col span={3}>
                 <Checkbox checked={roundOff} onChange={(e)=>{
                   setRoundOff(e.target.checked)
                 }}>
                   <span className="word small tip">round off</span>
                 </Checkbox>
-              </Col>
-              <Col span={9}>
+              </Col> */}
+              <Col span={12}>
                 <div style={{display:'inline-flex'}}>
                   <Button type="primary" onClick={applyPercentage} style={{marginRight:6}}>Apply</Button>
                   <Button loading={loading} type="primary" onClick={savePrice} style={{marginRight:6}}>Save and Next</Button>

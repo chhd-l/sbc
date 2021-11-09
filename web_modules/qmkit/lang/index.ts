@@ -12,7 +12,7 @@ const importAll = context => {
   return map;
 };
 
-let key = sessionStorage.getItem(cache.LANGUAGE) || 'en-US';
+let key = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 let langFile = importAll(context);
 let language: any = langFile[key];
 let antLanguage: any = langFile[key + '_antd'];
@@ -20,6 +20,16 @@ let antLanguage: any = langFile[key + '_antd'];
 
 function RCi18n({ id }) {
   return language[id] || id;
+}
+
+function assignObj(obj, source) {
+  const retObj = {...obj};
+
+  for (const [key, value] of Object.entries(source)) {
+    retObj[key] = value ? value : obj[key]
+  }
+
+  return retObj
 }
 
 async function getDynamicLanguage() {
@@ -51,7 +61,7 @@ async function getDynamicLanguage() {
     return retRes;
   });
 
-  language = { ...langFile[key], ...res };
+  language = assignObj(langFile[key], res);
 
   return language;
 }

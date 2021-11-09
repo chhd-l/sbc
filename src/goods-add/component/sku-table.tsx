@@ -636,7 +636,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship'}
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship' || rowInfo.subscriptionStatus === 0}
                          onFocus={() => this.onfocus()}
                          onBlur={() => this.onblur()}
                 >
@@ -753,6 +753,12 @@ class SkuForm extends React.Component<any, any> {
       }
     }else {
       editGoodsItem(id, key, e);
+    }
+
+    //新增sku时，修改skuno，同步修改externalskuno
+    const targetSkuItem = goodsList.find(sku => sku.get('id') === id);
+    if(key === 'goodsInfoNo' && !targetSkuItem.get('goodsInfoId')) {
+      editGoodsItem(id, 'externalSku', e);
     }
 
 

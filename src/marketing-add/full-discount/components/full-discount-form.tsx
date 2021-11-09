@@ -725,9 +725,7 @@ class FullDiscountForm extends React.Component<any, any> {
                   )}
                   &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                 </FormItem>
-
               </div>
-
             </FormItem>
           )
         }

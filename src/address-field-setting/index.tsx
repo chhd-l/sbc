@@ -128,14 +128,17 @@ export default class AddressFieldSetting extends React.Component<any, any> {
         <Spin spinning={loading}>
           <div className="container-search">
             <Row style={{ marginBottom: 10 }}>
-              <Col span={12}>
+              <Col span={24}>
                 <Headline title={step === 1 ? 'Address field setting' : 'Manage field display'} />
               </Col>
-              <Col span={12} className="text-align-right">
+              {/* <Col span={12} className="text-align-right">
                 {step === 1 ? <Button onClick={() => this.onOpenModal()}>Rule setting</Button> : null}
-              </Col>
+              </Col> */}
             </Row>
             <Alert type="info" message="Address setting is for address adding and address edit of shop and store portal" />
+            <div style={{margin: '10px 0'}}>
+              <RuleSetting setting={this.state.setting} onChange={this.onChangeAddressInputTypeSetting} />
+            </div>
             {step === 1 ? (
               <Fields manualFieldList={manualFieldList} autoFieldList={autoFieldList} activeKey={activeKey} onChangeActiveKey={this.onChangeActiveKey} onFieldChange={this.onFieldChange} onStepChange={this.onStepChange} onSortEnd={this.onSortFieldList} />
             ) : (
@@ -148,7 +151,7 @@ export default class AddressFieldSetting extends React.Component<any, any> {
             </Button>
           </div>
         </Spin>
-        <RuleSetting visible={visible} setting={this.state.setting} onChange={this.onChangeAddressInputTypeSetting} onCloseModal={this.onCloseModal} />
+        {/* <RuleSetting visible={visible} setting={this.state.setting} onChange={this.onChangeAddressInputTypeSetting} onCloseModal={this.onCloseModal} /> */}
       </div>
     );
   }

@@ -10,6 +10,7 @@ import Step3 from './components/Step3';
 import Step4 from './components/Step4';
 import Step5 from './components/Step5';
 import Create from './components/Creating';
+import StoreAudit from './components/Audit';
 import './index.less';
 import '../assets/App.less'
 const { Step } = Steps;
@@ -74,7 +75,7 @@ function CreateStores() {
           <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>
         </div>
       </div>
-    </div>):( <Create userInfo={userInfo} setStep={setCurrent}/>)
+    </div>): current === 5 ? ( <Create userInfo={userInfo} setStep={setCurrent}/>) : (<StoreAudit />)
     }
  </div>)
 }

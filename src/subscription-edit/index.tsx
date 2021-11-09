@@ -3,10 +3,12 @@ import { Breadcrumb, Tabs, Card, Menu, Row, Col, Button, Input, Select, message,
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import { PostalCodeMsg } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
+import { GetDelivery } from '../delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery'
 import PaymentMethod from './component/payment-method'
@@ -66,6 +68,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
+      allAddressList: [],
       deliveryList: [],
       billingList: [],
       customerAccount: '',
@@ -109,10 +112,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       pickupEditNumber: 0,
       pickupAddress: null,
       pickupFormData: [], // pickup 表单数据
+      confirmPickupDisabled: true, // pickup地址确认按钮状态
+      subscribeGoods: null, // 订阅商品数据，传给pickup组件
+
       deliveryDate: undefined,
       timeSlot: undefined,
       deliveryDateList: [],
-      timeSlotList: []
+      timeSlotList: [],
+      deliverDateStatus: 0
     };
   }
 
@@ -120,6 +127,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     this.getDict();
     this.getSubscriptionDetail();
     this.getCurrencySymbol();
+    this.getDeliveryDateStatus();
 
     let pickupIsOpen = JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || null;
     if (pickupIsOpen) {
@@ -127,6 +135,31 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         pickupIsOpen
       })
     }
+  }
+
+  // 获取 deliveryState 状态
+  getDeliveryDateStatus = () => {
+    GetDelivery()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          // deliveryDate 状态
+          if (res?.context?.systemConfigVO) {
+            let scon = res.context.systemConfigVO;
+            this.setState({
+              deliverDateStatus: scon.status
+            });
+          }
+        }
+        this.setState({
+          loading: false
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
   }
 
   getSubscriptionDetail = () => {
@@ -172,11 +205,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let paymentInfo = subscriptionDetail.payPaymentInfo;
           let paymentMethod = subscriptionDetail.paymentMethod
 
+          let subscribeGoods = [];
           let subscribeNumArr = [];
           let periodTypeArr = [];
           for (let i = 0; i < goodsInfo.length; i++) {
-            subscribeNumArr.push(goodsInfo[i].subscribeNum);
-            periodTypeArr.push(goodsInfo[i].periodTypeId);
+            let ginfo = goodsInfo[i];
+            subscribeNumArr.push(ginfo.subscribeNum);
+            periodTypeArr.push(ginfo.periodTypeId);
+
+            // 组装订阅商品goodsInfoId和数量
+            let goodsInfoId = ginfo?.goodsInfoVO?.goodsInfoId;
+            subscribeGoods.push({
+              goodsInfoId: goodsInfoId,
+              quantity: ginfo.subscribeNum
+            });
           }
           let originalParams = {
             billingAddressId: subscriptionDetail.billingAddressId,
@@ -189,6 +231,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           this.setState(
             {
+              subscribeGoods: subscribeGoods,
               subscriptionType: subscriptionDetail.subscriptionType,
               subscriptionInfo: subscriptionInfo,
               orderInfo: orderInfo,
@@ -215,7 +258,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
                 if (subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' && +storeId === 123457907) {
-                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.cityIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
+                  this.getTimeSlot({ cityNo: subscriptionDetail.consignee.provinceIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
                 }
               }
             }
@@ -412,7 +455,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       message.error(RCi18n({ id: "Subscription.quantityAndFrequency" }));
       return;
     }
-    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值, 
+    //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值,
     if (+storeId === 123457907 && deliveryAddressInfo.receiveType === 'HOME_DELIVERY' && deliveryDateList.length > 0) {
       //deliveryDate 没有选择 报错
       if (!deliveryDate) {
@@ -471,6 +514,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+
           this.setState({
             saveLoading: false,
             payPspItemEnum: '',
@@ -533,11 +577,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getAddressList = (customerId, type, showModal = false) => {
-    const { deliveryAddressInfo } = this.state;
+    const { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
         let allAddress = res.context.customerDeliveryAddressVOList || [];
+        let allList = allAddress.filter((addr: any) => addr.type === 'DELIVERY');
         let addressList = allAddress.filter((addr: any) => addr.receiveType !== 'PICK_UP');
         let pickup = allAddress.filter((pk: any) => pk.receiveType === 'PICK_UP');
         let customerAccount = res.context.customerAccount;
@@ -553,15 +598,34 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           this.getCityNameById(cityIds, 'DELIVERY');
 
           this.setState({
-            pickupAddress: pickup,
+            allAddressList: allList,
             deliveryList: addressList,
+            pickupAddress: pickup,
             customerAccount: customerAccount,
             customerId: customerId,
             visibleShipping: showModal
           }, () => {
-            // 根据 receiveType 设置默认选中
-            let rctype = deliveryAddressInfo?.receiveType || '';
-            let dltype = rctype === 'PICK_UP' ? 'pickupDelivery' : 'homeDelivery';
+            console.log('666 >>> pickupEditNumber: ', pickupEditNumber);
+            let dltype = '';
+            if (pickupEditNumber > 0) {
+              dltype = sessionStorage.getItem('portal-delivery-method') ?? 'homeDelivery';
+
+              let daId = '';
+              if (dltype === 'homeDelivery' && addressList?.length === 1) {
+                daId = addressList[0].deliveryAddressId;
+              } else if (dltype === 'pickupDelivery' && pickup?.length) {
+                daId = pickup[0].deliveryAddressId;
+              }
+
+              this.setState({
+                deliveryAddressId: daId
+              });
+
+            } else {
+              // 根据 receiveType 设置默认选中
+              let rctype = deliveryAddressInfo?.receiveType || '';
+              dltype = (rctype === 'PICK_UP' && pickupIsOpen) ? 'pickupDelivery' : 'homeDelivery';
+            }
             this.setState({
               deliveryType: dltype
             })
@@ -616,7 +680,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          this.getAddressList(customerId, 'DELIVERY');
+          this.getAddressList(customerId, 'DELIVERY', true);
           message.success(RCi18n({ id: "PetOwner.OperateSuccessfully" }));
         } else {
           message.error(RCi18n({ id: "PetOwner.Unsuccessful" }));
@@ -677,17 +741,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         addOrEditPickup: false,
         pickupLoading: false,
         visibleShipping: true
+      }, () => {
+        this.getAddressList(customerId, 'DELIVERY', true);
       });
     }
   }
 
   deliveryOK = async () => {
-    let { deliveryList, deliveryAddressId, subscriptionInfo } = this.state;
-    let deliveryAddressInfo = deliveryList.find((item) => {
+    const { deliveryList, allAddressList, deliveryAddressId, subscriptionInfo } = this.state;
+    let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
-    //俄罗斯地址验证是否完整
-    if ((window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
+
+    // 切换pickup地址时，获取pick point 状态
+    if (deliveryAddressInfo.receiveType === 'PICK_UP') {
+      await webapi.getPickupPointStatus(deliveryAddressId).then(data => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          deliveryAddressInfo['pickupPointState'] = res.context;
+        }
+      })
+    }
+
+    // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
+    if (deliveryAddressInfo.receiveType !== 'PICK_UP' && (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'ru') {
       if (!deliveryAddressInfo.street ||
         !deliveryAddressInfo.postCode ||
         !deliveryAddressInfo.house ||
@@ -704,7 +781,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-        this.getTimeSlot({ cityNo: deliveryAddressInfo.cityIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
+        this.getTimeSlot({ cityNo: deliveryAddressInfo.provinceIdStr, subscribeId: subscriptionInfo.subscriptionNumber })
         this.setState({
           deliveryDate: undefined,
           timeSlot: undefined
@@ -713,6 +790,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
 
     let addressList = this.selectedOnTop(deliveryList, deliveryAddressId);
+
     //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
     // if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
@@ -1038,19 +1116,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-  getTimeSlot = (params) => {
+  getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then(data => {
+      const { deliveryDate, timeSlot } = this.state
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let timeSlots = res.context.timeSlots
+        let deliveryDateList = res.context.timeSlots
         this.setState({
-          deliveryDateList: timeSlots
+          deliveryDateList: deliveryDateList,
+          timeSlotList: deliveryDateList[0] && deliveryDateList[0].dateTimeInfos || [],
+          deliveryDate: deliveryDate ? deliveryDate : deliveryDateList[0] && deliveryDateList[0].date,
+          timeSlot: timeSlot ? timeSlot : deliveryDateList[0] &&
+            deliveryDateList[0].dateTimeInfos[0].startTime + '-' + deliveryDateList[0].dateTimeInfos[0].endTime
         })
       }
     })
   }
 
-  deliveryDateChange = (value) => {
+  deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state
     let timeSlots = deliveryDateList.find(item => item.date === value).dateTimeInfos || []
     this.setState({
@@ -1060,12 +1143,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
   //timeslot
-  timeSlotChange = (value) => {
+  timeSlotChange = (value: any) => {
     this.setState({
       timeSlot: value
     })
   }
-
 
   // 更新 pickup编辑次数
   updatePickupEditNumber = (num: number) => {
@@ -1074,12 +1156,40 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  // 更新 pickup 按钮状态
+  updateConfirmPickupDisabled = (flag: boolean) => {
+    this.setState({
+      confirmPickupDisabled: flag
+    });
+  };
+
   // 更新pickup数据
-  updatePickupData = (data) => {
+  updatePickupData = (data: any) => {
     this.setState({
       pickupFormData: data
     });
   };
+
+  // 选择配送类型
+  handleSelectDeliveryMethod = (e: any) => {
+    const { deliveryList, pickupAddress } = this.state;
+    let value = e.target.value;
+
+    let daId = '';
+    if (value === 'homeDelivery' && deliveryList?.length === 1) {
+      daId = deliveryList[0].deliveryAddressId;
+    } else if (value === 'pickupDelivery' && pickupAddress?.length) {
+      daId = pickupAddress[0].deliveryAddressId;
+    }
+    this.setState({
+      deliveryAddressId: daId
+    });
+
+    sessionStorage.setItem('portal-delivery-method', value);
+    this.setState({
+      deliveryType: value
+    })
+  }
 
   render() {
     const {
@@ -1093,7 +1203,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressInfo,
       billingAddressInfo,
       countryArr,
-      deliveryList,
       billingList,
       noStartOrder,
       completedOrder,
@@ -1104,16 +1213,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionType,
       paymentMethod,
       deliveryType,
-      pickupAddress,
       pickupFormData,
       pickupEditNumber,
       defaultCity,
       addOrEditPickup,
+      pickupLoading,
+      deliveryList,
+      pickupAddress,
+      confirmPickupDisabled,
+      isUnfoldedDelivery,
 
       deliveryDate,
       deliveryDateList,
       timeSlotList,
-      timeSlot
+      timeSlot,
+      deliverDateStatus
       // operationLog
     } = this.state;
 
@@ -1160,7 +1274,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'subscribeNum',
         width: '15%',
         render: (text, record) => (
-          <div>
+          <div className="subscription_edit_quantity">
             {subscriptionType == 'Individualization' ? 1 : (
               <InputNumber
                 min={1}
@@ -1174,6 +1288,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   });
                 }}
                 value={record.subscribeNum}
+                disabled={subscriptionType === 'Peawee' ? true : false}
               />
             )}
           </div>
@@ -1185,7 +1300,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'frequency',
         width: '15%',
         render: (text: any, record: any) => (
-          <div className="subscription_delivery_frequency">
+          <div className="subscription_edit_frequency">
             <Select
               style={{ width: '70%' }}
               value={record.periodTypeId}
@@ -1193,6 +1308,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 value = value === '' ? null : value;
                 this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
+              disabled={subscriptionType === 'Peawee' ? true : false}
             >
               {/* individualFrequencyList */}
               {subscriptionType == 'Individualization' ? (
@@ -1508,7 +1624,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Breadcrumb.Item>
             <Breadcrumb.Item>{this.state.addressType === 'delivery' ? <FormattedMessage id="Subscription.Delivery information" /> : <FormattedMessage id="Subscription.Billing information" />}</Breadcrumb.Item>
           </Breadcrumb>
-          <DeliveryItem customerId={this.state.customerId} delivery={this.state.addressItem} addressType={this.state.addressType} backToDetail={this.backToSubscriptionEdit} />
+
+          <DeliveryItem
+            customerId={this.state.customerId}
+            delivery={this.state.addressItem}
+            addressType={this.state.addressType}
+            backToDetail={this.backToSubscriptionEdit}
+            fromPage="subscription"
+            pickupEditNumber={pickupEditNumber}
+            updatePickupEditNumber={this.updatePickupEditNumber}
+          />
         </div>
       );
     }
@@ -1534,6 +1659,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           {' '}
           <div className="container-search">
             <Headline title={<FormattedMessage id="Subscription.edit" />} />
+
             {/* subscription 基本信息 */}
             <Row className="subscription-basic-info">
               <Col span={24}>
@@ -1568,6 +1694,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </p>
               </Col>
             </Row>
+
             {/* subscription 和 total */}
             <Row style={{ marginTop: 20 }} gutter={16}>
               <Col span={24}>
@@ -1618,7 +1745,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">
+                    <label className="info-title info_title_edit_delivery_address">
                       {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                         <FormattedMessage id="Subscription.PickupAddress" />
                       ) : (
@@ -1648,7 +1775,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>
+                      {deliveryAddressInfo.countryId ? this.getDictValue(countryArr, deliveryAddressInfo.countryId) : deliveryAddressInfo.country}
+                    </p>
                   </Col>
 
                   <Col span={24}>
@@ -1657,15 +1786,43 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                    <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                    <p className="delivery_edit_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                  </Col>
+
+                  {deliveryAddressInfo?.county ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.County" />:{' '}
+                      </p>
+                      <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                    </Col>
+                  ) : null}
+
+                  {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}><FormattedMessage id="Subscription.WorkTime" />: </p>
+                      <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                    </Col>
+                  ) : null}
+
+                  <Col span={24}>
+                    {
+                      deliveryAddressInfo.receiveType === 'PICK_UP'
+                        ? null
+                        : deliveryAddressInfo.validFlag
+                          ? null
+                          : deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                    }
                   </Col>
                 </Row>
               </Col>
               {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
 
-              <Col span={8} className="timeSlot">
-                {storeId === 123457907 ? <Row>
+              {/* timeSlot和pickup point status */}
+              <Col span={8} className="timeSlot subscription_edit_timeSlot">
+                {/* {storeId === 123457907 && deliverDateStatus === 1 ? <Row> */}
+                {deliverDateStatus === 1 ? <Row>
                   {
                     deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ?
                       <>
@@ -1681,6 +1838,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                               <Select value={deliveryDate}
                                 onChange={this.deliveryDateChange}
+                                getPopupContainer={(trigger: any) => trigger.parentNode}
                                 placeholder={RCi18n({ id: 'Order.deliveryDate' })}>
                                 {
                                   deliveryDateList && deliveryDateList.map((item, index) => (
@@ -1693,6 +1851,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                             <Col span={24}>
                               <Select value={timeSlot}
+                                getPopupContainer={(trigger: any) => trigger.parentNode}
                                 onChange={this.timeSlotChange}
                                 placeholder={RCi18n({ id: 'Setting.timeSlot' })}>
                                 {
@@ -1726,7 +1885,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row> : storeId === 123457910 ? null : (
                   <Row>
                     <Col span={12}>
-                      <label className="info-title"><FormattedMessage id="Subscription.BillingAddress" /></label>
+                      <label className="info-title info_title_edit_billing_address"><FormattedMessage id="Subscription.BillingAddress" /></label>
                     </Col>
                     <Col span={12}>
                       <Tooltip placement="top" title={<FormattedMessage id="Subscription.Active.Change" />}>
@@ -1752,7 +1911,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Country" />: </p>
-                      <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
+                      <p>
+                        {billingAddressInfo.countryId ? this.getDictValue(countryArr, billingAddressInfo.countryId) : billingAddressInfo.country}
+                      </p>
                     </Col>
 
                     <Col span={24}>
@@ -1761,19 +1922,28 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </Col>
                     <Col span={24}>
                       <p style={{ width: 140 }}><FormattedMessage id="Subscription.Address2" />: </p>
-                      <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                      <p className="billing_edit_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
                     </Col>
+
+                    {billingAddressInfo?.county ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}><FormattedMessage id="Subscription.County" />: </p>
+                        <p>{billingAddressInfo ? billingAddressInfo.county : ''}</p>
+                      </Col>
+                    ) : null}
+
                   </Row>
                 )}
               </Col>
+
               {/* 显示支付信息 */}
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title"><FormattedMessage id="Subscription.PaymentMethod" /></label>
+                    <label className="info-title subscription_edit_payment"><FormattedMessage id="Subscription.PaymentMethod" /></label>
                   </Col>
                   <AuthWrapper functionName="f_change_payment_method">
-                    <>
+                    {Const.SITE_NAME !== 'MYVETRECO' && <>
                       <Col span={12}>
                         <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
                       </Col>
@@ -1787,8 +1957,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             paymentId, payPspItemEnum, paymentInfo: selectCard
                           })
                         }}
-                        paymentMethodVisible={this.state.paymentMethodVisible} />
-                    </>
+                        paymentMethodVisible={this.state.paymentMethodVisible}
+                        subscriptionType={this.state.subscriptionType}
+                      />
+                    </>}
                   </AuthWrapper>
                   {paymentInfo ?
                     <>
@@ -1820,10 +1992,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 </Row>
               </Col>
             </Row>
+
             {/* 修改收货地址弹窗 */}
             <Modal
               width={650}
-              title={<FormattedMessage id="Subscription.Active.ChooseDeliveryAddress" />}
+              title={RCi18n({ id: "Subscription.ChooseDeliveryAddress" })}
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
               onOk={() => this.deliveryOK()}
@@ -1843,12 +2016,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </span>
                   <Radio.Group
                     value={deliveryType}
-                    onChange={(e) => {
-                      let value = e.target.value;
-                      this.setState({
-                        deliveryType: value
-                      })
-                    }}
+                    onChange={(e) => { this.handleSelectDeliveryMethod(e) }}
                   >
                     <Radio value='homeDelivery'><FormattedMessage id="Subscription.HomeDelivery" /></Radio>
                     {pickupIsOpen && (
@@ -1894,6 +2062,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
               </Row>
 
+              {/*如果是黑名单的地址，则不能选择*/}
               <Radio.Group
                 style={{ maxHeight: 600, overflowY: 'auto' }}
                 value={this.state.deliveryAddressId}
@@ -1904,58 +2073,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   });
                 }}
               >
-                {/* pickup 地址列表 */}
-                {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
-                  pickupAddress.map((item: any, index: any) => (
-                    <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                      <Radio value={item.deliveryAddressId}>
-                        <div style={{ display: 'inline-grid' }}>
-                          <p>{item.firstName + '  ' + item.lastName}</p>
-                          <p>{item.city}</p>
-                          {item.province ? <p>{item.province}</p> : null}
-                          <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                          <p>{item.address1}</p>
-                          <p>{item.address2}</p>
-                        </div>
-                      </Radio>
-                      <div>
-                        <Button type="link" size="small" onClick={() => {
-                          this.setState({
-                            visibleShipping: false,
-                            addOrEditPickup: true,
-                            defaultCity: item.city
-                          });
-                        }}>
-                          <FormattedMessage id="Subscription.Edit" />
-                        </Button>
-                      </div>
-                    </Card>
-                  ))
-                ) : (
-                  <>
-                    {/* homeDelivery地址列表 */}
-                    {this.state.isUnfoldedDelivery ? deliveryList.map((item: any) => (
-                      <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
-                        <Radio value={item.deliveryAddressId}>
-                          <div style={{ display: 'inline-grid' }}>
-                            <p>{item.firstName + '  ' + item.lastName}</p>
-                            <p>{item.city}</p>
-                            {item.province ? <p>{item.province}</p> : null}
-
-                            <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                            <p>{item.address1}</p>
-                            <p>{item.address2}</p>
-                          </div>
-                        </Radio>
-                        <div>
-                          <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
-                            <FormattedMessage id="Subscription.Edit" />
-                          </Button>
-                        </div>
-                      </Card>
-                    ))
-                      : deliveryList.map((item: any, index: any) => index < 2 ? (
-                        <Card style={{ width: 602, marginBottom: 10 }} bodyStyle={{ padding: 10 }} key={item.deliveryAddressId}>
+                {/* pickup 地址列表 pickup地址不需要校验postCode */}
+                {
+                  deliveryType === 'pickupDelivery' && pickupIsOpen
+                    ? (
+                      pickupAddress.map((item: any, index: any) => (
+                        <Card
+                          style={{ width: 602, marginBottom: 10 }}
+                          bodyStyle={{ padding: 10 }}
+                          key={item.deliveryAddressId}>
                           <Radio value={item.deliveryAddressId}>
                             <div style={{ display: 'inline-grid' }}>
                               <p>{item.firstName + '  ' + item.lastName}</p>
@@ -1964,18 +2090,86 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               <p>{this.getDictValue(countryArr, item.countryId)}</p>
                               <p>{item.address1}</p>
                               <p>{item.address2}</p>
+                              <p>{item.workTime}</p>
                             </div>
                           </Radio>
                           <div>
-                            <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                            <Button type="link" size="small" onClick={() => {
+                              this.setState({
+                                visibleShipping: false,
+                                addOrEditPickup: true,
+                                defaultCity: item.city
+                              });
+                            }}>
                               <FormattedMessage id="Subscription.Edit" />
                             </Button>
                           </div>
                         </Card>
-                      ) : null
-                      )}
-                  </>
-                )}
+                      )))
+                    : (<>
+                      {/* homeDelivery地址列表 */}
+                      {this.state.isUnfoldedDelivery
+                        ? deliveryList.map((item: any) => (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}>
+                            <Radio
+                              disabled={!item.validFlag}
+                              value={item.deliveryAddressId}
+                            >
+                              <div style={{ display: 'inline-grid' }}>
+                                <p>{item.firstName + '  ' + item.lastName}</p>
+                                <p>{item.city}</p>
+                                {item.province ? <p>{item.province}</p> : null}
+
+                                <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                <p>{item.address1}</p>
+                                <p>{item.address2}</p>
+                                {
+                                  !item.validFlag
+                                    ? item.alert && <PostalCodeMsg text={item.alert} />
+                                    : null
+                                }
+                              </div>
+                            </Radio>
+                            <div>
+                              <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ))
+                        : deliveryList.map((item: any, index: any) => index < 2 ? (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}>
+                            <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                              <div style={{ display: 'inline-grid' }}>
+                                <p>{item.firstName + '  ' + item.lastName}</p>
+                                <p>{item.city}</p>
+                                {item.province ? <p>{item.province}</p> : null}
+                                <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                <p>{item.address1}</p>
+                                <p>{item.address2}</p>
+                                {
+                                  !item.validFlag
+                                    ? item.alert && <PostalCodeMsg text={item.alert} />
+                                    : null
+                                }
+                              </div>
+                            </Radio>
+                            <div>
+                              <Button type="link" size="small" onClick={() => this.onOpenAddressForm({ ...NEW_ADDRESS_TEMPLATE, ...item }, 'delivery')}>
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ) : null
+                        )}
+                    </>)
+                }
               </Radio.Group>
 
               {/* 显示更多地址按钮 */}
@@ -1991,7 +2185,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       );
                     }}
                   >
-                    <FormattedMessage id="Subscription.UnfoldedAll" />
+                    {isUnfoldedDelivery ? (
+                      <FormattedMessage id="Subscription.foldedAll" />
+                    ) : (
+                      <FormattedMessage id="Subscription.UnfoldedAll" />
+                    )}
                   </Button>
                 ) : null
               ) : null}
@@ -1999,13 +2197,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Modal>
 
             {/* pickup弹框 */}
-            {pickupIsOpen && (
+            {pickupIsOpen && addOrEditPickup ? (
               <Modal
                 width={650}
-                title={pickupAddress ? <FormattedMessage id="Subscription.ChangePickup" /> : <FormattedMessage id="Subscription.AddPickup" />}
+                title={pickupAddress?.length ? RCi18n({ id: "Subscription.ChangePickup" }) : RCi18n({ id: "Subscription.AddPickup" })}
                 visible={addOrEditPickup}
-                confirmLoading={this.state.pickupLoading}
+                confirmLoading={pickupLoading}
+                okButtonProps={{ disabled: confirmPickupDisabled }}
                 onOk={() => this.pickupConfirm()}
+                okText={RCi18n({ id: "Subscription.SelectPickpoint" })}
                 onCancel={() => {
                   this.setState({
                     deliveryAddressId: this.state.originalParams.deliveryAddressId,
@@ -2014,26 +2214,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   });
                 }}
               >
-                {addOrEditPickup ? (
-                  <Spin spinning={this.state.pickupLoading}>
-                    <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
-                      <Col style={{ width: '100%' }}>
-                        <PickupDelivery
-                          key={defaultCity}
-                          initData={pickupFormData}
-                          pickupAddress={pickupAddress}
-                          defaultCity={defaultCity}
-                          updatePickupEditNumber={this.updatePickupEditNumber}
-                          updateData={this.updatePickupData}
-                          pickupEditNumber={pickupEditNumber}
-                        />
-                      </Col>
-                    </Row>
-                  </Spin>
-                ) : null}
+                <Row type="flex" align="middle" justify="space-between" style={{ marginBottom: 10 }}>
+                  <Col style={{ width: '100%' }}>
+                    <PickupDelivery
+                      key={defaultCity}
+                      initData={pickupFormData}
+                      from="subscription"
+                      pickupAddress={pickupAddress}
+                      subscribeGoods={this.state.subscribeGoods}
+                      defaultCity={defaultCity}
+                      updateConfirmPickupDisabled={this.updateConfirmPickupDisabled}
+                      updatePickupEditNumber={this.updatePickupEditNumber}
+                      updateData={this.updatePickupData}
+                      pickupEditNumber={pickupEditNumber}
+                    />
+                  </Col>
+                </Row>
 
               </Modal>
-            )}
+
+            ) : null}
 
             {/* billingAddress弹框 */}
             <Modal
@@ -2117,18 +2317,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
           </div>
           <div className="container-search" style={{ marginBottom: 20 }}>
-            <Headline
-              title={<FormattedMessage id="Subscription.AutoshipOrder" />}
-            // extra={
-            //   <div>
-            //     <Select defaultValue="2020" style={{ width: 150 }} onChange={this.handleYearChange}>
-            //       <Option value="2020">2020</Option>
-            //       <Option value="2019">2019</Option>
-            //       <Option value="2018">2018</Option>
-            //     </Select>
-            //   </div>
-            // }
-            />
+            <Headline title={<FormattedMessage id="Subscription.AutoshipOrder" />} />
             <Tabs defaultActiveKey="1" onChange={this.tabChange}>
               <TabPane tab={<FormattedMessage id="Subscription.NoStart" />} key="noStart">
                 <Table rowKey={(record, index) => index.toString()} columns={columns_no_start} dataSource={noStartOrder} pagination={false}></Table>

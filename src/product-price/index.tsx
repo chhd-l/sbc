@@ -74,7 +74,8 @@ class ProductPrice extends Component<any, any> {
       if (!err) {
         let goodsInfoIds = this.state.goodsInfoIds;
         values.marketPricePercentage = values.marketPricePercentage.toString()
-        values.subscriptionPricePercentage = values.subscriptionPricePercentage.toString()
+        values.subscriptionPricePercentage = values.subscriptionPricePercentage ? values.subscriptionPricePercentage.toString() : '100'
+        this.props.form.setFieldsValue({subscriptionPricePercentage:values.subscriptionPricePercentage})
         let allP = {
           goodsInfoIds,
           ...values
@@ -83,7 +84,6 @@ class ProductPrice extends Component<any, any> {
           this.showConfirm(allP);
         } else {
           this.updatePriceAllFun(allP)
-
         }
       }
     });
@@ -166,7 +166,7 @@ class ProductPrice extends Component<any, any> {
   //检测用户输入
   checkFomeInput = (e, name) => {
     objP[name] = e
-    let bool = objP.marketPricePercentage > 0 && objP.subscriptionPricePercentage > 0;
+    let bool = objP.marketPricePercentage > 0;
     this.setState({
       isDisabled: !bool
     })
@@ -350,16 +350,16 @@ class ProductPrice extends Component<any, any> {
                 </Form.Item>
                 <Form.Item label={RCi18n({ id: 'Product.Subscriptionpricepercentage' })}>
                   {getFieldDecorator('subscriptionPricePercentage', {
-                    initialValue: '',
+                    initialValue: '100',
                     onChange: (e) => this.checkFomeInput(e, 'subscriptionPricePercentage')
                   })(<InputNumber min={0} />)}
                 </Form.Item>
-                <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
+                {/* <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
                   {getFieldDecorator('roundOff', {
                     initialValue: false,
                     valuePropName: 'checked',
                   })(<Checkbox />)}
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item>
                   <Button type="primary" htmlType="submit" disabled={isDisabled}>
                     apply

@@ -11,8 +11,13 @@ type TResult = {
 /**
  *
  * @returns 获取地址输入类型
+ * 法国暂时不使用配置，直接条用MANUALLY的设置
  */
 export async function getAddressInputTypeSetting() {
+  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
+  if (currentCountry === 'fr' || currentCountry === 'uk') {
+    return Promise.resolve('MANUALLY');
+  }
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
     method: 'POST',
     body: JSON.stringify({
@@ -53,9 +58,14 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
 
 /**
  * 获取是否进行地址验证的设置
+ * 法国暂时不进行验证
  * @returns
  */
 export async function getIsAddressValidation() {
+  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
+  if (currentCountry === 'fr' || currentCountry === 'uk') {
+    return Promise.resolve(false);
+  }
   return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
     body: JSON.stringify({})
@@ -178,7 +188,8 @@ export function searchCity(searchTxt: string) {
     body: JSON.stringify({
       cityName: searchTxt,
       pageNum: 0,
-      pageSize: 30
+      pageSize: 30,
+      storeId: Const.SITE_NAME === 'MYVETRECO' ? 123457915 : undefined
     })
   });
 }
@@ -237,6 +248,18 @@ export function getTaggingList() {
       pageNum: 0,
       pageSize: 1000,
       isPublished: 1
+    })
+  });
+}
+
+/**
+ * 合并包裹
+ */
+export function dimensionsByPackage(filterParams = {}) {
+  return Fetch<TResult>('/pick-up-supplier/dimensionsByPackage-supplier', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
     })
   });
 }

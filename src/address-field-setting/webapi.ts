@@ -61,3 +61,34 @@ export function editAddressApiSetting(param = {}) {
     body: JSON.stringify(param)
   });
 }
+
+// 编辑 editPostCodeBlockList
+export function editPostCodeBlockList(param = {}) {
+  return Fetch<TResult>('/addressDisplaySetting/editPostCodeBlockList', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+// 获取 PostCodeBlockList
+export const getPostCodeBlockList = async (addressDisplaySettingId) => {
+  return await Fetch<TResult>(`/addressDisplaySetting/getPostCodeBlockList?addressDisplaySettingId=${addressDisplaySettingId}`, {
+    method: 'GET'
+  })
+};
+
+// 校验新增 PostCode
+export function validPostCodeBlock(param = {}) {
+  return Fetch<TResult>('/addressDisplaySetting/validPostCodeBlock', {
+    method: 'POST',
+    body: JSON.stringify(param)
+  });
+}
+
+// 设置address1的suggestionFlag和validationFlag
+export function setFlagForAddress1(params = {}) {
+  return Fetch<TResult>('/addressDisplaySetting/edit-address-switch-setting', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  })
+}

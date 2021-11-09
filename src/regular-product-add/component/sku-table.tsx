@@ -370,7 +370,7 @@ class SkuForm extends React.Component<any, any> {
 
     //pricing uom
     columns = columns.push({
-      title: 'Pricing UOM',
+      title: <FormattedMessage id="Product.PricingUOM" />,
       key: 'priceUomId',
       width: 150,
       render: (rowInfo) => {
@@ -385,7 +385,7 @@ class SkuForm extends React.Component<any, any> {
                 })(
                   <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
-                      <Option value={item.get('id')} key={item.get('id')}>{item.get('uomName')}</Option>
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
                   </Select>
                 )}
@@ -551,7 +551,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship'} >
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship' || rowInfo.subscriptionStatus === 0} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                   <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
@@ -661,6 +661,12 @@ class SkuForm extends React.Component<any, any> {
     }
 
     editGoodsItem(id, key, e);
+
+    //新增sku时，修改skuno，同步修改externalskuno
+    const targetSkuItem = goodsList.find(sku => sku.get('id') === id);
+    if(key === 'goodsInfoNo' && !targetSkuItem.get('goodsInfoId')) {
+      editGoodsItem(id, 'externalSku', e);
+    }
 
     if(key == "addedFlag") {
       if(goodsList.toJS().length >1) {

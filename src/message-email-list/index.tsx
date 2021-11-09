@@ -71,6 +71,9 @@ export default class ClinicList extends Component<any, any> {
     );
   };
   resendEmail=(params)=>{
+    this.setState({
+      loading: true
+    });
     const {resendParams}=this.state;
     const fetchParams={
       isReSend:true,
@@ -81,9 +84,14 @@ export default class ClinicList extends Component<any, any> {
       .resendEmailTask(fetchParams)
       .then((data)=>{
         const {res}=data;
-        this.getEmailTaskList();
-        console.log(res,'resend');
-
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully')
+          this.setState({
+            loading:false
+          })
+          this.getEmailTaskList();
+          console.log(res,'resend');
+        }
       })
       .catch((err)=>{
         console.log(err,'resendWrong')
@@ -312,7 +320,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : ''}</span>
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : +text === 6 ? 'Building' : '' }</span>
       },
       {
         title: 'Email Receive Status',
@@ -344,7 +352,7 @@ export default class ClinicList extends Component<any, any> {
               <>
                 <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
                 <Tooltip placement="top" title={'Resend'} >
-                  <Link to={'/message-detail/' + record.id} className="iconfont iconReset"></Link>
+                  <a className="iconfont iconReset"></a>
                 </Tooltip>
                 </div>
                 <Divider type="vertical" />

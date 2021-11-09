@@ -92,6 +92,10 @@ const routes = [
     path: '/subscription-benefit-setting-add/:marketingId?',
     asyncComponent: () => import('./benefit-setting/benefit-setting-add')
   },
+  {
+    path: '/subscription-welcome-box-add/:marketingId?',
+    asyncComponent: () => import('./benefit-setting/benefit-setting-add/welcome-box')
+  },
   // prescriber
   {
     path: '/order-list-prescriber',
@@ -289,6 +293,7 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
+  { path: '/service-product-add', asyncComponent: () => import('./service-product-add/main') },
 
   // goods-regular-edit > 审核通过的商品编辑
   {
@@ -300,6 +305,12 @@ const routes = [
   {
     path: '/goods-bundle-edit/:gid',
     asyncComponent: () => import('./goods-add/main')
+  },
+
+  //service goods edit
+  {
+    path: '/goods-service-edit/:gid',
+    asyncComponent: () => import('./service-product-add/main')
   },
   //Related product
   {
@@ -572,6 +583,11 @@ const routes = [
     path: '/marketing-center',
     asyncComponent: () => import('./marketing-center')
   },
+  //营销中心
+  {
+    path: '/create-promotion/:type?/:id?',
+    asyncComponent: () => import('./marketing-setting/create-promotion')
+  },
   // 商品库导入
   {
     path: '/goods-library',
@@ -622,7 +638,7 @@ const routes = [
   },
   // 优惠券详情
   {
-    path: '/coupon-detail/:cid',
+    path: '/coupon-detail/:cid/:key',
     asyncComponent: () => import('./coupon-detail')
   },
   // 营销中心 - 创建优惠券
@@ -919,6 +935,18 @@ const routes = [
   {
     path: '/product-category',
     asyncComponent: () => import('./product-category')
+  },
+  {
+    path: '/product-dictionary',
+    asyncComponent: () => import('./product-dictionary')
+  },
+  {
+    path: '/product-dictionary-add',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
+    path: '/product-dictionary-edit/:id',
+    asyncComponent: () => import('./product-dictionary-update')
   },
   {
     path: '/product-price',

@@ -1,11 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useContext} from 'react';
 import {Checkbox, Col, List, Row} from "antd";
 import PriceListItem from "./priceListItem";
+import { FormContext } from '../Step4'
 
 const ListItem = List.Item;
 
-function CheckboxItem({item,isChecKedAll=false}){
+function CheckboxItem({item,isChecKedAll=false,title}){
     // console.log('渲染')
+    const Context = useContext(FormContext);
+    const {saveCheckStatus,checkedObject} = Context
+
     const [checkedList, setCheckedList] = React.useState([]);
     const [indeterminate, setIndeterminate] = React.useState(false);
     const [checkAll, setCheckAll] = React.useState(false);
@@ -21,12 +25,22 @@ function CheckboxItem({item,isChecKedAll=false}){
             //当checkAll为true的时候执行（为了优化代码速度）
             if(checkAll){
                 setCheckedList([])
+                // saveCheckStatus(title,item.spu,[])
                 setCheckAll(false);
+            }else {
+                let list = checkedObject[title][item.spu] || []
+
+                setCheckedList(list);
+                setIndeterminate(!!list.length && list.length < item.skuList.length);
+                setCheckAll(list.length === item.skuList.length);
             }
         }
     },[isChecKedAll])
 
     const onChange = list => {
+        //保存选中状态
+        saveCheckStatus(title,item.spu,list)
+
         setCheckedList(list);
         setIndeterminate(!!list.length && list.length < item.skuList.length);
         setCheckAll(list.length === item.skuList.length);
@@ -36,6 +50,8 @@ function CheckboxItem({item,isChecKedAll=false}){
         setCheckedList(e.target.checked ? item.skuList : []);
         setIndeterminate(false);
         setCheckAll(e.target.checked);
+        //保存选中状态
+        saveCheckStatus(title,item.spu,e.target.checked ? item.skuList : [])
     };
     return (
         <>

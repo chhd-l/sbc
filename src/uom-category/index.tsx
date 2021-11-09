@@ -39,7 +39,7 @@ function UomCategory(props: any) {
   const deleteCategory = (id: string) => {
     delUOMCategory(id).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        message.success('Operation successful');
+        message.success(RCi18n({id:'Product.OperateSuccessfully'}));
         submit();
       }
     });
@@ -48,17 +48,20 @@ function UomCategory(props: any) {
   const { getFieldDecorator } = props.form;
   const columns = [
     {
-      title: 'UOM category name',
+      title: RCi18n({id:'Product.UOMCategoryName'}),
       dataIndex: 'uomCategoryName',
+      width: '40%',
       key: 'name',
     },
     {
-      title: 'Description',
+      title: RCi18n({id:'Product.Description'}),
       dataIndex: 'description',
+      width: '40%',
       key: 'desc',
     },
     {
-      title: 'Operation',
+      title: RCi18n({id:'Product.operation'}),
+      width: '20%',
       key: 'oper',
       render: (text, record) => (
         <div>
@@ -68,7 +71,7 @@ function UomCategory(props: any) {
               onClick={() => setModalProps({ ...modalProps, visible: true, type: 2, id: record.id, name: record.uomCategoryName, description: record.description })}
             ></a>
           </Tooltip>
-          <Popconfirm placement="topLeft" title="Are you sure you want to delete this item?" onConfirm={() => deleteCategory(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+          <Popconfirm placement="topLeft" title={RCi18n({id:'Product.Areyousuretodelete'})} onConfirm={() => deleteCategory(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
             <Tooltip placement="top" title={<FormattedMessage id="Product.delete"/>}>
               <a className="iconfont iconDelete" style={{ marginLeft: 10 }}></a>
             </Tooltip>
@@ -81,13 +84,13 @@ function UomCategory(props: any) {
     <div>
       <BreadCrumb />
       <div className="container-search">
-        <Headline title="UOM category" />
+        <Headline title={RCi18n({id:'Product.UOMCategory'})} />
         <Form className="filter-content" layout="inline">
           <FormItem>
-            {getFieldDecorator('uomCategoryName')(<Input addonBefore="UOM category name" />)}
+            {getFieldDecorator('uomCategoryName')(<Input addonBefore={RCi18n({id:'Product.UOMCategoryName'})} />)}
           </FormItem>
           <FormItem>
-            <Button type="primary" icon="search" onClick={submit}>Search</Button>
+            <Button type="primary" icon="search" onClick={submit}><FormattedMessage id="Product.search"/></Button>
           </FormItem>
         </Form>
       </div>
@@ -97,7 +100,7 @@ function UomCategory(props: any) {
             type="primary"
             onClick={() => setModalProps({ ...modalProps, visible: true, type: 1, id: 0, name: '', description: '' })}
           >
-            Create new UOM category
+            <FormattedMessage id="Product.Createnewuomcategory"/>
           </Button>
         </div>
         <Table

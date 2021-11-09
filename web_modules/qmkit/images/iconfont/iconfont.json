@@ -6,6 +6,34 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "18442498",
+      "name": "copy",
+      "font_class": "copy",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
+      "icon_id": "23366576",
+      "name": "icon_ Service",
+      "font_class": "a-icon_Service",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "23366610",
+      "name": "icon_Bundle",
+      "font_class": "icon_Bundle",
+      "unicode": "e6b4",
+      "unicode_decimal": 59060
+    },
+    {
+      "icon_id": "23366613",
+      "name": "icon_Regular",
+      "font_class": "icon_Regular",
+      "unicode": "e6b5",
+      "unicode_decimal": 59061
+    },
+    {
       "icon_id": "18080496",
       "name": "Completed",
       "font_class": "Completed",

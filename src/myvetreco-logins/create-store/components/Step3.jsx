@@ -96,7 +96,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:logoFileList,
@@ -152,7 +152,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   const uploadIconProps = {
     headers:{
       Accept: 'application/json',
-      Authorization: 'Bearer ' + (sessionStorage.getItem('token') || sessionStorage.getItem('storeToken')),
+      Authorization: 'Bearer ' + (window.token || sessionStorage.getItem('storeToken')),
     },
     name: 'uploadFile',
     fileList:iconFileList,
@@ -293,8 +293,28 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24}>
+              <FormItem label="Sell to clinic" name="sellToClinic">
+                {getFieldDecorator('sellToClinic', {
+                  rules: [{ required: true, message: 'Please input Sell to clinic!' }],
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
                 {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12}>
+              <FormItem label="Postcode" name="postcode">
+                {getFieldDecorator('postcode', {
+                  rules: [{ pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -318,30 +338,22 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
-              <FormItem label="Postcode" name="postcode">
-                {getFieldDecorator('postcode', {
+            <Col span={24}>
+              <FormItem label="Introduction" name="introduction">
+                {getFieldDecorator('introduction', {
                   initialValue: ''
-                })(
-                  <Input size="large" />
-                )}
+                })(<Input.TextArea size="large" />)}
               </FormItem>
             </Col>
-            <Col span={24}>
-              <FormItem label="Introduction"
-                        name="introduction">
-                <Input.TextArea size="large" />
-              </FormItem>
-            </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:'none'}}>
               <div className='flex'>
                 <span>
                   <span className='form-require'>Order audit setting</span>
                 </span>
-                <FormItem name="auditSetting">
+                <FormItem name="auditSetting" style={{marginBottom:0}}>
                   {getFieldDecorator('auditSetting', {
                     rules: [{ required: true, message: 'Please choose Order audit setting!' }],
-                    initialValue: 0
+                    initialValue: 1
                   })(
                     <Radio.Group className="hmargin-level-4">
                       <Radio value={1}>Auto audit</Radio>
@@ -349,6 +361,13 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                     </Radio.Group>
                   )}
                 </FormItem>
+              </div>
+              <div className="flex word small" style={{color:'red'}}>
+                <span className="flex-item">Instructions:</span>
+                <div className="flex-item flex-main hpadding-level-2">
+                  <div>Auto audit: Orders do not need to audit by clinic after payment successfully by PO</div>
+                  <div>Manual audit: Orders need to audit by clinic after payment successfully by PO</div>
+                </div>
               </div>
             </Col>
             <Col span={12} className="align-item-right">

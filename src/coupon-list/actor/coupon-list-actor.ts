@@ -5,6 +5,7 @@ export default class CouponDetailActor extends Actor {
     return {
       //选择的标签
       queryTab: '0',
+      couponId: '',
       form: {
         likeCouponName: '',
         couponStatus: null,
@@ -20,13 +21,18 @@ export default class CouponDetailActor extends Actor {
       //当前页
       pageNum: 1,
       couponList: [],
-      loading: true
+      loading: true,
+      isModalVisible: false
     };
   }
 
   @Action('tab: change')
   changeTab(state, key) {
     return state.set('queryTab', key);
+  }
+  @Action('set: couponId')
+  setCouponId(state, key) {
+    return state.set('couponId', key);
   }
 
   @Action('form: field')
@@ -40,12 +46,16 @@ export default class CouponDetailActor extends Actor {
   }
 
   @Action('loading:start')
-  start(state: IMap) {
+  start(state) {
     return state.set('loading', true);
   }
 
   @Action('loading:end')
-  end(state: IMap) {
+  end(state) {
     return state.set('loading', false);
+  }
+  @Action('isModalVisible')
+  setIsModalVisible(state,val) {
+    return state.set('isModalVisible', val);
   }
 }

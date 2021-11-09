@@ -17,14 +17,14 @@
 .detail-container {
   margin: 12px 12px 0 12px;
   padding: 20px;
-  background-color: #fff;
+  background-color: #FFF;
 
   .headline {
     padding-bottom: 16px;
     border-bottom: 1px solid rgb(240, 240, 240);
 
     .ant-btn-primary span {
-      color: #fff;
+      color: #FFF;
       margin-left: 0;
     }
   }
@@ -35,8 +35,7 @@
   background-color: rgb(250, 250, 250);
   border-radius: 2px;
 
-  .ant-row,
-  .ant-row-flex {
+  .ant-row, .ant-row-flex {
     margin: 8px 0;
   }
 
@@ -49,29 +48,41 @@
   margin-bottom: 0;
   min-height: 40px;
 }
-.Membership-info-detail{
+
+.Membership-info-detail {
   padding: 5px 5px;
   background-color: rgb(250, 250, 250);
   border-radius: 2px;
+
   .Membership-info-box {
     display: flex;
+
     .Membership-info-box-label {
       //flex: 1;
       padding-right: 6px;
     }
+
     .Membership-info-box-text {
       flex: 1;
       word-break: break-all;
     }
   }
-    .ant-row,
-  .ant-row-flex {
+
+  .ant-row, .ant-row-flex {
     margin: 8px 0;
   }
 
   .ant-col {
     margin-bottom: 8px;
   }
+}
 
+.address-Tooltip-wrap {
+  .ant-tooltip-arrow::before {
+    background-color: #E8E8E8;
+  }
 
+  .ant-tooltip-inner {
+    background-color: #E8E8E8;
+  }
 }

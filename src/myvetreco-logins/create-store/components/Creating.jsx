@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
-import { util, RCi18n, history } from 'qmkit';
+import { util, RCi18n, history, login, switchLogin, cache } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
 import { Icon, message } from 'antd';
 
@@ -14,6 +14,14 @@ const STATUS = {
   PAYMENT_INFO:4,
   SETTING_INIT:5,
 }
+
+const autoLogin = () => {
+  let loginData = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}');
+  switchLogin({
+    storeId: loginData.storeId
+  }, (res) => {});
+};
+
 export default function Creating({userInfo,setStep}) {
   let [statusList,setStatusList] = useState([
     {title:'Contract Agreement', message: null, result: 'pending'},
@@ -45,7 +53,10 @@ export default function Creating({userInfo,setStep}) {
           storeId: userInfo.storeId,
         }).then(({res})=>{
           if(res.code === 'K-000000'){
-            history.push("/login")
+            setClassText('finished');
+            setTimeout(() => {
+              autoLogin();  //自动登录
+            }, 3000);
           }
         })
       }else if(isPending){
@@ -67,7 +78,7 @@ export default function Creating({userInfo,setStep}) {
 
   function getStatus() {
     queryStatus(userInfo.accountName).then(({res})=>{
-      debugger
+      
       for(let i in res.context){
         if(statusList[STATUS[i]]){
           //用两个值来判断 STORE_DETAIL 是否初始化成功
@@ -112,12 +123,14 @@ export default function Creating({userInfo,setStep}) {
   return (
 
     <div className="create-transition">
-      <div className={"loading " + classText}>{loadingText}</div>
+      <div className={`loading ${classText === 'finished' ? 'ok' : classText}`}>{loadingText}</div>
       <div className="step-list">
         <h1 style={{ color: '#30465a',minWidth: 400 }}>
           {
             classText === '' ? <FormattedMessage id={`Login.create_store_ing`}/> : (
-              classText === 'ok' ? 'Success! You are ready to go' : 'Store creation failed. Please try again'
+              classText === 'ok' ? 'Success! You are ready to go' : (
+                classText === 'finished' ? 'Logging...' : 'Store creation failed. Please try again'
+              )
             )
           }
           {/*{*/}

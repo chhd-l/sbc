@@ -17,7 +17,7 @@ export default class index extends Component<any, any> {
     render() {
         const LoginFormDetail = Form.create({})(LoginForm);
         if (Const.SITE_NAME === 'MYVETRECO') {
-          return (<MyVetRecoLoginForm />);
+          return (<MyVetRecoLoginForm useOkta={false} />);
         }
         return (
             <div style={styles.container}>{<LoginFormDetail />}</div>

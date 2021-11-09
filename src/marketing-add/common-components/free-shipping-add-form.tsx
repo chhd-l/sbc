@@ -375,7 +375,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
                         rules: [
                           {
                             validator: (_rule, value, callback) => {
-                              debugger
+                              
                               if(shippingBean.get('subType') !== 10 || value === 0 || value === '0') {
                                 callback();
                               } else if (!value) {//shippingBean.get('shippingValue')

@@ -41,7 +41,10 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   componentDidMount() {
     this.store.init();
   }
-
+  componentWillUnmount(){
+    document.getElementById('mars-footer-panel')?.remove() 
+  }
+  
   render() {
     // const LoginFormDetail = Form.create({})(LoginForm);
     // return this.state.isRcLogin ? (

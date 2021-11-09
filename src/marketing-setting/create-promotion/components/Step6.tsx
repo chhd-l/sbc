@@ -516,7 +516,7 @@ export default function Step6({setLoading}) {
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && formData.Conditions.fullItem + <FormattedMessage id="Marketing.items" /> }
+                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                     </div>

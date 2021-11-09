@@ -4,13 +4,13 @@ import { Radio, Button, Form, Breadcrumb, Input, Spin } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
 import AppointmentDatePicker from './components/appointment-date-picker';
-import { addNewAppointment, findAppointmentById, updateAppointmentById } from './webapi';
+import { apptUpdate, findAppointmentById, apptSave, goodsDict, queryDate } from './webapi';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
 
 import './index.less';
 import WeekCalender from './components/week-calender';
-import * as webapi from './webapi';
+// import * as webapi from './webapi';
 class NewAppointment extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -48,37 +48,68 @@ class NewAppointment extends React.Component<any, any> {
     sessionStorage.setItem('remember-appointment-list-params', '1');
     if (this.props.match.params.id) {
       this.getAppointmentById(this.props.match.params.id);
-    }
+    }  
   }
   //获取字典
   getAllDict = async () => {
-    const allDict = await Promise.all([webapi.goodsDict({ type: 'service_type' }), webapi.goodsDict({ type: 'apprintment_type' }), await webapi.goodsDict({ type: 'expert_type' })])
-    console.log(allDict)
+    const allDict = await Promise.all([goodsDict({ type: 'service_type' }), goodsDict({ type: 'apprintment_type' }), await goodsDict({ type: 'expert_type' })])
     let _listKey = ['serviceTypeList', 'apprintmentTypeList', 'expertTypeList',]
     allDict.map((item, index) => {
       const { res }: any = item;
       if (res?.code === Const.SUCCESS_CODE) {
         this.setState({
           [_listKey[index]]: res.context.goodsDictionaryVOS
+        },()=>{
+          if (!this.props.match.params.id) {
+          this.queryDate()
+          }
         })
       }
     })
-    this.queryDate()
+
   }
   //初始化能预约的时间
-  queryDate = () => {
+  queryDate = (type: boolean = false, chooseData: any = {}) => {
     const { getFieldsValue } = this.props.form;
     setTimeout(async () => {
       let { apptTypeId, minutes, expertTypeId } = getFieldsValue(['apptTypeId', 'minutes', 'expertTypeId'])
       console.log(apptTypeId, minutes, expertTypeId)
-      const { res } = await webapi.queryDate({ appointmentTypeId: apptTypeId, minutes, expertTypeId });
-      if (res.code === Const.SUCCESS_CODE) {
-        let resources = res.context.resources
-        this.setState({
-          resources,
-          key: (+new Date())
-        })
-      }
+      const resources = await new Promise(async (reslove) => {
+        const { res } = await queryDate({ appointmentTypeId: apptTypeId, minutes, expertTypeId });
+        if (res.code === Const.SUCCESS_CODE) {
+          let _resources = res.context.resources
+          if (type && minutes === chooseData.minutes) {
+            let _temp: any = {
+              "date": chooseData.bookSlotVO.dateNo,
+              "minutes": chooseData.minutes,
+              "minuteSlotVOList": []
+            }
+            _temp.minuteSlotVOList.push({ ...chooseData.bookSlotVO, type: 'primary',disabled:true })
+            console.log(_temp,'=_temp')
+            if (_resources.length == 0) {
+              _resources.push(_temp)
+            } else {
+              _resources.map(item => {
+                if (item.dateNo === _temp.dateNo) {
+                  item.minuteSlotVOList.map(it => {
+                    if (it.startTime === _temp.startTime) {
+                      it = { ...it, ..._temp }
+                    }
+                  })
+                }
+              })
+            }
+          }
+          console.log(1)
+          reslove(_resources);
+        }
+      })
+      console.log(resources)
+
+      this.setState({
+        resources,
+        key: (+new Date())
+      })
     });
   }
 
@@ -86,15 +117,20 @@ class NewAppointment extends React.Component<any, any> {
     this.setState({ loading: true });
     const { setFieldsValue } = this.props.form;
     findAppointmentById(id)
-      .then((data) => {
-        if (data.res.code === Const.SUCCESS_CODE) {
-
+      .then(({ res }) => {
+        if (res.code === Const.SUCCESS_CODE) {
+          let p = res.context
+          this.setState({ params: p, loading: false }, () => {
+            setFieldsValue(p);
+            this.queryDate(true, p)
+          });
         } else {
           this.setState({ loading: false });
         }
+
       })
       .catch(() => {
-        this.setState({ loading: true });
+        this.setState({ loading: false });
       });
   };
 
@@ -129,7 +165,6 @@ class NewAppointment extends React.Component<any, any> {
       consumerEmail: memberInfo.email,
       customerId: memberInfo.customerId
     }
-    console.log(p)
     this.setState({
       visible: false,
       params: {
@@ -154,9 +189,18 @@ class NewAppointment extends React.Component<any, any> {
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         console.log(values)
-        // this.setState({ loading: true });
-        const { res } = await webapi.apptSave({...values,serviceTypeId:'6'})
-
+        this.setState({ loading: true });
+        const { params } = this.state;
+        let d: any = {}
+        if (params.id) {
+          d = await apptUpdate({ ...params, ...values, serviceTypeId: '6' })
+        } else {
+          d = await apptSave({ ...values, serviceTypeId: '6' })
+        }
+        if (d.res.code === Const.SUCCESS_CODE) {
+          this.setState({ loading: false });
+          history.push('/appointment-list')
+        }
       }
     });
   };
@@ -183,7 +227,7 @@ class NewAppointment extends React.Component<any, any> {
                   required: true,
                   message: 'Please Select appointment type',
                 },],
-                onChange: () => this.queryDate()
+                onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
                   {apprintmentTypeList.map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
@@ -201,7 +245,7 @@ class NewAppointment extends React.Component<any, any> {
                   required: true,
                   message: 'Please Select expert type',
                 },],
-                onChange: () => this.queryDate()
+                onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
                   {expertTypeList.map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
@@ -222,7 +266,7 @@ class NewAppointment extends React.Component<any, any> {
                   required: true,
                   message: 'Please Select Duration',
                 },],
-                onChange: () => this.queryDate()
+                onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
                   <Radio value={15}><FormattedMessage id="Appointment.min15" /></Radio>
@@ -281,7 +325,7 @@ class NewAppointment extends React.Component<any, any> {
               <Button htmlType="submit" type="primary" >
                 <FormattedMessage id="Appointment.Save" />
               </Button>
-              <Button style={{ marginLeft: 20 }} onClick={() => history.go(-1)}>
+              <Button style={{ marginLeft: 20 }} onClick={() => history.push('/appointment-list')}>
                 <FormattedMessage id="Appointment.Cancel" />
               </Button>
             </div>

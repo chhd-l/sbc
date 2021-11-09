@@ -1040,32 +1040,36 @@ const routes = [
   },
   {
     path: '/appointment-list',
-    asyncComponent: () => import('./appointment-list')
-  },
-  {
-    path: '/appointment-add',
-    asyncComponent: () => import('./appointment-list/new')
-  },
-  {
-    path: '/appointment-update/:id',
-    asyncComponent: () => import('./appointment-list/new')
-  },
-
-  {
-    path: '/appointmention-list',
     asyncComponent: () => import('./appointmention-list')
   },
   {
-    path: '/appointmention-add',
+    path: '/appointment-add',
     asyncComponent: () => import('./appointmention-list/new')
   },
   {
-    path: '/appointmention-update/:id',
+    path: '/appointment-update/:id',
     asyncComponent: () => import('./appointmention-list/new')
   },
+
+  // {
+  //   path: '/appointmention-list',
+  //   asyncComponent: () => import('./appointmention-list')
+  // },
+  // {
+  //   path: '/appointmention-add',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  // {
+  //   path: '/appointmention-update/:id',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
   {
-    path: '/appointmention-details/:id',
+    path: '/appointment-details/:id',
     asyncComponent: () => import('./appointmention-list/details')
+  },
+  {
+    path: '/appointment-schedular',
+    asyncComponent: () => import('./appointmention-list/schedular')
   },
   
 

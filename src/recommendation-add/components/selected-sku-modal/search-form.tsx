@@ -25,7 +25,7 @@ export default class SearchForm extends React.Component<any, any> {
         brandId: undefined,
         cateId: undefined,
         likeValue: undefined,
-        likeGoodsName: undefined
+        goodsName: undefined
       },
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
     };
@@ -42,7 +42,7 @@ export default class SearchForm extends React.Component<any, any> {
           brandId: 0,
           cateId: 0,
           likeValue: '',
-          likeGoodsName: ''
+          goodsName: ''
         }
       });
     }
@@ -78,9 +78,9 @@ export default class SearchForm extends React.Component<any, any> {
             </div>
           </FormItem>
 
-          {/* <FormItem>
-            <Input addonBefore="Product Name" value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
-          </FormItem> */}
+          <FormItem>
+            <Input addonBefore="Product Name" value={searchParams.goodsName} onChange={(e) => this.paramsOnChange('goodsName', e.target.value)} />
+          </FormItem>
 
           {/* <FormItem>
             <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Product category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>

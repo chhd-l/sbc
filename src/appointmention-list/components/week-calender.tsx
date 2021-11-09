@@ -7,8 +7,9 @@ import './index.less';
 class WeekCalender extends Component {
     index: number
     props: {
+        value?: any
         data: any
-        onChange?:Function
+        onChange?: Function
     }
     constructor(props) {
         super(props)
@@ -16,7 +17,7 @@ class WeekCalender extends Component {
     }
     state = {
         weekDate: [],
-        selectedIndex:''
+        selectedIndex: ''
     }
     componentDidMount() {
         this.getCurrentWeek()
@@ -25,7 +26,7 @@ class WeekCalender extends Component {
         let weekOfDay: any = moment(date).format("E") // 指定日期的周的第几天
         let weekDate = []
         let dateList = await this.getEnmbeData();
-        for (let i = 1; i <= 7; i++) {
+        for (let i = 0; i <7; i++) {
             let _date = moment(date).subtract(weekOfDay - i, 'days');
             let nowDate: string = moment(_date).format('YYYYMMDD');
             let currentDate = dateList[nowDate] || {};
@@ -40,16 +41,17 @@ class WeekCalender extends Component {
     }
     getEnmbeData = () => {
         return new Promise((reslove) => {
-            let _data = this.props.data;
+            let _data = [...this.props.data];
             let _dataObj = {};
             _data.map(item => {
                 _dataObj[item.date] = item;
                 _dataObj[item.date]['minuteList'] = {};
                 item.minuteSlotVOList.map(list => {
-                    _dataObj[item.date]['minuteList'][list.startTime] =list;
+                    _dataObj[item.date]['minuteList'][list.startTime] = list;
                 })
 
             })
+            console.log(_dataObj, '_dataObj')
             reslove(_dataObj)
         })
 
@@ -63,6 +65,7 @@ class WeekCalender extends Component {
     }
 
     nextWeek = () => {
+        if (this.index === -2) return
         this.index--;
         const cc = this.getWeek();
         this.getCurrentWeek(cc[0])
@@ -81,22 +84,26 @@ class WeekCalender extends Component {
             let result = [];
             let current = moment(start);
             while (current <= end) {
-                let dateNo= current.format('YYYYMMDD')
-                let cc = (currentDate.minuteList && currentDate.minuteList[current.format('YYYYMMDD HH:mm')]) || { disabled: true,type:'default' }
-                let time =cc.startTime&&(moment(cc.startTime,'YYYYMMDD HH:mm').format('HH:mm'))
-                let ccc = { ...cc, time: (time ? time : current.format('HH:mm')) ,dateNo}
-                result.push(ccc);
+                let dateNo = current.format('YYYYMMDD')
+                let cc = { disabled: true, type: 'default', dateNo, time: current.format('HH:mm') }
+                if (currentDate.minuteList) {
+                    let curr = currentDate.minuteList[current.format('YYYYMMDD HH:mm')];
+                    if (curr) {
+                        cc = { ...curr, disabled: false, time: current.format('HH:mm'), dateNo };
+                    }
+                }
+                result.push(cc);
                 current.add(15, 'minutes');
             }
             reslove(result);
         })
     }
-    clickAppointItem=(item,index)=>{
-        this.setState({selectedIndex:(item.dateNo+'_'+index)})
+    clickAppointItem = (item, index) => {
+        this.setState({ selectedIndex: (item.dateNo + '_' + index) })
         this.props.onChange(item)
     }
     render() {
-        const { weekDate,selectedIndex } = this.state;
+        const { weekDate, selectedIndex } = this.state;
         return (
             <div className="week-calender">
                 <div className="week-head">
@@ -119,9 +126,9 @@ class WeekCalender extends Component {
                 </div>
                 <div className="week-content">
                     <ul>
-                        {weekDate.map((item,index) => (
+                        {weekDate.map((item, index) => (
                             <li key={index + 1}>
-                                {item.times.map((it,idx) => (<Button onClick={()=>this.clickAppointItem(it,idx)} key={it.time + 1} type={(selectedIndex===(it.dateNo+'_'+idx))?'primary':it.type} disabled={it.disabled} style={{ marginTop: 5 }}>{it.time}</Button>))}
+                                {item.times.map((it, idx) => (<Button onClick={() => this.clickAppointItem(it, idx)} key={it.time + 1} type={(selectedIndex === (it.dateNo + '_' + idx)) ? 'primary' : it.type} disabled={it.disabled} style={{ marginTop: 5 }}>{it.time}</Button>))}
 
 
                             </li>))

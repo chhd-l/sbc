@@ -1,8 +1,8 @@
 import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
-import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal, Icon } from 'antd';
-import { apptList, updateAppointmentById, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
+import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal, Icon, Popconfirm } from 'antd';
+import { apptList, apptCancel, apptArrived, updateAppointmentById, goodsDict, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
@@ -15,20 +15,21 @@ class Appointment extends React.Component<any, any> {
 
   constructor(props: any) {
     super(props);
-    let lastParams = { current: 1 };
-    if (sessionStorage.getItem('remember-appointment-list-params')) {
-      lastParams = JSON.parse(sessionStorage.getItem('appointment-list-params') || '{\"current\": 1 }');
-    }
-    const { current, ...rest } = lastParams;
     this.state = {
       loading: false,
       list: [],
-      searchForm: rest,
+      searchForm: {},
       pagination: {
-        current: current,
+        current: 1,
         pageSize: 10,
         total: 0
       },
+      serviceTypeObj: {},
+      apprintmentTypObj: {},
+      expertTypeObj: {},
+      serviceTypeList: [],
+      apprintmentTypeList: [],
+      expertTypeList: [],
       selectedRowKeys: [],
       exportModalData: {
         visible: false,
@@ -45,18 +46,18 @@ class Appointment extends React.Component<any, any> {
 
   componentDidMount() {
     this.getAppointmentList();
+    this.getAllDict();
   }
 
   componentWillUnmount() {
     //删掉需要记住筛选参数的标记
-    sessionStorage.removeItem('remember-appointment-list-params');
   }
 
   getAppointmentList = () => {
     const { searchForm, pagination } = this.state;
     this.setState({ loading: true });
     apptList({ ...searchForm, pageNum: pagination.current - 1, pageSize: pagination.pageSize })
-      .then((data:any) => {
+      .then((data: any) => {
         this.setState({
           loading: false,
           list: data.res.context.page.content,
@@ -71,32 +72,48 @@ class Appointment extends React.Component<any, any> {
         this.setState({ loading: false });
       });
   };
-
+  //获取字典
+  getAllDict = async () => {
+    const allDict = await Promise.all([goodsDict({ type: 'service_type' }), goodsDict({ type: 'apprintment_type' }), await goodsDict({ type: 'expert_type' })])
+    console.log(allDict)
+    let _listKey = ['serviceTypeObj', 'apprintmentTypObj', 'expertTypeObj',],
+      _list_ = ['serviceTypeList', 'apprintmentTypeList', 'expertTypeList',]
+    allDict.map((item, index) => {
+      const { res }: any = item;
+      if (res?.code === Const.SUCCESS_CODE) {
+        let objValue = {}
+        let _list = res.context.goodsDictionaryVOS
+        _list.map(it => {
+          objValue[it.id] = it.name;
+        })
+        this.setState({
+          [_list_[index]]: _list,
+          [_listKey[index]]: objValue
+        })
+      }
+    })
+  }
   onSearch = (e) => {
     e.preventDefault();
 
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        const { pagination } = this.state;
+        this.onTableChange({
+          ...pagination,
+          current: 1
+        }, values);
       }
     });
 
-
-    return
-
-    const { pagination, searchForm } = this.state;
-    sessionStorage.setItem('appointment-list-params', JSON.stringify({ ...searchForm, current: 1 }));
-    this.onTableChange({
-      ...pagination,
-      current: 1
-    });
   };
 
-  onTableChange = (pagination) => {
-    const { searchForm } = this.state;
-    sessionStorage.setItem('appointment-list-params', JSON.stringify({ ...searchForm, current: pagination.current }));
+  onTableChange = (pagination, values = {}) => {
+    // sessionStorage.setItem('appointmention-list-params', JSON.stringify({ ...values, current: pagination.current }));
     this.setState(
       {
+        searchForm: values,
         pagination: pagination
       },
       () => this.getAppointmentList()
@@ -196,94 +213,158 @@ class Appointment extends React.Component<any, any> {
       showCard: false
     });
   };
+  confirm = async (e, type) => {
+    console.log(e);
+    let result:any={};
+    switch (type) {
+      case 'cancel':
+        result = await apptCancel({...e,status:2});
+        break;
+      case 'arrived':
+        result= await apptArrived({...e,status:1});
+        break
+      default:
+        break;
+    }
+    if (result.res.code === Const.SUCCESS_CODE) {
+      message.success('successed');
+      this.getAppointmentList()
+    }
 
+  }
+
+  cancel = (e) => {
+    console.log(e);
+    message.error('Click on No');
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { serviceTypeObj,
+      apprintmentTypObj,
+      apprintmentTypeList,
+      expertTypeObj, } = this.state;
+    let status = {
+      "0": 'Booked',
+      "1": 'Arrived',
+      "2": 'Canceled'
+    }
     const columns = [
       {
         title: RCi18n({ id: 'Appointment.No.' }),
         dataIndex: 'apptNo',
-        key: 'd1'
+        key: 'apptNo'
       },
       {
         title: 'Order No',//RCi18n({id:'Appointment.No.'}),
-        dataIndex: 'apptNo',
-        key: 'd52'
+        dataIndex: 'goodsInfoId',
+        key: 'goodsInfoId'
       },
       {
         title: RCi18n({ id: 'Appointmention.Time' }),
         dataIndex: 'apptTime',
-        key: 'd2',
+        key: 'apptTime',
         render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
       },
       {
         title: RCi18n({ id: 'Appointment.PON' }),
         dataIndex: 'consumerName',
-        key: 'd3'
+        key: 'consumerName'
       },
       {
         title: RCi18n({ id: 'Appointment.Pet OE' }),
         dataIndex: 'consumerEmail',
-        key: 'd4'
+        key: 'consumerEmail'
       },
       {
         title: RCi18n({ id: 'Appointment.Phone number' }),
         dataIndex: 'consumerPhone',
-        key: 'd8'
+        key: 'consumerPhone'
       },
       {
         title: RCi18n({ id: 'Appointmention.Type' }),
-        dataIndex: 'type',
-        key: 'd5',
-        render: (text) => <div>{text === '0' ? RCi18n({ id: 'Appointment.Online' }) : text === '1' ? RCi18n({ id: 'Appointment.Offline' }) : ''}</div>
+        dataIndex: 'apptTypeId',
+        key: 'apptTypeId',
+        render: (text) => <div>{apprintmentTypObj[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Status' }),
-        dataIndex: 'status3',
-        key: 'status3',
-        render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
+        dataIndex: 'status',
+        key: 'status',
+        render: (text) => <div>{status[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.type' }),
-        dataIndex: 'status2',
-        key: 'status3',
-        render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
+        dataIndex: 'expertTypeId',
+        key: 'expertTypeId',
+        render: (text) => <div>{expertTypeObj[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.name' }),
-        dataIndex: 'status1',
-        key: 'status',
-        render: (text) => <div>{text === 0 ? RCi18n({ id: 'Appointment.Booked' }) : text === 1 ? RCi18n({ id: 'Appointment.Arrived' }) : text === 2 ? RCi18n({ id: 'Appointment.Canceled' }) : ''}</div>
+        dataIndex: 'expertNames',
+        key: 'expertNames',
+        // render: (text) => <div>{}</div>
       },
 
       {
         title: RCi18n({ id: 'Appointment.Operation' }),
-        dataIndex: 'status',
-        with: 200,
+        dataIndex: 'Operation',
+        width: 170,
         key: 'd7',
         render: (text, record) => (
           <>
-            <Tooltip title={RCi18n({ id: 'Appointment.Edit' })}>
-              <Link to={`/appointmention-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
-            </Tooltip>
             <Tooltip title={RCi18n({ id: 'Appointment.Details' })}>
-              <Link to={`/appointmention-details/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
-            </Tooltip>
-            <Tooltip title={RCi18n({ id: 'Appointment.Details' })}>
-              <Icon type="eye" />
+              <Link to={`/appointment-details/${record.id}`} className="iconfont " style={{ padding: '0 5px' }}><Icon type="eye" /></Link>
             </Tooltip>
 
-            <Tooltip title={RCi18n({ id: 'Appointment.Arrived' })}>
-              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
+
+
+            {[0].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Edit' })}>
+              <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
+            </Tooltip>}
+            {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Prescription' })}>
+              <Link to={`/recommendation`} className="iconfont " style={{ padding: '0 5px' }}><Icon type="profile" /></Link>
+            </Tooltip>
+            }
+
+            {[0].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Arrived' })}>
+              {/* <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
                 <i className="iconfont iconEnabled"></i>
+              </Button> */}
+           
+              <Popconfirm
+                title="Are you sure arrived this task?"
+                onConfirm={() => this.confirm(record,'arrived')}
+                onCancel={this.cancel}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="link" size="small" style={{ padding: '0 5px' }}>
+                <i className="iconfont iconEnabled"></i>
+                </Button>
+              </Popconfirm>
+           
+            </Tooltip>}
+            {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Pay' })}>
+              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
+                <Icon type="pay-circle" />
               </Button>
+            </Tooltip>}
+            {[0].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Cancel' })}>
+              <Popconfirm
+                title="Are you sure cancel this task?"
+                onConfirm={() => this.confirm(record,'cancel')}
+                onCancel={this.cancel}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="link" size="small" style={{ padding: '0 5px' }}>
+                  <Icon type="close-circle" />
+                </Button>
+              </Popconfirm>
+
             </Tooltip>
-            
-            <Tooltip title={RCi18n({ id: 'Appointment.Cancel' })}>
-              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 2)} style={{ padding: '0 5px' }}>
-                <Icon type="vertical-right" />
-              </Button>
-            </Tooltip>
+            }
+
 
           </>
         )
@@ -313,15 +394,15 @@ class Appointment extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  {getFieldDecorator('status', {})(
+                  {getFieldDecorator('apptTypeId', {})(
                     <SelectGroup
                       label={<p style={styles.label}>{<FormattedMessage id="Appointment.type" />}</p>}
                       style={{ width: '100%' }}
                     >
                       <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
-                      <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
-                      <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
-                      <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
+                      {apprintmentTypeList && apprintmentTypeList.map(item => <Option value={item.id} >{item.name}</Option>)}
+                      {/* <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
+                      <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option> */}
                     </SelectGroup>
                   )}
                 </FormItem>
@@ -354,7 +435,7 @@ class Appointment extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  {getFieldDecorator('consumerEmail', {})(
+                  {getFieldDecorator('consumerPhone', {})(
                     <Input
                       addonBefore={<p style={styles.label}>{<FormattedMessage id="Appointment.Phone number" />}</p>}
                     />
@@ -374,16 +455,19 @@ class Appointment extends React.Component<any, any> {
               </Col>
               <Col span={8}>
                 <FormItem>
-                  {getFieldDecorator('status', {})(
-                    <SelectGroup
-                      label={<p style={styles.label}>{<FormattedMessage id="Prescriber.Expert name" />}</p>}
-                      style={{ width: '100%' }}
-                    >
-                      <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
-                      <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
-                      <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
-                      <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
-                    </SelectGroup>
+                  {getFieldDecorator('expertNames', {})(
+                    <Input
+                      addonBefore={<p style={styles.label}>{<FormattedMessage id="Prescriber.Expert name" />}</p>}
+                    />
+                    // <SelectGroup
+                    //   label={<p style={styles.label}>{<FormattedMessage id="Prescriber.Expert name" />}</p>}
+                    //   style={{ width: '100%' }}
+                    // >
+                    //   <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
+                    //   <Option value="0">{<FormattedMessage id="Appointment.Booked" />}</Option>
+                    //   <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
+                    //   <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option>
+                    // </SelectGroup>
                   )}
                 </FormItem>
 
@@ -409,7 +493,7 @@ class Appointment extends React.Component<any, any> {
               <Button style={{ marginRight: 10 }} onClick={this.onOpenExportModal}>
                 {<FormattedMessage id="Appointment.Batch export" />}
               </Button>
-              <Button type="primary" onClick={() => history.push('/appointmention-add')}>
+              <Button type="primary" onClick={() => history.push('/appointment-add')}>
                 {<FormattedMessage id="Appointment.Add new" />}
               </Button>
             </Col>

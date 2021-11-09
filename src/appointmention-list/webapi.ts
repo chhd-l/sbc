@@ -95,7 +95,10 @@ export const apptList = (params={}) =>{
 export const apptUpdate = (params={}) =>{
   return Fetch(`/appt/update`, {
     method: 'POST',
-    body: JSON.stringify(params)
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
   });
 }
 //find
@@ -114,6 +117,27 @@ export const apptSave = (params={}) =>{
     })
   });
 }
+
+//cancel
+export const apptCancel = (params) =>{
+  return Fetch(`/appt/cancel`, {
+    method: 'post',
+    body: JSON.stringify(params)
+  });
+}
+// details
+export const apptDetail = (id) =>{
+  return Fetch(`/appt/detail/${id}`);
+}
+//arrived
+export const apptArrived = (params) =>{
+  return Fetch(`/appt/arrived`, {
+    method: 'post',
+    body: JSON.stringify(params)
+  });
+}
+
+
 
 
 export function exportAppointmentList(params = {}) {
@@ -136,5 +160,25 @@ export function exportAppointmentList(params = {}) {
 
       resolve('');
     }, 500);
+  });
+}
+
+/**
+ * 每日排版计划表
+ */
+ export const calendarByDay = (params) =>{
+  return Fetch(`/resourceDatePlan/calendarByDay`, {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+/**
+ * 人员列表
+ */
+ export const AllEmployeePerson = (params={}) =>{
+  return Fetch(`/resourceSetting/getAllEmployeeForResource`, {
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 }

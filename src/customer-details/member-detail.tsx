@@ -557,11 +557,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                               <div className="text-highlight">{pet.petsName}</div>
                             </Col>
                           </Row>
-                          <Row className="text-tip">
+                          <Row gutter={4} className="text-tip">
                             <Col span={12}><FormattedMessage id="PetOwner.Age" /></Col>
                             <Col span={12}><FormattedMessage id="PetOwner.Breed" /></Col>
                           </Row>
-                          <Row style={{ fontSize: 16 }}>
+                          <Row gutter={4} style={{ fontSize: 16 }}>
                             <Col span={12}>
                               {pet.birthOfPets && (
                                 <Tooltip title={calcPetAge(pet.birthOfPets)}>

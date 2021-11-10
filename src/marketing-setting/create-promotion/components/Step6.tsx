@@ -93,7 +93,7 @@ export default function Step6({setLoading}) {
          */
         couponPromotionType: formData.Advantage.couponPromotionType,//改版用到的字段
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
-        couponDiscount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.couponDiscount : 0,
+        couponDiscount: formData.Advantage.couponPromotionType === 1 ? parseInt(formData.Advantage.couponDiscount)/100 : 0,
         limitAmount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
         /**
          * 未用到
@@ -271,6 +271,10 @@ export default function Step6({setLoading}) {
             restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
             restSubscriptionOrderDiscount: parseInt(formData.Advantage.restSubscriptionOrderDiscount)/100,
           },
+          firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
+          firstSubscriptionOrderDiscount: formData.Advantage.firstSubscriptionOrderDiscount ,
+          restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
+          restSubscriptionOrderDiscount: formData.Advantage.restSubscriptionOrderDiscount,
           subType: subType,
           isClub: false,//未用到
         }

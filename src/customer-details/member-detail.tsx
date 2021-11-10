@@ -562,7 +562,8 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}><FormattedMessage id="PetOwner.Breed" /></Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
+                            <Col span={8}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : '  '}</Col>
+                            <Col span={4}></Col>
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreedName}>

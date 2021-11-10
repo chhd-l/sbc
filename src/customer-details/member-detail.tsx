@@ -536,7 +536,7 @@ export default class CustomerDetails extends React.Component<any, any> {
               <Row gutter={16}>
                 {pets.map((pet, idx) => (
                   <Col key={idx} span={8} style={{ margin: '10px 0' }}>
-                    <Card bodyStyle={{ padding: '10px 20px' }}>
+                    <Card bodyStyle={{ padding: '10px 20px' }} style={{height:120,overflow:'hidden'}}>
                       <div className="text-align-right">
                         {/* <Popconfirm placement="topRight" title="Are you sure to remove this item?" onConfirm={() => {}} okText="Confirm" cancelText="Cancel">
                           <Button type="link">
@@ -562,7 +562,13 @@ export default class CustomerDetails extends React.Component<any, any> {
                             <Col span={12}><FormattedMessage id="PetOwner.Breed" /></Col>
                           </Row>
                           <Row style={{ fontSize: 16 }}>
-                            <Col span={12}>{pet.birthOfPets ? calcPetAge(pet.birthOfPets) : ''}</Col>
+                            <Col span={12}>
+                              {pet.birthOfPets && (
+                                <Tooltip title={calcPetAge(pet.birthOfPets)}>
+                                  <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{calcPetAge(pet.birthOfPets)}</div>
+                                </Tooltip>
+                              )}
+                            </Col>
                             <Col span={12}>
                               {pet.petsBreed && (
                                 <Tooltip title={pet.petsBreedName}>

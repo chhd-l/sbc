@@ -315,7 +315,7 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType: detail.couponPromotionType,
           denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount || '',
+          couponDiscount: detail.couponDiscount*100 || '',
           limitAmount: detail.limitAmount,
         },
         storeId:detail.storeId,

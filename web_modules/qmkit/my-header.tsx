@@ -53,7 +53,7 @@ const IconFont = Icon.createFromIconfontCN({
 export default class MyHeader extends React.Component {
   constructor(props) {
     super(props);
-    const lan = sessionStorage.getItem(cache.LANGUAGE) || 'en-US';
+    const lan = localStorage.getItem(cache.LANGUAGE) || 'en-US';
     this.state = {
       qrCodeLink: '',
       url: '',
@@ -68,7 +68,7 @@ export default class MyHeader extends React.Component {
       // Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
       storeList: [],
       languageList:[],
-      lan:sessionStorage.getItem(cache.LANGUAGE) || 'en-US'
+      lan:localStorage.getItem(cache.LANGUAGE) || 'en-US'
     };
   }
 
@@ -97,7 +97,7 @@ export default class MyHeader extends React.Component {
     });
   }
   async getLanguage() {
-    let defaultLang = sessionStorage.getItem(cache.LANGUAGE)||'en-US';
+    let defaultLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
 
     const { res } = await getLanguageList();
     const languageList = res?.context?.languageList || [];
@@ -149,7 +149,7 @@ export default class MyHeader extends React.Component {
   //   this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
   // }
   setLangImgSrc(type,lang,img,imgMyVet?:string) {
-    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lang) return;
+    if ((localStorage.getItem(cache.LANGUAGE) || 'en-US') === lang) return;
     const imgSrc = type=== "active" && Const.SITE_NAME === 'MYVETRECO' ? imgMyVet : img;
     this.setState({ [lang]:imgSrc });
   }

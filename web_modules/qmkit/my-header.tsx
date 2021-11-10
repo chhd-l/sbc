@@ -290,7 +290,8 @@ export default class MyHeader extends React.Component {
   };
 
   modifyLang = async (value) => {
-    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
+    const currentLanguageKey = localStorage.getItem(cache.LANGUAGE) || 'en-US';
+    if (currentLanguageKey === value) return;
     let params = {
       employeeId: sessionStorage.getItem('employeeId') || '',
       language: value
@@ -298,6 +299,7 @@ export default class MyHeader extends React.Component {
     const { res } = await modifyLanguage(params);
     if (res.context) {
       sessionStorage.setItem(cache.LANGUAGE, value);
+      localStorage.setItem(cache.LANGUAGE, value);
       history.go(0);
       notification['info']({
         message: RCi18n({ id: "Public.changeLanguageAlert" })

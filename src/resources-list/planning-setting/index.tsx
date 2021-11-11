@@ -47,14 +47,16 @@ export default class PlanningSetting extends React.Component<any, any>{
   getTypeDict = () => {
     Promise.all([
       webapi.goodsDict({ type: 'service_type' }),
-      webapi.goodsDict({ type: 'apprintment_type' }),
+      webapi.goodsDict({ type: 'appointment_type' }),
       webapi.goodsDict({ type: 'expert_type' })
     ]).then((dictArr) => {
       const serviceTypeDict = dictArr[0].res?.context?.goodsDictionaryVOS || []
+      const serviceTypeDictFelin = [serviceTypeDict[5]]
       const appointmentTypeDict = dictArr[1]?.res?.context?.goodsDictionaryVOS || []
       const expertTypeDict = dictArr[2]?.res?.context?.goodsDictionaryVOS || []
       this.setState({
-        serviceTypeDict,
+        serviceTypeDict:serviceTypeDictFelin,
+        AvailServiceTypeDict:serviceTypeDictFelin,
         appointmentTypeDict,
         expertTypeDict
       })
@@ -76,11 +78,12 @@ export default class PlanningSetting extends React.Component<any, any>{
       settingDetailData: settingData,//往下传的数据,也是传给接口的数据
       // saveDetailData:data,
     }, () => {
-      const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
-      const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
-      this.setState({
-        AvailServiceTypeDict
-      })
+      // 暂时不需要该段代码，因为只有felin
+      // const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
+      // const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
+      // this.setState({
+      //   AvailServiceTypeDict
+      // })
     })
   }
 
@@ -108,18 +111,19 @@ export default class PlanningSetting extends React.Component<any, any>{
   }
 
   handleSelectChange = (type, value) => {
-    if (type == 'serviceTypeIds') {
-      let AvailServiceTypeDict = []
-      value.forEach(val => {
-        this.state.serviceTypeDict.map(item => {
-          if (item.id == val) AvailServiceTypeDict.push(item)
-        })
-      })
-      this.setState({
-        AvailServiceTypeDict,
-        AvailServiceTypeDisabled: false
-      })
-    }
+    // 暂时不需要该段代码，因为只有felin
+    // if (type == 'serviceTypeIds') {
+    //   let AvailServiceTypeDict = []
+    //   value.forEach(val => {
+    //     this.state.serviceTypeDict.map(item => {
+    //       if (item.id == val) AvailServiceTypeDict.push(item)
+    //     })
+    //   })
+    //   this.setState({
+    //     AvailServiceTypeDict,
+    //     AvailServiceTypeDisabled: false
+    //   })
+    // }
   }
 
   saveSubmit = (e) => {

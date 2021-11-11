@@ -81,19 +81,24 @@ const Schedular = () => {
   const getAllEmployeePerson = async () => {
     const { res } = await webapi.AllEmployeePerson()
     const _allEmployeePersonList = res.context?.employeeVOList;
-    const allPersonEmployeeIds = _allEmployeePersonList.map(item => {
-      let employees = {
-        employeeId: item.employeeId,
-        employeeName: item.employeeName
-      }
-      return employees
-    })
+    // 不能选择all 暂时不要该代码
+    // const allPersonEmployeeIds = _allEmployeePersonList.map(item => {
+    //   let employees = {
+    //     employeeId: item.employeeId,
+    //     employeeName: item.employeeName
+    //   }
+    //   return employees
+    // })
 
+    console.log(_allEmployeePersonList,'_allEmployeePersonList')
     setAllEmployeePersonList(_allEmployeePersonList)
-    _allEmployeePersonList.length ? setSelectPerson('All') : null
-    setAllEmployeeIds(allPersonEmployeeIds)
+    _allEmployeePersonList.length ? setSelectPerson(_allEmployeePersonList[0].employeeId) : null
+    // setAllEmployeeIds(allPersonEmployeeIds)
     let params = Object.assign(listParams, {
-      employeeIds: allPersonEmployeeIds
+      employeeIds: [{
+        employeeId: _allEmployeePersonList[0].employeeId,
+        employeeName: _allEmployeePersonList[0].employeeName
+      }]
     })
     getCalendarByDay(params)
   }
@@ -244,7 +249,7 @@ const Schedular = () => {
               onChange={changePersonName}
               value={selectPerson}
             >
-              {allEmployeePersonList.length ? <Option value={"All"}>All</Option> : null}
+              {/* {allEmployeePersonList.length ? <Option value={"All"}>All</Option> : null} */}
               {allEmployeePersonList.map(item => <Option key={item.employeeId} value={item.employeeId}>{item.employeeName}</Option>)}
             </Select>
           </Col>

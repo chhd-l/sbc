@@ -27,10 +27,11 @@ const ResourcesList = () => {
 
   const getTypeDict = async () => {
     const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
-    const appointmentTypeRes = await webapi.goodsDict({ type: 'apprintment_type' })
+    const appointmentTypeRes = await webapi.goodsDict({ type: 'appointment_type' })
     const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
+    const serviceTypeDictFelin = [serviceTypeDict[5]]
     const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
-    setServiceTypeDict(serviceTypeDict)
+    setServiceTypeDict(serviceTypeDictFelin)
     setAppointmentTypeDict(appointmentTypeDict)
   }
 

@@ -263,6 +263,10 @@ export default class ClinicList extends Component<any, any> {
         name: 'Todo'
       },
       {
+        value:'7',
+        name:'Timing'
+      },
+      {
         value:'6',
         name:'Building'
       },
@@ -320,7 +324,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'status',
         key: 'status',
         width: '7%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : +text === 6 ? 'Building' : '' }</span>
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : +text === 6 ? 'Building' : +text === 7 ? 'Timing' : '' }</span>
       },
       {
         title: 'Email Receive Status',

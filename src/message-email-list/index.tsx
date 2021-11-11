@@ -414,6 +414,13 @@ export default class ClinicList extends Component<any, any> {
                 </Tooltip>
               </>
             ) : null}
+            {+record.status === 7 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+              </>
+            ) : null}
           </div>
         )
       }

@@ -156,8 +156,9 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               })(
                 <Input
                   onChange={(e) => {
-                    let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase();
-                    form.setFieldsValue({storeDomain:'https://'+value+'.myvetreco.co'});
+                    const value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase();
+                    const postfix = window.location.host.match(/\.\w+$/) ? window.location.host.match(/\.\w+$/)[0] : '';
+                    form.setFieldsValue({storeDomain:'https://'+value+'.myvetreco'+postfix});
                   }}
                   disabled={adyenAuditState === 0}
                 />

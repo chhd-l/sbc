@@ -81,8 +81,8 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
                 initialValue: "1"
               })(
               <Select onChange={this.validateJobTitle} disabled={adyenAuditState === 0}>
-                <Option value="0">Owner</Option>
-                <Option value="1">Controller</Option>
+                <Option value="1">Owner</Option>
+                <Option value="2">Controller</Option>
               </Select>
               )}
             </FormItem>
@@ -131,7 +131,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
           <Col span={24}>
             <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>Only needed if shareholder type is controller</div>}>
               {getFieldDecorator('jobTitle', {
-                rules: [{ required: form.getFieldValue('shareholderType') === "1", message: 'Please input job title' }]
+                rules: [{ required: form.getFieldValue('shareholderType') === "2", message: 'Please input job title' }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}

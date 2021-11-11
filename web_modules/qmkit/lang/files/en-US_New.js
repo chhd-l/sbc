@@ -1120,6 +1120,7 @@ export default {
         'Prescriber.Next': 'Next',
         'Prescriber.Done': 'Done',
         'Prescriber.Role': 'Role',
+        'Prescriber.Deleted':'Deleted',
         'Prescriber.SelectRecommendedProduct': 'Select Recommended Product',
         'Prescriber.Add Product': 'Add Product',
         'Prescriber.apptNowasnotfind': 'scan error,apptNo was not find.',

@@ -47,7 +47,7 @@ export function findAppointmentById(id: number) {
   });
 }
 
-export function findAppointmentByAppointmentNo(apptNo: string) {
+export function findAppointmentByAppointmentNo(apptNo) {
   return Fetch<TResult>('/appt/findByNo', {
     method: 'POST',
     body: JSON.stringify({ apptNo })
@@ -82,7 +82,42 @@ export const goodsDict = (type) =>{
   });
 }
 
+ //获取字典
+ export const getAllDict = async (type) => {
 
+   const {res}:any=await goodsDict({ type})
+
+   if (res?.code === Const.SUCCESS_CODE) {
+    let objValue = {}
+    let list = res.context.goodsDictionaryVOS
+    list.map(it => {
+      objValue[it.id] = it.name;
+    })
+    return {
+      list,
+      objValue
+    }
+  }
+  return {
+    list:[],
+    objValue:{}
+  }
+
+//   const allDict = await Promise.all([goodsDict({ type: 'service_type' }), goodsDict({ type: 'apprintment_type' }), await goodsDict({ type: 'expert_type' })])
+//   console.log(allDict)
+//   let _listKey = ['serviceTypeObj', 'apprintmentTypObj', 'expertTypeObj',],
+//     _list_ = ['serviceTypeList', 'apprintmentTypeList', 'expertTypeList',]
+//   allDict.map((item, index) => {
+//     const { res }: any = item;
+//     if (res?.code === Const.SUCCESS_CODE) {
+//       let objValue = {}
+//       let _list = res.context.goodsDictionaryVOS
+//       _list.map(it => {
+//         objValue[it.id] = it.name;
+//       })
+//     }
+//   })
+}
 
 //list
 export const apptList = (params={}) =>{
@@ -137,6 +172,24 @@ export const apptArrived = (params) =>{
   });
 }
 
+//blocked
+
+export const bookBySlot = (params) =>{
+  return Fetch(`/resourceDatePlan/blockBySlot`, {
+    method: 'post',
+    body: JSON.stringify({...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
+  });
+}
+export const releaseById = (params) =>{
+  return Fetch(`/resourceDatePlan/releaseById`, {
+    method: 'post',
+    body: JSON.stringify({...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
+  });
+}
 
 
 
@@ -169,7 +222,9 @@ export function exportAppointmentList(params = {}) {
  export const calendarByDay = (params) =>{
   return Fetch(`/resourceDatePlan/calendarByDay`, {
     method: 'POST',
-    body: JSON.stringify(params)
+    body: JSON.stringify({...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    })
   });
 }
 

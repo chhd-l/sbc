@@ -172,12 +172,15 @@ class FillinPetInfoForm extends Component {
         const { lifeList, activityList, specialNeedsList, stateCustomPet, petsBreedList, weightList, fetching } = this.state
         const keys = getFieldValue('keys');
         return keys.length > 0 && keys.map((item, index) => (
-            <Col span={12} key={item}>
-                <Row gutter={20} key={item}>
-                    <div style={{ display: "flex", justifyContent: "space-between",padding:'0 20px' }}>
+            <Col span={12} key={item} >
+                <div style={{border:'1px solid #f8f8f8',marginTop:15, padding:'15px',boxShadow:'0 0 5px #f8f8f8'}}>
+                <Row gutter={10} key={item}>
+                   <Col span={24}>
+                   <div style={{ display: "flex", justifyContent: "space-between",padding:'0 20px' }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
-                        {!stateCustomPet[item]?.petsId&&<Button type="primary" onClick={() => this.remove(item, index)}>删除</Button>}
+                        {(!stateCustomPet[item]?.petsId)&&<Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>}
                     </div>
+                   </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Name' })}>
                             {getFieldDecorator(`customerPet[${item}].petsName`, {
@@ -325,7 +328,7 @@ class FillinPetInfoForm extends Component {
                         </Form.Item>
                     </Col>
                 </Row>
-
+                </div>
             </Col>
         ))
 

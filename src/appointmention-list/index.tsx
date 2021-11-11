@@ -2,7 +2,7 @@ import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal, Icon, Popconfirm } from 'antd';
-import { apptList, apptCancel, apptArrived, updateAppointmentById, goodsDict, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
+import { apptList, apptCancel, apptArrived, updateAppointmentById, getAllDict, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
@@ -24,12 +24,9 @@ class Appointment extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      serviceTypeObj: {},
-      apprintmentTypObj: {},
-      expertTypeObj: {},
-      serviceTypeList: [],
-      apprintmentTypeList: [],
-      expertTypeList: [],
+      serviceType: {},
+      appointmentType: {},
+      expertType: {},
       selectedRowKeys: [],
       exportModalData: {
         visible: false,
@@ -44,11 +41,20 @@ class Appointment extends React.Component<any, any> {
     };
   }
 
-  componentDidMount() {
+ async componentDidMount() {
     this.getAppointmentList();
-    this.getAllDict();
+      this.initDict()
   }
-
+  initDict=async()=>{
+    const appointmentType=await getAllDict('appointment_type')
+    const expertType=await getAllDict('expert_type')
+    const serviceType=await getAllDict('service_type')
+    this.setState({
+      expertType,
+      appointmentType,
+      serviceType
+    })
+}
   componentWillUnmount() {
     //删掉需要记住筛选参数的标记
   }
@@ -72,27 +78,7 @@ class Appointment extends React.Component<any, any> {
         this.setState({ loading: false });
       });
   };
-  //获取字典
-  getAllDict = async () => {
-    const allDict = await Promise.all([goodsDict({ type: 'service_type' }), goodsDict({ type: 'apprintment_type' }), await goodsDict({ type: 'expert_type' })])
-    console.log(allDict)
-    let _listKey = ['serviceTypeObj', 'apprintmentTypObj', 'expertTypeObj',],
-      _list_ = ['serviceTypeList', 'apprintmentTypeList', 'expertTypeList',]
-    allDict.map((item, index) => {
-      const { res }: any = item;
-      if (res?.code === Const.SUCCESS_CODE) {
-        let objValue = {}
-        let _list = res.context.goodsDictionaryVOS
-        _list.map(it => {
-          objValue[it.id] = it.name;
-        })
-        this.setState({
-          [_list_[index]]: _list,
-          [_listKey[index]]: objValue
-        })
-      }
-    })
-  }
+
   onSearch = (e) => {
     e.preventDefault();
 
@@ -239,10 +225,9 @@ class Appointment extends React.Component<any, any> {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { serviceTypeObj,
-      apprintmentTypObj,
-      apprintmentTypeList,
-      expertTypeObj, } = this.state;
+    const { serviceType,
+      appointmentType,
+      expertType, } = this.state;
     let status = {
       "0": 'Booked',
       "1": 'Arrived',
@@ -284,7 +269,7 @@ class Appointment extends React.Component<any, any> {
         title: RCi18n({ id: 'Appointmention.Type' }),
         dataIndex: 'apptTypeId',
         key: 'apptTypeId',
-        render: (text) => <div>{apprintmentTypObj[text]}</div>
+        render: (text) => <div>{(appointmentType?.objValue??{})[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Status' }),
@@ -296,7 +281,7 @@ class Appointment extends React.Component<any, any> {
         title: RCi18n({ id: 'Appointmention.Expert.type' }),
         dataIndex: 'expertTypeId',
         key: 'expertTypeId',
-        render: (text) => <div>{expertTypeObj[text]}</div>
+        render: (text) => <div>{(expertType?.objValue??{})[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.name' }),
@@ -400,7 +385,7 @@ class Appointment extends React.Component<any, any> {
                       style={{ width: '100%' }}
                     >
                       <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
-                      {apprintmentTypeList && apprintmentTypeList.map(item => <Option value={item.id} >{item.name}</Option>)}
+                      {(appointmentType?.list??[]).map(item => <Option value={item.id} >{item.name}</Option>)}
                       {/* <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
                       <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option> */}
                     </SelectGroup>

@@ -6,20 +6,37 @@ import { FormattedMessage } from 'react-intl';
 class FormSchedular extends React.Component {
     props: {
         form: any
-        handleSubmit: any
+        handleSubmit: Function
+        onCancel:Function
     }
 
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.handleSubmit(values)
-                console.log('Received values of form: ', values);
+                const blockSlotVO = {
+                    "id": "",
+                    "startTime": moment(values.startTime).format('YYYYMMDD HH:mm'),
+                    "endTime": moment(values.endTime).format('YYYYMMDD HH:mm'),
+                    "dateNo": moment(values.endTime).format('YYYYMMDD'),
+                    "notes": values.nates
+                }
+                this.props.handleSubmit({blockSlotVO})
+                console.log('Received values of form: ', blockSlotVO);
             }
         });
     };
 
-
+    // {
+    //   "expertId": "",
+    //   "blockSlotVO": {
+    //     "id": "",
+    //     "startTime": "20200101 10:15",
+    //     "endTime": "20200101 11:00",
+    //     "dateNo": "",
+    //     "notes": ""
+    //   }
+    // }
 
     handleOpenChange = open => {
         if (open) {
@@ -43,7 +60,7 @@ class FormSchedular extends React.Component {
     disabledDateTime = (e) => {
         //   console.log(e,'----',moment(e).format('YYYY-MM-DD HH:mm'))
 
-        return this.range(0, 24).splice(0,moment().hour());
+        return this.range(0, 24).splice(0, moment().hour());
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -59,14 +76,14 @@ class FormSchedular extends React.Component {
             <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit} className="login-form" >
 
                 <Form.Item label="Type">
-                    {getFieldDecorator('username', {
-                        initialValue: '0',
+                    {getFieldDecorator('bookType', {
+                        initialValue: '1',
                         rules: [{ required: true, message: 'Please input your username!' }],
                     })(
                         <Select
                             style={{ width: '100%' }}
                         >
-                            <Select.Option value="0">{<FormattedMessage id="Appointment.Blocked" />}</Select.Option>
+                            <Select.Option value="1">{<FormattedMessage id="Appointment.Blocked" />}</Select.Option>
                             {/* <Select.Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Select.Option>
                             <Select.Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Select.Option> */}
                         </Select>
@@ -76,7 +93,7 @@ class FormSchedular extends React.Component {
                     {getFieldDecorator('startTime', {
                         rules: [{ required: true, message: 'Please input your Password!' }],
                     })(
-                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }}  format= 'HH:mm'/>
+                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
                         // <DatePicker disabledDate={this.disabledDate}
                         //     disabledTime={this.disabledDateTime}
                         //     format="YYYY-MM-DD HH:mm"
@@ -93,19 +110,19 @@ class FormSchedular extends React.Component {
                     {getFieldDecorator('endTime', {
                         rules: [{ required: true, message: 'Please input your Password!' }],
                     })(
-                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime}  style={{ width: '100%' }} format= 'HH:mm'/>
-                        
+                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
+
                     )}
                 </Form.Item>
 
                 <Form.Item label="Notes">
-                    {getFieldDecorator('remember', {
+                    {getFieldDecorator('notes', {
                         valuePropName: 'checked',
                     })(<Input.TextArea rows={4} />)}
                 </Form.Item>
                 <div style={{ textAlign: 'center' }}>
                     <Button type="primary" style={{ width: 100 }} htmlType="submit">Ok</Button>
-                    <Button htmlType="reset" style={{ width: 100, marginLeft: 15 }}>Cancel</Button>
+                    <Button htmlType="reset" onClick={()=>this.props.onCancel()} style={{ width: 100, marginLeft: 15 }}>Cancel</Button>
                 </div>
             </Form>
         );

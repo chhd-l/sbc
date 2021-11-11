@@ -3,7 +3,7 @@ import { Const } from 'qmkit';
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
 import './index.less';
-import { apptDetail } from './webapi';
+import { apptDetail ,getAllDict} from './webapi';
 const { TabPane } = Tabs;
 
 class Details extends Component {
@@ -14,13 +14,26 @@ class Details extends Component {
         appointment: {},
         operations: [],
         order: {},
-        petOwner: {}
+        petOwner: {},
+        expertType:{},
+        appointmentType:{},
+        serviceType:{}
     }
     componentDidMount() {
-        console.log(this.props.match)
+        this.initDict()
         if (this.props.match.params.id) {
             this.getAppointmentById(this.props.match.params.id);
         }
+    }
+    initDict=async()=>{
+        const appointmentType=await getAllDict('appointment_type')
+        const expertType=await getAllDict('expert_type')
+        const serviceType=await getAllDict('service_type')
+        this.setState({
+          expertType,
+          appointmentType,
+          serviceType
+        })
     }
     getAppointmentById = (id: number) => {
         this.setState({ loading: true });
@@ -40,7 +53,7 @@ class Details extends Component {
         console.log(key);
     }
     render() {
-        let { appointment, operations, order, petOwner }: any = this.state,
+        let { appointment, operations, order, petOwner,expertType,appointmentType,serviceType }: any = this.state,
             columns = [
                 {
                     title: 'Operator Type',
@@ -76,6 +89,15 @@ class Details extends Component {
                 sm: { span: 18 },
             },
         };
+        let status = {
+            "0": 'Booked',
+            "1": 'Arrived',
+            "2": 'Canceled'
+          }
+          let owenType={
+           1:<FormattedMessage id="Appointment.Member" />,
+           2:<FormattedMessage id="Appointment.Guest" />
+          }
         return (
             <div className="appointmention-detail">
                 <Breadcrumb>
@@ -99,16 +121,16 @@ class Details extends Component {
                                                     {appointment?.appointmentNo ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment type">
-                                                    {appointment?.appointmentType ?? ''}
+                                                    {(appointmentType?.objValue??{})[appointment?.appointmentTypeId ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment status">
-                                                    {appointment?.appointmentStatus ?? ''}
+                                                    {status[appointment?.appointmentStatus ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Expert type">
-                                                    {appointment?.expertType ?? ''}
+                                                    {(expertType?.objValue??{})[appointment?.expertTypeId ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Expert name">
-                                                    {/* {appointment?.appointmentNo ?? ''} */}
+                                                    {appointment?.expertNames ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment time">
                                                     {appointment?.appointmentDate ?? ''}
@@ -166,7 +188,7 @@ class Details extends Component {
                                                     {petOwner?.email ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Pet Owner type">
-                                                    {petOwner?.petOwnerType ?? ''}
+                                                    {owenType[petOwner?.petOwnerType ?? '']}
                                                 </Form.Item>
 
                                             </Form>

@@ -4,7 +4,7 @@ import { Radio, Button, Form, Breadcrumb, Input, Spin } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
 import AppointmentDatePicker from './components/appointment-date-picker';
-import { apptUpdate, findAppointmentById, apptSave, goodsDict, queryDate } from './webapi';
+import { apptUpdate, findAppointmentById, apptSave, queryDate, getAllDict } from './webapi';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
 
@@ -34,9 +34,9 @@ class NewAppointment extends React.Component<any, any> {
         serviceTypeId: undefined
       },
       memberType: 'member',
-      serviceTypeList: [],
-      apprintmentTypeList: [],
-      expertTypeList: [],
+      expertType:{},
+      appointmentType:{},
+      serviceType:{},
       resources: [],
       key: (+new Date())
     };
@@ -44,30 +44,23 @@ class NewAppointment extends React.Component<any, any> {
 
   componentDidMount() {
     //标记返回appointment list时需要记住筛选参数
-    this.getAllDict();
+    this.initDict();
     sessionStorage.setItem('remember-appointment-list-params', '1');
     if (this.props.match.params.id) {
       this.getAppointmentById(this.props.match.params.id);
     }  
   }
   //获取字典
-  getAllDict = async () => {
-    const allDict = await Promise.all([goodsDict({ type: 'service_type' }), goodsDict({ type: 'apprintment_type' }), await goodsDict({ type: 'expert_type' })])
-    let _listKey = ['serviceTypeList', 'apprintmentTypeList', 'expertTypeList',]
-    allDict.map((item, index) => {
-      const { res }: any = item;
-      if (res?.code === Const.SUCCESS_CODE) {
-        this.setState({
-          [_listKey[index]]: res.context.goodsDictionaryVOS
-        },()=>{
-          if (!this.props.match.params.id) {
-          this.queryDate()
-          }
-        })
-      }
+  initDict=async()=>{
+    const appointmentType=await getAllDict('appointment_type')
+    const expertType=await getAllDict('expert_type')
+    const serviceType=await getAllDict('service_type')
+    this.setState({
+      expertType,
+      appointmentType,
+      serviceType
     })
-
-  }
+}
   //初始化能预约的时间
   queryDate = (type: boolean = false, chooseData: any = {}) => {
     const { getFieldsValue } = this.props.form;
@@ -207,7 +200,7 @@ class NewAppointment extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { apprintmentTypeList, expertTypeList, params, resources, key } = this.state;
+    const { expertType, appointmentType, serviceType, params, resources, key } = this.state;
     return (
       <Spin spinning={this.state.loading}>
         <Breadcrumb>
@@ -222,7 +215,7 @@ class NewAppointment extends React.Component<any, any> {
           <Form onSubmit={this.onSaveAppointment} wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
             <Form.Item label={RCi18n({ id: 'Appointment.SAType' })}>
               {getFieldDecorator('apptTypeId', {
-                initialValue: params.apptTypeId || (apprintmentTypeList[0]?.id ?? ''),
+                initialValue: params.apptTypeId || ((appointmentType?.list??[])[0]?.id ?? ''),
                 rules: [{
                   required: true,
                   message: 'Please Select appointment type',
@@ -230,7 +223,7 @@ class NewAppointment extends React.Component<any, any> {
                 onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
-                  {apprintmentTypeList.map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
+                  {(appointmentType?.list??[]).map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
                   {/* <Radio value="1"><FormattedMessage id="Appointment.Offline" /></Radio>
                   <Radio value="0"><FormattedMessage id="Appointment.Online" /></Radio> */}
                 </Radio.Group>
@@ -240,7 +233,7 @@ class NewAppointment extends React.Component<any, any> {
 
             <Form.Item label={RCi18n({ id: 'Appointment.Select.expert.type' })}>
               {getFieldDecorator('expertTypeId', {
-                initialValue: params.expertTypeId || (expertTypeList[0]?.id ?? ''),
+                initialValue: params.expertTypeId || ((expertType?.list??[])[0]?.id ?? ''),
                 rules: [{
                   required: true,
                   message: 'Please Select expert type',
@@ -248,7 +241,7 @@ class NewAppointment extends React.Component<any, any> {
                 onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
-                  {expertTypeList.map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
+                  {(expertType?.list??[]).map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
 
                   {/* <Radio value="1"><FormattedMessage id="Appointment.Behaviorist" /></Radio>
                   <Radio value="0"><FormattedMessage id="Appointment.Nutritionist" /></Radio>
@@ -269,9 +262,9 @@ class NewAppointment extends React.Component<any, any> {
                 onChange: () => this.queryDate(params.id?true:false,params)
               })(
                 <Radio.Group>
-                  <Radio value={15}><FormattedMessage id="Appointment.min15" /></Radio>
-                  <Radio value={30}><FormattedMessage id="Appointment.min30" /></Radio>
-                  <Radio value={45}><FormattedMessage id="Appointment.min45" /></Radio>
+                  <Radio key={15} value={15}><FormattedMessage id="Appointment.min15" /></Radio>
+                  <Radio key={30} value={30}><FormattedMessage id="Appointment.min30" /></Radio>
+                  <Radio key={45} value={45}><FormattedMessage id="Appointment.min45" /></Radio>
                 </Radio.Group>
               )}
             </Form.Item>

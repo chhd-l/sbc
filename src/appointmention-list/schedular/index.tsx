@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form } from 'antd';
+import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, history } from 'qmkit';
+import { Const, Headline, history } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
 import _ from 'lodash';
 import './index.less';
 import FormSchedular from './formSchedular';
-
+// import { findAppointmentByAppointmentNo } from '../webapi';
+const { confirm } = Modal;
 const { Option } = Select;
 // const currentDate = sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date();
 const currentDate = new Date();
@@ -23,24 +24,6 @@ const dayOrWeek = [{
   // }
 ]
 
-// {
-//   employeeId: "ieif78943NR438F",
-//   employeeName: "Join",
-//   bookedTimeSlot: [
-//     {
-//       dateNo: "20210101",
-//       startTime: "20210101 10:00",
-//       endTime: "20210101 11:30",
-//       bookType: "0"
-//     },
-//     {
-//       dateNo: "20210101",
-//       startTime: "20210101 13:30",
-//       endTime: "20210101 14:45",
-//       bookType: "1"
-//     },
-//   ]
-// },
 
 const Schedular = () => {
   const [dayPlanList, setDayPlanList] = useState([])
@@ -72,15 +55,25 @@ const Schedular = () => {
     dateNo: currentDateFormat,
     employeeIds: []
   })
+  // const [createBtn, setCreateBtn] = useState(false)
   const [visiteModel, setVisiteModel] = useState(false)
-  const formRef = useRef(null)
+  const [currentData, setCurrentData]: any = useState({})
+  const [handlerOption, setHandlerOption] = useState('')
+
+  const [expertType, setExpertType]: any = useState({})
+  const [appointmentType, setAppointmentType]: any = useState({})
+  const [serviceType, setServiceType]: any = useState({})
+  const [visite, setVisite]: any = useState(false)
+
 
   useEffect(() => {
     getAllEmployeePerson()
+    initDict()
   }, [])
 
   // 获取所有人
   const getAllEmployeePerson = async () => {
+    setVisite(true)
     const { res }: any = await webapi.AllEmployeePerson()
     const _allEmployeePersonList = res.context?.employeeVOList;
     const allPersonEmployeeIds = _allEmployeePersonList.map(item => {
@@ -92,27 +85,31 @@ const Schedular = () => {
     })
 
     setAllEmployeePersonList(_allEmployeePersonList)
-    _allEmployeePersonList.length ? setSelectPerson('All') : null
+    _allEmployeePersonList.length ? setSelectPerson(allPersonEmployeeIds[0].employeeId) : null
     setAllEmployeeIds(allPersonEmployeeIds)
     let params = Object.assign(listParams, {
-      employeeIds: allPersonEmployeeIds
+      employeeIds: [{
+        employeeId: allPersonEmployeeIds[0].employeeId,
+        employeeName: allPersonEmployeeIds[0].employeeName
+      }]
     })
     getCalendarByDay(params)
   }
 
   // 获取列表数据
   const getCalendarByDay = async (params) => {
+    setVisite(true)
     const { res }: any = await webapi.calendarByDay(params)
     let list = res.context.calendarByDayVOList || []
     setDayPlanList(list)
     bookedDataFormat(list)
+    setVisite(false)
   }
 
   // 组装页面表格所需的数据结构
   const bookedDataFormat = async (list) => {
     const allTimeArr: any = await intervals("20210101 09:00", "20210101 17:00");//todo:等确认起始值
     setTimePeriod(allTimeArr)
-    console.log(allTimeArr, 'all000')
     let bookedTypeAllList = Promise.all(list.map(async (elx) =>
       elx.bookedTimeSlot.map(item => {
         let _itemBookedTypeList = []
@@ -120,8 +117,9 @@ const Schedular = () => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
-              ...elx,
-              bookType: item.bookType === '1' ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
+              appointmentNo: item?.appointmentNo ?? undefined,
+              id: item?.id ?? undefined,
+              bookType: item.bookType === 1 ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
             })
           })
         })
@@ -134,10 +132,10 @@ const Schedular = () => {
       let _bookedList = list.map((item: any) => _.flatten(item))
       let allTimeBookedList = _bookedList.map((el) =>
         allTimeArr.map((_time: any) => {
-          console.log(el)
-          let item = { time: _time, bookType: '' }
-          item.bookType = el.find((_el: any) => _el.time === _time)?.bookType
-          return item
+          let item = { time: _time, bookType: '', }
+          let _currt: any = el.find((_el: any) => _el.time === _time);
+          item.bookType = _currt?.bookType ?? undefined
+          return { ..._currt, ...item }
         })
       )
       setTableData(allTimeBookedList)
@@ -146,16 +144,22 @@ const Schedular = () => {
 
   // 选择人名，组装接口所需参数
   const changePersonName = (value, option) => {
+    console.log(option)
     let employeeIds = [{
       employeeId: value,
       employeeName: option.props.children
     }]
     if (value === 'All') {
+      // setCreateBtn(false)
       employeeIds = allEmployeeIds
+    } else {
+      // setCreateBtn(true)
     }
     let params = Object.assign(listParams, {
       employeeIds
     })
+    console.log(value, 'params')
+
     setSelectPerson(value)
     setListParams(params)
     getCalendarByDay(params)
@@ -216,22 +220,95 @@ const Schedular = () => {
 
   // 跳转到list
   const goViewList = () => {
-
+    setHandlerOption('create')
     setVisiteModel(true)
     // history.push("/resources-planning")
   }
 
-  const handleOk = (e) => {
+  //添加blocked
+  const handleOk = async (e) => {
     console.log(e)
+    // currentData
+    const { res } = await webapi.bookBySlot({ expertId: selectPerson, ...e })
+    setVisiteModel(false)
+    getCalendarByDay(listParams)
   }
+  // 取消唐框
   const handleCancel = () => {
+    setHandlerOption('')
+    setVisiteModel(false)
+  }
+  //选择 blocked or Appointed 进行展示
+  const clickSchedular = (type) => {
+    if (type.bookType && type.bookType.includes('Appointed')) {
+      if (!type.appointmentNo) return
+      getAppointmentById(type.appointmentNo);
+    } else if (type.bookType && type.bookType.includes('Blocked')) {
+      if (!type.id) return
+      confirm({
+        title: 'Do you want to cancel these items?',
+        content: 'When clicked the OK button, this blocked will be closed',
+        onOk() {
+          return new Promise(async (resolve, reject) => {
+            const { res }: any = await webapi.releaseById({ id: type.id })
+            if (res.code === Const.SUCCESS_CODE) {
+              getCalendarByDay(listParams)
+              resolve(true)
+            } else {
+              reject()
+            }
+
+
+          }).catch(() => console.log('Oops errors!'));
+        },
+        onCancel() { },
+      });
+    }
+
+
 
   }
-  const clickSchedular=(type)=>{
-    console.log(type,'====')
+  const getAppointmentById = (id) => {
+    // this.setState({ loading: true });
+    webapi.findAppointmentByAppointmentNo(id)
+      .then(({ res }: any) => {
+        if (res.code === Const.SUCCESS_CODE) {
+          // this.setState({ loading: true, ...res.context });
+          setCurrentData(res?.context?.settingVO ?? {})
+          setHandlerOption('detail')
+          setVisiteModel(true)
+        } else {
+          // this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        // this.setState({ loading: true });
+      });
+  };
+  const initDict = async () => {
+    const appointmentType = await webapi.getAllDict('appointment_type')
+    const expertType = await webapi.getAllDict('expert_type')
+    const serviceType = await webapi.getAllDict('service_type')
+
+    setExpertType(expertType)
+    setAppointmentType(appointmentType)
+    setServiceType(serviceType)
+  }
+  const formItemLayout = {
+    labelCol: {
+      sm: { span: 10 },
+    },
+    wrapperCol: {
+      sm: { span: 14 },
+    },
+  };
+  let status = {
+    "0": 'Booked',
+    "1": 'Arrived',
+    "2": 'Canceled'
   }
   return (
-    <>
+    <Spin spinning={visite}>
       <div className="container-search">
         <Headline title={<FormattedMessage id="Resources.schedular" />} />
         <Row>
@@ -258,7 +335,7 @@ const Schedular = () => {
               onChange={changePersonName}
               value={selectPerson}
             >
-              {allEmployeePersonList.length ? <Option value={"All"}>All</Option> : null}
+              {/* {allEmployeePersonList.length ? <Option value={"All"}>All</Option> : null} */}
               {allEmployeePersonList.map(item => <Option key={item.employeeId} value={item.employeeId}>{item.employeeName}</Option>)}
             </Select>
           </Col>
@@ -295,7 +372,7 @@ const Schedular = () => {
               {tableData.map((el, idx) =>
                 <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
                   {el.map((_el, _idx) =>
-                    <div onClick={()=>clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
+                    <div onClick={() => clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
                       <span className={`each-duration`}>
                         <span>
                           {_el.bookType}
@@ -311,20 +388,57 @@ const Schedular = () => {
 
 
         {visiteModel && <Modal
-          title="Employee Schedule"
+          title={handlerOption === 'create' ? "Employee Schedule" : 'Appointed Info'}
           visible={visiteModel}
           // onOk={handleOk}
-          footer={null}
-
           onCancel={handleCancel}
+          footer={null}
         >
 
-          <FormSchedular handleSubmit={(e)=>handleOk(e)} />
+          {handlerOption === 'create'&&<FormSchedular handleSubmit={(e) => handleOk(e)} onCancel={handleCancel} />} 
+
+            {handlerOption === 'detail'&&(<div className="appointmention-detail">
+              <Card bordered={false}>
+                <Form {...formItemLayout} labelAlign="left">
+                  <Form.Item label="Type">
+                    Appointed
+                  </Form.Item>
+                  <Form.Item label="Appointment No.">
+                    {currentData?.apptNo ?? ''}
+                  </Form.Item>
+                  <Form.Item label="Appointment type">
+                    {(appointmentType?.objValue ?? {})[currentData?.apptTypeId ?? '']}
+                  </Form.Item>
+                  <Form.Item label="Appointment status">
+                    {status[currentData?.status ?? '']}
+                  </Form.Item>
+                  <Form.Item label="Expert type">
+                    {(expertType?.objValue ?? {})[currentData?.expertTypeId ?? '']}
+                  </Form.Item>
+                  <Form.Item label="Expert name">
+                    {currentData?.expertNames ?? ''}
+                  </Form.Item>
+                  <Form.Item label="Appointment time">
+                    {currentData?.apptTime ?? ''}
+                  </Form.Item>
+                  <Form.Item label="Created time">
+                    {currentData?.createTime ?? ''}
+                  </Form.Item>
+                  <Form.Item label="Last updated time">
+                    {currentData?.updateTime ?? ''}
+                  </Form.Item>
+                </Form>
+
+              </Card>
+              <div style={{ textAlign: 'center', marginTop: 20 }}>
+                <Button type="primary" onClick={handleCancel} style={{ width: 100 }}>Confirm</Button>
+              </div>
+            </div>)}
 
         </Modal>}
 
       </div>
-    </>
+    </Spin>
   )
 }
 

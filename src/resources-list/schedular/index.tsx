@@ -123,7 +123,7 @@ const Schedular = () => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
-              bookType: item.bookType === '1' ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
+              bookType: item.bookType === 1 ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
             })
           })
         })

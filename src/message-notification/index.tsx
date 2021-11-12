@@ -16,6 +16,9 @@ class Notification extends Component<any, any> {
       subscriptionAutomationData: [],
       recommendationAutomationData: [],
       priscriberAutomationData: [],
+      helpAutomationData:[],
+      operateAutomationData:[],
+      registerAutomationData:[],
 
       visible: false,
 
@@ -54,6 +57,9 @@ class Notification extends Component<any, any> {
             subscriptionAutomationData: res.context.subscriptionList,
             recommendationAutomationData: res.context.recommendationList,
             priscriberAutomationData: res.context.oktList,
+            helpAutomationData:res.context.helpList,
+            operateAutomationData:res.context.operateList,
+            registerAutomationData:res.context.registerList,
             allLoading: false
           });
         } else {
@@ -200,7 +206,7 @@ class Notification extends Component<any, any> {
   };
 
   render() {
-    const { title, orderAutomationData, subscriptionAutomationData, recommendationAutomationData, priscriberAutomationData, selectedForm, emailTemplateList, previewHtml, allLoading } = this.state;
+    const { title, orderAutomationData, subscriptionAutomationData, recommendationAutomationData, priscriberAutomationData, selectedForm, emailTemplateList, previewHtml, allLoading ,helpAutomationData , operateAutomationData ,registerAutomationData } = this.state;
     const columns = [
       {
         title: <FormattedMessage id="Marketing.Status" />,
@@ -299,6 +305,56 @@ class Notification extends Component<any, any> {
                 </div>
               </div>
               <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={priscriberAutomationData} pagination={false} />
+            </div>
+
+
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    Email Automation - Help
+                  </h3>
+                  <p>
+                    Sending Email automatically by the status of Help
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={helpAutomationData} pagination={false} />
+            </div>
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    Email Automation - Operate
+                  </h3>
+                  <p>
+                    Sending Email automatically by the status of Operate
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={operateAutomationData} pagination={false} />
+            </div>
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    Email Automation - Register
+                  </h3>
+                  <p>
+                    Sending Email automatically by the status of Register
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={registerAutomationData} pagination={false} />
             </div>
           </div>
         </Spin>

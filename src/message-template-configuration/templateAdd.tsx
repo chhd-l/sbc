@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BreadCrumb, Const, Headline, history } from 'qmkit';
+import { BreadCrumb, Const, Headline, history,RCi18n } from 'qmkit';
 import { Breadcrumb, Button, Col, Form, Input, message, Row, Select, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addTemplateList } from '@/message-template-configuration/webapi';
@@ -55,17 +55,17 @@ const TemplateAdd=()=>{
     <div >
       <BreadCrumb thirdLevel={true}>
         <Breadcrumb.Item>
-          Template Add
+          <FormattedMessage id="Marketing.EmailTemplateAddTitle" />
         </Breadcrumb.Item>
       </BreadCrumb>
 
       <Spin spinning={false}>
         <div className="container-search">
-          <Headline title={'Template Add'} />
+          <Headline title={RCi18n({id:'Marketing.EmailTemplateAddTitle'})} />
 
           <div>
             <div style={styles.title}>
-              <span style={styles.titleText}>Template Information</span>
+              <span style={styles.titleText}><FormattedMessage id="Marketing.EmailTemplateInformation"/></span>
               {/*{emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}*/}
               {/*{emailStatus === 'Finish' ? <Tag color="#87d068">{emailStatus}</Tag> : null}*/}
               {/*{emailStatus === 'To do' ? <Tag color="#108ee9">{emailStatus}</Tag> : null}*/}
@@ -81,7 +81,7 @@ const TemplateAdd=()=>{
           <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
             <Row style={{ marginTop: 20 }}>
               <Col span={8}>
-                <FormItem label={'Template ID'}>
+                <FormItem label={RCi18n({id:'Marketing.EmailTemplateId'})}>
                   <Input
                     // disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
                     // // onChange={(e) => {
@@ -103,7 +103,7 @@ const TemplateAdd=()=>{
               </Col>
               <Col span={2}></Col>
               <Col span={8}>
-                <FormItem label={'Template Type'}>
+                <FormItem label={RCi18n({id:'EmailTemplateType'})}>
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}

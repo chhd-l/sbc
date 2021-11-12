@@ -315,10 +315,10 @@ class Notification extends Component<any, any> {
                 </div>
                 <div style={{ marginLeft: 10 }}>
                   <h3>
-                    Email Automation - Help
+                    <FormattedMessage id="Marketing.EmailAutomationHelp" />
                   </h3>
                   <p>
-                    Sending Email automatically by the status of Help
+                    <FormattedMessage id="Marketing.SendingEmailHelp" />
                   </p>
                 </div>
               </div>
@@ -331,10 +331,10 @@ class Notification extends Component<any, any> {
                 </div>
                 <div style={{ marginLeft: 10 }}>
                   <h3>
-                    Email Automation - Operate
+                    <FormattedMessage id="Marketing.EmailAutomationOperate" />
                   </h3>
                   <p>
-                    Sending Email automatically by the status of Operate
+                    <FormattedMessage id="Marketing.SendingEmailOperate" />
                   </p>
                 </div>
               </div>
@@ -347,10 +347,10 @@ class Notification extends Component<any, any> {
                 </div>
                 <div style={{ marginLeft: 10 }}>
                   <h3>
-                    Email Automation - Register
+                    <FormattedMessage id="Marketing.EmailAutomationRegister" />
                   </h3>
                   <p>
-                    Sending Email automatically by the status of Register
+                    <FormattedMessage id="Marketing.SendingEmailRegister" />
                   </p>
                 </div>
               </div>

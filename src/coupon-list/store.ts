@@ -143,4 +143,11 @@ export default class AppStore extends Store {
       }, 500);
     });
   };
+  handleAdd = async (couponId: any)=>{
+    this.dispatch('isModalVisible',true);
+    this.dispatch('set: couponId',couponId);
+  }
+  setModalVisible = ()=>{
+    this.dispatch('isModalVisible',false);
+  }
 }

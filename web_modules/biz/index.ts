@@ -19,6 +19,7 @@ import PieChart from './chart-pie/index';
 import LogoLoadingIcon from './LogoLoadingIcon';
 import AntIcon from './antIcon';
 import AntSpin from './antSpin';
+import PostalCodeMsg from './PostalCodeMsg';
 
 export {
   LogoLoadingIcon,
@@ -42,4 +43,5 @@ export {
   PieChart,
   AntIcon,
   AntSpin,
+  PostalCodeMsg,
 };

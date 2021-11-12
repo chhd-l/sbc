@@ -14,6 +14,8 @@ import DeliveryItem from './component/delivery-item';
 import PaymentList from './component/payment-list';
 import FeedbackList from './component/feedback-list';
 import BenefitsList from './component/benefits-list'
+import { PostalCodeMsg } from 'biz';
+
 import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getTaggingList } from './component/webapi';
 
 import './index.less';
@@ -40,10 +42,11 @@ export const FORM_FIELD_MAP = {
   Address1: 'address1',
   Address2: 'address2',
   'Phone number': 'contactPhone',
-  'Postal code': 'postCode',
+  'Postal code': 'postalCode',
   Entrance: 'entrance',
   Apartment: 'apartment',
-  Comment: 'rfc'
+  Comment: 'rfc',
+  County: 'county'
 };
 
 export async function getPetsBreedListByType(type: string) {
@@ -414,10 +417,20 @@ export default class CustomerDetails extends React.Component<any, any> {
                         <>
                           <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${field.fieldName}`})}</Col>
                           <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
-                            {field.fieldName === 'Country' ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country) : (basic[FORM_FIELD_MAP[field.fieldName]])}
+                            {
+                              field.fieldName === 'Country'
+                              ? (basic.countryId ? this.state.countryList.find(c => c.id === basic.countryId)?.name : basic.country)
+                              : (basic[FORM_FIELD_MAP[field.fieldName]])
+                            }
                           </Col>
                         </>
                       ))}
+                      {
+                        !basic?.validFlag
+                          ?basic.alert && <Col span={24}><PostalCodeMsg text={basic.alert}/></Col>
+                          : null
+                      }
+
                     </Row>
                   </Col>
                 </Row>
@@ -584,9 +597,11 @@ export default class CustomerDetails extends React.Component<any, any> {
                 <TabPane tab={RCi18n({id:"PetOwner.DeliveryInformation"})} key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
-                {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru' ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">
-                  {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}
-                </TabPane> : null}
+                {
+                  (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru'
+                  ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
+                  : null
+                }
                 <TabPane tab={RCi18n({id:"PetOwner.PaymentMethods"})} key="payment">
                   <PaymentList customerId={this.state.customerId} customerAccount={this.state.customerAccount}/>
                 </TabPane>

@@ -72,6 +72,7 @@ export default async function Fetch<T>(
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'Accept-Language': sessionStorage.getItem(cache.LANGUAGE),
+        requestSource: Const.SITE_NAME === 'MYVETRECO' ? 'myvetreco' : '',
         Authorization:
           'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },

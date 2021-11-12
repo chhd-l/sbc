@@ -1,13 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
-import { Breadcrumb, Button, Col, DatePicker, Form, Icon, Input, Radio, Row, Select, Spin, Tag, Tooltip } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Icon,
+  Input,
+  message,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Tag,
+  Tooltip
+} from 'antd';
 import _ from 'lodash';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
 import * as webapi from './webapi';
+import { Link } from 'react-router-dom';
 
+const statusList = [
+  {
+    value:'0',
+    name:'Email'
+  },
+  {
+    value:'1',
+    name:'Text'
+  }
+]
 
 const TemplateEdit=(props)=>{
 
@@ -16,9 +42,9 @@ const TemplateEdit=(props)=>{
   },[])
 
   const [editForm,setEditForm]=useState({
-    id:props.location.query,
-    templateId: '',
-    type: null,
+    id:props.location.query.recordId,
+    templateId: props.location.query.recordTemplateId,
+    type: props.location.query.recordType,
   })
 
   const onFormChange = ({ field, value }) => {
@@ -36,7 +62,8 @@ const TemplateEdit=(props)=>{
       .then((data)=>{
         const {res}=data;
         if(res.code===Const.SUCCESS_CODE){
-          console.log(res,'edit')
+          message.success('Operate successfully')
+          history.push('/message-template-configuration')
         }
       })
   }
@@ -74,6 +101,7 @@ const TemplateEdit=(props)=>{
                 <FormItem label={'Template ID'}>
                     <Input
                       // disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
+                      placeholder={editForm.templateId}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         onFormChange({
@@ -86,16 +114,26 @@ const TemplateEdit=(props)=>{
               </Col>
               <Col span={8}>
                 <FormItem label={'Template Type'}>
-                  <Input
-                    // disabled={detailForm.consumerType === 'Member' || this.state.isDetail}
-                    onChange={(e) => {
-                      const value = (e.target as any).value;
+                  <Select
+                    style={styles.wrapper}
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    defaultValue=""
+                    onChange={(value)=>{
+                      value = value === '' ? null : value;
                       onFormChange({
-                        field: 'type',
+                        field:'type',
                         value
-                      });
+                      })
                     }}
-                  />
+                  >
+                    {
+                      statusList && statusList.map((item,index)=>(
+                        <Option value={item.value} key={index}>
+                          {item.name}
+                        </Option>
+                      ))
+                    }
+                  </Select>
                 </FormItem>
               </Col>
             </Row>

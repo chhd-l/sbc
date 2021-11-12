@@ -33,7 +33,7 @@ export default class CouponDetailActor extends Actor {
         isSuperimposeSubscription: 1,// 未勾选
         couponPromotionType: null,
         fullbuyCount: null,
-        couponJoinLevel: null,
+        couponJoinLevel: null
       },
       // 优惠券分类
       couponCates: [],
@@ -43,11 +43,21 @@ export default class CouponDetailActor extends Actor {
       skuCates: [],
       // 商品
       skus: [],
-      goodsList : null,
+      goodsList: null,
       currentCategary: null,
       currentAttribute: null,
       allGroups: [],
       currentGroup: null,
+      couponActivityConfigPage: {
+        content:[]
+      },
+      loading: false,
+      //当前的数据总数
+      total: 0,
+      //当前的分页条数
+      pageSize: 10,
+      //当前页
+      pageNum: 1,
     };
   }
 
@@ -56,6 +66,16 @@ export default class CouponDetailActor extends Actor {
    * @param state
    * @param param1
    */
+  @Action('page')
+  init(state, { total, pageNum }) {
+    return state.set('total', total).set('pageNum', pageNum);
+  }
+
+  @Action('loading')
+  loading(state, data) {
+    return state.set('loading', data);
+  }
+
   @Action('coupon: detail: field: value')
   fieldsValue(state, { field, value }) {
     return state.set(field, fromJS(value));
@@ -69,5 +89,10 @@ export default class CouponDetailActor extends Actor {
   @Action('marketingActor:currentGroup')
   currentGroup(state, currentGroup) {
     return state.set('currentGroup', currentGroup);
+  }
+
+  @Action('activityConfigPage')
+  activityConfigPage(state, data) {
+    return state.set('couponActivityConfigPage', data);
   }
 }

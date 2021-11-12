@@ -78,7 +78,8 @@ export default class GoodsActor extends Actor {
       resourceCates: [],
       purchaseTypeList: [],
       frequencyList: '',
-      goodsDescriptionDetailList: []
+      goodsDescriptionDetailList: [],
+      uomList: []
     };
   }
 
@@ -263,6 +264,10 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor:descriptionTab')
   goodsDescriptionTab(state, tabList) {
     return state.set('goodsDescriptionDetailList', tabList);
+  }
+  @Action('goodsActor:uomList')
+  uomList(state, uomList) {
+    return state.set('uomList', uomList);
   }
 }
 

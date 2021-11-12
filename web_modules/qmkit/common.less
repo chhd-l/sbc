@@ -3480,7 +3480,7 @@ form .ant-input-group-compact {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 10;
+  z-index: 999;
 }
 
 .overFlowtext {
@@ -3497,3 +3497,52 @@ form .ant-input-group-compact {
 .bg-white {
   background-color: #fff;
 }
+
+#mars-footer-panel {
+    position: fixed!important;
+    z-index: 0;
+  }
+  #mars-footer-panel .mars-footer-legal,#mars-footer-panel .mars-footer-label{
+    /* color: #fff!important; */
+  }
+  #onetrust-consent-sdk #onetrust-banner-sdk{
+    margin-bottom:0;
+  }
+  .header-border-opacity::before{
+    opacity: 1!important;
+  }
+  .ot-sdk-show-settings-wrapper{
+    position: absolute;
+    bottom: 0;
+    z-index:10;
+    left: 0;
+    background-color: #212CDB;
+  }
+  /* #mars-footer-panel .mars-footer-container{
+    padding-bottom: 36px;
+  } */
+  .optanon-show-settings-button.optanon-toggle-display,
+  .ot-sdk-show-settings {
+    color: #68b631;
+    border: 1px solid #68b631;
+    padding: 0.8em 2em;
+    /* position: fixed; */
+  
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    z-index: 10;
+  }
+  #ot-sdk-btn.ot-sdk-show-settings:hover {
+    color: #68b631;
+  }
+  
+  .optanon-show-settings-button.optanon-toggle-display
+    .optanon-show-settings-middle,
+  .ot-sdk-show-settings .optanon-show-settings-middle {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+  
+  #ot-sdk-btn.ot-sdk-show-settings {
+    background-color: #fff !important;
+  }

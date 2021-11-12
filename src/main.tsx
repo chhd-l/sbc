@@ -28,7 +28,8 @@ export default class Main extends React.Component<any, any> {
       123457908: 'de',
       123457909: 'fr',
       123457910: 'us',
-      123457911: 'tr'
+      123457911: 'tr',
+      123457916: 'uk'
     };
     (window as any).goodsCount = {
       123456858: 20,
@@ -36,8 +37,10 @@ export default class Main extends React.Component<any, any> {
       123457908: 20,
       123457909: 20,
       123457910: 20,
-      123457911: 10
+      123457911: 10,
+      123457916: 20
     };
+    (window as any).rchistory = history;
   }
 
   UNSAFE_componentWillMount() {

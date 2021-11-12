@@ -1,5 +1,9 @@
 import { Fetch } from 'qmkit';
-
+type TResult = {
+  code:string,
+  message:string,
+  context:any
+}
 /**
  * 获取优惠券列表
  */
@@ -26,3 +30,13 @@ export function deleteCoupon(id) {
 export function copyCoupon(id) {
   return Fetch<TResult>(`/coupon-info/copy/${id}`, { method: 'GET' });
 }
+
+/**
+ * 新增优惠券活动
+ */
+export function addCouponActivity (params) {
+  return Fetch<TResult>('/coupon-activity/add', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};

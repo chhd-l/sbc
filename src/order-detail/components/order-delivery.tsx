@@ -109,7 +109,7 @@ class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
+          {Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>
@@ -337,6 +337,7 @@ class OrderDelivery extends React.Component<any, any> {
 
   _deliveryColumns = () => {
     const { changeDeliverNum } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return [
       {
@@ -353,10 +354,10 @@ class OrderDelivery extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '50%'
+        width: '40%'
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
@@ -391,6 +392,7 @@ class OrderDelivery extends React.Component<any, any> {
   };
 
   _deliveryRecordColumns = () => {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     return [
       {
         title: <FormattedMessage id="Order.No." />,
@@ -408,7 +410,7 @@ class OrderDelivery extends React.Component<any, any> {
         key: 'itemName'
       },
       {
-        title: <FormattedMessage id="Order.Weight" />,
+        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails'
       },

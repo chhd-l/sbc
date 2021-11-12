@@ -6,7 +6,7 @@ import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
 import { withOktaAuth } from '@okta/okta-react';
-import { util, cache, history, Const } from 'qmkit';
+import { cache, history, Const } from 'qmkit';
 import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -18,13 +18,15 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
   }
 
   componentWillMount() {
-    if (Const.SITE_NAME === 'MYVETRECO') {
-      history.push('/login-admin');
-    } else if (this.props.location.state && this.props.location.state.oktaLogout) {
+    if (this.props.location.state && this.props.location.state.oktaLogout) {
       if(this.props.authState.isAuthenticated) {
          let idToken = this.props.authState.idToken;
          let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
          let issure = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) ===  'staff' ? Const.REACT_APP_RC_ISSUER : Const.REACT_APP_PRESCRIBER_ISSUER;
+         if (Const.SITE_NAME === 'MYVETRECO') {
+           redirectUri = window.origin + '/logout';
+           issure = Const.REACT_APP_PRESCRIBER_ISSUER;
+         }
         if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
           this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
         } else {

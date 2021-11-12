@@ -58,12 +58,12 @@ export default class Main extends React.Component<any, any> {
 
   onPrev = (res) => {
     let type = '';
-    if (res == 'price') {
+    if (res == 'inventory') {
       type = 'main';
-    } else if (res == 'inventory') {
-      type = 'price';
-    } else if (res == 'shipping') {
+    } else if (res == 'price') {
       type = 'inventory';
+    } else if (res == 'shipping') {
+      type = 'price';
     } else if (res == 'related') {
       type = 'shipping';
     } else if (res == 'seo') {
@@ -78,12 +78,12 @@ export default class Main extends React.Component<any, any> {
   onNext = (res) => {
     let type = res || 'main';
     if (res == 'main' && this.store._validMainForms()) {
-      type = 'price';
-    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
       this.store.getSubSkuStockByAPI();
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
+      type = 'shipping';      
     } else if (res == 'inventory' && this.store._validInventoryFormsNew()) {
-      type = 'shipping';
+      type = 'price';
     } else if (res == 'shipping') {
       type = 'related';
     } else if (res == 'related') {
@@ -160,15 +160,15 @@ export default class Main extends React.Component<any, any> {
                   <Detail />
                 </Tabs.TabPane>
               )}
-              <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
-                <AlertInfo />
-
-                <ProductPrice />
-              </Tabs.TabPane>
               <Tabs.TabPane tab={<FormattedMessage id="Product.Productinventory" />}key="inventory">
                 <AlertInfo />
 
                 <ProductInventory />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
+                <AlertInfo />
+
+                <ProductPrice />
               </Tabs.TabPane>
 
               <Tabs.TabPane tab={<FormattedMessage id="Product.shippingInformation" />} key="shipping">

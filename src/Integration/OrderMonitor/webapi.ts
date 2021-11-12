@@ -21,7 +21,7 @@ export function fetchOrderMonitorDetails(filterParams = {}) {
     body: JSON.stringify({...filterParams})
   });
 }
-// 获取Order Monitor列表
+// 获取ExceptionType列表
 export function getExceptionType() {
   return Fetch<TResult>('/orderMonitor/findExceptionTypes', {
     method: 'GET'
@@ -36,3 +36,11 @@ export function toPushDownStream(filterParams = {}) {
     body: JSON.stringify({...filterParams})
   });
 }
+
+// 获取pay status列表
+export function getOrderStatus() {
+  return Fetch<TResult>('/orderMonitor/pay-status', {
+    method: 'GET'
+  });
+}
+

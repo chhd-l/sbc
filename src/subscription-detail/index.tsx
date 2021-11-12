@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
 import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { PostalCodeMsg } from 'biz';
 import './index.less';
 import * as webapi from './webapi';
+import { GetDelivery } from '../delivery-date/webapi';
 const Panel = Collapse.Panel;
 
 import moment from 'moment';
@@ -76,6 +78,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       currencySymbol: '',
       isActive: false,
       paymentMethod: '',
+      deliverDateStatus: 0
     };
   }
 
@@ -87,10 +90,36 @@ class SubscriptionDetail extends React.Component<any, any> {
       () => {
         this.getCurrencySymbol();
         this.getDict();
+        this.getDeliveryDateStatus();
         this.getSubscriptionDetail(this.state.subscriptionId);
         this.getBySubscribeId(this.state.subscriptionId);
       }
     );
+  }
+
+  // 获取 deliveryState 状态
+  getDeliveryDateStatus = () => {
+    GetDelivery()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          // deliveryDate 状态
+          if (res?.context?.systemConfigVO) {
+            let scon = res.context.systemConfigVO;
+            this.setState({
+              deliverDateStatus: scon.status
+            });
+          }
+        }
+        this.setState({
+          loading: false
+        });
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
   }
 
   //查询frequency
@@ -514,7 +543,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   }
 
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod } = this.state;
+    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -990,10 +1019,10 @@ class SubscriptionDetail extends React.Component<any, any> {
               <Col span={8}>
                 <Row>
                   <Col span={12}>
-                    <label className="info-title">
-                      {deliveryAddressInfo.receiveType==='PICK_UP'?(
+                    <label className="info-title info_title_detail_delivery_address">
+                      {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                         <FormattedMessage id="Subscription.PickupAddress" />
-                      ):(
+                      ) : (
                         <FormattedMessage id="Subscription.DeliveryAddress" />
                       )}
                     </label>
@@ -1024,7 +1053,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                     <p style={{ width: 140 }}>
                       <FormattedMessage id="Subscription.Country" />:{' '}
                     </p>
-                    <p>{this.getDictValue(countryArr, deliveryAddressInfo.countryId)}</p>
+                    <p>
+                      {deliveryAddressInfo.countryId ? this.getDictValue(countryArr, deliveryAddressInfo.countryId) : deliveryAddressInfo.country}
+                    </p>
                   </Col>
                   <Col span={24}>
                     <p style={{ width: 140 }}>
@@ -1037,96 +1068,130 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <p style={{ width: 140 }}>
                     <FormattedMessage id="Subscription.Address2" />:{' '}
                   </p>
-                  <p>{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                  <p className="delivery_detail_address2">{deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}</p>
+                </Col>
+
+                {deliveryAddressInfo?.county ? (
+                  <Col span={24}>
+                    <p style={{ width: 140 }}>
+                      <FormattedMessage id="Subscription.County" />:{' '}
+                    </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                  </Col>
+                ) : null}
+
+                {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                  <Col span={24}>
+                    <p style={{ width: 140 }}><FormattedMessage id="Subscription.WorkTime" />: </p>
+                    <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                  </Col>
+                ) : null}
+
+                {/*根据地址是否属于黑名单进而决定是否显示*/}
+                <Col span={24}>
+                  {
+                    !deliveryAddressInfo.validFlag
+                      ? deliveryAddressInfo.alert && <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                      : null
+                  }
                 </Col>
               </Col>
-                 {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
+              {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
               <Col span={8}>
-                {
-                  storeId === 123457907 ? <Row>
-                    {deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? <>
-                      {deliveryAddressInfo.timeSlot ? <>
-                        <Col span={12}>
-                          <label className="info-title">
-                            <FormattedMessage id="Setting.timeSlot" />
-                          </label>
-                        </Col>
-                        <Col span={24}>
-                          <p>{deliveryAddressInfo.deliveryDate}</p>
-                        </Col>
-                        <Col span={24}>
-                          <p>{deliveryAddressInfo.timeSlot}</p>
-                        </Col>
-                      </> : null}
-                    </> : deliveryAddressInfo.receiveType === 'PICK_UP' ? <>
-                      <Col span={12}><p /></Col>
-                      <Col span={24}>
-                        {
-                          deliveryAddressInfo.pickupPointState ? <p>
-                            <FormattedMessage id="Subscription.TabPane.Active" />
-                            <span className="successPoint" />
-                          </p> : <p>
-                            <FormattedMessage id="Subscription.TabPane.Inactive" />
-                            <span className="failedPoint" />
-                          </p>
-                        }
-                      </Col>
-                    </> : null
-                    }
-
-
-                  </Row> : storeId === 123457910 ? null : (
-                    <Row>
+                {storeId === 123457907 ? <Row>
+                  {deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ? <>
+                    {deliveryAddressInfo.timeSlot && deliverDateStatus === 1 ? <>
                       <Col span={12}>
                         <label className="info-title">
-                          <FormattedMessage id="Subscription.BillingAddress" />
+                          <FormattedMessage id="Setting.timeSlot" />
                         </label>
                       </Col>
+                      <Col span={24}>
+                        <p>{deliveryAddressInfo.deliveryDate}</p>
+                      </Col>
+                      <Col span={24}>
+                        <p>{deliveryAddressInfo.timeSlot}</p>
+                      </Col>
+                    </> : null}
+                  </> : deliveryAddressInfo.receiveType === 'PICK_UP' ? <>
+                    <Col span={12}><p /></Col>
+                    <Col span={24}>
+                      {
+                        deliveryAddressInfo.pickupPointState ? <p>
+                          <FormattedMessage id="Subscription.TabPane.Active" />
+                          <span className="successPoint" />
+                        </p> : <p>
+                          <FormattedMessage id="Subscription.TabPane.Inactive" />
+                          <span className="failedPoint" />
+                        </p>
+                      }
+                    </Col>
+                  </> : null
+                  }
+                </Row> : storeId === 123457910 ? null : (
+                  <Row>
+                    <Col span={12}>
+                      <label className="info-title info_title_detail_billing_address">
+                        <FormattedMessage id="Subscription.BillingAddress" />
+                      </label>
+                    </Col>
 
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Name" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
+                    </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.City" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo.city}</p>
+                    </Col>
+                    {billingAddressInfo.province ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.Name" />:{' '}
+                          <FormattedMessage id="Subscription.State" />:{' '}
                         </p>
-                        <p>{billingAddressInfo ? billingAddressInfo.firstName + ' ' + billingAddressInfo.lastName : ''}</p>
+                        <p>{billingAddressInfo.province}</p>
                       </Col>
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.City" />:{' '}
-                        </p>
-                        <p>{billingAddressInfo.city}</p>
-                      </Col>
-                      {billingAddressInfo.province ? (
-                        <Col span={24}>
-                          <p style={{ width: 140 }}>
-                            <FormattedMessage id="Subscription.State" />:{' '}
-                          </p>
-                          <p>{billingAddressInfo.province}</p>
-                        </Col>
-                      ) : null}
+                    ) : null}
 
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.Country" />:{' '}
-                        </p>
-                        <p>{this.getDictValue(countryArr, billingAddressInfo.countryId)}</p>
-                      </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Country" />:{' '}
+                      </p>
+                      <p>
+                        {billingAddressInfo.countryId ? this.getDictValue(countryArr, billingAddressInfo.countryId) : billingAddressInfo.country}
+                      </p>
+                    </Col>
 
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.Address1" />:{' '}
-                        </p>
-                        <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
-                      </Col>
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Address1" />:{' '}
+                      </p>
+                      <p>{billingAddressInfo ? billingAddressInfo.address1 : ''}</p>
+                    </Col>
 
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.Address2" />:{' '}
+                      </p>
+                      <p className="billing_detail_address2">{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                    </Col>
+
+                    {billingAddressInfo?.county ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.Address2" />:{' '}
+                          <FormattedMessage id="Subscription.County" />:{' '}
                         </p>
-                        <p>{billingAddressInfo ? billingAddressInfo.address2 : ''}</p>
+                        <p>{billingAddressInfo ? billingAddressInfo.county : ''}</p>
                       </Col>
-                    </Row>
-                  )}
+                    ) : null}
+
+                  </Row>
+                )}
               </Col>
               <Col span={8}>
                 <Row>

@@ -157,9 +157,6 @@ export default class Customer extends React.Component<any, any> {
   };
 
   onFormChange = ({ field, value }) => {
-    if(field === "phoneNumber") {
-      this.setPhoneNumberReg()
-    }
     let data = this.state.searchForm;
     data[field] = value;
     this.setState({
@@ -176,6 +173,8 @@ export default class Customer extends React.Component<any, any> {
       })
       this.setState({
         phoneReg
+      },()=>{
+        this.setPhoneNumberReg();
       })
     })
   }

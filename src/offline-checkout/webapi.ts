@@ -18,6 +18,17 @@ export function getProductList() {
 }
 
 /**
+ * 获取产品列表
+ * @returns
+ */
+export function getAllProductList(keywords = '') {
+  return Fetch<TResult>('/goodsInfos/skuOrNameOrEan', {
+    method: 'POST',
+    body: JSON.stringify({ keywords: keywords })
+  });
+}
+
+/**
  * 扫描二维码显示member的推荐产品
  * @param apptNo 
  * @returns 

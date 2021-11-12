@@ -252,9 +252,9 @@ class ProductSearchSetting extends Component<any, any> {
           <Form
             name='complex'
             onSubmit={this.onFinish}
-            labelAlign='left'
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 15 }}
+            labelAlign='right'
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 16 }}
           >
 
 
@@ -361,7 +361,7 @@ class ProductSearchSetting extends Component<any, any> {
                  <FormattedMessage id='Product.Defaultclubfrequency' />
                 </span>
               }
-              style={{ marginBottom: 0 }}
+              style={{ marginBottom: 0, display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}
             >
               <Row gutter={20}>
                 <Col span={8}>

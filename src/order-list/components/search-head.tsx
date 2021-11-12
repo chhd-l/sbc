@@ -1,11 +1,32 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col, Modal, message } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup, ShippStatus, PaymentStatus, RCi18n } from 'qmkit';
-// import Modal from 'antd/lib/modal/Modal';
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Menu,
+  Dropdown,
+  Icon,
+  DatePicker,
+  Row,
+  Col,
+  Modal,
+  message
+} from 'antd';
+import {
+  noop,
+  ExportModal,
+  Const,
+  AuthWrapper,
+  checkAuth,
+  Headline,
+  ShippStatus,
+  PaymentStatus,
+  RCi18n
+} from 'qmkit';
 import { IList } from 'typings/globalType';
-
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -47,7 +68,6 @@ class SearchHead extends Component<any, any> {
 
   constructor(props) {
     super(props);
-
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
@@ -64,10 +84,10 @@ class SearchHead extends Component<any, any> {
       clinicSelectValue: '',
       numberSelectValue: '',
       recommenderSelectValue: '',
-      emailAddressType:'buyerEmail',
-      emailAddressValue:'',
-      citySearchType:'city',
-      citySearchValue:'',
+      emailAddressType: 'buyerEmail',
+      emailAddressValue: '',
+      citySearchType: 'city',
+      citySearchValue: '',
 
       // 21/3/3 新增字段
       refillNumber: '',
@@ -96,7 +116,14 @@ class SearchHead extends Component<any, any> {
         { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) },
         { value: 'Individualization', name: RCi18n({ id: 'Order.Individualization' }) }
       ],
-
+      refillNumberList: [
+        { value: 'First', name: RCi18n({ id: 'Order.first' }) },
+        { value: 'Recurrent', name: RCi18n({ id: 'Order.recurrent' }) }
+      ],
+      orderSourceList: [
+        { value: 'FGS', name: RCi18n({ id: 'Order.fgs' }) },
+        { value: 'L_ATELIER_FELIN', name: RCi18n({ id: 'Order.felin' }) }
+      ],
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -110,21 +137,27 @@ class SearchHead extends Component<any, any> {
   render() {
     const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState, orderType, orderSource, subscriptionType, refillNumber, subscriptionPlanType } = this.state;
-    const { orderTypeList, subscriptionTypeList, subscriptionPlanTypeList, showAdvanceSearch } = this.state;
+    const {
+      tradeState,
+      orderType,
+      orderSource,
+      subscriptionType,
+      refillNumber,
+      subscriptionPlanType,
+      refillNumberList,
+      orderSourceList,
+      orderTypeList,
+      subscriptionTypeList,
+      subscriptionPlanTypeList,
+      showAdvanceSearch
+    } = this.state;
     let hasMenu = false;
-    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
+    if (
+      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
+      checkAuth('fOrderList004')
+    ) {
       hasMenu = true;
     }
-    const refillNumberList = [
-      { value: 'First', name: RCi18n({ id: 'Order.first' }) },
-      { value: 'Recurrent', name: RCi18n({ id: 'Order.recurrent' }) }
-    ];
-
-    const orderSourceList = [
-      { value: 'FGS', name: RCi18n({ id: 'Order.fgs' }) },
-      { value: 'L_ATELIER_FELIN', name: RCi18n({ id: 'Order.felin' }) }
-    ];
 
     const menu = (
       <Menu>
@@ -139,7 +172,7 @@ class SearchHead extends Component<any, any> {
         )}
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
-            <Link to="/batch-export/order-list" >
+            <Link to="/batch-export/order-list">
               <FormattedMessage id="Order.batchExport" />
             </Link>
           </AuthWrapper>
@@ -154,8 +187,12 @@ class SearchHead extends Component<any, any> {
             <Headline title={<FormattedMessage id="Order.orderList" />} />
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
-            <span style={{ color: 'var(--primary-color)', cursor: 'pointer' }} onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}>
-              <FormattedMessage id="Order.AdvanceSearch" /> <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+            <span
+              style={{ color: 'var(--primary-color)', cursor: 'pointer' }}
+              onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}
+            >
+              <FormattedMessage id="Order.AdvanceSearch" />{' '}
+              <Icon type={showAdvanceSearch ? 'up' : 'down'} />
             </span>
           </Col>
         </Row>
@@ -328,7 +365,11 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} disabled defaultValue={RCi18n({ id: 'Order.subscriptionType' })} />
+                        <Input
+                          style={styles.leftLabel}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionType' })}
+                        />
                         <Select
                           style={styles.wrapper}
                           dropdownMatchSelectWidth={false}
@@ -391,7 +432,12 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={RCi18n({ id: 'Order.subscriptionOrderTime' })} disabled defaultValue={RCi18n({ id: 'Order.subscriptionOrderTime' })} />
+                        <Input
+                          style={styles.leftLabel}
+                          title={RCi18n({ id: 'Order.subscriptionOrderTime' })}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionOrderTime' })}
+                        />
                         <Select
                           style={styles.wrapper}
                           allowClear
@@ -418,12 +464,17 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.leftLabel} title={RCi18n({ id: 'Order.subscriptionPlanType' })} disabled defaultValue={RCi18n({ id: 'Order.subscriptionPlanType' })} />
+                        <Input
+                          style={styles.leftLabel}
+                          title={RCi18n({ id: 'Order.subscriptionPlanType' })}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionPlanType' })}
+                        />
                         <Select
                           style={styles.wrapper}
                           allowClear
                           value={subscriptionPlanType}
-                          disabled={subscriptionPlanTypeList.length<1}
+                          disabled={subscriptionPlanTypeList.length < 1}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
@@ -452,7 +503,10 @@ class SearchHead extends Component<any, any> {
                             let a = e.target.value ? e.target.value.split(',') : null;
 
                             this.setState({
-                              clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
+                              clinicSelectValue:
+                                this.state.clinicSelect == 'clinicsName'
+                                  ? (e.target as any).value
+                                  : a
                             });
                           }}
                         />
@@ -517,7 +571,6 @@ class SearchHead extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        {/*<Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.email' })} disabled defaultValue={RCi18n({ id: 'Order.search.email' })} />*/}
                         <Select
                           onChange={(val, a) => {
                             this.setState({
@@ -536,7 +589,7 @@ class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           onChange={(e) => {
                             this.setState({
-                              emailAddressValue:  (e.target as any).value
+                              emailAddressValue: (e.target as any).value
                             });
                           }}
                         />
@@ -570,16 +623,25 @@ class SearchHead extends Component<any, any> {
 
           {hasMenu && (
             <div className="handle-bar ant-form-inline filter-content">
-              <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() => document.getElementById('page-content')}
+              >
                 <Button>
-                  <FormattedMessage id="Order.bulkOperations"/> <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
           )}
         </div>
 
-        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
+        <ExportModal
+          data={exportModalData}
+          onHide={onExportModalHide}
+          handleByParams={exportModalData.get('exportByParams')}
+          handleByIds={exportModalData.get('exportByIds')}
+        />
       </div>
     );
   }
@@ -826,16 +888,20 @@ class SearchHead extends Component<any, any> {
   getSubsrciptionPlanType = (subsriptionType) => {
     const { subscriptionPlanTypeListClone } = this.state;
     let newSubscriptionPlanTypeList = [];
-    if(subsriptionType) {
+    if (subsriptionType) {
       if (subsriptionType === 'ContractProduct') {
-        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter(
+          (item) => item.value === 'SmartFeeder'
+        );
       } else if (subsriptionType.indexOf('Club') >= 0) {
-        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter(
+          (item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat'
+        );
       }
     } else {
       this.setState({
         subscriptionPlanType: ''
-      })
+      });
     }
     this.setState({
       subscriptionPlanTypeList: newSubscriptionPlanTypeList
@@ -858,7 +924,6 @@ class SearchHead extends Component<any, any> {
       tradeState,
       beginTime,
       endTime,
-      orderCategory,
       recommenderSelect,
       recommenderSelectValue,
       refillNumber,
@@ -886,31 +951,8 @@ class SearchHead extends Component<any, any> {
     if (tradeState.orderSource) {
       ts.orderSource = tradeState.orderSource;
     }
-
-    // const params = {
-    //   id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-    //   subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-    //   [buyerOptions]: buyerOptionsValue,
-    //   tradeState: ts,
-    //   [goodsOptions]: goodsOptionsValue,
-    //   [receiverSelect]: receiverSelectValue,
-    //   [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
-    //   [recommenderSelect]: recommenderSelectValue,
-    //   beginTime,
-    //   endTime,
-    //   orderCategory,
-
-    //   refillNumber,
-    //   orderType,
-    //   orderSource,
-    //   subscriptionType,
-    //   subscriptionPlanType,
-    //   [codeSelect]:codeSelectValue,
-
-    // };
     const params = {
       id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-
       subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
       [buyerOptions]: buyerOptionsValue,
       [receiverSelect]: receiverSelectValue,
@@ -926,10 +968,9 @@ class SearchHead extends Component<any, any> {
       [clinicSelect]: clinicSelectValue,
       subscriptionPlanType,
       [codeSelect]: codeSelectValue,
-      [emailAddressType]:emailAddressValue,
-      [citySearchType]:citySearchValue
+      [emailAddressType]: emailAddressValue,
+      [citySearchType]: citySearchValue
     };
-
     onSearch(params);
   };
 }

@@ -4,7 +4,7 @@ import './pickup-delivery.less';
 /**
  * 带有远程搜索功能的下拉选择组件
  */
-class SearchSelection extends React.Component {
+export default class SearchSelection extends React.Component {
   static defaultProps = {
     inputCustomStyle: false, //input框是否要全长
     customCls: '',
@@ -196,7 +196,6 @@ class SearchSelection extends React.Component {
             }, 500);
           }}
         >
-          {this.props.prefixIcon}
           <input
             type="text"
             placeholder={this.state.placeholder}
@@ -234,12 +233,7 @@ class SearchSelection extends React.Component {
             </div>
           )}
         </div>
-        {!this.state.searchForNoResult &&
-          optionList.length === 0 &&
-          this.props.nodataTipSlot}
       </div>
     );
   }
-}
-
-export default SearchSelection;
+};

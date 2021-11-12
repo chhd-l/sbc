@@ -33,7 +33,7 @@ import msgImg from './images/icon/msg-icon.png'
 const Option = Select.Option;
 const { TabPane } = Tabs;
 import text from './images/sys/text.png';
-import iconEengland from './images/icon/iconEengland.svg';
+import iconEngland from './images/icon/iconEengland.svg';
 import iconFrance from './images/icon/iconFrance.svg';
 import iconMexico from './images/icon/iconMexico.svg';
 import iconRussia from './images/icon/iconRussia.svg';
@@ -41,6 +41,7 @@ import iconSpain from './images/icon/iconSpain.svg';
 import iconTurkey from './images/icon/iconTurkey.svg';
 import iconAmerica from './images/icon/iconAmerica.svg';
 import iconGermany from './images/icon/iconGermany.svg';
+import iconSweden from './images/icon/iconSweden.png';
 
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';
@@ -74,12 +75,15 @@ export default class MyHeader extends React.Component {
   componentDidMount() {
     if ((window as any).token && Const.SITE_NAME !== 'MYVETRECO') {
       this.getLanguage()
+      // 获取切换店铺的下拉数据
+      if (checkAuth('f_home_switch_store')) {
+        this.getUserStoreList();
+      }
       if (checkAuth('f_petowner_task')) {
         this.getTaskList();
-        // 获取切换店铺的下拉数据
-        // this.getUserStoreList();
       }
     }
+
   }
 
   async getTaskList() {
@@ -145,6 +149,7 @@ export default class MyHeader extends React.Component {
   //   this.setState({ [val]: util.requireLocalSrc('sys/' + val + type + siteFlag + '.png') });
   // }
   setLangImgSrc(type,lang,img,imgMyVet?:string) {
+    if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === lang) return;
     const imgSrc = type=== "active" && Const.SITE_NAME === 'MYVETRECO' ? imgMyVet : img;
     this.setState({ [lang]:imgSrc });
   }
@@ -174,7 +179,7 @@ export default class MyHeader extends React.Component {
                   key={item.lang}
                   style={{
                     cursor: 'pointer',
-                    width: '30%'
+                    width: '25%'
                   }}
                   onMouseLeave={(e) => {
                     // this.setImgSrc(item.name, item.value, '');
@@ -313,10 +318,12 @@ export default class MyHeader extends React.Component {
    *
    * 123456858   墨西哥
    * 123457907   俄罗斯
-   * 123457908   德国  // 缺失
+   * 123457908   德国
    * 123457909   法国
-   * 123457910   美国  // 缺失
+   * 123457910   美国
    * 123457911   土耳其
+   * 123457915   瑞典
+   * 123457916   英国
    **/
   getStoreIcon = (storeId) => {
 
@@ -327,6 +334,9 @@ export default class MyHeader extends React.Component {
       case '123457909': return  <Icon component={iconFrance} className='logo'/>;
       case '123457910': return  <Icon component={iconAmerica} className='logo'/>;
       case '123457911': return  <Icon component={iconTurkey} className='logo'/>;
+      case '123457915': return  <Icon component={iconSweden} className='logo'/>;
+      case '123457916': return  <Icon component={iconEngland} className='logo'/>;
+
       default: return  <IconFont className='logo' type='iconfangjian1' />;
     }
   }
@@ -608,27 +618,30 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
-              {/* 暂时隐藏 */}
-              {/*<div className='headerRight-shop'>*/}
-              {/*    <div style={{ paddingLeft: 30}}>*/}
-              {/*      <AuthWrapper functionName='f_home_switch_store'>*/}
-              {/*        {*/}
-              {/*          isExistStoreList*/}
-              {/*              ? (*/}
-              {/*                  <Dropdown*/}
-              {/*                      placement={'bottomRight'}*/}
-              {/*                      overlay={shopMenu}*/}
-              {/*                      trigger={['click']}*/}
-              {/*                      overlayClassName='shop-list-box'*/}
-              {/*                  >*/}
-              {/*                    <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />*/}
-              {/*                  </Dropdown>*/}
-              {/*              )*/}
-              {/*              : null*/}
-              {/*        }*/}
-              {/*      </AuthWrapper>*/}
-              {/*    </div>*/}
-              {/*</div>*/}
+              {
+                Const.SITE_NAME !== 'MYVETRECO' ? (
+                  <div className='headerRight-shop'>
+                    <div style={{ paddingLeft: 30}}>
+                      <AuthWrapper functionName='f_home_switch_store'>
+                        {
+                          isExistStoreList
+                            ? (
+                              <Dropdown
+                                placement={'bottomRight'}
+                                overlay={shopMenu}
+                                trigger={['click']}
+                                overlayClassName='shop-list-box'
+                              >
+                                <span className="headerRight-shop-icon iconfont iconfangjian1" style={{ fontSize: 25 }} />
+                              </Dropdown>
+                            )
+                            : null
+                        }
+                      </AuthWrapper>
+                    </div>
+                  </div>
+                ): null
+              }
               <div >
                 <div>
                   <Dropdown overlay={menu} trigger={['click']}>

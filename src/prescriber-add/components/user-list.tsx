@@ -181,6 +181,7 @@ class UserList extends Component<any, any> {
       let paramter = {
         baseUrl: window.origin,
         email: recored.email,
+        lastName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[1] : '',
         firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
         prescriberId: prescriberId
       };

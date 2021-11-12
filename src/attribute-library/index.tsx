@@ -776,7 +776,7 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                     style={{ width: '80%' }}
                   >
-                    <Radio value="Single choice"><FormattedMessage id="Product.Choosetype" /></Radio>
+                    <Radio value="Single choice"><FormattedMessage id="Product.Singlechoice" /></Radio>
                     <Radio value="Multiple choice"><FormattedMessage id="Product.Multiplechoice" /></Radio>
                   </Radio.Group>
                 )}

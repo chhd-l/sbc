@@ -20,6 +20,25 @@ export default class BenefitSetting extends React.Component<any, any> {
                     </div>
                     <div className="benefitSetting-content">
                         <AuthWrapper functionName="f_benefit_setting">
+                            <Link to="/subscription-welcome-box-add">
+                                <div className="benefitSetting-item">
+                                    <div className="benefitSetting-item-content">
+                                        {/*<img src={icon1} alt="" />*/}
+                                        <i className="iconfont iconliwu-"/>
+                                        <div className="benefitSetting-item-text">
+                                            <h2>
+                                                <FormattedMessage id="Subscription.Welcomebox" />
+                                            </h2>
+                                            <p>
+                                                <FormattedMessage id="Subscription.Buy the products regulary to enjoy the membership gift" />
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </AuthWrapper>
+
+                        <AuthWrapper functionName="f_benefit_setting">
                             <Link to="/subscription-benefit-setting-add">
                                 <div className="benefitSetting-item">
                                     <div className="benefitSetting-item-content">

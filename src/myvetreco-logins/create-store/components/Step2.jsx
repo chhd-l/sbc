@@ -50,14 +50,26 @@ const { Option } = Select;
     })
   }
   })
-  }
+  };
+
+  const onChangePhoneNumber = (e) => {
+    if (e && !e.target.value.startsWith('+31')) {
+      const temp = e.target.value;
+      setTimeout(() => {
+        form.setFieldsValue({
+          contactPhone: `+31${temp.replace(/^[+|+3|+31]/, '')}`
+        });
+      });
+    }
+  };
+
   return (
     <div>
       <div className="vmargin-level-4 align-item-center word big">2 / 5  Fill in legal information and contact person</div>
       <div style={{ width: 800, margin: '20px auto' }}>
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 12]}>
-            <Col span={12}>
+            {/* <Col span={12}>
               <FormItem label="Trader category code (MCC)" name="tradeCategoryCode">
                 {getFieldDecorator('tradeCategoryCode', {
                   rules: [{ required: true, message: 'Trader category code (MCC)' }],
@@ -65,7 +77,7 @@ const { Option } = Select;
                 })(<Input size="large" placeholder='Trader category code (MCC)' />)}
               </FormItem>
 
-            </Col>
+            </Col> */}
             <Col span={12}>
               <FormItem label="Type of business">
                 {getFieldDecorator('typeOfBusiness', {
@@ -73,8 +85,8 @@ const { Option } = Select;
                  initialValue: legalInfo?.typeOfBusiness??1
                 })(
                   <Select size="large">
-                    <Option value={1}>bussines</Option>
-                    <Option value={0}>individual</Option>
+                    <Option value={1}>Business</Option>
+                    <Option value={0}>Individual</Option>
                   </Select>
                 )}
               </FormItem>
@@ -100,7 +112,7 @@ const { Option } = Select;
             <Col span={12}>
               <FormItem label="First name">
                 {getFieldDecorator('firstName', {
-                  rules:[{ required: true, message: 'Please input First name!' }],
+                  rules:[{ required: true, message: 'Please input First name!' },{ pattern: /^((?![0-9]).)*$/, message: 'First name should not contain numbers' }],
                  initialValue: legalInfo?.firstName??''
                 })(<Input size="large"/>)}
               </FormItem>
@@ -108,7 +120,7 @@ const { Option } = Select;
             <Col span={12}>
               <FormItem label="Last name">
                 {getFieldDecorator('lastName', {
-                  rules:[{ required: true, message: 'Please input Last name!' }],
+                  rules:[{ required: true, message: 'Please input Last name!' },{ pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
                   initialValue: legalInfo?.lastName??''
                 })(<Input size="large"/>)}
               </FormItem>
@@ -127,9 +139,12 @@ const { Option } = Select;
             <Col span={12}>
               <FormItem label="Phone number">
                 {getFieldDecorator('contactPhone', {
-                 initialValue: legalInfo?.contactPhone??''
+                  rules:[
+                    { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
+                  ],
+                  initialValue: legalInfo?.contactPhone??''
                 })(
-                  <Input size="large"/>
+                  <Input size="large" maxLength={12} onChange={onChangePhoneNumber} />
                 )}
               </FormItem>
             </Col>

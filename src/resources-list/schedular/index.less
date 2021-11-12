@@ -1,0 +1,145 @@
+.width-full {
+  width: 100%;
+}
+
+.booked-table-container {
+  overflow-x: auto;
+  // width: 1330px;
+}
+.person-wrap {
+  display: flex;
+  border-left: 1px solid #e8e8e8;
+  border-right: 1px solid #e8e8e8;
+  border-top: 1px solid #e8e8e8;
+  height: 35px;
+  line-height: 35px;
+  width: 100%;
+  .blank-space {
+    width: 50px;
+    border-right: 2px solid #e8e8e8;
+  }
+  .person-name {
+    border-right: 1px solid #e8e8e8;
+    background: #eeeeee;
+    color: #333333;
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+.schedular-time-table {
+  display: flex;
+  // margin-top: 20px;
+  width: 100%;
+  .time-planning-wrap {
+    display: flex;
+    border-left: 1px solid #e8e8e8;
+    border-right: 1px solid #e8e8e8;
+    &:first-child {
+      .time-hour,.time-minute  {
+        border-top: 1px solid #e8e8e8;
+      }
+      .planning-content {
+        border-top: 1px solid #e8e8e8;
+      }
+    }
+    &:last-child {
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .time-hour {
+      padding: 0px 12px;
+      position: relative;
+      span {
+        text-align: center;
+        position: absolute;
+        top: -2px;
+        left: 0;
+        right: 0;
+        color: #777777;
+      }
+    }
+    .time-minute {
+      border-right: 1px solid #e8e8e8;
+      li {
+        padding: 0px 12px;
+        height: 35px;
+        position: relative;
+        span {
+          font-size: 13px;
+          text-align: center;
+          position: absolute;
+          top: -2px;
+          left: 0;
+          right: 0;
+          color: #999999;
+        }
+      }
+    }
+    }
+
+    .booked-type-wrap {
+      width: 100%;
+      display: flex;
+      .item-person-booked {
+      border-top: 1px solid #e8e8e8;
+      }
+    }
+
+    .planning-content {
+      height: 35px;
+      line-height: 35px;
+      width: 100%;
+      border-bottom: 1px solid #e8e8e8;
+      border-right: 1px solid #e8e8e8;
+      .each-duration {
+        height: 100%;
+        display: inline-block;
+      }
+      &:last-child {
+        border-bottom: 0;
+        border-right: 0;
+        }
+    }
+
+    .block-item,.appointed-item {
+      .each-duration {
+        position: relative;
+        &::before {
+          position: absolute;
+          display: block;
+          content: ' ';
+          height: 100%;
+          width: 6px;
+          border-top-left-radius: 2px;
+          border-bottom-left-radius: 2px;
+        }
+        span {
+          padding-left: 18px;
+        }
+      }
+    }
+
+    .block-item {
+      background: #dddd;
+      .each-duration {
+        &::before {
+          background: #7d7d7d;
+        }
+        span {
+          color: #333333;
+        }
+      }
+    }
+
+    .appointed-item {
+      background: #ffe7e5;
+      .each-duration {
+        &::before {
+          background: #eb4456;
+        }
+        span {
+          color: #d6071f;
+        }
+      }
+    }
+  }

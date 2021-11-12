@@ -63,12 +63,7 @@ export default class DetailPublish extends React.Component<any, any> {
   handleOk = (e) => {
     const { onSend, getLink, sharing } = this.props.relaxProps;
     let sharingObj = sharing.toJS();
-    if (Const.SITE_NAME === 'MYVETRECO') {
-      onSend(
-        'send',
-        Object.assign({}, sharingObj, { base64Id: getLink })
-      );
-    } else if (
+    if (
       sharingObj.consumerFirstName != '' &&
       sharingObj.consumerLastName != '' &&
       sharingObj.consumerEmail != '' &&
@@ -147,7 +142,6 @@ export default class DetailPublish extends React.Component<any, any> {
     }
     return (
       <div id="publishButton">
-        {Const.SITE_NAME !== 'MYVETRECO' && <>
         <div className="share">
           <div className="title">
             <span>*</span>{RCi18n({id:'Order.FirstName'})}
@@ -232,7 +226,6 @@ export default class DetailPublish extends React.Component<any, any> {
             }}
           />
         </div>
-        </>}
         <div className="link space-between">
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />
@@ -264,12 +257,12 @@ export default class DetailPublish extends React.Component<any, any> {
             {RCi18n({id:'Order.shareLinkTip'})}
           </span>
         </div>
-        {/*<Button key="back" onClick={this.handleCancel}>
+        {/* <Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
-        </Button>*/}
+        </Button> */}
       </div>
     );
   }

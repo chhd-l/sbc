@@ -51,11 +51,21 @@ export default class TradeActor extends Actor {
   }
 
   @Action('tradeActor: editGoodsNum')
-  editGoodsNum(state, { skuId, value }: { skuId: string; value: number }) {
-    return state.updateIn(['tradeDetail', 'tradeItems'], tradeItems => {
-      const index = tradeItems.findIndex(item => item.get('skuId') == skuId);
-      return tradeItems.update(index, item => item.set('num', value));
-    });
+  editGoodsNum(state, { skuId, value,itemType }: { skuId: string; value: number,itemType:number }) {
+    if(itemType===2){
+     //订阅订单赠品
+      return state.updateIn(['tradeDetail', 'subscriptionPlanGiftList'], gifts => {
+        const index = gifts.findIndex(item => item.get('skuId') == skuId);
+        return gifts.update(index, item => item.set('num', value));
+      });
+    }else{
+      //商品
+      return state.updateIn(['tradeDetail', 'tradeItems'], tradeItems => {
+        const index = tradeItems.findIndex(item => item.get('skuId') == skuId);
+        return tradeItems.update(index, item => item.set('num', value));
+      });
+    }
+
   }
 
   @Action('tradeActor: updateGifts')

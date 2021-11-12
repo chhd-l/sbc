@@ -1345,7 +1345,7 @@ class FullReductionForm extends React.Component<any, any> {
           };
           _thisRef.onBeanChange(beanObject);
           initReductionDefualtLevelList()
-          debugger
+          
         },
         onCancel() {
           _thisRef.props.form.setFieldsValue({ 'subType': marketingBean.get('subType') })

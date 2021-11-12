@@ -59,6 +59,7 @@ export default class SkuTable extends React.Component<any, any> {
       baseSpecId: Number;
       editGoods: Function;
       init: Function;
+      uomList: IList;
     };
     gid: any,
   };
@@ -84,6 +85,7 @@ export default class SkuTable extends React.Component<any, any> {
     removeImg: noop,
     modalVisible: noop,
     init: noop,
+    uomList: 'uomList'
   };
 
   constructor(props) {
@@ -199,7 +201,7 @@ class SkuForm extends React.Component<any, any> {
   };
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList } = this.props.relaxProps;
+    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList, uomList } = this.props.relaxProps;
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -366,6 +368,34 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+    //pricing uom
+    columns = columns.push({
+      title: <FormattedMessage id="Product.PricingUOM" />,
+      key: 'priceUomId',
+      width: 150,
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={8}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('priceUomId' + rowInfo.id, {
+                  rules: [],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'priceUomId'),
+                  initialValue: rowInfo.priceUomId || null
+                })(
+                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
+                    {uomList.map(item => (
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
     columns = columns.push({
       title: RCi18n({id:'Product.Weightvalue'}),
       key: 'goodsInfoWeight',
@@ -521,7 +551,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship'} >
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship' || rowInfo.subscriptionStatus === 0} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                   <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
@@ -631,6 +661,12 @@ class SkuForm extends React.Component<any, any> {
     }
 
     editGoodsItem(id, key, e);
+
+    //新增sku时，修改skuno，同步修改externalskuno
+    const targetSkuItem = goodsList.find(sku => sku.get('id') === id);
+    if(key === 'goodsInfoNo' && !targetSkuItem.get('goodsInfoId')) {
+      editGoodsItem(id, 'externalSku', e);
+    }
 
     if(key == "addedFlag") {
       if(goodsList.toJS().length >1) {

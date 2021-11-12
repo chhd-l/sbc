@@ -1,8 +1,10 @@
 import React from 'react';
-import { Headline, Const } from 'qmkit';
+import { Headline, Const, AuthWrapper } from 'qmkit';
 import { Radio, Button, Switch, Modal, Form, Input, Select, Tabs } from 'antd';
 import SortFields from './sort-fields';
 import { getAddressSetting } from '../../validation-setting/webapi';
+import PostalCodeModal from '../component/PostalCodeModal';
+import AddressSettingModal from '../component/AddressSettingModal';
 
 const Option = Select.Option;
 const INPUT_TYPE = [
@@ -26,7 +28,12 @@ export default class Fields extends React.Component<any, any> {
     this.state = {
       visible: false,
       field: {},
-      apiName: ''
+      apiName: '',
+      isEditPostalCode: false,
+      visiblePostalCode: false,
+      isEditPostalCode2: false,
+      visiblePostalCode2: false,
+      visibleAddressSetting: false
     };
   }
 
@@ -55,6 +62,7 @@ export default class Fields extends React.Component<any, any> {
 
   onChangeModalField = (formField: any) => {
     const { field } = this.state;
+    console.log('666 >>> formField: ', formField);
     this.setState({
       field: { ...field, ...formField }
     });
@@ -75,14 +83,73 @@ export default class Fields extends React.Component<any, any> {
   };
 
   onSortManualEnd = (sortList) => {
+    // this.setState({
+    //   manu
+    // });
+  };
+
+  handlePostalCode = (id: number, field: any, checked: boolean) => {
     this.setState({
-      manu
+      isEditPostalCode: checked,
+    })
+    this.onChangeField(id, field)
+  }
+
+  handlePostalCode2 = (id: number, field: any, checked: boolean) => {
+    this.setState({
+      isEditPostalCode2: checked,
+    })
+    this.onChangeField(id, field)
+  }
+
+  handlePostalCodeCancel = () => {
+    this.setState({
+      visiblePostalCode: false,
+    });
+  };
+
+  handlePostalCodeShow = () => {
+    this.setState({
+      visiblePostalCode: true,
+    });
+  };
+
+  handlePostalCodeCancel2 = () => {
+    this.setState({
+      visiblePostalCode2: false,
+    });
+  };
+
+  handlePostalCodeShow2 = () => {
+    this.setState({
+      visiblePostalCode2: true,
+    });
+  };
+
+  handleAddressSettingModalOpen = () => {
+    this.setState({
+      visibleAddressSetting: true
+    });
+  };
+
+  handleAddressSettingModalClose = () => {
+    this.setState({
+      visibleAddressSetting: false
     });
   };
 
   render() {
-    const { visible, field, apiName } = this.state;
-    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onStepChange, onSortEnd } = this.props;
+    const {
+      visible,
+      field,
+      apiName,
+      isEditPostalCode,
+      isEditPostalCode2,
+      visiblePostalCode,
+      visiblePostalCode2,
+      visibleAddressSetting
+    } = this.state;
+    const { manualFieldList, autoFieldList, activeKey, onChangeActiveKey, onFieldChange, onSortEnd } = this.props;
     const columns = [
       {
         title: 'Sequence',
@@ -98,7 +165,23 @@ export default class Fields extends React.Component<any, any> {
         title: 'Field type',
         dataIndex: 'filedType',
         key: 'c3',
-        render: (text, record) => <div>{text === 0 ? 'Text' : 'Number'}</div>
+        render: (text, record) => (
+          <>
+            <div>
+              {text === 0 ? 'Text' : text === 1 ? 'Number' : 'Letter & Number'}
+              {' '}
+              {record.fieldKey === "postCode" ? (
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onOpenModal(record);
+                  }}
+                  className="iconfont iconEdit"
+                ></a>
+              ) : null}
+            </div>
+          </>
+        )
       },
       {
         title: 'Input type',
@@ -123,6 +206,34 @@ export default class Fields extends React.Component<any, any> {
             ) : null}
           </div>
         )
+      },
+      {
+        title: 'Validation',
+        dataIndex: 'validationFlag',
+        key: 'validationFlag',
+        render: (text, record) => {
+          let fieldName = record.fieldName || '';
+          if (fieldName === 'Postal code') {
+            return (
+              <AuthWrapper functionName='f-postCodeBlockList-edit'>
+                <div className='validation-wrap'>
+                  <Switch
+                    // checked={isEditPostalCode}
+                    defaultChecked={text === 1}
+                    onChange={(checked) => this.handlePostalCode(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
+                  />
+                  {
+                    isEditPostalCode || (text === 1)
+                      ? (<a onClick={this.handlePostalCodeShow} className='iconfont iconEdit' />)
+                      : null
+                  }
+                </div>
+              </AuthWrapper>
+            );
+          } else {
+            return null;
+          }
+        }
       },
       {
         title: 'Max length',
@@ -153,6 +264,124 @@ export default class Fields extends React.Component<any, any> {
         render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked ? 1 : 0 })} />
       }
     ];
+    const columns2 = [
+      {
+        title: 'Sequence',
+        dataIndex: 'sequence',
+        key: 'c1'
+      },
+      {
+        title: 'Field name',
+        dataIndex: 'fieldName',
+        key: 'c2'
+      },
+      {
+        title: 'Field type',
+        dataIndex: 'filedType',
+        key: 'c3',
+        render: (text, record) => (
+          <>
+            <div>
+              {text === 0 ? 'Text' : text === 1 ? 'Number' : 'Letter & Number'}
+              {' '}
+              {record.fieldKey === "postCode" ? (
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    this.onOpenModal(record);
+                  }}
+                  className="iconfont iconEdit"
+                ></a>
+              ) : null}
+            </div>
+          </>
+        )
+      },
+      {
+        title: 'Input type',
+        dataIndex: 'fieldName',
+        key: 'c4',
+        render: (text, record) => (
+          <div>
+            {INPUT_TYPE.reduce((prev, curr) => {
+              if (record[curr.key] === 1) {
+                prev.push(curr.value);
+              }
+              return prev;
+            }, []).join('+')}{' '}
+            {text === 'City' ? (
+              <a
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onOpenModal(record);
+                }}
+                className="iconfont iconEdit"
+              ></a>
+            ) : null}
+          </div>
+        )
+      },
+      {
+        title: 'Validation',
+        dataIndex: 'validationFlag',
+        key: 'validationFlag',
+        render: (text, record) => {
+          let fieldName = record.fieldName || '';
+
+          switch (fieldName) {
+            case 'Postal code':
+              return (
+              <AuthWrapper functionName='f-postCodeBlockList-edit'>
+                <div className='validation-wrap'>
+                  <Switch
+                    // checked={isEditPostalCode}
+                    defaultChecked={text === 1}
+                    onChange={(checked) => this.handlePostalCode2(record.id, { validationFlag: checked ? 1 : 0 }, checked)}
+                  />
+                  {
+                    isEditPostalCode2 || (text === 1)
+                      ? (<a onClick={this.handlePostalCodeShow2} className='iconfont iconEdit' />)
+                      : null
+                  }
+                </div>
+              </AuthWrapper>
+            );
+            case 'Address1':
+              return (<a onClick={this.handleAddressSettingModalOpen} className="iconfont iconEdit"/>)
+            default: return null
+          }
+        },
+      },
+      {
+        title: 'Max length',
+        dataIndex: 'maxLength',
+        key: 'c5'
+      },
+      {
+        title: 'Field columns',
+        dataIndex: 'occupancyNum',
+        key: 'c8',
+        render: (text, record) => (
+          <Radio.Group buttonStyle="solid" value={text} onChange={(e) => this.onChangeField(record.id, { occupancyNum: e.target.value })}>
+            <Radio.Button value={1}>1</Radio.Button>
+            <Radio.Button value={2}>2</Radio.Button>
+          </Radio.Group>
+        )
+      },
+      {
+        title: 'Required',
+        dataIndex: 'requiredFlag',
+        key: 'c6',
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { requiredFlag: checked ? 1 : 0 })} />
+      },
+      {
+        title: 'Enable',
+        dataIndex: 'enableFlag',
+        key: 'c7',
+        render: (text, record) => <Switch checked={text === 1} onChange={(checked) => this.onChangeField(record.id, { enableFlag: checked ? 1 : 0 })} />
+      }
+    ];
+
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -163,8 +392,14 @@ export default class Fields extends React.Component<any, any> {
         sm: { span: 16 }
       }
     };
+
+    const addressDisplaySettingId = manualFieldList.find(item => item.fieldKey === 'postCode')?.id;
+    const addressDisplaySettingId2 = autoFieldList.find(item => item.fieldKey === 'postCode')?.id;
+
+    const address1InAutoTable = autoFieldList.find(item => item.fieldKey === 'address1') ?? {};
+
     return (
-      <div>
+      <div className='fields-wrap'>
         <Tabs activeKey={activeKey} onChange={onChangeActiveKey}>
           <Tabs.TabPane tab="Input manually" key="MANUALLY">
             {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
@@ -176,7 +411,7 @@ export default class Fields extends React.Component<any, any> {
             {/* <Button type="primary" onClick={() => onStepChange(2)} style={{ marginBottom: 10 }}>
               Display
             </Button> */}
-            <SortFields columns={columns} dataList={autoFieldList} onSortEnd={onSortEnd} />
+            <SortFields columns={columns2} dataList={autoFieldList} onSortEnd={onSortEnd} />
           </Tabs.TabPane>
         </Tabs>
 
@@ -205,6 +440,26 @@ export default class Fields extends React.Component<any, any> {
                   </Option>
                 </Select>
               )}
+              {field.fieldKey === 'postCode' && (
+                <>
+                  <Select
+                    value={field.filedType}
+                    onChange={(v: any) => {
+                      this.onChangeModalField({ filedType: v })
+                    }}
+                  >
+                    <Option value={0} key={0}>
+                      text
+                    </Option>
+                    <Option value={1} key={1}>
+                      number
+                    </Option>
+                    <Option value={2} key={2}>
+                      Letter & Number
+                    </Option>
+                  </Select>
+                </>
+              )}
             </Form.Item>
             {field.fieldName === 'City' ? (
               <Form.Item label="Data source">
@@ -213,6 +468,42 @@ export default class Fields extends React.Component<any, any> {
             ) : null}
           </Form>
         </Modal>
+        {
+          visiblePostalCode
+            ? (
+              <PostalCodeModal
+                addressDisplaySettingId={addressDisplaySettingId}
+                visible={visiblePostalCode}
+                onCancel={this.handlePostalCodeCancel}
+              />
+            )
+            : null
+        }
+        {
+          visiblePostalCode2
+            ? (
+              <PostalCodeModal
+                addressDisplaySettingId={addressDisplaySettingId2}
+                visible={visiblePostalCode2}
+                onCancel={this.handlePostalCodeCancel2}
+              />
+            )
+            : null
+        }
+        {
+          visibleAddressSetting
+            ? (
+            <AddressSettingModal
+              fieldId={address1InAutoTable.id}
+              suggestionFlag={address1InAutoTable.suggestionFlag}
+              validationFlag={address1InAutoTable.validationFlag}
+              onChangeField={onFieldChange}
+              visible={visibleAddressSetting}
+              onCancel={this.handleAddressSettingModalClose} 
+            />
+            )
+            : null
+        }
       </div>
     );
   }

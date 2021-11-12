@@ -47,11 +47,12 @@ const MessageTemplateConfiguration=()=>{
 
   const [templateListData,setTemplateListData]=useState([]);
   const [searchForm,setSearchForm]=useState({
-    messageTemplate: '',
-    type: '',
+    keywords: '',
+    type: null,
   })
   const [showTab,setShowTab]=useState(false)
   const [detailId,setDetailId]=useState()
+  const [loading,setLoading]=useState(true)
 
   const columns = [
     {
@@ -75,10 +76,10 @@ const MessageTemplateConfiguration=()=>{
     },
     {
       title: 'Template Type',
-      dataIndex: 'sendCategory',
-      key: 'sendCategory',
+      dataIndex: 'type',
+      key: 'type',
       width: '10%',
-      ellipsis: true
+      render:(text) =><span>{+text === 0 ? 'Email':+text === 1 ? 'Text' :''}</span>
     },
     {
       title: 'Created Date',
@@ -94,7 +95,6 @@ const MessageTemplateConfiguration=()=>{
       render: (text, record) => (
         <div>
           <div>
-
             <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
               <a className="iconfont iconDetails" onClick={()=> {
                 setShowTab(true);
@@ -104,7 +104,7 @@ const MessageTemplateConfiguration=()=>{
 
             <Divider type="vertical" />
             <Tooltip placement="top" title={RCi18n({id:'edit'})}>
-              <Link to={{pathname:'/template-edit/' + record.templateId,query:record.id}} className="iconfont iconEdit"></Link>
+              <Link to={{pathname:'/template-edit/' + record.templateId,query: { recordId:record.id,recordTemplateId:record.templateId,recordType:record.type},}} className="iconfont iconEdit"></Link>
             </Tooltip>
 
             <Divider type="vertical" />
@@ -130,19 +130,21 @@ const MessageTemplateConfiguration=()=>{
 
 
   const getEmailTemplateList=()=>{
+    setLoading(true)
     webapi.getEmailTemplateList(searchForm).then((data) => {
       const {res} =data;
       console.log(res.context,'hua')
       if(res.code===Const.SUCCESS_CODE){
         //下方展示展示所有模板
-        setTemplateListData(res.context.messageTemplateResponseList);
+        setTemplateListData(res.context.messageTemplateVOS);
+        setLoading(false)
       }
     })
   }
 
 
   const deleteTemplate=(id)=>{
-    console.log(id,'id')
+    setLoading(true)
     const parmas={id:id}
     webapi
       .deleteTemplateList(parmas)
@@ -180,7 +182,7 @@ const MessageTemplateConfiguration=()=>{
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       onFormChange({
-                        field: 'messageTemplate',
+                        field: 'keywords',
                         value
                       });
                     }}
@@ -250,7 +252,7 @@ const MessageTemplateConfiguration=()=>{
           columns={columns}
           dataSource={templateListData}
           // pagination={this.state.pagination}
-          // loading={this.state.loading}
+          loading={loading}
           // scroll={{ x: '100%' }}
           // onChange={this.handleTableChange}
         />

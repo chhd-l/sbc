@@ -33,7 +33,9 @@ export default class GoodsSpecActor extends Actor {
           subscriptionPrice: 0,
           stock: 0,
           goodsInfoBundleRels: [],
-          specType: false
+          specType: false,
+          defaultSku: 0,
+          displayOnShop: 1
         }
       ],
       stockChecked: false,
@@ -190,7 +192,17 @@ export default class GoodsSpecActor extends Actor {
     if (key === 'baseSpecId') {
       return state.set('baseSpecId', fromJS(value));
     }
-    if (key === 'subscriptionStatus') {
+    if (key === 'defaultSku') {
+      let goodsList = state.toJS()['goodsList'];
+      goodsList.map((el) => {
+        if (el.id === id) {
+          el.defaultSku = parseInt(value);
+        } else {
+          el.defaultSku = 0;
+        }
+      });
+      return state.set('goodsList', fromJS(goodsList));
+    } else if (key === 'subscriptionStatus') {
       let goodsList = state.toJS()['goodsList'];
       goodsList.map((el) => {
         if (el.id === id) {
@@ -371,6 +383,8 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('subscriptionPrice', 0);
         goodsItem = goodsItem.set('subscriptionStatus', item2.get('subscriptionStatus'));
         goodsItem = goodsItem.set('promotions', item2.get('goodsPromotions'));
+        goodsItem = goodsItem.set('defaultSku', 0);
+        goodsItem = goodsItem.set('displayOnShop', 1);
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);
@@ -409,7 +423,9 @@ export default class GoodsSpecActor extends Actor {
         marketPrice: 0,
         subscriptionPrice: 0,
         subscriptionStatus: item.get('subscriptionStatus'),
-        skuSvIds: [item.get('specDetailId')]
+        skuSvIds: [item.get('specDetailId')],
+        defaultSku: 0,
+        displayOnShop: 1
       });
     });
     //每次循环后情况random缓存

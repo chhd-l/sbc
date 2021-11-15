@@ -1523,7 +1523,9 @@ export default class AppStore extends Store {
           stockUomId: item.get('stockUomId'),
           priceUomId: item.get('priceUomId'),
           factor: item.get('factor'),
-          externalStock: item.get('externalStock')
+          externalStock: item.get('externalStock'),
+          defaultSku: item.get('defaultSku'),
+          displayOnShop: item.get('displayOnShop')
         })
       );
     });

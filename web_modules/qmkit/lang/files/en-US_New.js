@@ -2757,6 +2757,7 @@ export default {
         'Resources.time_slot':'Time Slot',
         'Resources.bulk_planning_btn_warning':'Please select one or more items in the resources list below before clicking.',
         'Resources.schedular':'Schedular',
-        'Resources.list_view':'List View'
+        'Resources.list_view':'List View',
+        'Resources.TimeErrorInfo':'Please enter the correct time range'
     }
 }

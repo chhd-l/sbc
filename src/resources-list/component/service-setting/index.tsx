@@ -18,6 +18,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
     days: [],
     dates: []
   })
+  const [timeRangeErrInfo,setTimeRangeErrInfo] = useState([])
 
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
@@ -105,10 +106,45 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
         item.sort == data.sort
         item = data
         item.resourceDatePlanVOS.map(_item => selectedDateNo.push(_item.dateNo))
+        console.log(item,'----item')
+        handleTimeRangeErrInfo(data.timeSlotVO.timeSlot || '',data.sort)
       })
     })
     setSelectedDateNos(selectedDateNo)
     handleUpdateServiceData(serviceData)
+  }
+
+  // 校验输入的时间区间格式
+  const handleTimeRangeErrInfo = (timeSlot, sort) => {
+    let timesArr = [timeSlot]
+    if (timeSlot.includes('|')) {
+      timesArr = timeSlot.split('|')
+    }
+    const returnArr = timesArr.find(el => {
+      return (!el.includes('-') || el.includes('undefined'))
+    })
+    if (returnArr) return
+
+    let info = [...timeRangeErrInfo]
+    timesArr.map((_itemTimeGroup, idx) => {
+      const newTimes = _itemTimeGroup?.split('-')
+      let startT = newTimes[0]?.split(':')
+      let endT = newTimes[1]?.split(':')
+      if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
+        let minuteDiff = startT[0] === endT[0] && startT[1] > endT[1] ? true : false
+        const _idx = info?.findIndex(infoItem => infoItem.TIndex == idx && infoItem.TSort == sort)
+        if (_idx > -1 && (startT[0] < endT[0] || !minuteDiff)) {
+          info?.splice(_idx, 1)
+        } else if (startT[0] > endT[0] || minuteDiff) {
+          info.push({
+            info: 'Please enter the correct time range',
+            TIndex: idx,
+            TSort: sort
+          })
+        }
+      }
+    })
+    setTimeRangeErrInfo(info)
   }
 
   const deleteLinePlanList = (sort) => {
@@ -170,6 +206,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
               updateTableData={updateTableData}
               deleteLinePlanList={deleteLinePlanList}
               selectedDateNos={selectedDateNos}
+              timeRangeErrInfo={timeRangeErrInfo}
             />
           ))}
         </div>

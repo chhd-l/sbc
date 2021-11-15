@@ -6,7 +6,7 @@ import './index.less'
 const timeFormat = 'HH:mm';
 
 const SetDayTable = (props) => {
-  let { weekList, updateTableData, deleteLinePlanList, cannotSelect, setCannotSelect, daysList } = props
+  let { weekList, updateTableData, deleteLinePlanList, cannotSelect, setCannotSelect, daysList,timeRangeErrInfo } = props
   const [singleTimeErrInfo,setSingleTimeErrInfo] =useState("")
   const [multipleTimeErrInfo,setMultipleTimeErrInfo] =useState("")
 
@@ -186,7 +186,10 @@ const SetDayTable = (props) => {
       singleOrMultipleTimes = timeSlot.split('|')
       _time = singleOrMultipleTimes.map(item => item.split('-'))
     }
-    return (_time.map((timeRange, idx) => {
+    console.log(timeRangeErrInfo,'timeRangeErrInfotimeRangeErrInfo')
+    return (
+      <div>
+        {_time.map((timeRange, idx) => {
       return (
         <div key={idx} style={{ marginTop: "6px" }}>
           <TimePicker
@@ -209,10 +212,15 @@ const SetDayTable = (props) => {
             allowClear={false}
           />
           <Icon type="plus-square" onClick={handleAddTime} />
-          <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />
+         {_time.length>1? <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />:null}
         </div>
       )
-    })
+    })}
+    {timeRangeErrInfo.map(infoItem => infoItem.TSort == weekList.sort ? <span style={{color:"#f5222d"}}>
+      {/* {infoItem.info} */}
+      <FormattedMessage id='Resources.TimeErrorInfo' />
+      </span>:null)}
+      </div>
     )
   }
 

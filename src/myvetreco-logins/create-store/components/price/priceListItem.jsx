@@ -91,6 +91,7 @@ function PriceListItem({listItem,checkedList}){
                 <Col span={5}>
                     <InputNumber
                         value={sales}
+                        precision={2}
                         onChange={(value)=>changeSalesPrice(value)}
                     />
                 </Col>
@@ -98,6 +99,7 @@ function PriceListItem({listItem,checkedList}){
                 <Col span={5}>
                     <InputNumber
                         value={subscription}
+                        precision={2}
                         onChange={(value)=>setSubscription(value)}
                     />
                 </Col>

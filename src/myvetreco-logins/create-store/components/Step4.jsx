@@ -209,6 +209,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                              value={salesPercentage}
                              style={{width:180}}
                              step={10}
+                             precision={2}
                              onChange={(value)=>setSalesPercentage(value)} />
               </Col>
               <Col span={6}>
@@ -216,6 +217,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                              style={{width:180}}
                              value={subscriptionPercentage}
                              step={10}
+                             precision={2}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
               {/* <Col span={3}>

@@ -90,6 +90,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 点apply对选中条目价格进行计算
    */
   const applyPercentage =useCallback(()=>{
+    if (salesPercentage < subscriptionPercentage) {
+      message.error('Market price percentage should larger than subscription price percentage!');
+      return;
+    }
     setPercentageObj({
       salesPercentage,
       subscriptionPercentage
@@ -197,7 +201,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           <div style={{width:850,margin:'20px auto'}}>
             <Row gutter={24} style={{marginBottom:'10px'}}>
               <Col span={6}>
-                <div className="word small tip">Sales price percentage</div>
+                <div className="word small tip">Market price percentage</div>
               </Col>
               <Col span={6}>
                 <div className="word small tip">Subscription price percentage</div>

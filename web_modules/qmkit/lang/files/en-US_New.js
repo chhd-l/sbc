@@ -858,6 +858,7 @@ export default {
         "Order.RecipientName": "Recipient name",
         "Order.RecipientMail": "Recipient mail",
         "Order.ProductSKU": "Product SKU",
+        "Order.goodwillDesc": "This is a goodwill order.",
         "Order.New": "New",
         "Order.Valid": "Valid",
         "Order.LinkStatus": "Link status",

@@ -85,6 +85,18 @@ export default class Task extends React.Component<any, any> {
   handleExport = () => {
     const { taskForm } = this.state;
     console.log(taskForm)
+
+    // 只支持导出一年内的时间
+    const { dueTimeStart } = taskForm;
+    if (dueTimeStart) {
+      const isOver = moment(dueTimeStart).valueOf() < moment().subtract(1, 'y').valueOf();
+
+      if (isOver) {
+        message.error((window as any).RCi18n({id:'Task.ExportTaskTimeTips'}));
+        return;
+      }
+    }
+
     this.setState({
       exportLoading: true
     })

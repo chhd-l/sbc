@@ -2581,6 +2581,7 @@ export default {
         "Task.DeliveryStatus": "Pick-up-point Status",
         "Task.ExportTasks": "Export tasks",
         "Task.ExportTaskTips": "Please go to Analysis/Export report section to download the file.",
+        "Task.ExportTaskTimeTips": "Please select a time within one year.",
     },
     integration: {
         'Dashboard.Dashboard': 'Dashboard',

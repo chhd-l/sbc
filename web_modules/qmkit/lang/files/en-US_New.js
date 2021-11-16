@@ -2786,6 +2786,9 @@ export default {
         'Resources.bulk_planning_btn_warning':'Please select one or more items in the resources list below before clicking.',
         'Resources.schedular':'Schedular',
         'Resources.list_view':'List View',
-        'Resources.TimeErrorInfo':'Please enter the correct time range'
+        'Resources.TimeErrorInfo':'Please enter the correct time range',
+        'Menu.Schedular':'Schedular',
+        'Menu.Resources':'Resources',
+        'Menu.Resources planning':'Resources planning'
     }
 }

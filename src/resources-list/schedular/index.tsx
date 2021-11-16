@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, Button, Input, Row, Col, Select, Spin } from 'antd';
+import { DatePicker, Button, Input, Row, Col, Select, Spin,Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { Headline, history } from 'qmkit';
 import * as webapi from '../webapi';
@@ -90,7 +90,6 @@ const Schedular = () => {
     //   return employees
     // })
 
-    console.log(_allEmployeePersonList,'_allEmployeePersonList')
     setAllEmployeePersonList(_allEmployeePersonList)
     _allEmployeePersonList.length ? setSelectPerson(_allEmployeePersonList[0].employeeId) : null
     // setAllEmployeeIds(allPersonEmployeeIds)
@@ -115,7 +114,6 @@ const Schedular = () => {
   const bookedDataFormat = async (list) => {
     const allTimeArr = await intervals("20210101 09:00", "20210101 17:00");//todo:等确认起始值
     setTimePeriod(allTimeArr)
-    console.log(allTimeArr, 'all000')
     let bookedTypeAllList = Promise.all(list.map(async (el) =>
       el.bookedTimeSlot.map(item => {
         let _itemBookedTypeList = []
@@ -220,6 +218,7 @@ const Schedular = () => {
     history.push("/resources-planning")
   }
   console.log(dayPlanList,'dddalist')
+  console.log(tableData,'tabledatete===')
 
   return (
     <>
@@ -261,7 +260,7 @@ const Schedular = () => {
         </Row>
       </div>
       <div className="container">
-        <div className="booked-table-container">
+        {dayPlanList.length?<div className="booked-table-container">
           <ul className="person-wrap">
             <li className="blank-space"></li>
             {dayPlanList.map(person => <li style={{ width: rowWidth(tableData) }} className="person-name">{person.employeeName}</li>)}
@@ -298,7 +297,9 @@ const Schedular = () => {
               )}
             </Row>
           </div>
-        </div>
+        </div>:
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        }
       </div>
     </>
   )

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
-import { history, Const } from 'qmkit';
+import { history, Const,BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
 import * as webapi from '../webapi';
@@ -173,7 +173,7 @@ export default class PlanningSetting extends React.Component<any, any>{
     const { serviceTypeDict, appointmentTypeDict, expertTypeDict, AvailServiceTypeDict, settingDetailData } = this.state;
     return (
       <div className="planning-setting-wrap">
-        {/* <BreadCrumb /> */}
+        <BreadCrumb />
         <div className="container">
           <Spin spinning={this.state.spinLoading}>
             <div className="title-box">

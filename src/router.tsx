@@ -1134,6 +1134,10 @@ const routes = [
     path: '/api-document',
     asyncComponent: () => import('./Integration/ApiDocument')
   },
+  {
+    path:'/survey-list',
+    asyncComponent: () => import('./survey-list')
+  }
 ];
 
 const homeRoutes = [

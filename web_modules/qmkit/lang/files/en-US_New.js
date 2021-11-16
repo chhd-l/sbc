@@ -2756,5 +2756,9 @@ export default {
         "Login.create_store_success": "Success! You are ready to go",
         "Login.create_store_error": "Store creation failed. Please try again",
         "Login.password_length": "Password length should between 6-32 characters",
+    },
+    Survey: {
+        "Survey.survey_list":"Survey List",
+        
     }
 }

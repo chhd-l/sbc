@@ -30,16 +30,16 @@ function PriceListItem({listItem,checkedList}){
      */
     useEffect(()=>{
         if(checkedList.indexOf(listItem.sku) !== -1){
-            let sell = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
+            let sell = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(bignumber(percentageObj.salesPercentage), bignumber(0.01))))))
             sell = format(multiply(bignumber(sell), bignumber(1.21)))
             sell = bignumber(sell)
             sell = format(sell,{notation: 'fixed', precision: roundOff})
             setSell(sell)
-            let sale = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.salesPercentage, bignumber(0.01))))))
+            let sale = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(bignumber(percentageObj.salesPercentage), bignumber(0.01))))))
             sale = bignumber(sale)
             sale = format(sale,{notation: 'fixed', precision: roundOff})
             setSales(sale)
-            let subscription = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(percentageObj.subscriptionPercentage, bignumber(0.01))))))
+            let subscription = format(multiply(bignumber(listItem.marketPrice), bignumber(format(multiply(bignumber(percentageObj.subscriptionPercentage), bignumber(0.01))))))
             subscription = format(multiply(bignumber(subscription), bignumber(1.21)))
             subscription = bignumber(subscription)
             subscription = format(subscription,{notation: 'fixed', precision: roundOff})

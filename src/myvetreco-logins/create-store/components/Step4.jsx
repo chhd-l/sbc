@@ -135,10 +135,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       for(let i in allObj.Cat){
         allObj.Cat[i] = {
           isChecked: allObj.Cat[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
           sku: allObj.Cat[i].sku,
           spu: allObj.Cat[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
         }
       }
       newChooseObj = {...allObj.Cat,...newChooseObj}
@@ -147,10 +147,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       for(let i in allObj.Dog){
         allObj.Dog[i] = {
           isChecked: allObj.Dog[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
           sku: allObj.Dog[i].sku,
           spu: allObj.Dog[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
         }
         allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
         allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);

@@ -2579,6 +2579,8 @@ export default {
         "Task.PaymentMethod": "Payment Method",
         "Task.DeliveryMethod": "Delivery method",
         "Task.DeliveryStatus": "Pick-up-point Status",
+        "Task.ExportTasks": "Export tasks",
+        "Task.ExportTaskTips": "Please go to Analysis/Export report section to download the file.",
     },
     integration: {
         'Dashboard.Dashboard': 'Dashboard',

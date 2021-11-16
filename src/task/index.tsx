@@ -1,6 +1,6 @@
 import React, { Component, LegacyRef } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon, notification } from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ListView from './components/list-view';
@@ -37,7 +37,8 @@ export default class Task extends React.Component<any, any> {
       ],
       taskForm: sessionStorage.getItem(cache.TASKFROMDATA) ? JSON.parse(sessionStorage.getItem(cache.TASKFROMDATA)) : { status: '' },
       queryType: sessionStorage.getItem(cache.TASKQueryType) ? sessionStorage.getItem(cache.TASKQueryType) : '0',
-      showAdvanceSearch: sessionStorage.getItem(cache.TASKSHOWSEARCH) === 'True' ? true : false
+      showAdvanceSearch: sessionStorage.getItem(cache.TASKSHOWSEARCH) === 'True' ? true : false,
+      exportLoading: false,
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.clickTaskMore = this.clickTaskMore.bind(this);
@@ -60,7 +61,7 @@ export default class Task extends React.Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
   }
 
@@ -79,9 +80,41 @@ export default class Task extends React.Component<any, any> {
       showAdvanceSearch: true,
       taskForm: taskForm
     });
-  }
+  };
+
+  handleExport = () => {
+    const { taskForm } = this.state;
+    console.log(taskForm)
+    this.setState({
+      exportLoading: true
+    })
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve({res: {code: Const.SUCCESS_CODE}})
+      }, 5000)
+    }).then((data:any) => {
+      const res = data.res;
+
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success((window as any).RCi18n({id: 'Task.ExportTaskTips'}))
+      } else {
+        message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+      }
+
+      this.setState({
+        exportLoading: false
+      })
+    }).catch(() => {
+      message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+      this.setState({
+        exportLoading: false
+      })
+    });
+
+  };
+
   render() {
-    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch } = this.state;
+    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch, exportLoading } = this.state;
     return (
       <div>
         <Breadcrumb>
@@ -100,6 +133,9 @@ export default class Task extends React.Component<any, any> {
               <Headline title={title} />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
+              <Button type="primary" className="export-task-button" onClick={this.handleExport} loading={exportLoading}>
+                <span><FormattedMessage id="Task.ExportTasks" /></span>
+              </Button>
               <span
                 className="advanceSearch"
                 onClick={() => {

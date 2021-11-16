@@ -17,6 +17,7 @@ import DetailList from './list';
 import ProductTooltip from './productTooltip';
 import { cache, history, noop, SelectGroup } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import GoodsModal from './selected-sku-modal';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -40,32 +41,42 @@ export default class ChooseProducts extends React.Component<any, any> {
 
   props: {
     relaxProps?: {
+      onProductselect:Function
+      recommendParams:IMap,
+      getGoodsInfoPage: Function
       settlement: IMap;
       setName: IList;
+      productselect:IList
       onSharing: Function;
       onLinkStatus: Function;
+      savepetsRecommendParams: Function,
       linkStatus: any;
       detailProductList: any;
       createLinkType: any;
-      goodsQuantity:any
       loading:boolean
+      onChangeStep: Function
     };
   };
 
   static relaxProps = {
+    recommendParams:'recommendParams',
     settlement: 'settlement',
     setName: 'setName',
+    onProductselect: noop,
+    productselect:'productselect',
+    savepetsRecommendParams: noop,
     onSharing: noop,
     onLinkStatus: noop,
     detailProductList: 'detailProductList',
     linkStatus: 'linkStatus',
     createLinkType: 'createLinkType',
-    goodsQuantity:'goodsQuantity',
-    loading:'loading'
+    loading:'loading',
+    getGoodsInfoPage: noop,
+    onChangeStep: noop
   };
 
   componentDidMount() {
-    const { onSharing, detailProductList, linkStatus } = this.props.relaxProps;
+    const { onSharing, detailProductList, linkStatus,getGoodsInfoPage } = this.props.relaxProps;
     const employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     if (employee.prescribers && employee.prescribers.length > 0) {
       onSharing({
@@ -73,6 +84,7 @@ export default class ChooseProducts extends React.Component<any, any> {
         value: employee.prescribers[0].id
       });
     }
+    getGoodsInfoPage()
   }
 
   showProduct = (res) => {
@@ -108,12 +120,32 @@ export default class ChooseProducts extends React.Component<any, any> {
   cancel = () => {
     //message.info('canceled');
   };
+  next=()=>{
+    const { productselect,recommendParams, onChangeStep,savepetsRecommendParams} = this.props.relaxProps;
+    savepetsRecommendParams({...recommendParams.toJS(),goodsQuantity:productselect.toJS()})
+   
+    setTimeout(() => {
+      onChangeStep(3)
+    }, 300);
+  }
+  selectProduct=(select)=>{
+    const {
+      onProductselect,
+    } = this.props.relaxProps;
+
+    onProductselect(select);
+    this.setState({
+      visible:false
+    })
+  }
   render() {
     const {
       loading,
+      onChangeStep,
+      productselect,
     } = this.props.relaxProps;
-
-
+    let _productselect=productselect.toJS()
+    let selectedSkuIds=_productselect.map(item=>item.goodsInfoId)
     return (
       <div style={styles.main}>
      
@@ -140,13 +172,28 @@ export default class ChooseProducts extends React.Component<any, any> {
          <Spin spinning={loading}>
 
         <DetailList />
+        <div className="steps-action">
+
+                        <Button style={{ marginRight: 15 }} onClick={()=>onChangeStep(1)}>
+                            <FormattedMessage id="Prescriber.Previous" />
+                        </Button>
+                        <Button type="primary"  onClick={()=>this.next()} >
+                            <FormattedMessage id="Prescriber.Next" />
+                        </Button>
+                    </div>
 </Spin>
         {this.state.visible == true ? (
-          <ProductTooltip
-            onCancelBackFun={() => this.showProduct(false)}
-            visible={this.state.visible}
-            showModal={this.showProduct}
-          />
+
+          <GoodsModal selectedRows={_productselect} selectedSkuIds={selectedSkuIds}  onCancelBackFun={()=>{
+            this.setState({
+              visible:false
+            })
+          }}  onOkBackFun={(e,select)=>{this.selectProduct(select)}} visible={this.state.visible}></GoodsModal>
+          // <ProductTooltip
+          //   onCancelBackFun={() => this.showProduct(false)}
+          //   visible={this.state.visible}
+          //   showModal={this.showProduct}
+          // />
         ) : (
           <React.Fragment />
         )}

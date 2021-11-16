@@ -47,13 +47,17 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   inputNumberChange = (value, row, index) => {
     if(!value)return;
     const { productselect, onProductselect } = this.props.relaxProps;
-    let _clone = JSON.parse(JSON.stringify(productselect))
+    row.goodsInfoWeight=row?.goodsInfoWeight??0;
+    row.quantity=row?.quantity??1;
+    let _clone = JSON.parse(JSON.stringify(productselect.toJS()))
     let goodsInfoWeight:any=0,goodsInfoUnit=( row?.goodsInfoUnit??'').toLowerCase();
     if(goodsInfoUnit==='g'){
        goodsInfoWeight= value * (row.goodsInfoWeight/row.quantity)
     }else if(goodsInfoUnit==='kg'){
        let d:any=(value * (row.goodsInfoWeight/row.quantity))/1000
        goodsInfoWeight=parseInt(d)
+    }else{
+      goodsInfoWeight=0;
     }
     
     row.goodsInfoWeight=goodsInfoWeight;
@@ -65,21 +69,22 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   //删除
   deleteCartsGood = (index) => {
     const { productselect, onProductselect } = this.props.relaxProps;
-    let _clone = JSON.parse(JSON.stringify(productselect))
+    let _clone = JSON.parse(JSON.stringify(productselect.toJS()))
     _clone.splice(index, 1)
     onProductselect(_clone)
   }
   render() {
-    const { productselect } = this.props.relaxProps;
+    let { productselect } = this.props.relaxProps;
+    productselect=productselect.toJS()
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey="goodsInfoNo" dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
 
           <Column title={RCi18n({id:'Prescriber.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title={RCi18n({id:'Prescriber.SPU'})} dataIndex="goods.goodsNo" key="goods.goodsNo" />
+          <Column title={RCi18n({id:'Prescriber.SPU'})} dataIndex="goods.goodsNo" key="goodsNo" />
           <Column title={RCi18n({id:'Prescriber.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title={RCi18n({id:'Prescriber.Product category'})} dataIndex="goods.cateName" key="goods.cateName" />
-          <Column title={RCi18n({id:'Prescriber.Sales category'})} dataIndex="goods.brandName" key="goods.brandName" />
+          <Column title={RCi18n({id:'Prescriber.Product category'})} dataIndex="goods.cateName" key="cateName" />
+          <Column title={RCi18n({id:'Prescriber.Sales category'})} dataIndex="goods.brandName" key="brandName" />
           <Column
             title={RCi18n({id:'Prescriber.Price'})}
             dataIndex="marketPrice"

@@ -1068,16 +1068,39 @@ const routes = [
   },
   {
     path: '/appointment-list',
-    asyncComponent: () => import('./appointment-list')
+    asyncComponent: () => import('./appointmention-list')
   },
   {
     path: '/appointment-add',
-    asyncComponent: () => import('./appointment-list/new')
+    asyncComponent: () => import('./appointmention-list/new')
   },
   {
     path: '/appointment-update/:id',
-    asyncComponent: () => import('./appointment-list/new')
+    asyncComponent: () => import('./appointmention-list/new')
   },
+
+  // {
+  //   path: '/appointmention-list',
+  //   asyncComponent: () => import('./appointmention-list')
+  // },
+  // {
+  //   path: '/appointmention-add',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  // {
+  //   path: '/appointmention-update/:id',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  {
+    path: '/appointment-details/:id',
+    asyncComponent: () => import('./appointmention-list/details')
+  },
+  {
+    path: '/appointment-schedular',
+    asyncComponent: () => import('./appointmention-list/schedular')
+  },
+  
+
   {
     path: '/offline-checkout',
     asyncComponent: () => import('./offline-checkout')

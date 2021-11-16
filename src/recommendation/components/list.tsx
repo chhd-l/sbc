@@ -231,7 +231,7 @@ class ListView extends React.Component<any, any> {
       const img = v.goodsNames ? v.goodsNames.split(',') : [];
       const appointmentVO = v.appointmentVO
       return (
-        <tr className="ant-table-row  ant-table-row-level-0" key={v.felinRecoId}>
+        <tr className="ant-table-row  ant-table-row-level-0" key={v.felinRecoId+index}>
           <td colSpan={9} style={{ padding: 0 }}>
             <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>

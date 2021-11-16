@@ -2759,6 +2759,7 @@ export default {
     },
     Survey: {
         "Survey.survey_list":"Survey List",
-        
+        "Survey.survey_number":"Survey number",
+        "Survey.title":'Title'
     }
 }

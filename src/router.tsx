@@ -1137,6 +1137,10 @@ const routes = [
   {
     path:'/survey-list',
     asyncComponent: () => import('./survey-list')
+  },
+  {
+    path:'/new-survey',
+    asyncComponent: () => import('./survey-list/new-survey')
   }
 ];
 

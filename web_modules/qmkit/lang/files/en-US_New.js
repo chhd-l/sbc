@@ -2759,7 +2759,19 @@ export default {
     },
     Survey: {
         "Survey.survey_list":"Survey List",
-        "Survey.survey_number":"Survey number",
-        "Survey.title":'Title'
+        "Survey.survey_number":"Survey Number",
+        "Survey.title":'Title',
+        "Survey.all_survey":"All survey",
+        "Survey.views":'Views',
+        "Survey.clicks":'Clicks',
+        "Survey.status":"Status",
+        "Survey.creation_time":"Creation Time",
+        "Survey.add_new":'Add new',
+        "Survey.delete_confirm":"If you remove this survey, you will lose all it's data.",
+        "Survey.new_survey":"New Survey",
+        "Survey.label":'Label',
+        "Survey.description":"Description",
+        "Survey.active":"Active"
+
     }
 }

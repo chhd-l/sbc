@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card } from 'antd';
+import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card,Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { Const, Headline, history } from 'qmkit';
 import * as webapi from '../webapi';
@@ -347,7 +347,7 @@ const Schedular = () => {
         </Row>
       </div>
       <div className="container">
-        <div className="booked-table-container">
+       { dayPlanList.length ? <div className="booked-table-container">
           <ul className="person-wrap">
             <li className="blank-space"></li>
             {dayPlanList.map(person => <li style={{ width: rowWidth(tableData) }} className="person-name">{person.employeeName}</li>)}
@@ -384,7 +384,9 @@ const Schedular = () => {
               )}
             </Row>
           </div>
-        </div>
+        </div>:
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        }
 
 
         {visiteModel && <Modal

@@ -50,7 +50,7 @@ export const manualAudit = (tid: string, auditState) => {
  * @param audit
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const audit = (tid: string, auditState) => {
+export const audit = (tid: string, auditState,reason?: string) => {
   return Fetch<TResult>('/trade/pending/audit', {
     method: 'POST',
     body: JSON.stringify({

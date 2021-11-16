@@ -951,7 +951,9 @@ export default {
         'Order.RegulationDiscount':'Regulation discount',
         'Order.RealSubtotal':'Real subtotal',
         'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
-        'Order.peawee':'Peawee'
+        'Order.peawee':'Peawee',
+        'Order.Fulfillment':'Fulfillment',
+        'Order.ServiceOrderlist':'Order list (Service)',
 
 
     },
@@ -2540,6 +2542,7 @@ export default {
         'Menu.Inventory management': 'Inventory management',
         'Menu.Coupon Code List': 'Coupon Code List',
         'Menu.Promotion Code List': 'Promotion Code List',
+        'Menu.Service Order': 'Service Order',
     },
     Others: {
         "import": "Import",

@@ -33,7 +33,7 @@ export default class OrderList extends Component<any, any> {
   render() {
     return (
       <AuthWrapper functionName="fOrderList001">
-        <div className="order-con">
+        <div className="order-con service_order_con">
           <BreadCrumb />
           <div className="container-search">
             <SearchHead />

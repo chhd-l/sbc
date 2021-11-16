@@ -6,7 +6,7 @@ import FormActor from './actor/form-actor';
 import TabActor from './actor/tab-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, RCi18n } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -38,6 +38,7 @@ export default class AppStore extends Store {
       form['tradeState']['flowState'] = key;
     }
     form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
+    form['orderSource'] = 'L_ATELIER_FELINE';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
@@ -191,7 +192,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.deliverVerify(tid);
     if (res.code === Const.SUCCESS_CODE) {
       history.push({
-        pathname: `/order-detail/${tid}`,
+        pathname: `/service-order-detail/${tid}`,
         state: { tab: '2' }
       });
     }

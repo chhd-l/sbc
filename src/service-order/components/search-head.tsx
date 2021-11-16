@@ -184,7 +184,7 @@ class SearchHead extends Component<any, any> {
       <div>
         <Row>
           <Col span={12}>
-            <Headline title={<FormattedMessage id="Order.orderList" />} />
+            <Headline title={<FormattedMessage id="Order.ServiceOrderlist" />} />
           </Col>
           <Col span={12} style={{ textAlign: 'right' }}>
             <span

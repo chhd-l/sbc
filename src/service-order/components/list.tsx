@@ -17,7 +17,7 @@ class RejectForm extends React.Component<any, any> {
     intl: any;
   };
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props?.form;
 
     return (
       <Form>
@@ -483,7 +483,7 @@ class ListView extends React.Component<any, any> {
 
                           <AuthWrapper functionName="fOrderDetail001">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails"/>
+                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/service-order-detail/${id}`} className="iconfont iconDetails service_order_detail"/>
                             </Tooltip>
                           </AuthWrapper>
                         </span>

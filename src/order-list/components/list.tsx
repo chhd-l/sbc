@@ -483,7 +483,7 @@ class ListView extends React.Component<any, any> {
 
                           <AuthWrapper functionName="fOrderDetail001">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails"/>
+                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails order_list_detail"/>
                             </Tooltip>
                           </AuthWrapper>
                         </span>

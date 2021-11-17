@@ -58,27 +58,23 @@ export async function getAddressFieldList(type: string = 'MANUALLY') {
 
 /**
  * 获取是否进行地址验证的设置
- * 法国暂时不进行验证
+ * addressApiType: 1 - suggestion  0 - validation
  * @returns
  */
-export async function getIsAddressValidation() {
-  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
-  if (currentCountry === 'fr' || currentCountry === 'uk') {
-    return Promise.resolve(false);
-  }
+export async function getSuggestionOrValidationMethodName(addressApiType = 1) {
   return await Fetch<TResult>('/addressApiSetting/queryByStoreId', {
     method: 'POST',
-    body: JSON.stringify({})
+    body: JSON.stringify({ addressApiType })
   })
     .then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        return data.res.context.addressApiSettings.findIndex((item) => item.isCustom === 0 && item.isOpen === 1) > -1;
+        return (data.res.context.addressApiSettings.findIndex((item) => item.isOpen === 1) ?? {})['name'] ?? 'FGS';
       } else {
-        return false;
+        return 'FGS';
       }
     })
     .catch(() => {
-      return false;
+      return 'FGS';
     });
 }
 
@@ -285,5 +281,16 @@ export function pickupQueryCityFee(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
+  });
+}
+
+/**
+ * 建议地址 DQE
+ * @param address 
+ * @returns 
+ */
+export function getSuggestionAddressListByDQE(address = '') {
+  return Fetch<TResult>(`/address-input-auto/DQElist?address=${address}`, {
+    method: 'GET'
   });
 }

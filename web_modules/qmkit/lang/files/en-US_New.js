@@ -2771,7 +2771,20 @@ export default {
         "Survey.new_survey":"New Survey",
         "Survey.label":'Label',
         "Survey.description":"Description",
-        "Survey.active":"Active"
+        "Survey.active":"Active",
+        "Survey.survey_detail":"Survey Detail",
+        "Survey.basic_info" : "Basic Info",
+        "Survey.kpi":"KPI",
+        "Survey.survey_date":"Survey Date",
+        "Survey.survey_content":'Survey Content',
+        "Survey.survey_title":'Survey Title',
+        "Survey.survey_label":"Survey Label",
+        "Survey.survey_description":"Survey Description",
+        "Survey.responder_list":"Responder List",
+        "Survey.pet_owner_account":"Pet Owner Account",
+        "Survey.pet_owner_name":"Pet Owner Name",
+        "Survey.pet_owner_type":"Pet Owner Type",
+        "Survey.email":"Email"
 
     }
 }

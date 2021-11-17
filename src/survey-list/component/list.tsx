@@ -1,10 +1,9 @@
 import React from "react"
 import { Table, Popconfirm } from 'antd'
 import { FormattedMessage } from 'react-intl'
-import { AntIcon } from 'biz'
 import { Link } from 'react-router-dom'
 
-const AllSurveyList = () => {
+const AllSurveyList = ({listData}) => {
   const allSurveyListData = [{
     surveyNumber: 1,
     title: 2,
@@ -69,12 +68,12 @@ const AllSurveyList = () => {
       </span>
     ),
   }]
-
+  console.log(listData,'listDatalistData')
   return (
     <Table
       rowKey="allSurveyListId"
       // loading={loading}
-      dataSource={allSurveyListData}
+      dataSource={listData}
       columns={AllSurveyListColumns}
     />
   )

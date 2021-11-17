@@ -25,11 +25,11 @@ export default class SearchForm extends React.Component<any, any>{
     e.preventDefault()
     this.props.form.validateFields((err, values) => {
       const rangeDate = values["startDate"]
-      const params = Object.assign(this.state.formValues, {
+      const params = {
         ...values,
-        startDate: rangeDate[0].format('YYYY-MM-DD'),
-        endDate: rangeDate[1].format('YYYY-MM-DD'),
-      })
+        startDate: rangeDate?.[0].format('YYYY-MM-DD')||"",
+        endDate: rangeDate?.[1].format('YYYY-MM-DD')||"",
+      }
       if (!err) {
         this.props.onSearch({
           pageNum: 0,

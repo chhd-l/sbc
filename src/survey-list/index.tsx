@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BreadCrumb, Headline } from 'qmkit'
+import { BreadCrumb, Headline,history } from 'qmkit'
 import { FormattedMessage } from 'react-intl'
 import { Tabs, Button } from 'antd'
 import SearchForm from './component/search-form'
@@ -17,8 +17,9 @@ const SurveyList = () => {
   
   // 新增survey
   const AddNew = () =>{
-    //进入新增modal
+    history.push('/new-survey')
   }
+  
   return (
     <div>
       {/* <BreadCrumb /> */}

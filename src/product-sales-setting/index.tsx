@@ -213,7 +213,13 @@ class ProductSearchSetting extends Component<any, any> {
       if (!err) {
         this.setState({ loading: true });
         values.basePricePDPShowedFlag = values.basePricePDPShowedFlag ? 1 : 0;
-        const res: any = await defaultProductSetting(values);
+        const res: any = await defaultProductSetting({
+          ...values,
+          systemConfigs: [{
+            configName: "defaultQuantitySelected",
+            configKey: values.defaultQuantitySelected
+          }]
+        });
         this.setState({ loading: false });
         if (res.res.code === Const.SUCCESS_CODE) {
           message.success(res.res.message);
@@ -519,6 +525,27 @@ class ProductSearchSetting extends Component<any, any> {
                   }
                 ]
               })(<Switch />)}
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}>Default quantity selected</span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+            >
+              {getFieldDecorator('defaultQuantitySelected', {
+                initialValue: priceDisplayMethod || 0,
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please select default quantity selected !'
+                  }
+                ]
+              })(<Select disabled={disabled}
+                         optionLabelProp='label'
+                         placeholder='Please select default quantity selected !' style={{ width: 220 }}>
+                {['The smallest', 'The second one', 'The largest'].map((item, index) => (
+                  <Option key={index} title={item} value={index} label={item}>{item}</Option>
+                ))}
+              </Select>)}
             </Form.Item>
 
             <div className='bar-button' style={{ marginLeft: -40 }}>

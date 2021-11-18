@@ -552,6 +552,8 @@ export default {
         "Product.The13thDay": "The thirteenth day in the future",
         "Product.The14thDay": "The fourteenth day in the future",
 
+        "Product.DefaultSKU": "Default SKU",
+
     },
 
     Order: {

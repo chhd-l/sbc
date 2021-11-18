@@ -143,7 +143,7 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       basePricePDPShowedFlag
     } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-    let defaultQuantitySelected = (JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '[]').find(config => config.configName === 'defaultQuantitySelected') ?? {})['context'];
+    let { defaultQuantitySelected } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -228,7 +228,7 @@ class ProductSearchSetting extends Component<any, any> {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify([{configName: "defaultQuantitySelected",context: values.defaultQuantitySelected}]));
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected }));
         }
       }
     });

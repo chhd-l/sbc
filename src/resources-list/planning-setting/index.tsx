@@ -51,7 +51,8 @@ export default class PlanningSetting extends React.Component<any, any>{
       webapi.goodsDict({ type: 'expert_type' })
     ]).then((dictArr) => {
       const serviceTypeDict = dictArr[0].res?.context?.goodsDictionaryVOS || []
-      const serviceTypeDictFelin = [serviceTypeDict[5]]
+        // 目前只有felin 先过滤一下，
+    const serviceTypeDictFelin = serviceTypeDict.filter(item => item.id === "6")
       const appointmentTypeDict = dictArr[1]?.res?.context?.goodsDictionaryVOS || []
       const expertTypeDict = dictArr[2]?.res?.context?.goodsDictionaryVOS || []
       this.setState({

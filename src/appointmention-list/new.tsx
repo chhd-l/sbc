@@ -1,6 +1,6 @@
 import React from 'react';
 import { Const, Headline, history } from 'qmkit';
-import { Radio, Button, Form, Breadcrumb, Input, Spin } from 'antd';
+import { Radio, Button, Form, Breadcrumb, Input, Spin, Row, Col } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
 import AppointmentDatePicker from './components/appointment-date-picker';
@@ -18,8 +18,10 @@ class NewAppointment extends React.Component<any, any> {
       visible: false,
       loading: false,
       params: {
+        consumerName:undefined,
         apptTypeId: undefined,
-        consumerName: undefined,
+        consumerFirstName: undefined,
+        consumerLastName: undefined,
         consumerEmail: undefined,
         consumerPhone: undefined,
         customerId: undefined,
@@ -135,7 +137,8 @@ class NewAppointment extends React.Component<any, any> {
       memberType
     });
     setFieldsValue({
-      consumerName: memberType === 'member' ? params.consumerName : '',
+      consumerFirstName: memberType === 'member' ? params.consumerFirstName : '',
+      consumerLastName: memberType === 'member' ? params.consumerLastName : '',
       consumerPhone: memberType === 'member' ? params.consumerPhone : '',
       consumerEmail: memberType === 'member' ? params.consumerEmail : ''
     });
@@ -153,7 +156,9 @@ class NewAppointment extends React.Component<any, any> {
     console.log(memberInfo, 'memberInfo')
     const { setFieldsValue } = this.props.form;
     let p = {
-      consumerName: memberInfo.customerName,
+      consumerName:memberInfo.customerName,
+      consumerFirstName: memberInfo.firstName,
+      consumerLastName:memberInfo.lastName,
       consumerPhone: memberInfo.contactPhone,
       consumerEmail: memberInfo.email,
       customerId: memberInfo.customerId
@@ -181,14 +186,15 @@ class NewAppointment extends React.Component<any, any> {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        console.log(values)
         this.setState({ loading: true });
         const { params } = this.state;
         let d: any = {}
+
+       let cc={ ...params, ...values, serviceTypeId: '6' }
         if (params.id) {
-          d = await apptUpdate({ ...params, ...values, serviceTypeId: '6' })
+          d = await apptUpdate(cc)
         } else {
-          d = await apptSave({ ...values, serviceTypeId: '6' })
+          d = await apptSave(cc)
         }
         if (d.res.code === Const.SUCCESS_CODE) {
           this.setState({ loading: false });
@@ -294,12 +300,32 @@ class NewAppointment extends React.Component<any, any> {
                 )}
               </div>
             </Form.Item>
-            <Form.Item label={RCi18n({ id: 'Appointment.PON' })}>
+            {/* <Form.Item label={RCi18n({ id: 'Appointment.PON' })}>
               {getFieldDecorator('consumerName', {
                 initialValue: params.consumerName || '',
                 rules: [{ required: true, message: 'Pet owner name  is required' }]
               })(<Input disabled={this.state.memberType === 'member'} />)}
+            </Form.Item> */}
+              <Row>
+              <Col span={12}>
+              <Form.Item label={RCi18n({ id: 'PetOwner.FirstName' })} wrapperCol={{ sm: { span: 13 } }} labelCol={{ sm: { span: 8 } }}>
+              {getFieldDecorator('consumerFirstName', {
+                initialValue: params.consumerFirstName || '',
+                rules: [{ required: true, message: 'The first name  is required' }]
+              })(<Input disabled={this.state.memberType === 'member'} />)}
             </Form.Item>
+              </Col>
+              <Col span={12}>
+              <Form.Item label={RCi18n({ id: 'PetOwner.LastName' })} wrapperCol={{ sm: { span: 12 } }} labelCol={{ sm: { span: 4 } }}>
+              {getFieldDecorator('consumerLastName', {
+                initialValue: params.consumerLastName || '',
+                rules: [{ required: true, message: 'The last name  is required' }]
+              })(<Input disabled={this.state.memberType === 'member'} />)}
+            </Form.Item>
+              </Col>
+                </Row>
+
+
             <Form.Item label={RCi18n({ id: 'Appointment.Phone number' })}>
               {getFieldDecorator('consumerPhone', {
                 initialValue: params.consumerPhone || '',

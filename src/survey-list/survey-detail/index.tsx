@@ -1,28 +1,85 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Button, Row, Col,Table } from 'antd'
+import { Modal, Button, Row, Col, Table, Form, Input, Switch } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { BreadCrumb, Headline, history } from 'qmkit'
+import { useParams } from 'react-router-dom'
+import * as webapi from '../webapi'
+import NewSurveyModal from '../component/new-survey-modal'
 import './index.less'
 
 const responderListColumns = [{
   title: <FormattedMessage id="Survey.pet_owner_account" />,
   dataIndex: 'customerAccount',
   key: 'customerAccount',
-},{
+}, {
   title: <FormattedMessage id="Survey.pet_owner_name" />,
   dataIndex: 'contactName',
   key: 'contactName',
-},{
+}, {
   title: <FormattedMessage id="Survey.pet_owner_type" />,
   dataIndex: 'customerLevelName',
   key: 'customerLevelName',
-},{
+}, {
   title: <FormattedMessage id="Survey.email" />,
   dataIndex: 'email',
   key: 'email',
 },]
 
 const SurveyDetail = () => {
+  const [detailData,setDetailData] = useState({})
+  const [responderListData,setResponderListData] = useState([])
+  const [editSurveyModal,setEditSurveyModal] = useState(false)
+
+  const { id } = useParams()
+  useEffect(() => {
+    // todo:放开请求
+    // getSurveyDetail(id)
+    // getSurveyResponderList({
+    //   id,
+    //   pageNum: 0,
+    //   pageSize: 10
+    // })
+  }, [])
+
+  const getSurveyDetail = async (id) => {
+    const { res } = await webapi.surveyDetail(id)
+    console.log(res, 'detailres')
+    const detailData = res.context.survey || {}
+    setDetailData(detailData)
+
+  }
+
+  const getSurveyResponderList = async (params) =>{
+    const {res} = await webapi.surveyResponderList(params)
+    const responderListData = res.context.content || []
+    setResponderListData(responderListData)
+  }
+  
+  const goBack = () =>{
+    history.push('/survey-list')
+  }
+
+  const editSurveyContent =()=>{
+    setEditSurveyModal(true)
+  }
+
+  const handleCancelModal = () =>{
+    setEditSurveyModal(false)
+  }
+
+  const saveSurveyContent = (data) =>{
+    console.log(data,'ddd')
+    const param = {
+      ...data,
+      id,
+    }
+    // todo：放开请求
+    // updateSurveyDetail(param)
+  }
+
+  const updateSurveyDetail = async (params) => {
+    const {res} = await webapi.updateSurvey(params)
+  }
 
   return (
     <div>
@@ -37,13 +94,13 @@ const SurveyDetail = () => {
                 <Col span={12}>
                   <p>
                     <span><FormattedMessage id="Survey.survey_number" />:</span>&nbsp;
-                    <span>SUR0001</span>
+                    <span>{detailData?.surveyNumber}</span>
                   </p>
                 </Col>
                 <Col span={12}>
                   <p>
                     <span><FormattedMessage id="Survey.survey_date" />:</span>&nbsp;
-                    <span>2012-11-20</span>
+                    <span>{detailData?.surveyDay}</span>
                   </p>
                 </Col>
               </Row>
@@ -56,13 +113,13 @@ const SurveyDetail = () => {
                 <Col span={12}>
                   <p>
                     <span><FormattedMessage id="Survey.views" />:</span>&nbsp;
-                    <span>123</span>
+                    <span>{detailData?.views}</span>
                   </p>
                 </Col>
                 <Col span={12}>
                   <p>
                     <span><FormattedMessage id="Survey.clicks" />:</span>&nbsp;
-                    <span>200</span>
+                    <span>{detailData?.clicks}</span>
                   </p>
                 </Col>
               </Row>
@@ -75,19 +132,19 @@ const SurveyDetail = () => {
               <h3><FormattedMessage id="Survey.survey_content" /></h3>
               <p>
                 <span><FormattedMessage id="Survey.survey_title" />:</span>&nbsp;
-                <span>title123</span>
+                <span>{detailData?.title}</span>
               </p>
               <p>
                 <span><FormattedMessage id="Survey.survey_description" />:</span>&nbsp;
-                <span>descriptiondescriptiondescriptiondescription descriptiondescriptiondescriptiondescriptiondescription</span>
+                <span>{detailData?.description}</span>
               </p>
               <p>
                 <span><FormattedMessage id="Survey.survey_label" />:</span>&nbsp;
-                <span>labellabellabellabel</span>
+                <span>{detailData?.label}</span>
               </p>
               <p>
                 <span><FormattedMessage id="Survey.status" />:</span>&nbsp;
-                <span>active</span>
+                <span>{detailData?.status ?detailData?.status=== 1?"active":"inactive":''}</span>
               </p>
             </div>
           </Col>
@@ -96,20 +153,25 @@ const SurveyDetail = () => {
       <div className="container">
         <Headline title={<FormattedMessage id="Survey.responder_list" />} />
         <Table
-      rowKey="responderListId"
-      // loading={loading}
-      // dataSource={listData}
-      columns={responderListColumns}
-    />
+          rowKey="responderListId"
+          // loading={loading}
+          dataSource={responderListData}
+          columns={responderListColumns}
+        />
       </div>
       <div className="bar-button">
-            <Button className="new-survey-save-btn" type="primary" >
-              <FormattedMessage id="edit" />
-            </Button>
-            <Button >
-              <FormattedMessage id="back" />
-            </Button>
-          </div>
+        <Button className="survey-detail-edit-btn" onClick={editSurveyContent} type="primary" >
+          <FormattedMessage id="edit" />
+        </Button>
+        <Button onClick={goBack}>
+          <FormattedMessage id="back" />
+        </Button>
+      </div>
+      <NewSurveyModal
+        visible={editSurveyModal}
+        handleCancelModal={handleCancelModal}
+        saveSurveyContent={saveSurveyContent}
+      />
     </div>
   )
 }

@@ -29,3 +29,32 @@ import { Fetch } from 'qmkit';
     body: JSON.stringify(params)
   });
 }
+
+/**
+ * 调查详情
+ */
+ export const surveyDetail = (id) =>{
+  return Fetch(`/survey/detail/${id}`, {
+    method: 'GET',
+  });
+}
+
+/**
+ * 调查详情列表
+ */
+ export const surveyResponderList = (params) =>{
+  return Fetch("/survey/responder-list", {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+/**
+ * 调查详情编辑
+ */
+ export const updateSurvey = (params) =>{
+  return Fetch("/survey/update", {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

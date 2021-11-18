@@ -14,10 +14,6 @@ type TResult = {
  * 法国暂时不使用配置，直接条用MANUALLY的设置
  */
 export async function getAddressInputTypeSetting() {
-  const currentCountry = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId];
-  if (currentCountry === 'fr' || currentCountry === 'uk') {
-    return Promise.resolve('MANUALLY');
-  }
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
     method: 'POST',
     body: JSON.stringify({
@@ -68,7 +64,7 @@ export async function getSuggestionOrValidationMethodName(addressApiType = 1) {
   })
     .then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        return (data.res.context.addressApiSettings.findIndex((item) => item.isOpen === 1) ?? {})['name'] ?? 'FGS';
+        return (data.res.context.addressApiSettings.find((item) => item.isOpen === 1) ?? {})['name'] ?? 'FGS';
       } else {
         return 'FGS';
       }

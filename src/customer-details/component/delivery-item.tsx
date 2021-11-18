@@ -115,7 +115,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
     }
     //获取suggestion和validation的配置
     let [suggestionMethodName, validationMethodName] = await Promise.all([getSuggestionOrValidationMethodName(1), getSuggestionOrValidationMethodName(0)]);
-    console.log('yyyyyyy', suggestionMethodName, validationMethodName);
     //AUTOMATICALLY类型地址读取address1的suggestionFlag和validationFlag
     let isAddress1ApplySuggestion = false, isAddress1ApplyValidation = false;
     if (addressInputType === 'AUTOMATICALLY') {
@@ -338,7 +337,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   searchAddress = (txt: string) => {
     const { suggestionMethodName, isAddress1ApplySuggestion } = this.state;
-    console.log('xxxxxxx', suggestionMethodName, isAddress1ApplySuggestion);
     if (isAddress1ApplySuggestion) {
       if (suggestionMethodName === 'DADATA') { 
         getAddressListByDadata(txt).then((data) => {

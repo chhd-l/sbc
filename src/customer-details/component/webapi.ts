@@ -11,7 +11,6 @@ type TResult = {
 /**
  *
  * @returns 获取地址输入类型
- * 法国暂时不使用配置，直接条用MANUALLY的设置
  */
 export async function getAddressInputTypeSetting() {
   return await Fetch<TResult>('/system/config/listSystemConfigByStoreId', {

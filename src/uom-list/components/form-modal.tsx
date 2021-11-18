@@ -23,7 +23,7 @@ export default function FormModal(props) {
       uomName: uomName,
       categoryId: categoryId,
       type: type,
-      ratio: type !== 'Reference UOM for this category' ? ratio : undefined
+      ratio: type !== 'Reference UOM for this category' ? ratio : null
     }).then(data => {
       setLoading(false);
       if (data.res.code === Const.SUCCESS_CODE) {

@@ -960,16 +960,14 @@ class OrderDetailTab extends React.Component<any, any> {
 
   //下载发票 download invoice
   _handleDownInvoice(detail) {
-    let orderInvoiceIds = [];
-    const orderId=detail.get('id')
-    orderInvoiceIds.push(orderId);
+    let orderInvoiceIdList = detail.getIn(['invoice','orderInvoiceIdList']).toJS()
     let params = {
-      orderNo: orderId
+      orderInvoiceIds:orderInvoiceIdList
     };
     const token = (window as any).token;
-    let result = JSON.stringify({ ...params, token: 'Bearer ' + token });
+    let result = JSON.stringify({ ...params, token: token });
     let base64 = new util.Base64();
-    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.encode(result)}`;
+    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
     window.open(exportHref);
   }
 

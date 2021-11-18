@@ -53,9 +53,10 @@ class ManualOrder extends Component<any, any> {
     });
   }
 
-  turnShowPage = (token, spromocode) => {
+  turnShowPage = (token, promocode) => {
     let { customer,url } = this.state;
-    let winObj = window.open(`${url}cart?spromocode=${spromocode}&stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let spromocode = promocode ? `spromocode=${promocode}&` : ''
+    let winObj = window.open(`${url}cart?${spromocode}stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
@@ -86,13 +87,13 @@ class ManualOrder extends Component<any, any> {
     const { res } = await getShopToken(customer.customerId, {});
 
     // 如果勾选了 This is a goodwill order 需要获取 promotion code 传给shop端
-    let spromocode = '';
+    let promocode = '';
     if (goodwillChecked) {
-      spromocode = await new Promise(resolve => {
-        resolve('12321312')
+      promocode = await new Promise(resolve => {
+        resolve('ZLVRMXI2EA')
       })
     }
-    this.turnShowPage(res.context, spromocode);
+    this.turnShowPage(res.context, promocode);
     if (other !== 'other') {
       current = current + 1;
       this.setState({

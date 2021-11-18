@@ -33,6 +33,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionFrequencyId: '',
     defaultSubscriptionClubFrequencyId: '',
     defaultSubscriptionIndividualFrequencyId: '',
+    defaultQuantitySelected: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod: 0,
@@ -142,6 +143,7 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       basePricePDPShowedFlag
     } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
+    let defaultQuantitySelected = (JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '[]').find(config => config.configName === 'defaultQuantitySelected') ?? {})['context'];
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -175,6 +177,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionFrequencyId,
       defaultSubscriptionClubFrequencyId,
       defaultSubscriptionIndividualFrequencyId,
+      defaultQuantitySelected,
       language,
       purchaseType,
       basePricePDPShowedFlag,
@@ -217,7 +220,7 @@ class ProductSearchSetting extends Component<any, any> {
           ...values,
           systemConfigs: [{
             configName: "defaultQuantitySelected",
-            configKey: values.defaultQuantitySelected
+            context: values.defaultQuantitySelected
           }]
         });
         this.setState({ loading: false });
@@ -225,6 +228,7 @@ class ProductSearchSetting extends Component<any, any> {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify([{configName: "defaultQuantitySelected",context: values.defaultQuantitySelected}]));
         }
       }
     });
@@ -242,6 +246,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionFrequencyId,
       defaultSubscriptionClubFrequencyId,
       defaultSubscriptionIndividualFrequencyId,
+      defaultQuantitySelected,
       options,
       optionsClub,
       optionsIndividual,
@@ -532,7 +537,7 @@ class ProductSearchSetting extends Component<any, any> {
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('defaultQuantitySelected', {
-                initialValue: priceDisplayMethod || 0,
+                initialValue: defaultQuantitySelected || 0,
                 rules: [
                   {
                     required: true,

@@ -219,6 +219,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
           sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
 
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting 
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify(configResponse?.productSalesConfig ?? '[]')); //add product sales config
 
           sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
           sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight ? (configResponse as any).weight.valueEn : ''); //weight
@@ -441,6 +442,7 @@ export async function switchLogin(params, callback?: Function) {
           sessionStorage.setItem(cache.MAP_MODE, (configResponse as any).storeVO.prescriberMap); //货币名称
 
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify(defaultPurchase));//add product sales setting
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify(configResponse?.productSalesConfig ?? '[]')); //add product sales config
 
           sessionStorage.setItem(cache.CURRENT_YEAR, (configResponse as any).currentDate); //年
           sessionStorage.setItem(cache.SYSTEM_GET_WEIGHT, (configResponse as any).weight ? (configResponse as any).weight.valueEn : ''); //weight

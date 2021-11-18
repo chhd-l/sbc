@@ -62,8 +62,8 @@ import VList from 'react-virtualized/dist/es/List';
                 <Col span={2}></Col>
                 <Col span={6}>Product</Col>
                 <Col span={2}>Cost</Col>
-                <Col span={5}>Sales price(excl.VAT)</Col>
-                <Col span={4}>Selling price(incl.VAT)</Col>
+                <Col span={5}>Market price(excl.VAT)</Col>
+                <Col span={4}>Market price(incl.VAT)</Col>
                 <Col span={5}>Subscription price(incl.VAT)</Col>
             </Row>
             {/* <List

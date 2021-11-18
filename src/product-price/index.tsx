@@ -72,6 +72,10 @@ class ProductPrice extends Component<any, any> {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        if (values.marketPricePercentage < (values.subscriptionPricePercentage || 100)) {
+          message.error('Market price percentage should larger than subscription price percentage!');
+          return;
+        }
         let goodsInfoIds = this.state.goodsInfoIds;
         values.marketPricePercentage = values.marketPricePercentage.toString()
         values.subscriptionPricePercentage = values.subscriptionPricePercentage ? values.subscriptionPricePercentage.toString() : '100'
@@ -346,13 +350,13 @@ class ProductPrice extends Component<any, any> {
                   {getFieldDecorator('marketPricePercentage', {
                     initialValue: '',
                     onChange: (e) => this.checkFomeInput(e, 'marketPricePercentage')
-                  })(<InputNumber min={0} />)}
+                  })(<InputNumber min={0} precision={2} />)}
                 </Form.Item>
                 <Form.Item label={RCi18n({ id: 'Product.Subscriptionpricepercentage' })}>
                   {getFieldDecorator('subscriptionPricePercentage', {
                     initialValue: '100',
                     onChange: (e) => this.checkFomeInput(e, 'subscriptionPricePercentage')
-                  })(<InputNumber min={0} />)}
+                  })(<InputNumber min={0} precision={2} />)}
                 </Form.Item>
                 {/* <Form.Item label={RCi18n({ id: 'Product.Roundoff' })}>
                   {getFieldDecorator('roundOff', {

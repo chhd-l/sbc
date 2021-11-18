@@ -298,6 +298,26 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+    //default sku
+    columns = columns.push({
+      title: <FormattedMessage id="Product.DefaultSKU" />,
+      key: 'defaultSku',
+      width: 80,
+      align: 'center',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={8}>
+              <Checkbox
+                checked={rowInfo.defaultSku === 1}
+                onChange={(e) => this._editGoodsItem(rowInfo.id, 'defaultSku', e.target.checked ? 1 : 0)}
+              />
+            </Col>
+          </Row>
+        );
+      }
+    });
+
     //External SKU
     columns = columns.push({
       title: RCi18n({id:'Product.ExternalSKU'}),
@@ -399,6 +419,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: RCi18n({id:'Product.Weightvalue'}),
       key: 'goodsInfoWeight',
+      width: 100,
       render: (rowInfo) => {
         return (
           <Row>
@@ -506,13 +527,12 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '81px',
-        }}>
+        <div>
           <FormattedMessage id="Product.Subscription" />
         </div>
       ),
       key: 'subscriptionStatus',
+      width: 100,
       render: (rowInfo) => {
         return (
           <Row>
@@ -579,13 +599,13 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
+        <div><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
 
         return (
-          <Row style={{marginRight: '81px'}}>
+          <Row>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {goodsList.toJS().length == 1 ? ( goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>): (<div>
@@ -603,6 +623,41 @@ class SkuForm extends React.Component<any, any> {
                           <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
                         </div>
                       ) : null}</>)}
+                    </>
+                  )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: (
+        <div><FormattedMessage id="Product.Displayonshop" /></div>
+      ),
+      key: 'displayOnShop',
+      align: 'left',
+      render: (rowInfo) => {
+
+        return (
+          <Row>
+            <Col span={8}>
+              <FormItem style={styles.tableFormItem}>
+              {goodsList.toJS().length == 1 ? ( goods.get('displayFlag') == 0 ? (<Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />): (
+                  <Icon type="eye" style={{ fontSize: 20, color: "#cccccc" }} />
+                ) ) : (<>
+                  {goods.get('displayFlag') == 0 ? ( <Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />) : (
+                    <>
+                      {rowInfo.displayOnShop == 0? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 1)}>
+                          <Icon type="eye-invisible" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      ) : (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 0)}>
+                          <Icon type="eye" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      )}</>)}
                     </>
                   )}
               </FormItem>

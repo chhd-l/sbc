@@ -6,7 +6,7 @@ import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
 import { FormattedMessage } from 'react-intl';
-import { getShopToken, queryOrderStatus } from './webapi';
+import { getShopToken, queryOrderStatus, getShopCouponCode } from './webapi';
 
 const { Step } = Steps;
 class ManualOrder extends Component<any, any> {
@@ -89,9 +89,11 @@ class ManualOrder extends Component<any, any> {
     // 如果勾选了 This is a goodwill order 需要获取 promotion code 传给shop端
     let promocode = '';
     if (goodwillChecked) {
-      promocode = await new Promise(resolve => {
-        resolve('ZLVRMXI2EA')
-      })
+      const { res } = await getShopCouponCode();
+      if (res.code !== Const.SUCCESS_CODE) {
+        return;
+      }
+      promocode = res.context?.couponCode;
     }
     this.turnShowPage(res.context, promocode);
     if (other !== 'other') {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DatePicker, Button, Input, Row, Col, Select, Spin,Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Headline, history } from 'qmkit';
+import { Headline, history,BreadCrumb } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
 import _ from 'lodash';
@@ -222,10 +222,11 @@ const Schedular = () => {
 
   return (
     <>
+      <BreadCrumb />
       <div className="container-search">
         <Headline title={<FormattedMessage id="Resources.schedular" />} />
         <Row>
-          <Col span={6}>
+          <Col span={7}>
             <DatePicker
               defaultValue={moment(currentDate)}
               format="dddd, MMMM Do YYYY"
@@ -233,16 +234,16 @@ const Schedular = () => {
               onChange={(date) => handleDateChange(date)}
             />
           </Col>
-          <Col span={4} offset={1}>
+          {/* <Col span={4} offset={1}> */}
             {/* <Select
               className="width-full"
             onChange={switchDayOrWeek}
             >
               {dayOrWeek.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)}
             </Select> */}
-            <Input className="width-full" disabled value="Day" />
-          </Col>
-          <Col span={6} offset={1}>
+            {/* <Input className="width-full" disabled value="Day" />
+          </Col> */}
+          <Col span={7} offset={4}>
             <Select
               className="width-full"
               onChange={changePersonName}

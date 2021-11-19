@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BreadCrumb, Headline,history,Const } from 'qmkit'
 import { FormattedMessage } from 'react-intl'
-import { Tabs, Button } from 'antd'
+import { Tabs, Button, message } from 'antd'
 import * as webapi from './webapi'
 
 import SearchForm from './component/search-form'
@@ -12,6 +12,7 @@ const TabPane = Tabs.TabPane;
 const SurveyList = () => {
   const [surveyListData,setSurveyListData] = useState([])
   const [tableLoading, setTableLoading] = useState(false)
+  const [searchParams,setSearchParams] = useState({})
   useEffect(()=>{
     getSurveyList({
       pageNum: 0,
@@ -21,6 +22,7 @@ const SurveyList = () => {
 
   // 搜索
   const handleSearch = (searchData) => {
+    setSearchParams(searchData)
     getSurveyList(searchData)
   }
   
@@ -148,7 +150,11 @@ const SurveyList = () => {
 
   // 删除一条survey
   const handleDeleteSurvey = async (id) =>{
-    // const {res} = await webapi.deleteSurvey({id})
+    const {res} = await webapi.deleteSurvey({id})
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(res.message)
+      getSurveyList(searchParams)
+    }
   }
 
 
@@ -165,7 +171,11 @@ const SurveyList = () => {
         <Button style={{marginBottom:"20px"}} type="primary" onClick={AddNew}>
                 <FormattedMessage id="Survey.add_new" />
               </Button>
-          <AllSurveyList listData={surveyListData} tableLoading={tableLoading}/>
+          <AllSurveyList 
+          listData={surveyListData} 
+          tableLoading={tableLoading}
+          handleDeleteSurvey={handleDeleteSurvey}
+          />
         </TabPane>
       </Tabs>
       </div>

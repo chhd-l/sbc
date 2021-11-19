@@ -3,7 +3,7 @@ import { Table, Popconfirm } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 
-const AllSurveyList = ({listData,tableLoading}) => {
+const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
   const allSurveyListData = [{
     surveyNumber: 1,
     title: 2,
@@ -14,8 +14,11 @@ const AllSurveyList = ({listData,tableLoading}) => {
   }]
 
   // 删除当前行
-  const confirmDelete = () => {
-    console.log("delete")
+  const confirmDelete = (id) => {
+    console.log(id,'id===')
+    let _id = 'ff8080817d37ae31017d37afef470002';
+
+    handleDeleteSurvey(_id)
   }
 
   const AllSurveyListColumns = [{
@@ -54,7 +57,7 @@ const AllSurveyList = ({listData,tableLoading}) => {
         <Popconfirm
           placement="topRight"
           title={<FormattedMessage id="Survey.delete_confirm" />}
-          onConfirm={confirmDelete}
+          onConfirm={()=>confirmDelete(record.id)}
           okText={<FormattedMessage id="Product.Confirm" />}
           cancelText={<FormattedMessage id="Product.Cancel" />}
         >

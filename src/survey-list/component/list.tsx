@@ -48,12 +48,9 @@ const AllSurveyList = ({listData,tableLoading}) => {
     key: 'operation',
     render: (text, record) => (
       <span>
-        <Link>
+        <Link style={{marginRight:'15px'}}>
         <i className="icon iconfont iconDetails" />
         </Link>
-        <Link style={{margin:'0 12px'}} to={`/`}>
-          <i className="icon iconfont iconEdit" />
-        </Link >
         <Popconfirm
           placement="topRight"
           title={<FormattedMessage id="Survey.delete_confirm" />}

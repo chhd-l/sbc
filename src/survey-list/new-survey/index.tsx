@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { BreadCrumb, Headline, history } from 'qmkit'
-import { Button, Form, Input, Row, Col, Switch, Spin } from 'antd'
+import { BreadCrumb, Headline, history, Const } from 'qmkit'
+import { Button, Form, Input, Row, Col, Switch, Spin,message } from 'antd'
 import * as webapi from '../webapi'
 import './index.less'
 
@@ -21,7 +21,12 @@ const formItemLayout = {
 // @ts-ignore
 @Form.create()
 export default class NewSurvey extends React.Component<any, any>{
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    }
+  }
   saveSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -38,11 +43,22 @@ export default class NewSurvey extends React.Component<any, any>{
 
   saveNewSurvey = async (params) => {
     console.log(params, 'ppppp')
-    const {res} = await webapi.addNewSurvey(params)
-    console.log(res,'resSaveNew')
-    // 成功后跳转到list,并且给出一个操作成功的提示
-    // 如果“活动”打开：将触发验证以检查是否存在活动调查。
-    // 验证失败：CC 停留在新的调查页面上，并看到系统错误消息“已经有一个活动调查”（后端接口出提示信息）。
+    try {
+      this.setState({
+        loading: true
+      })
+      const { res } = await webapi.addNewSurvey(params)
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message)
+        history.push('/survey-list')
+      }
+      this.setState({
+        loading: false
+      })
+
+    } catch (err) {
+    }
+
   }
 
   handleCancel = () => {
@@ -53,67 +69,69 @@ export default class NewSurvey extends React.Component<any, any>{
     let { getFieldDecorator } = this.props.form;
     return (
       <div>
-        {/* <BreadCrumb /> */}
-        <Form
-          {...formItemLayout}
-          onSubmit={this.saveSubmit}
-        >
-          <div className="container">
-            <Headline title={<FormattedMessage id="Survey.new_survey" />} />
+        <Spin spinning={this.state.loading}>
+          {/* <BreadCrumb /> */}
+          <Form
+            {...formItemLayout}
+            onSubmit={this.saveSubmit}
+          >
+            <div className="container">
+              <Headline title={<FormattedMessage id="Survey.new_survey" />} />
 
-            <Row>
-              <Col span={14}>
-                <FormItem label={<FormattedMessage id="Survey.title" />}>
-                  {getFieldDecorator('title', {
-                    rules: [
-                      {
-                        required: true,
-                      },
-                    ],
-                  })(<Input />)}
-                </FormItem>
-              </Col>
-              <Col span={14}>
-                <FormItem label={<FormattedMessage id="Survey.label" />}>
-                  {getFieldDecorator('label', {
-                    rules: [
-                      {
-                        required: true,
-                      },
-                    ],
-                  })(<Input />)}
-                </FormItem>
-              </Col>
-              <Col span={14}>
-                <FormItem label={<FormattedMessage id="Survey.description" />}>
-                  {getFieldDecorator('description', {
-                    rules: [
-                      {
-                        required: true,
-                      },
-                    ],
-                  })(<TextArea rows={4} />)}
-                </FormItem>
-              </Col>
-              <Col span={14}>
-                <FormItem label={<FormattedMessage id="Survey.active" />}>
-                  {getFieldDecorator('status', {
-                    valuePropName: 'checked',
-                    initialValue: false
-                  })(<Switch />)}
-                </FormItem>
-              </Col>
-            </Row>
-          </div>
-          <div className="bar-button">
-            <Button htmlType="submit" className="new-survey-save-btn" type="primary" >
-              <FormattedMessage id="save" />
-            </Button>
-            <Button onClick={this.handleCancel}>
-              <FormattedMessage id="cancel" />
-            </Button>
-          </div>
-        </Form>
+              <Row>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Survey.title" />}>
+                    {getFieldDecorator('title', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Survey.label" />}>
+                    {getFieldDecorator('label', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Survey.description" />}>
+                    {getFieldDecorator('description', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<TextArea rows={4} />)}
+                  </FormItem>
+                </Col>
+                <Col span={14}>
+                  <FormItem label={<FormattedMessage id="Survey.active" />}>
+                    {getFieldDecorator('status', {
+                      valuePropName: 'checked',
+                      initialValue: false
+                    })(<Switch />)}
+                  </FormItem>
+                </Col>
+              </Row>
+            </div>
+            <div className="bar-button">
+              <Button htmlType="submit" className="new-survey-save-btn" type="primary" >
+                <FormattedMessage id="save" />
+              </Button>
+              <Button onClick={this.handleCancel}>
+                <FormattedMessage id="cancel" />
+              </Button>
+            </div>
+          </Form>
+        </Spin>
       </div>
     )
   }

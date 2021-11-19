@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, ValidConst, cache } from 'qmkit';
+import { noop, ValidConst, cache, Const } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';

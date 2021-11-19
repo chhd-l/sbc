@@ -5,7 +5,7 @@ import { noop, cache, ValidConst } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
-import { RCi18n } from 'qmkit';
+import { RCi18n, Const } from 'qmkit';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -80,6 +80,7 @@ class SpecForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { specSingleFlag, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
@@ -87,7 +88,7 @@ class SpecForm extends React.Component<any, any> {
             <FormattedMessage id="product.specificationSetting" />
           </div>
           <div style={styles.box}>
-            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
+            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag} disabled={disableFields}>
               <span>
                 {/* <span
                   style={{
@@ -167,7 +168,7 @@ class SpecForm extends React.Component<any, any> {
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
                               initialValue: item.get('specName')
-                            })(<Input placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} />)}
+                            })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -244,14 +245,14 @@ class SpecForm extends React.Component<any, any> {
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
                               initialValue: specValues
                             })(
-                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
+                              <Select mode="tags" disabled={disableFields} getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
                           </FormItem>
                         </Col>
                         <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
+                          <Button type="primary" disabled={disableFields} onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
                             <FormattedMessage id="delete" />
                           </Button>
                         </Col>
@@ -261,7 +262,7 @@ class SpecForm extends React.Component<any, any> {
                 })}
 
             {specSingleFlag ? null : (
-              <Button onClick={this._addSpec}>
+              <Button disabled={disableFields} onClick={this._addSpec}>
                 <Icon type="plus" />
                 <FormattedMessage id="addSpecifications" />
               </Button>

@@ -13,10 +13,11 @@ export default class ImageLibraryUpload extends Component<any, any> {
     modalVisible: Function;
     clickImg: Function;
     removeImg: Function;
+    disabled: boolean;
   };
 
   render() {
-    const { images, modalVisible, clickImg, removeImg, imgCount, imgType, skuId } = this.props;
+    const { images, modalVisible, clickImg, removeImg, imgCount, imgType, skuId, disabled } = this.props;
 
     return (
       <div>
@@ -36,7 +37,7 @@ export default class ImageLibraryUpload extends Component<any, any> {
                     <i className="anticon anticon-eye-o" onClick={() => clickImg(v.get('artworkUrl') || v.get('url'))}>
                       <Icon type="eye" />
                     </i>
-                    <i
+                    {disabled ? null : <i
                       title="Remove file"
                       onClick={() => {
                         removeImg({
@@ -47,14 +48,14 @@ export default class ImageLibraryUpload extends Component<any, any> {
                       className="anticon anticon-delete"
                     >
                       <Icon type="delete" />
-                    </i>
+                    </i>}
                   </span>
                 </div>
               </div>
             </div>
           );
         })}
-        {images.count() < imgCount ? (
+        {images.count() < imgCount && !disabled ? (
           <div onClick={() => modalVisible(imgCount, imgType, skuId)} style={styles.addImg}>
             <div style={styles.imgBox}>
               <Icon type="plus" style={styles.plus} />

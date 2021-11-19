@@ -192,7 +192,6 @@ export default class CouponBasicInfo extends Component<any, any> {
           {
             couponPromotionType !== 3 ? (
               <>
-
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
                   <div style={style}>{this._buildFullBuyType(fullBuyType, fullBuyPrice)}</div>
 
@@ -250,6 +249,32 @@ export default class CouponBasicInfo extends Component<any, any> {
                       <div style={style}><FormattedMessage id="Marketing.Orderreach" /> &nbsp;{`${fullBuyPrice}${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}</div> :
                       <div style={style}> <FormattedMessage id="Marketing.Orderreach" />&nbsp;{`${fullbuyCount}`}&nbsp;<FormattedMessage id="Marketing.items" /></div>
                   }
+                </FormItem>
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
+                  <div style={style}>
+                    {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
+
+                    {
+                      scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
+                        scopeType === 4 && dataSource.size > 0?
+                          <Table dataSource={ dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
+                            <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
+                            <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
+                            <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
+                            <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
+                            <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
+                            <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
+                          </Table> :  scopeType === 5 ?
+                          currentCategary && currentCategary.map(item=> (
+                            <span className="coupon-mgr10" key={item.storeCateId}>{item.get('cateName')}</span>
+                          ))
+                          :
+                          currentAttribute && currentAttribute.map(item=> (
+                            <span key={item.id} className="coupon-mgr10" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
+                          ))
+                    }
+
+                  </div>
                 </FormItem>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
                   <div style={style}>

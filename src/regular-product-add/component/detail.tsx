@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Select, Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { noop, ErrorBoundary, ReactEditor, history } from 'qmkit';
+import { noop, ErrorBoundary, ReactEditor, history, Const } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 import { ElementAccessExpression } from 'ts-morph';
@@ -89,6 +89,7 @@ export default class Detail extends React.Component<any, any> {
   render() {
     const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
     goodsDetailTabObj = {};
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <div>
         {goodsDescriptionDetailList.length > 0 && (
@@ -122,7 +123,7 @@ export default class Detail extends React.Component<any, any> {
                     onContentChange={this.onContentChange}
                     contentType={item.contentType}
                     tabNanme={item.descriptionName + '_' + item.descriptionId}
-                    disabled={!disabled}
+                    disabled={!disabled || disableFields}
                     height={320}
                   />
                 </Tabs.TabPane>

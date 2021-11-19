@@ -1,8 +1,8 @@
-import { Button, Icon, Popconfirm, Select, Table, Tooltip } from 'antd';
+import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
 import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
-import { cache } from 'qmkit';
+import { cache, AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
@@ -298,6 +298,9 @@ export default class SelectedProduct extends React.Component<any, any> {
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
           {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
+        <AuthWrapper functionName='f_goodwill_order'>
+          <Checkbox onChange={e => this.props.onGoodwillChecked(e.target.checked)}><FormattedMessage id="Order.goodwillDesc" /></Checkbox>
+        </AuthWrapper>
       </div>
     );
   }

@@ -29,7 +29,8 @@ const ResourcesList = () => {
     const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
     const appointmentTypeRes = await webapi.goodsDict({ type: 'appointment_type' })
     const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
-    const serviceTypeDictFelin = [serviceTypeDict[5]]
+    // 目前只有felin 先过滤一下，
+    const serviceTypeDictFelin = serviceTypeDict.filter(item => item.id === "6")
     const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
     setServiceTypeDict(serviceTypeDictFelin)
     setAppointmentTypeDict(appointmentTypeDict)

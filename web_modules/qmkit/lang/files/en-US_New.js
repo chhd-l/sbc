@@ -860,6 +860,7 @@ export default {
         "Order.RecipientName": "Recipient name",
         "Order.RecipientMail": "Recipient mail",
         "Order.ProductSKU": "Product SKU",
+        "Order.goodwillDesc": "This is a goodwill order.",
         "Order.New": "New",
         "Order.Valid": "Valid",
         "Order.LinkStatus": "Link status",
@@ -2608,6 +2609,9 @@ export default {
         "Task.PaymentMethod": "Payment Method",
         "Task.DeliveryMethod": "Delivery method",
         "Task.DeliveryStatus": "Pick-up-point Status",
+        "Task.ExportTasks": "Export tasks",
+        "Task.ExportTaskTips": "Please go to Analysis/Export report section to download the file.",
+        "Task.ExportTaskTimeTips": "Please select a time within one year.",
     },
     integration: {
         'Dashboard.Dashboard': 'Dashboard',

@@ -3,7 +3,7 @@ import { Table, Popconfirm } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 
-const AllSurveyList = ({listData}) => {
+const AllSurveyList = ({listData,tableLoading}) => {
   const allSurveyListData = [{
     surveyNumber: 1,
     title: 2,
@@ -72,7 +72,7 @@ const AllSurveyList = ({listData}) => {
   return (
     <Table
       rowKey="allSurveyListId"
-      // loading={loading}
+      loading={tableLoading}
       dataSource={listData}
       columns={AllSurveyListColumns}
     />

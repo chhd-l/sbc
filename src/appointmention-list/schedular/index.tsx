@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card,Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Const, Headline, history } from 'qmkit';
+import { Const, Headline, history, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
 import _ from 'lodash';
@@ -246,8 +246,10 @@ const Schedular = () => {
     } else if (type.bookType && type.bookType.includes('Blocked')) {
       if (!type.id) return
       confirm({
-        title: 'Do you want to cancel these items?',
-        content: 'When clicked the OK button, this blocked will be closed',
+        okText:RCi18n({id:'Product.OK'}),
+        cancelText:RCi18n({id:'Appointment.Cancel'}),
+        title: RCi18n({id:'Appointment.confirm title'}),
+        content: RCi18n({id:'Appointment.confirm content'}),
         onOk() {
           return new Promise(async (resolve, reject) => {
             const { res }: any = await webapi.releaseById({ id: type.id })
@@ -303,9 +305,9 @@ const Schedular = () => {
     },
   };
   let status = {
-    "0": 'Booked',
-    "1": 'Arrived',
-    "2": 'Canceled'
+    "0": RCi18n({id:'Order.offline.booked'}),
+    "1": RCi18n({id:'Order.offline.arrived'}),
+    "2": RCi18n({id:'Order.offline.canceled'}),
   }
   return (
     <Spin spinning={visite}>
@@ -405,28 +407,28 @@ const Schedular = () => {
                   <Form.Item label="Type">
                     Appointed
                   </Form.Item>
-                  <Form.Item label="Appointment No.">
+                  <Form.Item label={RCi18n({ id: 'Appointment.No.' })}>
                     {currentData?.apptNo ?? ''}
                   </Form.Item>
-                  <Form.Item label="Appointment type">
+                  <Form.Item label={RCi18n({ id: 'Appointmention.Type' })}>
                     {(appointmentType?.objValue ?? {})[currentData?.apptTypeId ?? '']}
                   </Form.Item>
-                  <Form.Item label="Appointment status">
+                  <Form.Item label={RCi18n({ id: 'Appointmention.Status' })}>
                     {status[currentData?.status ?? '']}
                   </Form.Item>
-                  <Form.Item label="Expert type">
+                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.type' })}>
                     {(expertType?.objValue ?? {})[currentData?.expertTypeId ?? '']}
                   </Form.Item>
-                  <Form.Item label="Expert name">
+                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.name' })}>
                     {currentData?.expertNames ?? ''}
                   </Form.Item>
-                  <Form.Item label="Appointment time">
+                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.type' })}>
                     {currentData?.apptTime ?? ''}
                   </Form.Item>
-                  <Form.Item label="Created time">
+                  <Form.Item label={RCi18n({ id: 'Appointment.Created time' })}>
                     {currentData?.createTime ?? ''}
                   </Form.Item>
-                  <Form.Item label="Last updated time">
+                  <Form.Item label={RCi18n({ id: 'Appointment.Last updated time'})}>
                     {currentData?.updateTime ?? ''}
                   </Form.Item>
                 </Form>

@@ -1103,6 +1103,10 @@ export default {
        'Appointment.Nutritionist':'Nutritionist',
        'Appointment.Orthopedist':'Orthopedist',
 
+       'Appointment.Created time':'Created time',
+       'Appointment.Last updated time':'Last updated time',
+       'Appointment.confirm title':'Do you want to cancel these items?',
+       'Appointment.confirm content':'When clicked the OK button, this blocked will be closed',
        'Appointment.min15':'15min',
        'Appointment.min30':'30min',
        'Appointment.min45':'45min',

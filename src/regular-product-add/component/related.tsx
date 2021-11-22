@@ -2,7 +2,7 @@ import * as React from 'react';
 import RelatedProduct from './related-product';
 import { Relax } from 'plume2';
 import { Button } from 'antd';
-import { noop } from 'qmkit';
+import { noop, Const } from 'qmkit';
 import ProductTooltip from './productTooltip';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -38,10 +38,11 @@ export default class Related extends React.Component<any, any> {
 
   render() {
     const { getGoodsId } = this.props.relaxProps;
+    const disabled = Const.SITE_NAME === 'MYVETRECO';
     return (
       <div>
         <div className="related-btn">
-          <Button type="primary" shape="round" onClick={() => this.showProduct(true)}>
+          <Button type="primary" disabled={disabled} shape="round" onClick={() => this.showProduct(true)}>
           <FormattedMessage id="Product.ChooseProduct" />
           </Button>
           <span className="related-text"><FormattedMessage id="Product.Maximum30" /></span>

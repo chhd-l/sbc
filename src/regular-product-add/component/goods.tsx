@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Alert, Col, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
+import { noop, QMMethod, Tips, ValidConst, SelectGroup, Const } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
 import ImageLibraryUpload from './image-library-upload';
@@ -301,6 +301,8 @@ class GoodsForm extends React.Component<any, any> {
         getFrequencyList = [...frequencyList.individual.dayIndividualList, ...frequencyList.individual.weekIndividualList, ...frequencyList.individual.monthIndividualList]
       }
     }
+    //myvetreco禁止编辑
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Form>
         {/* The first line */}
@@ -328,7 +330,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNo'),
                 initialValue: goods.get('goodsNo')
-              })(<Input />)}
+              })(<Input disabled={disableFields} />)}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -383,7 +385,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsName'),
                 initialValue: goods.get('goodsName')
-              })(<Input placeholder={RCi18n({id:'Product.morethanwords'})}/>)}
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.morethanwords'})}/>)}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -399,7 +401,7 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'addedFlag'),
                 initialValue: goods.get('addedFlag') != 0? 1:0
               })(
-                <RadioGroup>
+                <RadioGroup disabled={disableFields}>
                   <Radio value={1}>
                     <FormattedMessage id="product.onShelves" />
                   </Radio>
@@ -427,7 +429,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.selectstatus'})}>
+                <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.selectstatus'})}>
                   <Option value={1}><FormattedMessage id="Product.Y"/></Option>
                   <Option value={0}><FormattedMessage id="Product.N"/></Option>
                 </Select>
@@ -443,7 +445,7 @@ class GoodsForm extends React.Component<any, any> {
                 // initialValue: 'Y'
                 initialValue: goods.get('promotions')
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder={<FormattedMessage id="Product.selectType" />} disabled={Number(goods.get('subscriptionStatus')) === 0} >
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder={<FormattedMessage id="Product.selectType" />} disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                   <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
@@ -469,7 +471,7 @@ class GoodsForm extends React.Component<any, any> {
                   getPopupContainer={() => document.getElementById('page-content')}
                   // value={goods.get('defaultPurchaseType')}
                   placeholder={RCi18n({id:'Product.DefaultPurchaseType'})}
-                  disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields}>
                   {purchaseTypeList&&purchaseTypeList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}
@@ -496,7 +498,7 @@ class GoodsForm extends React.Component<any, any> {
                   getPopupContainer={() => document.getElementById('page-content')}
                   // value={goods.get('defaultFrequencyId')}
                   placeholder={RCi18n({id:'Product.DefaultFrequency'})}
-                  disabled={Number(goods.get('subscriptionStatus')) === 0}>
+                  disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields}>
                   {getFrequencyList&&getFrequencyList.map((option) => (
                     <Option value={option.id} key={option.id}>
                       {option.name}
@@ -547,7 +549,7 @@ class GoodsForm extends React.Component<any, any> {
                   getPopupContainer={() => document.getElementById('page-content')}
                   placeholder={RCi18n({id:'Product.productCategory'})}
                   notFoundContent="No classification"
-                  // disabled={cateDisabled}
+                  disabled={disableFields}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                 >
@@ -583,6 +585,7 @@ class GoodsForm extends React.Component<any, any> {
                   showSearch={false}
                   onChange={this.storeCateChange}
                   treeDefaultExpandAll
+                  disabled={disableFields}
                 >
                   {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
@@ -616,7 +619,7 @@ class GoodsForm extends React.Component<any, any> {
                       rules: [],
                       onChange: this._editGoods.bind(this, 'brandId')
                     }
-              )(this._getBrandSelect())}
+              )(this._getBrandSelect(disableFields))}
             </FormItem>
           </Col>
           <Col span={8}>
@@ -641,6 +644,7 @@ class GoodsForm extends React.Component<any, any> {
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.taggingChange}
+                  disabled={disableFields}
                 >
                   {this.loopTagging(taggingTotal)}
                 </TreeSelect>
@@ -697,7 +701,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
                 initialValue: goods.get('goodsNewSubtitle')
-              })(<Input placeholder={RCi18n({id:'Product.itemcardintro'})} />)}
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.itemcardintro'})} />)}
             </FormItem>
           </Col>
         </Row>
@@ -734,7 +738,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder={RCi18n({id:'Product.itemcardintro'})}/>)}
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.itemcardintro'})}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -783,7 +787,7 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'saleableFlag'),
                 initialValue: goods.get('saleableFlag')
               })(
-                <RadioGroup>
+                <RadioGroup disabled={disableFields}>
                   <span>
                     <Radio value={1}><FormattedMessage id="Product.Saleable" /></Radio>
                   </span>
@@ -807,7 +811,7 @@ class GoodsForm extends React.Component<any, any> {
                 onChange: this._editGoods.bind(this, 'displayFlag'),
                 initialValue: goods.get('displayFlag')
               })(
-                <RadioGroup>
+                <RadioGroup disabled={disableFields}>
                   <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
                   <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
                 </RadioGroup>
@@ -856,7 +860,7 @@ class GoodsForm extends React.Component<any, any> {
               }
             >
               <div style={{ width: 550 }}>
-                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
+                <ImageLibraryUpload disabled={disableFields} images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
               </div>
               <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
             </FormItem>
@@ -868,7 +872,7 @@ class GoodsForm extends React.Component<any, any> {
             {/* productVideo */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
               <div style={{ width: 550 }}>
-                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
+                <VideoLibraryUpload disabled={disableFields} modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
               </div>
               <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
             </FormItem>
@@ -1175,7 +1179,7 @@ class GoodsForm extends React.Component<any, any> {
   /**
    * 获取品牌下拉框
    */
-  _getBrandSelect = () => {
+  _getBrandSelect = (disabled: boolean) => {
     const { brandList } = this.props.relaxProps;
     return (
       <Select
@@ -1184,6 +1188,7 @@ class GoodsForm extends React.Component<any, any> {
         placeholder={RCi18n({id:'Product.pleaseSelectBrand'})}
         notFoundContent="No brand"
         allowClear={true}
+        disabled={disabled}
         optionFilterProp="children"
         filterOption={(input, option: any) => {
           return typeof option.props.children == 'string' ? option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 : true;

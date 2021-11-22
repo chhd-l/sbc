@@ -5,7 +5,7 @@ import { noop } from 'qmkit';
 import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import '../index.less'
-import { RCi18n } from 'qmkit';
+import { RCi18n, Const } from 'qmkit';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -154,6 +154,7 @@ class AttributeForm extends React.Component<any, any> {
     let propValues = det.goodsPropDetails;
     let propId = det.propId;
     let isSingle = det.isSingle;
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <TreeSelect
         getPopupContainer={() => document.getElementById('page-content')}
@@ -166,6 +167,7 @@ class AttributeForm extends React.Component<any, any> {
         treeDefaultExpandAll
         showSearch={false}
         onChange={(value) => this._onChange(propId, value)}
+        disabled={disableFields}
       >
         {this.generateStoreCateTree(propValues, isSingle)}
       </TreeSelect>

@@ -4,7 +4,7 @@ import { Select, Table, Row, Col, Form, InputNumber } from 'antd';
 const { Option } = Select;
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { noop, RCi18n } from 'qmkit';
+import { noop, RCi18n, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 @Relax
@@ -83,7 +83,7 @@ class SkuForm extends React.Component<any, any> {
   }
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
-    // const {  } = this.state
+    
     const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
@@ -97,7 +97,7 @@ class SkuForm extends React.Component<any, any> {
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -145,7 +145,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber value={rowInfo.depth} defaultValue={rowInfo.depth} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'depth', e)}/>
+                <InputNumber disabled={disableFields} value={rowInfo.depth} defaultValue={rowInfo.depth} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'depth', e)}/>
               </Col>
             </Row>
           )
@@ -158,7 +158,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select value={rowInfo.depthUnit || "mm"} defaultValue={rowInfo.depthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'depthUnit', e)}>
+                <Select value={rowInfo.depthUnit || "mm"} defaultValue={rowInfo.depthUnit || "mm"} disabled={disableFields} onChange={e => this._editGoodsItem(rowInfo.id, 'depthUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>
@@ -174,7 +174,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber value={rowInfo.width} defaultValue={rowInfo.width} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'width', e)}/>
+                <InputNumber value={rowInfo.width} defaultValue={rowInfo.width} disabled={disableFields} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'width', e)}/>
               </Col>
             </Row>
           )
@@ -187,7 +187,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select value={rowInfo.widthUnit || "mm"} defaultValue={rowInfo.widthUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'widthUnit', e)}>
+                <Select value={rowInfo.widthUnit || "mm"} defaultValue={rowInfo.widthUnit || "mm"} disabled={disableFields} onChange={e => this._editGoodsItem(rowInfo.id, 'widthUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>
@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <InputNumber value={rowInfo.height} defaultValue={rowInfo.height} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'height', e)}/>
+                <InputNumber value={rowInfo.height} defaultValue={rowInfo.height} disabled={disableFields} min={0} max={9999999} onChange={e => this._editGoodsItem(rowInfo.id, 'height', e)}/>
               </Col>
             </Row>
           )
@@ -216,7 +216,7 @@ class SkuForm extends React.Component<any, any> {
           return (
             <Row>
               <Col span={12}>
-                <Select value={rowInfo.heightUnit || "mm"} defaultValue={rowInfo.heightUnit || "mm"} onChange={e => this._editGoodsItem(rowInfo.id, 'heightUnit', e)}>
+                <Select value={rowInfo.heightUnit || "mm"} defaultValue={rowInfo.heightUnit || "mm"} disabled={disableFields} onChange={e => this._editGoodsItem(rowInfo.id, 'heightUnit', e)}>
                   <Option key="mm">mm</Option>
                   <Option key="cm">cm</Option>
                 </Select>

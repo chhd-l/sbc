@@ -60,6 +60,11 @@ export default class List extends React.Component<any, any>{
         dataIndex: 'arranged',
         key: 'arranged',
         width: 150,
+        render: (text, record) => (
+          <span>
+            {text ===1 ?"Yes":text === 0 ?"No" :null}
+          </span>
+        ),
       },
       {
         title: <FormattedMessage id="Resources.planning_time" />,
@@ -80,7 +85,6 @@ export default class List extends React.Component<any, any>{
   }
 
   handleOk = (values) => {
-    console.log('values', values);
     let { getListData } = this.props;
     // 更新列表
     getListData && getListData();
@@ -103,20 +107,15 @@ export default class List extends React.Component<any, any>{
 
   render() {
     let {
-      loading,
-      data,
+      tableLoading,
       onSelectChange
     } = this.props;
-    let {
-      visible,
-      currentRecord,
-    } = this.state;
     let columns = this.getColumns();
 
     return (
       <Table
         rowKey='goodsInfoId'
-        // loading={loading}
+        loading={tableLoading}
         dataSource={this.props.resourceList}
         columns={columns}
         rowSelection={{

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, checkAuth } from 'qmkit';
+import { noop, checkAuth, Const } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
@@ -52,14 +52,14 @@ class RelatedProduct extends React.Component<any, any> {
 
   render() {
     const { relatedList, enterpriseFlag } = this.props.relaxProps;
-
+    const disabled = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Table
         id="consent"
         rowKey="tabId"
         columns={this._columns}
         dataSource={relatedList && relatedList.toJS()}
-        onRow={(_record, index) => ({
+        onRow={disabled ? null : (_record, index) => ({
           index,
           moveRow: this.moveRow
         })}
@@ -145,6 +145,9 @@ class RelatedProduct extends React.Component<any, any> {
     rowInfo = fromJS(rowInfo);
     const check = +rowInfo.get('openFlag') === 0 ? false : true;
     // const check = +linkStatus === 0 ? true : false;
+    if (Const.SITE_NAME === 'MYVETRECO') {
+      return null;
+    }
 
     return (
       <div className="operation flex-end">

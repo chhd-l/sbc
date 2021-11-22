@@ -259,9 +259,9 @@ export default function index({...props}) {
           firstSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].firstSubscriptionOrderReduction :'',
           restSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].restSubscriptionOrderReduction :'',
           firstSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionLimitAmount :'',
-          firstSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount :'',
+          firstSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount*100 :'',
           restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
-          restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount :'',
+          restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount*100 :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
           selectedGiftRows:detail.goodsList?.goodsInfoPage?.content.filter(item=>{
             return giftIds.includes(item.goodsInfoId)
@@ -315,7 +315,7 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType: detail.couponPromotionType,
           denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount || '',
+          couponDiscount: detail.couponDiscount*100 || '',
           limitAmount: detail.limitAmount,
         },
         storeId:detail.storeId,

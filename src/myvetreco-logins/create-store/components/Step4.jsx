@@ -90,6 +90,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    * 点apply对选中条目价格进行计算
    */
   const applyPercentage =useCallback(()=>{
+    if (salesPercentage < subscriptionPercentage) {
+      message.error('Market price percentage should larger than subscription price percentage!');
+      return;
+    }
     setPercentageObj({
       salesPercentage,
       subscriptionPercentage
@@ -135,10 +139,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       for(let i in allObj.Cat){
         allObj.Cat[i] = {
           isChecked: allObj.Cat[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
           sku: allObj.Cat[i].sku,
           spu: allObj.Cat[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
         }
       }
       newChooseObj = {...allObj.Cat,...newChooseObj}
@@ -147,10 +151,10 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
       for(let i in allObj.Dog){
         allObj.Dog[i] = {
           isChecked: allObj.Dog[i].isChecked,
-          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(salesPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
           sku: allObj.Dog[i].sku,
           spu: allObj.Dog[i].spu,
-          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(subscriptionPercentage, bignumber(0.01))))))), bignumber(1.21))),
+          subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
         }
         allObj.Dog[i]['salePrice'] = parseFloat(allObj.Dog[i]['salePrice']);
         allObj.Dog[i]['subscriptionPrice'] = parseFloat(allObj.Dog[i]['subscriptionPrice']);
@@ -197,7 +201,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           <div style={{width:850,margin:'20px auto'}}>
             <Row gutter={24} style={{marginBottom:'10px'}}>
               <Col span={6}>
-                <div className="word small tip">Sales price percentage</div>
+                <div className="word small tip">Market price percentage</div>
               </Col>
               <Col span={6}>
                 <div className="word small tip">Subscription price percentage</div>
@@ -209,6 +213,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                              value={salesPercentage}
                              style={{width:180}}
                              step={10}
+                             precision={2}
                              onChange={(value)=>setSalesPercentage(value)} />
               </Col>
               <Col span={6}>
@@ -216,6 +221,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
                              style={{width:180}}
                              value={subscriptionPercentage}
                              step={10}
+                             precision={2}
                              onChange={(value)=>setSubscriptionPercentage(value)} />
               </Col>
               {/* <Col span={3}>

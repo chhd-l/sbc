@@ -78,7 +78,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
           <Col span={12}>
             <FormItem label="Shareholder type" required>
               {getFieldDecorator('shareholderType', {
-                initialValue: "1"
+                initialValue: "0"
               })(
               <Select onChange={this.validateJobTitle} disabled={adyenAuditState === 0}>
                 <Option value="0">Owner</Option>

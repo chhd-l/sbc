@@ -172,6 +172,8 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
             loading: false,
             storeInfo: Object.assign({}, storeInfo, { adyenAuditState: 0 })
           });
+        } else {
+          this.setState({ loading: false });
         }
       });
     }).catch((step: string) => {

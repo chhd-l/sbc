@@ -70,6 +70,7 @@ export default class SeoForm extends Component<any, any> {
       { name: 'H5', id: 'H5' }
     ];
     const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Form {...formItemLayout} className="login-form">
         {/*<Form.Item>*/}
@@ -88,6 +89,7 @@ export default class SeoForm extends Component<any, any> {
             initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.titleSource
           })(
             <Input
+              disabled={disableFields}
               onChange={(e) =>
                 updateSeoForm({
                   field: 'titleSource',
@@ -124,6 +126,7 @@ export default class SeoForm extends Component<any, any> {
                 initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaKeywordsSource
               })(
                 <TextArea
+                  disabled={disableFields}
                   rows={4}
                   onChange={(e) =>
                     updateSeoForm({
@@ -139,6 +142,7 @@ export default class SeoForm extends Component<any, any> {
                 initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaDescriptionSource
               })(
                 <TextArea
+                  disabled={disableFields}
                   rows={4}
                   onChange={(e) =>
                     updateSeoForm({

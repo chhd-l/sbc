@@ -85,7 +85,7 @@ export default class SettleDetailActor extends Actor {
   //product select
   @Action('product:productselect')
   productselect(state, res) {
-    return state.set('productselect', res);
+    return state.set('productselect', fromJS(res));
   }
 
   //create Link

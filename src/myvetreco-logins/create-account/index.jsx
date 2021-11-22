@@ -84,9 +84,9 @@ function CreateAccount({ form }) {
               <span>Create an Account</span>
             </div>}
 
-            <FormItem name="email" rules={[{required:true,message:RCi18n({id:'Login.email_address_vld'})},{type:'email',message:RCi18n({id:'Login.email_address_vld1'})}]}>
+            <FormItem name="email">
               {getFieldDecorator('email', {
-                rules: [{required:true,message:RCi18n({id:'Login.email_address_vld'})}],
+                rules: [{required:true,type:'email',message:RCi18n({id:'Login.email_address_vld1'})}],
                 initialValue: ''
               })(
                 <Input size="large" placeholder={RCi18n({id:'Login.email_address'})} suffix={<i className="iconfont iconemail1" style={{ fontSize: 18, color: '#a0b0bb' }}></i>} />

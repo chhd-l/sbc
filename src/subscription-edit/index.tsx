@@ -1943,7 +1943,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <label className="info-title subscription_edit_payment"><FormattedMessage id="Subscription.PaymentMethod" /></label>
                   </Col>
                   <AuthWrapper functionName="f_change_payment_method">
-                    <>
+                    {Const.SITE_NAME !== 'MYVETRECO' && <>
                       <Col span={12}>
                         <a style={styles.edit} onClick={() => this.setState({ paymentMethodVisible: true })} className="iconfont iconEdit"></a>
                       </Col>
@@ -1960,7 +1960,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         paymentMethodVisible={this.state.paymentMethodVisible}
                         subscriptionType={this.state.subscriptionType}
                       />
-                    </>
+                    </>}
                   </AuthWrapper>
                   {paymentInfo ?
                     <>

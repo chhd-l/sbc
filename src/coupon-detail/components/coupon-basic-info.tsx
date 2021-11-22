@@ -130,7 +130,7 @@ export default class CouponBasicInfo extends Component<any, any> {
     const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute, currentGroup } = this.props.relaxProps;
     const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
       fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
-      couponPromotionType, fullbuyCount,couponJoinLevel
+      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList
     } = coupon.toJS();
     let dataSource = fromJS([])
     // const goodsInfoPage = goodsList.goodsInfoPage.content
@@ -224,12 +224,9 @@ export default class CouponBasicInfo extends Component<any, any> {
                 </FormItem>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
                   <div style={style}>
-                    {
-                      couponJoinLevel == 0 ?
-                        <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
-                        <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
-                        : null
-                    }
+                    { couponJoinLevel == 0 && <span className="left-span"><FormattedMessage id="Marketing.all" /></span> }
+                    { couponJoinLevel == -3 && <span className="left-span">{currentGroup && currentGroup.get('name')}</span> }
+                    { couponJoinLevel == -4 && <span className="left-span">{emailSuffixList[0]}</span> }
                   </div>
                 </FormItem>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>

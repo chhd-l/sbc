@@ -951,7 +951,8 @@ export default {
         'Order.RegulationDiscount':'Regulation discount',
         'Order.RealSubtotal':'Real subtotal',
         'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
-        'Order.peawee':'Peawee'
+        'Order.peawee':'Peawee',
+        'Order.goodwillOrder':'Goodwill order',
 
 
     },

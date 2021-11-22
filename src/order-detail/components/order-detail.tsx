@@ -377,6 +377,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
+                      {detail.get('orderSource') === 'SUPPLIER' && (
+                        <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      )}
                     </p>
                   </Tooltip>
                   <p>

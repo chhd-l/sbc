@@ -204,10 +204,10 @@ class Appointment extends React.Component<any, any> {
     let result:any={};
     switch (type) {
       case 'cancel':
-        result = await apptCancel({...e,status:2});
+        result = await apptCancel({id:e.id,status:2});
         break;
       case 'arrived':
-        result= await apptArrived({...e,status:1});
+        result= await apptArrived({id:e.id,status:1});
         break
       default:
         break;
@@ -229,31 +229,55 @@ class Appointment extends React.Component<any, any> {
       appointmentType,
       expertType, } = this.state;
     let status = {
-      "0": 'Booked',
-      "1": 'Arrived',
-      "2": 'Canceled'
+      "0": RCi18n({id:'Order.offline.booked'}),
+      "1": RCi18n({id:'Order.offline.arrived'}),
+      "2": RCi18n({id:'Order.offline.canceled'}),
     }
     const columns = [
       {
         title: RCi18n({ id: 'Appointment.No.' }),
         dataIndex: 'apptNo',
-        key: 'apptNo'
+        key: 'apptNo',
+        ellipsis: true,
+        render: (text, record) => {
+          return (<Tooltip title={text}>
+          <div style={{width:100,textOverflow:'ellipsis',overflow:'hidden'}}>{text}</div>
+        </Tooltip>)
+        }
       },
       {
         title: 'Order No',//RCi18n({id:'Appointment.No.'}),
         dataIndex: 'goodsInfoId',
-        key: 'goodsInfoId'
+        key: 'goodsInfoId',
+        // width:150,
+        ellipsis: true,
+        render: (text, record) => {
+          return (<Tooltip title={text}>
+          <div style={{width:100,textOverflow:'ellipsis',overflow:'hidden'}}>{text}</div>
+        </Tooltip>)
+        }
       },
       {
         title: RCi18n({ id: 'Appointmention.Time' }),
         dataIndex: 'apptTime',
         key: 'apptTime',
-        render: (text, record) => <div>{`${moment(record.apptDate, 'YYYYMMDD').format('YYYY-MM-DD')} ${record.apptTime}`}</div>
+        render: (text, record) => {
+          if(text&&text.includes('#')){
+            let time=text.split('#');
+            let begin=moment(moment(time[0],'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
+            end=moment(moment(time[1],'YYYY-MM-DD HH:mm')).format('HH:mm');
+           return (<div>{begin}-{end}</div>)
+          }else{
+            return '';
+          }
+        }
       },
       {
         title: RCi18n({ id: 'Appointment.PON' }),
         dataIndex: 'consumerName',
-        key: 'consumerName'
+        key: 'consumerName',
+        width:'130px'
+
       },
       {
         title: RCi18n({ id: 'Appointment.Pet OE' }),

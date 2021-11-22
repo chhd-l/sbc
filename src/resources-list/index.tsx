@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Row, Col } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { BreadCrumb, Headline,history } from 'qmkit';
+import { BreadCrumb, Headline,history,Const } from 'qmkit';
 import * as webapi from './webapi';
 import SearchForm from './component/search-form'
 import ListTable from './component/list'
@@ -19,6 +19,7 @@ const ResourcesList = () => {
   const [serviceTypeDict,setServiceTypeDict] = useState([])
   const [appointmentTypeDict,setAppointmentTypeDict] = useState([])
   const [resourceList,setResourceList] = useState([])
+  const [tableLoading,setTableLoading] = useState(false)
 
   useEffect(()=>{
     getResourcesPageLists({})
@@ -29,15 +30,24 @@ const ResourcesList = () => {
     const serviceTypeRes = await webapi.goodsDict({ type: 'service_type' })
     const appointmentTypeRes = await webapi.goodsDict({ type: 'appointment_type' })
     const serviceTypeDict = serviceTypeRes?.res?.context?.goodsDictionaryVOS || []
-    const serviceTypeDictFelin = [serviceTypeDict[5]]
+    // 目前只有felin 先过滤一下，
+    const serviceTypeDictFelin = serviceTypeDict.filter(item => item.id === "6")
     const appointmentTypeDict = appointmentTypeRes?.res?.context?.goodsDictionaryVOS || []
     setServiceTypeDict(serviceTypeDictFelin)
     setAppointmentTypeDict(appointmentTypeDict)
   }
 
   const getResourcesPageLists = async (params) => {
-    const {res} = await webapi.getResourcesList(params);
-    setResourceList(res?.context?.resourceVOList)
+    try {
+      setTableLoading(true)
+      const {res} = await webapi.getResourcesList(params);
+      if(res.code === Const.SUCCESS_CODE) {
+        setResourceList(res?.context?.resourceVOList)
+      }
+      setTableLoading(false)
+    }catch(err) {
+
+    }
   }
 
   // 列表复选框选择
@@ -105,6 +115,7 @@ const ResourcesList = () => {
       </div>
       <div className="container">
         <ListTable
+        tableLoading={tableLoading}
         resourceList={resourceList}
           onSelectChange={(selectedRowKeys,selectedRows) => listSelect(selectedRowKeys,selectedRows)}
           // updateListData={changePageNum}

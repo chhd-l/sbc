@@ -46,7 +46,6 @@ let LoginHome = (props) => {
     });
   }
   useEffect(()=>{
-    console.info('.................................')
     getCookieBanner()
     getMarsFooter()
   },[])

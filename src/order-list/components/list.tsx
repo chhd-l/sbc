@@ -327,8 +327,13 @@ class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogethe" />
                               </span>
                             )}
+                            {v.get('orderSource') === 'SUPPLIER' && (
+                              <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                                <FormattedMessage id="Order.goodwillOrder" />
+                              </span>
+                            )}
                             {v.get('isAutoSub') && (
-                              <span style={styles.platform}>
+                              <span style={styles.platform} className="order_list_subscription_flag">
                                 <FormattedMessage id="Order.subscription" />
                               </span>
                             )}
@@ -339,6 +344,7 @@ class ListView extends React.Component<any, any> {
                                   left: '0',
                                   top: '20px'
                                 }}
+                                className="order_list_ordernumber"
                               >
                                 <Tooltip
                                   overlayStyle={{
@@ -727,6 +733,15 @@ const styles = {
     marginLeft: 5,
     border: ' 1px solid var(--primary-color)',
     color: 'var(--primary-color)',
+    borderRadius: 5
+  },
+  goodwillColor: {
+    fontSize: 12,
+    padding: '1px 3px',
+    display: 'inline-block',
+    marginLeft: 5,
+    border: ' 1px solid #2faf2b',
+    color: '#2faf2b',
     borderRadius: 5
   }
 } as any;

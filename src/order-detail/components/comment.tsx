@@ -222,7 +222,7 @@ class comment extends Component<any, any> {
               },
               ...pagination
             }}
-            renderItem={(item) => (
+            renderItem={(item:any) => (
               <List.Item
                 actions={
                   item.operableFlag
@@ -230,18 +230,18 @@ class comment extends Component<any, any> {
                         <Tooltip placement="top" title={<FormattedMessage id="Order.Edit"/>}>
                           <a onClick={() => this.editComment(item.id, item.content)}>
                             {' '}
-                            <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+                            <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}/>
                           </a>
                         </Tooltip>,
                         <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.deleteThisComment"/>} onConfirm={() => this.deleteComment(item.id)} okText={<FormattedMessage id="Order.btnConfirm"/>} cancelText={<FormattedMessage id="Order.btnCancel"/>}>
                           <Tooltip placement="top" title={<FormattedMessage id="Order.Delete"/>}>
                             <a>
-                              <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
+                              <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}/>
                             </a>
                           </Tooltip>
                         </Popconfirm>
                       ]
-                    : [<div style={{ width: 56 }}></div>]
+                    : [<div style={{ width: 56 }}/>]
                 }
               >
                 <List.Item.Meta
@@ -324,4 +324,4 @@ const styles = {
     fontWeight: 600,
     width: 800
   }
-};
+} as any;

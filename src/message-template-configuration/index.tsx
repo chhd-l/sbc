@@ -170,13 +170,13 @@ const MessageTemplateConfiguration=()=>{
     <div>
       <BreadCrumb />
       <div className="container-search">
-        <Headline title="Template Settings"/>
+        <Headline title={RCi18n({id:'Marketing.EmailTemplateSettiong'})}/>
         <Form className="filter-content" layout="inline">
           <Row>
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={'Template Name'} />
+                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplateName'})} />
                   <Input
                     style={styles.wrapper}
                     onChange={(e) => {
@@ -194,7 +194,7 @@ const MessageTemplateConfiguration=()=>{
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={'Template Type'} />
+                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplateType'})} />
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}

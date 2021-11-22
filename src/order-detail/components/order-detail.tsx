@@ -9,7 +9,7 @@ import {
   getOrderStatusValue,
   getFormatDeliveryDateStr,
   RCi18n,
-  checkAuth
+  checkAuth, util
 } from 'qmkit';
 import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
@@ -166,6 +166,11 @@ class OrderDetailTab extends React.Component<any, any> {
 
     //交易状态
     const tradeState = detail.get('tradeState');
+    //是否能下载发票
+    const canDownInvoice =
+      (tradeState.get('deliverStatus') === 'SHIPPED' ||
+        tradeState.get('deliverStatus') === 'DELIVERED') &&
+      tradeState.get('invoiceState') === 1;
 
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
@@ -352,11 +357,18 @@ class OrderDetailTab extends React.Component<any, any> {
     return (
       <div className="orderDetail">
         <div className="display-flex direction-row justify-between mb-20">
-          <label style={styles.greenText}>
-            <FormattedMessage
-              id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
-            />
-          </label>
+          <div>
+            <label style={styles.greenText}>
+              <FormattedMessage
+                id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
+              />
+            </label>
+            {canDownInvoice ? (
+              <a className="ml-20" onClick={() => {this._handleDownInvoice(detail)}}>
+                <FormattedMessage id="Download invoice" />
+              </a>
+            ) : null}
+          </div>
           {this._renderBtnAction(tid)}
         </div>
         <Row gutter={30}>
@@ -377,6 +389,9 @@ class OrderDetailTab extends React.Component<any, any> {
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
+                      {detail.get('orderSource') === 'SUPPLIER' && (
+                        <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      )}
                     </p>
                   </Tooltip>
                   <p>
@@ -945,6 +960,19 @@ class OrderDetailTab extends React.Component<any, any> {
     await refreshGoodsRealtimeStock(tid);
     this.setState({ tableLoading: false });
   };
+
+  //下载发票 download invoice
+  _handleDownInvoice(detail) {
+    let orderInvoiceIdList = detail.getIn(['invoice','orderInvoiceIdList']).toJS()
+    let params = {
+      orderInvoiceIds:orderInvoiceIdList
+    };
+    const token = (window as any).token;
+    let result = JSON.stringify({ ...params, token: token });
+    let base64 = new util.Base64();
+    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
+    window.open(exportHref);
+  }
 
   _renderBtnAction(tid: string) {
     const { detail, onDelivery } = this.props.relaxProps;

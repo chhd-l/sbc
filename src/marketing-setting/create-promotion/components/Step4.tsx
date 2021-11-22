@@ -264,7 +264,7 @@ function Step4({form}){
           {
             purchaseType === 0 &&  (
               <div>
-                <Checkbox value={{isSuperimposeSubscription}} onChange={(e=>{
+                <Checkbox checked={isSuperimposeSubscription} onChange={(e=>{
                   setIsSuperimposeSubscription(e.target.checked)
                 })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
@@ -397,7 +397,7 @@ function Step4({form}){
                 <>
                   <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator('customProductsType', {
-                      initialValue: formData.Conditions.customProductsType,
+                      initialValue: formData.Conditions.customProductsType || 0,
                       // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
                     })(<RadioGroup onChange={(e:RadioChangeEvent)=>setCustomProductsType(e.target.value)}>
                       <Radio value={0}>

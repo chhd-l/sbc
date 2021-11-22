@@ -39,10 +39,10 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <span style={styles.linkText}><FormattedMessage id="Product.Bundleproduct" /></span>
               </Link>
 
-              <Link to="/service-product-add" style={styles.linkContainer}>
+              {/* <Link to="/service-product-add" style={styles.linkContainer}>
                 <i className="iconfont icona-icon_Service" style={styles.linkIcon}></i>
                 <span style={styles.linkText}><FormattedMessage id="Product.Serviceproduct" /></span>
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div style={styles.instru}>

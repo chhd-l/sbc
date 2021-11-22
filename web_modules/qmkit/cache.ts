@@ -32,6 +32,7 @@ export default {
   STORE_INFRO: 'store_info',
   ERROR_INFO:'error_info',
   PRODUCT_SALES_SETTING:'product_sales_setting',
+  PRODUCT_SALES_CONFIG: 'product_sales_config',
   TAX_API_SETTINGS: 's2b-supplier@taxApiSettings',
   ADDRESS_API_SETTINGS: 's2b-supplier@addressApiSettings',
   TAX_SWITCH:'s2b-supplier@taxSwitch',

@@ -4,7 +4,7 @@ import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon,
 const { Option } = Select;
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst, RCi18n } from 'qmkit';
+import { cache, noop, ValidConst, RCi18n, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -112,7 +112,7 @@ class SkuForm extends React.Component<any, any> {
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, uomList } = this.props.relaxProps;
-
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -167,7 +167,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stockUomId'),
                   initialValue: rowInfo.stockUomId || null
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
+                  <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
                       <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
@@ -208,7 +208,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'factor'),
                   initialValue: rowInfo.factor || 1
                 })(
-                  <InputNumber min={1} step={1} precision={0} style={{ width: 100 }} />
+                  <InputNumber disabled={disableFields} min={1} step={1} precision={0} style={{ width: 100 }} />
                 )}
               </FormItem>
             </Col>
@@ -286,7 +286,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalStock'),
                 initialValue: rowInfo.externalStock
-              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={disableFields || (rowInfo.index > 1 && stockChecked)} />)}
             </FormItem>
           </Col>
         </Row>
@@ -387,7 +387,7 @@ class SkuForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
                 initialValue: rowInfo.virtualAlert
-              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} />)}
+              })(<InputNumber disabled={disableFields} style={{ width: 100 }} min={0} max={999999999} />)}
             </FormItem>
           </Col>
         </Row>

@@ -286,7 +286,7 @@ export default class PicModal extends React.Component<any, any> {
         this.setState({
           successCount: this.state.successCount + 1
         });
-        message.success(`${file.name} 上传成功！`);
+        message.success(`${file.name} upload successful`);
       }
     } else if (status === 'error') {
       this.setState({
@@ -321,7 +321,7 @@ export default class PicModal extends React.Component<any, any> {
     });
     if (fileList.length > choosedImgCount) {
       if (fileList.filter((f) => f.uid).length == fileList.length) {
-        message.error(`最多一次性上传${choosedImgCount}张图片`);
+        message.error(`Support ${choosedImgCount} pictures at one time!`);
       }
       return false;
     }
@@ -331,11 +331,11 @@ export default class PicModal extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过2M');
+        message.error('File size cannot exceed 2M!');
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error('File format error!');
       return false;
     }
   };
@@ -378,7 +378,7 @@ export default class PicModal extends React.Component<any, any> {
     if (cateId) {
       cleanChooseImgs();
     } else {
-      message.error('请选择图片分类');
+      message.error('Please choose category!');
     }
   };
 }

@@ -69,7 +69,9 @@ class MarketingDes extends React.Component<any, any> {
       promotionCode: any;
       marketingFreeShippingLevel: any;
       isSuperimposeSubscription: any;
-      marketingUseLimit:any
+      marketingUseLimit:any;
+      fullReductionLevelList: any;
+      fullDiscountLevelList: any;
     };
   };
 
@@ -84,11 +86,14 @@ class MarketingDes extends React.Component<any, any> {
     promotionCode: 'promotionCode',
     publicStatus: 'publicStatus',
     marketingUseLimit:'marketingUseLimit',
-    marketingFreeShippingLevel: 'marketingFreeShippingLevel'
+    marketingFreeShippingLevel: 'marketingFreeShippingLevel',
+    fullReductionLevelList: 'fullReductionLevelList',
+    fullDiscountLevelList: 'fullDiscountLevelList',
   };
 
   render() {
-    const { promotionType,marketingUseLimit, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel, isSuperimposeSubscription } = this.props.relaxProps;
+    const { promotionType,marketingUseLimit, marketingName, beginTime, endTime, marketingType, subType, promotionCode, publicStatus, marketingFreeShippingLevel, isSuperimposeSubscription,
+            fullReductionLevelList, fullDiscountLevelList} = this.props.relaxProps;
     return (
       <GreyBg>
         <Row>
@@ -161,7 +166,53 @@ class MarketingDes extends React.Component<any, any> {
             {moment(beginTime).format(Const.TIME_FORMAT).toString()} ~ {moment(endTime).format(Const.TIME_FORMAT).toString()}
           </Col>
         </Row>
-        {subType === 6 || subType === 7 ? null : (
+        {subType === 6 || subType === 7 ? (
+          <>
+            { subType === 6 ?
+              (<Row>
+                <Col span={6}>
+                  <span>
+                    {MAK_TYPE[marketingType]}
+                    <FormattedMessage id="Marketing.Type" />:
+                  </span>
+                </Col>
+                <Col span={18}>
+                  {fullReductionLevelList.toJS()[0].fullAmount ? 'Full amount reduction(Subscription)' : 'Full quantity reduction(Subscription)'}
+                  &nbsp;&nbsp;
+                  {fullReductionLevelList.toJS()[0].fullAmount || fullReductionLevelList.toJS()[0].fullCount}
+                  {
+                    fullReductionLevelList.toJS()[0].fullAmount ?
+                      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) :
+                      (window as any).RCi18n({
+                        id: 'Marketing.items'
+                      })
+                  }
+                </Col>
+              </Row>)
+                :
+              (<Row>
+                <Col span={6}>
+                  <span>
+                    {MAK_TYPE[marketingType]}
+                    <FormattedMessage id="Marketing.Type" />:
+                  </span>
+                </Col>
+                <Col span={18}>
+                  {fullDiscountLevelList.toJS()[0].fullAmount ? 'Full amount discount(Subscription)' : 'Full quantity discount(Subscription)'}
+                  &nbsp;&nbsp;
+                  {fullDiscountLevelList.toJS()[0].fullAmount || fullDiscountLevelList.toJS()[0].fullCount}
+                  {
+                    fullDiscountLevelList.toJS()[0].fullAmount ?
+                      sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) :
+                        (window as any).RCi18n({
+                          id: 'Marketing.items'
+                        })
+                  }
+                </Col>
+              </Row>)
+            }
+          </>
+        ) : (
           <Row>
             <Col span={6}>
               <span>

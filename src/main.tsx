@@ -129,10 +129,7 @@ export default class Main extends React.Component<any, any> {
         >
           <Layout>
             {/*头部*/}
-            <MyHeader
-                openMainLoading={this.openMainLoading}
-                closeMainLoading={this.closeMainLoading}
-            />
+            <MyHeader openMainLoading={this.openMainLoading} closeMainLoading={this.closeMainLoading} />
             <div className="layout-header"/>
             <Layout className="ant-layout-has-sider">
               {/*左侧一级菜单*/}

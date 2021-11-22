@@ -152,7 +152,8 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
-      orderExportStatus: currentSearchForm.orderExportStatus
+      orderExportStatus: currentSearchForm.orderExportStatus,
+      orderStatus:currentSearchForm.orderStatus?[currentSearchForm.orderStatus]:[]
     }
     this.getOrderMonitorList(params)
   }
@@ -165,7 +166,8 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
-      orderExportStatus: currentSearchForm.orderExportStatus
+      orderExportStatus: currentSearchForm.orderExportStatus,
+      orderStatus:currentSearchForm.orderStatus?[currentSearchForm.orderStatus]:[]
     }
     this.getOrderMonitorList(params)
   }
@@ -176,7 +178,8 @@ export default class OrderMonitorList extends Component<any, any> {
       endTime: currentSearchForm.endDate ? currentSearchForm.endDate + " 23:59:59" : null,
       exceptionType: currentSearchForm.exceptionType,
       orderNumber: currentSearchForm.orderNumber,
-      orderExportStatus: currentSearchForm.orderExportStatus
+      orderExportStatus: currentSearchForm.orderExportStatus,
+      orderStatus:currentSearchForm.orderStatus?[currentSearchForm.orderStatus]:[]
     };
     util.onExport(params, '/orderMonitor/exports');
   }

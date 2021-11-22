@@ -7,6 +7,7 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 
 function Step3({form}){
+
   const Context:any = useContext(FormContext);
   const { match,changeFormData,setStep,formData,formItemLayout } = Context
   const {getFieldDecorator,validateFields} = form
@@ -32,7 +33,7 @@ function Step3({form}){
         changeFormData(enumConst.stepEnum[2],{
           ...values,
           publicStatus: publicStatus ? 1 : 0,
-          isNotLimit:limitStatus ? 0 : 1
+          isNotLimit:limitStatus ? 0 : 1,
         })
         setStep(3)
       }
@@ -104,26 +105,26 @@ function Step3({form}){
                 <FormattedMessage id="Marketing.Public" />
               </Checkbox>
             </Form.Item>
+
+            <Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
+              {getFieldDecorator('perCustomer', {
+                initialValue: formData.PromotionType.perCustomer || 1,
+              })(
+                <InputNumber  size="large" min={1} disabled={!limitStatus}/>
+              )}
+              <Checkbox
+                checked={limitStatus}
+                style={{ marginLeft: 20 }}
+                onChange={(e)=>{
+                  setLimitStatus(e.target.checked)
+                }}
+              >
+                <FormattedMessage id="Marketing.LimitTheUsagePerCustomer" />
+              </Checkbox>
+            </Form.Item>
           </>
 
         )}
-        { typeOfPromotion === 0 && (<Form.Item label={<FormattedMessage id="Marketing.UsageLimit" />}>
-          {getFieldDecorator('perCustomer', {
-            initialValue: formData.PromotionType.perCustomer,
-          })(
-            <InputNumber  size="large" min={1} disabled={!limitStatus}/>
-          )}
-          <Checkbox
-            checked={limitStatus}
-            style={{ marginLeft: 20 }}
-            onChange={(e)=>{
-              setLimitStatus(e.target.checked)
-            }}
-          >
-            <FormattedMessage id="Marketing.LimitTheUsagePerCustomer" />
-          </Checkbox>
-        </Form.Item>)}
-
       </Form>
 
       <ButtonLayer step={2} toNext={toNext} />

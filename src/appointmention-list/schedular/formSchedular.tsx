@@ -59,8 +59,8 @@ class FormSchedular extends React.Component {
     }
     disabledDateTime = (e) => {
         //   console.log(e,'----',moment(e).format('YYYY-MM-DD HH:mm'))
-
-        return this.range(0, 24).splice(0, moment().hour());
+        console.log(this.range(0, 24),'====')
+        return [...this.range(0, 24).splice(0,9),...this.range(0, 24).splice(18)]
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -93,7 +93,7 @@ class FormSchedular extends React.Component {
                     {getFieldDecorator('startTime', {
                         rules: [{ required: true, message: 'Please input your Password!' }],
                     })(
-                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
+                        <TimePicker getPopupContainer={triggerNode => triggerNode.parentNode}  minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
                         // <DatePicker disabledDate={this.disabledDate}
                         //     disabledTime={this.disabledDateTime}
                         //     format="YYYY-MM-DD HH:mm"
@@ -110,7 +110,7 @@ class FormSchedular extends React.Component {
                     {getFieldDecorator('endTime', {
                         rules: [{ required: true, message: 'Please input your Password!' }],
                     })(
-                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
+                        <TimePicker minuteStep={15}  getPopupContainer={triggerNode => triggerNode.parentNode}  disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
 
                     )}
                 </Form.Item>

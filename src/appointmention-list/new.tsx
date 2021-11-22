@@ -79,17 +79,28 @@ class NewAppointment extends React.Component<any, any> {
               "minutes": chooseData.minutes,
               "minuteSlotVOList": []
             }
-            _temp.minuteSlotVOList.push({ ...chooseData.bookSlotVO, type: 'primary', disabled: true })
-            if (_resources.length == 0) {
+            _temp.minuteSlotVOList.push({ ...chooseData.bookSlotVO, type: 'link', disabled: false })
+            console.log(_temp,' _temp.minuteSlotVOList')
+            if (_resources.length === 0) {
               _resources.push(_temp)
             } else {
+             
               _resources.map(item => {
-                if (item.dateNo === _temp.dateNo) {
-                  item.minuteSlotVOList.map(it => {
-                    if (it.startTime === _temp.startTime) {
-                      it = { ...it, ..._temp }
+                console.log(item.date , _temp.date)
+                if (item.date === _temp.date) {
+                  console.log(item,'===2121====1')
+                  let isLoop=false;
+                  item.minuteSlotVOList.map((it,index) => {
+                   const  _t=  _temp.minuteSlotVOList.find(ii=>ii.startTime===it.startTime)
+                    if (_t) {
+                      isLoop=true
+                      it = { ...it, ..._t }
                     }
+                    if(item.minuteSlotVOList.length===(index+1)&&!_t)isLoop=false
                   })
+                  if(!isLoop){
+                    item.minuteSlotVOList=item.minuteSlotVOList.concat(_temp.minuteSlotVOList)
+                  }
                 }
               })
             }
@@ -97,6 +108,8 @@ class NewAppointment extends React.Component<any, any> {
           reslove(_resources);
         }
       })
+
+      console.log(resources,'====sss===')
 
       this.setState({
         resources,
@@ -292,7 +305,7 @@ class NewAppointment extends React.Component<any, any> {
                 initialValue: params.customerLevelId,
                 onChange:this.onSelectMemberType
               })(<Radio.Group
-              disabled={params.id}
+              disabled={params.id!==undefined}
               >
                 <Radio value={234}><FormattedMessage id="Appointment.Member" /></Radio>
                 <Radio value={233}><FormattedMessage id="Appointment.Guest" /></Radio>
@@ -318,7 +331,7 @@ class NewAppointment extends React.Component<any, any> {
                   {getFieldDecorator('consumerFirstName', {
                     initialValue: params.consumerFirstName || '',
                     rules: [{ required: true, message: 'The first name  is required' }]
-                  })(<Input disabled={customerLevelId === 234||params.id} />)}
+                  })(<Input disabled={customerLevelId === 234||params.id!==undefined} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -326,7 +339,7 @@ class NewAppointment extends React.Component<any, any> {
                   {getFieldDecorator('consumerLastName', {
                     initialValue: params.consumerLastName || '',
                     rules: [{ required: true, message: 'The last name  is required' }]
-                  })(<Input disabled={customerLevelId === 234||params.id} />)}
+                  })(<Input disabled={customerLevelId === 234||params.id!==undefined} />)}
                 </Form.Item>
               </Col>
             </Row>
@@ -342,7 +355,7 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('consumerEmail', {
                 initialValue: params.consumerEmail || '',
                 rules: [{ required: true, message: 'email is required' }]
-              })(<Input disabled={customerLevelId === 234||params.id} />)}
+              })(<Input disabled={customerLevelId === 234||params.id!==undefined} />)}
             </Form.Item>
 
             <CustomerList visible={this.state.visible} onConfirm={this.onChooseMember} onClose={() => this.onOpenMemberModal(false)} />

@@ -113,12 +113,15 @@ const Schedular = () => {
     let bookedTypeAllList = Promise.all(list.map(async (elx) =>
       elx.bookedTimeSlot.map(item => {
         let _itemBookedTypeList = []
+        let _s={1:'Blocked',0:'Appointed'}
         intervals(item.startTime, item.endTime).then((specificTime: any) => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
-              appointmentNo: item?.appointmentNo ?? undefined,
-              id: item?.id ?? undefined,
+              isShow:idx===0?true:false,
+              allTime:_s[item.bookType]+' '+moment(moment(item.startTime,'YYYY-MM-DD HH:mm')).format('HH:mm')+'-'+moment(moment(item.endTime,'YYYY-MM-DD HH:mm')).format('HH:mm'),
+              appointmentNo: item?.appointmentNo ?? null,
+              id: item?.id ?? null,
               bookType: item.bookType === 1 ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
             })
           })
@@ -138,6 +141,7 @@ const Schedular = () => {
           return { ..._currt, ...item }
         })
       )
+      console.log(allTimeBookedList,'======')
       setTableData(allTimeBookedList)
     })
   }
@@ -375,10 +379,11 @@ const Schedular = () => {
               {tableData.map((el, idx) =>
                 <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
                   {el.map((_el, _idx) =>
-                    <div onClick={() => clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
+                    <div onClick={() => clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.isShow===false?'top-border-none':''} ${_el.isShow?'top-border-white':''}  ${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
                       <span className={`each-duration`}>
                         <span>
-                          {_el.bookType}
+                          {/* {_idx===0?_el.bookType:''} */}
+                          {_el.isShow ?_el.allTime:''}
                         </span>
                       </span>
                     </div>

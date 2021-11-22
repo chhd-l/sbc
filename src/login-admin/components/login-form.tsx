@@ -83,13 +83,8 @@ class LoginForm extends React.Component<any, any> {
         <FormItem style={{ marginBottom: 0 }}>
           <div>
             <p style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}>
-              {/* © 2017-2019 南京万米信息技术有限公司 */}© {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : <FormattedMessage id="Public.RoyalCaninSAS2020" />}
+              &copy; {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : 'Royal Canin SAS'}
             </p>
-            {/* <p
-              style={{ textAlign: 'center', lineHeight: '20px', color: '#999' }}
-            >
-              版本号：{Const.COPY_VERSION}
-            </p> */}
           </div>
         </FormItem>
       </Form>

@@ -230,10 +230,21 @@ const Schedular = () => {
   }
 
   //添加blocked
-  const handleOk = async (e) => {
-    console.log(e)
+  const handleOk = async (blockSlotVO) => {
+    console.log(blockSlotVO)
+    let startTime=listParams.dateNo+' '+blockSlotVO.startTime,
+    endTime=listParams.dateNo+' '+blockSlotVO.endTime,
+    dateNo=listParams.dateNo
+    let p={
+      ...blockSlotVO,
+      startTime,
+endTime,
+dateNo
+    }
+
+
     // currentData
-    const { res } = await webapi.bookBySlot({ expertId: selectPerson, ...e })
+    const { res } = await webapi.bookBySlot({ expertId: selectPerson, blockSlotVO:p})
     setVisiteModel(false)
     getCalendarByDay(listParams)
   }

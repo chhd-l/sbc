@@ -920,7 +920,10 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>{subscriptionInfo.subscriptionNumber}</span>
+                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>
+                    {subscriptionInfo.subscriptionNumber}
+                  </span>
+                  {/* <span>[<FormattedMessage id="Order.goodwillOrder" />]</span> */}
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionDate" /> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>

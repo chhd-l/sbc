@@ -193,8 +193,7 @@ export default class CouponBasicInfo extends Component<any, any> {
             couponPromotionType !== 3 ? (
               <>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
-                  <div style={style}>{this._buildFullBuyType(fullBuyType, fullBuyPrice)}</div>
-
+                  <div style={style}>{this._buildFullBuyType(fullBuyType, fullBuyPrice, fullbuyCount)}</div>
                 </FormItem>
                 <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
                   <div style={style}>
@@ -305,11 +304,13 @@ export default class CouponBasicInfo extends Component<any, any> {
   /**
    * 构建使用门槛结构
    */
-  _buildFullBuyType = (fullBuyType, fullBuyPrice) => {
+  _buildFullBuyType = (fullBuyType, fullBuyPrice, fullbuyCount) => {
     if (fullBuyType === 0) {
       return 'No threshold';
     } else if (fullBuyType === 1) {
       return `Over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${fullBuyPrice} is available`;
+    }else if (fullBuyType === 2) {
+      return `Over ${fullbuyCount}${(window as any).RCi18n({ id: 'Marketing.items' })} is available`;
     }
   };
 

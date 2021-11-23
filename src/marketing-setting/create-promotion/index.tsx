@@ -302,6 +302,7 @@ export default function index({...props}) {
           fullItem: detail.fullbuyCount,
           joinLevel: parseInt(detail.couponJoinLevel),
           segmentIds:detail.segmentIds || [],
+          emailSuffixList:detail.emailSuffixList || [],
           scopeType: switchScopeType(detail.scopeType),
           customProductsType:detail.customProductsType || 0 ,
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),

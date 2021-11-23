@@ -7,15 +7,14 @@ class FormSchedular extends React.Component {
     props: {
         form: any
         handleSubmit: Function
-        onCancel:Function
+        onCancel:Function,
+        dateNo:any
     }
 
     handleSubmit = e => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-
-
                 const blockSlotVO = {
                     "id": "",
                     "startTime": moment(values.startTime).format('HH:mm'),
@@ -73,9 +72,12 @@ class FormSchedular extends React.Component {
         return current && current <= moment().day(1).endOf('day');
     }
     disabledDateTime = (e) => {
-        //   console.log(e,'----',moment(e).format('YYYY-MM-DD HH:mm'))
-        // console.log(this.range(0, 24),'====')
-        return [...this.range(0, 24).splice(0,9),...this.range(0, 24).splice(17,9)]
+        let _b= moment(moment(this.props.dateNo).format('YYYY-MM-DD 17:00')).diff(moment(moment().format('YYYY-MM-DD 17:00')),'minutes')
+        if(_b>0){
+            return [...this.range(0, 24).splice(0,9), ...this.range(0, 24).splice(17,9)]
+        }else{
+        return [...this.range(0, 24).splice(0,9),...this.range(0, 24).splice(0,(moment().hour())), ...this.range(0, 24).splice(17,9)]
+        }
     }
     render() {
         const { getFieldDecorator } = this.props.form;

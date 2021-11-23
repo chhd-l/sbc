@@ -118,6 +118,7 @@ const Schedular = () => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
+              startTime:item.startTime,
               isShow: idx === 0 ? true : false,
               allTime: _s[item.bookType] + ' ' + moment(moment(item.startTime, 'YYYY-MM-DD HH:mm')).format('HH:mm') + '-' + moment(moment(item.endTime, 'YYYY-MM-DD HH:mm')).format('HH:mm'),
               appointmentNo: item?.appointmentNo ?? null,
@@ -259,7 +260,9 @@ const Schedular = () => {
       if (!type.appointmentNo) return
       getAppointmentById(type.appointmentNo);
     } else if (type.bookType && type.bookType.includes('Blocked')) {
-      if (!type.id) return
+      let isCancel=moment(moment(type.startTime,'YYYY-MM-DD HH:mm')).diff(moment(),'minutes')
+      // console.log(type,isCancel)
+      if (!type.id||isCancel<=0) return
       confirm({
         okText: RCi18n({ id: 'Product.OK' }),
         cancelText: RCi18n({ id: 'Appointment.Cancel' }),
@@ -425,7 +428,7 @@ const Schedular = () => {
           footer={null}
         >
 
-          {handlerOption === 'create' && <FormSchedular handleSubmit={(e) => handleOk(e)} onCancel={handleCancel} />}
+          {handlerOption === 'create' && <FormSchedular dateNo={listParams.dateNo} handleSubmit={(e) => handleOk(e)} onCancel={handleCancel} />}
 
           {handlerOption === 'detail' && (<div className="appointmention-detail">
             <Card bordered={false}>

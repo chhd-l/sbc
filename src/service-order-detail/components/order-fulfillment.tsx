@@ -1,20 +1,13 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { fromJS } from 'immutable';
-import { Table, Button, InputNumber, Modal, Form, Spin, Row, Timeline, Icon } from 'antd';
+import { Table, Button, InputNumber, Modal, Form, Spin, Timeline } from 'antd';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, AuthWrapper, Logistics, cache, RCi18n } from 'qmkit';
+import { noop, Const, AuthWrapper, cache } from 'qmkit';
 import DeliveryForm from './delivery-form';
 import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment';
-// import orderToBePaid from '../icon/order_to_be_paid.svg';
-// import orderCompleted from '../icon/order_completed.svg';
-// import orderInTransit from '../icon/order_in_transit.svg';
-// import orderToBeDelivered from '../icon/order_to_be_delivered.svg';
-
-const DeliveryFormDetail = Form.create({})(DeliveryForm);
-
 
 /**
  * 订单发货记录
@@ -68,27 +61,11 @@ class OrderDelivery extends React.Component<any, any> {
     logisticsLoading: 'logisticsLoading'
   };
 
-  /*static getDerivedStateFromProps(nextProps, prevState) {
-    const { refresh } = nextProps.relaxProps;
-    // 当传入的type发生变化的时候，更新state
-    if (refresh != prevState.loading) {
-      return {
-
-      };
-    }
-
-    // 否则，对于state不进行任何操作
-    return null;
-  }*/
-
   render() {
-    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, isFetchingLogistics, isSavingShipment, logisticsLoading } = this.props.relaxProps;
+    const { detail, refresh, onRefresh, logisticsLoading } = this.props.relaxProps;
 
     const refreshList = fromJS(refresh);
     const tradeDelivers = refreshList && refreshList.toJS().length > 0 ? fromJS(refresh) : (detail.get('tradeDelivers') as IList);
-    const flowState = detail.getIn(['tradeState', 'flowState']);
-    const payState = detail.getIn(['tradeState', 'payState']);
-    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     //处理赠品
@@ -109,15 +86,7 @@ class OrderDelivery extends React.Component<any, any> {
           }}
         >
           <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
-            <div style={styles.buttonBox as any}>
-              <AuthWrapper functionName="fOrderDetail002">
-                <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>
-                  {<FormattedMessage id="Order.ship" />}
-                </Button>
-              </AuthWrapper>
-            </div>
-          ) : null}
+
         </div>
         <Spin spinning={logisticsLoading}>
           {tradeDelivers.count() > 0
@@ -140,16 +109,6 @@ class OrderDelivery extends React.Component<any, any> {
                     columns={this._deliveryRecordColumns()}
                     dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
                     pagination={false} bordered />
-                    {/* 土耳其跳转第三方物流 */}
-                    {/*{*/}
-                    {/*  storeId === 123457911 && v.get('trackingUrl')? <div>*/}
-                    {/*  <p>*/}
-                    {/*    <i className="iconfont iconIntransit" style={{color:'#e2001a',fontSize:40,marginRight:10}}/>*/}
-                    {/*    <span>{RCi18n({ id: "Order.shipedLogisticTip" })}</span>*/}
-                    {/*    <a href={v.get('trackingUrl')} style={{marginLeft:10}} target="_blank">{RCi18n({ id: "Order.viewLogisticDetail" })+' >'} </a>*/}
-                    {/*  </p>*/}
-                    {/*</div>:null*/}
-                    {/*}*/}
 
                   <div style={styles.expressBox as any}>
                     <div style={styles.stateBox}>
@@ -162,10 +121,6 @@ class OrderDelivery extends React.Component<any, any> {
                             <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
                             {logistic.get('deliverBagNo') ? (<><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>) : null}
 
-                            {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
-                            {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                            Refresh
-                          </Button> */}
                             {v.get('trackingUrl') ? (
                               <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
                                 <FormattedMessage id="Order.Trackdelivery" />
@@ -195,13 +150,7 @@ class OrderDelivery extends React.Component<any, any> {
                         ''
                       )}
                     </div>
-                    {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
-                      <AuthWrapper functionName="fOrderDetail002">
-                        <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
-                          Invalid
-                        </a>
-                      </AuthWrapper>
-                    )}*/}
+
                   </div>
                 </div>
               );
@@ -209,184 +158,37 @@ class OrderDelivery extends React.Component<any, any> {
             : null}
         </Spin>
 
-        { storeId == 123457911 ? this._renderStatusTip(detail) : null}
 
-        <div style={styles.expressBox as any}>
-          <div style={styles.stateBox} />
-          <div style={styles.expressOp}>
-            {flowState === 'DELIVERED' ? (
-              <AuthWrapper functionName="fOrderList003">
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    this._showConfirm();
-                  }}
-                >
-                  <FormattedMessage id="Order.confirmReceipt" />
-                </Button>
-              </AuthWrapper>
-            ) : null}
-          </div>
-        </div>
-
-        <Modal
-          maskClosable={false}
-          title={<FormattedMessage id="Order.DeliverGoods" />}
-          visible={modalVisible}
-          confirmLoading={isSavingShipment}
-          onCancel={this._hideDeliveryModal}
-          onOk={() => {
-            this['_receiveAdd'].validateFields(null, (errs, values) => {
-              //如果校验通过
-              if (!errs) {
-                if (values.deliverNo) {
-                  values.deliverTime = values.deliverTime.format(Const.DAY_FORMAT);
-                } else {
-                  values.deliverNo = null;
-                }
-                saveDelivery(values);
-              }
-            });
-          }}
-        >
-          {modalVisible && <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />}
-        </Modal>
       </div>
     );
-  }
-
-  //渲染订单状态提示语
-  _renderStatusTip(orderDetail) {
-    const orderStatus = orderDetail.getIn(['tradeState', 'flowState']);
-    const logisticsList = orderDetail.get('tradeDelivers').toJS() || []
-    const RenderTip = (props) => {
-      return (
-        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <div style={{ marginRight: '10px' }}>{props.icon}</div>
-          <div>{props.tip}</div>
-          {props.operation ? (
-            <div className="text-md-right text-center">
-              {props.operation}
-            </div>
-          ) : null}
-        </div>
-      )
-    }
-    let ret = null;
-    switch (orderStatus) {
-      case 'INIT':
-        // order create订单创建
-        ret = (
-          <RenderTip
-            // icon={
-            //   <Icon component={orderToBePaid} style={{ fontSize: '20px' }}/>
-            // }
-            tip={<FormattedMessage id="Order.createOrderTip" />}
-          />
-        );
-        break;
-      case 'TO_BE_DELIVERED':
-        // waiting for shipping等待发货
-        ret = (
-          <RenderTip
-            // icon={<Icon component={orderToBeDelivered} style={{ fontSize: '24px' }}/>}
-            tip={<FormattedMessage id="Order.waitShipping" />}
-          />
-        );
-        break;
-      case 'SHIPPED':
-        // order in shipping发货运输中
-        ret = (
-          <RenderTip
-            // icon={<Icon component={orderInTransit} style={{ fontSize: '24px' }}/>}
-            tip={
-              <FormattedMessage
-                id="Order.inTranistTip"
-                values={{
-                  val:
-                    logisticsList[0] && logisticsList[0].trackingUrl ? (
-                      <span>
-                        <a
-                          href={logisticsList[0].trackingUrl}
-                          target="_blank"
-                          rel="nofollow"
-                        >
-                          <FormattedMessage id="Order.viewLogisticDetail" /> &gt;
-                        </a>
-                      </span>
-                    ) : null
-                }}
-              />
-            }
-          />
-        );
-        break;
-      case 'COMPLETED':
-        // order completes完成订单
-        ret = (
-          <RenderTip
-            // icon={<Icon component={orderCompleted} style={{ fontSize: '24px' }}/>}
-            tip={<FormattedMessage id="Order.completeTip" />}
-          />
-        );
-        break;
-    }
-    return ret;
   }
 
   _deliveryColumns = () => {
     const { changeDeliverNum } = this.props.relaxProps;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
-
+    
     return [
       {
-        title: <FormattedMessage id="Order.No." />,
-        key: 'index',
-        render: (_text, _row, index) => index + 1
+        title: <FormattedMessage id="Order.appointmentNo" />,
+        dataIndex: 'appointmentNo',
+        key: 'appointmentNo',
       },
       {
-        title: <FormattedMessage id="Order.SKUCode" />,
-        dataIndex: 'skuNo',
-        key: 'skuNo'
+        title: <FormattedMessage id="Order.appointmentStatus2" />,
+        dataIndex: 'status',
+        key: 'status',
       },
       {
-        title: <FormattedMessage id="Order.Productname" />,
-        dataIndex: 'skuName',
-        key: 'skuName',
+        title: <FormattedMessage id="Order.appointmentTime2" />,
+        dataIndex: 'time',
+        key: 'time',
+      },
+      {
+        title: <FormattedMessage id="Order.appointmentOperator" />,
+        dataIndex: 'operator',
+        key: 'operator',
         width: '40%'
       },
-      {
-        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
-        dataIndex: 'specDetails',
-        key: 'specDetails'
-      },
-      {
-        title: <FormattedMessage id="Order.Quantity" />,
-        dataIndex: 'num',
-        key: 'num'
-      },
-      {
-        title: <FormattedMessage id="Order.Shipped" />,
-        dataIndex: 'deliveredNum',
-        key: 'deliveredNum',
-        render: (deliveredNum) => (deliveredNum ? deliveredNum : 0)
-      },
-      {
-        title: <FormattedMessage id="Order.ThisShipment" />,
-        key: 'deliveringNum',
-        render: (_, row) => {
-          return (
-            <InputNumber
-              min={0}
-              max={row.num - row.deliveredNum}
-              value={row.deliveringNum ? row.deliveringNum : 0}
-              onChange={(value) => {
-                changeDeliverNum(_.skuId, _.isGift, value);
-              }}
-            />
-          );
-        }
-      }
     ];
   };
 
@@ -395,28 +197,23 @@ class OrderDelivery extends React.Component<any, any> {
     return [
       {
         title: <FormattedMessage id="Order.No." />,
-        key: 'index',
+        key: 'appointmentNo',
         render: (_text, _row, index) => index + 1
       },
       {
         title: <FormattedMessage id="Order.SKUCode" />,
-        dataIndex: 'skuNo',
-        key: 'skuNo'
+        dataIndex: 'status',
+        key: 'status'
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
-        dataIndex: 'itemName',
-        key: 'itemName'
+        dataIndex: 'time',
+        key: 'time'
       },
       {
-        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
-        dataIndex: 'specDetails',
-        key: 'specDetails'
-      },
-      {
-        title: <FormattedMessage id="Order.ThisShipment" />,
-        dataIndex: 'itemNum',
-        key: 'itemNum'
+        title: <FormattedMessage id="Order.Productname" />,
+        dataIndex: 'operator',
+        key: 'operator'
       }
     ];
   };
@@ -458,26 +255,6 @@ class OrderDelivery extends React.Component<any, any> {
     });
   };
 
-  /**
-   * 确认收货确认提示
-   * @param tdId
-   * @private
-   */
-  _showConfirm = () => {
-    const { confirm, detail } = this.props.relaxProps;
-    const tid = detail.get('id');
-    const confirmModal = Modal.confirm;
-    const title = (window as any).RCi18n({ id: 'Order.confirmReceipt' });
-    const content = (window as any).RCi18n({ id: 'Order.Confirmreceiptofallitems' });
-    confirmModal({
-      title: title,
-      content: content,
-      onOk() {
-        confirm(tid);
-      },
-      onCancel() { }
-    });
-  };
 }
 
 export default injectIntl(OrderDelivery);

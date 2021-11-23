@@ -37,8 +37,10 @@ export default class AppStore extends Store {
     if (key != '0') {
       form['tradeState']['flowState'] = key;
     }
-    form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
-    form['orderSource'] = 'L_ATELIER_FELINE';
+    form['orderType'] = 'ALL_ORDER';
+    form['orderSource'] = 'L_ATELIER_FELIN';
+    
+    // form['orderType'] = 'FELINE_ORDER';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
@@ -135,8 +137,6 @@ export default class AppStore extends Store {
       } else {
         message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
         this.btnLoading = false;
-        //set loading false
-        // this.dispatch('detail-actor:setButtonLoading', false)
       }
     }
   };

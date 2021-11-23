@@ -416,6 +416,7 @@ class OrderDetailTab extends React.Component<any, any> {
               </Row>
             </div>
           </Col>
+
           {/*PetOwner panel*/}
           <Col span={12}>
             <div className="headBox">
@@ -433,6 +434,48 @@ class OrderDetailTab extends React.Component<any, any> {
                 {detail.getIn(['buyer', 'account'])}
               </p>
             </div>
+          </Col>
+        </Row>
+
+        <Row gutter={30}>
+          {/*Appointment panel*/}
+          <Col span={12}>
+            <Row>
+              <div className="headBox">
+                <h4>
+                  <FormattedMessage id="Order.appointment" />
+                </h4>
+                <Col span={12}>
+                  <p>
+                    <FormattedMessage id="Order.appointmentNumber" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.appointmentStatus" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.appointmentTime" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.expertType" />: null
+                  </p>
+                </Col>
+          
+                <Col span={12}>
+                  <p>
+                    <FormattedMessage id="Order.bookingTime" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.appointmentType" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.appointmentLocation" />: null
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.expertName" />: null
+                  </p>
+                </Col>
+              </div>
+            </Row>
           </Col>
         </Row>
 

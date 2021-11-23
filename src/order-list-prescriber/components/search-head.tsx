@@ -111,7 +111,7 @@ class SearchHead extends Component<any, any> {
 
     const orderSourceList = [
       { value: 'FGS', name: (window as any).RCi18n({id:'Order.fgs'}) },
-      { value: 'L_ATELIER_FELINE', name: (window as any).RCi18n({id:'Order.felin'}) }
+      { value: 'L_ATELIER_FELIN', name: (window as any).RCi18n({id:'Order.felin'}) }
     ];
 
     const menu = (

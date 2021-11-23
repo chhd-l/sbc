@@ -265,6 +265,7 @@ class SearchHead extends Component<any, any> {
                                 orderType: value
                               });
                             }}
+                            disabled
                           >
                             {orderTypeList &&
                               orderTypeList.map((item, index) => (
@@ -375,8 +376,8 @@ class SearchHead extends Component<any, any> {
                           dropdownMatchSelectWidth={false}
                           allowClear
                           value={subscriptionType}
-                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
+                          disabled
                           onChange={(value) => {
                             this.setState(
                               {
@@ -405,6 +406,7 @@ class SearchHead extends Component<any, any> {
                         {this._renderCodeSelect()}
                         <Input
                           style={styles.wrapper}
+                          disabled
                           onChange={(e) => {
                             this.setState({
                               codeSelectValue: (e.target as any).value
@@ -414,21 +416,6 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
-                  {/* <Col span={8}>
-                    <FormItem>
-                      <InputGroup compact style={styles.formItemStyle}>
-                        {this._renderRecommenderSelect()}
-                        <Input
-                          style={styles.wrapper}
-                          onChange={(e) => {
-                            this.setState({
-                              recommenderSelectValue: (e.target as any).value
-                            });
-                          }}
-                        />
-                      </InputGroup>
-                    </FormItem>
-                  </Col> */}
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -442,13 +429,13 @@ class SearchHead extends Component<any, any> {
                           style={styles.wrapper}
                           allowClear
                           value={refillNumber}
-                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
                           getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.setState({
                               refillNumber: value
                             });
                           }}
+                          disabled
                         >
                           {refillNumberList &&
                             refillNumberList.map((item, index) => (

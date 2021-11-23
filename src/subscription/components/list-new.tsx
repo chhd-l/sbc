@@ -258,9 +258,11 @@ export default class ListView extends React.Component<any, any> {
 
                         <div style={{ width: 310, display: 'inline-block' }} className="sub_list_subId">
                           <span style={{ marginLeft: 20, color: '#000' }}>{v.subscribeId} </span>
-                          {/* <span style={styles.goodwillColor} className="order_list_goodwill_flag">
-                            <FormattedMessage id="Order.goodwillOrder" />
-                          </span> */}
+                          {v?.subscribeSource === "SUPPLIER" ? (
+                            <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                              <FormattedMessage id="Order.goodwillOrder" />
+                            </span>
+                          ) : null}
                         </div>
 
                         <span style={{ marginLeft: 60 }}>

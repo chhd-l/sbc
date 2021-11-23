@@ -199,7 +199,7 @@ class NewAppointment extends React.Component<any, any> {
         const { params } = this.state;
         let d: any = {}
 
-        let cc = { ...params, ...values, serviceTypeId: '6' }
+        let cc = { ...params, ...values, serviceTypeId: '6',appointmentTypeId:params.apptTypeId}
         console.log(cc);
         // return
         if (params.id) {

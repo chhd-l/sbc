@@ -354,7 +354,10 @@ class Appointment extends React.Component<any, any> {
            
             </Tooltip>}
             {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Pay' })}>
-              <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
+              <Button type="link" size="small" onClick={() => {
+                  history.push(`/offline-checkout?apptNo=${record.apptNo}`)
+
+              }} style={{ padding: '0 5px' }}>
                 <Icon type="pay-circle" />
               </Button>
             </Tooltip>}

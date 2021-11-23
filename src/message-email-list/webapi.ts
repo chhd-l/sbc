@@ -56,3 +56,13 @@ export function resendEmailTask(resendParams={}){
     })
   })
 }
+
+// 查看任务的邮件模板及内容
+export function viewEmailTask(viewParams){
+  return Fetch<TResult>('/message/email/task/getEmailSendLogs',{
+    method:'POST',
+    body: JSON.stringify({
+      ...viewParams
+    })
+  })
+}

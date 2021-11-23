@@ -114,13 +114,16 @@ const Schedular = () => {
   const bookedDataFormat = async (list) => {
     const allTimeArr = await intervals("20210101 09:00", "20210101 17:00");//todo:等确认起始值
     setTimePeriod(allTimeArr)
-    let bookedTypeAllList = Promise.all(list.map(async (el) =>
-      el.bookedTimeSlot.map(item => {
+    let bookedTypeAllList = Promise.all(list.map(async (elx) =>
+      elx.bookedTimeSlot.map(item => {
         let _itemBookedTypeList = []
+        let _s={1:'Blocked',0:'Appointed'}
         intervals(item.startTime, item.endTime).then((specificTime) => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
+              isShow:idx===0?true:false,
+              allTime:_s[item.bookType]+' '+moment(moment(item.startTime,'YYYY-MM-DD HH:mm')).format('HH:mm')+'-'+moment(moment(item.endTime,'YYYY-MM-DD HH:mm')).format('HH:mm'),
               bookType: item.bookType === 1 ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
             })
           })
@@ -133,12 +136,14 @@ const Schedular = () => {
     bookedTypeAllList.then((list) => {
       let _bookedList = list.map(item => _.flatten(item))
       let allTimeBookedList = _bookedList.map((el) =>
-        allTimeArr.map(_time => {
-          let item = { time: _time, bookType: '' }
-          item.bookType = el.find(_el => _el.time === _time)?.bookType
-          return item
-        })
+      allTimeArr.map((_time: any) => {
+        let item = { time: _time, bookType: '', }
+        let _currt: any = el.find((_el: any) => _el.time === _time);
+        item.bookType = _currt?.bookType ?? undefined
+        return { ..._currt, ...item }
+      })
       )
+      console.log(allTimeBookedList,'======')
       setTableData(allTimeBookedList)
     })
   }
@@ -286,10 +291,10 @@ const Schedular = () => {
               {tableData.map((el, idx) =>
                 <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
                   {el.map((_el, _idx) =>
-                    <div key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
+                    <div key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.isShow===false?'top-border-none':''} ${_el.isShow?'top-border-white':''}  ${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
                       <span className={`each-duration`}>
                         <span>
-                          {_el.bookType}
+                        {_el.isShow ?_el.allTime:''}
                         </span>
                       </span>
                     </div>

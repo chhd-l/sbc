@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card,Empty } from 'antd';
+import { DatePicker, Button, Input, Row, Col, Select, Spin, Modal, Form, Card, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { Const, Headline, history,BreadCrumb, RCi18n } from 'qmkit';
+import { Const, Headline, history, BreadCrumb, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 import moment from 'moment';
 import _ from 'lodash';
@@ -113,12 +113,15 @@ const Schedular = () => {
     let bookedTypeAllList = Promise.all(list.map(async (elx) =>
       elx.bookedTimeSlot.map(item => {
         let _itemBookedTypeList = []
+        let _s = { 1: 'Blocked', 0: 'Appointed' }
         intervals(item.startTime, item.endTime).then((specificTime: any) => {
           specificTime.map((el, idx) => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
-              appointmentNo: item?.appointmentNo ?? undefined,
-              id: item?.id ?? undefined,
+              isShow: idx === 0 ? true : false,
+              allTime: _s[item.bookType] + ' ' + moment(moment(item.startTime, 'YYYY-MM-DD HH:mm')).format('HH:mm') + '-' + moment(moment(item.endTime, 'YYYY-MM-DD HH:mm')).format('HH:mm'),
+              appointmentNo: item?.appointmentNo ?? null,
+              id: item?.id ?? null,
               bookType: item.bookType === 1 ? `Blocked ${el}-${specificTime[idx + 1]}` : `Appointed ${el}-${specificTime[idx + 1]}`
             })
           })
@@ -138,6 +141,7 @@ const Schedular = () => {
           return { ..._currt, ...item }
         })
       )
+      console.log(allTimeBookedList, '======')
       setTableData(allTimeBookedList)
     })
   }
@@ -226,10 +230,21 @@ const Schedular = () => {
   }
 
   //添加blocked
-  const handleOk = async (e) => {
-    console.log(e)
+  const handleOk = async (blockSlotVO) => {
+    console.log(blockSlotVO)
+    let startTime = listParams.dateNo + ' ' + blockSlotVO.startTime,
+      endTime = listParams.dateNo + ' ' + blockSlotVO.endTime,
+      dateNo = listParams.dateNo
+    let p = {
+      ...blockSlotVO,
+      startTime,
+      endTime,
+      dateNo
+    }
+
+
     // currentData
-    const { res } = await webapi.bookBySlot({ expertId: selectPerson, ...e })
+    const { res } = await webapi.bookBySlot({ expertId: selectPerson, blockSlotVO: p })
     setVisiteModel(false)
     getCalendarByDay(listParams)
   }
@@ -246,10 +261,10 @@ const Schedular = () => {
     } else if (type.bookType && type.bookType.includes('Blocked')) {
       if (!type.id) return
       confirm({
-        okText:RCi18n({id:'Product.OK'}),
-        cancelText:RCi18n({id:'Appointment.Cancel'}),
-        title: RCi18n({id:'Appointment.confirm title'}),
-        content: RCi18n({id:'Appointment.confirm content'}),
+        okText: RCi18n({ id: 'Product.OK' }),
+        cancelText: RCi18n({ id: 'Appointment.Cancel' }),
+        title: RCi18n({ id: 'Appointment.confirm title' }),
+        content: RCi18n({ id: 'Appointment.confirm content' }),
         onOk() {
           return new Promise(async (resolve, reject) => {
             const { res }: any = await webapi.releaseById({ id: type.id })
@@ -276,7 +291,16 @@ const Schedular = () => {
       .then(({ res }: any) => {
         if (res.code === Const.SUCCESS_CODE) {
           // this.setState({ loading: true, ...res.context });
-          setCurrentData(res?.context?.settingVO ?? {})
+          let data=res?.context?.settingVO ?? {}
+          let text=data?.apptTime
+          if(text){
+            let time= text.split('#')
+            let begin=moment(moment(time[0],'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
+            end=moment(moment(time[1],'YYYY-MM-DD HH:mm')).format('HH:mm');
+            data.apptTime=begin+'-'+end
+          }
+
+          setCurrentData(data)
           setHandlerOption('detail')
           setVisiteModel(true)
         } else {
@@ -305,13 +329,13 @@ const Schedular = () => {
     },
   };
   let status = {
-    "0": RCi18n({id:'Order.offline.booked'}),
-    "1": RCi18n({id:'Order.offline.arrived'}),
-    "2": RCi18n({id:'Order.offline.canceled'}),
+    "0": RCi18n({ id: 'Order.offline.booked' }),
+    "1": RCi18n({ id: 'Order.offline.arrived' }),
+    "2": RCi18n({ id: 'Order.offline.canceled' }),
   }
   return (
     <Spin spinning={visite}>
-      <BreadCrumb/>
+      <BreadCrumb />
       <div className="container-search">
         <Headline title={<FormattedMessage id="Resources.schedular" />} />
         <Row>
@@ -324,13 +348,13 @@ const Schedular = () => {
             />
           </Col>
           {/* <Col span={4} offset={1}> */}
-            {/* <Select
+          {/* <Select
               className="width-full"
             onChange={switchDayOrWeek}
             >
               {dayOrWeek.map(item => <Option key={item.value} value={item.value}>{item.label}</Option>)}
             </Select> */}
-            {/* <Input className="width-full" disabled value="Day" />
+          {/* <Input className="width-full" disabled value="Day" />
           </Col> */}
           <Col span={7} offset={4}>
             <Select
@@ -350,7 +374,7 @@ const Schedular = () => {
         </Row>
       </div>
       <div className="container">
-       { dayPlanList.length ? <div className="booked-table-container">
+        {dayPlanList.length ? <div className="booked-table-container">
           <ul className="person-wrap">
             <li className="blank-space"></li>
             {dayPlanList.map(person => <li style={{ width: rowWidth(tableData) }} className="person-name">{person.employeeName}</li>)}
@@ -375,10 +399,11 @@ const Schedular = () => {
               {tableData.map((el, idx) =>
                 <Col style={{ width: rowWidth(tableData) }} className="item-person-booked">
                   {el.map((_el, _idx) =>
-                    <div onClick={() => clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
+                    <div onClick={() => clickSchedular(_el)} key={_idx} style={{ width: tableData.length > 5 ? "180px" : "100%" }} className={`${_el.isShow === false ? 'top-border-none' : ''} ${_el.isShow ? 'top-border-white' : ''}  ${_el.bookType?.includes("Blocked") ? "block-item" : ""} ${_el.bookType?.includes("Appointed") ? "appointed-item" : ""} planning-content`}>
                       <span className={`each-duration`}>
                         <span>
-                          {_el.bookType}
+                          {/* {_idx===0?_el.bookType:''} */}
+                          {_el.isShow ? _el.allTime : ''}
                         </span>
                       </span>
                     </div>
@@ -387,8 +412,8 @@ const Schedular = () => {
               )}
             </Row>
           </div>
-        </div>:
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </div> :
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         }
 
 
@@ -400,45 +425,45 @@ const Schedular = () => {
           footer={null}
         >
 
-          {handlerOption === 'create'&&<FormSchedular handleSubmit={(e) => handleOk(e)} onCancel={handleCancel} />} 
+          {handlerOption === 'create' && <FormSchedular handleSubmit={(e) => handleOk(e)} onCancel={handleCancel} />}
 
-            {handlerOption === 'detail'&&(<div className="appointmention-detail">
-              <Card bordered={false}>
-                <Form {...formItemLayout} labelAlign="left">
-                  <Form.Item label="Type">
-                    Appointed
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointment.No.' })}>
-                    {currentData?.apptNo ?? ''}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointmention.Type' })}>
-                    {(appointmentType?.objValue ?? {})[currentData?.apptTypeId ?? '']}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointmention.Status' })}>
-                    {status[currentData?.status ?? '']}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.type' })}>
-                    {(expertType?.objValue ?? {})[currentData?.expertTypeId ?? '']}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.name' })}>
-                    {currentData?.expertNames ?? ''}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointmention.Expert.type' })}>
-                    {currentData?.apptTime ?? ''}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointment.Created time' })}>
-                    {currentData?.createTime ?? ''}
-                  </Form.Item>
-                  <Form.Item label={RCi18n({ id: 'Appointment.Last updated time'})}>
-                    {currentData?.updateTime ?? ''}
-                  </Form.Item>
-                </Form>
+          {handlerOption === 'detail' && (<div className="appointmention-detail">
+            <Card bordered={false}>
+              <Form {...formItemLayout} labelAlign="left">
+                <Form.Item label="Type">
+                  Appointed
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointment.No.' })}>
+                  {currentData?.apptNo ?? ''}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointmention.Type' })}>
+                  {(appointmentType?.objValue ?? {})[currentData?.apptTypeId ?? '']}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointmention.Status' })}>
+                  {status[currentData?.status ?? '']}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointmention.Expert.type' })}>
+                  {(expertType?.objValue ?? {})[currentData?.expertTypeId ?? '']}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointmention.Expert.name' })}>
+                  {currentData?.expertNames ?? ''}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointmention.Time' })}>
+                  {currentData?.apptTime ?? ''}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointment.Created time' })}>
+                  {currentData?.createTime ?? ''}
+                </Form.Item>
+                <Form.Item label={RCi18n({ id: 'Appointment.Last updated time' })}>
+                  {currentData?.updateTime ?? ''}
+                </Form.Item>
+              </Form>
 
-              </Card>
-              <div style={{ textAlign: 'center', marginTop: 20 }}>
-                <Button type="primary" onClick={handleCancel} style={{ width: 100 }}>Confirm</Button>
-              </div>
-            </div>)}
+            </Card>
+            <div style={{ textAlign: 'center', marginTop: 20 }}>
+              <Button type="primary" onClick={handleCancel} style={{ width: 100 }}>Confirm</Button>
+            </div>
+          </div>)}
 
         </Modal>}
 

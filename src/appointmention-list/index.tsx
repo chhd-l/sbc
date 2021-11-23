@@ -484,7 +484,7 @@ class Appointment extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   {getFieldDecorator('apptDate', {})(
-                    <RangePicker format="YYYYMMDD" style={{ width: '100%' }} placeholder={RCi18n({ id: 'Appointment.Start time' })} />
+                    <RangePicker format="YYYY-MM-DD" style={{ width: '100%' }} placeholder={RCi18n({ id: 'Appointment.Start time' })} />
                   )}
                 </FormItem>
               </Col>

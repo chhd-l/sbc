@@ -72,8 +72,6 @@ const ResourcesList = () => {
   // 搜索查询
   const handleSearch = (data) => {
     getResourcesPageLists(data)
-    console.log(data, 'data=====')
-    // todo:表格list接口请求
   }
 
   const handleViewCalendar = () =>{

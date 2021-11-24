@@ -67,33 +67,41 @@ export default class PlanningSetting extends React.Component<any, any>{
   // 获取当前详情数据
   getDetailData = async () => {
     const employeeId = this.props.match.params?.id
-    const { res } = await webapi.findByEmployeeId({ employeeId })
-    const data = res?.context?.resourceSetting;
-    let settingData = data;
-    if (!data?.resourceServicePlanVOList?.length) {
-      settingData = Object.assign(data || {}, {
-        resourceServicePlanVOList: this.state.resourceServicePlanVOList
-      });
+    try {
+      this.setState({
+        spinLoading: true
+      })
+      const { res } = await webapi.findByEmployeeId({ employeeId })
+      const data = res?.context?.resourceSetting;
+      let settingData = data;
+      if (!data?.resourceServicePlanVOList?.length) {
+        settingData = Object.assign(data || {}, {
+          resourceServicePlanVOList: this.state.resourceServicePlanVOList
+        });
+      }
+      this.setState({
+        settingDetailData: settingData,//往下传的数据,也是传给接口的数据
+        spinLoading: false,
+        // saveDetailData:data,
+      }, () => {
+        // 暂时不需要该段代码，因为只有felin
+        // const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
+        // const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
+        // this.setState({
+        //   AvailServiceTypeDict
+        // })
+      })
+    }catch(err) {
+
     }
-    this.setState({
-      settingDetailData: settingData,//往下传的数据,也是传给接口的数据
-      // saveDetailData:data,
-    }, () => {
-      // 暂时不需要该段代码，因为只有felin
-      // const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
-      // const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
-      // this.setState({
-      //   AvailServiceTypeDict
-      // })
-    })
   }
 
   saveResourceData = async (params) => {
     try {
-      const { res } = await webapi.saveOrUpdateResource(params)
       this.setState({
         spinLoading: true
       })
+      const { res } = await webapi.saveOrUpdateResource(params)
       if (res.code == Const.SUCCESS_CODE) {
         this.setState({
           spinLoading: false
@@ -279,7 +287,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                   <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
                 </Col>
                 <Col span={2} >
-                  <Button onClick={this.handleCancel} type="primary"><FormattedMessage id="cancel" /></Button>
+                  <Button onClick={this.handleCancel} ><FormattedMessage id="cancel" /></Button>
                 </Col>
               </Row>
             </Form>

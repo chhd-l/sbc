@@ -397,14 +397,11 @@ export default function Step6({setLoading}) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.GroupOfCustomer" />:</div>
               <div className="step-summary-item-text">{enumConst.joinLevel[formData.Conditions.joinLevel]}</div>
             </div>
-            {
-              formData.Advantage.couponPromotionType !== 3 && (
-                <div className="step-summary-item">
-                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
-                  <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
-                </div>
-              )
-            }
+
+            <div className="step-summary-item">
+              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
+              <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
+            </div>
 
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>

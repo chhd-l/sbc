@@ -262,7 +262,7 @@ function Step4({form}){
             </Radio.Group>
           )}
           {
-            purchaseType === 0 &&  (
+            purchaseType !== 3 &&  (
               <div>
                 <Checkbox checked={isSuperimposeSubscription} onChange={(e=>{
                   setIsSuperimposeSubscription(e.target.checked)

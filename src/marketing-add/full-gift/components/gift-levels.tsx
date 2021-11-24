@@ -462,12 +462,17 @@ class GiftLevels extends React.Component<any, any> {
    * @param selectedRows
    */
   skuSelectedBackFun = (index, selectedSkuIds, selectedRows) => {
+    console.log(selectedRows.toJS())
+    console.log(selectedSkuIds)
     this.onChange(
       index,
       'fullGiftDetailList',
-      selectedSkuIds.map((skuId) => {
-        return { productId: skuId, productNum: 1 };
-      })
+      // selectedSkuIds.map((skuId) => {
+      //   return { productId: skuId, productNum: 1 };
+      // })
+      selectedRows.toJS().map(({goodsInfoId,goodsInfoName})=>(
+        { productId: goodsInfoId, productNum: 1,productName:goodsInfoName }
+      ))
     );
     let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
     this.props.GiftRowsOnChange(rows)

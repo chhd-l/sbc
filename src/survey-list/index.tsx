@@ -28,9 +28,11 @@ const SurveyList = () => {
 
   // 搜索
   const handleSearch = (searchData) => {
-    let searchP = Object.assign(searchParams,{
-      ...searchData
-    })
+    let searchP = {
+      ...searchData,
+      pageNum: 0,
+      pageSize: 10,
+    }
     setSearchParams(searchP)
     getSurveyList(searchP)
   }

@@ -8,7 +8,7 @@ import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
 
 import * as webapi from './webapi';
-import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh } from './webapi';
+import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh,findAppointmentByApptNo } from './webapi';
 import { message } from 'antd';
 import LogisticActor from './actor/logistic-actor';
 import { Const, history, RCi18n, ValidConst } from 'qmkit';
@@ -40,12 +40,16 @@ export default class AppStore extends Store {
         webapi.getPaymentInfo(orderInfo.id),
         queryDictionary({
           type: 'country'
-        })
+        }),
+        findAppointmentByApptNo(orderInfo.appointmentNo)
       ]).then((results) => {
         const { res: payRecordResult } = results[0] as any;
         const { res: logistics } = results[1] as any;
         const { res: payRecordResult2 } = results[2] as any;
         const { res: countryDictRes } = results[3] as any;
+        const { context: appointInfoRes } = results[4]?.res as any;
+        orderInfo=Object.assign(orderInfo,appointInfoRes)
+        console.log('3333',orderInfo)
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('detail:init', orderInfo);

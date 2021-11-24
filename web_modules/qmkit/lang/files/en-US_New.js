@@ -958,7 +958,7 @@ export default {
         'Order.Fulfillment':'Fulfillment',
         'Order.ServiceOrderlist':'Order list (Service)',
         'Order.goodwillOrder':'Goodwill order',
-        
+
         'Order.appointment':'Appointment',
         'Order.appointmentNumber':'Appointment number',
         'Order.bookingTime':'Booking Time',
@@ -972,6 +972,8 @@ export default {
         'Order.appointmentStatus2':'Status',
         'Order.appointmentTime2':'Time',
         'Order.appointmentOperator':'Operator',
+        'Order.Confirmed':'Confirmed',
+        'Order.appointmentLocation':'appointment Location'
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",
@@ -2606,6 +2608,7 @@ export default {
         'Menu.Coupon Code List': 'Coupon Code List',
         'Menu.Promotion Code List': 'Promotion Code List',
         'Menu.Service Order': 'Service Order',
+        'Menu.Tasks': 'Tasks',
     },
     Others: {
         "import": "Import",

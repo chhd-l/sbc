@@ -385,7 +385,9 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{detail.get('id')}</div>}
+                    title={<div>{detail.get('id')}{detail.get('orderSource') === 'SUPPLIER' ? (
+                      <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      ):''}</div>}
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}

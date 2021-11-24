@@ -1,6 +1,22 @@
 import React, { Component, LegacyRef } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon, notification } from 'antd';
+import { BreadCrumb, SelectGroup, Const, Headline, cache, RCi18n } from 'qmkit';
+import {
+  Form,
+  Row,
+  Col,
+  Select,
+  Input,
+  Button,
+  message,
+  Tooltip,
+  Table,
+  DatePicker,
+  Collapse,
+  Breadcrumb,
+  Icon,
+  notification,
+  Modal
+} from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ListView from './components/list-view';
@@ -100,15 +116,25 @@ export default class Task extends React.Component<any, any> {
     this.setState({
       exportLoading: true
     })
-    new Promise(resolve => {
-      setTimeout(() => {
-        resolve({res: {code: Const.SUCCESS_CODE}})
-      }, 5000)
-    }).then((data:any) => {
+    webapi.exportTask(taskForm).then((data:any) => {
       const res = data.res;
 
       if (res.code === Const.SUCCESS_CODE) {
-        message.success((window as any).RCi18n({id: 'Task.ExportTaskTips'}))
+        Modal.success({
+          width: 550,
+          centered: true,
+          content: RCi18n({ id: 'Public.exportConfirmTip' }),
+          okText: RCi18n({ id: 'Order.btnConfirm' }),
+          icon: '',
+          onOk: () => {
+            // this.props.history.goBack();
+          },
+          okButtonProps: {
+            style: {
+              marginRight: 200
+            }
+          }
+        });
       } else {
         message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
       }

@@ -76,13 +76,6 @@ function Step5({ form }) {
           couponPromotionType:0
         })
         setCouponPromotionType(0)
-      }else {
-        if(formData.Conditions.promotionType !== 0){
-          setFieldsValue({
-            couponPromotionType:0
-          })
-          setCouponPromotionType(0)
-        }
       }
     }
 
@@ -181,7 +174,7 @@ function Step5({ form }) {
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
               {
-                (formData.PromotionType.typeOfPromotion !== 1 && formData.Conditions.promotionType === 0 ) &&
+                formData.PromotionType.typeOfPromotion !== 1 &&
                 <Radio value={4}>
                   <FormattedMessage id="Marketing.Gifts" />
                 </Radio>
@@ -457,7 +450,6 @@ function Step5({ form }) {
                   )
                 }
               </>
-
             )
             : (
               <>
@@ -586,32 +578,32 @@ function Step5({ form }) {
                     </div>
                   </Form.Item>
                 )}
-                {
-                  couponPromotionType === 4 && (
-                    <Form.Item wrapperCol={{offset: 0,span:24}} required={true} labelAlign="left">
-                      {
-                        getFieldDecorator(
-                          'rules',
-                          {}
-                        )(
-                          <GiftLevels
-                            form={form}
-                            selectedRows={selectedGiftRows}
-                            isNormal={false}
-                            fullGiftLevelList={fullGiftLevelList}
-                            onChangeBack={onRulesChange}
-                            isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
-                            GiftRowsOnChange={GiftRowsOnChange}
-                            noMulti={true}
-                          />
-                        )}
-                    </Form.Item>
-                  )
-                }
               </>
             )
         }
-
+        {/*promotion gift所有可选*/}
+        {
+          couponPromotionType === 4 && (
+            <Form.Item wrapperCol={{offset: 0,span:24}} required={true} labelAlign="left">
+              {
+                getFieldDecorator(
+                  'rules',
+                  {}
+                )(
+                  <GiftLevels
+                    form={form}
+                    selectedRows={selectedGiftRows}
+                    isNormal={false}
+                    fullGiftLevelList={fullGiftLevelList}
+                    onChangeBack={onRulesChange}
+                    isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
+                    GiftRowsOnChange={GiftRowsOnChange}
+                    noMulti={true}
+                  />
+                )}
+            </Form.Item>
+          )
+        }
 
       </Form>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
+import { Button, Form, Input, Row, Col, Select, Spin, Modal } from 'antd';
 import { history, Const,BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
@@ -34,7 +34,8 @@ export default class PlanningSetting extends React.Component<any, any>{
           },
           resourceDatePlanVOS: []
         }]
-      }]
+      }],
+      timeErr:false,
     }
   }
 
@@ -67,33 +68,41 @@ export default class PlanningSetting extends React.Component<any, any>{
   // 获取当前详情数据
   getDetailData = async () => {
     const employeeId = this.props.match.params?.id
-    const { res } = await webapi.findByEmployeeId({ employeeId })
-    const data = res?.context?.resourceSetting;
-    let settingData = data;
-    if (!data?.resourceServicePlanVOList?.length) {
-      settingData = Object.assign(data || {}, {
-        resourceServicePlanVOList: this.state.resourceServicePlanVOList
-      });
+    try {
+      this.setState({
+        spinLoading: true
+      })
+      const { res } = await webapi.findByEmployeeId({ employeeId })
+      const data = res?.context?.resourceSetting;
+      let settingData = data;
+      if (!data?.resourceServicePlanVOList?.length) {
+        settingData = Object.assign(data || {}, {
+          resourceServicePlanVOList: this.state.resourceServicePlanVOList
+        });
+      }
+      this.setState({
+        settingDetailData: settingData,//往下传的数据,也是传给接口的数据
+        spinLoading: false,
+        // saveDetailData:data,
+      }, () => {
+        // 暂时不需要该段代码，因为只有felin
+        // const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
+        // const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
+        // this.setState({
+        //   AvailServiceTypeDict
+        // })
+      })
+    }catch(err) {
+
     }
-    this.setState({
-      settingDetailData: settingData,//往下传的数据,也是传给接口的数据
-      // saveDetailData:data,
-    }, () => {
-      // 暂时不需要该段代码，因为只有felin
-      // const AvailServiceTypeId = data?.resourceServicePlanVOList?.[0].serviceTypeId
-      // const AvailServiceTypeDict = this.state.serviceTypeDict.filter(item => item.id == AvailServiceTypeId)
-      // this.setState({
-      //   AvailServiceTypeDict
-      // })
-    })
   }
 
   saveResourceData = async (params) => {
     try {
-      const { res } = await webapi.saveOrUpdateResource(params)
       this.setState({
         spinLoading: true
       })
+      const { res } = await webapi.saveOrUpdateResource(params)
       if (res.code == Const.SUCCESS_CODE) {
         this.setState({
           spinLoading: false
@@ -129,6 +138,13 @@ export default class PlanningSetting extends React.Component<any, any>{
 
   saveSubmit = (e) => {
     e.preventDefault();
+    if(this.state.timeErr) {
+      Modal.error({
+        content: ((window as any).RCi18n({ id: 'Resources.TimeErrorInfo' })),
+        onOk() { },
+      });
+      return
+    }
     this.props.form.validateFields((err, values) => {
       const params = Object.assign(this.state.settingDetailData, {
         ...values
@@ -144,6 +160,12 @@ export default class PlanningSetting extends React.Component<any, any>{
     this.setState({
       // saveDetailData: params,
       settingDetailData: _data,
+    })
+  }
+
+  updateTimeRangeErrInfo = (bol) =>{
+    this.setState({
+      timeErr:true
     })
   }
 
@@ -273,13 +295,14 @@ export default class PlanningSetting extends React.Component<any, any>{
                 serviceData={settingDetailData}
                 serviceTypeDict={AvailServiceTypeDict}
                 updateServiceData={(data) => this.updateServiceData(data)}
+                updateTimeRangeErrInfo={(bol)=>this.updateTimeRangeErrInfo(bol)}
               />
               <Row>
                 <Col span={2} offset={9}>
                   <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
                 </Col>
                 <Col span={2} >
-                  <Button onClick={this.handleCancel} type="primary"><FormattedMessage id="cancel" /></Button>
+                  <Button onClick={this.handleCancel} ><FormattedMessage id="cancel" /></Button>
                 </Col>
               </Row>
             </Form>

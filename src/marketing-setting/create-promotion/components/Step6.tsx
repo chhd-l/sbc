@@ -209,11 +209,6 @@ export default function Step6({setLoading}) {
           /**
            * 第四步
            */
-          // promotionType: formData.Conditions.promotionType,
-          // isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
-          // joinLevel: (formData.Conditions.joinLevel === 0 || formData.Conditions.joinLevel === -4) ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
-          // segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
-          // scopeType: formData.Conditions.scopeType,
           ...commonParams.Conditions,
 
           marketingFreeShippingLevel: {
@@ -402,14 +397,11 @@ export default function Step6({setLoading}) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.GroupOfCustomer" />:</div>
               <div className="step-summary-item-text">{enumConst.joinLevel[formData.Conditions.joinLevel]}</div>
             </div>
-            {
-              formData.Advantage.couponPromotionType !== 3 && (
-                <div className="step-summary-item">
-                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
-                  <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
-                </div>
-              )
-            }
+
+            <div className="step-summary-item">
+              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
+              <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
+            </div>
 
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
@@ -527,9 +519,19 @@ export default function Step6({setLoading}) {
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                       {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+
+                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }*/}
+                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }*/}
+                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }*/}
+                      {formData.Advantage.couponPromotionType === 4 && (
+                        <>
+                          {
+                            formData.Advantage.fullGiftLevelList[0].fullGiftDetailList.map(item=>
+                             <span style={{paddingRight:6}}>{item.productName}</span>
+                            )
+                          }
+                        </>
+                      )}
                     </div>
                   </div>
 

@@ -3,7 +3,7 @@ import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Mod
 import { FormattedMessage } from 'react-intl';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const, RCi18n } from 'qmkit';
-import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getSuggestionOrValidationMethodName, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope, getSuggestionAddressListByDQE } from './webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getSuggestionOrValidationMethodName, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope, getSuggestionAddressListByDQE, returnDQE } from './webapi';
 import { updateAddress, addAddress, validPostCodeBlock } from '../webapi';
 import _ from 'lodash';
 import IMask from 'imask';
@@ -80,7 +80,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
       fields: {},
       suggestionAddress: {},
       searchAddressList: [],
-      dadataAddress: {} //用来验证俄罗斯地址是不是在配送范围
+      dadataAddress: {}, //用来验证俄罗斯地址是不是在配送范围
+      suggestionOpen: false  //手动控制建议地址的展开或关闭
     };
     this.searchCity = _.debounce(this.searchCity, 500);
     this.searchAddress = _.debounce(this.searchAddress, 200);
@@ -136,6 +137,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
       isAddress1ApplyValidation
     }, () => {
       // this.setPhoneNumberReg();
+      //设置默认country
+      if (!this.props.delivery.countryId && countries.length === 1) {
+        this.props.form.setFieldsValue({ countryId: countries[0]['id'] });
+      }
     });
   };
 
@@ -342,22 +347,25 @@ class DeliveryItem extends React.Component<Iprop, any> {
         getAddressListByDadata(txt).then((data) => {
           if (data.res.code === Const.SUCCESS_CODE) {
             this.setState({
-              searchAddressList: data.res.context.addressList
+              searchAddressList: data.res.context.addressList,
+              suggestionOpen: true
             });
           }
         });
       } else if (suggestionMethodName === 'DQE') {
-        getSuggestionAddressListByDQE(txt.replace(/\|/g, '，')).then(data => {
+        getSuggestionAddressListByDQE(txt).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
             this.setState({
               searchAddressList: (data.res.context ?? []).map(addr => ({
                 ...addr,
                 unrestrictedValue: addr.label,
+                selectedListeNumero: '',
                 postCode: addr.codePostal,
                 city: addr.localite,
                 state: addr.county,
                 street: addr.voie
-              }))
+              })),
+              suggestionOpen: true
             });
           }
         });
@@ -366,17 +374,31 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   onSelectRuAddress = (val: string) => {
-    const { suggestionMethodName } = this.state;
-    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === val);
+    let { suggestionMethodName, searchAddressList } = this.state;
+    const address = searchAddressList.find(addr => addr.unrestrictedValue === val);
+    let suggestionOpen = false;
     if (address) {
-      this.setState({
-        dadataAddress: address
-      });
       if (suggestionMethodName === 'DADATA') {
         this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
       } else if (suggestionMethodName === 'DQE') {
-        this.props.form.setFieldsValue({ postCode: address.postCode || '', city: address.city || '' });
+        this.props.form.setFieldsValue({ postCode: address.postCode || '', city: address.city || '', address1: address.address1 });
+        if (address.selectedListeNumero || address.listeNumero.indexOf(';') === -1) {
+          returnDQE(address.idvoie, address.pays, address.selectedListeNumero || address.listeNumero);
+        } else {
+          searchAddressList = address.listeNumero.split(';').map(item => ({
+            ...address,
+            unrestrictedValue: `${item} ${address.unrestrictedValue}`,
+            address1: `${item} ${address.address1}`,
+            selectedListeNumero: item
+          })).concat(searchAddressList);
+          suggestionOpen = true;
+        }
       }
+      this.setState({
+        searchAddressList,
+        dadataAddress: address,
+        suggestionOpen
+      });
     }
   };
 
@@ -387,6 +409,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (!address && suggestionMethodName === 'DADATA') { //dadata 必须选择列表中的一个地址
       this.props.form.setFieldsValue({ address1: this.props.delivery.address1 });
     }
+    this.setState({ suggestionOpen: false });
   };
 
   // 设置手机号输入限制
@@ -428,7 +451,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
         return (
-          <AutoComplete dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onSelect={this.onSelectRuAddress} onBlur={this.onCheckRuAddress} />
+          <AutoComplete open={this.state.suggestionOpen} dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onSelect={this.onSelectRuAddress} onBlur={this.onCheckRuAddress} />
           // <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
           //   {this.state.searchAddressList.map((item, idx) => (
           //     <Option value={item.unrestrictedValue} key={idx}>

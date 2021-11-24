@@ -37,8 +37,13 @@ const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
     )
   }, {
     title: <FormattedMessage id="Survey.creation_time" />,
-    dataIndex: 'creationTime',
-    key: 'creationTime',
+    dataIndex: 'createTime',
+    key: 'createTime',
+    render:(text,record) => ( 
+      <span>
+        {text ? text.includes(".") ? text.split('.')?.[0] : text : ''}
+      </span>
+    )
   }, {
     title: <FormattedMessage id="operation" />,
     dataIndex: 'operation',
@@ -62,7 +67,7 @@ const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
       </span>
     ),
   }]
-  console.log(listData,'listDatalistData')
+
   return (
     <Table
       rowKey="allSurveyListId"

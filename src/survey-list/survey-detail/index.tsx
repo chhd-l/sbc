@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Button, Row, Col, Table, Form, Input, Switch } from 'antd'
+import { Modal, Button, Row, Col, Table, message,Spin } from 'antd'
 import { FormattedMessage } from 'react-intl'
-import { BreadCrumb, Headline, history,Const } from 'qmkit'
+import { BreadCrumb, Headline, history, Const } from 'qmkit'
 import { useParams } from 'react-router-dom'
 import * as webapi from '../webapi'
 import NewSurveyModal from '../component/new-survey-modal'
@@ -26,9 +26,12 @@ const responderListColumns = [{
 },]
 
 const SurveyDetail = () => {
-  const [detailData,setDetailData] = useState({})
-  const [responderListData,setResponderListData] = useState([])
-  const [editSurveyModal,setEditSurveyModal] = useState(false)
+  const [detailData, setDetailData] = useState({})
+  const [responderListData, setResponderListData] = useState([])
+  const [editSurveyModal, setEditSurveyModal] = useState(false)
+  const [pageLoading, setPageLoading] = useState(false)
+  const [activeStatus, setActiveStatus] = useState('')
+  const [modalConfirmLoading,setModalConfirmLoading] = useState(false)
 
   const { id } = useParams()
   useEffect(() => {
@@ -41,30 +44,54 @@ const SurveyDetail = () => {
   }, [])
 
   const getSurveyDetail = async (id) => {
-    const { res } = await webapi.surveyDetail(id)
-    const detailData = res.context || {}
-    setDetailData(detailData)
+    try {
+      setPageLoading(true)
+      const { res } = await webapi.surveyDetail(id)
+      if (res.code === Const.SUCCESS_CODE) {
+        const detailData = res.context || {}
+        let _status = ''
+        if (detailData.status === 0) {
+          _status = 'inactive'
+        } else if (detailData.status === 1) {
+          _status = 'active'
+        }
+        setActiveStatus(_status)
+        setDetailData(detailData)
+      }
+
+      setPageLoading(false)
+    } catch (err) {
+
+    }
   }
 
-  const getSurveyResponderList = async (params) =>{
-    const {res} = await webapi.surveyResponderList(params)
-    const responderListData = res.context.content || []
-    setResponderListData(responderListData)
+  const getSurveyResponderList = async (params) => {
+    try {
+      setPageLoading(true)
+      const { res } = await webapi.surveyResponderList(params)
+      if (res.code === Const.SUCCESS_CODE) {
+        const responderListData = res.context.content || []
+        setResponderListData(responderListData)
+      }
+      setPageLoading(false)
+    } catch (err) {
+
+    }
   }
-  
-  const goBack = () =>{
+
+  const goBack = () => {
     history.push('/survey-list')
   }
 
-  const editSurveyContent =()=>{
+  const editSurveyContent = () => {
     setEditSurveyModal(true)
   }
 
-  const handleCancelModal = () =>{
+  const handleCancelModal = () => {
     setEditSurveyModal(false)
   }
 
-  const saveSurveyContent = (data) =>{
+  const saveSurveyContent = (data) => {
     const param = {
       ...data,
       id,
@@ -73,21 +100,23 @@ const SurveyDetail = () => {
   }
 
   const updateSurveyDetail = async (params) => {
-
-    const {res} = await webapi.updateSurvey(params)
-    console.log(res,'ressss==')
-    try{
-
-      if(res.code === Const.SUCCESS_CODE) {
-        
+    try {
+      setModalConfirmLoading(true)
+      const { res } = await webapi.updateSurvey(params)
+      if (res.code === Const.SUCCESS_CODE) {
+        setEditSurveyModal(false)
+        message.success(res.message)
+        getSurveyDetail(id)
       }
-    }catch(err) {
+      setModalConfirmLoading(false)
+    } catch (err) {
 
     }
   }
 
   return (
     <div>
+      <Spin spinning={pageLoading}>
       <BreadCrumb />
       <div className="container">
         <Headline title={<FormattedMessage id="Survey.survey_detail" />} />
@@ -105,7 +134,7 @@ const SurveyDetail = () => {
                 <Col span={12}>
                   <p>
                     <span><FormattedMessage id="Survey.survey_date" />:</span>&nbsp;
-                    <span>{detailData?.surveyDay}</span>
+                    <span>{detailData?.surveyDate}</span>
                   </p>
                 </Col>
               </Row>
@@ -149,7 +178,7 @@ const SurveyDetail = () => {
               </p>
               <p>
                 <span><FormattedMessage id="Survey.status" />:</span>&nbsp;
-                <span>{detailData?.status ?detailData?.status=== 1?"active":"inactive":''}</span>
+                <span>{activeStatus}</span>
               </p>
             </div>
           </Col>
@@ -177,7 +206,9 @@ const SurveyDetail = () => {
         handleCancelModal={handleCancelModal}
         saveSurveyContent={saveSurveyContent}
         detailData={detailData}
+        confirmLoading={modalConfirmLoading}
       />
+      </Spin>
     </div>
   )
 }

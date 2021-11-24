@@ -43,13 +43,13 @@ export default class NewSurveyModal extends React.Component<any, any>{
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible, detailData } = this.props;
+    const { visible, detailData,confirmLoading} = this.props;
     return (
       <Modal
         title={<strong><FormattedMessage id="Survey.survey_content" /></strong>}
         visible={visible}
         width={700}
-        // confirmLoading={confirmLoading}
+        confirmLoading={confirmLoading}
         maskClosable={false}
         onOk={this.handleOk}
         onCancel={this.handleCancel}

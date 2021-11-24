@@ -15,11 +15,6 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-list')
   },
-  {
-    path: '/service-order',
-    exact: true,
-    asyncComponent: () => import('./service-order')
-  },
   //订单列表(俄罗斯)
   {
     path: '/external-order-page',
@@ -176,7 +171,7 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-return-edit')
   },
-  
+
   // service order
   {
     path: '/service-order',
@@ -970,7 +965,7 @@ const routes = [
     path: '/product-price',
     asyncComponent: () => import('./product-price')
   },
-  
+
   {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')
@@ -1117,7 +1112,7 @@ const routes = [
     path: '/appointment-schedular',
     asyncComponent: () => import('./appointmention-list/schedular')
   },
-  
+
 
   {
     path: '/offline-checkout',
@@ -1142,7 +1137,7 @@ const routes = [
     path: '/integration-dashboard',
     asyncComponent: () => import('./Integration/Dashboard')
   },
-  
+
   {
     path: '/integration-interface',
     asyncComponent: () => import('./Integration/Interface/interface-list')

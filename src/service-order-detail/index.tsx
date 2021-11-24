@@ -77,7 +77,7 @@ export default class OrderDetail extends React.Component<any, any> {
                 <Comment orderNumber={tid} petOwnerName={detail.getIn(['buyer', 'name'])} />
               </Tabs.TabPane>
             </Tabs>
-            <OperateLog />
+            {this.store.state().get('tab')!=='2'?(<OperateLog />):null}
           </div>
         ) : (
           <div

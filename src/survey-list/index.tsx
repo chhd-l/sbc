@@ -12,18 +12,21 @@ const TabPane = Tabs.TabPane;
 const SurveyList = () => {
   const [surveyListData,setSurveyListData] = useState([])
   const [tableLoading, setTableLoading] = useState(false)
-  const [searchParams,setSearchParams] = useState({})
+  const [searchParams,setSearchParams] = useState({
+    pageNum: 0,
+    pageSize: 10,
+  })
   useEffect(()=>{
-    getSurveyList({
-      pageNum: 0,
-      pageSize: 10,
-    })
+    getSurveyList(searchParams)
   },[])
 
   // 搜索
   const handleSearch = (searchData) => {
-    setSearchParams(searchData)
-    getSurveyList(searchData)
+    let searchP = Object.assign(searchParams,{
+      ...searchData
+    })
+    setSearchParams(searchP)
+    getSurveyList(searchP)
   }
   
   // 新增survey
@@ -32,115 +35,11 @@ const SurveyList = () => {
   }
 
   const getSurveyList = async (params) => {
-    console.log(params, 'pparams')
     try {
       setTableLoading(true)
-      const data = await webapi.surveyList(params)
-      console.log(data, 'reslistlist')
-      const res = {
-        code: 'K-000000',
-        context: {
-          content: [
-            {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            }, {
-              id: 1,
-              surveyNumber: 'SUR0001',
-              title: 'xxxxxxxx',
-              views: 138,
-              clicks: 45,
-              status: 0
-            },
-          ],
-          number: 0,
-          size: 10,
-          total: 1,
-          sort: null,
-          totalElements: 1,
-          numberOfElements: 1,
-          first: true,
-          last: true,
-          totalPages: 1,
-          empty: false
-        },
-      };
+      const {res} = await webapi.surveyList(params)
       if (res.code === Const.SUCCESS_CODE) {
-        setSurveyListData(res.context.content || [])
+        setSurveyListData(res.context.surveySumVosPage.content || [])
       }
       setTableLoading(false)
     } catch (err) {

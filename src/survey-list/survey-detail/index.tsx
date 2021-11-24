@@ -32,21 +32,18 @@ const SurveyDetail = () => {
 
   const { id } = useParams()
   useEffect(() => {
-    // todo:放开请求
-    // getSurveyDetail(id)
-    // getSurveyResponderList({
-    //   id,
-    //   pageNum: 0,
-    //   pageSize: 10
-    // })
+    getSurveyDetail(id)
+    getSurveyResponderList({
+      id,
+      pageNum: 0,
+      pageSize: 10
+    })
   }, [])
 
   const getSurveyDetail = async (id) => {
     const { res } = await webapi.surveyDetail(id)
-    console.log(res, 'detailres')
-    const detailData = res.context.survey || {}
+    const detailData = res.context || {}
     setDetailData(detailData)
-
   }
 
   const getSurveyResponderList = async (params) =>{

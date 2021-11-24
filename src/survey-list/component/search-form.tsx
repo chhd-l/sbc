@@ -32,8 +32,6 @@ export default class SearchForm extends React.Component<any, any>{
       }
       if (!err) {
         this.props.onSearch({
-          pageNum: 0,
-          pageSize: 10,
           ...params,
         });
       }

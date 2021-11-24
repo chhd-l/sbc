@@ -4,21 +4,10 @@ import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 
 const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
-  const allSurveyListData = [{
-    surveyNumber: 1,
-    title: 2,
-    views: 33,
-    clicks: 44,
-    status: 5,
-    creationTime: 343
-  }]
 
   // 删除当前行
   const confirmDelete = (id) => {
-    console.log(id,'id===')
-    let _id = 'ff8080817d37ae31017d37afef470002';
-
-    handleDeleteSurvey(_id)
+    handleDeleteSurvey(id)
   }
 
   const AllSurveyListColumns = [{
@@ -51,7 +40,7 @@ const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
     key: 'operation',
     render: (text, record) => (
       <span>
-        <Link style={{marginRight:'15px'}}>
+        <Link to={`/survey-detail/${record.id}`} style={{marginRight:'15px'}}>
         <i className="icon iconfont iconDetails" />
         </Link>
         <Popconfirm

@@ -59,7 +59,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
                 rules: [{ required: isBusiness, message: 'Please input IBAN' }],
                 initialValue: ''
               })(
-              <Input disabled={adyenAuditState !== 3} />
+              <Input disabled={adyenAuditState < 2} />
               )}
             </FormItem>
           </Col>

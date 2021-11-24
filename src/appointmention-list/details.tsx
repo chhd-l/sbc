@@ -1,4 +1,5 @@
 import { Breadcrumb, Card, Col, Form, Row, Spin, Table, Tabs } from 'antd'
+import moment from 'moment';
 import { Const } from 'qmkit';
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
@@ -40,6 +41,15 @@ class Details extends Component {
         apptDetail(id)
             .then(({ res }: any) => {
                 if (res.code === Const.SUCCESS_CODE) {
+                    let data=res.context
+                    let text=data?.appointment?.appointmentTime
+                    console.log(text,'text')
+                    if(text){
+                        let time= text.split('#')
+                        let begin=moment(moment(time[0],'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
+                        end=moment(moment(time[1],'YYYY-MM-DD HH:mm')).format('HH:mm');
+                        data.appointment.appointmentTime=begin+'-'+end
+                      }
                     this.setState({ loading: true, ...res.context });
                 } else {
                     this.setState({ loading: false });
@@ -71,7 +81,7 @@ class Details extends Component {
                     key: 'operateTime',
                 },
                 {
-                    title: 'Time',
+                    title: 'Operation Category',
                     dataIndex: 'operationCategory',
                     key: 'operationCategory',
                 },
@@ -133,7 +143,7 @@ class Details extends Component {
                                                     {appointment?.expertNames ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment time">
-                                                    {appointment?.appointmentDate ?? ''}
+                                                    {appointment?.appointmentTime ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Created time">
                                                     {appointment?.createTime ?? ''}
@@ -153,22 +163,22 @@ class Details extends Component {
                                                         {order?.id ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order time">
-                                                        {order?.id ?? ''}
+                                                        {order?.orderTime ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order status">
-                                                        {order?.id ?? ''}
+                                                        {order?.status ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order  source">
-                                                        {order?.id ?? ''}
+                                                        {order?.source ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order type">
-                                                        {order?.id ?? ''}
+                                                        {order?.orderType ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Create by">
-                                                        {order?.id ?? ''}
+                                                        {order?.orderCreateType ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Payment method">
-                                                        {order?.id ?? ''}
+                                                        {order?.paymentMethodType ?? ''}
                                                     </Form.Item>
                                                 </Form>
                                             </Card>
@@ -204,7 +214,7 @@ class Details extends Component {
 
                             </TabPane>
                             <TabPane tab="Operation log" key="2">
-                                <Table dataSource={operations} columns={columns} />;
+                                <Table pagination={false} dataSource={operations} columns={columns} />;
                             </TabPane>
                         </Tabs>
                     </div>

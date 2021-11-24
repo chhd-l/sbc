@@ -122,25 +122,6 @@ class SubscriptionDetail extends React.Component<any, any> {
       });
   }
 
-  //查询frequency
-  // querySysDictionary = (type: String) => {
-  //   webapi
-  //     .querySysDictionary({ type: type })
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         this.setState({
-  //           frequencyList: res.context.sysDictionaryVOS
-  //         });
-  //       } else {
-  //         message.error('Unsuccessful');
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       message.error('Unsuccessful');
-  //     });
-  // };
-
   getSubscriptionDetail = (id: String) => {
     this.setState({
       loading: true
@@ -152,6 +133,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
+            subscribeSource: subscriptionDetail.subscribeSource,
             deliveryTimes: subscriptionDetail.deliveryTimes,
             subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : subscriptionDetail.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
@@ -552,28 +534,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-    // const cartExtra = (
-    //   <div>
-    //     <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
-    //       <Tooltip placement="top" title="Skip Next Delivery">
-    //         <Button type="link" style={{ fontSize: 16 }}>
-    //           <FormattedMessage id="Subscription.SkipNextDelivery"/>
-    //         </Button>
-    //       </Tooltip>
-    //     </Popconfirm>
-    //     {/* <Popconfirm
-    //       placement="topRight"
-    //       title="Are you sure order now?"
-    //       onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
-    //       okText="Confirm"
-    //       cancelText="Cancel"
-    //     >
-    //       <Button type="link" style={{ fontSize: 16 }}>
-    //         Order Now
-    //       </Button>
-    //     </Popconfirm> */}
-    //   </div>
-    // );
+   
     const columns = [
       {
         title: (
@@ -923,7 +884,10 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>
                     {subscriptionInfo.subscriptionNumber}
                   </span>
-                  {/* <span>[<FormattedMessage id="Order.goodwillOrder" />]</span> */}
+                  
+                  {subscriptionInfo?.subscribeSource === "SUPPLIER" ? (
+                    <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                  ) : null}
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionDate" /> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>

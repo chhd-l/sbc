@@ -7,7 +7,8 @@ class FormSchedular extends React.Component {
     props: {
         form: any
         handleSubmit: Function
-        onCancel:Function
+        onCancel:Function,
+        dateNo:any
     }
 
     handleSubmit = e => {
@@ -27,6 +28,19 @@ class FormSchedular extends React.Component {
         });
     };
 
+    compareToFirstTime = (rule, value, callback) => {
+        const { form } = this.props;
+        let startTime=form.getFieldValue('startTime')
+        // let endTime=
+       let isOver= moment(value).diff(moment(startTime),'minutes')
+        console.log(isOver)
+    //    return
+        if (value && isOver<0) {
+          callback('Two time that you enter is inconsistent!');
+        } else {
+          callback();
+        }
+      };
     // {
     //   "expertId": "",
     //   "blockSlotVO": {
@@ -58,9 +72,12 @@ class FormSchedular extends React.Component {
         return current && current <= moment().day(1).endOf('day');
     }
     disabledDateTime = (e) => {
-        //   console.log(e,'----',moment(e).format('YYYY-MM-DD HH:mm'))
-        // console.log(this.range(0, 24),'====')
-        return [...this.range(0, 24).splice(0,9),this.range(0, 24).splice(17,9)]
+        let _b= moment(moment(this.props.dateNo).format('YYYY-MM-DD 17:00')).diff(moment(moment().format('YYYY-MM-DD 17:00')),'minutes')
+        if(_b>0){
+            return [...this.range(0, 24).splice(0,9), ...this.range(0, 24).splice(17,9)]
+        }else{
+        return [...this.range(0, 24).splice(0,9),...this.range(0, 24).splice(0,(moment().hour())), ...this.range(0, 24).splice(17,9)]
+        }
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -91,7 +108,7 @@ class FormSchedular extends React.Component {
                 </Form.Item>
                 <Form.Item label="Start">
                     {getFieldDecorator('startTime', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{ required: true, message: 'Please input your startTime!' }],
                     })(
                         <TimePicker popupStyle={{width:200}} minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
                         // <DatePicker disabledDate={this.disabledDate}
@@ -108,7 +125,12 @@ class FormSchedular extends React.Component {
 
                 <Form.Item label="End">
                     {getFieldDecorator('endTime', {
-                        rules: [{ required: true, message: 'Please input your Password!' }],
+                        rules: [{ required: true, message: 'Please input your endTime!' },
+                        {
+                            validator: this.compareToFirstTime,
+                          },
+                    ],
+
                     })(
                         <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
 

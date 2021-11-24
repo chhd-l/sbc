@@ -58,3 +58,16 @@ export function updateTask(filterParams = {}) {
     })
   });
 }
+
+export function exportTask(filterParams = {}) {
+  return Fetch<TResult>('/task/async/export', {
+    method: 'POST',
+    body: JSON.stringify({
+      "module": 3,
+      "pickColums": [],
+      "taskPageRequest": {
+        ...filterParams
+      }
+    })
+  });
+}

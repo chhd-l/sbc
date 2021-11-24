@@ -303,6 +303,7 @@ class ExportReport extends Component<any, any> {
                       >
                         <Option value="1">{<FormattedMessage id="Menu.Order" />}</Option>
                         <Option value="2">{<FormattedMessage id="Menu.Subscription" />}</Option>
+                        <Option value="3">{<FormattedMessage id="Menu.Tasks" />}</Option>
                       </SelectGroup>
                     )
                   }

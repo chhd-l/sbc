@@ -2606,6 +2606,7 @@ export default {
         'Menu.Coupon Code List': 'Coupon Code List',
         'Menu.Promotion Code List': 'Promotion Code List',
         'Menu.Service Order': 'Service Order',
+        'Menu.Tasks': 'Tasks',
     },
     Others: {
         "import": "Import",

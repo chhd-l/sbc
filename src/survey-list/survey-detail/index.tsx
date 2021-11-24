@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Button, Row, Col, Table, Form, Input, Switch } from 'antd'
 import { FormattedMessage } from 'react-intl'
-import { BreadCrumb, Headline, history } from 'qmkit'
+import { BreadCrumb, Headline, history,Const } from 'qmkit'
 import { useParams } from 'react-router-dom'
 import * as webapi from '../webapi'
 import NewSurveyModal from '../component/new-survey-modal'
@@ -65,17 +65,25 @@ const SurveyDetail = () => {
   }
 
   const saveSurveyContent = (data) =>{
-    console.log(data,'ddd')
     const param = {
       ...data,
       id,
     }
-    // todo：放开请求
-    // updateSurveyDetail(param)
+    updateSurveyDetail(param)
   }
 
   const updateSurveyDetail = async (params) => {
+
     const {res} = await webapi.updateSurvey(params)
+    console.log(res,'ressss==')
+    try{
+
+      if(res.code === Const.SUCCESS_CODE) {
+        
+      }
+    }catch(err) {
+
+    }
   }
 
   return (
@@ -168,6 +176,7 @@ const SurveyDetail = () => {
         visible={editSurveyModal}
         handleCancelModal={handleCancelModal}
         saveSurveyContent={saveSurveyContent}
+        detailData={detailData}
       />
     </div>
   )

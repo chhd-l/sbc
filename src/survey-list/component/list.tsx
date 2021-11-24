@@ -30,6 +30,11 @@ const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
     title: <FormattedMessage id="Survey.status" />,
     dataIndex: 'status',
     key: 'status',
+    render:(text,record) => ( 
+      <span>
+        {text=== 1?"active":"inactive"}
+      </span>
+    )
   }, {
     title: <FormattedMessage id="Survey.creation_time" />,
     dataIndex: 'creationTime',

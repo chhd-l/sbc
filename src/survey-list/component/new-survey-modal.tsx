@@ -43,7 +43,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible } = this.props;
+    const { visible, detailData } = this.props;
     return (
       <Modal
         title={<strong><FormattedMessage id="Survey.survey_content" /></strong>}
@@ -67,6 +67,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
                       required: true,
                     },
                   ],
+                  initialValue: detailData?.title|| ''
                 })(<Input />)}
               </FormItem>
             </Col>
@@ -78,6 +79,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
                       required: true,
                     },
                   ],
+                  initialValue: detailData?.label|| ''
                 })(<Input />)}
               </FormItem>
             </Col>
@@ -89,6 +91,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
                       required: true,
                     },
                   ],
+                  initialValue: detailData?.description || ''
                 })(<TextArea rows={4} />)}
               </FormItem>
             </Col>
@@ -96,7 +99,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
               <FormItem label={<FormattedMessage id="Survey.active" />}>
                 {getFieldDecorator('status', {
                   valuePropName: 'checked',
-                  initialValue: false
+                  initialValue: detailData?.status ? detailData?.status === 1 ? true : false : false
                 })(<Switch />)}
               </FormItem>
             </Col>

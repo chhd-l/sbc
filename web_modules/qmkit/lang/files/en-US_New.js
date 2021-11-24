@@ -955,9 +955,23 @@ export default {
         'Order.RealSubtotal':'Real subtotal',
         'Order.returnOrder.checkReturnNum':'Cannot return the gift items without the purchased product',
         'Order.peawee':'Peawee',
+        'Order.Fulfillment':'Fulfillment',
+        'Order.ServiceOrderlist':'Order list (Service)',
         'Order.goodwillOrder':'Goodwill order',
+        
+        'Order.appointment':'Appointment',
+        'Order.appointmentNumber':'Appointment number',
+        'Order.bookingTime':'Booking Time',
+        'Order.appointmentStatus':'Appointment Status',
+        'Order.appointmentType':'Appointment Type',
+        'Order.appointmentTime':'Appointment Time',
+        'Order.expertType':'Expert Type',
+        'Order.expertName':'Expert Name',
 
-
+        'Order.appointmentNo':'Appointment No',
+        'Order.appointmentStatus2':'Status',
+        'Order.appointmentTime2':'Time',
+        'Order.appointmentOperator':'Operator',
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",
@@ -2591,6 +2605,7 @@ export default {
         'Menu.Inventory management': 'Inventory management',
         'Menu.Coupon Code List': 'Coupon Code List',
         'Menu.Promotion Code List': 'Promotion Code List',
+        'Menu.Service Order': 'Service Order',
     },
     Others: {
         "import": "Import",

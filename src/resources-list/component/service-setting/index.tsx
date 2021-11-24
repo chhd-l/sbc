@@ -9,7 +9,7 @@ import './index.less'
 
 const { Option } = Select;
 
-const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => {
+const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updateTimeRangeErrInfo }) => {
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [cannotSelect, setCannotSelect] = useState([])
   const [selectedDateNos, setSelectedDateNos] = useState([])
@@ -131,11 +131,10 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
       let startT = newTimes[0]?.split(':')
       let endT = newTimes[1]?.split(':')
       if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
-        let minuteDiff = startT[0] === endT[0] && startT[1] > endT[1] ? true : false
         const _idx = info?.findIndex(infoItem => infoItem.TIndex == idx && infoItem.TSort == sort)
-        if (_idx > -1 && (startT[0] < endT[0] || !minuteDiff)) {
+        if (_idx > -1 && (startT[0] < endT[0] || (startT[0] === endT[0] && startT[1] <= endT[1]))) {
           info?.splice(_idx, 1)
-        } else if (startT[0] > endT[0] || minuteDiff) {
+        } else if (_idx < 0 && ( startT[0] > endT[0] || (startT[0] === endT[0] && startT[1] > endT[1]))) {
           info.push({
             info: 'Please enter the correct time range',
             TIndex: idx,
@@ -145,6 +144,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData }) => 
       }
     })
     setTimeRangeErrInfo(info)
+    info.length && updateTimeRangeErrInfo(true)
   }
 
   const deleteLinePlanList = (sort) => {

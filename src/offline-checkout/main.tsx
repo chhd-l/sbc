@@ -64,6 +64,8 @@ class Checkout extends React.Component<any, any> {
             cateName: cate.cateName,
             childProducts: [],
           }))
+        }, () => {
+          this.handleScanMember()
         });
       } else {
         this.setState({ loading: false });
@@ -79,6 +81,15 @@ class Checkout extends React.Component<any, any> {
       memberType: memberType,
       memberInfo: memberInfo
     });
+  }
+
+  // /appointment-list 跳转中带有 apptNo 参数 需要自动执行一次扫码操作
+  handleScanMember = () => {
+    const apptNo = window.location.href.split('?apptNo=')[1]
+
+    if (apptNo) {
+      this.onScanMember(apptNo)
+    }
   }
 
   onScanMember = (code: string) => {

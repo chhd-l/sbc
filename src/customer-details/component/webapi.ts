@@ -289,3 +289,20 @@ export function getSuggestionAddressListByDQE(address = '') {
     method: 'GET'
   });
 }
+
+/**
+ * DQE 回调地址
+ * @param idVoie 
+ * @param pays 
+ * @param streetNumber 
+ */
+export function returnDQE(idVoie : string, pays : string, streetNumber : string) {
+  return Fetch<TResult>('/address-input-auto/returnDQE', {
+    method: 'POST',
+    body: JSON.stringify({
+      idVoie,
+      pays,
+      streetNumber
+    })
+  });
+}

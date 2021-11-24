@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col, Select, Spin } from 'antd';
+import { Button, Form, Input, Row, Col, Select, Spin, Modal } from 'antd';
 import { history, Const,BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
@@ -34,7 +34,8 @@ export default class PlanningSetting extends React.Component<any, any>{
           },
           resourceDatePlanVOS: []
         }]
-      }]
+      }],
+      timeErr:false,
     }
   }
 
@@ -137,6 +138,13 @@ export default class PlanningSetting extends React.Component<any, any>{
 
   saveSubmit = (e) => {
     e.preventDefault();
+    if(this.state.timeErr) {
+      Modal.error({
+        content: ((window as any).RCi18n({ id: 'Resources.TimeErrorInfo' })),
+        onOk() { },
+      });
+      return
+    }
     this.props.form.validateFields((err, values) => {
       const params = Object.assign(this.state.settingDetailData, {
         ...values
@@ -152,6 +160,12 @@ export default class PlanningSetting extends React.Component<any, any>{
     this.setState({
       // saveDetailData: params,
       settingDetailData: _data,
+    })
+  }
+
+  updateTimeRangeErrInfo = (bol) =>{
+    this.setState({
+      timeErr:true
     })
   }
 
@@ -281,6 +295,7 @@ export default class PlanningSetting extends React.Component<any, any>{
                 serviceData={settingDetailData}
                 serviceTypeDict={AvailServiceTypeDict}
                 updateServiceData={(data) => this.updateServiceData(data)}
+                updateTimeRangeErrInfo={(bol)=>this.updateTimeRangeErrInfo(bol)}
               />
               <Row>
                 <Col span={2} offset={9}>

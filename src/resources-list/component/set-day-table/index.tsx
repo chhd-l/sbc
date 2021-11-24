@@ -200,6 +200,7 @@ const SetDayTable = (props) => {
             value={timeRange[0].length ? moment(timeRange[0], timeFormat) : undefined}
             onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
             allowClear={false}
+            disabledHours={()=>[0,1,2,3,4,5,6,7,8,17,18,19,20,21,22,23]}
           />
           <span>-</span>
           <TimePicker
@@ -210,6 +211,7 @@ const SetDayTable = (props) => {
             value={timeRange[1] && timeRange[1] !== "undefined" ? moment(timeRange[1], timeFormat) : undefined}
             onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
             allowClear={false}
+            disabledHours={()=>[0,1,2,3,4,5,6,7,8,17,18,19,20,21,22,23]}
           />
           <Icon type="plus-square" onClick={handleAddTime} />
          {_time.length>1? <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />:null}

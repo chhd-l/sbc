@@ -16,6 +16,12 @@ const SurveyList = () => {
     pageNum: 0,
     pageSize: 10,
   })
+  const [surveyPagination,setSurveyPagination] = useState({
+    current:1,
+    pageSize: 10,
+    total: 0
+  })
+
   useEffect(()=>{
     getSurveyList(searchParams)
   },[])
@@ -40,6 +46,10 @@ const SurveyList = () => {
       const {res} = await webapi.surveyList(params)
       if (res.code === Const.SUCCESS_CODE) {
         setSurveyListData(res.context.surveySumVosPage.content || [])
+        setSurveyPagination(Object.assign(surveyPagination,{
+          current: res.context.surveySumVosPage.number +1,
+          total: res.context.surveySumVosPage.totalElements
+      }))
       }
       setTableLoading(false)
     } catch (err) {
@@ -54,6 +64,14 @@ const SurveyList = () => {
       message.success(res.message)
       getSurveyList(searchParams)
     }
+  }
+
+  const handlePaginationChange = (pagination) =>{
+    setSurveyPagination(pagination)
+    getSurveyList(Object.assign(searchParams,{
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    }))
   }
 
 
@@ -74,6 +92,8 @@ const SurveyList = () => {
           listData={surveyListData} 
           tableLoading={tableLoading}
           handleDeleteSurvey={handleDeleteSurvey}
+          pagination={surveyPagination}
+          handlePaginationChange={handlePaginationChange}
           />
         </TabPane>
       </Tabs>

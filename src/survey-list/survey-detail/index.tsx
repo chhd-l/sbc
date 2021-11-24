@@ -32,6 +32,12 @@ const SurveyDetail = () => {
   const [pageLoading, setPageLoading] = useState(false)
   const [activeStatus, setActiveStatus] = useState('')
   const [modalConfirmLoading,setModalConfirmLoading] = useState(false)
+  const [responderListLoading,setResponderListLoading] = useState(false)
+  const [responderPagination,setResponderPagination] = useState({
+    current:1,
+    pageSize: 10,
+    total: 0
+  })
 
   const { id } = useParams()
   useEffect(() => {
@@ -57,6 +63,7 @@ const SurveyDetail = () => {
         }
         setActiveStatus(_status)
         setDetailData(detailData)
+
       }
 
       setPageLoading(false)
@@ -67,13 +74,17 @@ const SurveyDetail = () => {
 
   const getSurveyResponderList = async (params) => {
     try {
-      setPageLoading(true)
+      setResponderListLoading(true)
       const { res } = await webapi.surveyResponderList(params)
       if (res.code === Const.SUCCESS_CODE) {
         const responderListData = res.context.content || []
         setResponderListData(responderListData)
+        setResponderPagination(Object.assign(responderPagination,{
+            current: res.context.number +1,
+            total: res.context.totalElements
+        }))
       }
-      setPageLoading(false)
+      setResponderListLoading(false)
     } catch (err) {
 
     }
@@ -112,6 +123,15 @@ const SurveyDetail = () => {
     } catch (err) {
 
     }
+  }
+
+  const handlePagination = (pagination) => {
+    setResponderPagination(pagination)
+    getSurveyResponderList({
+      id,
+      pageNum: pagination.current - 1,
+      pageSize: pagination.pageSize
+    })
   }
 
   return (
@@ -188,9 +208,11 @@ const SurveyDetail = () => {
         <Headline title={<FormattedMessage id="Survey.responder_list" />} />
         <Table
           rowKey="responderListId"
-          // loading={loading}
+          loading={responderListLoading}
           dataSource={responderListData}
           columns={responderListColumns}
+          pagination={responderPagination}
+          onChange={handlePagination}
         />
       </div>
       <div className="bar-button">

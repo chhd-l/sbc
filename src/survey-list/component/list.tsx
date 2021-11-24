@@ -3,11 +3,15 @@ import { Table, Popconfirm } from 'antd'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 
-const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
+const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey,pagination, handlePaginationChange}) => {
 
   // 删除当前行
   const confirmDelete = (id) => {
     handleDeleteSurvey(id)
+  }
+
+  const handlePagination = (pagination) => {
+    handlePaginationChange(pagination)
   }
 
   const AllSurveyListColumns = [{
@@ -74,6 +78,8 @@ const AllSurveyList = ({listData,tableLoading,handleDeleteSurvey}) => {
       loading={tableLoading}
       dataSource={listData}
       columns={AllSurveyListColumns}
+      pagination={pagination}
+      onChange={handlePagination}
     />
   )
 }

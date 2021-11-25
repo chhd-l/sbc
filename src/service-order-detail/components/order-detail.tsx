@@ -485,23 +485,14 @@ class OrderDetailTab extends React.Component<any, any> {
                             .appointStartTime
                         }
                         -
-                        {
-                          this._handleFelinAppointTime(
-                            detail.get('appointmentDate')
-                          ).appointEndTime?.split(' ')[1]
-                        }
+                        {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                       </div>
                     }
                   >
                     <p className="overFlowtext">
                       <FormattedMessage id="Order.appointmentTime" />:{' '}
                       {this._handleFelinAppointTime(detail.get('appointmentDate')).appointStartTime}
-                      -
-                      {
-                        this._handleFelinAppointTime(
-                          detail.get('appointmentDate')
-                        ).appointEndTime?.split(' ')[1]
-                      }
+                      -{this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                     </p>
                   </Tooltip>
                   <p>

@@ -247,8 +247,8 @@ class Appointment extends React.Component<any, any> {
       },
       {
         title: 'Order No',//RCi18n({id:'Appointment.No.'}),
-        dataIndex: 'goodsInfoId',
-        key: 'goodsInfoId',
+        dataIndex: 'businessId',
+        key: 'businessId',
         // width:150,
         ellipsis: true,
         render: (text, record) => {

@@ -548,7 +548,7 @@ class ProductSearchSetting extends Component<any, any> {
                          optionLabelProp='label'
                          placeholder='Please select default quantity selected !' style={{ width: 220 }}>
                 <Option value="0" label="The smallest">The smallest</Option>
-                <Option value="1" label="The second one">The second one</Option>
+                <Option value="1" label="Second smallest one">Second smallest one</Option>
                 <Option value="2" label="The largest">The largest</Option>
               </Select>)}
             </Form.Item>

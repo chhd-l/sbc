@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { BreadCrumb, Headline, history, Const } from 'qmkit'
-import { Button, Form, Input, Row, Col, Switch, Spin,message } from 'antd'
+import { BreadCrumb, Headline, history, Const, RCi18n } from 'qmkit'
+import { Button, Form, Input, Row, Col, Switch, Spin,message,Breadcrumb } from 'antd'
 import * as webapi from '../webapi'
 import './index.less'
 
@@ -70,7 +70,9 @@ export default class NewSurvey extends React.Component<any, any>{
     return (
       <div>
         <Spin spinning={this.state.loading}>
-          {/* <BreadCrumb /> */}
+        <BreadCrumb thirdLevel={true}>
+            <Breadcrumb.Item>{RCi18n({ id: 'Survey.new_survey' })}</Breadcrumb.Item>
+          </BreadCrumb>
           <Form
             {...formItemLayout}
             onSubmit={this.saveSubmit}

@@ -2831,6 +2831,7 @@ export default {
         'Resources.schedular':'Schedular',
         'Resources.list_view':'List View',
         'Resources.TimeErrorInfo':'Please enter the correct time range',
+        'Resources.ServiceTypeErrorInfo':'Please select available service type.',
         'Menu.Schedular':'Schedular',
         'Menu.Resources':'Resources',
         'Menu.Resources planning':'Resources planning'

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Button, Row, Col, Table, message,Spin } from 'antd'
+import { Breadcrumb, Button, Row, Col, Table, message,Spin } from 'antd'
 import { FormattedMessage } from 'react-intl'
-import { BreadCrumb, Headline, history, Const } from 'qmkit'
+import { BreadCrumb, Headline, history, Const,RCi18n } from 'qmkit'
 import { useParams } from 'react-router-dom'
 import * as webapi from '../webapi'
 import NewSurveyModal from '../component/new-survey-modal'
@@ -137,7 +137,9 @@ const SurveyDetail = () => {
   return (
     <div>
       <Spin spinning={pageLoading}>
-      <BreadCrumb />
+      <BreadCrumb thirdLevel={true}>
+        <Breadcrumb.Item>{RCi18n({ id: 'Survey.survey_detail' })}</Breadcrumb.Item>
+      </BreadCrumb>
       <div className="container">
         <Headline title={<FormattedMessage id="Survey.survey_detail" />} />
         <Row>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col, Select, Spin, Modal } from 'antd';
+import { Button, Form, Input, Row, Col, Select, Spin, Modal, message } from 'antd';
 import { history, Const,BreadCrumb } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import _ from 'lodash';
@@ -107,6 +107,7 @@ export default class PlanningSetting extends React.Component<any, any>{
         this.setState({
           spinLoading: false
         },()=>{
+        message.success(res.message)
         history.push('/resources-planning')
         })
       } else {
@@ -145,6 +146,15 @@ export default class PlanningSetting extends React.Component<any, any>{
       });
       return
     }
+    let serviceList = this.state.settingDetailData.resourceServicePlanVOList || []
+    const isHave = serviceList.some(listItem => listItem.serviceTypeId)
+    if(!isHave){
+      Modal.error({
+        content: ((window as any).RCi18n({ id: 'Resources.ServiceTypeErrorInfo' })),
+        onOk() { },
+      });
+      return
+    }
     this.props.form.validateFields((err, values) => {
       const params = Object.assign(this.state.settingDetailData, {
         ...values
@@ -165,7 +175,7 @@ export default class PlanningSetting extends React.Component<any, any>{
 
   updateTimeRangeErrInfo = (bol) =>{
     this.setState({
-      timeErr:true
+      timeErr:bol
     })
   }
 

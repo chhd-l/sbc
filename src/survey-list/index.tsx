@@ -79,7 +79,7 @@ const SurveyList = () => {
 
   return (
     <div>
-      {/* <BreadCrumb /> */}
+      <BreadCrumb />
       <div className="container-search">
         <Headline title={<FormattedMessage id="Survey.survey_list" />} />
         <SearchForm onSearch={handleSearch} />

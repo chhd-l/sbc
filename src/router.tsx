@@ -1182,6 +1182,18 @@ const routes = [
     path: '/schedular',
     asyncComponent: () => import('./resources-list/schedular')
   },
+  {
+    path:'/survey-list',
+    asyncComponent: () => import('./survey-list')
+  },
+  {
+    path:'/new-survey',
+    asyncComponent: () => import('./survey-list/new-survey')
+  },
+  {
+    path:'/survey-detail/:id',
+    asyncComponent: () => import('./survey-list/survey-detail')
+  }
 ];
 
 const homeRoutes = [

@@ -128,7 +128,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
-    const appointInfo=detail.get('settingVO').toJS()
+    const appointInfo = detail.get('settingVO').toJS();
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -188,6 +188,13 @@ class OrderDetailTab extends React.Component<any, any> {
 
     const columns = [
       {
+        title: <FormattedMessage id="Order.LineItemNo" />,
+        dataIndex: 'lineItemNo',
+        key: 'lineItemNo',
+        render: (text) => text,
+        width: '7%'
+      },
+      {
         title: <FormattedMessage id="Order.SKUcode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
@@ -207,7 +214,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
-          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
+          const productName = text === 'individualization' ? record.petsName + "'s" + text : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -224,7 +231,7 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
-        title: storeId === 123457934 ? <FormattedMessage id="Order.Specification" /> : <FormattedMessage id="Order.Weight" />,
+        title: <FormattedMessage id="Order.Specification" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
         width: '9%'
@@ -247,8 +254,8 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '8%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
-            record.subscriptionStatus === 1 &&
-            record.isSuperimposeSubscription === 1 ? (
+          record.subscriptionStatus === 1 &&
+          record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
                 {this._handlePriceFormat(
@@ -276,7 +283,11 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.Subtotal" />,
         width: '8%',
-        render: (row) => <span>{this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}</span>
+        render: (row) => (
+          <span>
+            {this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}
+          </span>
+        )
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
@@ -331,23 +342,22 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
     //ru
-    if (storeId !== 123457934) {
-      columns.splice(
-        7,
-        0,
-        {
-          title: <FormattedMessage id="Order.RegulationDiscount" />,
-          width: '8%',
-          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
-        },
-        {
-          title: <FormattedMessage id="Order.RealSubtotal" />,
-          width: '7%',
-          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
-        }
-      );
-    }
-
+    // if (storeId !== 123457934) {
+    //   columns.splice(
+    //     7,
+    //     0,
+    //     {
+    //       title: <FormattedMessage id="Order.RegulationDiscount" />,
+    //       width: '8%',
+    //       render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
+    //     },
+    //     {
+    //       title: <FormattedMessage id="Order.RealSubtotal" />,
+    //       width: '7%',
+    //       render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
+    //     }
+    //   );
+    // }
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderCategory'));
 
@@ -444,15 +454,56 @@ class OrderDetailTab extends React.Component<any, any> {
                   <FormattedMessage id="Order.appointment" />
                 </h4>
                 <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{appointInfo?.apptNo}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+                    </p>
+                  </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+                    <FormattedMessage id="Order.appointmentStatus" />:{' '}
+                    {appointInfo?.status === 0
+                      ? 'Booked'
+                      : appointInfo?.status === 1
+                      ? 'Arrived'
+                      : 'Cancel'}
                   </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentStatus" />: {appointInfo?.status===0?'Booked':appointInfo?.status===1?'Arrived':'Cancel'}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentTime" />: {this._handleFelinAppointTime(detail.get('appointmentDate')).appointStartTime}-{this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
-                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={
+                      <div>
+                        {
+                          this._handleFelinAppointTime(detail.get('appointmentDate'))
+                            .appointStartTime
+                        }
+                        -
+                        {
+                          this._handleFelinAppointTime(
+                            detail.get('appointmentDate')
+                          ).appointEndTime?.split(' ')[1]
+                        }
+                      </div>
+                    }
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.appointmentTime" />:{' '}
+                      {this._handleFelinAppointTime(detail.get('appointmentDate')).appointStartTime}
+                      -
+                      {
+                        this._handleFelinAppointTime(
+                          detail.get('appointmentDate')
+                        ).appointEndTime?.split(' ')[1]
+                      }
+                    </p>
+                  </Tooltip>
                   <p>
                     <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
                   </p>
@@ -466,7 +517,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.appointmentLocation" />: null
+                    <FormattedMessage id="Order.appointmentLocation" />:
                   </p>
                   <p>
                     <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
@@ -479,8 +530,8 @@ class OrderDetailTab extends React.Component<any, any> {
 
         {/*Subscription panel*/}
         {detail.get('subscribeId') ||
-          detail.get('clinicsId') ||
-          firstTradeItems.recommendationId ? (
+        detail.get('clinicsId') ||
+        firstTradeItems.recommendationId ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             {detail.get('subscribeId') ? (
               <Col span={12} style={{ alignSelf: 'flex-start' }}>
@@ -530,7 +581,7 @@ class OrderDetailTab extends React.Component<any, any> {
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
               (!detail.get('subscribeId') &&
                 (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-              showRealStock ? (
+            showRealStock ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -555,7 +606,7 @@ class OrderDetailTab extends React.Component<any, any> {
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
           (!detail.get('subscribeId') &&
             !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-          showRealStock ? (
+        showRealStock ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">
@@ -637,11 +688,11 @@ class OrderDetailTab extends React.Component<any, any> {
 
               {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>{promotion.marketingName}</span>
-                    <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
-                  </label>
-                ))
+                    <label style={styles.priceItem as any}>
+                      <span style={styles.name}>{promotion.marketingName}</span>
+                      <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
+                    </label>
+                  ))
                 : null}
 
               {tradePrice.subscriptionDiscountPrice ? (
@@ -741,8 +792,16 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.country" />:{' '}
                     {consignee.countryId ? (
-                      <>{countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}</>
-                    ) : consignee.country}
+                      <>
+                        {countryDict
+                          ? countryDict.find((c) => c.id == consignee.countryId)
+                            ? countryDict.find((c) => c.id == consignee.countryId).name
+                            : consignee.countryId
+                          : ''}
+                      </>
+                    ) : (
+                      consignee.country
+                    )}
                   </p>
                   {consignee?.county ? (
                     <p>
@@ -908,7 +967,9 @@ class OrderDetailTab extends React.Component<any, any> {
                             ? countryDict.find((c) => c.id == invoice.countryId).name
                             : invoice.countryId}
                         </>
-                      ) : invoice.country}
+                      ) : (
+                        invoice.country
+                      )}
                     </p>
                     {invoice?.county ? (
                       <p>
@@ -1104,7 +1165,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         retrial(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
@@ -1125,7 +1186,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         confirm(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
   _openPetDetails = (petsInfo) => {
@@ -1148,15 +1209,11 @@ class OrderDetailTab extends React.Component<any, any> {
     const apptTime = appointTime.split('#');
     const appointStartTime =
       apptTime.length > 0
-        ? moment(apptTime[0].split(' ')[0]).format('YYYY-MM-DD') +
-        ' ' +
-        apptTime[0].split(' ')[1]
+        ? moment(apptTime[0].split(' ')[0]).format('YYYY-MM-DD') + ' ' + apptTime[0].split(' ')[1]
         : '';
     const appointEndTime =
       apptTime.length > 1
-        ? moment(apptTime[1].split(' ')[0]).format('YYYY-MM-DD') +
-        ' ' +
-        apptTime[1].split(' ')[1]
+        ? moment(apptTime[1].split(' ')[0]).format('YYYY-MM-DD') + ' ' + apptTime[1].split(' ')[1]
         : '';
     return {
       appointStartTime,

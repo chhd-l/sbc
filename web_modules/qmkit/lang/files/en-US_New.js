@@ -973,7 +973,8 @@ export default {
         'Order.appointmentTime2':'Time',
         'Order.appointmentOperator':'Operator',
         'Order.Confirmed':'Confirmed',
-        'Order.appointmentLocation':'appointment Location'
+        'Order.appointmentLocation':'appointment Location',
+        'Order.LineItemNo':'Line Item No.'
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",

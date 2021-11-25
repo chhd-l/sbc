@@ -6,9 +6,7 @@ import './index.less'
 const timeFormat = 'HH:mm';
 
 const SetDayTable = (props) => {
-  let { weekList, updateTableData, deleteLinePlanList, cannotSelect, setCannotSelect, daysList,timeRangeErrInfo } = props
-  const [singleTimeErrInfo,setSingleTimeErrInfo] =useState("")
-  const [multipleTimeErrInfo,setMultipleTimeErrInfo] =useState("")
+  let { weekList, updateTableData, deleteLinePlanList, cannotSelect, setCannotSelect, daysList, timeRangeErrInfo } = props
 
   // 时间段的添加按钮事件
   const handleAddTime = () => {
@@ -56,96 +54,6 @@ const SetDayTable = (props) => {
     setCannotSelect(cannotSelect)
   }
 
-  // handle
-  const handleTimeErrInfo = (timeArr,idx) =>{
-    console.log(timeArr,'timeArr======')
-    const returnArr =  timeArr.find(el => {
-      return(!el.includes('-') || el.includes('undefined'))
-    })
-    if(returnArr) return
-
-    console.log(returnArr,'---return -00-0')
-    timeArr.map((_itemTimeGroup,index) => {
-    const newTimes = _itemTimeGroup?.split('-')
-    let startT = newTimes[0]?.split(':')
-    let endT = newTimes[1]?.split(':')
-    let info = []
-    if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
-    debugger
-
-      let minuteDiff = startT[0] === endT[0] && startT[1] > endT[1] ? true : false
-      if (timeArr.length === 1) {
-        if ((startT[0] > endT[0] || minuteDiff)) {
-          info.push('Please enter the correct time range')
-        } else {
-          info = []
-        }
-
-      }
-      if (timeArr.length > 1) {
-        if ((startT[0] > endT[0] || minuteDiff) && index === idx) {
-          info.push('Please enter the correct time range')
-          return
-        } else if (index === idx) {
-          const _idx = info.findIndex((itemInfo, itemInfoIdx) => itemInfoIdx === idx)
-          info.splice(_idx, 1)
-        }
-      }
-    }
-
-    console.log(info, 'infooooooofio')
-    })
-  }
-
-  // 单个错误时间区间提示
-  const handleSingleTimeErrInfo = (timeGroup) => {
-    const newTimes = timeGroup.split('-')
-    let startT = newTimes[0]?.split(':')
-    let endT = newTimes[1]?.split(':')
-    let singleInfo = ''
-    if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
-      let minuteDiff = startT[0] === endT[0] && startT[1] > endT[1] ? true : false
-      if (startT[0] > endT[0] || minuteDiff) {
-        singleInfo = 'Please enter the correct time range'
-      } else {
-        singleInfo = ''
-      }
-    }
-    setSingleTimeErrInfo(singleInfo)
-  }
-
-  // 多条错误时间区间提示
-  const handleMultipleTimeErrInfo = (timesArr, index) => {
-    console.log(timesArr, index, '多组数据')
-    const returnArr = timesArr.find(el => {
-      return (!el.includes('-') || el.includes('undefined'))
-    })
-    if (returnArr) return
-    let info = []
-    debugger
-    timesArr.map((_itemTimeGroup, idx) => {
-      const newTimes = _itemTimeGroup?.split('-')
-      let startT = newTimes[0]?.split(':')
-      let endT = newTimes[1]?.split(':')
-      if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
-        debugger
-
-        let minuteDiff = startT[0] === endT[0] && startT[1] > endT[1] ? true : false
-        if ((startT[0] > endT[0] || minuteDiff) && index === idx) {
-          info.push('Please enter the correct time range')
-          return
-        } else if (index === idx) {
-          const _idx = info.findIndex((itemInfo, itemInfoIdx) => itemInfoIdx === idx)
-          info.splice(_idx, 1)
-        }
-      }
-
-    })
-    console.log(info, 'infooooooofio')
-
-
-  }
-
   // 更改时间区间操作事件
   const timeChange = (timeStr, type, sort, idx) => {
     if (weekList.sort == sort) {
@@ -161,7 +69,6 @@ const SetDayTable = (props) => {
         })
         const newTimesArr = _time.map(el => el.join('-'))
         newTimesStr = newTimesArr.join('|')
-        // handleMultipleTimeErrInfo(newTimesArr,idx)
       } else {
         let times = timeSlot.split('-')
         if (type == "start") {
@@ -169,10 +76,8 @@ const SetDayTable = (props) => {
         } else {
           newTimesStr = `${times[0]}-${timeStr}`
         }
-        // handleSingleTimeErrInfo(newTimeStr)
       }
       weekList.timeSlotVO.timeSlot = newTimesStr
-        // handleSingleTimeErrInfo(newTimeStr)
     }
     updateTableData(weekList)
   }
@@ -186,42 +91,42 @@ const SetDayTable = (props) => {
       singleOrMultipleTimes = timeSlot.split('|')
       _time = singleOrMultipleTimes.map(item => item.split('-'))
     }
-    console.log(timeRangeErrInfo,'timeRangeErrInfotimeRangeErrInfo')
+
     return (
       <div>
         {_time.map((timeRange, idx) => {
-      return (
-        <div key={idx} style={{ marginTop: "6px" }}>
-          <TimePicker
-            format={timeFormat}
-            className={'start-time-picker'}
-            minuteStep={15}
-            placeholder={'Start time'}
-            value={timeRange[0].length ? moment(timeRange[0], timeFormat) : undefined}
-            onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
-            allowClear={false}
-            disabledHours={()=>[0,1,2,3,4,5,6,7,8,17,18,19,20,21,22,23]}
-          />
-          <span>-</span>
-          <TimePicker
-            format={timeFormat}
-            className={'end-time-picker'}
-            minuteStep={15}
-            placeholder={'End time'}
-            value={timeRange[1] && timeRange[1] !== "undefined" ? moment(timeRange[1], timeFormat) : undefined}
-            onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
-            allowClear={false}
-            disabledHours={()=>[0,1,2,3,4,5,6,7,8,17,18,19,20,21,22,23]}
-          />
-          <Icon type="plus-square" onClick={handleAddTime} />
-         {_time.length>1? <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} />:null}
-        </div>
-      )
-    })}
-    {timeRangeErrInfo.map(infoItem => infoItem.TSort == weekList.sort ? <span style={{color:"#f5222d"}}>
-      {/* {infoItem.info} */}
-      <FormattedMessage id='Resources.TimeErrorInfo' />
-      </span>:null)}
+          return (
+            <div key={idx} style={{ marginTop: "6px" }}>
+              <TimePicker
+                format={timeFormat}
+                className={'start-time-picker'}
+                minuteStep={15}
+                placeholder={'Start time'}
+                value={timeRange[0].length ? moment(timeRange[0], timeFormat) : undefined}
+                onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
+                allowClear={false}
+                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 18, 19, 20, 21, 22, 23]}
+              />
+              <span>-</span>
+              <TimePicker
+                format={timeFormat}
+                className={'end-time-picker'}
+                minuteStep={15}
+                placeholder={'End time'}
+                value={timeRange[1] && timeRange[1] !== "undefined" ? moment(timeRange[1], timeFormat) : undefined}
+                onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
+                allowClear={false}
+                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 18, 19, 20, 21, 22, 23]}
+              />
+              <Icon type="plus-square" onClick={handleAddTime} />
+              {_time.length > 1 ? <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} /> : null}
+            </div>
+          )
+        })}
+        {timeRangeErrInfo.map(infoItem => infoItem.TSort == weekList.sort ? <span style={{ color: "#f5222d" }}>
+          {/* {infoItem.info} */}
+          <FormattedMessage id='Resources.TimeErrorInfo' />
+        </span> : null)}
       </div>
     )
   }

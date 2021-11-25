@@ -5,6 +5,13 @@ export function fetchOrderDetail(tid: string) {
   return Fetch(`/trade/${tid}`);
 }
 
+export function findAppointmentByApptNo(apptNo: string) {
+  return Fetch<TResult>('/appt/findByNo', {
+    method: 'POST',
+    body: JSON.stringify({ apptNo })
+  });
+}
+
 type TParams = {
   //线下账户
   offLineAccountId: string;

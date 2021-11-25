@@ -193,6 +193,11 @@ class ExportReport extends Component<any, any> {
             case 2:
               return <span>{<FormattedMessage id="Menu.Subscription" />}</span>
               break;
+            case 3:
+              return <span>{<FormattedMessage id="Menu.Tasks" />}</span>
+              break;
+            default:
+              return module
           }
         }
       },

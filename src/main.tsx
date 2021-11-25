@@ -7,6 +7,8 @@ import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+const pcLogo = require('../public/images/login/logo1.png');
+
 const { Content } = Layout;
 
 Spin.setDefaultIndicator(Const.SITE_NAME === 'MYVETRECO' ? <LoadingForMyvetreco /> : <LoadingForRC />);
@@ -52,12 +54,8 @@ export default class Main extends React.Component<any, any> {
             if ((resIco.res as any).defaultLocalDateTime) {
               sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
             }
-            // const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
-            // if (ico) {
-            //   const linkEle = document.getElementById('icoLink') as any;
-            //   linkEle.href = ico[0].url;
-            //   linkEle.type = 'image/x-icon';
-            // }
+            const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
+            sessionStorage.setItem(cache.SITE_LOGO, configLog);
           }
         })
         .catch((err) => {});

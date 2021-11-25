@@ -155,8 +155,10 @@ class FillinPetInfoForm extends Component {
                     }
                     customerPet.push({...values.customerPet[item],petsId,uuid:item})
                 }
-             
-                savepetsRecommendParams(Object.assign({},recommendParams,{...values,customerPet}))
+                let params=Object.assign({},recommendParams,{...values,fillDate:moment(values.fillDate).format('YYYY-MM-DD'),customerPet})
+                console.log(params,values)
+                // return
+                savepetsRecommendParams(params)
 
                 setTimeout(() => {
                     onChangeStep(2)
@@ -352,7 +354,7 @@ class FillinPetInfoForm extends Component {
                                 {getFieldDecorator('fillDate', {
                                     initialValue: moment(recommendParams?.fillDate ?? null, 'YYYY-MM-DD'),
                                     rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
-                                })(<DatePicker style={{ width: '100%' }} disabled={recommendParams.felinRecoId?true:false}/>)}
+                                })(<DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabled={recommendParams.felinRecoId?true:false}/>)}
                             </Form.Item>
                         </Col>
                         <Col span={8}>

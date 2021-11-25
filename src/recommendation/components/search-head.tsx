@@ -56,23 +56,23 @@ class SearchHead extends Component<any, any> {
       goodsNames: '',
     };
   }
-  static getDerivedStateFromProps({relaxProps}, prevState) {
-    let form =relaxProps.form.toJS();
-    // Store prevId in state so we can compare when props change.
-    // Clear out previously-loaded data (so we don't render stale stuff).
-    if (form.felinRecoId !== prevState.felinRecoId) {
-      return {
-        felinRecoId: form.felinRecoId,
-        fillDate: form.fillDate?moment(form.fillDate,'YYYY-MM-DD'):null,
-        buyerOptions: form.consumerEmail?('PO e-mail'):('PO name'),
-        buyerOptionsValue:form.consumerEmail?form.consumerEmail:form.consumerName
+  // static getDerivedStateFromProps({relaxProps}, prevState) {
+  //   let form =relaxProps.form.toJS();
+  //   // Store prevId in state so we can compare when props change.
+  //   // Clear out previously-loaded data (so we don't render stale stuff).
+  //   if (form.felinRecoId !== prevState.felinRecoId) {
+  //     return {
+  //       felinRecoId: form.felinRecoId,
+  //       fillDate: form.fillDate?moment(form.fillDate,'YYYY-MM-DD'):null,
+  //       buyerOptions: form.consumerEmail?('PO e-mail'):('PO name'),
+  //       buyerOptionsValue:form.consumerEmail?form.consumerEmail:form.consumerName
 
-      };
-    }
+  //     };
+  //   }
 
-    // No state update necessary
-    return null;
-  }
+  //   // No state update necessary
+  //   return null;
+  // }
 
   render() {
     const { onSearch, tab, form, onExportModalHide } = this.props.relaxProps;
@@ -131,6 +131,7 @@ class SearchHead extends Component<any, any> {
                     value={felinRecoId}
                     addonBefore={RCi18n({ id: 'Prescriber.Recommendation No' })}
                     onChange={(e) => {
+                      console.log((e.target as any).value)
                       this.setState({
                         felinRecoId: (e.target as any).value
                       });

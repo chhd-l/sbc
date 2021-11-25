@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal,message } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 import { Const } from 'qmkit';
@@ -57,6 +57,9 @@ export default class BulkPlanningModal extends React.Component<any, any>{
           }]
         },
       })
+
+      message.success(res.message)
+
       this.props.onCancel();
     }
   }

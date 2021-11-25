@@ -316,7 +316,6 @@ export default function Step6({setLoading}) {
            * 第四步
            */
           ...commonParams.Conditions,
-          promotionType: 0,
           /**
            * 其他
            */

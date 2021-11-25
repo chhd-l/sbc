@@ -6,7 +6,7 @@ import * as webapi from './webapi';
 import FormActor from './actor/form-actor';
 //import Item from 'antd/lib/list/Item';
 //import { array } from 'prop-types';
-const pcIco = require('../../public/images/login/pcIco.ico');
+const pcLogo = require('../../public/images/login/logo1.png');
 
 export default class AppStore extends Store {
   bindActor() {
@@ -21,24 +21,22 @@ export default class AppStore extends Store {
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async () => {
-    // const linkEle = document.getElementById('icoLink') as any;
-    // linkEle.href = pcIco;
-    // linkEle.type = 'image/x-icon';
-    webapi
-      .getSiteInfo()
-      .then((resIco: any) => {
-        if (resIco.res.code == Const.SUCCESS_CODE) {
-          const logo = JSON.parse((resIco.res.context as any).pcLogo);
-          if(logo && logo.length > 0) {
-            this.dispatch('login:logo', logo[0].url);
-            sessionStorage.setItem(cache.SITE_LOGO, logo[0].url); //放入缓存,以便登陆后获取
-          }
-        }
-        this.dispatch('login:refresh', true);
-      })
-      .catch((err) => {
-       // console.log(err.toString());
-      });
+    // webapi
+    //   .getSiteInfo()
+    //   .then((resIco: any) => {
+    //     if (resIco.res.code == Const.SUCCESS_CODE) {
+    //       const logo = JSON.parse((resIco.res.context as any).pcLogo);
+    //       if(logo && logo.length > 0) {
+    //         this.dispatch('login:logo', logo[0].url);
+    //         sessionStorage.setItem(cache.SITE_LOGO, logo[0].url);
+    //       }
+    //     }
+    //     this.dispatch('login:refresh', true);
+    //   })
+    //   .catch((err) => {});
+    const configLogo = sessionStorage.getItem(cache.SITE_LOGO) ?? pcLogo;
+    this.dispatch('login:logo', configLogo);
+    this.dispatch('login:refresh', true);
   };
 
   /**

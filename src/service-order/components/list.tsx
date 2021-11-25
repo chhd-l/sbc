@@ -146,7 +146,7 @@ class ListView extends React.Component<any, any> {
                       <th style={{ width: '20%' }}>
                         <FormattedMessage id="Order.appointmentStatus" />
                       </th>
-                      
+
                       <th style={{ width: '14%' }}>
                         <FormattedMessage id="Order.paymentStatus" />
                       </th>
@@ -244,7 +244,6 @@ class ListView extends React.Component<any, any> {
 
   _renderContent(dataList) {
     const { onChecked, onAudit, verify, onValidateAudit } = this.props.relaxProps;
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
       dataList &&
@@ -382,29 +381,29 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
 
-                          {/*待发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' && (auditState === 'INSIDE_CHECKED' || auditState === 'CHECKED') && v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
-                            // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
-                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                  <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
-                                    {/*<FormattedMessage id="order.ship" />*/}
-                                  </a>
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
-                          {/*部分发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' && (v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
-                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
-                            (v.getIn(['tradeState', 'payState']) === 'PAID' || v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                  <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping" />
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
+                          {/*/!*待发货状态显示*!/*/}
+                          {/*{Const.SITE_NAME !== 'MYVETRECO' && (auditState === 'INSIDE_CHECKED' || auditState === 'CHECKED') && v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&*/}
+                          {/*  v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&*/}
+                          {/*  // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')*/}
+                          {/*  v.getIn(['tradeState', 'payState']) === 'PAID' && (*/}
+                          {/*    <AuthWrapper functionName="fOrderDetail002">*/}
+                          {/*      <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>*/}
+                          {/*        <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">*/}
+                          {/*          /!*<FormattedMessage id="order.ship" />*!/*/}
+                          {/*        </a>*/}
+                          {/*      </Tooltip>*/}
+                          {/*    </AuthWrapper>*/}
+                          {/*  )}*/}
+                          {/*/!*部分发货状态显示*!/*/}
+                          {/*{Const.SITE_NAME !== 'MYVETRECO' && (v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&*/}
+                          {/*  (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&*/}
+                          {/*  (v.getIn(['tradeState', 'payState']) === 'PAID' || v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (*/}
+                          {/*    <AuthWrapper functionName="fOrderDetail002">*/}
+                          {/*      <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>*/}
+                          {/*        <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping" />*/}
+                          {/*      </Tooltip>*/}
+                          {/*    </AuthWrapper>*/}
+                          {/*  )}*/}
                           {v.getIn(['tradeState', 'flowState']) === 'SHIPPED' && (
                             <AuthWrapper functionName="fOrderList003">
                               <Tooltip placement="top" title={<FormattedMessage id="Order.Delivered" />}>
@@ -445,7 +444,7 @@ class ListView extends React.Component<any, any> {
                           ) : null}
 
                           {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
-                          {/*||(flowState === 'TO_BE_DELIVERED'&&storeId==='123457911')*/}
+                          {/*||(flowState === 'TO_BE_DELIVERED')*/}
                           {(flowState === 'PENDING_REVIEW') && auditState === 'INSIDE_CHECKED' ? (
                             // <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
@@ -513,7 +512,7 @@ class ListView extends React.Component<any, any> {
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType') === 'Individualization' ? 2 : 2) : tradePrice.toFixed(v.get('subscriptionType') === 'Individualization' ? 2 : 2)}
                     </td>
-                    
+
                     {/* Appointment status */}
                     <td style={{ width: '20%' }}>null</td>
 

@@ -22,6 +22,7 @@ import { Consignee, Invoice } from '@/order-detail/components/type';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
+  { value: 'SINGLE', name: 'Single purchase' },
   { value: 'SUBSCRIPTION', name: 'Subscription' },
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
@@ -127,6 +128,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
+    const appointInfo=detail.get('settingVO').toJS()
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -347,7 +349,7 @@ class OrderDetailTab extends React.Component<any, any> {
     }
 
 
-    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
+    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderCategory'));
 
     return (
       <div className="orderDetail">
@@ -380,10 +382,6 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Tooltip>
                   <p>
-                    <FormattedMessage id="Order.ExternalOrderId" />:{' '}
-                    {detail.getIn(['tradeOms', 'orderNo'])}
-                  </p>
-                  <p>
                     <FormattedMessage id="Order.OrderStatus" />:{' '}
                     <FormattedMessage
                       id={getOrderStatusValue(
@@ -396,6 +394,10 @@ class OrderDetailTab extends React.Component<any, any> {
                     <FormattedMessage id="Order.orderType" />:{' '}
                     {orderDetailType ? orderDetailType.name : ''}
                   </p>
+                  <p>
+                    <FormattedMessage id="Order.paymentMethod" />:{' '}
+                    {detail.get('paymentMethodNickName')}
+                  </p>
                 </Col>
                 <Col span={12}>
                   <p>
@@ -403,14 +405,10 @@ class OrderDetailTab extends React.Component<any, any> {
                     {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.orderSource" />: {detail.get('orderSource')}
+                    <FormattedMessage id="Order.orderSource" />: L’Atellier Feline
                   </p>
                   <p>
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.paymentMethod" />:{' '}
-                    {detail.get('paymentMethodNickName')}
                   </p>
                 </Col>
               </Row>
@@ -447,31 +445,31 @@ class OrderDetailTab extends React.Component<any, any> {
                 </h4>
                 <Col span={12}>
                   <p>
-                    <FormattedMessage id="Order.appointmentNumber" />: null
+                    <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.appointmentStatus" />: null
+                    <FormattedMessage id="Order.appointmentStatus" />: {appointInfo?.status===0?'Booked':appointInfo?.status===1?'Arrived':'Cancel'}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.appointmentTime" />: null
+                    <FormattedMessage id="Order.appointmentTime" />: {this._handleFelinAppointTime(detail.get('appointmentDate')).appointStartTime}-{this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.expertType" />: null
+                    <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
                   </p>
                 </Col>
-          
+
                 <Col span={12}>
                   <p>
-                    <FormattedMessage id="Order.bookingTime" />: null
+                    <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.appointmentType" />: null
+                    <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
                   </p>
                   <p>
                     <FormattedMessage id="Order.appointmentLocation" />: null
                   </p>
                   <p>
-                    <FormattedMessage id="Order.expertName" />: null
+                    <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
                   </p>
                 </Col>
               </div>
@@ -1144,6 +1142,27 @@ class OrderDetailTab extends React.Component<any, any> {
       moreData: data
     });
   };
+
+  //处理预约信息里面的预约时间
+  _handleFelinAppointTime(appointTime) {
+    const apptTime = appointTime.split('#');
+    const appointStartTime =
+      apptTime.length > 0
+        ? moment(apptTime[0].split(' ')[0]).format('YYYY-MM-DD') +
+        ' ' +
+        apptTime[0].split(' ')[1]
+        : '';
+    const appointEndTime =
+      apptTime.length > 1
+        ? moment(apptTime[1].split(' ')[0]).format('YYYY-MM-DD') +
+        ' ' +
+        apptTime[1].split(' ')[1]
+        : '';
+    return {
+      appointStartTime,
+      appointEndTime
+    };
+  }
 }
 
 export default injectIntl(OrderDetailTab);

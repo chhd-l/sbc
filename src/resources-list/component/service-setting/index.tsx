@@ -144,7 +144,11 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
       }
     })
     setTimeRangeErrInfo(info)
-    info.length && updateTimeRangeErrInfo(true)
+    if(info.length){
+      updateTimeRangeErrInfo(true)
+    }else {
+      updateTimeRangeErrInfo(false)
+    }
   }
 
   const deleteLinePlanList = (sort) => {

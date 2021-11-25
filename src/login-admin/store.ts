@@ -4,7 +4,6 @@ import { cache, Const, history, util, RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import FormActor from './actor/form-actor';
 const pcLogo = require('../../public/images/login/logo1.png');
-const pcIco = require('../../public/images/login/pcIco.ico');
 
 //import { fromJS } from 'immutable';
 //import Item from 'antd/lib/list/Item';
@@ -23,27 +22,17 @@ export default class AppStore extends Store {
 
   //;;;;;;;;;;;;;action;;;;;;;;;;;;;;;;;;;;;;;
   init = async () => {
-    // const linkEle = document.getElementById('icoLink') as any;
-    // linkEle.href = pcIco;
-    // linkEle.type = 'image/x-icon';
-    webapi.getSiteInfo().then((resIco: any) => {
-      if (resIco.res && resIco.res.code && resIco.res.code == Const.SUCCESS_CODE) {
-        //logo
-        const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
-        this.dispatch('login:logo', configLog);
-        sessionStorage.setItem(cache.SITE_LOGO, configLog); //放入缓存,以便登陆后获取
-        //icon
-        /*const ico = (resIco.res.context as any).pcIco
-          ? JSON.parse((resIco.res.context as any).pcIco)
-          : null;
-        if (ico) {
-          const linkEle = document.getElementById('icoLink') as any;
-          linkEle.href = pcIco;
-          linkEle.type = 'image/x-icon';
-        }*/
-      }
-      this.dispatch('login:refresh', true);
-    });
+    // webapi.getSiteInfo().then((resIco: any) => {
+    //   if (resIco.res && resIco.res.code && resIco.res.code == Const.SUCCESS_CODE) {
+    //     const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
+    //     this.dispatch('login:logo', configLog);
+    //     sessionStorage.setItem(cache.SITE_LOGO, configLog);
+    //   }
+    //   this.dispatch('login:refresh', true);
+    // });
+    const configLogo = sessionStorage.getItem(cache.SITE_LOGO) ?? pcLogo;
+    this.dispatch('login:logo', configLogo);
+    this.dispatch('login:refresh', true);
   };
 
   /**

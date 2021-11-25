@@ -38,7 +38,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
         },
         bankRequest: {},
         adyenAuditState: 1, //0 - 审核中， 1 - 审核通过，2 - 审核未通过， 3 - 未创建
-        errorList: []
+        errorList: ''
       }
     }
   }
@@ -173,7 +173,10 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
             storeInfo: Object.assign({}, storeInfo, { adyenAuditState: 0 })
           });
         } else {
-          this.setState({ loading: false });
+          this.setState({
+            loading: false,
+            storeInfo: Object.assign({}, storeInfo, { errorList: data.res.context?.errorList ?? '' })
+          });
         }
       });
     }).catch((step: string) => {
@@ -197,7 +200,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
   }
 
   render() {
-    const { current, loading, typeOfBusiness, storeInfo: { adyenAuditState } } = this.state;
+    const { current, loading, typeOfBusiness, storeInfo: { adyenAuditState, errorList } } = this.state;
     return (
       <Spin spinning={loading}>
         <BreadCrumb />
@@ -208,7 +211,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
             </Col>
             <Col span={12} style={{textAlign:'right',paddingRight:20}}>
               {adyenAuditState === 0 ? <Button type="primary" disabled>Wait for auditing</Button> : adyenAuditState > 1 ? <Button type="primary" onClick={this.onAudit}>Submit for auditing</Button> : null}
-              {adyenAuditState === 2 && <Button type="link" onClick={this.showError}>Fail?</Button>}
+              {!!errorList && <Button type="link" onClick={this.showError}>Fail?</Button>}
               {adyenAuditState > 1 && <div>You can submit Ayden account once fill all required fields</div>}
             </Col>
           </Row>

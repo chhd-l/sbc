@@ -2862,6 +2862,8 @@ export default {
         "Survey.pet_owner_account":"Pet Owner Account",
         "Survey.pet_owner_name":"Pet Owner Name",
         "Survey.pet_owner_type":"Pet Owner Type",
-        "Survey.email":"Email"
+        "Survey.email":"Email",
+        'Menu.Survey':'Survey',
+        'Menu.Survey List':'Survey List'
     }
 }

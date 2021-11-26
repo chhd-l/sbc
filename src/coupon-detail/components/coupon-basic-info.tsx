@@ -130,13 +130,15 @@ export default class CouponBasicInfo extends Component<any, any> {
     const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute, currentGroup } = this.props.relaxProps;
     const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
       fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
-      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList
+      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList,fullGiftDetailList
     } = coupon.toJS();
+    console.log(coupon.toJS())
     let dataSource = fromJS([])
     // const goodsInfoPage = goodsList.goodsInfoPage.content
     if (scopeType === 4) {
       const cates = goodsList.get('cates')
       const brands = goodsList.get('brands')
+      console.log(cates)
       let array = []
       scopeIds.map((scope) => {
         if(goodsList.get('goodsInfoPage')) {
@@ -154,6 +156,27 @@ export default class CouponBasicInfo extends Component<any, any> {
         }
       });
       dataSource = fromJS(array).filter((goodsInfo) => goodsInfo);
+    }
+    /**
+     *  gift列表获取
+     */
+    let giftDataSource = []
+    let giftIds = fullGiftDetailList?.map(item=>{
+      return item.productId
+    })
+    if(couponPromotionType === 2){
+      const cates = goodsList.get('cates')
+      const brands = goodsList.get('brands')
+      if(goodsList.get('goodsInfoPage')){
+        goodsList.get('goodsInfoPage')?.toJS().content.forEach(item=>{
+          if(giftIds.includes(item?.goodsInfoId)){
+            item.brandName = brands.toJS().find((s) => s.brandId === item.brandId)?.brandName
+            item.cateName = cates.toJS().find((s) => s.cateId === item.cateId)?.cateName
+            item.productNum = fullGiftDetailList.find((s) => s.productId === item.goodsInfoId)?.productNum
+            giftDataSource.push(item)
+          }
+        })
+      }
     }
     return (
       <FormDiv>
@@ -284,6 +307,22 @@ export default class CouponBasicInfo extends Component<any, any> {
                 </FormItem>
               </>
             )
+          }
+
+          {
+            couponPromotionType === 2 &&
+            (<FormItem  labelCol={{span:3}} wrapperCol={{span: 21}} label={<FormattedMessage id="Marketing.Gift" />}>
+              <Table dataSource={giftDataSource} pagination={false} rowKey="giftDetailId">
+                <Column width="10%" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" render={(rowInfo) => <div>{rowInfo.goodsInfoNo}</div>} />
+                <Column width="25%" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" render={(rowInfo) => <div>{rowInfo.goodsInfoName}</div>} />
+                <Column width="10%" title={<FormattedMessage id="Marketing.Specification" />} key="specText" render={(rowInfo) => <div>{rowInfo.specText ? rowInfo.specText : '-'}</div>} />
+                <Column width="12%" title={<FormattedMessage id="Marketing.Category" />} key="cateName" render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>} />
+                <Column width="10%" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>} />
+                <Column width="12%" key="priceType" title={<FormattedMessage id="Marketing.Price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
+                <Column width="8%" title={<FormattedMessage id="Marketing.Inventory" />} key="stock" render={(rowInfo) => <div>{rowInfo.stock}</div>} />
+                <Column width="15%" title={<FormattedMessage id="Marketing.GiveTheNumber" />} key="productNum" dataIndex="productNum" />
+              </Table>
+            </FormItem>)
           }
         </Form>
       </FormDiv>

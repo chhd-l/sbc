@@ -201,14 +201,16 @@ export default function index({...props}) {
         detail?.fullGiftLevelList?.[0].fullGiftDetailList.forEach(item=>{
           giftIds.push(item.productId)
         })
-        customIds = detail.goodsInfoIdList.filter(item=>{
-          return !giftIds.includes(item)
+        detail.marketingScopeList.forEach(item=>{
+          customIds.push(item.scopeId)
         })
         customRowList = detail.goodsList?.goodsInfoPage?.content.filter(item=>{
           return customIds.includes(item.goodsInfoId)
         })
       }else {
-        customIds = detail.goodsInfoIdList
+        detail.marketingScopeList.forEach(item=>{
+          customIds.push(item.scopeId)
+        })
         customRowList = detail.goodsList?.goodsInfoPage?.content
       }
       setFormData({
@@ -277,6 +279,12 @@ export default function index({...props}) {
       result = await webapi.fetchCouponInfo(props.match.params.id)
       let detail = result.res.context.couponInfo
       let goodsList = result.res.context.goodsList
+      let giftIds = [] //gift product id 集合
+      if(detail.couponPromotionType === 2){
+        (detail.fullGiftDetailList || []).forEach(item=>{
+          giftIds.push(item.productId)
+        })
+      }
       setFormData({
         /**
          * 第二步
@@ -308,22 +316,42 @@ export default function index({...props}) {
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
           skuIds:detail.scopeIds,
-          selectedRows:goodsList?.goodsInfoPage?.content,
+          selectedRows:goodsList?.goodsInfoPage?.content.filter(item=>{
+            return detail.scopeIds.includes(item.goodsInfoId)
+          }),
         },
         /**
          * 第五步
          */
         Advantage:{
-          couponPromotionType: detail.couponPromotionType,
+          couponPromotionType: detail.couponPromotionType === 2 ? 4 : detail.couponPromotionType,
           denomination: detail.denomination,
           couponDiscount: detail.couponDiscount*100 || '',
           limitAmount: detail.limitAmount,
+          fullGiftLevelList: detail.couponPromotionType === 2 ? [
+            { fullAmount: null,
+              fullCount: null,
+              fullGiftDetailList:detail.fullGiftDetailList,
+              giftType: 1,
+              key: makeRandom(),
+            }
+          ] : [],
+          selectedGiftRows: goodsList?.goodsInfoPage?.content.filter(item=>{
+            return giftIds.includes(item.goodsInfoId)
+          }),
         },
         storeId:detail.storeId,
       })
     }
     setLoading(false)
   }
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  const makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
   /**
    * 回显StoreCateIds
    * @param storeCateIds

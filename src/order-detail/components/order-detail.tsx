@@ -159,10 +159,58 @@ class OrderDetailTab extends React.Component<any, any> {
     //收货人信息
     const consignee = detail.get('consignee')
       ? (detail.get('consignee').toJS() as Consignee | null)
-      : null;
+      : {
+        detailAddress: '',
+        name: '',
+        phone:'',
+        countryId: '',
+        country: '',
+        city: '',
+        province: '',
+        county: '',
+        cityId: '',
+        address: '',
+        detailAddress1: '',
+        detailAddress2: '',
+        rfc: '',
+        postCode: '',
+        firstName: '',
+        lastName: '',
+        comment: '',
+        entrance: '',
+        apartment: '',
+        area: '',
+        timeSlot: '',
+        deliveryDate: '',
+        workTime:'',
+      };
 
     //发票信息
-    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : null;
+    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : {
+      open: '',
+      type: '',
+      title: '',
+      projectName: '',
+      address:'',
+      address1: '',
+      address2: '',
+      contacts: '',
+      phone: '',
+      provinceId: '',
+      cityId:'',
+      province: '',
+      county: '',
+      countryId: '',
+      country: '',
+      firstName: '',
+      lastName:'',
+      postCode: '',
+      city: '',
+      comment: '',
+      entrance: '',
+      apartment:'',
+      area: '',
+    };
 
     //交易状态
     const tradeState = detail.get('tradeState');
@@ -675,10 +723,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.firstName}</div>}
+                    title={<div>{consignee?.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
+                      <FormattedMessage id="Order.FirstName" />: {consignee?.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -686,10 +734,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.lastName}</div>}
+                    title={<div>{consignee?.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
+                      <FormattedMessage id="Order.LastName" />: {consignee?.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip

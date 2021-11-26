@@ -93,10 +93,11 @@ export default function Step6({setLoading}) {
         /**
          * 第五步
          */
-        couponPromotionType: formData.Advantage.couponPromotionType,//改版用到的字段
+        couponPromotionType: formData.Advantage.couponPromotionType === 4 ? 2 : formData.Advantage.couponPromotionType,//gift字段为2
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
         couponDiscount: formData.Advantage.couponPromotionType === 1 ? parseInt(formData.Advantage.couponDiscount)/100 : 0,
         limitAmount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
+        fullGiftDetailList: formData.Advantage.couponPromotionType === 4 && formData.Advantage.fullGiftLevelList[0].fullGiftDetailList,
         /**
          * 未用到
          */
@@ -505,35 +506,24 @@ export default function Step6({setLoading}) {
                 </>
               ) : (
                 <>
-                  <div className="step-summary-item">
-                    <div className="step-summary-sub-title">
-                      {
-                        formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
-                          : <FormattedMessage id="Marketing.PromotionValue" />
-                      }
-                      :</div>
-                    <div className="step-summary-item-text">
-                      {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-
-                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }*/}
-                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }*/}
-                      {/*{formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }*/}
-                      {formData.Advantage.couponPromotionType === 4 && (
-                        <>
-                          {
-                            formData.Advantage.fullGiftLevelList[0].fullGiftDetailList.map(item=>
-                             <span style={{paddingRight:6}}>{item.productName}</span>
-                            )
-                          }
-                        </>
-                      )}
-                    </div>
-                  </div>
-
+                  {
+                    formData.Advantage.couponPromotionType !== 4 &&
+                    (<div className="step-summary-item">
+                      <div className="step-summary-sub-title">
+                        {
+                          formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
+                            : <FormattedMessage id="Marketing.PromotionValue" />
+                        }
+                        :</div>
+                      <div className="step-summary-item-text">
+                        {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                        {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                      </div>
+                    </div>)
+                  }
                   {
                     formData.Advantage.couponPromotionType === 1 && (
                       <div className="step-summary-item">
@@ -543,6 +533,28 @@ export default function Step6({setLoading}) {
                     )
                   }
                 </>
+              )
+            }
+            {
+              formData.Advantage.couponPromotionType === 4 &&
+              (
+                <div className="step-summary-item">
+                  <div className="step-summary-sub-title">
+                    {
+                      formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
+                        : <FormattedMessage id="Marketing.PromotionValue" />
+                    }
+                    :</div>
+                  <div className="step-summary-item-text">
+                    <>
+                      {
+                        (formData.Advantage.fullGiftLevelList[0].fullGiftDetailList || []).map(item=>
+                          <span style={{paddingRight:6}}>{item.productName}</span>
+                        )
+                      }
+                    </>
+                  </div>
+                </div>
               )
             }
           </div>

@@ -98,7 +98,7 @@ export default function index({...props}) {
    *         13：WELCOME_BOX_GIFT
    * @param subType
    */
-  const switchCartLimit = (subType)=>{
+  const switchCartLimit = (subType,detail)=>{
     switch (subType) {
       case 0:
         return 1;
@@ -113,9 +113,21 @@ export default function index({...props}) {
       case 5:
         return 2;
       case 6:
-        return 0;
+        if(detail?.fullReductionLevelList?.[0]?.fullAmount){
+          return 1;
+        }else if(detail?.fullReductionLevelList?.[0]?.fullCount){
+          return 2;
+        }else {
+          return 0;
+        }
       case 7:
-        return 0;
+        if(detail?.fullDiscountLevelList?.[0]?.fullAmount){
+          return 1;
+        }else if(detail?.fullDiscountLevelList?.[0]?.fullCount){
+          return 2;
+        }else {
+          return 0;
+        }
       case 10:
         return 1;
       case 11:
@@ -130,6 +142,10 @@ export default function index({...props}) {
         return detail.fullDiscountLevelList?.[0].fullAmount;
       case 4:
         return detail.fullGiftLevelList?.[0].fullAmount;
+      case 6:
+        return detail?.fullReductionLevelList?.[0].fullAmount || '';
+      case 7:
+        return detail?.fullDiscountLevelList?.[0].fullAmount || '';
       case 10:
         return detail.marketingFreeShippingLevel?.fullAmount;
       default :
@@ -144,6 +160,10 @@ export default function index({...props}) {
         return detail.fullDiscountLevelList?.[0].fullCount;
       case 5:
         return detail.fullGiftLevelList?.[0].fullCount;
+      case 6:
+        return detail?.fullReductionLevelList?.[0].fullCount || '';
+      case 7:
+        return detail?.fullDiscountLevelList?.[0].fullCount || '';
       case 11:
         return detail.marketingFreeShippingLevel?.fullCount;
       default :
@@ -236,7 +256,7 @@ export default function index({...props}) {
          */
         Conditions:{
           promotionType: detail.promotionType,
-          CartLimit: switchCartLimit(detail.subType),
+          CartLimit: switchCartLimit(detail.subType,detail),
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney:switchFullMoney(detail),
           fullItem:switchFullItem(detail),

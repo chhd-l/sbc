@@ -385,7 +385,7 @@ export default function Step6({setLoading}) {
               <div className="step-summary-item-text">{enumConst.promotionType[formData.Conditions.promotionType]}</div>
             </div>
             {
-              formData.Conditions.promotionType !== 2 && (
+              formData.Conditions.promotionType !== 3 && (
                 <div className="step-summary-item">
                   <div className="step-summary-sub-title"><FormattedMessage id="Marketing.DoesItCummulate" />:</div>
                   <div className="step-summary-item-text">{formData.Conditions.isSuperimposeSubscription === 0 ? 'Yes' : 'No'}</div>
@@ -548,8 +548,8 @@ export default function Step6({setLoading}) {
                   <div className="step-summary-item-text">
                     <>
                       {
-                        (formData.Advantage.fullGiftLevelList[0].fullGiftDetailList || []).map(item=>
-                          <span style={{paddingRight:6}}>{item.productName}</span>
+                        (formData.Advantage.selectedGiftRows || []).map(item=>
+                          <span style={{paddingRight:6}}>{item.goodsInfoName}</span>
                         )
                       }
                     </>

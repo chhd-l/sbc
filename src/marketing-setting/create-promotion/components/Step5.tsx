@@ -56,6 +56,7 @@ function Step5({ form }) {
         changeFormData(enumConst.stepEnum[4],{
           ...values,
           fullGiftLevelList,
+          selectedGiftRows:selectedGiftRows.toJS(),
         })
         setStep(5)
       }

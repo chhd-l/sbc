@@ -206,7 +206,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible && <ProductTooltipSKU id={this.state.id} pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} />}
-        <Form>
+        <Form className="table-overflow">
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
         {

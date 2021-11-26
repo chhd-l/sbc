@@ -958,7 +958,7 @@ export default {
         'Order.Fulfillment':'Fulfillment',
         'Order.ServiceOrderlist':'Order list (Service)',
         'Order.goodwillOrder':'Goodwill order',
-        
+
         'Order.appointment':'Appointment',
         'Order.appointmentNumber':'Appointment number',
         'Order.bookingTime':'Booking Time',
@@ -972,6 +972,9 @@ export default {
         'Order.appointmentStatus2':'Status',
         'Order.appointmentTime2':'Time',
         'Order.appointmentOperator':'Operator',
+        'Order.Confirmed':'Confirmed',
+        'Order.appointmentLocation':'appointment Location',
+        'Order.LineItemNo':'Line Item No.'
     },
     Subscription: {
         "Subscription.AutoshipOrder": "Subscription order",
@@ -2829,8 +2832,40 @@ export default {
         'Resources.schedular':'Schedular',
         'Resources.list_view':'List View',
         'Resources.TimeErrorInfo':'Please enter the correct time range',
+        'Resources.ServiceTypeErrorInfo':'Please select available service type.',
         'Menu.Schedular':'Schedular',
         'Menu.Resources':'Resources',
         'Menu.Resources planning':'Resources planning'
+    },
+    Survey: {
+        "Survey.survey_list":"Survey List",
+        "Survey.survey_number":"Survey Number",
+        "Survey.title":'Title',
+        "Survey.all_survey":"All survey",
+        "Survey.views":'Views',
+        "Survey.clicks":'Clicks',
+        "Survey.status":"Status",
+        "Survey.creation_time":"Creation Time",
+        "Survey.add_new":'Add new',
+        "Survey.delete_confirm":"If you remove this survey, you will lose all it's data.",
+        "Survey.new_survey":"New Survey",
+        "Survey.label":'Label',
+        "Survey.description":"Description",
+        "Survey.active":"Active",
+        "Survey.survey_detail":"Survey Detail",
+        "Survey.basic_info" : "Basic Info",
+        "Survey.kpi":"KPI",
+        "Survey.survey_date":"Survey Date",
+        "Survey.survey_content":'Survey Content',
+        "Survey.survey_title":'Survey Title',
+        "Survey.survey_label":"Survey Label",
+        "Survey.survey_description":"Survey Description",
+        "Survey.responder_list":"Responder List",
+        "Survey.pet_owner_account":"Pet Owner Account",
+        "Survey.pet_owner_name":"Pet Owner Name",
+        "Survey.pet_owner_type":"Pet Owner Type",
+        "Survey.email":"Email",
+        'Menu.Survey':'Survey',
+        'Menu.Survey List':'Survey List'
     }
 }

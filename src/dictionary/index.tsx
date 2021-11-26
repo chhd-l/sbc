@@ -26,7 +26,7 @@ class DitionaryList extends Component<any, any> {
           width: '20%',
         },
         {
-          title: <FormattedMessage id="Setting.Value" />,
+          title: 'valueEn',
           dataIndex: 'valueEn',
           key: 'value',
           width: '20%',

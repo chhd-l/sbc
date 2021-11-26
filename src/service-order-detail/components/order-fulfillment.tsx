@@ -9,6 +9,47 @@ import Moment from 'moment';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import moment from 'moment';
 
+enum operatorDic {
+  BOSS = 'Boss',
+  PLATFORM = 'Platform',
+  CUSTOMER = 'Customer',
+  THIRD = 'Third',
+  SUPPLIER = 'Supplier',
+  INTEGRATION = 'Integration'
+}
+
+const columns = [
+  {
+    title: <FormattedMessage id="Order.OperatorType"/>,
+    dataIndex: 'operator.platform',
+    key: 'operator.platform',
+    render: (val) => operatorDic[val] || val
+  },
+  {
+    title: <FormattedMessage id="Order.Operator"/>,
+    dataIndex: 'operator.name',
+    key: 'operator.name'
+  },
+  {
+    title: <FormattedMessage id="Order.Time"/>,
+    dataIndex: 'eventTime',
+    key: 'eventTime',
+    render: (time) => time && moment(time).format(Const.TIME_FORMAT).toString()
+  },
+  {
+    title: <FormattedMessage id="Order.OperationCategory"/>,
+    dataIndex: 'eventType',
+    key: 'eventType'
+  },
+  {
+    title: <FormattedMessage id="Order.OperationLog"/>,
+    dataIndex: 'eventDetail',
+    key: 'eventDetail',
+    width: '50%'
+  }
+];
+
+
 /**
  * 订单发货记录
  */
@@ -40,6 +81,7 @@ class OrderDelivery extends React.Component<any, any> {
       isFetchingLogistics: boolean;
       isSavingShipment: boolean;
       logisticsLoading: boolean;
+      log:IMap;
     };
   };
 
@@ -58,11 +100,13 @@ class OrderDelivery extends React.Component<any, any> {
     onRefresh: noop,
     isFetchingLogistics: 'isFetchingLogistics',
     isSavingShipment: 'isSavingShipment',
-    logisticsLoading: 'logisticsLoading'
+    logisticsLoading: 'logisticsLoading',
+    log: ['detail', 'tradeEventLogs']
   };
 
   render() {
     const { detail, refresh, onRefresh, logisticsLoading } = this.props.relaxProps;
+    const { log } = this.props.relaxProps;
 
     const refreshList = fromJS(refresh);
     const tradeDelivers = refreshList && refreshList.toJS().length > 0 ? fromJS(refresh) : (detail.get('tradeDelivers') as IList);
@@ -78,16 +122,17 @@ class OrderDelivery extends React.Component<any, any> {
 
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            wordBreak: 'break-word'
-          }}
-        >
-          <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
+        {/*<div*/}
+        {/*  style={{*/}
+        {/*    display: 'flex',*/}
+        {/*    flexDirection: 'column',*/}
+        {/*    wordBreak: 'break-word'*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />*/}
 
-        </div>
+        {/*</div>*/}
+        <Table rowKey={(_record, index) => index.toString()} columns={columns} dataSource={log ? log.toJS() : []} pagination={false} bordered />
         <Spin spinning={logisticsLoading}>
           {tradeDelivers.count() > 0
             ? tradeDelivers &&
@@ -164,9 +209,6 @@ class OrderDelivery extends React.Component<any, any> {
   }
 
   _deliveryColumns = () => {
-    const { changeDeliverNum } = this.props.relaxProps;
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
-    
     return [
       {
         title: <FormattedMessage id="Order.appointmentNo" />,

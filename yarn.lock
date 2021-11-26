@@ -7633,6 +7633,18 @@
   "resolved" "https://registry.npmjs.org/handle-thing/-/handle-thing-2.0.1.tgz"
   "version" "2.0.1"
 
+"handlebars@^4.7.7":
+  "integrity" "sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA=="
+  "resolved" "https://registry.npmjs.org/handlebars/-/handlebars-4.7.7.tgz"
+  "version" "4.7.7"
+  dependencies:
+    "minimist" "^1.2.5"
+    "neo-async" "^2.6.0"
+    "source-map" "^0.6.1"
+    "wordwrap" "^1.0.0"
+  optionalDependencies:
+    "uglify-js" "^3.1.4"
+
 "happypack@^5.0.1":
   "integrity" "sha512-AzXVxLzX0mtv0T40Kic72rfcGK4Y2b/cDdtcyw+e+V/13ozl7x0+EZ4hvrL1rJ8MoefR9+FfUJQsK2irH0GWOw=="
   "resolved" "https://registry.npmjs.org/happypack/-/happypack-5.0.1.tgz"
@@ -10136,7 +10148,7 @@
   "resolved" "https://registry.npmjs.org/negotiator/-/negotiator-0.6.2.tgz"
   "version" "0.6.2"
 
-"neo-async@^2.5.0", "neo-async@^2.6.1":
+"neo-async@^2.5.0", "neo-async@^2.6.0", "neo-async@^2.6.1":
   "integrity" "sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw=="
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
@@ -14867,7 +14879,7 @@
   "resolved" "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.28.tgz"
   "version" "0.7.28"
 
-"uglify-js@3.4.x":
+"uglify-js@^3.1.4", "uglify-js@3.4.x":
   "integrity" "sha512-Y2VsbPVs0FIshJztycsO2SfPk7/KAF/T72qzv9u5EpQ4kB2hQoHlhNQTsNyy6ul7lQtqJN/AoWeS23OzEiEFxw=="
   "resolved" "https://registry.npmjs.org/uglify-js/-/uglify-js-3.4.10.tgz"
   "version" "3.4.10"
@@ -15509,6 +15521,11 @@
   "integrity" "sha1-NcGsDdGsDBXjXZgVCPwiCEoToBE="
   "resolved" "https://registry.npmjs.org/wolfy87-eventemitter/-/wolfy87-eventemitter-5.1.0.tgz"
   "version" "5.1.0"
+
+"wordwrap@^1.0.0":
+  "integrity" "sha1-J1hIEIkUVqQXHI0CJkQa3pDLyus="
+  "resolved" "https://registry.npmjs.org/wordwrap/-/wordwrap-1.0.0.tgz"
+  "version" "1.0.0"
 
 "wordwrap@~0.0.2":
   "integrity" "sha1-o9XabNXAvAAI03I0u68b7WMFkQc="

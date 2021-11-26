@@ -174,7 +174,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
-        <Form>
+        <Form className="table-overflow">
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
         {

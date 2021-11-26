@@ -41,20 +41,20 @@ class Appointment extends React.Component<any, any> {
     };
   }
 
- async componentDidMount() {
+  async componentDidMount() {
     this.getAppointmentList();
-      this.initDict()
+    this.initDict()
   }
-  initDict=async()=>{
-    const appointmentType=await getAllDict('appointment_type')
-    const expertType=await getAllDict('expert_type')
-    const serviceType=await getAllDict('service_type')
+  initDict = async () => {
+    const appointmentType = await getAllDict('appointment_type')
+    const expertType = await getAllDict('expert_type')
+    const serviceType = await getAllDict('service_type')
     this.setState({
       expertType,
       appointmentType,
       serviceType
     })
-}
+  }
   componentWillUnmount() {
     //删掉需要记住筛选参数的标记
   }
@@ -86,20 +86,28 @@ class Appointment extends React.Component<any, any> {
       if (!err) {
         console.log('Received values of form: ', values);
         const { pagination } = this.state;
-        this.onTableChange({
-          ...pagination,
-          current: 1
-        }, values);
+        let { apptDate,...result } = values
+        let appointmentStartDate =apptDate&& moment(apptDate[0]).format('YYYY-MM-DD')||undefined
+        let appointmentEndDate = apptDate&&moment(apptDate[1]).format('YYYY-MM-DD')||undefined
+        this.setState({
+          searchForm: { ...this.state.searchForm, ...result,appointmentStartDate,appointmentEndDate }
+        }, () => {
+          this.onTableChange({
+            ...pagination,
+            current: 1
+          });
+        })
+
       }
     });
 
   };
 
-  onTableChange = (pagination, values = {}) => {
+  onTableChange = (pagination) => {
     // sessionStorage.setItem('appointmention-list-params', JSON.stringify({ ...values, current: pagination.current }));
     this.setState(
       {
-        searchForm: values,
+        searchForm: { ...this.state.searchForm },
         pagination: pagination
       },
       () => this.getAppointmentList()
@@ -201,13 +209,13 @@ class Appointment extends React.Component<any, any> {
   };
   confirm = async (e, type) => {
     console.log(e);
-    let result:any={};
+    let result: any = {};
     switch (type) {
       case 'cancel':
-        result = await apptCancel({id:e.id,status:2});
+        result = await apptCancel({ id: e.id, status: 2 });
         break;
       case 'arrived':
-        result= await apptArrived({id:e.id,status:1});
+        result = await apptArrived({ id: e.id, status: 1 });
         break
       default:
         break;
@@ -229,9 +237,9 @@ class Appointment extends React.Component<any, any> {
       appointmentType,
       expertType, } = this.state;
     let status = {
-      "0": RCi18n({id:'Order.offline.booked'}),
-      "1": RCi18n({id:'Order.offline.arrived'}),
-      "2": RCi18n({id:'Order.offline.canceled'}),
+      "0": RCi18n({ id: 'Order.offline.booked' }),
+      "1": RCi18n({ id: 'Order.offline.arrived' }),
+      "2": RCi18n({ id: 'Order.offline.canceled' }),
     }
     const columns = [
       {
@@ -241,8 +249,8 @@ class Appointment extends React.Component<any, any> {
         ellipsis: true,
         render: (text, record) => {
           return (<Tooltip title={text}>
-          <div style={{width:100,textOverflow:'ellipsis',overflow:'hidden'}}>{text}</div>
-        </Tooltip>)
+            <div style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{text}</div>
+          </Tooltip>)
         }
       },
       {
@@ -253,8 +261,8 @@ class Appointment extends React.Component<any, any> {
         ellipsis: true,
         render: (text, record) => {
           return (<Tooltip title={text}>
-          <div style={{width:100,textOverflow:'ellipsis',overflow:'hidden'}}>{text}</div>
-        </Tooltip>)
+            <div style={{ width: 100, textOverflow: 'ellipsis', overflow: 'hidden' }}>{text}</div>
+          </Tooltip>)
         }
       },
       {
@@ -262,12 +270,12 @@ class Appointment extends React.Component<any, any> {
         dataIndex: 'apptTime',
         key: 'apptTime',
         render: (text, record) => {
-          if(text&&text.includes('#')){
-            let time=text.split('#');
-            let begin=moment(moment(time[0],'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
-            end=moment(moment(time[1],'YYYY-MM-DD HH:mm')).format('HH:mm');
-           return (<div>{begin}-{end}</div>)
-          }else{
+          if (text && text.includes('#')) {
+            let time = text.split('#');
+            let begin = moment(moment(time[0], 'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
+              end = moment(moment(time[1], 'YYYY-MM-DD HH:mm')).format('HH:mm');
+            return (<div>{begin}-{end}</div>)
+          } else {
             return '';
           }
         }
@@ -276,13 +284,18 @@ class Appointment extends React.Component<any, any> {
         title: RCi18n({ id: 'Appointment.PON' }),
         dataIndex: 'consumerName',
         key: 'consumerName',
-        width:'130px'
+        width: '130px'
 
       },
       {
         title: RCi18n({ id: 'Appointment.Pet OE' }),
         dataIndex: 'consumerEmail',
-        key: 'consumerEmail'
+        key: 'consumerEmail',
+        render: (text, record) => {
+          return (<Tooltip title={text}>
+            <div style={{ width: 100, textOverflow: 'ellipsis', overflow: 'hidden' }}>{text}</div>
+          </Tooltip>)
+        }
       },
       {
         title: RCi18n({ id: 'Appointment.Phone number' }),
@@ -293,7 +306,7 @@ class Appointment extends React.Component<any, any> {
         title: RCi18n({ id: 'Appointmention.Type' }),
         dataIndex: 'apptTypeId',
         key: 'apptTypeId',
-        render: (text) => <div>{(appointmentType?.objValue??{})[text]}</div>
+        render: (text) => <div>{(appointmentType?.objValue ?? {})[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Status' }),
@@ -305,7 +318,7 @@ class Appointment extends React.Component<any, any> {
         title: RCi18n({ id: 'Appointmention.Expert.type' }),
         dataIndex: 'expertTypeId',
         key: 'expertTypeId',
-        render: (text) => <div>{(expertType?.objValue??{})[text]}</div>
+        render: (text) => <div>{(expertType?.objValue ?? {})[text]}</div>
       },
       {
         title: RCi18n({ id: 'Appointmention.Expert.name' }),
@@ -339,23 +352,23 @@ class Appointment extends React.Component<any, any> {
               {/* <Button type="link" size="small" onClick={() => this.updateAppointmentStatus(record, 1)} style={{ padding: '0 5px' }}>
                 <i className="iconfont iconEnabled"></i>
               </Button> */}
-           
+
               <Popconfirm
                 title="Are you sure arrived this task?"
-                onConfirm={() => this.confirm(record,'arrived')}
+                onConfirm={() => this.confirm(record, 'arrived')}
                 onCancel={this.cancel}
                 okText="Yes"
                 cancelText="No"
               >
                 <Button type="link" size="small" style={{ padding: '0 5px' }}>
-                <i className="iconfont iconEnabled"></i>
+                  <i className="iconfont iconEnabled"></i>
                 </Button>
               </Popconfirm>
-           
+
             </Tooltip>}
             {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Pay' })}>
               <Button type="link" size="small" onClick={() => {
-                  history.push(`/offline-checkout?apptNo=${record.apptNo}`)
+                history.push(`/offline-checkout?apptNo=${record.apptNo}`)
 
               }} style={{ padding: '0 5px' }}>
                 <Icon type="pay-circle" />
@@ -364,7 +377,7 @@ class Appointment extends React.Component<any, any> {
             {[0].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Cancel' })}>
               <Popconfirm
                 title="Are you sure cancel this task?"
-                onConfirm={() => this.confirm(record,'cancel')}
+                onConfirm={() => this.confirm(record, 'cancel')}
                 onCancel={this.cancel}
                 okText="Yes"
                 cancelText="No"
@@ -412,7 +425,7 @@ class Appointment extends React.Component<any, any> {
                       style={{ width: '100%' }}
                     >
                       <Option value="">{<FormattedMessage id="Appointment.All" />}</Option>
-                      {(appointmentType?.list??[]).map(item => <Option value={item.id} >{item.name}</Option>)}
+                      {(appointmentType?.list ?? []).map(item => <Option value={item.id} >{item.name}</Option>)}
                       {/* <Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Option>
                       <Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Option> */}
                     </SelectGroup>

@@ -327,7 +327,7 @@ class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogethe" />
                               </span>
                             )}
-                            {v.get('orderSource') === 'SUPPLIER' && (
+                            {v.get('goodWillFlag') === 1 && (
                               <span style={styles.goodwillColor} className="order_list_goodwill_flag">
                                 <FormattedMessage id="Order.goodwillOrder" />
                               </span>

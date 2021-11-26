@@ -385,13 +385,13 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{detail.get('id')}{detail.get('orderSource') === 'SUPPLIER' ? (
+                    title={<div>{detail.get('id')}{detail.get('goodWillFlag') === 1 ? (
                       <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
                       ):''}</div>}
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
-                      {detail.get('orderSource') === 'SUPPLIER' && (
+                      {detail.get('goodWillFlag') === 1 && (
                         <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
                       )}
                     </p>

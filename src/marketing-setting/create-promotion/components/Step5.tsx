@@ -28,7 +28,7 @@ function Step5({ form }) {
     }])
     if(match.params.id){
       setCouponPromotionType(formData.Advantage.couponPromotionType)
-      if(formData.subType === 4 || formData.subType === 5){
+      if(formData.subType === 4 || formData.subType === 5 || formData.Advantage.couponPromotionType){
         setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
         setSelectedGiftRows(fromJS(formData.Advantage.selectedGiftRows) || fromJS([]))
       }
@@ -56,6 +56,7 @@ function Step5({ form }) {
         changeFormData(enumConst.stepEnum[4],{
           ...values,
           fullGiftLevelList,
+          selectedGiftRows:selectedGiftRows.toJS(),
         })
         setStep(5)
       }
@@ -173,13 +174,9 @@ function Step5({ form }) {
               <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
-              {
-                formData.PromotionType.typeOfPromotion !== 1 &&
-                <Radio value={4}>
-                  <FormattedMessage id="Marketing.Gifts" />
-                </Radio>
-              }
-
+              <Radio value={4}>
+                <FormattedMessage id="Marketing.Gifts" />
+              </Radio>
             </Radio.Group>
           )}
         </Form.Item>

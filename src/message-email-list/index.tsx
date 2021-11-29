@@ -437,12 +437,6 @@ export default class ClinicList extends Component<any, any> {
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
-
-                <Divider type="vertical" />
-
-                  <Tooltip placement="top" title={RCi18n({id:'view'})}>
-                    <a onClick={()=>this.viewMessageTemplate(record.taskId)} type="link" className="iconfont iconView"></a>
-                  </Tooltip>
               </>
             ) : null}
             {+record.status === 7 ? (

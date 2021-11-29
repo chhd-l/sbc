@@ -98,7 +98,7 @@ export default function index({...props}) {
    *         13：WELCOME_BOX_GIFT
    * @param subType
    */
-  const switchCartLimit = (subType)=>{
+  const switchCartLimit = (subType,detail)=>{
     switch (subType) {
       case 0:
         return 1;
@@ -113,9 +113,21 @@ export default function index({...props}) {
       case 5:
         return 2;
       case 6:
-        return 0;
+        if(detail?.fullReductionLevelList?.[0]?.fullAmount){
+          return 1;
+        }else if(detail?.fullReductionLevelList?.[0]?.fullCount){
+          return 2;
+        }else {
+          return 0;
+        }
       case 7:
-        return 0;
+        if(detail?.fullDiscountLevelList?.[0]?.fullAmount){
+          return 1;
+        }else if(detail?.fullDiscountLevelList?.[0]?.fullCount){
+          return 2;
+        }else {
+          return 0;
+        }
       case 10:
         return 1;
       case 11:
@@ -130,6 +142,10 @@ export default function index({...props}) {
         return detail.fullDiscountLevelList?.[0].fullAmount;
       case 4:
         return detail.fullGiftLevelList?.[0].fullAmount;
+      case 6:
+        return detail?.fullReductionLevelList?.[0].fullAmount || '';
+      case 7:
+        return detail?.fullDiscountLevelList?.[0].fullAmount || '';
       case 10:
         return detail.marketingFreeShippingLevel?.fullAmount;
       default :
@@ -144,6 +160,10 @@ export default function index({...props}) {
         return detail.fullDiscountLevelList?.[0].fullCount;
       case 5:
         return detail.fullGiftLevelList?.[0].fullCount;
+      case 6:
+        return detail?.fullReductionLevelList?.[0].fullCount || '';
+      case 7:
+        return detail?.fullDiscountLevelList?.[0].fullCount || '';
       case 11:
         return detail.marketingFreeShippingLevel?.fullCount;
       default :
@@ -201,14 +221,16 @@ export default function index({...props}) {
         detail?.fullGiftLevelList?.[0].fullGiftDetailList.forEach(item=>{
           giftIds.push(item.productId)
         })
-        customIds = detail.goodsInfoIdList.filter(item=>{
-          return !giftIds.includes(item)
+        detail.marketingScopeList.forEach(item=>{
+          customIds.push(item.scopeId)
         })
         customRowList = detail.goodsList?.goodsInfoPage?.content.filter(item=>{
           return customIds.includes(item.goodsInfoId)
         })
       }else {
-        customIds = detail.goodsInfoIdList
+        detail.marketingScopeList.forEach(item=>{
+          customIds.push(item.scopeId)
+        })
         customRowList = detail.goodsList?.goodsInfoPage?.content
       }
       setFormData({
@@ -234,7 +256,7 @@ export default function index({...props}) {
          */
         Conditions:{
           promotionType: detail.promotionType,
-          CartLimit: switchCartLimit(detail.subType),
+          CartLimit: switchCartLimit(detail.subType,detail),
           isSuperimposeSubscription: detail.isSuperimposeSubscription,
           fullMoney:switchFullMoney(detail),
           fullItem:switchFullItem(detail),
@@ -277,6 +299,12 @@ export default function index({...props}) {
       result = await webapi.fetchCouponInfo(props.match.params.id)
       let detail = result.res.context.couponInfo
       let goodsList = result.res.context.goodsList
+      let giftIds = [] //gift product id 集合
+      if(detail.couponPromotionType === 2){
+        (detail.fullGiftDetailList || []).forEach(item=>{
+          giftIds.push(item.productId)
+        })
+      }
       setFormData({
         /**
          * 第二步
@@ -308,22 +336,42 @@ export default function index({...props}) {
           storeCateIds:ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds:ReStoreCateIds(detail.attributeValueIds || []),
           skuIds:detail.scopeIds,
-          selectedRows:goodsList?.goodsInfoPage?.content,
+          selectedRows:goodsList?.goodsInfoPage?.content.filter(item=>{
+            return detail.scopeIds.includes(item.goodsInfoId)
+          }),
         },
         /**
          * 第五步
          */
         Advantage:{
-          couponPromotionType: detail.couponPromotionType,
+          couponPromotionType: detail.couponPromotionType === 2 ? 4 : detail.couponPromotionType,
           denomination: detail.denomination,
           couponDiscount: detail.couponDiscount*100 || '',
           limitAmount: detail.limitAmount,
+          fullGiftLevelList: detail.couponPromotionType === 2 ? [
+            { fullAmount: null,
+              fullCount: null,
+              fullGiftDetailList:detail.fullGiftDetailList,
+              giftType: 1,
+              key: makeRandom(),
+            }
+          ] : [],
+          selectedGiftRows: goodsList?.goodsInfoPage?.content.filter(item=>{
+            return giftIds.includes(item.goodsInfoId)
+          }),
         },
         storeId:detail.storeId,
       })
     }
     setLoading(false)
   }
+  /**
+   * 生成随机数，作为key值
+   * @returns {string}
+   */
+  const makeRandom = () => {
+    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  };
   /**
    * 回显StoreCateIds
    * @param storeCateIds

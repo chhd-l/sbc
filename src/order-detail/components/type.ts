@@ -31,8 +31,8 @@ export interface Invoice{
   type: number; //发票类型
   title: string; //发票抬头
   projectName: string; //开票项目名称
-  generalInvoice: IMap; //普通发票
-  specialInvoice: IMap; //增值税专用发票
+  generalInvoice?: IMap; //普通发票
+  specialInvoice?: IMap; //增值税专用发票
   address: string;
   address1: string;
   address2: string;

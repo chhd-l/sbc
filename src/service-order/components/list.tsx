@@ -514,7 +514,7 @@ class ListView extends React.Component<any, any> {
                     </td>
 
                     {/* Appointment status */}
-                    <td style={{ width: '20%' }}>null</td>
+                    <td style={{ width: '20%' }}>{v.get('appointmentStatus')?v.get('appointmentStatus') : ''}</td>
 
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>

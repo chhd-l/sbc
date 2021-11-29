@@ -184,10 +184,10 @@ export default class CouponBasicInfo extends Component<any, any> {
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.CouponName" />}>
             <div style={style}>{couponName}</div>
           </FormItem>
-          <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.PromotionType" />}>
+          <FormItem labelCol={{span:3}} wrapperCol={{span: 21}} label={<FormattedMessage id="Marketing.PromotionType" />}>
             <div style={style}>{PROMOTION_TYPE[couponPurchaseType]}
               {
-                couponPurchaseType === 0 &&
+                couponPurchaseType != 3 &&
                 <Checkbox className="checkboxStyle"checked={isSuperimposeSubscription === 0} disabled={true}>
                   <div >
                     <FormattedMessage id="Marketing.Idontwanttocumulate" />

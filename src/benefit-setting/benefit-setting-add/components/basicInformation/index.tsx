@@ -63,10 +63,10 @@ export default class BasicInformation extends Component<any, any>{
                     <FormattedMessage id={ "Subscription.basicInformation"} />
                 </div>
                 <div>
-                    <Form.Item label={<FormattedMessage id={benefitType === config.CONSUMPTION_GIFT ? 'Subscription.Campaign name' : 'Subscription.WelcomeboxName'}/>}>
+                    <Form.Item {...formItemLayout} label={<FormattedMessage id={benefitType === config.CONSUMPTION_GIFT ? 'Subscription.Campaign name' : 'Subscription.WelcomeboxName'}/>}>
                         {getFieldDecorator('marketingName', inputConfig)(<Input />)}
                     </Form.Item>
-                    <Form.Item label={<FormattedMessage id={'Subscription.start and end time'} />}>
+                    <Form.Item {...formItemLayout} label={<FormattedMessage id={'Subscription.start and end time'} />}>
                         {getFieldDecorator('timers', rangeConfig)(
                             <RangePicker
                                 format={Const.DATE_FORMAT}
@@ -79,7 +79,7 @@ export default class BasicInformation extends Component<any, any>{
                                 ]}
                                 showTime={{ format: 'HH:mm' }} />)}
                     </Form.Item>
-                    {benefitType === config.WELCOME_BOX && <Form.Item label={<FormattedMessage id={'Order.subscriptionType'} />} required>
+                    {benefitType === config.WELCOME_BOX && <Form.Item {...formItemLayout} label={<FormattedMessage id={'Order.subscriptionType'} />} required>
                         {getFieldDecorator('type', {
                             initialValue: !!initData && initData.promotionType === 2 ? 'club' : !!initData && initData.promotionType === 0 ? 'all' : 'individual'
                         })(

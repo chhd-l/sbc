@@ -90,13 +90,14 @@ class NewAppointment extends React.Component<any, any> {
                 if (item.date === _temp.date) {
                   console.log(item,'===2121====1')
                   let isLoop=false;
-                  item.minuteSlotVOList.map((it,index) => {
+                  item.minuteSlotVOList=item.minuteSlotVOList.map((it,index) => {
                    const  _t=  _temp.minuteSlotVOList.find(ii=>ii.startTime===it.startTime)
                     if (_t) {
                       isLoop=true
                       it = { ...it, ..._t }
                     }
-                    if(item.minuteSlotVOList.length===(index+1)&&!_t)isLoop=false
+                    return it;
+                    //if(item.minuteSlotVOList.length===(index+1)&&!_t)isLoop=false
                   })
                   if(!isLoop){
                     item.minuteSlotVOList=item.minuteSlotVOList.concat(_temp.minuteSlotVOList)
@@ -109,7 +110,6 @@ class NewAppointment extends React.Component<any, any> {
         }
       })
 
-      console.log(resources,'====sss===')
 
       this.setState({
         resources,

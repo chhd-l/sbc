@@ -173,6 +173,7 @@ class FillinPetInfoForm extends Component {
         const { getFieldDecorator, getFieldValue } = this.props.form;
         const { lifeList, activityList, specialNeedsList, stateCustomPet, petsBreedList, weightList, fetching } = this.state
         const keys = getFieldValue('keys');
+        
         return keys.length > 0 && keys.map((item, index) => (
             <Col span={12} key={item} >
                 <div style={{border:'1px solid #f8f8f8',marginTop:15, padding:'15px',boxShadow:'0 0 5px #f8f8f8'}}>
@@ -180,7 +181,7 @@ class FillinPetInfoForm extends Component {
                    <Col span={24}>
                    <div style={{ display: "flex", justifyContent: "space-between",padding:'0 20px' }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
-                        {(!stateCustomPet[item]?.petsId)&&<Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>}
+                        {(!stateCustomPet[item]?.petsId||!this.props.recommendParams.felinRecoId)&&<Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>}
                     </div>
                    </Col>
                     <Col span={12}>
@@ -352,7 +353,7 @@ class FillinPetInfoForm extends Component {
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Date' })}>
                                 {getFieldDecorator('fillDate', {
-                                    initialValue: moment(recommendParams?.fillDate ?? null, 'YYYY-MM-DD'),
+                                    initialValue: moment(recommendParams.fillDate, 'YYYY-MM-DD'),
                                     rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
                                 })(<DatePicker format="YYYY-MM-DD" style={{ width: '100%' }} disabled={recommendParams.felinRecoId?true:false}/>)}
                             </Form.Item>

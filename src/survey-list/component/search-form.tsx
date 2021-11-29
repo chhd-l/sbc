@@ -27,8 +27,8 @@ export default class SearchForm extends React.Component<any, any>{
       const rangeDate = values["startDate"]
       const params = {
         ...values,
-        startDate: rangeDate?.[0].format('YYYY-MM-DD')||"",
-        endDate: rangeDate?.[1].format('YYYY-MM-DD')||"",
+        startDate: rangeDate?.[0]?.format('YYYY-MM-DD')||null,
+        endDate: rangeDate?.[1]?.format('YYYY-MM-DD')||null,
       }
       if (!err) {
         this.props.onSearch({

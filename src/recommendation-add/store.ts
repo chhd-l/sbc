@@ -30,6 +30,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.fetchFindById(param);
     if (res.code === Const.SUCCESS_CODE) {
       let { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      fillDate=(fillDate.includes('Invalid')||!fillDate)?moment().format('YYYY-MM-DD'):fillDate
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
       customerPet = customerPet && customerPet.map(item => {
         let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
@@ -118,9 +119,11 @@ export default class AppStore extends Store {
         list.map(item => {
           item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
         })
-      }
-      let _recommendParams = this.state().get('recommendParams')
-      this.savepetsRecommendParams({ ..._recommendParams, appointmentVO: settingVO, goodsQuantity })
+      } 
+      let _recommendParams = this.state().get('recommendParams').toJS()
+      let _te={ ..._recommendParams,expert:settingVO.expertNames,fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
+        console.log(_te)
+      this.savepetsRecommendParams(_te)
       this.dispatch('pets:list', list)
       // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
       // let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }

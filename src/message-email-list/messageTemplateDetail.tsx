@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {  Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
 import * as webapi from './webapi'
-import { Const } from 'qmkit';
+import { cache, Const } from 'qmkit';
 import Handlebars from 'handlebars'
 import SendSay from '../../web_modules/qmkit/sendsay';
 
@@ -25,7 +25,8 @@ const MessageTemplateDetail=({visibleTemplate,setVisibleTemplate,taskId})=>{
     const [loading,setLoading]=useState(true)
     const [previewHtml,setPreviewHtml]=useState('')
     const [templateTaskId,setTemplateTaskId]=useState('')
-
+    const isCountryRu = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] == 'ru'
+    console.log(isCountryRu,'Ru')
 
     const params={
         taskId:taskId
@@ -45,7 +46,7 @@ const MessageTemplateDetail=({visibleTemplate,setVisibleTemplate,taskId})=>{
 
                 let template = null;
 
-                if (false) {
+                if (isCountryRu) {
                   template = new SendSay(emailTemp, {anketa: {params: {...emailData}}}).getTemplate()
                 } else {
                   template = Handlebars.compile(emailTemp)(emailData)

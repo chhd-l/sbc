@@ -3,26 +3,29 @@ import {  Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'an
 import * as webapi from './webapi'
 import { Const } from 'qmkit';
 import Handlebars from 'handlebars'
+import SendSay from '../../web_modules/qmkit/sendsay';
+
+Handlebars.registerHelper('equals', function(arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+Handlebars.registerHelper('length', function(arg1,options) {
+  return arg1.length;
+});
+Handlebars.registerHelper('greaterThan', function(arg1, arg2, options) {
+  return (arg1 > arg2) ? options.fn(this) : options.inverse(this);
+});
+Handlebars.registerHelper('length', function(fn) {
+  return ('');
+});
+
+
 
 const MessageTemplateDetail=({visibleTemplate,setVisibleTemplate,taskId})=>{
 
     const [loading,setLoading]=useState(true)
     const [previewHtml,setPreviewHtml]=useState('')
     const [templateTaskId,setTemplateTaskId]=useState('')
-    const [paramsData,setParamsData]=useState()
-    Handlebars.registerHelper('equals', function(arg1, arg2, options) {
-      return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
-    });
-    Handlebars.registerHelper('length', function(arg1,options) {
-      return arg1.length;
-    });
-    Handlebars.registerHelper('greaterThan', function(arg1, arg2, options) {
-      return (arg1 > arg2) ? options.fn(this) : options.inverse(this);
-    });
-    Handlebars.registerHelper('length', function(fn) {
-      return ('');
-    });
-    const template = Handlebars.compile(previewHtml);
+
 
     const params={
         taskId:taskId
@@ -37,11 +40,21 @@ const MessageTemplateDetail=({visibleTemplate,setVisibleTemplate,taskId})=>{
               if(res.code === Const.SUCCESS_CODE){
                 setLoading(false);
                 const templateDate =res.context;
-                setPreviewHtml(templateDate.messageTemplateContent)
+                const emailData = JSON.parse(templateDate.messageSendParams).templateData
+                const emailTemp = templateDate.messageTemplateContent
+
+                let template = null;
+
+                if (false) {
+                  template = new SendSay(emailTemp, {anketa: {params: {...emailData}}}).getTemplate()
+                } else {
+                  template = Handlebars.compile(emailTemp)(emailData)
+                }
+
                 setTemplateTaskId(templateDate.messageTaskId)
-                const data=JSON.parse(templateDate.messageSendParams)
-                const trueData = data.templateData
-                setParamsData(trueData)
+                setPreviewHtml(template)
+
+
               }
           })
     }
@@ -66,7 +79,7 @@ const MessageTemplateDetail=({visibleTemplate,setVisibleTemplate,taskId})=>{
             ]}
         >
           <Spin spinning={loading}>
-            {previewHtml?<div dangerouslySetInnerHTML={{__html:template(paramsData)}} style={{zoom:'0.5'}}></div>:null}
+            {previewHtml?<div dangerouslySetInnerHTML={{__html:previewHtml}} style={{zoom:'0.5'}}></div>:null}
           </Spin>
         </Modal>
       </>

@@ -97,7 +97,7 @@ export default function Step6({setLoading}) {
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
         couponDiscount: formData.Advantage.couponPromotionType === 1 ? parseInt(formData.Advantage.couponDiscount)/100 : 0,
         limitAmount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
-        fullGiftDetailList: formData.Advantage.couponPromotionType === 4 && formData.Advantage.fullGiftLevelList[0].fullGiftDetailList,
+        fullGiftDetailList: formData.Advantage.couponPromotionType === 4 ? formData.Advantage.fullGiftLevelList[0].fullGiftDetailList: [],
         /**
          * 未用到
          */

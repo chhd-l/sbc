@@ -87,8 +87,8 @@ class Appointment extends React.Component<any, any> {
         console.log('Received values of form: ', values);
         const { pagination } = this.state;
         let { apptDate,...result } = values
-        let appointmentStartDate =apptDate&& moment(apptDate[0]).format('YYYY-MM-DD')||undefined
-        let appointmentEndDate = apptDate&&moment(apptDate[1]).format('YYYY-MM-DD')||undefined
+        let appointmentStartDate =apptDate&& moment(apptDate[0]).format('YYYYMMDD')||undefined
+        let appointmentEndDate = apptDate&&moment(apptDate[1]).format('YYYYMMDD')||undefined
         this.setState({
           searchForm: { ...this.state.searchForm, ...result,appointmentStartDate,appointmentEndDate }
         }, () => {

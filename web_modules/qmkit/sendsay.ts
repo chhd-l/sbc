@@ -239,7 +239,8 @@ class SendSay {
       if (item.includes('param.url_unsub')) {
         return 'param.url_unsub'
       }
-      return `<%=${item.trim()}%>`;
+      const splitItem = item.trim().split('.').join('?.');
+      return `<%=${splitItem}%>`;
     }
 
     const splitTpl = tpl.split('[%');

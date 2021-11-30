@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Row, Col, Spin, Select } from 'antd';
 import { checkCompanyInfoExists, saveLegalInfo } from "../webapi";
 import { FormattedMessage } from 'react-intl';
+import { Const } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -78,7 +79,7 @@ const { Option } = Select;
               </FormItem>
 
             </Col> */}
-            <Col span={12}>
+            <Col span={12} style={{display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none'}}>
               <FormItem label="Type of business">
                 {getFieldDecorator('typeOfBusiness', {
                   rules: [{ required: true, message: 'Please input Type of business!' }],

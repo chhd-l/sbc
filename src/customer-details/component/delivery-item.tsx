@@ -392,6 +392,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
         if (address.selectedListeNumero || address.listeNumero.indexOf(';') === -1) {
           returnDQE(address.idvoie, address.pays, address.selectedListeNumero || address.listeNumero);
         } else {
+          //删除选中的一级地址, 然后把解析的二级地址prepend到list中
+          const addressIndex = searchAddressList.findIndex(addr => addr.unrestrictedValue === val);
+          searchAddressList.splice(addressIndex, 1);
           searchAddressList = address.listeNumero.split(';').map(item => ({
             ...address,
             unrestrictedValue: `${item} ${address.unrestrictedValue}`,

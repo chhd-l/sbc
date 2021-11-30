@@ -233,10 +233,14 @@ class SendSay {
         return '<%}%>';
       }
       if (item.includes('FOREACH')) {
-        const splitItem = item.split('IN')[1];
-        return `<%for(var item of ${splitItem.trim()}){%>`;
+        const splitItem = item.split('FOREACH')[1].split('IN');
+        return `<%for(var ${splitItem[0].trim()} of (${splitItem[1].trim()} || [])){%>`;
       }
-      return `<%=${item.trim()}%>`;
+      if (item.includes('param.url_unsub')) {
+        return 'param.url_unsub'
+      }
+      const splitItem = item.trim().split('.').join('?.');
+      return `<%=${splitItem}%>`;
     }
 
     const splitTpl = tpl.split('[%');

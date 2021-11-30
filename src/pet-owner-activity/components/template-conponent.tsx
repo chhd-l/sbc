@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Row, Col, Modal, Tag, Button, Icon } from 'antd';
+import { getPreviewEmailTemp } from '../../../web_modules/qmkit/previewEmail';
 
 export default class TemplateConponent extends Component<any, any> {
   constructor(props) {
@@ -19,11 +20,12 @@ export default class TemplateConponent extends Component<any, any> {
     };
     if(avtivity) {
       let ccListString = avtivity.detailsResponse && avtivity.detailsResponse.ccList ? avtivity.detailsResponse.ccList : '';
+      const tempData = avtivity.messageSendParams ? JSON.parse(avtivity.messageSendParams).templateData : {}
       viewParams = {
         toEmail: avtivity.detailsResponse && avtivity.detailsResponse.email ? avtivity.detailsResponse.email : '',
         ccList: ccListString ? ccListString.split(';'): [],
         templateName: avtivity.emailTemplate,
-        templateContent: avtivity.emailTemplateHtml ? avtivity.emailTemplateHtml : ''
+        templateContent: avtivity.emailTemplateHtml ? getPreviewEmailTemp(avtivity.emailTemplateHtml, tempData) : ''
       };
     }
     return (

@@ -234,7 +234,10 @@ class SendSay {
       }
       if (item.includes('FOREACH')) {
         const splitItem = item.split('FOREACH')[1].split('IN');
-        return `<%for(var ${splitItem[0].trim()} of ${splitItem[1].trim()}){%>`;
+        return `<%for(var ${splitItem[0].trim()} of (${splitItem[1].trim()} || [])){%>`;
+      }
+      if (item.includes('param.url_unsub')) {
+        return 'param.url_unsub'
       }
       return `<%=${item.trim()}%>`;
     }

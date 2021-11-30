@@ -59,6 +59,8 @@ async function getDynamicLanguage() {
     }
 
     return retRes;
+  }).catch((err) => {
+    console.log('phrase langugage fetch error', err);
   });
 
   language = assignObj(langFile[key], res);

@@ -196,10 +196,10 @@ class NewAppointment extends React.Component<any, any> {
     this.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         this.setState({ loading: true });
-        const { params } = this.state;
+        const { params,appointmentType } = this.state;
         let d: any = {}
 
-        let cc = { ...params, ...values, serviceTypeId: '6',appointmentTypeId:params.apptTypeId}
+        let cc = { ...params, ...values, serviceTypeId: '6',appointmentTypeId:values.apptTypeId}
         console.log(cc);
         // return
         if (params.id) {

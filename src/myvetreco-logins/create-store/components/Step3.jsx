@@ -77,12 +77,12 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 setStep(3)
               }
             })
-          }else {
+          } else {
             form.setFields({
               storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}
             })
+            setLoading(false)
           }
-          setLoading(false)
         })
       }
     });

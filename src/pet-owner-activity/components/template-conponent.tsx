@@ -31,7 +31,7 @@ export default class TemplateConponent extends Component<any, any> {
     return (
       <div className="template-component">
         <Card style={{ width: '95%', overflow: 'hidden' }}>
-          <iframe ref="previewIframe" srcDoc={viewParams.templateContent} width="100%" height="100%" frameBorder="0"></iframe>
+          <div dangerouslySetInnerHTML={{ __html: viewParams.templateContent }} style={{ zoom: '0.1', maxHeight: '2000px'}}></div>
         </Card>
         <div className="footer-btn">
           <Button
@@ -94,7 +94,7 @@ export default class TemplateConponent extends Component<any, any> {
             </div>
             <div className="separate"></div>
             <div>
-              <iframe ref="previewIframe" srcDoc={viewParams.templateContent} width="100%" height="700px" frameBorder="0"></iframe>
+              <div dangerouslySetInnerHTML={{ __html: viewParams.templateContent }} style={{ zoom: '0.5' }}></div>
             </div>
           </div>
         </Modal>

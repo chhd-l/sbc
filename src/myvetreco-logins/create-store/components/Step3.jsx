@@ -292,10 +292,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="Sell to clinic" name="sellToClinic">
                 {getFieldDecorator('sellToClinic', {
-                  rules: [{ required: true, message: 'Please input Sell to clinic!' }],
+                  rules: [{ required: Const.SITE_NAME === 'MYVETRECO', message: 'Please input Sell to clinic!' }],
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -338,7 +338,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="Introduction" name="introduction">
                 {getFieldDecorator('introduction', {
                   initialValue: ''

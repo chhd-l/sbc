@@ -342,7 +342,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   searchAddress = (txt: string) => {
     const { suggestionMethodName, isAddress1ApplySuggestion } = this.state;
-    if (isAddress1ApplySuggestion) {
+    if (isAddress1ApplySuggestion && txt !== '') {
       if (suggestionMethodName === 'DADATA') { 
         getAddressListByDadata(txt).then((data) => {
           if (data.res.code === Const.SUCCESS_CODE) {
@@ -356,15 +356,22 @@ class DeliveryItem extends React.Component<Iprop, any> {
         getSuggestionAddressListByDQE(txt).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
             this.setState({
-              searchAddressList: (data.res.context ?? []).map(addr => ({
-                ...addr,
-                unrestrictedValue: addr.label,
-                selectedListeNumero: '',
-                postCode: addr.codePostal,
-                city: addr.localite,
-                state: addr.county,
-                street: addr.voie
-              })),
+              searchAddressList: (data.res.context ?? [])
+                .reduce((prev, curr) => {   //根据label去重
+                  if (prev.findIndex(t => t.label === curr.label) === -1) {
+                    prev.push(curr);
+                  }
+                  return prev;
+                }, [])
+                .map(addr => ({
+                  ...addr,
+                  unrestrictedValue: addr.label,
+                  selectedListeNumero: '',
+                  postCode: addr.codePostal,
+                  city: addr.localite,
+                  state: addr.county,
+                  street: addr.voie
+                })),
               suggestionOpen: true
             });
           }

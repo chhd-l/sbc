@@ -20,7 +20,7 @@ export default class TemplateConponent extends Component<any, any> {
     };
     if(avtivity) {
       let ccListString = avtivity.detailsResponse && avtivity.detailsResponse.ccList ? avtivity.detailsResponse.ccList : '';
-      const tempData = avtivity.messageSendParams ? JSON.parse(avtivity.messageSendParams).templateData : {}
+      const tempData = avtivity.messageSendParams ? JSON.parse(avtivity.messageSendParam)?.templateData : {}
       viewParams = {
         toEmail: avtivity.detailsResponse && avtivity.detailsResponse.email ? avtivity.detailsResponse.email : '',
         ccList: ccListString ? ccListString.split(';'): [],

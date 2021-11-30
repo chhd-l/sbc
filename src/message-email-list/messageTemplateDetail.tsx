@@ -26,11 +26,10 @@ const MessageTemplateDetail = ({ visibleTemplate, setVisibleTemplate, taskId }) 
           setLoading(false);
 
           const templateDate = res.context;
-          const emailTemp = templateDate.messageTemplateContent;
-          const emailData = JSON.parse(templateDate.messageSendParams).templateData;
+          const emailTemp = templateDate?.messageTemplateContent;
+          const emailData = JSON.parse(templateDate.messageSendParams)?.templateData;
 
           const template = getPreviewEmailTemp(emailTemp, emailData);
-
           setTemplateTaskId(templateDate.messageTaskId);
           setPreviewHtml(template);
         }

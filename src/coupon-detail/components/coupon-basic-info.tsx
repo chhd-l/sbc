@@ -301,7 +301,10 @@ export default class CouponBasicInfo extends Component<any, any> {
                       couponJoinLevel == 0 ?
                         <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
                         <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
-                        : null
+                        : couponJoinLevel == -4 ?
+                          <span className="left-span">
+                            {emailSuffixList && emailSuffixList.toJS()[0]}
+                          </span>: null
                     }
                   </div>
                 </FormItem>

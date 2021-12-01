@@ -1,5 +1,5 @@
 
-import { Fetch } from 'qmkit';
+import { Fetch, Const } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -108,5 +108,22 @@ export function checkCompanyInfoExists(params) {
     body: JSON.stringify({
       ...params
     })
+  });
+}
+
+//获取国家列表
+export async function getCountryList() {
+  return await Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({ type: 'country' })
+  }).then((data) => {
+    const { res } = data;
+    if (res.code === Const.SUCCESS_CODE) {
+      return res.context.sysDictionaryVOS;
+    } else {
+      return [];
+    }
+  }).catch((err) => {
+    return [];
   });
 }

@@ -35,7 +35,7 @@ function assignObj(obj, source) {
 async function getDynamicLanguage() {
   const url = `https://api.phrase.com/v2/projects/${Const.PHRASE_PROJECT_ID}/locales/${key}/download?access_token=31950e3e49b165b8b2c604b65574e6cf279d9ea395e3718ce52b1ec335bef6e5&include_empty_translations=true&file_format=node_json`;
 
-  let retRes = {};
+  let retRes = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || {};
 
   await fetch(url, {
     method: 'get',
@@ -54,13 +54,10 @@ async function getDynamicLanguage() {
     if (resJson) {
       retRes = resJson;
       window.localStorage.setItem('PHRASE_LANGUAGE', JSON.stringify(retRes));
-    } else {
-      retRes = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || {};
     }
 
   }).catch((err) => {
     console.log('phrase langugage fetch error', err);
-    retRes = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || {};
   });
 
   language = assignObj(langFile[key], retRes);

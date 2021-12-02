@@ -119,6 +119,7 @@ const Schedular = () => {
             idx !== specificTime.length - 1 && _itemBookedTypeList.push({
               time: el,
               startTime:item.startTime,
+              endTime:item.endTime,
               isShow: idx === 0 ? true : false,
               allTime: _s[item.bookType] + ' ' + moment(moment(item.startTime, 'YYYY-MM-DD HH:mm')).format('HH:mm') + '-' + moment(moment(item.endTime, 'YYYY-MM-DD HH:mm')).format('HH:mm'),
               appointmentNo: item?.appointmentNo ?? null,
@@ -260,7 +261,7 @@ const Schedular = () => {
       if (!type.appointmentNo) return
       getAppointmentById(type.appointmentNo);
     } else if (type.bookType && type.bookType.includes('Blocked')) {
-      let isCancel=moment(moment(type.startTime,'YYYY-MM-DD HH:mm')).diff(moment(),'minutes')
+      let isCancel=moment(moment(type.endTime,'YYYY-MM-DD HH:mm')).diff(moment(),'minutes')
       // console.log(type,isCancel)
       if (!type.id||isCancel<=0) return
       confirm({

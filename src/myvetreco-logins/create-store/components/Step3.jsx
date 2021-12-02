@@ -233,7 +233,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   }
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">3 / 5 Tell us more about your store</div>
+      <div className="vmargin-level-4 align-item-center word big">3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} Tell us more about your store</div>
 
       <div style={{width:800,margin:'0 auto'}}>
         <Row gutter={[24,12]}>

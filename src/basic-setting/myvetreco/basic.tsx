@@ -4,10 +4,10 @@ import { Const, cache } from 'qmkit';
 import DebounceSelect from '../../myvetreco-logins/create-store/components/debounceSelect';
 import { cityList, checkCompanyInfoExists } from '../webapi';
 import { FormattedMessage } from 'react-intl';
-import FileItem from './fileitem';
+import UploadItem from './uploaditem';
 import { FormComponentProps } from 'antd/es/form';
 import moment from 'moment';
-import { SupportedDocumentUtil } from './main';
+import { SupportedDocumentUtil, SupportedDocumentFieldValidator } from './main';
 
 interface BasicFormProps extends FormComponentProps {
   onChangeName: Function;
@@ -286,7 +286,8 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
             cityId: values.cityId.key,
             city: values.cityId.label,
             dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
-            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+            documentType: values.supportedDocument.documentType,
+            supportedDocument: SupportedDocumentUtil.mapUploadObjToProps(values.supportedDocument)
           });
         } else {
           reject('1');
@@ -426,15 +427,15 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
           </Col>
           <Col span={24}>
             <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
-              <div>You can upload Passport, Visa or Driving License</div>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: true, type: 'array', message: 'Please upload supported document' }]
+                rules: [{ required: true, validator: SupportedDocumentFieldValidator }],
+                initialValue: { documentType: 'PASSPORT', PASSPORT: [] }
               })(
-                <FileItem disabled={adyenAuditState === 0} />
+                <UploadItem disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>

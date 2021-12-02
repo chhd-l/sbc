@@ -54,13 +54,23 @@ const { Option } = Select;
   };
 
   const onChangePhoneNumber = (e) => {
-    if (e && !e.target.value.startsWith('+31')) {
+    if (Const.SITE_NAME === 'MYVETRECO' && e && !e.target.value.startsWith('+31')) {
       const temp = e.target.value;
       setTimeout(() => {
         form.setFieldsValue({
           contactPhone: `+31${temp.replace(/^[+|+3|+31]/, '')}`
         });
       });
+    }
+  };
+
+  const validatePhoneNumber = (rules, value, callback) => {
+    if (Const.SITE_NAME === 'MYVETRECO' && !/^\+31[0-9]{9}$/.test(value)) {
+      callback('Please input the right format: +31xxxxxxxxx');
+    } else if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
+      callback('Please input a right phone number');
+    } else {
+      callback();
     }
   };
 
@@ -101,10 +111,10 @@ const { Option } = Select;
                 })(<Input size="large"/>)}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={12} style={{display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none'}}>
               <FormItem label="Chamber of Commerce number">
                    {getFieldDecorator('commerceNumber', {
-                  rules:[{ required: true, message: 'Please input Chamber of Commerce number!' }],
+                  rules:[{ required: Const.SITE_NAME === 'MYVETRECO', message: 'Please input Chamber of Commerce number!' }],
                  initialValue: legalInfo?.commerceNumber??''
                 })( <Input size="large"/>)}
                
@@ -141,7 +151,7 @@ const { Option } = Select;
               <FormItem label="Phone number">
                 {getFieldDecorator('contactPhone', {
                   rules:[
-                    { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
+                    { required: true, validator: validatePhoneNumber }
                   ],
                   initialValue: legalInfo?.contactPhone??''
                 })(

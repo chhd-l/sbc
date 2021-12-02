@@ -46,8 +46,8 @@ function CreateStores() {
           <Step title={RCi18n({id:'Login.create_store_step1'})} />
           <Step title={RCi18n({id:'Login.create_store_step2'})} />
           <Step title={RCi18n({id:'Login.create_store_step3'})} />
-          <Step title={RCi18n({id:'Login.create_store_step4'})} />
-          <Step title={RCi18n({id:'Login.create_store_step5'})} />
+          {Const.SITE_NAME === 'MYVETRECO' && <Step title={RCi18n({id:'Login.create_store_step4'})} />}
+          {Const.SITE_NAME === 'MYVETRECO' && <Step title={RCi18n({id:'Login.create_store_step5'})} />}
         </Steps>
       </div>
       <div>
@@ -68,11 +68,11 @@ function CreateStores() {
                  sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
         </div>
         <div style={{display: current === 3 ? 'block' : 'none' }}>
-          <Step4 setStep={setCurrent} userInfo={userInfo} step={current}
-                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>
+          {Const.SITE_NAME === 'MYVETRECO' && <Step4 setStep={setCurrent} userInfo={userInfo} step={current}
+                 sourceStoreId={sourceStoreId} sourceCompanyInfoId={sourceCompanyInfoId}/>}
         </div>
         <div style={{display: current === 4 ? 'block' : 'none' }}>
-          <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>
+          {Const.SITE_NAME === 'MYVETRECO' && <Step5 setStep={setCurrent} userInfo={userInfo} paymentInfoRequest={submitData?.paymentInfoRequest}/>}
         </div>
       </div>
     </div>): current === 5 ? ( <Create userInfo={userInfo} setStep={setCurrent}/>) : (<StoreAudit />)

@@ -149,6 +149,12 @@ const Common = {
   REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
+  //测试新Okta 测试完待删除
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
+  // REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
+  // REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
+
+
   // PROD  Okta Config
   // REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
   // REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",

@@ -27,6 +27,8 @@ const getOktaAppConfig = () => {
     });
   } else if (host.indexOf('myvetreco') > -1) {
     return Object.assign({}, OKTA_APP_CONFIG, {
+      REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
+      REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
       REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
     });
   } else if (host === 'store.peawee.co.uk') {

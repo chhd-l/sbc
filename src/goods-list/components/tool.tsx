@@ -81,14 +81,14 @@ class Tool extends React.Component<any, any> {
 
     return (
       <div className="handle-bar">
-        <AuthWrapper functionName="f_goods_sync">
+        {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_goods_sync">
           <Dropdown overlay={this._syncMenu} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>
               {<FormattedMessage id="Product.Synchronize" />}
               <Icon type="down" />
             </Button>
           </Dropdown>
-        </AuthWrapper>
+        </AuthWrapper>}
         {hasMenu && (
           <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
             <Button>

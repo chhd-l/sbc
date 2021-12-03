@@ -53,17 +53,29 @@ export default class settingForm extends React.Component<any, any> {
     this.state = {
       storeLogo: storeLogo,
       //用于storeSign图片展示
+      // storeSignImage:
+      //   storeSign && storeSign
+      //     ? [
+      //         {
+      //           uid: 'store-sign-1',
+      //           name: storeSign,
+      //           size: 1,
+      //           status: 'done',
+      //           url: storeSign
+      //         }
+      //       ]
+      //     : [],
       storeSignImage:
-        storeSign && storeSign
+        storeSign
           ? [
-              {
-                uid: 'store-sign-1',
-                name: storeSign,
-                size: 1,
-                status: 'done',
-                url: storeSign
-              }
-            ]
+            {
+              uid: 'store-sign-1',
+              name: storeSign,
+              size: 1,
+              status: 'done',
+              url: storeSign
+            }
+          ]
           : [],
       //用于storeSign图片校验
       storeSign: storeSign

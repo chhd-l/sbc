@@ -455,7 +455,10 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     let { level } = this.state;
     level._indeterminate = !!checkedList.length && checkedList.length < customerLevel.length;
     level._checkAll = checkedList.length === customerLevel.length;
-    (level._checkedLevelList = checkedList), this.setState(level);
+    // (level._checkedLevelList = checkedList), this.setState(level);
+    level._checkedLevelList = checkedList;
+    this.setState(level);
+
 
     this.props.form.resetFields('joinLevel');
   };

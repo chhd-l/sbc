@@ -85,7 +85,12 @@ const Schedular = () => {
     })
 
     setAllEmployeePersonList(_allEmployeePersonList)
-    _allEmployeePersonList.length ? setSelectPerson(allPersonEmployeeIds[0].employeeId) : null
+    if(!!_allEmployeePersonList.length){
+      setSelectPerson(allPersonEmployeeIds[0].employeeId)
+    }
+    // _allEmployeePersonList.length
+    //   ? setSelectPerson(allPersonEmployeeIds[0].employeeId)
+    //   : null
     setAllEmployeeIds(allPersonEmployeeIds)
     let params = Object.assign(listParams, {
       employeeIds: [{

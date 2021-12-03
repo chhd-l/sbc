@@ -394,7 +394,10 @@ export default class SpecifyAddForm extends React.Component<any, any> {
     let { level } = this.state;
     level._indeterminate = false;
     level._checkAll = checked;
-    (level._checkedLevelList = checked ? levelIds : []), this.setState(level);
+    // (level._checkedLevelList = checked ? levelIds : []), this.setState(level);
+    level._checkedLevelList = checked ? levelIds : [];
+    this.setState(level);
+
   };
 
   /**

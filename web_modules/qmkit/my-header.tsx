@@ -41,7 +41,7 @@ import iconSpain from './images/icon/iconSpain.svg';
 import iconTurkey from './images/icon/iconTurkey.svg';
 import iconAmerica from './images/icon/iconAmerica.svg';
 import iconGermany from './images/icon/iconGermany.svg';
-import iconSweden from './images/icon/iconSweden.png';
+import iconSweden from './images/icon/iconSweden.svg';
 
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';

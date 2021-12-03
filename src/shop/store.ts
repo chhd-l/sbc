@@ -584,7 +584,7 @@ export default class AppStore extends Store {
   };
 
   initCityDictionary = async () => {
-    const { res } = await webApi.getDictionaryByType('city');
+    const { res } = await webApi.getCityData();
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('dictionary: city', res.context.sysDictionaryVOS);

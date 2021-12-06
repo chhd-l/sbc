@@ -13,6 +13,7 @@ let arrQuantity = [];
 /*发布*/
 export default class DetailPublish extends React.Component<any, any> {
   props: {
+    showModal?:Function
     relaxProps?: {
       sharing: any;
       productForm: any;
@@ -22,6 +23,7 @@ export default class DetailPublish extends React.Component<any, any> {
       onProductForm: Function;
       loading: boolean;
       createLink: any;
+     
     };
   };
 
@@ -57,7 +59,7 @@ export default class DetailPublish extends React.Component<any, any> {
   };
 
   onSelectChange = (selectedRowKeys, v, o) => {
-    selectedRowKeys.map((item, i) => {
+    selectedRowKeys.forEach((item, i) => {
       v[i].quantity = 1;
       if (arrQuantity.length > 0) {
         arrQuantity.map((m, n) => {

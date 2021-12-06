@@ -472,7 +472,11 @@ export default class MyHeader extends React.Component {
     if (pcDom || h5Dom || miniProgramDom) {
       menuPreview = (
         <Menu className="menuPreview">
-          {pcDom && pcDom}
+          {/* old code */}
+          {/* {pcDom && pcDom} */}
+
+           {/* change code */}
+          {pcDom}
           {/* {h5Dom && h5Dom}
           {miniProgramDom && miniProgramDom} */}
         </Menu>

@@ -118,10 +118,11 @@ class StepOneEdit extends React.Component<any, any> {
   getStoreLog = async () => {
     const { res } = await fetchStoreInfo();
     if (res.code === Const.SUCCESS_CODE) {
+      let _is=!res.context.storeLogo
       this.setState({
         storeLogo: res.context.storeLogo,
         storeLogoImage:
-          res.context.storeLogo && res.context.storeLogo
+        !_is
             ? [
                 {
                   uid: 'store-logo-1',

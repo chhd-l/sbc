@@ -547,9 +547,7 @@ export default class AppStore extends Store {
             }
           }
         });
-        if (typeof v.logo == 'string') {
-          v.logo = v.logo;
-        } else {
+        if (typeof v.logo !== 'string') {
           if (v.logo[0].url) {
             v.logo = v.logo[0].url;
           } else {

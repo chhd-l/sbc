@@ -123,8 +123,9 @@ export default class AdyenCreditCardForm extends Component {
    * @param component 
    */
   handleOnAdditionalDetails = (state, component) => {
-    state.data // Provides the data that you need to pass in the `/payments/details` call.
-    component // Provides the active component instance that called this event.
+    // Provides the data that you need to pass in the `/payments/details` call.
+    // Provides the active component instance that called this event.
+    console.log(state.data, component)
   }
   /**
    * 根据他们的国家/地区、设备和付款金额获取可用付款方式的列表

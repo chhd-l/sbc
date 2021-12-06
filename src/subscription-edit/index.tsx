@@ -1823,8 +1823,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
               {/* timeSlot和pickup point status */}
               <Col span={8} className="timeSlot subscription_edit_timeSlot">
-                {/* {storeId === 123457907 && deliverDateStatus === 1 ? <Row> */}
-                {deliverDateStatus === 1 ? <Row>
+                {storeId === 123457907 && deliverDateStatus === 1 ? <Row>
+                {/* {deliverDateStatus === 1 ? <Row> */}
                   {
                     deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ?
                       <>

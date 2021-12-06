@@ -930,7 +930,6 @@ export default class FirstDiscountForm extends React.Component<any, any> {
     });
   };
   initLevel = (levelType) => {
-    const { ma }
     const initLevel = [
       {
         key: this.makeRandom(),
@@ -939,7 +938,6 @@ export default class FirstDiscountForm extends React.Component<any, any> {
         discount: null
       }
     ];
-    ma
   }
   /**
    * 生成随机数，作为key值

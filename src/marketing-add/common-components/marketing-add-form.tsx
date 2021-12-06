@@ -1464,7 +1464,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
     });
   };
   initLevel = (levelType) => {
-    const { ma }
     const initLevel = [
       {
         key: this.makeRandom(),

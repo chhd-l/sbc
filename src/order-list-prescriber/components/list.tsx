@@ -217,7 +217,9 @@ class ListView extends React.Component<any, any> {
 
   //判断价格显示位数，针对Individualization类型小数位数特殊处理
   judgePriceNum(price,subscriberType){
-    return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    // return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    return price&&price.toFixed(2);
+
   }
 
   _renderLoading() {

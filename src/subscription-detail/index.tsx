@@ -513,8 +513,8 @@ class SubscriptionDetail extends React.Component<any, any> {
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
-      isNaN(nlen) ? 2 : nlen;
-      nlen > 4 ? nlen = 4 : nlen = nlen;
+      // isNaN(nlen) ? 2 : nlen;
+      nlen = nlen > 4 ? 4: nlen;
       if (subscriptionInfo.subscriptionType === 'Club') {
         nlen = 2;
       }
@@ -523,7 +523,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-
+  
   render() {
     const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
     const cartTitle = (
@@ -568,7 +568,8 @@ class SubscriptionDetail extends React.Component<any, any> {
             )}
             <p>
               {currencySymbol + ' '}
-              {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))} */}
               {/* {currencySymbol + this.getSubscriptionPrice(record.subscribePrice)} */}
             </p>
           </div>

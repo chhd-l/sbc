@@ -243,7 +243,8 @@ class ListView extends React.Component<any, any> {
 
   //判断价格显示位数，针对Individualization类型小数位数特殊处理
   judgePriceNum(price,subscriberType){
-    return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    // return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    return price&&price.toFixed(2)
   }
 
   _renderLoading() {
@@ -546,7 +547,8 @@ class ListView extends React.Component<any, any> {
                       {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                       {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null} */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2)}
+                      {/* {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2)} */}
+                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(2) : tradePrice.toFixed(2)}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>

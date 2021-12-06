@@ -1106,8 +1106,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
-      isNaN(nlen) ? 2 : nlen;
-      nlen > 4 ? nlen = 4 : nlen = nlen;
+      // isNaN(nlen) ? 2 : nlen;
+      nlen = nlen > 4 ? 4 : nlen
+      // nlen > 4 ? nlen = 4 : nlen = nlen;
       if (subscriptionType === 'Club') {
         nlen = 2;
       }
@@ -1262,7 +1263,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             )}
             < p >
               {currencySymbol + ' '}
-              {subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))} */}
               {/* {currencySymbol + ' ' + this.getSubscriptionPrice(record.subscribePrice)} */}
             </p >
           </div >

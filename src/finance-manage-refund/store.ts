@@ -143,11 +143,11 @@ export default class AppStore extends Store {
     //都从第一页开始
     this.dispatch('detail:pageNum', 0);
     this.dispatch('detail:tradeNo', value.trim());
-    if (kind == 'income') {
-      //await this.getIncomeDetail();
-    } else {
-      //await this.getRefundDetail();
-    }
+    // if (kind == 'income') {
+    //   await this.getIncomeDetail();
+    // } else {
+    //   await this.getRefundDetail();
+    // }
   };
 
   /**

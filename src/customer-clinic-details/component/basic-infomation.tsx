@@ -138,21 +138,20 @@ class BasicInfomation extends React.Component<any, any> {
 
   saveBasicInfomation = () => {
     const { basicForm, currentForm } = this.state;
-
-    (currentForm.firstName = basicForm.firstName),
-      (currentForm.lastName = basicForm.lastName),
-      (currentForm.birthDay = basicForm.birthDay),
-      (currentForm.email = basicForm.email),
-      (currentForm.contactPhone = basicForm.contactPhone),
-      (currentForm.postCode = basicForm.postCode),
-      (currentForm.city = basicForm.city),
-      (currentForm.country = basicForm.country),
-      (currentForm.house = basicForm.address1),
-      (currentForm.housing = basicForm.address2),
-      (currentForm.contactMethod = basicForm.preferredMethods),
-      (currentForm.reference = basicForm.reference),
-      (currentForm.clinicsVOS = basicForm.selectedClinics),
-      (currentForm.customerId = basicForm.customerId),
+      currentForm.firstName = basicForm.firstName;
+      currentForm.lastName = basicForm.lastName;
+      currentForm.birthDay = basicForm.birthDay;
+      currentForm.email = basicForm.email;
+      currentForm.contactPhone = basicForm.contactPhone;
+      currentForm.postCode = basicForm.postCode;
+      currentForm.city = basicForm.city;
+      currentForm.country = basicForm.country;
+      currentForm.house = basicForm.address1;
+      currentForm.housing = basicForm.address2;
+      currentForm.contactMethod = basicForm.preferredMethods;
+      currentForm.reference = basicForm.reference;
+      currentForm.clinicsVOS = basicForm.selectedClinics;
+      currentForm.customerId = basicForm.customerId;
       webapi
         .basicDetailsUpdate(currentForm)
         .then((data) => {

@@ -1010,13 +1010,15 @@ class GoodsForm extends React.Component<any, any> {
         let message = '';
         //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
         if (checkFlag == 'true') {
-          if (enterpriseFlag) {
-            //分销商品和企业购商品
-            message = RCi18n({id:'Product.suretoswitch'});
-          } else {
-            //分销商品
-            message = RCi18n({id:'Product.suretoswitch'});
-          }
+          message = RCi18n({id:'Product.suretoswitch'});
+
+          // if (enterpriseFlag) {
+          //   //分销商品和企业购商品
+          //   message = RCi18n({id:'Product.suretoswitch'});
+          // } else {
+          //   //分销商品
+          //   message = RCi18n({id:'Product.suretoswitch'});
+          // }
         } else {
           if (enterpriseFlag) {
             message = RCi18n({id:'Product.suretoswitch'});
@@ -1162,7 +1164,7 @@ class GoodsForm extends React.Component<any, any> {
 
     let productFilter = [];
 
-    selectChildren.map((child) => {
+    selectChildren.forEach((child) => {
       productFilter.push({
         filterId: child.parentId,
         filterValueId: child.value

@@ -103,7 +103,8 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
     let selectedDateNo = []
     serviceData.resourceServicePlanVOList.map(el => {
       el.resourceWeekPlanVOList.map(item => {
-        item.sort == data.sort
+        //无用判断
+        // item.sort == data.sort
         item = data
         item.resourceDatePlanVOS.map(_item => selectedDateNo.push(_item.dateNo))
         console.log(item,'----item')
@@ -126,11 +127,11 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
     if (returnArr) return
 
     let info = [...timeRangeErrInfo]
-    timesArr.map((_itemTimeGroup, idx) => {
+    timesArr.forEach((_itemTimeGroup, idx) => {
       const newTimes = _itemTimeGroup?.split('-')
       let startT = newTimes[0]?.split(':')
       let endT = newTimes[1]?.split(':')
-      if (newTimes[0].includes(":") && newTimes[1].includes(":")) {
+      if (newTimes[0].includes(':') && newTimes[1].includes(':')) {
         const _idx = info?.findIndex(infoItem => infoItem.TIndex == idx && infoItem.TSort == sort)
         if (_idx > -1 && (startT[0] < endT[0] || (startT[0] === endT[0] && startT[1] <= endT[1]))) {
           info?.splice(_idx, 1)

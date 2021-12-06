@@ -189,13 +189,10 @@ class ExportReport extends Component<any, any> {
           switch (module){
             case 1:
               return <span>{<FormattedMessage id="Menu.Order" />}</span>
-              break;
             case 2:
               return <span>{<FormattedMessage id="Menu.Subscription" />}</span>
-              break;
             case 3:
               return <span>{<FormattedMessage id="Menu.Tasks" />}</span>
-              break;
             default:
               return module
           }
@@ -229,16 +226,12 @@ class ExportReport extends Component<any, any> {
           switch (status){
             case 1:
               return <span><FormattedMessage id="Analysis.NotStarted" /></span>
-              break;
             case 2:
               return <span><FormattedMessage id="Marketing.InProcess" /></span>
-              break;
             case 3:
               return <span><FormattedMessage id="Analysis.Fail" /></span>
-              break;
             case 4:
               return <span><FormattedMessage id="Analysis.Success" /></span>
-              break;
           }
         }
       },
@@ -249,17 +242,14 @@ class ExportReport extends Component<any, any> {
           switch (record.status){
             case 1:
               return <span></span>
-              break;
             case 2:
               return (
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.InProcess" />}>
                   <Icon type="loading" style={{...styles.icon,...styles.click}}/>
                 </Tooltip>
               )
-              break;
             case 3:
               return <span></span>
-              break;
             case 4:
               let docment = (
                 <Tooltip placement="top" title={<FormattedMessage id="Analysis.Down" />}>
@@ -273,7 +263,6 @@ class ExportReport extends Component<any, any> {
               }else {
                 return
               }
-              break;
           }
         }
       },

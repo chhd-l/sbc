@@ -143,12 +143,12 @@ export default class AddProductModal extends Component {
     //保存临时当前下拉框的所有数据
     _tempParam = [..._tempParam, item]
     //以对象方式存储存在的值
-    _tempParam.map(it => {
+    _tempParam.forEach(it => {
       _paramsObj[it.id] = it;
     })
     //组装参数
     let _params = [];
-    _newValue.map(val => {
+    _newValue.forEach(val => {
       _params.push({
         attributeId: _paramsObj[val].attributeId,
         attributeValueId: _paramsObj[val].id

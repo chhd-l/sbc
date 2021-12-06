@@ -1473,7 +1473,6 @@ export default class MarketingAddForm extends React.Component<any, any> {
         discount: null
       }
     ];
-    ma
   }
   /**
    * 生成随机数，作为key值

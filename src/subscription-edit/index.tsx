@@ -1106,7 +1106,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
-      // isNaN(nlen) ? 2 : nlen;
+      nlen = isNaN(nlen) ? 2 : nlen;
       nlen = nlen > 4 ? 4 : nlen
       // nlen > 4 ? nlen = 4 : nlen = nlen;
       if (subscriptionType === 'Club') {

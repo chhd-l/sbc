@@ -113,7 +113,11 @@ class RunBoyBg extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', this.resize); //增加
     let hi = document.getElementById('scene');
-    new Parallax(hi);
+    try {
+      new Parallax(hi);
+    }catch (e){
+      throw e;
+    }
   }
 
   componentWillUnmount() {

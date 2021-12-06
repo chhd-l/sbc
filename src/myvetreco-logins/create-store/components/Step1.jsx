@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Checkbox, Button, Skeleton} from 'antd';
 import {onContactAgreement} from "../webapi";
+import { Const } from 'qmkit';
 
 export default function Step1({ setStep,userInfo }) {
     const [check,setCheck] = useState(false)
@@ -22,7 +23,7 @@ export default function Step1({ setStep,userInfo }) {
   return (
     <div>
 
-      <div className="vmargin-level-4 align-item-center word big">1 / 5 Agree our legal contract to start</div>
+      <div className="vmargin-level-4 align-item-center word big">1 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} Agree our legal contract to start</div>
       <div className="legal-container scrollbar">
         LEGAL CONTRACT <br />
           Mars is al meer dan 100 jaar een trots familiebedrijf. Het is deze onafhankelijkheid die het ons toestaat om in generaties te denken en niet in kwartalen, zodat we kunnen investeren in de langetermijntoekomst van ons bedrijf, onze mensen, onze klanten en de planeet — allemaal gedreven door onze vaste principes. Wij geloven dat de wereld die we morgen willen begint met de manier waarop we vandaag zaken doen.

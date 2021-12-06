@@ -45,7 +45,7 @@ export default class CouponInfo extends Component<any, any> {
       //   <Breadcrumb.Item>{id ? '编辑' : '创建'}精准发券活动</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title={id ? 'Create coupon activity' : 'Create coupon activity'} />
+        <Headline title={id ? 'Edit coupon activity' : 'Create coupon activity'} />
         <Alert
           message={
             <div>

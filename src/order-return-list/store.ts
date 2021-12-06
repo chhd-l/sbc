@@ -436,8 +436,7 @@ export default class AppStore extends Store {
         } else {
           message.error('请登录');
         }
-
-        resolve;
+        resolve(true);
       }, 500);
     });
   };

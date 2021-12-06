@@ -76,7 +76,7 @@ const { Option } = Select;
 
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">2 / 5  Fill in legal information and contact person</div>
+      <div className="vmargin-level-4 align-item-center word big">2 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'}  Fill in legal information and contact person</div>
       <div style={{ width: 800, margin: '20px auto' }}>
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 12]}>

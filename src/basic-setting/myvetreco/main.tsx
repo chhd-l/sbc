@@ -9,11 +9,33 @@ import MapKeyToDisplayName from '../tools';
 import moment from 'moment';
 
 export const SupportedDocumentUtil = {
-  mapPropsToFormData: (props) => {
-    return props && props.length ? props.map(item => ({ uid: '-1', name: item, url: item, status: 'done' })) : [];
+  mapPropsToFormData: (props, documentType) => {
+    return props && props.length ? props.filter(item => item.documentType === documentType).map(item => ({ uid: '-1', name: item.filePath, url: item.filePath, status: 'done' })) : [];
   },
-  mapFormDataToProps: (formData) => {
-    return formData && formData.length ? formData.map(item => item.url) : [];
+  mapFormDataToProps: (formData, documentType) => {
+    return formData && formData.length ? formData.map(item => ({ filePath: item.url, documentType: documentType })) : [];
+  },
+  mapUploadObjToProps: (uploadObj) => {
+    if (uploadObj.documentType === 'PASSPORT') {
+      return SupportedDocumentUtil.mapFormDataToProps(uploadObj['PASSPORT'], 'PASSPORT');
+    } else if (uploadObj.documentType === 'ID_CARD') {
+      return SupportedDocumentUtil.mapFormDataToProps(uploadObj['ID_CARD_FRONT'], 'ID_CARD_FRONT').concat(SupportedDocumentUtil.mapFormDataToProps(uploadObj['ID_CARD_BACK'], 'ID_CARD_BACK'));
+    } else {
+      return SupportedDocumentUtil.mapFormDataToProps(uploadObj['DRIVING_LICENCE_FRONT'], 'DRIVING_LICENCE_FRONT').concat(SupportedDocumentUtil.mapFormDataToProps(uploadObj['DRIVING_LICENCE_BACK'], 'DRIVING_LICENCE_BACK'));
+    }
+  }
+};
+
+export const SupportedDocumentFieldValidator = (rules, value, callback) => {
+  const errorMessage = 'Please upload all the supported documents completely';
+  if (value.documentType === 'PASSPORT' && value['PASSPORT'].length === 0) {
+    callback(errorMessage);
+  } else if (value.documentType === 'ID_CARD' && (value['ID_CARD_FRONT'].length === 0 || value['ID_CARD_BACK'].length === 0)) {
+    callback(errorMessage);
+  } else if (value.documentType === 'DRIVING_LICENCE' && (value['DRIVING_LICENCE_FRONT'].length === 0 || value['DRIVING_LICENCE_BACK'].length === 0)) {
+    callback(errorMessage);
+  } else {
+    callback();
   }
 };
 
@@ -66,31 +88,70 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
             });
             //business 并且不是审核通过的状态的话，初始化representative form
             if (storeInfoResp.adyenAuditState !== 1) {
+              const shodDocumentType = storeInfoResp.representativeRequest?.shareholder?.documentType ?? 'PASSPORT';
               this.shodForm.props.form.setFieldsValue({
                 ...(storeInfoResp.representativeRequest?.shareholder ?? {}),
-                supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument)
+                supportedDocument: {
+                  documentType: shodDocumentType,
+                  ...(
+                    shodDocumentType === 'PASSPORT'
+                      ? {
+                        PASSPORT: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument, 'PASSPORT')
+                      }
+                      : {
+                        [`${shodDocumentType}_FRONT`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument, `${shodDocumentType}_FRONT`),
+                        [`${shodDocumentType}_BACK`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.shareholder?.supportedDocument, `${shodDocumentType}_BACK`)
+                      }
+                  )
+                }
               });
+              const signDocumentType = storeInfoResp.representativeRequest?.signatories?.documentType ?? 'PASSPORT';
               this.signForm.props.form.setFieldsValue({
                 ...(storeInfoResp.representativeRequest?.signatories ?? {}),
                 cityId: { key: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', value: storeInfoResp.representativeRequest?.signatories?.cityId ?? '', label: storeInfoResp.representativeRequest?.signatories?.city ?? '' },
                 dateOfBirth: storeInfoResp.representativeRequest?.signatories?.dateOfBirth ? moment(storeInfoResp.representativeRequest.signatories.dateOfBirth, 'YYYY-MM-DD') : null,
-                supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument)
+                supportedDocument: {
+                  documentType: signDocumentType,
+                  ...(
+                    signDocumentType === 'PASSPORT'
+                      ? {
+                        PASSPORT: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument, 'PASSPORT')
+                      }
+                      : {
+                        [`${signDocumentType}_FRONT`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument, `${signDocumentType}_FRONT`),
+                        [`${signDocumentType}_BACK`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.representativeRequest?.signatories?.supportedDocument, `${signDocumentType}_BACK`)
+                      }
+                  )
+                }
               });
               this.signForm.setDefaultOptions();
             }
           } else {
+            const basiDocumentType = storeInfoResp.individualBasicRequest?.documentType ?? 'PASSPORT';
             this.basiForm.props.form.setFieldsValue({
               ...storeInfoResp.individualBasicRequest,
               cityId: { key: storeInfoResp.individualBasicRequest.cityId ?? '', value: storeInfoResp.individualBasicRequest.cityId ?? '', label: storeInfoResp.individualBasicRequest.city ?? '' },
               dateOfBirth: storeInfoResp.individualBasicRequest.dateOfBirth ? moment(storeInfoResp.individualBasicRequest.dateOfBirth, 'YYYY-MM-DD') : null,
-              supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.individualBasicRequest?.supportedDocument)
+              supportedDocument: {
+                documentType: basiDocumentType,
+                ...(
+                  basiDocumentType === 'PASSPORT'
+                    ? {
+                      PASSPORT: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.individualBasicRequest?.supportedDocument, 'PASSPORT')
+                    }
+                    : {
+                      [`${basiDocumentType}_FRONT`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.individualBasicRequest?.supportedDocument, `${basiDocumentType}_FRONT`),
+                      [`${basiDocumentType}_BACK`]: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.individualBasicRequest?.supportedDocument, `${basiDocumentType}_BACK`)
+                    }
+                )
+              }
             });
           }
           this.basiForm.setDefaultOptions();
           //初始化bank information
           this.bankForm.props.form.setFieldsValue({
             ...(storeInfoResp.bankRequest ?? {}),
-            supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.bankRequest?.supportedDocument)
+            supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.bankRequest?.supportedDocument, 'BANK_STATEMENT')
           });
         });
       }

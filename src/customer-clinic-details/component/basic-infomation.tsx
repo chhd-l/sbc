@@ -161,7 +161,9 @@ class BasicInfomation extends React.Component<any, any> {
           } else {
           }
         })
-        .catch((err) => {});
+        .catch(() => {
+
+        });
   };
 
   getClinicList = () => {

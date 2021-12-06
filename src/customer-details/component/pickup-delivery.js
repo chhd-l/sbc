@@ -151,8 +151,10 @@ export default class PickupDelivery extends React.Component {
 
     // 有默认city且无缓存 或者 有缓存
     let pickupEditNumber = this.props.pickupEditNumber;
-    let defaultCity = this.props.defaultCity;
-    defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
+    let defaultCity = this.props.defaultCity
+      ? this.props.defaultCity
+      : sitem?.cityData?.city;
+    // defaultCity ? (defaultCity = defaultCity) : (defaultCity = sitem?.cityData?.city);
     // 有默认城市但没有缓存
     if ((defaultCity && !sitem) || (defaultCity && pickupEditNumber == 0) || pickupEditNumber > 0) {
       let res = await webapi.pickupQueryCity(defaultCity);
@@ -318,7 +320,10 @@ export default class PickupDelivery extends React.Component {
     sitem?.homeAndPickup.forEach((v, i) => {
       if (v.type == val) {
         // 选中 pickup
-        v.type == 'pickup' ? (pickupItem = v) : null;
+        if (v.type == 'pickup'){
+          pickupItem = v
+        }
+        // v.type == 'pickup' ? (pickupItem = v) : null;
       }
     });
 

@@ -46,7 +46,7 @@ const SetDayTable = (props) => {
       })
       let deleteIndx = cannotSelect?.findIndex((el) => el === selecetedIdx)
       cannotSelect.splice(deleteIndx, 1)
-      cannotSelect = cannotSelect
+      cannotSelect = [...cannotSelect]
       _resourceDatePlanVOS = props.weekList.resourceDatePlanVOS.filter(el => el.dateNo !== date)
     }
     props.weekList.resourceDatePlanVOS = _resourceDatePlanVOS

@@ -323,32 +323,10 @@ class CateModalForm extends React.Component<any, any> {
             message = '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
           }
         }
-        if (message != '') {
-          // confirm({
-          //   title: '提示',
-          //   content: message,
-          //   onOk() {
-          let goods = Map({
-            [key]: fromJS(e)
-          });
-          editGoods(goods);
-          //   },
-          //   onCancel() {
-          //     let goods = Map({
-          //       [key]: fromJS(1)
-          //     });
-          //     editGoods(goods);
-          //     setFieldsValue({ saleType: 1 });
-          //   },
-          //   okText: '确定',
-          //   cancelText: '取消'
-          // });
-        } else {
-          let goods = Map({
-            [key]: fromJS(e)
-          });
-          editGoods(goods);
-        }
+        let goods = Map({
+          [key]: fromJS(e)
+        });
+        editGoods(goods);
       }
     } else {
       let goods = Map({

@@ -23,7 +23,8 @@ class BankInformation extends React.Component<BankFormProps, any> {
         if (!errors) {
           resolve({
             ...values,
-            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+            documentType: 'BANK_STATEMENT',
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument, 'BANK_STATEMENT')
           });
         } else {
           reject('3');

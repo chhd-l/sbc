@@ -184,7 +184,7 @@ class OnlineRefundModalForm extends React.Component<any, any> {
             {getFieldDecorator('actualReturnPoints', {
               initialValue: this.state.applyPoints
             })(<Input type="hidden" />)}
-            <label style={{ marginRight: 10 }}>{(this.state.applyPoints && this.state.applyPoints) || Number(0)}</label>
+            <label style={{ marginRight: 10 }}>{/*(this.state.applyPoints && this.state.applyPoints) || Number(0)*/ this.state.applyPoints}</label>
           </FormItem>
           <FormItem {...formItemLayout} label="Refund remark" hasFeedback>
             {getFieldDecorator('refundComment', {

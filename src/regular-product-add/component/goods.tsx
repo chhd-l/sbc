@@ -1019,6 +1019,14 @@ class GoodsForm extends React.Component<any, any> {
           //   //分销商品
           //   message = RCi18n({id:'Product.suretoswitch'});
           // }
+          /*if (enterpriseFlag) {
+            //分销商品和企业购商品
+            message = RCi18n({id:'Product.suretoswitch'});
+          } else {
+            //分销商品
+            message = RCi18n({id:'Product.suretoswitch'});
+          }*/
+          message = RCi18n({id:'Product.suretoswitch'});
         } else {
           if (enterpriseFlag) {
             message = RCi18n({id:'Product.suretoswitch'});

@@ -44,11 +44,11 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
 
   },[store])
 
-  // useEffect(() => {
-  //   if (Const.SITE_NAME !== 'MYVETRECO') {
-  //     getCountryList().then(list => setCountryList(list));
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (Const.SITE_NAME !== 'MYVETRECO') {
+      getCountryList().then(list => setCountryList(list));
+    }
+  }, []);
 
   const toNext = async (e)=>{
     e.preventDefault();
@@ -233,7 +233,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   }
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">3 / 5 Tell us more about your store</div>
+      <div className="vmargin-level-4 align-item-center word big">3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} Tell us more about your store</div>
 
       <div style={{width:800,margin:'0 auto'}}>
         <Row gutter={[24,12]}>
@@ -332,7 +332,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            {/* <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'none':'block'}}>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'none':'block'}}>
               <FormItem label="Country" name="countryCode">
                 {getFieldDecorator('countryCode', {
                   rules: [{ required: true, message: 'Please select a country' }],
@@ -340,12 +340,12 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 })(
                   <Select showSearch size="large">
                     {countryList.map((op, idx) => (
-                      <Option key={idx} value={op.id}>{op.name}</Option>
+                      <Option key={idx} value={op.countryCode}>{op.countryName}</Option>
                     ))}
                   </Select>
                 )}
               </FormItem> 
-            </Col> */}
+            </Col>
             <Col span={12}>
               <FormItem label="Postcode" name="postcode">
                 {getFieldDecorator('postcode', {

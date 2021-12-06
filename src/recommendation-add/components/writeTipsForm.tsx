@@ -75,7 +75,7 @@ class WriteTipsForm extends React.Component<any, any> {
     const { res } = await acquireContent({ categoryId: this.chooseItems, fillAutoType: 1 })
     if (res.code === Const.SUCCESS_CODE) {
       const result = res.context.content;
-      this.chooseItems.map((item) => {
+      this.chooseItems.forEach((item) => {
         let _hh = result[item];
         for (let dd in _hh) {
           html += `

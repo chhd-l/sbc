@@ -674,7 +674,7 @@ export default function getLazarSoftScanner() {
           //{
           // try next round
           //}
-        }
+        // }
         // If we didn't find alignment pattern... well try anyway without it
       }
 

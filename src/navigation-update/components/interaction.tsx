@@ -241,7 +241,7 @@ export default class Interaction extends React.Component<any, any> {
     let selectChildren = allChildrenList.filter((x) => filterValues.includes(x.value));
     let allParentIds = [...new Set(selectChildren.map((x) => x.parentId))]; // remove repect item
     let selectFilterList = [];
-    allParentIds.map((item) => {
+    allParentIds.forEach((item) => {
       let children = selectChildren.filter((x) => x.parentId === item);
       let childValues = children.map((x) => x.value);
       let childTitles = children.map((x) => x.titleEn);

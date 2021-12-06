@@ -42,11 +42,14 @@ export default class CompanyChoose extends React.Component<any, any> {
 
   _handleOnChange = (index, checked, expressCompanyId) => {
     const { onChecked } = this.props.relaxProps;
-    if (checked) {
-      onChecked(index, checked, expressCompanyId);
-    } else {
+    if (onChecked){
       onChecked(index, checked, expressCompanyId);
     }
+    // if (checked) {
+    //   onChecked(index, checked, expressCompanyId);
+    // } else {
+    //   onChecked(index, checked, expressCompanyId);
+    // }
   };
 }
 

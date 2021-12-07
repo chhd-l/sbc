@@ -4,7 +4,10 @@ class SendSay {
     eTag: '%>', //结束标签
     compress: false, //是否压缩html
     escape: true,   //默认输出是否进行HTML转义
-    error: function (e) {} //错误回调
+    error: function(e) {
+      console.log(e)
+      //错误回调
+    }
   };
 
   _modifierMap = {
@@ -23,7 +26,7 @@ class SendSay {
     this.tpl = tpl;
 
     this.data = data;
-  };
+  }
 
   _type = (x) => {
     if (x === null) {
@@ -109,12 +112,12 @@ class SendSay {
     const parseJs = (line) => {
       const reg = /^(?:=|(:.*?)=)(.*)$/
       let html;
-      let arr;
+      let arr = reg.exec(line);
       let modifier;
 
       // = := :*=
       // :h=123 [':h=123', 'h', '123']
-      if (arr = reg.exec(line)) {
+      if (arr) {
         html = arr[2]; // 输出
         if (Boolean(arr[1])) {
           // :开头
@@ -148,7 +151,7 @@ class SendSay {
     }
 
     return code;
-  }
+  };
 
   _compiler = (tpl, opt) => {
     const mainCode = this._parse(tpl, opt);
@@ -179,7 +182,7 @@ class SendSay {
       e.temp = 'function anonymous(__data__, __modifierMap__) {' + code + '}';
       throw e;
     }
-  }
+  };
 
   _compile = (tpl) => {
     const me = this;
@@ -219,12 +222,12 @@ class SendSay {
   _translateCode = (tpl) => {
     const switchCode = (item) => {
       if (item.includes('ELSIF')) {
-        const splitItem = item.split('ELSIF')[1]
-        return `<%}else if(${splitItem.trim()}){%>`;
+        const splitELSIF = item.split('ELSIF')[1]
+        return `<%}else if(${splitELSIF.trim()}){%>`;
       }
       if (item.includes('IF')) {
-        const splitItem = item.split('IF')[1];
-        return `<%if(${splitItem.trim()}){%>`;
+        const splitIF = item.split('IF')[1];
+        return `<%if(${splitIF.trim()}){%>`;
       }
       if (item.includes('ELSE')) {
         return '<%}else{%>';
@@ -233,8 +236,8 @@ class SendSay {
         return '<%}%>';
       }
       if (item.includes('FOREACH')) {
-        const splitItem = item.split('FOREACH')[1].split('IN');
-        return `<%for(var ${splitItem[0].trim()} of (${splitItem[1].trim()} || [])){%>`;
+        const splitFOREACHS = item.split('FOREACH')[1].split('IN');
+        return `<%for(var ${splitFOREACHS[0].trim()} of (${splitFOREACHS[1].trim()} || [])){%>`;
       }
       if (item.includes('param.url_unsub')) {
         return 'param.url_unsub'

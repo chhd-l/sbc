@@ -61,7 +61,7 @@ export default class DetailPublish extends React.Component<any, any> {
     selectedRowKeys.forEach((item, i) => {
       v[i].quantity = 1;
       if (arrQuantity.length > 0) {
-        arrQuantity.map((m, n) => {
+        arrQuantity.forEach((m, n) => {
           if (m.no == item) {
             v[i].quantity = Number(m.quantity);
           }

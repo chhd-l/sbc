@@ -22,8 +22,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
 
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
-    let dates = []
-    allWeeks.map(item => dates.push({
+    let dates =  allWeeks.map(item =>({
       date: moment(new Date()).day(item).format('YYYYMMDD')
     }));
     let days = dates.map(item => moment(item.date).format('M.DD'))
@@ -103,9 +102,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
     let selectedDateNo = []
     serviceData.resourceServicePlanVOList.map(el => {
       el.resourceWeekPlanVOList.map(item => {
-        //无用判断
-        // item.sort == data.sort
-        item = data
+        if(item.sort == data.sort)item = data;
         item.resourceDatePlanVOS.map(_item => selectedDateNo.push(_item.dateNo))
         console.log(item,'----item')
         handleTimeRangeErrInfo(data.timeSlotVO.timeSlot || '',data.sort)

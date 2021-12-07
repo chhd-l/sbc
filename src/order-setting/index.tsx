@@ -203,7 +203,7 @@ class OrderSetting extends Component<any, any> {
 
           pcashList.map((item) => {
             if (item.configType === 'order_capture_payment_when') {
-              paymentOnlineForm.paymentWhen = item.context;
+              paymentCashForm.paymentWhen = item.context;
             }
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {

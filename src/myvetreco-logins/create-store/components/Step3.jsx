@@ -356,7 +356,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="City" name="cityId">
                 {getFieldDecorator('cityId', {
                   initialValue: {key:'',label:''}

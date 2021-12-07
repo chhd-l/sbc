@@ -13,6 +13,10 @@ const OktaLogout = (props) => {
       let idToken = authState.idToken;
       let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
       let issure = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) ===  'staff' ? Const.REACT_APP_RC_ISSUER : Const.REACT_APP_PRESCRIBER_ISSUER;
+      if (Const.SITE_NAME === 'MYVETRECO') {
+        redirectUri = window.origin + '/logout';
+        issure = Const.REACT_APP_PRESCRIBER_ISSUER;
+      }
       if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
         authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
       } else {

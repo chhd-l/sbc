@@ -148,6 +148,9 @@ class OrderSetting extends Component<any, any> {
           let ponlineList = res.context.ponlineList;
           let unLimitedList = res.context.unLimitedList;
           ponlineList.map((item) => {
+            if (item.configType === 'order_capture_payment_when') {
+              paymentOnlineForm.paymentWhen = item.context;
+            }
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {
               paymentOnlineForm.orderExpirationTimeStatus = !!item.status;
@@ -199,6 +202,9 @@ class OrderSetting extends Component<any, any> {
           });
 
           pcashList.map((item) => {
+            if (item.configType === 'order_capture_payment_when') {
+              paymentCashForm.paymentWhen = item.context;
+            }
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {
               paymentCashForm.orderExpirationTimeStatus = !!item.status;
@@ -326,6 +332,9 @@ class OrderSetting extends Component<any, any> {
     const { pcashList, ponlineList, sequenceRequestList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
     let isVerify = true
     ponlineList.map((item) => {
+      if (item.configType === 'order_capture_payment_when') {
+          item.context = paymentOnlineForm.paymentWhen;
+      }
       //订单失效时间
       if (item.configType === 'order_setting_timeout_cancel') {
         item.status = +paymentOnlineForm.orderExpirationTimeStatus;
@@ -444,6 +453,9 @@ class OrderSetting extends Component<any, any> {
     }
 
     pcashList.map((item) => {
+      if (item.configType === 'order_capture_payment_when') {
+        item.context = paymentCashForm.paymentWhen;
+      }
       //订单失效时间
       if (item.configType === 'order_setting_timeout_cancel') {
         item.status = +paymentCashForm.orderExpirationTimeStatus;

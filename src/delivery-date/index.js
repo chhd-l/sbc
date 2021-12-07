@@ -93,10 +93,7 @@ const index = () => {
   }, [dateSwitch]);
 
   useEffect(() => {
-    let newSelectWeeks = [];
-    deliveryForm.openDate.map((item) => {
-      newSelectWeeks.push(...item.weeks);
-    });
+    let newSelectWeeks =  deliveryForm.openDate.map((item) =>(item.weeks));
     setAllSelectWeeks(newSelectWeeks);
   }, [deliveryForm.openDate]);
 
@@ -169,26 +166,42 @@ const index = () => {
   }
 
   function deleteOpenTable(sort) {
-    const newOpenDate = [];
-    deliveryForm.openDate
+    let newOpenDate = [];
+    // deliveryForm.openDate
+    //   .sort((a, b) => a.sort - b.sort)
+    //   .map((item) => {
+    //     if (item.sort !== sort) {
+    //       newOpenDate.push(item);
+    //     }
+    //   });
+    // change code
+
+    newOpenDate= deliveryForm.openDate
       .sort((a, b) => a.sort - b.sort)
-      .map((item) => {
-        if (item.sort !== sort) {
-          newOpenDate.push(item);
-        }
-      });
+      .filter((item) => item.sort !== sort);
     handleChange('openDate', newOpenDate);
   }
 
   function editOpenTable(openTableItem) {
-    const newOpenDate = [];
-    deliveryForm.openDate.map((item) => {
+    let newOpenDate = [];
+    // deliveryForm.openDate.map((item) => {
+    //   if (item.sort === openTableItem.sort) {
+    //     newOpenDate.push(openTableItem);
+    //   } else {
+    //     newOpenDate.push(item);
+    //   }
+    // });
+
+    // change code
+
+    newOpenDate=deliveryForm.openDate.map((item) => {
       if (item.sort === openTableItem.sort) {
-        newOpenDate.push(openTableItem);
-      } else {
-        newOpenDate.push(item);
-      }
+        // newOpenDate.push(openTableItem);
+        return openTableItem;
+      } 
+      return item;
     });
+
     handleChange('openDate', newOpenDate);
   }
 
@@ -208,26 +221,43 @@ const index = () => {
   }
 
   function deleteCloseTable(sort) {
-    const newCloseDate = [];
-    deliveryForm.closeDate
+    let newCloseDate = [];
+    // deliveryForm.closeDate
+    //   .sort((a, b) => a.sort - b.sort)
+    //   .map((item) => {
+    //     if (item.sort !== sort) {
+    //       newCloseDate.push(item);
+    //     }
+    //   });
+
+// change code Nathan
+
+newCloseDate=deliveryForm.closeDate
       .sort((a, b) => a.sort - b.sort)
-      .map((item) => {
-        if (item.sort !== sort) {
-          newCloseDate.push(item);
-        }
-      });
+      .filter((item) => (item.sort !== sort));
+
     handleChange('closeDate', newCloseDate);
   }
 
   function editCloseTable(closeTableItem) {
-    const newCloseDate = [];
-    deliveryForm.closeDate.map((item) => {
+    let newCloseDate = [];
+    // deliveryForm.closeDate.map((item) => {
+    //   if (item.sort === closeTableItem.sort) {
+    //     newCloseDate.push(closeTableItem);
+    //   } else {
+    //     newCloseDate.push(item);
+    //   }
+    // });
+
+    //change code Nathan
+    newCloseDate=deliveryForm.closeDate.map((item) => {
       if (item.sort === closeTableItem.sort) {
-        newCloseDate.push(closeTableItem);
-      } else {
-        newCloseDate.push(item);
-      }
+        return closeTableItem;
+      } 
+        return item;
+      
     });
+
     handleChange('closeDate', newCloseDate);
   }
 

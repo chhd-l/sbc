@@ -99,53 +99,54 @@ class SendSay {
     return error;
   };
 
-  _parse = (tpl, opt) => {
-    let code = '';
-    const sTag = opt.sTag;
-    const eTag = opt.eTag;
-    const escape = opt.escape;
-    const parseHtml = (line) => {
-      // 单双引号转义，换行符替换为空格
-      line = line.replace(/('|")/g, '\\$1').replace(/\n/g, ' ');
-      return ';__code__ += ("' + line + '")\n';
-    };
-    const parseJs = (line) => {
-      const reg = /^(?:=|(:.*?)=)(.*)$/
-      let html;
-      let arr = reg.exec(line);
-      let modifier;
+  _parseHtml = (line) => {
+    // 单双引号转义，换行符替换为空格
+    line = line.replace(/('|")/g, '\\$1').replace(/\n/g, ' ');
+    return ';__code__ += ("' + line + '")\n';
+  };
 
-      // = := :*=
-      // :h=123 [':h=123', 'h', '123']
-      if (arr) {
-        html = arr[2]; // 输出
-        if (Boolean(arr[1])) {
-          // :开头
-          modifier = arr[1].slice(1);
-        } else {
-          // = 开头
-          modifier = escape ? 'h' : '';
-        }
+  _parseJs = (line) => {
+    const reg = /^(?:=|(:.*?)=)(.*)$/
+    let html;
+    let arr = reg.exec(line);
+    let modifier;
 
-        return ';__code__ += __modifierMap__["' + modifier + '"](typeof (' + html + ') !== "undefined" ? (' + html + ') : "")\n';
+    // = := :*=
+    // :h=123 [':h=123', 'h', '123']
+    if (arr) {
+      html = arr[2]; // 输出
+      if (Boolean(arr[1])) {
+        // :开头
+        modifier = arr[1].slice(1);
+      } else {
+        // = 开头
+        modifier = this._o.escape ? 'h' : '';
       }
 
-      //原生js
-      return ';' + line + '\n';
-    };
+      return ';__code__ += __modifierMap__["' + modifier + '"](typeof (' + html + ') !== "undefined" ? (' + html + ') : "")\n';
+    }
 
+    //原生js
+    return ';' + line + '\n';
+  };
+
+  _parse = (tpl, opt) => {
+    const sTag = opt.sTag;
+    const eTag = opt.eTag;
     const tokens = tpl.split(sTag);
+
+    let code = '';
 
     for (let i = 0, len = tokens.length; i < len; i++) {
       let token = tokens[i].split(eTag);
 
       if (token.length === 1) {
-        code += parseHtml(token[0]);
+        code += this._parseHtml(token[0]);
       } else {
-        //
-        code += parseJs(token[0]);
+        code += this._parseJs(token[0]);
+
         if (token[1]) {
-          code += parseHtml(token[1]);
+          code += this._parseHtml(token[1]);
         }
       }
     }

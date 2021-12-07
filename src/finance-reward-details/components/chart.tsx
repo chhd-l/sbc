@@ -151,9 +151,10 @@ export default class ListChart extends React.Component<any, any> {
       } else if (row.key.startsWith('c_')) {
         let isChild = false;
         expandedRows.forEach((rowKey) => {
-          if (rowKey.split('_')[1] == rowKey.split('_')[1]) {
+          /*if (rowKey.split('_')[1] == rowKey.split('_')[1]) {
             isChild = true;
-          }
+          }*/
+          isChild = true;
         });
         if (isChild) {
           return {

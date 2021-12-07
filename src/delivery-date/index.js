@@ -93,8 +93,7 @@ const index = () => {
   }, [dateSwitch]);
 
   useEffect(() => {
-    let newSelectWeeks = [];
-    deliveryForm.openDate.map((item) =>newSelectWeeks.push(...item.weeks));
+    let newSelectWeeks =  deliveryForm.openDate.map((item) =>(item.weeks));
     setAllSelectWeeks(newSelectWeeks);
   }, [deliveryForm.openDate]);
 
@@ -167,7 +166,7 @@ const index = () => {
   }
 
   function deleteOpenTable(sort) {
-    const newOpenDate = [];
+    let newOpenDate = [];
     // deliveryForm.openDate
     //   .sort((a, b) => a.sort - b.sort)
     //   .map((item) => {
@@ -184,7 +183,7 @@ const index = () => {
   }
 
   function editOpenTable(openTableItem) {
-    const newOpenDate = [];
+    let newOpenDate = [];
     // deliveryForm.openDate.map((item) => {
     //   if (item.sort === openTableItem.sort) {
     //     newOpenDate.push(openTableItem);
@@ -222,7 +221,7 @@ const index = () => {
   }
 
   function deleteCloseTable(sort) {
-    const newCloseDate = [];
+    let newCloseDate = [];
     // deliveryForm.closeDate
     //   .sort((a, b) => a.sort - b.sort)
     //   .map((item) => {
@@ -241,7 +240,7 @@ newCloseDate=deliveryForm.closeDate
   }
 
   function editCloseTable(closeTableItem) {
-    const newCloseDate = [];
+    let newCloseDate = [];
     // deliveryForm.closeDate.map((item) => {
     //   if (item.sort === closeTableItem.sort) {
     //     newCloseDate.push(closeTableItem);

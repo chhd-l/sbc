@@ -4,7 +4,10 @@ class SendSay {
     eTag: '%>', //结束标签
     compress: false, //是否压缩html
     escape: true,   //默认输出是否进行HTML转义
-    error: function (e) {} //错误回调
+    error: function(e) {
+      console.log(e)
+      //错误回调
+    }
   };
 
   _modifierMap = {
@@ -23,7 +26,7 @@ class SendSay {
     this.tpl = tpl;
 
     this.data = data;
-  };
+  }
 
   _type = (x) => {
     if (x === null) {
@@ -96,59 +99,60 @@ class SendSay {
     return error;
   };
 
-  _parse = (tpl, opt) => {
-    let code = '';
-    const sTag = opt.sTag;
-    const eTag = opt.eTag;
-    const escape = opt.escape;
-    const parseHtml = (line) => {
-      // 单双引号转义，换行符替换为空格
-      line = line.replace(/('|")/g, '\\$1').replace(/\n/g, ' ');
-      return ';__code__ += ("' + line + '")\n';
-    };
-    const parseJs = (line) => {
-      const reg = /^(?:=|(:.*?)=)(.*)$/
-      let html;
-      let arr;
-      let modifier;
+  _parseHtml = (line) => {
+    // 单双引号转义，换行符替换为空格
+    line = line.replace(/('|")/g, '\\$1').replace(/\n/g, ' ');
+    return ';__code__ += ("' + line + '")\n';
+  };
 
-      // = := :*=
-      // :h=123 [':h=123', 'h', '123']
-      if (arr = reg.exec(line)) {
-        html = arr[2]; // 输出
-        if (Boolean(arr[1])) {
-          // :开头
-          modifier = arr[1].slice(1);
-        } else {
-          // = 开头
-          modifier = escape ? 'h' : '';
-        }
+  _parseJs = (line) => {
+    const reg = /^(?:=|(:.*?)=)(.*)$/
+    let html;
+    let arr = reg.exec(line);
+    let modifier;
 
-        return ';__code__ += __modifierMap__["' + modifier + '"](typeof (' + html + ') !== "undefined" ? (' + html + ') : "")\n';
+    // = := :*=
+    // :h=123 [':h=123', 'h', '123']
+    if (arr) {
+      html = arr[2]; // 输出
+      if (Boolean(arr[1])) {
+        // :开头
+        modifier = arr[1].slice(1);
+      } else {
+        // = 开头
+        modifier = this._o.escape ? 'h' : '';
       }
 
-      //原生js
-      return ';' + line + '\n';
-    };
+      return ';__code__ += __modifierMap__["' + modifier + '"](typeof (' + html + ') !== "undefined" ? (' + html + ') : "")\n';
+    }
 
+    //原生js
+    return ';' + line + '\n';
+  };
+
+  _parse = (tpl, opt) => {
+    const sTag = opt.sTag;
+    const eTag = opt.eTag;
     const tokens = tpl.split(sTag);
+
+    let code = '';
 
     for (let i = 0, len = tokens.length; i < len; i++) {
       let token = tokens[i].split(eTag);
 
       if (token.length === 1) {
-        code += parseHtml(token[0]);
+        code += this._parseHtml(token[0]);
       } else {
-        //
-        code += parseJs(token[0]);
+        code += this._parseJs(token[0]);
+
         if (token[1]) {
-          code += parseHtml(token[1]);
+          code += this._parseHtml(token[1]);
         }
       }
     }
 
     return code;
-  }
+  };
 
   _compiler = (tpl, opt) => {
     const mainCode = this._parse(tpl, opt);
@@ -179,7 +183,7 @@ class SendSay {
       e.temp = 'function anonymous(__data__, __modifierMap__) {' + code + '}';
       throw e;
     }
-  }
+  };
 
   _compile = (tpl) => {
     const me = this;
@@ -219,12 +223,12 @@ class SendSay {
   _translateCode = (tpl) => {
     const switchCode = (item) => {
       if (item.includes('ELSIF')) {
-        const splitItem = item.split('ELSIF')[1]
-        return `<%}else if(${splitItem.trim()}){%>`;
+        const splitELSIF = item.split('ELSIF')[1]
+        return `<%}else if(${splitELSIF.trim()}){%>`;
       }
       if (item.includes('IF')) {
-        const splitItem = item.split('IF')[1];
-        return `<%if(${splitItem.trim()}){%>`;
+        const splitIF = item.split('IF')[1];
+        return `<%if(${splitIF.trim()}){%>`;
       }
       if (item.includes('ELSE')) {
         return '<%}else{%>';
@@ -233,8 +237,8 @@ class SendSay {
         return '<%}%>';
       }
       if (item.includes('FOREACH')) {
-        const splitItem = item.split('FOREACH')[1].split('IN');
-        return `<%for(var ${splitItem[0].trim()} of (${splitItem[1].trim()} || [])){%>`;
+        const splitFOREACHS = item.split('FOREACH')[1].split('IN');
+        return `<%for(var ${splitFOREACHS[0].trim()} of (${splitFOREACHS[1].trim()} || [])){%>`;
       }
       if (item.includes('param.url_unsub')) {
         return 'param.url_unsub'

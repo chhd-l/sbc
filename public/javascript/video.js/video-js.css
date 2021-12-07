@@ -1142,7 +1142,7 @@ video::-webkit-media-text-track-display {
   margin-bottom: -0.1em; }
 
 .video-js .vjs-subs-caps-button + .vjs-menu .vjs-captions-menu-item .vjs-menu-item-text .vjs-icon-placeholder:before {
-  font-family: VideoJS;
+  font-family: VideoJS,Helvetica, sans-serif;
   content: "\f10d";
   font-size: 1.5em;
   line-height: inherit; }
@@ -1153,7 +1153,7 @@ video::-webkit-media-text-track-display {
   margin-bottom: -0.1em; }
 
 .video-js .vjs-audio-button + .vjs-menu .vjs-main-desc-menu-item .vjs-menu-item-text .vjs-icon-placeholder:before {
-  font-family: VideoJS;
+  font-family: VideoJS,Helvetica, sans-serif;
   content: " \f11d";
   font-size: 1.5em;
   line-height: inherit; }

@@ -102,9 +102,8 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
     let selectedDateNo = []
     serviceData.resourceServicePlanVOList.map(el => {
       el.resourceWeekPlanVOList.map(item => {
-        if(item.sort == data.sort)item = data;
+        // if(item.sort == data.sort)item = data;
         item.resourceDatePlanVOS.map(_item => selectedDateNo.push(_item.dateNo))
-        console.log(item,'----item')
         handleTimeRangeErrInfo(data.timeSlotVO.timeSlot || '',data.sort)
       })
     })

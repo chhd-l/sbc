@@ -14,11 +14,11 @@ var gutil = require('gulp-util');
 var ftp = require( 'vinyl-ftp' );
 
 (async()=>{
-
+//# '172.19.26.161',# 'root',#'000000',
   var conn = ftp.create( {
-    host:    '172.19.26.161',
-    user:     'root',
-    password: '000000',
+    host:   undefined,
+    user:     undefined,
+    password: undefined,
     port:22,
     parallel: 10,
     log:      gutil.log

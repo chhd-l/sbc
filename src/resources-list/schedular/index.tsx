@@ -80,7 +80,7 @@ const Schedular = () => {
   // 获取所有人
   const getAllEmployeePerson = async () => {
     const { res } = await webapi.AllEmployeePerson()
-    const _allEmployeePersonList = res.context?.employeeVOList;
+    const _allEmployeePersonList = res.context?.employeeVOList ?? [];
     // 不能选择all 暂时不要该代码
     // const allPersonEmployeeIds = _allEmployeePersonList.map(item => {
     //   let employees = {
@@ -91,15 +91,17 @@ const Schedular = () => {
     // })
 
     setAllEmployeePersonList(_allEmployeePersonList)
-    if(_allEmployeePersonList.length)setSelectPerson(_allEmployeePersonList[0].employeeId);
-    // setAllEmployeeIds(allPersonEmployeeIds)
-    let params = Object.assign(listParams, {
-      employeeIds: [{
-        employeeId: _allEmployeePersonList[0].employeeId,
-        employeeName: _allEmployeePersonList[0].employeeName
-      }]
-    })
-    getCalendarByDay(params)
+    if(_allEmployeePersonList.length) {
+      setSelectPerson(_allEmployeePersonList[0].employeeId);
+      // setAllEmployeeIds(allPersonEmployeeIds)
+      let params = Object.assign(listParams, {
+        employeeIds: [{
+          employeeId: _allEmployeePersonList[0].employeeId,
+          employeeName: _allEmployeePersonList[0].employeeName
+        }]
+      })
+      getCalendarByDay(params)
+    }
   }
 
   // 获取列表数据

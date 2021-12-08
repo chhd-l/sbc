@@ -335,7 +335,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'none':'block'}}>
               <FormItem label="Country" name="countryCode">
                 {getFieldDecorator('countryCode', {
-                  rules: [{ required: true, message: 'Please select a country' }],
+                  rules: [{ required: Const.SITE_NAME !== 'MYVETRECO', message: 'Please select a country' }],
                   initialValue: ''
                 })(
                   <Select showSearch size="large">

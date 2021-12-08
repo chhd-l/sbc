@@ -32,7 +32,8 @@ export default class Main extends React.Component<any, any> {
       123457909: 'fr',
       123457910: 'us',
       123457911: 'tr',
-      123457916: 'uk'
+      123457916: 'uk',
+      123457934: 'peawee'
     };
     (window as any).goodsCount = {
       123456858: 20,

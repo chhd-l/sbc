@@ -388,7 +388,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
       if (suggestionMethodName === 'DADATA') {
         this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
       } else if (suggestionMethodName === 'DQE') {
-        this.props.form.setFieldsValue({ postCode: address.postCode || '', city: address.city || '', address1: address.address1 });
+        this.props.form.setFieldsValue({ postCode: address.postCode || '', city: address.city || '', address1: address.address1, county: address.county });
         if (address.selectedListeNumero || address.listeNumero.indexOf(';') === -1) {
           returnDQE(address.idvoie, address.pays, address.selectedListeNumero || address.listeNumero);
         } else {

@@ -181,9 +181,6 @@ export function getDictionaryByType(dictionaryType: String) {
   let params = {
     type: dictionaryType
   };
-  if (Const.SITE_NAME === 'MYVETRECO') {
-    return getCityData();
-  }
   return Fetch<TResult>('/sysdict/querySysDictionary', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -195,10 +192,14 @@ export function getDictionaryByType(dictionaryType: String) {
  * @returns 
  */
 export function getCityData() {
-  return Fetch<TResult>('/system-city/query-all').then((data) => {
-    data.res.context.sysDictionaryVOS = data.res.context.systemCityVO.map(item => ({...item,valueEn:item.cityName}));
-    return data;
-  });
+  if (Const.SITE_NAME === 'MYVETRECO') {
+    return Fetch<TResult>('/system-city/query-all').then((data) => {
+      data.res.context.sysDictionaryVOS = data.res.context.systemCityVO.map(item => ({...item,valueEn:item.cityName}));
+      return data;
+    });
+  } else {
+    return getDictionaryByType('city');
+  }
 }
 
 /**

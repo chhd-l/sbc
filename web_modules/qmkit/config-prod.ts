@@ -31,7 +31,7 @@ const getOktaAppConfig = () => {
       REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
       REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
     });
-  } else if (host === 'portal.myvetreco.nl') {
+  } else if (host === 'store.myvetreco.nl') {
     return Object.assign({}, OKTA_APP_CONFIG, {
       REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
       REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',

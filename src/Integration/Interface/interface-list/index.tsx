@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n, SelectGroup } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Form, Input, Row, Col, Select, Button, Tooltip, Spin, Table } from 'antd';
+import { Form, Input, Row, Col, Select, Button, Tooltip, Spin, Table, Switch, message } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 
@@ -106,6 +106,17 @@ class InterfaceList extends Component<any, any> {
     }
     this.getInterfaceList(params)
   }
+  onRefresh = () => {
+    const { searchForm,pagination } = this.state
+    let params = {
+      apiInvokerId: searchForm.invoker,
+      apiProviderId: searchForm.provider,
+      interfaceName: searchForm.interfaceName,
+      pageSize: pagination.pageSize,
+      pageNum: pagination.current-1,
+    }
+    this.getInterfaceList(params)
+  }
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -114,6 +125,15 @@ class InterfaceList extends Component<any, any> {
       searchForm: data
     });
   };
+  onStatusChange = (checked,interfaceId)=>{
+    webapi.updateLogStatus({interfaceId,addLog:checked?1:0}).then(data=>{
+      const { res } = data
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(res.message)
+        this.onRefresh()
+      }
+    })
+  }
 
   render() {
     const { systemList, interfaceList, pagination, loading } = this.state
@@ -169,10 +189,16 @@ class InterfaceList extends Component<any, any> {
         dataIndex: 'Operation',
         render: (text, record) => (
           <AuthWrapper functionName="f_interface_details">
+            <Switch checked={record.addLog?true:false} 
+            size="small"
+            style={{marginRight:10}}
+            onChange={(checked)=>this.onStatusChange(checked,record.id)} />
+
             <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
               <Link to={`/interface-detail/${record.id}`}
                 className="iconfont iconDetails" />
             </Tooltip>
+            
           </AuthWrapper>
         )
       }

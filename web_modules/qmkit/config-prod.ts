@@ -121,12 +121,26 @@ const _config = {
         key: '13c0bad7-420a-43bd-8784-3402a1f270ce'
       },
       de: {
-        app_id: 'MarsIncorporated_ROYALCANIN_GERMANY_D2C_UAT_TEST',
+        app_id: 'ROYALCANIN_GERMANY_D2C',
         key: 'pub.v2.4116105963663555.aHR0cHM6Ly9ldXJvc3RvcmUucm95YWxjYW5pbi5jb20.sEPXI2OxOklPsU8l6m_n8E2oSZ34aXvMflvSSSJWXEs'
       },
       fr: {
-        app_id: 'MarsIncorporated_ROYALCANIN_FRANCE_D2C_UAT_TEST',
+        app_id: 'ROYALCANIN_FRANCE_D2C',
         key: 'pub.v2.4116105963663555.aHR0cHM6Ly9ldXJvc3RvcmUucm95YWxjYW5pbi5jb20.sEPXI2OxOklPsU8l6m_n8E2oSZ34aXvMflvSSSJWXEs'
+      },
+      uk:{
+        app_id:'ROYALCANIN_UK_D2C',
+        key:'pub.v2.4116377247202506.aHR0cHM6Ly9ldXJvc3RvcmUucm95YWxjYW5pbi5jb20.ILaBOM2ps5HDujVntRqy3_hT_HvtQeWGRWT8BlhvV0Q'
+      }
+    }
+  },
+  'store.peawee.co.uk': {
+    // SHOPDOMINDE: 'https://shop.royalcanin.de',
+    ISPRODUCT: true,
+    PAYMENT: {
+      peawee:{
+        app_id:'Peawee_UK',
+        key:'pub.v2.4116363376510463.aHR0cHM6Ly9zdG9yZS5wZWF3ZWUuY28udWs.Gue-YlmJ_o38-ofitFXdNBScwZkp2hhDUKP6h6BqOQM'
       }
     }
   },

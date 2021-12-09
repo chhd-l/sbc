@@ -1193,7 +1193,26 @@ const routes = [
   {
     path:'/survey-detail/:id',
     asyncComponent: () => import('./survey-list/survey-detail')
-  }
+  },
+  /**
+   * setting-integration
+   * **/
+  {
+    path:'/hub',
+    asyncComponent: () => import('./setting-integration/hub')
+  },
+  {
+    path:'/OKTA',
+    asyncComponent: () => import('./setting-integration/OKTA')
+  },
+  {
+    path:'/pet-api',
+    asyncComponent: () => import('./setting-integration/pet-api')
+  },
+  {
+    path:'/product-api',
+    asyncComponent: () => import('./setting-integration/product-api')
+  },
 ];
 
 const homeRoutes = [

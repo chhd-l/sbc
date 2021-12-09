@@ -285,7 +285,11 @@ export default {
   'Menu.Carriers Company Settings':'Carriers Company Settings',
   'Menu.Product price':'Product price',
   'Menu.Shop editor':'Shop editor',
-
+  'Menu.Integration':'Integration',
+  'Menu.OKTA':'OKTA',
+  'Menu.Pet API':'Pet API',
+  'Menu.Hub':'Hub',
+  'Menu.Product API':'Product API',
 
 
   /*-----------------------------  Home -----------------------------------------------*/

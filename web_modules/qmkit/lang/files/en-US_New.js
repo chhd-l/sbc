@@ -2560,6 +2560,7 @@ export default {
         'Setting.domain': 'Domain',
         'Setting.domainRequired': 'Domain is required',
         'Setting.enableDeliveryDate': 'Enable Delivery Date',
+        "Setting.countryCode":"Country Code",
 
     },
     Menu: {

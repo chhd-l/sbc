@@ -1193,6 +1193,10 @@ const routes = [
   {
     path:'/survey-detail/:id',
     asyncComponent: () => import('./survey-list/survey-detail')
+  },
+  {
+    path: '/store-details',
+    asyncComponent: () => import('./store-details')
   }
 ];
 

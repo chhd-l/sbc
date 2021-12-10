@@ -408,7 +408,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
                   <AuthWrapper functionName="f_home_transactiontrend_more"><Link to="/report-transaction"><FormattedMessage id="Home.more"/> &gt;</Link></AuthWrapper>
                 </span>
               </div>
-              {!transactionTrendView ||
+              {!transactionTrendView || (!transactionTrendView.weekNumList && !transactionTrendView.revenueList && !transactionTrendView.transactionList) ||
               (transactionTrendView.weekNumList && transactionTrendView.weekNumList.length === 0 && transactionTrendView.revenueList && transactionTrendView.revenueList.length === 0 && transactionTrendView.transactionList && transactionTrendView.transactionList.length === 0) ? (
                 <div className="data-img">
                   <img src={nodataImg} className="no-data-img"/>

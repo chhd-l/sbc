@@ -1,4 +1,4 @@
-import { Button, Checkbox, Collapse, Form, Input, Modal, Spin } from 'antd';
+import { Button, Checkbox, Collapse, Form, Input, Modal, Radio, Spin } from 'antd';
 import { Relax } from 'plume2';
 import { Const, noop, ReactEditor } from 'qmkit';
 import React from 'react';
@@ -26,6 +26,9 @@ class WriteTipsForm extends React.Component<any, any> {
     this.state = {
       index: 1,
       visible: false,
+      isSend:0,
+      pickup:false,
+      paris:false,
       suggest: '',
       optimal: '',
       disabled: false
@@ -47,6 +50,7 @@ class WriteTipsForm extends React.Component<any, any> {
     let _type = `${o || ''}`
     this.setState({
       index: +new Date(),
+      isSend: (recommendParams?.isSend??false)?1: 0,
       suggest: recommendParams.suggest || '',
       disabled: recommendParams.isSend,
       optimal: _type,
@@ -56,7 +60,7 @@ class WriteTipsForm extends React.Component<any, any> {
         optimal: _type,
         paris: recommendParams.paris,
         pickup: recommendParams.pickup,
-        isSend: recommendParams.isSend || false
+        isSend: (recommendParams?.isSend??false)?1: 0
       })
     })
 
@@ -117,7 +121,7 @@ class WriteTipsForm extends React.Component<any, any> {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        this.props.done(values);
+       this.props.done(values);
       }
     })
   }
@@ -125,7 +129,7 @@ class WriteTipsForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { loading, fillAutoList, onChangeStep } = this.props;
-    const { suggest, optimal, index, disabled, type } = this.state;
+    const { suggest, optimal, index, isSend, type,pickup,paris } = this.state;
     const formItemLayout = {
       labelCol: {
         sm: { span: 2 },
@@ -165,30 +169,31 @@ class WriteTipsForm extends React.Component<any, any> {
           </Form.Item>
           <Form.Item label={RCi18n({ id: 'Prescriber.Paris' })} {...formItemLayout}>
             {getFieldDecorator('paris', {
-              initialValue: true,
+              initialValue: paris,
               valuePropName: "checked",
             })(<Checkbox />)}
 
           </Form.Item>
           <Form.Item label={RCi18n({ id: 'Prescriber.Pick up' })}  {...formItemLayout} >
             {getFieldDecorator('pickup', {
-              initialValue: true,
+              initialValue: pickup,
               valuePropName: "checked",
             })(<Checkbox />)}
           </Form.Item>
-          <Form.Item>
+          <Form.Item >
+          The customer has agreed to send the email
             {getFieldDecorator('isSend', {
-              initialValue: true,
-              valuePropName: "checked",
-              onChange: (e) => {
-                this.setState({
-                  disabled: e.target.checked
-                })
-              }
+              initialValue: isSend,
+              rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
+        
+            })(<Radio.Group style={{marginLeft:10}}>
+                <Radio value={1}>YES</Radio>
+                <Radio value={0}>NO</Radio>
+              </Radio.Group>
 
-            })(<Checkbox>The customer has agreed to send the email</Checkbox>)}
-            <Button disabled={!disabled} size="small" type="primary">Send</Button>
+            )}
           </Form.Item>
+         
           <div className="steps-action">
 
             <Button style={{ marginRight: 15 }} onClick={() => onChangeStep(2)}>

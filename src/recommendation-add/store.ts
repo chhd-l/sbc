@@ -92,7 +92,15 @@ export default class AppStore extends Store {
 
   fetchFelinSave = async (params = {}) => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchFelinSave(params)
+
+   let customerPet= params.customerPet.map(item=>{
+      return{
+        ...item,
+        weight:JSON.stringify({measure:item.measure,measureUnit:item.measureUnit})
+      }
+    })
+    let isSend=params.isSend===0?false:true
+    const { res } = await webapi.fetchFelinSave({...params,customerPet,isSend})
     if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }
@@ -112,7 +120,7 @@ export default class AppStore extends Store {
       let list = pets.map(item => {
         let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
         item.measure = _tempWeight?.measure ?? 0;
-        item.measureUnit = _tempWeight?.measureUnit ?? 'Kg';
+        item.measureUnit = _tempWeight?.measureUnit ?? 'kg';
         return item
       })
       if (list.length > 0) {

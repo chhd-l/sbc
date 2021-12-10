@@ -2560,6 +2560,7 @@ export default {
         'Setting.domain': 'Domain',
         'Setting.domainRequired': 'Domain is required',
         'Setting.enableDeliveryDate': 'Enable Delivery Date',
+        "Setting.countryCode":"Country Code",
 
         "Setting.storeFavicon": "Store favicon",
         "Setting.storeFaviconTip": "PC mall favicon, you can add up to one, the picture format is limited to ico, the recommended size is 36*36, and the size does not exceed 2M",

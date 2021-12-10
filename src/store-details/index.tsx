@@ -195,7 +195,7 @@ class StoreDetail extends React.Component<any, any> {
         <div className="container">
         <Spin spinning={loading}>
           <Form layout="horizontal" {...formItemLayout}>
-            <div style={styles.title}>Store contact information</div>
+            <div style={styles.title}><FormattedMessage id="Setting.storeContactInfo"/></div>
             <Row gutter={[24,2]}>
               <Col span={12}>
                 <FormItem label={<FormattedMessage id="storeAccount" />}>
@@ -276,7 +276,7 @@ class StoreDetail extends React.Component<any, any> {
                   </FormItem>
               </Col>
             </Row>
-            <div style={styles.title}>Logo</div>
+            <div style={styles.title}><FormattedMessage id="Setting.logo"/></div>
             <Row gutter={[24,2]}>
               <Col span={24}>
                 <FormItem label={<FormattedMessage id="storeLogo" />} labelCol={{xs:{span:24},sm:{span:3}}} wrapperCol={{xs:{span:24},sm:{span:20}}}>
@@ -333,7 +333,7 @@ class StoreDetail extends React.Component<any, any> {
                 </FormItem>
               </Col>
             </Row>
-            <div style={styles.title}>Standards and formats</div>
+            <div style={styles.title}><FormattedMessage id="Setting.standardAndFormats"/></div>
             <Row gutter={[24,2]}>
               <Col span={12}>
                 <FormItem label={<FormattedMessage id="Setting.storeLanguage" />} extra={<div style={{color:'#666'}}><FormattedMessage id="Setting.Thefirstisthedefaultlanguage" /></div>}>
@@ -405,7 +405,7 @@ class StoreDetail extends React.Component<any, any> {
               </Col>
             </Row>
             <Row gutter={[24,2]}>
-              <Col span={4} style={{textAlign:'right'}}>Edit order ID format:</Col>
+              <Col span={4} style={{textAlign:'right'}}><FormattedMessage id="Setting.editOrderIdFormat"/>:</Col>
             </Row>
             <Row gutter={[24,2]}>
               <Col span={18} push={3}>
@@ -422,7 +422,7 @@ class StoreDetail extends React.Component<any, any> {
                 })}
               </Col>
             </Row>
-            <div style={styles.title}>Signed information</div>
+            <div style={styles.title}><FormattedMessage id="Setting.signedInformation"/></div>
             <Row gutter={[24,2]}>
               <Col span={22} push={1}>
                 <SignedInfo storeInfo={storeInfo} />

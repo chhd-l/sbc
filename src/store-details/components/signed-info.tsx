@@ -158,8 +158,8 @@ export default class SignedInfo extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>Signed brand</H2>
-            <GreyText>Signed {brandList ? brandList.length : 0} brands, Up to 50 brands can be signed</GreyText>
+            <H2><FormattedMessage id="Setting.SignedBrand"/></H2>
+            <GreyText>{brandList ? brandList.length : 0} <FormattedMessage id="Setting.brandUpto50" /></GreyText>
           </div>
           <TableBox>
             <DataGrid rowKey="contractBrandId" dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
@@ -211,8 +211,8 @@ export default class SignedInfo extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>Signing period</H2>
-            <GreyText>Merchant store validity</GreyText>
+            <H2><FormattedMessage id="Setting.SigningPeriod"/></H2>
+            <GreyText><FormattedMessage id="Setting.Merchantstorevalidity"/></GreyText>
           </div>
           <RangePicker value={[storeInfo.contractStartDate ? moment(storeInfo.contractStartDate) : null, storeInfo.contractEndDate ? moment(storeInfo.contractEndDate) : null]} format="YYYY-MM-DD HH:mm:ss" disabled />
         </Content>
@@ -220,16 +220,16 @@ export default class SignedInfo extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>Merchant type</H2>
+            <H2><FormattedMessage id="Setting.merchantType"/></H2>
           </div>
           <RadioGroup value={storeInfo.companyType}>
             {storeInfo.companyType == 0 ? (
               <Radio value={0} disabled>
-                Self-employed
+                <FormattedMessage id="Setting.selfEmployeed"/>
               </Radio>
             ) : (
               <Radio value={1} disabled>
-                Third-party Merchants
+                <FormattedMessage id="Setting.thirdPartyMerchants"/>
               </Radio>
             )}
           </RadioGroup>

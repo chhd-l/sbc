@@ -2563,6 +2563,13 @@ export default {
 
         "Setting.storeFavicon": "Store favicon",
         "Setting.storeFaviconTip": "PC mall favicon, you can add up to one, the picture format is limited to ico, the recommended size is 36*36, and the size does not exceed 2M",
+        "Setting.merchantType": "Merchant type",
+        "Setting.selfEmployeed": "Self-employed",
+        "Setting.thirdPartyMerchants": "Third-party Merchants",
+        "Setting.storeContactInfo": "Store contact information",
+        "Setting.logo": "Logo",
+        "Setting.standardAndFormats": "Standards and formats",
+        "Setting.editOrderIdFormat": "Edit order ID format",
 
     },
     Menu: {
@@ -2604,6 +2611,11 @@ export default {
         'Menu.Promotion Code List': 'Promotion Code List',
         'Menu.Service Order': 'Service Order',
         'Menu.Tasks': 'Tasks',
+
+        "Menu.Store details": "Store details",
+        "Menu.Store Setting": "Store Setting",
+        "Menu.Consent": "Consent",
+        "Menu.Tax": "Tax",
     },
     Others: {
         "import": "Import",

@@ -1818,13 +1818,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </Col>
                 </Row>
               </Col>
-              {/* 如果是俄罗斯 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
+              {/* 如果是俄罗斯 且 deliverDateStatus为1 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
 
               {/* timeSlot和pickup point status */}
               <Col span={8} className="timeSlot subscription_edit_timeSlot">
-                {storeId === 123457907 && deliverDateStatus === 1 ? <Row>
-                {/* {deliverDateStatus === 1 ? <Row> */}
+                {storeId === 123457907 ? <>
+                {deliverDateStatus === 1 ? <Row>
                   {
                     deliveryAddressInfo.receiveType === 'HOME_DELIVERY' ?
                       <>
@@ -1883,8 +1883,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           </Col>
                         </> : null
                   }
-
-                </Row> : storeId === 123457910 ? null : (
+                </Row>:null
+                } </> : storeId === 123457910 ? null : (
                   <Row>
                     <Col span={12}>
                       <label className="info-title info_title_edit_billing_address"><FormattedMessage id="Subscription.BillingAddress" /></label>

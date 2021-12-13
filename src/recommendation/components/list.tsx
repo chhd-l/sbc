@@ -10,7 +10,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { RCi18n } from 'qmkit';
-import * as webapi from './webapi';
+import * as webapi from '../webapi';
 
 type TList = List<any>;
 
@@ -209,10 +209,11 @@ class ListView extends React.Component<any, any> {
       return false
     }
     let couponCode = ''
-    if(v.apptType){
+    if(v.appointmentVO?.apptType=='Online'){
       // online的时候才能去获取couponCode
       try{
-        couponCode = await webapi.fetchCouponCode()
+        let {res} = await webapi.fetchCouponCode()
+        couponCode = res.context.couponCode
       }catch(err){
         message.error(err&&err.message);
         console.info('....',err)

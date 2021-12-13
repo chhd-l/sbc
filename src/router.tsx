@@ -1198,6 +1198,10 @@ const routes = [
     path: '/store-details',
     asyncComponent: () => import('./store-details')
   },
+  {
+    path: '/store-consent',
+    asyncComponent: () => import('./store-consent')
+  },
   /**
    * setting-integration
    * **/

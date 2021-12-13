@@ -1202,6 +1202,10 @@ const routes = [
     path: '/store-consent',
     asyncComponent: () => import('./store-consent')
   },
+  {
+    path: '/store-tax',
+    asyncComponent: () => import('./store-tax')
+  },
   /**
    * setting-integration
    * **/

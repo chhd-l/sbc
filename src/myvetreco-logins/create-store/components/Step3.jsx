@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Select, Radio, message, Icon} from 'antd';
-import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList} from "../webapi";
+import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList, checkCountryInfoExists} from "../webapi";
 import DebounceSelect from './debounceSelect'
 import { Const } from 'qmkit';
 
@@ -50,49 +50,87 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     }
   }, []);
 
+  const isRepeatCountry = async (params) => {
+    let flag = null;
+    try {
+      const {res} = await checkCountryInfoExists(params);
+      flag = res.context?.countryExists;
+    } catch(e) {
+      flag = 'error';
+    }
+    return true;
+  }
+
+  const isRepeatCompanyInfo = async (params) => {
+    let flag = null;
+    try {
+      const {res} = await checkCompanyInfoExists(params);
+      flag = res.context?.storeNameExists;
+    } catch(e) {
+      flag = 'error';
+    }
+    return flag;
+  }
+
   const toNext = async (e)=>{
     e.preventDefault();
     // if(!imgUrl){
     //   message.warn('Please upload logo')
     //   return
     // }
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       console.log(values)
       if (!err) {
-        setLoading(true)
-        checkCompanyInfoExists({
+        setLoading(true);
+
+        // 检查 storeName 是否重复
+        const isRepeatCompanyInfoFlag = await isRepeatCompanyInfo({
           storeName:values.storeName,
           storeId:userInfo?.storeId,
           companyInfoId: userInfo?.companyInfoId
-        }).then(({res,err})=>{
-          if(!res.context.storeNameExists){
-            saveStoreDetail({
-              email: userInfo?.accountName,
-              storeId: userInfo?.storeId,
-              storeLogo:imgUrl,
-              currentCompanyInfoId: userInfo?.companyInfoId,
-              currentStoreId: userInfo?.storeId,
-              sourceCompanyInfoId: sourceCompanyInfoId,
-              sourceStoreId: sourceStoreId,
-              storeSign:faviconUrl,
-              ...values,
-              cityId:values.cityId.key,
-              cityName:values.cityId.label,
-              introductionHtml:values.introduction // ? encodeURIComponent(SplicingHtml(values.introduction)) : ''
-            }).then(({res,err})=>{
-              if(err){
-                setLoading(false)
-              }else {
-                setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5)   //FGS去掉第4、5步
-              }
-            })
-          } else {
-            form.setFields({
-              storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}
-            })
-            setLoading(false)
+        });
+
+        if (isRepeatCompanyInfoFlag) {
+          isRepeatCompanyInfoFlag === true && form.setFields({storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}});
+          setLoading(false);
+          return;
+        }
+
+        // 检查 countryCode 是否重复
+        if (Const.SITE_NAME !== 'MYVETRECO') {
+          const isRepeatCountryFlag = await isRepeatCountry({
+            countryCode: values.countryCode,
+            storeId: userInfo?.storeId,
+            companyInfoId: userInfo?.companyInfoId,
+          })
+
+          if (isRepeatCountryFlag) {
+            isRepeatCountryFlag === true && form.setFields({countryCode: { value: values.countryCode, errors: [new Error('Country is repeated')] }});
+            setLoading(false);
+            return;
           }
-        })
+        }
+
+        saveStoreDetail({
+          email: userInfo?.accountName,
+          storeId: userInfo?.storeId,
+          storeLogo:imgUrl,
+          currentCompanyInfoId: userInfo?.companyInfoId,
+          currentStoreId: userInfo?.storeId,
+          sourceCompanyInfoId: sourceCompanyInfoId,
+          sourceStoreId: sourceStoreId,
+          storeSign:faviconUrl,
+          ...values,
+          cityId:values.cityId.key,
+          cityName:values.cityId.label,
+          introductionHtml:values.introduction // ? encodeURIComponent(SplicingHtml(values.introduction)) : ''
+        }).then(({res,err})=>{
+          if(err){
+            setLoading(false)
+          }else {
+            setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5)   //FGS去掉第4、5步
+          }
+        });
       }
     });
 

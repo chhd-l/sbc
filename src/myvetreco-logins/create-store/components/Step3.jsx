@@ -51,18 +51,18 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   }, []);
 
   const isRepeatCountry = async (params) => {
-    let flag = null;
+    let flag;
     try {
       const {res} = await checkCountryInfoExists(params);
       flag = res.context?.countryExists;
     } catch(e) {
       flag = 'error';
     }
-    return true;
+    return flag;
   }
 
   const isRepeatCompanyInfo = async (params) => {
-    let flag = null;
+    let flag;
     try {
       const {res} = await checkCompanyInfoExists(params);
       flag = res.context?.storeNameExists;

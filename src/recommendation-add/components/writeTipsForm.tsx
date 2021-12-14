@@ -187,7 +187,7 @@ class WriteTipsForm extends React.Component<any, any> {
             })(<Checkbox />)}
           </Form.Item>
           <Form.Item >
-            {RCi18n({ id: 'Prescriber.Pet agreed' }) }
+            <span className='ant-form-item-required'></span>{RCi18n({ id: 'Prescriber.Pet agreed' }) }
             {getFieldDecorator('isSend', {
               initialValue: isSend,
               rules: [{ required: true, message: RCi18n({ id: 'Prescriber.Pet send email' }) }],

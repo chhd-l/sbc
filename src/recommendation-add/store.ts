@@ -90,7 +90,7 @@ export default class AppStore extends Store {
   }
   //保存
 
-  fetchFelinSave = async (params = {}) => {
+  fetchFelinSave = async (params:any = {}) => {
     this.dispatch('loading:start');
 
    let customerPet= params.customerPet.map(item=>{
@@ -129,8 +129,8 @@ export default class AppStore extends Store {
         })
       } 
       let _recommendParams = this.state().get('recommendParams').toJS()
-      let _te={ ..._recommendParams,expert:settingVO.expertNames,fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
-        console.log(_te)
+      let _te={ ..._recommendParams,expert:settingVO.expertNames,apptId:settingVO.id, fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
+        // console.log(_te,'-------')
       this.savepetsRecommendParams(_te)
       this.dispatch('pets:list', list)
       // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')

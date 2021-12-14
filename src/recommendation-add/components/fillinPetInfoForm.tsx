@@ -156,7 +156,7 @@ class FillinPetInfoForm extends Component {
                     customerPet.push({...values.customerPet[item],petsId,uuid:item})
                 }
                 let params=Object.assign({},recommendParams,{...values,fillDate:moment(values.fillDate).format('YYYY-MM-DD'),customerPet})
-                console.log(params,values)
+                // console.log(params,values)
                 // return
                 savepetsRecommendParams(params)
 

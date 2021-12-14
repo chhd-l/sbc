@@ -2947,7 +2947,7 @@ export default {
     "Prescriber.Sensitvities": "Sensibilidades:",
     "Prescriber.Lifestyle": "Estilo de vida",
     "Prescriber.Activity": "Actividad:",
-    "Prescriber.Weight": "Peso (g)",
+    "Prescriber.Weight": "Peso",
     "Prescriber.inputWeight": "Por favor, introduzca el peso.",
     "Prescriber.Sterilzed": "Esterilizado",
     "Prescriber.selectSterilzed": "Por favor, seleccione Esterilizado.",

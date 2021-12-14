@@ -208,7 +208,7 @@ class FillinPetInfoForm extends Component {
                         <Form.Item label={RCi18n({ id: 'Prescriber.Dateofbirth' })}>
                             {getFieldDecorator(`customerPet[${item}].birthOfPets`, {
                                 initialValue: stateCustomPet[item]?.birthOfPets && moment(stateCustomPet[item]?.birthOfPets ?? null, 'YYYY-MM-DD') || null,
-                                rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectDateofbirth' }) }],
+                                rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectDateofbirth:' }) }],
 
                             })(<DatePicker disabled={stateCustomPet[item]?.petsId?true:false} style={{ width: '100%' }} />)}
                         </Form.Item>
@@ -237,7 +237,8 @@ class FillinPetInfoForm extends Component {
 
                     </Col>
                     <Col span={12}>
-                        <Form.Item label={RCi18n({ id: 'Prescriber.Special needs' })}>
+                        {/* {RCi18n({ id: 'Prescriber.Special needs' })} */}
+                        <Form.Item label={RCi18n({ id: 'Prescriber.Sensitvities' })}>
                             {getFieldDecorator(`customerPet[${item}].needs`, {
                                 initialValue: stateCustomPet[item]?.needs ?? '',
                                 //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
@@ -252,11 +253,9 @@ class FillinPetInfoForm extends Component {
                                 }
                             </Select>)}
                         </Form.Item>
-
-
                     </Col>
                     <Col span={12}>
-                        <Form.Item label={RCi18n({ id: 'Prescriber.Sensitvities' })}>
+                        <Form.Item label={RCi18n({ id: 'Prescriber.Lifestyle' })}>
                             {getFieldDecorator(`customerPet[${item}].lifestyle`, {
                                 initialValue: stateCustomPet[item]?.lifestyle ?? '',
                                 // rules: [{ required: true, message: 'Please select Lifestyle!' }],
@@ -302,9 +301,9 @@ class FillinPetInfoForm extends Component {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label="  ">
+                                <Form.Item label="">
                                     {getFieldDecorator(`customerPet[${item}].measureUnit`, {
-                                        initialValue: stateCustomPet[item]?.measureUnit ?? 'Kg',
+                                        initialValue: stateCustomPet[item]?.measureUnit ?? 'kg',
                                     })(<Select
                                         disabled={stateCustomPet[item]?.petsId?true:false}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Headline, BreadCrumb, history, SelectGroup, Const, ExportModal, QRScaner } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Form, Row, Col, Input, DatePicker, Button, Select, Tooltip, message, Modal, Icon, Popconfirm } from 'antd';
-import { apptList, apptCancel, apptArrived, updateAppointmentById, getAllDict, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
+import { apptList, apptCancel,getMagByApptId, apptArrived, updateAppointmentById, getAllDict, exportAppointmentList, findAppointmentByAppointmentNo } from './webapi';
 import moment from 'moment';
 import { FormattedMessage } from 'react-intl';
 import { RCi18n } from 'qmkit';
@@ -224,9 +224,19 @@ class Appointment extends React.Component<any, any> {
       message.success('successed');
       this.getAppointmentList()
     }
-
   }
-
+  getMagByApptId=async(row)=>{
+    const {res}=await getMagByApptId({
+      apptNo:row.apptNo
+    })
+    if(res.code===Const.SUCCESS_CODE){
+      if(res.context.felinRecoId){
+        history.push(`/recommendation-edit/${res.context.felinRecoId}`)
+      }else{
+        history.push('/recommendation')
+      }
+    }
+  }
   cancel = (e) => {
     console.log(e);
     message.error('Click on No');
@@ -344,7 +354,7 @@ class Appointment extends React.Component<any, any> {
               <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
             </Tooltip>}
             {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Prescription' })}>
-              <Link to={`/recommendation`} className="iconfont " style={{ padding: '0 5px' }}><Icon type="profile" /></Link>
+              <a   onClick={()=>this.getMagByApptId(record)}  className="iconfont " style={{ padding: '0 5px' }}><Icon type="profile" /></a>
             </Tooltip>
             }
 

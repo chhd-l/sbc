@@ -26,7 +26,7 @@ class WriteTipsForm extends React.Component<any, any> {
     this.state = {
       index: 1,
       visible: false,
-      isSend:0,
+      isSend:undefined,
       pickup:false,
       paris:false,
       suggest: '',
@@ -36,8 +36,13 @@ class WriteTipsForm extends React.Component<any, any> {
   }
 
   _onChange = (value, key: string) => {
+     const { setFieldsValue } = this.props.form;
     this.setState({
       [key]: value
+    },()=>{
+      setFieldsValue({
+        [key]: value
+      })
     })
   }
   componentDidMount() {
@@ -50,7 +55,7 @@ class WriteTipsForm extends React.Component<any, any> {
     let _type = `${o || ''}`
     this.setState({
       index: +new Date(),
-      isSend: (recommendParams?.isSend??false)?1: 0,
+      isSend: recommendParams.isSend,
       suggest: recommendParams.suggest || '',
       disabled: recommendParams.isSend,
       optimal: _type,
@@ -60,7 +65,7 @@ class WriteTipsForm extends React.Component<any, any> {
         optimal: _type,
         paris: recommendParams.paris,
         pickup: recommendParams.pickup,
-        isSend: (recommendParams?.isSend??false)?1: 0
+        isSend: recommendParams?.isSend
       })
     })
 
@@ -121,6 +126,7 @@ class WriteTipsForm extends React.Component<any, any> {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+     
        this.props.done(values);
       }
     })
@@ -181,14 +187,14 @@ class WriteTipsForm extends React.Component<any, any> {
             })(<Checkbox />)}
           </Form.Item>
           <Form.Item >
-          The customer has agreed to send the email
+            {RCi18n({ id: 'Prescriber.Pet agreed' }) }
             {getFieldDecorator('isSend', {
               initialValue: isSend,
-              rules: [{ required: true, message: RCi18n({ id: 'selectfillDate' }) }],
+              rules: [{ required: true, message: RCi18n({ id: 'Prescriber.Pet send email' }) }],
         
             })(<Radio.Group style={{marginLeft:10}}>
-                <Radio value={1}>YES</Radio>
-                <Radio value={0}>NO</Radio>
+                <Radio value={true}>YES</Radio>
+                <Radio value={false}>NO</Radio>
               </Radio.Group>
 
             )}

@@ -99,8 +99,8 @@ export default class AppStore extends Store {
         weight:JSON.stringify({measure:item.measure,measureUnit:item.measureUnit})
       }
     })
-    let isSend=params.isSend===0?false:true
-    const { res } = await webapi.fetchFelinSave({...params,customerPet,isSend})
+    // let isSend=params.isSend===0?false:true
+    const { res } = await webapi.fetchFelinSave({...params,customerPet})
     if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }

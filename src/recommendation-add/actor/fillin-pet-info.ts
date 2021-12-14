@@ -17,7 +17,7 @@ export default class FillInPetInfoActor extends Actor {
         optimal: undefined,
         pickup: true,
         fillDate: null,
-        isSend:0,
+        isSend:undefined,
         appointmentVO: {},//扫码信息
         customerPet: [{
           petsId:undefined,

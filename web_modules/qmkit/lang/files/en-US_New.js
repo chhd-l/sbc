@@ -1190,6 +1190,8 @@ export default {
         'Prescriber.Product name': 'Product name',
         'Prescriber.New': 'New',
         'Prescriber.Pet':'Pet',
+        'Prescriber.Pet agreed': 'The customer has agreed to send the email',
+        'Prescriber.Pet send email': 'please selected agreed to send the email',
         'Prescriber.needsToBeOperated': 'Please select the order that needs to be operated',
         'Prescriber.audit': 'Audit',
         'Prescriber.confirmAudit': 'Confirm to review the selected order?',

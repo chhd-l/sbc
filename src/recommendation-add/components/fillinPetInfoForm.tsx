@@ -301,7 +301,7 @@ class FillinPetInfoForm extends Component {
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item label="">
+                                <Form.Item label=" ">
                                     {getFieldDecorator(`customerPet[${item}].measureUnit`, {
                                         initialValue: stateCustomPet[item]?.measureUnit ?? 'kg',
                                     })(<Select

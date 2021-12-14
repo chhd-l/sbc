@@ -10,6 +10,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import moment from 'moment';
 import copy from 'copy-to-clipboard';
 import { RCi18n } from 'qmkit';
+import * as webapi from '../webapi';
 
 type TList = List<any>;
 
@@ -191,9 +192,9 @@ class ListView extends React.Component<any, any> {
     );
   }
 
-  handleCopy = (v,value) => {
+  handleCopy = async(v) => {
    const isTrue= this.timeDiffSaven(v);
-
+   let value = await this.newUrl(v)
     if (!value||isTrue==='Invalid') {
       message.error(RCi18n({ id: 'Prescriber.copylink failed' }));
       return
@@ -202,15 +203,30 @@ class ListView extends React.Component<any, any> {
       message.success(RCi18n({ id: 'Prescriber.Operate successfully' }));
     }
   }
-  newUrl = (oldUrl) => {
+  newUrl = async(v) => {
+    let oldUrl = v.linkAddr
     if (!oldUrl) {
       return false
     }
+    let couponCode = ''
+    if(v.appointmentVO?.apptType=='Online'){
+      // online的时候才能去获取couponCode
+      try{
+        let {res} = await webapi.fetchCouponCode()
+        couponCode = res.context.couponCode
+      }catch(err){
+        message.error(err&&err.message);
+        console.info('....',err)
+      }
+    }
     let tempArr = oldUrl.split('?');
     let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite;
+    let newUrl = couponCode ? `${oldUrl}?couponCode=${couponCode}`:oldUrl
     if (pcWebsite && tempArr[1]) {
-      return pcWebsite + '?' + tempArr[1];
-    } else return oldUrl;
+      newUrl =  pcWebsite + '?' + tempArr[1]+ couponCode?`&couponCode=${couponCode}`:'';
+    } 
+    return newUrl
+
   };
 
   timeDiffSaven(item) {
@@ -327,7 +343,7 @@ class ListView extends React.Component<any, any> {
                         </a>
                       </Tooltip>
                       <Tooltip placement="top" title={<FormattedMessage id="Prescriber.copied link" />}>
-                        <Icon type="link" onClick={() => this.handleCopy(v,this.newUrl(v.linkAddr))} />
+                        <Icon type="link" onClick={() => this.handleCopy(v)} />
                       </Tooltip>
                     </div>
 

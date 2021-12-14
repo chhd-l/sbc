@@ -148,11 +148,19 @@ const Common = {
   REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
   REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
+  REACT_APP_PRESCRIBER_Scope:['openid', 'profile', 'email','user.consent:read','user.profile:write','user.consent:delete','user.consent:collect'],
+  REACT_APP_RC_Scope:['openid', 'profile', 'email'],
 
   //测试新Okta 测试完待删除
-  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
   // REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
+
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
   // REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',
+
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa3fbl740oBK3vtO0x7',
+  // REACT_APP_PRESCRIBER_ISSUER: 'https://accountpreview.royalcanin.com/oauth2/default',
+
   // REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
 
 

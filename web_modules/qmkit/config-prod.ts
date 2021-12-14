@@ -27,15 +27,18 @@ const getOktaAppConfig = () => {
     });
   } else if (host === 'portal.myvetreco.co') {
     return Object.assign({}, OKTA_APP_CONFIG, {
-      REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
-      REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
+      // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
+      // REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
+      REACT_APP_PRESCRIBER_CLIENT_ID: '0oabra5gsP9KS9cgX0x6',
+      REACT_APP_PRESCRIBER_ISSUER: 'https://accountpreview.royalcanin.com/oauth2/default',
       REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
     });
   } else if (host === 'store.myvetreco.nl') {
     return Object.assign({}, OKTA_APP_CONFIG, {
       REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
       REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',
-      REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
+      REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback',
+      REACT_APP_PRESCRIBER_Scope: ['openid', 'profile', 'email'],
     });
   } else if (host === 'store.peawee.co.uk') {
     return Object.assign({}, OKTA_APP_CONFIG, {

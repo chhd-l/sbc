@@ -191,7 +191,7 @@ export default class DetailPublish extends React.Component<any, any> {
               checked={this.state.checked}
               //checked={this.state.checkbox}
             />
-            {RCi18n({id:'Order.sendEmail'})}
+            {Const.SITE_NAME === 'MYVETRECO' ? 'The pet owner has agreed to receive an invitation e-mail from My VetReco' : RCi18n({id:'Order.sendEmail'})}
           </div>
         </div>
         <div className="share">

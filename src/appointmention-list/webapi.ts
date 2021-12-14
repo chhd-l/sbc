@@ -172,6 +172,19 @@ export const apptArrived = (params) =>{
   });
 }
 
+
+// 获取 id
+export function getMagByApptId(filterParams = {}) {
+  return Fetch<TResult>('/felinReco/magByApptId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+
+
 //blocked
 
 export const bookBySlot = (params) =>{

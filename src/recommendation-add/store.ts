@@ -90,9 +90,17 @@ export default class AppStore extends Store {
   }
   //保存
 
-  fetchFelinSave = async (params = {}) => {
+  fetchFelinSave = async (params:any = {}) => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchFelinSave(params)
+
+   let customerPet= params.customerPet.map(item=>{
+      return{
+        ...item,
+        weight:JSON.stringify({measure:item.measure,measureUnit:item.measureUnit})
+      }
+    })
+    // let isSend=params.isSend===0?false:true
+    const { res } = await webapi.fetchFelinSave({...params,customerPet})
     if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }
@@ -112,7 +120,7 @@ export default class AppStore extends Store {
       let list = pets.map(item => {
         let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
         item.measure = _tempWeight?.measure ?? 0;
-        item.measureUnit = _tempWeight?.measureUnit ?? 'Kg';
+        item.measureUnit = _tempWeight?.measureUnit ?? 'kg';
         return item
       })
       if (list.length > 0) {
@@ -121,8 +129,8 @@ export default class AppStore extends Store {
         })
       } 
       let _recommendParams = this.state().get('recommendParams').toJS()
-      let _te={ ..._recommendParams,expert:settingVO.expertNames,fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
-        console.log(_te)
+      let _te={ ..._recommendParams,expert:settingVO.expertNames,apptId:settingVO.id, fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
+        // console.log(_te,'-------')
       this.savepetsRecommendParams(_te)
       this.dispatch('pets:list', list)
       // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')

@@ -126,3 +126,14 @@ export async function getCountryList() {
     return [];
   });
 }
+
+
+//检查国家是否重复
+export function checkCountryInfoExists(params) {
+  return Fetch<TResult>('/storeConfig/check',{
+    method: 'post',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

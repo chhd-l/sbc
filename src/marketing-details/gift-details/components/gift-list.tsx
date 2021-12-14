@@ -16,7 +16,7 @@ const GreyBg = styled.div`
   color: #333333;
   margin-left: -28px;
   span {
-    width: 100px;
+    width: 200px;
     text-align: right;
     color: #666666;
     display: inline-block;
@@ -78,12 +78,16 @@ export default class GiftList extends React.Component<any, any> {
             <GreyBg>
               <Row>
                 <Col span={24}>
-                  <span>
-                    <FormattedMessage id="Marketing.Rules" />:
-                  </span>
-                  <FormattedMessage id="Marketing.Full" />
-                  {level.fullAmount ? level.fullAmount : level.fullCount}
-                  {subType == '4' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'Items'} {level.giftType == '1' ? <FormattedMessage id="Marketing.AnOptionalOne" /> : <FormattedMessage id="Marketing.TheDefaultAllGive" />}
+                  <Col span={6}>
+                    <span>
+                      <FormattedMessage id="Marketing.Rules" />:
+                    </span>
+                  </Col>
+                  <Col span={18}>
+                    <FormattedMessage id="Marketing.Full" />
+                    {level.fullAmount ? level.fullAmount : level.fullCount}
+                    {subType == '4' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'Items'} {level.giftType == '1' ? <FormattedMessage id="Marketing.AnOptionalOne" /> : <FormattedMessage id="Marketing.TheDefaultAllGive" />}
+                  </Col>
                 </Col>
               </Row>
             </GreyBg>

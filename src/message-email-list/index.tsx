@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { resendEmailTask } from './webapi';
+import MessageTemplateDetail from '@/message-email-list/messageTemplateDetail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -39,7 +40,9 @@ export default class ClinicList extends Component<any, any> {
       resendParams: {
         isReSend:true,
         messageTaskId:'',
-      }
+      },
+      visibleMessageTemplate:false,
+      taskId:''
     };
   }
   componentDidMount() {
@@ -70,6 +73,22 @@ export default class ClinicList extends Component<any, any> {
       () => this.getEmailTaskList()
     );
   };
+  viewMessageTemplate=(id)=>{
+
+    this.setState(
+      {
+        visibleMessageTemplate:true,
+        taskId:id
+      }
+    )
+  }
+  closeMessageTemplate=()=>{
+    this.setState(
+      {
+        visibleMessageTemplate:false
+      }
+    )
+  }
   resendEmail=(params)=>{
     this.setState({
       loading: true
@@ -219,7 +238,7 @@ export default class ClinicList extends Component<any, any> {
 
 
   render() {
-    const { title, searchForm, taskList, emailTemplateList } = this.state;
+    const { title, searchForm, taskList, emailTemplateList ,visibleMessageTemplate,taskId } = this.state;
 
     const objectTypeList = [
       {
@@ -405,6 +424,12 @@ export default class ClinicList extends Component<any, any> {
                 <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
+
+                <Divider type="vertical" />
+
+                  <Tooltip placement="top" title={RCi18n({id:'view'})}>
+                    <a onClick={()=>this.viewMessageTemplate(record.taskId)} type="link" className="iconfont iconView"></a>
+                  </Tooltip>
               </>
             ) : null}
             {+record.status === 5 ? (
@@ -652,6 +677,7 @@ export default class ClinicList extends Component<any, any> {
             </Row>
           </Form>
         </div>
+        <MessageTemplateDetail setVisibleTemplate={this.closeMessageTemplate} visibleTemplate={visibleMessageTemplate} taskId={taskId}/>
         <div className="container">
           <Table
             rowKey="id"

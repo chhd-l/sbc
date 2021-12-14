@@ -78,6 +78,13 @@ export function getShopToken(customerId, filterParams) {
   });
 }
 
+//获取coupon code
+export function getShopCouponCode() {
+  return Fetch<TResult>(`/coupon-code/goodwill/get`, {
+    method: 'Get',
+  });
+}
+
 /**
  * get Dict
  * @param filterParams

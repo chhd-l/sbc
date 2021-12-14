@@ -46,7 +46,7 @@ export default class SettleDetailActor extends Actor {
   @Action('list:init')
   init(state: IMap, res) {
     return state.set('dataList', fromJS(res));
-    const { content, pageSize, total } = res;
+    // const { content, pageSize, total } = res;
     /* return state.withMutations((state) => {
       state
         .set('total', total)
@@ -85,7 +85,7 @@ export default class SettleDetailActor extends Actor {
   //product select
   @Action('product:productselect')
   productselect(state, res) {
-    return state.set('productselect', res);
+    return state.set('productselect', fromJS(res));
   }
 
   //create Link

@@ -3,7 +3,7 @@ import { Form, Input, Select, Spin, Row, Col, Button, message, AutoComplete, Mod
 import { FormattedMessage } from 'react-intl';
 import { FormComponentProps } from 'antd/lib/form';
 import { Headline, cache, Const, RCi18n } from 'qmkit';
-import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getIsAddressValidation, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope } from './webapi';
+import { getAddressInputTypeSetting, getAddressFieldList, getCountryList, getStateList, getCityList, searchCity, getSuggestionOrValidationMethodName, validateAddress, getRegionListByCityId, getAddressListByDadata, validateAddressScope, getSuggestionAddressListByDQE, returnDQE } from './webapi';
 import { updateAddress, addAddress, validPostCodeBlock } from '../webapi';
 import _ from 'lodash';
 import IMask from 'imask';
@@ -70,14 +70,18 @@ class DeliveryItem extends React.Component<Iprop, any> {
       searchCityList: [],
       regionList: [],
       addressInputType: '',
-      isAddressValidation: false,
+      suggestionMethodName: 'FGS',
+      validationMethodName: 'FGS',
+      isAddress1ApplySuggestion: false,
+      isAddress1ApplyValidation: false,
       validationModalVisisble: false,
       validationSuccess: false,
       checkedAddress: 0,
       fields: {},
       suggestionAddress: {},
       searchAddressList: [],
-      dadataAddress: {} //用来验证俄罗斯地址是不是在配送范围
+      dadataAddress: {}, //用来验证俄罗斯地址是不是在配送范围
+      suggestionOpen: false  //手动控制建议地址的展开或关闭
     };
     this.searchCity = _.debounce(this.searchCity, 500);
     this.searchAddress = _.debounce(this.searchAddress, 200);
@@ -94,7 +98,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
     let states = [];
     let cities = [];
     let regions = [];
-    let isAddressValidation = false;
     if (addressInputType) {
       fields = await getAddressFieldList(addressInputType);
     }
@@ -111,9 +114,14 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (fields.find(ad => ad.fieldName === 'State' && ad.inputDropDownBoxFlag === 1)) {
       states = await getStateList();
     }
-    //MANUALLY类型的地址才去获取是否进行验证的配置
-    if (addressInputType === 'MANUALLY') {
-      isAddressValidation = await getIsAddressValidation();
+    //获取suggestion和validation的配置
+    let [suggestionMethodName, validationMethodName] = await Promise.all([getSuggestionOrValidationMethodName(1), getSuggestionOrValidationMethodName(0)]);
+    //AUTOMATICALLY类型地址读取address1的suggestionFlag和validationFlag
+    let isAddress1ApplySuggestion = false, isAddress1ApplyValidation = false;
+    if (addressInputType === 'AUTOMATICALLY') {
+      const address1 = fields.find(ad => ad.fieldKey === 'address1') ?? {};
+      isAddress1ApplySuggestion = address1.suggestionFlag === 1;
+      isAddress1ApplyValidation = address1.validationFlag === 1;
     }
     this.setState({
       loading: false,
@@ -123,14 +131,22 @@ class DeliveryItem extends React.Component<Iprop, any> {
       stateList: states.map((t) => ({ id: t.id, name: t.stateName })),
       cityList: cities,
       regionList: regions,
-      isAddressValidation: isAddressValidation
+      suggestionMethodName,
+      validationMethodName,
+      isAddress1ApplySuggestion,
+      isAddress1ApplyValidation
     }, () => {
       // this.setPhoneNumberReg();
+      //设置默认country
+      if (!this.props.delivery.countryId && countries.length === 1) {
+        this.props.form.setFieldsValue({ countryId: countries[0]['id'] });
+      }
     });
   };
 
   validateAddress = () => {
-    if (this.state.isAddressValidation) {
+    //us fedex进行弹框显示建议地址
+    if (this.state.suggestionMethodName === 'FEDEX') {
       this.props.form.validateFields((err, fields) => {
         if (!err) {
           this.setState({ loading: true });
@@ -209,7 +225,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   saveAddress = async () => {
     const { delivery } = this.props;
-    const { checkedAddress, suggestionAddress, dadataAddress, addressInputType } = this.state;
+    const { checkedAddress, suggestionAddress, dadataAddress, suggestionMethodName, isAddress1ApplyValidation } = this.state;
     const sugAddr = checkedAddress === 1 ? { province: suggestionAddress.provinceCode, city: suggestionAddress.city, address1: suggestionAddress.address1, address2: suggestionAddress.address2, postCode: suggestionAddress.postalCode } : {};
 
     if (dadataAddress) {
@@ -227,7 +243,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
         const rFields = { ...fields, ...sugAddr };
 
         //俄罗斯地址修改了才去调是否在配送范围的验证
-        if (addressInputType === 'AUTOMATICALLY' && delivery.address1 !== fields.address1) {
+        if (isAddress1ApplyValidation && suggestionMethodName === 'DADATA' && delivery.address1 !== fields.address1) {
 
           const validStatus = await validateAddressScope({
             regionFias: dadataAddress.provinceId || null,
@@ -248,7 +264,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
           }
         }
         //俄罗斯地址验证地址是否齐全
-        if (addressInputType === 'AUTOMATICALLY' && delivery.address1 === fields.address1 && (!delivery.street || !delivery.postCode || !delivery.house || !delivery.city)) {
+        if (isAddress1ApplyValidation && suggestionMethodName === 'DADATA' && delivery.address1 === fields.address1 && (!delivery.street || !delivery.postCode || !delivery.house || !delivery.city)) {
           const errTip = !delivery.street
             ? new Error(RCi18n({ id: 'PetOwner.AddressStreetTip' }))
             : !delivery.postCode
@@ -270,7 +286,6 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
         handlerFunc({
           ...delivery,
-          ...rFields,
           ...(dadataAddress.unrestrictedValue ? {
             country: dadataAddress.countryCode || '',
             countryId: (this.state.countryList[0] ?? {}).id ?? '',
@@ -289,6 +304,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
             countryId: (this.state.countryList[0] ?? {}).id ?? '',
             provinceId: rFields.province ? (this.state.stateList.find(st => st.name === rFields.province) ?? {})['id'] : null
           }),
+          ...rFields,
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),
@@ -325,31 +341,85 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   searchAddress = (txt: string) => {
-    getAddressListByDadata(txt).then((data) => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          searchAddressList: data.res.context.addressList
+    const { suggestionMethodName, isAddress1ApplySuggestion } = this.state;
+    if (isAddress1ApplySuggestion && txt !== '') {
+      if (suggestionMethodName === 'DADATA') { 
+        getAddressListByDadata(txt).then((data) => {
+          if (data.res.code === Const.SUCCESS_CODE) {
+            this.setState({
+              searchAddressList: data.res.context.addressList,
+              suggestionOpen: true
+            });
+          }
+        });
+      } else if (suggestionMethodName === 'DQE') {
+        getSuggestionAddressListByDQE(txt).then(data => {
+          if (data.res.code === Const.SUCCESS_CODE) {
+            this.setState({
+              searchAddressList: (data.res.context ?? [])
+                .reduce((prev, curr) => {   //根据label去重
+                  if (prev.findIndex(t => t.label === curr.label) === -1) {
+                    prev.push(curr);
+                  }
+                  return prev;
+                }, [])
+                .map(addr => ({
+                  ...addr,
+                  unrestrictedValue: addr.label,
+                  selectedListeNumero: '',
+                  postCode: addr.codePostal,
+                  city: addr.localite,
+                  state: addr.county,
+                  street: addr.voie
+                })),
+              suggestionOpen: true
+            });
+          }
         });
       }
-    });
+    }
   };
 
   onSelectRuAddress = (val: string) => {
-    const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === val);
+    let { suggestionMethodName, searchAddressList } = this.state;
+    const address = searchAddressList.find(addr => addr.unrestrictedValue === val);
+    let suggestionOpen = false;
     if (address) {
+      if (suggestionMethodName === 'DADATA') {
+        this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
+      } else if (suggestionMethodName === 'DQE') {
+        this.props.form.setFieldsValue({ postCode: address.postCode || '', city: address.city || '', address1: address.address1, county: address.county });
+        if (address.selectedListeNumero || address.listeNumero.indexOf(';') === -1) {
+          returnDQE(address.idvoie, address.pays, address.selectedListeNumero || address.listeNumero);
+        } else {
+          //删除一级地址, 然后用解析的二级地址作为候选
+          // const addressIndex = searchAddressList.findIndex(addr => addr.unrestrictedValue === val);
+          // searchAddressList.splice(addressIndex, 1);
+          searchAddressList = address.listeNumero.split(';').map(item => ({
+            ...address,
+            unrestrictedValue: `${item} ${address.unrestrictedValue}`,
+            address1: `${item} ${address.address1}`,
+            selectedListeNumero: item
+          }));
+          suggestionOpen = true;
+        }
+      }
       this.setState({
-        dadataAddress: address
+        searchAddressList,
+        dadataAddress: address,
+        suggestionOpen
       });
-      this.props.form.setFieldsValue({ postCode: address.postCode || '', entrance: address.entrance || '', apartment: address.flat || '' });
     }
   };
 
   onCheckRuAddress = () => {
+    const { suggestionMethodName } = this.state;
     const address1 = this.props.form.getFieldValue('address1');
     const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === address1);
-    if (!address) {
+    if (!address && suggestionMethodName === 'DADATA') { //dadata 必须选择列表中的一个地址
       this.props.form.setFieldsValue({ address1: this.props.delivery.address1 });
     }
+    this.setState({ suggestionOpen: false });
   };
 
   // 设置手机号输入限制
@@ -391,7 +461,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
     if (field.fieldName === 'Address1') {
       if (field.inputSearchBoxFlag === 1) {
         return (
-          <AutoComplete dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onSelect={this.onSelectRuAddress} onBlur={this.onCheckRuAddress} />
+          <AutoComplete open={this.state.suggestionOpen} dataSource={this.state.searchAddressList.map(addr => addr.unrestrictedValue)} onSearch={this.searchAddress} onSelect={this.onSelectRuAddress} onBlur={this.onCheckRuAddress} />
           // <Select showSearch filterOption={false} onSearch={this.searchAddress} onChange={this.onSelectRuAddress}>
           //   {this.state.searchAddressList.map((item, idx) => (
           //     <Option value={item.unrestrictedValue} key={idx}>
@@ -460,27 +530,28 @@ class DeliveryItem extends React.Component<Iprop, any> {
     //   SE(123457915
     //   RU(123457907
     //   TR(123457911
-    let regExp = null;
-    if (storeId == 123457909) {
-      // 法国
-      regExp = /^\(\+[3][3]\)[\s](([0][1-9])|[1-9])[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
-    } else if (storeId == 123457910) {
-      // 美国
-      regExp = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
-    } else if (storeId == 123456858) {
-      // 墨西哥
-      regExp = /^\+\([5][2]\)[\s\-][0-9]{3}[\s\-][0-9]{3}[\s\-][0-9]{4}$/;
-    } else if (storeId == 123457907) {
-      // 俄罗斯
-      regExp = /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
-    } else if (storeId == 123457911) {
-      // 土耳其
-      regExp = /^0\s\(?([2-9][0-8][0-9])\)?\s([1-9][0-9]{2})[\-\. ]?([0-9]{2})[\-\. ]?([0-9]{2})(\s*x[0-9]+)?$/;
-    } else {
-      // 其他国家
-      // regExp = /\S/;
-      regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
-    }
+    // let regExp = null;
+    // if (storeId == 123457909) {
+    //   // 法国
+    //   regExp = /^\(\+[3][3]\)[\s](([0][1-9])|[1-9])[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
+    // } else if (storeId == 123457910) {
+    //   // 美国
+    //   regExp = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    // } else if (storeId == 123456858) {
+    //   // 墨西哥
+    //   regExp = /^\+\([5][2]\)[\s\-][0-9]{3}[\s\-][0-9]{3}[\s\-][0-9]{4}$/;
+    // } else if (storeId == 123457907) {
+    //   // 俄罗斯
+    //   regExp = /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+    // } else if (storeId == 123457911) {
+    //   // 土耳其
+    //   regExp = /^0\s\(?([2-9][0-8][0-9])\)?\s([1-9][0-9]{2})[\-\. ]?([0-9]{2})[\-\. ]?([0-9]{2})(\s*x[0-9]+)?$/;
+    // } else {
+    //   // 其他国家
+    //   // regExp = /\S/;
+    //   regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
+    // }
+    const regExp = /^[0-9+-\\(\\)\s]{6,25}$/;
 
     if (!regExp.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPhone" }));
@@ -514,6 +585,10 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   //俄罗斯address1校验
   ruAddress1Validator = (rule, value, callback) => {
+    const { suggestionMethodName } = this.state;
+    if (suggestionMethodName !== 'DADATA') {
+      callback();
+    }
     const address = this.state.searchAddressList.find(addr => addr.unrestrictedValue === value);
     if (address && !address.street) {
       callback(RCi18n({ id: 'PetOwner.AddressStreetTip' }));

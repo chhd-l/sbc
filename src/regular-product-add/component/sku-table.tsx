@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import {Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select, Popconfirm} from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import {fromJS, List, Map} from 'immutable';
-import {AuthWrapper, cache, noop, ValidConst} from 'qmkit';
+import {AuthWrapper, cache, noop, ValidConst, Const} from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
 import { FormattedMessage } from 'react-intl';
 import ProductTooltip from './productTooltip';
@@ -174,7 +174,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible == true ? <ProductTooltip visible={this.state.visible} showModal={this.showProduct} /> : <React.Fragment />}
-        <Form>
+        <Form className="table-overflow">
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
         {
@@ -203,7 +203,7 @@ class SkuForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, goodsList, uomList } = this.props.relaxProps;
     let columns: any = List();
-
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     // 未开启规格时，不需要展示默认规格
     if (!specSingleFlag) {
 
@@ -241,7 +241,7 @@ class SkuForm extends React.Component<any, any> {
       className: 'goodsImg',
       render: (rowInfo) => {
         const images = fromJS(rowInfo.images ? rowInfo.images : []);
-        return <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
+        return <ImageLibraryUpload disabled={disableFields} images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgCount={1} imgType={1} skuId={rowInfo.id} />;
       }
     });
 
@@ -290,8 +290,29 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoNo'),
                   initialValue: rowInfo.goodsInfoNo
-                })(<Input style={{ width: '116px' }} />)}
+                })(<Input disabled={disableFields} style={{ width: '116px' }} />)}
               </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //default sku
+    columns = columns.push({
+      title: <FormattedMessage id="Product.DefaultSKU" />,
+      key: 'defaultSku',
+      width: 80,
+      align: 'center',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={8}>
+              <Checkbox
+                checked={rowInfo.defaultSku === 1}
+                onChange={(e) => this._editGoodsItem(rowInfo.id, 'defaultSku', e.target.checked ? 1 : 0)}
+                disabled={disableFields}
+              />
             </Col>
           </Row>
         );
@@ -325,7 +346,7 @@ class SkuForm extends React.Component<any, any> {
               </FormItem>
             </Col>
             {
-              !!rowInfo.goodsInfoId
+              !!rowInfo.goodsInfoId && !disableFields
                   ? (
                         <a className='skuMappingList-btn' onClick={() => this.handleExternalSku(rowInfo)}>
                           <AntIcon className='SkuMappingList-action-icon' type='iconEdit'/>
@@ -360,7 +381,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoBarcode'),
                   initialValue: rowInfo.goodsInfoBarcode
-                })(<Input style={{ width: '116px' }} />)}
+                })(<Input disabled={disableFields} style={{ width: '116px' }} />)}
               </FormItem>
             </Col>
           </Row>
@@ -383,7 +404,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'priceUomId'),
                   initialValue: rowInfo.priceUomId || null
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
+                  <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
                     {uomList.map(item => (
                       <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
                     ))}
@@ -399,6 +420,7 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: RCi18n({id:'Product.Weightvalue'}),
       key: 'goodsInfoWeight',
+      width: 100,
       render: (rowInfo) => {
         return (
           <Row>
@@ -417,7 +439,7 @@ class SkuForm extends React.Component<any, any> {
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsInfoWeight'),
                   initialValue: rowInfo.goodsInfoWeight || 0
-                })(<InputNumber formatter={limitDecimals} parser={limitDecimals} style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
+                })(<InputNumber disabled={disableFields} formatter={limitDecimals} parser={limitDecimals} style={{ width: '116px' }} min={0} onKeyUp={(e) => this.noMinus(e)} />)}
               </FormItem>
             </Col>
           </Row>
@@ -437,7 +459,7 @@ class SkuForm extends React.Component<any, any> {
                   onChange: (e) => this._editGoodsItem(rowInfo.id, 'goodsInfoUnit', e),
                   initialValue: rowInfo.goodsInfoUnit !== null ? rowInfo.goodsInfoUnit : 'kg'
                 })(
-                  <Select getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} >
+                  <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} style={{ width: '60px' }} >
                     <Option value="kg">kg</Option>
                     <Option value="g">g</Option>
                     <Option value="lb">lb</Option>
@@ -506,13 +528,12 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{
-          marginRight: '81px',
-        }}>
+        <div>
           <FormattedMessage id="Product.Subscription" />
         </div>
       ),
       key: 'subscriptionStatus',
+      width: 100,
       render: (rowInfo) => {
         return (
           <Row>
@@ -521,7 +542,7 @@ class SkuForm extends React.Component<any, any> {
                   <Select 
                     value={rowInfo.subscriptionStatus}
                     onChange = {(e) => this._editGoodsItem(rowInfo.id, 'subscriptionStatus', e)}
-                    disabled={goods.get('subscriptionStatus') === 0 || goodsList.toJS().length == 1} 
+                    disabled={goods.get('subscriptionStatus') === 0 || goodsList.toJS().length == 1 || disableFields} 
                     getPopupContainer={() => document.getElementById('page-content')} 
                     style={{ width: '81px' }} 
                     placeholder="please select status">
@@ -551,7 +572,7 @@ class SkuForm extends React.Component<any, any> {
                          defaultValue={rowInfo.promotions}
                          getPopupContainer={() => document.getElementById('page-content')}
                          placeholder={<FormattedMessage id="Product.selectType" />}
-                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship' || rowInfo.subscriptionStatus === 0} >
+                         disabled={goods.get('subscriptionStatus') === 0 || goods.get('promotions') === 'autoship' || rowInfo.subscriptionStatus === 0 || disableFields} >
                   <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
                   <Option value='club'><FormattedMessage id="Product.Club" /></Option>
                   <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
@@ -579,13 +600,13 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
+        <div><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
 
         return (
-          <Row style={{marginRight: '81px'}}>
+          <Row>
             <Col span={8}>
               <FormItem style={styles.tableFormItem}>
                 {goodsList.toJS().length == 1 ? ( goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>): (<div>
@@ -593,16 +614,51 @@ class SkuForm extends React.Component<any, any> {
                 </div>) ) : (<>
                   {goods.get('addedFlag') == 0 ? ( <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span>) : (
                     <>
-                      {rowInfo.addedFlag == 1 ? (
+                      {rowInfo.addedFlag == 1 ? (disableFields ? <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#cccccc" }}></span> :
                         <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 0)}>
                           <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
                         </div>
                       ) : null}
-                      {rowInfo.addedFlag == 0? (
+                      {rowInfo.addedFlag == 0 ? (disableFields ? <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#cccccc" }}></span> :
                         <div onClick={() => this._editGoodsItem(rowInfo.id, 'addedFlag', 1)}>
                           <span className="icon iconfont iconOnShelves" style={{ fontSize: 20, color: "#E1021A" }}></span>
                         </div>
                       ) : null}</>)}
+                    </>
+                  )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: (
+        <div><FormattedMessage id="Product.Displayonshop" /></div>
+      ),
+      key: 'displayOnShop',
+      align: 'left',
+      render: (rowInfo) => {
+
+        return (
+          <Row>
+            <Col span={8}>
+              <FormItem style={styles.tableFormItem}>
+              {goodsList.toJS().length == 1 ? ( goods.get('displayFlag') == 0 ? (<Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />): (
+                  <Icon type="eye" style={{ fontSize: 20, color: "#cccccc" }} />
+                ) ) : (<>
+                  {goods.get('displayFlag') == 0 ? ( <Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />) : (
+                    <>
+                      {rowInfo.displayOnShop == 0 ? (disableFields ? <Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} /> :
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 1)}>
+                          <Icon type="eye-invisible" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      ) : (disableFields ? <Icon type="eye" style={{ fontSize: 20, color: "#cccccc" }} /> :
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 0)}>
+                          <Icon type="eye" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      )}</>)}
                     </>
                   )}
               </FormItem>

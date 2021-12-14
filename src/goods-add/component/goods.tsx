@@ -903,30 +903,6 @@ class GoodsForm extends React.Component<any, any> {
       })
     }
 
-    else if (key === 'saleableFlag') {
-      if (e == 0) {
-        this.setState({
-          saleableType: true
-
-        });
-        let goods = Map({
-          [key]: fromJS(0),
-        });
-        editGoods(goods);
-        setFieldsValue({ saleableType: 0 });
-
-      } else {
-        this.setState({
-          saleableType: false
-        });
-        let goods = Map({
-          [key]: fromJS(1),
-        });
-        editGoods(goods);
-        setFieldsValue({ saleableType: 1 });
-      }
-    }
-
     else if (key === 'displayFlag') {
       if (e == 0) {
         let goods = Map({
@@ -1148,7 +1124,7 @@ class GoodsForm extends React.Component<any, any> {
 
     let productFilter = [];
 
-    selectChildren.map((child) => {
+    selectChildren.forEach((child) => {
       productFilter.push({
         filterId: child.parentId,
         filterValueId: child.value

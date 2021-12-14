@@ -91,22 +91,6 @@ function Step4({form}){
     setSelectedSkuIds(formData.Conditions.skuIds || [])
     setSelectedRows(fromJS(formData.Conditions.selectedRows) || fromJS([]))
   }
-  /**
-   * 选项提示
-   * @param Tips
-   * @constructor
-   */
-  const Tips = (Tips,top=-10)=>{
-    if(formData.PromotionType.typeOfPromotion === 0){
-      return (
-        <Form.Item wrapperCol={WrapperCol} style={{marginBottom:0,color:'#f5222d'}}>
-          <div style={{fontSize:12,marginTop:top}}>
-            {Tips}
-          </div>
-        </Form.Item>
-      )
-    }
-  }
 
   /**
    * 后添加进入方法
@@ -262,7 +246,7 @@ function Step4({form}){
             </Radio.Group>
           )}
           {
-            purchaseType === 0 &&  (
+            purchaseType !== 3 &&  (
               <div>
                 <Checkbox checked={isSuperimposeSubscription} onChange={(e=>{
                   setIsSuperimposeSubscription(e.target.checked)
@@ -273,15 +257,6 @@ function Step4({form}){
             )
           }
         </Form.Item>
-        {
-          purchaseType === 1 && Tips(<FormattedMessage id="Marketing.AutoShipTips" />,-20)
-        }
-        {
-          purchaseType === 2 && Tips(<FormattedMessage id="Marketing.ClubTips" />,-20)
-        }
-        {
-          purchaseType === 3 && Tips(<FormattedMessage id="Marketing.SpTips" />,-20)
-        }
 
         {/*Group of customer*/}
         <Form.Item label={<FormattedMessage id="Marketing.GroupOfCustomer" />} >
@@ -360,9 +335,6 @@ function Step4({form}){
                   />
                 )}
               </Form.Item>
-              {
-                Tips(<FormattedMessage id="Marketing.ByEmailTips" />)
-              }
             </>
 
           )}
@@ -397,7 +369,7 @@ function Step4({form}){
                 <>
                   <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator('customProductsType', {
-                      initialValue: formData.Conditions.customProductsType,
+                      initialValue: formData.Conditions.customProductsType || 0,
                       // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
                     })(<RadioGroup onChange={(e:RadioChangeEvent)=>setCustomProductsType(e.target.value)}>
                       <Radio value={0}>
@@ -408,12 +380,6 @@ function Step4({form}){
                       </Radio>
                     </RadioGroup>)}
                   </Form.Item>
-                  {
-                    customProductsType === 0 && Tips(<FormattedMessage id="Marketing.IncludeProductTips" />)
-                  }
-                  {
-                    customProductsType === 1 && Tips(<FormattedMessage id="Marketing.ExcludeProductTips" />)
-                  }
                   <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator(
                       'goods',
@@ -430,7 +396,6 @@ function Step4({form}){
                       </div>
                     )}
                   </Form.Item>
-                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Custom' })}.`)}
                 </>
               )
             }
@@ -481,7 +446,6 @@ function Step4({form}){
                       </TreeSelect>
                     )}
                   </Form.Item>
-                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Category' })}.`)}
                 </>
               )
             }
@@ -535,7 +499,6 @@ function Step4({form}){
                       </TreeSelect>
                     )}
                   </Form.Item>
-                  {Tips(`${(window as any).RCi18n({ id: 'Marketing.ProductsCommonTips' })}${(window as any).RCi18n({ id: 'Marketing.Attribute' })}.`)}
                 </>
               )
             }
@@ -604,9 +567,6 @@ function Step4({form}){
                 )}
                 <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
               </Form.Item>
-              {
-                (purchaseType === 1 || purchaseType === 2) && Tips(<FormattedMessage id="Marketing.QuantityTips" />)
-              }
             </>
           )
         }
@@ -645,9 +605,6 @@ function Step4({form}){
                 )}
                 <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
               </Form.Item>
-              {
-                (purchaseType === 1 || purchaseType === 2) && Tips(<FormattedMessage id="Marketing.AmountTips" />)
-              }
             </>
           )
         }

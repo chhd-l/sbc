@@ -27,14 +27,12 @@ class Line extends React.Component {
       tooltip: {
         trigger: 'axis',
         formatter:function(params) {
-          let res = ""
+          let res = ''
           params&&params.map((item,index)=>{
             if(index == 0) {
-              res += '<div style=" "> '+ item.seriesName + "：" + item.value + "<br>"
-              '</div>';
+              res += '<div style=" "> '+ item.seriesName + '：' + item.value + '<br>' + '</div>';
             }else {
-              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value) +unit.unit2
-              '</div>';
+              res += '<div style=" "> '+ item.seriesName + '：' + Number(item.value) +unit.unit2 + '</div>';
             }
           })
           return res

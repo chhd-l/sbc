@@ -22,5 +22,15 @@ export function fetchInterfaceList(filterParams = {}) {
     })
   });
 }
+//更新interface Log 状态
+export function updateLogStatus(filterParams = {}) {
+  return Fetch<TResult>('/intInterface/logStatus', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
 
 

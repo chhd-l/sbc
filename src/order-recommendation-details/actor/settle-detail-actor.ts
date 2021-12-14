@@ -46,7 +46,7 @@ export default class SettleDetailActor extends Actor {
   @Action('list:init')
   init(state: IMap, res) {
     return state.set('dataList', fromJS(res));
-    const { content, pageSize, total } = res;
+    // const { content, pageSize, total } = res;
     /* return state.withMutations((state) => {
       state
         .set('total', total)

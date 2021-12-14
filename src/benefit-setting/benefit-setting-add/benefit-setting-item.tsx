@@ -107,7 +107,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
         let errorObject = {};
 
         form.validateFields((err, values) => {
-            form.validateFields
+            // form.validateFields
 
             console.log('Received values of form: ', values);
             if (!err) {

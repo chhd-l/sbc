@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Upload, Form, Button, Row, Col, Input, Radio, message, Icon} from 'antd';
-import {checkCompanyInfoExists, cityList, saveStoreDetail} from "../webapi";
+import {Upload, Form, Button, Row, Col, Input, Select, Radio, message, Icon} from 'antd';
+import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const } from '../../../../web_modules/qmkit';
+import { Const } from 'qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
@@ -18,6 +19,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
 
   const [logoFileList,setLogoFileList] = useState([])
   const [iconFileList,setIconFileList] = useState([])
+
+  const [countryList, setCountryList] = useState([])
 
   useEffect(()=>{
     if(store){
@@ -40,6 +43,12 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     }
 
   },[store])
+
+  useEffect(() => {
+    if (Const.SITE_NAME !== 'MYVETRECO') {
+      getCountryList().then(list => setCountryList(list));
+    }
+  }, []);
 
   const toNext = async (e)=>{
     e.preventDefault();
@@ -74,15 +83,15 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               if(err){
                 setLoading(false)
               }else {
-                setStep(3)
+                setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5)   //FGS去掉第4、5步
               }
             })
-          }else {
+          } else {
             form.setFields({
               storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}
             })
+            setLoading(false)
           }
-          setLoading(false)
         })
       }
     });
@@ -206,13 +215,25 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     })
   }
 
+  const validatePostCode = (rules, value, callback) => {
+    if (value === '') {
+      callback();
+    } else if (Const.SITE_NAME === 'MYVETRECO' && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
+      callback('Enter a valid postcode, example: 1234 AB');
+    } else if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
+      callback('Please enter a valid postcode');
+    } else {
+      callback();
+    }
+  };
+
 
   const SplicingHtml = (val)=>{
     return `<div style="border-color: inherit"> <div class="text-center max-w-6xl m-auto px-2 hidden" style="border-color: inherit" > <h1 class="text-32px pt-12 pb-9">Important Notice</h1> <p class="text-lg"> Due to an increase in demand, you preferred product may be currently unavailable. <br /> Yor pet's health is our top priority, and were working hard to ensure their formulas are Hack in stock soon. <br /> Thank you for your patience </p> <p class="py-10 text-lg" style="border-color: inherit"><i class="icon iconfont text-4xl font-medium">&#xe61b;</i> <span class="px-1 lg:px-5"> 30% off first purchase + 5% off every autoship order </span> <button class="rounded-full py-1 px-5 border-solid border-2 mt-2" style="border-color: inherit" ><a href="/subscription-landing"> Join the Autoship </a></button> </p> </div> <div class="bg-gray-100 h-2 hidden"></div> <div class="max-w-6xl m-auto grid grid-cols-12 flex items-center text-center lg:text-left pt-8 pb-6"> <div class="col-span-12 lg:col-span-9"> <h6 class="text-32px pb-7">Introduction</h6> <p class="pr-2 lg:pr-60 pl-2 lg:pl-0 text-lg pb-8 text-gary-999"> ${val} </p> <img src="/aboutus/shop_logo.png" alt="" /> </div> <div class="col-span-12 lg:col-span-3"> <img class="inline-block" src="/aboutus/cat.png" alt="" /> </div> </div> </div>`
   }
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">3 / 5 Tell us more about your store</div>
+      <div className="vmargin-level-4 align-item-center word big">3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} Tell us more about your store</div>
 
       <div style={{width:800,margin:'0 auto'}}>
         <Row gutter={[24,12]}>
@@ -292,10 +313,10 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="Sell to clinic" name="sellToClinic">
                 {getFieldDecorator('sellToClinic', {
-                  rules: [{ required: true, message: 'Please input Sell to clinic!' }],
+                  rules: [{ required: Const.SITE_NAME === 'MYVETRECO', message: 'Please input Sell to clinic!' }],
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -311,17 +332,31 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'none':'block'}}>
+              <FormItem label="Country" name="countryCode">
+                {getFieldDecorator('countryCode', {
+                  rules: [{ required: Const.SITE_NAME !== 'MYVETRECO', message: 'Please select a country' }],
+                  initialValue: ''
+                })(
+                  <Select showSearch size="large">
+                    {countryList.map((op, idx) => (
+                      <Option key={idx} value={op.countryCode}>{op.countryName}</Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem> 
+            </Col>
             <Col span={12}>
               <FormItem label="Postcode" name="postcode">
                 {getFieldDecorator('postcode', {
-                  rules: [{ pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+                  rules: [{ validator: validatePostCode }],
                   initialValue: ''
                 })(
                   <Input size="large" />
                 )}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="City" name="cityId">
                 {getFieldDecorator('cityId', {
                   initialValue: {key:'',label:''}
@@ -338,7 +373,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
               <FormItem label="Introduction" name="introduction">
                 {getFieldDecorator('introduction', {
                   initialValue: ''
@@ -370,6 +405,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 </div>
               </div>
             </Col>
+          </Row>
+          <Row gutter={[24,12]}>
             <Col span={12} className="align-item-right">
               <Button size="large" onClick={() => setStep(1)}>Back</Button>
             </Col>

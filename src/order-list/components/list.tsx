@@ -243,7 +243,8 @@ class ListView extends React.Component<any, any> {
 
   //判断价格显示位数，针对Individualization类型小数位数特殊处理
   judgePriceNum(price,subscriberType){
-    return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    // return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    return price&&price.toFixed(2)
   }
 
   _renderLoading() {
@@ -327,8 +328,13 @@ class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogethe" />
                               </span>
                             )}
+                            {v.get('goodWillFlag') === 1 && (
+                              <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                                <FormattedMessage id="Order.goodwillOrder" />
+                              </span>
+                            )}
                             {v.get('isAutoSub') && (
-                              <span style={styles.platform}>
+                              <span style={styles.platform} className="order_list_subscription_flag">
                                 <FormattedMessage id="Order.subscription" />
                               </span>
                             )}
@@ -339,6 +345,7 @@ class ListView extends React.Component<any, any> {
                                   left: '0',
                                   top: '20px'
                                 }}
+                                className="order_list_ordernumber"
                               >
                                 <Tooltip
                                   overlayStyle={{
@@ -483,7 +490,7 @@ class ListView extends React.Component<any, any> {
 
                           <AuthWrapper functionName="fOrderDetail001">
                             <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails"/>
+                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails order_list_detail"/>
                             </Tooltip>
                           </AuthWrapper>
                         </span>
@@ -540,7 +547,8 @@ class ListView extends React.Component<any, any> {
                       {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
                       {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null} */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2)}
+                      {/* {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2)} */}
+                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(2) : tradePrice.toFixed(2)}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
@@ -727,6 +735,15 @@ const styles = {
     marginLeft: 5,
     border: ' 1px solid var(--primary-color)',
     color: 'var(--primary-color)',
+    borderRadius: 5
+  },
+  goodwillColor: {
+    fontSize: 12,
+    padding: '1px 3px',
+    display: 'inline-block',
+    marginLeft: 5,
+    border: ' 1px solid #2faf2b',
+    color: '#2faf2b',
     borderRadius: 5
   }
 } as any;

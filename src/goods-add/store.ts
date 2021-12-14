@@ -1544,6 +1544,8 @@ export default class AppStore extends Store {
           widthUnit: item.get('widthUnit') || 'mm',
           height: item.get('height') || 0,
           heightUnit: item.get('heightUnit') || 'mm',
+          defaultSku: item.get('defaultSku'),
+          displayOnShop: item.get('displayOnShop')
         })
       );
     });

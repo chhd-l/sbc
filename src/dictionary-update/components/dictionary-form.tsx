@@ -186,7 +186,7 @@ class DictionaryForm extends Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Value">
+        <FormItem label="ValueEn">
           {getFieldDecorator('valueEn', {
             rules: [
               {
@@ -201,6 +201,27 @@ class DictionaryForm extends Component<any, any> {
                 const value = (e.target as any).value;
                 this.onFormChange({
                   field: 'valueEn',
+                  value
+                });
+              }}
+            />
+          )}
+        </FormItem>
+        <FormItem label="Value">
+          {getFieldDecorator('value', {
+            rules: [
+              {
+                required: true,
+                message: 'Please input Value!'
+              },
+              { max: 200, message: 'Exceed maximum length!' }
+            ]
+          })(
+            <Input
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onFormChange({
+                  field: 'value',
                   value
                 });
               }}

@@ -81,8 +81,10 @@ export default function Step6({setLoading}) {
         isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,//改版用到的字段
         fullBuyPrice: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
         fullbuyCount: formData.Conditions.CartLimit === 2 ? formData.Conditions.fullItem : null,
-        couponJoinLevel: formData.Conditions.joinLevel === -4 ? 0 : formData.Conditions.joinLevel,
+        couponJoinLevel: formData.Conditions.joinLevel,
         segmentIds:  formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],//改版用到的字段
+        emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
+
         scopeType: switchFile(formData.Conditions.scopeType),//改版用到的字段
         storeCateIds: formData.Conditions.scopeType === 2 ? getAttributeValue(formData.Conditions.storeCateIds) : [],//改版用到的字段
         customProductsType: formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
@@ -91,10 +93,11 @@ export default function Step6({setLoading}) {
         /**
          * 第五步
          */
-        couponPromotionType: formData.Advantage.couponPromotionType,//改版用到的字段
+        couponPromotionType: formData.Advantage.couponPromotionType === 4 ? 2 : formData.Advantage.couponPromotionType,//gift字段为2
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
         couponDiscount: formData.Advantage.couponPromotionType === 1 ? parseInt(formData.Advantage.couponDiscount)/100 : 0,
         limitAmount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
+        fullGiftDetailList: formData.Advantage.couponPromotionType === 4 ? formData.Advantage.fullGiftLevelList[0].fullGiftDetailList: [],
         /**
          * 未用到
          */
@@ -161,14 +164,16 @@ export default function Step6({setLoading}) {
 
           fullReductionLevelList: [{
             key: makeRandom(),
-            fullAmount: formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
-            fullCount: formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             reduction: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
           }],
           /**
            * 第五步
            */
           marketingSubscriptionReduction: {
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             firstSubscriptionOrderReduction:formData.Advantage.firstSubscriptionOrderReduction,
             restSubscriptionOrderReduction:formData.Advantage.restSubscriptionOrderReduction,
           },//订阅打折
@@ -205,11 +210,7 @@ export default function Step6({setLoading}) {
           /**
            * 第四步
            */
-          promotionType: formData.Conditions.promotionType,
-          isSuperimposeSubscription: formData.Conditions.isSuperimposeSubscription,
-          joinLevel: (formData.Conditions.joinLevel === 0 || formData.Conditions.joinLevel === -4) ? -1 : formData.Conditions.joinLevel,//coupon Promotion兼容处理
-          segmentIds: formData.Conditions.joinLevel === -3 ? [formData.Conditions.segmentIds] : [],
-          scopeType: formData.Conditions.scopeType,
+          ...commonParams.Conditions,
 
           marketingFreeShippingLevel: {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
@@ -257,8 +258,8 @@ export default function Step6({setLoading}) {
 
           fullDiscountLevelList: [{
             key: makeRandom(),
-            fullAmount:  formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
-            fullCount:  formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2 && (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             discount: parseInt(formData.Advantage.couponDiscount)/100,
             limitAmount:formData.Advantage.limitAmount,
           }],
@@ -266,6 +267,8 @@ export default function Step6({setLoading}) {
            * 第五步
            */
           marketingSubscriptionDiscount: {
+            fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
+            fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
             firstSubscriptionOrderDiscount: parseInt(formData.Advantage.firstSubscriptionOrderDiscount)/100 ,
             restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
@@ -314,7 +317,6 @@ export default function Step6({setLoading}) {
            * 第四步
            */
           ...commonParams.Conditions,
-          promotionType: 0,
           /**
            * 其他
            */
@@ -383,7 +385,7 @@ export default function Step6({setLoading}) {
               <div className="step-summary-item-text">{enumConst.promotionType[formData.Conditions.promotionType]}</div>
             </div>
             {
-              formData.Conditions.promotionType !== 2 && (
+              formData.Conditions.promotionType !== 3 && (
                 <div className="step-summary-item">
                   <div className="step-summary-sub-title"><FormattedMessage id="Marketing.DoesItCummulate" />:</div>
                   <div className="step-summary-item-text">{formData.Conditions.isSuperimposeSubscription === 0 ? 'Yes' : 'No'}</div>
@@ -395,14 +397,11 @@ export default function Step6({setLoading}) {
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.GroupOfCustomer" />:</div>
               <div className="step-summary-item-text">{enumConst.joinLevel[formData.Conditions.joinLevel]}</div>
             </div>
-            {
-              formData.Advantage.couponPromotionType !== 3 && (
-                <div className="step-summary-item">
-                  <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
-                  <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
-                </div>
-              )
-            }
+
+            <div className="step-summary-item">
+              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.ProductsInTheCart" />:</div>
+              <div className="step-summary-item-text">{enumConst.scopeType[formData.Conditions.scopeType]}</div>
+            </div>
 
             <div className="step-summary-item">
               <div className="step-summary-sub-title"><FormattedMessage id="Marketing.CartLimit" />:</div>
@@ -507,25 +506,24 @@ export default function Step6({setLoading}) {
                 </>
               ) : (
                 <>
-                  <div className="step-summary-item">
-                    <div className="step-summary-sub-title">
-                      {
-                        formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
-                          : <FormattedMessage id="Marketing.PromotionValue" />
-                      }
-                      :</div>
-                    <div className="step-summary-item-text">
-                      {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                      {formData.Advantage.couponPromotionType === 4 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
-                    </div>
-                  </div>
-
+                  {
+                    formData.Advantage.couponPromotionType !== 4 &&
+                    (<div className="step-summary-item">
+                      <div className="step-summary-sub-title">
+                        {
+                          formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
+                            : <FormattedMessage id="Marketing.PromotionValue" />
+                        }
+                        :</div>
+                      <div className="step-summary-item-text">
+                        {formData.Advantage.couponPromotionType === 0 && formData.Advantage.denomination + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                        {formData.Advantage.couponPromotionType === 1 && formData.Advantage.couponDiscount+'%' }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullItem && `${formData.Conditions.fullItem}${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
+                        {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
+                      </div>
+                    </div>)
+                  }
                   {
                     formData.Advantage.couponPromotionType === 1 && (
                       <div className="step-summary-item">
@@ -535,6 +533,28 @@ export default function Step6({setLoading}) {
                     )
                   }
                 </>
+              )
+            }
+            {
+              formData.Advantage.couponPromotionType === 4 &&
+              (
+                <div className="step-summary-item">
+                  <div className="step-summary-sub-title">
+                    {
+                      formData.PromotionType.typeOfPromotion === 1 ? <FormattedMessage id="Marketing.CouponValue" />
+                        : <FormattedMessage id="Marketing.PromotionValue" />
+                    }
+                    :</div>
+                  <div className="step-summary-item-text">
+                    <>
+                      {
+                        (formData.Advantage.selectedGiftRows || []).map(item=>
+                          <span style={{paddingRight:6}}>{item.goodsInfoName}</span>
+                        )
+                      }
+                    </>
+                  </div>
+                </div>
               )
             }
           </div>

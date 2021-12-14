@@ -122,7 +122,7 @@ export default class ProductGridSKU extends React.Component<any, any> {
         <DataGrid
           loading={loading}
           rowKey='goodsInfoId'
-          dataSource={goodsInfoPage.content && goodsInfoPage.content}
+          dataSource={goodsInfoPage && goodsInfoPage.content}
           isScroll={false}
           pagination={{
             total: goodsInfoPage.totalElements,

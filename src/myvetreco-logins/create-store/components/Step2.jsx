@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Row, Col, Spin, Select } from 'antd';
 import { checkCompanyInfoExists, saveLegalInfo } from "../webapi";
 import { FormattedMessage } from 'react-intl';
+import { Const } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -53,7 +54,7 @@ const { Option } = Select;
   };
 
   const onChangePhoneNumber = (e) => {
-    if (e && !e.target.value.startsWith('+31')) {
+    if (Const.SITE_NAME === 'MYVETRECO' && e && !e.target.value.startsWith('+31')) {
       const temp = e.target.value;
       setTimeout(() => {
         form.setFieldsValue({
@@ -63,9 +64,19 @@ const { Option } = Select;
     }
   };
 
+  const validatePhoneNumber = (rules, value, callback) => {
+    if (Const.SITE_NAME === 'MYVETRECO' && !/^\+31[0-9]{9}$/.test(value)) {
+      callback('Please input the right format: +31xxxxxxxxx');
+    } else if (!/^[0-9+-\\(\\)\s]{6,25}$/.test(value)) {
+      callback('Please input a right phone number');
+    } else {
+      callback();
+    }
+  };
+
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">2 / 5  Fill in legal information and contact person</div>
+      <div className="vmargin-level-4 align-item-center word big">2 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'}  Fill in legal information and contact person</div>
       <div style={{ width: 800, margin: '20px auto' }}>
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 12]}>
@@ -78,7 +89,7 @@ const { Option } = Select;
               </FormItem>
 
             </Col> */}
-            <Col span={12}>
+            <Col span={12} style={{display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none'}}>
               <FormItem label="Type of business">
                 {getFieldDecorator('typeOfBusiness', {
                   rules: [{ required: true, message: 'Please input Type of business!' }],
@@ -100,10 +111,10 @@ const { Option } = Select;
                 })(<Input size="large"/>)}
               </FormItem>
             </Col>
-            <Col span={12}>
+            <Col span={12} style={{display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none'}}>
               <FormItem label="Chamber of Commerce number">
                    {getFieldDecorator('commerceNumber', {
-                  rules:[{ required: true, message: 'Please input Chamber of Commerce number!' }],
+                  rules:[{ required: Const.SITE_NAME === 'MYVETRECO', message: 'Please input Chamber of Commerce number!' }],
                  initialValue: legalInfo?.commerceNumber??''
                 })( <Input size="large"/>)}
                
@@ -140,7 +151,7 @@ const { Option } = Select;
               <FormItem label="Phone number">
                 {getFieldDecorator('contactPhone', {
                   rules:[
-                    { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
+                    { required: true, validator: validatePhoneNumber }
                   ],
                   initialValue: legalInfo?.contactPhone??''
                 })(

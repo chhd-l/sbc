@@ -122,25 +122,6 @@ class SubscriptionDetail extends React.Component<any, any> {
       });
   }
 
-  //查询frequency
-  // querySysDictionary = (type: String) => {
-  //   webapi
-  //     .querySysDictionary({ type: type })
-  //     .then((data) => {
-  //       const { res } = data;
-  //       if (res.code === Const.SUCCESS_CODE) {
-  //         this.setState({
-  //           frequencyList: res.context.sysDictionaryVOS
-  //         });
-  //       } else {
-  //         message.error('Unsuccessful');
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       message.error('Unsuccessful');
-  //     });
-  // };
-
   getSubscriptionDetail = (id: String) => {
     this.setState({
       loading: true
@@ -152,6 +133,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
+            subscribeSource: subscriptionDetail.subscribeSource,
             deliveryTimes: subscriptionDetail.deliveryTimes,
             subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : subscriptionDetail.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
@@ -531,8 +513,8 @@ class SubscriptionDetail extends React.Component<any, any> {
     if (num > 0) {
       let nlen = num.toString().split('.')[1]?.length;
       // subscriptionInfo.subscriptionType == 'Individualization' ? nlen = 4 : nlen = 2;
-      isNaN(nlen) ? 2 : nlen;
-      nlen > 4 ? nlen = 4 : nlen = nlen;
+      // isNaN(nlen) ? 2 : nlen;
+      nlen = nlen > 4 ? 4: nlen;
       if (subscriptionInfo.subscriptionType === 'Club') {
         nlen = 2;
       }
@@ -541,7 +523,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-
+  
   render() {
     const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
     const cartTitle = (
@@ -552,28 +534,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-    // const cartExtra = (
-    //   <div>
-    //     <Popconfirm placement="topRight" title="Are you sure skip next delivery?" onConfirm={() => this.skipNextDelivery(subscriptionInfo.subscriptionNumber)} okText="Confirm" cancelText="Cancel">
-    //       <Tooltip placement="top" title="Skip Next Delivery">
-    //         <Button type="link" style={{ fontSize: 16 }}>
-    //           <FormattedMessage id="Subscription.SkipNextDelivery"/>
-    //         </Button>
-    //       </Tooltip>
-    //     </Popconfirm>
-    //     {/* <Popconfirm
-    //       placement="topRight"
-    //       title="Are you sure order now?"
-    //       onConfirm={() => this.orderNow(subscriptionInfo.subscriptionNumber)}
-    //       okText="Confirm"
-    //       cancelText="Cancel"
-    //     >
-    //       <Button type="link" style={{ fontSize: 16 }}>
-    //         Order Now
-    //       </Button>
-    //     </Popconfirm> */}
-    //   </div>
-    // );
+   
     const columns = [
       {
         title: (
@@ -607,7 +568,8 @@ class SubscriptionDetail extends React.Component<any, any> {
             )}
             <p>
               {currencySymbol + ' '}
-              {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
+              {/* {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))} */}
               {/* {currencySymbol + this.getSubscriptionPrice(record.subscribePrice)} */}
             </p>
           </div>
@@ -920,7 +882,13 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               <Col span={11} className="basic-info">
                 <p>
-                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>{subscriptionInfo.subscriptionNumber}</span>
+                  <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>
+                    {subscriptionInfo.subscriptionNumber}
+                  </span>
+                  
+                  {subscriptionInfo?.subscribeSource === "SUPPLIER" ? (
+                    <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                  ) : null}
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionDate" /> :<span>{moment(new Date(subscriptionInfo.subscriptionTime)).format('YYYY-MM-DD HH:mm:ss')}</span>

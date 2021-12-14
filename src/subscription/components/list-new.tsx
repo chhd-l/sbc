@@ -256,8 +256,13 @@ export default class ListView extends React.Component<any, any> {
                           />
                         </span> */}
 
-                        <div style={{ width: 310, display: 'inline-block' }}>
+                        <div style={{ width: 310, display: 'inline-block' }} className="sub_list_subId">
                           <span style={{ marginLeft: 20, color: '#000' }}>{v.subscribeId} </span>
+                          {v?.subscribeSource === "SUPPLIER" ? (
+                            <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                              <FormattedMessage id="Order.goodwillOrder" />
+                            </span>
+                          ) : null}
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
@@ -447,5 +452,14 @@ const styles = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: 100
+  },
+  goodwillColor: {
+    fontSize: 12,
+    padding: '1px 3px',
+    display: 'inline-block',
+    marginLeft: 5,
+    border: ' 1px solid #2faf2b',
+    color: '#2faf2b',
+    borderRadius: 5
   }
 } as any;

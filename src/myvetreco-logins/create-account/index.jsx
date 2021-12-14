@@ -5,7 +5,6 @@ import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
 import { createStoreAccount } from './webapi';
 import './index.less';
-// import VIcon from '../../components/icon';
 
 import logo from '../assets/images/logo-s.png';
 import fgsLogo from '../../login-admin/img/logo.png';
@@ -84,9 +83,9 @@ function CreateAccount({ form }) {
               <span>Create an Account</span>
             </div>}
 
-            <FormItem name="email" rules={[{required:true,message:RCi18n({id:'Login.email_address_vld'})},{type:'email',message:RCi18n({id:'Login.email_address_vld1'})}]}>
+            <FormItem name="email">
               {getFieldDecorator('email', {
-                rules: [{required:true,message:RCi18n({id:'Login.email_address_vld'})}],
+                rules: [{required:true,type:'email',message:RCi18n({id:'Login.email_address_vld1'})}],
                 initialValue: ''
               })(
                 <Input size="large" placeholder={RCi18n({id:'Login.email_address'})} suffix={<i className="iconfont iconemail1" style={{ fontSize: 18, color: '#a0b0bb' }}></i>} />
@@ -117,7 +116,7 @@ function CreateAccount({ form }) {
               )}
             </FormItem>
 
-            <FormItem name="recommendationCode" className="password">
+            {Const.SITE_NAME === 'MYVETRECO' && <FormItem name="recommendationCode" className="password">
               {getFieldDecorator('recommendationCode', {
                 initialValue: ''
               })(
@@ -125,7 +124,7 @@ function CreateAccount({ form }) {
                   <Icon type="unordered-list" style={{fontSize: 20,color: '#a0b0bb'}}/>
                 } />
               )}
-            </FormItem>
+            </FormItem>}
 
             <div className="password">
               <Button loading={loading} type="primary" size="large" block htmlType="submit">{RCi18n({id:'Login.create_an_account'})}</Button>

@@ -23,7 +23,8 @@ class BankInformation extends React.Component<BankFormProps, any> {
         if (!errors) {
           resolve({
             ...values,
-            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument)
+            documentType: 'BANK_STATEMENT',
+            supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument, 'BANK_STATEMENT')
           });
         } else {
           reject('3');
@@ -59,7 +60,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
                 rules: [{ required: isBusiness, message: 'Please input IBAN' }],
                 initialValue: ''
               })(
-              <Input disabled={adyenAuditState !== 3} />
+              <Input disabled={adyenAuditState < 2} />
               )}
             </FormItem>
           </Col>

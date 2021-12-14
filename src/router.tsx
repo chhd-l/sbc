@@ -130,6 +130,11 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-detail')
   },
+  {
+    path: '/service-order-detail/:tid',
+    exact: true,
+    asyncComponent: () => import('./service-order-detail')
+  },
   //订单-详情
   {
     path: '/order-detail-limited/:tid',
@@ -166,6 +171,14 @@ const routes = [
     exact: true,
     asyncComponent: () => import('./order-return-edit')
   },
+
+  // service order
+  {
+    path: '/service-order',
+    exact: true,
+    asyncComponent: () => import('./service-order')
+  },
+
   //推荐列表
   {
     path: '/recommendation',
@@ -952,7 +965,7 @@ const routes = [
     path: '/product-price',
     asyncComponent: () => import('./product-price')
   },
-  
+
   {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')
@@ -1068,16 +1081,39 @@ const routes = [
   },
   {
     path: '/appointment-list',
-    asyncComponent: () => import('./appointment-list')
+    asyncComponent: () => import('./appointmention-list')
   },
   {
     path: '/appointment-add',
-    asyncComponent: () => import('./appointment-list/new')
+    asyncComponent: () => import('./appointmention-list/new')
   },
   {
     path: '/appointment-update/:id',
-    asyncComponent: () => import('./appointment-list/new')
+    asyncComponent: () => import('./appointmention-list/new')
   },
+
+  // {
+  //   path: '/appointmention-list',
+  //   asyncComponent: () => import('./appointmention-list')
+  // },
+  // {
+  //   path: '/appointmention-add',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  // {
+  //   path: '/appointmention-update/:id',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  {
+    path: '/appointment-details/:id',
+    asyncComponent: () => import('./appointmention-list/details')
+  },
+  {
+    path: '/appointment-schedular',
+    asyncComponent: () => import('./appointmention-list/schedular')
+  },
+
+
   {
     path: '/offline-checkout',
     asyncComponent: () => import('./offline-checkout')
@@ -1101,7 +1137,7 @@ const routes = [
     path: '/integration-dashboard',
     asyncComponent: () => import('./Integration/Dashboard')
   },
-  
+
   {
     path: '/integration-interface',
     asyncComponent: () => import('./Integration/Interface/interface-list')
@@ -1134,6 +1170,30 @@ const routes = [
     path: '/api-document',
     asyncComponent: () => import('./Integration/ApiDocument')
   },
+  {
+    path: '/resources-planning',
+    asyncComponent: () => import('./resources-list')
+  },
+  {
+    path: '/resources-setting/:id',
+    asyncComponent: () => import('./resources-list/planning-setting')
+  },
+  {
+    path: '/schedular',
+    asyncComponent: () => import('./resources-list/schedular')
+  },
+  {
+    path:'/survey-list',
+    asyncComponent: () => import('./survey-list')
+  },
+  {
+    path:'/new-survey',
+    asyncComponent: () => import('./survey-list/new-survey')
+  },
+  {
+    path:'/survey-detail/:id',
+    asyncComponent: () => import('./survey-list/survey-detail')
+  }
 ];
 
 const homeRoutes = [

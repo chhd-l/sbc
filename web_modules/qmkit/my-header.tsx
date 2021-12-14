@@ -41,7 +41,7 @@ import iconSpain from './images/icon/iconSpain.svg';
 import iconTurkey from './images/icon/iconTurkey.svg';
 import iconAmerica from './images/icon/iconAmerica.svg';
 import iconGermany from './images/icon/iconGermany.svg';
-import iconSweden from './images/icon/iconSweden.png';
+import iconSweden from './images/icon/iconSweden.svg';
 
 import { RCi18n, switchLogin } from 'qmkit';
 import tr from './lang/files/tr';
@@ -472,7 +472,11 @@ export default class MyHeader extends React.Component {
     if (pcDom || h5Dom || miniProgramDom) {
       menuPreview = (
         <Menu className="menuPreview">
-          {pcDom && pcDom}
+          {/* old code */}
+          {/* {pcDom && pcDom} */}
+
+           {/* change code */}
+          {pcDom}
           {/* {h5Dom && h5Dom}
           {miniProgramDom && miniProgramDom} */}
         </Menu>

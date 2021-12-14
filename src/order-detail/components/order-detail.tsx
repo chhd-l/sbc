@@ -9,7 +9,7 @@ import {
   getOrderStatusValue,
   getFormatDeliveryDateStr,
   RCi18n,
-  checkAuth
+  checkAuth, util
 } from 'qmkit';
 import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
@@ -159,13 +159,66 @@ class OrderDetailTab extends React.Component<any, any> {
     //收货人信息
     const consignee = detail.get('consignee')
       ? (detail.get('consignee').toJS() as Consignee | null)
-      : null;
+      : {
+        detailAddress: '',
+        name: '',
+        phone:'',
+        countryId: '',
+        country: '',
+        city: '',
+        province: '',
+        county: '',
+        cityId: '',
+        address: '',
+        detailAddress1: '',
+        detailAddress2: '',
+        rfc: '',
+        postCode: '',
+        firstName: '',
+        lastName: '',
+        comment: '',
+        entrance: '',
+        apartment: '',
+        area: '',
+        timeSlot: '',
+        deliveryDate: '',
+        workTime:'',
+      };
 
     //发票信息
-    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : null;
+    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : {
+      open: '',
+      type: '',
+      title: '',
+      projectName: '',
+      address:'',
+      address1: '',
+      address2: '',
+      contacts: '',
+      phone: '',
+      provinceId: '',
+      cityId:'',
+      province: '',
+      county: '',
+      countryId: '',
+      country: '',
+      firstName: '',
+      lastName:'',
+      postCode: '',
+      city: '',
+      comment: '',
+      entrance: '',
+      apartment:'',
+      area: '',
+    };
 
     //交易状态
     const tradeState = detail.get('tradeState');
+    //是否能下载发票
+    const canDownInvoice =
+      (tradeState.get('deliverStatus') === 'SHIPPED' ||
+        tradeState.get('deliverStatus') === 'DELIVERED') &&
+      tradeState.get('invoiceState') === 1;
 
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
@@ -352,11 +405,18 @@ class OrderDetailTab extends React.Component<any, any> {
     return (
       <div className="orderDetail">
         <div className="display-flex direction-row justify-between mb-20">
-          <label style={styles.greenText}>
-            <FormattedMessage
-              id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
-            />
-          </label>
+          <div>
+            <label style={styles.greenText}>
+              <FormattedMessage
+                id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
+              />
+            </label>
+            {canDownInvoice ? (
+              <a className="ml-20" onClick={() => {this._handleDownInvoice(detail)}}>
+                <FormattedMessage id="Download invoice" />
+              </a>
+            ) : null}
+          </div>
           {this._renderBtnAction(tid)}
         </div>
         <Row gutter={30}>
@@ -373,10 +433,15 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{detail.get('id')}</div>}
+                    title={<div>{detail.get('id')}{detail.get('goodWillFlag') === 1 ? (
+                      <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      ):''}</div>}
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
+                      {detail.get('goodWillFlag') === 1 && (
+                        <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      )}
                     </p>
                   </Tooltip>
                   <p>
@@ -658,10 +723,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.firstName}</div>}
+                    title={<div>{consignee?.firstName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
+                      <FormattedMessage id="Order.FirstName" />: {consignee?.firstName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -669,10 +734,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{consignee.lastName}</div>}
+                    title={<div>{consignee?.lastName}</div>}
                   >
                     <p className="overFlowtext">
-                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
+                      <FormattedMessage id="Order.LastName" />: {consignee?.lastName}
                     </p>
                   </Tooltip>
                   <Tooltip
@@ -945,6 +1010,19 @@ class OrderDetailTab extends React.Component<any, any> {
     await refreshGoodsRealtimeStock(tid);
     this.setState({ tableLoading: false });
   };
+
+  //下载发票 download invoice
+  _handleDownInvoice(detail) {
+    let orderInvoiceIdList = detail.getIn(['invoice','orderInvoiceIdList']).toJS()
+    let params = {
+      orderInvoiceIds:orderInvoiceIdList
+    };
+    const token = (window as any).token;
+    let result = JSON.stringify({ ...params, token: token });
+    let base64 = new util.Base64();
+    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
+    window.open(exportHref);
+  }
 
   _renderBtnAction(tid: string) {
     const { detail, onDelivery } = this.props.relaxProps;

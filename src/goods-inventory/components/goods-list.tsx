@@ -51,7 +51,7 @@ export default class CateList extends React.Component<any, any> {
             init(pageNum - 1, pageSize, stock);
           }
         }}
-        dataSource={dataList && dataList}
+        dataSource={dataList}
       >
         <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column

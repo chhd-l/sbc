@@ -206,7 +206,7 @@ class SkuForm extends React.Component<any, any> {
     return (
       <div style={{ marginBottom: 20 }}>
         {this.state.visible && <ProductTooltipSKU id={this.state.id} pid={this.state.pid} visible={this.state.visible} showModal={this.showProduct} />}
-        <Form>
+        <Form className="table-overflow">
           <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
         </Form>
         {
@@ -400,6 +400,26 @@ class SkuForm extends React.Component<any, any> {
                   </div>
                 )}
               </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //default sku
+    columns = columns.push({
+      title: <FormattedMessage id="Product.DefaultSKU" />,
+      key: 'defaultSku',
+      width: 80,
+      align: 'center',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={8}>
+              <Checkbox
+                checked={rowInfo.defaultSku === 1}
+                onChange={(e) => this._editGoodsItem(rowInfo.id, 'defaultSku', e.target.checked ? 1 : 0)}
+              />
             </Col>
           </Row>
         );
@@ -668,7 +688,7 @@ class SkuForm extends React.Component<any, any> {
 
     columns = columns.push({
       title: (
-        <div style={{marginRight: '81px'}}><FormattedMessage id="Product.On/Off shelves" /></div>
+        <div><FormattedMessage id="Product.On/Off shelves" /></div>
       ),
       key: 'addedFlag',
       render: (rowInfo) => {
@@ -695,6 +715,41 @@ class SkuForm extends React.Component<any, any> {
               )}
             </FormItem>
           </Col>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: (
+        <div><FormattedMessage id="Product.Displayonshop" /></div>
+      ),
+      key: 'displayOnShop',
+      align: 'left',
+      render: (rowInfo) => {
+
+        return (
+          <Row>
+            <Col span={8}>
+              <FormItem style={styles.tableFormItem}>
+              {goodsList.toJS().length == 1 ? ( goods.get('displayFlag') == 0 ? (<Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />): (
+                  <Icon type="eye" style={{ fontSize: 20, color: "#cccccc" }} />
+                ) ) : (<>
+                  {goods.get('displayFlag') == 0 ? ( <Icon type="eye-invisible" style={{ fontSize: 20, color: "#cccccc" }} />) : (
+                    <>
+                      {rowInfo.displayOnShop == 0? (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 1)}>
+                          <Icon type="eye-invisible" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      ) : (
+                        <div onClick={() => this._editGoodsItem(rowInfo.id, 'displayOnShop', 0)}>
+                          <Icon type="eye" style={{ fontSize: 20, color: "#E1021A" }} />
+                        </div>
+                      )}</>)}
+                    </>
+                  )}
+              </FormItem>
+            </Col>
+          </Row>
         );
       }
     });

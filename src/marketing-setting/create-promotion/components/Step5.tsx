@@ -28,7 +28,7 @@ function Step5({ form }) {
     }])
     if(match.params.id){
       setCouponPromotionType(formData.Advantage.couponPromotionType)
-      if(formData.subType === 4 || formData.subType === 5){
+      if(formData.subType === 4 || formData.subType === 5 || formData.Advantage.couponPromotionType){
         setFullGiftLevelList(formData.Advantage.fullGiftLevelList)
         setSelectedGiftRows(fromJS(formData.Advantage.selectedGiftRows) || fromJS([]))
       }
@@ -56,6 +56,7 @@ function Step5({ form }) {
         changeFormData(enumConst.stepEnum[4],{
           ...values,
           fullGiftLevelList,
+          selectedGiftRows:selectedGiftRows.toJS(),
         })
         setStep(5)
       }
@@ -76,13 +77,6 @@ function Step5({ form }) {
           couponPromotionType:0
         })
         setCouponPromotionType(0)
-      }else {
-        if(formData.Conditions.promotionType !== 0){
-          setFieldsValue({
-            couponPromotionType:0
-          })
-          setCouponPromotionType(0)
-        }
       }
     }
 
@@ -180,13 +174,9 @@ function Step5({ form }) {
               <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
               </Radio>
-              {
-                (formData.PromotionType.typeOfPromotion !== 1 && formData.Conditions.promotionType === 0 ) &&
-                <Radio value={4}>
-                  <FormattedMessage id="Marketing.Gifts" />
-                </Radio>
-              }
-
+              <Radio value={4}>
+                <FormattedMessage id="Marketing.Gifts" />
+              </Radio>
             </Radio.Group>
           )}
         </Form.Item>
@@ -457,7 +447,6 @@ function Step5({ form }) {
                   )
                 }
               </>
-
             )
             : (
               <>
@@ -586,32 +575,32 @@ function Step5({ form }) {
                     </div>
                   </Form.Item>
                 )}
-                {
-                  couponPromotionType === 4 && (
-                    <Form.Item wrapperCol={{offset: 0,span:24}} required={true} labelAlign="left">
-                      {
-                        getFieldDecorator(
-                          'rules',
-                          {}
-                        )(
-                          <GiftLevels
-                            form={form}
-                            selectedRows={selectedGiftRows}
-                            isNormal={false}
-                            fullGiftLevelList={fullGiftLevelList}
-                            onChangeBack={onRulesChange}
-                            isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
-                            GiftRowsOnChange={GiftRowsOnChange}
-                            noMulti={true}
-                          />
-                        )}
-                    </Form.Item>
-                  )
-                }
               </>
             )
         }
-
+        {/*promotion gift所有可选*/}
+        {
+          couponPromotionType === 4 && (
+            <Form.Item wrapperCol={{offset: 0,span:24}} required={true} labelAlign="left">
+              {
+                getFieldDecorator(
+                  'rules',
+                  {}
+                )(
+                  <GiftLevels
+                    form={form}
+                    selectedRows={selectedGiftRows}
+                    isNormal={false}
+                    fullGiftLevelList={fullGiftLevelList}
+                    onChangeBack={onRulesChange}
+                    isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
+                    GiftRowsOnChange={GiftRowsOnChange}
+                    noMulti={true}
+                  />
+                )}
+            </Form.Item>
+          )
+        }
 
       </Form>
 

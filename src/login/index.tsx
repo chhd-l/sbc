@@ -6,7 +6,7 @@ import AppStore from './store';
 const bg = require('./img/bg-1.png');
 const bg_login = require('./img/bg_login.png');
 import { withOktaAuth } from '@okta/okta-react';
-import { cache, history, Const } from 'qmkit';
+import { cache, history, Const, util } from 'qmkit';
 import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -40,9 +40,21 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
+    this.getMarsFooter()
   }
   componentWillUnmount(){
     document.getElementById('mars-footer-panel')?.remove() 
+  }
+  getMarsFooter = ()=>{
+    // 未登录不能区分国家，先不区分
+    // let country =  (window as any)?.countryEnum[JSON.parse(sessionStorage?.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0]||''
+    // let footerParamsMap ={
+    //   'mx':'shop-royalcanin-mx',
+    //   'de':'shop-royalcanin-de',
+    // }
+    // let footerParams = footerParamsMap[country]||'store-royalcanin-com'
+    // util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?${footerParams}`})
+    return util.loadJS({url: `https://footer.mars.com/js/footer.js.aspx?store-royalcanin-com`})
   }
   
   render() {

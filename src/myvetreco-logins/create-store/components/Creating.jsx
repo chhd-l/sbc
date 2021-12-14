@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useInterval } from 'ahooks';
-import { util, RCi18n, history, login, switchLogin, cache } from 'qmkit';
+import { util, RCi18n, history, login, switchLogin, cache, Const } from 'qmkit';
 import {finishCreateStore, queryStatus} from "../webapi";
 import { Icon, message } from 'antd';
 
@@ -22,14 +22,23 @@ const autoLogin = () => {
   }, (res) => {});
 };
 
-export default function Creating({userInfo,setStep}) {
-  let [statusList,setStatusList] = useState([
+const getInitStatusList = () => {
+  let statusList = [
     {title:'Contract Agreement', message: null, result: 'pending'},
     {title:'Legal Info', message: null, result: 'pending'},
-    {title:'Store Details', message: null, result: 'pending'},
-    {title:'Price Setting', message: null, result: 'pending'},
-    {title:'Payment Info', message: null, result: 'pending'},
-  ])
+    {title:'Store Details', message: null, result: 'pending'}
+  ];
+  if (Const.SITE_NAME === 'MYVETRECO') {
+    statusList = statusList.concat([
+      {title:'Price Setting', message: null, result: 'pending'},
+      {title:'Payment Info', message: null, result: 'pending'}
+    ]);
+  }
+  return statusList;
+}
+
+export default function Creating({userInfo,setStep}) {
+  let [statusList,setStatusList] = useState(getInitStatusList());
   let [count, setCount] = useState(0);
   let [loadingText, setLoadingText] = useState('Create');
   let [isPending, setIsPending] = useState(false);//是否有步骤在pending状态
@@ -42,7 +51,7 @@ export default function Creating({userInfo,setStep}) {
 
 
   useInterval(() => {
-    if (count < (errorIndex*-32) || count < -160) {
+    if (count < (errorIndex*-32) || count < (list.length*-32)) {
       if(errorIndex == 9){
         setLoadingText('Success');
         setClassText('ok');
@@ -143,7 +152,7 @@ export default function Creating({userInfo,setStep}) {
             {list.map((item, _index) =>
                 (
                     <li key={_index}>
-                      {_index + 1} of 5:{item.name}
+                      {_index + 1} of {list.length}:{item.name}
                       {
                         count < item.top && statusIcon(item.result)
                       }

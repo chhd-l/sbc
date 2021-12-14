@@ -214,7 +214,7 @@ export default class ProductSearchList extends React.Component<any, any> {
   _menu = () => {
     return (
       <Menu>
-        <Menu.Item>
+        {/* <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a
               onClick={()=>this.showModal('repair')}
@@ -222,7 +222,7 @@ export default class ProductSearchList extends React.Component<any, any> {
              <FormattedMessage id="Product.Repair index" />
             </a>
           </AuthWrapper>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item>
           <AuthWrapper functionName="f_goods_up_down">
             <a

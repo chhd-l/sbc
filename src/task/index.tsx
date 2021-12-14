@@ -1,6 +1,22 @@
 import React, { Component, LegacyRef } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Collapse, Breadcrumb, Icon } from 'antd';
+import { BreadCrumb, SelectGroup, Const, Headline, cache, RCi18n } from 'qmkit';
+import {
+  Form,
+  Row,
+  Col,
+  Select,
+  Input,
+  Button,
+  message,
+  Tooltip,
+  Table,
+  DatePicker,
+  Collapse,
+  Breadcrumb,
+  Icon,
+  notification,
+  Modal
+} from 'antd';
 import * as webapi from './webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import ListView from './components/list-view';
@@ -37,7 +53,8 @@ export default class Task extends React.Component<any, any> {
       ],
       taskForm: sessionStorage.getItem(cache.TASKFROMDATA) ? JSON.parse(sessionStorage.getItem(cache.TASKFROMDATA)) : { status: '' },
       queryType: sessionStorage.getItem(cache.TASKQueryType) ? sessionStorage.getItem(cache.TASKQueryType) : '0',
-      showAdvanceSearch: sessionStorage.getItem(cache.TASKSHOWSEARCH) === 'True' ? true : false
+      showAdvanceSearch: sessionStorage.getItem(cache.TASKSHOWSEARCH) === 'True' ? true : false,
+      exportLoading: false,
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.clickTaskMore = this.clickTaskMore.bind(this);
@@ -60,7 +77,7 @@ export default class Task extends React.Component<any, any> {
         }
       })
       .catch(() => {
-        message.error('Get data failed');
+        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
   }
 
@@ -79,9 +96,63 @@ export default class Task extends React.Component<any, any> {
       showAdvanceSearch: true,
       taskForm: taskForm
     });
-  }
+  };
+
+  handleExport = () => {
+    const { taskForm } = this.state;
+    console.log(taskForm)
+
+    // 只支持导出一年内的时间
+    const { dueTimeStart } = taskForm;
+    if (dueTimeStart) {
+      const isOver = moment(dueTimeStart).valueOf() < moment().subtract(1, 'y').valueOf();
+
+      if (isOver) {
+        message.error((window as any).RCi18n({id:'Task.ExportTaskTimeTips'}));
+        return;
+      }
+    }
+
+    this.setState({
+      exportLoading: true
+    })
+    webapi.exportTask(taskForm).then((data:any) => {
+      const res = data.res;
+
+      if (res.code === Const.SUCCESS_CODE) {
+        Modal.success({
+          width: 550,
+          centered: true,
+          content: RCi18n({ id: 'Public.exportConfirmTip' }),
+          okText: RCi18n({ id: 'Order.btnConfirm' }),
+          icon: '',
+          onOk: () => {
+            // this.props.history.goBack();
+          },
+          okButtonProps: {
+            style: {
+              marginRight: 200
+            }
+          }
+        });
+      } else {
+        message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+      }
+
+      this.setState({
+        exportLoading: false
+      })
+    }).catch(() => {
+      message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
+      this.setState({
+        exportLoading: false
+      })
+    });
+
+  };
+
   render() {
-    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch } = this.state;
+    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch, exportLoading } = this.state;
     return (
       <div>
         <Breadcrumb>
@@ -100,6 +171,9 @@ export default class Task extends React.Component<any, any> {
               <Headline title={title} />
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
+              <Button type="primary" className="export-task-button" onClick={this.handleExport} loading={exportLoading}>
+                <span><FormattedMessage id="Task.ExportTasks" /></span>
+              </Button>
               <span
                 className="advanceSearch"
                 onClick={() => {

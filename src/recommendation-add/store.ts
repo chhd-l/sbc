@@ -6,7 +6,7 @@ import * as webapi from './webapi';
 import SettleDetailActor from './actor/settle-detail-actor';
 import FillInPetInfoActor from './actor/fillin-pet-info'
 import moment from 'moment';
-
+import { fromJS, Set } from 'immutable';
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -18,31 +18,44 @@ export default class AppStore extends Store {
   bindActor() {
     return [new SettleDetailActor(), new FillInPetInfoActor()];
   }
-
+  uuid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
   init = async (param?: any) => {
     this.dispatch('loading:start');
     const { res } = await webapi.fetchFindById(param);
     if (res.code === Const.SUCCESS_CODE) {
-      const { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      let { goodsQuantity, appointmentVO, customerPet, storeId, suggest, expert, fillDate, optimal, pickup, paris, apptId, felinRecoId } = res.context;
+      fillDate=(fillDate.includes('Invalid')||!fillDate)?moment().format('YYYY-MM-DD'):fillDate
       const felinReco = { felinRecoId, storeId, apptId, expert, paris, suggest, pickup, fillDate, optimal }
-      let _tempWeight = customerPet.weight?JSON.parse(customerPet.weight):{}
-      let { measure = 0, measureUnit = '' } = _tempWeight
-      
-      customerPet.measure = measure;
-      customerPet.measureUnit = measureUnit;
-      customerPet.birthOfPets=moment(customerPet.birthOfPets).format('YYYY-MM-DD')
-      console.log(measure, measureUnit, 'customerPet', felinReco)
+      customerPet = customerPet && customerPet.map(item => {
+        let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
+        let { measure = 0, measureUnit = '' } = _tempWeight
+        item.measure = measure;
+        item.measureUnit = measureUnit;
+        item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
+        return item;
+      }) || []
+
       this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
     } else {
       this.dispatch('loading:end');
     }
   };
+
+  savepetsRecommendParams = (all) => {
+    this.dispatch('pets:recommendParams', all)
+  }
+
+
+
   initDistaptch = ({ felinReco, goodsQuantity, appointmentVO, customerPet, list }) => {
     this.transaction(() => {
-      this.dispatch('pets:felinReco', felinReco)
-      this.dispatch('pets:goodsQuantity', goodsQuantity);
-      this.dispatch('pets:appointmentVO', appointmentVO);
-      this.dispatch('pets:customerPet', customerPet);
+      this.savepetsRecommendParams({ appointmentVO, goodsQuantity, ...felinReco, customerPet })
       this.dispatch('pets:list', list)
 
       this.dispatch('loading:end');
@@ -51,7 +64,7 @@ export default class AppStore extends Store {
   onProductForm = async (param?: any) => {
     param = Object.assign(this.state().get('onProductForm').toJS(), param);
     this.dispatch('loading:start');
-    const res1 = await webapi.fetchproductTooltip();
+    const res1 = await webapi.fetchFelinRecoProducts(param);
     if (res1.res.code === Const.SUCCESS_CODE) {
       param.total = res1.res.context.goodsInfoPage.total;
       this.transaction(() => {
@@ -64,6 +77,12 @@ export default class AppStore extends Store {
     }
   };
 
+  //步骤
+  onChangeStep = (step) => {
+    this.dispatch(`pets:step`, step)
+  }
+
+
   onChangePestsForm = (params, type?: any) => {
     this.dispatch('loading:start');
     this.dispatch(`pets:${type}`, params)
@@ -73,7 +92,15 @@ export default class AppStore extends Store {
 
   fetchFelinSave = async (params = {}) => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchFelinSave(params)
+
+   let customerPet= params.customerPet.map(item=>{
+      return{
+        ...item,
+        weight:JSON.stringify({measure:item.measure,measureUnit:item.measureUnit})
+      }
+    })
+    let isSend=params.isSend===0?false:true
+    const { res } = await webapi.fetchFelinSave({...params,customerPet,isSend})
     if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }
@@ -91,62 +118,110 @@ export default class AppStore extends Store {
       const { settingVO, pets, felinReco } = res.context;
       let goodsQuantity = JSON.parse(felinReco?.goodsIds ?? '[]')
       let list = pets.map(item => {
-        let _tempWeight =item.weight?JSON.parse(item.weight):{}
-        item.measure = _tempWeight?.measure??0;
-        item.measureUnit = _tempWeight?.measureUnit??'Kg';
+        let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
+        item.measure = _tempWeight?.measure ?? 0;
+        item.measureUnit = _tempWeight?.measureUnit ?? 'kg';
         return item
       })
-      if(list.length>0){
-        list.map(item=>{
-          item.birthOfPets=moment(item.birthOfPets).format('YYYY-MM-DD')
+      if (list.length > 0) {
+        list.map(item => {
+          item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
         })
+      } 
+      let _recommendParams = this.state().get('recommendParams').toJS()
+      let _te={ ..._recommendParams,expert:settingVO.expertNames,fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
+        console.log(_te)
+      this.savepetsRecommendParams(_te)
+      this.dispatch('pets:list', list)
+      // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
+      // let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
+      // this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
+      if (settingVO.apptNo) {
+        message.success(res.message)
+      } else {
+        message.error((window as any).RCi18n({ id: 'Prescriber.appointmentIdNotExist' }))
       }
-      felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
-      let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
-      this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
-     if(settingVO.apptNo){
-      message.success(res.message)
-     }else{
-      message.error((window as any).RCi18n({id:'Prescriber.appointmentIdNotExist'}))
-     }
-      
+
     }
   }
-
-
-  //goods info 
-
-  getGoodsInfoPage = async () => {
+  //查询全部
+  getFillAutofindAllTitle = async (param) => {
     this.dispatch('loading:start');
-    const { res } = await webapi.fetchproductTooltip();
+    const { res } = await webapi.fetchFindAllCate(param)
     if ((res as any).code == Const.SUCCESS_CODE) {
-      let goodsInfoList = (res as any).context.goodsInfoList;
-      this.dispatch('goods:infoPage', goodsInfoList)
-      let goods = this.state().get('goodsQuantity')
-      let obj = {}, productSelect = []
-      goodsInfoList.map(item => {
-        obj[item.goodsInfoNo] = item
-      })
-      goods.map(item => {
-       let goodsInfoWeight:any=0,goodsInfoUnit=(obj[item.goodsInfoNo]?.goodsInfoUnit??'').toLowerCase();
-       obj[item.goodsInfoNo].goodsInfoWeight=obj[item.goodsInfoNo]?.goodsInfoWeight??0
-       if(goodsInfoUnit==='g'){
-          goodsInfoWeight=item.quantity*obj[item.goodsInfoNo].goodsInfoWeight
-       }else if(goodsInfoUnit==='kg'){
-          let d:any=(item.quantity*obj[item.goodsInfoNo].goodsInfoWeight)/1000
-          goodsInfoWeight=parseInt(d)
-       }
-
-        productSelect.push({ ...obj[item.goodsInfoNo], quantity: item.quantity ,goodsInfoWeight})
-      })
-      this.onProductselect(productSelect)
+      this.dispatch('pets:fillAutoList', res.context?.result??[])
     }
     this.dispatch('loading:end');
   }
 
+
+  getGoodsInfoPage = async () => {
+    this.dispatch('loading:start');
+
+    let goods = this.state().get('recommendParams').get('goodsQuantity').toJS()
+     const list=await Promise.all(goods.map(async(item)=>{
+     let {res}=await  webapi.fetchFelinRecoProducts({goodsSku:item.goodsInfoNo})
+      if ((res as any).code == Const.SUCCESS_CODE) {
+        let _item=res.context.goodsInfoPage.content;
+        if(_item.length>0){
+          
+          return {..._item[0],quantity:item.quantity}
+        }
+       return undefined;
+      }
+    }))
+    let _list=list.filter(item=>item!==undefined)
+    this.onProductselect(_list)
+    this.dispatch('loading:end');
+  }
+
+     
+
+  //goods info 
+//这个是查询全部fgs 的数据
+ /* getGoodsInfoPage = async () => {
+    this.dispatch('loading:start');
+
+    let goods = this.state().get('recommendParams').get('goodsQuantity').toJS()
+
+     const list=await Promise.all(goods.map(async(item)=>{
+     let {res}=await  webapi.fetchFelinRecoProducts({likeGoodsInfoNo:item.goodsInfoNo})
+      if ((res as any).code == Const.SUCCESS_CODE) {
+        res = (res as any).context;
+        res['goodsInfoPage'].content.map((goodInfo) => {
+          const cId = fromJS(res['goodses'])
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('cateId');
+          const cate = fromJS(res['cates']).find((s) => s.get('cateId') === cId);
+          goodInfo['cateName'] = cate ? cate.get('cateName') : '';
+  
+          const bId = fromJS(res['goodses'])
+            .find((s) => s.get('goodsId') === goodInfo.goodsId)
+            .get('brandId');
+          const brand =
+            res['brands'] == null
+              ? ''
+              : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
+          goodInfo['brandName'] = brand ? brand.get('brandName') : '';
+  
+          return goodInfo;
+        });        
+
+      let goodsInfoList = res['goodsInfoPage']['content']
+          if(goodsInfoList.length>0){
+            goodsInfoList[0].quantity=1
+            return goodsInfoList[0]
+          }
+       
+     }
+     }))
+     this.onProductselect(list)
+    this.dispatch('loading:end');
+  }
+*/
   //productselect
-  onProductselect = (addProduct) => {
-    this.dispatch('product:productselect', addProduct);
+  onProductselect = (addProduct=[]) => {
+   this.dispatch('product:productselect', addProduct);
   };
 
   //Create Link

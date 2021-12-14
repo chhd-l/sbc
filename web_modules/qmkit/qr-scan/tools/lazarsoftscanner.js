@@ -664,17 +664,17 @@ export default function getLazarSoftScanner() {
         var estAlignmentY = Math.floor(topLeft.Y + correctionToTopLeft * (bottomRightY - topLeft.Y));
 
         // Kind of arbitrary -- expand search radius before giving up
-        for (var i = 4; i <= 16; i <<= 1) {
+        // for (var i = 4; i <= 16; i <<= 1) {
           //try
           //{
-          alignmentPattern = this.findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, i);
-          break;
+          alignmentPattern = this.findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, 4);
+          // break;
           //}
           //catch (re)
           //{
           // try next round
           //}
-        }
+        // }
         // If we didn't find alignment pattern... well try anyway without it
       }
 
@@ -1758,19 +1758,17 @@ export default function getLazarSoftScanner() {
 
     var options = true;
     if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-      try {
-        navigator.mediaDevices.enumerateDevices().then(function (devices) {
-          devices.forEach(function (device) {
-            console.log('deb1');
-            if (device.kind === 'videoinput') {
-              if (device.label.toLowerCase().search('back') > -1) options = [{ sourceId: device.deviceId }];
-            }
-            console.log(device.kind + ': ' + device.label + ' id = ' + device.deviceId);
-          });
+      navigator.mediaDevices.enumerateDevices().then(function (devices) {
+        devices.forEach(function (device) {
+          console.log('deb1');
+          if (device.kind === 'videoinput') {
+            if (device.label.toLowerCase().search('back') > -1) options = [{ sourceId: device.deviceId }];
+          }
+          console.log(device.kind + ': ' + device.label + ' id = ' + device.deviceId);
         });
-      } catch (e) {
+      }).catch((e) => {
         console.log(e);
-      }
+      })
     } else {
       console.log('no navigator.mediaDevices.enumerateDevices');
     }
@@ -1889,8 +1887,8 @@ export default function getLazarSoftScanner() {
       for (var y = 0; y < qrcode.height; y++) {
         for (var x = 0; x < qrcode.width; x++) {
           var point = x * 4 + y * qrcode.width * 4;
-          qrcode.imagedata.data[point] = image[x + y * qrcode.width] ? 0 : 0;
-          qrcode.imagedata.data[point + 1] = image[x + y * qrcode.width] ? 0 : 0;
+          qrcode.imagedata.data[point] = 0;
+          qrcode.imagedata.data[point + 1] = 0;
           qrcode.imagedata.data[point + 2] = image[x + y * qrcode.width] ? 255 : 0;
         }
       }
@@ -1907,8 +1905,8 @@ export default function getLazarSoftScanner() {
       for (var y = 0; y < qRCodeMatrix.bits.Height; y++) {
         for (var x = 0; x < qRCodeMatrix.bits.Width; x++) {
           var point = x * 4 * 2 + y * 2 * qrcode.width * 4;
-          qrcode.imagedata.data[point] = qRCodeMatrix.bits.get_Renamed(x, y) ? 0 : 0;
-          qrcode.imagedata.data[point + 1] = qRCodeMatrix.bits.get_Renamed(x, y) ? 0 : 0;
+          qrcode.imagedata.data[point] = 0;
+          qrcode.imagedata.data[point + 1] = 0;
           qrcode.imagedata.data[point + 2] = qRCodeMatrix.bits.get_Renamed(x, y) ? 255 : 0;
         }
       }

@@ -53,7 +53,6 @@ export default class List extends React.Component<any, any> {
             return index + 1;
           }}
         />
-        />
         <Column
           title={<FormattedMessage id="bank" />}
           dataIndex="bankName"

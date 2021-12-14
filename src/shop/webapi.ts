@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, Const } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -185,6 +185,21 @@ export function getDictionaryByType(dictionaryType: String) {
     method: 'POST',
     body: JSON.stringify(params)
   });
+}
+
+/**
+ * 取所有city
+ * @returns 
+ */
+export function getCityData() {
+  if (Const.SITE_NAME === 'MYVETRECO') {
+    return Fetch<TResult>('/system-city/query-all').then((data) => {
+      data.res.context.sysDictionaryVOS = data.res.context.systemCityVO.map(item => ({...item,valueEn:item.cityName}));
+      return data;
+    });
+  } else {
+    return getDictionaryByType('city');
+  }
 }
 
 /**

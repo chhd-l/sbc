@@ -117,37 +117,7 @@ export default class GoodsList extends React.Component<any, any> {
               {rowInfo.num || 0}
             </div>
           );
-          {
-            /*
-            2018-04-09 暂时取消退货数量的修改,与江哥以及产品经理沟通后,原因如下:
-            1.因为目前只支持修改本次的退货商品数量,不支持修改还未退货的商品数量
-            2.营销满赠,赠品的种类也有可能变多或变少
-            <FormItem>
-              {
-                getFieldDecorator(rowInfo.skuId + index , {
-                  initialValue: rowInfo.num,
-                  rules: [{
-                    required: true, message: '请填写退货数量'
-                  }, {
-                    pattern: ValidConst.number, message: '退货数量只能是整数'
-                  },{
-                    validator: (rule, value, callback) => {
-                      const canReturnNum = rowInfo.canReturnNum
-
-                      if (value > canReturnNum) {
-                        callback('退货数量不可超过可退数量')
-                      }
-
-                      callback();
-                    }
-                  }],
-                })(
-                    <InputNumber min={0} onChange={this._editGoodsNum.bind(this, rowInfo.skuId)} />
-                )
-              }
-              <p>{`可退量${rowInfo.canReturnNum}`}</p>
-            </FormItem>*/
-          }
+          
         }
       },
       {

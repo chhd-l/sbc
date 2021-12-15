@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline } from 'qmkit';
-import { Form, Icon, Input, Button, Row, Col, Spin } from 'antd';
+import { BreadCrumb, Const, Headline } from 'qmkit';
+import { Form, Icon, Input, Button, Row, Col, Spin, message } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
 import './index.less';
+import * as webApi from '@/setting-integration/webapi';
+import * as webapi from '@/setting-integration/webapi';
 
 // @ts-ignore
 @Form.create()
@@ -11,7 +13,9 @@ export default class ProductApi extends Component<any, any>{
   constructor(props: any) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      catalogData: {},
+      imageData: {},
     }
   }
 
@@ -20,21 +24,77 @@ export default class ProductApi extends Component<any, any>{
     this.initForm();
   }
 
-  initForm = () => {
+  initForm = async () => {
+    const { setFieldsValue } = this.props.form;
+    this.setState({loading:true})
+    let { res } = await webApi.getProductApiList();
+    this.setState({loading:false})
+    let catalogData = res.context.find(item => item.type === 'CATALOG');
+    let imageData = res.context.find(item => item.type === 'IMAGE');
+    this.setState({
+      catalogData: catalogData??{},
+      imageData: imageData??{},
+    })
+    if (res.code === Const.SUCCESS_CODE){
+      setFieldsValue({
+        'CatalogInfo.url': catalogData?.url,
+        'CatalogInfo.clientId': catalogData?.clientId,
+        'CatalogInfo.clientSecret': catalogData?.clientSecret,
+        'CatalogInfo.countryCode': catalogData?.countryCode,
+
+        'ImageInfo.url': imageData?.url,
+        'ImageInfo.clientId': imageData?.clientId,
+        'ImageInfo.clientSecret': imageData?.clientSecret,
+        'ImageInfo.countryCode': imageData?.countryCode,
+
+      })
+    }else {
+      message.warn(res.message)
+    }
 
   }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    const {
+      catalogData,
+      imageData
+    } = this.state;
+    this.props.form.validateFields( async (err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        let {
+          CatalogInfo,
+          ImageInfo
+        } = values;
+        let params = {
+          productSynchronizationConfigVos: [
+            {
+              ...catalogData,
+              ...CatalogInfo,
+            },
+            {
+              ...imageData,
+              ...ImageInfo,
+            }
+          ]
+        }
+        this.setState({loading: true});
+        let {res} = await webapi.updateProductApi(params);
+        this.setState({loading: false});
+
+        if (res.code === Const.SUCCESS_CODE){
+          message.success('Operate successfully');
+        }else {
+          message.warn(res.message);
+        }
       }
-    });
+    })
+
   };
 
   render() {
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -70,7 +130,7 @@ export default class ProductApi extends Component<any, any>{
                 )}
               </Form.Item>
               <Form.Item label={'Client ID'}>
-                {getFieldDecorator('CatalogInfo.clientID', {
+                {getFieldDecorator('CatalogInfo.clientId', {
                   rules: [
                     { required: true, message: 'Please input your Client ID!' },
                   ],
@@ -120,7 +180,7 @@ export default class ProductApi extends Component<any, any>{
                 )}
               </Form.Item>
               <Form.Item label={'Client ID'}>
-                {getFieldDecorator('ImageInfo.clientID', {
+                {getFieldDecorator('ImageInfo.clientId', {
                   rules: [
                     { required: true, message: 'Please input your Client ID!' },
                   ],

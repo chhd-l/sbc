@@ -58,3 +58,28 @@ export function updateHub(params:UpdateHubParams) {
     })
   });
 }
+
+/************** product-api *****************/
+export const getProductApiList = () => {
+  return Fetch<TResult>('/synchronizationConfig/find');
+};
+
+interface UpdateProductApiObj{
+  id: number,
+  url: string,
+  clientId: number,
+  type: string,
+  clientSecret: string,
+  countryCode: string,
+}
+
+export function updateProductApi(params:{
+  productSynchronizationConfigVos: Array<UpdateProductApiObj>
+}) {
+  return Fetch<TResult>('/synchronizationConfig/edit', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

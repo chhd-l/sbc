@@ -157,7 +157,7 @@ const Common = {
 
   // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
   // REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',
-
+  // REACT_APP_PRESCRIBER_Scope:['openid', 'profile', 'email'],
   // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa3fbl740oBK3vtO0x7',
   // REACT_APP_PRESCRIBER_ISSUER: 'https://accountpreview.royalcanin.com/oauth2/default',
 

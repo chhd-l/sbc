@@ -206,8 +206,8 @@ class NewAppointment extends React.Component<any, any> {
         }
 
         let cc = { ...params, ...values, consumerName, serviceTypeId: '6', appointmentTypeId: values.apptTypeId, }
-        console.log(cc);
-        return
+        // console.log(cc);
+        // return
         if (params.id) {
           d = await apptUpdate(cc)
         } else {

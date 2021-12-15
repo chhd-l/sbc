@@ -2571,6 +2571,8 @@ export default {
         "Setting.logo": "Logo",
         "Setting.standardAndFormats": "Standards and formats",
         "Setting.editOrderIdFormat": "Edit order ID format",
+        "Setting.HeaderAndFooter": "Header & Footer",
+        "Setting.header": "Header",
 
     },
     Menu: {

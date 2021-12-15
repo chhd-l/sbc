@@ -55,3 +55,17 @@ export function updateNavigationStatus(id, status) {
 export const getStoreInfo = () => {
   return Fetch<TResult>('/store/storeInfo');
 };
+
+/**
+ * navigation header & footer
+ */
+export function getStoreHeader() {
+  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
+}
+
+export function saveStoreHeader(params = {}) {
+  return Fetch<TResult>('/storeConfig/saveNavigation', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

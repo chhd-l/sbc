@@ -2563,7 +2563,7 @@ export default {
         'Setting.enableDeliveryDate': 'Enable Delivery Date',
         "Setting.countryCode":"Country Code",
 
-        "Setting.storeFavicon": "Store favicon",
+        "Setting.storeFavicon": "Shop favicon",
         "Setting.storeFaviconTip": "PC mall favicon, you can add up to one, the picture format is limited to ico, the recommended size is 36*36, and the size does not exceed 2M",
         "Setting.merchantType": "Merchant type",
         "Setting.selfEmployeed": "Self-employed",

@@ -63,7 +63,7 @@ class StoreDetail extends React.Component<any, any> {
           storeSignImage: data.res.context.storeSign ? [{ uid: 'store-sign-1', name: data.res.context.storeSign, size: 1, url: data.res.context.storeSign, status: 'done' }] : [],
           sequenceRequestList: orderSeqData.res.context
         });
-        this.props.form.setFieldsValue(Object.assign({}, (data.res.context ?? {}), { cityIds: data.res.context?.cityIds ?? [], languageId: data.res.context?.languageId ?? [] }));
+        this.props.form.setFieldsValue(Object.assign({}, (data.res.context ?? {}), { cityIds: data.res.context?.cityIds ?? [], languageId: data.res.context?.languageId ? data.res.context.languageId[0] : null }));
       } else {
         this.setState({ loading: false });
       }
@@ -153,6 +153,7 @@ class StoreDetail extends React.Component<any, any> {
     form.validateFields((err, values) => {
       if (!err) {
         this.setState({ loading: true });
+        values['languageId'] = [values['languageId']];
         Promise.all([
           storeInfoChanged
            ? editStoreInfo({ ...storeInfo, ...values, ...(storeLogoImage.length > 0 ? { storeLogo: storeLogoImage[0]['url'] } : {}), ...(storeSignImage.length > 0 ? { storeSign: storeSignImage[0]['url'] } : {}) })
@@ -279,7 +280,7 @@ class StoreDetail extends React.Component<any, any> {
             <div style={styles.title}><FormattedMessage id="Setting.logo"/></div>
             <Row gutter={[24,2]}>
               <Col span={24}>
-                <FormItem label={<FormattedMessage id="storeLogo" />} labelCol={{xs:{span:24},sm:{span:3}}} wrapperCol={{xs:{span:24},sm:{span:20}}}>
+                <FormItem label={<FormattedMessage id="Setting.shopLogo" />} labelCol={{xs:{span:24},sm:{span:3}}} wrapperCol={{xs:{span:24},sm:{span:20}}}>
                   <Row>
                     <Col span={3}>
                       <div className="clearfix logoImg">
@@ -336,16 +337,11 @@ class StoreDetail extends React.Component<any, any> {
             <div style={styles.title}><FormattedMessage id="Setting.standardAndFormats"/></div>
             <Row gutter={[24,2]}>
               <Col span={12}>
-                <FormItem label={<FormattedMessage id="Setting.storeLanguage" />} extra={<div style={{color:'#666'}}><FormattedMessage id="Setting.Thefirstisthedefaultlanguage" /></div>}>
+                <FormItem label={<FormattedMessage id="Setting.storeLanguage" />}>
                 {getFieldDecorator('languageId', {
-                    initialValue: storeInfo.languageId ?? []
+                    initialValue: null
                   })(
-                    <Select
-                      mode="multiple"
-                      showSearch
-                      filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                      onChange={this.modifyChangedStatus}
-                    >
+                    <Select onChange={this.modifyChangedStatus}>
                       {languageList.map((item) => (
                         <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.valueEn}

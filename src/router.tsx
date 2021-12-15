@@ -1193,7 +1193,38 @@ const routes = [
   {
     path:'/survey-detail/:id',
     asyncComponent: () => import('./survey-list/survey-detail')
-  }
+  },
+  {
+    path: '/store-details',
+    asyncComponent: () => import('./store-details')
+  },
+  {
+    path: '/store-consent',
+    asyncComponent: () => import('./store-consent')
+  },
+  {
+    path: '/store-tax',
+    asyncComponent: () => import('./store-tax')
+  },
+  /**
+   * setting-integration
+   * **/
+  {
+    path:'/hub',
+    asyncComponent: () => import('./setting-integration/hub')
+  },
+  {
+    path:'/OKTA',
+    asyncComponent: () => import('./setting-integration/OKTA')
+  },
+  {
+    path:'/pet-api',
+    asyncComponent: () => import('./setting-integration/pet-api')
+  },
+  {
+    path:'/product-api',
+    asyncComponent: () => import('./setting-integration/product-api')
+  },
 ];
 
 const homeRoutes = [

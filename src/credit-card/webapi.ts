@@ -41,3 +41,12 @@ export function deletePaymentsInfoByIds(store_id:string,id:string) {
     method: 'DELETE'
   });
 }
+
+export function getOriginClientKeys() {
+  return Fetch<TResult>(`/api/payment-method/origin-client-keys`, {
+    method: 'get'
+  });
+}
+
+
+

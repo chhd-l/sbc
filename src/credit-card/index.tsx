@@ -7,7 +7,7 @@ import CyberCreditCardForm from './payment-type/cyber';
 import './index.less'
 import { Breadcrumb, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { fetchGetPayPspList, fetchAddPaymentInfo } from './webapi';
+import { fetchGetPayPspList, fetchAddPaymentInfo ,getOriginClientKeys} from './webapi';
 
 export default class CreditCard extends Component<any> {
     state = {
@@ -61,6 +61,9 @@ export default class CreditCard extends Component<any> {
         const {fromSubscroption}=this.getRequest(history.location.search) as any;
         let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
         let cardType=this.payCardType(d);
+        getOriginClientKeys().then(res=>{
+            
+        })
         let clientKey = Const.PAYMENT[d]
         switch (d) {
             case 'de':

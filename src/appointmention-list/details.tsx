@@ -179,7 +179,7 @@ class Details extends Component {
                                                     </Form.Item>
                                                     <Form.Item label="Order type">
                                                         {/* {order?.orderType ?? ''} */}
-                                                         {['SINGLE_PURCHASE'].includes(order.orderType)? <FormattedMessage
+                                                         {['SINGLE_PURCHASE'].includes(order?.orderType??'')? <FormattedMessage
                                                             id={'Order.Singlepurchase'}
                                                         />:''}       
                                                        

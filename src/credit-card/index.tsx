@@ -7,32 +7,32 @@ import CyberCreditCardForm from './payment-type/cyber';
 import './index.less'
 import { Breadcrumb, Button } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { fetchGetPayPspList, fetchAddPaymentInfo ,getOriginClientKeys} from './webapi';
+import { fetchGetPayPspList, fetchAddPaymentInfo, getOriginClientKeys } from './webapi';
 
 export default class CreditCard extends Component<any> {
     state = {
-        adyenCardParam: {},
         payPspItem: [],
         storeId: -1,
         customerId: '',
+        payCode: '',
         customerAccount: '',
-        pspName: '',
-        fromSubscroption:false
+        clientKey: {},
+        fromSubscroption: false
     }
 
     componentDidMount() {
         this.paymentCardType()
 
     }
-     getRequest(url) { 
-        var theRequest = {},strs; 
-           var str = url.substr(1); 
-           strs = str.split("&"); 
-           for(var i = 0; i < strs.length; i ++) { 
-              theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]); 
-           } 
-        return theRequest; 
-     } 
+    getRequest(url) {
+        var theRequest = {}, strs;
+        var str = url.substr(1);
+        strs = str.split("&");
+        for (var i = 0; i < strs.length; i++) {
+            theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+        }
+        return theRequest;
+    }
     /**
      * 获取店铺支持银行卡
      */
@@ -41,40 +41,51 @@ export default class CreditCard extends Component<any> {
         const customerAccount = this.props.match.params.account || ''
         const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')
         const { res } = await fetchGetPayPspList(storeId)
-        let { payPspItemVOList, name } = res.context
+        let { payPspItemVOList } = res.context
         if (res.code === Const.SUCCESS_CODE) {
+            let payCode = payPspItemVOList[0].code;
             let list = payPspItemVOList[0]?.payPspItemCardTypeVOList ?? []
             this.setState({
+                payCode,
                 payPspItem: list,
                 storeId,
                 customerId,
                 customerAccount,
-                pspName: name,
-                
+            }, () => {
+                this.getOriginClientKeys(payCode)
             })
         }
     }
-
-
-    renderCreditForm() {
-        const { customerId, storeId, pspName } = this.state;
-        const {fromSubscroption}=this.getRequest(history.location.search) as any;
-        let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
-        let cardType=this.payCardType(d);
-        getOriginClientKeys().then(res=>{
-            
+    getOriginClientKeys = (payCode) => {
+        getOriginClientKeys().then(({ res }: any) => {
+            const originClientKeysList = res.context.originClientKeysList;
+            const item = originClientKeysList.find(item => item.pspItemCode === payCode);
+            if(!item)return;
+            this.setState({
+                clientKey: item || {}
+            })
         })
-        let clientKey = Const.PAYMENT[d]
-        switch (d) {
-            case 'de':
-            case 'fr':
-                return <AdyenCreditCardForm fromSubscroption={fromSubscroption} clientKey={clientKey} cardType={cardType} pspName={pspName} storeId={storeId} customerId={customerId} />
-            case 'mx':
-            case 'ru':
-            case 'tr':
-                return <PayuCreditCardForm fromSubscroption={fromSubscroption} storeId={storeId} cardType={cardType} customerId={customerId} clientKey={clientKey} pspName={pspName} />
-            default:
-                return <CyberCreditCardForm country={clientKey} />
+    }
+
+
+
+    renderCreditForm(payCode,clientKey) {
+        const { customerId, storeId } = this.state;
+        const { fromSubscroption } = this.getRequest(history.location.search) as any;
+        let d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+        let cardType = this.payCardType(d);
+        // console.log(clientKey, 'fromSubscroption')
+        if (clientKey) {
+            switch (payCode) {
+                case 'adyen_credit_card':
+                    return <AdyenCreditCardForm fromSubscroption={fromSubscroption} clientKey={clientKey} cardType={cardType} storeId={storeId} customerId={customerId} />
+                case 'payu_ru':
+                case 'payu_tu':
+                case 'payu':
+                    return <PayuCreditCardForm fromSubscroption={fromSubscroption} storeId={storeId} cardType={cardType} customerId={customerId} clientKey={clientKey} />
+                default:
+                    return <CyberCreditCardForm country={clientKey} />
+            }
         }
     }
 
@@ -94,7 +105,7 @@ export default class CreditCard extends Component<any> {
     }
 
     render() {
-        const { customerId, customerAccount, payPspItem } = this.state
+        const { customerId, customerAccount,payCode, payPspItem ,clientKey} = this.state
         return (
             // <AuthWrapper functionName="f_create_credit_card">
             <div>
@@ -105,9 +116,9 @@ export default class CreditCard extends Component<any> {
                     {payPspItem.map(item => {
                         return <img src={item.imgUrl} key={item.id} style={{ width: 40, marginRight: 10 }} />
                     })}
-                    <div style={{ marginTop: 10 }}>
-                        {this.renderCreditForm()}
-                    </div>
+                   {clientKey.pspItemCode&& <div style={{ marginTop: 10 }}>
+                        {this.renderCreditForm(payCode,clientKey)}
+                    </div>}
                 </div>
             </div>
             // </AuthWrapper>

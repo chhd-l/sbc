@@ -7,8 +7,13 @@ import { FormattedMessage } from 'react-intl';
 import {  Const, history, RCi18n } from 'qmkit';
 import translations from '../js/translations';
 interface IKey {
-  app_id: string
-  key: string
+  appId: string
+  environment: string
+  locale: string
+  openPlatformSecret: string
+  pspItemCode: string
+  pspName: string
+  publicKey: string
 }
 interface IAdyenCardParam {
   "storeId": number
@@ -25,14 +30,13 @@ interface IAdyenCardParam {
 export default class AdyenCreditCardForm extends Component {
   card:any
   props: {
-    clientKey:any
+    clientKey:IKey
     showPayButton?: boolean
     showBrandIcon?: boolean
     hasHolderName?: boolean
     holderNameRequired?: boolean
     taxNumber?: number
     customerId: string
-    pspName: string
     storeId: number
     cardType:any
     fromSubscroption?:any
@@ -61,21 +65,11 @@ export default class AdyenCreditCardForm extends Component {
    * 初始化adyen drop-in ui
    */
   initFormPay() {
-    const language = sessionStorage.getItem('language')
     const { hasHolderName, taxNumber, holderNameRequired, showPayButton, showBrandIcon ,cardType,clientKey,fromSubscroption} = this.props;
-    let _language={
-      'en-US':'en-US',
-      'tr':'tr-TR',
-      'de':'de-DE',
-      'fr':'fr-FR',
-      'ru':'ru-RU',
-       'mx':'es-ES'
-    };
-    
     const configuration: any = {
-      locale: _language[language],
-      environment: Const.PAYMENT_ENVIRONMENT,
-      clientKey: clientKey.key,//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
+      locale: clientKey.locale,
+      environment: clientKey.environment,
+      clientKey: clientKey?.openPlatformSecret??'',//"pub.v2.8015632026961356.aHR0cDovL2xvY2FsaG9zdDozMDAy.BQDRrmDX7NdBXUAZq_wvnpq1EPWjdxJ8MQIanwrV2XQ",
       paymentMethodsResponse: this.paymentMethodsResponse,
       onChange: this.handleOnChange,
       onAdditionalDetails: this.handleOnAdditionalDetails,
@@ -137,7 +131,7 @@ export default class AdyenCreditCardForm extends Component {
   async save() {
    const isDefault= this.card.data.storePaymentMethod
     const { adyenCardParam } = this.state;
-    const { customerId, pspName, storeId } = this.props
+    const { customerId, storeId } = this.props
     const { encryptedCardNumber, encryptedExpiryMonth, encryptedExpiryYear, encryptedSecurityCode, holderName } = adyenCardParam as any
     let params: IAdyenCardParam = {
       storeId,
@@ -147,7 +141,7 @@ export default class AdyenCreditCardForm extends Component {
       encryptedExpiryYear,
       encryptedSecurityCode,
       holderName,
-      pspName,
+      pspName:this.props.clientKey.pspName,
       isDefault:isDefault?1:0
     }
     this.setState({loading:true})

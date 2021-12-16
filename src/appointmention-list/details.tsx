@@ -1,10 +1,10 @@
 import { Breadcrumb, Card, Col, Form, Row, Spin, Table, Tabs } from 'antd'
 import moment from 'moment';
-import { Const } from 'qmkit';
+import { Const, getOrderStatusValue } from 'qmkit';
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
 import './index.less';
-import { apptDetail ,getAllDict} from './webapi';
+import { apptDetail, getAllDict } from './webapi';
 const { TabPane } = Tabs;
 
 class Details extends Component {
@@ -16,9 +16,9 @@ class Details extends Component {
         operations: [],
         order: {},
         petOwner: {},
-        expertType:{},
-        appointmentType:{},
-        serviceType:{}
+        expertType: {},
+        appointmentType: {},
+        serviceType: {}
     }
     componentDidMount() {
         this.initDict()
@@ -26,14 +26,14 @@ class Details extends Component {
             this.getAppointmentById(this.props.match.params.id);
         }
     }
-    initDict=async()=>{
-        const appointmentType=await getAllDict('appointment_type')
-        const expertType=await getAllDict('expert_type')
-        const serviceType=await getAllDict('service_type')
+    initDict = async () => {
+        const appointmentType = await getAllDict('appointment_type')
+        const expertType = await getAllDict('expert_type')
+        const serviceType = await getAllDict('service_type')
         this.setState({
-          expertType,
-          appointmentType,
-          serviceType
+            expertType,
+            appointmentType,
+            serviceType
         })
     }
     getAppointmentById = (id: number) => {
@@ -41,15 +41,15 @@ class Details extends Component {
         apptDetail(id)
             .then(({ res }: any) => {
                 if (res.code === Const.SUCCESS_CODE) {
-                    let data=res.context
-                    let text=data?.appointment?.appointmentTime
-                    console.log(text,'text')
-                    if(text){
-                        let time= text.split('#')
-                        let begin=moment(moment(time[0],'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
-                        end=moment(moment(time[1],'YYYY-MM-DD HH:mm')).format('HH:mm');
-                        data.appointment.appointmentTime=begin+'-'+end
-                      }
+                    let data = res.context
+                    let text = data?.appointment?.appointmentTime
+                    console.log(text, 'text')
+                    if (text) {
+                        let time = text.split('#')
+                        let begin = moment(moment(time[0], 'YYYY-MM-DD HH:mm')).format('YYYY-MM-DD HH:mm'),
+                            end = moment(moment(time[1], 'YYYY-MM-DD HH:mm')).format('HH:mm');
+                        data.appointment.appointmentTime = begin + '-' + end
+                    }
                     this.setState({ loading: true, ...res.context });
                 } else {
                     this.setState({ loading: false });
@@ -63,7 +63,7 @@ class Details extends Component {
         console.log(key);
     }
     render() {
-        let { appointment, operations, order, petOwner,expertType,appointmentType,serviceType }: any = this.state,
+        let { appointment, operations, order, petOwner, expertType, appointmentType, serviceType }: any = this.state,
             columns = [
                 {
                     title: 'Operator Type',
@@ -103,11 +103,11 @@ class Details extends Component {
             "0": 'Booked',
             "1": 'Arrived',
             "2": 'Canceled'
-          }
-          let owenType={
-           1:<FormattedMessage id="Appointment.Member" />,
-           2:<FormattedMessage id="Appointment.Guest" />
-          }
+        }
+        let owenType = {
+            1: <FormattedMessage id="Appointment.Member" />,
+            2: <FormattedMessage id="Appointment.Guest" />
+        }
         return (
             <div className="appointmention-detail">
                 <Breadcrumb>
@@ -131,13 +131,13 @@ class Details extends Component {
                                                     {appointment?.appointmentNo ?? ''}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment type">
-                                                    {(appointmentType?.objValue??{})[appointment?.appointmentTypeId ?? '']}
+                                                    {(appointmentType?.objValue ?? {})[appointment?.appointmentTypeId ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Appointment status">
                                                     {status[appointment?.appointmentStatus ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Expert type">
-                                                    {(expertType?.objValue??{})[appointment?.expertTypeId ?? '']}
+                                                    {(expertType?.objValue ?? {})[appointment?.expertTypeId ?? '']}
                                                 </Form.Item>
                                                 <Form.Item label="Expert name">
                                                     {appointment?.expertNames ?? ''}
@@ -166,13 +166,24 @@ class Details extends Component {
                                                         {order?.orderTime ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order status">
-                                                        {order?.status ?? ''}
+                                                       
+                                                        <FormattedMessage
+                                                            id={getOrderStatusValue(
+                                                                'OrderStatus',
+                                                                order?.status ?? ''
+                                                            )}
+                                                        />
                                                     </Form.Item>
                                                     <Form.Item label="Order  source">
                                                         {order?.source ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order type">
-                                                        {order?.orderType ?? ''}
+                                                        {/* {order?.orderType ?? ''} */}
+                                                         {['SINGLE_PURCHASE'].includes(order.orderType)? <FormattedMessage
+                                                            id={'Order.Singlepurchase'}
+                                                        />:''}       
+                                                       
+                                                        
                                                     </Form.Item>
                                                     <Form.Item label="Create by">
                                                         {order?.orderCreateType ?? ''}

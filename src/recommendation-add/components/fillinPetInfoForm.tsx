@@ -1,6 +1,6 @@
 import { Button, Checkbox, Col, DatePicker, Form, Icon, Input, message, Radio, Row, Select, Spin } from 'antd'
 import React, { Component } from 'react'
-import { QRScaner, noop, RCi18n } from 'qmkit';
+import { QRScaner, noop, RCi18n, cache } from 'qmkit';
 const { Option } = Select;
 import { querySysDictionary } from '../webapi'
 import { Relax } from 'plume2';
@@ -20,6 +20,7 @@ class FillinPetInfoForm extends Component {
     }
 
     state = {
+        country:'',
         stateCustomPet: {},
         sourceKeys: [],
         lifeList: [],
@@ -38,9 +39,29 @@ class FillinPetInfoForm extends Component {
 
     componentDidMount() {
         const { recommendParams } = this.props;
+
+             /**
+* RuTrFr
+label:Sensitivity
+dict:sensitivity_cat
+其他国家暂时都用：
+label:Special Need
+dict:specialneeds_cat
+         */
+
+let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+        console.log(d,'=====')
+
+        if(d==='us'){
+            this.getDictAlllist('specialneeds_cat', 'specialNeedsList');
+        }else{
+            this.getDictAlllist('sensitivity_cat', 'specialNeedsList');
+        }
+
         this.getDictAlllist('Lifestyle', 'lifeList');
         this.getDictAlllist('Activity', 'activityList');
-        this.getDictAlllist('specialNeeds', 'specialNeedsList');
+
+      
         this.getDictAlllist('CatBreed', 'petsBreedList')
         let _c = recommendParams?.customerPet ?? []
         let stateCustomPet = {};
@@ -51,6 +72,7 @@ class FillinPetInfoForm extends Component {
         })
         console.log(_c,'======cccc====')
         this.setState({
+            country:d,
             sourceKeys: _c.map(item => (item.petsId||item.uuid)),
             stateCustomPet
         }, () => {
@@ -174,6 +196,9 @@ class FillinPetInfoForm extends Component {
         const { lifeList, activityList, specialNeedsList, stateCustomPet, petsBreedList, weightList, fetching } = this.state
         const keys = getFieldValue('keys');
         
+
+
+
         return keys.length > 0 && keys.map((item, index) => (
             <Col span={12} key={item} >
                 <div style={{border:'1px solid #f8f8f8',marginTop:15, padding:'15px',boxShadow:'0 0 5px #f8f8f8'}}>
@@ -238,7 +263,7 @@ class FillinPetInfoForm extends Component {
                     </Col>
                     <Col span={12}>
                         {/* {RCi18n({ id: 'Prescriber.Special needs' })} */}
-                        <Form.Item label={RCi18n({ id: 'Prescriber.Sensitvities' })}>
+                        <Form.Item label={this.state.country==='us'? RCi18n({ id: 'Prescriber.Special needs' }):RCi18n({ id: 'Prescriber.Sensitvities' })}>
                             {getFieldDecorator(`customerPet[${item}].needs`, {
                                 initialValue: stateCustomPet[item]?.needs ?? '',
                                 //  rules: [{ required: true, message: 'Please select Sensitvities!' }],

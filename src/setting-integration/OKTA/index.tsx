@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const } from 'qmkit';
+import { BreadCrumb, Headline, Const, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Icon, Input, Button, Row, Col, Spin, message } from 'antd';
 import * as webApi from '../webapi';
@@ -10,6 +10,7 @@ import * as webapi from '@/setting-integration/webapi';
 // @ts-ignore
 @Form.create()
 export default class OKTA extends Component<any, any>{
+  private base64: any;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -17,6 +18,7 @@ export default class OKTA extends Component<any, any>{
       shopData: {},
       frontData: {},
     }
+    this.base64 = new util.Base64();
   }
 
   componentDidMount() {
@@ -40,17 +42,17 @@ export default class OKTA extends Component<any, any>{
         'OKTA.appName': frontData?.appName,
         'OKTA.oktaDomain': frontData?.oktaDomain,
         'OKTA.ciamDomain': frontData?.ciamDomain,
-        'OKTA.clientId': frontData?.clientId,
+        'OKTA.clientId': frontData?.clientId ? this.base64.urlDecode(frontData?.clientId):'',
         'OKTA.signOutRedirectUrls': frontData?.signOutRedirectUrls ?? null,
         'OKTA.signInRedirectUrls': frontData?.signInRedirectUrls ?? null,
 
         'Workforce.appName': shopData?.appName,
         'Workforce.oktaDomain': shopData?.oktaDomain,
         'Workforce.ciamDomain': shopData?.ciamDomain,
-        'Workforce.clientId': shopData?.clientId,
+        'Workforce.clientId': shopData?.clientId ? this.base64.urlDecode(shopData?.clientId):'',
+        'Workforce.clientSecret':  shopData?.clientSecret ? this.base64.urlDecode(shopData?.clientSecret):'',
         'Workforce.signOutRedirectUrls': shopData?.signOutRedirectUrls ?? null,
         'Workforce.signInRedirectUrls': shopData?.signInRedirectUrls ?? null,
-        'Workforce.clientSecret': shopData?.clientSecret,
       })
     }else {
       message.warn(res.message)
@@ -102,11 +104,11 @@ export default class OKTA extends Component<any, any>{
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 10 },
+        sm: { span: 8 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 },
+        sm: { span: 12 },
       },
     };
     const { loading } = this.state;
@@ -117,7 +119,7 @@ export default class OKTA extends Component<any, any>{
         <Spin spinning={loading}>
           <div className="container-search OKTA-warp">
             <Form {...formItemLayout}>
-              <Headline title={<FormattedMessage id="Menu.OKTA" />} />
+              <Headline title={'Shop'} />
               <Row>
                 <Col span={12}>
                   <Form.Item label={'Application name'}>
@@ -209,7 +211,7 @@ export default class OKTA extends Component<any, any>{
                 </Col>
               </Row>
 
-              <Headline title={'Workforce'} />
+              <Headline title={'Backend'} />
               <Row>
                 <Col span={12}>
                   <Form.Item label={'Application name'}>

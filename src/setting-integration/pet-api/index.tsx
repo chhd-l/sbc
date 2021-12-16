@@ -72,7 +72,7 @@ export default class PetApi extends Component<any, any>{
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 8 },
       },
     };
     const {loading} = this.state;
@@ -100,7 +100,7 @@ export default class PetApi extends Component<any, any>{
               </Form.Item>
               <Form.Item label={<FormattedMessage id='Setting.countryCode'/>} wrapperCol={{
                 xs: { span: 24 },
-                sm: { span: 8 },
+                sm: { span: 4 },
               }}>
                 {getFieldDecorator('countryCode', {
                   rules: [
@@ -113,12 +113,17 @@ export default class PetApi extends Component<any, any>{
                 )}
               </Form.Item>
             </Form>
-            <Row>
-              <Col span={8} offset={4}>
-                <Button onClick={this.handleSubmit}>Save</Button>
-              </Col>
-            </Row>
           </div>
+          <Row className='bar-button'>
+            <Col span={12}>
+              <Row>
+                <Col span={12}>
+                  <Button onClick={this.handleSubmit}>Save</Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
         </Spin>
       </div>
     );

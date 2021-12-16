@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline } from 'qmkit';
+import { BreadCrumb, Const, Headline, util } from 'qmkit';
 import { Form, Icon, Input, Button, Row, Col, Spin, message } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
@@ -10,6 +10,7 @@ import * as webapi from '@/setting-integration/webapi';
 // @ts-ignore
 @Form.create()
 export default class ProductApi extends Component<any, any>{
+  private base64: any;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -17,6 +18,8 @@ export default class ProductApi extends Component<any, any>{
       catalogData: {},
       imageData: {},
     }
+    this.base64 = new util.Base64();
+
   }
 
   componentDidMount() {
@@ -38,13 +41,13 @@ export default class ProductApi extends Component<any, any>{
     if (res.code === Const.SUCCESS_CODE){
       setFieldsValue({
         'CatalogInfo.url': catalogData?.url,
-        'CatalogInfo.clientId': catalogData?.clientId,
-        'CatalogInfo.clientSecret': catalogData?.clientSecret,
+        'CatalogInfo.clientId': catalogData?.clientId ? this.base64.urlDecode(catalogData?.clientId):'',
+        'CatalogInfo.clientSecret': catalogData?.clientSecret ? this.base64.urlDecode(catalogData?.clientSecret):'',
         'CatalogInfo.countryCode': catalogData?.countryCode,
 
         'ImageInfo.url': imageData?.url,
-        'ImageInfo.clientId': imageData?.clientId,
-        'ImageInfo.clientSecret': imageData?.clientSecret,
+        'ImageInfo.clientId': imageData?.clientId ? this.base64.urlDecode(imageData?.clientId):'',
+        'ImageInfo.clientSecret': imageData?.clientSecret ? this.base64.urlDecode(imageData?.clientSecret):'',
         'ImageInfo.countryCode': imageData?.countryCode,
 
       })
@@ -98,11 +101,11 @@ export default class ProductApi extends Component<any, any>{
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 6 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 },
+        sm: { span: 10 },
       },
     };
     const {loading} = this.state;
@@ -114,115 +117,139 @@ export default class ProductApi extends Component<any, any>{
           <div className="container-search ProductApi-warp">
             <Form {...formItemLayout}>
               <Headline title='Product Catalog Info' />
-              <Form.Item label={<FormattedMessage id='URL'/>}>
-                {getFieldDecorator('CatalogInfo.url', {
-                  rules: [
-                    { required: true, message: 'Please input your URL!' },
-                    {
-                      pattern: /[a-zA-z]+:\/\/[^s]*/,
-                      message: 'Please enter the correct URL!'
-                    }
-                  ],
-                })(
-                  <Input
-                    placeholder="URL"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Client ID'}>
-                {getFieldDecorator('CatalogInfo.clientId', {
-                  rules: [
-                    { required: true, message: 'Please input your Client ID!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Client ID"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Client secret'}>
-                {getFieldDecorator('CatalogInfo.clientSecret', {
-                  rules: [
-                    { required: true, message: 'Please input your Client secret!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Client secret"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Country Code'}>
-                {getFieldDecorator('CatalogInfo.countryCode', {
-                  rules: [
-                    { required: true, message: 'Please input your Country Code!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Country Code"
-                  />
-                )}
-              </Form.Item>
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={<FormattedMessage id='URL'/>}>
+                    {getFieldDecorator('CatalogInfo.url', {
+                      rules: [
+                        { required: true, message: 'Please input your URL!' },
+                        {
+                          pattern: /[a-zA-z]+:\/\/[^s]*/,
+                          message: 'Please enter the correct URL!'
+                        }
+                      ],
+                    })(
+                      <Input
+                        placeholder="URL"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label={'Client ID'}>
+                    {getFieldDecorator('CatalogInfo.clientId', {
+                      rules: [
+                        { required: true, message: 'Please input your Client ID!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Client ID"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={'Client secret'}>
+                    {getFieldDecorator('CatalogInfo.clientSecret', {
+                      rules: [
+                        { required: true, message: 'Please input your Client secret!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Client secret"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label={'Country Code'}>
+                    {getFieldDecorator('CatalogInfo.countryCode', {
+                      rules: [
+                        { required: true, message: 'Please input your Country Code!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Country Code"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Headline title='Product Image Info' />
-              <Form.Item label={<FormattedMessage id='URL'/>}>
-                {getFieldDecorator('ImageInfo.url', {
-                  rules: [
-                    { required: true, message: 'Please input your URL!' },
-                    {
-                      pattern: /[a-zA-z]+:\/\/[^s]*/,
-                      message: 'Please enter the correct URL!'
-                    }
-                  ],
-                })(
-                  <Input
-                    placeholder="URL"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Client ID'}>
-                {getFieldDecorator('ImageInfo.clientId', {
-                  rules: [
-                    { required: true, message: 'Please input your Client ID!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Client ID"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Client secret'}>
-                {getFieldDecorator('ImageInfo.clientSecret', {
-                  rules: [
-                    { required: true, message: 'Please input your Client secret!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Client secret"
-                  />
-                )}
-              </Form.Item>
-              <Form.Item label={'Country Code'}>
-                {getFieldDecorator('ImageInfo.countryCode', {
-                  rules: [
-                    { required: true, message: 'Please input your Country Code!' },
-                  ],
-                })(
-                  <Input
-                    placeholder="Country Code"
-                  />
-                )}
-              </Form.Item>
-
-
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={<FormattedMessage id='URL'/>}>
+                    {getFieldDecorator('ImageInfo.url', {
+                      rules: [
+                        { required: true, message: 'Please input your URL!' },
+                        {
+                          pattern: /[a-zA-z]+:\/\/[^s]*/,
+                          message: 'Please enter the correct URL!'
+                        }
+                      ],
+                    })(
+                      <Input
+                        placeholder="URL"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label={'Client ID'}>
+                    {getFieldDecorator('ImageInfo.clientId', {
+                      rules: [
+                        { required: true, message: 'Please input your Client ID!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Client ID"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={'Client secret'}>
+                    {getFieldDecorator('ImageInfo.clientSecret', {
+                      rules: [
+                        { required: true, message: 'Please input your Client secret!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Client secret"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item label={'Country Code'}>
+                    {getFieldDecorator('ImageInfo.countryCode', {
+                      rules: [
+                        { required: true, message: 'Please input your Country Code!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="Country Code"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
-            <Row>
-              <Col span={8} offset={4}>
-                <Button onClick={this.handleSubmit}>Save</Button>
-              </Col>
-            </Row>
-
           </div>
-
+          <Row className='bar-button'>
+            <Col span={12}>
+              <Row>
+                <Col span={12}>
+                  <Button onClick={this.handleSubmit}>Save</Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Spin>
       </div>
     );

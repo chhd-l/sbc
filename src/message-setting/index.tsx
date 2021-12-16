@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
-import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm, message, Spin, Radio, Select } from 'antd';
+import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm, message, Spin, Radio, Select, AutoComplete } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';
 import settingForm from '@/distribution-setting/components/setting-form';
@@ -251,23 +251,18 @@ class MessageSetting extends Component<any, any> {
                 </FormItem>
                 <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
                   {getFieldDecorator('fromEmail', {
-                    rules: [{ required: true, message: <FormattedMessage id="Marketing.PleaseInputSender" /> }],
+                    rules: [{ required: true, type: 'email', message: <FormattedMessage id="Order.offline.consumerEmailRequired" /> }],
                     initialValue: settingForm.fromEmail
                   })(
-                    <Select
+                    <AutoComplete
+                      dataSource={senderList}
                       onChange={(value) => {
                         this.onFormChange({
                           field: 'fromEmail',
                           value
                         });
                       }}
-                    >
-                      {
-                        senderList&&senderList.map((item,index)=>(
-                          <Option value={item} key={index}>{item}</Option>
-                        ))
-                      }
-                    </Select>
+                    />
                   )}
                 </FormItem>
                 <FormItem label={<FormattedMessage id="Marketing.AccessKeyID" />} style={styles.formItem}>

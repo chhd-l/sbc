@@ -2317,7 +2317,6 @@ export default {
   'PetOwner.PleaseInputPostCode':'Please input Post Code!',
   'PetOwner.Country':'Country',
   'PetOwner.PleaseInputCountry':'Please input Country!',
-  'PetOwner.City':'City',
   'PetOwner.PleaseSelectCity':'Please select City!',
   'PetOwner.AddressReference':'Address reference',
   'PetOwner.PleaseInputAddress1':'Please input Address 1!',

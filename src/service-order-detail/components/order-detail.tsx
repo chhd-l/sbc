@@ -6,7 +6,7 @@ import {
   Const,
   noop,
   cache,
-  getOrderStatusValue,
+  getFelineOrderStatusValue,
   getFormatDeliveryDateStr,
   RCi18n,
   checkAuth
@@ -341,23 +341,6 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       }
     ];
-    //ru
-    // if (storeId !== 123457934) {
-    //   columns.splice(
-    //     7,
-    //     0,
-    //     {
-    //       title: <FormattedMessage id="Order.RegulationDiscount" />,
-    //       width: '8%',
-    //       render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
-    //     },
-    //     {
-    //       title: <FormattedMessage id="Order.RealSubtotal" />,
-    //       width: '7%',
-    //       render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
-    //     }
-    //   );
-    // }
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderCategory'));
 
@@ -366,7 +349,7 @@ class OrderDetailTab extends React.Component<any, any> {
         <div className="display-flex direction-row justify-between mb-20">
           <label style={styles.greenText}>
             <FormattedMessage
-              id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
+              id={getFelineOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
             />
           </label>
           {this._renderBtnAction(tid)}
@@ -394,7 +377,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.OrderStatus" />:{' '}
                     <FormattedMessage
-                      id={getOrderStatusValue(
+                      id={getFelineOrderStatusValue(
                         'OrderStatus',
                         detail.getIn(['tradeState', 'flowState'])
                       )}
@@ -1043,7 +1026,6 @@ class OrderDetailTab extends React.Component<any, any> {
     const { detail, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
-    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
@@ -1071,29 +1053,8 @@ class OrderDetailTab extends React.Component<any, any> {
           )}
         </div>
       );
-    } else if (
-      Const.SITE_NAME !== 'MYVETRECO' &&
-      (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
-      (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
-      payState === 'PAID'
-    ) {
-      return (
-        <div>
-          <AuthWrapper functionName="fOrderDetail002">
-            <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-              <a
-                href="javascript:void(0);"
-                style={styles.pr20}
-                onClick={() => {
-                  onDelivery();
-                }}
-                className="iconfont iconbtn-shipping"
-              />
-            </Tooltip>
-          </AuthWrapper>
-        </div>
-      );
-    } else if (flowState === 'DELIVERED') {
+    }
+    if (flowState === 'DELIVERED') {
       return (
         <div>
           <AuthWrapper functionName="fOrderList003">

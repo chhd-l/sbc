@@ -14,6 +14,15 @@ export const OrderStatus = [
   { langKey: 'Order.rejected', name: 'Rejected', value: 'REJECTED', listShow: true } // listShow not work
 ];
 
+export const FelineOrderStatus = [
+  { langKey: 'Order.all', name: 'All', value: '0', listShow: true },
+  { langKey: 'Order.created', name: 'Created', value: 'INIT', listShow: true },
+  { langKey: 'Order.pendingReview', name: 'Pending review', value: 'PENDING_REVIEW', listShow: true },
+  { langKey: 'Order.Confirmed', name: 'Confirmed', value: 'TO_BE_DELIVERED', listShow: true },
+  { langKey: 'Order.Completed', name: 'Completed', value: 'COMPLETED', listShow: true },
+  { langKey: 'Order.cancelled', name: 'Cancelled', value: 'VOID', listShow: true },
+];
+
 export const ShippStatus = [
   { langKey: 'Order.notshipped', name: 'Not Shipped', value: 'NOT_YET_SHIPPED' },
   { langKey: 'Order.partiallyShipped', name: 'Partially Shipped', value: 'PART_SHIPPED' },
@@ -44,10 +53,6 @@ export const ReturnOrderStatus = [
   { langKey: 'Order.refundFailed', name: 'Refund failed', value: 'REFUND_FAILED', listShow: true }
 ];
 
-
-
-
-
 export function getOrderStatusValue(statusName, value) {
   switch (statusName) {
     case 'OrderStatus':
@@ -65,5 +70,23 @@ export function getOrderStatusValue(statusName, value) {
     default:
       return "Order.unknown";
   }
+}
 
+export function getFelineOrderStatusValue(statusName, value) {
+  switch (statusName) {
+    case 'OrderStatus':
+      let orderStatus = FelineOrderStatus.find((x) => x.value === value);
+      return orderStatus ? orderStatus.langKey : 'Order.unknown';
+    case 'ShippStatus':
+      let shippStatus = ShippStatus.find((x) => x.value === value);
+      return shippStatus ? shippStatus.langKey : 'Order.unknown';
+    case 'PaymentStatus':
+      let paymentStatus = PaymentStatus.find((x) => x.value === value);
+      return paymentStatus ? paymentStatus.langKey : 'Order.unknown';
+    case 'ReturnOrderStatus':
+      let returnOrderStatus = ReturnOrderStatus.find((x) => x.value === value);
+      return returnOrderStatus ? returnOrderStatus.langKey : 'Order.unknown';
+    default:
+      return "Order.unknown";
+  }
 }

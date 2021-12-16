@@ -43,7 +43,7 @@ import ErrorBoundary from './errorBoundary';
 import ReactEditor from './reactEditor/index'
 import Fetch from './fetch/index'
 import Fonts from './images/iconfont/iconfont.json'
-import {OrderStatus, ShippStatus, PaymentStatus, getOrderStatusValue} from './order-status-enum'
+import {OrderStatus, ShippStatus, PaymentStatus, FelineOrderStatus, getOrderStatusValue,getFelineOrderStatusValue} from './order-status-enum'
 import QRScaner from './qr-scan';
 import {RCi18n} from './lang';
 import { getFormatDeliveryDateStr } from './deliveryDate';
@@ -100,7 +100,9 @@ export {
   OrderStatus,
   ShippStatus,
   PaymentStatus,
+  FelineOrderStatus,
   getOrderStatusValue,
+  getFelineOrderStatusValue,
   QRScaner,
   RCi18n,
   getFormatDeliveryDateStr,

@@ -1206,6 +1206,10 @@ const routes = [
     path: '/store-tax',
     asyncComponent: () => import('./store-tax')
   },
+  {
+    path: '/store-footer',
+    asyncComponent: () => import('./navigation-list/footer')
+  },
   /**
    * setting-integration
    * **/

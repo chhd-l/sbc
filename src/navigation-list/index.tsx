@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { getStoreLanguages } from './storeLanguage';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import NavigationHeader from './components/navigation-header';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -278,10 +277,6 @@ class NavigationList extends Component<any, any> {
               <DragTable columns={columns} dataSource={dataSource} sort={this.sortNavigation} />
             </Spin>
           </Row>
-        </div>
-        <div className="container">
-          <Headline title={<FormattedMessage id="Setting.HeaderAndFooter" />} />
-          <NavigationHeader />
         </div>
       </div>
     );

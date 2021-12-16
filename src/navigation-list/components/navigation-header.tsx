@@ -11,6 +11,7 @@ export default class NavigationHeader extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: false,
+      changed: false,
       id: '',
       header: '',
       footer: ''
@@ -35,7 +36,8 @@ export default class NavigationHeader extends React.Component<any, any> {
 
   onChangeField = (field, value) => {
     this.setState({
-      [field]: value
+      [field]: value,
+      changed: true
     });
   };
 
@@ -49,20 +51,14 @@ export default class NavigationHeader extends React.Component<any, any> {
       if (data.res.code === Const.SUCCESS_CODE) {
         message.success(RCi18n({id:'Setting.Operationsuccessful'}));
       }
-      this.setState({ loading: false });
+      this.setState({ loading: false, changed: false });
     }).catch(() => { this.setState({ loading: false }); });
   };
 
   render() {
-    const { header, footer, loading } = this.state;
+    const { footer, loading, changed } = this.state;
     return (
       <div>
-        <Row gutter={[24, 12]}>
-          <Col span={3} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.header"/>:</Col>
-          <Col span={18}>
-            <TextArea rows={6} value={header} onChange={(e) => this.onChangeField('header', e.target.value)}></TextArea>
-          </Col>
-        </Row>
         <Row gutter={[24, 12]}>
           <Col span={3} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.footer"/>:</Col>
           <Col span={18}>
@@ -71,7 +67,7 @@ export default class NavigationHeader extends React.Component<any, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={6} push={3}>
-            <Button type="primary" loading={loading} onClick={this.saveData}><FormattedMessage id="Setting.save"/></Button>
+            <Button type="primary" disabled={!changed} loading={loading} onClick={this.saveData}><FormattedMessage id="Setting.save"/></Button>
           </Col>
         </Row>
       </div>

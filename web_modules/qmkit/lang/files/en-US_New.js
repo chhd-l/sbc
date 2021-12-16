@@ -2620,6 +2620,7 @@ export default {
         "Menu.Store Setting": "Store Setting",
         "Menu.Consent": "Consent",
         "Menu.Tax": "Tax",
+        "Menu.Footer": "Footer",
     },
     Others: {
         "import": "Import",

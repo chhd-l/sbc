@@ -175,15 +175,18 @@ class Details extends Component {
                                                         />
                                                     </Form.Item>
                                                     <Form.Item label="Order  source">
-                                                        {order?.source ?? ''}
+                                                    <FormattedMessage id="Order.orderSource felin" />
+                                                        {/* {['L_ATELIER_FELIN'].includes(order?.source??'')?  <FormattedMessage id="Order.orderSource felin" />:''}      */}
                                                     </Form.Item>
                                                     <Form.Item label="Order type">
                                                         {/* {order?.orderType ?? ''} */}
-                                                         {['SINGLE_PURCHASE'].includes(order?.orderType??'')? <FormattedMessage
+                                                         {/* {['SINGLE_PURCHASE'].includes(order?.orderType??'')? <FormattedMessage
                                                             id={'Order.Singlepurchase'}
-                                                        />:''}       
+                                                        />:''}        */}
                                                        
-                                                        
+                                                       <FormattedMessage
+                                                            id={'Order.Singlepurchase'}
+                                                        />
                                                     </Form.Item>
                                                     <Form.Item label="Create by">
                                                         {order?.orderCreateType ?? ''}

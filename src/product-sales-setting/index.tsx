@@ -501,7 +501,7 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Price display method</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PriceDisplayMethod' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('priceDisplayMethod', {
@@ -509,12 +509,12 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select Price display method !'
+                    message: RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})
                   }
                 ]
               })(<Select disabled={disabled}
                          optionLabelProp='label'
-                         placeholder='Please select Price display method !' style={{ width: 220 }}>
+                         placeholder={RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})} style={{ width: 220 }}>
                 {['From the lowest to highest', 'Above the lowest', 'Lowest one-off and subscription price'].map((item, index) => (
                   <Option key={index} title={item} value={index} label={item}>{item}</Option>
                 ))}
@@ -523,23 +523,18 @@ class ProductSearchSetting extends Component<any, any> {
 
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.BasePriceShowedInPDP' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
             >
               {getFieldDecorator('basePricePDPShowedFlag', {
                 valuePropName: 'checked',
-                initialValue: basePricePDPShowedFlag === 0 ? false : true,
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select Base price showed in PDP !'
-                  }
-                ]
+                initialValue: basePricePDPShowedFlag === 0 ? false : true
               })(<Switch />)}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Default quantity selected</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.DefaultQuantitySelected' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('defaultQuantitySelected', {
@@ -547,12 +542,12 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select default quantity selected !'
+                    message: RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})
                   }
                 ]
               })(<Select disabled={disabled}
                          optionLabelProp='label'
-                         placeholder='Please select default quantity selected !' style={{ width: 220 }}>
+                         placeholder={RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})} style={{ width: 220 }}>
                 <Option value="0" label="The smallest">The smallest</Option>
                 <Option value="1" label="Second smallest one">Second smallest one</Option>
                 <Option value="2" label="The largest">The largest</Option>
@@ -560,7 +555,7 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Promotion display format</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PromotionDisplayFormat' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('discountDisplayTypeInfo', {
@@ -568,12 +563,12 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select promotion display format !'
+                    message: RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})
                   }
                 ]
               })(<Select disabled={disabled}
                          optionLabelProp='label'
-                         placeholder='Please select promotion display format !' style={{ width: 220 }}>
+                         placeholder={RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})} style={{ width: 220 }}>
                 <Option value="Percentage" label="Percentage">Percentage</Option>
                 <Option value="Amount" label="Amount">Amount</Option>
               </Select>)}

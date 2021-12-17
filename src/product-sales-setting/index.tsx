@@ -34,6 +34,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionClubFrequencyId: '',
     defaultSubscriptionIndividualFrequencyId: '',
     defaultQuantitySelected: '',
+    discountDisplayTypeInfo: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod: 0,
@@ -143,7 +144,7 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       basePricePDPShowedFlag
     } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-    let { defaultQuantitySelected } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
+    let { defaultQuantitySelected, discountDisplayTypeInfo } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -178,6 +179,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionClubFrequencyId,
       defaultSubscriptionIndividualFrequencyId,
       defaultQuantitySelected,
+      discountDisplayTypeInfo,
       language,
       purchaseType,
       basePricePDPShowedFlag,
@@ -221,6 +223,9 @@ class ProductSearchSetting extends Component<any, any> {
           systemConfigs: [{
             configName: "defaultQuantitySelected",
             context: values.defaultQuantitySelected
+          },{
+            configName: "discountDisplayTypeInfo",
+            context: values.discountDisplayTypeInfo
           }]
         });
         this.setState({ loading: false });
@@ -228,7 +233,7 @@ class ProductSearchSetting extends Component<any, any> {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected }));
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected, discountDisplayTypeInfo: values.discountDisplayTypeInfo }));
         }
       }
     });
@@ -247,6 +252,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionClubFrequencyId,
       defaultSubscriptionIndividualFrequencyId,
       defaultQuantitySelected,
+      discountDisplayTypeInfo,
       options,
       optionsClub,
       optionsIndividual,
@@ -495,7 +501,7 @@ class ProductSearchSetting extends Component<any, any> {
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Price display method</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PriceDisplayMethod' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('priceDisplayMethod', {
@@ -503,12 +509,12 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select Price display method !'
+                    message: RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})
                   }
                 ]
               })(<Select disabled={disabled}
                          optionLabelProp='label'
-                         placeholder='Please select Price display method !' style={{ width: 220 }}>
+                         placeholder={RCi18n({id:'Product.PleaseSelectPriceDisplayMethod'})} style={{ width: 220 }}>
                 {['From the lowest to highest', 'Above the lowest', 'Lowest one-off and subscription price'].map((item, index) => (
                   <Option key={index} title={item} value={index} label={item}>{item}</Option>
                 ))}
@@ -517,23 +523,18 @@ class ProductSearchSetting extends Component<any, any> {
 
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Base price showed in PDP</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.BasePriceShowedInPDP' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
             >
               {getFieldDecorator('basePricePDPShowedFlag', {
                 valuePropName: 'checked',
-                initialValue: basePricePDPShowedFlag === 0 ? false : true,
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please select Base price showed in PDP !'
-                  }
-                ]
+                initialValue: basePricePDPShowedFlag === 0 ? false : true
               })(<Switch />)}
             </Form.Item>
 
             <Form.Item
-              label={<span style={{ color: '#666' }}>Default quantity selected</span>}
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.DefaultQuantitySelected' /></span>}
               style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
             >
               {getFieldDecorator('defaultQuantitySelected', {
@@ -541,15 +542,35 @@ class ProductSearchSetting extends Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select default quantity selected !'
+                    message: RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})
                   }
                 ]
               })(<Select disabled={disabled}
                          optionLabelProp='label'
-                         placeholder='Please select default quantity selected !' style={{ width: 220 }}>
+                         placeholder={RCi18n({id:'Product.PleaseSelectDefaultQuantitySelected'})} style={{ width: 220 }}>
                 <Option value="0" label="The smallest">The smallest</Option>
                 <Option value="1" label="Second smallest one">Second smallest one</Option>
                 <Option value="2" label="The largest">The largest</Option>
+              </Select>)}
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.PromotionDisplayFormat' /></span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+            >
+              {getFieldDecorator('discountDisplayTypeInfo', {
+                initialValue: discountDisplayTypeInfo,
+                rules: [
+                  {
+                    required: true,
+                    message: RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})
+                  }
+                ]
+              })(<Select disabled={disabled}
+                         optionLabelProp='label'
+                         placeholder={RCi18n({id:'Product.PleaseSelectPromotionDisplayFormat'})} style={{ width: 220 }}>
+                <Option value="Percentage" label="Percentage">Percentage</Option>
+                <Option value="Amount" label="Amount">Amount</Option>
               </Select>)}
             </Form.Item>
 

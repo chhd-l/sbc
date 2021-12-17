@@ -554,6 +554,14 @@ export default {
 
         "Product.DefaultSKU": "Default SKU",
 
+        "Product.PriceDisplayMethod": "Price display method",
+        "Product.PleaseSelectPriceDisplayMethod": "Please select Price display method !",
+        "Product.BasePriceShowedInPDP": "Base price showed in PDP",
+        "Product.DefaultQuantitySelected": "Default quantity selected",
+        "Product.PleaseSelectDefaultQuantitySelected": "Please select default quantity selected !",
+        "Product.PromotionDisplayFormat": "Promotion display format",
+        "Product.PleaseSelectPromotionDisplayFormat": "Please select promotion display format",
+
     },
 
     Order: {

@@ -106,7 +106,7 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
       }
 
       let allGradeMenus = _getChildren(
-        dataList.filter((item) => item.get('grade') === 1),
+        dataList.filter((item) => item.get('grade') === 1 && item.get('sort') > 0),  //去掉Base菜单，Base菜单用来挂一些通用的权限，避免将通用的接口重复配置到各具体的菜单里
         dataList
       );
 
@@ -237,7 +237,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
             }
           } else {
             let url = _getUrl(allGradeMenus);
-            history.push(url);
+            if (shouldChangeLanguageSetting) {
+              window.location.href = url;
+            } else {
+              history.push(url);
+            }
           }
           callback(res.context)
           break;
@@ -345,7 +349,7 @@ export async function switchLogin(params, callback?: Function) {
       }
 
       let allGradeMenus = _getChildren(
-          dataList.filter((item) => item.get('grade') === 1),
+          dataList.filter((item) => item.get('grade') === 1 && item.get('sort') > 0),
           dataList
       );
 

@@ -1120,7 +1120,6 @@ export default {
        'Appointment.Behaviorist':'Behaviorist',
        'Appointment.Nutritionist':'Nutritionist',
        'Appointment.Orthopedist':'Orthopedist',
-
        'Appointment.Created time':'Created time',
        'Appointment.Last updated time':'Last updated time',
        'Appointment.confirm title':'Do you want to cancel these items?',
@@ -1128,6 +1127,7 @@ export default {
        'Appointment.min15':'15min',
        'Appointment.min30':'30min',
        'Appointment.min45':'45min',
+       'Appointment.min60':'60min',
         'Appointment.Select.time.slot':'Select time slot',
         'Appointment.Operation': 'Operation',
         'Appointment.Operatio': 'Operatio',

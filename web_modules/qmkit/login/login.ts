@@ -237,7 +237,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
             }
           } else {
             let url = _getUrl(allGradeMenus);
-            history.push(url);
+            if (shouldChangeLanguageSetting) {
+              window.location.href = url;
+            } else {
+              history.push(url);
+            }
           }
           callback(res.context)
           break;

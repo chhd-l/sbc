@@ -166,15 +166,14 @@ class OrderDelivery extends React.Component<any, any> {
                             {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
                           </Button> */}
+                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                              <FormattedMessage id="Order.Refresh" />
+                            </Button>
                             {v.get('trackingUrl') ? (
                               <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
                                 <FormattedMessage id="Order.Trackdelivery" />
                               </Button>
-                            ) : (
-                              <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                                <FormattedMessage id="Order.Refresh" />
-                              </Button>
-                            )}
+                            ) :null}
                           </label>
                           <div style={{ marginTop: 20 }}>
                             <Timeline>

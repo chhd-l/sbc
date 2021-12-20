@@ -3,7 +3,17 @@ import { Breadcrumb, Tabs, Card, Dropdown, Icon, Menu, Row, Col, Button, Input, 
 import { StoreProvider } from 'plume2';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
-import { Headline, BreadCrumb, SelectGroup, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import {
+  Headline,
+  BreadCrumb,
+  SelectGroup,
+  Const,
+  cache,
+  AuthWrapper,
+  getOrderStatusValue,
+  RCi18n,
+  history
+} from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { PostalCodeMsg } from 'biz';
 import './index.less';
@@ -85,16 +95,21 @@ class SubscriptionDetail extends React.Component<any, any> {
   componentDidMount() {
     this.setState(
       {
-        subscriptionId: this.props.match && this.props.match.params ? this.props.match.params.subId : null
+        subscriptionId: this.props.match && this.props.match.params ? this.props.match.params.subId : null,
+        loading:true
       },
       () => {
+        this.getSubscriptionDetail(this.state.subscriptionId);
         this.getCurrencySymbol();
         this.getDict();
         this.getDeliveryDateStatus();
-        this.getSubscriptionDetail(this.state.subscriptionId);
         this.getBySubscribeId(this.state.subscriptionId);
       }
     );
+  }
+
+  componentWillUnmount() {
+    sessionStorage.removeItem('fromTaskToSubDetail')
   }
 
   // 获取 deliveryState 状态
@@ -111,14 +126,8 @@ class SubscriptionDetail extends React.Component<any, any> {
             });
           }
         }
-        this.setState({
-          loading: false
-        });
       })
       .catch(() => {
-        this.setState({
-          loading: false
-        });
       });
   }
 
@@ -185,20 +194,21 @@ class SubscriptionDetail extends React.Component<any, any> {
               promotionCode: subscriptionDetail.promotionCode,
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
-              isActive: subscriptionDetail.subscribeStatus === "0",
+              isActive: subscriptionDetail.subscribeStatus === '0',
               paymentMethod: paymentMethod
             },
             () => {
-              this.applyPromationCode(this.state.promotionCode);
+              this.applyPromotionCode(this.state.promotionCode);
             }
           );
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
+      }).finally(()=>{
+      this.setState({
+        loading: false
       });
+    });
   };
   skipNextDelivery = (id: String) => {
     this.setState({
@@ -211,17 +221,14 @@ class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
           message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
-        } else {
-          this.setState({
-            loading: false
-          });
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
+      }).finally(()=>{
+      this.setState({
+        loading: false
       });
+    });
   };
 
   orderNow = (id: String) => {
@@ -235,17 +242,14 @@ class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.getSubscriptionDetail(this.state.subscriptionId);
           message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
-        } else {
-          this.setState({
-            loading: false
-          });
         }
       })
       .catch((err) => {
-        this.setState({
-          loading: false
-        });
+      }).finally(()=>{
+      this.setState({
+        loading: false
       });
+    });
   };
 
   petsById = (id: String) => {
@@ -416,18 +420,16 @@ class SubscriptionDetail extends React.Component<any, any> {
   };
 
   getDictValue = (list, id) => {
+    let tempId=id;
     if (list && list.length > 0) {
       let item = list.find((item) => {
         return item.id === id;
       });
       if (item) {
-        return item.name;
-      } else {
-        return id;
+        tempId = item.name;
       }
-    } else {
-      return id;
     }
+    return tempId;
   };
   getBySubscribeId = (id: String) => {
     let params = {
@@ -453,7 +455,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     }
     return sum;
   };
-  applyPromationCode = (promotionCode?: String) => {
+  applyPromotionCode = (promotionCode?: String) => {
     const { goodsInfo, subscriptionInfo } = this.state;
     let goodsInfoList = [];
     for (let i = 0; i < (goodsInfo ? goodsInfo.length : 0); i++) {
@@ -471,7 +473,6 @@ class SubscriptionDetail extends React.Component<any, any> {
       deliveryAddressId: this.state.deliveryAddressId,
       customerAccount: subscriptionInfo.consumerAccount,
     };
-    this.setState({ loading: true });
     webapi
       .getPromotionPrice(params)
       .then((data) => {
@@ -487,15 +488,9 @@ class SubscriptionDetail extends React.Component<any, any> {
             freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
             subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
             promotionVOList: res.context.promotionVOList ?? [],
-            loading: false
           });
-        } else {
-          this.setState({ loading: false });
         }
       })
-      .catch((err) => {
-        this.setState({ loading: false });
-      });
   };
   handleYearChange = (value) => { };
   tabChange = (key) => { };
@@ -523,9 +518,9 @@ class SubscriptionDetail extends React.Component<any, any> {
       return num;
     }
   }
-  
+
   render() {
-    const { title, orderInfo, recentOrderList, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
+    const { title, orderInfo, recentOrderList,loading, subscriptionId, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -534,7 +529,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         <span className="order-time">{'#' + subscriptionInfo.deliveryTimes}</span>
       </div>
     );
-   
+
     const columns = [
       {
         title: (
@@ -859,23 +854,59 @@ class SubscriptionDetail extends React.Component<any, any> {
 
     return (
       <div>
-        <Breadcrumb>
-          <Breadcrumb.Item>
-            <a href="/subscription-list">
-              <FormattedMessage id="Subscription.Subscription" />
-            </a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>
-            <a href="/subscription-list">
-              <FormattedMessage id="Subscription.SubscriptionList" />
-            </a>
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>{<FormattedMessage id="Subscription.detail" />}</Breadcrumb.Item>
-        </Breadcrumb>
+        {/*从task跳到subscription detail显示不同的面包屑*/}
+        {sessionStorage.getItem('fromTaskToSubDetail')?(
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/">
+                <FormattedMessage id="Menu.Home" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/tasks">
+                <FormattedMessage id="task.TaskBoard" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href={`/edit-task/${sessionStorage.getItem('taskId')}`}>
+                <FormattedMessage id="task.Taskedition" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{<FormattedMessage id="Subscription.detail" />}</Breadcrumb.Item>
+          </Breadcrumb>
+        ):(
+          <Breadcrumb>
+            <Breadcrumb.Item>
+              <a href="/subscription-list">
+                <FormattedMessage id="Subscription.Subscription" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <a href="/subscription-list">
+                <FormattedMessage id="Subscription.SubscriptionList" />
+              </a>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>{<FormattedMessage id="Subscription.detail" />}</Breadcrumb.Item>
+          </Breadcrumb>
+        )}
+
         <Spin spinning={this.state.loading}>
-          {' '}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="Subscription.detail" />} />
+            <Headline
+              style={{ display: 'flex', justifyContent: 'space-between' }}
+              title={<FormattedMessage id="Subscription.detail" />}
+            >
+              {sessionStorage.getItem('fromTaskToSubDetail')&&storeId===123457907?(  <a
+                style={{ textAlign: 'right' }}
+                onClick={() => {
+                  sessionStorage.setItem('subscriptionNo', subscriptionId);
+                  history.push('/task/manage-all-subscription');
+                }}
+              >
+                <FormattedMessage id="task.editAllSubLink" />
+              </a>):null}
+
+            </Headline>
             <Row className="subscription-basic-info">
               <Col span={24}>
                 <span style={{ fontSize: '16px', color: '#3DB014' }}>{subscriptionInfo.subscriptionStatus}</span>
@@ -885,8 +916,8 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <FormattedMessage id="Subscription.SubscriptionNumber" /> : <span>
                     {subscriptionInfo.subscriptionNumber}
                   </span>
-                  
-                  {subscriptionInfo?.subscribeSource === "SUPPLIER" ? (
+
+                  {subscriptionInfo?.subscribeSource === 'SUPPLIER' ? (
                     <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
                   ) : null}
                 </p>

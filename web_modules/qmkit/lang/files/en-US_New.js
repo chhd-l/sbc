@@ -554,6 +554,14 @@ export default {
 
         "Product.DefaultSKU": "Default SKU",
 
+        "Product.PriceDisplayMethod": "Price display method",
+        "Product.PleaseSelectPriceDisplayMethod": "Please select Price display method !",
+        "Product.BasePriceShowedInPDP": "Base price showed in PDP",
+        "Product.DefaultQuantitySelected": "Default quantity selected",
+        "Product.PleaseSelectDefaultQuantitySelected": "Please select default quantity selected !",
+        "Product.PromotionDisplayFormat": "Promotion display format",
+        "Product.PleaseSelectPromotionDisplayFormat": "Please select promotion display format",
+
     },
 
     Order: {
@@ -1120,7 +1128,6 @@ export default {
        'Appointment.Behaviorist':'Behaviorist',
        'Appointment.Nutritionist':'Nutritionist',
        'Appointment.Orthopedist':'Orthopedist',
-
        'Appointment.Created time':'Created time',
        'Appointment.Last updated time':'Last updated time',
        'Appointment.confirm title':'Do you want to cancel these items?',
@@ -1128,6 +1135,7 @@ export default {
        'Appointment.min15':'15min',
        'Appointment.min30':'30min',
        'Appointment.min45':'45min',
+       'Appointment.min60':'60min',
         'Appointment.Select.time.slot':'Select time slot',
         'Appointment.Operation': 'Operation',
         'Appointment.Operatio': 'Operatio',

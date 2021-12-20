@@ -290,6 +290,7 @@ class NewAppointment extends React.Component<any, any> {
                   <Radio key={15} value={15}><FormattedMessage id="Appointment.min15" /></Radio>
                   <Radio key={30} value={30}><FormattedMessage id="Appointment.min30" /></Radio>
                   <Radio key={45} value={45}><FormattedMessage id="Appointment.min45" /></Radio>
+                  <Radio key={45} value={60}><FormattedMessage id="Appointment.min60" /></Radio>
                 </Radio.Group>
               )}
             </Form.Item>

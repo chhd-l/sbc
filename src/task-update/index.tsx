@@ -67,84 +67,6 @@ const formTableItemLayout = {
   }
 };
 
-const columns = [
-  {
-    title: RCi18n({ id: 'Task.SubscriptionNumber' }),
-    dataIndex: 'subscriptionNumber',
-    key: 'subscriptionNumber',
-    width: '17%',
-    render: text =>
-      <Link
-        to={`/subscription-detail/${text}`}
-      >
-        {text}
-      </Link>
-  },
-  {
-    title: RCi18n({ id: 'Task.ProductName' }),
-    key: 'nameAndDateVOList',
-    width: '14%',
-    render: (text, record, index) => {
-      // let html = text.replaceAll(",", "<br/>")
-      // let productNames = text.split(',') 
-      let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : []
-      return <div>
-        {
-          nameAndDateVOList && nameAndDateVOList.map(data => (
-            <Tooltip placement="topLeft" title={data.productName}>
-              <p className="msg" style={{
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                cursor: 'pointer'
-              }} >{data.productName} </p>
-            </Tooltip>
-          ))
-        }
-      </div>
-    },
-    ellipsis: true,
-  },
-  {
-    title: RCi18n({ id: 'Task.ShipmentDate' }),
-    // dataIndex: 'shipmentDate',
-    key: 'shipmentDate',
-    width: '14%',
-    render: (text, record, index) => {
-      // let html = text.replaceAll(",", "<br/>")
-      // let productNames = text.split(',') 
-      let nameAndDateVOList = record.nameAndDateVOList
-      return <div>
-        {
-          nameAndDateVOList && nameAndDateVOList.map(data => (
-            <p>{data.shipmentDate} </p>
-          ))
-        }
-      </div>
-    },
-  },
-  {
-    title: RCi18n({ id: 'Task.DeliveryMethod' }),
-    dataIndex: 'deliveryMethod',
-    key: 'deliveryMethod'
-  },
-  {
-    title: RCi18n({ id: 'Task.DeliveryAddress' }),
-    dataIndex: 'deliveryAddress',
-    key: 'deliveryAddress'
-  },
-  {
-    title: RCi18n({ id: 'Task.DeliveryStatus' }),
-    dataIndex: 'deliveryStatus',
-    key: 'deliveryStatus'
-  },
-  {
-    title: RCi18n({ id: 'Task.PaymentMethod' }),
-    dataIndex: 'paymentMethod',
-    key: 'paymentMethod'
-  }
-];
-
 @injectIntl
 class TaskUpdate extends Component<any, any> {
   constructor(props) {
@@ -253,6 +175,7 @@ class TaskUpdate extends Component<any, any> {
             });
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
+              sessionStorage.setItem('taskCustomerAccount',customerAccount)
               this.getPetOwnerPets(customerAccount);
               this.getPetOwnerOrders(customerAccount);
               this.getPetOwnerSubscriptions(customerAccount);
@@ -543,6 +466,84 @@ class TaskUpdate extends Component<any, any> {
     } = this.state;
     let taskStatus = statusList.find((x) => x.value === task.status);
     let subscriptionNumbers = task.subscriptionNumber ? task.subscriptionNumber.split(',') : [];
+
+    const columns = [
+      {
+        title: RCi18n({ id: 'Task.SubscriptionNumber' }),
+        dataIndex: 'subscriptionNumber',
+        key: 'subscriptionNumber',
+        width: '17%',
+        render: text =>
+          <a
+            onClick={()=>{sessionStorage.setItem('taskId',id);sessionStorage.setItem('fromTaskToSubDetail','true');history.push(`/subscription-detail/${text}`)}}
+          >
+            {text}
+          </a>
+      },
+      {
+        title: RCi18n({ id: 'Task.ProductName' }),
+        key: 'nameAndDateVOList',
+        width: '14%',
+        render: (text, record, index) => {
+          // let html = text.replaceAll(",", "<br/>")
+          // let productNames = text.split(',')
+          let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : []
+          return <div>
+            {
+              nameAndDateVOList && nameAndDateVOList.map(data => (
+                <Tooltip placement="topLeft" title={data.productName}>
+                  <p className="msg" style={{
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis',
+                    cursor: 'pointer'
+                  }} >{data.productName} </p>
+                </Tooltip>
+              ))
+            }
+          </div>
+        },
+        ellipsis: true,
+      },
+      {
+        title: RCi18n({ id: 'Task.ShipmentDate' }),
+        // dataIndex: 'shipmentDate',
+        key: 'shipmentDate',
+        width: '14%',
+        render: (text, record, index) => {
+          // let html = text.replaceAll(",", "<br/>")
+          // let productNames = text.split(',')
+          let nameAndDateVOList = record.nameAndDateVOList
+          return <div>
+            {
+              nameAndDateVOList && nameAndDateVOList.map(data => (
+                <p>{data.shipmentDate} </p>
+              ))
+            }
+          </div>
+        },
+      },
+      {
+        title: RCi18n({ id: 'Task.DeliveryMethod' }),
+        dataIndex: 'deliveryMethod',
+        key: 'deliveryMethod'
+      },
+      {
+        title: RCi18n({ id: 'Task.DeliveryAddress' }),
+        dataIndex: 'deliveryAddress',
+        key: 'deliveryAddress'
+      },
+      {
+        title: RCi18n({ id: 'Task.DeliveryStatus' }),
+        dataIndex: 'deliveryStatus',
+        key: 'deliveryStatus'
+      },
+      {
+        title: RCi18n({ id: 'Task.PaymentMethod' }),
+        dataIndex: 'paymentMethod',
+        key: 'paymentMethod'
+      }
+    ];
 
     return (
       <div>
@@ -1103,6 +1104,15 @@ class TaskUpdate extends Component<any, any> {
                             {...formTableItemLayout}
                             label={<FormattedMessage id="task.AssociateSubscription" />}
                           >
+                            {this.state.subscriptionTable.length>0 && JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId===123457907?(
+                                <Button
+                                  style={{ marginBottom: '20px' }}
+                                  type="primary"
+                                  onClick={() => {sessionStorage.setItem('taskId',id);history.push('/task/manage-all-subscription')}}
+                                >
+                                  <FormattedMessage id="task.manageAllSubBtn" />
+                                </Button>
+                            ):null}
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(

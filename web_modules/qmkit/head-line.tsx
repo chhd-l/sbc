@@ -24,8 +24,8 @@ export default class Headline extends React.PureComponent<any, any> {
           {this.props.smallTitle && <small>{this.props.smallTitle}</small>}
         </h3>
         {this.props.children}
-        <span style={{ color: '#F56C1D', fontSize: 14 }}>{this.props.state}</span>
-        {this.props.extra && <div style={{ position: 'absolute', right: 50 }}>{this.props.extra}</div>}
+        {this.props.state?(<span style={{ color: '#F56C1D', fontSize: 14 }}>{this.props.state}</span>):null}
+        {this.props.extra ? (<div style={{ position: 'absolute', right: 50 }}>{this.props.extra}</div>):null}
       </div>
     );
   }

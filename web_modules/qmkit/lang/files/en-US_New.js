@@ -2883,6 +2883,7 @@ export default {
         "Survey.pet_owner_name":"Pet Owner Name",
         "Survey.pet_owner_type":"Pet Owner Type",
         "Survey.email":"Email",
+        "Survey.show_survey":'Show the survey to',
         'Menu.Survey':'Survey',
         'Menu.Survey List':'Survey List'
     }

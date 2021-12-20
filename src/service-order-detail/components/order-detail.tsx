@@ -398,7 +398,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.orderSource" />: L’Atellier Feline
+                    <FormattedMessage id="Order.orderSource" />:  <FormattedMessage id="Order.orderSource felin" />
                   </p>
                   <p>
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}

@@ -8,14 +8,18 @@ import styleCss from '../js/style.js';
 import { Col, Form, Input, Row, Button, message, Spin, Checkbox } from 'antd';
 import { fetchAddPaymentInfo } from '../webapi';
 interface IKey {
-  app_id: string
-  key: string
+  appId: string
+environment: string
+locale: string
+openPlatformSecret: string
+pspItemCode: string
+pspName: string
+publicKey: string
 }
 interface IProps {
   clientKey: IKey
   customerId: string
   storeId: number
-  pspName: string
   form: any
   cardType: any
   fromSubscroption:any
@@ -51,7 +55,7 @@ class PayuCreditCardForm extends Component<IProps> {
         src: 'https://fonts.googleapis.com/css?family=Source+Code+Pro',
       }
     ]
-    const formElements = new (window as any).POS.Fields(this.props.clientKey.key, {
+    const formElements = new (window as any).POS.Fields(this.props.clientKey.publicKey, {
       fonts
     })
 
@@ -102,7 +106,7 @@ class PayuCreditCardForm extends Component<IProps> {
         }
         const result = await (window as any).POS.createToken(this.cardNumber, {
           additionalData,
-          environment: Const.PAYMENT_ENVIRONMENT // Set the PaymentsOS environment you're connecting to
+          environment: this.props.clientKey.environment // Set the PaymentsOS environment you're connecting to
         })
         if (result.error) {
           message.error(result.error['cvv'] + ',' + result.error['pan'] + ',' + result.error['expiry'])
@@ -124,7 +128,7 @@ class PayuCreditCardForm extends Component<IProps> {
       paymentToken: params.token,
       paymentVendor: params.vendor,
       phone: params.phone,
-      pspName: this.props.pspName,
+      pspName: this.props.clientKey.pspName,
       storeId: this.props.storeId,
       isDefault:params.isDefault?1:0
     }

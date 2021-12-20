@@ -394,6 +394,16 @@ export default function index({...props}) {
     console.log(formData)
     setFormData({...formData});
   };
+  /**
+   * 点击跳转steps
+   * @param current
+   */
+  const changeSteps = (current)=>{
+    console.log(current)
+    if(current < step){
+      setStep(current)
+    }
+  }
   return (
     <FormContext.Provider
       value={{
@@ -412,6 +422,7 @@ export default function index({...props}) {
         <div className="create-promotion">
           <BreadCrumb/>
           <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
+            {/*onChange={changeSteps}*/}
             <Steps current={step} className="step-container">
               <Step title={<FormattedMessage id="Marketing.Create" />} />
               <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />

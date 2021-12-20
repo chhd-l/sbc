@@ -39,12 +39,25 @@ class CouponModal extends Component<any, any> {
             history.push({
               pathname: `/coupon-detail/${this.props.couponId}/2`
             });
+          }else if(res.res.code == 'K-080106'){
+            this.props.form.setFields({
+              time:{
+                errors:[
+                  new Error((window as any).RCi18n({
+                    id: 'Marketing.ValidityDates'
+                  }))
+                ]
+              }
+            })
           }
         });
       }
     });
   };
   handleCancel = () => {
+    this.props.form.setFields({
+      time:{}
+    });
     this.props.form.resetFields();
     const { setVisible } = this.props;
     setVisible();

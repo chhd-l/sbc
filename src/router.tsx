@@ -1040,6 +1040,11 @@ const routes = [
     asyncComponent: () => import('./task-update')
   },
   {
+    path: '/task/manage-all-subscription',
+    exact: true,
+    asyncComponent: () => import('./task-manage-all-subscription')
+  },
+  {
     path: '/description-management',
     asyncComponent: () => import('./description-management')
   },

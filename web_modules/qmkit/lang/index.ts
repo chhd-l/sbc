@@ -34,7 +34,7 @@ const importAll = context => {
 let key = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 let langFile = importAll(context);
 let language: any = langFile['en-US'];
-let antLanguage: any = langFile[key + '_antd'];
+let antLanguage: any = langFile[key + '_antd'] || langFile['en-US_antd'];
 
 
 function RCi18n({ id }) {

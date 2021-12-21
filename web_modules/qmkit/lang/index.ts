@@ -1,7 +1,7 @@
 /**
  * 国际化语言如何新增?
  * 1、与后端约定新增语言的 key 名, 如 en-US
- * 2、本地新增 Ant 的对应 key 国际化语言 .ts 文件, 如 en-US_antd.ts
+ * 2、本地新增 multiLang_antd.ts 的对应 key 国际化语言  如 en-US
  * 3、Phrase APP 上面 store-portal 项目增加对应 key 的 国际化语言 如 en-US
  *
  * 国际化中如何新增翻译?

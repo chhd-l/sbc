@@ -1108,6 +1108,8 @@ export default {
   "Marketing.EmailTemplateInformation": "Template Information",
   "Marketing.EmailTemplateId": "Template ID",
   "Marketing.EmailTemplateEdit": "Template Edit",
+  "Marketing.PrefixLength": "Prefix length should between 1-10 characters",
+  "Marketing.ValidityDates":"Validity dates for coupon codes must fit in activity dates of the promotion",
   "Analysis.ProductReport": "Product Report",
   "Analysis.DownloadTheReport": "Download the report",
   "Analysis.OnShelfSKU": "On shelf SKU",

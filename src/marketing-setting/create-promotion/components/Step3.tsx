@@ -123,8 +123,51 @@ function Step3({form}){
               </Checkbox>
             </Form.Item>
           </>
-
         )}
+        {/*{*/}
+        {/*  typeOfPromotion === 1 && (*/}
+        {/*    <Form.Item label="Prefix">*/}
+        {/*      {getFieldDecorator('prefix', {*/}
+        {/*        initialValue:'',*/}
+        {/*        rules: [*/}
+        {/*          {*/}
+        {/*            required: true,*/}
+        {/*            whitespace: true,*/}
+        {/*            message:*/}
+        {/*              (window as any).RCi18n({*/}
+        {/*                id: 'Marketing.PleaseInputCodeName'*/}
+        {/*              })*/}
+        {/*          },*/}
+        {/*          {*/}
+        {/*            max:10,*/}
+        {/*            message:*/}
+        {/*              (window as any).RCi18n({*/}
+        {/*                id: 'Marketing.PrefixLength'*/}
+        {/*              })*/}
+        {/*          },*/}
+        {/*          {*/}
+        {/*            validator: (_rule, value, callback) => {*/}
+        {/*              if (value) {*/}
+        {/*                let reg:any = /^[0-9A-Z]+$/*/}
+        {/*                if (!reg.text(value)) {*/}
+        {/*                  callback(*/}
+        {/*                    (window as any).RCi18n({*/}
+        {/*                      id: 'Marketing.0.01-99999999.99',*/}
+        {/*                    })*/}
+        {/*                  );*/}
+        {/*                }*/}
+        {/*              }*/}
+        {/*              callback();*/}
+        {/*            }*/}
+        {/*          }*/}
+        {/*        ],*/}
+        {/*      })(*/}
+        {/*        <Input size="large"*/}
+        {/*               style={{ width: 360 }}*/}
+        {/*               placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseInputCodeName' })}/>,*/}
+        {/*      )}*/}
+        {/*    </Form.Item>*/}
+        {/*  )}*/}
       </Form>
 
       <ButtonLayer step={2} toNext={toNext} />

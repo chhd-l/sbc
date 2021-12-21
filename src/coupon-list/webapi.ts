@@ -38,5 +38,5 @@ export function addCouponActivity (params) {
   return Fetch<TResult>('/coupon-activity/add', {
     method: 'POST',
     body: JSON.stringify(params)
-  });
+  },{isHandleResult:true,isShowLoading:true,customerTip:true});
 };

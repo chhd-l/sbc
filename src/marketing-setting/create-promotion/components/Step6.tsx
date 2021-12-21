@@ -95,7 +95,7 @@ export default function Step6({setLoading}) {
          */
         couponPromotionType: formData.Advantage.couponPromotionType === 4 ? 2 : formData.Advantage.couponPromotionType,//gift字段为2
         denomination: formData.Advantage.couponPromotionType === 0 ? formData.Advantage.denomination : null,
-        couponDiscount: formData.Advantage.couponPromotionType === 1 ? parseInt(formData.Advantage.couponDiscount)/100 : 0,
+        couponDiscount: formData.Advantage.couponPromotionType === 1 ? 1 - parseInt(formData.Advantage.couponDiscount)/100 : 0,
         limitAmount: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
         fullGiftDetailList: formData.Advantage.couponPromotionType === 4 ? formData.Advantage.fullGiftLevelList[0].fullGiftDetailList: [],
         /**
@@ -260,7 +260,7 @@ export default function Step6({setLoading}) {
             key: makeRandom(),
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
             fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
-            discount: parseInt(formData.Advantage.couponDiscount)/100,
+            discount: 1 - parseInt(formData.Advantage.couponDiscount)/100,
             limitAmount:formData.Advantage.limitAmount,
           }],
           /**
@@ -270,9 +270,9 @@ export default function Step6({setLoading}) {
             fullAmount: formData.Conditions.CartLimit === 1 ? formData.Conditions.fullMoney : null,
             fullCount: (formData.Conditions.CartLimit === 2 || formData.Conditions.CartLimit === 0) ? formData.Conditions.fullItem || '1' : null,
             firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
-            firstSubscriptionOrderDiscount: parseInt(formData.Advantage.firstSubscriptionOrderDiscount)/100 ,
+            firstSubscriptionOrderDiscount: 1 - parseInt(formData.Advantage.firstSubscriptionOrderDiscount)/100 ,
             restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
-            restSubscriptionOrderDiscount: parseInt(formData.Advantage.restSubscriptionOrderDiscount)/100,
+            restSubscriptionOrderDiscount: 1 - parseInt(formData.Advantage.restSubscriptionOrderDiscount)/100,
           },
           firstSubscriptionLimitAmount: formData.Advantage.firstSubscriptionLimitAmount,
           firstSubscriptionOrderDiscount: formData.Advantage.firstSubscriptionOrderDiscount ,

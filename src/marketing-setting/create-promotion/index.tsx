@@ -276,14 +276,14 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType:switchCouponPromotionType(detail),
           denomination: (detail.subType === 0 || detail.subType === 1) ? detail.fullReductionLevelList?.[0]?.reduction : '',
-          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? (detail.fullDiscountLevelList?.[0].discount && detail.fullDiscountLevelList?.[0].discount*100) : '',
+          couponDiscount: (detail.subType === 2 || detail.subType === 3) ? (detail.fullDiscountLevelList?.[0].discount && 100 - detail.fullDiscountLevelList?.[0].discount*100) : '',
           limitAmount: (detail.subType === 2 || detail.subType === 3) ? detail.fullDiscountLevelList?.[0].limitAmount : '',
           firstSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].firstSubscriptionOrderReduction :'',
           restSubscriptionOrderReduction:detail.subType === 6 ? detail.fullReductionLevelList[0].restSubscriptionOrderReduction :'',
           firstSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionLimitAmount :'',
-          firstSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount*100 :'',
+          firstSubscriptionOrderDiscount:detail.subType === 7 ? 100 - detail.fullDiscountLevelList[0].firstSubscriptionOrderDiscount*100 :'',
           restSubscriptionLimitAmount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionLimitAmount :'',
-          restSubscriptionOrderDiscount:detail.subType === 7 ? detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount*100 :'',
+          restSubscriptionOrderDiscount:detail.subType === 7 ? 100 - detail.fullDiscountLevelList[0].restSubscriptionOrderDiscount*100 :'',
           fullGiftLevelList: (detail.subType === 4 || detail.subType === 5) ? detail.fullGiftLevelList : [],
           selectedGiftRows:detail.goodsList?.goodsInfoPage?.content.filter(item=>{
             return giftIds.includes(item.goodsInfoId)
@@ -346,7 +346,7 @@ export default function index({...props}) {
         Advantage:{
           couponPromotionType: detail.couponPromotionType === 2 ? 4 : detail.couponPromotionType,
           denomination: detail.denomination,
-          couponDiscount: detail.couponDiscount*100 || '',
+          couponDiscount: 100 - detail.couponDiscount*100 || '',
           limitAmount: detail.limitAmount,
           fullGiftLevelList: detail.couponPromotionType === 2 ? [
             { fullAmount: null,

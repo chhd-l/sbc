@@ -20,6 +20,7 @@ const OktaLogout = (props) => {
       if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
         authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
       } else {
+        // authService.logout(redirectUri)
         window.location.href = `${issure}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${redirectUri}`;
       }
     } else {

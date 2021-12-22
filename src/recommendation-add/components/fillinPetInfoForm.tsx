@@ -283,7 +283,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                         <Form.Item label={RCi18n({ id: 'Prescriber.Lifestyle' })}>
                             {getFieldDecorator(`customerPet[${item}].lifestyle`, {
                                 initialValue: stateCustomPet[item]?.lifestyle ?? '',
-                                // rules: [{ required: true, message: 'Please select Lifestyle!' }],
+                                rules: [{ required: true, message: 'Please selected!' }],
 
                             })(<Select
                                 disabled={stateCustomPet[item]?.petsId?true:false}
@@ -300,7 +300,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                         <Form.Item label={RCi18n({ id: 'Prescriber.Activity' })}>
                             {getFieldDecorator(`customerPet[${item}].activity`, {
                                 initialValue: stateCustomPet[item]?.activity ?? '',
-                                // rules: [{ required: true, message: 'Please selectActivity!' }],
+                                rules: [{ required: true, message: 'Please selected!' }],
 
                             })(<Select
                                 disabled={stateCustomPet[item]?.petsId?true:false}

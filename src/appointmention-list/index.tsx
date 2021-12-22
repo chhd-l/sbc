@@ -350,7 +350,7 @@ class Appointment extends React.Component<any, any> {
 
 
 
-            {([0].includes(record.status)&&record.businessId!==null) && <Tooltip title={RCi18n({ id: 'Appointment.Edit' })}>
+            {([0].includes(record.status)&&(record.businessId!==null&&record.businessPaid)) && <Tooltip title={RCi18n({ id: 'Appointment.Edit' })}>
               <Link to={`/appointment-update/${record.id}`} className="iconfont iconEdit" style={{ padding: '0 5px' }}></Link>
             </Tooltip>}
             {[1].includes(record.status) && <Tooltip title={RCi18n({ id: 'Appointment.Prescription' })}>

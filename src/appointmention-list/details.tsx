@@ -1,6 +1,6 @@
 import { Breadcrumb, Card, Col, Form, Row, Spin, Table, Tabs } from 'antd'
 import moment from 'moment';
-import { Const, getOrderStatusValue } from 'qmkit';
+import { Const, getFelineOrderStatusValue, getOrderStatusValue } from 'qmkit';
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -166,9 +166,8 @@ class Details extends Component {
                                                         {order?.orderTime ?? ''}
                                                     </Form.Item>
                                                     <Form.Item label="Order status">
-                                                       
                                                         <FormattedMessage
-                                                            id={getOrderStatusValue(
+                                                            id={getFelineOrderStatusValue(
                                                                 'OrderStatus',
                                                                 order?.status ?? ''
                                                             )}

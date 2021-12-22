@@ -18,11 +18,15 @@ function Step3({form}){
   const [limitStatus,setLimitStatus] = useState(false)
 
   useEffect(()=>{
+    console.log(match)
     if(match.params.id){
       setPromotionCode(formData.PromotionType.promotionCode)
       setPublicStatus(formData.PromotionType.publicStatus === 0 ? false : true)
       setLimitStatus(formData.PromotionType.isNotLimit === 0 ? true : false)
       setTypeOfPromotion(formData.PromotionType.typeOfPromotion)
+      if(match.params.type === 'coupon'){
+        getPromotionCode()
+      }
     }else {
       getPromotionCode()
     }

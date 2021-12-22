@@ -68,7 +68,9 @@ export default class MyHeader extends React.Component {
       // Spanish: util.requireLocalSrc(lan === 'es' ? Const.SITE_NAME === 'MYVETRECO' ? 'sys/Spanish_act_blue.png' : 'sys/Spanish_act.png' : 'sys/Spanish.png'),
       storeList: [],
       languageList:[],
-      lan:localStorage.getItem(cache.LANGUAGE) || 'en-US'
+      lan:localStorage.getItem(cache.LANGUAGE) || 'en-US',
+      frontLanguageList:[],
+      showMoreLang:true,
     };
   }
 
@@ -113,8 +115,11 @@ export default class MyHeader extends React.Component {
         [item.lang]: defaultImg
       })
     })
+
+    const _frontLanguageList = _languageList.length && _languageList.slice(0,7) || []
     this.setState({
       languageList: _languageList,
+      frontLanguageList:_frontLanguageList
     })
   }
 
@@ -162,24 +167,33 @@ export default class MyHeader extends React.Component {
       { name: 'France', value: 'fr' },
       { name: 'Spanish', value: 'es' }
     ];
+
     return (
-      <div style={{ position: 'relative', height: 640 }}>
-        <div style={{ width: '60%', position: 'absolute', top: '23%', left: '20%' }}>
-          <p style={{ textAlign: 'center', fontSize: 56, color: 'var(--primary-color)', marginBottom: 50 }}>
+      <div style={{height: 640,display:'flex',alignItems:'center' }}>
+        <div>
+          <p style={{ textAlign: 'center', fontSize: 50, color: 'var(--primary-color)'}}>
             <Icon type="environment" style={{ fontSize: 48 }} />
             &nbsp;&nbsp;
             <span>
               <FormattedMessage id="Public.ChooseLocation" />
             </span>
           </p>
-          <div className="space-around">
-            {this.state.languageList?.map((item) => {
+          <p style={styles.languageMore}>
+            <a onClick={() => this.handleMoreLanguage()}>
+              <span style={this.state.showMoreLang?{display:"block"}:{display:"none"}}>
+                <FormattedMessage id="Public.more" />
+                <span style={styles.languageGt}>&gt;</span>
+              </span>
+            </a>
+          </p>
+          <div style={styles.languageListWrap}>
+            {this.state.frontLanguageList?.map((item) => {
               return (
                 <img
                   key={item.lang}
                   style={{
                     cursor: 'pointer',
-                    width: '25%'
+                    width: '14.2%'
                   }}
                   onMouseLeave={(e) => {
                     // this.setImgSrc(item.name, item.value, '');
@@ -288,6 +302,13 @@ export default class MyHeader extends React.Component {
    this.modifyLang(value)
 
   };
+
+  handleMoreLanguage = () =>{
+    this.setState({
+      frontLanguageList:this.state.languageList,
+      showMoreLang:false
+    })
+  }
 
   modifyLang = async (value) => {
     const currentLanguageKey = localStorage.getItem(cache.LANGUAGE) || 'en-US';
@@ -723,4 +744,23 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center'
   },
+  languageMore: {
+    color:"var(--primary-color)",
+    textAlign:'right',
+    fontSize:"20px",
+    marginBottom:"35px",
+    position:"relative",
+    padding:'0 16px',
+  },
+  languageGt: {
+    position: "absolute",
+    top: "2px",
+  },
+  languageListWrap: {
+    display:'flex',
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+    maxHeight: "470px",
+    overflowY: "auto"
+  }
 } as any;

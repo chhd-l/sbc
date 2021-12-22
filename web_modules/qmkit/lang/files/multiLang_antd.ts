@@ -10,7 +10,7 @@ import fr from 'antd/es/locale/fr_FR';
 import ru from 'antd/es/locale/ru_RU';
 import sv from 'antd/es/locale/sv_SE';
 import tr from 'antd/es/locale/tr_TR';
-
+import jp from 'antd/es/locale/ja_JP';
 
 const antdMultiLang = {
   mx: enUS,
@@ -20,7 +20,8 @@ const antdMultiLang = {
   ru: ru,
   tr: tr,
   es: es,
-  sv: sv
+  sv: sv,
+  jp:jp,
 };
 
 const key = localStorage.getItem(cache.LANGUAGE) || 'en-US';

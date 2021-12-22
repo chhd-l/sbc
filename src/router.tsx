@@ -855,6 +855,11 @@ const routes = [
     path: '/navigation-add',
     asyncComponent: () => import('./navigation-update')
   },
+  // 营销横幅
+  {
+    path: '/marketing-banner',
+    asyncComponent: () => import('./marketing-banner')
+  },
   //商品评价
   {
     path: '/nps-list',
@@ -924,6 +929,10 @@ const routes = [
   {
     path: '/order-audit-setting',
     asyncComponent: () => import('./order-audit-setting-new')
+  },
+  {
+    path: '/custom-account-setting',
+    asyncComponent: () => import('./custom-account-setting')
   },
   {
     path: '/report-product',

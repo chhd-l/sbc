@@ -58,15 +58,15 @@ const NEW_ADDRESS_TEMPLATE = {
 };
 
 /**
- * manage all subscription
+ * 订单详情
  */
 export default class SubscriptionDetail extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      subscriptionList: [],
       pickupIsOpen: false, // pickup开关
-      subscriptionId: null,
+      title: 'Subscription edit',
+      subscriptionId: this.props.match.params.subId,
       loading: false,
       orderInfo: {},
       subscriptionInfo: {},
@@ -141,13 +141,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       timeSlot: undefined,
       deliveryDateList: [],
       timeSlotList: [],
-      deliverDateStatus: 0
+      deliverDateStatus: 0,
+      subscriptionList:[],
+      checkedSubscriptionId:'-1'
     };
   }
 
   componentDidMount() {
     this.getDict();
-    this.getSubscriptionList();
+    this.getSubscriptionDetail();
     this.getCurrencySymbol();
     this.getDeliveryDateStatus();
 
@@ -157,10 +159,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         pickupIsOpen
       });
     }
-  }
-
-  componentWillUnmount() {
-    sessionStorage.removeItem('subscriptionNo');
   }
 
   // 获取 deliveryState 状态
@@ -188,23 +186,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  getSubscriptionList = () => {
+  getSubscriptionDetail = () => {
     this.setState({
       loading: true
     });
-    let params = {
-      pageNum: 0,
-      pageSize: 999,
-      customerAccount: sessionStorage.getItem('taskCustomerAccount')
-    };
     webapi
-      .getSubscriptionList(params)
+      .getTaskSubscriptionList({ customerAccount: sessionStorage.getItem('taskCustomerAccount') })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          let subscriptionList = res.context.subscriptionResponses;
-          console.log('subscriptionList', subscriptionList);
-          this.setState({ subscriptionList: subscriptionList });
+          let subscriptionList=res.context.subscriptionResponseVOList;
+          this.setState({subscriptionList:subscriptionList})
           let subscriptionDetail = subscriptionList[0];
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
@@ -225,91 +217,89 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
             customerId: subscriptionDetail.customerId
           };
-          let orderInfo = {
-            recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
-            orderStatus: subscriptionDetail.trades
-              ? subscriptionDetail.trades[0].tradeState.flowState
-              : ''
-          };
-          let recentOrderList = [];
-          if (subscriptionDetail.trades) {
-            for (let i = 0; i < subscriptionDetail.trades.length; i++) {
-              let recentOrder = {
-                recentOrderId: subscriptionDetail.trades[i].id,
-                orderStatus: subscriptionDetail.trades[i].tradeState.flowState
-              };
-              recentOrderList.push(recentOrder);
-            }
-          }
-
-          let goodsInfo = subscriptionDetail.goodsInfo;
-          let paymentInfo = subscriptionDetail.payPaymentInfo;
-          let paymentMethod = subscriptionDetail.paymentMethod;
-
-          let subscribeGoods = [];
-          let subscribeNumArr = [];
-          let periodTypeArr = [];
-          for (let i = 0; i < goodsInfo.length; i++) {
-            let ginfo = goodsInfo[i];
-            subscribeNumArr.push(ginfo.subscribeNum);
-            periodTypeArr.push(ginfo.periodTypeId);
-
-            // 组装订阅商品goodsInfoId和数量
-            let goodsInfoId = ginfo?.goodsInfoVO?.goodsInfoId;
-            subscribeGoods.push({
-              goodsInfoId: goodsInfoId,
-              quantity: ginfo.subscribeNum
-            });
-          }
-          let originalParams = {
-            billingAddressId: subscriptionDetail.billingAddressId,
-            deliveryAddressId: subscriptionDetail.deliveryAddressId,
-            subscribeNumArr: subscribeNumArr,
-            periodTypeArr: periodTypeArr,
-            nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
-            promotionCode: subscriptionDetail.promotionCode
-          };
-
-          this.setState(
-            {
-              subscribeGoods: subscribeGoods,
-              subscriptionType: subscriptionDetail.subscriptionType,
-              subscriptionInfo: subscriptionInfo,
-              orderInfo: orderInfo,
-              recentOrderList: recentOrderList,
-              goodsInfo: goodsInfo,
-              paymentInfo: paymentInfo,
-              petsId: subscriptionDetail.petsId,
-              deliveryAddressId: subscriptionDetail.deliveryAddressId,
-              deliveryAddressInfo: subscriptionDetail.consignee,
-              billingAddressId: subscriptionDetail.billingAddressId,
-              billingAddressInfo: subscriptionDetail.invoice,
-              originalParams: originalParams,
-              promotionCodeShow: subscriptionDetail.promotionCode,
-              noStartOrder: subscriptionDetail.noStartTradeList,
-              completedOrder: subscriptionDetail.completedTradeList,
-              paymentMethod: paymentMethod,
-              deliveryDate: subscriptionDetail.consignee.deliveryDate,
-              timeSlot: subscriptionDetail.consignee.timeSlot
-            },
-            () => {
-              if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
-                let customerId = this.state.deliveryAddressInfo.customerId;
-                this.getAddressList(customerId, 'DELIVERY');
-                this.getAddressList(customerId, 'BILLING');
-                this.applyPromotionCode(this.state.promotionCodeShow);
-                if (
-                  subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
-                  +storeId === 123457907
-                ) {
-                  this.getTimeSlot({
-                    cityNo: subscriptionDetail.consignee.provinceIdStr,
-                    subscribeId: subscriptionInfo.subscriptionNumber
-                  });
-                }
-              }
-            }
-          );
+          this.setState({subscriptionDetail:subscriptionDetail,subscriptionInfo:subscriptionInfo})
+          // let orderInfo = {
+          //   recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
+          //   orderStatus: subscriptionDetail.trades
+          //     ? subscriptionDetail.trades[0].tradeState.flowState
+          //     : ''
+          // };
+          // let recentOrderList = [];
+          // if (subscriptionDetail.trades) {
+          //   for (let i = 0; i < subscriptionDetail.trades.length; i++) {
+          //     let recentOrder = {
+          //       recentOrderId: subscriptionDetail.trades[i].id,
+          //       orderStatus: subscriptionDetail.trades[i].tradeState.flowState
+          //     };
+          //     recentOrderList.push(recentOrder);
+          //   }
+          // }
+          // let goodsInfo = subscriptionDetail.goodsInfo;
+          // let paymentInfo = subscriptionDetail.payPaymentInfo;
+          // let paymentMethod = subscriptionDetail.paymentMethod;
+          // let subscribeGoods = [];
+          // let subscribeNumArr = [];
+          // let periodTypeArr = [];
+          // for (let i = 0; i < goodsInfo.length; i++) {
+          //   let ginfo = goodsInfo[i];
+          //   subscribeNumArr.push(ginfo.subscribeNum);
+          //   periodTypeArr.push(ginfo.periodTypeId);
+          //   // 组装订阅商品goodsInfoId和数量
+          //   let goodsInfoId = ginfo?.goodsInfoVO?.goodsInfoId;
+          //   subscribeGoods.push({
+          //     goodsInfoId: goodsInfoId,
+          //     quantity: ginfo.subscribeNum
+          //   });
+          // }
+          // let originalParams = {
+          //   billingAddressId: subscriptionDetail.billingAddressId,
+          //   deliveryAddressId: subscriptionDetail.deliveryAddressId,
+          //   subscribeNumArr: subscribeNumArr,
+          //   periodTypeArr: periodTypeArr,
+          //   nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
+          //   promotionCode: subscriptionDetail.promotionCode
+          // };
+          // this.setState(
+          //   {
+          //     subscriptionList:subscriptionList,
+          //     subscribeGoods: subscribeGoods,
+          //     subscriptionType: subscriptionDetail.subscriptionType,
+          //     subscriptionInfo: subscriptionInfo,
+          //     orderInfo: orderInfo,
+          //     recentOrderList: recentOrderList,
+          //     goodsInfo: goodsInfo,
+          //     paymentInfo: paymentInfo,
+          //     petsId: subscriptionDetail.petsId,
+          //     deliveryAddressId: subscriptionDetail.deliveryAddressId,
+          //     deliveryAddressInfo: subscriptionDetail.consignee,
+          //     billingAddressId: subscriptionDetail.billingAddressId,
+          //     billingAddressInfo: subscriptionDetail.invoice,
+          //     originalParams: originalParams,
+          //     promotionCodeShow: subscriptionDetail.promotionCode,
+          //     noStartOrder: subscriptionDetail.noStartTradeList,
+          //     completedOrder: subscriptionDetail.completedTradeList,
+          //     paymentMethod: paymentMethod,
+          //     deliveryDate: subscriptionDetail.consignee.deliveryDate,
+          //     timeSlot: subscriptionDetail.consignee.timeSlot
+          //   },
+          //   () => {
+          //     if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
+          //       let customerId = this.state.deliveryAddressInfo.customerId;
+          //       this.getAddressList(customerId, 'DELIVERY');
+          //       this.getAddressList(customerId, 'BILLING');
+          //       this.applyPromotionCode(this.state.promotionCodeShow);
+          //       if (
+          //         subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
+          //         +storeId === 123457907
+          //       ) {
+          //         this.getTimeSlot({
+          //           cityNo: subscriptionDetail.consignee.provinceIdStr,
+          //           subscribeId: subscriptionInfo.subscriptionNumber
+          //         });
+          //       }
+          //     }
+          //   }
+          // );
         } else {
           this.setState({
             loading: false
@@ -581,7 +571,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
           message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
           setTimeout(() => {
-            this.getSubscriptionList();
+            this.getSubscriptionDetail();
           }, 1000);
         } else {
           this.setState({
@@ -1034,7 +1024,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getSubscriptionList();
+          this.getSubscriptionDetail();
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
         } else {
           this.setState({
@@ -1075,7 +1065,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getSubscriptionList();
+          this.getSubscriptionDetail();
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
         } else {
           this.setState({
@@ -1311,37 +1301,59 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       timeSlotList,
       timeSlot,
       deliverDateStatus,
-      subscriptionList
+      subscriptionList,
+      checkedSubscriptionId
+      // operationLog
     } = this.state;
+
+    // const cartExtra = (
+    //   <Button type="link"  style={{fontSize:16,}}>Skip Next Delivery</Button>
+    // );
 
     const columns = [
       {
-        title: <FormattedMessage id="task.AssociateSubscription" />
+        title: <FormattedMessage id="task.AssociateSubscription" />,
+        width:'7%',
+        render:(text,record)=>(
+          <Checkbox
+            checked={record.subscriptionId===checkedSubscriptionId}
+            onChange={(e) => {
+              this.setState({checkedSubscriptionId:record.subscriptionId===checkedSubscriptionId?'-1':record.subscriptionId})
+            }}
+          />
+        )
       },
       {
         title: <FormattedMessage id="Subscription.SubscriptionNumber" />,
-        dataIndex: 'subscribeId'
+        dataIndex: 'subscribeId',
+        width:'7%',
       },
       {
         title: <FormattedMessage id="product.productName" />,
         key: 'Product',
-        render: (text: any, record: any) => record.goodsInfo[0].goodsName
+        width:'7%',
+        render: (text: any, record: any) => record.goodsResponseVOList[0].goodsName
       },
       {
         title: <FormattedMessage id="Task.ShipmentDate" />,
-        render: (text: any, record: any) => moment(record.updateTime)
+        width:'7%',
+        render: (text: any, record: any) => record.firstDeliveryTime
       },
       {
         title: <FormattedMessage id="Task.DeliveryAddress" />
       },
       {
-        title: <FormattedMessage id="Order.paymentMethod" />
+        title: <FormattedMessage id="Order.paymentMethod" />,
+        dataIndex:'paymentMethod',
+        width:'7%',
       },
       {
         title: <FormattedMessage id="weight" />
       },
       {
-        title: <FormattedMessage id="Product.ExternalSKU" />
+        title: <FormattedMessage id="Product.ExternalSKU" />,
+        dataIndex:'externalSubscribeId',
+        width:'7%',
       },
       {
         title: <FormattedMessage id="task.statusOfSubscription" />,
@@ -1350,8 +1362,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Subscription.Qty" />,
-        dataIndex: 'subscribeNum',
         key: 'subscribeNum',
+        width:'7%',
         render: (text, record) => (
           <div className="subscription_edit_quantity">
             {record.subscriptionType == 'Individualization' ? (
@@ -1368,7 +1380,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     value
                   });
                 }}
-                value={record.subscribeNum}
+                value={record.goodsResponseVOList[0].subscribeNum}
                 disabled={subscriptionType === 'Peawee'}
               />
             )}
@@ -1379,16 +1391,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         title: <FormattedMessage id="Subscription.Frequency" />,
         dataIndex: 'frequency',
         key: 'frequency',
+        width:'7%',
         render: (text: any, record: any) => (
           <div className="subscription_edit_frequency">
             <Select
-              style={{ width: '70%' }}
+              style={{ width: '100%' }}
               value={record.periodTypeId}
               onChange={(value: any) => {
                 value = value === '' ? null : value;
                 this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
               }}
-              disabled={subscriptionType === 'Peawee' ? true : false}
+              disabled={subscriptionType === 'Peawee'}
             >
               {/* individualFrequencyList */}
               {subscriptionType == 'Individualization'
@@ -1418,19 +1431,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <span>
               {currencySymbol +
                 ' ' +
-                this.getSubscriptionPrice(+record.subscribeNum * +record.originalPrice)}
+                this.getSubscriptionPrice(+record.goodsResponseVOList[0].subscribeNum * +record.goodsResponseVOList[0].subscribePrice)}
             </span>
           </div>
         )
       },
       {
-        title: <FormattedMessage id="subscription.deliveryDate" />
+        title: <FormattedMessage id="subscription.deliveryDate" />,
+        width:'6%',
+        render: (text: any, record: any) => record.firstDeliveryTime
       },
       {
         title: <FormattedMessage id="Order.timeSlot" />
       },
       {
-        title: <FormattedMessage id="Subscription.DeliveryMethod" />
+        title: <FormattedMessage id="Subscription.DeliveryMethod" />,
+        render: (text: any, record: any) => record.deliveryType === 1 ? 'Home Delivery' : record.deliveryType === 2 ? 'Pickup Delivery' : ''
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />
@@ -1542,7 +1558,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'
-                        ? item.petsName + '\'s personalized subscription'
+                        ? item.petsName + "'s personalized subscription"
                         : item.skuName}
                     </p>
                     <p>{item.specDetails}</p>
@@ -1676,7 +1692,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'
-                        ? item.petsName + '\'s personalized subscription'
+                        ? item.petsName + "'s personalized subscription"
                         : item.skuName}
                     </p>
                     <p>{item.specDetails}</p>
@@ -1890,6 +1906,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Breadcrumb>
 
         <Spin spinning={this.state.loading}>
+          {' '}
           <div className="container-search task-manage-all-subscription">
             <Headline title={<FormattedMessage id="Subscription.edit" />} />
 
@@ -1897,18 +1914,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             <Row className="subscription-basic-info">
               <Col span={11} className="basic-info">
                 <p>
-                  <FormattedMessage id="Subscription.PetOwnerName" /> :{subscriptionInfo.consumer}
+                  <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
+                  <span>{subscriptionInfo.consumer}</span>
                 </p>
                 <p>
-                  <FormattedMessage id="Subscription.ConsumerAccount" /> :
-                  {subscriptionInfo.consumerAccount}
+                  <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
+                  <span>{subscriptionInfo.consumerAccount}</span>
                 </p>
                 <p>
-                  <FormattedMessage id="Subscription.ConsumerType" /> :
-                  {subscriptionInfo.consumerType}
+                  <FormattedMessage id="Subscription.ConsumerType" /> :{' '}
+                  <span>{subscriptionInfo.consumerType}</span>
                 </p>
                 <p>
-                  <FormattedMessage id="Subscription.PhoneNumber" /> :{subscriptionInfo.phoneNumber}
+                  <FormattedMessage id="Subscription.PhoneNumber" /> :{' '}
+                  <span>{subscriptionInfo.phoneNumber}</span>
                 </p>
               </Col>
             </Row>
@@ -2122,7 +2141,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           style={styles.edit}
                           onClick={() => this.billingOpen()}
                           className="iconfont iconEdit"
-                        />
+                        ></a>
                       </Tooltip>
                     </Col>
 
@@ -2206,7 +2225,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             style={styles.edit}
                             onClick={() => this.setState({ paymentMethodVisible: true })}
                             className="iconfont iconEdit"
-                          />
+                          ></a>
                         </Col>
                         <PaymentMethod
                           cancel={() => this.setState({ paymentMethodVisible: false })}
@@ -2728,4 +2747,4 @@ const styles = {
     background: '#fff',
     borderRadius: 3
   }
-} as any;
+};

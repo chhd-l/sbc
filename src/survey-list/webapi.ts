@@ -3,7 +3,7 @@ import { Fetch } from 'qmkit';
 /**
  * 调查列表
  */
- export const surveyList = (params) =>{
+export const surveyList = (params) => {
   return Fetch('/survey/list', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -13,7 +13,7 @@ import { Fetch } from 'qmkit';
 /**
  * 删除一条调查
  */
- export const deleteSurvey = (params) =>{
+export const deleteSurvey = (params) => {
   return Fetch('/survey/delete', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -23,7 +23,7 @@ import { Fetch } from 'qmkit';
 /**
  * 新增调查
  */
- export const addNewSurvey = (params) =>{
+export const addNewSurvey = (params) => {
   return Fetch('/survey/add', {
     method: 'POST',
     body: JSON.stringify(params)
@@ -33,7 +33,7 @@ import { Fetch } from 'qmkit';
 /**
  * 调查详情
  */
- export const surveyDetail = (id) =>{
+export const surveyDetail = (id) => {
   return Fetch(`/survey/detail/${id}`, {
     method: 'GET',
   });
@@ -42,7 +42,7 @@ import { Fetch } from 'qmkit';
 /**
  * 调查详情列表
  */
- export const surveyResponderList = (params) =>{
+export const surveyResponderList = (params) => {
   return Fetch("/survey/responder-list", {
     method: 'POST',
     body: JSON.stringify(params)
@@ -52,9 +52,21 @@ import { Fetch } from 'qmkit';
 /**
  * 调查详情编辑
  */
- export const updateSurvey = (params) =>{
+export const updateSurvey = (params) => {
   return Fetch("/survey/update", {
     method: 'POST',
     body: JSON.stringify(params)
+  });
+}
+
+/**
+ * survey type 字典
+ */
+export const surveyTypeDict = () => {
+  return Fetch("/sysdict/querySysDictionary", {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'surveyType'
+    })
   });
 }

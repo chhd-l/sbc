@@ -36,7 +36,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticTriggerValue: 1,
         orderAllowZonePriceStatus: false,
         orderAllowZonePriceValue: 1,
-        paymentWhen: 'None'
+        paymentWhen: 'None',
+        statusChangeWhen:'delivered',
       },
       paymentCashForm: {
         orderExpirationTimeStatus: false,
@@ -53,7 +54,8 @@ class OrderSetting extends Component<any, any> {
         orderAutomaticConfirmationValue: 1,
         orderAutomaticTriggerStatus: false,
         orderAutomaticTriggerValue: 1,
-        paymentWhen: 'None'
+        paymentWhen: 'None',
+        statusChangeWhen:'delivered',
       },
       unlimitedForm: {
         orderExpirationTimeStatus: false,
@@ -736,40 +738,43 @@ class OrderSetting extends Component<any, any> {
                   <FormItem label={<FormattedMessage id="Order.PaymentCategory" />}>
                     <div>
                       <Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>
-                        <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Online payment">
+                        <Radio style={{ width: 140, textAlign: 'center' }} value="Online payment">
                           <FormattedMessage id="Order.OnlinePayment" />
-                        </Radio.Button>
-                        <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Cash">
+                        </Radio>
+                        <Radio style={{ width: 140, textAlign: 'center' }} value="Cash">
                           <FormattedMessage id="Order.Cash" />
-                        </Radio.Button>
+                        </Radio>
                       </Radio.Group>
                     </div>
                   </FormItem>
 
-                  <FormItem label={<FormattedMessage id="Order.capturePaymentWhen" />}>
-                    <Row>
-                      <Select
-                        value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}
-                        style={{ width: 140 }}
-                        onChange={(value) => {
-                          if (paymentCategory === 'Online payment') {
-                            this.paymentOnlineFormChange({
-                              field: 'paymentWhen',
-                              value: value
-                            });
-                          } else {
-                            this.paymentCashFormChange({
-                              field: 'paymentWhen',
-                              value: value
-                            });
-                          }
-                        }}
-                      >
-                        <Option value="None"><FormattedMessage id="Order.none" /></Option>
-                        <Option value="To be delivered"><FormattedMessage id="Order.toBeDelivered" /></Option>
-                        <Option value="Shipped"><FormattedMessage id="Order.Shipped" /></Option>
-                      </Select>
-                    </Row>
+                  {/*<FormItem label={<FormattedMessage id="Order.capturePaymentWhen" />}>*/}
+                  {/*  <Row>*/}
+                  {/*    <Select*/}
+                  {/*      value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}*/}
+                  {/*      style={{ width: 140 }}*/}
+                  {/*      onChange={(value) => {*/}
+                  {/*        if (paymentCategory === 'Online payment') {*/}
+                  {/*          this.paymentOnlineFormChange({*/}
+                  {/*            field: 'paymentWhen',*/}
+                  {/*            value: value*/}
+                  {/*          });*/}
+                  {/*        } else {*/}
+                  {/*          this.paymentCashFormChange({*/}
+                  {/*            field: 'paymentWhen',*/}
+                  {/*            value: value*/}
+                  {/*          });*/}
+                  {/*        }*/}
+                  {/*      }}*/}
+                  {/*    >*/}
+                  {/*      <Option value="None"><FormattedMessage id="Order.none" /></Option>*/}
+                  {/*      <Option value="To be delivered"><FormattedMessage id="Order.toBeDelivered" /></Option>*/}
+                  {/*      <Option value="Shipped"><FormattedMessage id="Order.Shipped" /></Option>*/}
+                  {/*    </Select>*/}
+                  {/*  </Row>*/}
+                  {/*</FormItem>*/}
+                  <FormItem>
+                    <strong> sales order setting </strong>
                   </FormItem>
                   {paymentCategory === 'Online payment' ? (
                     <>
@@ -818,10 +823,12 @@ class OrderSetting extends Component<any, any> {
                         />
                         {paymentOnlineForm.orderConfirmReceiptStatus ? (
                             <div style={styles.inputStyle}>
+                              {/*<span>After</span>*/}
                               <InputNumber
                                 precision={0}
                                 min={1}
                                 max={9999}
+                                // style={{ margin: '0 5px' }}
                                 value={paymentOnlineForm.orderConfirmReceiptValue}
                                 onChange={(value) =>
                                   this.paymentOnlineFormChange({
@@ -831,71 +838,50 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDays" /></span>
+                              {/*<span > days of </span>*/}
+                              {/*    <Select*/}
+                              {/*      value={paymentCategory === 'Online payment' ? paymentOnlineForm.statusChangeWhen : paymentCashForm.statusChangeWhen}*/}
+                              {/*      style={{ width: 140 }}*/}
+                              {/*      onChange={(value) => {*/}
+                              {/*        if (paymentCategory === 'Online payment') {*/}
+                              {/*          this.paymentOnlineFormChange({*/}
+                              {/*            field: 'statusChangeWhen',*/}
+                              {/*            value: value*/}
+                              {/*          });*/}
+                              {/*        } else {*/}
+                              {/*          this.paymentCashFormChange({*/}
+                              {/*            field: 'statusChangeWhen',*/}
+                              {/*            value: value*/}
+                              {/*          });*/}
+                              {/*        }*/}
+                              {/*      }}*/}
+                              {/*    >*/}
+                              {/*      <Option value="delivered">delivered</Option>*/}
+                              {/*      <Option value="shipped"><FormattedMessage id="Order.Shipped" /></Option>*/}
+                              {/*    </Select>*/}
+                              {/*<span style={{ margin: '0 10px' }}>status,</span>*/}
+                              {/*<span >*/}
+                              {/*  the pending review return orders will be automatically approved.</span>*/}
                             </div>
                         ) : null}
                       </FormItem>
 
-                      <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
+                      <FormItem label={<FormattedMessage id="Order.AllowZoneOrder" />}>
                         <Switch
                           checkedChildren={RCi18n({ id: 'Order.On' })}
                           unCheckedChildren={RCi18n({ id: 'Order.Off' })}
-                          checked={paymentOnlineForm.orderRefundsStatus}
+                          checked={paymentOnlineForm.orderAllowZonePriceStatus}
                           onChange={(value) =>
                             this.paymentOnlineFormChange({
-                              field: 'orderRefundsStatus',
+                              field: 'orderAllowZonePriceStatus',
                               value: value
                             })
                           }
                         />
-                        {paymentOnlineForm.orderRefundsStatus ? (
-                            <div style={styles.inputStyle}>
-                              <InputNumber
-                                precision={0}
-                                min={1}
-                                max={9999}
-                                value={paymentOnlineForm.orderRefundsValue}
-                                onChange={(value) =>
-                                  this.paymentOnlineFormChange({
-                                    field: 'orderRefundsValue',
-                                    value: value
-                                  })
-                                }
-                              />
-                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
-                            </div>
-                        ) : null}
                       </FormItem>
 
-                      <FormItem label={<FormattedMessage id="Order.Automatic" />}>
-                        <Switch
-                          checkedChildren={RCi18n({ id: 'Order.On' })}
-                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
-                          checked={paymentOnlineForm.orderAutomaticReviewStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderAutomaticReviewStatus',
-                              value: value
-                            })
-                          }
-                        />
-                        {paymentOnlineForm.orderAutomaticReviewStatus ? (
-                            <div style={styles.inputStyle}>
-                              <InputNumber
-                                precision={0}
-                                min={0}
-                                max={9999}
-                                value={paymentOnlineForm.orderAutomaticReviewValue}
-                                onChange={(value) =>
-                                  this.paymentOnlineFormChange({
-                                    field: 'orderAutomaticReviewValue',
-                                    value: value
-                                  })
-                                }
-                              />
-                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysMerchant" /></span>
-                            </div>
-                        ) : null}
-                      </FormItem>
+                      <FormItem> <strong> Return order setting </strong> </FormItem>
+
                       <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
                         <Switch
                           checkedChildren={RCi18n({ id: 'Order.On' })}
@@ -926,6 +912,67 @@ class OrderSetting extends Component<any, any> {
                             </div>
                         ) : null}
                       </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderRefundsStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderRefundsStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentOnlineForm.orderRefundsStatus ? (
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={1}
+                              max={9999}
+                              value={paymentOnlineForm.orderRefundsValue}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderRefundsValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
+                          </div>
+                        ) : null}
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automatic" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAutomaticReviewStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAutomaticReviewStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentOnlineForm.orderAutomaticReviewStatus ? (
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={0}
+                              max={9999}
+                              value={paymentOnlineForm.orderAutomaticReviewValue}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderAutomaticReviewValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysMerchant" /></span>
+                          </div>
+                        ) : null}
+                      </FormItem>
+
                       <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
                         <Switch
                           checkedChildren={RCi18n({ id: 'Order.On' })}
@@ -989,19 +1036,6 @@ class OrderSetting extends Component<any, any> {
                               <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
                             </div>
                         ) : null}
-                      </FormItem>
-                      <FormItem label={<FormattedMessage id="Order.AllowZoneOrder" />}>
-                        <Switch
-                          checkedChildren={RCi18n({ id: 'Order.On' })}
-                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
-                          checked={paymentOnlineForm.orderAllowZonePriceStatus}
-                          onChange={(value) =>
-                            this.paymentOnlineFormChange({
-                              field: 'orderAllowZonePriceStatus',
-                              value: value
-                            })
-                          }
-                        />
                       </FormItem>
                     </>
                   ) : null}
@@ -1068,6 +1102,37 @@ class OrderSetting extends Component<any, any> {
                             </div>
                         ) : null}
                       </FormItem>
+                      <FormItem> <strong> Return order setting </strong> </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderAutomaticSkipStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderAutomaticSkipStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentCashForm.orderAutomaticSkipStatus ? (
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={0}
+                              max={9999}
+                              value={paymentCashForm.orderAutomaticSkipValue}
+                              onChange={(value) =>
+                                this.paymentCashFormChange({
+                                  field: 'orderAutomaticSkipValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                          </div>
+                        ) : null}
+                      </FormItem>
 
                       <FormItem label={<FormattedMessage id="Order.CompletedOrdersAllowed" />}>
                         <Switch
@@ -1127,36 +1192,6 @@ class OrderSetting extends Component<any, any> {
                                 }
                               />
                               <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysTheMerchant" /></span>
-                            </div>
-                        ) : null}
-                      </FormItem>
-                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
-                        <Switch
-                          checkedChildren={RCi18n({ id: 'Order.On' })}
-                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
-                          checked={paymentCashForm.orderAutomaticSkipStatus}
-                          onChange={(value) =>
-                            this.paymentCashFormChange({
-                              field: 'orderAutomaticSkipStatus',
-                              value: value
-                            })
-                          }
-                        />
-                        {paymentCashForm.orderAutomaticSkipStatus ? (
-                            <div style={styles.inputStyle}>
-                              <InputNumber
-                                precision={0}
-                                min={0}
-                                max={9999}
-                                value={paymentCashForm.orderAutomaticSkipValue}
-                                onChange={(value) =>
-                                  this.paymentCashFormChange({
-                                    field: 'orderAutomaticSkipValue',
-                                    value: value
-                                  })
-                                }
-                              />
-                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
                             </div>
                         ) : null}
                       </FormItem>
@@ -1229,6 +1264,7 @@ class OrderSetting extends Component<any, any> {
               </TabPane>
               <TabPane tab={<FormattedMessage id="Order.cashOnDelivery" />} key="Cash on delivery">
                 <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
+                  <FormItem><strong> sales order setting </strong></FormItem>
                   <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                     <Switch
                       checkedChildren={RCi18n({ id: 'Order.On' })}
@@ -1289,7 +1325,7 @@ class OrderSetting extends Component<any, any> {
                         </div>
                     ) : null}
                   </FormItem>
-
+                  <FormItem><strong> Return order setting </strong></FormItem>
                   <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
                     <Switch
                       checkedChildren={RCi18n({ id: 'Order.On' })}
@@ -1452,18 +1488,22 @@ class OrderSetting extends Component<any, any> {
 
                     return (
                       <FormItem label={filedType[item.sequenceType]} key={item.sequenceType}>
-                        <div style={{ display: "flex" }}>
-                          <Input addonBefore="Prefix" style={{ width: 200, }} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
-                          <InputNumber style={{ width: 140, margin: '0 10px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
-                          <Input style={{ width: 200, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
+                        <div style={{ display: 'flex' }}>
+                          <Button >Prefix</Button> &nbsp;&nbsp;
+                          <Input  style={{ width: 100, margin: '0 20px'}} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
+                          <Input style={{ width: 100, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
+                          <InputNumber style={{ width: 100, margin: '0 20px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
+                          <sup className="ant-form-item-required"></sup>
                         </div>
                       </FormItem>
                     )
 
 
                   })}
-
-                  {/* <FormItem label={<FormattedMessage id="Order.SubscriptionNumber" />}>
+                  <Row>
+                    <Col span={13}></Col>
+                    <Col> <a className="ant-form-item-required"></a> Order Number Length </Col>
+                  </Row>                  {/* <FormItem label={<FormattedMessage id="Order.SubscriptionNumber" />}>
                     <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
                   </FormItem>
                   <FormItem label={<FormattedMessage id="Order.ReturnOrderNumber" />}>

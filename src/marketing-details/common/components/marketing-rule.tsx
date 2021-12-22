@@ -66,11 +66,11 @@ export default class MarketingRule extends React.Component<any, any> {
                     </span>
                     ) : subType === 2 ? ( //full amount discount
                       <div className="rule-span">
-                        <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {(level.discount * 100).toFixed()} % discount
+                        <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} discount {100 - (level.discount * 100)} % discount
                       </div>
                     ) : subType === 3 ? ( //full quantity discount
                       <span className="rule-span">
-                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {(level.discount * 100).toFixed()} % discount
+                      <FormattedMessage id="Marketing.Full" /> {level.fullAmount == 0 || level.fullAmount ? level.fullAmount : level.fullCount} items discount {100 - (level.discount * 100)} % discount
                     </span>
                     ) : subType === 6 ? ( // subsctiption reduction
                       <div className="rule-span">
@@ -87,7 +87,7 @@ export default class MarketingRule extends React.Component<any, any> {
                       <div className="rule-span">
                         <div>
                           <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
-                          {(level.firstSubscriptionOrderDiscount * 100).toFixed()} % <FormattedMessage id="Marketing.discount" />
+                          {100 - (level.firstSubscriptionOrderDiscount * 100)} % <FormattedMessage id="Marketing.discount" />
                           {
                             level.firstSubscriptionLimitAmount && (
                               <>
@@ -97,7 +97,7 @@ export default class MarketingRule extends React.Component<any, any> {
                           }
                         </div>
                         <div>
-                          <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {(level.restSubscriptionOrderDiscount * 100).toFixed()}&nbsp;% <FormattedMessage id="Marketing.discount" />
+                          <FormattedMessage id="Marketing.Fortherestsubscriptionorder" /> {100 - (level.restSubscriptionOrderDiscount * 100)}&nbsp;% <FormattedMessage id="Marketing.discount" />
                           {
                             level.restSubscriptionLimitAmount && (
                               <>

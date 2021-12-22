@@ -130,7 +130,8 @@ export default class CouponBasicInfo extends Component<any, any> {
     const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute, currentGroup } = this.props.relaxProps;
     const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
       fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
-      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList,fullGiftDetailList
+      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList,fullGiftDetailList,couponDiscount,
+      limitAmount
     } = coupon.toJS();
     console.log(coupon.toJS())
     let dataSource = fromJS([])
@@ -210,6 +211,14 @@ export default class CouponBasicInfo extends Component<any, any> {
             couponPromotionType === 0 &&
             <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
               <div style={style}>{`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}</div>
+            </FormItem>
+          }
+          {
+            couponPromotionType === 1 &&
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
+              <div style={style}>
+                {`${100 - couponDiscount*100}%, ${(window as any).RCi18n({id: 'Marketing.DiscountLimit'})} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${limitAmount}`}
+              </div>
             </FormItem>
           }
           {

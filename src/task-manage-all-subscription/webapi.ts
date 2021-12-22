@@ -229,8 +229,8 @@ export function getPickupPointStatus(id: String) {
   });
 }
 
-export function getSubscriptionList(filterParams = {}) {
-  return Fetch<TResult>('/sub/findPage', {
+export function getTaskSubscriptionList(filterParams = {}) {
+  return Fetch<TResult>('/sub/getManageAllSubscriptionList', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams

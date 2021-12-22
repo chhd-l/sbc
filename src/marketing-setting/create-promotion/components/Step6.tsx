@@ -106,9 +106,12 @@ export default function Step6({setLoading}) {
         rangeDayType: 0,
         couponDesc: '',
       }
-      if(match.params.id){
+      if(match.params.id && match.params.type === 'coupon'){
         detail = await webapi.editCoupon({...params,couponId:match.params.id,storeId:formData.storeId})
       }else {
+        if(match.params.type === 'promotion'){
+          await webapi.deleteMarketing(match.params.id)
+        }
         detail = await webapi.addCoupon(params)
       }
     }else {
@@ -185,9 +188,12 @@ export default function Step6({setLoading}) {
           subType: subType,
           isClub: false,//未用到
         }
-        if(match.params.id){
+        if(match.params.id && match.params.type === 'promotion'){
           detail = await webapi.updateFullReduction({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
           detail = await webapi.addFullReduction(params)
         }
       }
@@ -224,9 +230,12 @@ export default function Step6({setLoading}) {
           marketingSubscriptionReduction: {},//未知 有什么作用
           isClub: false,//未用到
         }
-        if(match.params.id){
+        if(match.params.id && match.params.type === 'promotion'){
           detail =  await webapi.updateFreeShipping({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
           detail = await webapi.addFreeShipping(params)
         }
 
@@ -281,9 +290,12 @@ export default function Step6({setLoading}) {
           subType: subType,
           isClub: false,//未用到
         }
-        if(match.params.id){
+        if(match.params.id && match.params.type === 'promotion'){
           detail = await webapi.updateFullDiscount({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
           detail = await webapi.addFullDiscount(params)
         }
       }
@@ -324,9 +336,12 @@ export default function Step6({setLoading}) {
           subType: subType,
           isClub: false,
         }
-        if(match.params.id){
+        if(match.params.id && match.params.type === 'promotion'){
           detail = await webapi.updateFullGift({...params,marketingId:match.params.id,storeId:formData.storeId})
         }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
           detail = await webapi.addFullGift(params)
         }
       }

@@ -1,10 +1,13 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Headline, history } from 'qmkit'
-import { Modal, Button, Form, Input, Row, Col, Switch, Spin } from 'antd'
+import { Modal, Button, Form, Input, Row, Col, Switch, Spin, Select } from 'antd'
+import * as webapi from '../webapi'
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const { Option } = Select;
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -21,8 +24,23 @@ const formItemLayout = {
 export default class NewSurveyModal extends React.Component<any, any>{
   constructor(props) {
     super(props);
-
+    this.state = {
+      surveyTypeList: []
+    }
   }
+
+  componentDidMount(): void {
+    this.getSurveyTypeDict()
+  }
+
+  getSurveyTypeDict = async () => {
+    const { res } = await webapi.surveyTypeDict();
+    const surveyTypeList = res.context?.sysDictionaryVOS || []
+    this.setState({
+      surveyTypeList,
+    })
+  }
+
   handleOk = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -43,7 +61,8 @@ export default class NewSurveyModal extends React.Component<any, any>{
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible, detailData,confirmLoading} = this.props;
+    const { visible, detailData, confirmLoading } = this.props;
+    const { surveyTypeList } = this.state;
     return (
       <Modal
         title={<strong><FormattedMessage id="Survey.survey_content" /></strong>}
@@ -59,7 +78,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
           {...formItemLayout}
         >
           <Row>
-            <Col span={18}>
+            <Col span={22}>
               <FormItem label={<FormattedMessage id="Survey.title" />}>
                 {getFieldDecorator('title', {
                   rules: [
@@ -67,11 +86,11 @@ export default class NewSurveyModal extends React.Component<any, any>{
                       required: true,
                     },
                   ],
-                  initialValue: detailData?.title|| ''
+                  initialValue: detailData?.title || ''
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={18}>
+            <Col span={22}>
               <FormItem label={<FormattedMessage id="Survey.label" />}>
                 {getFieldDecorator('label', {
                   rules: [
@@ -79,11 +98,29 @@ export default class NewSurveyModal extends React.Component<any, any>{
                       required: true,
                     },
                   ],
-                  initialValue: detailData?.label|| ''
+                  initialValue: detailData?.label || ''
                 })(<Input />)}
               </FormItem>
             </Col>
-            <Col span={18}>
+            <Col span={22}>
+              <FormItem label={<FormattedMessage id="Survey.show_survey" />}>
+                {getFieldDecorator('surveyTypes', {
+                  rules: [
+                    {
+                      required: true,
+                    },
+                  ],
+                  initialValue: detailData?.surveyTypes || []
+                })(<Select
+                  mode="multiple"
+                  className="survey_types"
+                  getPopupContainer={() => document.getElementsByClassName('survey_types')[0]}
+                >
+                  {surveyTypeList.map(item => <Option key={item.id} value={item.name}>{item.name}</Option>)}
+                </Select>)}
+              </FormItem>
+            </Col>
+            <Col span={22}>
               <FormItem label={<FormattedMessage id="Survey.description" />}>
                 {getFieldDecorator('description', {
                   rules: [
@@ -95,7 +132,7 @@ export default class NewSurveyModal extends React.Component<any, any>{
                 })(<TextArea rows={4} />)}
               </FormItem>
             </Col>
-            <Col span={18}>
+            <Col span={22}>
               <FormItem label={<FormattedMessage id="Survey.active" />}>
                 {getFieldDecorator('status', {
                   valuePropName: 'checked',

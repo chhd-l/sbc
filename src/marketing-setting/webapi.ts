@@ -210,3 +210,21 @@ export const updateFullGift = (giftBean) => {
     body: JSON.stringify(giftBean)
   });
 };
+
+
+/**
+ * 删除优惠券
+ */
+export function deleteCoupon(id) {
+  return Fetch<TResult>(`/coupon-info/${id}`, { method: 'DELETE' });
+}
+/**
+ * 删除营销
+ * @param marketingId
+ * @returns {Promise<IAsyncResult<TResult>>}
+ */
+export const deleteMarketing = (marketingId) => {
+  return Fetch<TResult>(`/marketing/delete/${marketingId}`, {
+    method: 'DELETE'
+  });
+};

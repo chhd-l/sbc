@@ -60,7 +60,7 @@ export const getStoreInfo = () => {
  * navigation header & footer
  */
 export function getStoreHeader() {
-  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
+  return Fetch<TResult>('/storeConfig//queryStoreConfig/headerFooterConfig');
 }
 
 export function saveStoreHeader(params = {}) {

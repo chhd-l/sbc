@@ -41,6 +41,7 @@ const index = () => {
           setList(data)
         }else {
           console.log('ERROR')
+          message.error('error')
         }
     })
   },[])
@@ -56,7 +57,7 @@ const index = () => {
     webapi
       .editCustomAccountSetting(data).then(({ res }) => {
           if (res.code == Const.SUCCESS_CODE){
-            console.log('OK')
+            // console.log('OK')
             message.success('Operation successful');
           }else {
             message.error('error')
@@ -66,7 +67,7 @@ const index = () => {
 
   function radioChange(e: any){
     setRoleChoice(e.target.value)
-    console.log(roleChoice,'role')
+    // console.log(roleChoice,'role')
   }
 
   return (
@@ -89,12 +90,12 @@ const index = () => {
           <div style={{padding:'30px 20px 0 20px',margin:'20px 20px 0 20px',background: '#fff',borderRadius:'10px'}}>
             {/*<Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>*/}
             <Radio.Group disabled={editDisable} value={roleChoice} >
-              <Radio  value="1" onClick={radioChange}>
+              <Radio  value="2" onClick={radioChange}>
                 <a style={{color:'#222'}}>Accounts are optional</a>
                 <p>Customers will be able to check out with a customer account or as a guest.</p>
               </Radio>
               <br/>
-              <Radio value="2" onClick={radioChange}>
+              <Radio value="1" onClick={radioChange}>
                 <a style={{color:'#222'}}>Accounts are required</a>
                 <p>Customers will only be able to check out if they have a customer account.</p>
               </Radio>

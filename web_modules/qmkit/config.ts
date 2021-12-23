@@ -18,6 +18,7 @@ export default {
   PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',
+  ISPRODUCT: false,
 
   PAYMENT: {
     "ru": {

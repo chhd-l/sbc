@@ -410,6 +410,10 @@ const routes = [
     path: '/customer-clinic-list',
     asyncComponent: () => import('./customer-clinic-list')
   },
+  {
+    path: '/pet-owner-blocklist',
+    asyncComponent: () => import('./pet-owner-blocklist')
+  },
   // clinic客户详情
   {
     path: '/customer-clinic-details/:type/:id/:account',

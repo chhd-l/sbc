@@ -1,3 +1,6 @@
+// Multi language has integrated to Phrase app flatform.
+// * https://app.phrase.com/
+// * minytang@deloitte.com.cn/Test1106,,,^^^^^^
 
 import { cache, Const } from 'qmkit';
 

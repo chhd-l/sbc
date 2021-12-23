@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Tabs, message, Input, Modal, Switch, Select } from 'antd';
 
 import { FormattedMessage } from 'react-intl';
+import LogisticSettingForm from './logistic-setting-form';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
 import { SelectGroup, Const, noop, RCi18n } from 'qmkit';
-import List from "@/groupon-activity-list/component/list";
+import List from '@/groupon-activity-list/component/list';
 import { Relax } from 'plume2';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 const { TabPane } = Tabs;
 
 const formItemLayout = {
@@ -20,10 +23,12 @@ const formItemLayout = {
 };
 @Relax
 class LogisticSettingModal extends React.Component<any, any> {
+  WrapperForm: any;
   constructor(props) {
     super(props);
+    this.WrapperForm = Form.create({})(LogisticSettingForm);
   }
-  form;
+  _form;
   props: {
     visible: any;
     form: any;
@@ -51,142 +56,42 @@ class LogisticSettingModal extends React.Component<any, any> {
   };
 
   _save = () => {
-    const { saveSetting } = this.props.relaxProps
-    this.props.form.validateFields(null, async (errs, values) => {
+    const form = this._form as WrappedFormUtils;
+    const { saveSetting } = this.props.relaxProps;
+    form.validateFields((errs) => {
       if (!errs) {
-        saveSetting()
+        saveSetting();
       }
     });
-  }
+  };
   _cancel = () => {
-    const { closeSettingModal } = this.props.relaxProps
-    closeSettingModal()
-  }
+    const { closeSettingModal } = this.props.relaxProps;
+    closeSettingModal();
+  };
   _afterClose = () => {
-    const { afterCloseSettingModal } = this.props.relaxProps
-    this.props.form.resetFields()
-    afterCloseSettingModal()
-  }
+    const form = this._form as WrappedFormUtils;
+    const { afterCloseSettingModal } = this.props.relaxProps;
+    form.resetFields();
+    afterCloseSettingModal();
+  };
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-
-    const { onSettingFormChange,settingForm, settingModalVisible, saveSettingLoading, } = this.props.relaxProps
+    const { onSettingFormChange, settingForm, settingModalVisible, saveSettingLoading } =
+      this.props.relaxProps;
+    const WrapperForm = this.WrapperForm;
     return (
-      <Modal afterClose={this._afterClose}
-             confirmLoading={saveSettingLoading}
-             maskClosable={false}
-             title={<FormattedMessage id="Setting.Editlogisticsetting"/>}
-             visible={settingModalVisible}
-             onOk={this._save} onCancel={() => this._cancel()}>
-        <Form>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Headertoken" />}>
-            {getFieldDecorator('headerToken', {
-              initialValue:settingForm.get('headerToken')||'',
-              rules: [
-                {
-                  required: true,
-                  message: RCi18n({
-                    id: 'Setting.Pleaseinputheadertoken'
-                  }),
-                },
-              ],
-            })(
-              <Input placeholder={
-                RCi18n({
-                  id: 'Setting.Pleaseinputheadertoken'
-                })}
-                     onChange={(e) => {
-                       onSettingFormChange({
-                         field: 'headerToken',
-                         value: e.target.value
-                       })
-                     }}
-              />
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Username" />}>
-            {getFieldDecorator('userName', {
-              initialValue:settingForm.get('userName')||'',
-              rules: [
-                {
-                  required: true,
-                  message: RCi18n({
-                    id: 'Setting.Pleaseinputusername'
-                  }),
-                },
-              ],
-            })(
-              <Input placeholder={
-                RCi18n({
-                  id: 'Setting.Pleaseinputusername'
-                })
-              }
-                     onChange={(e)=>{
-                       onSettingFormChange({
-                         field: 'userName',
-                         value: e.target.value
-                       })
-                     }}
-              />
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
-            {getFieldDecorator('lang', {
-               initialValue:settingForm.get('lang')||'',
-              rules: [
-                {
-                  required: true,
-                  message: RCi18n({
-                    id: 'Setting.Pleaseinputlang'
-                  }),
-                },
-              ],
-            })(
-              <Input placeholder={
-                RCi18n({
-                  id: 'Setting.Pleaseinputlang'
-                })
-              }
-                     onChange={(e)=>{
-                       onSettingFormChange({
-                         field: 'lang',
-                         value: e.target.value
-                       })
-                     }}
-              />
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Url" />}>
-            {getFieldDecorator('outUrl', {
-               initialValue:settingForm.get('outUrl')||'',
-              rules: [
-                {
-                  required: true,
-                  message: RCi18n({
-                    id: 'Setting.Pleaseinputurl'
-                  }),
-                },
-              ],
-            })(
-              <Input placeholder={
-                RCi18n({
-                  id: 'Setting.Pleaseinputurl'
-                })
-              }
-                     onChange={(e)=>{
-                       onSettingFormChange({
-                         field: 'outUrl',
-                         value: e.target.value
-                       })
-                     }}
-              />
-            )}
-          </Form.Item>
-
-        </Form>
+      <Modal
+        afterClose={this._afterClose}
+        confirmLoading={saveSettingLoading}
+        maskClosable={false}
+        title={<FormattedMessage id="Setting.Editlogisticsetting" />}
+        visible={settingModalVisible}
+        onOk={() => this._save()}
+        onCancel={() => this._cancel()}
+      >
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
 }
-export default Form.create()(LogisticSettingModal);
+export default LogisticSettingModal;

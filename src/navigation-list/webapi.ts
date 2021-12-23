@@ -69,3 +69,27 @@ export function saveStoreHeader(params = {}) {
     body: JSON.stringify(params)
   });
 }
+
+
+export function getCookieBanner() {
+  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
+}
+
+export function saveCookieBanner(params = {}) {
+  return Fetch<TResult>('/storeConfig/banner/update', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+
+export function getShopConfig() {
+  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
+}
+
+export function saveShopConfig(params = {}) {
+  return Fetch<TResult>('/storeConfig/update', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

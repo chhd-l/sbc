@@ -1215,6 +1215,14 @@ const routes = [
     path: '/store-footer',
     asyncComponent: () => import('./navigation-list/footer')
   },
+  {
+    path: '/cookie-banner',
+    asyncComponent: () => import('./navigation-list/banner')
+  },
+  {
+    path: '/shop-config',
+    asyncComponent: () => import('./navigation-list/shopConfig')
+  },
   /**
    * setting-integration
    * **/

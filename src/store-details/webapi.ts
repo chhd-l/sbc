@@ -28,19 +28,6 @@ export function getDictionaryByType(dictionaryType: String) {
   }).catch(() => { return []; });
 }
 
-export function getOrderSettingConfig() {
-  return Fetch<TResult>('/orderConfig/query', {
-    method: 'GET'
-  });
-}
-
-export function getQueryOrderSequence() {
-  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] ?? 0;
-  return Fetch<TResult>(`/orderConfig/queryOrderSequence?storeId=${storeId}`, {
-    method: 'GET'
-  });
-}
-
 export const getCateList = () => {
   return Fetch<TResult>('/contract/cate/list', {
     method: 'GET'
@@ -60,11 +47,3 @@ export const editStoreInfo = (info) => {
   });
 };
 
-export function updateOrderSettingConfig(filterParams = {}) {
-  return Fetch<TResult>('/orderConfig', {
-    method: 'PUT',
-    body: JSON.stringify({
-      ...filterParams
-    })
-  });
-}

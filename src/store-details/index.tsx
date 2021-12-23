@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Input, InputNumber, Select, Row, Col, Spin, Icon, message, Button } from 'antd';
 import { Headline, BreadCrumb, Const, QMUpload, Tips, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getStoreInfo, getDictionaryByType, getQueryOrderSequence, getOrderSettingConfig, editStoreInfo, updateOrderSettingConfig } from './webapi';
+import { getStoreInfo, getDictionaryByType, editStoreInfo } from './webapi';
 import SignedInfo from './components/signed-info';
 
 const FormItem = Form.Item;
@@ -38,10 +38,7 @@ class StoreDetail extends React.Component<any, any> {
       languageList: [],
       timezoneList: [],
       currencyList: [],
-      orderConfigModifyRequest: {}, //无用数据，为了使用order setting的接口设置order rule
-      sequenceRequestList: [],
       storeInfoChanged: false,
-      orderSettingChanged: false
     };
   }
 
@@ -51,31 +48,26 @@ class StoreDetail extends React.Component<any, any> {
 
   getInitStoreInfo = () => {
     this.setState({ loading: true });
-    Promise.all([
-      getStoreInfo(),
-      getQueryOrderSequence()
-    ]).then(([data, orderSeqData]) => {
-      if (data.res.code === Const.SUCCESS_CODE && orderSeqData.res.code === Const.SUCCESS_CODE) {
+    getStoreInfo().then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
           loading: false,
           storeInfo: data.res.context ?? {},
           storeLogoImage: data.res.context.storeLogo ? [{ uid: 'store-logo-1', name: data.res.context.storeLogo, size: 1, url: data.res.context.storeLogo, status: 'done' }] : [],
-          storeSignImage: data.res.context.storeSign ? [{ uid: 'store-sign-1', name: data.res.context.storeSign, size: 1, url: data.res.context.storeSign, status: 'done' }] : [],
-          sequenceRequestList: orderSeqData.res.context
+          storeSignImage: data.res.context.storeSign ? [{ uid: 'store-sign-1', name: data.res.context.storeSign, size: 1, url: data.res.context.storeSign, status: 'done' }] : []
         });
         this.props.form.setFieldsValue(Object.assign({}, (data.res.context ?? {}), { cityIds: data.res.context?.cityIds ?? [], languageId: data.res.context?.languageId ? data.res.context.languageId[0] : null }));
       } else {
         this.setState({ loading: false });
       }
     }).catch(() => { this.setState({ loading: false }); });
-    Promise.all([getDictionaryByType('country'), getDictionaryByType('city'), getDictionaryByType('language'), getDictionaryByType('timeZone'), getDictionaryByType('currency'), getOrderSettingConfig()]).then(([countryList, cityList, languageList, timezoneList, currencyList, orderSetting]) => {
+    Promise.all([getDictionaryByType('country'), getDictionaryByType('city'), getDictionaryByType('language'), getDictionaryByType('timeZone'), getDictionaryByType('currency')]).then(([countryList, cityList, languageList, timezoneList, currencyList]) => {
       this.setState({
         countryList: countryList,
         cityList: cityList,
         languageList: languageList,
         timezoneList: timezoneList,
-        currencyList: currencyList,
-        orderConfigModifyRequest: orderSetting.res.context ?? {}
+        currencyList: currencyList
       });
     });
   }
@@ -130,17 +122,6 @@ class StoreDetail extends React.Component<any, any> {
     }
   };
 
-  changeInputValue = (e, key, index) => {
-    const { sequenceRequestList } = this.state;
-    let value = e.target && e.target.value || e
-    let findFiled = sequenceRequestList[index]
-    findFiled[key] = value;
-    this.setState({
-      sequenceRequestList,
-      orderSettingChanged: true
-    })
-  };
-
   modifyChangedStatus = () => {
     if (!this.state.storeInfoChanged) {
       this.setState({ storeInfoChanged: true });
@@ -149,22 +130,20 @@ class StoreDetail extends React.Component<any, any> {
 
   saveSetting = () => {
     const { form } = this.props;
-    const { orderConfigModifyRequest, sequenceRequestList, storeLogoImage, storeSignImage, storeInfo, storeInfoChanged, orderSettingChanged } = this.state;
+    const { storeLogoImage, storeSignImage, storeInfo } = this.state;
     form.validateFields((err, values) => {
       if (!err) {
         this.setState({ loading: true });
         values['languageId'] = [values['languageId']];
-        Promise.all([
-          storeInfoChanged
-           ? editStoreInfo({ ...storeInfo, ...values, ...(storeLogoImage.length > 0 ? { storeLogo: storeLogoImage[0]['url'] } : {}), ...(storeSignImage.length > 0 ? { storeSign: storeSignImage[0]['url'] } : {}) })
-           : Promise.resolve({ res: { code: Const.SUCCESS_CODE } }),
-          orderSettingChanged
-           ? updateOrderSettingConfig({ orderConfigModifyRequest, sequenceRequestList })
-           : Promise.resolve({ res: { code: Const.SUCCESS_CODE } })
-        ]).then(([data1, data2]) => {
-          if (data1.res.code === Const.SUCCESS_CODE && data2.res.code === Const.SUCCESS_CODE) {
+        editStoreInfo({
+          ...storeInfo,
+          ...values,
+          ...(storeLogoImage.length > 0 ? { storeLogo: storeLogoImage[0]['url'] } : {}),
+          ...(storeSignImage.length > 0 ? { storeSign: storeSignImage[0]['url'] } : {})
+        }).then((data) => {
+          if (data.res.code === Const.SUCCESS_CODE) {
             message.success(RCi18n({ id: 'Setting.Operationsuccessful' }));
-            this.setState({ storeInfoChanged: false, orderSettingChanged: false });
+            this.setState({ storeInfoChanged: false });
           }
           this.setState({ loading: false });
         }).catch(() => { this.setState({ loading: false }); });
@@ -189,7 +168,7 @@ class StoreDetail extends React.Component<any, any> {
       return: <FormattedMessage id="Order.ReturnOrderNumber" />
     };
     const { getFieldDecorator } = this.props.form;
-    const { loading, storeInfo, countryList, cityList, languageList, timezoneList, currencyList, sequenceRequestList } = this.state;
+    const { loading, storeInfo, countryList, cityList, languageList, timezoneList, currencyList } = this.state;
     return (
       <div>
         <BreadCrumb />
@@ -400,24 +379,6 @@ class StoreDetail extends React.Component<any, any> {
                 </FormItem>
               </Col>
             </Row>
-            <Row gutter={[24,2]}>
-              <Col span={4} style={{textAlign:'right'}}><FormattedMessage id="Setting.editOrderIdFormat"/>:</Col>
-            </Row>
-            <Row gutter={[24,2]}>
-              <Col span={18} push={3}>
-                {sequenceRequestList.map((item, index) => {
-                  return (
-                    <FormItem label={filedType[item.sequenceType]} key={item.sequenceType} labelCol={{xs:{span:24},sm:{span:5}}} wrapperCol={{xs:{span:24},sm:{span:16}}}>
-                      <div style={{ display: "flex" }}>
-                        <Input addonBefore="Prefix" style={{ width: 200, }} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
-                        <InputNumber style={{ width: 140, margin: '0 10px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
-                        <Input style={{ width: 200, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
-                      </div>
-                    </FormItem>
-                  )
-                })}
-              </Col>
-            </Row>
             <div style={styles.title}><FormattedMessage id="Setting.signedInformation"/></div>
             <Row gutter={[24,2]}>
               <Col span={22} push={1}>
@@ -428,7 +389,7 @@ class StoreDetail extends React.Component<any, any> {
         </Spin>
         </div>
         <div className="bar-button">
-          <Button type="primary" disabled={!this.state.storeInfoChanged && !this.state.orderSettingChanged} onClick={this.saveSetting}>
+          <Button type="primary" disabled={!this.state.storeInfoChanged} onClick={this.saveSetting}>
             <FormattedMessage id="Setting.Save" />
           </Button>
         </div>

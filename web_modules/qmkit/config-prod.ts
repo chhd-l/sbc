@@ -153,7 +153,9 @@ const _config = {
       }
     }
   },
-  'store.royalcanin.com': {}
+  'store.royalcanin.com': {
+    ISPRODUCT: true
+  }
 };
 
 const SITE_NAME = host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC';

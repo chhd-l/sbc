@@ -931,8 +931,8 @@ const routes = [
     asyncComponent: () => import('./order-audit-setting-new')
   },
   {
-    path: '/custom-account-setting',
-    asyncComponent: () => import('./custom-account-setting')
+    path: '/customer-account-setting',
+    asyncComponent: () => import('./customer-account-setting')
   },
   {
     path: '/report-product',

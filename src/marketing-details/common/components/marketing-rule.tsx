@@ -87,7 +87,7 @@ export default class MarketingRule extends React.Component<any, any> {
                       <div className="rule-span">
                         <div>
                           <FormattedMessage id="Marketing.theFirstSubscriptionOrder" />
-                          {(level.firstSubscriptionOrderDiscount * 100).toFixed()} % <FormattedMessage id="Marketing.discount" />
+                          {100 - (level.firstSubscriptionOrderDiscount * 100)} % <FormattedMessage id="Marketing.discount" />
                           {
                             level.firstSubscriptionLimitAmount && (
                               <>

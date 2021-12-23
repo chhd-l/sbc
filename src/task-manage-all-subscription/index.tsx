@@ -177,6 +177,19 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
+  //一个订阅含多个商品，进行订阅拆分
+  handleSubscriptionGoods = (subscriptionList) => {
+    let tempSubscriptionList = [];
+    subscriptionList.map((item) => {
+      item.goodsResponseVOList.map((e, index) => {
+        tempSubscriptionList.push(
+          Object.assign(item, { goodsResponse: e, showCheckBox: index === 0 })
+        );
+      });
+    });
+    return tempSubscriptionList;
+  };
+
   getManageAllSubscription = () => {
     this.setState({
       loading: true
@@ -187,6 +200,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionList = res.context.subscriptionResponseVOList;
+          subscriptionList = this.handleSubscriptionGoods(subscriptionList);
+          console.log('subscriptionList', subscriptionList);
           this.setState({ subscriptionList: subscriptionList });
           let subscriptionDetail = subscriptionList[0];
           let subscriptionInfo = {
@@ -197,11 +212,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 : subscriptionDetail.subscribeStatus === '1'
                 ? RCi18n({ id: 'Subscription.Pause' })
                 : RCi18n({ id: 'Subscription.Inactive' }),
-            subscriptionNumber: subscriptionDetail.subscribeId,
+            subscribeId: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
-            presciberID: subscriptionDetail.prescriberId,
-            presciberName: subscriptionDetail.prescriberName,
-            consumer: subscriptionDetail.customerName,
+            customerName: subscriptionDetail.customerName,
             consumerAccount: subscriptionDetail.customerAccount,
             consumerType: subscriptionDetail.customerType,
             phoneNumber: subscriptionDetail.customerPhone,
@@ -262,26 +275,22 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           //       let customerId = this.state.deliveryAddressInfo.customerId;
           //       this.getAddressList(customerId, 'DELIVERY');
           //       this.getAddressList(customerId, 'BILLING');
-          //       this.applyPromotionCode(this.state.promotionCodeShow);
           //       if (
           //         subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
           //         +storeId === 123457907
           //       ) {
           //         this.getTimeSlot({
           //           cityNo: subscriptionDetail.consignee.provinceIdStr,
-          //           subscribeId: subscriptionInfo.subscriptionNumber
+          //           subscribeId: subscriptionInfo.subscribeId
           //         });
           //       }
           //     }
           //   }
           // );
-        } else {
-          this.setState({
-            loading: false
-          });
         }
       })
-      .catch(() => {
+      .catch(() => {})
+      .finally(() => {
         this.setState({
           loading: false
         });
@@ -408,32 +417,20 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   };
 
   onGoodsChange = ({ field, goodsId, value }) => {
-    let data = this.state.goodsInfo;
-    if (field === 'subscribeNum') {
-      data = data.map((item) => {
-        if (item.skuId === goodsId) {
-          item.subscribeNum = value;
+    let data = this.state.subscriptionList;
+    data = data.map((item) => {
+      if (item.goodsResponse.skuId === goodsId) {
+        if (field === 'subscribeNum') {
+          item.goodsResponse.subscribeNum = value;
+        } else {
+          item.goodsResponse.periodTypeId = value;
         }
-        return item;
-      });
-    }
-    if (field === 'periodTypeId') {
-      data = data.map((item) => {
-        if (item.skuId === goodsId) {
-          item.periodTypeId = value;
-        }
-        return item;
-      });
-    }
-
-    this.setState(
-      {
-        goodsInfo: data
-      },
-      () => {
-        this.applyPromotionCode(this.state.promotionCodeShow);
       }
-    );
+      return item;
+    });
+    this.setState({
+      goodsInfo: data
+    });
   };
 
   updateSubscription = () => {
@@ -447,7 +444,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       deliveryDateList,
       timeSlotList,
       deliveryDate,
-      timeSlot
+      timeSlot,
+      checkedSubscriptionIdList,
+      subscriptionList
     } = this.state;
     this.setState({
       saveLoading: true
@@ -455,22 +454,22 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     let subscribeNumArr = [];
     let periodTypeArr = [];
     let validNum = true;
-    for (let i = 0; i < goodsInfo.length; i++) {
-      if (goodsInfo[i].subscribeNum) {
-        subscribeNumArr.push(goodsInfo[i].subscribeNum);
-        periodTypeArr.push(goodsInfo[i].periodTypeId);
-      } else {
-        validNum = false;
-        break;
-      }
-    }
-    if (!validNum) {
-      this.setState({
-        saveLoading: false
-      });
-      message.error(RCi18n({ id: 'Subscription.quantityAndFrequency' }));
-      return;
-    }
+    // for (let i = 0; i < goodsInfo.length; i++) {
+    //   if (goodsInfo[i].subscribeNum) {
+    //     subscribeNumArr.push(goodsInfo[i].subscribeNum);
+    //     periodTypeArr.push(goodsInfo[i].periodTypeId);
+    //   } else {
+    //     validNum = false;
+    //     break;
+    //   }
+    // }
+    // if (!validNum) {
+    //   this.setState({
+    //     saveLoading: false
+    //   });
+    //   message.error(RCi18n({ id: 'Subscription.quantityAndFrequency' }));
+    //   return;
+    // }
     //俄罗斯 HOME_DELIVERY 如果deliveryDateList 有值,
     if (
       +storeId === 123457907 &&
@@ -495,7 +494,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       deliveryAddressId: deliveryAddressId,
       goodsItems: goodsInfo,
       nextDeliveryTime: moment(subscriptionInfo.nextDeliveryTime).format('YYYY-MM-DD'),
-      subscribeId: subscriptionInfo.subscriptionNumber,
+      subscribeId: subscriptionInfo.subscribeId,
       changeField: '',
       promotionCode: this.state.promotionCodeShow,
       paymentId: this.state.paymentId,
@@ -532,8 +531,33 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     //   params.changeField = changeFieldArr.join(',');
     // }
 
+    let goodsItems = [];
+    subscriptionList.map((ele) => {
+      checkedSubscriptionIdList.map((item) => {
+        if (ele.subscribeId === item) {
+          goodsItems.push({
+            subscribeGoodsId: ele.goodsResponse.subscribeGoodsId,
+            subscribeNum: ele.goodsResponse.subscribeNum,
+            subscribeId: ele.goodsResponse.subscribeId,
+            skuId: ele.goodsResponse.skuId,
+            periodTypeId: ele.goodsResponse.periodTypeId
+          });
+        }
+      });
+    });
+    const apiParams = {
+      subscriptionRequestList: this.state.checkedSubscriptionIdList,
+      goodsItems: goodsItems,
+      paymentId: this.state.paymentId,
+      deliveryAddressId: params.deliveryAddressId,
+      deliveryDate: params.deliveryDate,
+      timeSlot: params.timeSlot,
+      customerId: this.state.customerId
+    };
+    console.log('apiParams', apiParams);
+
     webapi
-      .updateManageAllSubscription(params)
+      .updateManageAllSubscription(apiParams)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -816,7 +840,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
         this.getTimeSlot({
           cityNo: deliveryAddressInfo.provinceIdStr,
-          subscribeId: subscriptionInfo.subscriptionNumber
+          subscribeId: subscriptionInfo.subscribeId
         });
         this.setState({
           deliveryDate: undefined,
@@ -829,15 +853,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
-    // if (await webapi.getAddressInputTypeSetting() === 'AUTOMATICALLY') {
-    //   const feeRes = await webapi.calcShippingFee(deliveryAddressInfo.address1);
-    //   if (feeRes.res.code === Const.SUCCESS_CODE && feeRes.res.context.success) {
-    //     deliveryPrice = feeRes.res.context.tariffs[0]?.deliveryPrice ?? 0
-    //   } else {
-    //     message.error(<FormattedMessage id="Subscription.shippingArea"/>);
-    //     return;
-    //   }
-    // }
 
     if (this.state.sameFlag) {
       this.setState({
@@ -855,7 +870,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         visibleShipping: false
       });
     }
-    this.applyPromotionCode();
   };
   billingOpen = () => {
     this.setState({
@@ -896,82 +910,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     }
   };
 
-  subTotal = () => {
-    const { goodsInfo } = this.state;
-    let sum = 0;
-    for (let i = 0; i < goodsInfo.length; i++) {
-      if (goodsInfo[i].subscribeNum && goodsInfo[i].originalPrice) {
-        sum += +goodsInfo[i].subscribeNum * +goodsInfo[i].originalPrice;
-      }
-    }
-    return sum;
-  };
-  removePromotionCode = () => {
-    this.setState(
-      {
-        promotionCodeInput: ''
-      },
-      () => {
-        this.applyPromotionCode();
-      }
-    );
-  };
-  applyPromotionCode = (promotionCode?: String) => {
-    const { goodsInfo, promotionCodeInput, subscriptionInfo } = this.state;
-    this.setState({
-      loading: true
-    });
-    let goodsInfoList = [];
-    for (let i = 0; i < goodsInfo.length; i++) {
-      let goods = {
-        goodsInfoId: goodsInfo[i].skuId,
-        buyCount: goodsInfo[i].subscribeNum,
-        periodTypeId: goodsInfo[i].periodTypeId,
-        goodsInfoFlag: 1
-      };
-      goodsInfoList.push(goods);
-    }
-    let params = {
-      totalPrice: this.subTotal(),
-      goodsInfoList: goodsInfoList,
-      promotionCode: promotionCode ? promotionCode : promotionCodeInput,
-      deliveryAddressId: this.state.deliveryAddressId,
-      customerAccount: subscriptionInfo.consumerAccount,
-      isAutoSub: true
-    };
-    webapi
-      .getPromotionPrice(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            deliveryPrice: res.context.deliveryPrice,
-            discountsPrice: res.context.discountsPrice,
-            promotionCodeShow: res.context.promotionCode,
-            taxFeePrice: res.context.taxFeePrice ? res.context.taxFeePrice : 0,
-            isPromotionCodeValid: res.context.promotionFlag,
-            promotionDesc: res.context.promotionDesc,
-            freeShippingFlag: res.context.freeShippingFlag ?? false,
-            freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
-            subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
-            promotionVOList: res.context.promotionVOList ?? [],
-            loading: false
-          });
-        } else {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
-      });
-  };
-
-  handleYearChange = () => {};
-  tabChange = () => {};
   cancelNextSubscription = (row) => {
     // let goodsItems = [];
     // if (row && row.tradeItems) {
@@ -1279,48 +1217,58 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="task.AssociateSubscription" />,
         width: '7%',
-        render: (text, record) => (
-          <Checkbox
-            checked={checkedSubscriptionIdList.includes(record.subscriptionId)}
-            onChange={(e) => {
-              const tempCheckedSubscription = checkedSubscriptionIdList;
-              let index = tempCheckedSubscription.indexOf(record.subscriptionId);
-              if (index !== -1) {
-                tempCheckedSubscription.splice(index, 1);
-              } else {
-                tempCheckedSubscription.push(record.subscriptionId);
-              }
-              this.setState({ checkedSubscriptionIdList: tempCheckedSubscription });
-            }}
-          />
-        )
+        key: 'index',
+        render: (text, record) =>
+          record.showCheckBox ? (
+            <Checkbox
+              checked={checkedSubscriptionIdList.includes(record.subscribeId)}
+              onChange={(e) => {
+                const tempCheckedSubscription = checkedSubscriptionIdList;
+                let index = tempCheckedSubscription.indexOf(record.subscribeId);
+                if (index !== -1) {
+                  tempCheckedSubscription.splice(index, 1);
+                } else {
+                  tempCheckedSubscription.push(record.subscribeId);
+                }
+                this.setState({ checkedSubscriptionIdList: tempCheckedSubscription });
+              }}
+            />
+          ) : null
       },
       {
         title: <FormattedMessage id="Subscription.SubscriptionNumber" />,
         dataIndex: 'subscribeId',
+        key: 'subscribeId',
         width: '7%'
       },
       {
         title: <FormattedMessage id="product.productName" />,
         key: 'Product',
         width: '7%',
-        render: (text: any, record: any) => record.goodsResponseVOList[0].goodsName
+        render: (text: any, record: any) => record.goodsResponse.goodsName
       },
       {
         title: <FormattedMessage id="Task.ShipmentDate" />,
         width: '7%',
-        render: (text: any, record: any) => record.firstDeliveryTime
+        key: 'ShipmentDate',
+        render: (text: any, record: any) => record.goodsResponse.nextDeliveryTime
       },
       {
-        title: <FormattedMessage id="Task.DeliveryAddress" />
+        title: <FormattedMessage id="Task.DeliveryAddress" />,
+        width: '9%',
+        key: 'address1',
+        render: (text: any, record: any) => record?.consignee?.address1
       },
       {
         title: <FormattedMessage id="Order.paymentMethod" />,
-        dataIndex: 'paymentMethod',
-        width: '7%'
+        key: 'paymentMethod',
+        width: '6%',
+        render: (text: any, record: any) => record.paymentMethod
       },
       {
-        title: <FormattedMessage id="weight" />
+        title: <FormattedMessage id="weight" />,
+        width: '5%',
+        render: (text: any, record: any) => record.goodsResponse.specText
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
@@ -1328,14 +1276,16 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         width: '7%'
       },
       {
-        title: <FormattedMessage id="task.statusOfSubscription" />,
-        dataIndex: 'subscriptionStatus',
-        render: (text: any, record: any) => <span>{text === 0 ? 'Active' : 'Pause'}</span>
+        // title: <FormattedMessage id="task.statusOfSubscription" />,
+        title: <FormattedMessage id="Subscription.SubscriptionStatus" />,
+        dataIndex: 'subscribeStatus',
+        render: (text: any, record: any) => <span>{text === '0' ? 'Active' : 'Pause'}</span>
       },
       {
-        title: <FormattedMessage id="Subscription.Qty" />,
+        // title: <FormattedMessage id="Subscription.Qty" />,
+        title: <FormattedMessage id="Subscription.Quantity" />,
         key: 'subscribeNum',
-        width: '7%',
+        width: '5%',
         render: (text, record) => (
           <div className="subscription_edit_quantity">
             {record.subscriptionType == 'Individualization' ? (
@@ -1348,11 +1298,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                   value = +value.toString().replace(/\D/g, '');
                   this.onGoodsChange({
                     field: 'subscribeNum',
-                    goodsId: record.skuId,
+                    goodsId: record.goodsResponse.skuId,
                     value
                   });
                 }}
-                value={record.goodsResponseVOList[0].subscribeNum}
+                value={record.goodsResponse.subscribeNum}
                 disabled={subscriptionType === 'Peawee'}
               />
             )}
@@ -1363,15 +1313,19 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Subscription.Frequency" />,
         dataIndex: 'frequency',
         key: 'frequency',
-        width: '7%',
+        width: '6%',
         render: (text: any, record: any) => (
           <div className="subscription_edit_frequency">
             <Select
               style={{ width: '100%' }}
-              value={record.goodsResponseVOList[0].periodTypeId}
+              value={record.goodsResponse.periodTypeId}
               onChange={(value: any) => {
                 value = value === '' ? null : value;
-                this.onGoodsChange({ field: 'periodTypeId', goodsId: record.skuId, value });
+                this.onGoodsChange({
+                  field: 'periodTypeId',
+                  goodsId: record.goodsResponse.skuId,
+                  value
+                });
               }}
               disabled={subscriptionType === 'Peawee'}
             >
@@ -1398,6 +1352,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Order.Total amount" />,
         dataIndex: 'Total',
         key: 'Total',
+        width: '6%',
         render: (text: any, record: any) => (
           <div>
             <span>
@@ -1411,13 +1366,15 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           </div>
         )
       },
+      // {
+      //   title: <FormattedMessage id="subscription.deliveryDate" />,
+      //   width: '6%',
+      //   render: (text: any, record: any) => record.firstDeliveryTime
+      // },
       {
-        title: <FormattedMessage id="subscription.deliveryDate" />,
-        width: '6%',
-        render: (text: any, record: any) => record.firstDeliveryTime
-      },
-      {
-        title: <FormattedMessage id="Order.timeSlot" />
+        title: <FormattedMessage id="Order.timeSlot" />,
+        width: '8%',
+        render: (text: any, record: any) => <span>2021-12-25 12:40-20:20</span>
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,
@@ -1429,7 +1386,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
             : ''
       },
       {
-        title: <FormattedMessage id="task.pickPointStatus" />
+        title: <FormattedMessage id="task.pickPointStatus" />,
+        render: (text: any, record: any) =>
+          record.consignee.pickupPointState ? 'Active' : 'Inactive'
       }
     ];
     const content = (
@@ -1597,7 +1556,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 <Col span={11} className="basic-info">
                   <p>
                     <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
-                    <span>{subscriptionInfo.consumer}</span>
+                    <span>{subscriptionInfo.customerName}</span>
                   </p>
                   <p>
                     <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
@@ -1643,9 +1602,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                     <Col span={12}>
                       {checkedSubscriptionIdList.length > 0 ? (
                         <a
-                          style={styles.edit}
                           onClick={() => this.deliveryOpen()}
-                          className="iconfont iconEdit"
+                          className="iconfont iconEdit pr-10"
                         />
                       ) : null}
                     </Col>
@@ -1820,9 +1778,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           title={<FormattedMessage id="Subscription.Active.Change" />}
                         >
                           <a
-                            style={styles.edit}
                             onClick={() => this.billingOpen()}
-                            className="iconfont iconEdit"
+                            className="iconfont iconEdit pr-10"
                           />
                         </Tooltip>
                       </Col>
@@ -1905,9 +1862,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           <Col span={12}>
                             {checkedSubscriptionIdList.length > 0 ? (
                               <a
-                                style={styles.edit}
                                 onClick={() => this.setState({ paymentMethodVisible: true })}
-                                className="iconfont iconEdit"
+                                className="iconfont iconEdit pr-10"
                               />
                             ) : null}
                           </Col>
@@ -2141,7 +2097,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 >
                   {/* pickup 地址列表 pickup地址不需要校验postCode */}
                   {deliveryType === 'pickupDelivery' && pickupIsOpen ? (
-                    pickupAddress.map((item: any, index: any) => (
+                    (pickupAddress||[]).map((item: any, index: any) => (
                       <Card
                         style={{ width: 602, marginBottom: 10 }}
                         bodyStyle={{ padding: 10 }}
@@ -2447,21 +2403,3 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     );
   }
 }
-const styles = {
-  priceStyle: {
-    marginRight: 15
-  },
-  edit: {
-    paddingRight: 10
-  },
-  imgItem: {
-    width: 60,
-    height: 60,
-    padding: 5,
-    border: '1px solid #ddd',
-    float: 'left',
-    marginRight: 10,
-    background: '#fff',
-    borderRadius: 3
-  }
-};

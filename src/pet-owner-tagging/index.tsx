@@ -383,7 +383,6 @@ class PetOwnerTagging extends Component<any, any> {
         <div>
           <Spin spinning={loading}>
             <BreadCrumb thirdLevel={true}>
-              <Breadcrumb.Item>{title}</Breadcrumb.Item>
             </BreadCrumb>
             <div className="container-search">
               <Headline title={title} />

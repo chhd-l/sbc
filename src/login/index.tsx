@@ -40,7 +40,17 @@ export default withOktaAuth(class Login extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
+    this.getCookieBanner()
     this.getMarsFooter()
+  }
+  getCookieBanner = ()=>{
+    util.loadJS({
+      url: 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js',
+      dataSets: {
+        domainScript: Const.ISPRODUCT?'18097cd9-5541-4f5f-98dc-f59b2b2d5730':'18097cd9-5541-4f5f-98dc-f59b2b2d5730-test',
+        documentLanguage: 'true'
+      }
+    });
   }
   componentWillUnmount(){
     document.getElementById('mars-footer-panel')?.remove() 

@@ -237,3 +237,13 @@ export function getTaskSubscriptionList(filterParams = {}) {
     })
   });
 }
+
+// 批量更新Subscription
+export function updateManageAllSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/updateManageAllSubscription', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

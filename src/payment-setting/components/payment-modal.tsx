@@ -148,7 +148,19 @@ class PaymentModal extends React.Component<any, any> {
                           }} />)}
                         </FormItem>
                       </Col>
-
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Client Key" />}>
+                          {getFieldDecorator(item.id + 'clientKey', {
+                            initialValue: item.pspConfigVO&&item.pspConfigVO.clientKey
+                          })(<Input.TextArea onChange={(e) => {
+                            onFormChange({
+                              id: key,
+                              field: 'clientKey',
+                              value: e.target.value
+                            })
+                          }} />)}
+                        </FormItem>
+                      </Col>
                       {/*新增*/}
                       <Col span={24}>
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
@@ -341,6 +353,7 @@ class PaymentModal extends React.Component<any, any> {
               appId: payPspItemVOList.pspConfigVO.appId,
               privateKey: payPspItemVOList.pspConfigVO.privateKey,
               publicKey: payPspItemVOList.pspConfigVO.publicKey,
+              clientKey: payPspItemVOList.pspConfigVO.clientKey,
             }),
             payPspItemSaveRequest: Object.assign({
               id: payPspItemVOList.pspConfigVO && payPspItemVOList.pspConfigVO.pspItemId ? payPspItemVOList.pspConfigVO.pspItemId : payPspItemVOList.id,

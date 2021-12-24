@@ -70,9 +70,11 @@ export function saveStoreHeader(params = {}) {
   });
 }
 
-
-export function getCookieBanner() {
-  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
+export function getConfigContext(params) {
+  return Fetch<TResult>('/storeConfig/list', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
 }
 
 export function saveCookieBanner(params = {}) {
@@ -83,9 +85,6 @@ export function saveCookieBanner(params = {}) {
 }
 
 
-export function getShopConfig() {
-  return Fetch<TResult>('/storeConfig/getStoreConfigNavigationList');
-}
 
 export function saveShopConfig(params = {}) {
   return Fetch<TResult>('/storeConfig/update', {

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Input, message, Row, Col, Button } from 'antd';
-import { Const, RCi18n } from 'qmkit';
+import { Const, RCi18n, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getShopConfig, saveShopConfig } from '../webapi';
+import { getConfigContext, saveShopConfig } from '../webapi';
 
 const TextArea = Input.TextArea;
+const base64 = new util.Base64();
 
 export default class NavigationHeader extends React.Component<any, any> {
   constructor(props) {
@@ -23,12 +24,12 @@ export default class NavigationHeader extends React.Component<any, any> {
   }
 
   initData = () => {
-    getShopConfig().then(data => {
+    getConfigContext({
+      configType: 'baseConfig'
+    }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          id: data.res.context.id,
-          header: data.res.context.header,
-          footer: data.res.context.footer
+          footer: data.res.context.context
         });
       }
     });

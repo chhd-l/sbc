@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, message, Row, Col, Button } from 'antd';
 import { Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getCookieBanner, saveCookieBanner } from '../webapi';
+import { getConfigContext, saveCookieBanner } from '../webapi';
 
 const TextArea = Input.TextArea;
 
@@ -23,12 +23,12 @@ export default class NavigationHeader extends React.Component<any, any> {
   }
 
   initData = () => {
-    getCookieBanner().then(data => {
+    getConfigContext({
+      configType: 'bannerConfig'
+    }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          id: data.res.context.id,
-          header: data.res.context.header,
-          footer: data.res.context.footer
+          footer: data.res.context.context
         });
       }
     });

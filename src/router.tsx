@@ -410,6 +410,10 @@ const routes = [
     path: '/customer-clinic-list',
     asyncComponent: () => import('./customer-clinic-list')
   },
+  {
+    path: '/pet-owner-blocklist',
+    asyncComponent: () => import('./pet-owner-blocklist')
+  },
   // clinic客户详情
   {
     path: '/customer-clinic-details/:type/:id/:account',
@@ -931,8 +935,8 @@ const routes = [
     asyncComponent: () => import('./order-audit-setting-new')
   },
   {
-    path: '/custom-account-setting',
-    asyncComponent: () => import('./custom-account-setting')
+    path: '/customer-account-setting',
+    asyncComponent: () => import('./customer-account-setting')
   },
   {
     path: '/report-product',
@@ -1223,6 +1227,14 @@ const routes = [
   {
     path: '/store-footer',
     asyncComponent: () => import('./navigation-list/footer')
+  },
+  {
+    path: '/cookie-banner',
+    asyncComponent: () => import('./navigation-list/banner')
+  },
+  {
+    path: '/shop-config',
+    asyncComponent: () => import('./navigation-list/shopConfig')
   },
   /**
    * setting-integration

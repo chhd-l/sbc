@@ -2498,7 +2498,7 @@ export default {
         'Setting.Pleaseinputlang': 'Please input lang',
         'Setting.Url': 'Url',
         'Setting.Pleaseinputurl': 'Please input url',
-        'Setting.Editlogisticsetting': 'Edit carriers setting',
+        'Setting.Editlogisticsetting': 'Edit parcelLab setting',
         'Setting.Updatelogisticinformation': 'Update carriers information',
         'Setting.Logisticcompanynamecannotrepeat': 'Carriers company name can not repeat.',
         'Setting.Logisticcompanycodecannotrepeat': 'Carriers company code can not repeat.',
@@ -2623,6 +2623,7 @@ export default {
         'Menu.Promotion Code List': 'Promotion Code List',
         'Menu.Service Order': 'Service Order',
         'Menu.Tasks': 'Tasks',
+        'Menu.Pet owner blocklist': 'Pet owner blocklist',
 
         "Menu.Store details": "Store details",
         "Menu.Store Setting": "Store Setting",

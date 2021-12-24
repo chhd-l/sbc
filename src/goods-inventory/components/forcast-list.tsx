@@ -116,6 +116,11 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'inventory'
       },
       {
+        title:  <FormattedMessage id="Product.stockCoverageInDays" />,
+        dataIndex: 'stockCoverageInDays',
+        key: 'stockCoverageInDays'
+      },
+      {
         title:  <FormattedMessage id="Product.The1stDay" />,
         dataIndex: 'futureListArr[0]',
         width: 150,

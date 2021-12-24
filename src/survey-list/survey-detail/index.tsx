@@ -199,6 +199,10 @@ const SurveyDetail = () => {
                 <span>{detailData?.label}</span>
               </p>
               <p>
+                <span><FormattedMessage id="Survey.show_survey" />:</span>&nbsp;
+                <span>{detailData?.surveyType}</span>
+              </p>
+              <p>
                 <span><FormattedMessage id="Survey.status" />:</span>&nbsp;
                 <span>{activeStatus}</span>
               </p>

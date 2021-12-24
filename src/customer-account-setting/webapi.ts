@@ -1,17 +1,5 @@
 import { Fetch } from 'qmkit';
 
-export function setBannerContent(bannerContent) {
-  console.log(bannerContent.value)
-
-  // return Fetch<TResult>('',{
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ bannerContent: bannerContent }]
-  //   })
-  // })
-}
-
-
 type TResult = {
   code: string;
   message: string;
@@ -23,7 +11,6 @@ export const getListSystemAccountConfigUsing = () => {
   })
 };
 
-
 export const editCustomAccountSetting = (params) => {
   // return !status;
   return Fetch<TResult>('/order/config/batchEnableAndDisable',{
@@ -32,10 +19,4 @@ export const editCustomAccountSetting = (params) => {
       requestList: [{  ...params }]
     })
   })
-  // return Fetch<TResult>('/system/config/batchEnableAndDisable', {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ status: status }]
-  //   })
-  // });
 }

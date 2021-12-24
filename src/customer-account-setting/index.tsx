@@ -12,73 +12,63 @@ import * as webapi from './webapi';
 // import Foot from './components/foot';
 
 const index = () => {
-  const [footerContent,setFooterContent] = useState('null')
   const [editDisable,setDisable] = useState(true)
   const [roleChoice,setRoleChoice] = useState(1)
-  // const [context,setContext]=useState('1')
   const [list,setList] = useState({
-    configKey: 'order_account_setting',
-    configName: '账号类型下单设置',
-    configType: 'order_account_setting',
+    configKey: '',
+    configName: '',
+    configType: '',
     context: roleChoice,
     delFlag: 0,
     id: 571,
-    remark: '账号类型下单设置',
+    remark: '',
     status: 1,
-    userId: '123457907'
+    userId: ''
     })
-   useEffect( () => {
- });
 
   useEffect(()=>{
     webapi
       .getListSystemAccountConfigUsing().then(({ res }) =>{
         if (res.code == Const.SUCCESS_CODE){
-          // console.log(JSON.stringify(res.context) +'212232')
-
           if (res.context[0].status == '1' ){
             setDisable(false)
           } else {
             setDisable(true)
           }
           setRoleChoice(res.context[0].context);
-          // console.log(JSON.stringify(res.context[0].context) +'wewe')
           let data = JSON.parse(JSON.stringify(res.context[0]))
-          console.log('2222'+JSON.stringify(data))
+          // console.log('2222'+JSON.stringify(data))
           setList(data)
-          // setList(res.context[0]);
-          // console.log('111'+list);
         }else {
           console.log('ERROR')
+          message.error('error')
         }
     })
   },[])
 
   function saveAccountSet() {
-
     let data = JSON.parse(JSON.stringify(list))
-    console.log('ccc'+roleChoice)
+    // console.log('ccc'+roleChoice)
     data.context = roleChoice
 
-    setList(data)
-    console.log(JSON.stringify(list));
+    // setList(data)
+    // console.log(JSON.stringify(list));
 
     webapi
-      .editCustomAccountSetting(list).then(({ res }) => {
+      .editCustomAccountSetting(data).then(({ res }) => {
           if (res.code == Const.SUCCESS_CODE){
-            console.log('OK')
-        }
+            // console.log('OK')
+            message.success('Operation successful');
+          }else {
+            message.error('error')
+          }
       });
-    // if (field === 'footerContent'){
-    //   setFooterContent(value)
-    // }
   };
 
   function radioChange(e: any){
     setRoleChoice(e.target.value)
-    console.log(roleChoice,'role')
+    // console.log(roleChoice,'role')
   }
-
 
   return (
     <div>
@@ -100,27 +90,22 @@ const index = () => {
           <div style={{padding:'30px 20px 0 20px',margin:'20px 20px 0 20px',background: '#fff',borderRadius:'10px'}}>
             {/*<Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>*/}
             <Radio.Group disabled={editDisable} value={roleChoice} >
-              <Radio  value="1" onClick={radioChange}>
-                {/*<FormattedMessage id="Order.OnlinePayment" />*/}
+              <Radio  value="2" onClick={radioChange}>
                 <a style={{color:'#222'}}>Accounts are optional</a>
                 <p>Customers will be able to check out with a customer account or as a guest.</p>
               </Radio>
               <br/>
-              <Radio value="2" onClick={radioChange}>
-                {/*<FormattedMessage id="Order.Cash" />*/}
+              <Radio value="1" onClick={radioChange}>
                 <a style={{color:'#222'}}>Accounts are required</a>
                 <p>Customers will only be able to check out if they have a customer account.</p>
               </Radio>
             </Radio.Group>
           </div>
         </div>
-
-
       </div>
       {/*<Foot />*/}
       <div className="bar-button">
         {/*<AuthWrapper key="001" functionName={this.props.goodsFuncName}>*/}
-        {/*<Button type="primary" onClick={this._save}>*/}
         <Button type="primary" onClick={saveAccountSet}>
           <FormattedMessage id="Setting.Save" />
         </Button>

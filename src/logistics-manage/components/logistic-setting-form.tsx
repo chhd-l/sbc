@@ -85,7 +85,7 @@ class LogisticSettingForm extends Component<any, any> {
             />
           )}
         </Form.Item>
-        {/* <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
+        <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
               {getFieldDecorator('lang', {
                  initialValue:settingForm.get('lang')||'',
                 rules: [
@@ -110,7 +110,7 @@ class LogisticSettingForm extends Component<any, any> {
                        }}
                 />
               )}
-            </Form.Item> */}
+            </Form.Item>
         <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Url" />}>
           {getFieldDecorator('outUrl', {
             initialValue: settingForm.get('outUrl'),

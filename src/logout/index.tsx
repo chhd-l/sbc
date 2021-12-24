@@ -4,8 +4,8 @@ import * as webapi from './webapi';
 
 export default class Logout extends Component<any, any> {
   async componentWillMount() {
-    await webapi.logout()
     util.logout();
+    await webapi.logout()
     history.push('/login');
   }
   render() {

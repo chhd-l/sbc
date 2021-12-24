@@ -57,6 +57,7 @@
     "braft-editor": "^2.3.9",
     "cache-loader": "^1.2.0",
     "core-js": "^3.1.2",
+    "crypto-js": "^4.1.1",
     "echarts": "4.2.1",
     "echarts-for-react": "^2.0.0",
     "gg-editor": "2.0.2",

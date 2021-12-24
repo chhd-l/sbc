@@ -1,11 +1,11 @@
 import React from 'react';
 import { Input, message, Row, Col, Button } from 'antd';
-import { Const, RCi18n, util } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { getConfigContext, saveShopConfig } from '../webapi';
+import { decryptAES } from '../../../web_modules/qmkit/util';
 
 const TextArea = Input.TextArea;
-const base64 = new util.Base64();
 
 export default class NavigationHeader extends React.Component<any, any> {
   constructor(props) {
@@ -29,7 +29,7 @@ export default class NavigationHeader extends React.Component<any, any> {
     }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          footer: base64.decode(data.res.context.context)
+          footer: decryptAES(data.res.context.context)
         });
       }
     });

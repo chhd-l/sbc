@@ -474,7 +474,7 @@ export const loadJS = ({
  * @param message 内容
  * @returns 
  */
-export function encryptAES(aseKey, message) {
+export function encryptAES(message , aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
   var encrypt = CryptoJS.AES.encrypt(
     message,
     CryptoJS.enc.Utf8.parse(aseKey),
@@ -491,7 +491,7 @@ export function encryptAES(aseKey, message) {
  * @param encrypt 加密字符串
  * @returns 
  */
-export function decryptAES(aseKey, encrypt) {
+export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
   var decrypt = CryptoJS.AES.decrypt(
     encrypt,
     CryptoJS.enc.Utf8.parse(aseKey),

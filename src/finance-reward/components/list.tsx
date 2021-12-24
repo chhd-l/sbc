@@ -53,11 +53,10 @@ export default class OrderInvoiceList extends React.Component<any, any> {
 
   render() {
     const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
-    //console.log(this.props.relaxProps.searchForm.toJS(),'--------===');
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey="orderInvoiceId"
         pagination={{
           pageSize,
@@ -70,21 +69,21 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column title={<FormattedMessage id="PrescriberType" />} key="prescriberType" width="12%" dataIndex="prescriberType" />
-        <Column title={<FormattedMessage id="PrescriberID" />} key="prescriberId" dataIndex="prescriberId" width="11%" />
-        <Column title={<FormattedMessage id="PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="20%" />
-        <Column title={<FormattedMessage id="OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="10%" />
-        <Column title={<FormattedMessage id="OrderAmount" />} dataIndex="orderAmount" width="11%" key="orderAmount" render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.PrescriberType" />} key="prescriberType" width="12%" dataIndex="prescriberType" />
+        <Column title={<FormattedMessage id="Finance.PrescriberID" />} key="prescriberId" dataIndex="prescriberId" width="11%" />
+        <Column title={<FormattedMessage id="Finance.PrescriberName" />} key="prescriberName" dataIndex="prescriberName" width="20%" />
+        <Column title={<FormattedMessage id="Finance.OrderQuantity" />} key="orderQuantity" dataIndex="orderQuantity" width="10%" />
+        <Column title={<FormattedMessage id="Finance.OrderAmount" />} dataIndex="orderAmount" width="11%" key="orderAmount" render={(orderPrice) => <span>{orderPrice != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2)}` : '-'}</span>} />
 
-        <Column title={<FormattedMessage id="RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
-        <Column title={<FormattedMessage id="RewardAmount" />} dataIndex="rewardAmount" key="rewardAmount" width="11%" render={(rewardAmount) => <span>{rewardAmount != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rewardAmount.toFixed(2)}` : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.RewardType" />} dataIndex="rewardType" key="rewardType" width="11%" />
+        <Column title={<FormattedMessage id="Finance.RewardAmount" />} dataIndex="rewardAmount" key="rewardAmount" width="11%" render={(rewardAmount) => <span>{rewardAmount != null ? `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + rewardAmount.toFixed(2)}` : '-'}</span>} />
 
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Finance.operation" />}
           width="10%"
           render={(text, record: any, i) => {
             return (
-              <Tooltip placement="top" title="Details">
+              <Tooltip placement="top" title={<FormattedMessage id="Finance.Details" />}>
                 <a href="javascript:void(0)" onClick={() => this._renderOperate(text)} className="iconfont iconDetails"></a>
               </Tooltip>
             );
@@ -106,10 +105,6 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       }
     });
 
-    /*setTimeout(()=>{
-      console.log(this.props.relaxProps.ccccccc);
-
-    },300)*/
     //return (<Link to={{pathname :'/finance-reward-details', state : { name : rowInfo }}}>Details</Link>)
 
     /*const { invoiceState, orderInvoiceId } = rowInfo;
@@ -128,18 +123,18 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="fetchOrderInovices">
           <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
-            {<FormattedMessage id="view" />}
+            {<FormattedMessage id="Finance.view" />}
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={invoiceState == 0 ? 'Do you confirm to bill？' : 'Do you confirm to cancel bill record？'}
+            title={invoiceState == 0 ? <FormattedMessage id="Finance.ConfirmToBill" /> : <FormattedMessage id="Finance.CancelBillRecord" />}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
-            okText="Confirm"
-            cancelText="Cancel"
+            okText={<FormattedMessage id="Finance.Confirm" />}
+            cancelText={<FormattedMessage id="Finance.Cancel" />}
           >
             <a href="javascript:void(0);">{invoiceState == 0 ? 'Billing' : 'Cancellation'}</a>
           </Popconfirm>

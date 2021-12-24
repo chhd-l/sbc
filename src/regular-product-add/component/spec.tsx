@@ -5,6 +5,7 @@ import { noop, cache, ValidConst } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Map, fromJS } from 'immutable';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n, Const } from 'qmkit';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -23,13 +24,16 @@ export default class Spec extends React.Component<any, any> {
       deleteSpec: Function;
       updateSpecForm: Function;
       setDefaultBaseSpecId: Function;
+      editGoodsItem: Function;
       baseSpecId: any;
+      goods: any
     };
   };
 
   static relaxProps = {
     // 是否为单规格
     specSingleFlag: 'specSingleFlag',
+    goods: 'goods',
     // 修改是否为当单规格
     editSpecSingleFlag: noop,
     // 商品规格
@@ -43,7 +47,8 @@ export default class Spec extends React.Component<any, any> {
     addSpec: noop,
     deleteSpec: noop,
     updateSpecForm: noop,
-    setDefaultBaseSpecId: noop
+    setDefaultBaseSpecId: noop,
+    editGoodsItem: noop
   };
 
   constructor(props) {
@@ -75,6 +80,7 @@ class SpecForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { specSingleFlag, goodsSpecs, baseSpecId } = this.props.relaxProps;
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <div id="specSelect" style={{ marginBottom: 10 }}>
         <Form>
@@ -82,7 +88,7 @@ class SpecForm extends React.Component<any, any> {
             <FormattedMessage id="product.specificationSetting" />
           </div>
           <div style={styles.box}>
-            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag}>
+            <Checkbox onChange={this._editSpecFlag} checked={!specSingleFlag} disabled={disableFields}>
               <span>
                 {/* <span
                   style={{
@@ -103,7 +109,7 @@ class SpecForm extends React.Component<any, any> {
             {specSingleFlag ? null : (
               <Row>
                 <Col offset={0}>
-                  <p style={{ color: '#999', marginBottom: 5 }}>You can quickly add multiple specifications using the keyboard enter key</p>
+                  <p style={{ color: '#999', marginBottom: 5 }}><FormattedMessage id="Product.usingTheKeyboardEnterKey" /></p>
                 </Col>
               </Row>
             )}
@@ -141,7 +147,7 @@ class SpecForm extends React.Component<any, any> {
                                 {
                                   min: 1,
                                   max: 100,
-                                  message: 'No more than 100 characters'
+                                  message: <FormattedMessage id="Product.NoMoreThan100characters" />
                                 },
                                 {
                                   // 重复校验,
@@ -162,7 +168,7 @@ class SpecForm extends React.Component<any, any> {
                               ],
                               onChange: this._editSpecName.bind(this, item.get('specId')),
                               initialValue: item.get('specName')
-                            })(<Input placeholder="Please input specification" style={{ width: '90%' }} />)}
+                            })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.inputspecification'})} style={{ width: '90%' }} />)}
                           </FormItem>
                         </Col>
                         <Col span={9}>
@@ -214,21 +220,21 @@ class SpecForm extends React.Component<any, any> {
                                       });
 
                                       if (whitespace) {
-                                        callback(new Error('The specification value cannot be a space character'));
+                                        callback(new Error(RCi18n({id:'Product.specificationvaluecannot'})));
                                         return;
                                       }
-                                      if (overLen) {
+                                      /*if (overLen) {
                                         callback(new Error('Each value supports up to 20 characters'));
                                         return;
-                                      }
+                                      }*/
                                       if (duplicated) {
-                                        callback(new Error('Repeated specifications'));
+                                        callback(new Error(RCi18n({id:'Product.Repeatedspecifications'})));
                                         return;
                                       }
                                     }
 
-                                    if (value.length > 20) {
-                                      callback(new Error('Support up to 20 specifications'));
+                                    if (value.length > 100) {
+                                      callback(new Error(RCi18n({id:'Product.Supportupto20specifications'})));
                                       return;
                                     }
 
@@ -239,14 +245,14 @@ class SpecForm extends React.Component<any, any> {
                               onChange: this._editSpecValue.bind(this, item.get('specId')),
                               initialValue: specValues
                             })(
-                              <Select mode="tags" getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder="Please input specification Value" notFoundContent="No specification value" tokenSeparators={[',']}>
+                              <Select mode="tags" disabled={disableFields} getPopupContainer={() => document.getElementById('specSelect')} style={{ width: '90%' }} placeholder={RCi18n({id:'Product.inputspecificationValue'})} notFoundContent={RCi18n({id:'Product.Nospecificationvalue'})} tokenSeparators={[',']}>
                                 {this._getChildren(item.get('specValues'), item.get('specName'))}
                               </Select>
                             )}
                           </FormItem>
                         </Col>
                         <Col span={2} style={{ marginTop: 2, textAlign: 'center' }}>
-                          <Button type="primary" onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
+                          <Button type="primary" disabled={disableFields} onClick={() => this._deleteSpec(item.get('specId'))} style={{ marginTop: '2px' }}>
                             <FormattedMessage id="delete" />
                           </Button>
                         </Col>
@@ -256,7 +262,7 @@ class SpecForm extends React.Component<any, any> {
                 })}
 
             {specSingleFlag ? null : (
-              <Button onClick={this._addSpec}>
+              <Button disabled={disableFields} onClick={this._addSpec}>
                 <Icon type="plus" />
                 <FormattedMessage id="addSpecifications" />
               </Button>
@@ -302,7 +308,8 @@ class SpecForm extends React.Component<any, any> {
    * 修改规格值
    */
   _editSpecValue = (specId: number, value: string) => {
-    const { editSpecValues, goodsSpecs, updateSpecForm } = this.props.relaxProps;
+    const { editSpecValues, goodsSpecs, updateSpecForm, editGoodsItem, goods } = this.props.relaxProps;
+    const { setFieldsValue } = this.props.form;
     // 找到原规格值列表
     const spec = goodsSpecs.find((spec) => spec.get('specId') == specId);
     const oldSpecValues = spec.get('specValues');
@@ -312,13 +319,24 @@ class SpecForm extends React.Component<any, any> {
       const isMock = !ov || ov.get('isMock') === true;
       const valueId = ov ? ov.get('specDetailId') : this._getRandom();
       return Map({
+        goodsPromotions: goods.get('promotions'),
         isMock: isMock,
         specDetailId: valueId,
-        detailName: item
+        detailName: item,
+        subscriptionStatus: goods.get('subscriptionStatus'),
       });
     });
     updateSpecForm(this.props.form);
     editSpecValues({ specId, specValues });
+
+    /*if (value.length == 1) {
+      let goods = Map({
+        subscriptionStatus: fromJS(1)
+      });
+      editGoodsItem(goods);
+      setFieldsValue({ subscriptionStatus: 1 })
+      //setFieldsValue({ subscriptionStatus: 0 });
+    }*/
   };
 
   /**
@@ -327,7 +345,7 @@ class SpecForm extends React.Component<any, any> {
   _addSpec = () => {
     const { addSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() >= 5) {
-      message.error('Add up to 5 specifications');
+      message.error(RCi18n({id:'Product.AddUpo5Specifications'}));
       return;
     }
     updateSpecForm(this.props.form);
@@ -337,7 +355,7 @@ class SpecForm extends React.Component<any, any> {
   _deleteSpec = (specId: number) => {
     const { deleteSpec, goodsSpecs, updateSpecForm } = this.props.relaxProps;
     if (goodsSpecs != null && goodsSpecs.count() <= 1) {
-      message.error('Keep at least 1 specification item');
+      message.error(RCi18n({id:'Product.Keep1SpecificationItem'}));
       return;
     }
     updateSpecForm(this.props.form);

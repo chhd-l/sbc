@@ -94,10 +94,10 @@ export default class See extends React.Component<any, any> {
               <div className="detail">
                 <span className="evaluate">Consumer</span>
                 <span className="text">
-                  Consumer name：{goodsEvaluate.customerName}
+                  Pet owner name ：{goodsEvaluate.customerName}
                 </span>
                 <span className="text mar-lr">
-                  Consumer type：{goodsEvaluate.consumerType}
+                  Pet owner type：{goodsEvaluate.consumerType}
                 </span>
               </div>
               <div className="detail">
@@ -143,7 +143,7 @@ export default class See extends React.Component<any, any> {
                     <div className="detail">
                       <span className="evaluate">Rating</span>
                       <span className="text">
-                        Consumer name：{goodsEvaluate.customerName}
+                        Pet owner name ：{goodsEvaluate.customerName}
                       </span>
                       <span className="text mar-lr">
                         Time：{goodsEvaluate.historyEvaluateTime}
@@ -164,7 +164,7 @@ export default class See extends React.Component<any, any> {
                 <div className="detail">
                   <span className="evaluate">Rating</span>
                   <span className="text">
-                    Consumer name：{goodsEvaluate.customerName}
+                    Pet owner name ：{goodsEvaluate.customerName}
                   </span>
                   <span className="text mar-lr">
                     Time：
@@ -192,7 +192,7 @@ export default class See extends React.Component<any, any> {
                 <div className="detail">
                   <span className="evaluate">Rating</span>
                   <span className="text">
-                    Consumer name：{goodsEvaluate.customerName}
+                    Pet owner name ：{goodsEvaluate.customerName}
                   </span>
                   <span className="text mar-lr">
                     Time：

@@ -11,6 +11,44 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
+const limitDecimals = (value: string | number): string => {
+
+  const reg = /^(\-)*(\d+)\.(\d\d\d\d\d).*$/;
+  if (typeof value === 'string') {
+    if (!isNaN(Number(value))) {
+      //value = Number(value).toFixed(2)
+      return value.replace(reg, '$1$2.$3');
+    } else {
+      return '';
+    }
+    // return !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
+    /*let a = !isNaN(Number(value)) ? value.replace(reg, '$1$2.$3') : ''
+
+    if (parseInt(a) === parseFloat(a))
+    {
+      return Number(a).toFixed(2)
+    }
+    else
+    {
+      return a
+    }*/
+  } else if (typeof value === 'number') {
+    let a = !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : '';
+    return !isNaN(value) ? String(value).replace(reg, '$1$2.$3') : '';
+    /* if (parseInt(a) === parseFloat(a))
+     {
+       return Number(a).toFixed(2)
+     }
+     else
+     {
+       return a
+     }*/
+
+  } else {
+    return '';
+  }
+};
+
 @Relax
 export default class ProductPrice extends React.Component<any, any> {
   WrapperForm: any;
@@ -25,7 +63,6 @@ export default class ProductPrice extends React.Component<any, any> {
       spuMarketPrice: number;
       priceOpt: number;
       getGoodsId: any;
-      addSkUProduct: any;
       selectedBasePrice: any;
       editGoodsItem: Function;
       deleteGoodsInfo: Function;
@@ -42,6 +79,7 @@ export default class ProductPrice extends React.Component<any, any> {
       updateAllBasePrice: Function;
       setDefaultBaseSpecId: Function;
       setSelectedBasePrice: Function;
+      onProductselectSku: Function;
     };
   };
 
@@ -58,7 +96,6 @@ export default class ProductPrice extends React.Component<any, any> {
     baseSpecId: 'baseSpecId',
     subscriptionStatus: 'subscriptionStatus',
     getGoodsId: 'getGoodsId',
-    addSkUProduct: 'addSkUProduct',
     selectedBasePrice: 'selectedBasePrice',
     editGoodsItem: noop,
     deleteGoodsInfo: noop,
@@ -71,20 +108,26 @@ export default class ProductPrice extends React.Component<any, any> {
     updateBasePrice: noop,
     updateAllBasePrice: noop,
     setDefaultBaseSpecId: noop,
-    setSelectedBasePrice: noop
+    setSelectedBasePrice: noop,
+    onProductselectSku: noop
   };
 
   constructor(props) {
     super(props);
     this.WrapperForm = Form.create({})(SkuForm);
-    this.state = {};
+    this.state = {
+      priceType: false
+    };
   }
+
   componentDidMount() {
     const { setDefaultBaseSpecId, getGoodsId } = this.props.relaxProps;
     // if (!getGoodsId) {
     //   setDefaultBaseSpecId();
     // }
+
   }
+
   render() {
     const WrapperForm = this.WrapperForm;
     const { goods } = this.props.relaxProps;
@@ -114,14 +157,25 @@ class SkuForm extends React.Component<any, any> {
     });
   };
 
+
+  componentDidMount() {
+
+  }
+
   render() {
-    const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
-    // const {  } = this.state
+    const { goodsList } = this.props.relaxProps;
+
     const columns = this._getColumns();
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
-          <Table size="small" rowKey="id" dataSource={goodsList.toJS()} columns={columns} pagination={false} />
+          <Table
+            size='small'
+            rowKey='id'
+            dataSource={goodsList.toJS()}
+            columns={columns}
+            pagination={false}
+          />
         </Form>
       </div>
     );
@@ -129,7 +183,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, selectedBasePrice, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, selectedBasePrice, specSingleFlag, goods, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -182,10 +236,9 @@ class SkuForm extends React.Component<any, any> {
     });
 
     columns = columns.push({
-      title: <FormattedMessage id="product.SKU" />,
+      title: <FormattedMessage id='product.SKU' />,
       key: 'goodsInfoNo' + 'index',
       render: (rowInfo) => {
-        //let a = addSkUProduct[rowInfo.index-1]?addSkUProduct[rowInfo.index-1].pid:''
         return (
           <Row>
             <Col span={12}>
@@ -199,25 +252,25 @@ class SkuForm extends React.Component<any, any> {
       title: 'Purchase type',
       key: 'subscriptionStatus',
       render: (rowInfo) => (
-        <Row className="purchase-row">
+        <Row className='purchase-row'>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
               <div>
                 {goods.get('subscriptionStatus') == 1 ? (
                   <div>
-                    <p>
-                      <span>One off</span>
-                    </p>
+                    <div>
+                      <span><FormattedMessage id='Product.OneOff' /></span>
+                    </div>
                     {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                      <p>
-                        <span>Subscription</span>
-                      </p>
+                      <div>
+                        <span><FormattedMessage id='Product.Subscription' /></span>
+                      </div>
                     ) : null}
                   </div>
                 ) : (
-                  <p>
-                    <span>One off</span>
-                  </p>
+                  <div>
+                    <span><FormattedMessage id='Product.OneOff' /></span>
+                  </div>
                 )}
               </div>
             </FormItem>
@@ -229,13 +282,14 @@ class SkuForm extends React.Component<any, any> {
     columns = columns.push({
       title: (
         <div>
-          <FormattedMessage id="product.listPrice" />
+          <FormattedMessage id='product.purchasePrice' />
         </div>
       ),
       key: 'linePrice',
       render: (rowInfo) => (
         <Row>
-          <Col span={12}>
+          <Col span={12} className='flex-start-align'>
+            <span style={{ paddingRight: '3px' }}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
             <FormItem style={styles.tableFormItem}>
               {getFieldDecorator('linePrice_' + rowInfo.id, {
                 // rules: [
@@ -244,9 +298,17 @@ class SkuForm extends React.Component<any, any> {
                 //     message: 'Please enter the correct value'
                 //   }
                 // ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
+                // onChange: this._editGoodsItem.bind(this, rowInfo.id, 'linePrice'),
                 initialValue: rowInfo.linePrice || 0
-              })(<InputNumber min={0} max={9999999} formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />)}
+              })(
+                <InputNumber
+                  disabled
+                  min={0}
+                  max={9999999}
+                  precision={2}
+                  // step={0.01}
+                  // formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                />)}
             </FormItem>
           </Col>
         </Row>
@@ -289,17 +351,126 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          <FormattedMessage id="product.marketPrice" />
+          <FormattedMessage id='product.marketPrice' />
         </div>
       ),
       key: 'marketPrice',
-      render: (rowInfo) => (
-        <Row>
-          <Col span={12}>
-            {goods.get('subscriptionStatus') == 1 ? (
-              <div className="flex-content-center">
+      render: (rowInfo) => {
+        let marketPrice = 0;
+        let subscriptionPrice = 0;
+        marketPrice = rowInfo.marketPrice;
+        subscriptionPrice = rowInfo.subscriptionPrice;
+        /*if(goods.get('goodsId') == null && this.state.priceType == false) {
+
+          if (goodsList.toJS().length == 1 && rowInfo.goodsInfoBundleRels.length == 1) {
+            marketPrice = rowInfo.marketPrice
+            subscriptionPrice = rowInfo.subscriptionPrice
+          }else {
+            marketPrice = rowInfo.marketPrice
+            subscriptionPrice = rowInfo.subscriptionPrice
+          }
+        }else {
+          marketPrice = rowInfo.marketPrice
+          subscriptionPrice = rowInfo.subscriptionPrice
+        }*/
+
+        return (
+          <Row>
+            <Col span={12}>
+              {goods.get('subscriptionStatus') == 1 ? (
+                <div>
+                  <p className='flex-start-align'>
+                    <span
+                      style={{ paddingRight: '3px' }}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
+                    <FormItem style={styles.tableFormItem}>
+                      <InputNumber
+                        min={0}
+                        max={9999999.99}
+                        value={marketPrice}
+                        //precision={marketPriceNum}
+                        onChange={e => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true)}
+                        style={{ width: '111px' }}
+                        //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                        formatter={limitDecimals}
+                        parser={limitDecimals}
+                        // step={0.01}
+                      />
+
+                    </FormItem></p>
+                  {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
+                    <p className='flex-start-align'>
+                      <span
+                        style={{ paddingRight: '3px' }}>{sessionStorage.getItem('s2b-supplier@systemGetConfig:')}</span>
+                      <FormItem style={styles.tableFormItem}>
+                        <InputNumber
+                          min={0}
+                          max={9999999.99}
+                          //precision={4}
+                          style={{ width: '111px' }}
+                          disabled={rowInfo.subscriptionStatus === 0}
+                          value={subscriptionPrice}
+                          onChange={e => this._editGoodsItem(rowInfo.id, 'subscriptionPrice', e)}
+                          formatter={limitDecimals}
+                          parser={limitDecimals}
+                          // step={0.01}
+                          /*formatter={(value) => {
+                            return `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`
+                          }}*/
+                        />
+                        {/*{getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input subscription price'
+                          },
+                          // {
+                          //   pattern: ValidConst.zeroPrice,
+                          //   message: 'Please input the legal amount with two decimal places'
+                          // },
+                          {
+                            type: 'number',
+                            max: 9999999.99,
+                            message: 'The maximum value is 9999999.99',
+                            transform: function (value) {
+                              return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
+                            }
+                          }
+                        ],
+                        onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
+                        initialValue:  subscriptionPrice
+                      })(
+                        <InputNumber
+                          min={0}
+                          max={9999999.99}
+                          //precision={4}
+                          style={{ width: '111px' }}
+                          disabled={rowInfo.subscriptionStatus === 0}
+                          formatter={limitDecimals}
+                          parser={limitDecimals}
+                          // step={0.01}
+
+                        />
+
+                      )}*/}
+                      </FormItem></p>
+                  ) : null}
+                </div>
+              ) : (
                 <FormItem style={styles.tableFormItem}>
-                  {getFieldDecorator('marketPrice_' + rowInfo.id, {
+                  <InputNumber
+                    min={0}
+                    max={9999999.99}
+                    value={marketPrice}
+                    //precision={marketPriceNum}
+                    onChange={e => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true)}
+                    style={{ width: '111px' }}
+                    //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
+                    formatter={limitDecimals}
+                    parser={limitDecimals}
+                    // step={0.01}
+                  />
+
+                  {/*{getFieldDecorator('marketPrice_' + rowInfo.id, {
                     rules: [
                       {
                         required: true,
@@ -319,100 +490,33 @@ class SkuForm extends React.Component<any, any> {
                       // }
                     ],
 
-                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, rowInfo.subscriptionStatus === 0 ? false : true),
-                    initialValue: rowInfo.marketPrice || 0
+                    onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
+                    initialValue:  marketPrice ? marketPrice : 0
                   })(
                     <InputNumber
                       min={0}
                       max={9999999.99}
                       precision={2}
-                      disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                      formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                      style={{ width: '111px' }}
+                      formatter={limitDecimals}
+                      parser={limitDecimals}
+                      // step={0.01}
+                      //disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
                     />
                     // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                  )}
+                  )}*/}
                 </FormItem>
-                {rowInfo.subscriptionStatus != 0 || rowInfo.subscriptionStatus != null ? (
-                  <FormItem style={styles.tableFormItem}>
-                    {getFieldDecorator('subscriptionPrice_' + rowInfo.id, {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Please input subscription price'
-                        },
-                        {
-                          pattern: ValidConst.zeroPrice,
-                          message: 'Please input the legal amount with two decimal places'
-                        },
-                        {
-                          type: 'number',
-                          max: 9999999.99,
-                          message: 'The maximum value is 9999999.99',
-                          transform: function (value) {
-                            return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                          }
-                        }
-                      ],
-                      onChange: this._editGoodsItem.bind(this, rowInfo.id, 'subscriptionPrice'),
-                      initialValue: rowInfo.subscriptionPrice || 0
-                    })(
-                      <InputNumber
-                        min={0}
-                        max={9999999.99}
-                        precision={2}
-                        disabled={rowInfo.subscriptionStatus === 0}
-                        formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      />
-                      // <Input style={{ width: '60px' }} min={0} max={9999999} disabled={rowInfo.subscriptionStatus === 0} />
-                    )}
-                  </FormItem>
-                ) : null}
-              </div>
-            ) : (
-              <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('marketPrice_' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input market price'
-                    }
-                    // {
-                    //   pattern: ValidConst.zeroPrice,
-                    //   message: 'Please input the legal amount with two decimal places'
-                    // },
-                    // {
-                    //   type: 'number',
-                    //   max: 9999999.99,
-                    //   message: 'The maximum value is 9999999.99',
-                    //   transform: function (value) {
-                    //     return isNaN(parseFloat(value)) ? 0 : parseFloat(value);
-                    //   }
-                    // }
-                  ],
-
-                  onChange: (e) => this._editGoodsItem(rowInfo.id, 'marketPrice', e, false),
-                  initialValue: rowInfo.marketPrice || 0
-                })(
-                  <InputNumber
-                    min={0}
-                    max={9999999.99}
-                    precision={2}
-                    disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)}
-                    formatter={(value) => `${sessionStorage.getItem('s2b-supplier@systemGetConfig:') ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') : ''} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  />
-                  // <Input style={{ width: '60px' }} disabled={(rowInfo.index > 1 && marketPriceChecked) || (!rowInfo.aloneFlag && priceOpt == 0 && spuMarketPrice)} />
-                )}
-              </FormItem>
-            )}
-          </Col>
-        </Row>
-      )
+              )}
+            </Col>
+          </Row>
+        );
+      }
     });
 
     columns = columns.push({
       title: (
         <div>
-          Base price
+          <FormattedMessage id='Product.Baseprice' />
           {/*<Select value={selectedBasePrice} onChange={this._handleBasePriceChange}>
             {goodsSpecs.map((item) => (item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT) && item.get('specValues').size > 0 ? <Option value={item.get('mockSpecId')}>{sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT)}</Option> : null))}
             <Option value={'weightValue'}>Weight value</Option>
@@ -438,7 +542,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: 'Please enter the correct value'
+                        message: <FormattedMessage id='Product.PleaseEnterTheCorrect' />
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -450,7 +554,7 @@ class SkuForm extends React.Component<any, any> {
                         <p>{rowInfo.subscriptionBasePrice ? sessionStorage.getItem('s2b-supplier@systemGetConfig:') + ' ' + rowInfo.subscriptionBasePrice : ''}</p>
                       </div>
                     ) : (
-                      <p></p>
+                      <p/>
                     )
                   )}
                 </FormItem>
@@ -460,7 +564,7 @@ class SkuForm extends React.Component<any, any> {
                     rules: [
                       {
                         pattern: ValidConst.number,
-                        message: 'Please enter the correct value'
+                        message: <FormattedMessage id='Product.PleaseEnterTheCorrect' />
                       }
                     ],
                     onChange: this._editGoodsItem.bind(this, rowInfo.id, 'basePrice'),
@@ -509,11 +613,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(<FormattedMessage id='Product.lessThan2M' />);
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(<FormattedMessage id='Product.FileFormatError' />);
       return false;
     }
   };
@@ -527,11 +631,13 @@ class SkuForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
+    this.setState({
+      priceType: true
+    });
+
     editGoodsItem(id, key, e);
-    if (key == 'marketPrice') {
-      editGoodsItem(id, 'flag', flag);
-    }
-    if (key == 'stock' || key == 'marketPrice' || key == 'subscriptionPrice') {
+
+    if (key == 'marketPrice' || key == 'subscriptionPrice') {
       // 是否同步库存
       if (checked) {
         // 修改store中的库存或市场价
@@ -548,7 +654,9 @@ class SkuForm extends React.Component<any, any> {
         // update
         this.props.form.setFieldsValue(values);
       }
+
     }
+
     updateBasePrice(id, key, e);
   };
 

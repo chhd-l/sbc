@@ -1,11 +1,33 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
-import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
-import Modal from 'antd/lib/modal/Modal';
+import { Link } from 'react-router-dom';
+import {
+  Form,
+  Input,
+  Select,
+  Button,
+  Menu,
+  Dropdown,
+  Icon,
+  DatePicker,
+  Row,
+  Col,
+  Modal,
+  message
+} from 'antd';
+import {
+  noop,
+  ExportModal,
+  Const,
+  AuthWrapper,
+  checkAuth,
+  Headline,
+  ShippStatus,
+  PaymentStatus,
+  RCi18n
+} from 'qmkit';
 import { IList } from 'typings/globalType';
-import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +38,7 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -29,6 +51,7 @@ export default class SearchHead extends Component<any, any> {
       onExportModalHide: Function;
       exportModalData: IMap;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -45,7 +68,6 @@ export default class SearchHead extends Component<any, any> {
 
   constructor(props) {
     super(props);
-
     this.state = {
       goodsOptions: 'skuName',
       receiverSelect: 'consigneeName',
@@ -62,21 +84,78 @@ export default class SearchHead extends Component<any, any> {
       clinicSelectValue: '',
       numberSelectValue: '',
       recommenderSelectValue: '',
+      emailAddressType: 'buyerEmail',
+      emailAddressValue: '',
+      citySearchType: 'city',
+      citySearchValue: '',
+
+      // 21/3/3 新增字段
+      refillNumber: '',
+      orderType: '',
+      orderSource: '',
+      subscriptionType: '',
+      subscriptionPlanType: '',
+      codeSelect: 'promotionCode',
+      codeSelectValue: '',
+      orderTypeList: [
+        { value: 'SINGLE_PURCHASE', name: RCi18n({ id: 'Order.Singlepurchase' }) },
+        { value: 'SUBSCRIPTION', name: RCi18n({ id: 'Order.subscription' }) },
+        { value: 'MIXED_ORDER', name: RCi18n({ id: 'Order.mixedOrder' }) }
+      ],
+      subscriptionPlanTypeList: [],
+      subscriptionPlanTypeListClone: [
+        { value: 'Cat', name: RCi18n({ id: 'Order.cat' }) },
+        { value: 'Dog', name: RCi18n({ id: 'Order.dog' }) },
+        { value: 'Cat_Dog', name: RCi18n({ id: 'Order.Cat&Dog' }) },
+        { value: 'SmartFeeder', name: RCi18n({ id: 'Order.smartFeeder' }) }
+      ],
+      subscriptionTypeList: [
+        { value: 'ContractProduct', name: RCi18n({ id: 'Order.contractProduct' }) },
+        { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
+        { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },
+        { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) },
+        { value: 'Individualization', name: RCi18n({ id: 'Order.Individualization' }) }
+      ],
+      refillNumberList: [
+        { value: 'First', name: RCi18n({ id: 'Order.first' }) },
+        { value: 'Recurrent', name: RCi18n({ id: 'Order.recurrent' }) }
+      ],
+      orderSourceList: [
+        { value: 'FGS', name: RCi18n({ id: 'Order.fgs' }) },
+        { value: 'L_ATELIER_FELIN', name: RCi18n({ id: 'Order.felin' }) }
+      ],
       tradeState: {
         deliverStatus: '',
         payState: '',
         orderSource: ''
       },
-      orderCategory: ''
+      orderCategory: '',
+      showAdvanceSearch: false,
+      orderTypeSelect: 'Order type'
     };
   }
-
   render() {
-    const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
+    const { tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState } = this.state;
+    const {
+      tradeState,
+      orderType,
+      orderSource,
+      subscriptionType,
+      refillNumber,
+      subscriptionPlanType,
+      refillNumberList,
+      orderSourceList,
+      orderTypeList,
+      subscriptionTypeList,
+      subscriptionPlanTypeList,
+      showAdvanceSearch
+    } = this.state;
     let hasMenu = false;
-    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
+    if (
+      (tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) ||
+      checkAuth('fOrderList004')
+    ) {
       hasMenu = true;
     }
 
@@ -86,16 +165,16 @@ export default class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
         )}
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
-            </a>
+            <Link to="/batch-export/order-list">
+              <FormattedMessage id="Order.batchExport" />
+            </Link>
           </AuthWrapper>
         </Menu.Item>
       </Menu>
@@ -103,218 +182,423 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Row>
+          <Col span={12}>
+            <Headline title={<FormattedMessage id="Order.orderList" />} />
+          </Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <span
+              style={{ color: 'var(--primary-color)', cursor: 'pointer' }}
+              onClick={() => this.setState({ showAdvanceSearch: !showAdvanceSearch })}
+            >
+              <FormattedMessage id="Order.AdvanceSearch" />{' '}
+              <Icon type={showAdvanceSearch ? 'up' : 'down'} />
+            </span>
+          </Col>
+        </Row>
         <div>
           <Form className="filter-content" layout="inline">
             <Row>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderNumberSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          numberSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderBuyerOptionSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          buyerOptionsValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderGoodsOptionSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          goodsOptionsValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderReceiverSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          receiverSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderClinicSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        let a = e.target.value ? e.target.value.split(',') : null;
-
-                        this.setState({
-                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
-
-              <Col span={8} id="input-group-width">
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
+              <Row>
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderNumberSelect()}
+                      <Input
                         style={styles.wrapper}
-                        onChange={(value) =>
+                        onChange={(e) => {
                           this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
-                        </Option>
-                        <Option value="PAYING">Paying</Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
+                            numberSelectValue: (e.target as any).value
                           });
                         }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
-                  </InputGroup>
-                </FormItem>
-              </Col>
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
 
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
-                    <Select
-                      style={styles.wrapper}
-                      defaultValue=""
-                      onChange={(value) => {
-                        this.setState({
-                          orderCategory: value
-                        });
-                      }}
-                    >
-                      <Option value="">
-                        <FormattedMessage id="all" />
-                      </Option>
-                      <Option value="SINGLE" title="Single purchase">
-                        Single purchase
-                      </Option>
-                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
-                        1st autoship order
-                      </Option>
-                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
-                        Recurrent orders of autoship
-                      </Option>
-                    </Select>
-                  </InputGroup>
-                </FormItem>
-              </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderBuyerOptionSelect()}
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          this.setState({
+                            buyerOptionsValue: (e.target as any).value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
 
-              <Col span={8} id="Range-picker-width">
-                <FormItem>
-                  <RangePicker
-                    className="rang-picker-width"
-                    style={styles.formItemStyle}
-                    onChange={(e) => {
-                      let beginTime = '';
-                      let endTime = '';
-                      if (e.length > 0) {
-                        beginTime = e[0].format(Const.DAY_FORMAT);
-                        endTime = e[1].format(Const.DAY_FORMAT);
-                      }
-                      this.setState({ beginTime: beginTime, endTime: endTime });
-                    }}
-                  />
-                </FormItem>
-              </Col>
-              <Col span={8}>
-                <FormItem>
-                  <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderRecommenderSelect()}
-                    <Input
-                      style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          recommenderSelectValue: (e.target as any).value
-                        });
-                      }}
-                    />
-                  </InputGroup>
-                </FormItem>
-              </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      {this._renderReceiverSelect()}
+                      <Input
+                        style={styles.wrapper}
+                        onChange={(e) => {
+                          this.setState({
+                            receiverSelectValue: (e.target as any).value
+                          });
+                        }}
+                      />
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+              </Row>
+              {showAdvanceSearch ? (
+                <Row>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderOrderTypeSelect()}
+                        {this.state.orderTypeSelect === 'Order type' ? (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderType}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                orderType: value
+                              });
+                            }}
+                          >
+                            {orderTypeList &&
+                              orderTypeList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        ) : (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            value={orderSource}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                orderSource: value
+                              });
+                            }}
+                          >
+                            {orderSourceList &&
+                              orderSourceList.map((item, index) => (
+                                <Option value={item.value} title={item.name} key={index}>
+                                  {item.name}
+                                </Option>
+                              ))}
+                          </Select>
+                        )}
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderGoodsOptionSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              goodsOptionsValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8} id="input-group-width">
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderStatusSelect()}
+                        {this.state.statusSelect === 'paymentStatus' ? (
+                          <Select
+                            style={styles.wrapper}
+                            allowClear
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) =>
+                              this.setState({
+                                tradeState: {
+                                  deliverStatus: '',
+                                  payState: value,
+                                  orderSource: ''
+                                }
+                              })
+                            }
+                            value={tradeState.payState}
+                          >
+                            {PaymentStatus.map((item) => (
+                              <Option value={item.value}>{item.name}</Option>
+                            ))}
+                          </Select>
+                        ) : (
+                          <Select
+                            value={tradeState.deliverStatus}
+                            style={styles.wrapper}
+                            allowClear
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                tradeState: {
+                                  deliverStatus: value,
+                                  payState: '',
+                                  orderSource: ''
+                                }
+                              });
+                            }}
+                          >
+                            {ShippStatus.map((item) => (
+                              <Option value={item.value}>{item.name}</Option>
+                            ))}
+                          </Select>
+                        )}
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input
+                          style={styles.leftLabel}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionType' })}
+                        />
+                        <Select
+                          style={styles.wrapper}
+                          dropdownMatchSelectWidth={false}
+                          allowClear
+                          value={subscriptionType}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState(
+                              {
+                                subscriptionType: value
+                              },
+                              () => {
+                                this.getSubsrciptionPlanType(value);
+                              }
+                            );
+                          }}
+                        >
+                          {subscriptionTypeList &&
+                            subscriptionTypeList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderCodeSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              codeSelectValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  {/* <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderRecommenderSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              recommenderSelectValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col> */}
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input
+                          style={styles.leftLabel}
+                          title={RCi18n({ id: 'Order.subscriptionOrderTime' })}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionOrderTime' })}
+                        />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          value={refillNumber}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              refillNumber: value
+                            });
+                          }}
+                        >
+                          {refillNumberList &&
+                            refillNumberList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input
+                          style={styles.leftLabel}
+                          title={RCi18n({ id: 'Order.subscriptionPlanType' })}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.subscriptionPlanType' })}
+                        />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          value={subscriptionPlanType}
+                          disabled={subscriptionPlanTypeList.length < 1}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              subscriptionPlanType: value
+                            });
+                          }}
+                        >
+                          {subscriptionPlanTypeList &&
+                            subscriptionPlanTypeList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        {this._renderClinicSelect()}
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            let a = e.target.value ? e.target.value.split(',') : null;
+
+                            this.setState({
+                              clinicSelectValue:
+                                this.state.clinicSelect == 'clinicsName'
+                                  ? (e.target as any).value
+                                  : a
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+
+                  {/*新增city搜索*/}
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      /!*<Input style={styles.leftLabel} title={RCi18n({ id: 'Order.search.city' })} disabled defaultValue={RCi18n({ id: 'Order.search.city' })} />*!/*/}
+                  {/*      <Select*/}
+                  {/*        onChange={(val, a) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            citySearchValue: val*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        value={this.state.citySearchType}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.search.email' })} value="city">*/}
+                  {/*          <FormattedMessage id="Order.search.city" />*/}
+                  {/*        </Option>*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.search.email' })} value="cityId">*/}
+                  {/*          <FormattedMessage id="Order.search.cityId" />*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Input*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        onChange={(e) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            citySearchValue:  (e.target as any).value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      />*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
+
+                  <Col span={8} id="Range-picker-width">
+                    <FormItem>
+                      <RangePicker
+                        className="rang-picker-width"
+                        style={styles.formItemStyle}
+                        onChange={(e) => {
+                          let beginTime = '';
+                          let endTime = '';
+                          if (e.length > 0) {
+                            beginTime = e[0].format(Const.DAY_FORMAT);
+                            endTime = e[1].format(Const.DAY_FORMAT);
+                          }
+                          this.setState({ beginTime: beginTime, endTime: endTime });
+                        }}
+                      />
+                    </FormItem>
+                  </Col>
+
+                  {/*新增email搜索*/}
+                  {/*<AuthWrapper functionName="f_search_email">*/}
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Select
+                          onChange={(val, a) => {
+                            this.setState({
+                              emailAddressType: val
+                            });
+                          }}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          value={this.state.emailAddressType}
+                          style={styles.label}
+                        >
+                          <Option title={RCi18n({ id: 'Order.search.email' })} value="buyerEmail">
+                            <FormattedMessage id="Order.search.email" />
+                          </Option>
+                        </Select>
+                        <Input
+                          style={styles.wrapper}
+                          onChange={(e) => {
+                            this.setState({
+                              emailAddressValue: (e.target as any).value
+                            });
+                          }}
+                        />
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
+                  {/*</AuthWrapper>*/}
+                </Row>
+              ) : null}
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
@@ -325,60 +609,11 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
-                      e.preventDefault();
-                      const {
-                        buyerOptions,
-                        goodsOptions,
-                        receiverSelect,
-                        clinicSelect,
-                        numberSelect,
-                        id,
-                        subscribeId,
-                        buyerOptionsValue,
-                        goodsOptionsValue,
-                        receiverSelectValue,
-                        clinicSelectValue,
-                        numberSelectValue,
-                        tradeState,
-                        beginTime,
-                        endTime,
-                        orderCategory,
-                        recommenderSelect,
-                        recommenderSelectValue
-                      } = this.state;
-
-                      const ts = {} as any;
-                      if (tradeState.deliverStatus) {
-                        ts.deliverStatus = tradeState.deliverStatus;
-                      }
-
-                      if (tradeState.payState) {
-                        ts.payState = tradeState.payState;
-                      }
-
-                      if (tradeState.orderSource) {
-                        ts.orderSource = tradeState.orderSource;
-                      }
-
-                      const params = {
-                        id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-                        subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-                        [buyerOptions]: buyerOptionsValue,
-                        tradeState: ts,
-                        [goodsOptions]: goodsOptionsValue,
-                        [receiverSelect]: receiverSelectValue,
-                        [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
-                        [recommenderSelect]: recommenderSelectValue,
-                        beginTime,
-                        endTime,
-                        orderCategory
-                      };
-
-                      onSearch(params);
+                      this.handleSearch(e);
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -387,17 +622,26 @@ export default class SearchHead extends Component<any, any> {
           </Form>
 
           {hasMenu && (
-            <div className="handle-bar">
-              <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
+            <div className="handle-bar ant-form-inline filter-content">
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() => document.getElementById('page-content')}
+              >
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
           )}
         </div>
 
-        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
+        <ExportModal
+          data={exportModalData}
+          onHide={onExportModalHide}
+          handleByParams={exportModalData.get('exportByParams')}
+          handleByIds={exportModalData.get('exportByIds')}
+        />
       </div>
     );
   }
@@ -410,14 +654,15 @@ export default class SearchHead extends Component<any, any> {
             buyerOptions: value
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Consumer name" value="buyerName">
-          <FormattedMessage id="consumerName" />
+        <Option title={RCi18n({ id: 'Order.consumerName' })} value="buyerName">
+          <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Consumer account" value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+        <Option title={RCi18n({ id: 'Order.consumerAccount' })} value="buyerAccount">
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
     );
@@ -431,14 +676,15 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
-          <FormattedMessage id="productName" />
+        <Option title={RCi18n({ id: 'Order.productName' })} value="skuName">
+          <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
-          <FormattedMessage id="skuCode" />
+        <Option title={RCi18n({ id: 'Order.skuCode' })} value="skuNo">
+          <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
     );
@@ -452,14 +698,37 @@ export default class SearchHead extends Component<any, any> {
             receiverSelect: val
           })
         }
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
-          <FormattedMessage id="recipient" />
+        <Option title={RCi18n({ id: 'Order.recipient' })} value="consigneeName">
+          <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+        <Option title={RCi18n({ id: 'Order.recipientPhone' })} value="consigneePhone">
+          <FormattedMessage id="Order.recipientPhone" />
+        </Option>
+      </Select>
+    );
+  };
+
+  _renderOrderTypeSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            orderTypeSelect: val
+          })
+        }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.orderTypeSelect}
+        style={styles.label}
+      >
+        <Option title={RCi18n({ id: 'Order.orderType' })} value="Order type">
+          <FormattedMessage id="Order.orderType" />
+        </Option>
+        <Option title={RCi18n({ id: 'Order.orderSource' })} value="Order source">
+          <FormattedMessage id="Order.orderSource" />
         </Option>
       </Select>
     );
@@ -473,14 +742,15 @@ export default class SearchHead extends Component<any, any> {
             clinicSelect: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.clinicSelect}
         style={styles.label}
       >
-        <Option title="Auditor name" value="clinicsName">
-          <FormattedMessage id="clinicName" />
+        <Option title={RCi18n({ id: 'Order.clinicName' })} value="clinicsName">
+          <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title="Auditor ID" value="clinicsIds">
-          <FormattedMessage id="clinicID" />
+        <Option title={RCi18n({ id: 'Order.clinicID' })} value="clinicsIds">
+          <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
     );
@@ -493,14 +763,15 @@ export default class SearchHead extends Component<any, any> {
             numberSelect: val
           });
         }}
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+        <Option title={RCi18n({ id: 'Order.OrderNumber' })} value="orderNumber">
+          <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option title="Subscriptio number" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option title={RCi18n({ id: 'Order.subscriptionNumber' })} value="subscriptionNumber">
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -513,14 +784,15 @@ export default class SearchHead extends Component<any, any> {
             recommenderSelect: val
           })
         }
+        getPopupContainer={() => document.getElementById('page-content')}
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recommender id" value="recommenderId">
-          <FormattedMessage id="recommenderId" />
+        <Option title={RCi18n({ id: 'Order.recommenderId' })} value="recommenderId">
+          <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title="Recommender name" value="recommenderName">
-          <FormattedMessage id="recommenderName" />
+        <Option title={RCi18n({ id: 'Order.recommenderName' })} value="recommenderName">
+          <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
     );
@@ -534,14 +806,15 @@ export default class SearchHead extends Component<any, any> {
             statusSelect: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title="Payment status" value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+        <Option title={RCi18n({ id: 'Order.paymentStatus' })} value="paymentStatus">
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title="Shipping status" value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+        <Option title={RCi18n({ id: 'Order.shippingStatus' })} value="shippingStatus">
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -557,16 +830,18 @@ export default class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = RCi18n({ id: 'Order.pleaseSelectOrderToOperate' });
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = RCi18n({ id: 'Order.audit' });
+    const content = RCi18n({ id: 'Order.confirmAudit' });
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -578,13 +853,129 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export all orders',
-      byIdsTitle: 'Export selected orders',
+      byParamsTitle: RCi18n({ id: 'Order.Exportfilteredorders' }),
+      byIdsTitle: RCi18n({ id: 'Order.Exportselectedorders' }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
+
+  _renderCodeSelect = () => {
+    const codeTypeList = [
+      { value: 'promotionCode', name: RCi18n({ id: 'Order.promotionCode' }) },
+      { value: 'couponCode', name: RCi18n({ id: 'Order.couponCode' }) }
+    ];
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            codeSelect: val
+          })
+        }
+        getPopupContainer={() => document.getElementById('page-content')}
+        value={this.state.codeSelect}
+        style={styles.label}
+      >
+        {codeTypeList &&
+          codeTypeList.map((item, index) => (
+            <Option value={item.value} title={item.name} key={index}>
+              {item.name}
+            </Option>
+          ))}
+      </Select>
+    );
+  };
+  getSubsrciptionPlanType = (subsriptionType) => {
+    const { subscriptionPlanTypeListClone } = this.state;
+    let newSubscriptionPlanTypeList = [];
+    if (subsriptionType) {
+      if (subsriptionType === 'ContractProduct') {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter(
+          (item) => item.value === 'SmartFeeder'
+        );
+      } else if (subsriptionType.indexOf('Club') >= 0) {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter(
+          (item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat'
+        );
+      }
+    } else {
+      this.setState({
+        subscriptionPlanType: ''
+      });
+    }
+    this.setState({
+      subscriptionPlanTypeList: newSubscriptionPlanTypeList
+    });
+  };
+  handleSearch = (e) => {
+    const { onSearch } = this.props.relaxProps;
+    e.preventDefault();
+    const {
+      buyerOptions,
+      goodsOptions,
+      receiverSelect,
+      clinicSelect,
+      numberSelect,
+      buyerOptionsValue,
+      goodsOptionsValue,
+      receiverSelectValue,
+      clinicSelectValue,
+      numberSelectValue,
+      tradeState,
+      beginTime,
+      endTime,
+      recommenderSelect,
+      recommenderSelectValue,
+      refillNumber,
+      orderType,
+      orderSource,
+      subscriptionType,
+      subscriptionPlanType,
+      codeSelect,
+      codeSelectValue,
+      emailAddressType,
+      emailAddressValue,
+      citySearchType,
+      citySearchValue
+    } = this.state;
+
+    const ts = {} as any;
+    if (tradeState.deliverStatus) {
+      ts.deliverStatus = tradeState.deliverStatus;
+    }
+
+    if (tradeState.payState) {
+      ts.payState = tradeState.payState;
+    }
+
+    if (tradeState.orderSource) {
+      ts.orderSource = tradeState.orderSource;
+    }
+    const params = {
+      id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+      subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      [buyerOptions]: buyerOptionsValue,
+      [receiverSelect]: receiverSelectValue,
+      subscriptionRefillType: refillNumber,
+      [goodsOptions]: goodsOptionsValue,
+      orderType,
+      orderSource,
+      tradeState: ts,
+      subscriptionTypeQuery: subscriptionType,
+      beginTime,
+      endTime,
+      [recommenderSelect]: recommenderSelectValue,
+      [clinicSelect]: clinicSelectValue,
+      subscriptionPlanType,
+      [codeSelect]: codeSelectValue,
+      [emailAddressType]: emailAddressValue,
+      [citySearchType]: citySearchValue
+    };
+    onSearch(params);
+  };
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   formItemStyle: {
@@ -602,7 +993,10 @@ const styles = {
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
-    cursor: 'text'
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   },
   wrapper: {
     width: 200

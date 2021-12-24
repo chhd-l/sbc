@@ -1,4 +1,4 @@
-import { Fetch } from 'qmkit';
+import { Fetch, cache } from 'qmkit';
 
 type TResult = {
   code: string;
@@ -20,10 +20,16 @@ export function queryClinicsDictionary(filterParams = {}) {
  * @param filterParams
  */
 export function getBasicDetails(id = null) {
-  return Fetch<TResult>('/customer/detail/' + id, {
-    method: 'Get'
+  return Fetch<TResult>('/customer/detail2/' + id, {
+    method: 'GET'
   });
 }
+export function getMemberShipDetails(id = null) {
+  return Fetch<TResult>('/subscription/order/gift/detail/' + id, {
+    method: 'GET'
+  });
+}
+
 
 export function basicDetailsSave(filterParams = {}) {
   return Fetch('/customer/detail', {
@@ -62,7 +68,7 @@ export function fetchClinicList(filterParams = {}) {
  */
 export function getAddressList(id = null) {
   return Fetch<TResult>('/customer/addressList/' + id, {
-    method: 'Get'
+    method: 'GET'
   });
 }
 
@@ -72,7 +78,7 @@ export function getAddressList(id = null) {
  */
 export function getAddressListByType(id = null, type = '') {
   return Fetch<TResult>('/customer/addressList/listByCustomerIdAndType?customerId=' + id + '&type=' + type, {
-    method: 'Get'
+    method: 'GET'
   });
 }
 
@@ -83,6 +89,19 @@ export function getAddressListByType(id = null, type = '') {
 export function delAddress(id = null) {
   return Fetch<TResult>('/customer/address/' + id, {
     method: 'DELETE'
+  });
+}
+
+/**
+ * 新增客户地址
+ * @param filterParams
+ */
+export function addAddress(filterParams = {}) {
+  return Fetch<TResult>('/customer/address', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 }
 
@@ -144,6 +163,20 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+//mixed_breed没有配置在字典里，前端写死来显示
+export function getMixedBreedDisplayName() {
+  const names = {
+    de: "Gemischte Rasse",
+    us: "Mixed Breed",
+    mx: "Raza Mixta",
+    fr: "Race Mixte",
+    ru: "Смешанная порода",
+    tr: "Melez ırk",
+  };
+  return names[(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']];
+};
+
 // 根据ID删除Pet
 export function delPets(filterParams = {}) {
   return Fetch<TResult>('/pets/delPets', {
@@ -155,21 +188,15 @@ export function delPets(filterParams = {}) {
 }
 
 export function getPaymentMethods(param) {
-  return Fetch<TResult>('/payment-method/query-by-customer-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
+  return Fetch<TResult>(`/${param.storeId}/pay-payment-info/${param.customerId}`, {
+    method: 'GET'
   });
 }
 
 export function deleteCard(param) {
-  return Fetch<TResult>('/payment-method/delete-by-id', {
-    method: 'POST',
-    body: JSON.stringify({
-      ...param
-    })
-  });
+  return Fetch<TResult>(`/${param.storeId}/pay-payment-info-del/${param.id}`, {
+    method: 'DELETE'
+  },{ isHandleResult: true, customerTip: true });
 }
 
 export function addOrUpdatePaymentMethod(param) {
@@ -188,7 +215,7 @@ export function delCustomer(filterParams = {}) {
     body: JSON.stringify({
       ...filterParams
     })
-  }); 
+  });
 }
 
 export function queryCityById(filterParams = {}) {
@@ -204,6 +231,34 @@ export function queryCityListByName(filterParams = {}) {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function setTagging(params = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || 0
+    })
+  });
+}
+
+export function getPrescriberList(params = {}) {
+  return Fetch<TResult>('/prescriber/query/listByCustomer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
+    })
+  });
+}
+export function getBenefitsList(params){
+  return Fetch<TResult>('/subscription/order/gift/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
     })
   });
 }
@@ -289,3 +344,65 @@ export function queryCityListByName(filterParams = {}) {
 //     data: parameter
 //   })
 // }
+
+//查询州地址
+
+export function queryStateList() {
+  return Fetch<TResult>('/systemState/queryByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...{ storeId: 123457910 }
+    })
+  });
+}
+
+// 分页获取 tag list
+export function getTaggingList(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// bindTagging
+export function bindTagging(filterParams = {}) {
+  return Fetch<TResult>('/customer/segment/segment/segmentRelation', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+//feedback
+export function getByCustomerId(customerId) {
+  return Fetch<TResult>('/customer/feedback/getByCustomerId', {
+    method: 'POST',
+    body: JSON.stringify({
+      petOwnerId: customerId
+    })
+  });
+}
+
+export function saveFeedback(params = {}) {
+  return Fetch<TResult>('/customer/feedback/save', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+//更新pet lifestage数据
+export function refreshPetLifeStage(petId: string) {
+  return Fetch<TResult>(`/pets/updateLifeStage/${petId}`, {
+    method: 'PUT'
+  });
+}
+
+// 校验 validPostCodeBlock
+export function validPostCodeBlock(postCode) {
+  return Fetch<TResult>(`/addressDisplaySetting/validPostCodeBlockForPortal?postCode=${postCode}`, {
+    method: 'GET'
+  });
+}

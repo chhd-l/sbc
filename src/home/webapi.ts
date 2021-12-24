@@ -99,12 +99,32 @@ export const getPrescriberTransactionTrendView = (params) => {
 };
 
 export const getListAll = ({ prescriberName }) => {
-  //console.log(prescriberName,'======')
-  //{"prescriberNoOrName":"PETS MEDICAL"}
   return Fetch(/*'/prescriber/listAll'*/ '/prescriber/listAllByNoOrName', {
     method: 'POST',
     body: JSON.stringify({ prescriberNoOrName: prescriberName })
   });
 };
 
+export const getPrescriberRecommentCodeUseView = (params) => {
+  return Fetch('/dashboard/prescriberRecommentCodeUseView', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+
 /* ================================================================================================================ */
+
+type TResult = {
+  code: string;
+  message: string;
+  context: any;
+};
+export function getDeliveryOptions() {
+  return Fetch<TResult>('/system/config/listByStoreIdAndKey', {
+    method: 'POST',
+    body: JSON.stringify({
+      configKey: 'delivery_option'
+    })
+  });
+}

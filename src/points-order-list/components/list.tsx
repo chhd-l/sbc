@@ -3,9 +3,10 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper } from 'qmkit';
+import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
+import { FormattedMessage } from 'react-intl';
 const defaultImg = require('../../goods-list/img/none.png');
 
 const deliverStatus = (status) => {
@@ -27,19 +28,6 @@ const payStatus = (status) => {
     return '未知';
   }
 };
-
-const flowState = (status) => {
-  if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return '待发货';
-  } else if (status == 'DELIVERED') {
-    return '待收货';
-  } else if (status == 'CONFIRMED') {
-    return '已收货';
-  } else if (status == 'COMPLETED') {
-    return '已完成';
-  }
-};
-
 type TList = List<any>;
 
 @Relax
@@ -159,7 +147,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -226,7 +214,7 @@ export default class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*部分发货状态显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'DELIVERED_PART' && v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' && !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID') && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') && (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') && v.getIn(['tradeState', 'payState']) === 'PAID' &&(
                             <AuthWrapper functionName="f_points_order_list_005">
                               <a onClick={() => this._toDeliveryForm(id)}>Delivery</a>
                             </AuthWrapper>
@@ -305,7 +293,7 @@ export default class ListView extends React.Component<any, any> {
                     {/*发货状态*/}
                     <td style={{ width: '10%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
                     {/*订单状态*/}
-                    <td style={{ width: '10%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '10%' }}><FormattedMessage id={getOrderStatusValue('OrderStatus', v.getIn(['tradeState', 'flowState']))} /></td>
                     {/*支付状态*/}
                     <td
                       style={{

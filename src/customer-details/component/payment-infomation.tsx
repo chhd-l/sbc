@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { addressList } from '@/order-add-old/webapi';
 import axios from 'axios';
 import moment from 'moment';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 const { TextArea } = Input;
 const { MonthPicker } = DatePicker;
@@ -36,14 +35,15 @@ class PaymentInformation extends React.Component<any, any> {
     };
   }
   componentDidMount() {
-    this.getList();
+  //  this.getList();
   }
   getList() {
     this.setState({
       loading: true
     });
+    let {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
     webapi
-      .getPaymentMethods({ customerId: this.props.customerId, storeId: JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).storeId || '' })
+      .getPaymentMethods({ customerId: this.props.customerId, storeId })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -57,14 +57,14 @@ class PaymentInformation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   }
 
@@ -74,14 +74,14 @@ class PaymentInformation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="PetOwner.OperateSuccessfully" />);
           this.getList();
         } else {
-          message.error(res.message || 'Delete failed');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error('Delete failed');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   clickDefault = () => {
@@ -94,120 +94,73 @@ class PaymentInformation extends React.Component<any, any> {
   render() {
     const { cardList, loading } = this.state;
     return (
-      <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={loading}>
         <Row style={{ minHeight: 200 }}>
-          {cardList &&
-            cardList.map((item, index) => (
-              <Col span={6} offset={1} key={index}>
-                {item.paymentType === 'PAYU' ? (
-                  <>
-                    {item.payuPaymentMethod ? (
-                      <Card>
-                        <Row>
-                          <Col span={16} offset={1}>
-                            <p>{item.payuPaymentMethod.holder_name}</p>
-                            <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
-                            <p>{item.payuPaymentMethod.card_type}</p>
-                          </Col>
-                          <Col span={5}>
-                            {!item.isDefault ? (
-                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                <Tooltip placement="top" title="Delete">
-                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
-                                </Tooltip>
-                              </Popconfirm>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      </Card>
-                    ) : null}
-                  </>
-                ) : (
-                  <>
-                    {item.adyenPaymentMethod ? (
-                      <Card>
-                        <Row>
-                          <Col span={16} offset={1}>
-                            <p>{item.adyenPaymentMethod.holder_name}</p>
-                            <p>{item.adyenPaymentMethod?.lastFour ? '**** **** **** ' + item.adyenPaymentMethod.lastFour : ''}</p>
-                            <p>{item.adyenPaymentMethod.card_type}</p>
-                          </Col>
-                          <Col span={5}>
-                            {!item.isDefault ? (
-                              <Popconfirm placement="topLeft" title="Are you sure to delete this card?" onConfirm={() => this.delCard(item.id)} okText="Confirm" cancelText="Cancel">
-                                <Tooltip placement="top" title="Delete">
-                                  <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
-                                </Tooltip>
-                              </Popconfirm>
-                            ) : null}
-                          </Col>
-                        </Row>
-                      </Card>
-                    ) : null}
-                  </>
-                )}
-              </Col>
-            ))}
+          {cardList && cardList.length === 0 ? (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          ) : (
+            <>
+              {cardList.map((item, index) => (
+                <Col span={6} offset={1} key={index}>
+                  {item.paymentType === 'PAYU' ? (
+                    <>
+                      {item.payuPaymentMethod ? (
+                        <Card>
+                          <Row>
+                            <Col span={16} offset={1}>
+                              <p>{item.payuPaymentMethod.holder_name}</p>
+                              <p>{item.payuPaymentMethod.last_4_digits ? '**** **** **** ' + item.payuPaymentMethod.last_4_digits : ''}</p>
+                              <p>{item.payuPaymentMethod.card_type}</p>
+                            </Col>
+                            <Col span={5}>
+                              {!item.isDefault ? (
+                                <Popconfirm placement="topLeft" title={<FormattedMessage id="PetOwner.deleteThisCard" />} onConfirm={() => this.delCard(item.id)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
+                                  <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Delete" />}>
+                                    <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              ) : null}
+                            </Col>
+                          </Row>
+                        </Card>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      {item.adyenPaymentMethod ? (
+                        <Card>
+                          <Row>
+                            <Col span={16} offset={1}>
+                              <p>{item.adyenPaymentMethod.holder_name}</p>
+                              <p>{item.adyenPaymentMethod.lastFour ? '**** **** **** ' + item.adyenPaymentMethod.lastFour : ''}</p>
+                              <p>{item.adyenPaymentMethod.card_type}</p>
+                            </Col>
+                            <Col span={5}>
+                              {!item.isDefault ? (
+                                <Popconfirm placement="topLeft" title={<FormattedMessage id="PetOwner.deleteThisCard" />} onConfirm={() => this.delCard(item.id)} okText={<FormattedMessage id="PetOwner.Confirm" />} cancelText={<FormattedMessage id="PetOwner.Cancel" />}>
+                                  <Tooltip placement="top" title={<FormattedMessage id="PetOwner.Delete" />}>
+                                    <a className="iconfont iconDelete" style={{ float: 'right' }}></a>
+                                  </Tooltip>
+                                </Popconfirm>
+                              ) : null}
+                            </Col>
+                          </Row>
+                        </Card>
+                      ) : null}
+                    </>
+                  )}
+                </Col>
+              ))}
+            </>
+          )}
+
           <div className="bar-button">
             <Button>
-              <Link to="/customer-list">Cancel</Link>
+              <Link to="/customer-list">
+                <FormattedMessage id="PetOwner.Cancel" />
+              </Link>
             </Button>
           </div>
-
-          {/* <Col span={20}>
-            {this.state.cardList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
-            
-            
-            <Card
-              style={{
-                display: this.state.cardList.length === 0 ? 'none' : 'block'
-              }}
-            >
-              <Form {...formItemLayout}>
-                <Row gutter={16}>
-                  <Col span={12}>
-                    <FormItem label="Card number">
-                      {getFieldDecorator('cardNumber', {
-                      })(
-                        <Input
-                          disabled
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={12}>
-                    <FormItem label="Card owner">
-                      {getFieldDecorator('cardOwner', {
-                      })(
-                        <Input disabled/>
-                      )}
-                    </FormItem>
-                  </Col>
-
-                  <Col span={24}>
-                    <FormItem>
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delCard()} okText="Confirm" cancelText="Cancel">
-                        <Button
-                          style={{
-                            marginRight: '20px',
-                            display: this.props.customerType === 'Guest' ? 'none' : null
-                          }}
-                        >
-                          <FormattedMessage id="delete" />
-                        </Button>
-                      </Popconfirm>
-
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
-                      </Button>
-                    </FormItem>
-                  </Col>
-                </Row>
-              </Form>
-            </Card>
-          </Col>
-         */}
         </Row>
       </Spin>
     );

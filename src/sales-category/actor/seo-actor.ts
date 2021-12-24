@@ -7,8 +7,10 @@ export default class SeoActor extends Actor {
       seoForm: {
         titleSource: '', //{name}
         metaKeywordsSource: '', //{name}
-        metaDescriptionSource: '' //{description}
+        metaDescriptionSource: '', //{description}
+        headingTag: ''
       },
+      updateNumbers: 0, //0：新增seo, 大于0：编辑seo
       seoModalVisible: false,
       currentStoreCateId: null,
       loading: false
@@ -30,6 +32,12 @@ export default class SeoActor extends Actor {
   setSeoForm(state: IMap, form) {
     return state.set('seoForm', form);
   }
+
+  @Action('seoActor: updateNumbers')
+  setSeoUpdateNumbers(state: IMap, updateNumbers) {
+    return state.set('updateNumbers', updateNumbers);
+  }
+
   @Action('seoActor: currentStoreCateId')
   setCurrentStoreCateId(state: IMap, currentStoreCateId) {
     return state.set('currentStoreCateId', currentStoreCateId);
@@ -40,9 +48,10 @@ export default class SeoActor extends Actor {
     return state.set(
       'seoForm',
       fromJS({
-        titleSource: '{name}',
-        metaKeywordsSource: '{name}',
-        metaDescriptionSource: '{description}'
+        titleSource: '',
+        metaKeywordsSource: '',
+        metaDescriptionSource: '',
+        headingTag: ''
       })
     );
   }

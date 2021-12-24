@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Select, Table, Input, Row, Col, Form, message, Checkbox, Tooltip, Icon, InputNumber } from 'antd';
 const { Option } = Select;
-
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst } from 'qmkit';
+import { cache, noop, ValidConst, RCi18n, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -34,6 +33,9 @@ export default class ProductInventory extends React.Component<any, any> {
       modalVisible: Function;
       goods: IMap;
       baseSpecId: Number;
+      uomList: IList;
+      updateInventoryForm: Function;
+      priceForm: any;
     };
   };
 
@@ -55,7 +57,10 @@ export default class ProductInventory extends React.Component<any, any> {
     synchValue: noop,
     clickImg: noop,
     removeImg: noop,
-    modalVisible: noop
+    modalVisible: noop,
+    uomList: 'uomList',
+    updateInventoryForm: noop,
+    priceForm: 'priceForm'
   };
 
   constructor(props) {
@@ -83,14 +88,18 @@ class SkuForm extends React.Component<any, any> {
       count: 0
     };
   }
+
+  componentDidMount() {
+    const { updateInventoryForm } = this.props.relaxProps;
+    updateInventoryForm(this.props.form);
+  }
+
   handleChange(value) {
-    console.log(`selected ${value}`);
   }
   render() {
     const { goodsList, goods, goodsSpecs, baseSpecId } = this.props.relaxProps;
     // const {  } = this.state
     const columns = this._getColumns();
-
     return (
       <div style={{ marginBottom: 20 }}>
         <Form>
@@ -102,8 +111,8 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId } = this.props.relaxProps;
-
+    const { goodsSpecs, stockChecked, marketPriceChecked, modalVisible, clickImg, removeImg, specSingleFlag, spuMarketPrice, priceOpt, goods, baseSpecId, uomList } = this.props.relaxProps;
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     let columns: any = List();
 
     // 未开启规格时，不需要展示默认规格
@@ -142,6 +151,36 @@ class SkuForm extends React.Component<any, any> {
         );
       }
     });
+
+    //Stocking UOM
+    columns = columns.push({
+      title: <FormattedMessage id="Product.StockingUOM" />,
+      key: 'stockUomId',
+      width: '10%',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('stockUomId_' + rowInfo.id, {
+                  rules: [],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stockUomId'),
+                  initialValue: rowInfo.stockUomId || null
+                })(
+                  <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} style={{ width: 100 }} >
+                    {uomList.map(item => (
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
+                    ))}
+                  </Select>
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //Conversion factor
     columns = columns.push({
       title: (
         <div>
@@ -155,7 +194,65 @@ class SkuForm extends React.Component<any, any> {
           >
             *
           </span>
-          <FormattedMessage id="product.inventory" />
+          <FormattedMessage id="Product.ConversionFactor" />
+        </div>
+      ),
+      key: 'factor',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                {getFieldDecorator('factor_' + rowInfo.id, {
+                  rules: [],
+                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'factor'),
+                  initialValue: rowInfo.factor || 1
+                })(
+                  <InputNumber disabled={disableFields} min={1} step={1} precision={0} style={{ width: 100 }} />
+                )}
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    //Pricing UOM -disabled
+    columns = columns.push({
+      title: <FormattedMessage id="Product.PricingUOM" />,
+      key: 'priceUomId',
+      width: '10%',
+      render: (rowInfo) => {
+        return (
+          <Row>
+            <Col span={12}>
+              <FormItem style={styles.tableFormItem}>
+                <Select value={rowInfo.priceUomId} disabled style={{ width: 100 }}>
+                   {uomList.map(item => (
+                      <Option value={item.get('id')} key={item.get('id')} title={item.get('uomName')}>{item.get('uomName')}</Option>
+                    ))}
+                </Select>
+              </FormItem>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    columns = columns.push({
+      title: (
+        <div>
+          <span
+            style={{
+              color: 'red',
+              fontFamily: 'SimSun',
+              marginRight: '4px',
+              fontSize: '12px'
+            }}
+          >
+            *
+          </span>
+          <FormattedMessage id="Product.StockingInventory" />
           <br />
           {/*<Checkbox checked={stockChecked} onChange={(e) => this._synchValue(e, 'stock')}>
             <FormattedMessage id="allTheSame" />
@@ -168,50 +265,49 @@ class SkuForm extends React.Component<any, any> {
           </Checkbox>*/}
         </div>
       ),
-      key: 'stock',
+      key: 'externalStock',
       render: (rowInfo) => (
         <Row>
           <Col span={12}>
             <FormItem style={styles.tableFormItem}>
-              {getFieldDecorator('stock_' + rowInfo.id, {
+              {getFieldDecorator('externalStock_' + rowInfo.id, {
                 rules: [
                   {
-                    required: true,
-                    message: 'Please input inventory'
-                  },
-                  {
-                    pattern: ValidConst.number,
-                    message: 'Please enter the correct value'
+                    validator: (_rule, value, callback) => {
+                      if (!value && value !== 0) {
+                        callback(RCi18n({id:'Product.PleaseInputInventory'}));
+                      }
+                      if (!ValidConst.zeroNumber.test(value)) {
+                        callback(RCi18n({id:'Product.PleaseEnterTheCorrect'}));
+                      }
+                      callback();
+                    }
                   }
                 ],
-                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
-                initialValue: rowInfo.stock
-              })(<InputNumber style={{ width: '121px' }} min={0} max={9999999} disabled={rowInfo.index > 1 && stockChecked} />)}
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'externalStock'),
+                initialValue: rowInfo.externalStock
+              })(<InputNumber style={{ width: 100 }} min={0} max={999999999} disabled={disableFields || (rowInfo.index > 1 && stockChecked)} />)}
             </FormItem>
           </Col>
         </Row>
       )
     });
 
+    //Stocking inventory
     columns = columns.push({
-      title: 'UOM',
-      key: 'goodsMeasureUnit + stock',
+      title: <FormattedMessage id="Product.PricingInventory" />,
+      key: 'stock',
       render: (rowInfo) => {
+        let stock = 0;
+        if (rowInfo.externalStock && rowInfo.factor) {
+          stock = Math.floor(rowInfo.externalStock / rowInfo.factor);
+        }
+        this._editGoodsItem(rowInfo.id, 'stock', stock);
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('goodsMeasureUnit_' + rowInfo.id, {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: 'Please input UOM'
-                    }
-                  ],
-                  onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
-                  initialValue: rowInfo.goodsMeasureUnit
-                })(<Input style={{ width: '115px' }} />)}
+                <InputNumber value={stock} disabled />
               </FormItem>
             </Col>
           </Row>
@@ -219,6 +315,84 @@ class SkuForm extends React.Component<any, any> {
       }
     });
 
+
+    // columns = columns.push({
+    //   title: <FormattedMessage id="Product.Virtualinventory" />,
+    //   key: 'virtualInventory',
+    //   render: (rowInfo) => (
+    //     <Row>
+    //       <Col span={12}>
+    //         <FormItem style={styles.tableFormItem}>
+    //           {getFieldDecorator('virtualInventory_' + rowInfo.id, {
+    //             rules: [
+    //               // {
+    //               //   required: true,
+    //               //   message: 'Please input inventory'
+    //               // },
+    //               {
+    //                 pattern: ValidConst.number,
+    //                 message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
+    //               }
+    //             ],
+    //             onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
+    //             initialValue: rowInfo.virtualInventory
+    //           })(<InputNumber style={{ width: '121px' }} min={0} max={999999999} />)}
+    //         </FormItem>
+    //       </Col>
+    //     </Row>
+    //   )
+    // });
+    // columns = columns.push({
+    //   title: <FormattedMessage id="Product.UOM"/>,
+    //   key: 'goodsMeasureUnit + stock',
+    //   render: (rowInfo) => {
+    //     return (
+    //       <Row>
+    //         <Col span={12}>
+    //           <FormItem style={styles.tableFormItem}>
+    //             {getFieldDecorator('goodsMeasureUnit_' + rowInfo.id, {
+    //               rules: [
+    //                 {
+    //                   required: true,
+    //                   whitespace: true,
+    //                   message: RCi18n({id:'Product.PleaseInputUOM'})
+    //                 }
+    //               ],
+    //               onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
+    //               initialValue: rowInfo.goodsMeasureUnit
+    //             })(<Input style={{ width: '115px' }} />)}
+    //           </FormItem>
+    //         </Col>
+    //       </Row>
+    //     );
+    //   }
+    // });
+    columns = columns.push({
+      title: RCi18n({id: 'Product.Inventory Alert'}),
+      key: 'virtualAlert',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualAlert_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: RCi18n({id:'Product.PleaseEnterTheCorrect'})
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
+                initialValue: rowInfo.virtualAlert
+              })(<InputNumber disabled={disableFields} style={{ width: 100 }} min={0} max={999999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
     columns = columns.push({
       title: '',
       key: '1',
@@ -246,11 +420,11 @@ class SkuForm extends React.Component<any, any> {
       if (file.size < FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('The file size must be less than 2M');
+        message.error(RCi18n({id:'Product.lessThan2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };
@@ -259,10 +433,37 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any) => {
-    const { editGoodsItem, synchValue } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, priceForm, goodsList } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
+    }
+
+    //factor更新，需要更新marketPrice, subscriptionPrice, basePrice, subscriptionBasePrice, linePrice
+    if (key === 'factor') {
+      const goodsItem = goodsList.toJS().find(g => g.id === id);
+      const { marketPrice, subscriptionPrice, basePrice, subscriptionBasePrice, linePrice, factor } = goodsItem;
+      const newMarketPrice = marketPrice ? marketPrice * parseInt(e) / parseInt(factor) : marketPrice;
+      const newSubscriptionPrice = subscriptionPrice ? subscriptionPrice * parseInt(e) / parseInt(factor) : subscriptionPrice;
+      const newBasePrice = basePrice ? basePrice * parseInt(e) / parseInt(factor) : basePrice;
+      const newSubscriptionBasePrice = subscriptionBasePrice ? subscriptionBasePrice * parseInt(e) / parseInt(factor) : subscriptionBasePrice;
+      const newLinePrice = linePrice ? linePrice * parseInt(e) / parseInt(factor) : linePrice;
+      
+      editGoodsItem(id, 'marketPrice', newMarketPrice);
+      editGoodsItem(id, 'subscriptionPrice', newSubscriptionPrice);
+      editGoodsItem(id, 'basePrice', newBasePrice);
+      editGoodsItem(id, 'subscriptionBasePrice', newSubscriptionBasePrice);
+      editGoodsItem(id, 'linePrice', newLinePrice);
+
+      if (priceForm.getFieldsValue) {
+        priceForm.setFieldsValue({
+          [`marketPrice_${id}`]: newMarketPrice,
+          [`subscriptionPrice_${id}`]: newSubscriptionPrice,
+          [`basePrice_${id}`]: newBasePrice,
+          [`subscriptionBasePrice_${id}`]: newSubscriptionBasePrice,
+          [`linePrice_${id}`]: newLinePrice
+        });
+      }
     }
 
     editGoodsItem(id, key, e);

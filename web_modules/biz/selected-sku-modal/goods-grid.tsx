@@ -6,6 +6,7 @@ import { Const, DataGrid, cache } from 'qmkit';
 import SearchForm from './search-form';
 import * as webapi from './webapi';
 import { Table } from 'antd';
+import 'index.less'
 
 
 const Column = Table.Column;
@@ -65,7 +66,7 @@ export default class GoodsGrid extends React.Component<any, any> {
         <SearchForm searchBackFun={this.searchBackFun} visible={visible} />
 
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={loading}
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
@@ -142,7 +143,8 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="Category" key="goodsCate" dataIndex="cateName" />
+          <Column title="Product category" key="goodsCate" dataIndex="cateName"  width="15%"
+          />
 
           <Column
             title="Brand"
@@ -187,7 +189,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       params.pageSize = 10;
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
-
+    this.setState({loading: true});
     let { res } = await webapi.fetchGoodsList({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {

@@ -34,7 +34,6 @@ export default class AppStore extends Store {
         this.dispatch('product:productselect', arr);
       });
     } else {
-      message.error(res1.res.message);
       this.dispatch('loading:end');
     }
   };
@@ -50,7 +49,6 @@ export default class AppStore extends Store {
         this.dispatch('productList:productInit', res1.res.context.goodsInfos.content);
       });
     } else {
-      message.error(res1.res.message);
       this.dispatch('loading:end');
     }
   };
@@ -100,16 +98,15 @@ export default class AppStore extends Store {
   onSend = async (type, param?: any) => {
     const res = await webapi.fetchModify(param);
     if (res.res.code === Const.SUCCESS_CODE) {
-      message.success('send successfully!');
+      message.success(RCi18n({id:'Order.sendSuccessfully'}));
       if (type == 'send') {
         history.goBack();
       } else {
         this.dispatch('get:send', true);
       }
     } else {
-      message.error(res.res.message);
       if (res.res.code === 'K-110001') {
-        message.success('send failed!');
+        message.success(RCi18n({id:'Order.sendFailed'}));
         return false;
       }
     }
@@ -123,9 +120,8 @@ export default class AppStore extends Store {
       //message.success('switch successfully!');
       this.dispatch('get:linkStatus', res.res.context);
     } else {
-      message.error(res.res.message);
       if (res.res.code === 'K-110001') {
-        message.success('switch failed!');
+        message.success(RCi18n({id:'Order.switchFailed'}));
         return false;
       }
     }

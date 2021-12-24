@@ -63,7 +63,7 @@ export default class OrderDelivery extends React.Component<any, any> {
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map(
       (gift) =>
         gift
-          .set('skuName', `【赠品】${gift.get('skuName')}`)
+          .set('skuName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('skuName')}`)
           .set('levelPrice', 0)
           .set('isGift', true)
     );
@@ -79,7 +79,7 @@ export default class OrderDelivery extends React.Component<any, any> {
             pagination={false}
             bordered
           />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') &&
+          {(flowState === 'AUDIT' || flowState === 'PARTIALLY_SHIPPED') &&
           !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="f_points_order_list_005">
@@ -101,7 +101,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                 ? v.get('giftItemList')
                 : fromJS([])
               ).map((gift) =>
-                gift.set('itemName', `【赠品】${gift.get('itemName')}`)
+                gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`)
               );
               return (
                 <div
@@ -127,12 +127,12 @@ export default class OrderDelivery extends React.Component<any, any> {
                           【Logistics information】delivery date：{deliverTime}
                           &nbsp;&nbsp; Logistics company：
                           {logistic.get('logisticCompanyName')}{' '}
-                          &nbsp;&nbsp;Logistics single number：
+                          &nbsp;&nbsp;Logistics number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
-                          <Logistics
+                          {/* <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
-                          />
+                          /> */}
                         </label>
                       ) : (
                         '无'

@@ -58,13 +58,14 @@ export default class OrderDelivery extends React.Component<any, any> {
     const tradeDelivers = detail.get('tradeDelivers') as IList;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map(
       (gift) =>
         gift
-          .set('skuName', `【赠品】${gift.get('skuName')}`)
+          .set('skuName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('skuName')}`)
           .set('levelPrice', 0)
           .set('isGift', true)
     );
@@ -86,8 +87,7 @@ export default class OrderDelivery extends React.Component<any, any> {
             pagination={false}
             bordered
           />
-          {(flowState === 'AUDIT' || flowState === 'DELIVERED_PART') &&
-          !(paymentOrder == 'PAY_FIRST' && payState != 'PAID') ? (
+          {(flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" onClick={() => deliver()}>
@@ -108,7 +108,7 @@ export default class OrderDelivery extends React.Component<any, any> {
                 ? v.get('giftItemList')
                 : fromJS([])
               ).map((gift) =>
-                gift.set('itemName', `【赠品】${gift.get('itemName')}`)
+                gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`)
               );
               return (
                 <div
@@ -136,12 +136,12 @@ export default class OrderDelivery extends React.Component<any, any> {
                           【Logistics information】delivery date：{deliverTime}
                           &nbsp;&nbsp; Logistics company：
                           {logistic.get('logisticCompanyName')}{' '}
-                          &nbsp;&nbsp;Logistics single number：
+                          &nbsp;&nbsp;Logistics number：
                           {logistic.get('logisticNo')}&nbsp;&nbsp;
-                          <Logistics
+                          {/* <Logistics
                             companyInfo={logistic}
                             deliveryTime={deliverTime}
-                          />
+                          /> */}
                         </label>
                       ) : (
                         'none'

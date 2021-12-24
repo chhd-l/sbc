@@ -2,8 +2,8 @@ import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
 import { InputNumber, Input, Button, Select, Form } from 'antd';
-import { DataGrid, ValidConst } from 'qmkit';
-
+import { DataGrid, ValidConst, cache, noop } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { GoodsModal } from 'biz';
 
 const Option = Select.Option;
@@ -13,6 +13,7 @@ const Column = Table.Column;
 const FormItem = Form.Item;
 
 import styled from 'styled-components';
+import { Relax } from 'plume2';
 
 const HasError = styled.div`
   display: flex;
@@ -26,12 +27,20 @@ const HasError = styled.div`
   }
 `;
 
-export default class GiftLevels extends React.Component<any, any> {
+class GiftLevels extends React.Component<any, any> {
+  props: {
+    intl;
+    isFullCount;
+    fullGiftLevelList;
+    isNormal;
+    selectedRows;
+    noMulti;
+  }
   constructor(props) {
     super(props);
     this.state = {
       isFullCount: props.isFullCount,
-      selectedRows: props.selectedRows,
+
       fullGiftLevelList: props.fullGiftLevelList ? props.fullGiftLevelList : [],
       //公用的商品弹出框
       goodsModal: {
@@ -42,336 +51,292 @@ export default class GiftLevels extends React.Component<any, any> {
     };
   }
 
+
   componentDidMount() {
-    if (
-      !this.props.fullGiftLevelList ||
-      this.props.fullGiftLevelList.length == 0
-    ) {
-      this.initLevel();
-    }
+    console.log(this.props.isFullCount)
+    // if (!this.props.fullGiftLevelList || this.props.fullGiftLevelList.length == 0) {
+    //   this.initLevel();
+    // }
   }
 
-  shouldComponentUpdate(nextProps) {
-    let resetFields = {};
-    const { fullGiftLevelList, isFullCount } = this.props;
-
-    if (isFullCount != nextProps.isFullCount) {
-      fullGiftLevelList.forEach((level, index) => {
-        resetFields[`level_rule_value_${index}`] = null;
-        level.fullGiftDetailList.forEach((detail, detailIndex) => {
-          resetFields[
-            `${detail.productId}level_detail${index}${detailIndex}`
-          ] = 1;
-        });
-      });
-      this.initLevel();
-      this.setState({
-        selectedRows: fromJS([]),
-        isFullCount: nextProps.isFullCount
-      });
-    } else {
-      if (
-        fullGiftLevelList &&
-        fullGiftLevelList.length != nextProps.fullGiftLevelList.length
-      ) {
-        nextProps.fullGiftLevelList.forEach((level, index) => {
-          if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
-            resetFields[`level_rule_value_${index}`] = !isFullCount
-              ? level.fullAmount
-              : level.fullCount;
-          }
-        });
-      }
-    }
-    if (JSON.stringify(resetFields) !== '{}') {
-      this.props.form.setFieldsValue(resetFields);
-    }
-    return true;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   let resetFields = {};
+  //   const { fullGiftLevelList, isFullCount } = this.props;
+  //
+  //   if (isFullCount != nextProps.isFullCount) {
+  //     fullGiftLevelList.forEach((level, index) => {
+  //       resetFields[`level_rule_value_${index}`] = null;
+  //       level.fullGiftDetailList.forEach((detail, detailIndex) => {
+  //         resetFields[`${detail.productId}level_detail${index}${detailIndex}`] = 1;
+  //       });
+  //     });
+  //     this.initLevel();
+  //     this.setState({
+  //       selectedRows: fromJS([]),
+  //       isFullCount: nextProps.isFullCount
+  //     });
+  //   } else {
+  //     if (fullGiftLevelList && fullGiftLevelList.length != nextProps.fullGiftLevelList.length) {
+  //       nextProps.fullGiftLevelList.forEach((level, index) => {
+  //         if ((!isFullCount ? level.fullAmount : level.fullCount) != null) {
+  //           resetFields[`level_rule_value_${index}`] = !isFullCount ? level.fullAmount : level.fullCount;
+  //         }
+  //       });
+  //     }
+  //   }
+  //   if (JSON.stringify(resetFields) !== '{}') {
+  //     this.props.form.setFieldsValue(resetFields);
+  //   }
+  //   return true;
+  // }
 
   render() {
-    const { goodsModal, isFullCount, fullGiftLevelList } = this.state;
-
+    const { isFullCount, fullGiftLevelList, isNormal, selectedRows,noMulti = false } = this.props;
+    const { goodsModal } = this.state
     const { form } = this.props;
-
     const { getFieldDecorator } = form;
-
     return (
       <div>
-        {fullGiftLevelList.map((level, index) => {
-          return (
-            <div key={level.key ? level.key : level.giftLevelId}>
-              <HasError>
-                <span>Full&nbsp;</span>
-                <FormItem>
-                  {getFieldDecorator(`level_rule_value_${index}`, {
-                    rules: [
-                      { required: true, message: 'Must enter rules' },
-                      {
-                        validator: (_rule, value, callback) => {
-                          if (value) {
-                            if (!isFullCount) {
-                              if (
-                                !ValidConst.price.test(value) ||
-                                !(value < 100000000 && value > 0)
-                              ) {
-                                callback('0.01-99999999.99');
-                              }
-                            } else {
-                              if (
-                                !ValidConst.noZeroNumber.test(value) ||
-                                !(value < 10000 && value > 0)
-                              ) {
-                                callback('1-9999');
+        {fullGiftLevelList && fullGiftLevelList.length> 0 &&
+          fullGiftLevelList.map((level, index) => {
+            return (
+              <div key={level.key ? level.key : level.giftLevelId}>
+                <HasError>
+                  {isNormal && (
+                    <div>
+                      <span>Full&nbsp;</span>
+                      <FormItem style={{ display: 'inline-block' }}>
+                        {getFieldDecorator(`level_rule_value_${index}`, {
+                          rules: [
+                            { required: true, message:
+                                (window as any).RCi18n({
+                                  id: 'Marketing.Mustenterrules'
+                                })
+                            },
+                            {
+                              validator: (_rule, value, callback) => {
+                                if (value) {
+                                  if (!isFullCount) {
+                                    if (!ValidConst.price.test(value) || !(value < 100000000 && value > 0)) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.0-99999999.99'
+                                        })
+                                      );
+                                    }
+                                  } else {
+                                    if (!ValidConst.noZeroNumber.test(value) || !(value < 10000 && value > 0)) {
+                                      callback(
+                                        (window as any).RCi18n({
+                                          id: 'Marketing.1-9999'
+                                        })
+                                      );
+                                    }
+                                  }
+                                }
+                                callback();
                               }
                             }
-                          }
-                          callback();
-                        }
-                      }
-                    ],
-                    initialValue: !isFullCount
-                      ? level.fullAmount
-                      : level.fullCount
-                  })(
-                    <Input
-                      style={{ width: 200 }}
-                      placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
-                      onChange={(e) => {
-                        this.ruleValueChange(index, e.target.value);
-                      }}
-                    />
+                          ],
+                          initialValue: !isFullCount ? level.fullAmount : level.fullCount
+                        })(
+                          // <Input
+                          //   value={isFullCount ? level.fullAmount : null}
+                          //   style={{ width: 200 }}
+                          //   placeholder={!isFullCount ? '0.01-99999999.99' : '1-9999'}
+                          //   onChange={(e) => {
+                          //     this.ruleValueChange(index, e.target.value);
+                          //   }}
+                          // />
+                          <Input
+                            style={{ width: 180 }}
+                            value={!isFullCount ? level.fullAmount : level.fullCount}
+                            // placeholder={!isFullCount ?
+                            //   (window as any).RCi18n({
+                            //     id: 'Marketing.0-99999999.99',
+                            //   })
+                            //   :
+                            //   (window as any).RCi18n({
+                            //     id: 'Marketing.1-9999',
+                            //   })
+                            // }
+                            onChange={(e) => {
+                              this.ruleValueChange(index, e.target.value);
+                            }}
+                            disabled={isFullCount === 2}
+                          />
+
+                        )}
+                      </FormItem>
+                      <span>
+                        &nbsp;
+                        {isFullCount !== 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'items'}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </div>
                   )}
-                </FormItem>
-                <span>
-                  &nbsp;
-                  {!isFullCount
-                    ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
-                    : 'items'}
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </span>
-                <Button
-                  type="primary"
-                  icon="plus"
-                  onClick={() => this.openGoodsModal(index)}
-                  style={{ marginTop: 3.5 }}
-                >
-                  Add a free gift
-                </Button>
-                &nbsp;&nbsp;
-                <Select
-                  value={level.giftType}
-                  style={{ width: 120, marginTop: 3.5 }}
-                  onChange={(val) => {
-                    this.onChange(index, 'giftType', val);
-                  }}
-                  getPopupContainer={(triggerNode) => triggerNode.parentElement}
-                >
-                  <Option value={1}>An optional one</Option>
-                  <Option value={0}>The default all give</Option>
-                </Select>
-                &nbsp;&nbsp;&nbsp;
-                {index > 0 && (
-                  <a onClick={() => this.deleteLevels(index)}>Delete</a>
-                )}
-              </HasError>
+                  <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5,marginBottom:24 }}>
+                    <FormattedMessage id="Marketing.Addgift" />
+                  </Button>
+                  {/*&nbsp;&nbsp;*/}
+                  {/*<Select*/}
+                  {/*  value={level.giftType}*/}
+                  {/*  style={{ width: 120, marginTop: 3.5 }}*/}
+                  {/*  onChange={(val) => {*/}
+                  {/*    this.onChange(index, 'giftType', val);*/}
+                  {/*  }}*/}
+                  {/*  getPopupContainer={(triggerNode) => triggerNode.parentElement}*/}
+                  {/*>*/}
+                  {/*  <Option value={1}>An optional one</Option>*/}
+                  {/*  <Option value={0}>The default all give</Option>*/}
+                  {/*</Select>*/}
+                  &nbsp;&nbsp;&nbsp;
+                  {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
+                </HasError>
 
-              <DataGrid
-                scroll={{ y: 500 }}
-                size="small"
-                rowKey={(record) => record.goodsInfoId}
-                dataSource={
-                  level.fullGiftDetailList
-                    ? this.getSelectedRowByIds(
-                        this.getIdsFromLevel(level.fullGiftDetailList)
-                      )
-                    : []
-                }
-                pagination={false}
-              >
-                <Column
-                  title="SKU code"
-                  dataIndex="goodsInfoNo"
-                  key="goodsInfoNo"
-                  width="10%"
-                />
+                <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={level.fullGiftDetailList ? this.getSelectedRowByIds(this.getIdsFromLevel(level.fullGiftDetailList)) : []} pagination={false}>
+                  <Column title="SKU code" dataIndex="goodsInfoNo" key="goodsInfoNo" />
 
-                <Column
-                  title="Product Name"
-                  dataIndex="goodsInfoName"
-                  key="goodsInfoName"
-                  width="20%"
-                  render={(value) => {
-                    return <div className="line-two">{value}</div>;
-                  }}
-                />
+                  <Column
+                    title={<FormattedMessage id="Marketing.ProductName" />}
+                    dataIndex="goodsInfoName"
+                    key="goodsInfoName"
+                    render={(value) => {
+                      return <div className="line-two">{value}</div>;
+                    }}
+                  />
 
-                <Column
-                  title="Specification"
-                  dataIndex="specText"
-                  key="specText"
-                  width="8%"
-                  render={(value) => {
-                    if (value) {
-                      return <div>{value}</div>;
-                    } else {
-                      return '-';
-                    }
-                  }}
-                />
+                  <Column
+                    title={<FormattedMessage id="Marketing.Specification" />}
+                    dataIndex="specText"
+                    key="specText"
+                    render={(value) => {
+                      if (value) {
+                        return <div>{value}</div>;
+                      } else {
+                        return '-';
+                      }
+                    }}
+                  />
 
-                <Column
-                  title="Category"
-                  key="cateName"
-                  dataIndex="cateName"
-                  width="8%"
-                />
+                  <Column  title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
 
-                <Column
-                  title="Brand"
-                  key="brandName"
-                  dataIndex="brandName"
-                  width="8%"
-                  render={(value) => {
-                    if (value) {
-                      return value;
-                    } else {
-                      return '-';
-                    }
-                  }}
-                />
+                  <Column
+                    title={<FormattedMessage id="Marketing.Brand" />}
+                    key="brandName"
+                    dataIndex="brandName"
+                    width="8%"
+                    render={(value) => {
+                      if (value) {
+                        return value;
+                      } else {
+                        return '-';
+                      }
+                    }}
+                  />
 
-                <Column
-                  title="Price"
-                  key="marketPrice"
-                  dataIndex="marketPrice"
-                  width="10%"
-                  render={(data) => {
-                    return `¥${data}`;
-                  }}
-                />
+                  <Column
+                    title={<FormattedMessage id="Marketing.Price" />}
+                    key="marketPrice"
+                    dataIndex="marketPrice"
+                    render={(data) => {
+                      return `¥${data}`;
+                    }}
+                  />
 
-                <Column
-                  title="Inventory"
-                  key="stock"
-                  dataIndex="stock"
-                  width="10%"
-                  render={(stock) => {
-                    if (stock < 20) {
-                      return (
-                        <div className="has-error">
-                          <p>{stock}</p>
-                          <div className="ant-form-explain">
-                            Inventory is too low
+                  <Column
+                    title={<FormattedMessage id="Marketing.Inventory" />}
+                    key="stock"
+                    dataIndex="stock"
+                    render={(stock) => {
+                      if (stock < 20) {
+                        return (
+                          <div className="has-error">
+                            <p>{stock}</p>
+                            <div className="ant-form-explain">Inventory is too low</div>
                           </div>
-                        </div>
-                      );
-                    } else {
-                      return stock;
-                    }
-                  }}
-                />
+                        );
+                      } else {
+                        return stock;
+                      }
+                    }}
+                  />
 
-                <Column
-                  title="Give the number"
-                  className="centerItem"
-                  key="count"
-                  width="20%"
-                  render={(row, _record, detailIndex) => {
-                    return (
-                      <FormItem>
-                        {getFieldDecorator(
-                          `${row.goodsInfoId}level_detail${index}${detailIndex}`,
-                          {
-                            initialValue: fullGiftLevelList[index][
-                              'fullGiftDetailList'
-                            ][detailIndex]
-                              ? fullGiftLevelList[index]['fullGiftDetailList'][
-                                  detailIndex
-                                ]['productNum']
-                              : 1,
+                  <Column
+                    title={<FormattedMessage id="Marketing.GiveTheNumber" />}
+                    className="centerItem"
+                    key="count"
+                    render={(row, _record, detailIndex) => {
+                      return (
+                        <FormItem>
+                          {getFieldDecorator(`${row.goodsInfoId}level_detail${index}${detailIndex}`, {
+                            initialValue: fullGiftLevelList[index]['fullGiftDetailList'][detailIndex] ? fullGiftLevelList[index]['fullGiftDetailList'][detailIndex]['productNum'] : 1,
                             rules: [
-                              { required: true, message: '必须输入赠送数量' },
+                              { required: true, message:
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.greaterthan0andlessthan999'
+                                  })
+                              },
                               {
                                 pattern: ValidConst.noZeroNumber,
-                                message: '只能是大于0的整数'
+                                message: (window as any).RCi18n({
+                                  id: 'Marketing.greaterthan0andlessthan999'
+                                })
                               },
                               {
                                 validator: (_rule, value, callback) => {
-                                  if (
-                                    value &&
-                                    ValidConst.noZeroNumber.test(value) &&
-                                    (value > 999 || value < 1)
-                                  ) {
-                                    callback('仅限1-999间的整数');
+                                  if (value && ValidConst.noZeroNumber.test(value) && (value > 999 || value < 1)) {
+                                    callback(
+                                      (window as any).RCi18n({
+                                        id: 'Marketing.greaterthan0andlessthan999'
+                                      })
+                                    );
                                   }
                                   callback();
                                 }
                               }
                             ]
-                          }
-                        )(
-                          <InputNumber
-                            min={0}
-                            onChange={(val: string) => {
-                              this.giftCountOnChange(index, detailIndex, val);
-                            }}
-                          />
-                        )}
-                      </FormItem>
-                    );
-                  }}
-                />
+                          })(
+                            <InputNumber
+                              min={0}
+                              onChange={(val: string) => {
+                                this.giftCountOnChange(index, detailIndex, val);
+                              }}
+                            />
+                          )}
+                        </FormItem>
+                      );
+                    }}
+                  />
 
-                <Column
-                  title="Operation"
-                  key="operate"
-                  width="12%"
-                  render={(row) => {
-                    return (
-                      <a
-                        onClick={() => this.deleteRows(index, row.goodsInfoId)}
-                      >
-                        Delete
-                      </a>
-                    );
-                  }}
-                />
-              </DataGrid>
-              <FormItem key={index}>
-                {getFieldDecorator(`level_${index}`, {})(<div />)}
-              </FormItem>
-            </div>
-          );
-        })}
-        <Button
-          onClick={this.addLevels}
-          disabled={fullGiftLevelList.length >= 5}
-        >
-          Add multi-level promotions
-        </Button>
-        &nbsp;&nbsp;up to 5 levels can be set
-        {fullGiftLevelList.length > 0 && goodsModal._modalVisible && (
+                  <Column
+                    title={<FormattedMessage id="Marketing.Operation" />}
+                    key="operate"
+                    render={(row) => {
+                      return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}>Delete</a>;
+                    }}
+                  />
+                </DataGrid>
+                <FormItem key={index}>{getFieldDecorator(`level_${index}`, {})(<div />)}</FormItem>
+              </div>
+            );
+          })}
+        {
+          !noMulti && (<>
+              <Button onClick={this.addLevels} disabled={fullGiftLevelList && fullGiftLevelList.length >= 5}>
+                <FormattedMessage id="Marketing.Addmulti-levelpromotions" />
+              </Button>
+              &nbsp;&nbsp; <FormattedMessage id="Marketing.upto5levels" />
+          </>)
+        }
+
+        {fullGiftLevelList && fullGiftLevelList.length > 0 && goodsModal && goodsModal._modalVisible && (
           <GoodsModal
             skuLimit={20}
             visible={goodsModal._modalVisible}
-            selectedSkuIds={this.getIdsFromLevel(
-              fullGiftLevelList[goodsModal._forIndex]['fullGiftDetailList']
-            )}
-            selectedRows={fromJS(
-              this.getSelectedRowByIds(
-                this.getIdsFromLevel(
-                  fullGiftLevelList[goodsModal._forIndex]['fullGiftDetailList']
-                )
-              )
-            )}
-            onOkBackFun={(selectedSkuIds, selectedRows) =>
-              this.skuSelectedBackFun(
-                goodsModal._forIndex,
-                selectedSkuIds,
-                selectedRows
-              )
-            }
+            selectedSkuIds={this.getIdsFromLevel(fullGiftLevelList[goodsModal._forIndex]['fullGiftDetailList'])}
+            selectedRows={fromJS(this.getSelectedRowByIds(this.getIdsFromLevel(fullGiftLevelList[goodsModal._forIndex]['fullGiftDetailList'])))}
+            onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(goodsModal._forIndex, selectedSkuIds, selectedRows)}
             onCancelBackFun={this.closeGoodsModal}
           />
         )}
@@ -385,20 +350,15 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param goodsInfoId
    */
   deleteRows = (_index, goodsInfoId) => {
-    let { selectedRows, fullGiftLevelList } = this.state;
-    const { onChangeBack } = this.props;
+    let { fullGiftLevelList, onChangeBack, selectedRows } = this.props;
     fullGiftLevelList.forEach((level) => {
-      let levelIndex = level.fullGiftDetailList.findIndex(
-        (detail) => detail.productId == goodsInfoId
-      );
+      let levelIndex = level.fullGiftDetailList.findIndex((detail) => detail.productId == goodsInfoId);
       if (levelIndex > -1) {
         level.fullGiftDetailList.splice(levelIndex, 1);
       }
     });
     //去除选中
-    let rowIndex = selectedRows
-      .toJS()
-      .findIndex((row) => row.goodsInfoId == goodsInfoId);
+    let rowIndex = selectedRows.toJS().findIndex((row) => row.goodsInfoId == goodsInfoId);
     let newRows = selectedRows.toJS();
     //大于-1说明包含此元素
     if (rowIndex > -1) {
@@ -406,10 +366,7 @@ export default class GiftLevels extends React.Component<any, any> {
     }
     selectedRows = fromJS(newRows);
 
-    this.setState({
-      selectedRows: selectedRows,
-      fullGiftLevelList: fullGiftLevelList
-    });
+    this.props.GiftRowsOnChange(selectedRows)
     onChangeBack(fullGiftLevelList);
   };
 
@@ -418,15 +375,14 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param index
    */
   deleteLevels = (index) => {
-    let { fullGiftLevelList } = this.state;
+    let { fullGiftLevelList, onChangeBack } = this.props;
     //重置表单的值
     this.props.form.setFieldsValue({
       [`level_rule_value_${fullGiftLevelList.length - 1}`]: null
     });
     fullGiftLevelList.splice(index, 1);
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullGiftLevelList);
   };
 
@@ -434,7 +390,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * 添加多级促销
    */
   addLevels = () => {
-    const { fullGiftLevelList } = this.state;
+    const { fullGiftLevelList, onChangeBack } = this.props;
     if (fullGiftLevelList.length >= 5) return;
     fullGiftLevelList.push({
       key: this.makeRandom(),
@@ -443,10 +399,9 @@ export default class GiftLevels extends React.Component<any, any> {
       giftType: 1,
       fullGiftDetailList: []
     });
-    this.setState({ fullGiftLevelList: fullGiftLevelList });
+    // this.setState({ fullGiftLevelList: fullGiftLevelList });
 
     //传递到父页面
-    const { onChangeBack } = this.props;
     onChangeBack(fullGiftLevelList);
   };
 
@@ -463,7 +418,7 @@ export default class GiftLevels extends React.Component<any, any> {
         fullGiftDetailList: []
       }
     ];
-    this.setState({ fullGiftLevelList: initLevel });
+    // this.setState({ fullGiftLevelList: initLevel });
 
     const { onChangeBack } = this.props;
     onChangeBack(initLevel);
@@ -475,7 +430,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   ruleValueChange = (index, value) => {
-    const { isFullCount } = this.state;
+    const { isFullCount } = this.props;
     this.onChange(index, !isFullCount ? 'fullAmount' : 'fullCount', value);
   };
 
@@ -486,7 +441,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param value
    */
   onChange = (index, props, value) => {
-    const { fullGiftLevelList } = this.state;
+    const { fullGiftLevelList } = this.props;
     fullGiftLevelList[index][props] = value;
     if (props == 'fullAmount') {
       fullGiftLevelList[index]['fullCount'] = null;
@@ -507,17 +462,21 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param selectedRows
    */
   skuSelectedBackFun = (index, selectedSkuIds, selectedRows) => {
+    console.log(selectedRows.toJS())
+    console.log(selectedSkuIds)
     this.onChange(
       index,
       'fullGiftDetailList',
-      selectedSkuIds.map((skuId) => {
-        return { productId: skuId, productNum: 1 };
-      })
+      // selectedSkuIds.map((skuId) => {
+      //   return { productId: skuId, productNum: 1 };
+      // })
+      selectedRows.toJS().map(({goodsInfoId,goodsInfoName})=>(
+        { productId: goodsInfoId, productNum: 1,productName:goodsInfoName }
+      ))
     );
-    let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(
-      fromJS(this.state.selectedRows).toSet()
-    );
-    this.setState({ goodsModal: { _modalVisible: false }, selectedRows: rows });
+    let rows = (selectedRows.isEmpty() ? Set([]) : selectedRows.toSet()).concat(fromJS(this.props.selectedRows).toSet());
+    this.props.GiftRowsOnChange(rows)
+    this.setState({ goodsModal: { _modalVisible: false }});
   };
 
   /**
@@ -527,7 +486,7 @@ export default class GiftLevels extends React.Component<any, any> {
    * @param count
    */
   giftCountOnChange = (index, detailIndex, count) => {
-    let { fullGiftLevelList } = this.state;
+    let { fullGiftLevelList } = this.props;
     let fullGiftDetailList = fullGiftLevelList[index].fullGiftDetailList;
     fullGiftDetailList[detailIndex]['productNum'] = count;
     this.onChange(index, 'fullGiftDetailList', fullGiftDetailList);
@@ -554,10 +513,8 @@ export default class GiftLevels extends React.Component<any, any> {
    * @returns {Array}
    */
   getSelectedRowByIds = (ids) => {
-    const { selectedRows } = this.state;
-    const rows = selectedRows.filter((row) =>
-      ids.includes(row.get('goodsInfoId'))
-    );
+    const { selectedRows } = this.props;
+    const rows = selectedRows.filter((row) => ids.includes(row.get('goodsInfoId')));
     return rows && !rows.isEmpty() ? rows.toJS() : [];
   };
 
@@ -582,3 +539,4 @@ export default class GiftLevels extends React.Component<any, any> {
     return 'key' + (Math.random() as any).toFixed(6) * 1000000;
   };
 }
+export default injectIntl(GiftLevels)

@@ -1,21 +1,13 @@
 import { IOptions, Store } from 'plume2';
 import { fromJS, Map } from 'immutable';
 import { message, Modal } from 'antd';
-import { Const, history, QMFloat } from 'qmkit';
+import { cache, Const, history, QMFloat, RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
 import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import {
-  fetchOrderReturnList,
-  getCanRefundPrice,
-  getReturnDetail,
-  getReturnReasons,
-  getReturnWays,
-  getTradeDetail,
-  remedy
-} from './webapi';
+import { fetchOrder, getCanRefundPrice, getReturnDetail, getReturnReasons, getReturnWays, getTradeDetail, remedy } from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -28,12 +20,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new FormActor(),
-      new TradeActor(),
-      new PriceActor(),
-      new ImageActor()
-    ];
+    return [new FormActor(), new TradeActor(), new PriceActor(), new ImageActor()];
   }
 
   init = async (rid: string) => {
@@ -58,20 +45,15 @@ export default class AppStore extends Store {
 
     // 在线支付订单，计算剩余退款金额
     if (isOnLine) {
-      let orderReturnListRes = await fetchOrderReturnList(returnDetail.res.tid);
+      let OrderRes = await fetchOrder(returnDetail.res.tid);
 
-      if (orderReturnListRes.res && orderReturnListRes.res['context']) {
-        orderReturnListRes.res['context']
+      if (OrderRes.res && OrderRes.res['context']) {
+        OrderRes.res['context']
           .filter((v) => {
             return v.returnFlowState == 'COMPLETED';
           })
           .forEach((v) => {
-            canApplyPrice = QMFloat.accSubtr(
-              canApplyPrice,
-              v.returnPrice.applyStatus
-                ? v.returnPrice.applyPrice
-                : v.returnPrice.totalPrice
-            );
+            canApplyPrice = QMFloat.accSubtr(canApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice);
           });
       }
     }
@@ -90,12 +72,8 @@ export default class AppStore extends Store {
 
     const detailMap: IMap = fromJS(returnDetail.res || Map());
 
-    const selectedReturnReason = detailMap.get('returnReason')
-      ? detailMap.get('returnReason').keySeq().first()
-      : '0';
-    const selectedReturnWay = detailMap.get('returnWay')
-      ? detailMap.get('returnWay').keySeq().first()
-      : '0';
+    const selectedReturnReason = detailMap.get('returnReason') ? detailMap.get('returnReason').keySeq().first() : '0';
+    const selectedReturnWay = detailMap.get('returnWay') ? detailMap.get('returnWay').keySeq().first() : '0';
 
     this.transaction(() => {
       this.dispatch('formActor: editItem', {
@@ -126,10 +104,7 @@ export default class AppStore extends Store {
         key: 'applyIntegral',
         value: detailMap.getIn(['returnPoints', 'applyPoints'])
       });
-      this.dispatch(
-        'imageActor: editImages',
-        fromJS(images.map((v) => JSON.parse(v)))
-      );
+      this.dispatch('imageActor: editImages', fromJS(images.map((v) => JSON.parse(v))));
 
       this.dispatch('tradeActor: init', {
         returnDetail: detailMap,
@@ -178,10 +153,7 @@ export default class AppStore extends Store {
     param = param.set('rid', data.get('id'));
 
     // 退货原因
-    param = param.set(
-      'returnReason',
-      Map().set(data.get('selectedReturnReason'), 0)
-    );
+    param = param.set('returnReason', Map().set(data.get('selectedReturnReason'), 0));
 
     // 退货说明
     param = param.set('description', data.get('description').trim());
@@ -215,30 +187,17 @@ export default class AppStore extends Store {
       }
 
       // 退货方式
-      param = param.set(
-        'returnWay',
-        Map().set(data.get('selectedReturnWay'), 0)
-      );
+      param = param.set('returnWay', Map().set(data.get('selectedReturnWay'), 0));
 
       param = param.set('returnItemNums', returnItems);
     }
 
     // 退款金额，退货是商品总额，退款是应付金额
-    const totalPrice = data.get('isReturn')
-      ? returnItems
-          .reduce(
-            (sum, item) =>
-              QMFloat.accAdd(sum, item.get('num') * item.get('price')),
-            0
-          )
-          .toFixed(2)
-      : data.getIn(['returnDetail', 'returnPrice', 'totalPrice']);
+    const totalPrice = data.get('isReturn') ? returnItems.reduce((sum, item) => QMFloat.accAdd(sum, item.get('num') * item.get('price')), 0).toFixed(2) : data.getIn(['returnDetail', 'returnPrice', 'totalPrice']);
 
     param = param.set('returnPriceRequest', {
       applyStatus: data.get('applyStatus'),
-      applyPrice: data.get('isReturn')
-        ? totalPrice
-        : data.get('applyPrice').toFixed(2),
+      applyPrice: data.get('isReturn') ? totalPrice : data.get('applyPrice').toFixed(2),
       totalPrice: totalPrice
     });
 
@@ -247,9 +206,7 @@ export default class AppStore extends Store {
     });
 
     // 本次退款金额
-    const rePrice = data.get('applyStatus')
-      ? data.get('applyPrice')
-      : totalPrice;
+    const rePrice = data.get('applyStatus') ? data.get('applyPrice') : totalPrice;
     // 剩余可退金额
     let remainPrice = rePrice;
     const { res } = await getCanRefundPrice(data.get('id'));
@@ -259,32 +216,36 @@ export default class AppStore extends Store {
     // 退款金额大于可退金额时
     if (remainPrice < rePrice) {
       // 在线支付要判断退款金额不能大于剩余退款金额
-      if (data.get('isOnLine')) {
+      // if (data.get('isOnLine')) {
+        let title = RCi18n({id: 'Order.refundableAmountTips'}) + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data.get('canApplyPrice').toFixed(2)
+        let content = RCi18n({id: 'Order.refundableAmountTips2'})
+        let okText=RCi18n({id: 'Order.btnConfirm'}) 
         Modal.warning({
-          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
-          content: '退款金额不可大于可退金额，请修改',
-          okText: '确定'
+          title: title,
+          content: content,
+          okText: okText,
         });
         return;
-      } else {
-        if (remainPrice < 0) {
-          remainPrice = 0;
-        }
+      // } 
+      // else {
+      //   if (remainPrice < 0) {
+      //     remainPrice = 0;
+      //   }
 
-        let onModify = this.onModify;
-        // 线下，给出提示
-        confirm({
-          title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
-          content: '当前退款金额超出了可退金额，是否继续？',
-          onOk() {
-            return onModify(param);
-          },
-          onCancel() {},
-          okText: '继续',
-          cancelText: '关闭'
-        });
-        return;
-      }
+      //   let onModify = this.onModify;
+      //   // 线下，给出提示
+      //   confirm({
+      //     title: `该订单剩余可退金额为：$${remainPrice.toFixed(2)}`,
+      //     content: '当前退款金额超出了可退金额，是否继续？',
+      //     onOk() {
+      //       return onModify(param);
+      //     },
+      //     onCancel() {},
+      //     okText: '继续',
+      //     cancelText: '关闭'
+      //   });
+      //   return;
+      // }
     }
 
     return this.onModify(param);
@@ -296,10 +257,9 @@ export default class AppStore extends Store {
     result = await remedy(param.toJS());
 
     if (result.res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       history.go(-1);
     } else {
-      message.error(result.res.message);
       return;
     }
   };

@@ -1,8 +1,17 @@
 import React from 'react';
-import { Layout } from 'antd';
-import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache } from 'qmkit';
-const { Content } = Layout;
+import {Layout, message, Spin, Icon} from 'antd';
+import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache, LoadingForRC, LoadingForMyvetreco } from 'qmkit';
 import { routes, auditDidNotPass } from './router';
+import { LogoLoadingIcon } from 'biz';
+import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
+import UUID from 'uuid-js';
+import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+const pcLogo = require('../public/images/login/logo1.png');
+
+const { Content } = Layout;
+
+Spin.setDefaultIndicator(Const.SITE_NAME === 'MYVETRECO' ? <LoadingForMyvetreco /> : <LoadingForRC />);
 
 export default class Main extends React.Component<any, any> {
   _menu: any;
@@ -11,25 +20,46 @@ export default class Main extends React.Component<any, any> {
     super(props);
     this.state = {
       // 当前浏览器地址匹配的路由path
-      matchedPath: ''
+      matchedPath: '',
+      hasError: false,
+      uuid: '',
+      loading: false,
     };
+    (window as any).countryEnum = {
+      123456858: 'mx',
+      123457907: 'ru',
+      123457908: 'de',
+      123457909: 'fr',
+      123457910: 'us',
+      123457911: 'tr',
+      123457916: 'uk',
+      123457934: 'peawee'
+    };
+    (window as any).goodsCount = {
+      123456858: 20,
+      123457907: 20,
+      123457908: 20,
+      123457909: 20,
+      123457910: 20,
+      123457911: 10,
+      123457916: 20
+    };
+    (window as any).rchistory = history;
   }
 
   UNSAFE_componentWillMount() {
     if (this.props.location.pathname != '/implicit/callback') {
-      Fetch('/baseConfig').then((resIco: any) => {
-        if (resIco.res.code == Const.SUCCESS_CODE) {
-          if ((resIco.res as any).defaultLocalDateTime) {
-            sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
+      Fetch('/baseConfig')
+        .then((resIco: any) => {
+          if (resIco.res.code == Const.SUCCESS_CODE) {
+            if ((resIco.res as any).defaultLocalDateTime) {
+              sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
+            }
+            const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
+            sessionStorage.setItem(cache.SITE_LOGO, configLog);
           }
-          const ico = (resIco.res.context as any).pcIco ? JSON.parse((resIco.res.context as any).pcIco) : null;
-          if (ico) {
-            const linkEle = document.getElementById('icoLink') as any;
-            linkEle.href = ico[0].url;
-            linkEle.type = 'image/x-icon';
-          }
-        }
-      });
+        })
+        .catch((err) => {});
       /*if (util.isLogin()) {
         Fetch('/initConfig/getConfig', { method: 'POST' }).then((resIco: any) => {
           if (resIco.res.code == Const.SUCCESS_CODE) {
@@ -47,6 +77,13 @@ export default class Main extends React.Component<any, any> {
   }
 
   handlePathMatched = (path) => {
+   let recommendation_params= JSON.parse(sessionStorage.getItem('recommendation_params')||'[]')
+
+   if(recommendation_params.length===2){
+    recommendation_params.shift()
+   }
+   recommendation_params.push(path)
+   sessionStorage.setItem('recommendation_params',JSON.stringify(recommendation_params))
     this.setState({
       matchedPath: path
     });
@@ -68,33 +105,51 @@ export default class Main extends React.Component<any, any> {
     }
   }
 
+  openMainLoading = () => {
+    this.setState({
+      loading: true
+    })
+  }
+
+  closeMainLoading = () => {
+    this.setState({
+      loading: false
+    })
+  }
+
   render() {
+    let { loading } = this.state;
+    //const mainLoadingIcon = <LogoLoadingIcon style={{ fontSize: 24 }} spin />;
+    // this.props.text.d
     return (
       <div>
-        <Layout>
-          {/*头部*/}
-          <MyHeader />
-          <div className="layout-header"></div>
-          <Layout className="ant-layout-has-sider">
-            {/*左侧一级菜单*/}
-            <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
-            {/*左侧二三级菜单*/}
-            <MyLeftMenu matchedPath={this.state.matchedPath} ref={(menu) => (this._menu = menu)} />
-            {/*右侧主操作区域*/}
-            <Content>
-              <div className="main-content" id="page-content">
-                {routeWithSubRoutes(routes, this.handlePathMatched)}
-                {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
-                <div style={styles.copyright}>
-                  © Royal Canin SAS 2020
-                  {/* © 2017-2019 南京万米信息技术有限公司 版本号：{
-                    Const.COPY_VERSION
-                  } */}
-                </div>
-              </div>
-            </Content>
+        <Spin
+            spinning={loading}
+        >
+          <Layout>
+            {/*头部*/}
+            <MyHeader openMainLoading={this.openMainLoading} closeMainLoading={this.closeMainLoading} />
+            <div className="layout-header"/>
+            <Layout className="ant-layout-has-sider">
+              {/*左侧一级菜单*/}
+              <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
+              {/*左侧二三级菜单*/}
+              <MyLeftMenu matchedPath={this.state.matchedPath} onSecondActiveChange={this._onSecondActiveChange} ref={(menu) => (this._menu = menu)} />
+              {/*右侧主操作区域*/}
+              <ErrorBoundary uuid={this.state.uuid}>
+                <Content>
+                  <div className="main-content" id="page-content">
+                    {routeWithSubRoutes(routes, this.handlePathMatched)}
+                    {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
+                    <div style={styles.copyright}>
+                      &copy; {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : `Royal Canin SAS ${moment().format('YYYY')}`}
+                    </div>
+                  </div>
+                </Content>
+              </ErrorBoundary>
+            </Layout>
           </Layout>
-        </Layout>
+        </Spin>
       </div>
     );
   }
@@ -104,7 +159,19 @@ export default class Main extends React.Component<any, any> {
    * @private
    */
   _onFirstActiveChange = () => {
+    const uuid = UUID.create().toString();
+    this.setState({
+      hasError: false,
+      uuid
+    });
     this._menu._openKeysChange(['0']);
+  };
+  _onSecondActiveChange = () => {
+    const uuid = UUID.create().toString();
+    this.setState({
+      hasError: false,
+      uuid
+    });
   };
 }
 

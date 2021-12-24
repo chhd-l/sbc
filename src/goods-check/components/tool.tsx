@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Button, Modal, message } from 'antd';
 import { IList } from 'typings/globalType';
 import { withRouter } from 'react-router';
-import { noop, AuthWrapper } from 'qmkit';
+import { noop, AuthWrapper, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const confirm = Modal.confirm;
@@ -35,7 +35,7 @@ export default class Tool extends React.Component<any, any> {
       <div className="handle-bar">
         <AuthWrapper functionName="f_goods_del">
           <Button onClick={this._spuCheckedFunc}>
-            <FormattedMessage id="batchDeletion" />
+            <FormattedMessage id="Product.batchDeletion" />
           </Button>
         </AuthWrapper>
       </div>
@@ -45,12 +45,12 @@ export default class Tool extends React.Component<any, any> {
   _spuCheckedFunc = () => {
     const { onSpuDelete, selectedSpuKeys } = this.props.relaxProps;
     if (selectedSpuKeys.count() < 1) {
-      message.error('Select at least one item');
+      message.error(RCi18n({id:"Product.atLeastOneItem"}));
       return;
     }
     confirm({
-      title: '提示',
-      content: '是否确定批量删除选中的商品？',
+      title: RCi18n({id:"Product.Notification"}),
+      content: RCi18n({id:"Product.deleteTip"}),
       onOk() {
         onSpuDelete();
       }

@@ -33,16 +33,12 @@ export default class ProductFinderDetails extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             details: res.context.details,
-            chartRecords: res.context.stepList.map((x) => ({ question: x.question,
-               answer: x.productFinderAnswerDetailsVO ? (x.productFinderAnswerDetailsVO.prefix || '') + ' ' + (x.productFinderAnswerDetailsVO.suffix || '') : '' }))
+            chartRecords: res.context.stepList.map((x) => ({ question: x.question, answer: x.productFinderAnswerDetailsVO ? (x.productFinderAnswerDetailsVO.prefix || '') + ' ' + (x.productFinderAnswerDetailsVO.suffix || '') : '' }))
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
-      });
+      .catch((err) => {});
   }
 
   render() {
@@ -53,7 +49,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
           <Breadcrumb.Item>{title}</Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <div className="container-search">
             <Headline title={title} />
           </div>
@@ -79,10 +75,10 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer type</p>
+                      <p>Pet owner type</p>
                     </Col>
                     <Col span={12}>
-                      <strong>{details.consumerType === 0 ? 'Member' : 'Guest'}</strong>
+                      <strong>{details.consumerType === 0 ? 'Guest' : 'Member'}</strong>
                     </Col>
                   </Row>
                 </Col>
@@ -102,7 +98,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer account</p>
+                      <p>Pet owner account</p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerAccount}</strong>
@@ -125,7 +121,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                 <Col span={8}>
                   <Row>
                     <Col span={12}>
-                      <p>Consumer name</p>
+                      <p>Pet owner name </p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerName}</strong>
@@ -177,7 +173,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
           </div>
         </Spin>
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}
           </Button>
         </div>
@@ -185,5 +181,3 @@ export default class ProductFinderDetails extends React.Component<any, any> {
     );
   }
 }
-
-

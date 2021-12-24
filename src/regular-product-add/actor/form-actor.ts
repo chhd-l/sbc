@@ -12,15 +12,19 @@ export default class FormActor extends Actor {
       userPriceForm: {},
       areaPriceForm: {},
       logisticsForm: {},
+      inventoryForm: {}, //新的inventory form实体
+      priceForm: {}, //新的price form实体
       //分销 切换类型是否要提示
       checkFlag: false,
       //企业购提示按钮
       enterpriseFlag: false,
       seoForm: {
-        titleSource: '', //{name}-Royal Canin
+        titleSource: '', //{name} | Royal Canin Shop
+        headingTag: '',
         metaKeywordsSource: '', //{name}, {subtitle}, {sales category}, {tagging}
         metaDescriptionSource: '' //{description}
-      }
+      },
+      updateNumbers: 0 //0：新增seo, 大于0：编辑seo
     };
   }
 
@@ -33,7 +37,10 @@ export default class FormActor extends Actor {
   setSeoForm(state: IMap, form) {
     return state.set('seoForm', form);
   }
-
+  @Action('seoActor: updateNumbers')
+  setSeoUpdateNumbers(state: IMap, updateNumbers) {
+    return state.set('updateNumbers', updateNumbers);
+  }
   @Action('formActor:goods')
   updateGoodsForm(state, goodsForm) {
     return state.set('goodsForm', goodsForm);
@@ -82,5 +89,15 @@ export default class FormActor extends Actor {
   @Action('formActor:enterpriseFlag')
   setEnterpriseFlag(state, value) {
     return state.set('enterpriseFlag', value);
+  }
+
+  @Action('formActor:inventoryForm')
+  setInventoryForm(state, inventoryForm) {
+    return state.set('inventoryForm', inventoryForm);
+  }
+
+  @Action('formActor:priceForm')
+  setPriceForm(state, priceForm) {
+    return state.set('priceForm', priceForm);
   }
 }

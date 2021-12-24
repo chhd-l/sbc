@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
 import Const from './config';
-import { util, history } from 'qmkit';
+import { util, history, cache } from 'qmkit';
 import * as _ from 'lodash';
 import { message } from 'antd';
 
@@ -42,7 +42,7 @@ export default async function Fetch<T>(
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Accept-Language': 'en',
+        'Accept-Language': sessionStorage.getItem(cache.LANGUAGE),
         Authorization:
           'Bearer' + ((window as any).token ? ' ' + (window as any).token : '')
       },

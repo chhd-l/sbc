@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form, Modal, Radio } from 'antd';
-import { noop } from 'qmkit';
+import { noop, RCi18n } from 'qmkit';
 import { IMap } from 'plume2';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Button from 'antd/lib/button/button';
+import { FormattedMessage } from 'react-intl';
 
 const RadioGroup = Radio.Group;
 
@@ -56,12 +57,12 @@ export default class ExportModal extends React.Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={'Batch Export'}
+        title={<FormattedMessage id="Public.Batch Export" />}
         visible={visible}
         onCancel={() => onHide()}
         footer={[
           <Button key="back" size="large" onClick={() => onHide()}>
-            Cancel
+            <FormattedMessage id="Public.Cancel" />
           </Button>,
           <Button
             key="submit"
@@ -70,7 +71,7 @@ export default class ExportModal extends React.Component<any, any> {
             loading={this.state.posting}
             onClick={() => this._handleOk()}
           >
-            Export
+            <FormattedMessage id="Public.Export" />
           </Button>
         ]}
       >
@@ -81,6 +82,7 @@ export default class ExportModal extends React.Component<any, any> {
             byIdsTitle: byIdsTitle
           }}
         />
+
       </Modal>
     );
   }
@@ -116,23 +118,28 @@ class ExportForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Form style={{ textAlign: 'center' }}>
-        <FormItem>
-          {getFieldDecorator('exportType', {
-            rules: [
-              {
-                required: true,
-                message: 'Please select an export method'
-              }
-            ]
-          })(
-            <RadioGroup>
-              <Radio value="byParams">{this.props.byParamsTitle}</Radio>
-              <Radio value="byIds">{this.props.byIdsTitle}</Radio>
-            </RadioGroup>
-          )}
-        </FormItem>
-      </Form>
+      <div>
+        <Form style={{ marginLeft: 50 }}>
+          <FormItem >
+            {getFieldDecorator('exportType', {
+              rules: [
+                {
+                  required: true,
+                  message: RCi18n({id:"Order.Pleaseselectanexportmethod"})
+                }
+              ]
+            })(
+              <RadioGroup>
+                <Radio value="byParams">{this.props.byParamsTitle}</Radio>
+                <Radio value="byIds">{this.props.byIdsTitle}</Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+
+        </Form>
+        <p style={{ color: '#e2001a', lineHeight: 0.5 }}><FormattedMessage id="Public.Reminder100records" /></p>
+      </div>
+
     );
   }
 }

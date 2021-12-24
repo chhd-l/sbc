@@ -9,7 +9,9 @@ export default class ExpActor extends Actor {
     return {
       checkedList: [],
       allExpressList: [],
-      checkedRelation: {}
+      checkedRelation: {},
+      allCompanyList:[],
+      cardLoading: false
     };
   }
 
@@ -20,25 +22,16 @@ export default class ExpActor extends Actor {
   /**
    * action建立actor的handle和store的dispatch之间的关联*/
   @Action('exp:init')
-  init(state: IMap, content) {
-    const { all, checked } = content;
-    const relaMap = {};
-    if (checked) {
-      checked.forEach(rela => {
-        relaMap[rela.expressCompanyId] = rela.id;
-      });
-    }
-
-    all.forEach(express => {
-      express['isChecked'] = relaMap[express['expressCompanyId']] != null;
-    });
-
+  init(state, content) {
     return state.withMutations(state => {
-      state
-        .set('checkedList', fromJS(checked))
-        .set('allExpressList', fromJS(all))
-        .set('checkedRelation', fromJS(relaMap));
+      state.set('allExpressList', content)
     });
+  }
+
+  @Action('exp:allCompany')
+  allCompany(state, content) {
+    console.log(content,'content')
+    return state.set('allCompanyList', content)
   }
 
   @Action('exp:checked')
@@ -57,5 +50,10 @@ export default class ExpActor extends Actor {
   @Action('exp:afterUnChecked')
   afterUnChecked(state: IMap, expressCompanyId) {
     return state.removeIn(['checkedRelation', expressCompanyId]);
+  }
+
+  @Action('exp:cardLoading')
+  cardLoading(state, loading: boolean) {
+    return state.set('cardLoading', loading)
   }
 }

@@ -11,7 +11,8 @@ enum operatorDic {
   PLATFORM = 'Platform',
   CUSTOMER = 'Customer',
   THIRD = 'Third',
-  SUPPLIER = 'Supplier'
+  SUPPLIER = 'Supplier',
+  INTEGRATION = 'Integration'
 }
 
 const columns = [
@@ -19,7 +20,7 @@ const columns = [
     title: 'Operator Type',
     dataIndex: 'operator.platform',
     key: 'operator.platform',
-    render: (val) => `${operatorDic[val]}`
+    render: (val) => operatorDic[val] || val
   },
   {
     title: 'Operator',
@@ -60,7 +61,6 @@ export default class OperateLog extends React.Component<any, any> {
 
   render() {
     const { log } = this.props.relaxProps;
-    debugger;
     const Panel = Collapse.Panel;
 
     return (
@@ -77,7 +77,7 @@ export default class OperateLog extends React.Component<any, any> {
           </Collapse>
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}
           </Button>
         </div>

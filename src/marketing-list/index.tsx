@@ -5,6 +5,7 @@ import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
 import MarketingList from './components/tab-data-grid';
+import { FormattedMessage } from 'react-intl';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Marketing extends React.Component<any, any> {
@@ -31,8 +32,7 @@ export default class Marketing extends React.Component<any, any> {
             <Breadcrumb.Item>促销活动</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title="Campaign list" />
-
+            <Headline title={<FormattedMessage id="Marketing.Automationlist"/>} />
             {/*搜索条件*/}
             <SearchForm />
           </div>

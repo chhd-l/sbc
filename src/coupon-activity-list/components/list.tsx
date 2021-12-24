@@ -5,7 +5,7 @@ import moment from 'moment';
 import { AuthWrapper, Const, DataGrid, noop, util } from 'qmkit';
 import { IList } from 'typings/globalType';
 import { Popconfirm } from 'antd';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 @Relax
 export default class List extends React.Component<any, any> {
   props: {
@@ -20,6 +20,7 @@ export default class List extends React.Component<any, any> {
       init: Function;
       pauseActivity: Function;
       startActivity: Function;
+      loading: boolean;
     };
   };
 
@@ -33,13 +34,15 @@ export default class List extends React.Component<any, any> {
     deleteActivity: noop,
     init: noop,
     pauseActivity: noop,
-    startActivity: noop
+    startActivity: noop,
+    loading: 'loading'
   };
 
   render() {
-    const { total, pageNum, pageSize, couponActivityList, init } = this.props.relaxProps;
+    const { total, pageNum, pageSize, couponActivityList, init, loading } = this.props.relaxProps;
     return (
       <DataGrid
+        loading={loading}
         rowKey={(record) => record.activityId}
         dataSource={couponActivityList.toJS()}
         pagination={{
@@ -51,21 +54,21 @@ export default class List extends React.Component<any, any> {
           }
         }}
       >
-        <DataGrid.Column title="优惠券活动名称" dataIndex="activityName" key="activityName" />
-        <DataGrid.Column
-          title="活动类型"
+        <DataGrid.Column title={<FormattedMessage id="Marketing.ActivityName" />} dataIndex="activityName" key="activityName" />
+        {/* <DataGrid.Column
+          title="Activity type"
           dataIndex="couponActivityType"
           key="couponActivityType"
           render={(text) => {
             return Const.couponActivityType[text];
           }}
-        />
+        /> */}
         <DataGrid.Column
           title={
             <p>
-              开始
+              <FormattedMessage id="Marketing.StartTime" />
               <br />
-              结束时间
+              <FormattedMessage id="Marketing.EndTime" />
             </p>
           }
           dataIndex="startTime"
@@ -83,27 +86,28 @@ export default class List extends React.Component<any, any> {
             );
           }}
         />
-        <DataGrid.Column
-          title="目标客户"
+        {/* <DataGrid.Column
+          title="Target customers"
           dataIndex="joinLevel"
           key="joinLevel"
           render={(text) => {
             return this.showTargetCustomer(text);
           }}
-        />
+        /> */}
         <DataGrid.Column
-          title="活动状态"
-          dataIndex="pauseFlag"
-          key="pauseFlag"
+          title={<FormattedMessage id="Marketing.Status" />}
+          dataIndex="marketingStatus"
+          key="marketingStatus"
           render={(text) => {
             return Const.activityStatus[text];
           }}
         />
+        {/*pauseFlag*/}
         <DataGrid.Column
-          title="操作"
+          title={<FormattedMessage id="Marketing.Operation" />}
           key="operate"
           className={'operation-th'}
-          dataIndex="pauseFlag"
+          dataIndex="marketingStatus"
           render={(text, record) => {
             return this.operator(text, record);
           }}
@@ -160,36 +164,36 @@ export default class List extends React.Component<any, any> {
     return (
       <div className="operation-box">
         <AuthWrapper functionName={'f_coupon_activity_detail'}>
-          <Link to={`/coupon-activity-detail/${record.activityId}/${record.couponActivityType}`}>查看</Link>
+          <Link to={`/coupon-activity-detail/${record.activityId}/${record.couponActivityType}`}>View</Link>
         </AuthWrapper>
-        <AuthWrapper functionName={'f_coupon_activity_editor'}>
-          {activityType != 'specify' && text == 1 && (
-            <a
-              href="javascript:void(0);"
-              onClick={() => {
-                pauseActivity(record.activityId);
-              }}
-            >
-              暂停
-            </a>
-          )}
-          {activityType != 'specify' && text == 2 && (
-            <a
-              href="javascript:void(0);"
-              onClick={() => {
-                startActivity(record.activityId);
-              }}
-            >
-              开始
-            </a>
-          )}
-          {text == 3 && <Link to={url}>编辑</Link>}
-          {text == 3 && (
-            <Popconfirm title="确定删除该活动？" onConfirm={() => deleteActivity(record.activityId)} okText="确定" cancelText="取消">
-              <a href="javascript:void(0);">删除</a>
-            </Popconfirm>
-          )}
-        </AuthWrapper>
+        {/*<AuthWrapper functionName={'f_coupon_activity_editor'}>*/}
+        {/*  {activityType != 'specify' && text == 1 && (*/}
+        {/*    <a*/}
+        {/*      href="javascript:void(0);"*/}
+        {/*      onClick={() => {*/}
+        {/*        pauseActivity(record.activityId);*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      Pause*/}
+        {/*    </a>*/}
+        {/*  )}*/}
+        {/*  {activityType != 'specify' && text == 2 && (*/}
+        {/*    <a*/}
+        {/*      href="javascript:void(0);"*/}
+        {/*      onClick={() => {*/}
+        {/*        startActivity(record.activityId);*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      Start*/}
+        {/*    </a>*/}
+        {/*  )}*/}
+        {/*  {text == 3 && <Link to={url}>Edit</Link>}*/}
+        {/*  {text == 3 && (*/}
+        {/*    <Popconfirm title="Are you sure to delete this activity?" onConfirm={() => deleteActivity(record.activityId)} okText="Yes" cancelText="Cancel">*/}
+        {/*      <a href="javascript:void(0);">Delete</a>*/}
+        {/*    </Popconfirm>*/}
+        {/*  )}*/}
+        {/*</AuthWrapper>*/}
       </div>
     );
   }

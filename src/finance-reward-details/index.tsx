@@ -47,13 +47,13 @@ export default class BillingDetails extends React.Component<any, any> {
         }}
       >
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="rewardDetails" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="Finance.rewardDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
-        <Spin spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.store.get('loading')}>
           <div className="container-search">
             <div className="space-between">
               <div style={{ width: '60%' }}>
-                <Headline title={<FormattedMessage id="rewardDetails" />} />
+                <Headline title={<FormattedMessage id="Finance.rewardDetails" />} />
               </div>
               <OptionDiv style={{ width: '30%' }}>
                 <Tooltip
@@ -66,7 +66,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 >
                   <a style={{ fontSize: 14 }}>
                     <Icon type="question-circle-o" />
-                    &nbsp;&nbsp;{<FormattedMessage id="RewardRules" />}
+                    &nbsp;&nbsp;{<FormattedMessage id="Finance.RewardRules" />}
                   </a>
                 </Tooltip>
               </OptionDiv>
@@ -96,10 +96,10 @@ export default class BillingDetails extends React.Component<any, any> {
                   {i + 1}. {item.startTime} - {item.endTIme}
                 </p>
                 <p>
-                  {<FormattedMessage id="firstRewardRate" />}: {item.firstRewardRate}
+                  {<FormattedMessage id="Finance.firstRewardRate" />}: {item.firstRewardRate}
                 </p>
                 <p>
-                  {<FormattedMessage id="repeatRewardRate" />}: {item.repeatRewardRate}
+                  {<FormattedMessage id="Finance.repeatRewardRate" />}: {item.repeatRewardRate}
                 </p>
               </div>
             );

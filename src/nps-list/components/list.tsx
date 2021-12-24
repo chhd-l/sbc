@@ -51,19 +51,11 @@ export default class CustomerList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      dataList,
-      pageSize,
-      total,
-      currentPage,
-      init,
-      goodsEvaluateDetail
-    } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, goodsEvaluateDetail } = this.props.relaxProps;
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         isScroll={false}
         className="resetTable"
         /*sc*/
@@ -148,9 +140,7 @@ export default class CustomerList extends React.Component<any, any> {
           key="goodsScore"
           dataIndex="goodsScore"
           // width={150}
-          render={(evaluateScore) =>
-            evaluateScore ? evaluateScore + ' star' : '-'
-          }
+          render={(evaluateScore) => (evaluateScore ? evaluateScore + ' star' : '-')}
         />
         {/* <Column
           title="评价内容"
@@ -176,17 +166,7 @@ export default class CustomerList extends React.Component<any, any> {
           }}
         /> */}
 
-        <Column
-          title={<FormattedMessage id="surveyTime" />}
-          key="createTime"
-          dataIndex="createTime"
-          width={102}
-          render={(evaluateTime) =>
-            evaluateTime
-              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
-              : ''
-          }
-        />
+        <Column title={<FormattedMessage id="surveyTime" />} key="createTime" dataIndex="createTime" width={102} render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
 
         <Column
           title={<FormattedMessage id="operation" />}
@@ -198,11 +178,7 @@ export default class CustomerList extends React.Component<any, any> {
               <div className="operation-th">
                 <AuthWrapper functionName={'query_nps'}>
                   <Tooltip placement="top" title="View">
-                    <span
-                      style={styles.see}
-                      onClick={() => goodsEvaluateDetail(rowData)}
-                      className="iconfont iconView"
-                    ></span>
+                    <span style={styles.see} onClick={() => goodsEvaluateDetail(rowData)} className="iconfont iconView"></span>
                   </Tooltip>
                 </AuthWrapper>
               </div>
@@ -231,7 +207,8 @@ const styles = {
     border: '1px solid #ddd',
     float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   },
   goodsName: {
     display: 'flex',

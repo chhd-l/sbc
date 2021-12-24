@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin, Alert } from 'antd';
+import { Spin, Alert, Form } from 'antd';
 import { IOptions, StoreProvider } from 'plume2';
 
 import { Headline, BreadCrumb } from 'qmkit';
@@ -9,8 +9,11 @@ import CateModal from './component/cate-modal';
 import Tool from './component/tool';
 import { FormattedMessage } from 'react-intl';
 import PicModal from './component/pic-modal';
+import ImgModal from './component/img-modal';
 import SeoSettingModal from './component/seo-setting-modal';
+const _SeoSettingModal = Form.create({})(SeoSettingModal);
 import './index.less';
+import NewStateModal from '@/address-management/components/new-state-modal';
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class GoodsCate extends React.Component<any, any> {
   store: AppStore;
@@ -37,7 +40,7 @@ export default class GoodsCate extends React.Component<any, any> {
     return (
       <div>
         {/* this.store.get('loading') */}
-        <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.store.get('loading')} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.store.get('loading')}>
           <BreadCrumb />
           {/* <Breadcrumb separator=">">
           <Breadcrumb.Item>商品</Breadcrumb.Item>
@@ -46,8 +49,8 @@ export default class GoodsCate extends React.Component<any, any> {
         </Breadcrumb> */}
 
           <div className="container-search">
-            <Headline title={<FormattedMessage id="product.salesCategory" />} />
-            <Alert message={<FormattedMessage id="product.salesCategoryInfo" />} type="info" />
+            <Headline title={<FormattedMessage id="Product.salesCategory" />} />
+            <Alert message={<FormattedMessage id="Product.salesCategoryInfo" />} type="info" />
 
             {/*工具条*/}
             <Tool />
@@ -61,8 +64,9 @@ export default class GoodsCate extends React.Component<any, any> {
             <CateModal />
 
             <PicModal />
+            <ImgModal />
 
-            <SeoSettingModal />
+            <_SeoSettingModal />
           </div>
         </Spin>
       </div>

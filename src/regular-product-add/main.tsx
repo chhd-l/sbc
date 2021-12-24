@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
-import { Const, Headline, history, checkAuth, BreadCrumb, ErrorBoundary } from 'qmkit';
+import { Const, Headline, history, checkAuth, BreadCrumb, ErrorBoundary, RCi18n } from 'qmkit';
 import './index.less';
 import AppStore from './store';
 import Goods from './component/goods';
@@ -26,6 +26,7 @@ import { FormattedMessage } from 'react-intl';
 import AlertInfo from './component/alret';
 import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
+import ShippingInformation from './component/shippingInformation';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -42,16 +43,16 @@ export default class Main extends React.Component<any, any> {
     this.store.init(gid);
     this.store.setFreightList();
     //初始化素材
-    this.store.initImg({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    });
-    this.store.initVideo({
-      pageNum: 0,
-      cateId: -1,
-      successCount: 0
-    }); //传入-1时,则会去初始化第一个分类的信息
+    // this.store.initImg({
+    //   pageNum: 0,
+    //   cateId: -1,
+    //   successCount: 0
+    // });
+    // this.store.initVideo({
+    //   pageNum: 0,
+    //   cateId: -1,
+    //   successCount: 0
+    // }); //传入-1时,则会去初始化第一个分类的信息
     if (this.props.location.state != undefined) {
       this.store.onMainTabChange(this.props.location.state.tab, false);
     }
@@ -66,12 +67,14 @@ export default class Main extends React.Component<any, any> {
 
   onPrev = (res) => {
     let type = '';
-    if (res == 'price') {
+    if (res == 'inventory') {
       type = 'main';
-    } else if (res == 'inventory') {
+    } else if (res == 'price') {
+      type = 'inventory';
+    } else if (res == 'shipping') {
       type = 'price';
     } else if (res == 'related') {
-      type = 'inventory';
+      type = 'shipping';
     } else if (res == 'seo') {
       type = 'related';
     }
@@ -84,10 +87,12 @@ export default class Main extends React.Component<any, any> {
   onNext = (res) => {
     let type = res || 'main';
     if (res == 'main' && this.store._validMainForms()) {
-      type = 'price';
-    } else if (res == 'price' && this.store._validPriceFormsNew()) {
       type = 'inventory';
-    } else if (res == 'inventory') {
+    } else if (res == 'price' && this.store._validPriceFormsNew()) {
+      type = 'shipping';
+    } else if (res == 'inventory' && this.store._validInventoryFormsNew()) {
+      type = 'price';
+    } else if (res == 'shipping') {
       type = 'related';
     } else if (res == 'related') {
       type = 'seo';
@@ -122,12 +127,15 @@ export default class Main extends React.Component<any, any> {
 
     return (
       <div>
+        {/* BreadCrumb */}
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{gid ? 'Edit product (Regular product)' : 'New product (Regular product)'}</Breadcrumb.Item>
+          <Breadcrumb.Item>{gid ? <FormattedMessage id="Product.EditRegularProduct" /> : <FormattedMessage id="Product.NewRegularProduct" />}</Breadcrumb.Item>
         </BreadCrumb>
+        {/* Headline */}
         <div className="container-search">
-          <Headline title={gid ? 'Edit product (Regular product)' : 'New product (Regular product)'} state={this._getState(gid)} />
+          <Headline title={gid ? <FormattedMessage id="Product.EditRegularProduct" /> : <FormattedMessage id="Product.NewRegularProduct" />} />
         </div>
+        {/* Tabs */}
         <div className="container">
           <Tabs
             activeKey={this.store.get('activeTabKey')}
@@ -138,19 +146,21 @@ export default class Main extends React.Component<any, any> {
             }}
             onChange={(activeKey) => this.onMainTabChange(activeKey)}
           >
+            {/* Product information */}
             {(checkAuth(goodsFuncName) || checkAuth(priceFuncName)) && (
-              <Tabs.TabPane tab="Product information" key="main">
+              <Tabs.TabPane tab={<FormattedMessage id="Product.Productinformation" />} key="main">
                 <AlertInfo />
-                {/*商品基本信息*/}
+                {/* Basic information 》商品基本信息 */}
                 <Goods />
-                {/*商品属性信息*/}
-                <GoodsPropDetail />
 
-                {/*商品规格信息*/}
+                {/* Attribute information 》商品属性信息 */}
+                <GoodsPropDetail />
+                
+                {/* Specification setting 》商品规格信息 */}
                 <Spec />
 
                 {/*商品表格*/}
-                <SkuTable />
+                <SkuTable gid={gid} />
 
                 {/*物流表单*/}
                 {/* <Logistics /> */}
@@ -162,19 +172,27 @@ export default class Main extends React.Component<any, any> {
                 <Detail />
               </Tabs.TabPane>
             )}
-            <Tabs.TabPane tab="Product price" key="price">
-              <AlertInfo />
-
-              <ProductPrice />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Product inventory" key="inventory">
+            {/* Product inventory */}
+            <Tabs.TabPane tab={<FormattedMessage id="Product.Productinventory" />} key="inventory">
               <AlertInfo />
 
               <ProductInventory />
             </Tabs.TabPane>
+            {/* Product price */}
+            <Tabs.TabPane tab={<FormattedMessage id="Product.Productprice" />} key="price">
+              <AlertInfo />
 
+              <ProductPrice />
+            </Tabs.TabPane>
+            {/* shipping information */}
+            <Tabs.TabPane tab={<FormattedMessage id="Product.shippingInformation" />} key="shipping">
+              <AlertInfo />
+
+              <ShippingInformation />
+            </Tabs.TabPane>
+            {/* Related product */}
             <Tabs.TabPane
-              tab="Related product"
+              tab={<FormattedMessage id="Product.Relatedproduct" />}
               key="related"
               //disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
@@ -182,20 +200,16 @@ export default class Main extends React.Component<any, any> {
 
               <Related />
             </Tabs.TabPane>
+            {/* SEO setting */}
             <Tabs.TabPane
-              tab="SEO setting"
+              tab={<FormattedMessage id="Product.SEOsetting" />}
               key="seo"
               // disabled={!this.store.state().getIn(['goods', 'goodsId'])}
             >
               <AlertInfo
                 message={
                   <div>
-                    <p>You can delete these fields, including &#123; name &#125;-Royal Canin, &#123; name &#125;, &#123; subtitle &#125;, &#123; sales category &#125;, &#123; tagging &#125;, &#123; description &#125;, but can not edit the field</p>
-                    <p>1、&#123; name &#125; means the name of the product which enters in the product information tab page</p>
-                    <p>2、&#123;subtitle &#125; means the subtitle of the product which enters in the product information tab page</p>
-                    <p>3、&#123; sales category &#125; means the sales category of the product which was chosen in the product information tab page</p>
-                    <p>4、&#123; tagging &#125; means the sales category of the product which was chosen in the product information</p>
-                    <p>5、&#123;description &#125; means the description of the product which enters in the product information tab page</p>
+                    <p><FormattedMessage id="Product.SEOsettingalert" /></p>
                   </div>
                 }
               />
@@ -204,7 +218,7 @@ export default class Main extends React.Component<any, any> {
           </Tabs>
 
           {/*页脚*/}
-          <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} />
+          <Foot goodsFuncName={goodsFuncName} isLeave={true} priceFuncName={priceFuncName} tabType={this.store.get('activeTabKey')} onNext={this.onNext} onPrev={this.onPrev} loading={this.store.get('loading')} />
           {/*{this.state.tabType != 'related' ? <Foot goodsFuncName={goodsFuncName} priceFuncName={priceFuncName} /> : null}*/}
 
           {/*品牌*/}
@@ -223,8 +237,7 @@ export default class Main extends React.Component<any, any> {
 
           {this.store.get('loading') ? (
             <div className="spin">
-              {/*<Spin spinning={this.store.get('loading')} size="large" />*/}
-              <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px' }} alt="" />
+              <Spin spinning={this.store.get('loading')} />
             </div>
           ) : null}
         </div>
@@ -246,7 +259,7 @@ export default class Main extends React.Component<any, any> {
       if (auditStatus == 0) {
         history.goBack();
       }
-      return Const.goodsState[auditStatus];
+      return Const.goodsState[auditStatus] && RCi18n({id:`Product.${Const.goodsState[auditStatus]}`});
     }
 
     return null;

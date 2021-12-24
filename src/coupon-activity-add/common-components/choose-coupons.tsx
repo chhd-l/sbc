@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Form, InputNumber, Table } from 'antd';
 import { AuthWrapper, DataGrid, ValidConst, cache } from 'qmkit';
 import CouponsModal from './coupons-modal';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import styled from 'styled-components';
 
 const Column = Table.Column;
@@ -36,7 +36,7 @@ export default class ChooseCoupons extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" icon="plus" onClick={() => this.changeModalVisible(true)}>
-          Select coupons
+          <FormattedMessage id="Marketing.SelectCoupons" />
         </Button>
         <span style={{ color: '#999', marginLeft: 8 }}> {'' + (type == 2 ? 'Up to ten coupons' : '')}</span>
         <TableRow>
@@ -53,12 +53,12 @@ export default class ChooseCoupons extends React.Component<any, any> {
               return '';
             }}
           >
-            <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
+            <Column title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" width="15%" />
 
             <Column title={`Coupon  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
             <Column
-              title="Valid period"
+              title={<FormattedMessage id="Marketing.ValidPeriod" />}
               dataIndex="validity"
               key="validity"
               width="30%"
@@ -82,22 +82,22 @@ export default class ChooseCoupons extends React.Component<any, any> {
               }
               key="totalCount"
               dataIndex="totalCount"
-              width="20%"
+              width="15%"
               render={(value, rowData, index) => {
-                const message = type == 0 ? '请输入1-999999999的整数' : '请输入1-10的整数';
+                const message = type == 0 ? 'Please enter an integer of 1-9999999' : 'Please enter an integer of 1-10';
                 return (
                   <FormItem>
                     {getFieldDecorator('couponId_' + (rowData as any).couponId, {
                       rules: [
-                        { required: true, message: '请输入优惠券的的数量' },
+                        { required: true, message: <FormattedMessage id="Marketing.PleaseEnterTheNumberOfCoupons" /> },
                         {
                           pattern: ValidConst.noZeroNineNumber,
                           message: message
                         },
                         {
                           validator: (_rule, value, callback) => {
-                            if (type != 0 && value > 10) {
-                              callback('请输入1-10的整数');
+                            if (type != 0 && value > 10000) {
+                              callback(<FormattedMessage id="Marketing.PleaseEnterAnInteger" />);
                             }
                             callback();
                           }
@@ -114,19 +114,21 @@ export default class ChooseCoupons extends React.Component<any, any> {
             />
 
             <Column
-              title="Operation"
+              title={<FormattedMessage id="Marketing.Operation" />}
               key="operate"
-              width="10%"
+              width="15%"
               render={(row) => {
                 return (
                   <div>
-                    <AuthWrapper functionName={'f_coupon_detail'}>
-                      <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                        详情
-                      </a>
-                    </AuthWrapper>
-                    &nbsp;&nbsp;
-                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>删除</a>
+                    {/*<AuthWrapper functionName={'f_coupon_detail'}>*/}
+                    {/*  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">*/}
+                    {/*    <FormattedMessage id="Marketing.Detail" />*/}
+                    {/*  </a>*/}
+                    {/*</AuthWrapper>*/}
+                    {/*&nbsp;&nbsp;*/}
+                    <a onClick={() => this.props.onDelCoupon(row.couponId)}>
+                      <FormattedMessage id="Marketing.Delete" />
+                    </a>
                   </div>
                 );
               }}

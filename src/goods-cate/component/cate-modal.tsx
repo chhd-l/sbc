@@ -157,7 +157,6 @@ class CateModalForm extends React.Component<any, any> {
     const goodsCateId = formData.get('goodsCateId');
     const goodsDescription = formData.get('cateDescription');
     const { getFieldDecorator } = this.props.form;
-    // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
@@ -175,15 +174,15 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form" style={{ width: 550 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="categoryName" />} hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.categoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please enter a category name'
+                message: <FormattedMessage id="Product.CategoryName" />
               },
-              { max: 100, message: 'Up to 100 characters' },
+              { max: 100, message: <FormattedMessage id="Product.UpToCharacters" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Category Name');
@@ -194,15 +193,15 @@ class CateModalForm extends React.Component<any, any> {
             onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="subCategory" />}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.subCategory" />}>
           {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="product.platformCategory" />}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.platformCategory" />}>
           {getFieldDecorator('cateId', {
             rules: [
               {
                 required: true,
-                message: 'Please select platform product category'
+                message: <FormattedMessage id="Product.selectPlatformProductCategory" />
               },
               {
                 validator: (_rule, value, callback) => {
@@ -242,13 +241,13 @@ class CateModalForm extends React.Component<any, any> {
             </TreeSelect>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.cateImage" />}>
           <div style={{ width: '400px' }}>
             <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
-          <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+          <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
         </FormItem>
-        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="Product.cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [
               {
@@ -322,32 +321,24 @@ class CateModalForm extends React.Component<any, any> {
             message = '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
           }
         }
-        if (message != '') {
-          // confirm({
-          //   title: '提示',
-          //   content: message,
-          //   onOk() {
+        // if (message != '') {
+        //
+        //   let goods = Map({
+        //     [key]: fromJS(e)
+        //   });
+        //   editGoods(goods);
+        //
+        // } else {
+        //   let goods = Map({
+        //     [key]: fromJS(e)
+        //   });
+        //   editGoods(goods);
+        // }
+
           let goods = Map({
             [key]: fromJS(e)
           });
           editGoods(goods);
-          //   },
-          //   onCancel() {
-          //     let goods = Map({
-          //       [key]: fromJS(1)
-          //     });
-          //     editGoods(goods);
-          //     setFieldsValue({ saleType: 1 });
-          //   },
-          //   okText: '确定',
-          //   cancelText: '取消'
-          // });
-        } else {
-          let goods = Map({
-            [key]: fromJS(e)
-          });
-          editGoods(goods);
-        }
       }
     } else {
       let goods = Map({

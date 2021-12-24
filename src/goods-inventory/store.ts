@@ -43,17 +43,15 @@ export default class AppStore extends Store {
       this.dispatch('loading:end');
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
   onThreshold = async () => {
-    const { res, err } = await webapi.getThreshold();
+    const { res, err } = (await webapi.getThreshold()) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      this.dispatch('goodsActor:stock', res.context.valueEn);
+      this.dispatch('goodsActor:stock', res.context.valueEn || 0);
       this.init(0, 10, res.context.valueEn);
     } else {
-      message.error(res.message);
     }
   };
 
@@ -67,8 +65,6 @@ export default class AppStore extends Store {
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(data.res.code);
     }
   };
 
@@ -91,7 +87,7 @@ export default class AppStore extends Store {
           const exportHref = Const.HOST + `/inventory/export/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('请登录');
+          message.error('Please login in');
         }
         resolve();
       }, 500);

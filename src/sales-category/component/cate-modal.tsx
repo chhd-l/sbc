@@ -1,14 +1,26 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Form, Input, TreeSelect, Tree, message, Select, Radio } from 'antd';
+import {
+  Modal,
+  Form,
+  Input,
+  TreeSelect,
+  Tree,
+  message,
+  Select,
+  Radio,
+  Switch,
+  DatePicker,
+} from 'antd';
 import { Relax } from 'plume2';
-import { noop, QMMethod, Tips } from 'qmkit';
+import {Const, noop, QMMethod, Tips} from 'qmkit';
 import { Map, fromJS } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { FormattedMessage } from 'react-intl';
 import { IList, IMap } from 'typings/globalType';
 import ImageLibraryUpload from './image-library-upload';
+import moment from 'moment';
 const TreeNode = Tree.TreeNode;
 const { TextArea } = Input;
 const Option = Select.Option;
@@ -26,6 +38,7 @@ const formItemLayout = {
     sm: { span: 10 }
   }
 };
+const { RangePicker } = DatePicker;
 
 @Relax
 export default class CateModal extends React.Component<any, any> {
@@ -86,7 +99,16 @@ export default class CateModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal maskClosable={false} title={formData.get('storeCateId') ? 'Edit' : 'Add'} visible={modalVisible} zIndex={100} width={700} onCancel={this._handleModelCancel} onOk={this._handleSubmit} confirmLoading={loading}>
+      <Modal
+          maskClosable={false}
+          title={formData.get('storeCateId') ? 'Edit' : 'Add'}
+          visible={modalVisible}
+          zIndex={100}
+          width={700}
+          onCancel={this._handleModelCancel}
+          onOk={this._handleSubmit}
+          confirmLoading={loading}
+      >
         <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
@@ -167,9 +189,14 @@ class CateModalForm extends React.Component<any, any> {
     const cateType = formData.get('cateType');
     const displayStatus = formData.get('displayStatus');
     const altName = formData.get('altName');
+    const filterStatus = !!formData.get('filterStatus');
+    const periodBeginTime = formData.get('periodBeginTime');
+    const periodEndTime = formData.get('periodEndTime');
+    let period = periodBeginTime && periodEndTime
+        ? [moment(periodBeginTime), moment(periodEndTime)]
+        : []
 
     const { getFieldDecorator } = this.props.form;
-    // console.log(formData.get('children'), 'children')
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
@@ -187,15 +214,15 @@ class CateModalForm extends React.Component<any, any> {
 
     return (
       <Form className="login-form" style={{ width: 550 }}>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="categoryName" />} hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.categoryName" />} hasFeedback>
           {getFieldDecorator('cateName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please enter a category name'
+                message: <FormattedMessage id="Product.enterCategoryName" />
               },
-              { max: 100, message: 'Up to 100 characters' },
+              { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> },
               {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback, 'Category Name');
@@ -215,97 +242,196 @@ class CateModalForm extends React.Component<any, any> {
               rules: [
                 {
                   required: true,
-                  message: 'Please selecte display in shop'
+                  message: <FormattedMessage id="Product.PleaseSelectDisplay" />
                 }
               ],
               initialValue: displayStatus,
               onChange: this._editGoods.bind(this, 'displayStatus')
             })(
               <Radio.Group>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
+                <Radio value={true}>
+                  <FormattedMessage id="Product.Yes" />
+                </Radio>
+                <Radio value={false}>
+                  <FormattedMessage id="Product.No" />
+                </Radio>
               </Radio.Group>
             )}
           </FormItem>
         )}
-
-        {displayStatus ? (
-          <>
-            {formData.get('cateParentName') ? null : (
-              <FormItem {...formItemLayout} label="Router">
-                {getFieldDecorator('cateRouter', {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: 'Please enter router'
-                    },
-                    { max: 100, message: 'Up to 100 characters' }
-                  ],
-                  initialValue: cateRouter,
-                  onChange: this._editGoods.bind(this, 'cateRouter')
-                })(<Input />)}
-                <Tips title={<FormattedMessage id="product.recommendedRouter" />} />
-              </FormItem>
-            )}
-            {formData.get('cateParentName') ? null : (
-              <FormItem {...formItemLayout} label="ALT name">
-                {getFieldDecorator('altName', {
-                  rules: [
-                    {
-                      required: true,
-                      whitespace: true,
-                      message: 'Please enter ALT name'
-                    },
-                    { max: 100, message: 'Up to 100 characters' }
-                  ],
-                  initialValue: altName,
-                  onChange: this._editGoods.bind(this, 'altName')
-                })(<Input />)}
-              </FormItem>
-            )}
-            <FormItem labelCol={2} {...formItemLayout} label="Category type">
-              {getFieldDecorator('cateType', {
-                // rules: [
-                //   {
-                //     required: true,
-                //     message: 'Please selecte category type'
-                //   }
-                // ],
-                onChange: this._editGoods.bind(this, 'cateType'),
-                initialValue: cateType ? this._getCateTypeName(cateType) : ''
-              })(
-                <Select>
-                  <Option value="">All</Option>
-                  {petType &&
-                    petType.toJS().map((item, index) => (
-                      <Option value={item.valueEn} key={index}>
-                        {item.name}
-                      </Option>
-                    ))}
-                </Select>
-              )}
-              <Tips title={<FormattedMessage id="product.recommendedAliasName" />} />
+        {formData.get('cateParentName')
+            ? null
+            : (
+                <FormItem {...formItemLayout} label="Filter status">
+                  {getFieldDecorator('filterStatus', {
+                    rules: [],
+                    valuePropName: 'checked',
+                    initialValue: filterStatus || false,
+                    onChange: this._editGoods.bind(this, 'filterStatus')
+                  })(
+                      <Switch/>
+                    )}
             </FormItem>
-          </>
-        ) : null}
+        )}
 
-        <FormItem {...formItemLayout} label={<FormattedMessage id="cateImage" />}>
+        {formData.get('cateParentName')
+            ? null
+            : (
+                <FormItem {...formItemLayout} label="Period">
+                  {getFieldDecorator('period', {
+                    rules: [],
+                    initialValue: period || [],
+                    onChange: this._editGoods.bind(this, 'period')
+                  })(
+                      <RangePicker
+                          // allowClear={false}
+                          format={Const.TIME_FORMAT}
+                          placeholder={['Start time', 'End time']}
+                          showTime
+                      />
+                  )}
+                </FormItem>
+            )
+        }
+
+        {formData.get('cateParentName') ? null : (
+            <FormItem {...formItemLayout} label="Router">
+              {getFieldDecorator('cateRouter', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: <FormattedMessage id="Product.PleaseEnterRouter" />
+                  },
+                  { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
+                ],
+                initialValue: cateRouter,
+                onChange: this._editGoods.bind(this, 'cateRouter')
+              })(<Input />)}
+              <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />
+            </FormItem>
+        )}
+        {formData.get('cateParentName') ? null : (
+            <FormItem {...formItemLayout} label="ALT name">
+              {getFieldDecorator('altName', {
+                rules: [
+                  {
+                    required: true,
+                    whitespace: true,
+                    message: <FormattedMessage id="Product.PleaseEnterALT" />
+                  },
+                  { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }
+                ],
+                initialValue: altName,
+                onChange: this._editGoods.bind(this, 'altName')
+              })(<Input />)}
+            </FormItem>
+        )}
+        <FormItem labelCol={2} {...formItemLayout} label="Category type">
+          {getFieldDecorator('cateType', {
+            // rules: [
+            //   {
+            //     required: true,
+            //     message: 'Please selected category type'
+            //   }
+            // ],
+            onChange: this._editGoods.bind(this, 'cateType'),
+            initialValue: cateType ? this._getCateTypeName(cateType) : ''
+          })(
+              <Select>
+                <Option value="">
+                  <FormattedMessage id="Product.All" />
+                </Option>
+                {petType &&
+                petType.toJS().map((item, index) => (
+                    <Option value={item.valueEn} key={index}>
+                      {item.name}
+                    </Option>
+                ))}
+              </Select>
+          )}
+          <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />
+        </FormItem>
+
+        {/*{displayStatus ? (*/}
+        {/*  <>*/}
+        {/*    {formData.get('cateParentName') ? null : (*/}
+        {/*      <FormItem {...formItemLayout} label="Router">*/}
+        {/*        {getFieldDecorator('cateRouter', {*/}
+        {/*          rules: [*/}
+        {/*            {*/}
+        {/*              required: true,*/}
+        {/*              whitespace: true,*/}
+        {/*              message: <FormattedMessage id="Product.PleaseEnterRouter" />*/}
+        {/*            },*/}
+        {/*            { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }*/}
+        {/*          ],*/}
+        {/*          initialValue: cateRouter,*/}
+        {/*          onChange: this._editGoods.bind(this, 'cateRouter')*/}
+        {/*        })(<Input />)}*/}
+        {/*        <Tips title={<FormattedMessage id="Product.recommendedRouter" />} />*/}
+        {/*      </FormItem>*/}
+        {/*    )}*/}
+        {/*    {formData.get('cateParentName') ? null : (*/}
+        {/*      <FormItem {...formItemLayout} label="ALT name">*/}
+        {/*        {getFieldDecorator('altName', {*/}
+        {/*          rules: [*/}
+        {/*            {*/}
+        {/*              required: true,*/}
+        {/*              whitespace: true,*/}
+        {/*              message: <FormattedMessage id="Product.PleaseEnterALT" />*/}
+        {/*            },*/}
+        {/*            { max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }*/}
+        {/*          ],*/}
+        {/*          initialValue: altName,*/}
+        {/*          onChange: this._editGoods.bind(this, 'altName')*/}
+        {/*        })(<Input />)}*/}
+        {/*      </FormItem>*/}
+        {/*    )}*/}
+        {/*    <FormItem labelCol={2} {...formItemLayout} label="Category type">*/}
+        {/*      {getFieldDecorator('cateType', {*/}
+        {/*        // rules: [*/}
+        {/*        //   {*/}
+        {/*        //     required: true,*/}
+        {/*        //     message: 'Please selected category type'*/}
+        {/*        //   }*/}
+        {/*        // ],*/}
+        {/*        onChange: this._editGoods.bind(this, 'cateType'),*/}
+        {/*        initialValue: cateType ? this._getCateTypeName(cateType) : ''*/}
+        {/*      })(*/}
+        {/*        <Select>*/}
+        {/*          <Option value="">*/}
+        {/*            <FormattedMessage id="Product.All" />*/}
+        {/*          </Option>*/}
+        {/*          {petType &&*/}
+        {/*            petType.toJS().map((item, index) => (*/}
+        {/*              <Option value={item.valueEn} key={index}>*/}
+        {/*                {item.name}*/}
+        {/*              </Option>*/}
+        {/*            ))}*/}
+        {/*        </Select>*/}
+        {/*      )}*/}
+        {/*      <Tips title={<FormattedMessage id="Product.recommendedAliasName" />} />*/}
+        {/*    </FormItem>*/}
+        {/*  </>*/}
+        {/*) : null}*/}
+
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.cateImage" />}>
           <div style={{ width: '400px' }}>
             <ImageLibraryUpload images={images} modalVisible={modalVisibleFun} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
           </div>
-          <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
+          <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
         </FormItem>
 
         <FormItem {...formItemLayout} label="Description title">
           {getFieldDecorator('cateTitle', {
-            rules: [{ max: 100, message: 'Up to 100 characters' }],
+            rules: [{ max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }],
             onChange: this._editGoods.bind(this, 'cateTitle'),
             initialValue: descriptionTitle
           })(<Input />)}
         </FormItem>
 
-        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="cateDsc" />}>
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="Product.cateDsc" />}>
           {getFieldDecorator('cateDescription', {
             rules: [
               {
@@ -379,32 +505,10 @@ class CateModalForm extends React.Component<any, any> {
             message = '该商品正在参加企业购活动，切换为批发模式，将会退出企业购活动，确定要切换？';
           }
         }
-        if (message != '') {
-          // confirm({
-          //   title: '提示',
-          //   content: message,
-          //   onOk() {
-          let goods = Map({
-            [key]: fromJS(e)
-          });
-          editGoods(goods);
-          //   },
-          //   onCancel() {
-          //     let goods = Map({
-          //       [key]: fromJS(1)
-          //     });
-          //     editGoods(goods);
-          //     setFieldsValue({ saleType: 1 });
-          //   },
-          //   okText: '确定',
-          //   cancelText: '取消'
-          // });
-        } else {
-          let goods = Map({
-            [key]: fromJS(e)
-          });
-          editGoods(goods);
-        }
+        let goods = Map({
+          [key]: fromJS(e)
+        });
+        editGoods(goods);
       }
     } else {
       let goods = Map({

@@ -3,6 +3,12 @@ import { LoginCallback } from '@okta/okta-react';
 const routes = [
   //首页
   { path: '/', exact: true, asyncComponent: () => import('./home') },
+  //异步导出
+  {
+    path: '/batch-export/:from',
+    exact: true,
+    asyncComponent: () => import('./batch-export')
+  },
   //订单列表
   {
     path: '/order-list',
@@ -39,6 +45,10 @@ const routes = [
     asyncComponent: () => import('./seo-setting')
   },
   {
+    path: '/shipping-fee-setting',
+    asyncComponent: () => import('./shipping-fee-setting')
+  },
+  {
     path: '/site-map',
     exact: true,
     asyncComponent: () => import('./site-map')
@@ -63,12 +73,28 @@ const routes = [
     asyncComponent: () => import('./subscription-plan')
   },
   {
+    path: '/subscription-plan-detail/:id',
+    asyncComponent: () => import('./subscription-plan/detail')
+  },
+  {
     path: '/subscription-plan-update/:id',
     asyncComponent: () => import('./subscription-plan-update')
   },
   {
     path: '/subscription-plan-add',
     asyncComponent: () => import('./subscription-plan-update')
+  },
+  {
+    path: '/subscription-benefit-setting',
+    asyncComponent: () => import('./benefit-setting')
+  },
+  {
+    path: '/subscription-benefit-setting-add/:marketingId?',
+    asyncComponent: () => import('./benefit-setting/benefit-setting-add')
+  },
+  {
+    path: '/subscription-welcome-box-add/:marketingId?',
+    asyncComponent: () => import('./benefit-setting/benefit-setting-add/welcome-box')
   },
   // prescriber
   {
@@ -96,13 +122,18 @@ const routes = [
   {
     path: '/order-add',
     exact: true,
-    asyncComponent: () => import('./order-add')
+    asyncComponent: () => import('./manual-order')
   },
   //订单-详情
   {
     path: '/order-detail/:tid',
     exact: true,
     asyncComponent: () => import('./order-detail')
+  },
+  {
+    path: '/service-order-detail/:tid',
+    exact: true,
+    asyncComponent: () => import('./service-order-detail')
   },
   //订单-详情
   {
@@ -130,7 +161,7 @@ const routes = [
   },
   //订单-订单管理-订单列表-新增退单
   {
-    path: '/order-return-add',
+    path: '/order-return-add/:id',
     exact: true,
     asyncComponent: () => import('./order-return-add')
   },
@@ -139,6 +170,32 @@ const routes = [
     path: '/order-return-edit/:rid',
     exact: true,
     asyncComponent: () => import('./order-return-edit')
+  },
+
+  // service order
+  {
+    path: '/service-order',
+    exact: true,
+    asyncComponent: () => import('./service-order')
+  },
+
+  //推荐列表
+  {
+    path: '/recommendation',
+    exact: true,
+    asyncComponent: () => import('./recommendation')
+  },
+  //新增推荐
+  {
+    path: '/recommendation-add',
+    exact: true,
+    asyncComponent: () => import('./recommendation-add')
+  },
+  //编辑推荐
+  {
+    path: '/recommendation-edit/:id',
+    exact: true,
+    asyncComponent: () => import('./recommendation-add')
   },
   //订单-订单管理-推荐列表
   {
@@ -249,14 +306,24 @@ const routes = [
   { path: '/goods-add', asyncComponent: () => import('./goods-add') },
   { path: '/goods-main', asyncComponent: () => import('./goods-add/main') },
   { path: '/regular-product-add', asyncComponent: () => import('./regular-product-add/main') },
-  // 审核通过的商品编辑
+  { path: '/service-product-add', asyncComponent: () => import('./service-product-add/main') },
+
+  // goods-regular-edit > 审核通过的商品编辑
   {
     path: '/goods-regular-edit/:gid',
     asyncComponent: () => import('./regular-product-add/main')
   },
+
+  // goods-bundle-edit
   {
     path: '/goods-bundle-edit/:gid',
     asyncComponent: () => import('./goods-add/main')
+  },
+
+  //service goods edit
+  {
+    path: '/goods-service-edit/:gid',
+    asyncComponent: () => import('./service-product-add/main')
   },
   //Related product
   {
@@ -288,8 +355,10 @@ const routes = [
     path: '/goods-sku-detail/:pid',
     asyncComponent: () => import('./goods-sku-detail')
   },
-  // 商品列表
+
+  // Product list - 商品列表
   { path: '/goods-list', asyncComponent: () => import('./goods-list') },
+
   // 待审核商品列表
   {
     path: '/goods-check',
@@ -298,6 +367,11 @@ const routes = [
   {
     path: '/goods-inventory',
     asyncComponent: () => import('./goods-inventory')
+  },
+  // Mapping关系维护列表
+  {
+    path: '/product-sku-mapping',
+    asyncComponent: () => import('./product-sku-mapping')
   },
 
   // 客户列表
@@ -310,6 +384,22 @@ const routes = [
     path: '/customer-details/:type/:id/:account',
     asyncComponent: () => import('./customer-details')
   },
+  {
+    path: '/petowner-details/:id/:account',
+    asyncComponent: () => import('./customer-details/member-detail')
+  },
+  {
+    path: '/credit-card/:id/:account',
+    asyncComponent: () => import('./credit-card')
+  },
+  {
+    path: '/edit-petowner/:id/:account',
+    asyncComponent: () => import('./customer-details/edit-basic-information')
+  },
+  {
+    path: '/edit-pet/:id/:account/:petid',
+    asyncComponent: () => import('./customer-details/edit-pet-item')
+  },
   // 客户等级
   {
     path: '/customer-level',
@@ -319,6 +409,10 @@ const routes = [
   {
     path: '/customer-clinic-list',
     asyncComponent: () => import('./customer-clinic-list')
+  },
+  {
+    path: '/pet-owner-blocklist',
+    asyncComponent: () => import('./pet-owner-blocklist')
   },
   // clinic客户详情
   {
@@ -447,6 +541,10 @@ const routes = [
     path: '/customer-statistics',
     asyncComponent: () => import('./customer-statistics')
   },
+  {
+    path: '/delivery-date',
+    asyncComponent: () => import('./delivery-date')
+  },
   //业务员统计
   {
     path: '/employee-statistics',
@@ -469,8 +567,23 @@ const routes = [
   },
   //新增 / 编辑营销-满减
   {
-    path: '/marketing-full-reduction/:marketingId?',
+    path: '/marketing-full-reduction/:marketingId?/:marketingType?',
     asyncComponent: () => import('./marketing-add/full-reduction')
+  },
+  //新增 / 编辑营销-首次折扣
+  {
+    path: '/marketing-first-order-discount/:marketingId?',
+    asyncComponent: () => import('./marketing-add/first-order-discount')
+  },
+  //新增 / 编辑营销-免运费
+  {
+    path: '/marketing-free-shipping/:marketingId?',
+    asyncComponent: () => import('./marketing-add/free-shipping')
+  },
+  //新增 / 编辑营销-一口价
+  {
+    path: '/marketing-fixed-price/:marketingId?',
+    asyncComponent: () => import('./marketing-add/fixed-price')
   },
   //营销列表
   {
@@ -486,6 +599,11 @@ const routes = [
   {
     path: '/marketing-center',
     asyncComponent: () => import('./marketing-center')
+  },
+  //营销中心
+  {
+    path: '/create-promotion/:type?/:id?',
+    asyncComponent: () => import('./marketing-setting/create-promotion')
   },
   // 商品库导入
   {
@@ -537,7 +655,7 @@ const routes = [
   },
   // 优惠券详情
   {
-    path: '/coupon-detail/:cid',
+    path: '/coupon-detail/:cid/:key',
     asyncComponent: () => import('./coupon-detail')
   },
   // 营销中心 - 创建优惠券
@@ -653,22 +771,22 @@ const routes = [
   //页面管理
   {
     path: '/page-manage/weixin',
-    asyncComponent: () => System.import('./page-manage')
+    asyncComponent: () => import('./page-manage')
   },
   //模板管理
   {
     path: '/template-manage/weixin',
-    asyncComponent: () => System.import('./template-manage')
+    asyncComponent: () => import('./template-manage')
   },
   //页面管理
   {
     path: '/page-manage/pc',
-    asyncComponent: () => System.import('./page-manage')
+    asyncComponent: () => import('./page-manage')
   },
   //模板管理
   {
     path: '/template-manage/pc',
-    asyncComponent: () => System.import('./template-manage')
+    asyncComponent: () => import('./template-manage')
   },
   // 企业会员列表
   {
@@ -695,6 +813,10 @@ const routes = [
     path: '/payment-setting',
     asyncComponent: () => import('./payment-setting')
   },
+  {
+    path: '/payment-method',
+    asyncComponent: () => import('./payment-method')
+  },
   // prescriber
   {
     path: '/prescriber',
@@ -718,6 +840,10 @@ const routes = [
     asyncComponent: () => import('./prescriber-reward-rate')
   },
   {
+    path: '/prescriber-setting',
+    asyncComponent: () => import('./prescriber-setting')
+  },
+  {
     path: '/prescriber-type-add',
     asyncComponent: () => import('./prescriber-type-add')
   },
@@ -732,6 +858,11 @@ const routes = [
   {
     path: '/navigation-add',
     asyncComponent: () => import('./navigation-update')
+  },
+  // 营销横幅
+  {
+    path: '/marketing-banner',
+    asyncComponent: () => import('./marketing-banner')
   },
   //商品评价
   {
@@ -757,6 +888,26 @@ const routes = [
     path: '/message-setting',
     asyncComponent: () => import('./message-setting')
   },
+  //message-template-configuration
+  {
+    path:'/message-template-configuration',
+    asyncComponent: () => import('./message-template-configuration')
+  },
+  //message-template-detail
+  {
+    path:'/template-details/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateDetail')
+  },
+  //message-template-edit
+  {
+    path:'/template-edit/:id',
+    asyncComponent:()=>import('./message-template-configuration/templateEdit')
+  },
+  //message-template-add
+  {
+    path:'/template-add',
+    asyncComponent:()=>import('./message-template-configuration/templateAdd')
+  },
   //message-overview
   {
     path: '/message-overview',
@@ -781,7 +932,11 @@ const routes = [
   },
   {
     path: '/order-audit-setting',
-    asyncComponent: () => import('./order-audit-setting')
+    asyncComponent: () => import('./order-audit-setting-new')
+  },
+  {
+    path: '/customer-account-setting',
+    asyncComponent: () => import('./customer-account-setting')
   },
   {
     path: '/report-product',
@@ -796,6 +951,10 @@ const routes = [
     asyncComponent: () => import('./report-traffic')
   },
   {
+    path: '/export-report',
+    asyncComponent: () => import('./export-report')
+  },
+  {
     path: '/sales-category',
     asyncComponent: () => import('./sales-category')
   },
@@ -804,8 +963,29 @@ const routes = [
     asyncComponent: () => import('./product-category')
   },
   {
+    path: '/product-dictionary',
+    asyncComponent: () => import('./product-dictionary')
+  },
+  {
+    path: '/product-dictionary-add',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
+    path: '/product-dictionary-edit/:id',
+    asyncComponent: () => import('./product-dictionary-update')
+  },
+  {
+    path: '/product-price',
+    asyncComponent: () => import('./product-price')
+  },
+
+  {
     path: '/product-finder-list',
     asyncComponent: () => import('./product-finder-list')
+  },
+  {
+    path: '/product-sales-setting',
+    asyncComponent: () => import('./product-sales-setting')
   },
   {
     path: '/product-finder-details/:id',
@@ -814,6 +994,11 @@ const routes = [
   {
     path: '/product-search-list',
     asyncComponent: () => import('./product-search-list')
+  },
+  //添加同义词
+  {
+    path: '/addSynonyms',
+    asyncComponent: () => import('./product-search-list/addSynonyms')
   },
   {
     path: '/product-search-details',
@@ -836,13 +1021,240 @@ const routes = [
     asyncComponent: () => import('./invoice-list')
   },
   {
+    path: '/invoice-setting',
+    asyncComponent: () => import('./invoice-list/components/invoice-setting')
+  },
+  {
     path: '/subscription-setting',
     asyncComponent: () => import('./subscription-setting')
-  }
+  },
+  {
+    path: '/automations',
+    asyncComponent: () => import('./automations')
+  },
+  {
+    path: '/automation-workflow/:id',
+    asyncComponent: () => import('./automation-workflow')
+  },
+  {
+    path: '/pet-owner-tagging',
+    asyncComponent: () => import('./pet-owner-tagging')
+  },
+  {
+    path: '/tasks',
+    asyncComponent: () => import('./task')
+  },
+  {
+    path: '/add-task',
+    asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/edit-task/:id',
+    asyncComponent: () => import('./task-update')
+  },
+  {
+    path: '/task/manage-all-subscription',
+    exact: true,
+    asyncComponent: () => import('./task-manage-all-subscription')
+  },
+  {
+    path: '/description-management',
+    asyncComponent: () => import('./description-management')
+  },
+  {
+    path: '/pet-owner-activity/:id',
+    asyncComponent: () => import('./pet-owner-activity')
+  },
+  {
+    path: '/pet-all/:id',
+    asyncComponent: () => import('./pet-all')
+  },
+  {
+    path: '/pet-owner-all/:id',
+    asyncComponent: () => import('./pet-owner-all')
+  },
+  {
+    path: '/prescriber-booking-detail',
+    asyncComponent: () => import('./prescriber-booking-detail')
+  },
+  {
+    path: '/validation-setting',
+    asyncComponent: () => import('./validation-setting')
+  },
+  {
+    path: '/automation-detail/:id',
+    asyncComponent: () => import('./automation-detail')
+  },
+  {
+    path: '/automation-edit/:id',
+    asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/automation-add',
+    asyncComponent: () => import('./automation-form')
+  },
+  {
+    path: '/address-field-setting',
+    asyncComponent: () => import('./address-field-setting')
+  },
+  {
+    path: '/appointment-list',
+    asyncComponent: () => import('./appointmention-list')
+  },
+  {
+    path: '/appointment-add',
+    asyncComponent: () => import('./appointmention-list/new')
+  },
+  {
+    path: '/appointment-update/:id',
+    asyncComponent: () => import('./appointmention-list/new')
+  },
+
   // {
-  //   path: '/invoice-details',
-  //   asyncComponent: () => import('./invoice-details')
-  // }
+  //   path: '/appointmention-list',
+  //   asyncComponent: () => import('./appointmention-list')
+  // },
+  // {
+  //   path: '/appointmention-add',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  // {
+  //   path: '/appointmention-update/:id',
+  //   asyncComponent: () => import('./appointmention-list/new')
+  // },
+  {
+    path: '/appointment-details/:id',
+    asyncComponent: () => import('./appointmention-list/details')
+  },
+  {
+    path: '/appointment-schedular',
+    asyncComponent: () => import('./appointmention-list/schedular')
+  },
+
+
+  {
+    path: '/offline-checkout',
+    asyncComponent: () => import('./offline-checkout')
+  },
+  {
+    path: '/split-order-setting',
+    asyncComponent: () => import('./order-split-setting')
+  },
+  {
+    path: '/uom-category',
+    asyncComponent: () => import('./uom-category')
+  },
+  {
+    path: '/uom-list',
+    asyncComponent: () => import('./uom-list')
+  },
+    /**
+     * Integration  -------------------------------------------------------
+     * **/
+  {
+    path: '/integration-dashboard',
+    asyncComponent: () => import('./Integration/Dashboard')
+  },
+
+  {
+    path: '/integration-interface',
+    asyncComponent: () => import('./Integration/Interface/interface-list')
+  },
+  {
+    path: '/interface-detail/:id',
+    asyncComponent: () => import('./Integration/Interface/Interface-detail')
+  },
+  {
+    path: '/integration-log',
+    asyncComponent: () => import('./Integration/Log/log-list')
+  },
+  {
+    path: '/log-detail/:id',
+    asyncComponent: () => import('./Integration/Log/log-detail')
+  },
+  {
+    path: '/log-response/:id',
+    asyncComponent: () => import('./Integration/Log/log-response')
+  },
+  {
+    path: '/order-monitor',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-list')
+  },
+  {
+    path: '/order-monitor-details/:id',
+    asyncComponent: () => import('./Integration/OrderMonitor/order-monitor-details')
+  },
+  {
+    path: '/api-document',
+    asyncComponent: () => import('./Integration/ApiDocument')
+  },
+  {
+    path: '/resources-planning',
+    asyncComponent: () => import('./resources-list')
+  },
+  {
+    path: '/resources-setting/:id',
+    asyncComponent: () => import('./resources-list/planning-setting')
+  },
+  {
+    path: '/schedular',
+    asyncComponent: () => import('./resources-list/schedular')
+  },
+  {
+    path:'/survey-list',
+    asyncComponent: () => import('./survey-list')
+  },
+  {
+    path:'/new-survey',
+    asyncComponent: () => import('./survey-list/new-survey')
+  },
+  {
+    path:'/survey-detail/:id',
+    asyncComponent: () => import('./survey-list/survey-detail')
+  },
+  {
+    path: '/store-details',
+    asyncComponent: () => import('./store-details')
+  },
+  {
+    path: '/store-consent',
+    asyncComponent: () => import('./store-consent')
+  },
+  {
+    path: '/store-tax',
+    asyncComponent: () => import('./store-tax')
+  },
+  {
+    path: '/store-footer',
+    asyncComponent: () => import('./navigation-list/footer')
+  },
+  {
+    path: '/cookie-banner',
+    asyncComponent: () => import('./navigation-list/banner')
+  },
+  {
+    path: '/shop-config',
+    asyncComponent: () => import('./navigation-list/shopConfig')
+  },
+  /**
+   * setting-integration
+   * **/
+  {
+    path:'/hub',
+    asyncComponent: () => import('./setting-integration/hub')
+  },
+  {
+    path:'/OKTA',
+    asyncComponent: () => import('./setting-integration/OKTA')
+  },
+  {
+    path:'/pet-api',
+    asyncComponent: () => import('./setting-integration/pet-api')
+  },
+  {
+    path:'/product-api',
+    asyncComponent: () => import('./setting-integration/product-api')
+  },
 ];
 
 const homeRoutes = [
@@ -858,6 +1270,30 @@ const homeRoutes = [
   {
     path: '/find-password',
     asyncComponent: () => import('./find-password')
+  },
+  {
+    path: '/forget-password',
+    asyncComponent: () => import('./myvetreco-logins/forget-password')
+  },
+  {
+    path: '/check-mail',
+    asyncComponent: () => import('./myvetreco-logins/check-mail')
+  },
+  {
+    path: '/reset-password',
+    asyncComponent: () => import('./myvetreco-logins/reset-password')
+  },
+  {
+    path: '/reset-password',
+    asyncComponent: () => import('./myvetreco-logins/reset-password')
+  },
+  {
+    path: '/create-account',
+    asyncComponent: () => import('./myvetreco-logins/create-account')
+  },
+  {
+    path: '/create-store',
+    asyncComponent: () => import('./myvetreco-logins/create-store')
   },
   {
     path: '/lackcompetence',
@@ -885,12 +1321,20 @@ const homeRoutes = [
   //商家注册协议
   {
     path: '/supplier-agreement',
-    asyncComponent: () => System.import('./company-register/component/agreement')
+    asyncComponent: () => import('./company-register/component/agreement')
   },
   {
     path: '/generalTermsAndConditions',
     asyncComponent: () => import('./general-terms-and-conditions')
-  }
+  },
+  // pickup map
+  {
+    path: '/pickup-map',
+    asyncComponent: () => import('./pickup-map')
+  },
+
+  { path: '/error', asyncComponent: () => import('./error') }
+  //{ path: '*', asyncComponent: () => import('./error') }
 ];
 
 // 审核未通过下的, 包括未开店
@@ -901,5 +1345,6 @@ const auditDidNotPass = [
     asyncComponent: () => import('./shop/process-index')
   }
 ];
+
 
 export { routes, homeRoutes, auditDidNotPass };

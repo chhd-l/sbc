@@ -11,9 +11,10 @@ const TreeNode = Tree.TreeNode;
 export default class addTargetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
+    const defaultSelectedKeys = (this.props.selectedRowKeys || []).map((row) => row.goodsInfoId);
     this.state = {
       visible: false,
-      selectedRowKeys: [],
+      selectedRowKeys: defaultSelectedKeys,
 
       brandList: [],
       serchForm: {},
@@ -21,6 +22,7 @@ export default class addTargetProduct extends Component<any, any> {
 
       loading: false,
       skuProducts: [],
+      clearExsit: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -37,59 +39,32 @@ export default class addTargetProduct extends Component<any, any> {
     this.getSkuProductList = this.getSkuProductList.bind(this);
   }
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { visible, selectedRowKeys } = nextProps;
-
-    if (visible !== prevState.visible) {
-      return {
-        visible: visible,
-        selectedRowKeys: selectedRowKeys
-      };
-    }
-
-    return null;
-  }
-
   componentDidMount() {
-    webapi
-      .getBrandList()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            brandList: res.context
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+    webapi.getBrandList().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          brandList: res.context
+        });
+      }
+    });
 
-    webapi
-      .getProductCategoryList()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          let newCategoryList = res.context.map((item) => {
-            return {
-              id: item.cateId,
-              parentId: item.cateParentId === 0 ? null : item.cateParentId,
-              cateName: item.cateName
-            };
-          });
-          let treeData = util.setChildrenData(newCategoryList);
-          this.setState({
-            productCategories: treeData
-          });
-        } else {
-          message.error(res.message || 'Get data failed');
-        }
-      })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+    webapi.getProductCategoryList().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        let newCategoryList = res.context.map((item) => {
+          return {
+            id: item.cateId,
+            parentId: item.cateParentId === 0 ? null : item.cateParentId,
+            cateName: item.cateName
+          };
+        });
+        let treeData = util.setChildrenData(newCategoryList);
+        this.setState({
+          productCategories: treeData
+        });
+      }
+    });
 
     this.getSkuProductList();
   }
@@ -116,9 +91,12 @@ export default class addTargetProduct extends Component<any, any> {
   }
   getSkuProductList() {
     const { serchForm, pagination } = this.state;
+    const { exsit } = this.props;
     let params = Object.assign(serchForm, {
       pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      selectedGoodIds: exsit && exsit.length ? exsit.map((item) => item.goodsInfoId) : [],
+      filterStock: true
     });
     this.setState({
       loading: true
@@ -128,24 +106,24 @@ export default class addTargetProduct extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          pagination.total = res.context.goodsInfos.total;
-          res.context.goodsInfos.content.map((item) => {
+          let total = res.context.goodsInfos.total;
+          let productData = res.context.goodsInfos.content;
+          pagination.total = total;
+          productData.map((item) => {
             item.key = item.goodsInfoId;
           });
           this.setState({
-            skuProducts: res.context.goodsInfos.content,
+            skuProducts: productData,
             pagination: pagination,
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });
@@ -178,69 +156,76 @@ export default class addTargetProduct extends Component<any, any> {
   }
 
   onSelectChange(selectedRowKeys) {
-    this.setState({selectedRowKeys });
+    this.setState({ selectedRowKeys });
   }
 
   handleOk() {
-    this.props.updateTable(this.state.selectedRowKeys);
+    const { skuProducts, selectedRowKeys } = this.state;
+    this.props.updateTable(skuProducts.filter((p) => selectedRowKeys.includes(p.goodsInfoId)));
   }
   handleCancel() {
     this.props.updateTable();
   }
   render() {
-    const { visible, loading, brandList, productCategories, skuProducts, selectedRowKeys } = this.state;
+    const { loading, brandList, productCategories, skuProducts, selectedRowKeys, clearExsit } = this.state;
+    const { visible } = this.props;
     const columns = [
       {
-        title: 'Image',
+        title: <FormattedMessage id="Subscription.Image"/>,
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
         render: (text) => <img src={text} alt="" style={{ width: 20 }} />,
         width: '10%'
       },
       {
-        title: 'SKU',
+        title: <FormattedMessage id="Subscription.SKU"/>,
         dataIndex: 'goodsInfoNo',
         key: 'goodsInfoNo',
         width: '15%'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Subscription.ProductName"/>,
         dataIndex: 'goodsInfoName',
         key: 'goodsInfoName',
         width: '20%'
       },
       {
-        title: 'Specification',
+        title: <FormattedMessage id="Subscription.Specification"/>,
         dataIndex: 'specName',
         key: 'specName',
         width: '15%'
       },
       {
-        title: 'Product category',
+        title: <FormattedMessage id="Subscription.ProductCategory"/>,
         dataIndex: 'goodsCateName',
         key: 'goodsCateName',
         width: '15%'
       },
       {
-        title: 'Brand',
+        title: <FormattedMessage id="Subscription.Brand"/>,
         dataIndex: 'brandName',
         key: 'brandName',
         width: '15%'
       },
       {
-        title: 'Price',
+        title: <FormattedMessage id="Subscription.Price"/>,
         dataIndex: 'marketPrice',
         key: 'marketPrice',
         width: '10%'
       }
     ];
     const rowSelection = {
+      columnTitle: ' ', // hide all check
+      getCheckboxProps: (record) => ({
+        disabled: selectedRowKeys && selectedRowKeys.length >= 1 && record.goodsInfoId !== selectedRowKeys[0],
+        name: record.name
+      }),
       selectedRowKeys,
       onChange: this.onSelectChange
     };
     return (
       <div>
-        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title="Add products" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText="Confirm" cancelText="Cancel">
+        <Modal className="addTargetProductModal" width="1100px" maskClosable={false} title={<FormattedMessage id="Subscription.AddProducts"/>} visible={visible} onOk={this.handleOk} onCancel={this.handleCancel} okText={<FormattedMessage id="Subscription.Confirm"/>} cancelText={<FormattedMessage id="Subscription.Cancel"/>}>
           <Form className="filter-content" layout="inline">
             <Row>
               <Col span={8}>
@@ -248,7 +233,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="product.SKU" />
+                        <FormattedMessage id="Subscription.SKU" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -263,7 +248,7 @@ export default class addTargetProduct extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="formLable">
-                        <FormattedMessage id="product.productName" />
+                        <FormattedMessage id="Subscription.productName" />
                       </p>
                     }
                     style={{ width: 300 }}
@@ -281,7 +266,7 @@ export default class addTargetProduct extends Component<any, any> {
                       getPopupContainer={() => document.getElementById('page-content')}
                       label={
                         <p className="formLable">
-                          <FormattedMessage id="product.brand" />
+                          <FormattedMessage id="Subscription.brand" />
                         </p>
                       }
                       defaultValue="All"
@@ -309,7 +294,7 @@ export default class addTargetProduct extends Component<any, any> {
                     <TreeSelectGroup
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
-                      label={<p className="formLable">Product category</p>}
+                      label={<p className="formLable"><FormattedMessage id="Subscription.ProductCategory"/></p>}
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                       treeDefaultExpandAll
                       onChange={(value) => {
@@ -334,7 +319,7 @@ export default class addTargetProduct extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="product.search" />
+                      <FormattedMessage id="Subscription.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -346,7 +331,7 @@ export default class addTargetProduct extends Component<any, any> {
             columns={columns}
             dataSource={skuProducts}
             pagination={this.state.pagination}
-            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={loading}
             onChange={this.handleTableChange}
           />
         </Modal>

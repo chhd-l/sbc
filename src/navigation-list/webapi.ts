@@ -55,3 +55,40 @@ export function updateNavigationStatus(id, status) {
 export const getStoreInfo = () => {
   return Fetch<TResult>('/store/storeInfo');
 };
+
+/**
+ * navigation header & footer
+ */
+export function getStoreHeader() {
+  return Fetch<TResult>('/storeConfig//queryStoreConfig/headerFooterConfig');
+}
+
+export function saveStoreHeader(params = {}) {
+  return Fetch<TResult>('/storeConfig/saveNavigation', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function getConfigContext(params) {
+  return Fetch<TResult>('/storeConfig/list', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+export function saveCookieBanner(params = {}) {
+  return Fetch<TResult>('/storeConfig/banner/update', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}
+
+
+
+export function saveShopConfig(params = {}) {
+  return Fetch<TResult>('/storeConfig/update', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+}

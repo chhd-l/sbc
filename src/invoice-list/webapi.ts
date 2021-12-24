@@ -58,3 +58,37 @@ export function addInvoice(filterParams = {}) {
     })
   });
 }
+
+// invoice setting
+export function getInvoiceConfig() {
+  return Fetch<TResult>('/account/invoice/switch', {
+    method: 'GET',
+  });
+}
+
+export function setInvoiceConfig(params = {}) {
+  return Fetch<TResult>('/account/invoice/switch', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
+
+export function getInvoiceSysConfig(configType: string) {
+  return Fetch<TResult>('/system/config/listSystemConfigByStoreId', {
+    method: 'POST',
+    body: JSON.stringify({
+      configType
+    })
+  });
+}
+
+export function saveInvoiceSysConfig(params = []) {
+  return Fetch<TResult>('/system/config/batchModifyConfig', {
+    method: 'POST',
+    body: JSON.stringify({
+      configRequestList: params
+    })
+  });
+}

@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, cache } from 'qmkit';
 import { message, Modal } from 'antd';
 import * as webapi from './webapi';
 import SpecifyActor from './actor/specify.actor';
@@ -61,7 +61,6 @@ export default class AppStore extends Store {
       const levRes = await webapi.allStoreCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
         this.dispatch('loading:end');
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -73,7 +72,6 @@ export default class AppStore extends Store {
     } else {
       const levRes = await webapi.allCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.customerLevelVOList;
@@ -107,7 +105,10 @@ export default class AppStore extends Store {
           coupon.totalCount = item.totalCount;
           coupon.couponName = couponInfo.couponName;
           // 2.2.2.面值
-          coupon.denominationStr = couponInfo.fullBuyType == 0 ? `over zero minus${couponInfo.denomination}` : `over${couponInfo.fullBuyPrice}minus${couponInfo.denomination}`;
+          coupon.denominationStr =
+            couponInfo.fullBuyType == 0
+              ? `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}zero minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.denomination}`
+              : `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${couponInfo.denomination}`;
           // 2.2.3.有效期
           if (couponInfo.rangeDayType == 0) {
             // 按起止时间
@@ -152,14 +153,14 @@ export default class AppStore extends Store {
       message.error('请选择目标客户');
       return;
     }
-
+    this.dispatch('loading:start');
     // 1.从state中获取数据
     let activity = this.state().get('activity').toJS();
     // 2.格式化数据
     let params = {} as any;
     params.activityName = activity.activityName;
     params.startTime = activity.startTime;
-    params.endTime = activity.startTime;
+    params.endTime = activity.endTime;
     params.couponActivityType = 1; // 指定赠券
     params.receiveType = 1;
     params.receiveCount = 1;
@@ -185,25 +186,31 @@ export default class AppStore extends Store {
       res = await webapi.addCouponActivity(params);
     }
     res = res.res;
+    this.dispatch('loading:end');
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push({
         pathname: '/coupon-activity-list'
       });
     } else if (res.code == 'K-080106') {
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       info({
-        content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
-        okText: '好的'
+        content: 'The end time of the coupon is earlier than the end time of the activity.Please delete it or modify the activity time.',
+        // content: `${res.errorData.length}张优惠券结束时间早于活动结束时间，请删除后再保存或是修改活动时间。`,
+        okText: 'OK'
       });
+      if (res.errorData) {
+        this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      }
     } else if (res.code == 'K-080104') {
-      this.dispatch('set: invalid: coupons', fromJS(res.errorData));
       info({
-        content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
-        okText: '好的'
+        content: 'Coupon does not exist, please delete and save.',
+        // content: `${res.errorData.length}张优惠券不存在，请删除后保存。`,
+        okText: 'OK'
       });
+      if (res.errorData) {
+        this.dispatch('set: invalid: coupons', fromJS(res.errorData));
+      }
     } else {
-      message.error(res.message);
     }
   };
 

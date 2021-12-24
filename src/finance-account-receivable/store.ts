@@ -18,13 +18,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [
-      new loadingActor(),
-      new listActor(),
-      new editActor(),
-      new visibleActor(),
-      new GateWaysActor()
-    ];
+    return [new loadingActor(), new listActor(), new editActor(), new visibleActor(), new GateWaysActor()];
   }
 
   /**
@@ -94,7 +88,6 @@ export default class AppStore extends Store {
         });
         this.initOffLineAccounts();
       } else {
-        message.error(res.message);
       }
       return;
     }
@@ -116,7 +109,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -127,7 +119,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -138,7 +129,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.initOffLineAccounts();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -162,16 +152,11 @@ export default class AppStore extends Store {
   };
 
   onSaveChannel = async () => {
-    let channelJson = this.state()
-      .get('channelJson')
-      .toJS();
+    let channelJson = this.state().get('channelJson').toJS();
     let channelItems = [];
     let checkedWxChannel = false;
     for (let item in channelJson['channelItemList']) {
-      if (
-        (item === 'wx' || item === 'wx_pub' || item === 'wx_pub_qr') &&
-        channelJson['channelItemList'][item]['isOpen'] == 1
-      ) {
+      if ((item === 'wx' || item === 'wx_pub' || item === 'wx_pub_qr') && channelJson['channelItemList'][item]['isOpen'] == 1) {
         checkedWxChannel = true;
       }
       channelItems.push(channelJson['channelItemList'][item]);
@@ -195,7 +180,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:channel_hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 

@@ -23,6 +23,7 @@ export default class AppStore extends Store {
    * 初始化页面
    */
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
+    this.dispatch('loading:start');
     const query = this.state().get('form').toJS();
     const queryTab = this.state().get('queryTab');
     if (query.joinLevel == -3) {
@@ -38,36 +39,36 @@ export default class AppStore extends Store {
       pageSize
     });
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
+      this.dispatch('loading:end');
     }
     let activityList = res.context.content;
     const now = moment();
-    activityList = activityList.map((item) => {
-      //设置活动状态
-      let pauseFlag;
-      const flag = item.pauseFlag;
-      const startTime = moment(item.startTime);
-      const endTime = moment(item.endTime);
-      if (endTime.isBefore(now)) {
-        pauseFlag = 4;
-      } else if (startTime.isAfter(now)) {
-        pauseFlag = 3;
-      } else if (now.isBetween(startTime, endTime)) {
-        if (flag == 1) {
-          pauseFlag = 2;
-        } else {
-          pauseFlag = 1;
-        }
-      }
-      item.pauseFlag = pauseFlag;
-      return item;
-    });
+    // activityList = activityList.map((item) => {
+    //   //设置活动状态
+    //   let pauseFlag;
+    //   const flag = item.pauseFlag;
+    //   const startTime = moment(item.startTime);
+    //   const endTime = moment(item.endTime);
+    //   if (endTime.isBefore(now)) {
+    //     pauseFlag = 4;
+    //   } else if (startTime.isAfter(now)) {
+    //     pauseFlag = 3;
+    //   } else if (now.isBetween(startTime, endTime)) {
+    //     if (flag == 1) {
+    //       pauseFlag = 2;
+    //     } else {
+    //       pauseFlag = 1;
+    //     }
+    //   }
+    //   item.pauseFlag = pauseFlag;
+    //   return item;
+    // });
     // 查询自营/非自营客户等级
     let levelList = [];
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
+        this.dispatch('loading:end');
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -76,10 +77,11 @@ export default class AppStore extends Store {
         level.customerLevelId = level.storeLevelId;
         level.customerLevelName = level.levelName;
       });
+      this.dispatch('loading:end');
     } else {
       const levRes = await webapi.allCustomerLevel();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
+        this.dispatch('loading:end');
         return;
       }
       levelList = levRes.res.context.customerLevelVOList;
@@ -90,6 +92,7 @@ export default class AppStore extends Store {
       total: res.context.totalElements,
       pageNum: pageNum + 1
     });
+    this.dispatch('loading:end');
   };
 
   /**
@@ -120,7 +123,6 @@ export default class AppStore extends Store {
   deleteActivity = async (id) => {
     const { res } = await webapi.deleteActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');
@@ -134,7 +136,6 @@ export default class AppStore extends Store {
   pauseActivity = async (id) => {
     const { res } = await webapi.pauseActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');
@@ -147,7 +148,6 @@ export default class AppStore extends Store {
   startActivity = async (id) => {
     const { res } = await webapi.startActivity(id);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
       return;
     }
     message.success('Operate successfully');

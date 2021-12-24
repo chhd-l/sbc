@@ -19,9 +19,9 @@ export default class Tool extends React.Component<any, any> {
   render() {
     return (
       <div className="handle-bar">
-        <AuthWrapper functionName="f_goods_cate_1">
+        <AuthWrapper functionName="Add sales category">
           <Button type="primary" onClick={this._showCateModal}>
-            Add new category
+            <FormattedMessage id="Product.AddNewCategory" />
           </Button>
         </AuthWrapper>
       </div>

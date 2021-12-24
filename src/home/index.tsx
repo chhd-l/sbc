@@ -5,12 +5,14 @@ import AppStore from './store';
 import Header from './component/header';
 import TodoItems from './component/todo-items';
 import Prescriber from './component/prescriber';
+import TodoItemsMyvet from './component/todo-items-myvetreco';
 import moment from 'moment';
 /*import StatisticalReport from './component/statistical-report';
 import Ranking from './component/ranking';
 import HomePrescriber from './component/home-prescriber';*/
 
-import { cache } from 'qmkit';
+import { cache, Const } from 'qmkit';
+import * as webapi from './webapi';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class HelloApp extends React.Component<any, any> {
@@ -40,7 +42,7 @@ export default class HelloApp extends React.Component<any, any> {
       prescriberId: id
     });
     let date = sessionStorage.getItem(cache.CURRENT_YEAR);
-    if (id == null) {
+    if (Const.SITE_NAME === 'MYVETRECO' || id == null) {
       this.store.newInit({
         companyId: 2,
         weekNum: moment(date).week(),
@@ -54,8 +56,26 @@ export default class HelloApp extends React.Component<any, any> {
         prescriberId: id
       });
     }
-  }
 
+    this.getDeliveryOption();
+  }
+  getDeliveryOption() {
+    webapi
+      .getDeliveryOptions()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          let doptions = res.context.configVOList;
+          let pickupIsOpen = false;
+          doptions.map((e: any) => {
+            if (e.configType === 'pick_up_delivery') {
+              e.status === 1 ? pickupIsOpen = true : pickupIsOpen = false;
+            }
+          });
+          sessionStorage.setItem('portal-pickup-isopen', JSON.stringify(pickupIsOpen));
+        }
+      }).catch(() => { });
+  }
   changePage(res) {
     this.setState(
       {
@@ -85,10 +105,10 @@ export default class HelloApp extends React.Component<any, any> {
   render() {
     let allFunctions = JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS));
     if (allFunctions.includes('f_home')) {
-      return !this.state.prescriberId ? (
+      return !this.state.prescriberId || Const.SITE_NAME === 'MYVETRECO' ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+          {Const.SITE_NAME === 'MYVETRECO' ? <TodoItemsMyvet /> : this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
 
           {/*<StatisticalReport />
           <Ranking /> */}

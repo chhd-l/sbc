@@ -25,10 +25,12 @@ export default class EditActor extends Actor {
         position: null,
         //性别，默认0，保密
         sex: 0,
+        // 头像
+        employeeImage: '',
         //归属部门，逗号分隔
         departmentIds: '',
         //生日
-        birthday: null
+        birthday: null,
       },
       edit: false,
       //编辑弹框各项控件是否禁用

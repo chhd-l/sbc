@@ -13,7 +13,7 @@ type DeliverParam = {
   date: string;
 };
 
-export const fetchOrderReturnList = (filter = {}) => {
+export const fetchOrder = (filter = {}) => {
   return Fetch<TResult>('/return', {
     method: 'POST',
     body: JSON.stringify(filter)

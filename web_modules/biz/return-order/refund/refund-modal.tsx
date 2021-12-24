@@ -275,9 +275,10 @@ class RefundForm extends React.Component<any, any> {
               initialValue: this.props.applyPoints || Number(0),
             })(<Input type="hidden"/>)}
             <label style={{marginRight: 10}}>
-              {this.props.applyPoints &&
+              {/* {this.props.applyPoints &&
               this.props.applyPoints ||
-              Number(0)}
+              Number(0)} */}
+              {this.props?.applyPoints??Number(0)}
             </label>
           </FormItem>
           <FormItem {...formItemLayout} label="备注">

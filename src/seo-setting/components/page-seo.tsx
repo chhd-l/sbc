@@ -53,19 +53,18 @@ export default class PageSeo extends React.Component<any, any> {
     const dataSource = allPages.toJS();
     const columns = [
       {
-        title: 'Page',
+        title: <FormattedMessage id="Setting.Page" />,
         dataIndex: 'name',
         key: 'name'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Setting.Operation" />,
         dataIndex: 'Operation',
         key: 'Operation',
         render: (text, record) => <a style={{ marginRight: 5 }} onClick={() => this.editSeo(text, record)} className="iconfont iconicon"></a>
       }
     ];
 
-    console.log(total, 'total----------');
     return (
       <div>
         <Table
@@ -78,7 +77,7 @@ export default class PageSeo extends React.Component<any, any> {
             total: total
           }}
           onChange={this.handleTableChange}
-          loading={{ spinning: loading, delay: 3000, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" /> }}
+          loading={loading}
         />
         <SeoModal />
       </div>

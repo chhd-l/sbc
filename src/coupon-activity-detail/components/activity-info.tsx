@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FormattedMessage } from 'react-intl';
 import { Relax } from 'plume2';
 import { Row, Col, Spin } from 'antd';
 import moment from 'moment';
@@ -44,90 +44,71 @@ export default class ActivityInfo extends React.Component<any, any> {
         <GreyBg>
           <Row>
             <Col span={24}>
-              <span>活动名称：</span>
+              <span>
+                <FormattedMessage id="Marketing.ActiviyName" />：
+              </span>
               {couponActivity.get('activityName')}
             </Col>
           </Row>
           <Row>
             <Col span={24}>
               {couponActivity.get('couponActivityType') == 1 ? (
-                <span>发放时间：</span>
+                <span>
+                  <FormattedMessage id="Marketing.IssuanceTime" />：
+                </span>
               ) : (
-                <span>活动时间：</span>
+                <span>Activity time：</span>
               )}
               {couponActivity.get('couponActivityType') == 1
-                ? moment(couponActivity.get('startTime'))
-                    .format(Const.TIME_FORMAT)
-                    .toString()
-                : moment(couponActivity.get('startTime'))
-                    .format(Const.TIME_FORMAT)
-                    .toString() +
-                  ' ~ ' +
-                  moment(couponActivity.get('endTime'))
-                    .format(Const.TIME_FORMAT)
-                    .toString()}
+                ? moment(couponActivity.get('startTime')).format(Const.TIME_FORMAT).toString()
+                : moment(couponActivity.get('startTime')).format(Const.TIME_FORMAT).toString() + ' ~ ' + moment(couponActivity.get('endTime')).format(Const.TIME_FORMAT).toString()}
             </Col>
           </Row>
 
           <Row>
             <Col span={24}>
-              <span>优惠券：</span>
+              <span>
+                <FormattedMessage id="Marketing.Coupon" />：
+              </span>
             </Col>
           </Row>
         </GreyBg>
         <CouponList />
-        <GreyBg>
-          {couponActivity.get('couponActivityType') != 1 && (
-            <Row>
-              <Col span={24}>
-                <span>
-                  {couponActivity.get('couponActivityType') == 2
-                    ? '优惠券总组数：'
-                    : '每人限领次数：'}
-                </span>
-                {couponActivity.get('receiveType') == '0'
-                  ? '不限'
-                  : couponActivity.get('receiveCount') + '组'}
-              </Col>
-            </Row>
-          )}
-        </GreyBg>
-        <GreyBg>
-          {couponActivity.get('couponActivityType') != 2 && (
-            <Row>
-              <Col span={24}>
-                {couponActivity.get('joinLevel') != -2 && (
-                  <div>
-                    <span>目标客户：</span>
-                    {couponActivity.get('joinLevel') == -1
-                      ? '全平台客户'
-                      : this._showLevel(
-                          couponActivity.get('joinLevel'),
-                          customerLevelList
-                        )}
-                  </div>
-                )}
+        {/*<GreyBg>*/}
+        {/*  {couponActivity.get('couponActivityType') != 1 && (*/}
+        {/*    <Row>*/}
+        {/*      <Col span={24}>*/}
+        {/*        <span>{couponActivity.get('couponActivityType') == 2 ? 'Total number of coupons：' : 'Maximum number of times per person：'}</span>*/}
+        {/*        {couponActivity.get('receiveType') == '0' ? 'Unlimited' : couponActivity.get('receiveCount') + 'group'}*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  )}*/}
+        {/*</GreyBg>*/}
+        {/*<GreyBg>*/}
+        {/*  {couponActivity.get('couponActivityType') != 2 && (*/}
+        {/*    <Row>*/}
+        {/*      <Col span={24}>*/}
+        {/*        {couponActivity.get('joinLevel') != -2 && (*/}
+        {/*          <div>*/}
+        {/*            <span>Target customers：</span>*/}
+        {/*            {couponActivity.get('joinLevel') == -1 ? 'All platform' : this._showLevel(couponActivity.get('joinLevel'), customerLevelList)}*/}
+        {/*          </div>*/}
+        {/*        )}*/}
 
-                {!loading &&
-                  couponActivity.get('joinLevel') == -2 &&
-                  customerDetailVOS && (
-                    <div>
-                      <span style={styles.lableSpan}>目标客户：</span>
-                      <div style={styles.lableBox}>
-                        {customerDetailVOS.toJS().map((record) => {
-                          return (
-                            <span style={styles.item}>
-                              {record.customerAccount}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-              </Col>
-            </Row>
-          )}
-        </GreyBg>
+        {/*        {!loading && couponActivity.get('joinLevel') == -2 && customerDetailVOS && (*/}
+        {/*          <div>*/}
+        {/*            <span style={styles.lableSpan}>Target customers：</span>*/}
+        {/*            <div style={styles.lableBox}>*/}
+        {/*              {customerDetailVOS.toJS().map((record) => {*/}
+        {/*                return <span style={styles.item}>{record.customerAccount}</span>;*/}
+        {/*              })}*/}
+        {/*            </div>*/}
+        {/*          </div>*/}
+        {/*        )}*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  )}*/}
+        {/*</GreyBg>*/}
       </div>
     );
   }
@@ -141,15 +122,13 @@ export default class ActivityInfo extends React.Component<any, any> {
     } else if (-2 == text) {
       return '';
     } else if (-1 == text) {
-      return '全平台客户';
+      return 'All platform';
     } else if (0 == text) {
-      return '全部等级';
+      return 'All levels';
     } else {
       let str = '';
       text.split(',').forEach((item) => {
-        const level = customerLevelList.find(
-          (i) => i.get('customerLevelId') == item
-        );
+        const level = customerLevelList.find((i) => i.get('customerLevelId') == item);
         if (level) {
           str += level.get('customerLevelName') + '，';
         }

@@ -2,10 +2,11 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Table, InputNumber, Form } from 'antd';
 import { IMap } from 'typings/globalType';
-import { noop, ValidConst, QMFloat } from 'qmkit';
-
-import './goods-list-style.css';
+import { noop, ValidConst, QMFloat, cache } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import Amount from './amount';
+import './goods-list-style.css';
+
 const FormItem = Form.Item;
 
 @Relax
@@ -33,9 +34,14 @@ export default class GoodsList extends React.Component<any, any> {
     const giftDataSource = this._getGiftDataSource(); // 订单赠品
     const giftColumns = this._getColumns(1);
 
+    const subGiftDataSource = this._getSubGiftDataSource(); // 订阅订单赠品
+    const subGiftColumns = this._getColumns(2);
+
     return (
       <div>
-        <h3 style={styles.title}>Select return products</h3>
+        <h3 style={styles.title}>
+          <FormattedMessage id="Order.Selectreturnproducts" />
+        </h3>
         <Table
           bordered
           dataSource={dataSource}
@@ -50,6 +56,17 @@ export default class GoodsList extends React.Component<any, any> {
             bordered
             dataSource={giftDataSource}
             columns={giftColumns}
+            pagination={false}
+            rowKey="skuId"
+          />
+        )}
+
+        {subGiftDataSource && subGiftDataSource.length > 0 && (
+          <Table
+            showHeader={false}
+            bordered
+            dataSource={subGiftDataSource}
+            columns={subGiftColumns}
             pagination={false}
             rowKey="skuId"
           />
@@ -78,46 +95,58 @@ export default class GoodsList extends React.Component<any, any> {
   };
 
   /**
+   * 获取订阅订单赠品数据源
+   */
+  _getSubGiftDataSource = () => {
+    const { tradeDetail } = this.props.relaxProps;
+    if (tradeDetail.get('subscriptionPlanGiftList')) {
+      return tradeDetail.get('subscriptionPlanGiftList').toJS();
+    }
+    return null;
+  };
+
+  /**
    * 商品与赠品公用(通过itemType区分展示个性内容)
-   * itemType=0表示商品 , itemType=1表示赠品
+   * itemType=0表示商品 , itemType=1表示赠品,itemType=2表示订阅
    */
   _getColumns = (itemType) => {
     const { getFieldDecorator } = this.props.form;
 
     return [
       {
-        title: 'SKU code',
+        title: <FormattedMessage id="Order.SKU Code" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
         width: 150
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Order.Product Name" />,
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ? '【赠品】' : ''}${text}`
+        render: (text) => `${itemType == 1 ||itemType == 2 ? '[Gift]' : ''}${text}`
       },
       {
-        title: 'Specification',
+        title: <FormattedMessage id="Order.Specification" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
         width: 150
       },
       {
-        title: 'Return unit price',
+        title: <FormattedMessage id="Order.Returnunitprice" />,
+        dataIndex: 'unitPrice',
         key: 'price',
         width: 100,
-        render: (rowInfo) => {
-          return itemType == 1 ? (
-            <div>${rowInfo.price.toFixed(2)}</div>
-          ) : (
-            <div>${rowInfo.price}</div>
+        render: (text, rowInfo) => {
+          return (
+            <div>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (rowInfo.unitPrice||0).toFixed(2)}
+            </div>
           );
         }
       },
       {
-        title: 'Return quantity',
+        title: <FormattedMessage id="Order.Returnquantity" />,
         key: 'num',
         width: 100,
         className: 'centerItem',
@@ -133,18 +162,17 @@ export default class GoodsList extends React.Component<any, any> {
                 rules: [
                   {
                     required: true,
-                    message: '请填写退货数量'
+                    message: <FormattedMessage id="Order.Pleaseenterreturnquantity" />
                   },
                   {
                     pattern: ValidConst.number,
-                    message: '退货数量只能是整数'
+                    message: <FormattedMessage id="Order.Returnquantityshould" />
                   },
                   {
                     validator: (_rule, value, callback) => {
                       const canReturnNum = rowInfo.canReturnNum;
-
                       if (value > canReturnNum) {
-                        callback('退货数量不可超过可退数量');
+                        callback(<FormattedMessage id="Order.Theamountreturnedmustnotexceed" />);
                       }
 
                       callback();
@@ -154,24 +182,27 @@ export default class GoodsList extends React.Component<any, any> {
               })(
                 <InputNumber
                   min={0}
-                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId)}
+                  max={rowInfo.canReturnNum}
+                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId,itemType)}
                 />
               )}
-              <p>{`eturnable number ${rowInfo.canReturnNum}`}</p>
+              <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
             </FormItem>
           );
         }
       },
       {
-        title: 'Subtotal of return amount',
+        title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
         key: 'total',
         width: 100,
         render: (rowInfo) => {
-          if (itemType == 1) {
-            return <div>${(rowInfo.price * rowInfo.num).toFixed(2)}</div>;
-          } else {
-            return this._getRowTotalPrice(rowInfo);
-          }
+          return (
+            <div>
+              {' '}
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
+              {(rowInfo.unitPrice * rowInfo.num).toFixed(2)}
+            </div>
+          );
         }
       }
     ];
@@ -180,10 +211,9 @@ export default class GoodsList extends React.Component<any, any> {
   /**
    * 修改数量
    */
-  _editGoodsNum = (skuId: string, returnNum) => {
+  _editGoodsNum = (skuId: string, itemType, returnNum) => {
     const { editGoodsNum } = this.props.relaxProps;
-
-    editGoodsNum(skuId, returnNum || 0);
+    editGoodsNum(skuId, returnNum || 0, itemType);
   };
 
   /**
@@ -193,14 +223,14 @@ export default class GoodsList extends React.Component<any, any> {
     const num = rowInfo.num || 0;
     if (num < rowInfo.canReturnNum) {
       //小于可退数量,直接单价乘以数量
-      return QMFloat.addZero(QMFloat.accMul(rowInfo.price, num));
+      return QMFloat.addZero(QMFloat.accMul(rowInfo.unitPrice, num));
     } else {
       //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
       return QMFloat.addZero(
         QMFloat.accSubtr(
           rowInfo.splitPrice,
           QMFloat.accMul(
-            rowInfo.price,
+            rowInfo.unitPrice,
             QMFloat.accSubtr(rowInfo.totalNum, rowInfo.canReturnNum)
           )
         )

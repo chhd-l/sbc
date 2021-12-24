@@ -4,50 +4,13 @@ import { IMap } from 'typings/globalType';
 import { Popover } from 'antd';
 import moment from 'moment';
 import { fromJS } from 'immutable';
-import { Const, Logistics } from 'qmkit';
+import { cache, Const, Logistics, RCi18n } from 'qmkit';
 
 import { Table } from 'antd';
-import { FormattedMessage } from 'react-intl';
-
-const columns = [
-  {
-    title: <FormattedMessage id="product.SKU" />,
-    dataIndex: 'skuNo',
-    key: 'skuNo',
-    render: (text) => <span>{text}</span>
-  },
-  {
-    title: <FormattedMessage id="product.productName" />,
-    dataIndex: 'skuName',
-    key: 'skuName'
-  },
-  {
-    title: <FormattedMessage id="weigth" />,
-    dataIndex: 'specDetails',
-    key: 'specDetails',
-    render: (s) => <div>{s}</div>
-  },
-  {
-    title: <FormattedMessage id="returnUnitPrice" />,
-    dataIndex: 'price',
-    key: 'price',
-    render: (price) => <div>${price.toFixed(2)}</div>
-  },
-  {
-    title: <FormattedMessage id="quantityReturned" />,
-    dataIndex: 'num',
-    key: 'num'
-  },
-  {
-    title: <FormattedMessage id="subtotalOfReturnAmount" />,
-    dataIndex: 'splitPrice',
-    key: 'splitPriceTotal',
-    render: (splitPrice) => <div>${splitPrice.toFixed(2)}</div>
-  }
-];
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @Relax
-export default class GoodsList extends React.Component<any, any> {
+class GoodsList extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
@@ -74,7 +37,15 @@ export default class GoodsList extends React.Component<any, any> {
     //赠品信息
     let returnGifts = detailObj.returnGifts ? detailObj.returnGifts : [];
     returnGifts = returnGifts.map((gift) => {
-      gift.skuName = '【赠品】' + gift.skuName;
+      gift.skuName = (window as any).RCi18n({ id: 'Order.Giveaway' }) + gift.skuName;
+      gift.splitPrice = 0;
+      return gift;
+    });
+
+    //赠品信息
+    let returnSubscriptionPlanGift = detailObj.returnSubscriptionPlanGift ? detailObj.returnSubscriptionPlanGift : [];
+    returnSubscriptionPlanGift = returnSubscriptionPlanGift.map((gift) => {
+      gift.skuName = '[Gift] ' + gift.skuName;
       gift.splitPrice = 0;
       return gift;
     });
@@ -83,10 +54,12 @@ export default class GoodsList extends React.Component<any, any> {
     const totalPrice = detail.getIn(['returnPrice', 'totalPrice']);
     // 改价金额
     const applyPrice = detail.getIn(['returnPrice', 'applyPrice']);
-    // 应退积分
-    const applyPoints = detail.getIn(['returnPoints', 'applyPoints']);
-    // 实退积分
-    const actualPoints = detail.getIn(['returnPoints', 'actualPoints']);
+    //
+    const actualReturnPrice = detail.getIn(['returnPrice', 'actualReturnPrice']);
+    // // 应退积分
+    // const applyPoints = detail.getIn(['returnPoints', 'applyPoints']);
+    // // 实退积分
+    // const actualPoints = detail.getIn(['returnPoints', 'actualPoints']);
 
     // 附件图片
     let images = detailObj.images || [];
@@ -110,12 +83,13 @@ export default class GoodsList extends React.Component<any, any> {
 
     if (returnLogistics) {
       logisticInfo =
-        ' 发货日期：' +
-        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT) +
-        ' 物流公司：' +
-        returnLogistics.get('company') +
-        ' 物流单号：' +
-        returnLogistics.get('no');
+        ' Delivery date: ' +
+        (moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT)?
+        moment(returnLogistics.get('createTime')).format(Const.DAY_FORMAT):' - ') +
+        ' Logistics company: ' +
+        (returnLogistics.get('company')?returnLogistics.get('company'):' - ') +
+        ' Tracking number: ' +
+        (returnLogistics.get('no')?returnLogistics.get('no'):'-');
 
       returnLogisticInfo = {
         logisticCompanyName: returnLogistics.get('company'),
@@ -129,84 +103,134 @@ export default class GoodsList extends React.Component<any, any> {
     let rejectLabel = '';
     switch (returnFlowStatus) {
       case 'REJECT_RECEIVE':
-        rejectLabel = '拒绝收货原因';
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForRejection'});
         break;
       case 'REJECT_REFUND':
-        rejectLabel = '拒绝退款原因';
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForRefuse'});
         break;
       case 'VOID':
-        rejectLabel = '审核驳回原因';
+        rejectLabel = (window as any).RCi18n({id:'Order.reasonForReject'});
         break;
     }
+
+    const columns = [
+      {
+        title: <FormattedMessage id="Order.SKU" />,
+        dataIndex: 'skuNo',
+        key: 'skuNo',
+        render: (text) => <span>{text}</span>
+      },
+      {
+        title: <FormattedMessage id="Order.Product name" />,
+        dataIndex: 'skuName',
+        key: 'skuName'
+      },
+      {
+        title: <FormattedMessage id="Order.Weight" />,
+        dataIndex: 'specDetails',
+        key: 'specDetails',
+        render: (s) => <div>{s}</div>
+      },
+      {
+        title: <FormattedMessage id="returnUnitPrice" />,
+        dataIndex: 'unitPrice',
+        key: 'unitPrice',
+        render: (unitPrice) => <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{unitPrice.toFixed(2)}</div>
+      },
+      {
+        title: <FormattedMessage id="Order.quantityReturned" />,
+        dataIndex: 'num',
+        key: 'num'
+      },
+      {
+        title: <FormattedMessage id="Order.Subtotalofreturnamount" />,
+        dataIndex: 'price',
+        key: 'price',
+        render: (price) => <div>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{price.toFixed(2)}</div>
+      }
+    ];
 
     return (
       <div style={styles.container}>
         <Table
           rowKey={(_record, index) => index.toString()}
           columns={columns}
-          dataSource={returnItems.concat(returnGifts)}
+          dataSource={returnItems.concat(returnGifts).concat(returnSubscriptionPlanGift)}
           pagination={false}
           bordered
         />
         <div style={styles.detailBox as any}>
-          <div />
           <div style={styles.priceBox}>
-            <label style={styles.priceItem as any}>
+          <label style={styles.priceItem as any}>
               <span style={styles.name}>
-                <FormattedMessage id="refundableAmount" />:{' '}
+              <FormattedMessage id="Order.Total amount" />:{' '}
               </span>
               <strong>
-                $
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
                 {totalPrice
                   ? parseFloat(totalPrice).toFixed(2)
                   : Number(0).toFixed(2)}
               </strong>
             </label>
+
             <label style={styles.priceItem as any}>
+              <span style={styles.name}>
+                <FormattedMessage id="Order.refundableAmount" />:{' '}
+              </span>
+              <strong>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
+                {applyPrice
+                  ? parseFloat(applyPrice).toFixed(2)
+                  : Number(0).toFixed(2)}
+              </strong>
+            </label>
+            {/* <label style={styles.priceItem as any}>
               <span style={styles.name}>
                 <FormattedMessage id="pointsRefundable" />:{' '}
               </span>
               <strong>{applyPoints ? applyPoints : Number(0)}</strong>
-            </label>
+            </label> */}
             {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
-                  <FormattedMessage id="actualRefundAmount" />:{' '}
+                  <FormattedMessage id="Order.actualRefundAmount" />:{' '}
                 </span>
                 <strong>
-                  $
-                  {applyPrice
-                    ? parseFloat(applyPrice).toFixed(2)
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'$'}
+                  {actualReturnPrice
+                    ? parseFloat(actualReturnPrice).toFixed(2)
                     : Number(0).toFixed(2)}
                 </strong>
               </label>
             )}
-            {refundStatus === 2 && (
+            {/* {refundStatus === 2 && (
               <label style={styles.priceItem as any}>
                 <span style={styles.name}>
                   <FormattedMessage id="actualRefundPoints" />:{' '}
                 </span>
                 <strong>{actualPoints ? actualPoints : Number(0)}</strong>
               </label>
-            )}
+            )} */}
           </div>
         </div>
         <div style={styles.returnReason}>
           <label style={styles.inforItem}>
-            <FormattedMessage id="returnReason" />:{' '}
+            <FormattedMessage id="Order.returnReason" />:{' '}
             {Object.getOwnPropertyNames(returnReason).map(
               (key) => returnReason[key]
             )}
+
           </label>
           <label style={styles.inforItem}>
-            <FormattedMessage id="chargebackAttachment" />:{' '}
+
+            <FormattedMessage id="Order.returnDescription" />:{' '}
             {detail.get('description')}
           </label>
           {
             /**退货才有退货方式**/
             returnType == 'RETURN' ? (
               <label style={styles.inforItem}>
-                Return method:{' '}
+                <FormattedMessage id="Order.Returnmethod" />:{' '}
                 {Object.getOwnPropertyNames(returnWay).map(
                   (key) => returnWay[key]
                 )}
@@ -215,7 +239,7 @@ export default class GoodsList extends React.Component<any, any> {
           }
           <div style={styles.inforItem}>
             <label>
-              <FormattedMessage id="returnInstructions" />:{' '}
+            <FormattedMessage id="Order.returnOrderAttachment" />:{' '}
             </label>
             {images.map((imageObj, index) => (
               <Popover
@@ -243,15 +267,16 @@ export default class GoodsList extends React.Component<any, any> {
           </div>
           {returnType == 'RETURN' && returnWay['1'] ? (
             <label style={styles.inforItem}>
-              物流信息: {logisticInfo}
-              {returnLogisticInfo && (
+              <FormattedMessage id="Order.logisticsInformation" />
+              : <p>{logisticInfo}</p>
+              {/* {returnLogisticInfo && (
                 <Logistics
                   companyInfo={fromJS(returnLogisticInfo)}
                   deliveryTime={moment(
                     returnLogistics.get('createTime')
                   ).format(Const.DAY_FORMAT)}
                 />
-              )}
+              )} */}
             </label>
           ) : null}
 
@@ -263,6 +288,8 @@ export default class GoodsList extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(GoodsList);
 
 const styles = {
   container: {
@@ -280,24 +307,24 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: 20,
     border: '1px solid #e9e9e9',
     borderTop: 0,
     marginTop: -4,
-    borderRadius: 4
+    borderRadius: 4,
   },
   priceBox: {
     display: 'flex',
     flexDirection: 'column'
   },
   name: {
-    width: 120,
+    width: 150,
     textAlign: 'right',
     display: 'inline-block'
   },
   priceItem: {
-    width: 200,
+    width: 230,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -11,12 +11,13 @@ import { Table } from 'antd';
 const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 @withRouter
 @Relax
-export default class CateList extends React.Component<any, any> {
+class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       loading: any;
       goodsPageContent: IList;
@@ -58,7 +59,7 @@ export default class CateList extends React.Component<any, any> {
     const { goodsBrandList, goodsPageContent, selectedSpuKeys, onSelectChange, total, pageNum, expandedRowKeys, loading } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
         expandedRowRender={this._expandedRowRender}
@@ -75,9 +76,9 @@ export default class CateList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
-        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
-        <Column title={<FormattedMessage id="product.productName" />} dataIndex="goodsName" key="goodsName" className="nameBox" width={200} />
-        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.productName" />} dataIndex="goodsName" key="goodsName" className="nameBox" width={200} />
+        <Column title={<FormattedMessage id="Product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
         {/* <Column
           title="销售类型"
           key="saleType"
@@ -93,11 +94,13 @@ export default class CateList extends React.Component<any, any> {
           }}
         /> */}
         <Column
+          width={150}
           title={
             <span>
               <FormattedMessage id="product.marketPrice" />
-              <br />
+              
               <FormattedMessage id="priceSettingMethod" />
+
             </span>
           }
           key="marketPrice"
@@ -111,9 +114,9 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="product.storeCategory" />} dataIndex="storeCateIds" key="storeCateIds" width={150} render={this._renderStoreCateList} />
+        <Column title={<FormattedMessage id="Product.storeCategory" />} dataIndex="storeCateIds" key="storeCateIds" width={150} render={this._renderStoreCateList} />
         <Column
-          title={<FormattedMessage id="product.brand" />}
+          title={<FormattedMessage id="Product.brand" />}
           dataIndex="brandId"
           key="brandId"
           render={(rowInfo) => {
@@ -126,10 +129,10 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="approvalStatus" />} dataIndex="auditStatus" key="auditStatus" render={this._getAuditInfo} />
+        <Column title={<FormattedMessage id="Product.approvalStatus" />} dataIndex="auditStatus" key="auditStatus" render={this._getAuditInfo} />
         <Column
           align="center"
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           key="goodsId"
           className="operation-th"
           render={(rowInfo) => {
@@ -139,7 +142,9 @@ export default class CateList extends React.Component<any, any> {
               return (
                 <div className="operation-th">
                   <AuthWrapper functionName="f_goods_detail_1">
-                    <Link to={`/goods-detail/${rowInfo.goodsId}`}>View</Link>
+                    <Link to={`/goods-detail/${rowInfo.goodsId}`}>
+                      <FormattedMessage id="Product.View" />
+                    </Link>
                   </AuthWrapper>
                 </div>
               );
@@ -190,7 +195,7 @@ export default class CateList extends React.Component<any, any> {
               })
             }
           >
-            <FormattedMessage id="edit" />
+            <FormattedMessage id="Product.edit" />
           </a>
         </AuthWrapper>
         <AuthWrapper functionName="f_goods_sku_price">
@@ -203,7 +208,7 @@ export default class CateList extends React.Component<any, any> {
               })
             }
           >
-            <FormattedMessage id="product.setPrice" />
+            <FormattedMessage id="Product.setPrice" />
           </a>
         </AuthWrapper>
         <AuthWrapper functionName="f_goods_del">
@@ -213,7 +218,7 @@ export default class CateList extends React.Component<any, any> {
               this._delete(rowInfo.goodsId);
             }}
           >
-            <FormattedMessage id="delete" />
+            <FormattedMessage id="Product.delete" />
           </a>
         </AuthWrapper>
       </div>
@@ -225,9 +230,11 @@ export default class CateList extends React.Component<any, any> {
    */
   _delete = (goodsId: string) => {
     const { onSpuDelete } = this.props.relaxProps;
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.DeleteConfirmTip'});
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this product?',
+      title: title,
+      content: content,
       onOk() {
         onSpuDelete([goodsId]);
       }
@@ -254,7 +261,7 @@ export default class CateList extends React.Component<any, any> {
         {(auditStatus == 2 || auditStatus == 3) && (
           <Tooltip placement="top" title={record.auditReason}>
             <a href="#">
-              <FormattedMessage id="reason" />
+              <FormattedMessage id="Product.reason" />
             </a>
           </Tooltip>
         )}
@@ -299,7 +306,7 @@ export default class CateList extends React.Component<any, any> {
                         })
                       }
                     >
-                      <FormattedMessage id="edit" />
+                      <FormattedMessage id="Product.edit" />
                     </a>
                   </AuthWrapper>
                   <AuthWrapper functionName="f_goods_sku_price">
@@ -331,31 +338,41 @@ export default class CateList extends React.Component<any, any> {
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>Specification：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.Specification" />：
+                </label>
                 <span style={styles.textCon}>{currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}</span>
               </div>
               <div style={styles.cell}>
                 <label style={styles.label}>
-                  <FormattedMessage id="product.SKU" />：
+                  <FormattedMessage id="Product.SKU" />：
                 </label>
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>Market price：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.MarketPrice" />：
+                </label>
                 {goods.get('marketPrice') ? goods.get('marketPrice').toFixed(2) : '0.0'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>On/Off shelve：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.shelve" />：
+                </label>
                 {goods.get('addedFlag') == 0 ? '下架' : '上架'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>Bar code：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.BarCode" />：
+                </label>
                 {goods.get('goodsInfoBarcode') ? goods.get('goodsInfoBarcode') : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>In stock：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.InStock" />：
+                </label>
                 {goods.get('stock')}
               </div>
             </div>
@@ -385,6 +402,8 @@ export default class CateList extends React.Component<any, any> {
   };
 }
 
+export default injectIntl(CateList);
+
 const styles = {
   item: {
     float: 'left',
@@ -413,7 +432,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 120

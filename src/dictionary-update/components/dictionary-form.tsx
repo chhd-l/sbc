@@ -1,20 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Switch,
-  Table,
-  Row,
-  Col
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Switch, Table, Row, Col } from 'antd';
 
 import * as webapi from './../webapi';
-import { history } from 'qmkit';
+import { history, Const } from 'qmkit';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -32,6 +21,7 @@ class DictionaryForm extends Component<any, any> {
         name: '',
         type: '',
         description: '',
+        value: '',
         valueEn: '',
         enabled: 0,
         priority: 0,
@@ -58,13 +48,14 @@ class DictionaryForm extends Component<any, any> {
     const { res } = await webapi.getDictionaryDetails({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let response = res.context.sysDictionaryVO;
       let dictionaryForm = {
         id: response.id,
         name: response.name,
         type: response.type,
         description: response.description,
+        value: response.value,
         valueEn: response.valueEn,
         priority: response.priority,
         enabled: response.enabled,
@@ -83,13 +74,12 @@ class DictionaryForm extends Component<any, any> {
         name: response.name,
         type: response.type,
         description: response.description,
+        value: response.value,
         valueEn: response.valueEn,
         priority: response.priority,
         enabled: response.enabled === 0 ? true : false,
         parentId: response.parentId
       });
-    } else {
-      message.error(res.message || 'get data faild');
     }
   };
   handleSubmit = (e) => {
@@ -129,11 +119,9 @@ class DictionaryForm extends Component<any, any> {
     const { res } = await webapi.addDictionary({
       ...dictionaryForm
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/dictionary');
-    } else {
-      message.error(res.message || 'create faild');
     }
   };
   onUpdate = async () => {
@@ -142,11 +130,9 @@ class DictionaryForm extends Component<any, any> {
     const { res } = await webapi.updateDictionary({
       ...dictionaryForm
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       history.push('/dictionary');
-    } else {
-      message.error(res.message || 'update faild');
     }
   };
 
@@ -157,17 +143,13 @@ class DictionaryForm extends Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             countryArr: res.context.sysDictionaryVOS
           });
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
 
   render() {
@@ -176,9 +158,7 @@ class DictionaryForm extends Component<any, any> {
       <Form {...layout} style={{ width: '600px' }} onSubmit={this.handleSubmit}>
         <FormItem label="Name">
           {getFieldDecorator('name', {
-            rules: [
-              { required: true, message: 'Please input Dictionary Name!' }
-            ]
+            rules: [{ required: true, message: 'Please input Dictionary Name!' }, { max: 200, message: 'Exceed maximum length!' }]
           })(
             <Input
               onChange={(e) => {
@@ -193,9 +173,7 @@ class DictionaryForm extends Component<any, any> {
         </FormItem>
         <FormItem label="Type">
           {getFieldDecorator('type', {
-            rules: [
-              { required: true, message: 'Please select Dictionary Type' }
-            ]
+            rules: [{ required: true, message: 'Please select Dictionary Type' }, { max: 200, message: 'Exceed maximum length!' }]
           })(
             <Input
               onChange={(e) => {
@@ -208,13 +186,14 @@ class DictionaryForm extends Component<any, any> {
             />
           )}
         </FormItem>
-        <FormItem label="Value">
+        <FormItem label="ValueEn">
           {getFieldDecorator('valueEn', {
             rules: [
               {
                 required: true,
                 message: 'Please input Value!'
-              }
+              },
+              { max: 200, message: 'Exceed maximum length!' }
             ]
           })(
             <Input
@@ -222,6 +201,27 @@ class DictionaryForm extends Component<any, any> {
                 const value = (e.target as any).value;
                 this.onFormChange({
                   field: 'valueEn',
+                  value
+                });
+              }}
+            />
+          )}
+        </FormItem>
+        <FormItem label="Value">
+          {getFieldDecorator('value', {
+            rules: [
+              {
+                required: true,
+                message: 'Please input Value!'
+              },
+              { max: 200, message: 'Exceed maximum length!' }
+            ]
+          })(
+            <Input
+              onChange={(e) => {
+                const value = (e.target as any).value;
+                this.onFormChange({
+                  field: 'value',
                   value
                 });
               }}
@@ -258,7 +258,9 @@ class DictionaryForm extends Component<any, any> {
         <FormItem label="Description">
           {getFieldDecorator(
             'description',
-            {}
+            {
+              rules: [{ max: 200, message: 'Exceed maximum length!' }]
+            }
           )(
             <Input.TextArea
               onChange={(e) => {

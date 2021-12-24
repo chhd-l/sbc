@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
 import './index.less';
-import { AuthWrapper, BreadCrumb, Headline, SelectGroup } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n, cache } from 'qmkit';
 import List from './components/list-new';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const InputGroup = Input.Group
 
 export default class SubscriptionList extends Component<any, any> {
   constructor(props) {
@@ -16,7 +18,7 @@ export default class SubscriptionList extends Component<any, any> {
       searchForm: {
         subscriptionOption: 'Subscription Number',
         number: '',
-        consumerOption: 'Consumer Name',
+        consumerOption: 'Pet Owner Name',
         consumer: '',
         productOption: 'Product Name',
         product: '',
@@ -24,15 +26,20 @@ export default class SubscriptionList extends Component<any, any> {
         recipientOption: 'Receiver',
         recipient: '',
         prescriberOption: 'Auditor Name',
-        prescriber: ''
+        prescriber: '',
+        frequencyOption: 'autoship',
+        phoneNumber: 'Phone number',
+        phone: '',
       },
       subscriptionOption: ['Subscription Number', 'Order Number'],
-
-      consumerOption: ['Consumer Name', 'Consumer Account'],
+      consumerOption: ['Pet Owner Name', 'Pet Owner Account'],
       productOption: ['Product Name', 'SKU Code'],
       recipientOption: ['Receiver', 'Receiver Phone'],
       prescriberOption: ['Auditor Name', 'Auditor ID'],
+      frequencyOption: ['autoship', 'club'],
+      phoneNumber: ['Phone number', 'Delivery address phone number'],
       frequencyList: [],
+      frequencyListClub: [],
       activeKey: 'all',
       subscriptionList: [],
       searchParams: {},
@@ -44,12 +51,33 @@ export default class SubscriptionList extends Component<any, any> {
       },
       isPrescriber: false,
       prescriberList: [],
-      prescriberIds: []
+      prescriberIds: [],
+      subscriptionType: '',
+      subscriptionPlanType: '',
+      deliveryType:'',
+
+      subscriptionPlanTypeListClone: [
+        { value: 'Cat', name: RCi18n({ id: 'Order.cat' }) },
+        { value: 'Dog', name: RCi18n({ id: 'Order.dog' }) },
+        { value: 'Cat_Dog', name: RCi18n({ id: 'Order.Cat&Dog' }) },
+        { value: 'SmartFeeder', name: RCi18n({ id: 'Order.smartFeeder' }) }
+      ],
+      subscriptionTypeList: [
+        { value: 'ContractProduct', name: RCi18n({ id: 'Order.contractProduct' }) },
+        { value: 'Club', name: RCi18n({ id: 'Order.club' }) },
+        { value: 'Autoship', name: RCi18n({ id: 'Order.autoship' }) },
+        { value: 'Autoship_Club', name: RCi18n({ id: 'Order.Autoship&Club' }) }
+      ],
+      subscriptionDeliveryMethodList: [
+        { value: '1', name: RCi18n({ id: 'Subscription.HomeDelivery' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.PickupDelivery' }) },
+      ],
     };
   }
 
   componentDidMount() {
     this.querySysDictionary('Frequency_day');
+    this.querySysDictionary('Frequency_day_club');
     if (sessionStorage.getItem('s2b-supplier@employee')) {
       let employee = JSON.parse(sessionStorage.getItem('s2b-supplier@employee'));
       if (employee.roleName && employee.roleName.indexOf('Prescriber') !== -1) {
@@ -87,31 +115,36 @@ export default class SubscriptionList extends Component<any, any> {
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
     data[field] = value;
+    if (field === 'frequencyOption') {
+      data['frequency'] = '';
+    }
     this.setState({
       searchForm: data
     });
   };
 
   onSearch = () => {
-    const { searchForm, activeKey } = this.state;
+    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
       subscriptionNumber: searchForm.subscriptionOption === 'Subscription Number' ? searchForm.number : '',
-      consumerName: searchForm.consumerOption === 'Consumer Name' ? searchForm.consumer : '',
-      consumerAccount: searchForm.consumerOption === 'Consumer Account' ? searchForm.consumer : '',
+      consumerName: searchForm.consumerOption === 'Pet Owner Name' ? searchForm.consumer : '',
+      consumerAccount: searchForm.consumerOption === 'Pet Owner Account' ? searchForm.consumer : '',
       productName: searchForm.productOption === 'Product Name' ? searchForm.product : '',
       skuCode: searchForm.productOption === 'SKU Code' ? searchForm.product : '',
       recipient: searchForm.recipientOption === 'Recipient' ? searchForm.recipient : '',
       recipientPhone: searchForm.recipientOption === 'Recipient Phone' ? searchForm.recipient : '',
       prescriberId:
-        // searchForm.prescriberOption === 'Prescriber ID'
-        //   ? searchForm.prescriber
-        //   : '',
-        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
+        JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null && Const.SITE_NAME !== 'MYVETRECO' ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
       prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
-      status: activeKey
+      status: activeKey,
+      subscriptionType,
+      subscriptionPlanType,
+      phoneNum: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
+      consigneeNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
+      deliveryType
     };
     this.setState(
       () => {
@@ -120,18 +153,20 @@ export default class SubscriptionList extends Component<any, any> {
             customerAccount: param.consumerAccount ? param.consumerAccount : '',
             customerName: param.consumerName ? param.consumerName : '',
             subscribeId: param.subscriptionNumber,
-            // subscribeIds: param.subscriptionNumber
-            //   ? [param.subscriptionNumber]
-            //   : [],
             cycleTypeId: param.frequency,
             subscribeStatus: param.status === 'all' ? '' : param.status,
             consigneeName: param.recipient ? param.recipient : '',
-            consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
+            // consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
             skuNo: param.skuCode ? param.skuCode : '',
             goodsName: param.productName ? param.productName : '',
             prescriberId: param.prescriberId ? param.prescriberId : '',
-            prescriberName: param.prescriberName ? param.prescriberName : ''
+            prescriberName: param.prescriberName ? param.prescriberName : '',
+            subscriptionType,
+            subscriptionPlanType,
+            phoneNum: param.phoneNum ? param.phoneNum : '',
+            consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
+            deliveryType
           }
         };
       },
@@ -147,7 +182,7 @@ export default class SubscriptionList extends Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           if (type === 'Frequency_day') {
             let frequencyList = [...res.context.sysDictionaryVOS];
             this.setState(
@@ -155,6 +190,15 @@ export default class SubscriptionList extends Component<any, any> {
                 frequencyList: frequencyList
               },
               () => this.querySysDictionary('Frequency_week')
+            );
+          }
+          if (type === 'Frequency_day_club') {
+            let frequencyList = [...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyListClub: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_week_club')
             );
           }
           if (type === 'Frequency_week') {
@@ -166,22 +210,33 @@ export default class SubscriptionList extends Component<any, any> {
               () => this.querySysDictionary('Frequency_month')
             );
           }
+          if (type === 'Frequency_week_club') {
+            let frequencyList = [...this.state.frequencyListClub, ...res.context.sysDictionaryVOS];
+            this.setState(
+              {
+                frequencyListClub: frequencyList
+              },
+              () => this.querySysDictionary('Frequency_month_club')
+            );
+          }
           if (type === 'Frequency_month') {
             let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
             this.setState({
               frequencyList: frequencyList
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
+          if (type === 'Frequency_month_club') {
+            let frequencyList = [...this.state.frequencyListClub, ...res.context.sysDictionaryVOS];
+            this.setState({
+              frequencyListClub: frequencyList
+            });
+          }
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => { });
   };
   //todo
-  _handleBatchExport = () => {};
+  _handleBatchExport = () => { };
   onTabChange = (key) => {
     this.setState(
       {
@@ -204,7 +259,7 @@ export default class SubscriptionList extends Component<any, any> {
       .getSubscriptionList(params)
       .then((data) => {
         let { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = {
             current: 1,
             pageSize: 10,
@@ -221,26 +276,49 @@ export default class SubscriptionList extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
 
+  getSubsrciptionPlanType = (subsriptionType) => {
+    const { subscriptionPlanTypeListClone } = this.state;
+    let newSubscriptionPlanTypeList = [];
+    if (subsriptionType) {
+      if (subsriptionType === 'ContractProduct') {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'SmartFeeder');
+      } else if (subsriptionType.indexOf('Club') >= 0) {
+        newSubscriptionPlanTypeList = subscriptionPlanTypeListClone.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+      }
+    } else {
+      this.setState({
+        subscriptionPlanType: ''
+      })
+    }
+    this.setState({
+      subscriptionPlanTypeList: newSubscriptionPlanTypeList
+    });
+  };
+
   render() {
-    const { searchForm, subscriptionOption, productOption, consumerOption, recipientOption, frequencyList, activeKey, prescriberOption, prescriberList } = this.state;
+    const { searchForm, subscriptionOption, productOption, consumerOption,phoneNumber,
+      recipientOption, frequencyOption, frequencyList, frequencyListClub, activeKey,
+      prescriberOption, prescriberList, subscriptionType,
+      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList,subscriptionDeliveryMethodList,deliveryType } = this.state;
+    // 将frequencyListClub和frequencyList存起来，以便导出页面使用
+    sessionStorage.setItem('frequencyList', JSON.stringify((frequencyList || []).map(item => ({ value: item.id, name: item.name }))));
+    sessionStorage.setItem('frequencyListClub', JSON.stringify((frequencyListClub || []).map(item => ({ value: item.id, name: item.name }))));
     const menu = (
       <Menu>
         <Menu.Item>
-          <AuthWrapper functionName="f_subscription_export">
-            <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
-            </a>
+          <AuthWrapper functionName="f_subscription_export_1">
+            <Link to="/batch-export/subscription-list" >
+              <FormattedMessage id="Subscription.batchExport" />
+            </Link>
           </AuthWrapper>
         </Menu.Item>
       </Menu>
@@ -249,12 +327,14 @@ export default class SubscriptionList extends Component<any, any> {
 
     const clinicsIds = JSON.parse(sessionStorage.getItem('s2b-employee@data')) ? JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds : null;
 
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+
     return (
       <AuthWrapper functionName="f_subscription_list">
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="subscriptionList" />} />
+            <Headline title={<FormattedMessage id="Subscription.SubscriptionList" />} />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
@@ -262,7 +342,7 @@ export default class SubscriptionList extends Component<any, any> {
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 170 }}
+                          style={styles.label}
                           defaultValue={searchForm.subscriptionOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -274,7 +354,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {subscriptionOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
                         </Select>
@@ -307,7 +387,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {productOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
                         </Select>
@@ -322,11 +402,56 @@ export default class SubscriptionList extends Component<any, any> {
                     />
                   </FormItem>
                 </Col>
+
                 <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Select
+                        style={styles.label}
+                        defaultValue={searchForm.frequencyOption}
+                        onChange={(value) => {
+                          value = value === '' ? null : value;
+                          this.onFormChange({
+                            field: 'frequencyOption',
+                            value
+                          });
+                        }}
+                      >
+                        {frequencyOption.map((item) => (
+                          <Option value={item} key={item}>
+                            {RCi18n({ id: 'Subscription.Frequency' })} ({RCi18n({ id: `Order.${item}` })})
+                          </Option>
+                        ))}
+                      </Select>
+                      <Select
+                        style={styles.newWrapper}
+                        allowClear
+                        value={searchForm.frequency}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value) => {
+                          this.onFormChange({
+                            field: 'frequency',
+                            value
+                          });
+                        }}
+                      >
+                        {(searchForm.frequencyOption === 'autoship' ? frequencyList : frequencyListClub).map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+
+                {/* <Col span={8}>
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={{ width: 110 }}>Frequency</p>}
+                      label={<p style={{ width: 110 }}><FormattedMessage id="Subscription.Frequency" /></p>}
                       style={{ width: 180 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -337,7 +462,7 @@ export default class SubscriptionList extends Component<any, any> {
                       }}
                     >
                       <Option value="">
-                        <FormattedMessage id="all" />
+                        <FormattedMessage id="Subscription.all" />
                       </Option>
                       {frequencyList &&
                         frequencyList.map((item, index) => (
@@ -347,14 +472,14 @@ export default class SubscriptionList extends Component<any, any> {
                         ))}
                     </SelectGroup>
                   </FormItem>
-                </Col>
+                </Col> */}
 
                 <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
                         <Select
-                          style={{ width: 170 }}
+                          style={styles.label}
                           defaultValue={searchForm.consumerOption}
                           onChange={(value) => {
                             value = value === '' ? null : value;
@@ -366,7 +491,7 @@ export default class SubscriptionList extends Component<any, any> {
                         >
                           {consumerOption.map((item) => (
                             <Option value={item} key={item}>
-                              {item}
+                              <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
                         </Select>
@@ -381,6 +506,7 @@ export default class SubscriptionList extends Component<any, any> {
                     />
                   </FormItem>
                 </Col>
+
                 <Col span={8}>
                   {/* todo */}
                   {this.state.isPrescriber ? (
@@ -389,7 +515,7 @@ export default class SubscriptionList extends Component<any, any> {
                         disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ? true : false}
                         value={clinicsIds ? prescriberType : searchForm.prescriber}
                         // value={searchForm.prescriber}
-                        label={<p style={styles.label}>Prescriber</p>}
+                        label={<p style={styles.label}><FormattedMessage id="Subscription.Prescriber" /></p>}
                         onChange={(value) => {
                           value = value === '' ? null : value;
                           this.onFormChange({
@@ -398,9 +524,9 @@ export default class SubscriptionList extends Component<any, any> {
                           });
                         }}
                       >
-                        <Option value="all">All</Option>
+                        <Option value="all"><FormattedMessage id="Subscription.all" /></Option>
                         {prescriberList &&
-                          prescriberList.map((item, index) => (
+                          prescriberList.map((item: any, index: any) => (
                             <Option value={item.id} key={index}>
                               {item.prescriberName}
                             </Option>
@@ -424,7 +550,7 @@ export default class SubscriptionList extends Component<any, any> {
                           >
                             {prescriberOption.map((item) => (
                               <Option value={item} key={item}>
-                                {item}
+                                <FormattedMessage id={`Subscription.${item}`} />
                               </Option>
                             ))}
                           </Select>
@@ -440,6 +566,130 @@ export default class SubscriptionList extends Component<any, any> {
                     </FormItem>
                   )}
                 </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.leftLabel} disabled defaultValue={RCi18n({ id: 'Order.subscriptionType' })} />
+                      <Select
+                        style={styles.newWrapper}
+                        dropdownMatchSelectWidth={false}
+                        allowClear
+                        value={subscriptionType}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value: any) => {
+                          this.setState({
+                            subscriptionType: value
+                          }, () => {
+                            this.getSubsrciptionPlanType(value);
+                          });
+                        }}
+                      >
+                        {subscriptionTypeList &&
+                          subscriptionTypeList.map((item, index) => (
+                            <Option value={item.value} title={item.name} key={index}>
+                              {item.name}
+                            </Option>
+                          ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                <Col span={8}>
+                  <FormItem>
+                    <InputGroup compact style={styles.formItemStyle}>
+                      <Input style={styles.leftLabel} title={RCi18n({ id: 'Order.subscriptionPlanType' })} disabled defaultValue={RCi18n({ id: 'Order.subscriptionPlanType' })} />
+                      <Select
+                        style={styles.newWrapper}
+                        allowClear
+                        value={subscriptionPlanType}
+                        // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onChange={(value) => {
+                          this.setState({
+                            subscriptionPlanType: value
+                          });
+                        }}
+                      >
+                        {subscriptionPlanTypeList &&
+                          subscriptionPlanTypeList.map((item, index) => (
+                            <Option value={item.value} title={item.name} key={index}>
+                              {item.name}
+                            </Option>
+                          ))}
+                      </Select>
+                    </InputGroup>
+                  </FormItem>
+                </Col>
+
+                {/* 根据电话号码搜索 */}
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                      addonBefore={
+                        <Select
+                          style={styles.label}
+                          defaultValue={searchForm.phoneNumber}
+                          onChange={(value:any) => {
+                            value = value === '' ? null : value;
+                            this.onFormChange({
+                              field: 'phoneNumber',
+                              value
+                            });
+                          }}
+                        >
+                          {phoneNumber.map((item: any) => (
+                            <Option title={item} value={item} key={item}>
+                              <FormattedMessage id={`Subscription.${item}`} />
+                            </Option>
+                          ))}
+                        </Select>
+                      }
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'phone',
+                          value
+                        });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
+
+                {/* Ru根据Delivery method搜索 */}
+                {
+                  storeId===123457907?(
+                    <Col span={8}>
+                      <FormItem>
+                        <InputGroup compact style={styles.formItemStyle}>
+                          <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.DeliveryMethods' })} disabled defaultValue={RCi18n({ id: 'Subscription.DeliveryMethods' })} />
+                          <Select
+                            style={styles.newWrapper}
+                            allowClear
+                            value={deliveryType}
+                            getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onChange={(value) => {
+                              this.setState({
+                                deliveryType: value
+                              });
+                            }}
+                          >
+                            {subscriptionDeliveryMethodList &&
+                            subscriptionDeliveryMethodList.map((item, index) => (
+                              <Option value={item.value} title={item.name} key={index}>
+                                {item.name}
+                              </Option>
+                            ))}
+                          </Select>
+                        </InputGroup>
+                      </FormItem>
+                    </Col>
+                  ):null
+                }
+
+
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
@@ -452,8 +702,8 @@ export default class SubscriptionList extends Component<any, any> {
                         this.onSearch();
                       }}
                     >
-                      <span>
-                        <FormattedMessage id="search" />
+                      <span className="portal_search_text">
+                        <FormattedMessage id="Subscription.search" />
                       </span>
                     </Button>
                   </FormItem>
@@ -491,56 +741,73 @@ export default class SubscriptionList extends Component<any, any> {
                   />
                 </FormItem> */}
             </Form>
+            <div className="handle-bar">
+              <Dropdown
+                overlay={menu}
+                placement="bottomLeft"
+                getPopupContainer={() =>
+                  document.getElementById('page-content')
+                }
+              >
+                <Button>
+                  <FormattedMessage id="order.bulkOperations" />{' '}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+            </div>
           </div>
           <div className="container">
-            {/* 
             <Spin spinning={this.state.loading}>
-              {/* 
-              <div className="handle-bar">
-                <Dropdown
-                  overlay={menu}
-                  placement="bottomLeft"
-                  getPopupContainer={() =>
-                    document.getElementById('page-content')
-                  }
-                >
-                  <Button>
-                    <FormattedMessage id="order.bulkOperations" />{' '}
-                    <Icon type="down" />
-                  </Button>
-                </Dropdown>
-              </div> */}
-
-            {/* <SearchList /> */}
-
-            <Tabs
-              onChange={(key) => {
-                this.onTabChange(key);
-              }}
-              activeKey={activeKey}
-            >
-              <Tabs.TabPane tab={<FormattedMessage id="all" />} key="all">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Active" key="0">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="Inactive" key="2">
-                <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
-              </Tabs.TabPane>
-            </Tabs>
+              <Tabs
+                onChange={(key) => {
+                  this.onTabChange(key);
+                }}
+                activeKey={activeKey}
+              >
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.all" />} key="all">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.Active" />} key="0">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.Inactive" />} key="2">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab={<FormattedMessage id="Subscription.Pause" />} key="1">
+                  <List data={this.state.subscriptionList} pagination={this.state.pagination} searchParams={this.state.searchParams} />
+                </Tabs.TabPane>
+              </Tabs>
+            </Spin>
           </div>
         </div>
       </AuthWrapper>
     );
   }
 }
+
+
 const styles = {
   label: {
-    width: 150,
-    textAlign: 'center'
+    width: 170,
   },
   wrapper: {
     width: 157
+  },
+  formItemStyle: {
+    width: 375
+  },
+
+  leftLabel: {
+    width: 170,
+    textAlign: 'left',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
+  },
+  newWrapper: {
+    width: 185
   }
 } as any;

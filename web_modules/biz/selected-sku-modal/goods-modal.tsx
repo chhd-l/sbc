@@ -5,9 +5,11 @@ import { message, Modal } from 'antd';
 
 import GoodsGrid from './goods-grid';
 import { IList } from '../../../typings/globalType';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
-export default class GoodsModal extends React.Component<any, any> {
+class GoodsModal extends React.Component<any, any> {
   props: {
+    intl;
     selectedSkuIds: IList;
     selectedRows: IList;
     visible: boolean;
@@ -58,9 +60,10 @@ export default class GoodsModal extends React.Component<any, any> {
       <Modal  maskClosable={false}
         title={
           <div>
-            Choose goods&nbsp;
+            <FormattedMessage id="Product.ChooseGoods"/>
+            &nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> items have been selected
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> <FormattedMessage id="Product.itemsHaveBeenSelected"/>
             </small>
           </div>
         }
@@ -70,7 +73,8 @@ export default class GoodsModal extends React.Component<any, any> {
           if (application === 'saleType') {
             onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
           } else if (skuLimit && selectedSkuIds.length > skuLimit) {
-            message.error('Choose up to 20 items');
+            message.error(`Choose up to ${skuLimit} items`);
+            // message.error('Choose up to 20 items');
           } else {
             onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
           }
@@ -104,3 +108,5 @@ export default class GoodsModal extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(GoodsModal)

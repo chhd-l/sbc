@@ -15,6 +15,11 @@ export default class HomeAuthActor extends Actor {
       transactionTrendView: '',
       trafficTrendDashboardView: '',
       conversionFunnelDashboardView: '',
+      taskEmployeeStatisticsView: [],
+      prescriberTradeTopView: '',
+      prescriberTradeItemTopView: '',
+      prescriberTradeAndItemTopView: '',
+      prescriberRecommentCodeUseView: '',
       search: '',
       searchData: '',
       selectSearchData: '',
@@ -23,7 +28,8 @@ export default class HomeAuthActor extends Actor {
       p_conversionFunnelDashboardView: '',
       p_trafficTrendDashboardView: '',
       p_transactionTrendView: '',
-      p_trafficDashboardView: ''
+      p_trafficDashboardView: '',
+      p_prescriberRecommentCodeUseView: '',
     };
   }
 
@@ -50,6 +56,12 @@ export default class HomeAuthActor extends Actor {
   trafficDashboardView(state: IMap, res) {
     return state.set('trafficDashboardView', res);
   }
+
+  @Action('home:taskEmployeeStatisticsView')
+  taskEmployeeStatisticsView(state: IMap, res) {
+    return state.set('taskEmployeeStatisticsView', res);
+  }
+
   @Action('home:transactionTrendView')
   transactionTrendView(state: IMap, res) {
     return state.set('transactionTrendView', res);
@@ -62,6 +74,24 @@ export default class HomeAuthActor extends Actor {
   conversionFunnelDashboardView(state: IMap, res) {
     return state.set('conversionFunnelDashboardView', res);
   }
+  @Action('home:prescriberTradeTopView')
+  prescriberTradeTopView(state: IMap, res) {
+    return state.set('prescriberTradeTopView', res);
+  }
+  @Action('home:prescriberTradeItemTopView')
+  prescriberTradeItemTopView(state: IMap, res) {
+    return state.set('prescriberTradeItemTopView', res);
+  }
+  @Action('home:prescriberTradeAndItemTopView')
+  prescriberTradeAndItemTopView(state: IMap, res) {
+    return state.set('prescriberTradeAndItemTopView', res);
+  }
+  @Action('home:prescriberRecommentCodeUseView')
+  prescriberRecommentCodeUseView(state: IMap, res) {
+    return state.set('prescriberRecommentCodeUseView', res);
+  }
+
+
 
   /*Prescriber*/
 
@@ -90,6 +120,12 @@ export default class HomeAuthActor extends Actor {
   p_trafficDashboardView(state: IMap, res) {
     return state.set('p_trafficDashboardView', res);
   }
+  @Action('prescriber:p_prescriberRecommentCodeUseView')
+  p_prescriberRecommentCodeUseView(state: IMap, res) {
+    return state.set('p_prescriberRecommentCodeUseView', res);
+  }
+
+
 
   @Action('home:search')
   search(state: IMap, res) {

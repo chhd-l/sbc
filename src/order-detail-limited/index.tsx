@@ -30,7 +30,7 @@ export default class OrderDetail extends React.Component<any, any> {
     if (this.state.loading) {
       return (
         <div style={styles.noBackgroundContainer}>
-          <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+          <Spin spinning={this.state.loading}></Spin>
         </div>
       );
     }
@@ -38,17 +38,17 @@ export default class OrderDetail extends React.Component<any, any> {
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{<FormattedMessage id="orderDetails" />}</Breadcrumb.Item>
+          <Breadcrumb.Item>{<FormattedMessage id="Order.OrderDetails" />}</Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title={<FormattedMessage id="orderDetails" />} />
+          <Headline title={<FormattedMessage id="Order.OrderDetails" />} />
         </div>
         <div className="container">
           <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
-            <Tabs.TabPane tab={<FormattedMessage id="orderDetails" />} key="1">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
               <OrderDetailTab />
             </Tabs.TabPane>
-            <Tabs.TabPane tab={<FormattedMessage id="deliveryRecord" />} key="2">
+            <Tabs.TabPane tab={<FormattedMessage id="Order.DeliveryRecord" />} key="2">
               <OrderDelivery />
             </Tabs.TabPane>
             {/* <Tabs.TabPane

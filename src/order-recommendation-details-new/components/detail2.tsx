@@ -6,7 +6,7 @@ import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
 
-import { cache, history, noop, SelectGroup } from 'qmkit';
+import { cache, history, noop, SelectGroup, RCi18n } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -55,11 +55,11 @@ export default class BillingDetailsNext extends React.Component<any, any> {
   render() {
     return (
       <div style={styles.main}>
-        <div style={styles.nav}>{history.location.state ? 'Recommended Product List' : 'Select Recommended Product'}</div>
+        <div style={styles.nav}>{history.location.state ? RCi18n({id:'Order.RecommendedProductList'}) : RCi18n({id:'Order.SelectRecommendedProduct'})}</div>
         <div style={styles.btn}>
           {history.location.state ? null : (
             <Button type="primary" shape="round" icon="edit" onClick={() => this.showProduct(true)} disabled={localStorage.getItem('enable') ? true : false}>
-              Add Product
+              {RCi18n({id:'Order.addProduct'})}
             </Button>
           )}
         </div>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
-import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table } from 'antd';
+import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Switch } from 'antd';
 import * as webapi from './webapi';
+import { getSubscriptionPlanTypes } from './../subscription-plan-update/webapi';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -15,9 +16,9 @@ export default class SubscriptionPlan extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Subscription Plan',
+      title: <FormattedMessage id="Subscription.SubscriptionPlan"/>,
       subscriptionForm: {},
-      typeList: ['Product'],
+      typeList: [],
       subscriptionPlanList: [],
       pagination: {
         current: 1,
@@ -27,12 +28,20 @@ export default class SubscriptionPlan extends Component<any, any> {
       loading: false
     };
 
-    this.handleTableChange = this.handleTableChange.bind(this);
-    this.getSubscriptionPlanList = this.getSubscriptionPlanList.bind(this);
+    // this.handleTableChange = this.handleTableChange.bind(this);
+    // this.getSubscriptionPlanList = this.getSubscriptionPlanList.bind(this);
   }
 
   componentDidMount() {
     this.getSubscriptionPlanList();
+    getSubscriptionPlanTypes().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          typeList: res.context.sysDictionaryVOS
+        });
+      }
+    });
   }
 
   onFormChange = ({ field, value }) => {
@@ -78,73 +87,127 @@ export default class SubscriptionPlan extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           pagination.total = res.context.total;
           this.setState({
-            subscriptionPlanList: res.context,
+            subscriptionPlanList: res.context.subscriptionPlanResponses || [],
             pagination: pagination,
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
+      .catch(() => {
         this.setState({
           loading: false
         });
       });
   };
+
+  setSubscriptionPlanEnableFlag = (id, enableFlag) => {
+    const { subscriptionPlanList } = this.state;
+    this.setState({ loading: true });
+    webapi
+      .setSubscriptionPlanEnableFlag(id, enableFlag)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          subscriptionPlanList.forEach((plan) => {
+            if (plan.id === id) {
+              plan.enableFlag = enableFlag;
+            }
+          });
+          this.setState({
+            subscriptionPlanList,
+            loading: false
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
   render() {
     const { title, typeList, subscriptionPlanList } = this.state;
     const columns = [
       {
-        title: 'Subscription Plan ID',
-        dataIndex: 'subscriptionPlanId',
-        key: 'subscriptionPlanId',
+        title: <FormattedMessage id="Subscription.SubscriptionPlanID"/>,
+        dataIndex: 'planId',
+        key: 'planId',
         width: '18%'
       },
       {
-        title: 'Subscription Plan Name',
-        dataIndex: 'name',
-        key: 'name',
+        title: <FormattedMessage id="Subscription.SubscriptionPlanName"/>,
+        dataIndex: 'planName',
+        key: 'planName',
         width: '18%'
       },
       {
-        title: 'Subscription Plan Type',
-        dataIndex: 'type',
-        key: 'type',
-        width: '18%'
+        title: <FormattedMessage id="Subscription.SubscriptionType"/>,
+        dataIndex: 'planType',
+        key: 'planType',
+        width: '12%'
       },
       {
-        title: 'Quantity',
+        title: <FormattedMessage id="Subscription.Quantity"/>,
         dataIndex: 'quantity',
         key: 'quantity',
         width: '8%'
       },
       {
-        title: 'Offer Time Period',
-        dataIndex: 'timePeriod',
+        title: <FormattedMessage id="Subscription.OfferTimePeriod"/>,
         key: 'timePeriod',
         width: '13%',
         render: (text, record) => moment(record.startDate).format('YYYY.MM.DD') + '-' + moment(record.endDate).format('YYYY.MM.DD')
       },
       {
-        title: 'Number of Delivery',
-        dataIndex: 'delivery',
-        key: 'delivery',
-        width: '13%'
+        title: <FormattedMessage id="Subscription.NumberOfDelivery"/>,
+        dataIndex: 'deliveryTimes',
+        key: 'deliveryTimes',
+        width: '10%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Subscription.Status"/>,
+        dataIndex: 'status',
+        key: 'status',
+        width: '7%',
+        render: (text) => (text === 0 ? <FormattedMessage id="Subscription.Draft"/> : <FormattedMessage id="Subscription.Publish"/>)
+      },
+      {
+        title: <FormattedMessage id="Subscription.Enable"/>,
+        dataIndex: 'enableFlag',
+        key: 'enable',
+        width: '8%',
+        render: (text, record) => (
+          <div>
+            <Switch
+              checked={text}
+              onChange={(value) => {
+                this.setSubscriptionPlanEnableFlag(record.id, value);
+              }}
+            />
+          </div>
+        )
+      },
+      {
+        title: <FormattedMessage id="Subscription.Operation"/>,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
-              <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit"></Link>
+            <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail"/>}>
+              <Link to={'/subscription-plan-detail/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
+            {record.status === 0 && (
+              <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit"/>}>
+                <Link to={'/subscription-plan-update/' + record.id} className="iconfont iconEdit" style={{ paddingLeft: 10 }}></Link>
+              </Tooltip>
+            )}
           </div>
         )
       }
@@ -159,11 +222,11 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan Name</p>}
+                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanName"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'name',
+                        field: 'planName',
                         value
                       });
                     }}
@@ -173,11 +236,11 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Subscription Plan ID</p>}
+                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanID"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
-                        field: 'id',
+                        field: 'planId',
                         value
                       });
                     }}
@@ -188,23 +251,23 @@ export default class SubscriptionPlan extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Subscription Plan Type</p>}
+                    label={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionType"/></p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
-                        field: 'consumerType',
+                        field: 'planType',
                         value
                       });
                     }}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Subscription.all" />
                     </Option>
                     {typeList &&
                       typeList.map((item, index) => (
-                        <Option value={item} key={index}>
-                          {item}
+                        <Option value={item.name} key={index}>
+                          {item.name}
                         </Option>
                       ))}
                   </SelectGroup>
@@ -225,7 +288,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Subscription.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -235,14 +298,14 @@ export default class SubscriptionPlan extends Component<any, any> {
         </div>
         <div className="container">
           <Button type="primary" htmlType="submit" style={{ marginBottom: '20px' }}>
-            <Link to={{ pathname: '/subscription-plan-add' }}>Add New Plan</Link>
+            <Link to={{ pathname: '/subscription-plan-add' }}><FormattedMessage id="Subscription.AddNewPlan"/></Link>
           </Button>
           <Table
             rowKey="id"
             columns={columns}
             dataSource={subscriptionPlanList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />

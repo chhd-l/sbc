@@ -1,12 +1,15 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
-import { login, cache, getRoutType } from 'qmkit';
+import { login, cache, getRoutType, Const, util } from 'qmkit';
 import { Row, Col, Spin } from 'antd';
 const bg_selectRole = require('../img/bg-SelectRole.jpg');
 const role_RC = require('../img/role-RC.png');
 const role_Perscriber = require('../img/role-Perscriber.png');
 let switchedRouter = false;
 import { switchRouter } from '@/index';
+import { FormattedMessage } from 'react-intl';
+
+import MyvetrecoLoginForm from '../../myvetreco-logins/login';
 
 let LoginHome = (props) => {
   let { authState, authService } = useOktaAuth();
@@ -22,7 +25,7 @@ let LoginHome = (props) => {
     switchRouter();
     switchedRouter = true;
   };
-
+ 
   useEffect(() => {
     if (!authState.isAuthenticated) {
       if (switchedRouter) {
@@ -44,35 +47,50 @@ let LoginHome = (props) => {
       login(routerType, authState.accessToken);
     }
   }, [authState, authService]);
-
   return (authState.isAuthenticated && sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)) || toOkta ? (
     <div>
       <div style={styles.noBackgroundContainer}>
-        <Spin spinning={true} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}></Spin>
+        <Spin spinning={true}></Spin>
       </div>
     </div>
-  ) : (
+  ) : Const.SITE_NAME === 'MYVETRECO' ? (<MyvetrecoLoginForm useOkta={true} onLogin={loginpPercriberOkta} />) : (
     <div>
       <div style={styles.container}>
         <Row style={{ top: '20px' }}>
           <Row style={styles.welcomeFont}>
-            Welcome to ROYALCANIN<span style={styles.logoR}>R</span> store portal
+            <FormattedMessage id="Public.WelcometoROYALCANIN" />
+            <span style={styles.logoR}>
+              <FormattedMessage id="Public.R" />
+            </span>{' '}
+            <FormattedMessage id="Public.storeportal" />
           </Row>
-          <Row style={styles.selectFont}>Please select your role:</Row>
+          <Row style={styles.selectFont}>
+            <FormattedMessage id="Public.Pleaseselectyourrole" />:
+          </Row>
           <Row style={{ marginTop: '40px' }}>
             <Col span={2}></Col>
             <Col span={9} style={styles.buttonContainer} onClick={loginpRcOkta}>
               <img style={styles.roleImg} src={role_RC} />
-              <div style={styles.roleWord}>RC Staff</div>
+              <div style={styles.roleWord}>
+                <FormattedMessage id="Public.RCStaff" />
+              </div>
             </Col>
             <Col span={2}></Col>
             <Col span={9} style={styles.buttonContainer} onClick={loginpPercriberOkta}>
               <img style={styles.roleImg} src={role_Perscriber} />
-              <div style={styles.roleWord}>Prescriber</div>
+              <div style={styles.roleWord}>
+                <FormattedMessage id="Public.Prescriber" />
+              </div>
             </Col>
             <Col span={2}></Col>
           </Row>
         </Row>
+      </div>
+      <div className="ot-sdk-show-settings-wrapper w-full">
+        <button id="ot-sdk-btn" className="ot-sdk-show-settings text-xs">
+          {' '}
+          Cookie Settings
+        </button>
       </div>
     </div>
   );

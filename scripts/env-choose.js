@@ -13,12 +13,9 @@ let questions = [
     message: '请选择环境------------>',
     choices: [
       { name: 'dev' },
-      { name: 'test1' },
-      { name: 'test2' },
-      { name: 'test3' },
-      { name: 'local' },
-      { name: 'prod' },
-      { name: 'dev:205' },
+      { name: 'stg' },
+      { name: 'prod_de' },
+      { name: 'prod_fa' },
     ],
   },
 ];
@@ -50,11 +47,7 @@ module.exports = () => {
 
 
 let portMap = {
-  prod: 3000,
-  test1: 3001,
   dev: 3002,
-  local: 3003,
-  "dev:205": 3005
 }
 
 // let nodeEnvMap={

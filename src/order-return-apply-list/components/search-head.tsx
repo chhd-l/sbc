@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import { Relax } from 'plume2';
 import {} from 'immutable';
 import { Form, Input, Select, Button, Row, Col } from 'antd';
-import { Headline, noop } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
-
+import { Headline, noop, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
+const InputGroup = Input.Group;
 
 /**
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
     relaxProps?: {
       onSearch: Function;
@@ -39,69 +39,91 @@ export default class SearchHead extends Component<any, any> {
       receiverSelectValue: ''
     };
   }
+  handleSearch = (e) => {
+    const { onSearch } = this.props.relaxProps;
+    e.preventDefault();
+    let { goodsOptions, buyerSelect, receiverSelect, id, goodsOptionsValue, buyerSelectValue, receiverSelectValue } = this.state;
+
+    let params = {
+      id,
+      [goodsOptions]: goodsOptionsValue,
+      [buyerSelect]: buyerSelectValue,
+      [receiverSelect]: receiverSelectValue
+    };
+
+    onSearch(params);
+  };
 
   render() {
-    const { onSearch, total } = this.props.relaxProps;
+    const { total } = this.props.relaxProps;
 
     return (
       <div>
-        <Headline
-          title={<FormattedMessage id="initiateApplication" />}
-          number={total.toString()}
-        />
+        <Headline title={<FormattedMessage id="Order.initiateApplication" />} number={total && total.toString()} />
 
         <div>
           <Form className="filter-content" layout="inline">
-            <Row id="input-lable-wwidth">
-              <Col span="8">
+            <Row>
+              <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={<FormattedMessage id="order.orderNumber" />}
-                    onChange={(e) => {
-                      this.setState({
-                        id: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.orderNumber'})} />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          id: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
-              {/*商品名称、SKU编码*/}
-              <Col span="8">
+              <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderGoodsOptionSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        goodsOptionsValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderGoodsOptionSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          goodsOptionsValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
-              {/*客户名称、客户账号*/}
-              <Col span="8">
+
+              <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderBuyerSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        buyerSelectValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderBuyerOptionSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          buyerSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
-              {/*收件人、收件人手机*/}
-              <Col span="8">
+
+              <Col span={8}>
                 <FormItem>
-                  <Input
-                    addonBefore={this._renderReceiverSelect()}
-                    onChange={(e) => {
-                      this.setState({
-                        receiverSelectValue: (e.target as any).value
-                      });
-                    }}
-                  />
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderReceiverSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          receiverSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
                 </FormItem>
               </Col>
               <Col span="24" style={{ textAlign: 'center' }}>
@@ -112,30 +134,12 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     icon="search"
                     onClick={(e) => {
-                      e.preventDefault();
-                      let {
-                        goodsOptions,
-                        buyerSelect,
-                        receiverSelect,
-                        id,
-                        goodsOptionsValue,
-                        buyerSelectValue,
-                        receiverSelectValue
-                      } = this.state;
-
-                      let params = {
-                        id,
-                        [goodsOptions]: goodsOptionsValue,
-                        [buyerSelect]: buyerSelectValue,
-                        [receiverSelect]: receiverSelectValue
-                      };
-
-                      onSearch(params);
+                      this.handleSearch(e);
                     }}
                   >
                     {
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="Order.search" />
                       </span>
                     }
                   </Button>
@@ -148,80 +152,122 @@ export default class SearchHead extends Component<any, any> {
     );
   }
 
-  /**
-   * 买家相关查询条件
-   * @returns {any}
-   * @private
-   */
-  _renderBuyerSelect = () => {
+  // order/subscription id
+
+  _renderNumberSelect = () => {
     return (
       <Select
-        getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(val) =>
+        onChange={(val, a) => {
           this.setState({
-            buyerSelect: val
-          })
-        }
-        value={this.state.buyerSelect}
-        style={{ width: 100 }}
+            numberSelect: val
+          });
+        }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.numberSelect}
+        style={styles.label}
       >
-        <Option value="buyerName">
-          {<FormattedMessage id="consumerName" />}
+        <Option title="Order number" value="orderNumber">
+          <FormattedMessage id="Order.orderNumber" />
         </Option>
-        <Option value="buyerAccount">
-          {<FormattedMessage id="consumerAccount" />}
+        <Option title="Subscriptio id" value="subscriptionNumber">
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
   };
 
-  /**
-   * 收件人相关查询条件
-   * @returns {any}
-   * @private
-   */
-  _renderReceiverSelect = () => {
-    return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(val) =>
-          this.setState({
-            receiverSelect: val
-          })
-        }
-        value={this.state.receiverSelect}
-        style={{ width: 100 }}
-      >
-        <Option value="consigneeName">
-          {<FormattedMessage id="recipient" />}
-        </Option>
-        <Option value="consigneePhone">
-          {<FormattedMessage id="recipientPhone" />}
-        </Option>
-      </Select>
-    );
-  };
+  //product 相关
 
-  /**
-   * 商品相关查询条件
-   * @returns {any}
-   * @private
-   */
   _renderGoodsOptionSelect = () => {
     return (
       <Select
-        getPopupContainer={() => document.getElementById('page-content')}
         onChange={(val) => {
           this.setState({
             goodsOptions: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.goodsOptions}
-        style={{ width: 100 }}
+        style={styles.label}
       >
-        <Option value="skuName">{<FormattedMessage id="productName" />}</Option>
-        <Option value="skuNo">{<FormattedMessage id="skuCode" />}</Option>
+        <Option title="Product name" value="skuName">
+          <FormattedMessage id="Order.productName" />
+        </Option>
+        <Option title="Sku code" value="skuNo">
+          <FormattedMessage id="Order.skuCode" />
+        </Option>
+      </Select>
+    );
+  };
+
+  // consumer 相关
+  _renderBuyerOptionSelect = () => {
+    return (
+      <Select
+        onChange={(value, a) => {
+          this.setState({
+            buyerSelect: value
+          });
+        }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.buyerSelect}
+        style={styles.label}
+      >
+        <Option title="Pet owner name " value="buyerName">
+          <FormattedMessage id="Order.consumerName" />
+        </Option>
+        <Option title="Pet owner account" value="buyerAccount">
+          <FormattedMessage id="Order.consumerAccount" />
+        </Option>
+      </Select>
+    );
+  };
+
+  // 收件人相关
+  _renderReceiverSelect = () => {
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            receiverSelect: val
+          })
+        }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
+        value={this.state.receiverSelect}
+        style={styles.label}
+      >
+        <Option title="Recipient" value="consigneeName">
+          <FormattedMessage id="Order.recipient" />
+        </Option>
+        <Option title="Recipient phone" value="consigneePhone">
+          <FormattedMessage id="Order.recipientPhone" />
+        </Option>
       </Select>
     );
   };
 }
+
+export default injectIntl(SearchHead)
+
+const styles = {
+  formItemStyle: {
+    width: 335
+  },
+  label: {
+    width: 135,
+    textAlign: 'center',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  leftLabel: {
+    width: 135,
+    textAlign: 'left',
+    color: 'rgba(0, 0, 0, 0.65)',
+    backgroundColor: '#fff',
+    cursor: 'text'
+  },
+  wrapper: {
+    width: 200
+  }
+} as any;

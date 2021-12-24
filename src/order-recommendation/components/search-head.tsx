@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, DatePicker, Row, Col, message, Cascader } from 'antd';
-import { noop, AuthWrapper, checkAuth, Headline, history, SelectGroup } from 'qmkit';
+import { noop, AuthWrapper, checkAuth, Headline, history,RCi18n, SelectGroup, Const } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -14,8 +14,9 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -83,7 +84,7 @@ export default class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -91,7 +92,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Order.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -123,7 +124,7 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore="Recommendation No"
+                    addonBefore={RCi18n({id:'Order.RecommendationNo'})}
                     onChange={(e) => {
                       this.setState({
                         recommendationId: (e.target as any).value
@@ -204,7 +205,6 @@ export default class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:
@@ -231,7 +231,6 @@ export default class SearchHead extends Component<any, any> {
                       // }
                       /* onChange={(e) => {
                         let a = e.target.value.split(',');
-                        console.log(a.map(Number), 111);
 
                         this.setState({
                           clinicSelectValue:
@@ -247,7 +246,7 @@ export default class SearchHead extends Component<any, any> {
 
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
-                  {sessionStorage.getItem('PrescriberType') != null ? (
+                  {sessionStorage.getItem('PrescriberType') != null || Const.SITE_NAME === 'MYVETRECO' ? (
                     <Button
                       type="primary"
                       icon="plus"
@@ -258,7 +257,9 @@ export default class SearchHead extends Component<any, any> {
                         history.push('/recomm-page-detail-new');
                       }}
                     >
-                      <span>New</span>
+                      <span>
+                        <FormattedMessage id="Order.New" />
+                      </span>
                     </Button>
                   ) : null}
 
@@ -277,13 +278,13 @@ export default class SearchHead extends Component<any, any> {
                         [goodsOptions == 'Product name' ? 'goodsInfoName' : 'goodsInfoNo']: goodsOptionsValue,
                         [receiverSelect]: receiverSelectValue,
                         [clinicSelect == 'clinicsName' ? 'prescriberName' : 'prescriberId']: clinicSelectValue,
-                        linkStatus
+                        //linkStatus
                       };
                       onSearch(params);
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -323,17 +324,21 @@ export default class SearchHead extends Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        defaultValue="Recipient name"
+        defaultValue={RCi18n({id:'Order.RecipientName'})}
         onChange={(value, a) => {
           this.setState({
             buyerOptions: value
           });
         }}
-        value={this.state.buyerOptions}
+        // value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="consumerName">Recipient name</Option>
-        <Option value="consumerEmail">Recipient mail</Option>
+        <Option value="consumerName">
+          <FormattedMessage id="Order.RecipientName" />
+        </Option>
+        <Option value="consumerEmail">
+          <FormattedMessage id="Order.RecipientMail" />
+        </Option>
       </Select>
     );
   };
@@ -346,12 +351,16 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
-        defaultValue="Product name"
-        value={this.state.goodsOptions}
+        defaultValue={RCi18n({id:'Order.Product Name'})}
+        // value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option value="goodsInfoName">Product name</Option>
-        <Option value="goodsInfoNo">Product SKU</Option>
+        <Option value="goodsInfoName">
+          <FormattedMessage id="Order.Product Name" />
+        </Option>
+        <Option value="goodsInfoNo">
+          <FormattedMessage id="Order.ProductSKU" />
+        </Option>
       </Select>
     );
   };
@@ -368,10 +377,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
     );
@@ -389,8 +398,12 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option value="clinicsName">Prescriber name</Option>
-        <Option value="clinicsIds">Prescriber id</Option>
+        <Option value="clinicsName">
+          <FormattedMessage id="Order.PrescriberName" />
+        </Option>
+        <Option value="clinicsIds">
+          <FormattedMessage id="Order.PrescriberId" />
+        </Option>
       </Select>
     );
   };
@@ -406,10 +419,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+          <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option value="subscriptionNumber">
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -427,10 +440,10 @@ export default class SearchHead extends Component<any, any> {
         style={styles.label}
       >
         <Option value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
         <Option value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -446,16 +459,18 @@ export default class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = (window as any).RCi18n({id:'Marketing.needsToBeOperated'});
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({id:'Order.audit'});
+    const content = (window as any).RCi18n({id:'Order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -467,13 +482,15 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export filtered orders',
-      byIdsTitle: 'Export selected order',
+      byParamsTitle: RCi18n({id:'Order.exportFilterOrder'}),
+      byIdsTitle: RCi18n({id:'Order.exportSelectedOrder'}),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   label: {

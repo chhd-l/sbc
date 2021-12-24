@@ -6,10 +6,12 @@ import GoodsActor from './actor/goods-actor';
 import FormActor from './actor/form-actor';
 import FreightActor from './actor/freight-actor';
 import { message } from 'antd';
-import { Const } from 'qmkit';
-import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight } from './webapi';
+import { Const, RCi18n } from 'qmkit';
+import { goodsList, spuDelete, spuOnSale, spuOffSale, getCateList, getProductCategories, getBrandList, freightList, goodsFreight, goodsFreightExpress, updateFreight, syncProductImage, syncProduct } from './webapi';
+import { intl  } from 'react-intl';
 
 import { IList } from 'typings/globalType';
+import React from "react";
 
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -34,35 +36,68 @@ export default class AppStore extends Store {
     }
   ) => {
     this.dispatch('info:setLoading', true);
-    const { res, err } = (await goodsList({
+    await Promise.all([
+      goodsList({
       pageNum,
       pageSize,
       auditStatus: this.state().get('auditStatus')
-    })) as any;
-    if (!err && res.code === Const.SUCCESS_CODE) {
-      res.context.goodsPage.content.forEach((v, i) => {
-        v.key = i;
-      });
-      this.dispatch('info:setLoading', false);
-      this.dispatch('goodsActor: init', fromJS(res.context));
-      this.dispatch('form:field', { key: 'pageNum', value: pageNum });
-    } else {
-      message.error(res.message);
-      this.dispatch('info:setLoading', false);
-    }
+    }),
+      getCateList(),
+      getProductCategories(),
+      getBrandList()]).then(results => {
+      const [res1,res2,res3,res4]: Array<any> = [results[0].res,results[1].res,results[2].res,results[3].res]
 
-    const cates: any = await getCateList();
-    const productCates: any = await getProductCategories();
-    const brands: any = await getBrandList();
-    this.transaction(() => {
-      this.dispatch('cateActor: init', fromJS(cates.res.context));
-      this.dispatch('goodsActor:getGoodsCate', fromJS(productCates.res.context));
-      this.dispatch('brandActor: init', fromJS(brands.res.context));
-    });
-
-    if (flushSelected) {
-      this.dispatch('goodsActor:clearSelectedSpuKeys');
-    }
+      if (res2 && res2.code === Const.SUCCESS_CODE) {
+        this.dispatch('cateActor: init', fromJS(res2.context ? res2.context : []));
+      }
+      if (res3 && res3.code === Const.SUCCESS_CODE) {
+        this.dispatch('goodsActor:getGoodsCate', fromJS(res3.context ? res3.context : []));
+      }
+      if (res4 && res4.code === Const.SUCCESS_CODE) {
+        this.dispatch('brandActor: init', fromJS(res4.context? res4.context: []));
+      }
+      if (res1.code === Const.SUCCESS_CODE) {
+        res1.context.goodsPage.content.forEach((v, i) => {
+          v.key = i;
+        });
+        this.dispatch('info:setLoading', false);
+        this.dispatch('goodsActor: init', fromJS(res1.context));
+        this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+      } else {
+        this.dispatch('info:setLoading', false);
+      }
+      if (flushSelected) {
+        this.dispatch('goodsActor:clearSelectedSpuKeys');
+      }
+    })
+    // const { res, err } = (await goodsList({
+    //   pageNum,
+    //   pageSize,
+    //   auditStatus: this.state().get('auditStatus')
+    // })) as any;
+    // if (!err && res.code === Const.SUCCESS_CODE) {
+    //   res.context.goodsPage.content.forEach((v, i) => {
+    //     v.key = i;
+    //   });
+    //   this.dispatch('info:setLoading', false);
+    //   this.dispatch('goodsActor: init', fromJS(res.context));
+    //   this.dispatch('form:field', { key: 'pageNum', value: pageNum });
+    // } else {
+    //   this.dispatch('info:setLoading', false);
+    // }
+    //
+    // const cates: any = await getCateList();
+    // const productCates: any = await getProductCategories();
+    // const brands: any = await getBrandList();
+    // this.transaction(() => {
+    //   this.dispatch('cateActor: init', fromJS(cates.res.context));
+    //   this.dispatch('goodsActor:getGoodsCate', fromJS(productCates.res.context));
+    //   this.dispatch('brandActor: init', fromJS(brands.res.context));
+    // });
+    //
+    // if (flushSelected) {
+    //   this.dispatch('goodsActor:clearSelectedSpuKeys');
+    // }
   };
 
   /**
@@ -70,6 +105,8 @@ export default class AppStore extends Store {
    */
   onSearch = async () => {
     this.dispatch('form:field', { key: 'pageNum', value: 0 });
+    //message.error(`<FormattedMessage id="Public.Overview" />`);
+   // this.intl.get("Public.Overview")
     this.onPageSearch();
   };
 
@@ -169,14 +206,31 @@ export default class AppStore extends Store {
     this.onSearch();
   };
 
+  spuSyncImage = async (ids: string[]) => {
+    if (!ids) {
+      const selectedSpuKeys: IList = this.state().get('selectedSpuKeys');
+      ids = selectedSpuKeys.toJS();
+    }
+
+    const data: any = await syncProductImage({ goodsIds: ids });
+    if (data.res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({id:'Product.SynchronizeTips'}));
+    }
+  }
+
+  spuSyncText = async () => {
+    const data: any = await syncProduct();
+    if (data.res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({id:'Product.SynchronizeTips'}));
+    }
+  }
+
   /**
    * tip
    */
   message = (data: any) => {
     if (data.res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-    } else {
-      message.error(data.res.code);
+      message.success(RCi18n({id:'Product.OperateSuccessfully'}));
     }
   };
   /**
@@ -199,7 +253,6 @@ export default class AppStore extends Store {
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('freight:freightList', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -214,13 +267,11 @@ export default class AppStore extends Store {
         if (result.res.code === Const.SUCCESS_CODE) {
           this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
         } else {
-          message.error(result.res.message);
         }
       } else {
         this.dispatch('freight:freightTemp', fromJS(res.context));
       }
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -234,12 +285,11 @@ export default class AppStore extends Store {
     };
     const { res, err } = (await updateFreight(param)) as any;
     if (!err && res.code === Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Product.OperateSuccessfully'}));
       this.setFeightVisible(false);
       this.setFreightTempId(null);
       this.dispatch('goodsActor:clearSelectedSpuKeys');
     } else {
-      message.error(res.message);
     }
   };
 }

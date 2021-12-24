@@ -167,7 +167,7 @@ export default class DownloadModal extends React.Component<ModalProps, any> {
         //   },
         // });
       } else {
-        message.error(res.message);
+       
       }
     }
   };

@@ -11,7 +11,7 @@ import './index.less';
  * 退单列表
  */
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class OrderReturnList extends React.Component<any, any> {
+export default class Order extends React.Component<any, any> {
   store: AppStore;
 
   constructor(props) {
@@ -28,7 +28,7 @@ export default class OrderReturnList extends React.Component<any, any> {
 
   render() {
     return (
-      <AuthWrapper functionName="rolf001">
+      <AuthWrapper functionName="f_retrun_detail">
         <div className="order-con">
           <BreadCrumb />
           {/* <Breadcrumb separator=">">

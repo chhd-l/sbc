@@ -199,7 +199,7 @@ export function addUser(employee) {
   return Fetch<TResult>('/customer/employee', {
     method: 'POST',
     body: JSON.stringify(employee)
-  });
+  }, { isHandleResult: true, customerTip: true });
 }
 
 export function updateUser(employee) {
@@ -210,7 +210,9 @@ export function updateUser(employee) {
 }
 
 export function getAllRoles() {
-  return Fetch('/customer/employee/roles');
+  return Fetch<TResult>('/customer/employee/roles', {
+    method: 'GET'
+  });
 }
 
 export function auditEmployee(employeeIds: string[], accountState: Number) {
@@ -246,3 +248,20 @@ export function queryCityListByName(filterParams = {}) {
     })
   });
 }
+
+export function fetchAllRoles() {
+  return Fetch<TResult>('/customer/employee/roles');
+}
+
+export function generateRecommendationCode(filterParams = {}) {
+  return Fetch<TResult>('/prescriber/generateRecommendationCode', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+
+
+

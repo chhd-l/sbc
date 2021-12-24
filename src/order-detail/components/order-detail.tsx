@@ -1,54 +1,32 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
-import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tag, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, cache, util } from 'qmkit';
-import { fromJS, Map, List } from 'immutable';
+import { Col, Form, Input, Modal, Row, Table, Tooltip } from 'antd';
+import {
+  AuthWrapper,
+  Const,
+  noop,
+  cache,
+  getOrderStatusValue,
+  getFormatDeliveryDateStr,
+  RCi18n,
+  checkAuth, util
+} from 'qmkit';
+import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
-
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import PetItem from '@/customer-details/component/pet-item';
+import OrderMoreFields from './order_more_field';
+import './style.less';
+import { Consignee, Invoice } from '@/order-detail/components/type';
 
-const invoiceContent = (invoice) => {
-  let invoiceContent = '';
+const orderTypeList = [
+  { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
+  { value: 'SUBSCRIPTION', name: 'Subscription' },
+  { value: 'MIXED_ORDER', name: 'Mixed Order' }
+];
 
-  if (invoice.type == '0') {
-    invoiceContent += 'general invoice';
-  } else if (invoice.type == '1') {
-    invoiceContent += '增值税专用发票';
-  } else if (invoice.type == '-1') {
-    invoiceContent += '不需要发票';
-    return invoiceContent;
-  }
-
-  invoiceContent += ' ' + (invoice.projectName || '');
-
-  if (invoice.type == 0 && invoice.generalInvoice.flag) {
-    invoiceContent += ' ' + (invoice.generalInvoice.title || '');
-    invoiceContent += ' ' + invoice.generalInvoice.identification;
-  } else if (invoice.type == 1 && invoice.specialInvoice) {
-    invoiceContent += ' ' + invoice.specialInvoice.companyName;
-    invoiceContent += ' ' + invoice.specialInvoice.identification;
-  }
-  return invoiceContent;
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return 'Pending review';
-  } else if (status == 'GROUPON') {
-    return 'To be formed';
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return 'to be delivered';
-  } else if (status == 'DELIVERED') {
-    return 'To be received';
-  } else if (status == 'CONFIRMED') {
-    return 'Received';
-  } else if (status == 'COMPLETED') {
-    return 'Completed';
-  } else if (status == 'VOID') {
-    return 'Out of date';
-  }
-};
+const showRealStock = false && checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
 
 /**
  * 拒绝表单，只为校验体验
@@ -56,7 +34,6 @@ const flowState = (status) => {
 class RejectForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
-
     return (
       <Form>
         <FormItem>
@@ -64,15 +41,19 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
-              // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(
+            <Input.TextArea
+              placeholder={(window as any).RCi18n({ id: 'Order.RejectionReasonTip' })}
+              autosize={{ minRows: 4, maxRows: 4 }}
+            />
+          )}
         </FormItem>
       </Form>
     );
@@ -83,36 +64,32 @@ class RejectForm extends React.Component<any, any> {
       callback();
       return;
     }
-
     if (value.length > 100) {
-      callback(new Error('Enter up to 100 characters'));
+      callback(new Error((window as any).RCi18n({ id: 'Order.100charactersLimitTip' })));
       return;
     }
     callback();
   };
 }
 
-const WrappedRejectForm = Form.create()(RejectForm);
+const WrappedRejectForm = Form.create()(injectIntl(RejectForm));
 
 /**
  * 订单详情
  */
 @Relax
-export default class OrderDetailTab extends React.Component<any, any> {
+class OrderDetailTab extends React.Component<any, any> {
   onAudit: any;
   _rejectForm;
 
   props: {
+    intl?: any;
     relaxProps?: {
       detail: IMap;
       countryDict: List<any>;
-      cityDict: List<any>;
       onAudit: Function;
       confirm: Function;
       retrial: Function;
-      sellerRemarkVisible: boolean;
-
-      setSellerRemarkVisible: Function;
       remedySellerRemark: Function;
       setSellerRemark: Function;
       verify: Function;
@@ -120,356 +97,542 @@ export default class OrderDetailTab extends React.Component<any, any> {
       orderRejectModalVisible: boolean;
       showRejectModal: Function;
       hideRejectModal: Function;
+      refreshGoodsRealtimeStock: Function;
     };
   };
 
   static relaxProps = {
     detail: 'detail',
     countryDict: 'countryDict',
-    cityDict: 'cityDict',
     onAudit: noop,
     confirm: noop,
     retrial: noop,
-    sellerRemarkVisible: 'sellerRemarkVisible',
-
     orderRejectModalVisible: 'orderRejectModalVisible',
-    setSellerRemarkVisible: noop,
     remedySellerRemark: noop,
     setSellerRemark: noop,
     verify: noop,
     onDelivery: noop,
     showRejectModal: noop,
-    hideRejectModal: noop
+    hideRejectModal: noop,
+    refreshGoodsRealtimeStock: noop
   };
   state = {
     visiblePetDetails: false,
-    havePet: false,
-    currentPetInfo: {
-      petsName: '',
-      birthOfPets: '',
-      petsBreed: '',
-      petsSex: 0,
-      petsType: '',
-      petsSizeValueName: '',
-      customerPetsPropRelations: []
-    }
+    moreData: [],
+    visibleMoreFields: false,
+    currentPet: {},
+    tableLoading: false
   };
 
   render() {
-    const { currentPetInfo, havePet } = this.state;
-    const { detail, countryDict, cityDict, orderRejectModalVisible } = this.props.relaxProps;
+    const { currentPet } = this.state;
+    const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
-    let orderSource = detail.get('orderSource');
-    let orderType = '';
-    if (orderSource == 'WECHAT') {
-      orderType = 'H5 Order';
-    } else if (orderSource == 'APP') {
-      orderType = 'APP Order';
-    } else if (orderSource == 'PC') {
-      orderType = 'PC Order';
-    } else if (orderSource == 'LITTLEPROGRAM') {
-      orderType = '小程序订单';
-    } else {
-      orderType = '代客下单';
-    }
-    const tradeItems = detail.get('tradeItems').toJS();
-    //赠品信息
+    const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
+    //订阅赠品信息
+    let giftList = detail.get('subscriptionPlanGiftList')
+      ? detail.get('subscriptionPlanGiftList').toJS()
+      : [];
+    giftList = giftList.map((gift) => {
+      let tempGift = {
+        skuNo: gift.goodsInfoNo,
+        skuName: gift.goodsInfoName,
+        num: gift.quantity,
+        originalPrice: 0,
+        price: 0,
+        isGift: true
+      };
+      return tempGift;
+    });
+    //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
-    const tradePrice = detail.get('tradePrice').toJS() as any;
+    gifts = gifts
+      .map((gift) =>
+        gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
+      )
+      .toJS();
+
+    const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
     //收货人信息
-    const consignee = detail.get('consignee').toJS() as {
-      detailAddress: string;
-      name: string;
-      phone: string;
-      countryId: string;
-      cityId: number;
-      address: string;
-      detailAddress1: string;
-      detailAddress2: string;
-      rfc: string;
-      postCode: string;
-    };
+    const consignee = detail.get('consignee')
+      ? (detail.get('consignee').toJS() as Consignee | null)
+      : {
+        detailAddress: '',
+        name: '',
+        phone:'',
+        countryId: '',
+        country: '',
+        city: '',
+        province: '',
+        county: '',
+        cityId: '',
+        address: '',
+        detailAddress1: '',
+        detailAddress2: '',
+        rfc: '',
+        postCode: '',
+        firstName: '',
+        lastName: '',
+        comment: '',
+        entrance: '',
+        apartment: '',
+        area: '',
+        timeSlot: '',
+        deliveryDate: '',
+        workTime:'',
+      };
 
     //发票信息
-    const invoice = detail.get('invoice')
-      ? (detail.get('invoice').toJS() as {
-          open: boolean; //是否需要开发票
-          type: number; //发票类型
-          title: string; //发票抬头
-          projectName: string; //开票项目名称
-          generalInvoice: IMap; //普通发票
-          specialInvoice: IMap; //增值税专用发票
-          address: string;
-          address1: string;
-          address2: string;
-          contacts: string; //联系人
-          phone: string; //联系方式
-          provinceId: number;
-          cityId: number;
-          countryId: number;
-        })
-      : null;
+    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : {
+      open: '',
+      type: '',
+      title: '',
+      projectName: '',
+      address:'',
+      address1: '',
+      address2: '',
+      contacts: '',
+      phone: '',
+      provinceId: '',
+      cityId:'',
+      province: '',
+      county: '',
+      countryId: '',
+      country: '',
+      firstName: '',
+      lastName:'',
+      postCode: '',
+      city: '',
+      comment: '',
+      entrance: '',
+      apartment:'',
+      area: '',
+    };
 
-    //附件信息
-    const encloses = detail.get('encloses') ? detail.get('encloses').split(',') : [];
-    const enclo = fromJS(
-      encloses.map((url, index) =>
-        Map({
-          uid: index,
-          name: index,
-          size: 1,
-          status: 'done',
-          url: url
-        })
-      )
-    );
     //交易状态
     const tradeState = detail.get('tradeState');
+    //是否能下载发票
+    const canDownInvoice =
+      (tradeState.get('deliverStatus') === 'SHIPPED' ||
+        tradeState.get('deliverStatus') === 'DELIVERED') &&
+      tradeState.get('invoiceState') === 1;
 
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
-    const reduction = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 0);
-    const discount = tradePrice.discountsPriceDetails.find((item) => item.marketingType == 1);
     tradeItems.forEach((tradeItems) => {
       if (tradeItems.isFlashSaleGoods) {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
+    let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
+    const installmentPrice = tradePrice.installmentPrice;
+
+    const deliverWay = detail.get('deliverWay');
+    const deliveryMethod =
+      deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
+    const addressHour =
+      deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
+    const address1 = consignee.detailAddress1 + ' ' + (addressHour || '');
+
     const columns = [
       {
-        title: 'SKU Code',
+        title: <FormattedMessage id="Order.SKUcode" />,
         dataIndex: 'skuNo',
         key: 'skuNo',
-        render: (text) => text
+        render: (text) => text,
+        width: '9%'
       },
       {
-        title: 'Product Name',
+        title: <FormattedMessage id="Order.externalSKuCode" />,
+        dataIndex: 'externalSkuNo',
+        key: 'externalSkuNo',
+        render: (text) => text,
+        width: '9%'
+      },
+      {
+        title: <FormattedMessage id="Order.Productname" />,
         dataIndex: 'skuName',
         key: 'skuName',
-        width: '50%'
+        width: '9%',
+        render: (text, record) => {
+          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
+          return (
+            <Tooltip
+              overlayStyle={{
+                overflowY: 'auto'
+              }}
+              placement="bottomLeft"
+              title={<div>{productName}</div>}
+            >
+              <p className="overFlowtext" style={{ width: 100 }}>
+                {productName}
+              </p>
+            </Tooltip>
+          );
+        }
       },
       {
-        title: 'Weight',
+        title: storeId === 123457934 ? <FormattedMessage id="Order.Specification" /> : <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
-        key: 'specDetails'
+        key: 'specDetails',
+        width: '9%'
       },
       {
-        title: 'Pet category',
-        dataIndex: 'petCategory',
-        key: 'petCategory',
-        width: '10%',
-        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsType ? <p>{record.petsInfo.petsType}</p> : null}</>
+        title: showRealStock ? (
+          <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
+        ) : (
+          <FormattedMessage id="Order.Quantity" />
+        ),
+        dataIndex: 'num',
+        key: 'num',
+        width: '6%',
+        render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
-        title: 'Pet name',
-        dataIndex: 'petName',
-        key: 'petName',
-        width: '10%',
-        render: (text, record) => <>{record.petsInfo && record.petsInfo.petsName ? <p>{record.petsInfo.petsName}</p> : null}</>
+        title: <FormattedMessage id="Order.Price" />,
+        dataIndex: 'originalPrice',
+        key: 'originalPrice',
+        width: '8%',
+        render: (originalPrice, record) =>
+          record.subscriptionPrice > 0 &&
+            record.subscriptionStatus === 1 &&
+            record.isSuperimposeSubscription === 1 ? (
+            <div>
+              <span>
+                {this._handlePriceFormat(
+                  record.subscriptionPrice,
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
+              </span>
+              <br />
+              <span style={{ textDecoration: 'line-through' }}>
+                {this._handlePriceFormat(
+                  originalPrice,
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
+              </span>
+            </div>
+          ) : (
+            <span>
+              {this._handlePriceFormat(
+                originalPrice,
+                detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+              )}
+            </span>
+          )
       },
       {
-        title: 'Pet details',
-        dataIndex: 'petDetails',
-        key: 'petDetails',
-        width: '10%',
+        title: <FormattedMessage id="Order.Subtotal" />,
+        width: '8%',
+        render: (row) => <span>{this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}</span>
+      },
+      {
+        title: <FormattedMessage id="Order.purchaseType" />,
+        dataIndex: 'goodsInfoFlag',
+        key: 'goodsInfoFlag',
+        width: '7%',
+        render: (text) => {
+          switch (text) {
+            case 0:
+              return <FormattedMessage id="Order.SinglePurchase" />;
+            case 1:
+              return <FormattedMessage id="Order.autoship" />;
+            case 2:
+              return <FormattedMessage id="Order.club" />;
+            case 4:
+              return <FormattedMessage id="Order.peawee" />;
+          }
+        }
+      },
+      {
+        title: <FormattedMessage id="Order.Subscriptionumber" />,
+        dataIndex: 'subscriptionSourceList',
+        key: 'subscriptionSourceList',
+        width: '9%',
+        render: (text, record) =>
+          record.subscriptionSourceList && record.subscriptionSourceList.length > 0
+            ? record.subscriptionSourceList.map((x) => x.subscribeId).join(',')
+            : null
+      },
+      {
+        title: <FormattedMessage id="Order.petName" />,
+        dataIndex: 'petsName',
+        key: 'petsName',
+        width: '6%',
         render: (text, record) => (
-          <>
-            {record.petsInfo ? (
-              <Button type="link" onClick={() => this._openPetDetails(record.petsInfo)}>
-                view
-              </Button>
-            ) : null}
-          </>
+          <a onClick={() => this._openPetDetails(record.petsInfo)}>
+            {record.petsInfo ? record.petsInfo.petsName : ''}
+          </a>
         )
       },
       {
-        title: 'Quantity',
-        dataIndex: 'num',
-        key: 'num'
-      },
-      {
-        title: 'Price',
-        dataIndex: 'originalPrice',
-        key: 'originalPrice',
-        render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
-            <div>
-              <span>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
-              </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
-              </span>
-            </div>
-          ) : (
-            <span>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
-            </span>
-          )
-      },
-      {
-        title: 'Subtotal',
-        render: (row) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}
-          </span>
-        )
+        title: '',
+        width: '8%',
+        render: (text, record) => {
+          return record.isGift ? null : (
+            <a onClick={() => this._openMoreFields(record)}>
+              {' '}
+              <FormattedMessage id="more" />
+            </a>
+          );
+        }
       }
     ];
+    //ru
+    if (storeId !== 123457934) {
+      columns.splice(
+        7,
+        0,
+        {
+          title: <FormattedMessage id="Order.RegulationDiscount" />,
+          width: '8%',
+          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
+        },
+        {
+          title: <FormattedMessage id="Order.RealSubtotal" />,
+          width: '7%',
+          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
+        }
+      );
+    }
 
-    const columnsNoPet = [
-      {
-        title: 'SKU Code',
-        dataIndex: 'skuNo',
-        key: 'skuNo',
-        render: (text) => text
-      },
-      {
-        title: 'Product Name',
-        dataIndex: 'skuName',
-        key: 'skuName',
-        width: '20%'
-      },
-      {
-        title: 'Weight',
-        dataIndex: 'specDetails',
-        key: 'specDetails'
-      },
-      // {
-      //   title: 'Price',
-      //   dataIndex: 'levelPrice',
-      //   key: 'levelPrice',
-      //   render: (levelPrice) => (
-      //     <span>
-      //       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-      //       {levelPrice && levelPrice.toFixed(2)}
-      //     </span>
-      //   )
-      // },
-      {
-        title: 'Quantity',
-        dataIndex: 'num',
-        key: 'num'
-      },
-      {
-        title: 'Price',
-        dataIndex: 'originalPrice',
-        key: 'originalPrice',
-        render: (originalPrice, record) =>
-          record.subscriptionPrice > 0 && record.subscriptionStatus === 1 ? (
-            <div>
-              <span>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {record.subscriptionPrice.toFixed(2)}
-              </span>
-              <span style={{ textDecoration: 'line-through', marginLeft: '8px' }}>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {originalPrice && originalPrice.toFixed(2)}
-              </span>
-            </div>
-          ) : (
-            <span>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              {originalPrice && originalPrice.toFixed(2)}
-            </span>
-          )
-      },
-      {
-        title: 'Subtotal',
-        render: (row) => (
-          <span>
-            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {row.price.toFixed(2)}
-            {/*{(row.num * (row.subscriptionPrice > 0 ? row.subscriptionPrice : row.levelPrice)).toFixed(2)}*/}
-          </span>
-        )
-      }
-    ];
+
+    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
+
     return (
-      <div>
-        <div style={styles.headBox as any}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
-            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
-
-            {this._renderBtnAction(tid)}
+      <div className="orderDetail">
+        <div className="display-flex direction-row justify-between mb-20">
+          <div>
+            <label style={styles.greenText}>
+              <FormattedMessage
+                id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
+              />
+            </label>
+            {canDownInvoice ? (
+              <a className="ml-20" onClick={() => {this._handleDownInvoice(detail)}}>
+                <FormattedMessage id="Download invoice" />
+              </a>
+            ) : null}
           </div>
-          <Row>
-            <Col span={8}>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="orderNumber" />}: {detail.get('id')} {/*{detail.get('platform') != 'CUSTOMER' && (*/}
-                {/*<span style={styles.platform}>代下单</span>*/}
-                {/* <span style={styles.platform}>{orderType}</span> */}
-                {detail.get('grouponFlag') && <span style={styles.platform}>拼团</span>}
-                {/*)}*/}
+          {this._renderBtnAction(tid)}
+        </div>
+        <Row gutter={30}>
+          {/*order panel*/}
+          <Col span={12}>
+            <div className="headBox">
+              <h4>
+                <FormattedMessage id="Order.delivery.Order" />
+              </h4>
+              <Row>
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{detail.get('id')}{detail.get('goodWillFlag') === 1 ? (
+                      <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      ):''}</div>}
+                  >
+                    <p className="overFlowtext">
+                      {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
+                      {detail.get('goodWillFlag') === 1 && (
+                        <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                      )}
+                    </p>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.ExternalOrderId" />:{' '}
+                    {detail.getIn(['tradeOms', 'orderNo'])}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.OrderStatus" />:{' '}
+                    <FormattedMessage
+                      id={getOrderStatusValue(
+                        'OrderStatus',
+                        detail.getIn(['tradeState', 'flowState'])
+                      )}
+                    />
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.orderType" />:{' '}
+                    {orderDetailType ? orderDetailType.name : ''}
+                  </p>
+                </Col>
+                <Col span={12}>
+                  <p>
+                    <FormattedMessage id="Order.OrderTime" />:{' '}
+                    {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.orderSource" />: {detail.get('orderSource')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.paymentMethod" />:{' '}
+                    {detail.get('paymentMethodNickName')}
+                  </p>
+                </Col>
+              </Row>
+            </div>
+          </Col>
+          {/*PetOwner panel*/}
+          <Col span={12}>
+            <div className="headBox">
+              <h4>
+                <FormattedMessage id="Order.PetOwner" />
+              </h4>
+              <p>
+                <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
               </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="orderTime" />}: {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
+              <p>
+                <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
-              {detail.get('isAutoSub') ? (
-                <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
-                </p>
-              ) : (
-                ''
-              )}
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicID" />}: {detail.get('clinicsId')}
+              <p>
+                <FormattedMessage id="Order.Petowneraccount" />:{' '}
+                {detail.getIn(['buyer', 'account'])}
               </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="clinicName" />}: {detail.get('clinicsName')}
-              </p>
-            </Col>
-            <Col span={8}>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="consumerAccount" />}: {detail.getIn(['buyer', 'account'])}
-              </p>
-              {detail.getIn(['buyer', 'customerFlag']) && (
-                <p style={styles.darkText}>
-                  {/* {(util.isThirdStore()
-                    ? 'Consumer Level:  '
-                    : 'Platform Level:  ') +
-                    detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
-                </p>
-              )}
-              <p style={styles.darkText}>
-                {<FormattedMessage id="phoneNumber" />}: {detail.getIn(['consignee', 'phone'])}
-              </p>
-              {/* <p style={styles.darkText}>
-                {<FormattedMessage id="recommenderId" />}: {detail.get('recommenderId')}
-              </p>
-              <p style={styles.darkText}>
-                {<FormattedMessage id="recommenderName" />}: {detail.get('recommenderName')}
-              </p> */}
+            </div>
+          </Col>
+        </Row>
+
+        {/*Subscription panel*/}
+        {detail.get('subscribeId') ||
+          detail.get('clinicsId') ||
+          firstTradeItems.recommendationId ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            {detail.get('subscribeId') ? (
+              <Col span={12} style={{ alignSelf: 'flex-start' }}>
+                <div className="headBox" style={{ height: 120 }}>
+                  <h4>
+                    <FormattedMessage id="Order.subscription" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionType" />:{' '}
+                    {detail.get('subscriptionTypeQuery')
+                      ? detail.get('subscriptionTypeQuery').replace('_', ' & ')
+                      : ''}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionPlanType" />:{' '}
+                    {detail.get('subscriptionPlanType')}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
+
+            {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+              <Col span={12}>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.partner" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommenderid" />:{' '}
+                    {firstTradeItems.recommendationId}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommendername" />:{' '}
+                    {firstTradeItems.recommendationName}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
+
+            {((detail.get('subscribeId') &&
+              !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+              (!detail.get('subscribeId') &&
+                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+              showRealStock ? (
+              <Col span={12}>
+                <AuthWrapper functionName="fOrderDetail001">
+                  <div
+                    style={{
+                      color: '#E1021A',
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textDecoration: 'underline',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => this._refreshRealtimeStock(tid)}
+                  >
+                    Real-time stock
+                  </div>
+                </AuthWrapper>
+              </Col>
+            ) : null}
+          </Row>
+        ) : null}
+
+        {((detail.get('subscribeId') &&
+          (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+          (!detail.get('subscribeId') &&
+            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+          showRealStock ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Col span={24}>
+              <AuthWrapper functionName="fOrderDetail001">
+                <div
+                  style={{
+                    color: '#E1021A',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => this._refreshRealtimeStock(tid)}
+                >
+                  Real-time stock
+                </div>
+              </AuthWrapper>
             </Col>
           </Row>
-        </div>
+        ) : null}
 
-        <div
-          style={{
-            display: 'flex',
-            marginTop: 20,
-            flexDirection: 'column',
-            wordBreak: 'break-word'
-          }}
-        >
-          <Table rowKey={(_record, index) => index.toString()} columns={havePet ? columns : columnsNoPet} dataSource={tradeItems.concat(gifts)} pagination={false} bordered />
+        <div className="display-flex mb-20 mt-20 direction-column word-break-break">
+          <Table
+            rowKey={(_record, index) => index.toString()}
+            columns={columns}
+            dataSource={tradeItems.concat(gifts, giftList)}
+            pagination={false}
+            bordered
+            rowClassName={() => 'order-detail-row'}
+          />
 
           <Modal
-            title={currentPetInfo.petsName}
+            title={<FormattedMessage id="Order.moreFields" />}
+            width={600}
+            visible={this.state.visibleMoreFields}
+            onOk={() => {
+              this.setState({
+                visibleMoreFields: false
+              });
+            }}
+            onCancel={() => {
+              this.setState({
+                visibleMoreFields: false
+              });
+            }}
+          >
+            <Row>
+              <OrderMoreFields data={this.state.moreData} />
+            </Row>
+          </Modal>
+
+          <Modal
+            title={<FormattedMessage id="PetOwner.PetInformation" />}
+            width={1100}
             visible={this.state.visiblePetDetails}
             onOk={() => {
               this.setState({
@@ -483,261 +646,350 @@ export default class OrderDetailTab extends React.Component<any, any> {
             }}
           >
             <Row>
-              <Col span={12}>
-                <p>
-                  {currentPetInfo.petsType === 'dog' ? <i className="iconfont icondog" style={styles.iconRight}></i> : <i className="iconfont iconcat" style={styles.iconRight}></i>}
-                  {currentPetInfo.petsBreed}
-                </p>
-                <p>
-                  <i className="iconfont iconbirthday" style={styles.iconRight}></i>
-                  {currentPetInfo.birthOfPets}
-                </p>
-                <p>
-                  {currentPetInfo.petsSex === 0 ? <i className="iconfont iconman" style={styles.iconRight}></i> : <i className="iconfont iconwoman" style={styles.iconRight}></i>}
-                  {currentPetInfo.petsSex === 0 ? 'male' : 'female'}
-                </p>
-                {currentPetInfo.petsSizeValueName ? (
-                  <p>
-                    <i className="iconfont iconweight" style={styles.iconRight}></i>
-                    {currentPetInfo.petsSizeValueName}
-                  </p>
-                ) : null}
-              </Col>
-              <Col span={12}>
-                <h3>special Needs</h3>
-                {currentPetInfo.customerPetsPropRelations && currentPetInfo.customerPetsPropRelations.map((item) => <Tag style={{ marginBottom: 3 }}>{item.propName}</Tag>)}
-              </Col>
+              <PetItem petsInfo={currentPet} />
             </Row>
           </Modal>
 
+          {/*订单相关价格 panel*/}
           <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
-
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="productAmount" />}:</span>
-                <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {(tradePrice.goodsPrice || 0).toFixed(2)}
-                </strong>
+                <span style={styles.name}>{<FormattedMessage id="Order.Productamount" />}:</span>
+                <strong>{this._handlePriceFormat(tradePrice.goodsPrice)}</strong>
               </label>
-              {/* <label style={styles.priceItem as any}>
-                <span style={styles.name}>
-                  {<FormattedMessage id="pointsDeduction" />}:
-                </span>
-                <strong>-${(tradePrice.pointsPrice || 0).toFixed(2)}</strong>
-              </label> */}
-              {/* {reduction && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>满减优惠: </span>
-                  <strong>-${reduction.discounts.toFixed(2)}</strong>
-                </label>
-              )} */}
 
-              {discount && (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{<FormattedMessage id="promotionAmount" />}:</span>
-                  <strong>-${discount.discounts.toFixed(2)}</strong>
-                </label>
-              )}
-
-              {/* {tradePrice.couponPrice ? (
-                <div>
+              {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
+                ? tradePrice.promotionVOList.map((promotion) => (
                   <label style={styles.priceItem as any}>
-                    <span style={styles.name}>优惠券: </span>
-                    <strong>
-                      -${(tradePrice.couponPrice || 0).toFixed(2)}
-                    </strong>
+                    <span style={styles.name}>{promotion.marketingName}</span>
+                    <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
                   </label>
-                </div>
-              ) : null}
-
-              {tradePrice.special ? (
-                <div>
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>订单改价: </span>
-                    <strong>
-                      ${(tradePrice.privilegePrice || 0).toFixed(2)}
-                    </strong>
-                  </label>
-                </div>
-              ) : null} */}
-
-              {/* {tradePrice.discountsPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>{tradePrice.promotionDesc ? tradePrice.promotionDesc : 'Promotion'}: </span>
-                  <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
-                    {(tradePrice.discountsPrice || 0).toFixed(2)}
-                  </strong>
-                </label>
-              ) : null} */}
-
-              {tradePrice.promotionDiscountPrice ? (
-                <label style={styles.priceItem as any}>
-                  <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
-                  </span>
-                  <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    {(tradePrice.promotionDiscountPrice || 0).toFixed(2)}
-                  </strong>
-                </label>
-              ) : null}
+                ))
+                : null}
 
               {tradePrice.subscriptionDiscountPrice ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
-                    {/* {tradePrice.promotionDiscountPrice ? tradePrice.promotionDiscountPrice : 'Promotion'} */}
-                    Promotion:
+                    <FormattedMessage id="Order.subscriptionDiscount" />:
                   </span>
-                  <strong>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                    {(tradePrice.subscriptionDiscountPrice || 0).toFixed(2)}
-                  </strong>
+                  <strong>-{this._handlePriceFormat(tradePrice.subscriptionDiscountPrice)}</strong>
                 </label>
               ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="shippingFees" />}: </span>
-                <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {(tradePrice.deliveryPrice || 0).toFixed(2)}
-                </strong>
+                <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
+                <strong>{this._handlePriceFormat(tradePrice.deliveryPrice)}</strong>
               </label>
+              {tradePrice.freeShippingFlag ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>
+                    {<FormattedMessage id="Order.shippingFeesDiscount" />}:{' '}
+                  </span>
+                  <strong>-{this._handlePriceFormat(tradePrice.freeShippingDiscountPrice)}</strong>
+                </label>
+              ) : null}
+              {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
+                  <strong>{this._handlePriceFormat(tradePrice.taxFeePrice)}</strong>
+                </label>
+              ) : null}
 
               <label style={styles.priceItem as any}>
-                <span style={styles.name}>{<FormattedMessage id="total" />}: </span>
+                <span style={styles.name}>{<FormattedMessage id="Order.Total" />}: </span>
                 <strong>
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {(tradePrice.totalPrice || 0).toFixed(2)}
+                  {this._handlePriceFormat(tradePrice.totalPrice)}
+                  {installmentPrice && installmentPrice.additionalFee
+                    ? ' +(' + this._handlePriceFormat(installmentPrice.additionalFee) + ')'
+                    : null}
                 </strong>
               </label>
             </div>
           </div>
         </div>
 
-        <Row>
-          <Col span={8}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryAddress2" />}: {consignee.detailAddress2}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="postalCode" />}: {consignee.postCode}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="reference" />}: {consignee.rfc}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryComment" />}: {detail.get('buyerRemark')}
-            </p>
+        <Row gutter={30}>
+          {/*deliveryAddress panel*/}
+          <Col span={12}>
+            <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
+              <h4>
+                <FormattedMessage id="Order.deliveryAddress" />
+              </h4>
+              <Row>
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee?.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.FirstName" />: {consignee?.firstName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee?.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.LastName" />: {consignee?.lastName}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{address1}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address1" />: {address1}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress2}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
+                    </p>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.country" />:{' '}
+                    {consignee.countryId ? (
+                      <>{countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}</>
+                    ) : consignee.country}
+                  </p>
+                  {consignee?.county ? (
+                    <p>
+                      <FormattedMessage id="Order.county" />: {consignee.county}
+                    </p>
+                  ) : null}
+                  <p>
+                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.comment}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                    </p>
+                  </Tooltip>
+                </Col>
+
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.city}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.city" />: {consignee.city}
+                    </p>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.state" />: {consignee.province}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.region" />: {consignee.area}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
+                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.deliveryDate" />:{' '}
+                      {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                    </p>
+                  </Tooltip>
+                  {storeId === 123457907 && (
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{deliveryMethod}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
+                      </p>
+                    </Tooltip>
+                  )}
+                </Col>
+                {storeId === 123457907 ? (
+                  <Col span={24}>
+                    <p>
+                      <FormattedMessage id="Order.estimatedDeliveryDate" />:
+                      {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                        detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDesc"
+                            values={{
+                              minDay: detail.get('minDeliveryTime'),
+                              maxDay: detail.get('maxDeliveryTime')
+                            }}
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDescEqual"
+                            values={{ day: detail.get('minDeliveryTime') }}
+                          />
+                        )
+                      ) : null}
+                    </p>
+                  </Col>
+                ) : null}
+              </Row>
+            </div>
           </Col>
-          <Col span={8}>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress1" />}: {invoice.address1}
-            </p>
-            <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryInvoiceAddress2" />}: {invoice.address2}
-            </p>
-          </Col>
+          {/*billingAddress panel*/}
+          {storeId !== 123457907 ? (
+            <Col span={12}>
+              <div className="headBox order_detail_billing_address" style={{ height: 220 }}>
+                <h4>
+                  <FormattedMessage id="Order.billingAddress" />
+                </h4>
+                <Row>
+                  <Col span={12}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.firstName}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.FirstName" />: {invoice.firstName}
+                      </p>
+                    </Tooltip>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.lastName}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.LastName" />: {invoice.lastName}
+                      </p>
+                    </Tooltip>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.address1}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.address1" />: {invoice.address1}
+                      </p>
+                    </Tooltip>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.address2}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.address2" />: {invoice.address2}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.country" />:{' '}
+                      {invoice.countryId ? (
+                        <>
+                          {countryDict.find((c) => c.id == invoice.countryId)
+                            ? countryDict.find((c) => c.id == invoice.countryId).name
+                            : invoice.countryId}
+                        </>
+                      ) : invoice.country}
+                    </p>
+                    {invoice?.county ? (
+                      <p>
+                        <FormattedMessage id="Order.county" />: {invoice.county}
+                      </p>
+                    ) : null}
+                    <p>
+                      <FormattedMessage id="Order.Entrance" />: {invoice.entrance}
+                    </p>
+                  </Col>
+                  <Col span={12}>
+                    <p>
+                      <FormattedMessage id="Order.city" />: {invoice.city}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Postalcode" />: {invoice.postCode}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.phoneNumber" />: {invoice.phone}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.state" />: {invoice.province}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.region" />: {invoice.area}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Apartment" />: {invoice.apartment}
+                    </p>
+                  </Col>
+                  <Col span={24}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{invoice.comment}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.Comment" />: {invoice.comment}
+                      </p>
+                    </Tooltip>
+                  </Col>
+                </Row>
+              </div>
+            </Col>
+          ) : null}
         </Row>
 
-        {/* <div
-          style={{ display: 'flex', flexDirection: 'column', marginBottom: 10 }}
+        <Modal
+          maskClosable={false}
+          title={<FormattedMessage id="Order.rejectionReasonTip" />}
+          visible={orderRejectModalVisible}
+          okText={<FormattedMessage id="Order.save" />}
+          onOk={() => this._handleOK(tid)}
+          onCancel={() => this._handleCancel()}
         >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              paddingTop: 10,
-              marginLeft: 20
-            }}
-          >
-            {<FormattedMessage id="sellerNotes" />}:
-            {sellerRemarkVisible == true && (
-              <a onClick={() => setSellerRemarkVisible(false)}>
-                <Icon type="edit" />
-                {detail.get('sellerRemark') || 'none'}
-              </a>
-            )}
-            {sellerRemarkVisible == false && (
-              <div
-                style={{ width: 400, display: 'flex', flexDirection: 'row' }}
-              >
-                <Input
-                  style={{ width: 300, marginRight: 20 }}
-                  onChange={(e) => {
-                    setSellerRemark((e.target as any).value);
-                  }}
-                  placeholder={detail.get('sellerRemark')}
-                  size="small"
-                  defaultValue={detail.get('sellerRemark')}
-                />
-
-                <a style={styles.pr20} onClick={() => remedySellerRemark()}>
-                  {<FormattedMessage id="confirm" />}
-                </a>
-                <a onClick={() => setSellerRemarkVisible(true)}>
-                  {<FormattedMessage id="cancel" />}
-                </a>
-              </div>
-            )}
-          </div>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="buyerNotes" />}:{' '}
-            {detail.get('buyerRemark') || 'none'}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="orderAttachment" />}:{' '}
-            {this._renderEncloses(enclo)}
-          </label>
-
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="paymentMethod" />}:{' '}
-            {detail.getIn(['payInfo', 'desc']) || 'none'}
-          </label>
-          {
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceInformation" />}:{' '}
-              {invoice ? invoiceContent(invoice) || '' : 'none'}
-            </label>
-          }
-          {invoice.address && (
-            <label style={styles.inforItem}>
-              {<FormattedMessage id="invoiceReceivingAddress" />}:{' '}
-              {invoice && invoice.type == -1
-                ? 'none'
-                : `${invoice.contacts} ${invoice.phone}
-                ${invoice.address || 'none'}`}
-            </label>
-          )}
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryMethod" />}:{' '}
-            {<FormattedMessage id="expressDelivery" />}
-          </label>
-          <label style={styles.inforItem}>
-            {<FormattedMessage id="deliveryInformation" />}:{consignee.name}{' '}
-            {consignee.phone} {consignee.detailAddress}
-          </label>
-
-          {tradeState.get('obsoleteReason') && (
-            <label style={styles.inforItem}>
-              驳回原因：{tradeState.get('obsoleteReason')}
-            </label>
-          )}
-        </div>
-         */}
-        <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK(tid)} onCancel={() => this._handleCancel()}>
           <WrappedRejectForm
             ref={(form) => {
               this._rejectForm = form;
@@ -748,82 +1000,47 @@ export default class OrderDetailTab extends React.Component<any, any> {
     );
   }
 
-  //附件
-  _renderEncloses(encloses) {
-    if (encloses.size == 0 || encloses[0] === '') {
-      return <span>{<FormattedMessage id="none" />}</span>;
-    }
+  _handlePriceFormat(price, num = 2) {
+    return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (price || 0).toFixed(num);
+  }
 
-    return encloses.map((v, k) => {
-      return (
-        <Popover key={'pp-' + k} placement="topRight" title={''} trigger="click" content={<img key={'p-' + k} style={styles.attachmentView} src={v.get('url')} />}>
-          <a href="#">
-            <img key={k} style={styles.attachment} src={v.get('url')} />
-          </a>
-        </Popover>
-      );
-    });
+  //刷新商品实时库存
+  _refreshRealtimeStock = async (tid: string) => {
+    const { refreshGoodsRealtimeStock } = this.props.relaxProps;
+    await refreshGoodsRealtimeStock(tid);
+    this.setState({ tableLoading: false });
+  };
+
+  //下载发票 download invoice
+  _handleDownInvoice(detail) {
+    let orderInvoiceIdList = detail.getIn(['invoice','orderInvoiceIdList']).toJS()
+    let params = {
+      orderInvoiceIds:orderInvoiceIdList
+    };
+    const token = (window as any).token;
+    let result = JSON.stringify({ ...params, token: token });
+    let base64 = new util.Base64();
+    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
+    window.open(exportHref);
   }
 
   _renderBtnAction(tid: string) {
-    const { detail, onAudit, verify, onDelivery, showRejectModal } = this.props.relaxProps;
+    const { detail, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
     //创建订单状态
-    if (flowState === 'INIT' || flowState === 'AUDIT') {
+    if (Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'INIT' || flowState === 'AUDIT')) {
       return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {payState === 'NOT_PAID' && (
-            <AuthWrapper functionName="edit_order_f_001">
-              <Tooltip placement="top" title="Modify">
-                <a
-                  style={styles.pr20}
-                  onClick={() => {
-                    verify(tid);
-                  }}
-                >
-                  Modify
-                </a>
-              </Tooltip>
-            </AuthWrapper>
-          )}
-          {
-            // payState === 'PAID'
-            //   ? null
-            //   : flowState === 'INIT' && (
-            //       <AuthWrapper functionName="fOrderList002">
-            //         <Tooltip placement="top" title="Turn down">
-            //           <a onClick={() => showRejectModal()} href="javascript:void(0)" style={styles.pr20} className="iconfont iconbtn-turndown">
-            //             {/*<FormattedMessage id="order.turnDown" />*/}
-            //           </a>
-            //         </Tooltip>
-            //       </AuthWrapper>
-            //     )
-          }
-          {/*已审核处理的*/}
           {flowState === 'AUDIT' && (
             <div>
-              {payState === 'PAID' || payState === 'UNCONFIRMED' ? null : (
-                <AuthWrapper functionName="fOrderList002">
-                  <Tooltip placement="top" title="Re-review">
-                    <a
-                      onClick={() => {
-                        this._showRetrialConfirm(tid);
-                      }}
-                      href="javascript:void(0)"
-                      style={styles.pr20}
-                    >
-                      Re-review
-                    </a>
-                  </Tooltip>
-                </AuthWrapper>
-              )}
               {!(paymentOrder == 'PAY_FIRST' && payState != 'PAID') && (
                 <AuthWrapper functionName="fOrderDetail002">
-                  <Tooltip placement="top" title="Ship">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
                     <a
                       href="javascript:void(0);"
                       style={styles.pr20}
@@ -831,39 +1048,24 @@ export default class OrderDetailTab extends React.Component<any, any> {
                         onDelivery();
                       }}
                       className="iconfont iconbtn-shipping"
-                    >
-                      {/*{<FormattedMessage id="ship" />}*/}
-                    </a>
+                    />
                   </Tooltip>
                 </AuthWrapper>
               )}
             </div>
           )}
-          {/*未审核需要处理的*/}
-          {
-            // flowState === 'INIT' && (
-            //   <AuthWrapper functionName="fOrderList002">
-            //     <Tooltip placement="top" title="Review">
-            //       <a
-            //         onClick={() => {
-            //           onAudit(tid, 'CHECKED');
-            //         }}
-            //         style={{ fontSize: 14 }}
-            //         className="iconfont iconbtn-review"
-            //       >
-            //         {/*Review*/}
-            //       </a>
-            //     </Tooltip>
-            //   </AuthWrapper>
-            // )
-          }
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if (
+      Const.SITE_NAME !== 'MYVETRECO' &&
+      (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
+      (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
+      payState === 'PAID'
+    ) {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002">
-            <Tooltip placement="top" title="Ship">
+            <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
               <a
                 href="javascript:void(0);"
                 style={styles.pr20}
@@ -871,9 +1073,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                   onDelivery();
                 }}
                 className="iconfont iconbtn-shipping"
-              >
-                {/*{<FormattedMessage id="ship" />}*/}
-              </a>
+              />
             </Tooltip>
           </AuthWrapper>
         </div>
@@ -882,7 +1082,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
       return (
         <div>
           <AuthWrapper functionName="fOrderList003">
-            <Tooltip placement="top" title="Confirm receipt">
+            <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
               <a
                 onClick={() => {
                   this._showConfirm(tid);
@@ -890,7 +1090,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                 href="javascript:void(0)"
                 style={styles.pr20}
               >
-                Confirm receipt
+                <FormattedMessage id="Order.confirmReceipt" />
               </a>
             </Tooltip>
           </AuthWrapper>
@@ -933,13 +1133,15 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { retrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({ id: 'Order.Re-review' });
+    const content = (window as any).RCi18n({ id: 'Order.Confirmtoreturntheselected' });
     confirm({
-      title: '回审',
-      content: '确认将选中的订单退回重新审核?',
+      title: title,
+      content: content,
       onOk() {
         retrial(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
 
@@ -952,28 +1154,36 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { confirm } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
+    const title = (window as any).RCi18n({ id: 'Order.ConfirmReceipt' });
+    const content = (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' });
     confirmModal({
-      title: 'Confirm receipt',
-      content: 'Confirm receipt of all items?',
+      title: title,
+      content: content,
       onOk() {
         confirm(tdId);
       },
-      onCancel() {}
+      onCancel() { }
     });
   };
-  _openPetDetails = (petInfo) => {
+  _openPetDetails = (petsInfo) => {
     this.setState({
       visiblePetDetails: true,
-      currentPetInfo: petInfo
+      currentPet: petsInfo ? petsInfo : {}
+    });
+  };
+
+  _openMoreFields = (recored) => {
+    const data = [{ ...recored }];
+    this.setState({
+      visibleMoreFields: true,
+      moreData: data
     });
   };
 }
 
+export default injectIntl(OrderDetailTab);
+
 const styles = {
-  headBox: {
-    padding: 15,
-    backgroundColor: '#FAFAFA'
-  },
   greenText: {
     color: '#339966'
   },

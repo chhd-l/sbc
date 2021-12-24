@@ -63,19 +63,10 @@ export default class OrderInvoiceList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      selected,
-      dataList,
-      onSelect,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
@@ -94,76 +85,18 @@ export default class OrderInvoiceList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column
-          title={<FormattedMessage id="billingTime" />}
-          key="invoiceTime"
-          dataIndex="invoiceTime"
-          render={(invoiceTime) => (
-            <span>
-              {invoiceTime
-                ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString()
-                : '-'}
-            </span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="orderNumber" />}
-          key="orderNo"
-          dataIndex="orderNo"
-        />
-        <Column
-          title={<FormattedMessage id="consumerName" />}
-          key="customerName"
-          dataIndex="customerName"
-        />
-        <Column
-          title={<FormattedMessage id="orderAmount" />}
-          key="orderPrice"
-          dataIndex="orderPrice"
-          render={(orderPrice) => (
-            <span>
-              {orderPrice != null
-                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                  orderPrice.toFixed(2)
-                : '-'}
-            </span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="paymentStatus" />}
-          dataIndex="payOrderStatus"
-          key="payOrderStatus"
-          render={(payOrderStatus) => (
-            <span> {payOrderStatusDic[payOrderStatus]} </span>
-          )}
-        />
+        <Column title={<FormattedMessage id="Finance.billingTime" />} key="invoiceTime" dataIndex="invoiceTime" render={(invoiceTime) => <span>{invoiceTime ? momnet(invoiceTime).format(Const.TIME_FORMAT).toString() : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.orderNumber" />} key="orderNo" dataIndex="orderNo" />
+        <Column title={<FormattedMessage id="Finance.consumerName" />} key="customerName" dataIndex="customerName" />
+        <Column title={<FormattedMessage id="Finance.orderAmount" />} key="orderPrice" dataIndex="orderPrice" render={(orderPrice) => <span>{orderPrice != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + orderPrice.toFixed(2) : '-'}</span>} />
+        <Column title={<FormattedMessage id="Finance.paymentStatus" />} dataIndex="payOrderStatus" key="payOrderStatus" render={(payOrderStatus) => <span> {payOrderStatusDic[payOrderStatus]} </span>} />
 
-        <Column
-          title={<FormattedMessage id="invoiceType" />}
-          dataIndex="invoiceType"
-          key="invoiceType"
-          render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>}
-        />
+        <Column title={<FormattedMessage id="Finance.invoiceType" />} dataIndex="invoiceType" key="invoiceType" render={(invoiceType) => <span>{invoiceTypeDic[invoiceType]}</span>} />
 
-        <Column
-          title={<FormattedMessage id="invoice.invoiceHeader" />}
-          dataIndex="invoiceTitle"
-          key="invoiceTitle"
-          render={(invoiceTitle) => <span>{invoiceTitle || '个人'}</span>}
-        />
+        <Column title={<FormattedMessage id="Finance.invoiceHeader" />} dataIndex="invoiceTitle" key="invoiceTitle" render={(invoiceTitle) => <span>{invoiceTitle || '个人'}</span>} />
 
-        <Column
-          title={<FormattedMessage id="invoiceStatus" />}
-          dataIndex="invoiceState"
-          key="invoiceState"
-          render={(invoiceState) => (
-            <span>{invoiceStateDic[invoiceState]}</span>
-          )}
-        />
-        <Column
-          title={<FormattedMessage id="operation" />}
-          render={(rowInfo) => this._renderOperate(rowInfo)}
-        />
+        <Column title={<FormattedMessage id="Finance.invoiceStatus" />} dataIndex="invoiceState" key="invoiceState" render={(invoiceState) => <span>{invoiceStateDic[invoiceState]}</span>} />
+        <Column title={<FormattedMessage id="Finance.operation" />} render={(rowInfo) => this._renderOperate(rowInfo)} />
         {/*<Column
           title="操作"
           dataIndex="operation"
@@ -182,10 +115,7 @@ export default class OrderInvoiceList extends React.Component<any, any> {
     const { invoiceState, orderInvoiceId } = rowInfo;
 
     //待确认
-    return checkAuth('fetchOrderInovices') ||
-      checkAuth('destoryOpenOrderInvoice')
-      ? this._renderMenu(orderInvoiceId, invoiceState)
-      : '-';
+    return checkAuth('fetchOrderInovices') || checkAuth('destoryOpenOrderInvoice') ? this._renderMenu(orderInvoiceId, invoiceState) : '-';
   }
 
   _renderMenu = (id: string, invoiceState: number) => {
@@ -195,26 +125,20 @@ export default class OrderInvoiceList extends React.Component<any, any> {
       <div className="operation-box">
         <AuthWrapper functionName="fetchOrderInovices">
           <a href="javascript:void(0);" onClick={() => onSearchByInvoiceId(id)}>
-            {<FormattedMessage id="view" />}
+            {<FormattedMessage id="Finance.view" />}
           </a>
         </AuthWrapper>
 
         <AuthWrapper functionName="destoryOpenOrderInvoice">
           <Popconfirm
-            title={
-              invoiceState == 0
-                ? 'Do you confirm to bill?？'
-                : 'Do you confirm to cancel bill record？'
-            }
+            title={invoiceState == 0 ? <FormattedMessage id="Finance.confirmToBill" /> : <FormattedMessage id="Finance.cancelBillRecord" />}
             onConfirm={() => {
               invoiceState == 0 ? onConfirm(id) : onDestory(id);
             }}
-            okText="Confirm"
-            cancelText="Cancel"
+            okText={<FormattedMessage id="Finance.Confirm" />}
+            cancelText={<FormattedMessage id="Finance.Cancel" />}
           >
-            <a href="javascript:void(0);">
-              {invoiceState == 0 ? 'Billing' : 'Cancellation'}
-            </a>
+            <a href="javascript:void(0);">{invoiceState == 0 ? <FormattedMessage id="Finance.Billing" /> : <FormattedMessage id="Finance.Cancellation" />}</a>
           </Popconfirm>
         </AuthWrapper>
       </div>

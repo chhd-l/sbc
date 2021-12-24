@@ -6,6 +6,7 @@ import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { FormattedMessage } from 'react-intl';
 
 declare type IList = List<any>;
 
@@ -44,7 +45,7 @@ class RelatedProduct extends React.Component<any, any> {
   };
 
   componentDidMount() {
-    const { onRelatedList } = this.props.relaxProps;
+    //const { onRelatedList } = this.props.relaxProps;
     //onRelatedList();
   }
 
@@ -56,7 +57,7 @@ class RelatedProduct extends React.Component<any, any> {
         id="consent"
         rowKey="tabId"
         columns={this._columns}
-        dataSource={relatedList.toJS()}
+        dataSource={relatedList && relatedList.toJS()}
         onRow={(_record, index) => ({
           index,
           moveRow: this.moveRow
@@ -75,7 +76,7 @@ class RelatedProduct extends React.Component<any, any> {
   };
   _columns = [
     {
-      title: 'Image',
+      title: <FormattedMessage id="Product.Image" />,
       dataIndex: 'goodsImg',
       key: 'goodsImg',
       /*render: (text, record, index) => `${index + 1}` + <img src={text.goodsImg} alt=""/>*/
@@ -84,7 +85,7 @@ class RelatedProduct extends React.Component<any, any> {
       }
     },
     {
-      title: 'SPU',
+      title: <FormattedMessage id="Product.SPU" />,
       dataIndex: 'goodsNo',
       key: 'goodsNo'
       /*render: (text) => {
@@ -93,28 +94,28 @@ class RelatedProduct extends React.Component<any, any> {
       }*/
     },
     {
-      title: 'Product name',
+      title: <FormattedMessage id="Product.ProductName" />,
       dataIndex: 'goodsName',
       key: 'goodsName'
     },
     {
-      title: 'Sales category',
+      title: <FormattedMessage id="Product.SalesCategory" />,
       dataIndex: 'storeCateName',
       key: 'storeCateName'
     },
     {
-      title: 'Product category',
+      title: <FormattedMessage id="Product.ProductCategory" />,
       dataIndex: 'goodsCateName',
       key: 'goodsCateName'
     },
     {
-      title: 'Brand',
+      title: <FormattedMessage id="Product.brand" />,
       dataIndex: 'brandName',
       key: 'brandName'
     },
 
     {
-      title: 'Operation',
+      title: <FormattedMessage id="Product.Operation" />,
       dataIndex: 'operation',
       key: 'operation',
       render: (_text, _record) => this._getOption(_record)
@@ -129,11 +130,10 @@ class RelatedProduct extends React.Component<any, any> {
   confirm = (check, id) => {
     this.onChange(!check, id);
     // this.setState({ showSwich: true });
-    // console.log(check);
     // message.success('Click on Yes');
   };
   cancel = () => {
-    message.info('canceled');
+    message.info(<FormattedMessage id="Product.canceled" />);
   };
   /**
    * 获取操作项
@@ -147,13 +147,13 @@ class RelatedProduct extends React.Component<any, any> {
       <div className="operation flex-end">
         <Popconfirm
           className="deleted"
-          title="Confirm deletion?"
+          title={<FormattedMessage id="Product.ConfirmDeletion" />}
           onConfirm={() => {
             const { getConsentDelete } = this.props.relaxProps;
             getConsentDelete(rowInfo.get('id'));
           }}
         >
-          <Tooltip placement="top" title="Delete">
+          <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
             <a href="javascript:void(0)" className="iconfont iconDelete"></a>
           </Tooltip>
         </Popconfirm>

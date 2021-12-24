@@ -14,7 +14,7 @@ type DeliverParam = {
 };
 
 export const fetchReturnDetail = rid => {
-  return Fetch(`/return/${rid}`, {
+  return Fetch<TResult>(`/return/detail/${rid}`, {
     method: 'POST'
   });
 };
@@ -46,14 +46,18 @@ export const reject = (rid: string, reason: string) => {
  * @param values
  * @returns {Promise<IAsyncResult<TResult>>}
  */
-export const deliver = (rid: string, values: DeliverParam) => {
+ export const deliver = (rid: string, values: DeliverParam) => {
   return Fetch<TResult>(`/return/deliver/${rid}`, {
     method: 'POST',
-    body: JSON.stringify({
-      company: values.logisticCompany,
+    
+    body: values? JSON.stringify({
       code: values.logisticCompanyCode,
+      company: values.logisticCompany,
       no: values.logisticNo,
-      createTime: values.date
+      createTime: values.date,
+      skip:false
+    }):JSON.stringify({
+      skip:true
     })
   });
 };
@@ -142,6 +146,24 @@ export function fetchRefundOrdeById(rid: string) {
  */
 export function destroyRefundOrder(refundId: string) {
   return Fetch(`/account/refundOrders/destory/${refundId}`, {
+    method: 'GET'
+  });
+}
+
+
+export const realRefund = (rid: string, refundPrice:any) => {
+  return Fetch<TResult>(`/return/refund/${rid}/online`, {
+    method: 'POST',
+    body: JSON.stringify({refundPrice})
+  });
+};
+
+/**
+ * order setting
+ * 需要其中的退单配置项
+ */
+ export function getOrderSettingConfig() {
+  return Fetch<TResult>('/orderConfig/query', {
     method: 'GET'
   });
 }

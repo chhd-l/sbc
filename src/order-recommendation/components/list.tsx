@@ -3,8 +3,8 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, history } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { noop, Const, AuthWrapper, history, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
@@ -14,49 +14,32 @@ import moment from 'moment';
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
+    return <FormattedMessage id="Order.notShipped" />;
   } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
+    return <FormattedMessage id="Order.allShipments" />;
   } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
+    return <FormattedMessage id="Order.partialShipment" />;
   } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
+    return <FormattedMessage id="Order.invalid" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.unknown" />;
   }
 };
 
 const payStatus = (status) => {
   if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
+    return <FormattedMessage id="Order.unpaid" />;
   } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
+    return <FormattedMessage id="Order.toBeConfirmed" />;
   } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
+    return <FormattedMessage id="Order.paid" />;
   } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
+    return <FormattedMessage id="Order.Refund" />;
   } else {
-    return <FormattedMessage id="order.unknown" />;
+    return <FormattedMessage id="Order.unknown" />;
   }
 };
 
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
 
 type TList = List<any>;
 
@@ -71,15 +54,15 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100Characters" />
               }
               // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder="Please enter the reason for rejection" autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(<Input.TextArea placeholder={RCi18n({id:'Order.enterTheReason'})} autosize={{ minRows: 4, maxRows: 4 }} />)}
         </FormItem>
       </Form>
     );
@@ -102,7 +85,7 @@ class RejectForm extends React.Component<any, any> {
 const WrappedRejectForm = Form.create({})(RejectForm);
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -111,6 +94,7 @@ export default class ListView extends React.Component<any, any> {
 
   props: {
     histroy?: Object;
+    intl?:any;
     relaxProps?: {
       loading: boolean;
       orderRejectModalVisible: boolean;
@@ -181,14 +165,26 @@ export default class ListView extends React.Component<any, any> {
                         />
                       </th>*/}
                       <th style={{ width: '11%' }}>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                        <FormattedMessage id="Order.Product" />
                       </th>
-                      <th style={{ width: '12%' }}>Recipient name</th>
-                      <th style={{ width: '13.5%' }}>Recipient mail</th>
-                      <th style={{ width: '11%' }}>Amount</th>
-                      <th style={{ width: '10.5%' }}>Link status</th>
-                      <th style={{ width: '12.5%' }}>Perscriber</th>
-                      <th style={{ width: '7.1%' }}>Operation</th>
+                      <th style={{ width: '12%' }}>
+                        <FormattedMessage id="Order.RecipientName" />
+                      </th>
+                      <th style={{ width: '13.5%' }}>
+                        <FormattedMessage id="Order.RecipientMail" />
+                      </th>
+                      <th style={{ width: '11%' }}>
+                        <FormattedMessage id="Order.amount" />
+                      </th>
+                      <th style={{ width: '10.5%' }}>
+                        <FormattedMessage id="Order.LinkStatus" />
+                      </th>
+                      <th style={{ width: '12.5%' }}>
+                        <FormattedMessage id="Order.Perscriber" />
+                      </th>
+                      <th style={{ width: '7.1%' }}>
+                        <FormattedMessage id="Order.Operation" />
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
@@ -198,7 +194,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Order.noData" />
                   </span>
                 </div>
               ) : null}
@@ -215,7 +211,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -231,14 +227,13 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={9}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
   }
 
   onDetail(e) {
-    //console.log(e, 11111111111);
   }
 
   _renderContent(dataList) {
@@ -276,7 +271,10 @@ export default class ListView extends React.Component<any, any> {
                         <span> {id}</span>
                       </div>
                       <div style={{ width: 310, display: 'inline-block' }}>
-                        <span> Created Time: {moment(v.createTime).format('YYYY-MM-DD')}</span>
+                        <span>
+                          {' '}
+                          <FormattedMessage id="Order.CreatedTime" />: {moment(v.createTime).format('YYYY-MM-DD')}
+                        </span>
                       </div>
                     </div>
                   </td>
@@ -325,7 +323,7 @@ export default class ListView extends React.Component<any, any> {
                         return a.toFixed(2);
                       }, 0)}
                   </td>
-                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? 'Valid' : 'Invalid') : '--'}</td>
+                  <td style={{ width: '13%' }}>{v.linkStatus != null ? (v.linkStatus == 0 ? RCi18n({id:'Order.Valid'}) : RCi18n({id:'Order.invalid'})) : '--'}</td>
                   <td style={{ width: '15.4%' }}>{v.prescriberId != null ? v.prescriberName : '--'}</td>
                   <td
                     style={{
@@ -342,7 +340,7 @@ export default class ListView extends React.Component<any, any> {
                       })
                     }
                   >
-                    <Tooltip placement="top" title="See details">
+                    <Tooltip placement="top" title={<FormattedMessage id="Order.detail" />}>
                       <span className="iconfont iconDetails"></span>
                     </Tooltip>
                   </td>
@@ -373,9 +371,11 @@ export default class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({id:'Order.review'});
+    const content = (window as any).RCi18n({id:'Order.confirmReview'});
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: title,
+      content: content,
       onOk() {
         onRetrial(tdId);
       },
@@ -436,19 +436,20 @@ export default class ListView extends React.Component<any, any> {
   };
 }
 
+export default injectIntl(ListView);
+
 const styles = {
   loading: {
     textAlign: 'center',
     height: 300
   },
   imgItem: {
-    width: '40%',
-    height: 'auto',
+    width: 60,
+    height: 60,
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: 10,
     background: '#fff',
     borderRadius: 3
   },

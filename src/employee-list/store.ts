@@ -34,7 +34,9 @@ export default class AppStore extends Store {
       pageNum,
       pageSize
     });
-    const { res: roleRes } = await webapi.fetchAllRoles();
+    const {
+      res: { context: roleRes }
+    } = await webapi.fetchAllRoles();
     //部门树
     await this.departTree();
     //没有部门的人数
@@ -48,7 +50,6 @@ export default class AppStore extends Store {
         this.dispatch('loading:end');
       });
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
   };
@@ -76,7 +77,6 @@ export default class AppStore extends Store {
         this.dispatch('employee:defaultExpandedKeys', defaultExpandedKeys);
       }
     } else {
-      message.error(res.message);
     }
   };
 
@@ -144,7 +144,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -162,7 +161,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -182,7 +180,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -197,7 +194,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -209,7 +205,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -241,7 +236,6 @@ export default class AppStore extends Store {
       this.switchModal('');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -259,7 +253,6 @@ export default class AppStore extends Store {
       this.switchModal('');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -303,6 +296,13 @@ export default class AppStore extends Store {
     });
   };
 
+  initEmployeeByEmail = (employee) => {
+    this.transaction(() => {
+      this.dispatch('edit', true);
+      this.dispatch('edit:init', employee);
+    })
+  }
+
   onSave = async (employeeForm) => {
     //更新
     // if (employeeForm.roleName != null) {
@@ -315,10 +315,10 @@ export default class AppStore extends Store {
 
     if (this.state().get('edit')) {
       //如果非主账号，部门ID,需要拼接
-      if (this.state().get('isMaster') == 0) {
-        let restDepartmentIds = this.state().get('restDepartmentIds').toJS();
-        employeeForm.departmentIdList = employeeForm.departmentIdList.concat(restDepartmentIds);
-      }
+      // if (this.state().get('isMaster') == 0) {
+      //   let restDepartmentIds = this.state().get('restDepartmentIds');
+      //   employeeForm.departmentIdList = employeeForm.departmentIdList.concat(restDepartmentIds);
+      // }
       employeeForm.employeeId = this.state().getIn(['employeeForm', 'employeeId']);
       const { res } = await webapi.updateEmployee(employeeForm);
       //取消编辑状态
@@ -332,7 +332,6 @@ export default class AppStore extends Store {
         this.init();
       } else {
         this.dispatch('edit', true);
-        message.error(res.message);
       }
       return;
     }
@@ -343,7 +342,6 @@ export default class AppStore extends Store {
       this.dispatch('modal:hide');
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -412,7 +410,6 @@ export default class AppStore extends Store {
       this.toggleAdjustModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -445,7 +442,6 @@ export default class AppStore extends Store {
       this.toggleConnectModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 
@@ -466,7 +462,6 @@ export default class AppStore extends Store {
       //this.toggleConnectModal();
       this.init();
     } else {
-      message.error(res.message);
     }
   };
 

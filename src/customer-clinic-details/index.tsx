@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Breadcrumb
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { Tabs } from 'antd';
@@ -37,12 +26,8 @@ class CustomerDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       customerId: this.props.match.params.id ? this.props.match.params.id : '',
-      customerType: this.props.match.params.type
-        ? this.props.match.params.type
-        : 'Guest',
-      customerAccount: this.props.match.params.account
-        ? this.props.match.params.account
-        : ''
+      customerType: this.props.match.params.type ? this.props.match.params.type : 'Guest',
+      customerAccount: this.props.match.params.account ? this.props.match.params.account : ''
     };
   }
   componentDidMount() {
@@ -54,7 +39,7 @@ class CustomerDetails extends React.Component<any, any> {
     const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       if (type === 'city') {
         sessionStorage.setItem('dict-city', JSON.stringify(res.context));
       }
@@ -62,7 +47,6 @@ class CustomerDetails extends React.Component<any, any> {
         sessionStorage.setItem('dict-country', JSON.stringify(res.context));
       }
     } else {
-      message.error(res.message);
     }
   };
   clickTabs = (key) => {};
@@ -77,41 +61,26 @@ class CustomerDetails extends React.Component<any, any> {
         <div className="container">
           {this.state.customerType !== 'Guest' ? (
             <Tabs defaultActiveKey="basic" onChange={this.clickTabs}>
-              <TabPane tab="Basic infomation" key="basic">
-                <BasicInfomation
-                  customerId={this.state.customerId}
-                ></BasicInfomation>
+              <TabPane tab="Basic Information" key="basic">
+                <BasicInfomation customerId={this.state.customerId}></BasicInfomation>
               </TabPane>
               <TabPane tab="Pet infomation" key="pet">
-                <PetInfomation
-                  customerId={this.state.customerId}
-                  customerAccount={this.state.customerAccount}
-                ></PetInfomation>
+                <PetInfomation customerId={this.state.customerId} customerAccount={this.state.customerAccount}></PetInfomation>
               </TabPane>
               <TabPane tab="Delivery infomation" key="delivery">
-                <DeliveryInformation
-                  customerId={this.state.customerId}
-                ></DeliveryInformation>
+                <DeliveryInformation customerId={this.state.customerId}></DeliveryInformation>
               </TabPane>
               <TabPane tab="Billing infomation" key="billing">
-                <BillingInfomation
-                  customerId={this.state.customerId}
-                ></BillingInfomation>
+                <BillingInfomation customerId={this.state.customerId}></BillingInfomation>
               </TabPane>
             </Tabs>
           ) : (
             <Tabs defaultActiveKey="delivery" onChange={this.clickTabs}>
               <TabPane tab="Delivery infomation" key="vistor-delivery">
-                <DeliveryInformation
-                  customerId={this.state.customerId}
-                  customerType="Guest"
-                ></DeliveryInformation>
+                <DeliveryInformation customerId={this.state.customerId} customerType="Guest"></DeliveryInformation>
               </TabPane>
               <TabPane tab="Billing infomation" key="vistor-billing">
-                <BillingInfomation
-                  customerId={this.state.customerId}
-                  customerType="Guest"
-                ></BillingInfomation>
+                <BillingInfomation customerId={this.state.customerId} customerType="Guest"></BillingInfomation>
               </TabPane>
             </Tabs>
           )}

@@ -3,7 +3,7 @@ import { Relax, StoreProvider } from 'plume2';
 import AppStore from '../store';
 import '../index.less';
 import { fromJS, Map } from 'immutable';
-import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup } from 'qmkit';
+import { AuthWrapper, BreadCrumb, Headline, noop, SelectGroup, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Form, Select, Input, Button, Table, Divider, message, Icon } from 'antd';
 import { Link } from 'react-router-dom';
@@ -40,6 +40,7 @@ export default class SeoForm extends Component<any, any> {
       getGoodsId: any;
       updateSeoForm: Function;
       getSeo: Function;
+      updateNumbers: any;
     };
   };
 
@@ -47,14 +48,13 @@ export default class SeoForm extends Component<any, any> {
     updateSeoForm: noop,
     getSeo: noop,
     seoForm: 'seoForm',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    updateNumbers: 'updateNumbers'
   };
   componentDidMount() {
-    const { getSeo, getGoodsId } = this.props.relaxProps;
+    const { getSeo, getGoodsId, updateNumbers } = this.props.relaxProps;
     if (getGoodsId) {
       getSeo(getGoodsId);
-    } else {
-      getSeo();
     }
   }
 
@@ -62,6 +62,15 @@ export default class SeoForm extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     const { seoForm, updateSeoForm } = this.props.relaxProps;
     const seoObj = seoForm.toJS();
+    const arr = [
+      { name: 'H1', id: 'H1' },
+      { name: 'H2', id: 'H2' },
+      { name: 'H3', id: 'H3' },
+      { name: 'H4', id: 'H4' },
+      { name: 'H5', id: 'H5' }
+    ];
+    const loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Form {...formItemLayout} className="login-form">
         {/*<Form.Item>*/}
@@ -77,9 +86,10 @@ export default class SeoForm extends Component<any, any> {
         {/*</Form.Item>*/}
         <Form.Item label="Title">
           {getFieldDecorator('titleSource', {
-            initialValue: seoObj.titleSource
+            initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.titleSource
           })(
             <Input
+              disabled={disableFields}
               onChange={(e) =>
                 updateSeoForm({
                   field: 'titleSource',
@@ -89,36 +99,72 @@ export default class SeoForm extends Component<any, any> {
             />
           )}
         </Form.Item>
-        <Form.Item label="Meta Keywords">
-          {getFieldDecorator('metaKeywordsSource', {
-            initialValue: seoObj.metaKeywordsSource
-          })(
-            <TextArea
-              rows={4}
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'metaKeywordsSource',
-                  value: e.target.value
-                })
-              }
-            />
-          )}
-        </Form.Item>
-        <Form.Item label="Meta Description">
-          {getFieldDecorator('metaDescriptionSource', {
-            initialValue: seoObj.metaDescriptionSource
-          })(
-            <TextArea
-              rows={4}
-              onChange={(e) =>
-                updateSeoForm({
-                  field: 'metaDescriptionSource',
-                  value: e.target.value
-                })
-              }
-            />
-          )}
-        </Form.Item>
+        {/*<Form.Item label="Heading Tag">*/}
+        {/*  {getFieldDecorator('headingTag', {*/}
+        {/*    initialValue: seoObj.headingTag*/}
+        {/*  })(*/}
+        {/*    <Select*/}
+        {/*      onChange={(e) =>*/}
+        {/*        updateSeoForm({*/}
+        {/*          field: 'headingTag',*/}
+        {/*          value: e*/}
+        {/*        })*/}
+        {/*      }*/}
+        {/*    >*/}
+        {/*      {arr.map((item) => (*/}
+        {/*        <option key={item.id} value={item.id}>*/}
+        {/*          {item.name}*/}
+        {/*        </option>*/}
+        {/*      ))}*/}
+        {/*    </Select>*/}
+        {/*  )}*/}
+        {/*</Form.Item>*/}
+        {loginInfo && loginInfo.storeId !== 123457910 && loginInfo.storeId !== 123456858  && (
+          <>
+            <Form.Item label="Meta Keywords">
+              {getFieldDecorator('metaKeywordsSource', {
+                initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaKeywordsSource
+              })(
+                <TextArea
+                  disabled={disableFields}
+                  rows={4}
+                  onChange={(e) =>
+                    updateSeoForm({
+                      field: 'metaKeywordsSource',
+                      value: e.target.value
+                    })
+                  }
+                />
+              )}
+            </Form.Item>
+            <Form.Item label="Meta Description">
+              {getFieldDecorator('metaDescriptionSource', {
+                initialValue: Const.SITE_NAME === 'MYVETRECO' ? '' : seoObj.metaDescriptionSource
+              })(
+                <TextArea
+                  disabled={disableFields}
+                  rows={4}
+                  onChange={(e) =>
+                    updateSeoForm({
+                      field: 'metaDescriptionSource',
+                      value: e.target.value
+                    })
+                  }
+                />
+              )}
+            </Form.Item>
+            <Form.Item label="H1">
+              {getFieldDecorator('h1', {
+                initialValue: '{ name }'
+              })(<Input style={{ width: 300 }} disabled />)}
+            </Form.Item>
+            <Form.Item label="H2">
+              {getFieldDecorator('h2', {
+                initialValue: '{ subtitle }'
+              })(<Input style={{ width: 300 }} disabled />)}
+            </Form.Item>
+          </>
+        )}
       </Form>
     );
   }

@@ -14,7 +14,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
-import { cache, history, noop, SelectGroup } from 'qmkit';
+import { cache, history, noop, SelectGroup, RCi18n } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -125,13 +125,13 @@ export default class BillingDetails extends React.Component<any, any> {
           <div style={{ width: 150 }}>
             {history.location.state ? (
               <SelectGroup
-                label="Prescriber"
+                label={RCi18n({id:'Order.Prescriber'})}
                 disabled
                 value={detailProductList.prescriberName}
               ></SelectGroup>
             ) : (
               <SelectGroup
-                label="Prescriber"
+                label={RCi18n({id:'Order.Prescriber'})}
                 disabled={createLinkType}
                 defaultValue={
                   sessionStorage.getItem('PrescriberType')
@@ -153,18 +153,18 @@ export default class BillingDetails extends React.Component<any, any> {
             {history.location.state ? (
               <div className="proptContainer">
                 <Popconfirm
-                  title="Do you change state?"
+                  title={RCi18n({id:'Order.stateTip'})}
                   onConfirm={() => this.confirm(check)}
                   onCancel={this.cancel}
                   getPopupContainer={(e) => document.body}
-                  okText="Yes"
-                  cancelText="No"
+                  okText={RCi18n({id:'Order.yes'})}
+                  cancelText={RCi18n({id:'Order.no'})}
                   className="proptMessage"
                 >
                   <Switch
                     loading={loading}
-                    checkedChildren="Valid"
-                    unCheckedChildren="Invalid"
+                    checkedChildren={RCi18n({id:'Order.Valid'})}
+                    unCheckedChildren={RCi18n({id:'Order.invalid'})}
                     checked={check}
                     // onChange={this.onValid}
                   />
@@ -176,8 +176,8 @@ export default class BillingDetails extends React.Component<any, any> {
 
         <div style={styles.nav}>
           {history.location.state
-            ? 'Recommended Product List'
-            : 'Select Recommended Product'}
+            ? RCi18n({id:'Order.RecommendedProductList'})
+            : RCi18n({id:'Order.SelectRecommendedProduct'})}
         </div>
         <div style={styles.btn}>
           {history.location.state ? null : (
@@ -188,7 +188,7 @@ export default class BillingDetails extends React.Component<any, any> {
               icon="edit"
               onClick={() => this.showProduct(true)}
             >
-              Add Product
+              {RCi18n({id:'Order.addProduct'})}
             </Button>
           )}
         </div>

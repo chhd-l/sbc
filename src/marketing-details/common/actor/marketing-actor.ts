@@ -2,6 +2,7 @@
  * Created by feitingting on 2017/6/20.
  */
 import { Action, Actor, IMap } from 'plume2';
+import { fromJS } from 'immutable';
 
 export default class MarketingActor extends Actor {
   defaultState() {
@@ -9,6 +10,7 @@ export default class MarketingActor extends Actor {
       marketingName: '',
       beginTime: '',
       endTime: '',
+      promotionType: null,
       marketingType: '',
       promotionCode: '',
       publicStatus: '',
@@ -18,6 +20,13 @@ export default class MarketingActor extends Actor {
       marketingScopeList: [],
       fullReductionLevelList: [],
       fullDiscountLevelList: [],
+      marketingFreeShippingLevel: null,
+      emailSuffixList: [],
+      marketingUseLimit:{
+        perCustomer:1,
+        isNotLimit:1
+      },
+
       goodsList: {
         // 商品分页数据
         goodsInfoPage: {
@@ -26,12 +35,29 @@ export default class MarketingActor extends Actor {
         goodses: {},
         brands: {},
         cates: {}
-      }
+      },
+      allGroups: [],
+      currentGroup: null,
+      scopeType: null,
+      storeCateIds: [],
+      currentCategary: null,
+      currentAttribute: null,
+      isSuperimposeSubscription: 1//未勾选
     };
   }
 
   constructor() {
     super();
+  }
+
+  @Action('marketingActor:currentCategary')
+  currentCategary(state: IMap, currentCategary) {
+    return state.set('currentCategary', currentCategary);
+  }
+
+  @Action('marketingActor:currentAttribute')
+  currentAttribute(state: IMap, currentAttribute) {
+    return state.set('currentAttribute', currentAttribute);
   }
 
   @Action('marketingActor:init')
@@ -42,5 +68,15 @@ export default class MarketingActor extends Actor {
   @Action('marketingActor:level')
   level(state: IMap, res) {
     return state.set('customerLevels', res);
+  }
+
+  @Action('marketingActor:allGroups')
+  getAllGroups(state, allGroups) {
+    return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('marketingActor:currentGroup')
+  currentGroup(state, currentGroup) {
+    return state.set('currentGroup', currentGroup);
   }
 }

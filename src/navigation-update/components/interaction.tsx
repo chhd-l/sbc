@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Input, message, Radio, Select, Tree, TreeSelect, Row, Col } from 'antd';
 import * as webapi from '../webapi';
-import { util, AssetManagement } from 'qmkit';
+import { util, AssetManagement, Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 const { SHOW_PARENT } = TreeSelect;
 
 const FormItem = Form.Item;
@@ -68,7 +69,7 @@ export default class Interaction extends React.Component<any, any> {
       .querySysDictionary({ type: 'pageType' })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pageList = res.context.sysDictionaryVOS;
           this.setState({
             pageList
@@ -80,19 +81,16 @@ export default class Interaction extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getCategories() {
     webapi
       .getCategories()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let treeSource = res.context.map((item) => {
             return {
               id: item.storeCateId,
@@ -108,19 +106,16 @@ export default class Interaction extends React.Component<any, any> {
             treeData
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getFilters() {
     webapi
       .getFilters()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let filterList = [];
           let activeFilters = res.context.filter((x) => x.filterStatus === '1');
           activeFilters.map((item) => {
@@ -154,20 +149,17 @@ export default class Interaction extends React.Component<any, any> {
             filterList
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
   getSorts() {
     webapi
       .getSorts()
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
-          let activeSorter = res.context.filter(x=>x.sortStatus === '1') 
+        if (res.code === Const.SUCCESS_CODE) {
+          let activeSorter = res.context.filter((x) => x.sortStatus === '1');
           let sortList = activeSorter.map((item) => {
             return {
               id: item.id,
@@ -178,12 +170,9 @@ export default class Interaction extends React.Component<any, any> {
             sortList
           });
         } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch(() => {
-        message.error('Get data failed');
-      });
+      .catch(() => {});
   }
 
   radioChange(e) {
@@ -252,7 +241,7 @@ export default class Interaction extends React.Component<any, any> {
     let selectChildren = allChildrenList.filter((x) => filterValues.includes(x.value));
     let allParentIds = [...new Set(selectChildren.map((x) => x.parentId))]; // remove repect item
     let selectFilterList = [];
-    allParentIds.map((item) => {
+    allParentIds.forEach((item) => {
       let children = selectChildren.filter((x) => x.parentId === item);
       let childValues = children.map((x) => x.value);
       let childTitles = children.map((x) => x.titleEn);
@@ -302,7 +291,7 @@ export default class Interaction extends React.Component<any, any> {
   }
 
   updateImg = (images) => {
-    let imageString =images && images.length > 0 ? images[0] : ''
+    let imageString = images && images.length > 0 ? images[0] : '';
     this.props.addField('pageImg', imageString);
   };
 
@@ -332,9 +321,10 @@ export default class Interaction extends React.Component<any, any> {
     let defaultFilter = this.getFilterValues(navigation.filter);
     return (
       <div>
-        <h3>{noLanguageSelect ? 'Step2' : 'Step3'}</h3>
+        <h3>{noLanguageSelect ? <FormattedMessage id="Content.Step2" /> : <FormattedMessage id="Content.Step3" />}</h3>
         <h4>
-          Interaction Type<span className="ant-form-item-required"></span>
+          <FormattedMessage id="Content.InteractionType" />
+          <span className="ant-form-item-required"></span>
         </h4>
         <div className="interaction">
           <Form>
@@ -343,18 +333,24 @@ export default class Interaction extends React.Component<any, any> {
                 initialValue: interaction
               })(
                 <Radio.Group onChange={this.radioChange} size="large">
-                  <Radio value={0}>Page</Radio>
-                  <Radio value={1}>External URL</Radio>
-                  <Radio value={2}>Text</Radio>
+                  <Radio value={0}>
+                    <FormattedMessage id="Content.Page" />
+                  </Radio>
+                  <Radio value={1}>
+                    <FormattedMessage id="Content.ExternalURL" />
+                  </Radio>
+                  <Radio value={2}>
+                    <FormattedMessage id="Content.Text" />
+                  </Radio>
                 </Radio.Group>
               )}
             </FormItem>
             {interaction === 0 ? (
               <div>
-                <FormItem {...layout} label="Page">
+                <FormItem {...layout} label={<FormattedMessage id="Content.Page" />}>
                   {getFieldDecorator('pageId', {
                     initialValue: pageList && pageList.length > 0 ? navigation.pageId : null,
-                    rules: [{ required: true, message: 'Please select page' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectPage" /> }]
                   })(
                     <Select onChange={this.pageChange}>
                       {pageList &&
@@ -368,13 +364,13 @@ export default class Interaction extends React.Component<any, any> {
                 </FormItem>
                 {pageTypeCode === 'PLP' ? (
                   <div>
-                    <FormItem {...layout} label="Sales Category">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.SalesCategory" />}>
                       {getFieldDecorator('navigationCateIds', {
                         initialValue: defaultCategoryIds,
-                        rules: [{ required: true, message: 'Please select sales category' }]
+                        rules: [{ required: true, message: <FormattedMessage id="Content.PleaseSelectSalesCategory" /> }]
                       })(<TreeSelect {...tProps} />)}
                     </FormItem>
-                    <FormItem {...layout} label="Page Title">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PageTitle" />}>
                       {getFieldDecorator('pageTitle', {
                         initialValue: navigation.pageTitle
                       })(
@@ -386,7 +382,7 @@ export default class Interaction extends React.Component<any, any> {
                         />
                       )}
                     </FormItem>
-                    <FormItem {...layout} label="Page Description">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PageDescription" />}>
                       {getFieldDecorator('pageDesc', {
                         initialValue: navigation.pageDesc
                       })(
@@ -401,19 +397,21 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                     <Row>
                       <Col span={4}>
-                        <div className="uploadTip">Recommened size：800*800px the size of a single sheet does not exceed 2M，and the maximum sheets is 10</div>
+                        <div className="uploadTip">
+                          <FormattedMessage id="Content.RecommenedSize" />
+                        </div>
                       </Col>
                     </Row>
-                    <FormItem {...layout} label="Page Picture">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.PagePicture" />}>
                       <AssetManagement choosedImgCount={1} images={navigation.pageImg ? [navigation.pageImg] : []} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />
                     </FormItem>
                   </div>
                 ) : null}
                 {pageTypeCode === 'SRP' ? (
-                  <FormItem {...layout} label="Keywords">
+                  <FormItem {...layout} label={<FormattedMessage id="Content.Keywords" />}>
                     {getFieldDecorator('keywords', {
                       initialValue: navigation.keywords,
-                      rules: [{ required: true, message: 'Please input keywords' }]
+                      rules: [{ required: true, message: <FormattedMessage id="Content.PleaseInputKeywords" /> }]
                     })(
                       <Input
                         onChange={(e) => {
@@ -427,7 +425,7 @@ export default class Interaction extends React.Component<any, any> {
 
                 {pageTypeCode === 'SRP' || pageTypeCode === 'PLP' ? (
                   <div>
-                    <FormItem {...layout} label="Filter">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.Filter" />}>
                       {getFieldDecorator('filter', {
                         initialValue: defaultFilter
                       })(
@@ -445,7 +443,7 @@ export default class Interaction extends React.Component<any, any> {
                         </TreeSelect>
                       )}
                     </FormItem>
-                    <FormItem {...layout} label="Sort">
+                    <FormItem {...layout} label={<FormattedMessage id="Content.Sort" />}>
                       {getFieldDecorator('searchSort', {
                         initialValue: navigation.searchSort
                       })(
@@ -464,7 +462,7 @@ export default class Interaction extends React.Component<any, any> {
                     </FormItem>
                   </div>
                 ) : pageTypeCode !== '' ? (
-                  <FormItem {...layout} label="Parameter">
+                  <FormItem {...layout} label={<FormattedMessage id="Content.Parameter" />}>
                     <span className="tip ant-form-item-required">{example}</span>
                     {getFieldDecorator('paramsField', {
                       initialValue: navigation.paramsField
@@ -482,7 +480,7 @@ export default class Interaction extends React.Component<any, any> {
               </div>
             ) : null}
             {interaction === 1 ? (
-              <FormItem {...layout} label="Target">
+              <FormItem {...layout} label={<FormattedMessage id="Content.Target" />}>
                 {getFieldDecorator('target', {
                   initialValue: navigation.target ? navigation.target : ''
                 })(

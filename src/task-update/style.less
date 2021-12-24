@@ -1,0 +1,41 @@
+.taskMemo {
+  color: rgba(0, 0, 0, 0.65);
+  max-height: 200px;
+  min-height: 200px;
+  overflow-y: auto;
+  pointer-events: all;
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.memo {
+  padding-left: 16px;
+  list-style: circle;
+  color: #221357;
+}
+
+.panel {
+  padding: 20px;
+
+  .log {
+    margin-bottom: 10px;
+  }
+}
+
+.overFlowtext {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.taskName{
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display:-webkit-box; //作为弹性伸缩盒子模型显示。
+  -webkit-box-orient:vertical; //设置伸缩盒子的子元素排列方式--从上到下垂直排列
+  -webkit-line-clamp:3; //显示的行
+  word-wrap: break-word;
+
+}

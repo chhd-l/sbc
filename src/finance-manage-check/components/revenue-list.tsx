@@ -95,13 +95,13 @@ export default class RevenueList extends React.Component<any, any> {
 
         <div>
           <DataGrid
-            loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'initial', zIndex: 999 }} alt="" /> }}
+            loading={loading}
             dataSource={incomeList.toJS().length > 0 ? incomeList.toJS() : []}
             rowKey={(record, index) => index}
             pagination={false}
           >
             <Column
-              title="NO."
+              title={<FormattedMessage id="Finance.NO" />}
               dataIndex="index"
               key="index"
               width="50"
@@ -110,7 +110,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             />
             <Column
-              title="Total revenue"
+              title={<FormattedMessage id="Finance.TotalRevenue" />}
               dataIndex="totalAmount"
               key="totalAmount"
               render={(_text, rowData: any) => {
@@ -172,7 +172,7 @@ export default class RevenueList extends React.Component<any, any> {
               }}
             /> */}
             <Column
-              title="Payment Source"
+              title={<FormattedMessage id="Finance.PaymentSource" />}
               dataIndex="syncTotalAmount"
               key="syncTotalAmount"
               render={(_text, rowData: any) => {
@@ -222,13 +222,13 @@ export default class RevenueList extends React.Component<any, any> {
               width="100"
             />*/}
             <Column
-              title={<FormattedMessage id="operation" />}
+              title={<FormattedMessage id="Finance.Operation" />}
               dataIndex="operate"
               key="storeId"
               render={(_text, record: any) => {
                 return (
                   <AuthWrapper functionName="f_finance_manage_refund">
-                    <Tooltip placement="top" title="Details">
+                    <Tooltip placement="top" title={<FormattedMessage id="Finance.Details" />}>
                       <a
                         onClick={() =>
                           history.push({

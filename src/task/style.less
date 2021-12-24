@@ -1,0 +1,211 @@
+.taskCardViewClass {
+  min-height: 600px;
+  overflow-y: auto;
+  max-height: 600px;
+}
+
+.taskCardViewClass h3 {
+  padding: 10px 0;
+}
+
+.taskCardViewClass .taskCardItem {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.taskStatusList {
+  margin-bottom: 20px;
+
+  h3 {
+    display: inline-block;
+    margin-right: 10px;
+    text-transform: uppercase;
+  }
+
+  .taskMore {
+    display: inline-block;
+    margin-top: 7px;
+    cursor: pointer;
+  }
+}
+
+.stick {
+  display: inline-block;
+  width: 4px;
+  height: 22px;
+  opacity: 1;
+  border-radius: 20px;
+  margin-right: 10px;
+  top: 5px;
+  position: relative;
+}
+
+.todo {
+  span {
+    color: rgba(233, 63, 81);
+  }
+
+  .stick {
+    background: rgba(233, 63, 81, 1);
+  }
+}
+
+.onGoing {
+  span {
+    color: rgba(57, 173, 255);
+  }
+
+  .stick {
+    background: rgba(57, 173, 255);
+  }
+}
+
+.completed {
+  span {
+    color: rgba(114, 198, 127);
+  }
+
+  .stick {
+    background: rgba(114, 198, 127);
+  }
+}
+
+.cancelled {
+  span {
+    color: rgba(172, 176, 180);
+  }
+
+  .stick {
+    background: rgba(172, 176, 180);
+  }
+}
+
+.taskCard {
+  color: rgba(127, 127, 127);
+  // height: 135px;
+}
+
+.taskCard .status {
+  font-size: 12px;
+}
+
+.upborder {
+  border-top: 1px solid rgb(217, 217, 217);
+}
+
+.contentPanel div {
+  color: #221357;
+  margin-bottom: 10px;
+
+  &.goldenMoment {
+    font-size: 15px;
+    padding-left: 8px;
+
+    .addTaskIcon {
+      padding: 3px;
+      color: #ffffff;
+      border-radius: 3px;
+      margin-right: 8px;
+      font-size: 12px;
+    }
+
+    .warningIcon {
+      float: right;
+      position: relative;
+      margin-right: 5px;
+    }
+
+    .high {
+      color: #e2001a;
+    }
+
+    .medium {
+      color: #e7a23b;
+    }
+
+    .low {
+      color: #f9d055;
+    }
+
+    .point {
+      border-radius: 8px;
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 2px;
+    }
+    .taskCardTitle{
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display:-webkit-box; //作为弹性伸缩盒子模型显示。
+      -webkit-box-orient:vertical; //设置伸缩盒子的子元素排列方式--从上到下垂直排列
+      -webkit-line-clamp:3; //显示的行
+
+    }
+  }
+
+  &.contentInfo {
+    font-size: 10px;
+    color: #989898;
+
+    .addTaskIcon {
+      font-size: 10px;
+      margin-right: 8px;
+      margin-left: 8px;
+    }
+  }
+}
+
+.ant-advanced-search-form {
+  /deep/ .ant-form-item {
+    .ant-form-item-label {
+      width: 32%;
+    }
+
+    .ant-form-item-control-wrapper {
+      display: inline-block;
+      width: 250px;
+    }
+  }
+}
+
+.taskCardViewClass .taskCard .ant-card-body {
+  padding: 13px 0 15px 0 !important;
+}
+
+.cardViewList .ant-card-body {
+  padding: 0 !important;
+}
+
+.taskCardViewClass .iconPanel {
+  padding-left: 0;
+  text-align: center;
+}
+
+.taskItem {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.filter-content {
+  /deep/ .ant-select-selection-selected-value {
+    width: 150px;
+  }
+}
+
+.advanceSearch {
+  color: #e82f3d;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.export-task-button {
+  color: #e82f3d;
+  margin-bottom: 16px;
+  margin-right: 14px;
+  border: 1px solid #e82f3d;
+  background-color: #fff;
+}

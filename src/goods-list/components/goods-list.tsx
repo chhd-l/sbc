@@ -6,17 +6,19 @@ import { Menu, Dropdown, Icon, Modal, Tooltip, Popconfirm } from 'antd';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 import { Table } from 'antd';
+import ImgWithFallback from './fallback-image';
 
 const Column = Table.Column;
 const confirm = Modal.confirm;
 const defaultImg = require('../img/none.png');
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import './goods-list.css';
 
 @withRouter
 @Relax
-export default class CateList extends React.Component<any, any> {
+class CateList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       goodsPageContent: IList;
       goodsInfoList: IList;
@@ -75,7 +77,7 @@ export default class CateList extends React.Component<any, any> {
       <DataGrid
         rowKey={(record) => record.goodsId}
         dataSource={goodsPageContent.toJS()}
-        loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+        loading={loading}
         // expandedRowRender={this._expandedRowRender}
         // expandedRowKeys={expandedRowKeys.toJS()}
         // onExpand={(expanded, record) => {
@@ -95,14 +97,15 @@ export default class CateList extends React.Component<any, any> {
         }}
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
-        <Column title={<FormattedMessage id="product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        {/* Image */}
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img, record) => (img && record.weShareId ? <ImgWithFallback src={img} style={styles.imgItem} /> : <img src={img ?? defaultImg} style={styles.imgItem} />)} />
+        {/* Product name */}
         <Column
           // title="商品名称"
-          title={<FormattedMessage id="product.productName" />}
+          title={<FormattedMessage id="Product.productName" />}
           dataIndex="goodsName"
           key="goodsName"
           className="nameBox"
-          width={160}
           render={(rowInfo) => {
             return (
               <Tooltip
@@ -118,7 +121,8 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
+        {/* SPU */}
+        <Column title={<FormattedMessage id="Product.SPU" />} dataIndex="goodsNo" key="goodsNo" />
         {/* <Column
           title="销售类型"
           key="saleType"
@@ -133,10 +137,11 @@ export default class CateList extends React.Component<any, any> {
             );
           }}
         /> */}
+        {/* Market price */}
         <Column
           title={
             <span>
-              <FormattedMessage id="product.marketPrice" />
+              <FormattedMessage id="Product.marketPrice" />
             </span>
           }
           key="marketPrice"
@@ -146,35 +151,36 @@ export default class CateList extends React.Component<any, any> {
               <div>
                 <p style={styles.lineThrough}>
                   {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  {marketPrice == null ? 0.0 : marketPrice.toFixed(2)}
+                  {/*.toFixed(2)*/}
+                  {marketPrice == null ? 0.0 : marketPrice}
                 </p>
               </div>
             );
           }}
         />
+        {/* Sales category */}
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.salesCategory" />}
+          title={<FormattedMessage id="Product.SalesCategory" />}
           dataIndex="goodsStoreCateNames"
-          key="goodsStoreCateNames"
-          width={100}
+          key="goodsStoreCateNames" 
           //render={this._renderStoreCateList}
         />
+        {/* Product category */}
         <Column
           // title="店铺分类"
-          title={<FormattedMessage id="product.productCategory" />}
+          title={<FormattedMessage id="Product.ProductCategory" />}
           dataIndex="productCategoryNames"
           key="productCategoryNames"
-          width={100}
           //render={this._renderProductCateList}
         />
+        {/* Brand */}
         <Column
           // title="品牌"
-          title={<FormattedMessage id="product.brand" />}
+          title={<FormattedMessage id="Product.brand" />}
           dataIndex="brandName"
           key="brandName"
           render={(rowInfo) => {
-            console.log(rowInfo);
             return rowInfo != null ? rowInfo : '--';
             /*return (
               goodsBrandList
@@ -185,23 +191,25 @@ export default class CateList extends React.Component<any, any> {
             );*/
           }}
         />
+        {/* On/off shelves */}
         <Column
-          title={<FormattedMessage id="product.onOrOffShelves" />}
+          title={<FormattedMessage id="Product.onOrOffShelves" />}
           dataIndex="addedFlag"
           key="addedFlag"
           render={(rowInfo) => {
             if (rowInfo == 0) {
-              return <FormattedMessage id="product.offShelves" />;
+              return <FormattedMessage id="Product.offShelves" />;
             }
             if (rowInfo == 2) {
-              return <FormattedMessage id="product.partialOnShelves" />;
+              return <FormattedMessage id="Product.partialOnShelves" />;
             }
-            return <FormattedMessage id="product.onShelves" />;
+            return <FormattedMessage id="Product.onShelves" />;
           }}
         />
+        {/* Operation */}
         <Column
           align="center"
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           key="goodsId"
           className="operation-th"
           render={(rowInfo) => {
@@ -246,37 +254,22 @@ export default class CateList extends React.Component<any, any> {
 
   _menu = (rowInfo) => {
     const { spuOnSale, spuOffSale, spuDelete } = this.props.relaxProps;
+    const editPath = rowInfo.goodsType == 5 ? `/goods-service-edit/${rowInfo.goodsId}` : rowInfo.goodsType == 2 ? `/goods-bundle-edit/${rowInfo.goodsId}` : `/goods-regular-edit/${rowInfo.goodsId}`;
     return (
       <div className="operation-box">
         <AuthWrapper functionName="f_goods_sku_edit_2">
-          <Tooltip placement="top" title="Edit">
-            {rowInfo.goodsType != 2 ? (
-              <a
-                onClick={() =>
-                  history.push({
-                    pathname: `/goods-regular-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main', goodsType: 'edit' }
-                  })
-                }
-                style={{ marginRight: 5 }}
-              >
-                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
-                {/* <FormattedMessage id="edit" /> */}
-              </a>
-            ) : (
-              <a
-                onClick={() =>
-                  history.push({
-                    pathname: `/goods-bundle-edit/${rowInfo.goodsId}`,
-                    state: { tab: 'main', goodsType: 'edit' }
-                  })
-                }
-                style={{ marginRight: 5 }}
-              >
-                <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
-                {/* <FormattedMessage id="edit" /> */}
-              </a>
-            )}
+          <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
+            <a
+              onClick={() =>
+                history.push({
+                  pathname: editPath,
+                  state: { tab: 'main', goodsType: 'edit' }
+                })
+              }
+              style={{ marginRight: 5 }}
+            >
+              <span className="icon iconfont iconEdit" style={{ fontSize: 20 }}></span>
+            </a>
           </Tooltip>
         </AuthWrapper>
         {/* <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -292,9 +285,9 @@ export default class CateList extends React.Component<any, any> {
             <FormattedMessage id="product.setPrice" />
           </a>
         </AuthWrapper> */}
-        {rowInfo.addedFlag == 0 || rowInfo.addedFlag == 2 ? (
+        {rowInfo.addedFlag == 0 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <Tooltip placement="top" title="On Shelves">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Onshelves" />}>
               <a
                 href="#!"
                 onClick={() => {
@@ -309,9 +302,9 @@ export default class CateList extends React.Component<any, any> {
         ) : null}
         {rowInfo.addedFlag == 1 || rowInfo.addedFlag == 2 ? (
           <AuthWrapper functionName="f_goods_up_down">
-            <Popconfirm placement="topLeft" title="Are you sure you want off to shelves this product?" onConfirm={() => spuOffSale([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Off Shelves">
-                <a>
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.OffshelvesConfirmTip" />} onConfirm={() => spuOffSale([rowInfo.goodsId])} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Offshelves" />}>
+                <a style={{ marginRight: 5 }}>
                   <span className="icon iconfont iconOffShelves" style={{ fontSize: 20 }}></span>
                 </a>
               </Tooltip>
@@ -319,8 +312,8 @@ export default class CateList extends React.Component<any, any> {
           </AuthWrapper>
         ) : null}
         <AuthWrapper functionName="f_goods_6">
-          <Popconfirm placement="topLeft" title="Are you sure you want to delete this product?" onConfirm={() => spuDelete([rowInfo.goodsId])} okText="Confirm" cancelText="Cancel">
-            <Tooltip placement="top" title="Delete">
+          <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisProduct" />} onConfirm={() => spuDelete([rowInfo.goodsId])} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
               <a>
                 <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
               </a>
@@ -376,7 +369,7 @@ export default class CateList extends React.Component<any, any> {
                     })
                   }
                 >
-                  <FormattedMessage id="edit" />
+                  <FormattedMessage id="Product.edit" />
                 </a>
               </AuthWrapper>
               <AuthWrapper functionName="f_goods_sku_edit_3">
@@ -391,38 +384,50 @@ export default class CateList extends React.Component<any, any> {
                       })
                     }
                   >
-                    <FormattedMessage id="product.setPrice" />
+                    <FormattedMessage id="Product.setPrice" />
                   </a>
                 )}
               </AuthWrapper>
             </div>
             <div style={{ marginLeft: 0 }}>
               <div style={styles.cell}>
-                <label style={styles.label}>Specification：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.Specification" />：
+                </label>
                 <span className="specification" style={styles.textCon}>
                   {currentGoodsSpecDetails ? currentGoodsSpecDetails : '-'}
                 </span>
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>SKU code：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.skuCode" />：
+                </label>
                 {goods.get('goodsInfoNo')}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>Market price：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.MarketPrice" />：
+                </label>
                 {goods.get('marketPrice') || goods.get('marketPrice') === 0 ? goods.get('marketPrice').toFixed(2) : 0}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>On/Off shelve：</label>
-                {goods.get('addedFlag') == 0 ? 'Off shelf' : 'On shelf'}
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.On/OffShelve" />：
+                </label>
+                {goods.get('addedFlag') != 0 ? 'Off shelf' : 'On shelf'}
               </div>
             </div>
             <div>
               <div style={styles.cell}>
-                <label style={styles.label}>Bar code：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.BarCode" />：
+                </label>
                 {goods.get('goodsInfoBarcode') ? goods.get('goodsInfoBarcode') : '-'}
               </div>
               <div style={styles.cell}>
-                <label style={styles.label}>In stock：</label>
+                <label style={styles.label}>
+                  <FormattedMessage id="Product.InStock" />：
+                </label>
                 {goods.get('stock')}
               </div>
             </div>
@@ -456,15 +461,19 @@ export default class CateList extends React.Component<any, any> {
    */
   _delete = (goodsId: string) => {
     const { spuDelete } = this.props.relaxProps;
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.deleteThisProduct'});
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this product?',
+      title: title,
+      content: content,
       onOk() {
         spuDelete([goodsId]);
       }
     });
   };
 }
+
+export default injectIntl(CateList);
 
 const styles = {
   item: {
@@ -500,7 +509,10 @@ const styles = {
     height: 60,
     padding: 5,
     border: '1px solid #ddd',
-    background: '#fff'
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
   },
   textCon: {
     width: 100,

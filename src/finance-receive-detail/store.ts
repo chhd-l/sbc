@@ -12,13 +12,7 @@ import ExportActor from './actor/export-actor';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new ListActor(),
-      new SearchActor(),
-      new LoadingActor(),
-      new SelectedActor(),
-      new ExportActor()
-    ];
+    return [new ListActor(), new SearchActor(), new LoadingActor(), new SelectedActor(), new ExportActor()];
   }
 
   constructor(props) {
@@ -31,17 +25,11 @@ export default class AppStore extends Store {
   init = async (param?) => {
     this.dispatch('loading:start');
     param = this.state().get('searchForm').merge(fromJS(param)).toJS();
-    param.startTime =
-      param.dateRange[0] &&
-      moment(param.dateRange[0]).format('YYYY-MM-DD').toString();
-    param.endTime =
-      param.dateRange[1] &&
-      moment(param.dateRange[1]).format('YYYY-MM-DD').toString();
+    param.startTime = param.dateRange[0] && moment(param.dateRange[0]).format('YYYY-MM-DD').toString();
+    param.endTime = param.dateRange[1] && moment(param.dateRange[1]).format('YYYY-MM-DD').toString();
 
     if (param && param.endTime) {
-      param.endTime = moment(param.endTime)
-        .add(1, 'day')
-        .format(Const.DAY_FORMAT);
+      param.endTime = moment(param.endTime).add(1, 'day').format(Const.DAY_FORMAT);
     }
     //根据收款单时间排序
     param.sortByReceiveTime = true;
@@ -57,7 +45,7 @@ export default class AppStore extends Store {
 
     this.transaction(() => {
       this.dispatch('loading:end');
-      this.dispatch('list:init', res);
+      this.dispatch('list:init', res.context);
       this.dispatch('offlineAccounts', offlineAccounts);
       this.dispatch('channelItem', channelValue);
       this.dispatch('sumPrice', (sumPrice as any).context);
@@ -88,7 +76,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       this.init();
     } else {
-      message.error(res.message);
     }
   }
 
@@ -105,9 +92,7 @@ export default class AppStore extends Store {
       });
     }
 
-    return this._onExport({ payOrderIds: selected.toJS() }, () =>
-      this.dispatch('select:init', [])
-    );
+    return this._onExport({ payOrderIds: selected.toJS() }, () => this.dispatch('select:init', []));
   };
 
   /**

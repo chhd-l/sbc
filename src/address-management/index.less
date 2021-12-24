@@ -4,22 +4,43 @@
 
 .code-container {
   display: flex;
-  flex-display: row;
+  //flex-display: row;
+  flex-direction: row;
 }
 
 .iconjia {
-  color: #e2001a;
+  color: var(--primary-color);
   font-size: 22px;
   margin: 0 10px;
   cursor: pointer;
 }
 
 .iconjian2 {
-  color: #e2001a;
+  color: var(--primary-color);
   font-size: 22px;
   cursor: pointer;
 }
 
 .grey-color {
   color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.hide {
+  display: none;
+}
+
+.codeStr {
+  color: var(--primary-color);
+  position: relative;
+  bottom: 15px;
+}
+
+.ant-table-placeholder {
+  border: none !important;
+}
+
+.no-data-img {
+  width: 70px;
+  height: 72px;
+  left: 41%;
 }

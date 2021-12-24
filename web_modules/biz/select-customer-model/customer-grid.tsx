@@ -204,7 +204,7 @@ export default class CustomerGrid extends React.Component<any, any> {
     const { rowChangeBackFun } = this.props;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selectedRowKeys,
@@ -308,7 +308,7 @@ export default class CustomerGrid extends React.Component<any, any> {
     params.pageSize = pageSize;
     const { res } = await webApi.fetchCustomerList(params);
     if (res.code != Const.SUCCESS_CODE) {
-      message.error(res.message);
+     
     } else {
       this.setState({
         customerPage: res.context,

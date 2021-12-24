@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import { IList } from 'typings/globalType';
 import AddCustomizedFilter from './add-customized-filter';
 import RelevancyProduct from './relevancy-product';
+import { FormattedMessage } from 'react-intl';
 
-const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: '#e2001a', marginLeft: 20 }} />);
+const DragHandle = sortableHandle(() => <Icon type="drag" style={{ fontSize: 20, color: 'var(--primary-color)', marginLeft: 20 }} />);
 
 const SortableItem = sortableElement((props) => <tr {...props} />);
 const SortableContainer = sortableContainer((props) => <tbody {...props} />);
@@ -45,22 +46,27 @@ export default class SortableTable extends React.Component {
 
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter((el) => !!el);
-      for (let i = 0; i < newData.length; i++) {
-        newData[i].sort = i + 1;
-      }
-      if (oldIndex > newIndex) {
-        let tempIndex = oldIndex;
-        oldIndex = newIndex;
-        newIndex = tempIndex;
-      }
       let newSortList = [];
-      for (let index = oldIndex; index <= newIndex; index++) {
-        let param = {
-          id: newData[index].id,
-          sort: newData[index].sort
-        };
-        newSortList.push(param);
+      for (let i = 0; i < newData.length; i++) {
+        //newData[i].sort = i + 1;
+        newSortList.push({
+          id: newData[i].id,
+          sort: i + 1,
+        });
       }
+      // if (oldIndex > newIndex) {
+      //   let tempIndex = oldIndex;
+      //   oldIndex = newIndex;
+      //   newIndex = tempIndex;
+      // }
+      
+      // for (let index = oldIndex; index <= newIndex; index++) {
+      //   let param = {
+      //     id: newData[index].id,
+      //     sort: newData[index].sort
+      //   };
+      //   newSortList.push(param);
+      // }
       if (type === 'sort') {
         let params = {
           storeGoodsSortList: newSortList
@@ -125,28 +131,28 @@ export default class SortableTable extends React.Component {
     const { dataSource, type } = this.state;
     const columnsFilter = [
       {
-        title: 'Filter name',
+        title: <FormattedMessage id="Product.FilterName" />,
         dataIndex: 'attributeName',
         className: 'drag-visible'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: <FormattedMessage id="Product.AttributeValue" />,
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '30%',
         render: (text, record) => <p>{record.filterType === '1' ? this.getAttributeValue(record.storeGoodsFilterValueVOList) : this.getAttributeValue(record.attributesValueList)}</p>
       },
       {
-        title: 'Filter status',
+        title: <FormattedMessage id="Product.FilterStatus" />,
         dataIndex: 'filterStatus',
         className: 'drag-visible',
         render: (text, record) => (
-          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateFilterStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+          <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateFilterStatus(!+text, record)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
             <Switch checked={+text ? true : false}></Switch>
           </Popconfirm>
           // <div>
@@ -155,7 +161,7 @@ export default class SortableTable extends React.Component {
         )
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: 'operation',
         className: 'drag-visible',
         render: (text, record) => (
@@ -163,8 +169,8 @@ export default class SortableTable extends React.Component {
             {/* {record.filterType === '1' && record.canDelFlag ? <AddCustomizedFilter currentSelected={record} type="edit" refreshList={this.refreshList} /> : null} */}
 
             {record.filterType !== '1' ? (
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.deleteThisItem" />} onConfirm={() => this.deleteFilter(record.id, record.filterType)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+                <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
                   <a className="iconfont iconDelete"></a>
                 </Tooltip>
               </Popconfirm>
@@ -176,34 +182,34 @@ export default class SortableTable extends React.Component {
     ];
     const columnsSort = [
       {
-        title: 'Sort field name',
+        title: <FormattedMessage id="Product.SortFieldName" />,
         dataIndex: 'sortName',
         className: 'drag-visible'
       },
       {
-        title: 'Sort field status',
+        title: <FormattedMessage id="Product.SortFieldStatus" />,
         dataIndex: 'sortStatus',
         className: 'drag-visible',
         render: (text, record) => (
           <div>
-            <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateSortStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
+            <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? ' disable' : 'enable') + ' this?'} onConfirm={() => this.updateSortStatus(!+text, record)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
               <Switch checked={+text ? true : false}></Switch>
             </Popconfirm>
             {/* <Switch checked={+text ? true : false} onClick={(checked) => this.updateSortStatus(checked, record)}></Switch> */}
           </div>
         )
       },
-      {
-        title: 'Operation',
-        dataIndex: 'operation',
-        className: 'drag-visible',
-        render: (text, record) => (
-          <div>
-            <RelevancyProduct sortId={record.id} />
-            <DragHandle />
-          </div>
-        )
-      }
+      // {
+      //   title: <FormattedMessage id="Product.Operation" />,
+      //   dataIndex: 'operation',
+      //   className: 'drag-visible',
+      //   render: (text, record) => (
+      //     <div>
+      //       <RelevancyProduct sortId={record.id} />
+      //       <DragHandle />
+      //     </div>
+      //   )
+      // }
     ];
 
     const DraggableContainer = (props) => <SortableContainer useDragHandle helperClass="row-dragging" onSortEnd={this.onSortEnd} {...props} />;

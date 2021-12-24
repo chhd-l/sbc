@@ -15,15 +15,12 @@ const Column = Table.Column;
 const TreeNode = Tree.TreeNode;
 
 const goodsOptionSelect = (
-  <Select
-    style={{ width: 100 }}
-    getPopupContainer={() => document.getElementById('modal-head')}
-  >
+  <Select style={{ width: 100 }} getPopupContainer={() => document.getElementById('modal-head')}>
     <Option value="0">
-      <FormattedMessage id="spuCode" />
+      <FormattedMessage id="Order.spuCode" />
     </Option>
     <Option value="1">
-      <FormattedMessage id="skuCode" />
+      <FormattedMessage id="Order.skuCode" />
     </Option>
   </Select>
 );
@@ -47,35 +44,20 @@ class SearchForm extends React.Component<any, any> {
       .toSeq()
       .filter((cate) => cate.get('cateParentId') === parentCateId)
       .map((item) => {
-        const childCates = oldCateList.filter(
-          (cate) => cate.get('cateParentId') == item.get('cateId')
-        );
+        const childCates = oldCateList.filter((cate) => cate.get('cateParentId') == item.get('cateId'));
         if (childCates && childCates.count()) {
           return (
-            <TreeNode
-              key={item.get('cateId').toString()}
-              value={item.get('cateId').toString()}
-              title={item.get('cateName').toString()}
-            >
+            <TreeNode key={item.get('cateId').toString()} value={item.get('cateId').toString()} title={item.get('cateName').toString()}>
               {this.loop(oldCateList, childCates, item.get('cateId'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('cateId').toString()}
-            value={item.get('cateId').toString()}
-            title={item.get('cateName').toString()}
-          />
-        );
+        return <TreeNode key={item.get('cateId').toString()} value={item.get('cateId').toString()} title={item.get('cateName').toString()} />;
       });
 
   render() {
     const params = fromJS(this.props.searchParam) as any;
-    const likeGoodsNo =
-      params.get('noType') === '0'
-        ? params.get('likeGoodsNo')
-        : params.get('likeGoodsInfoNo');
+    const likeGoodsNo = params.get('noType') === '0' ? params.get('likeGoodsNo') : params.get('likeGoodsInfoNo');
     const { getFieldDecorator } = this.props.form;
     const { cates, brands } = this.props;
 
@@ -99,23 +81,15 @@ class SearchForm extends React.Component<any, any> {
           <FormItem>
             {getFieldDecorator('likeGoodsName', {
               initialValue: params.get('likeGoodsName')
-            })(<Input addonBefore={<FormattedMessage id="productName" />} />)}
+            })(<Input addonBefore={<FormattedMessage id="Order.productName" />} />)}
           </FormItem>
 
           <FormItem>
             {getFieldDecorator('cateId', {
               initialValue: params.get('cateId').toString()
             })(
-              <TreeSelectGroup
-                getPopupContainer={() => document.getElementById('modal-head')}
-                dropdownStyle={{ zIndex: 1053 }}
-                label={<FormattedMessage id="catogery" />}
-              >
-                <TreeNode
-                  key="0"
-                  value="0"
-                  title={<FormattedMessage id="all" />}
-                >
+              <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} dropdownStyle={{ zIndex: 1053 }} label={<FormattedMessage id="catogery" />}>
+                <TreeNode key="0" value="0" title={<FormattedMessage id="all" />}>
                   {this.loop(fromJS(cates), fromJS(cates), 0)}
                 </TreeNode>
               </TreeSelectGroup>
@@ -126,17 +100,11 @@ class SearchForm extends React.Component<any, any> {
             {getFieldDecorator('brandId', {
               initialValue: params.get('brandId').toString()
             })(
-              <FormattedMessage id="brand">
+              <FormattedMessage id="Order.brand">
                 {(txt) => (
-                  <SelectGroup
-                    getPopupContainer={() =>
-                      document.getElementById('modal-head')
-                    }
-                    label={txt.toString()}
-                    dropdownStyle={{ zIndex: 1053 }}
-                  >
+                  <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={txt.toString()} dropdownStyle={{ zIndex: 1053 }}>
                     <Option key="0" value="0">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Order.all" />
                     </Option>
                     {brands.map((v) => (
                       <Option key={v.brandId} value={v.brandId + ''}>
@@ -167,7 +135,7 @@ class SearchForm extends React.Component<any, any> {
             }}
           >
             <span>
-              <FormattedMessage id="search" />
+              <FormattedMessage id="Order.search" />
             </span>
           </Button>
         </Form>
@@ -295,22 +263,9 @@ export default class GoodsAdd extends React.Component<any, any> {
             selectedRowKeys: this.state.selectedRowKeys,
             onChange: (selectedRowKeys: any[], selectedRows: any[]) => {
               const sRows = fromJS(this.state.selectedRows).filter((f) => f);
-              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet())
-                .concat(fromJS(selectedRows).toSet())
-                .toList();
-              rows = selectedRowKeys
-                .map((key) =>
-                  rows
-                    .filter((row) => 'add_' + row.get('goodsInfoId') == key)
-                    .first()
-                )
-                .filter((f) => f);
-              let intervals = this.state.allIntervals.filter(
-                (interval) =>
-                  selectedRowKeys.findIndex(
-                    (row) => row == 'add_' + interval.get('goodsInfoId')
-                  ) >= 0
-              );
+              let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedRows).toSet()).toList();
+              rows = selectedRowKeys.map((key) => rows.filter((row) => 'add_' + row.get('goodsInfoId') == key).first()).filter((f) => f);
+              let intervals = this.state.allIntervals.filter((interval) => selectedRowKeys.findIndex((row) => row == 'add_' + interval.get('goodsInfoId')) >= 0);
               this.setState({
                 selectedRows: rows,
                 selectedRowKeys,
@@ -321,19 +276,10 @@ export default class GoodsAdd extends React.Component<any, any> {
               const goodsInfoId = record.goodsInfoId;
               let oldIntervals = fromJS(this.state.intervals || []);
               if (selected) {
-                const selectedIntervals =
-                  this.state.allIntervals.filter(
-                    (i) => i && i.get('goodsInfoId') == goodsInfoId
-                  ) || fromJS([]);
-                oldIntervals = QMMethod.distinct(
-                  oldIntervals,
-                  selectedIntervals,
-                  'intervalPriceId'
-                );
+                const selectedIntervals = this.state.allIntervals.filter((i) => i && i.get('goodsInfoId') == goodsInfoId) || fromJS([]);
+                oldIntervals = QMMethod.distinct(oldIntervals, selectedIntervals, 'intervalPriceId');
               } else {
-                oldIntervals = oldIntervals.filter(
-                  (i) => i && i.get('goodsInfoId') != goodsInfoId
-                );
+                oldIntervals = oldIntervals.filter((i) => i && i.get('goodsInfoId') != goodsInfoId);
               }
               const intervals = this.state.intervals;
               this.setState({
@@ -347,29 +293,14 @@ export default class GoodsAdd extends React.Component<any, any> {
             })
           }}
         >
-          <Column
-            title={<FormattedMessage id="skuCode" />}
-            dataIndex="goodsInfoNo"
-            key="goodsInfoNo"
-            width="15%"
-          />
+          <Column title={<FormattedMessage id="Order.SKUcode" />} dataIndex="goodsInfoNo" key="goodsInfoNo" width="15%" />
+
+          <Column title={<FormattedMessage id="Order.ProductName" />} dataIndex="goodsInfoName" key="goodsInfoName" width="20%" />
+
+          <Column title={<FormattedMessage id="Order.Weight" />} dataIndex="specText" key="specText" width="20%" />
 
           <Column
-            title={<FormattedMessage id="productName" />}
-            dataIndex="goodsInfoName"
-            key="goodsInfoName"
-            width="20%"
-          />
-
-          <Column
-            title={<FormattedMessage id="weight" />}
-            dataIndex="specText"
-            key="specText"
-            width="20%"
-          />
-
-          <Column
-            title={<FormattedMessage id="catogery" />}
+            title={<FormattedMessage id="Order.catogery" />}
             key="goodsCate"
             render={(rowInfo) => {
               const cId = fromJS(spus)
@@ -381,16 +312,14 @@ export default class GoodsAdd extends React.Component<any, any> {
           />
 
           <Column
-            title={<FormattedMessage id="brand" />}
+            title={<FormattedMessage id="Order.brand" />}
             key="goodsBrand"
             render={(rowInfo) => {
               const bId = fromJS(spus)
                 .find((s) => s.get('goodsId') === rowInfo.goodsId)
                 .get('brandId');
               if (bId) {
-                const brand = fromJS(_brands).find(
-                  (s) => s.get('brandId') === bId
-                );
+                const brand = fromJS(_brands).find((s) => s.get('brandId') === bId);
                 return brand ? brand.get('brandName') : '';
               } else {
                 return '';
@@ -399,20 +328,14 @@ export default class GoodsAdd extends React.Component<any, any> {
           />
 
           <Column
-            title={<FormattedMessage id="price" />}
+            title={<FormattedMessage id="Order.Price" />}
             key="marketPrice"
             render={(rowInfo) => {
               const priceType = fromJS(spus)
                 .filter((s) => s.get('goodsId') === rowInfo.goodsId)
                 .first()
                 .get('priceType');
-              return priceType === 1
-                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                    (rowInfo.intervalMinPrice || 0).toFixed(2) +
-                    '-' +
-                    (rowInfo.intervalMaxPrice || 0).toFixed(2)
-                : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                    (rowInfo.salePrice || 0).toFixed(2);
+              return priceType === 1 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (rowInfo.intervalMinPrice || 0).toFixed(2) + '-' + (rowInfo.intervalMaxPrice || 0).toFixed(2) : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (rowInfo.salePrice || 0).toFixed(2);
             }}
           />
         </DataGrid>
@@ -469,19 +392,9 @@ export default class GoodsAdd extends React.Component<any, any> {
       const fetchBrand = await webapi.fetchBrandList();
       const fetchCates = await webapi.fetchCateList();
 
-      const {
-        brands: _brands,
-        cates: _cates,
-        goodses: spus,
-        goodsIntervalPrices: allIntervals
-      } = res as any;
+      const { brands: _brands, cates: _cates, goodses: spus, goodsIntervalPrices: allIntervals } = res as any;
 
-      const {
-        totalElements: total,
-        content: skus,
-        number: pageNum,
-        size: pageSize
-      } = (res as any).goodsInfoPage;
+      const { totalElements: total, content: skus, number: pageNum, size: pageSize } = (res as any).goodsInfoPage;
 
       //关联生效中的营销活动
       const { res: goodsMarketings } = await webapi.fetchGoodsMarketings({
@@ -490,10 +403,7 @@ export default class GoodsAdd extends React.Component<any, any> {
       });
       skus.map((sku) => {
         sku.marketings = goodsMarketings[sku.goodsInfoId];
-        sku.marketings =
-          sku.marketings && sku.marketings.length > 0
-            ? sku.marketings
-            : undefined;
+        sku.marketings = sku.marketings && sku.marketings.length > 0 ? sku.marketings : undefined;
         if (sku.marketings) {
           sku.marketingId = sku.marketings[0].marketingId; //默认选中第一个
         }
@@ -513,9 +423,7 @@ export default class GoodsAdd extends React.Component<any, any> {
           _cates,
           spus
         },
-        allIntervals: fromJS(allIntervals || []).concat(
-          this.state.allIntervals
-        ),
+        allIntervals: fromJS(allIntervals || []).concat(this.state.allIntervals),
         total,
         brands,
         cates,

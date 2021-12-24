@@ -1,51 +1,56 @@
 import React from 'react';
 import { Table, Button, Divider } from 'antd';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 const columns = [
   {
-    title: 'Prescriber ID',
+    title: <FormattedMessage id="Prescriber.PrescriberID" />,
     dataIndex: 'clinicID',
     key: 'clinicID'
   },
   {
-    title: 'Prescriber name',
+    title: <FormattedMessage id="Prescriber.PrescriberName" />,
     dataIndex: 'clinicName',
     key: 'clinicName'
   },
   {
-    title: 'Prescriber phone',
+    title: <FormattedMessage id="Prescriber.PrescriberPhone" />,
     dataIndex: 'clinicPhone',
     key: 'clinicPhone'
   },
   {
-    title: 'Prescriber city',
+    title: <FormattedMessage id="Prescriber.PrescriberCity" />,
     dataIndex: 'clinicCity',
     key: 'clinicCity'
   },
   {
-    title: 'Prescriber zip',
+    title: <FormattedMessage id="Prescriber.PrescriberZip" />,
     dataIndex: 'clinicZip',
     key: 'clinicZip'
   },
   {
-    title: 'Longitude',
+    title: <FormattedMessage id="Prescriber.Longitude" />,
     dataIndex: 'longitude',
     key: 'longitude'
   },
   {
-    title: 'Latitude',
+    title: <FormattedMessage id="Prescriber.Latitude" />,
     dataIndex: 'latitude',
     key: 'latitude'
   },
   {
-    title: 'Action',
+    title: <FormattedMessage id="Prescriber.Action" />,
     key: 'action',
     render: (text, record) => (
       <span>
-        <Link to="/clinic-add">Edit</Link>
+        <Link to="/clinic-add">
+          <FormattedMessage id="Prescriber.Edit" />,
+        </Link>
         <Divider type="vertical" />
-        <a>Delete</a>
+        <a>
+          <FormattedMessage id="Prescriber.Delete" />,
+        </a>
       </span>
     )
   }
@@ -97,14 +102,16 @@ export default class SearchForm extends React.Component<any, any> {
     return (
       <div>
         <Button>
-          <Link to="/clinic-add">Add</Link>
+          <Link to="/clinic-add">
+            <FormattedMessage id="Prescriber.Add" />
+          </Link>
         </Button>
         <Table
           columns={columns}
           rowKey={(record) => record.clinicID}
           dataSource={data}
           pagination={pagination}
-          loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={this.state.loading}
           onChange={this.handleTableChange}
         />
       </div>

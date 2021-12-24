@@ -28,7 +28,12 @@ export default class CouponDetailActor extends Actor {
         // 优惠券说明
         couponDesc: '',
         // 优惠券类型 0通用券 1运费券 2店铺券
-        couponType: ''
+        couponType: '',
+        couponPurchaseType: 0,
+        isSuperimposeSubscription: 1,// 未勾选
+        couponPromotionType: null,
+        fullbuyCount: null,
+        couponJoinLevel: null
       },
       // 优惠券分类
       couponCates: [],
@@ -37,7 +42,22 @@ export default class CouponDetailActor extends Actor {
       // 商品分类
       skuCates: [],
       // 商品
-      skus: []
+      skus: [],
+      goodsList: null,
+      currentCategary: null,
+      currentAttribute: null,
+      allGroups: [],
+      currentGroup: null,
+      couponActivityConfigPage: {
+        content:[]
+      },
+      loading: false,
+      //当前的数据总数
+      total: 0,
+      //当前的分页条数
+      pageSize: 10,
+      //当前页
+      pageNum: 1,
     };
   }
 
@@ -46,8 +66,33 @@ export default class CouponDetailActor extends Actor {
    * @param state
    * @param param1
    */
+  @Action('page')
+  init(state, { total, pageNum }) {
+    return state.set('total', total).set('pageNum', pageNum);
+  }
+
+  @Action('loading')
+  loading(state, data) {
+    return state.set('loading', data);
+  }
+
   @Action('coupon: detail: field: value')
   fieldsValue(state, { field, value }) {
     return state.set(field, fromJS(value));
+  }
+
+  @Action('marketingActor:allGroups')
+  getAllGroups(state, allGroups) {
+    return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('marketingActor:currentGroup')
+  currentGroup(state, currentGroup) {
+    return state.set('currentGroup', currentGroup);
+  }
+
+  @Action('activityConfigPage')
+  activityConfigPage(state, data) {
+    return state.set('couponActivityConfigPage', data);
   }
 }

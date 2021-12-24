@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal, Icon, Input, Checkbox, Button, message } from 'antd';
-import { cache, noop, util } from 'qmkit';
+import { cache, noop, util, RCi18n, Const } from 'qmkit';
 import { Relax } from 'plume2';
 import copy from 'copy-to-clipboard'; //拷贝插件
 
@@ -51,11 +51,11 @@ export default class DetailPublish extends React.Component<any, any> {
         return sharingObj;
         //onSend(Object.assign({}, sharingObj, {id:getLink}))
       } else {
-        message.error('Email format error!');
+        message.error(RCi18n({id:'Order.EmailFormatError'}));
         return false;
       }
     } else {
-      message.error('* Cannot be empty!');
+      message.error('* '+RCi18n({id:'Order.NotEmpty'}));
       return false;
     }
   };
@@ -103,9 +103,9 @@ export default class DetailPublish extends React.Component<any, any> {
 
   copyLink = (e) => {
     if (copy(e)) {
-      message.success('Copy successfully!');
+      message.success(RCi18n({id:'Order.CopySucc'}));
     } else {
-      message.error('Copy failed!');
+      message.error(RCi18n({id:'Order.CopyFailed'}));
     }
   };
 
@@ -136,15 +136,19 @@ export default class DetailPublish extends React.Component<any, any> {
   render() {
     const { sharing, onSharing, getLink } = this.props.relaxProps;
     const clear = this.state.clear;
+    let linkBaseUrl = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG) || '{}').supplierWebsite ?? '';
+    if (!linkBaseUrl.endsWith('/')) {
+      linkBaseUrl += '/';
+    }
     return (
       <div id="publishButton">
         <div className="share">
           <div className="title">
-            <span>*</span>First Name
+            <span>*</span>{RCi18n({id:'Order.FirstName'})}
           </div>
           <Input
             type="text"
-            placeholder="Input First Name"
+            placeholder={RCi18n({id:'Order.InputFirstName'})}
             value={sharing.get('consumerFirstName')}
             onChange={(e) => {
               const value = (e.target as any).value;
@@ -157,11 +161,11 @@ export default class DetailPublish extends React.Component<any, any> {
         </div>
         <div className="share">
           <div className="title">
-            <span>*</span>Last Name
+            <span>*</span>{RCi18n({id:'Order.LastName'})}
           </div>
           <Input
             type="text"
-            placeholder="Input Last Name"
+            placeholder={RCi18n({id:'Order.InputLastName'})}
             value={sharing.get('consumerLastName')}
             onChange={(e) => {
               const value = (e.target as any).value;
@@ -187,16 +191,16 @@ export default class DetailPublish extends React.Component<any, any> {
               checked={this.state.checked}
               //checked={this.state.checkbox}
             />
-            The customer has agreed to send the E-mail
+            {Const.SITE_NAME === 'MYVETRECO' ? 'The pet owner has agreed to receive an invitation e-mail from My VetReco' : RCi18n({id:'Order.sendEmail'})}
           </div>
         </div>
         <div className="share">
           <div className="title" style={{ clear: 'left' }}>
-            <span>*</span>E-mail
+            <span>*</span>{RCi18n({id:'Order.Email'})}
           </div>
           <Input
             type="text"
-            placeholder="Input E-mail"
+            placeholder={RCi18n({id:'Order.InputEmail'})}
             value={sharing.get('consumerEmail')}
             onChange={(e) => {
               const value = (e.target as any).value;
@@ -208,10 +212,10 @@ export default class DetailPublish extends React.Component<any, any> {
           />
         </div>
         <div className="share">
-          <div className="title">Phone Number</div>
+          <div className="title">{RCi18n({id:'Order.Phonenumber'})}</div>
           <Input
             type="text"
-            placeholder="Input the phone number"
+            placeholder={RCi18n({id:'Order.InputPhone'})}
             value={sharing.get('consumerPhoneNumber')}
             onChange={(e) => {
               const value = (e.target as any).value;
@@ -226,11 +230,7 @@ export default class DetailPublish extends React.Component<any, any> {
           <div style={{ paddingTop: 4, marginLeft: 2 }}>
             <Icon type="link" />
             <span style={{ marginLeft: 5, color: '#8f0101' }}>
-              {
-                JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
-                  .supplierWebsite
-              }
-              recommendation/{getLink}
+              {linkBaseUrl}recommendation/{getLink}
             </span>
           </div>
         </div>
@@ -238,14 +238,11 @@ export default class DetailPublish extends React.Component<any, any> {
           <Button
             onClick={() =>
               this.copyLink(
-                `${
-                  JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG))
-                    .supplierWebsite
-                }recommendation/${getLink}`
+                `${linkBaseUrl}recommendation/${getLink}`
               )
             }
           >
-            Copy the link
+            {RCi18n({id:'Order.CopyLink'})}
           </Button>
         </div>
         <div style={{ paddingTop: 4, marginTop: '1rem' }}>
@@ -257,15 +254,15 @@ export default class DetailPublish extends React.Component<any, any> {
               float: 'left'
             }}
           >
-            The share link has been generated and will be invalid after 7 days
+            {RCi18n({id:'Order.shareLinkTip'})}
           </span>
         </div>
-        {/*<Button key="back" onClick={this.handleCancel}>
+        {/* <Button key="back" onClick={this.handleCancel}>
           Exit
         </Button>
         <Button key="submit" type="primary" onClick={this.handleOk}>
           Send
-        </Button>*/}
+        </Button> */}
       </div>
     );
   }

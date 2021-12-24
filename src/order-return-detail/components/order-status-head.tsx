@@ -1,19 +1,19 @@
 import React from 'react';
 
 import { Relax } from 'plume2';
-import { Col, message, Modal, Row } from 'antd';
+import { Col, InputNumber, message, Modal, Popconfirm, Row, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import { IMap } from 'typings/globalType';
-import { AuthWrapper, Const, noop } from 'qmkit';
+import { AuthWrapper, cache, Const, noop, RCi18n } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { fromJS } from 'immutable';
 import moment from 'moment';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
 
 @Relax
-export default class OrderStatusHead extends React.Component<any, any> {
+class OrderStatusHead extends React.Component<any, any> {
   props: {
     relaxProps?: {
       detail: IMap;
@@ -46,6 +46,9 @@ export default class OrderStatusHead extends React.Component<any, any> {
       onRefundOnlineModalChange: Function;
       refundRecord: IMap;
       fetchRefundOrder: Function;
+      changeRefundPrice: Function;
+      onRealRefund: Function;
+      pendingRefundConfig:IMap;
     };
   };
 
@@ -75,7 +78,10 @@ export default class OrderStatusHead extends React.Component<any, any> {
     onlineRefundModalHide: noop,
     onRefundOnlineModalChange: noop,
     refundRecord: 'refundRecord',
-    fetchRefundOrder: noop
+    fetchRefundOrder: noop,
+    changeRefundPrice: noop,
+    onRealRefund: noop,
+    pendingRefundConfig:'pendingRefundConfig'
   };
 
   constructor(props) {
@@ -100,7 +106,8 @@ export default class OrderStatusHead extends React.Component<any, any> {
       refundModalData,
       onRefundModalHide,
       onlineRefundModalData,
-      onlineRefundModalHide
+      onlineRefundModalHide,
+      onRealRefund
     } = this.props.relaxProps;
     let { refundRecord } = this.props.relaxProps;
 
@@ -123,222 +130,165 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
     //退款单
     refundRecord = refundRecord || fromJS({});
-    const enableReturn =
-      (returnFlowState === 'RECEIVED' ||
-        (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
-      refundRecord.get('refundStatus') != null &&
-      refundRecord.get('refundStatus') != 2 &&
-      refundRecord.get('refundStatus') != 3;
+    const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundRecord.get('refundStatus') != null && refundRecord.get('refundStatus') != 2 && refundRecord.get('refundStatus') != 3;
 
+    const labelText = returnType == 'RETURN' ? Const.returnGoodsState[returnFlowState] : Const.returnMoneyState[returnFlowState] || '';
     return (
       <div>
         <div style={styles.container as any}>
           <div style={styles.row}>
             <div style={styles.orderPre}>
               <label style={styles.greenText}>
-                {returnType == 'RETURN'
-                  ? Const.returnGoodsState[returnFlowState]
-                  : Const.returnMoneyState[returnFlowState] || ''}
+                <FormattedMessage id={`Order.${labelText}`} />
               </label>
             </div>
             <div style={styles.orderEnd}>
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="f_order_return_edit">
-                  <Link
-                    style={styles.pr20}
-                    to={{
-                      pathname: `/order-return-edit/${rid}`,
-                      state: { rid: `${rid}` }
-                    }}
-                  >
-                    Update
-                  </Link>
-                </AuthWrapper>
-              )}
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="rolf002">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showAudit(onAudit, rid)}
-                  >
-                    Audit
-                  </a>
+              {returnFlowState === 'PENDING_REVIEW' && (
+                <AuthWrapper functionName="f_return_review">
+
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Approve" />}>
+                    <a style={{ marginLeft: 20 }} onClick={
+                      () => {
+                        this._showAudit(onAudit, rid);
+                      }
+                    }>
+                      <FormattedMessage id="Order.Approve" />
+                    </a>
+
+                  </Tooltip>
+
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.Reject" />}>
+                    <a style={{ marginLeft: 20 }} onClick={
+                      () => {
+                        this._showReject(onReject, rid);
+                      }
+                    }>
+                      <FormattedMessage id="Order.Reject" />
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
 
-              {returnFlowState === 'INIT' && (
-                <AuthWrapper functionName="rolf002">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showReject(onReject, rid)}
-                  >
-                    Reject
-                  </a>
+              {returnFlowState === 'TO_BE_DELIVERED' && (
+                <AuthWrapper functionName="f_return_delivered">
+                  <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert" />} onConfirm={() => {
+                    this._showDeliver(onDeliver, rid, false)
+                  }} okText={<FormattedMessage id="Order.btnConfirm" />} cancelText={<FormattedMessage id="Order.cancel" />}>
+                    <Tooltip placement="top" title={<FormattedMessage id="Order.skipLogistics" />}>
+                      <a style={{ marginLeft: 20 }}>
+                        <FormattedMessage id="Order.skipLogistics" />
+                      </a>
+                    </Tooltip>
+                  </Popconfirm>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.fillLogistics" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
+                      <FormattedMessage id="Order.fillLogistics" />
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
               )}
 
-              {/*退货单的已审核状态*/}
-              {returnFlowState === 'AUDIT' && returnType == 'RETURN' && (
-                <AuthWrapper functionName="rolf003">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showDeliver(onDeliver, rid)}
-                  >
-                    Fill in logistics
-                  </a>
+              {returnFlowState === 'TO_BE_RECEIVED' && (
+                <AuthWrapper functionName="f_return_received">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientAccepted" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
+                      <FormattedMessage id="Order.RecipientAccepted" />
+                    </a>
+                  </Tooltip>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RecipientRejected" />}>
+                    <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
+                      <FormattedMessage id="Order.RecipientRejected" />
+                    </a>
+                  </Tooltip>
+
                 </AuthWrapper>
               )}
-
-              {returnFlowState === 'DELIVERED' && (
-                <AuthWrapper functionName="rolf004">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() => this._showReceive(onReceive, rid)}
-                  >
-                    收货
-                  </a>
-                </AuthWrapper>
-              )}
-
-              {returnFlowState === 'DELIVERED' && (
-                <AuthWrapper functionName="rolf004">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() =>
-                      this._showRejectReceive(onRejectReceive, rid)
-                    }
-                  >
-                    拒绝收货
-                  </a>
-                </AuthWrapper>
-              )}
-
-              {/*已收货状态 或者 退款单的已审核状态*/}
-              {enableReturn && (
-                <AuthWrapper functionName="rolf005">
-                  <div>
-                    {' '}
+              {returnFlowState === 'PENDING_REFUND' &&this.showPendingRefundBtn(payType)? (
+                <AuthWrapper functionName="f_return_refund">
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.refusedToRefund" />}>
                     <a
-                      style={styles.pr20}
-                      href="#"
+                      href="javascript:void(0)"
+                      style={{ marginLeft: 20 }}
                       onClick={() => {
-                        if (payType == 0) {
-                          this._showOnlineRefund(
-                            onOnlineRefund,
-                            rid,
-                            customerId,
-                            payPrice,
-                            applyPoints
-                          );
-                        } else {
-                          this._showOfflineRefund(
-                            onOfflineRefund,
-                            rid,
-                            customerId,
-                            payPrice,
-                            applyPoints
-                          );
-                        }
+                        // console.log(onRejectRefund, 'onRejectRefund');
+                        this._showRejectRefund(onRejectRefund, rid, 0 == payType);
                       }}
                     >
-                      <FormattedMessage id="refund" />
+                      <FormattedMessage id="Order.refusedToRefund" />
                     </a>
-                  </div>
+                  </Tooltip>
+                  <Tooltip placement="top" title={<FormattedMessage id="Order.RealRefund" />}>
+                    <a
+                      href="javascript:void(0)"
+                      style={{ marginLeft: 20 }}
+                      onClick={() => {
+                        this._showRealRefund(onRealRefund, rid, applyPrice);
+                      }}
+                    >
+                      <FormattedMessage id="Order.RealRefund" />
+                    </a>
+                  </Tooltip>
                 </AuthWrapper>
-              )}
-              {/*已收货状态 或者 退款单的已审核状态*/}
-              {enableReturn && (
-                <AuthWrapper functionName="rolf005">
-                  <a
-                    style={styles.pr20}
-                    href="#"
-                    onClick={() =>
-                      this._showRejectRefund(onRejectRefund, rid, 0 == payType)
-                    }
-                  >
-                    <FormattedMessage id="refusedToRefund" />
-                  </a>
-                </AuthWrapper>
-              )}
+              ):null}
             </div>
           </div>
           <Row>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="chargebackNumber" />：{detail.get('id')}{' '}
+                <FormattedMessage id="Order.ReturnOrderNumber" />：{detail.get('id')}{' '}
                 {detail.get('platform') != 'CUSTOMER' && (
                   <span style={styles.platform}>
-                    <FormattedMessage id="Chargeback" />
+                    <FormattedMessage id="Order.Return" />
                   </span>
                 )}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="applicationTime" />：
-                {moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
+                <FormattedMessage id="Order.applicationTime" />：{moment(detail.get('createTime')).format(Const.TIME_FORMAT)}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="orderNumber" />：{detail.get('tid')}
+                <FormattedMessage id="Order.orderNumber" />：{detail.get('tid')}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="payWay" />：{detail.get('payWay')}
+                <FormattedMessage id="Order.payWay" />：{detail.get('payWay')}
               </p>
             </Col>
             <Col span={8}>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumer" />：
-                {detail.getIn(['buyer', 'name'])}
+                <FormattedMessage id="Order.Petownername" />：{detail.getIn(['buyer', 'name'])}
               </p>
               <p style={styles.darkText}>
-                <FormattedMessage id="consumerAccount" />：
-                {this._parsePhone(detail.getIn(['buyer', 'account']))}
+                <FormattedMessage id="Order.consumerAccount" />:{this._parsePhone(detail.getIn(['buyer', 'account']))}
               </p>
 
               {detail.getIn(['buyer', 'customerFlag']) && (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="consumerLevel" />： Tourist
-                  {/* {detail.getIn(['buyer', 'levelName'])} */}
+                  <FormattedMessage id="Order.consumerLevel" />:
+                  {detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
             </Col>
           </Row>
         </div>
-        <RejectModal
-          data={rejectModalData}
-          onHide={onRejectModalHide}
-          handleOk={rejectModalData.get('onOk')}
-        />
-        <DeliverModal
-          data={deliverModalData}
-          onHide={onDeliverModalHide}
-          handleOk={deliverModalData.get('onOk')}
-        />
-        <RefundModal
-          data={refundModalData}
-          onHide={onRefundModalHide}
-          handleOk={refundModalData.get('onOk')}
-        />
-        <OnlineRefundModal
-          data={onlineRefundModalData}
-          onHide={onlineRefundModalHide}
-        />
+        <RejectModal data={rejectModalData} onHide={onRejectModalHide} handleOk={rejectModalData.get('onOk')} />
+        <DeliverModal data={deliverModalData} onHide={onDeliverModalHide} handleOk={deliverModalData.get('onOk')} />
+        <RefundModal data={refundModalData} onHide={onRefundModalHide} handleOk={refundModalData.get('onOk')} />
+        <OnlineRefundModal data={onlineRefundModalData} onHide={onlineRefundModalHide} />
       </div>
     );
   }
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
+    const content = RCi18n({ id: 'Order.approveAlert' });
+    const title = RCi18n({ id: 'Order.Approve' });
     confirm({
-      title: '审核通过',
-      content: '是否确认审核通过？',
+      title: title,
+      content: content,
+      okText: RCi18n({ id: 'Order.OK' }),
       onOk() {
         return onAudit(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -346,30 +296,36 @@ export default class OrderStatusHead extends React.Component<any, any> {
   _showReject(onReject: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '驳回',
+      type: 'reject',
       onOk: onReject,
       rid: rid
     });
   }
 
   // 填写物流
-  _showDeliver(onDeliver: Function, rid: string) {
-    this.props.relaxProps.onDeliverModalChange({
-      visible: true,
-      onOk: onDeliver,
-      rid: rid
-    });
+  _showDeliver(onDeliver: Function, rid: string, isSkip: boolean) {
+    if (isSkip) {
+      this.props.relaxProps.onDeliverModalChange({
+        visible: true,
+        onOk: onDeliver,
+        rid: rid
+      });
+    } else {
+      onDeliver(rid, false)
+    }
   }
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
+    const content = RCi18n({ id: 'Order.receiptAlert' });
+    const title = RCi18n({ id: 'Order.ConfirmReceipt' });
     confirm({
-      title: '确认收货',
-      content: '是否确认收货？',
+      title: title,
+      content: content,
       onOk() {
         return onReceive(rid);
       },
-      onCancel() {}
+      onCancel() { }
     });
   }
 
@@ -377,20 +333,14 @@ export default class OrderStatusHead extends React.Component<any, any> {
   _showRejectReceive(onRejectReceive: Function, rid: string) {
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '拒绝收货',
+      type: 'recipient rejected',
       onOk: onRejectReceive,
       rid: rid
     });
   }
 
   // 在线退款 这里不要奇怪，新的需求 线上线下走的是一个接口 才onOfflineRefund
-  async _showOnlineRefund(
-    onOnlineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  async _showOnlineRefund(onOnlineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundOnlineModalChange({
       visible: true,
       onOk: onOnlineRefund,
@@ -402,13 +352,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
   }
 
   // 线下退款
-  _showOfflineRefund(
-    onOfflineRefund: Function,
-    rid: string,
-    customerId: string,
-    refundAmount: number,
-    applyPoints: number
-  ) {
+  _showOfflineRefund(onOfflineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
     this.props.relaxProps.onRefundModalChange({
       visible: true,
       onOk: onOfflineRefund,
@@ -420,17 +364,12 @@ export default class OrderStatusHead extends React.Component<any, any> {
   }
 
   // 拒绝退款
-  async _showRejectRefund(
-    onRejectRefund: Function,
-    rid: string,
-    online: boolean
-  ) {
+  async _showRejectRefund(onRejectRefund: Function, rid: string, online: boolean) {
     // 在线退款需要校验是否已在退款处理中
     if (online) {
       const { checkRefundStatus, init } = this.props.relaxProps;
       const { res } = await checkRefundStatus(rid);
       if (res.code !== Const.SUCCESS_CODE) {
-        message.error(res.message);
         setTimeout(() => init(rid), 2000);
         return;
       }
@@ -438,7 +377,7 @@ export default class OrderStatusHead extends React.Component<any, any> {
 
     this.props.relaxProps.onRejectModalChange({
       visible: true,
-      type: '拒绝退款',
+      type: 'refused to refund',
       onOk: onRejectRefund,
       rid: rid
     });
@@ -455,7 +394,57 @@ export default class OrderStatusHead extends React.Component<any, any> {
       return phone;
     }
   }
+  async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+    const content = RCi18n({ id: 'Order.refundAlert1' });
+    const content1 = RCi18n({ id: 'Order.refundAlert2' });
+    const title = RCi18n({ id: 'Order.confirmRefund' });
+    confirm({
+      title: title,
+      content: <div>
+        <p>{content}</p>
+        <p>{content1}</p>
+
+
+        <InputNumber
+          min={0}
+          max={applyPrice}
+          defaultValue={applyPrice}
+          formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '$'} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          parser={value => value.replace(/\$\s?|(,*)/g, '')}
+          onChange={this.changeRealRefund}
+        />
+      </div>,
+      onOk() {
+        return onRealRefund(rid, applyPrice);
+      },
+      onCancel() {
+        this.setState({
+          refundPrice: null
+        })
+      }
+    });
+  }
+  changeRealRefund = (value) => {
+    this.props.relaxProps.changeRefundPrice({
+      refundPrice: value
+    })
+  }
+  showPendingRefundBtn=(payType)=>{
+    const {pendingRefundConfig}= this.props.relaxProps;
+    if(payType===0){
+      return pendingRefundConfig.get('online')
+    }
+    if(payType===1){
+      return pendingRefundConfig.get('cashOnDelivery')
+    }
+    if(payType===2){
+      return pendingRefundConfig.get('cash')
+    }
+    return 1
+  }
 }
+
+export default injectIntl(OrderStatusHead);
 
 const styles = {
   container: {
@@ -500,10 +489,11 @@ const styles = {
   },
   platform: {
     fontSize: 12,
-    color: '#fff',
-    padding: '1px 3px',
-    background: '#F56C1D',
+    padding: '0px 5px',
     display: 'inline-block',
-    marginLeft: 5
+    marginLeft: 5,
+    border: ' 1px solid #F56C1D',
+    color: '#F56C15',
+    borderRadius: 5
   }
 } as any;

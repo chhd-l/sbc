@@ -1,5 +1,6 @@
 import { Action, Actor } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
+import { treeNesting } from '../../../web_modules/qmkit/utils/utils'
 
 export default class GoodsActor extends Actor {
   defaultState() {
@@ -23,6 +24,7 @@ export default class GoodsActor extends Actor {
         goodsName: '',
         // SPU编码
         goodsNo: '',
+        promotions: 'autoship',
         internalGoodsNo: '',
         // 计量单位
         goodsUnit: '',
@@ -42,9 +44,12 @@ export default class GoodsActor extends Actor {
         saleType: 0,
         saleableFlag: 1,
         displayFlag: 1,
-        subscriptionPrice: '',
+        //subscriptionPrice: '',
         subscriptionStatus: 1,
-        goodsId: null
+        goodsId: null,
+        defaultPurchaseType: null,
+        defaultFrequencyId: null,
+        resource: 1 //商品来源
       },
       // 是否编辑商品
       isEditGoods: false,
@@ -70,9 +75,28 @@ export default class GoodsActor extends Actor {
       goodsTaggingRelList: null,
       productFilter: null,
       addSkUProduct: [],
-      oldGoodsDetailTabContent: ''
+      oldGoodsDetailTabContent: '',
+      resourceCates: [],
+      purchaseTypeList: [],
+      frequencyList: {
+        autoShip: {},
+        club: {}
+      },
+      goodsDescriptionDetailList: [],
+      subSkuSelectdRows: []
     };
   }
+
+  /**
+   * 存储sub-sku弹框里选择的行
+   * @param state 
+   * @param dataList 
+   * @returns 
+   */
+   @Action('goodsActor: setSubSkuSelectdRows')
+   setSubSkuSelectdRows(state, selectdRows: IList) {
+     return state.set('subSkuSelectdRows', selectdRows);
+   }
 
   /**
    * 初始化分类
@@ -82,24 +106,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initCateList')
   initCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = dataList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = dataList
-          .filter((item) => item.get('cateParentId') == data.get('cateId'))
-          .map((childrenData) => {
-            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('cateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(dataList,'cateParentId','cateId')
     return state.set('cateList', newDataList).set('sourceCateList', dataList);
   }
 
@@ -111,24 +118,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initStoreCateList')
   initStoreCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = dataList
-      .filter((item) => item.get('cateParentId') == 0)
-      .map((data) => {
-        const children = dataList
-          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
-          .map((childrenData) => {
-            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
-            if (!lastChildren.isEmpty()) {
-              childrenData = childrenData.set('children', lastChildren);
-            }
-            return childrenData;
-          });
-
-        if (!children.isEmpty()) {
-          data = data.set('children', children);
-        }
-        return data;
-      });
+    const newDataList = treeNesting(dataList,'cateParentId','cateId')
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
@@ -269,13 +259,10 @@ export default class GoodsActor extends Actor {
   editEditor(state, editor) {
     return state.set('editor', editor);
   }
-
   @Action('goodsActor: editorContent')
   editEditorContent(state, { keyName, value }) {
-    console.log(keyName, value);
     return state.setIn(['goods', keyName], value);
   }
-
   @Action('priceActor:setAlonePrice')
   toggleSetAlonePrice(state, result) {
     return state.setIn(['goods', 'allowPriceSet'], result);
@@ -308,5 +295,24 @@ export default class GoodsActor extends Actor {
   @Action('product:productFilter')
   productFilter(state, productFilter) {
     return state.set('productFilter', productFilter);
+  }
+
+  @Action('goodsActor:resourceCates')
+  resourceCates(state, resourceCates) {
+    return state.set('resourceCates', resourceCates);
+  }
+
+  @Action('goodsActor:purchaseTypeList')
+  purchaseTypeList(state, purchaseTypeList) {
+    return state.set('purchaseTypeList', purchaseTypeList);
+  }
+  @Action('goodsActor:frequencyList')
+  frequencyList(state, params) {
+    const frequencyList = params;
+    return state.set('frequencyList', frequencyList);
+  }
+  @Action('goodsActor:descriptionTab')
+  goodsDescriptionTab(state, tabList) {
+    return state.set('goodsDescriptionDetailList', tabList);
   }
 }

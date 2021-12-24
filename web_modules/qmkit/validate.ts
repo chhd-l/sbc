@@ -16,6 +16,8 @@ export default {
   noZeroNumber: /^[1-9]\d{0,}$/,
   //9位数字,不包含0
   noZeroNineNumber: /^[1-9]\d{0,8}$/,
+  //包含0且不以0开头的整数
+  zeroNumber: /^(0|[1-9][0-9]*)$/,
   // 固定电话
   telephone: /(^\d{0,9}-\d{0,10}$)|(^\d{1,20}$)/,
   // 纳税人识别号
@@ -46,4 +48,5 @@ export default {
   enterpriseRange:  /^(0|[1-9][0-9]{0,6})(\.([1-9]|[0-9][1-9]))?$/,
   //不能为负数
   noMinus: /^\d+(\.\d+)?$/,
+  Retimes: undefined
 };

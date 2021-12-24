@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Tabs } from 'antd';
+import { Select, Tabs } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { ErrorBoundary, noop, UEditor, ReactEditor } from 'qmkit';
+import { ErrorBoundary, noop, ReactEditor, history } from 'qmkit';
 import { List } from 'immutable';
 import { FormattedMessage } from 'react-intl';
 let goodsDetailTabObj = {};
+
 @Relax
 export default class Detail extends React.Component<any, any> {
   child: any;
@@ -17,11 +18,13 @@ export default class Detail extends React.Component<any, any> {
       chooseImgs: List<any>;
       imgType: number;
       goodsDetailTab: IList;
+      goodsDescriptionDetailList: any;
 
       editGoods: Function;
       refDetailEditor: Function;
       reftabDetailEditor: Function;
       modalVisible: Function;
+      editEditor: Function;
       editEditorContent: Function;
     };
   };
@@ -33,68 +36,78 @@ export default class Detail extends React.Component<any, any> {
     imgType: 'imgType',
     goodsTabs: 'goodsTabs',
     goodsDetailTab: 'goodsDetailTab',
+    goodsDescriptionDetailList: 'goodsDescriptionDetailList',
+
     // 修改商品基本信息
     editGoods: noop,
     refDetailEditor: noop,
     reftabDetailEditor: noop,
     modalVisible: noop,
+    editEditor: noop,
     editEditorContent: noop
   };
 
-  getDetailString = (goodsDetailTabContent, name) => {
-    let detail = goodsDetailTabContent ? goodsDetailTabContent[name] : '';
-    if (!detail) {
-      return '';
-    }
-    if (Array.isArray(detail)) {
-      return '<code>[' + goodsDetailTabContent[name].toString().replace(/^\"|\"$/g, '') + ']</code>';
-    } else {
-      return detail.toString();
-    }
-  };
+
   onContentChange = (html: string, name: string) => {
-    const { editEditorContent } = this.props.relaxProps;
-
-    const reg = /[^><]+(?=<\/code>)/gim;
-    let _html = html.match(reg);
-    if (_html) {
-      goodsDetailTabObj[name] = _html.toString();
-    } else {
-      goodsDetailTabObj[name] = html;
-    }
-    let p = JSON.stringify(goodsDetailTabObj);
-    editEditorContent('goodsDetail', p);
-    // console.log(goodsDetailTabObj)
+    // if (goodsDetailTabObj[name].contentType.toUpperCase() === 'JSON') {
+    //   goodsDetailTabObj[name].content = this.functionTurnJson(html);
+    // } else {
+      goodsDetailTabObj[name].content = html;
+    // }
+    this.sortDetailTab();
   };
-
-  render() {
-    const { goods, refDetailEditor, reftabDetailEditor, chooseImgs, imgType, goodsTabs, goodsDetailTab } = this.props.relaxProps;
-    let goodsDetailTabCopy = goodsDetailTab.sort((a, b) => a.get('priority') - b.get('priority'));
-    let goodsDetailTabContent: any = {};
-    let goodsDetailContent: string = goods.get('goodsDetail');
-    if (goodsDetailContent) {
-      try {
-        goodsDetailTabContent = JSON.parse(goodsDetailContent);
-      } catch {
-        goodsDetailTabCopy.map((item) => {
-          goodsDetailTabContent[item.get('name')] = '';
-        });
-      }
+  sortDetailTab = () => {
+    const { editEditorContent } = this.props.relaxProps;
+    let arr = [];
+    for (let key in goodsDetailTabObj) {
+      arr.push(goodsDetailTabObj[key]);
     }
-    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
-    let storeId = loginInfo ? loginInfo.storeId : '';
+    editEditorContent(arr);
+  };
+  changeTabsBar = (key,item) => {
+    let id=item.descriptionName + '_' + item.descriptionId;
+    item['contentType']=key;
+    item.content = ''
+    item.key=+new Date();
+    goodsDetailTabObj[id]=item;
+    this.sortDetailTab();
+  }
+  render() {
+    const { goods, goodsDescriptionDetailList } = this.props.relaxProps;
+    goodsDetailTabObj = {};
     return (
       <div>
-        {goodsDetailContent && (
-          <Tabs defaultActiveKey="main0" animated={false}>
-            {goodsDetailTabCopy.map((item, i) => {
+        {goodsDescriptionDetailList.length > 0 && (
+          <Tabs defaultActiveKey={'main' + goodsDescriptionDetailList[0].descriptionId} animated={false}>
+            {goodsDescriptionDetailList.map((item, i) => {
+              goodsDetailTabObj[item.descriptionName + '_' + item.descriptionId] = item;
+              let resource = goods.get('resource'),
+                disabled = true;
+              if (resource !== 1) {
+                disabled = item?.editable ?? false;
+              }
+              item.content = item?.content ?? '';
+              item.contentType=item?.contentType??'text'
+            
               return (
-                <Tabs.TabPane tab={item.get('name')} key={'main' + i} forceRender>
-                  {
-                    <ErrorBoundary>
-                      <ReactEditor id={'main-' + i} content={this.getDetailString(goodsDetailTabContent, item.get('name'))} onContentChange={this.onContentChange} tabNanme={item.get('name')} disabled={false} height={320} />
-                    </ErrorBoundary>
-                  }
+                <Tabs.TabPane tab={item.descriptionName} key={'main' + item.descriptionId} forceRender>
+                  <div style={{paddingBottom:10,position:'absolute',right:0,zIndex:99,top:10}}>
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode} key={item.descriptionId} disabled={item?.created??true} value={item.contentType} style={{ width: 200 }} onChange={(e)=>{this.changeTabsBar(e,item)}}>
+                    <Select.Option value="text">html</Select.Option>
+                    <Select.Option value="json">json</Select.Option>
+                  </Select>
+                  </div>
+                  <ReactEditor
+                    key={item.key}
+                    id={'main-' + item.descriptionId}
+                    cateId={item.goodsCateId}
+                    content={item.content}
+                    onContentChange={this.onContentChange}
+                    contentType={item.contentType}
+                    tabNanme={item.descriptionName + '_' + item.descriptionId}
+                    disabled={!disabled}
+                    height={320}
+                  />
                 </Tabs.TabPane>
               );
             })}

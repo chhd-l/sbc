@@ -2,10 +2,11 @@ import { Actor, Action } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, Map, List } from 'immutable';
 import { message } from 'antd';
-import { cache, Const } from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 export default class GoodsSpecActor extends Actor {
   defaultState() {
+    let defaultGoodsInfoNo = this._randomGoodsInfoNo();
     return {
       // 是否为单规格
       specSingleFlag: true,
@@ -22,8 +23,19 @@ export default class GoodsSpecActor extends Actor {
       goodsList: [
         {
           id: this._getRandom(),
+          subscriptionStatus: 1,
           index: 1,
-          goodsInfoNo: this._randomGoodsInfoNo()
+          addedFlag: 1,
+          subscriptionPrice: 0,
+          marketPrice: 0,
+          promotions: 'autoship',
+          factor: 1,
+          externalStock: 0,
+          stock: 0,
+          goodsInfoNo: defaultGoodsInfoNo,
+          externalSku: defaultGoodsInfoNo,
+          defaultSku: 0,
+          displayOnShop: 1
         }
       ],
       stockChecked: false,
@@ -42,7 +54,7 @@ export default class GoodsSpecActor extends Actor {
    * @private
    */
   _randomGoodsInfoNo() {
-    const skuNo = '8' + new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
+    const skuNo = '8' + new Date().getTime().toString().substr(-9) + Math.random().toString().substr(-6);
 
     // 如果已经生成过，重新生成
     if (this.generatedNo.get(skuNo)) {
@@ -78,15 +90,25 @@ export default class GoodsSpecActor extends Actor {
    * 设置是否为单规格
    */
   @Action('goodsSpecActor: editSpecSingleFlag')
-  editSpecSingleFlag(state, specSingleFlag: boolean) {
+  editSpecSingleFlag(state, { specSingleFlag, promotions, subscriptionStatus }: any) {
     if (specSingleFlag) {
+      let defaultGoodsInfoNo = this._randomGoodsInfoNo();
       state = state.set(
         'goodsList',
         fromJS([
           {
             id: Math.random().toString().substring(2),
             index: 1,
-            goodsInfoNo: this._randomGoodsInfoNo()
+            addedFlag: 1,
+            goodsInfoNo: defaultGoodsInfoNo,
+            externalSku: defaultGoodsInfoNo,
+            subscriptionStatus: subscriptionStatus,
+            promotions: promotions,
+            stock: 0,
+            subscriptionPrice: 0,
+            marketPrice: 0,
+            defaultSku: 0,
+            displayOnShop: 1
           }
         ])
       );
@@ -144,13 +166,20 @@ export default class GoodsSpecActor extends Actor {
         marketPrice = firstSku.get('marketPrice');
       }
     }
-    if (marketPrice > 0) {
-      goods = goods.map((item) => item.set('marketPrice', marketPrice));
-    }
+    // 初始化marketPrice和subscriptionPrice放在this._getGoods方法中
+    // if (marketPrice >= 0) {
+    //   goods = goods.map((item) => {
+    //     if (item.get('subscriptionStatus')) {
+    //       return item.set('marketPrice', marketPrice).set('subscriptionPrice', marketPrice);
+    //     } else {
+    //       return item.set('marketPrice', marketPrice);
+    //     }
+    //   });
+    // }
 
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     return state.set('goodsSpecs', goodsSpecs).set('goodsList', goods);
@@ -164,7 +193,17 @@ export default class GoodsSpecActor extends Actor {
     if (key === 'baseSpecId') {
       return state.set('baseSpecId', fromJS(value));
     }
-    if (key === 'subscriptionStatus') {
+    if (key === 'defaultSku') {
+      let goodsList = state.toJS()['goodsList'];
+      goodsList.map((el) => {
+        if (el.id === id) {
+          el.defaultSku = parseInt(value);
+        } else {
+          el.defaultSku = 0;
+        }
+      });
+      return state.set('goodsList', fromJS(goodsList));
+    } else if (key === 'subscriptionStatus') {
       let goodsList = state.toJS()['goodsList'];
       goodsList.map((el) => {
         if (el.id === id) {
@@ -208,18 +247,33 @@ export default class GoodsSpecActor extends Actor {
    * 添加规格
    */
   @Action('goodsSpecActor: addSpec')
-  addSpec(state) {
+  addSpec(state, promotions) {
     let goodsSpecs = state.get('goodsSpecs');
     const random = this._getRandom();
     const spec = fromJS({
       specId: random,
       mockSpecId: random,
       isMock: true,
+      promotions,
       specName: 'specification' + (goodsSpecs.count() + 1),
       specValues: []
     });
     return state.update('goodsSpecs', (goodsSpecs) => goodsSpecs.push(spec));
   }
+
+  /**
+   * 更新规格里specValues里的属性值
+   * @param state 
+   * @param {specId, key, value} 
+   * @returns 
+   */
+   @Action('goodsSpecActor: updateSpecValues')
+   updateSpecValues(state, { specId, key, value }) {
+     return state.update('goodsSpecs', (goodsSpecs) => {
+       const index = goodsSpecs.findIndex((item) => item.get('specId') == specId);
+       return goodsSpecs.update(index, (item) => item.set(key, value));
+     });
+   }
 
   /**
    * 添加规格
@@ -234,7 +288,7 @@ export default class GoodsSpecActor extends Actor {
     const goods = this._getGoods(goodsSpecs, state.get('goodsList'));
     if (goods.count() > Const.spuMaxSku) {
       // 只进行提示，但是不拦截，保存时拦截
-      message.error(`SKU数量不超过${Const.spuMaxSku}个`);
+      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
     }
 
     state = state.set('goodsList', goods);
@@ -284,10 +338,17 @@ export default class GoodsSpecActor extends Actor {
         .sort((a, b) => a - b)
         .join();
 
-      const sku = goodsList.find((sku) => sku.get('skuSvIds') == skuSvIds);
+      // const sku = goodsList.find((sku) => sku.get('skuSvIds') == skuSvIds);
+      const sku = goodsList.find((sku) => {
+        let curSkuSvIds = sku.get('skuSvIds');
+        if(!curSkuSvIds) {
+          return false
+        } else {
+          return curSkuSvIds.sort((a, b) => a - b).join() == skuSvIds;
+        }
+      });
       return sku ? o.mergeDeep(sku.set('index', o.get('index'))) : o;
     });
-
     return resultArray;
   };
 
@@ -318,6 +379,16 @@ export default class GoodsSpecActor extends Actor {
         goodsItem = goodsItem.set('id', this._getRandom());
         goodsItem = goodsItem.set('index', resultIndex++);
         goodsItem = goodsItem.set('goodsInfoNo', goodsInfoNo);
+        goodsItem = goodsItem.set('externalSku', goodsInfoNo);
+        goodsItem = goodsItem.set('stock', 0);
+        goodsItem = goodsItem.set('externalStock', 0);
+        goodsItem = goodsItem.set('factor', 1);
+        goodsItem = goodsItem.set('marketPrice', 0);
+        goodsItem = goodsItem.set('subscriptionPrice', 0);
+        goodsItem = goodsItem.set('subscriptionStatus', item2.get('subscriptionStatus'));
+        goodsItem = goodsItem.set('promotions', item2.get('goodsPromotions'));
+        goodsItem = goodsItem.set('defaultSku', 0);
+        goodsItem = goodsItem.set('displayOnShop', 1);
         let skuSvIds = fromJS(item1.get('skuSvIds')).toJS();
         skuSvIds.push(item2.get('specDetailId'));
         skuSvIds.sort((a, b) => a - b);
@@ -325,6 +396,10 @@ export default class GoodsSpecActor extends Actor {
         resultArray = resultArray.push(goodsItem);
       });
     });
+
+    //每次循环完清空random缓存
+    this.generatedNo = Map();
+
     if (index == goodsSpecs.count() - 1) {
       return resultArray;
     }
@@ -335,19 +410,36 @@ export default class GoodsSpecActor extends Actor {
    * 转换规格为数组
    */
   _convertSpev = (spec: IMap) => {
-    return spec.get('specValues').map((item, index) => {
+    let resultArr = spec.get('specValues').map((item, index) => {
+      let b = spec.toJS()
+      const promotions  = spec.get('promotions');
       const specId = 'specId-' + spec.get('specId');
       const specDetailId = 'specDetailId-' + spec.get('specId');
       const goodsInfoNo = this._randomGoodsInfoNo();
+      //debugger
       return Map({
         [specId]: item.get('detailName'),
         [specDetailId]: item.get('specDetailId'),
         id: this._getRandom(),
         index: index + 1,
         goodsInfoNo: goodsInfoNo,
-        skuSvIds: [item.get('specDetailId')]
+        externalSku: goodsInfoNo,
+        factor: 1,
+        externalStock: 0,
+        stock: 0,
+        marketPrice: 0,
+        subscriptionPrice: 0,
+        promotions: item.get('goodsPromotions') == 'club' ? 'club' : 'autoship',
+        addedFlag: 1,
+        subscriptionStatus: item.get('subscriptionStatus'),
+        skuSvIds: [item.get('specDetailId')],
+        defaultSku: 0,
+        displayOnShop: 1
       });
     });
+    //每次循环后情况random缓存
+    this.generatedNo = Map();
+    return resultArr;
   };
 
   /**

@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Button, Col, Form, Icon, Input, Modal, Popover, Row, Table, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop, util } from 'qmkit';
+import { AuthWrapper, Const, noop, util, getOrderStatusValue } from 'qmkit';
 import { fromJS, Map, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
 
@@ -19,7 +19,8 @@ const columns = [
     title: 'Product Name',
     dataIndex: 'skuName',
     key: 'skuName',
-    width: '50%'
+    width: '50%',
+    render: (text,record) => text==='individualization'?record.petsName+'\'s personalized subscription':text
   },
   {
     title: 'Weight',
@@ -67,23 +68,6 @@ const invoiceContent = (invoice) => {
   return invoiceContent;
 };
 
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return 'Pending review';
-  } else if (status == 'GROUPON') {
-    return 'To be formed';
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return 'to be delivered';
-  } else if (status == 'DELIVERED') {
-    return 'To be received';
-  } else if (status == 'CONFIRMED') {
-    return 'Received';
-  } else if (status == 'COMPLETED') {
-    return 'Completed';
-  } else if (status == 'VOID') {
-    return 'Out of date';
-  }
-};
 
 /**
  * 拒绝表单，只为校验体验
@@ -197,7 +181,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const tradeItems = detail.get('tradeItems').toJS();
     //赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
-    gifts = gifts.map((gift) => gift.set('skuName', '【赠品】' + gift.get('skuName')).set('levelPrice', 0)).toJS();
+    gifts = gifts.map((gift) => gift.set('skuName', (window as any).RCi18n({ id: 'Order.Giveaway' }) + gift.get('skuName')).set('levelPrice', 0)).toJS();
     const tradePrice = detail.get('tradePrice').toJS() as any;
 
     //收货人信息
@@ -207,6 +191,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
       phone: string;
       countryId: string;
       cityId: number;
+      city: string;
+      province: string;
       address: string;
       detailAddress1: string;
       detailAddress2: string;
@@ -267,7 +253,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               justifyContent: 'space-between'
             }}
           >
-            <label style={styles.greenText}>{flowState(detail.getIn(['tradeState', 'flowState']))}</label>
+            <label style={styles.greenText}><FormattedMessage id={getOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))} /></label>
 
             {this._renderBtnAction(tid)}
           </div>
@@ -285,7 +271,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
               </p>
               {detail.get('isAutoSub') ? (
                 <p style={styles.darkText}>
-                  <FormattedMessage id="order.subscriptioNumber" /> : {detail.get('subscribeId')}
+                  <FormattedMessage id="order.subscriptionNumber" /> : {detail.get('subscribeId')}
                 </p>
               ) : (
                 ''
@@ -304,7 +290,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
                     ? 'Consumer Level:  '
                     : 'Platform Level:  ') +
                     detail.getIn(['buyer', 'levelName'])} */}
-                  {'Consumer type:  ' + detail.getIn(['buyer', 'levelName'])}
+                  {'Pet owner type:  ' + detail.getIn(['buyer', 'levelName'])}
                 </p>
               )}
               <p style={styles.darkText}>
@@ -330,8 +316,13 @@ export default class OrderDetailTab extends React.Component<any, any> {
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryCountry" />}: {countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId}
             </p>
+            {consignee.province ? (
+              <p style={styles.inforItem}>
+                {<FormattedMessage id="deliveryState" />}: {consignee.province}
+              </p>
+            ) : null}
             <p style={styles.inforItem}>
-              {<FormattedMessage id="deliveryCity" />}: {cityDict.find((c) => c.id == consignee.cityId) && cityDict.find((c) => c.id == consignee.cityId).cityName}
+              {<FormattedMessage id="deliveryCity" />}: {consignee.city}
             </p>
             <p style={styles.inforItem}>
               {<FormattedMessage id="deliveryAddress1" />}: {consignee.detailAddress1}
@@ -383,6 +374,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
     const { detail, onAudit, verify, onDelivery, showRejectModal } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
+    const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const paymentOrder = detail.get('paymentOrder');
 
     //修改状态的修改
@@ -473,7 +465,7 @@ export default class OrderDetailTab extends React.Component<any, any> {
           }
         </div>
       );
-    } else if (flowState === 'DELIVERED_PART') {
+    } else if (((flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID'))) {
       return (
         <div>
           <AuthWrapper functionName="fOrderDetail002_3pl">
@@ -548,8 +540,8 @@ export default class OrderDetailTab extends React.Component<any, any> {
 
     const confirm = Modal.confirm;
     confirm({
-      title: '回审',
-      content: '确认将选中的订单退回重新审核?',
+      title: 'Re-review',
+      content: 'Confirm to return the selected order for re approval ?',
       onOk() {
         retrial(tdId);
       },

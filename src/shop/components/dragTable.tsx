@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, checkAuth } from 'qmkit';
+import { noop, checkAuth, RCi18n } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 
@@ -27,6 +28,7 @@ class TabList extends React.Component<any, any> {
       pageChange: Function;
       linkStatus: any;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -67,13 +69,13 @@ class TabList extends React.Component<any, any> {
   };
   _columns = [
     {
-      title: 'No',
+      title: <FormattedMessage id="Setting.No" />,
       dataIndex: 'id',
       key: 'id',
       render: (text, record, index) => `${index + 1}`
     },
     {
-      title: 'Consent title',
+      title: <FormattedMessage id="Setting.Consenttitle" />,
       dataIndex: 'consentTitle',
       key: 'consentTitle',
       render: (text) => {
@@ -82,33 +84,33 @@ class TabList extends React.Component<any, any> {
       }
     },
     {
-      title: 'Consent Id',
+      title: <FormattedMessage id="Setting.ConsentId" />,
       dataIndex: 'consentId',
       key: 'consentId'
     },
     {
-      title: 'Consent code',
+      title: <FormattedMessage id="Setting.Consentcode" />,
       dataIndex: 'consentCode',
       key: 'consentCode'
     },
     {
-      title: 'Consent type',
+      title: <FormattedMessage id="Setting.Consenttype" />,
       dataIndex: 'consentType',
       key: 'consentType'
     },
     {
-      title: 'Category',
+      title: <FormattedMessage id="Setting.Category" />,
       dataIndex: 'consentCategory',
       key: 'consentCategory'
     },
     {
-      title: 'Field type',
+      title: <FormattedMessage id="Setting.Fieldtype" />,
       dataIndex: 'filedType',
       key: 'filedType'
     },
     ,
     {
-      title: 'Operation',
+      title: <FormattedMessage id="Setting.Operation" />,
       dataIndex: 'operation',
       key: 'operation',
       render: (_text, _record) => this._getOption(_record)
@@ -127,7 +129,7 @@ class TabList extends React.Component<any, any> {
     // message.success('Click on Yes');
   };
   cancel = () => {
-    message.info('canceled');
+    message.info((window as any).RCi18n({ id: 'Setting.canceled' }));
   };
   /**
    * 获取操作项
@@ -145,18 +147,18 @@ class TabList extends React.Component<any, any> {
         </Tooltip>
         <Popconfirm
           className="deleted"
-          title="Confirm deletion?"
+          title={(window as any).RCi18n({ id: 'Setting.Confirmdeletion?' })}
           onConfirm={() => {
             const { getConsentDelete } = this.props.relaxProps;
             getConsentDelete(rowInfo.get('id'));
           }}
         >
-          <Tooltip placement="top" title="Delete">
+          <Tooltip placement="top" title={(window as any).RCi18n({ id: 'Setting.Delete?' })}>
             <a href="javascript:void(0)" className="iconfont iconDelete"></a>
           </Tooltip>
         </Popconfirm>
         <div className="switch">
-          <Popconfirm title={check ? 'Are you sure disable this consent?' : 'Are you sure able this consent?'} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
+          <Popconfirm title={check ? (window as any).RCi18n({ id: 'Setting.Areyousuredisable' }) : (window as any).RCi18n({ id: 'Setting.Areyousureable' })} onConfirm={() => this.confirm(check, rowInfo.get('id'))} onCancel={this.cancel} okText="Yes" cancelText="No">
             <Switch
               //loading={loading}
               checked={check}
@@ -269,4 +271,4 @@ let _dragDirection = (dragIndex, hoverIndex, initialClientOffset, clientOffset, 
     return 'upward';
   }
 };
-export default DragDropContext(HTML5Backend)(TabList);
+export default DragDropContext(HTML5Backend)(injectIntl(TabList));

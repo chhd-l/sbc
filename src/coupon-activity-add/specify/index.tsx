@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StoreProvider } from 'plume2';
 import { Alert, Breadcrumb, Form } from 'antd';
 import { Headline, BreadCrumb } from 'qmkit';
-
+import { FormattedMessage } from 'react-intl';
 import Appstore from './store';
 import SpecifyAddForm from './components/add-form';
 
@@ -31,7 +31,10 @@ export default class CouponInfo extends Component<any, any> {
         {/* <Breadcrumb.Item>
           {source == 'marketCenter' ? '营销中心' : '优惠券活动'}
         </Breadcrumb.Item> */}
-        <Breadcrumb.Item>{id ? 'Edit ' : 'Create '}full-count coupon activity</Breadcrumb.Item>
+        <Breadcrumb.Item>
+          {id ? 'Edit ' : 'Create '}
+          <FormattedMessage id="Marketing.couponActivity" />
+        </Breadcrumb.Item>
       </BreadCrumb>,
       // <Breadcrumb separator=">" key="Breadcrumb">
       //   <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -42,13 +45,18 @@ export default class CouponInfo extends Component<any, any> {
       //   <Breadcrumb.Item>{id ? '编辑' : '创建'}精准发券活动</Breadcrumb.Item>
       // </Breadcrumb>,
       <div className="container" key="container">
-        <Headline title={id ? 'Create full-count coupon activity' : 'Create full-count coupon activity'} />
+        <Headline title={id ? 'Edit coupon activity' : 'Create coupon activity'} />
         <Alert
           message={
             <div>
-              <p>Instructions</p>
-              <p>During the activity valid coupons can be displayed on the front end. Customers can collect them at the coupon center, the activity page or product details page.</p>
-              <p>Each customer can only collect one coupon at a time, and each order can only use one coupon, which can be collected again after use;</p>
+              <p>
+                <FormattedMessage id="Marketing.Instructions" />
+              </p>
+              <p>
+                <FormattedMessage id="Marketing.TheCouponCould" />
+              </p>
+              {/*<p>During the activity valid coupons can be displayed on the front end. Customers can collect them at the coupon center, the activity page or product details page.</p>*/}
+              {/*<p>Each customer can only collect one coupon at a time, and each order can only use one coupon, which can be collected again after use;</p>*/}
             </div>
           }
           type="info"

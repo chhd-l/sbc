@@ -33,7 +33,7 @@ export default class TransactionReport extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Transaction',
+      title: <FormattedMessage id="Analysis.Transaction" />,
       loading: true,
       overviewList: [],
       subscriptionList: [],
@@ -222,8 +222,8 @@ export default class TransactionReport extends Component<any, any> {
   }
 
   onChangeDate = (date, dateString) => {
-    let startDate = moment(dateString[0]).format('YYYY-MM-DD');
-    let endDate = moment(dateString[1]).format('YYYY-MM-DD');
+    let startDate = dateString[0];
+    let endDate = dateString[1];
     this.setState(
       {
         startDate,
@@ -236,8 +236,8 @@ export default class TransactionReport extends Component<any, any> {
     );
   };
   getDefaultDate = () => {
-    let startDate = moment(new Date(this.dateCalculate(7)).toLocaleDateString()).format('YYYY-MM-DD');
-    let endDate = moment(new Date(this.dateCalculate(0)).toLocaleDateString()).format('YYYY-MM-DD');
+    let startDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD');
+    let endDate = moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD');
     this.setState(
       {
         startDate,
@@ -286,11 +286,11 @@ export default class TransactionReport extends Component<any, any> {
             value: context.averageBasket,
             rate: context.averageBasketQoQ
           },
-          {
-            name: 'Sales per visitor',
-            value: context.salesPerVisitor,
-            rate: context.salesPerVisitorQoQ
-          }
+          // {
+          //   name: 'Sales per visitor',
+          //   value: context.salesPerVisitor,
+          //   rate: context.salesPerVisitorQoQ
+          // }
         ];
         let subscriptionList = [
           {
@@ -423,7 +423,7 @@ export default class TransactionReport extends Component<any, any> {
           const exportHref = Const.HOST + `/digitalStrategy/transactionReportPage/export/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Analysis.Unsuccessful" />);
         }
 
         resolve();
@@ -436,34 +436,34 @@ export default class TransactionReport extends Component<any, any> {
 
     const columns = [
       {
-        title: 'Date',
+        title: <FormattedMessage id="Analysis.Date" />,
         dataIndex: 'date',
         key: 'date'
       },
       {
-        title: 'Sales volume',
+        title: <FormattedMessage id="Analysis.SalesVolume" />,
         dataIndex: 'salesVolume',
         key: 'salesVolume'
       },
       {
-        title: 'Revenue',
+        title: <FormattedMessage id="Analysis.Revenue" />,
         dataIndex: 'revenue',
         key: 'revenue',
         render: (revenue) => <span>{revenue != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + revenue.toFixed(2) : null}</span>
       },
       {
-        title: 'Average basket',
+        title: <FormattedMessage id="Analysis.AverageBasket" />,
         dataIndex: 'averageBasket',
         key: 'averageBasket',
         render: (averageBasket) => <span>{averageBasket != null ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + ' ' + averageBasket.toFixed(2) : null}</span>
       },
       {
-        title: 'Units sold',
+        title: <FormattedMessage id="Analysis.UnitsSold" />,
         dataIndex: 'unitsSold',
         key: 'unitsSold'
       },
       {
-        title: 'Consumers',
+        title: <FormattedMessage id="Analysis.Consumers" />,
         dataIndex: 'consumers',
         key: 'consumers'
       }
@@ -472,18 +472,25 @@ export default class TransactionReport extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <div className="container-search">
             <Headline
               title={<p style={styles.blodFont}> {title}</p>}
               extra={
                 <div>
-                  <RangePicker onChange={this.onChangeDate} disabledDate={this.disabledDate} defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]} format={'YYYY-MM-DD'} />
+                  <RangePicker
+                    onChange={this.onChangeDate}
+                    disabledDate={this.disabledDate}
+                    defaultValue={[moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days'), moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD')]}
+                    format={'YYYY-MM-DD'}
+                  />
                 </div>
               }
             />
             <div>
-              <h4 style={styles.blodFont}>Sales Overview</h4>
+              <h4 style={styles.blodFont}>
+                <FormattedMessage id="Analysis.SalesOverview" />
+              </h4>
               <div className="data-statistics-transaction" style={{ width: 1200 }}>
                 {overviewList &&
                   overviewList.map((item, index) => (
@@ -515,7 +522,9 @@ export default class TransactionReport extends Component<any, any> {
             </div>
 
             <div style={styles.itemDisplay}>
-              <h4 style={styles.blodFont}>Subscription</h4>
+              <h4 style={styles.blodFont}>
+                <FormattedMessage id="Analysis.Subscription" />
+              </h4>
               <div className="data-statistics-transaction">
                 {subscriptionList &&
                   subscriptionList.map((item, index) => (
@@ -555,13 +564,21 @@ export default class TransactionReport extends Component<any, any> {
 
           <div className="container-search">
             <Headline
-              title={<p style={styles.blodFont}>Transaction trend</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TransactionTrend" />
+                </p>
+              }
               // title= "Transaction trend"
               extra={
                 <div>
                   <Select defaultValue="Week trend" style={{ width: 120 }} onChange={this.handleChange}>
-                    <Option value="Week trend">Week trend</Option>
-                    <Option value="Day trend">Day trend</Option>
+                    <Option value="Week trend">
+                      <FormattedMessage id="Analysis.WeekTrend" />
+                    </Option>
+                    <Option value="Day trend">
+                      <FormattedMessage id="Analysis.DayTrend" />
+                    </Option>
                   </Select>
                 </div>
               }
@@ -571,12 +588,18 @@ export default class TransactionReport extends Component<any, any> {
 
           <div className="container-search">
             <Headline
-              title={<p style={styles.blodFont}>Transaction report</p>}
+              title={
+                <p style={styles.blodFont}>
+                  <FormattedMessage id="Analysis.TransactionReport" />
+                </p>
+              }
               // title="Transaction report"
               extra={
                 <AuthWrapper functionName="f_export_transaction_data">
                   <Button type="primary" shape="round" icon="download" onClick={() => this.onExport()}>
-                    <span style={{ color: '#ffffff' }}>Download the report</span>
+                    <span style={{ color: '#ffffff' }}>
+                      <FormattedMessage id="Analysis.DownloadTheReport" />
+                    </span>
                   </Button>
                 </AuthWrapper>
               }

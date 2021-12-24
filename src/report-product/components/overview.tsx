@@ -6,6 +6,7 @@ const { RangePicker } = DatePicker;
 import * as webapi from '../webapi';
 import { Relax } from 'plume2';
 import moment from 'moment';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const icon1 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAhCAYAAABX5MJvAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIaADAAQAAAABAAAAIQAAAAAWQIAAAAAD50lEQVRYCcVYMW8dRRCemV2fsRNQkBwUp0iCRAUFSgAJCiQkIBFOQDRQ8QcQHR0VLiiiSBSRCFUEBSKWiJSCEEcBOoTcABFCVFShSBoLmYBf/O7d7jDfhb3cO9+99yzb8pOs3Zmdme+7udndOTNt4ffW719lvTC7Ly+yGY19P63s86Aucxz6rAXLdJH5/N6s661ffurtfNLQPM5QVfnVn79/JJP8wCCP2Tj7tD5lDma+9t0zr9xlZk36tnEkiZO/3tjnQzG3FfAmCMgUzq9++/Sp9eZakltJ4OkXfrg+V2ThQDLc7uhzt7b84murbVnZRGJRVX5a+Wa+LzS7XeCm/3Sk3rMvnLmzyBzra1IXkIHdIgAcPBjiA6eOO0QCr2A3MlAHRHzg1HUVIxSh3ssP1xc3zUN8XSke26RvUzD3if0N2xi3WpdnstupWD0MkJ7TN5fnBm3WSQcCGj9O4thRbVdK8U7k7GWhsCk0dp3h9lCo5evAObCdbdhJKOohKcKxtnXgARdrZSbKg6jNsq5zcpWDZW2S16F0xlwfv+8e7BW7P+qh0hy4Nv/b4yhe+2fCkxBEaKiWU7xy1EjPeeZ/BzGfZ+WSRBSd7/JANoDvcRfg+bbzsxNRXN4/a8X1ZmGBhN2SZawMaW98flRs4NuZms2MMhq3ZjXtjcB5EEi2kflumhPFkTsO+ILb8IHD1mby0FRGWnxqBE4lT2ZZcqwrD2QemQngC67j5LCVUZhmw/rGRYr6UuXH9Bk5+dDOh9uVLtJIEsAX9AOVw4QT8fRwKIrPLQPPJxclvsDOny3l4O9UetZDkY1yxw/4goakY71VLbF4tNgovrBaPp4MmOmceHc+yWpFYvO/SllpKsbiYFprjsAXdETNhS7ZHuhgiPylPdaTpQ2aFZZFcv5i08cWqmwId+8Q4Nv69GQkoh6O+WDJtvMTADQiwf4+YCeXmgQgC3NVF6zaWRfAF/SEbUHqOtuGRykGI0BHSj3TIDr/Pjl3pW43NGeaiATwBU3pkHNDUOf22/1zyY6z+0+j1Hfi37NSu94wHRaVfqsUSqvVvDEBflm1C79cO9p5gcVwUqN+Al+78XrWjrzL4lYasdrFEN+wBbVte7XNAP3n8onTt8ozAl0x08ZjbYbkp36kQb7CxPtV5CMjcrPVrk3p5Os2ddIBF/MyE//3E0c6s5G8dnBEFq4dX/iz6icwQVu+gxhjQwEPuDCsblm0WmjLx3rvgAFwUms3RAICvgvQlu8ATmcIxAdO3aDKBJRID74LdosI4iJ+eg2JSFmYSUgjCnVPv8ASEYx7+i1aJ4Ks7OlXeZ0M5rv1/4n/ANnU1qrBziWWAAAAAElFTkSuQmCC';
 const icon2 =
@@ -16,8 +17,7 @@ export default class ProductOverView extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      beginDate: '',
-      endDate: '',
+
       overview: {
         onShelfSkuValue: 130,
         onShelfSkuRate: -3.2,
@@ -36,9 +36,12 @@ export default class ProductOverView extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       productStatistics: any;
+      beginDate: '',
+      endDate: '',
       onProductStatistics: Function;
       onProductReportPage: Function;
       getDate: any;
+      fieldOnChange: Function;
     };
   };
 
@@ -47,15 +50,16 @@ export default class ProductOverView extends Component<any, any> {
     productStatistics: 'productStatistics',
     onProductStatistics: noop,
     onProductReportPage: noop,
-    getDate: 'getDate'
+    getDate: 'getDate',
+    beginDate: 'beginDate',
+    endDate: 'endDate',
+    fieldOnChange: noop,
   };
   componentDidMount() {
-    this.setState({
-      beginDate: moment(new Date(sessionStorage.getItem('defaultLocalDateTime')))
-        .subtract(7, 'days')
-        .format('YYYY-MM-DD'),
-      endDate: sessionStorage.getItem(cache.CURRENT_YEAR)
-    });
+    //   this.setState({
+    //     beginDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days').format('YYYY-MM-DD'),
+    //   endDate: moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').format('YYYY-MM-DD')
+    // });
   }
 
   getOverviewInfo(params = {}) {
@@ -64,16 +68,25 @@ export default class ProductOverView extends Component<any, any> {
     });
   }
   datePickerChange(e) {
+    const { fieldOnChange } = this.props.relaxProps
     let beginTime = '';
     let endTime = '';
     if (e.length > 0) {
       beginTime = e[0].format(Const.DAY_FORMAT);
       endTime = e[1].format(Const.DAY_FORMAT);
     }
-    this.setState({
-      beginDate: beginTime,
-      endDate: endTime
-    });
+    // this.setState({
+    //   beginDate: beginTime,
+    //   endDate: endTime
+    // });
+    fieldOnChange({
+      field: 'beginDate',
+      value: beginTime
+    })
+    fieldOnChange({
+      field: 'endDate',
+      value: endTime
+    })
   }
   dateCalculate = (n) => {
     let date = new Date(sessionStorage.getItem('defaultLocalDateTime'));
@@ -84,51 +97,57 @@ export default class ProductOverView extends Component<any, any> {
   }
   onSearch() {
     const { onProductStatistics, onProductReportPage } = this.props.relaxProps;
-    const { beginDate, endDate } = this.state;
-    const params1 = {
-      beginDate,
-      endDate
-    };
-    const params2 = {
-      beginDate,
-      endDate,
-      sortName: 'revenue',
-      pageSize: 10,
-      pageNum: 1
-    };
-    onProductStatistics(params1);
-    onProductReportPage(params2);
+    // const { beginDate, endDate } = this.state;
+    // const params1 = {
+    //   beginDate,
+    //   endDate
+    // };
+    // const params2 = {
+    //   beginDate,
+    //   endDate,
+    //   sortName: 'revenue',
+    //   pageSize: 10,
+    //   pageNum: 1
+    // };
+    onProductStatistics();
+    onProductReportPage();
   }
   render() {
-    const { productStatistics } = this.props.relaxProps;
+    const { productStatistics, beginDate } = this.props.relaxProps;
     let loadinga = false;
     return (
-      <Spin spinning={loadinga} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+      <Spin spinning={loadinga}>
         <div className="container statistics">
           <div className="list-head-container">
-            <h4>Product</h4>
+            <h4>
+              <FormattedMessage id="Analysis.Product" />
+            </h4>
             <div>
               <Form layout="inline">
                 <Form.Item>
                   <RangePicker
                     onChange={(e) => this.datePickerChange(e)}
                     disabledDate={this.disabledDate}
-                    defaultValue={[moment(new Date(this.dateCalculate(7)), 'YYYY-MM-DD'), moment(new Date(sessionStorage.getItem('defaultLocalDateTime')), 'YYYY-MM-DD')]}
+                    defaultValue={[moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD').subtract(7, 'days'), moment(sessionStorage.getItem('defaultLocalDateTime'), 'YYYY-MM-DD')]}
                     format={'YYYY-MM-DD'}
                   />
                 </Form.Item>
                 <Button type="primary" style={{ marginTop: '5px' }} shape="round" onClick={() => this.onSearch()}>
-                  Search
+                  <FormattedMessage id="Analysis.Search" />
                 </Button>
               </Form>
             </div>
           </div>
           <div className="head-container row-flex">
             <div className="overviewContainer">
-              <h4>Overview</h4>
+              <h4>
+                <FormattedMessage id="Analysis.Overview" />
+              </h4>
               <div className="data-statistics">
                 <div className="mode">
-                  <div className="mode-text">On shelf SKU</div>
+                  <div className="mode-text">
+                    <FormattedMessage id="Analysis.OnShelfSKU" />
+                  </div>
                   <div className="mode-num">
                     <span> {productStatistics && productStatistics.onShelfSkuNum ? productStatistics.onShelfSkuNum : '--'}</span>
                   </div>
@@ -144,7 +163,9 @@ export default class ProductOverView extends Component<any, any> {
                   </div>
                 </div>
                 <div className="mode">
-                  <div className="mode-text">Total SKU</div>
+                  <div className="mode-text">
+                    <FormattedMessage id="Analysis.TotalSKU" />
+                  </div>
                   <div className="mode-num">
                     <span> {productStatistics && productStatistics.totalSkuNum ? productStatistics.totalSkuNum : '--'}</span>
                   </div>
@@ -160,7 +181,9 @@ export default class ProductOverView extends Component<any, any> {
                   </div>
                 </div>
                 <div className="mode">
-                  <div className="mode-text">Product rating</div>
+                  <div className="mode-text">
+                    <FormattedMessage id="Analysis.ProductRating" />
+                  </div>
                   <div className="mode-num">
                     <span> {productStatistics && productStatistics.skuRating ? productStatistics.skuRating : '--'}</span>
                   </div>
@@ -183,7 +206,9 @@ export default class ProductOverView extends Component<any, any> {
             </div>
           </div>
           <div className="head-container mgt20 mgb20">
-            <h4>Best sellers</h4>
+            <h4>
+              <FormattedMessage id="Analysis.BestSellers" />
+            </h4>
             <div className="row-flex mgt20">
               {productStatistics.salesVolumeTopProduct &&
                 productStatistics.salesVolumeTopProduct.map((item, index) => {
@@ -194,8 +219,11 @@ export default class ProductOverView extends Component<any, any> {
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
-                          <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName line-clamp">{item.skuName}</span>
+                          <span className="rank">
+                            <FormattedMessage id="Analysis.TOP" />
+                            {item.topNum}
+                          </span>
+                          <p className="goodsName" title={item.skuName} style={styles.ellipsis}>{item.skuName}</p>
                           <span className="price">
                             {item.marketPrice ? item.marketPrice : '--'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </span>
@@ -208,7 +236,9 @@ export default class ProductOverView extends Component<any, any> {
             </div>
           </div>
           <div className="head-container mgt20 mgb20">
-            <h4 className="title">High praise products</h4>
+            <h4 className="title">
+              <FormattedMessage id="Analysis.HighPraiseProducts" />
+            </h4>
             <div className="row-flex mgt20">
               {productStatistics && productStatistics.evaluationTopProduct.length != 0 ? (
                 productStatistics.evaluationTopProduct.map((item, index) => {
@@ -220,7 +250,7 @@ export default class ProductOverView extends Component<any, any> {
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
                           <span className="rank">TOP{item.topNum}</span>
-                          <span className="goodsName line-clamp">{item.skuName}</span>
+                          <span className="goodsName" title={item.skuName} style={styles.ellipsis}>{item.skuName}</span>
                           <span className="price">
                             {item.marketPrice} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                           </span>
@@ -245,4 +275,11 @@ export default class ProductOverView extends Component<any, any> {
     );
   }
 }
-const styles = {} as any;
+const styles = {
+  ellipsis: {
+    overflow: 'hidden', //超出的文本隐藏
+    textOverflow: 'ellipsis',//溢出用省略号显示
+    whiteSpace: 'nowrap', //溢出不换行
+    width:80,
+  }
+} as any;

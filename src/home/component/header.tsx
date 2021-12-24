@@ -2,15 +2,15 @@ import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { DatePicker, Icon, Select, Input, Button, message } from 'antd';
 import '../index.less';
-import { cache, noop } from 'qmkit';
+import { cache, noop, RCi18n, Const } from 'qmkit';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-//import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const { WeekPicker } = DatePicker;
 const { Option } = Select;
 
 @Relax
-export default class Header extends React.Component<any, any> {
+class Header extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -54,13 +54,14 @@ export default class Header extends React.Component<any, any> {
   componentDidMount() {
     const { searchData } = this.props.relaxProps;
     let prescribers = JSON.parse(sessionStorage.getItem('s2b-employee@data')).prescribers;
+    let selectPrescriber = sessionStorage.getItem('PrescriberSelect') ? JSON.parse(sessionStorage.getItem('PrescriberSelect')) : '';
 
     let PrescriberSelectType = sessionStorage.getItem('PrescriberSelectType');
     this.setState({
       prescribers: sessionStorage.getItem('s2b-employee@data') ? prescribers : '',
-      prescriber: prescribers && prescribers.length > 0 ? prescribers[0] : '',
-      prescriberId: prescribers && prescribers.length > 0 ? prescribers[0].prescriberId : '',
-      id: prescribers && prescribers.length > 0 ? prescribers[0].id : ''
+      prescriber: selectPrescriber ? selectPrescriber : prescribers && prescribers.length > 0 ? prescribers[0] : '',
+      prescriberId: selectPrescriber ? selectPrescriber.prescriberId : prescribers && prescribers.length > 0 ? prescribers[0].prescriberId : '',
+      id: selectPrescriber ? selectPrescriber.id : prescribers && prescribers.length > 0 ? prescribers[0].id : ''
     });
     if (searchData == '') {
       this.setState({
@@ -95,7 +96,7 @@ export default class Header extends React.Component<any, any> {
           companyId: 2,
           weekNum: date.week(),
           year: moment(date).weekYear(),
-          prescriberId: this.state.id == '' ? prescribers[0].id : this.state.id
+          prescriberId: this.state.prescriberId
         };
         prescriberInit(obj);
       } else {
@@ -163,13 +164,13 @@ export default class Header extends React.Component<any, any> {
   };
 
   onClean = (res) => {
+    this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week ? this.state.week : moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
     this.setState({
       searchType: false,
       buttonType: false
     });
-    if (this.state.searchType == true) {
-      this.props.changePage({ type: false, getPrescriberId: null, week: this.state.week ? this.state.week : moment(sessionStorage.getItem(cache.CURRENT_YEAR)).week() });
-    }
+    // if (this.state.searchType == true) {
+    // }
   };
 
   selectClick = (res) => {
@@ -201,7 +202,7 @@ export default class Header extends React.Component<any, any> {
         prescriberName: a.props.val.prescriberName
       })
     );
-    message.success('Prescriber choosed here will be setted as default for other pages.');
+    message.success((window as any).RCi18n({id:'Home.Prescriber.success'}));
   };
 
   render() {
@@ -209,11 +210,24 @@ export default class Header extends React.Component<any, any> {
       <div className="shopHeader home space-between">
         <div className="Header-date flex-start-align">
           <Icon type="clock-circle" className="Header-date-icon" />
-          <WeekPicker defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())} onChange={this.dateChange} placeholder="Select week" />
-          <div className="Header-date-text">* The data is updated every 15 minutes</div>
+          <WeekPicker
+            defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())}
+            disabledDate={(current) => {
+              if (current && current.year() >= 2021 && current.week() > 3) {
+                if (current.week() > moment().endOf('day').week()) {
+                  return current.week();
+                }
+              } else if (current && current.year() <= 2021 && current.week() <= 3) {
+                return current && current.week();
+              }
+            }}
+            onChange={this.dateChange}
+            placeholder={(window as any).RCi18n({id:'Home.SelectWeek'})}
+          />
+          <div className="Header-date-text">* <FormattedMessage id="Home.HeaderTip" /></div>
         </div>
-        <div className="home-prescriber flex-start-end">
-          <span style={{ marginRight: 8 }}>Prescriber: </span>
+        {Const.SITE_NAME !== 'MYVETRECO' && <div className="home-prescriber flex-start-end">
+          <span style={{ marginRight: 8 }}><FormattedMessage id="Home.Prescriber" />: </span>
           {this.state.prescriber == '' ? (
             this.state.searchType == false ? (
               <Input
@@ -229,7 +243,7 @@ export default class Header extends React.Component<any, any> {
                 autoFocus={false}
                 open={this.state.openType}
                 style={{ width: 200, marginRight: 8 }}
-                placeholder="Select Prescriber Data"
+                placeholder={(window as any).RCi18n({id:'Home.SelectPrescriber'})}
                 defaultValue="All"
                 //optionFilterProp="children"
                 onChange={this.onChange}
@@ -241,7 +255,7 @@ export default class Header extends React.Component<any, any> {
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }*/
               >
-                <Option value="all">All</Option>
+                <Option value="all"><FormattedMessage id="Home.All" /></Option>
                 {this.state.selectList && this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
@@ -255,7 +269,7 @@ export default class Header extends React.Component<any, any> {
             )
           ) : (
             this.state.defaultValue && (
-              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder="Select Prescriber Data" defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
+              <Select showArrow={false} autoFocus={false} open={this.state.openType} style={{ width: 200, marginRight: 8 }} placeholder={(window as any).RCi18n({id:'Home.SelectPrescriber'})} defaultValue={this.state.defaultValue} onChange={this.onPrescriberChange} onDropdownVisibleChange={this.selectClick}>
                 {this.state.selectList.length !== 0
                   ? this.state.selectList.map((item, index) => {
                       return (
@@ -269,11 +283,11 @@ export default class Header extends React.Component<any, any> {
             )
           )}
           {this.state.prescriber == '' ? this.state.buttonType == false ? <Button shape="circle" icon="search" onClick={this.onSearch} /> : <Button shape="circle" icon="close-circle" onClick={this.onClean} /> : ''}
-        </div>
-        {this.state.prescriber.id ? (
+        </div>}
+        {this.state.prescriber.id && Const.SITE_NAME !== 'MYVETRECO' ? (
           <div>
             <Link style={{ textDecoration: 'underline' }} to={'/prescriber-edit/' + this.state.id}>
-              Manage Prescriber
+              <FormattedMessage id="Home.ManagePrescriber" />
             </Link>
           </div>
         ) : (
@@ -283,3 +297,5 @@ export default class Header extends React.Component<any, any> {
     );
   }
 }
+
+export default injectIntl(Header)

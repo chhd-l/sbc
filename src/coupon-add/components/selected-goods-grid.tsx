@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DataGrid } from 'qmkit';
+import { cache, DataGrid } from 'qmkit';
 import { Table } from 'antd';
 
 const Column = Table.Column;
@@ -9,6 +9,7 @@ import { Relax } from 'plume2';
 import { IList } from '../../../typings/globalType';
 import noop from '../../../web_modules/qmkit/noop';
 import { Button } from 'antd';
+import { FormattedMessage } from 'react-intl';
 const TableRow = styled.div`
   margin-top: 20px;
   .red {
@@ -41,33 +42,17 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <div>
         <Button type="primary" icon="plus" onClick={() => this.onAdd()}>
-          添加商品
+          <FormattedMessage id="Marketing.AddProduct" />
         </Button>
         &nbsp;&nbsp;
         <TableRow>
-          <DataGrid
-            scroll={{ y: 500 }}
-            size="small"
-            rowKey={(record) => record.goodsInfoId}
-            dataSource={goodsRows ? goodsRows.toJS() : []}
-            pagination={false}
-          >
-            <Column
-              title="SKU code"
-              dataIndex="goodsInfoNo"
-              key="goodsInfoNo"
-              width="15%"
-            />
+          <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={goodsRows ? goodsRows.toJS() : []} pagination={false}>
+            <Column title={<FormattedMessage id="Marketing.SKUCode" />} dataIndex="goodsInfoNo" key="goodsInfoNo" width="15%" />
+
+            <Column title={<FormattedMessage id="Marketing.ProductName" />} dataIndex="goodsInfoName" key="goodsInfoName" width="20%" />
 
             <Column
-              title="商品名称"
-              dataIndex="goodsInfoName"
-              key="goodsInfoName"
-              width="20%"
-            />
-
-            <Column
-              title="规格"
+              title={<FormattedMessage id="Marketing.Specifications" />}
               dataIndex="specText"
               key="specText"
               width="20%"
@@ -80,15 +65,10 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
               }}
             />
 
-            <Column
-              title="分类"
-              key="cateName"
-              dataIndex="cateName"
-              width="10%"
-            />
+            <Column title={<FormattedMessage id="Marketing.Classification" />} key="cateName" dataIndex="cateName" width="10%" />
 
             <Column
-              title="品牌"
+              title={<FormattedMessage id="Marketing.Brand" />}
               key="brandName"
               dataIndex="brandName"
               width="10%"
@@ -102,23 +82,21 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             />
 
             <Column
-              title="单价"
+              title={<FormattedMessage id="Marketing.Price" />}
               key="marketPrice"
               dataIndex="marketPrice"
               width="10%"
               render={(data) => {
-                return `¥${data}`;
+                return `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${data}`;
               }}
             />
 
             <Column
-              title="操作"
+              title={<FormattedMessage id="Marketing.Operation" />}
               key="operate"
               width="10%"
               render={(row) => {
-                return (
-                  <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>删除</a>
-                );
+                return <a onClick={() => deleteSelectedSku(row.goodsInfoId)}><FormattedMessage id="Marketing.Delete" /></a>;
               }}
             />
           </DataGrid>

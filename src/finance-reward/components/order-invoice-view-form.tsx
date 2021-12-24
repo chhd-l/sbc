@@ -58,51 +58,29 @@ export default class OrderInvoiceViewForm extends React.Component<any, any> {
 
     return (
       <Form>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="invoiceStatus" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.invoiceStatus" />}>
           <label>{invoiceStateDic[invoiceView.get('invoiceState')]}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="orderNumber" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.orderNumber" />}>
           <label>{invoiceView.get('orderNo')}</label>
         </FormItem>
 
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="consumerName" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.consumerName" />}>
           <label>{invoiceView.get('customerName')}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="orderAmount" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.OrderAmount" />}>
           <label>
             {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            {invoiceView.get('orderPrice') &&
-              invoiceView.get('orderPrice').toFixed(2)}
+            {invoiceView.get('orderPrice') && invoiceView.get('orderPrice').toFixed(2)}
           </label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="paymentStatus" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.paymentStatus" />}>
           <label>{payOrderStatusDic[invoiceView.get('payOrderStatus')]}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="invoiceType" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.invoiceType" />}>
           <label>{invoiceType[invoiceView.get('invoiceType')]}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="invoice.invoiceHeader" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.invoiceHeader" />}>
           <label>{invoiceView.get('invoiceTitle') || 'personal'}</label>
         </FormItem>
         {/* {invoiceView.get('taxNo') ? (
@@ -126,29 +104,14 @@ export default class OrderInvoiceViewForm extends React.Component<any, any> {
             </FormItem>
           </div>
         ) : null} */}
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="billingItems" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.billingItems" />}>
           <label>{invoiceView.get('projectName')}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="invoiceReceiptInformation" />}
-        >
+        <FormItem {...formItemLayout} label={<FormattedMessage id="invoiceReceiptInformation" />}>
           <label>{invoiceView.get('invoiceAddress')}</label>
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="billingTime" />}
-        >
-          <label>
-            {invoiceView.get('invoiceTime')
-              ? moment(invoiceView.get('invoiceTime'))
-                  .format(Const.TIME_FORMAT)
-                  .toString()
-              : '-'}
-          </label>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Finance.billingTime" />}>
+          <label>{invoiceView.get('invoiceTime') ? moment(invoiceView.get('invoiceTime')).format(Const.TIME_FORMAT).toString() : '-'}</label>
         </FormItem>
       </Form>
     );

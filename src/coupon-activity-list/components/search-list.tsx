@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Tabs } from 'antd';
-import { noop } from 'qmkit';
+import { Const, noop } from 'qmkit';
 import { Relax } from 'plume2';
 import List from './list';
 
@@ -31,21 +31,24 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={queryTab}
         >
-          <Tabs.TabPane tab="全部" key="0">
+          <Tabs.TabPane tab={Const.activityStatus[0]} key="0">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="进行中" key="1">
+          <Tabs.TabPane tab={Const.activityStatus[1]} key="1">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="暂停中" key="2">
+          {/*<Tabs.TabPane tab={Const.activityStatus[2]} key="2">*/}
+          {/*  <List />*/}
+          {/*</Tabs.TabPane>*/}
+          <Tabs.TabPane tab={Const.activityStatus[3]} key="3">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="未开始" key="3">
+          <Tabs.TabPane tab={Const.activityStatus[4]} key="4">
             <List />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="已结束" key="4">
-            <List />
-          </Tabs.TabPane>
+          {/*<Tabs.TabPane tab={Const.activityStatus[5]} key="5">*/}
+          {/*  <List />*/}
+          {/*</Tabs.TabPane>*/}
         </Tabs>
       </div>
     );

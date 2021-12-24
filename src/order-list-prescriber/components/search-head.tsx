@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
+import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, RCi18n, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,8 +16,9 @@ const InputGroup = Input.Group;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -66,18 +67,52 @@ export default class SearchHead extends Component<any, any> {
         payState: '',
         orderSource: ''
       },
-      orderCategory: ''
+      orderCategory: '',
+
+      // 21/3/3 新增字段
+      refillNumber: '',
+      orderType: '',
+      orderSource: '',
+      subscriptionType: '',
+      subscriptionPlanType: '',
+      codeSelect: 'promotionCode',
+      codeSelectValue: '',
+      planTypeList: []
     };
   }
 
   render() {
     const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState } = this.state;
+    const { tradeState, orderType, subscriptionType, subscriptionPlanType, planTypeList } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002_prescriber')) || checkAuth('fOrderList004_prescriber')) {
       hasMenu = true;
     }
+
+    if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004')) {
+      hasMenu = true;
+    }
+    const refillNumberList = [
+      { value: 'First', name: (window as any).RCi18n({id:'Order.first'}) },
+      { value: 'Recurrent', name: (window as any).RCi18n({id:'Order.recurrent'}) }
+    ];
+
+    const orderTypeList = [
+      { value: 'SINGLE_PURCHASE', name: (window as any).RCi18n({id:'Order.Singlepurchase'}) },
+      { value: 'SUBSCRIPTION', name: (window as any).RCi18n({id:'Order.subscription'}) }
+    ];
+
+    const subscriptionTypeList = [
+      { value: 'ContractProduct', name: (window as any).RCi18n({id:'Order.contractProduct'}) },
+      { value: 'Club', name: (window as any).RCi18n({id:'Order.club'}) },
+      { value: 'Autoship', name: (window as any).RCi18n({id:'Order.autoship'}) }
+    ];
+
+    const orderSourceList = [
+      { value: 'FGS', name: (window as any).RCi18n({id:'Order.fgs'}) },
+      { value: 'L_ATELIER_FELIN', name: (window as any).RCi18n({id:'Order.felin'}) }
+    ];
 
     const menu = (
       <Menu>
@@ -85,7 +120,7 @@ export default class SearchHead extends Component<any, any> {
           <Menu.Item>
             <AuthWrapper functionName="fOrderList002_prescriber">
               <a target="_blank" href="javascript:;" onClick={() => this._showBatchAudit()}>
-                <FormattedMessage id="order.batchReview" />
+                <FormattedMessage id="Order.batchReview" />
               </a>
             </AuthWrapper>
           </Menu.Item>
@@ -93,7 +128,7 @@ export default class SearchHead extends Component<any, any> {
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004_prescriber">
             <a href="javascript:;" onClick={() => this._handleBatchExport()}>
-              <FormattedMessage id="order.batchExport" />
+              <FormattedMessage id="Order.batchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -102,7 +137,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="order.orderList" />} />
+        <Headline title={<FormattedMessage id="Order.orderList" />} />
         <div>
           <Form className="filter-content" layout="inline">
             <Row>
@@ -125,15 +160,24 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderBuyerOptionSelect()}
-                    <Input
+                  <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionOrderTime'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionOrderTime'})} />
+                    <Select
                       style={styles.wrapper}
-                      onChange={(e) => {
+                      allowClear
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) => {
                         this.setState({
-                          buyerOptionsValue: (e.target as any).value
+                          refillNumber: value
                         });
                       }}
-                    />
+                    >
+                      {refillNumberList &&
+                        refillNumberList.map((item, index) => (
+                          <Option value={item.value} title={item.name} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -157,15 +201,32 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderReceiverSelect()}
-                    <Input
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderType'})} title={(window as any).RCi18n({id:'Order.orderType'})} />
+                    <Select
                       style={styles.wrapper}
-                      onChange={(e) => {
-                        this.setState({
-                          receiverSelectValue: (e.target as any).value
-                        });
+                      allowClear
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) => {
+                        if (value === 'SINGLE_PURCHASE') {
+                          this.setState({
+                            orderType: value,
+                            subscriptionType: '',
+                            subscriptionPlanType: ''
+                          });
+                        } else {
+                          this.setState({
+                            orderType: value
+                          });
+                        }
                       }}
-                    />
+                    >
+                      {orderTypeList &&
+                        orderTypeList.map((item, index) => (
+                          <Option value={item.value} title={item.name} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -173,21 +234,24 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    {this._renderClinicSelect()}
-                    {sessionStorage.getItem('PrescriberSelect') ? (
-                      <Input style={styles.wrapper} value={this.state.clinicSelectValue} disabled />
-                    ) : (
-                      <Input
-                        style={styles.wrapper}
-                        onChange={(e) => {
-                          let a = e.target.value ? e.target.value.split(',') : null;
-
-                          this.setState({
-                            clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
-                          });
-                        }}
-                      />
-                    )}
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.orderSource'})} title={(window as any).RCi18n({id:'Order.orderSource'})} />
+                    <Select
+                      style={styles.wrapper}
+                      allowClear
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) => {
+                        this.setState({
+                          orderSource: value
+                        });
+                      }}
+                    >
+                      {orderSourceList &&
+                        orderSourceList.map((item, index) => (
+                          <Option value={item.value} title={item.name} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -199,6 +263,8 @@ export default class SearchHead extends Component<any, any> {
                     {this.state.statusSelect === 'paymentStatus' ? (
                       <Select
                         style={styles.wrapper}
+                        allowClear
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) =>
                           this.setState({
                             tradeState: {
@@ -210,24 +276,23 @@ export default class SearchHead extends Component<any, any> {
                         }
                         value={tradeState.payState}
                       >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
                         <Option value="NOT_PAID">
-                          <FormattedMessage id="order.unpaid" />
+                          <FormattedMessage id="Order.unpaid" />
                         </Option>
-                        <Option value="UNCONFIRMED">
+                        {/*<Option value="UNCONFIRMED">
                           <FormattedMessage id="order.toBeConfirmed" />
-                        </Option>
+                        </Option>*/}
                         <Option value="PAID">
-                          <FormattedMessage id="order.paid" />
+                          <FormattedMessage id="Order.paid" />
                         </Option>
-                        <Option value="PAYING">Paying</Option>
+                        <Option value="PAYING"><FormattedMessage id="Order.Paying" /></Option>
                       </Select>
                     ) : (
                       <Select
                         value={tradeState.deliverStatus}
                         style={styles.wrapper}
+                        allowClear
+                        getPopupContainer={(trigger: any) => trigger.parentNode}
                         onChange={(value) => {
                           this.setState({
                             tradeState: {
@@ -238,17 +303,14 @@ export default class SearchHead extends Component<any, any> {
                           });
                         }}
                       >
-                        <Option value="">
-                          <FormattedMessage id="all" />
-                        </Option>
                         <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="order.notShipped" />
+                          <FormattedMessage id="Order.notShipped" />
                         </Option>
                         <Option value="PART_SHIPPED">
-                          <FormattedMessage id="order.partialShipment" />
+                          <FormattedMessage id="Order.partialShipment" />
                         </Option>
                         <Option value="SHIPPED">
-                          <FormattedMessage id="order.allShipments" />
+                          <FormattedMessage id="Order.allShipments" />
                         </Option>
                       </Select>
                     )}
@@ -259,28 +321,30 @@ export default class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue="Order Category" />
+                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionType'})} title={(window as any).RCi18n({id:'Order.subscriptionType'})} />
                     <Select
                       style={styles.wrapper}
-                      defaultValue=""
+                      allowClear
+                      value={subscriptionType}
+                      disabled={orderType === 'SINGLE_PURCHASE'}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
-                        this.setState({
-                          orderCategory: value
-                        });
+                        this.setState(
+                          {
+                            subscriptionType: value
+                          },
+                          () => {
+                            this.getPlanType(value);
+                          }
+                        );
                       }}
                     >
-                      <Option value="">
-                        <FormattedMessage id="all" />
-                      </Option>
-                      <Option value="SINGLE" title="Single purchase">
-                        Single purchase
-                      </Option>
-                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
-                        1st autoship order
-                      </Option>
-                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
-                        Recurrent orders of autoship
-                      </Option>
+                      {subscriptionTypeList &&
+                        subscriptionTypeList.map((item, index) => (
+                          <Option value={item.value} title={item.name} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
                     </Select>
                   </InputGroup>
                 </FormItem>
@@ -303,7 +367,6 @@ export default class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
@@ -320,6 +383,66 @@ export default class SearchHead extends Component<any, any> {
                 </FormItem>
               </Col>
 
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.leftLabel} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} disabled defaultValue={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} title={(window as any).RCi18n({id:'Order.subscriptionPlanType'})} />
+                    <Select
+                      style={styles.wrapper}
+                      allowClear
+                      value={subscriptionPlanType}
+                      disabled={planTypeList.length<1}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) => {
+                        this.setState({
+                          subscriptionPlanType: value
+                        });
+                      }}
+                    >
+                      {planTypeList &&
+                        planTypeList.map((item, index) => (
+                          <Option value={item.value} title={item.name} key={index}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </Select>
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              {/* <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderClinicSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        let a = e.target.value ? e.target.value.split(',') : null;
+
+                        this.setState({
+                          clinicSelectValue: this.state.clinicSelect == 'clinicsName' ? (e.target as any).value : a
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col> */}
+
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    {this._renderCodeSelect()}
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        this.setState({
+                          codeSelectValue: (e.target as any).value
+                        });
+                      }}
+                    />
+                  </InputGroup>
+                </FormItem>
+              </Col>
+
               <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
@@ -329,60 +452,11 @@ export default class SearchHead extends Component<any, any> {
                     shape="round"
                     style={{ textAlign: 'center' }}
                     onClick={(e) => {
-                      e.preventDefault();
-                      const {
-                        buyerOptions,
-                        goodsOptions,
-                        receiverSelect,
-                        clinicSelect,
-                        numberSelect,
-                        id,
-                        subscribeId,
-                        buyerOptionsValue,
-                        goodsOptionsValue,
-                        receiverSelectValue,
-                        clinicSelectValue,
-                        numberSelectValue,
-                        tradeState,
-                        beginTime,
-                        endTime,
-                        orderCategory,
-                        recommenderSelect,
-                        recommenderSelectValue
-                      } = this.state;
-
-                      const ts = {} as any;
-                      if (tradeState.deliverStatus) {
-                        ts.deliverStatus = tradeState.deliverStatus;
-                      }
-
-                      if (tradeState.payState) {
-                        ts.payState = tradeState.payState;
-                      }
-
-                      if (tradeState.orderSource) {
-                        ts.orderSource = tradeState.orderSource;
-                      }
-
-                      const params = {
-                        id: numberSelect === 'orderNumber' ? numberSelectValue : '',
-                        subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
-                        [buyerOptions]: buyerOptionsValue,
-                        tradeState: ts,
-                        [goodsOptions]: goodsOptionsValue,
-                        [receiverSelect]: receiverSelectValue,
-                        clinicsIds: sessionStorage.getItem('PrescriberSelect') && JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null,
-                        [recommenderSelect]: recommenderSelectValue,
-                        beginTime,
-                        endTime,
-                        orderCategory
-                      };
-
-                      onSearch(params);
+                      this.handleSearch(e);
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -394,7 +468,7 @@ export default class SearchHead extends Component<any, any> {
             <div className="handle-bar ant-form-inline filter-content">
               <Dropdown overlay={menu} placement="bottomLeft" getPopupContainer={() => document.getElementById('page-content')}>
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" /> <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
@@ -414,14 +488,15 @@ export default class SearchHead extends Component<any, any> {
             buyerOptions: value
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Consumer name" value="buyerName">
-          <FormattedMessage id="consumerName" />
+        <Option title={(window as any).RCi18n({id:'Order.consumerName'})} value="buyerName">
+          <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Consumer account" value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+        <Option title={(window as any).RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
     );
@@ -435,14 +510,15 @@ export default class SearchHead extends Component<any, any> {
             goodsOptions: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
-          <FormattedMessage id="productName" />
+        <Option title={(window as any).RCi18n({id:'Order.productName'})} value="skuName">
+          <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
-          <FormattedMessage id="skuCode" />
+        <Option title={(window as any).RCi18n({id:'Order.skuCode'})} value="skuNo">
+          <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
     );
@@ -456,14 +532,15 @@ export default class SearchHead extends Component<any, any> {
             receiverSelect: val
           })
         }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
-          <FormattedMessage id="recipient" />
+        <Option title={(window as any).RCi18n({id:'Order.recipient'})} value="consigneeName">
+          <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+        <Option title={(window as any).RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
     );
@@ -477,14 +554,15 @@ export default class SearchHead extends Component<any, any> {
             recommenderSelect: val
           })
         }
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recommender id" value="recommenderId">
-          <FormattedMessage id="recommenderId" />
+        <Option title={(window as any).RCi18n({id:'Order.recommenderId'})} value="recommenderId">
+          <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title="Recommender name" value="recommenderName">
-          <FormattedMessage id="recommenderName" />
+        <Option title={(window as any).RCi18n({id:'Order.recommenderName'})} value="recommenderName">
+          <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>
     );
@@ -498,15 +576,16 @@ export default class SearchHead extends Component<any, any> {
             clinicSelect: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.clinicSelect}
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option title="Auditor name" value="clinicsName">
-          <FormattedMessage id="clinicName" />
+        <Option title={(window as any).RCi18n({id:'Order.clinicName'})} value="clinicsName">
+          <FormattedMessage id="Order.clinicName" />
         </Option>
-        <Option title="Auditor ID" value="clinicsIds">
-          <FormattedMessage id="clinicID" />
+        <Option title={(window as any).RCi18n({id:'Order.clinicID'})} value="clinicsIds">
+          <FormattedMessage id="Order.clinicID" />
         </Option>
       </Select>
     );
@@ -519,14 +598,15 @@ export default class SearchHead extends Component<any, any> {
             numberSelect: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
-          <FormattedMessage id="order.orderNumber" />
+        <Option title={(window as any).RCi18n({id:'Order.OrderNumber'})} value="orderNumber">
+          <FormattedMessage id="Order.OrderNumber" />
         </Option>
-        <Option title="Subscriptio number" value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option title={(window as any).RCi18n({id:'Order.subscriptionNumber'})} value="subscriptionNumber">
+          <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -540,14 +620,15 @@ export default class SearchHead extends Component<any, any> {
             statusSelect: val
           });
         }}
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title="Payment status" value="paymentStatus">
-          <FormattedMessage id="order.paymentStatus" />
+        <Option title={(window as any).RCi18n({id:'Order.paymentStatus'})} value="paymentStatus">
+          <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title="Shipping status" value="shippingStatus">
-          <FormattedMessage id="order.shippingStatus" />
+        <Option title={(window as any).RCi18n({id:'Order.shippingStatus'})} value="shippingStatus">
+          <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
     );
@@ -563,16 +644,18 @@ export default class SearchHead extends Component<any, any> {
       .filter((v) => v.get('checked'))
       .map((v) => v.get('id'))
       .toJS();
-
+    const mess = (window as any).RCi18n({id:'Order.pleaseSelectOrderToOperate'});
     if (checkedIds.length == 0) {
-      message.error('Please select the order that needs to be operated');
+      message.error(mess);
       return;
     }
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({id:'Order.audit'});
+    const content = (window as any).RCi18n({id:'Order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -584,17 +667,152 @@ export default class SearchHead extends Component<any, any> {
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: 'Export all orders',
-      byIdsTitle: 'Export selected orders',
+      byParamsTitle: (window as any).RCi18n({
+        id: 'Order.Exportfilteredorders'
+      }),
+      byIdsTitle:
+        (window as any).RCi18n({
+          id: 'Order.Exportselectedorders'
+        }),
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
+
+  _renderCodeSelect = () => {
+    const codeTypeList = [
+      { value: 'promotionCode', name: (window as any).RCi18n({id:'Order.promotionCode'}) },
+      { value: 'couponCode', name: (window as any).RCi18n({id:'Order.couponCode'}) }
+    ];
+    return (
+      <Select
+        onChange={(val) =>
+          this.setState({
+            codeSelect: val
+          })
+        }
+        getPopupContainer={() => document.getElementById('page-content')}
+        value={this.state.codeSelect}
+        style={styles.label}
+      >
+        {codeTypeList &&
+          codeTypeList.map((item, index) => (
+            <Option value={item.value} title={item.name} key={index}>
+              {item.name}
+            </Option>
+          ))}
+      </Select>
+    );
+  };
+  getPlanType = (rel) => {
+    const subscriptionPlanTypeList = [
+      { value: 'Cat ', name: (window as any).RCi18n({id:'Order.cat'}), rel: 'Club' },
+      { value: 'Dog', name: (window as any).RCi18n({id:'Order.dog'}), rel: 'Club' },
+      { value: 'SmartFeeder', name: (window as any).RCi18n({id:'Order.smartFeeder'}), rel: 'ContractProduct' }
+    ];
+    if (rel) {
+      let planTypeList = subscriptionPlanTypeList.filter((item) => item.rel === rel);
+      this.setState({
+        planTypeList
+      });
+    } else {
+      this.setState({
+        planTypeList: subscriptionPlanTypeList
+      });
+    }
+  };
+  handleSearch = (e) => {
+    const { onSearch } = this.props.relaxProps;
+    e.preventDefault();
+    const {
+      buyerOptions,
+      goodsOptions,
+      receiverSelect,
+      // clinicSelect,
+      numberSelect,
+      buyerOptionsValue,
+      goodsOptionsValue,
+      receiverSelectValue,
+      // clinicSelectValue,
+      numberSelectValue,
+      tradeState,
+      beginTime,
+      endTime,
+      orderCategory,
+      recommenderSelect,
+      recommenderSelectValue,
+      refillNumber,
+      orderType,
+      orderSource,
+      subscriptionType,
+      subscriptionPlanType,
+      codeSelect,
+      codeSelectValue
+    } = this.state;
+
+    const ts = {} as any;
+    if (tradeState.deliverStatus) {
+      ts.deliverStatus = tradeState.deliverStatus;
+    }
+
+    if (tradeState.payState) {
+      ts.payState = tradeState.payState;
+    }
+
+    if (tradeState.orderSource) {
+      ts.orderSource = tradeState.orderSource;
+    }
+
+    // const params = {
+    //   id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+    //   subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+    //   [buyerOptions]: buyerOptionsValue,
+    //   tradeState: ts,
+    //   [goodsOptions]: goodsOptionsValue,
+    //   [receiverSelect]: receiverSelectValue,
+    //   [clinicSelect]: clinicSelect === 'clinicsName' ? (clinicSelectValue ? clinicSelectValue : '') : clinicSelectValue ? clinicSelectValue : null,
+    //   [recommenderSelect]: recommenderSelectValue,
+    //   beginTime,
+    //   endTime,
+    //   orderCategory,
+
+    //   refillNumber,
+    //   orderType,
+    //   orderSource,
+    //   subscriptionType,
+    //   subscriptionPlanType,
+    //   [codeSelect]:codeSelectValue,
+
+    // };
+    const params = {
+      id: numberSelect === 'orderNumber' ? numberSelectValue : '',
+      subscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+
+      // externalOrderId: numberSelect === 'orderNumber' ? numberSelectValue : '',
+      // externalSubscribeId: numberSelect !== 'orderNumber' ? numberSelectValue : '',
+      subscriptionRefillType: refillNumber,
+      [goodsOptions]: goodsOptionsValue,
+      orderType,
+      orderSource,
+      tradeState: ts,
+      subscriptionTypeQuery: subscriptionType,
+      beginTime,
+      endTime,
+      [recommenderSelect]: recommenderSelectValue,
+      // [clinicSelect]: clinicSelectValue,
+      subscriptionPlanType,
+      [codeSelect]: codeSelectValue
+    };
+
+    onSearch(params);
+  };
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   formItemStyle: {
-    width: 335
+    width: 334
   },
   label: {
     width: 135,
@@ -608,7 +826,10 @@ const styles = {
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
-    cursor: 'text'
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
   },
   wrapper: {
     width: 200

@@ -8,7 +8,9 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
-export default class Line extends React.Component {
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n, Const } from 'qmkit'
+class Line extends React.Component {
   constructor(props, ctx) {
     super(props);
   }
@@ -17,7 +19,7 @@ export default class Line extends React.Component {
     let option = {
       title: [
         {
-          text: 'Rate',
+          text: (window as any).RCi18n({id:'Home.Rate'}),
           x: 'center',
           top: '32%',
           textStyle: {
@@ -66,7 +68,7 @@ export default class Line extends React.Component {
               name: '',
               itemStyle: {
                 normal: {
-                  color: '#ea162d',
+                  color: Const.COLORS.PRIMARY_COLOR,
                   label: {
                     show: false
                   },
@@ -95,3 +97,4 @@ export default class Line extends React.Component {
     );
   }
 }
+export default injectIntl(Line)

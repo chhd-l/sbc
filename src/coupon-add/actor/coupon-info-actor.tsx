@@ -2,6 +2,7 @@ import { Actor, Action } from 'plume2';
 import { fromJS } from 'immutable';
 import moment from 'moment';
 import { Const } from 'qmkit';
+import { IList } from '../../../typings/globalType';
 
 export default class CouponInfoActor extends Actor {
   defaultState() {
@@ -30,6 +31,7 @@ export default class CouponInfoActor extends Actor {
       fullBuyType: 1,
       // 购满多少钱
       fullBuyPrice: null,
+      fullbuyCount: null,
       // 营销类型(0,1,2,3) 0全部商品，1品牌，2平台类目/店铺分类，3自定义货品（店铺可用）
       scopeType: 0,
       // 分类
@@ -50,10 +52,26 @@ export default class CouponInfoActor extends Actor {
       btnDisabled: false,
       goodsModalVisible: false,
       // 聚合给选择分类使用
-      reducedCateIds: []
+      reducedCateIds: [],
+      customProductsType:0,
+
+      // 店铺分类信息
+      storeCateList: [],
+      sourceStoreCateList: [],
+      storeCateIds: [],
+      couponJoinLevel: 0,
+      allGroups: [],
+      segmentIds: [],
+      couponPromotionType: 0, //Amount: 0 or Percentage: 1
+      couponDiscount: null,
+      attributesList: [],
+      attributeValueIds: null,
+      couponPurchaseType: 0,
+      isSuperimposeSubscription: 1, //未勾选
+      limitAmount: null
+
     };
   }
-
   /**
    * 键值设置
    * @param state
@@ -62,6 +80,7 @@ export default class CouponInfoActor extends Actor {
   @Action('coupon: info: field: value')
   fieldsValue(state, { field, value }) {
     state = state.set(field, fromJS(value));
+    // debugger
     return state;
   }
 
@@ -93,11 +112,22 @@ export default class CouponInfoActor extends Actor {
       endTime,
       fullBuyPrice,
       fullBuyType,
+      fullbuyCount,
       rangeDayType,
       scopeIds,
       scopeType,
       startTime,
-      goodsList
+      goodsList,
+      storeCateIds,
+      couponJoinLevel,
+      segmentIds,
+      couponPromotionType,
+      couponDiscount,
+      attributeValueIds,
+      couponPurchaseType,
+      isSuperimposeSubscription,
+      limitAmount,
+      customProductsType
     } = params;
     state = state
       .set('couponCateIds', fromJS(cateIds))
@@ -108,14 +138,23 @@ export default class CouponInfoActor extends Actor {
       .set('effectiveDays', effectiveDays)
       .set('endTime', endTime ? moment(endTime).format(Const.DAY_FORMAT) : '')
       .set('fullBuyPrice', fullBuyPrice)
+      .set('fullbuyCount', fullbuyCount)
       .set('fullBuyType', fullBuyType)
       .set('rangeDayType', rangeDayType)
       .set('scopeType', scopeType)
-      .set(
-        'startTime',
-        startTime ? moment(startTime).format(Const.DAY_FORMAT) : ''
-      )
-      .set('couponDesc', couponDesc);
+      .set('startTime', startTime ? moment(startTime).format(Const.DAY_FORMAT) : '')
+      .set('couponDesc', couponDesc)
+      .set('storeCateIds', fromJS(storeCateIds))
+      .set('couponJoinLevel', couponJoinLevel)
+      .set('segmentIds', fromJS(segmentIds))
+      .set('couponPromotionType', couponPromotionType)
+      .set('couponDiscount', fromJS(couponDiscount))
+      .set('attributeValueIds', fromJS(attributeValueIds))
+      .set('couponPurchaseType', couponPurchaseType)
+      .set('isSuperimposeSubscription', isSuperimposeSubscription)
+      .set('limitAmount', limitAmount)
+      .set('customProductsType',customProductsType)
+
     if (scopeType === 1) {
       state = state.set('chooseBrandIds', fromJS(scopeIds));
     } else if (scopeType === 3) {
@@ -136,9 +175,7 @@ export default class CouponInfoActor extends Actor {
       chooseSkuIds.findIndex((item) => item == skuId),
       1
     );
-    goodsRows = goodsRows.delete(
-      goodsRows.findIndex((row) => row.get('goodsInfoId') == skuId)
-    );
+    goodsRows = goodsRows.delete(goodsRows.findIndex((row) => row.get('goodsInfoId') == skuId));
     return state.set('goodsRows', goodsRows).set('chooseSkuIds', chooseSkuIds);
   }
 
@@ -194,17 +231,59 @@ export default class CouponInfoActor extends Actor {
         });
       });
     cateList = cateList.map((cate) => {
-      const newCate = newCates.filter(
-        (i) => i.get('cateParentId') == cate.get('cateId')
-      );
+      const newCate = newCates.filter((i) => i.get('cateParentId') == cate.get('cateId'));
       if (newCate) {
         const concatCates = newCate.map((c) => c.get('storeCateId'));
-        cate = cate.update((i) =>
-          i.set('cateIds', i.get('cateIds').concat(concatCates))
-        );
+        cate = cate.update((i) => i.set('cateIds', i.get('cateIds').concat(concatCates)));
       }
       return cate;
     });
     return state.set('reducedCateIds', cateList).set('cates', newCates);
+  }
+
+  /**
+   * 初始化店铺分类
+   * @param state
+   * @param dataList
+   */
+  @Action('goodsActor: initStoreCateList')
+  initStoreCateList(state, dataList: IList) {
+    // 改变数据形态，变为层级结构
+    const newDataList = dataList
+      .filter((item) => item.get('cateParentId') == 0)
+      .map((data) => {
+        const children = dataList
+          .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
+          .map((childrenData) => {
+            const lastChildren = dataList.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
+            if (!lastChildren.isEmpty()) {
+              childrenData = childrenData.set('children', lastChildren);
+            }
+            return childrenData;
+          });
+
+        if (!children.isEmpty()) {
+          data = data.set('children', children);
+        }
+        return data;
+      });
+    return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
+  }
+
+  @Action('goodsActor: allGroups')
+  getAllGroups(state, allGroups) {
+    return state.set('allGroups', fromJS(allGroups));
+  }
+
+  @Action('goodsActor:attributesList')
+  getAllAttributesList(state, attributesList) {
+    attributesList.forEach((item) => {
+      if (item.attributesValuesVOList) {
+        item.attributesValuesVOList.forEach((child) => {
+          child.attributeName = child.attributeDetailName;
+        });
+      }
+    });
+    return state.set('attributesList', fromJS(attributesList));
   }
 }

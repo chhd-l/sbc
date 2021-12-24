@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumb, Tooltip, Icon, Button, Input, Modal } from 'antd';
 import { StoreProvider } from 'plume2';
-import { Headline, BreadCrumb, history } from 'qmkit';
+import { Headline, BreadCrumb, history, RCi18n } from 'qmkit';
 import Detail from './components/detail';
 import PublishButton from './components/publishButton';
 import User from './components/user';
@@ -37,16 +37,16 @@ export default class BillingDetails extends React.Component<any, any> {
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
             {history.location.state
-              ? 'Prescription portal detail'
-              : 'New Prescription portal'}
+              ? RCi18n({id:'Order.PrescriptionPortalDetail'})
+              : RCi18n({id:'Order.NewPrescription'})}
           </Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
           <Headline
             title={
               history.location.state
-                ? 'Prescription portal detail'
-                : 'New Prescription portal'
+                ? RCi18n({id:'Order.PrescriptionPortalDetail'})
+                : RCi18n({id:'Order.NewPrescription'})
             }
           />
         </div>
@@ -54,10 +54,10 @@ export default class BillingDetails extends React.Component<any, any> {
           <Detail />
           <div className="text">
             <Icon type="info-circle" />
-            <span>Do not recommend more than five items at a time.</span>
+            <span>{RCi18n({id:'Order.itemTip'})}</span>
           </div>
           <div className="reasonsInput">
-            <span>Recommended Reasons</span>
+            <span>{RCi18n({id:'Order.RecommendedReasons'})}</span>
             {history.location.state ? (
               <Input
                 size="large"
@@ -72,7 +72,7 @@ export default class BillingDetails extends React.Component<any, any> {
               <Input
                 size="large"
                 disabled={this.store.state().get('createLinkType')}
-                placeholder="Input Recommended Reasons"
+                placeholder={RCi18n({id:'Order.InputRecommendedReasons'})}
                 style={{ border: '1px #dedede solid' }}
                 onChange={this.onInput}
               />

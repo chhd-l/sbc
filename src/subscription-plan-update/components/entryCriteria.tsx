@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Checkbox, Row, Col, Select, Button, Tooltip } from 'antd';
 import AddConsent from '../modals/addConsent';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -47,10 +48,10 @@ export default class entryCriteria extends Component<any, any> {
     const { allConsents } = this.state;
     if (selectedRowKeys) {
       let consents = allConsents.filter((x) => selectedRowKeys.includes(x.id));
-      addField('consentTypes', consents);
-      addField('consentTypeIds', selectedRowKeys);
+      addField('consents', consents);
+      addField('consentIds', selectedRowKeys);
       form.setFieldsValue({
-        consentTypeIds: selectedRowKeys
+        consentIds: selectedRowKeys
       });
     }
     this.setState({
@@ -60,82 +61,92 @@ export default class entryCriteria extends Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { subscriptionPlan, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { visible, allConsents } = this.state;
     return (
       <div>
-        <h3>Step3</h3>
-        <h4>Entry Criteria</h4>
+        <h3>
+          <FormattedMessage id="Subscription.Step3" />
+        </h3>
+        <h4>
+          <FormattedMessage id="Subscription.EntryCriteria" />
+        </h4>
         <div className="entryCriteria">
           <Form>
-            <FormItem {...layout} label="Subscription Plan name">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.Subscription" />}>
               <Checkbox
-                checked={subscriptionPlan.signOnSubscription === 1 ? true : false}
+                disabled={!editable}
+                checked={subscriptionPlan.signOnSubscriptionFlag}
                 onChange={(e) => {
-                  subscriptionPlan.signOnSubscription = e.target.checked ? 1 : 0;
-                  addField('signOnSubscription', subscriptionPlan.signOnSubscription);
+                  subscriptionPlan.signOnSubscriptionFlag = e.target.checked;
+                  addField('signOnSubscriptionFlag', subscriptionPlan.signOnSubscriptionFlag);
                 }}
               >
-                <span className="checkBoxTip">Consumers need consent to sign on subscription</span>
+                <span className="checkBoxTip">
+                  <FormattedMessage id="Subscription.ConsumersNeed" />
+                </span>
               </Checkbox>
             </FormItem>
-            {subscriptionPlan.signOnSubscription === 1 ? (
-              <FormItem {...layout} label="Consent type">
+            {subscriptionPlan.signOnSubscriptionFlag ? (
+              <FormItem {...layout} label={<FormattedMessage id="Subscription.Consent" />}>
                 <Row>
                   <Col span={16}>
-                    {getFieldDecorator('consentTypeIds', {
-                      initialValue: subscriptionPlan.consentTypeIds,
-                      rules: [{ required: true, message: 'Please select Consent type' }]
+                    {getFieldDecorator('consentIds', {
+                      initialValue: subscriptionPlan.consentIds.map((cons) => parseInt(cons)),
+                      rules: [{ required: true, message: <FormattedMessage id="PleaseAddConsent" /> }]
                     })(
                       <Select
+                        disabled={!editable}
                         mode="multiple"
                         onChange={(value: any) => {
-                          addField('consentTypeIds', value);
+                          addField('consentIds', value);
                           let consents = allConsents.filter((x) => value.includes(x.id));
-                          addField('consentTypes', consents);
+                          addField('consents', consents);
                         }}
-                        dropdownStyle={{display: 'none'}}
+                        dropdownStyle={{ display: 'none' }}
                       >
-                        {subscriptionPlan.consentTypes &&
-                          subscriptionPlan.consentTypes.map((item, index) => (
-                            <Option value={item.id} key={index}>
-                              <Tooltip
-                                overlayStyle={{
-                                  overflowY: 'auto'
-                                }}
-                                placement="bottomLeft"
-                                title={<div dangerouslySetInnerHTML={{ __html: item.name }} />}
-                              >
-                                <div className="overflow" dangerouslySetInnerHTML={{ __html: item.name }} />
-                              </Tooltip>
-                            </Option>
-                          ))}
+                        {allConsents.map((item, index) => (
+                          <Option value={item.id} key={index}>
+                            <Tooltip
+                              overlayStyle={{
+                                overflowY: 'auto'
+                              }}
+                              placement="bottomLeft"
+                              title={<div dangerouslySetInnerHTML={{ __html: item.name }} />}
+                            >
+                              <div className="overflow" dangerouslySetInnerHTML={{ __html: item.name }} />
+                            </Tooltip>
+                          </Option>
+                        ))}
                       </Select>
                     )}
                   </Col>
                   <Col span={1}></Col>
                   <Col span={4}>
-                    <Button type="primary" onClick={this.showAddConsent}>
-                      Add
+                    <Button type="primary" onClick={this.showAddConsent} disabled={!editable}>
+                      <FormattedMessage id="Subscription.Add"/>
                     </Button>
                   </Col>
                 </Row>
               </FormItem>
             ) : null}
 
-            <FormItem {...layout} label="Subscription Plan">
+            <FormItem {...layout} label={<FormattedMessage id="Subscription.Subscription" />}>
               <Checkbox
-                checked={subscriptionPlan.otherPromotion === 1 ? true : false}
+                disabled={!editable}
+                checked={subscriptionPlan.subscriptionPlanFlag}
                 onChange={(e) => {
-                  subscriptionPlan.otherPromotion = e.target.checked ? 1 : 0;
-                  addField('otherPromotion', subscriptionPlan.otherPromotion);
+                  subscriptionPlan.subscriptionPlanFlag = e.target.checked;
+                  addField('subscriptionPlanFlag', subscriptionPlan.subscriptionPlanFlag);
                 }}
               >
-                <span className="checkBoxTip">Subscription plan can be applied with other promotions</span>
+                <span className="checkBoxTip">
+                  <FormattedMessage id="Subscription.SubscriptionOtherPromotions" />
+                </span>
               </Checkbox>
             </FormItem>
           </Form>
-          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.consentTypeIds} />
+          <AddConsent getAllConsent={this.getAllConsent} visible={visible} updateTable={this.updateTable} selectedRowKeys={subscriptionPlan.consentIds} />
         </div>
       </div>
     );

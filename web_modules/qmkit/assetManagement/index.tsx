@@ -83,7 +83,8 @@ export default class PicModal extends React.Component<any, any> {
     webapi.getImgCates().then(data => {
       const { res } = data
       if (res) {
-        let cateList = this.cates(res)
+        let storeResourceCateList = res.context.storeResourceCateVOList
+        let cateList = this.cates(storeResourceCateList)
         let cateId = cateList[0].cateId.toString()
         let cateIds = []
         cateIds.push(cateId)
@@ -139,13 +140,13 @@ export default class PicModal extends React.Component<any, any> {
         this.setState({
           loading: false
         })
-        message.error(res.message || 'Operation failure')
+       
       }
     }).catch(err => {
       this.setState({
         loading: false
       })
-      message.error(err.toString() || 'Operation failure')
+     
     })
   }
 
@@ -541,7 +542,7 @@ export default class PicModal extends React.Component<any, any> {
                 </Form>
               </Col>
             </Row>
-            <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+            <Spin spinning={loading}>
               <Row>
                 <Col span={6}>
                   <div style={{ height: 560, overflowY: 'auto', borderRight: '1px solid #f6f6f6' }}>

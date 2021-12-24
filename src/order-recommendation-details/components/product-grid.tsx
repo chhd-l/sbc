@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid } from 'qmkit';
+import { Const, DataGrid, RCi18n } from 'qmkit';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -58,7 +58,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     return (
       <div className="content">
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={loading}
           rowKey={(record) => record.goodsInfoId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
@@ -106,14 +106,14 @@ export default class GoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="Product Name"
+            title={RCi18n({id:'Order.Product Name'})}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="15%"
           />
 
           <Column
-            title="SKU"
+            title={RCi18n({id:'Order.SKU'})}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="20%"
@@ -121,7 +121,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Signed classification"
+            title={RCi18n({id:'Order.Signedclassification'})}
             dataIndex="Signed"
             key="Signed"
             width="20%"
@@ -135,10 +135,10 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="Price" key="marketPrice" dataIndex="marketPrice" />
+          <Column title={RCi18n({id:'Order.Price'})} key="marketPrice" dataIndex="marketPrice" />
 
           <Column
-            title="Quantity"
+            title={RCi18n({id:'Order.Quantity'})}
             key="recommendationNumber"
             dataIndex="recommendationNumber"
             render={(value, i) => {

@@ -33,13 +33,7 @@ export default class OrderInvoiceViewModal extends React.Component<any, any> {
     }
 
     return (
-      <Modal
-        maskClosable={false}
-        title={<FormattedMessage id="orderDetails" />}
-        visible={viewVisible}
-        onOk={() => onViewHide()}
-        onCancel={() => onViewHide()}
-      >
+      <Modal maskClosable={false} title={<FormattedMessage id="Finance.orderDetails" />} visible={viewVisible} onOk={() => onViewHide()} onCancel={() => onViewHide()}>
         <WrapperForm />
       </Modal>
     );

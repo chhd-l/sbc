@@ -1,26 +1,10 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Menu,
-  Card,
-  Checkbox,
-  Empty,
-  Spin
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
-import { addressList } from '@/order-add-old/webapi';
+import { Const } from 'qmkit';
 
 const { TextArea } = Input;
 
@@ -114,16 +98,13 @@ class BillingInfomation extends React.Component<any, any> {
       .updateAddress(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.getAddressList();
           message.success('Operate successfully');
         } else {
-          message.error(res.message || 'Update failed');
         }
       })
-      .catch((err) => {
-        message.error('Update failed');
-      });
+      .catch((err) => {});
   };
 
   getSelectedClinic = (array) => {
@@ -141,7 +122,7 @@ class BillingInfomation extends React.Component<any, any> {
       .getAddressListByType(this.props.customerId, 'BILLING')
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let addressList = res.context.customerDeliveryAddressVOList;
           if (addressList.length > 0) {
             let billingForm = this.state.billingForm;
@@ -176,13 +157,9 @@ class BillingInfomation extends React.Component<any, any> {
               isDefault: billingForm.isDefaltAddress === 1 ? true : false
             });
           }
-        } else {
-          message.error(res.message || 'Get data failed');
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
 
   onFormChange = ({ field, value }) => {
@@ -198,15 +175,12 @@ class BillingInfomation extends React.Component<any, any> {
       .delAddress(this.state.billingForm.deliveryAddressId)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
         } else {
-          message.error(res.message || 'Delete failed');
         }
       })
-      .catch((err) => {
-        message.error('Delete failed');
-      });
+      .catch((err) => {});
   };
   clickDefault = () => {
     let isDefault = !this.state.isDefault;
@@ -222,7 +196,7 @@ class BillingInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
             clinicList: res.context.content
@@ -231,14 +205,12 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
       });
   };
 
@@ -288,7 +260,7 @@ class BillingInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <Col span={3}>
             <h3>All Address( {this.state.addressList.length} )</h3>
             <ul>
@@ -297,10 +269,7 @@ class BillingInfomation extends React.Component<any, any> {
                   key={item.id}
                   style={{
                     cursor: 'pointer',
-                    color:
-                      item.deliveryAddressId === this.state.currentId
-                        ? '#e2001a'
-                        : ''
+                    color: item.deliveryAddressId === this.state.currentId ? '#e2001a' : ''
                   }}
                   onClick={() => this.switchAddress(item.id)}
                 >
@@ -310,9 +279,7 @@ class BillingInfomation extends React.Component<any, any> {
             </ul>
           </Col>
           <Col span={20}>
-            {this.state.addressList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.addressList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
               title={this.state.title}
               style={{
@@ -320,11 +287,7 @@ class BillingInfomation extends React.Component<any, any> {
               }}
               extra={
                 <div>
-                  <Checkbox
-                    disabled
-                    checked={this.state.isDefault}
-                    onChange={() => this.clickDefault()}
-                  >
+                  <Checkbox disabled checked={this.state.isDefault} onChange={() => this.clickDefault()}>
                     Set default billing address
                   </Checkbox>
                   {/* <Button
@@ -342,11 +305,10 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col
                     span={12}
                     style={{
-                      display:
-                        this.props.customerType !== 'Guest' ? 'none' : 'block'
+                      display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Consumer account">
+                    <FormItem label="Pet owner account">
                       {getFieldDecorator('customerAccount', {
                         rules: [
                           {
@@ -360,8 +322,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col
                     span={12}
                     style={{
-                      display:
-                        this.props.customerType !== 'Guest' ? 'none' : 'block'
+                      display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
                     <FormItem label="Selected Prescriber">
@@ -396,10 +357,7 @@ class BillingInfomation extends React.Component<any, any> {
                             <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
                           ))} */}
                           {clinicList.map((item) => (
-                            <Option
-                              value={item.prescriberId.toString()}
-                              key={item.prescriberId}
-                            >
+                            <Option value={item.prescriberId.toString()} key={item.prescriberId}>
                               {item.prescriberId + ',' + item.prescriberName}
                             </Option>
                           ))}
@@ -433,9 +391,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Last Name">
                       {getFieldDecorator('lastName', {
-                        rules: [
-                          { required: true, message: 'Please input Last Name!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input Last Name!' }]
                       })(
                         <Input
                           disabled
@@ -476,9 +432,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Post Code">
                       {getFieldDecorator('postCode', {
-                        rules: [
-                          { required: true, message: 'Please input Post Code!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input Post Code!' }]
                       })(
                         <Input
                           disabled
@@ -496,9 +450,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Country">
                       {getFieldDecorator('countryId', {
-                        rules: [
-                          { required: true, message: 'Please input Country!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input Country!' }]
                       })(
                         <Select
                           disabled
@@ -522,9 +474,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="City">
                       {getFieldDecorator('cityId', {
-                        rules: [
-                          { required: true, message: 'Please input City!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input City!' }]
                       })(
                         <Select
                           disabled
@@ -548,9 +498,7 @@ class BillingInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Address 1">
                       {getFieldDecorator('address1', {
-                        rules: [
-                          { required: true, message: 'Please input Address 1!' }
-                        ]
+                        rules: [{ required: true, message: 'Please input Address 1!' }]
                       })(
                         <TextArea
                           disabled

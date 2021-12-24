@@ -19,30 +19,37 @@ const Common = {
 
   // 退货状态
   returnGoodsState: {
-    INIT: '待审核',
+    INIT: 'Init',
     AUDIT: 'Logistics information to be filled in',
-    DELIVERED: '待商家收货',
+    DELIVERED: 'Delivered',
     RECEIVED: 'Pending refund',
     COMPLETED: 'Finished',
-    REJECT_RECEIVE: '拒绝收货',
-    REJECT_REFUND: '拒绝退款',
+    REJECT_RECEIVE: 'Reject receive',
+    REJECT_REFUND: 'Reject refund',
     VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
+    REFUND_FAILED: 'Refund failed',
+    RECEIVED_REJECTED:'Received rejected',
+    PENDING_REVIEW:'Pending review',
+    REFUND_REJECTED:'Refund rejected',
+    REVIEW_REJECTED:'Review rejected',
+    PENDING_REFUND:'Pending refund',
+    TO_BE_DELIVERED:'toBeDelivered',
+    TO_BE_RECEIVED:'toBeReceived'
   },
   // 退款状态
   returnMoneyState: {
-    INIT: '待审核',
+    INIT: 'Init',
     AUDIT: 'Pending refund',
     COMPLETED: 'Finished',
-    REJECT_REFUND: '拒绝退款',
+    REJECT_REFUND: 'Reject refund',
     VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
+    REFUND_FAILED: 'Refund failed'
   },
   // 退款单状态
   refundStatus: {
     0: 'Pending refund',
     3: 'Pending refund',
-    1: '拒绝退款',
+    1: 'Reject refund',
     2: 'Refund'
   },
   // 支付方式
@@ -66,31 +73,17 @@ const Common = {
 
   // 发货状态
   deliverStatus: {
-    NOT_YET_SHIPPED: 'Not shipped',
-    SHIPPED: '已发货',
-    PART_SHIPPED: '部分发货',
-    VOID: '作废'
+    NOT_YET_SHIPPED: 'Not yet shipped',
+    SHIPPED: 'Shipped',
+    PART_SHIPPED: 'Part shipped',
+    VOID: 'void'
   },
 
   // 支付状态
   payState: {
-    NOT_PAID: '未支付',
-    PARTIAL_PAID: '部分支付',
+    NOT_PAID: 'Not paid',
+    PARTIAL_PAID: 'Partial paid',
     PAID: 'Paid'
-  },
-
-  // 订单状态
-  flowState: {
-    INIT: '待审核',
-    REMEDY: '修改订单',
-    REFUND: '退款',
-    AUDIT: 'To be delivered',
-    DELIVERED_PART: 'To be delivered',
-    DELIVERED: 'Ready for receiving',
-    CONFIRMED: 'Received',
-    COMPLETED: 'Finished',
-    VOID: 'Invalid',
-    REFUND_FAILED: '退款失败'
   },
   // 优惠券使用范围
   couponScopeType: {
@@ -101,16 +94,16 @@ const Common = {
     3: 'Limited store classification', //店铺分类
     4: 'Some commodities'
   },
-  // 优惠券查询类型
-  couponStatus: {
-    0: 'all',
-    1: 'in effect',
-    2: 'not effective',
-    3: 'Take effect ',
-    4: 'invalid'
+  // // 优惠券查询类型
+  // couponStatus: {
+  //   0: 'all',
+  //   1: 'in effect',
+  //   2: 'not effective',
+  //   3: 'Take effect ',
+  //   4: 'invalid'
 
 
-  },
+  // },
   // 优惠券查询类型
   couponStatus: {
     0: 'All',
@@ -120,10 +113,12 @@ const Common = {
     4: 'Expired'
   },
   activityStatus: {
-    1: '进行中',
-    2: '暂停中',
-    3: '未开始',
-    4: '已结束'
+    0: 'All',
+    1: 'In process',
+    2: 'Pause',
+    3: 'Not start',
+    4: 'Completed',
+    5: 'Not start and in process'
   },
   couponActivityType: {
     0: '全场赠券',
@@ -141,32 +136,51 @@ const Common = {
     TWO: 2 * 1024 * 1024
   },
 
-  spuMaxSku: 50,
+  spuMaxSku: 100,
 
-  // STG Presciber Okta Config
+  // PHRASE 远程拉取language项目id
+  PHRASE_PROJECT_ID: 'b16c5e4ed825ad40972b1d8379cb733e',
+
+  // STG  Okta Config
   REACT_APP_PRESCRIBER_CLIENT_ID: "0oaq5jv1f653OBJn80x6",
   REACT_APP_PRESCRIBER_ISSUER : "https://accountpreview.royalcanin.com/oauth2/default",
-  REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback",
+  REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
+  REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
+  REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
+  REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
+  REACT_APP_PRESCRIBER_Scope:['openid', 'profile', 'email','user.consent:read','user.profile:write','user.consent:delete','user.consent:collect'],
+  REACT_APP_RC_Scope:['openid', 'profile', 'email'],
 
-  // PROD Presciber Okta Config
+  //测试新Okta 测试完待删除
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa11rn3i75tj9K6g0h8',
+  // REACT_APP_PRESCRIBER_ISSUER: 'https://accountdev.royalcanin.com/oauth2/default',
+
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa2jwc4milE29DI6417',
+  // REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',
+  // REACT_APP_PRESCRIBER_Scope:['openid', 'profile', 'email'],
+  // REACT_APP_PRESCRIBER_CLIENT_ID: '0oa3fbl740oBK3vtO0x7',
+  // REACT_APP_PRESCRIBER_ISSUER: 'https://accountpreview.royalcanin.com/oauth2/default',
+
+  // REACT_APP_PRESCRIBER_RedirectURL: window.origin + '/implicit/callback'
+
+
+  // PROD  Okta Config
   // REACT_APP_PRESCRIBER_CLIENT_ID: "0oa6ac06a7I03dDyY416",
   // REACT_APP_PRESCRIBER_ISSUER : "https://signin.royalcanin.com/oauth2/default",
   // REACT_APP_PRESCRIBER_RedirectURL: window.origin +  "/implicit/callback?type=prescriber",
+  // REACT_APP_RC_CLIENT_ID: "0oa78y2vww7kzTbiq357",
+  // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
+  // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
   // DEV RC STAFF Okta Config
   // REACT_APP_RC_CLIENT_ID: "0oazb1qrtg8k0aKCP4x6",
   // REACT_APP_RC_ISSUER : "https://dev-476019.okta.com/oauth2/default",
   // REACT_APP_RC_RedirectURL: window.origin +  "/implicit/callback",
 
-  // PROD RC STAFF Okta Config
+  // PROD MX RC STAFF Okta Config
   // REACT_APP_RC_CLIENT_ID: "0oa5odnbjhRhbV16X357",
   // REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
   // REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
-
-  // STG RC STAFF Okta Config
-  REACT_APP_RC_CLIENT_ID: "0oa6fb12ahvn5lAAL357",
-  REACT_APP_RC_ISSUER : "https://mars-group.okta.com",
-  REACT_APP_RC_RedirectURL: window.origin + "/implicit/callback?type=staff",
 
 };
 export default Common;

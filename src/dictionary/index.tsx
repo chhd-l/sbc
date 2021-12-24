@@ -1,57 +1,62 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
+import { Headline, SelectGroup, BreadCrumb, Const, RCi18n } from 'qmkit';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-export default class DitionaryList extends Component<any, any> {
+class DitionaryList extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       columns: [
         {
-          title: 'Name',
+          title: <FormattedMessage id="Setting.Name" />,
           dataIndex: 'name',
-          key: 'name'
+          key: 'name',
+          width: '20%',
         },
         {
-          title: 'Type',
+          title: <FormattedMessage id="Setting.Type" />,
           dataIndex: 'type',
-          key: 'type'
+          key: 'type',
+          width: '20%',
         },
         {
-          title: 'Value',
+          title: 'valueEn',
           dataIndex: 'valueEn',
-          key: 'value'
+          key: 'value',
+          width: '20%',
         },
         {
-          title: 'Description',
+          title: <FormattedMessage id="Setting.Description" />,
           dataIndex: 'description',
-          key: 'description'
+          key: 'description',
+          width: '20%',
         },
         {
-          title: 'Priority',
+          title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'priority',
-          key: 'priority'
+          key: 'priority',
+          width: '10%',
         },
         {
-          title: 'Operation',
+          title: <FormattedMessage id="Setting.Priority" />,
           dataIndex: 'operation',
           key: 'operation',
+          width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Edit">
+              <Tooltip placement="top" title={`${RCi18n({id: 'Setting.Edit'})}`}>
                 <Link to={'/dictionary-edit/' + record.id} className="iconfont iconEdit"></Link>
               </Tooltip>
 
               <Divider type="vertical" />
-
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteDictionary(record.id)} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={`${RCi18n({id: 'Setting.Areyousuretodelete'})}`} onConfirm={() => this.deleteDictionary(record.id)} okText={(window as any).RCi18n({ id: 'Setting.Confirm' })} cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
+                <Tooltip placement="top" title={`${RCi18n({id: 'Setting.Delete'})}`}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
               </Popconfirm>
@@ -77,6 +82,9 @@ export default class DitionaryList extends Component<any, any> {
     this.queryClinicsDictionary();
     this.getDictionary();
   }
+  props: {
+    intl: any;
+  };
   getDictionary = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const query = this.state.searchForm;
     this.setState({
@@ -87,7 +95,7 @@ export default class DitionaryList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let dictionaryData = res.context.sysDictionaryPage.content;
       pagination.total = res.context.sysDictionaryPage.total;
@@ -107,15 +115,21 @@ export default class DitionaryList extends Component<any, any> {
   };
   queryClinicsDictionary = async () => {
     const { res } = await webapi.getDictionaryTypes();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         dictionaryTypes: res.context
       });
     } else {
-      message.error(res.message);
     }
   };
   onSearch = () => {
+    const { pagination } = this.state;
+    this.setState({
+      pagination: {
+        ...pagination,
+        current: 1
+      }
+    });
     this.getDictionary({ pageNum: 0, pageSize: 10 });
   };
   handleTableChange(pagination: any) {
@@ -128,14 +142,12 @@ export default class DitionaryList extends Component<any, any> {
     const { res } = await webapi.deleteDictionary({
       id: id
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
       this.getDictionary({
         pageNum: this.state.pagination.current - 1,
         pageSize: 10
       });
-    } else {
-      message.error(res.message || 'delete faild');
     }
   };
   render() {
@@ -145,11 +157,11 @@ export default class DitionaryList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title="Dictionary" />
+          <Headline title={`${RCi18n({id: 'Setting.Dictionary'})}`}/>
           <Form className="filter-content" layout="inline">
             <FormItem>
               <Input
-                addonBefore="Keyword"
+                addonBefore={`${RCi18n({id: 'Setting.Keyword'})}`}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   this.onFormChange({
@@ -157,14 +169,14 @@ export default class DitionaryList extends Component<any, any> {
                     value
                   });
                 }}
-                placeholder="Please input name or discription"
+                placeholder={(window as any).RCi18n({ id: 'Setting.Pleaseinputnameordiscription' })}
                 style={{ width: 300 }}
               />
             </FormItem>
             <FormItem>
               <SelectGroup
                 defaultValue="All"
-                label="Type"
+                label={(window as any).RCi18n({ id: 'Setting.Type' })}
                 showSearch
                 onChange={(value) => {
                   value = value === '' ? null : value;
@@ -175,7 +187,7 @@ export default class DitionaryList extends Component<any, any> {
                 }}
                 style={{ width: 300 }}
               >
-                <Option value="">All</Option>
+                <Option value="">{(window as any).RCi18n({ id: 'Setting.All' })}</Option>
                 {dictionaryTypes.map((item) => (
                   <Option value={item} key={item}>
                     {item}
@@ -195,17 +207,20 @@ export default class DitionaryList extends Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Setting.search" />
                 </span>
               </Button>
             </Form.Item>
           </Form>
           <Button type="primary" htmlType="submit" style={{ marginBottom: '10px' }}>
-            <Link to="/dictionary-add">Add</Link>
+            <Link to="/dictionary-add">
+              {' '}
+              <FormattedMessage id="Setting.Add" />
+            </Link>
           </Button>
         </div>
         <div className="container">
-          <Spin spinning={this.state.loading}  indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin spinning={this.state.loading}>
             <Table rowKey={(record, index) => index} dataSource={this.state.dictionaryData} columns={columns} pagination={this.state.pagination} onChange={this.handleTableChange} />
           </Spin>
         </div>
@@ -213,3 +228,4 @@ export default class DitionaryList extends Component<any, any> {
     );
   }
 }
+export default injectIntl(DitionaryList);

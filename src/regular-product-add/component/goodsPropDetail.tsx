@@ -5,6 +5,7 @@ import { noop } from 'qmkit';
 import { Form, Row, Col, Select, Tree, TreeSelect } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import '../index.less'
+import { RCi18n, Const } from 'qmkit';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -76,6 +77,7 @@ class AttributeForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
+        {/* attributeInformation title */}
         <div
           style={{
             fontSize: 16,
@@ -89,25 +91,28 @@ class AttributeForm extends React.Component<any, any> {
             <FormattedMessage id="product.attributeInformationDetail" />
           </span>
         </div>
+        {/* attributeForm */}
         <div>
           <Form id="attributeForm">
-            {propList &&
-              propList.map((detList) => {
+            {propList.size>0 &&
+              propList.toJS().map((detList) => {
+                
                 return (
-                  <Row type="flex" justify="start" key={detList.get(0).get('propId')}>
+                  <Row type="flex" justify="start" key={detList[0].propId}>
                     {detList.map((det) => (
-                      <Col span={10} key={det.get('propId') + det.get('cateId')}>
-                        <FormItem {...formItemLayout} label={det.get('propName')}>
-                          {getFieldDecorator(`${det.get('propName')}`, {
+                      
+                      <Col span={10} key={det.propId + det.cateId}>
+                        <FormItem {...formItemLayout} label={det.propName}>
+                          {getFieldDecorator(`${det.propName}`, {
                             rules: [
                               {
                                 required: false,
-                                message: `Please select the ${det.get('propName')}`
+                                message: `Please select the ${det.propName}`
                               }
                             ],
                             initialValue:
-                            det.get('goodsPropDetails') && (det.get('goodsPropDetails').filter((item) => item.get('select') === 'select')).length
-                             ? (det.get('goodsPropDetails').filter((item) => item.get('select') === 'select')).toJS().map((item) => {
+                            det.goodsPropDetails && (det.goodsPropDetails.filter((item) => item.select === 'select')).length
+                             ? (det.goodsPropDetails.filter((item) => item.select === 'select')).map((item) => {
                               return {
                                 label: item.detailName,
                                 value: item.detailId
@@ -146,21 +151,23 @@ class AttributeForm extends React.Component<any, any> {
   };
 
   _getPropTree = (det) => {
-    let propValues = det.get('goodsPropDetails');
-    let propId = det.get('propId');
-    let isSingle = det.get('isSingle');
+    let propValues = det.goodsPropDetails;
+    let propId = det.propId;
+    let isSingle = det.isSingle;
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <TreeSelect
         getPopupContainer={() => document.getElementById('page-content')}
         treeCheckable={true}
         showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
         treeCheckStrictly={true}
-        placeholder="Select the property information"
+        placeholder={RCi18n({id:'Product.ThePropertyInformation'})}
         notFoundContent="No Data"
         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
         treeDefaultExpandAll
         showSearch={false}
         onChange={(value) => this._onChange(propId, value)}
+        disabled={disableFields}
       >
         {this.generateStoreCateTree(propValues, isSingle)}
       </TreeSelect>
@@ -183,11 +190,11 @@ class AttributeForm extends React.Component<any, any> {
           }
         });
     });
-    const values = propValues ? propValues.toJS().map((x) => x.detailId) : [];
+    const values = propValues ? propValues.map((x) => x.detailId) : [];
     let intersection = values.filter((v) => selectList.includes(v));
     return propValues.map((item) => {
-      const singleDisabled = isSingle && intersection.length > 0 && item.get('detailId') != intersection[0];
-      return <TreeNode key={item.get('detailId')} value={item.get('detailId')} title={item.get('detailName')} disabled={singleDisabled} />;
+      const singleDisabled = isSingle && intersection.length > 0 && item.detailId != intersection[0];
+      return <TreeNode key={item.detailId} value={item.detailId} title={item.detailName} disabled={singleDisabled} />;
     });
   };
 

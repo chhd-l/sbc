@@ -24,26 +24,22 @@ export default class GoodsActor extends Actor {
       expandedRowKeys: [],
       // 模糊条件-SKU编码(搜索出来直接展开显示这个sku对应的spu)
       likeGoodsInfoNo1: '',
-      loading: true,
+      loading: true
     };
   }
 
   @Action('goodsActor: init')
   init(state: IMap, data) {
     let exp = List();
-    if (
-      state.get('likeGoodsInfoNo1') != '' &&
-      data
-        .get('goodsPage')
-        .get('content')
-        .count() > 0
-    ) {
-      exp = data
-        .get('goodsPage')
-        .get('content')
-        .map((value) => value.get('goodsId'));
-    }
-    return state.merge(data).set('expandedRowKeys', exp);
+    try {
+      if (state.get('likeGoodsInfoNo1') != '' && data.get('goodsPage').get('content').count() > 0) {
+        exp = data
+          .get('goodsPage')
+          .get('content')
+          .map((value) => value.get('goodsId'));
+      }
+      return state.merge(data).set('expandedRowKeys', exp);
+    } catch (error) {}
   }
 
   @Action('goodsActor: onSelectChange')

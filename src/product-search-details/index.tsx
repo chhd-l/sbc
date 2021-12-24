@@ -102,14 +102,12 @@ export default class ProductSearchDetails extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
@@ -133,19 +131,19 @@ export default class ProductSearchDetails extends React.Component<any, any> {
         width: '15%'
       },
       {
-        title: 'Consumer Type',
+        title: 'Pet Owner Type',
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '15%'
       },
       {
-        title: 'Consumer Account',
+        title: 'Pet owner account',
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '15%'
       },
       {
-        title: 'Consumer Name',
+        title: 'Pet owner name',
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '15%'
@@ -171,7 +169,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={<p style={styles.label}>Pet owner account</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -220,7 +218,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
           <Table rowKey="id" columns={columns} dataSource={searchResultDetails} pagination={pagination} loading={loading} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={() => (history as any).go(-1)}>
+          <Button onClick={() => (history as any).go(-1)}>
             {<FormattedMessage id="back" />}
           </Button>
         </div>

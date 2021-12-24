@@ -1,14 +1,7 @@
 import { Store, IOptions } from 'plume2';
 import { fromJS } from 'immutable';
 
-import {
-  getCateList,
-  fetchImages,
-  addCate,
-  moveImage,
-  deleteImage,
-  updateImage
-} from './webapi';
+import { getCateList, fetchImages, addCate, moveImage, deleteImage, updateImage } from './webapi';
 import CateActor from './actor/cate-actor';
 import ImageActor from './actor/image-actor';
 import { IMap } from 'typings/globalType';
@@ -33,10 +26,8 @@ export default class AppStore extends Store {
   init = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     //1.查询店铺分类列表
     const cateList: any = await getCateList();
-    const cateListIm = fromJS(cateList.res);
-    const cateId = cateListIm
-      .find((item) => item.get('isDefault') == 1)
-      .get('cateId'); //找默认分类
+    const cateListIm = fromJS(cateList.res.context.storeResourceCateVOList);
+    const cateId = cateListIm.find((item) => item.get('isDefault') == 1).get('cateId'); //找默认分类
 
     //2.查询图片分页信息
     const imageList: any = await fetchImages({
@@ -48,7 +39,7 @@ export default class AppStore extends Store {
     if (imageList.res.code === Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.selectImageCate(cateId);
-        this.dispatch('cateActor: init', fromJS(cateList.res)); //初始化分类列表
+        this.dispatch('cateActor: init', fromJS(cateList.res.context.storeResourceCateVOList)); //初始化分类列表
         this.dispatch('imageActor: init', fromJS(imageList.res.context)); //初始化图片分页列表
         this.dispatch('imageActor: page', fromJS({ currentPage: pageNum + 1 }));
         this.dispatch('cateActor: closeCateModal');
@@ -61,9 +52,7 @@ export default class AppStore extends Store {
   /**
    * 查询图片信息分页列表
    */
-  queryImagePage = async (
-    { pageNum, pageSize } = { pageNum: 0, pageSize: 10 }
-  ) => {
+  queryImagePage = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 10 }) => {
     const cateListIm = this.state().get('cateAllList');
     const cateId = this.state().get('cateId'); //之前选中的分类
     //查询图片分页信息
@@ -94,23 +83,15 @@ export default class AppStore extends Store {
     if (cateId) {
       const selfCate = cateListIm.find((item) => item.get('cateId') == cateId); //找到自己
       if (selfCate && selfCate.get('cateParentId')) {
-        const parentCate = cateListIm.find(
-          (item) => item.get('cateId') == selfCate.get('cateParentId')
-        ); //找到父级
+        const parentCate = cateListIm.find((item) => item.get('cateId') == selfCate.get('cateParentId')); //找到父级
         if (parentCate) {
           if (!cateIdListIm.has(parentCate.get('cateId').toString())) {
-            cateIdListIm = cateIdListIm.push(
-              parentCate.get('cateId').toString()
-            ); //加入展开的分类中
+            cateIdListIm = cateIdListIm.push(parentCate.get('cateId').toString()); //加入展开的分类中
           }
-          const parentPareCate = cateListIm.find(
-            (item) => item.get('cateId') == parentCate.get('cateParentId')
-          ); //找到父级的父级
+          const parentPareCate = cateListIm.find((item) => item.get('cateId') == parentCate.get('cateParentId')); //找到父级的父级
           if (parentPareCate) {
             if (!cateIdListIm.has(parentPareCate.get('cateId').toString())) {
-              cateIdListIm = cateIdListIm.push(
-                parentPareCate.get('cateId').toString()
-              ); //加入展开的分类中
+              cateIdListIm = cateIdListIm.push(parentPareCate.get('cateId').toString()); //加入展开的分类中
             }
           }
         }
@@ -126,23 +107,12 @@ export default class AppStore extends Store {
     let cateIdList = new Array();
     if (cateId) {
       cateIdList.push(cateId);
-      const secondCateList = cateListIm.filter(
-        (item) => item.get('cateParentId') == cateId
-      ); //找第二层子节点
+      const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
-        cateIdList = cateIdList.concat(
-          secondCateList.map((item) => item.get('cateId')).toJS()
-        );
-        const thirdCateList = cateListIm.filter(
-          (item) =>
-            secondCateList.filter(
-              (sec) => item.get('cateParentId') == sec.get('cateId')
-            ).size > 0
-        ); //找第三层子节点
+        cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
+        const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
         if (thirdCateList && thirdCateList.size > 0) {
-          cateIdList = cateIdList.concat(
-            thirdCateList.map((item) => item.get('cateId')).toJS()
-          );
+          cateIdList = cateIdList.concat(thirdCateList.map((item) => item.get('cateId')).toJS());
         }
       }
     }
@@ -178,6 +148,7 @@ export default class AppStore extends Store {
    */
   showCateModal = (type: boolean) => {
     this.dispatch('cateActor: showCateModal', type);
+    this.init();
   };
 
   /**
@@ -229,10 +200,7 @@ export default class AppStore extends Store {
   autoExpandImageCate = (cateId) => {
     if (cateId) {
       this.dispatch('cateActor: editCateId', List.of(cateId.toString())); //选中的分类id List
-      this.dispatch(
-        'cateActor: editExpandedKeys',
-        this._getExpandedCateIdList(this.state().get('cateAllList'), cateId)
-      ); //需要展开的分类
+      this.dispatch('cateActor: editExpandedKeys', this._getExpandedCateIdList(this.state().get('cateAllList'), cateId)); //需要展开的分类
       this.dispatch('imageActor: editCateId', cateId.toString()); //选中的分类id
     }
   };
@@ -245,8 +213,6 @@ export default class AppStore extends Store {
     const result = (await updateImage(image)) as any;
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(result.res.message);
     }
   };
 
@@ -272,8 +238,6 @@ export default class AppStore extends Store {
       message.success('Move successfully');
       this.showMoveImageModal(false);
       this.queryImagePage();
-    } else {
-      message.error(result.res.message);
     }
   };
 
@@ -289,8 +253,6 @@ export default class AppStore extends Store {
       this.showCateModal(false);
       const cateList: any = await getCateList();
       this.dispatch('cateActor: init', fromJS(cateList.res)); //初始化分类列表
-    } else {
-      message.error(result.res.message);
     }
   };
 
@@ -312,8 +274,6 @@ export default class AppStore extends Store {
     if (result.res.code === Const.SUCCESS_CODE) {
       message.success('Successfully deleted');
       this.queryImagePage();
-    } else {
-      message.error(result.res.message);
     }
   };
 }

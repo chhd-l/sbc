@@ -28,7 +28,6 @@ export default class AppStore extends Store {
       this.dispatch('freight:freightWithGoods', fromJS(res.context));
       this.dispatch('freight:clearSelectedSpuKeys');
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -39,7 +38,6 @@ export default class AppStore extends Store {
     if (!err && res.code === Const.SUCCESS_CODE) {
       this.dispatch('freight:freightList', fromJS(res.context));
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -52,18 +50,13 @@ export default class AppStore extends Store {
         this.dispatch('freight:selectTemp', fromJS(res.context));
         const result = (await webapi.goodsFreightExpress(freightTempId)) as any;
         if (result.res.code === Const.SUCCESS_CODE) {
-          this.dispatch(
-            'freight:selectTempExpress',
-            fromJS(result.res.context)
-          );
+          this.dispatch('freight:selectTempExpress', fromJS(result.res.context));
         } else {
-          message.error(result.res.message);
         }
       } else {
         this.dispatch('freight:freightTemp', fromJS(res.context));
       }
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -111,23 +104,15 @@ export default class AppStore extends Store {
       const params = {
         pageNum: 0,
         pageSize: 10,
-        freightTempId: this.state()
-          .get('freightTemp')
-          .get('freightTempId')
+        freightTempId: this.state().get('freightTemp').get('freightTempId')
       };
       this.init(params);
       this.setFreightList();
-      this.setGoodsFreight(
-        this.state()
-          .get('freightTemp')
-          .get('freightTempId'),
-        false
-      );
+      this.setGoodsFreight(this.state().get('freightTemp').get('freightTempId'), false);
       this.setFeightVisible(false);
       this.setFreightTempId(null);
       this.dispatch('freight:clearSelectedSpuKeys');
     } else {
-      message.error(res.message);
     }
   };
   /**
@@ -147,22 +132,14 @@ export default class AppStore extends Store {
       const params = {
         pageNum: 0,
         pageSize: 10,
-        freightTempId: this.state()
-          .get('freightTemp')
-          .get('freightTempId')
+        freightTempId: this.state().get('freightTemp').get('freightTempId')
       };
       this.init(params);
       this.setFreightList();
-      this.setGoodsFreight(
-        this.state()
-          .get('freightTemp')
-          .get('freightTempId'),
-        false
-      );
+      this.setGoodsFreight(this.state().get('freightTemp').get('freightTempId'), false);
       this.setFeightVisible(false);
       this.setFreightTempId(null);
     } else {
-      message.error(res.message);
     }
   };
 }

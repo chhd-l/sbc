@@ -1,0 +1,205 @@
+/*
+.ant-steps .ant-steps-item.ant-steps-item-active .ant-steps-item-content .ant-steps-item-title {
+  color: var(--primary-color);
+}
+*/
+.login-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #f0f2f5;
+  .ant-form-item-control {
+    line-height: inherit;
+  }
+}
+
+.check-content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  max-width: 1920px;
+  margin: 0  auto;  
+
+  .check-main {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    width: 420px;
+    
+    &.on-mobile {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0 15px;
+      right: 0;
+      top: 10%;
+    }
+
+    .check-logo {
+      width: 330px;
+      height: 59px;
+      margin: 0 auto;
+      padding-bottom: 80px;
+      position: relative;
+      img {
+        width: 33px;
+        height: 45px;
+      }
+
+      span {
+        font-size: 30px;
+        font-weight: 500;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #448bff;
+      }
+
+      .jl {
+        position: absolute;
+        top: -58px;
+        right: 70px;
+        z-index: 0;
+        transform: rotateY(180deg);
+        img{
+          width: 47px;
+          height: 47px;
+        }
+      }
+
+      .jr {
+        position: absolute;
+        top: -34px;
+        right: 6px;
+        z-index: 1;
+        transform: rotateY(180deg);
+        img{
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+    .ant-space {
+      width: 100%;
+    }
+    .check-text1 {
+      text-align: center;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 36px;
+      letter-spacing: 0px;
+      color: #a0b0bb;
+    }
+    .check-text2 {
+      text-align: center;
+      font-size: 16px;
+      font-weight: normal;
+      font-stretch: normal;
+      line-height: 36px;
+      letter-spacing: 0px;
+      color: #a0b0bb;
+      span {
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 0px;
+        color: #448bff;
+        cursor: pointer;
+      }
+    }
+    input {
+      font-size: 16px;
+      background-color: #ffffff;
+    }
+
+    .anticon[tabindex] {
+      color: #a0b0bb;
+    }
+
+    .ant-input-affix-wrapper .ant-input:focus {
+      color: var(--primary-color);
+    }
+
+    .password {
+      margin-top: 16px;
+    }
+
+    .ant-input-affix-wrapper {
+      font-size: 20px;
+      border-radius: 4px;
+    }
+
+    //Checkbox {
+    //  vertical-align: top;
+    //}
+
+    .ant-checkbox + span {
+      color: #999999;
+      font-size: 16px;
+    }
+
+    .forgot {
+      text-align: right;
+      color: #999999;
+      font-size: 16px;
+      text-decoration: underline
+    }
+
+    .ant-checkbox-inner {
+      // 设置 checkbox 的大小
+      width: 20px;
+      height: 20px;
+
+      // 设置对勾的 大小 和 位置
+      &::after {
+        width: 7px;
+        height: 13px;
+      }
+    }
+
+    Button {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .text {
+      text-align: center;
+      font-size: 16px;
+      font-weight: normal;
+      color: #a0b0bb;
+      margin-top: 20px;
+
+      span {
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 0px;
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+    }
+  }
+
+}
+
+@media screen and (max-width: 575px) {
+  .check-content .check-main {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px;
+    right: 0;
+    top: 10%;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .check-content {
+    max-height: 1080px;
+    top: 50%;
+    transform: translate(0, -50%);
+    .check-main {
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+  }
+}

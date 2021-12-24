@@ -22,7 +22,7 @@ export default class SpecifyActor extends Actor {
         // 无效的优惠券
         invalidCoupons: [],
         // 目标客户
-        joinLevel: '-2',
+        joinLevel: '-1',
         //选择的客户ids
         chooseCustomerIds: [],
         //选择的客户
@@ -46,10 +46,7 @@ export default class SpecifyActor extends Actor {
    */
   @Action('change: coupon: total: count')
   changeCouponTotalCount(state, { index, totalCount }) {
-    return state.setIn(
-      ['activity', 'coupons', index, 'totalCount'],
-      totalCount
-    );
+    return state.setIn(['activity', 'coupons', index, 'totalCount'], totalCount);
   }
 
   /**
@@ -57,9 +54,7 @@ export default class SpecifyActor extends Actor {
    */
   @Action('del: coupon')
   onDelCoupon(state, couponId) {
-    return state.updateIn(['activity', 'coupons'], (coupons) =>
-      coupons.filter((coupon) => coupon.get('couponId') != couponId)
-    );
+    return state.updateIn(['activity', 'coupons'], (coupons) => coupons.filter((coupon) => coupon.get('couponId') != couponId));
   }
 
   /**
@@ -106,9 +101,7 @@ export default class SpecifyActor extends Actor {
    */
   @Action('choose: customer')
   chooseCustomer(state, { customerIds, rows }) {
-    return state
-      .setIn(['activity', 'chooseCustomerList'], fromJS(rows))
-      .setIn(['activity', 'chooseCustomerIds'], fromJS(customerIds));
+    return state.setIn(['activity', 'chooseCustomerList'], fromJS(rows)).setIn(['activity', 'chooseCustomerIds'], fromJS(customerIds));
   }
 
   /**
@@ -116,12 +109,8 @@ export default class SpecifyActor extends Actor {
    */
   @Action('del: customer')
   delCustomer(state, customerId) {
-    state = state.updateIn(['activity', 'chooseCustomerIds'], (customerIds) =>
-      customerIds.filter((id) => id != customerId)
-    );
-    state = state.updateIn(['activity', 'chooseCustomerList'], (list) =>
-      list.filter((customer) => customer.get('customerId') != customerId)
-    );
+    state = state.updateIn(['activity', 'chooseCustomerIds'], (customerIds) => customerIds.filter((id) => id != customerId));
+    state = state.updateIn(['activity', 'chooseCustomerList'], (list) => list.filter((customer) => customer.get('customerId') != customerId));
     return state;
   }
 }

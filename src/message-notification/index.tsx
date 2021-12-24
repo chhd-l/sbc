@@ -2,20 +2,23 @@ import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
 import * as webapi from './webapi';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class Notification extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Notification Automation',
+      title: <FormattedMessage id="Marketing.NotificationAutomation" />,
 
       orderAutomationData: [],
 
       subscriptionAutomationData: [],
       recommendationAutomationData: [],
       priscriberAutomationData: [],
+      helpAutomationData:[],
+      operateAutomationData:[],
+      registerAutomationData:[],
 
       visible: false,
 
@@ -54,17 +57,18 @@ class Notification extends Component<any, any> {
             subscriptionAutomationData: res.context.subscriptionList,
             recommendationAutomationData: res.context.recommendationList,
             priscriberAutomationData: res.context.oktList,
+            helpAutomationData:res.context.helpList,
+            operateAutomationData:res.context.operateList,
+            registerAutomationData:res.context.registerList,
             allLoading: false
           });
         } else {
-          message.error(res.message || 'Operation failure');
           this.setState({
             allLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Operation failure');
         this.setState({
           allLoading: false
         });
@@ -106,14 +110,10 @@ class Notification extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
-          message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Update Failed');
+          message.success(<FormattedMessage id="Marketing.OperateSuccessfully" />);
         }
       })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-      });
+      .catch((err) => {});
   };
   startNotification = (id: string) => {
     webapi
@@ -122,14 +122,10 @@ class Notification extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getNotificationList();
-          message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Update Failed');
+          message.success(<FormattedMessage id="Marketing.OperateSuccessfully" />);
         }
       })
-      .catch((err) => {
-        message.error(err || 'Update Failed');
-      });
+      .catch((err) => {});
   };
 
   getTemplateList = () => {
@@ -137,7 +133,7 @@ class Notification extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList
+          emailTemplateList: res.context.messageTemplateResponseList
         });
       }
     });
@@ -170,14 +166,12 @@ class Notification extends Component<any, any> {
             previewHtml: templateData.emailTemplateHtml
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
@@ -205,38 +199,36 @@ class Notification extends Component<any, any> {
               this.getNotificationList();
             }
           );
-          message.success('Operate successfully');
-        } else {
-          message.error(res.message || 'Save Failed');
+          message.success(<FormattedMessage id="Marketing.OperateSuccessfully" />);
         }
       })
-      .catch((err) => {
-        message.error(err || 'Save Failed');
-      });
+      .catch((err) => {});
   };
 
   render() {
-    const { title, orderAutomationData, subscriptionAutomationData, recommendationAutomationData, priscriberAutomationData, selectedForm, emailTemplateList, previewHtml, allLoading } = this.state;
+    const { title, orderAutomationData, subscriptionAutomationData, recommendationAutomationData, priscriberAutomationData, selectedForm, emailTemplateList, previewHtml, allLoading ,helpAutomationData , operateAutomationData ,registerAutomationData } = this.state;
     const columns = [
       {
-        title: 'Status',
+        title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'objectStatus',
         key: 'objectStatus',
         width: '40%'
       },
       {
-        title: 'Email Template',
+        title: <FormattedMessage id="Marketing.EmailTemplate" />,
         dataIndex: 'emailTemplate',
         key: 'emailTemplate',
         width: '30%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Marketing.Operation" />,
         key: 'operation',
         width: '20%',
         render: (text, record) => (
           <span>
-            <a onClick={() => this.openSetting(record)}>setting</a>
+            <a onClick={() => this.openSetting(record)}>
+              <FormattedMessage id="Marketing.setting" />
+            </a>
             <Divider type="vertical" />
             <Switch checkedChildren="on" unCheckedChildren="off" defaultChecked={+record.status === 1 ? true : false} onChange={() => this.changeAutoStatus(record.id, record.status)} />
           </span>
@@ -247,7 +239,7 @@ class Notification extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={allLoading}>
           <div className="container-search">
             <Headline title={title} />
             <div style={{ marginTop: 10 }}>
@@ -256,8 +248,12 @@ class Notification extends Component<any, any> {
                   <Icon type="mail" style={{ fontSize: 40 }} />
                 </div>
                 <div style={{ marginLeft: 10 }}>
-                  <h3>Email Automation - Order</h3>
-                  <p>Sending Email automatically by the status of Order</p>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationOrder" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailOrder" />
+                  </p>
                 </div>
               </div>
               <Table style={{ marginTop: 20 }} columns={columns} dataSource={orderAutomationData} pagination={false} />
@@ -268,8 +264,12 @@ class Notification extends Component<any, any> {
                   <Icon type="mail" style={{ fontSize: 40 }} />
                 </div>
                 <div style={{ marginLeft: 10 }}>
-                  <h3>Email Automation - Subscription</h3>
-                  <p>Sending Email automatically by the status of Subscription</p>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationSubscription" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailSubscription" />
+                  </p>
                 </div>
               </div>
               <Table style={{ marginTop: 20 }} columns={columns} dataSource={subscriptionAutomationData} pagination={false} />
@@ -280,8 +280,12 @@ class Notification extends Component<any, any> {
                   <Icon type="mail" style={{ fontSize: 40 }} />
                 </div>
                 <div style={{ marginLeft: 10 }}>
-                  <h3>Email Automation - Recommendation</h3>
-                  <p>Sending Email automatically by the status of Recommendation</p>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationRecommendation" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailRecommendation" />
+                  </p>
                 </div>
               </div>
               <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={recommendationAutomationData} pagination={false} />
@@ -292,41 +296,95 @@ class Notification extends Component<any, any> {
                   <Icon type="mail" style={{ fontSize: 40 }} />
                 </div>
                 <div style={{ marginLeft: 10 }}>
-                  <h3>Email Automation - Prescriber creation</h3>
-                  <p>Sending Email automatically by the status of Prescriber creation</p>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationPrescriberCreation" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailPrescriberCreation" />
+                  </p>
                 </div>
               </div>
               <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={priscriberAutomationData} pagination={false} />
+            </div>
+
+
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationHelp" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailHelp" />
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={helpAutomationData} pagination={false} />
+            </div>
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationOperate" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailOperate" />
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={operateAutomationData} pagination={false} />
+            </div>
+            <div style={{ marginTop: 30 }}>
+              <div style={{ display: 'flex' }}>
+                <div style={{ margin: 'auto 0' }}>
+                  <Icon type="mail" style={{ fontSize: 40 }} />
+                </div>
+                <div style={{ marginLeft: 10 }}>
+                  <h3>
+                    <FormattedMessage id="Marketing.EmailAutomationRegister" />
+                  </h3>
+                  <p>
+                    <FormattedMessage id="Marketing.SendingEmailRegister" />
+                  </p>
+                </div>
+              </div>
+              <Table rowKey="id" style={{ marginTop: 20 }} columns={columns} dataSource={registerAutomationData} pagination={false} />
             </div>
           </div>
         </Spin>
         <Modal
           width="800px"
-          title="Template Setting"
+          title={<FormattedMessage id="Marketing.TemplateSetting" />}
           visible={this.state.visible}
           onOk={this.updateNotification}
           onCancel={this.handleCancel}
           footer={[
             <Button key="back" shape="round" onClick={this.handleCancel}>
-              Cancel
+              <FormattedMessage id="Marketing.Cancel" />
             </Button>,
             <Button key="submit" shape="round" type="primary" onClick={this.updateNotification}>
-              Confirm
+              <FormattedMessage id="Marketing.Confirm" />
             </Button>
           ]}
         >
           <Row>
             <Col span={6}>
               <Form layout="vertical">
-                <FormItem label="Status">
+                <FormItem label={<FormattedMessage id="Marketing.Status" />}>
                   <p>{selectedForm.selectedStatus}</p>
                 </FormItem>
-                <FormItem label="Email Template">
+                <FormItem label={<FormattedMessage id="Marketing.EmailTemplate" />}>
                   <Select value={selectedForm.selectedTemplateId} onChange={(value, option) => this.templateChange(value, option)}>
                     {emailTemplateList &&
                       emailTemplateList.map((item, index) => (
-                        <Option title={item.emailTemplate} value={item.templateId} key={index}>
-                          {item.emailTemplate}
+                        <Option title={item.messageTemplate} value={item.templateId} key={index}>
+                          {item.messageTemplate}
                         </Option>
                       ))}
                   </Select>
@@ -334,7 +392,7 @@ class Notification extends Component<any, any> {
               </Form>
             </Col>
             <Col span={18}>
-              <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+              <Spin spinning={this.state.loading}>
                 {previewHtml ? <div dangerouslySetInnerHTML={{ __html: previewHtml }} style={{ zoom: '0.5' }}></div> : null}
               </Spin>
             </Col>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, Modal, Switch, Select } from 'antd';
 import * as webapi from '../webapi';
 import { FormattedMessage } from 'react-intl';
-import { QMMethod, ValidConst } from 'qmkit';
+import { QMMethod, ValidConst, Const } from 'qmkit';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import { fromJS, List } from 'immutable';
@@ -27,10 +27,10 @@ class UserModal extends Component<any, any> {
   }
 
   getPrescriberRole = async () => {
-    const { res: roleRes } = await webapi.getAllRoles();
-    let prescriberRole = fromJS(roleRes).find((x) => x.get('roleName') === 'Prescriber');
+    const { res } = await webapi.getAllRoles();
+    let prescriberRole = res.context.find((x) => x.roleName === 'Prescriber');
     this.setState({
-      prescriberRoleId: prescriberRole.get('roleInfoId')
+      prescriberRoleId: prescriberRole.roleInfoId
     });
   };
 
@@ -42,19 +42,19 @@ class UserModal extends Component<any, any> {
         <Form>
           <Row>
             <Col span={24}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="firstName" />} hasFeedback>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber.firstName" />} hasFeedback>
                 {getFieldDecorator('firstName', {
                   initialValue: this.props.userForm.firstName,
                   rules: [
                     {
                       required: true,
                       whitespace: false,
-                      message: 'Please input first name'
+                      message: <FormattedMessage id="Prescriber.PleaseInputFirstName" />
                     },
                     {
                       min: 1,
                       max: 20,
-                      message: '1-20 characters'
+                      message: <FormattedMessage id="Prescriber.characters" />
                     },
                     {
                       validator: (rule, value, callback) => {
@@ -66,19 +66,19 @@ class UserModal extends Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="lastName" />} hasFeedback>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber.lastName" />} hasFeedback>
                 {getFieldDecorator('lastName', {
                   initialValue: this.props.userForm.lastName,
                   rules: [
                     {
                       required: true,
                       whitespace: false,
-                      message: 'Please input last name'
+                      message: <FormattedMessage id="Prescriber.PleaseInputLastName" />
                     },
                     {
                       min: 1,
                       max: 20,
-                      message: '1-20 characters'
+                      message: <FormattedMessage id="Prescriber.characters" />
                     },
                     {
                       validator: (rule, value, callback) => {
@@ -90,14 +90,14 @@ class UserModal extends Component<any, any> {
               </FormItem>
             </Col>
             <Col span={24}>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="email" />} required={true} hasFeedback>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber.email" />} required={true} hasFeedback>
                 {getFieldDecorator('email', {
                   initialValue: this.props.userForm.email,
                   rules: [
-                    { required: true, message: 'Please input email' },
+                    { required: true, message: <FormattedMessage id="Prescriber.PleaseInputEmail" /> },
                     {
                       pattern: ValidConst.email,
-                      message: 'Please enter your vaild email'
+                      message: <FormattedMessage id="Prescriber.PleaseEnterYourVaildEmail" />
                     },
                     {
                       validator: (rule, value, callback) => {
@@ -133,21 +133,21 @@ class UserModal extends Component<any, any> {
         });
         if (this.props.userForm.id) {
           const { res } = await webapi.updateUser(param);
-          if (res.code === 'K-000000') {
-            message.success('Operate successfully');
+          if (res.code === Const.SUCCESS_CODE) {
+            message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
             this.props.reflash();
             this.cancel();
           } else {
-            message.error(res.message || 'save faild');
+            message.error(res.message || <FormattedMessage id="Prescriber.saveFaild" />);
           }
         } else {
           const { res } = await webapi.addUser(param);
-          if (res.code === 'K-000000') {
-            message.success('Operate successfully');
+          if (res.code === Const.SUCCESS_CODE) {
+            message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
             this.props.reflash();
             this.cancel();
           } else {
-            message.error(res.message || 'save faild');
+            message.error(res.message || <FormattedMessage id="Prescriber.saveFaild" />);
           }
         }
       }

@@ -1,5 +1,7 @@
+import { edit } from '@/regular-product-add/webapi';
 import { Row, Col, Radio, Form, Input, InputNumber } from 'antd';
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -9,182 +11,231 @@ export default class exitRules extends Component<any, any> {
     this.state = {};
   }
   render() {
-    const { subscriptionPlan, addField } = this.props;
+    const { editable, subscriptionPlan, addField } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <h3>Step4</h3>
-        <h4>Exit Rules</h4>
+        <h3>
+          <FormattedMessage id="Subscription.Step4" />
+        </h3>
+        <h4>
+          <FormattedMessage id="Subscription.ExitRules" />
+        </h4>
         <div className="exitRules">
           <Form>
-            <h5>Cancellation policy</h5>
+            <h5>
+              <FormattedMessage id="Subscription.CancellationPolicy" />
+            </h5>
             <Row className="rules">
               <FormItem>
                 <Col span={8}>
-                  <strong>Consumer can choose to cancel the plan</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ConsumerCanChoose" />
+                  </strong>
                 </Col>
                 <Col span={4}>
                   {getFieldDecorator('canCancelPlan', {
                     initialValue: subscriptionPlan.canCancelPlan
                   })(
                     <Radio.Group
+                      disabled={true}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         addField('canCancelPlan', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
               <FormItem>
                 <Col span={8}>
-                  <strong>Consumer is charged a fee upon cancellation</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ConsumerIsCharged" />
+                  </strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canCancelChargedFee', {
-                    initialValue: subscriptionPlan.canCancelChargedFee
+                  {getFieldDecorator('SubscriptionFlag', {
+                    initialValue: subscriptionPlan.subscriptionPlanFlag
                   })(
                     <Radio.Group
+                      disabled={true}
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canCancelChargedFee', value);
+                        addField('subscriptionPlanFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
             </Row>
-            {subscriptionPlan.canCancelPlan && subscriptionPlan.canCancelChargedFee ? (
+            {subscriptionPlan.canCancelPlan && subscriptionPlan.subscriptionPlanFlag ? (
               <div>
-                <h5>Terms of cancellation</h5>
+                <h5>
+                  <FormattedMessage id="Subscription.TermsOfCancellation" />
+                </h5>
                 <Row className="rules">
                   <FormItem>
-                    <strong>Consumer is charged a fee before</strong>
-                    {getFieldDecorator('chargedRefills', {
-                      initialValue: subscriptionPlan.chargedRefills,
-                      rules: [{ required: true, message: 'This is Required' }]
+                    <strong>
+                      <FormattedMessage id="Subscription.ConsumerIsChargedBefore" />
+                    </strong>
+                    {getFieldDecorator('cancellationRefillTimes', {
+                      initialValue: subscriptionPlan.cancellationRefillTimes,
+                      rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
+                        disabled={!editable}
                         min={0}
                         onChange={(value) => {
-                          addField('chargedRefills', value);
+                          addField('cancellationRefillTimes', value);
                         }}
                       />
                     )}
-                    <strong>refills</strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.refills" />
+                    </strong>
                   </FormItem>
                   <FormItem>
-                    <strong>Total cancellation fee:</strong>
-                    {getFieldDecorator('cancellationFee', {
-                      initialValue: subscriptionPlan.cancellationFee,
-                      rules: [{ required: true, message: 'This is Required' }]
+                    <strong style={{ marginRight: '10px' }}>
+                      <FormattedMessage id="Subscription.TotalCancellationFee" />:
+                    </strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.remainingNumberOfRefills" /> *
+                    </strong>
+                    {getFieldDecorator('cancellationRefillFee', {
+                      initialValue: subscriptionPlan.cancellationRefillFee,
+                      rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                     })(
                       <InputNumber
+                        disabled={!editable}
                         min={0}
                         onChange={(value) => {
-                          addField('cancellationFee', value);
+                          addField('cancellationRefillFee', value);
                         }}
                       />
                     )}
-                    <strong>times of refill X</strong>
-                    {getFieldDecorator('cancellationTime', {
-                      initialValue: subscriptionPlan.cancellationTime,
-                      rules: [{ required: true, message: 'This is Required' }]
-                    })(
-                      <InputNumber
-                        min={0}
-                        onChange={(value) => {
-                          addField('cancellationTime', value);
-                        }}
-                      />
-                    )}
-                    <strong>cancellation fee per refill </strong>
+                    <strong>
+                      <FormattedMessage id="Subscription.cancellationFeePerRefill" />
+                    </strong>
                   </FormItem>
                 </Row>
               </div>
             ) : null}
-            <h5>Adjustment rules</h5>
+            <h5>
+              <FormattedMessage id="Subscription.AdjustmentRules" />
+            </h5>
             <Row className="rules">
               <FormItem>
                 <Col span={6}>
-                  <strong>Change delivery date</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.ChangeDeliveryDate" />
+                  </strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canChangeDelivery', {
-                    initialValue: subscriptionPlan.canChangeDelivery
+                  {getFieldDecorator('changeDeliveryDateFlag', {
+                    initialValue: subscriptionPlan.changeDeliveryDateFlag
                   })(
                     <Radio.Group
+                      disabled={!editable}
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canChangeDelivery', value);
+                        addField('changeDeliveryDateFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.canChangeDelivery ? (
+              {subscriptionPlan.changeDeliveryDateFlag ? (
                 <FormItem>
-                  <strong>After</strong>
-                  {getFieldDecorator('ChangeDeliveryTime', {
-                    initialValue: subscriptionPlan.ChangeDeliveryTime,
-                    rules: [{ required: true, message: 'This is Required' }]
+                  <strong>
+                    <FormattedMessage id="Subscription.After" />
+                  </strong>
+                  {getFieldDecorator('changeDeliveryDateAfterTimes', {
+                    initialValue: subscriptionPlan.changeDeliveryDateAfterTimes,
+                    rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber
+                      disabled={!editable}
                       min={0}
                       onChange={(value) => {
-                        addField('ChangeDeliveryTime', value);
+                        addField('changeDeliveryDateAfterTimes', value);
                       }}
                     />
                   )}
-                  <strong>delivery times, consumer can change the next delivery date</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.deliveryTimesDate" />
+                  </strong>
                 </FormItem>
               ) : null}
             </Row>
-            <Row className="rules" style={{marginTop: '15px'}}>
+            <Row className="rules" style={{ marginTop: '15px' }}>
               <FormItem>
                 <Col span={6}>
-                  <strong>Skip the next delivery</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.SkipTheNextDelivery" />
+                  </strong>
                 </Col>
                 <Col span={4}>
-                  {getFieldDecorator('canSkipNextDelivery', {
-                    initialValue: subscriptionPlan.canSkipNextDelivery
+                  {getFieldDecorator('skipNextDeliveryFlag', {
+                    initialValue: subscriptionPlan.skipNextDeliveryFlag
                   })(
                     <Radio.Group
+                      disabled
                       onChange={(e) => {
                         const value = (e.target as any).value;
-                        addField('canSkipNextDelivery', value);
+                        addField('skipNextDeliveryFlag', value);
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Subscription.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Subscription.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </Col>
               </FormItem>
-              {subscriptionPlan.canSkipNextDelivery ? (
+              {subscriptionPlan.skipNextDeliveryFlag ? (
                 <FormItem>
-                  <strong>After</strong>
-                  {getFieldDecorator('skipNextDeliveryTime', {
-                    initialValue: subscriptionPlan.skipNextDeliveryTime,
-                    rules: [{ required: true, message: 'This is Required' }]
+                  <strong>
+                    <FormattedMessage id="Subscription.After" />
+                  </strong>
+                  {getFieldDecorator('skipNextDeliveryTimes', {
+                    initialValue: subscriptionPlan.skipNextDeliveryTimes,
+                    rules: [{ required: true, message: <FormattedMessage id="Subscription.ThisIsRequired" /> }]
                   })(
                     <InputNumber
+                      disabled={!editable}
                       min={0}
                       onChange={(value) => {
-                        addField('skipNextDeliveryTime', value);
+                        addField('skipNextDeliveryTimes', value);
                       }}
                     />
                   )}
-                  <strong>delivery times, consumer can skip the next delivery</strong>
+                  <strong>
+                    <FormattedMessage id="Subscription.deliveryTimes" />
+                  </strong>
                 </FormItem>
               ) : null}
             </Row>

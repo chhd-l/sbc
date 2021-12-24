@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoreProvider } from 'plume2';
-
+import { Row, Col } from 'antd';
 import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
 import AppStore from './store';
 import SearchForm from './components/search-form';
@@ -15,7 +15,7 @@ export default class GoodsView extends React.Component<any, any> {
 
   componentDidMount() {
     this.store.init();
-    this.store.setFreightList();
+    //this.store.setFreightList();
   }
 
   render() {
@@ -29,7 +29,7 @@ export default class GoodsView extends React.Component<any, any> {
             <Breadcrumb.Item>商品列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="product.productList" />} />
+            <Headline title={<FormattedMessage id="Product.productList" />} />
 
             {/*搜索*/}
             <SearchForm />

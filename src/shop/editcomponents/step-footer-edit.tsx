@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Row, Col, Form, Button, message, Input, DatePicker } from 'antd';
+import { Const, RCi18n } from 'qmkit';
 
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from '../webapi';
+import { IMap } from 'plume2';
 
 const formItemLayout = {
   labelCol: {
@@ -32,23 +34,27 @@ const tailFormItemLayout = {
   }
 };
 
-export default class StepFour extends React.Component<any, any> {
+class StepFour extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       contentForm: {}
     };
+  }
+  props: {
+    intl: any;
+  };
+
+  componentDidMount() {
     this.getContentInformation();
   }
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreContentInfo();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         contentForm: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -68,17 +74,13 @@ export default class StepFour extends React.Component<any, any> {
         <Form>
           <Row style={{ padding: '0 20px' }}>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="contactUsUrl" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.contactUsUrl" />}>
                 {getFieldDecorator('contactUsUrl', {
                   initialValue: this.state.contentForm.contactUsUrl,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Contact Us Url'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputContactUsUrl' })
                     }
                   ]
                 })(
@@ -95,11 +97,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="ourValues" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.ourValues" />}>
                 {getFieldDecorator('ourValues', {
                   initialValue: this.state.contentForm.ourValues
                 })(
@@ -116,11 +114,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="qualityAndSafety" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.qualityAndSafety" />}>
                 {getFieldDecorator('qualityAndSafety', {
                   initialValue: this.state.contentForm.qualityAndSafety
                 })(
@@ -137,11 +131,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="specificNutrition" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.specificNutrition" />}>
                 {getFieldDecorator('specificNutrition', {
                   initialValue: this.state.contentForm.specificNutrition
                 })(
@@ -158,11 +148,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="informationForParents" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.informationForParents" />}>
                 {getFieldDecorator('informationForParents', {
                   initialValue: this.state.contentForm.informationForParents
                 })(
@@ -179,11 +165,7 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="cookies" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.cookies" />}>
                 {getFieldDecorator('cookiesUrl', {
                   initialValue: this.state.contentForm.cookiesUrl
                 })(
@@ -200,17 +182,13 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="storeContactEmail" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.storeContactEmail" />}>
                 {getFieldDecorator('storeContactEmail', {
                   initialValue: this.state.contentForm.storeContactEmail,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Store Contact Email!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputStoreContactEmail' }) + '!'
                     }
                   ]
                 })(
@@ -226,17 +204,13 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="storeContactPhoneNumber" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.storeContactPhoneNumber" />}>
                 {getFieldDecorator('storeContactPhoneNumber', {
                   initialValue: this.state.contentForm.storeContactPhoneNumber,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Store Contact Phone Number!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputStoreContactPhoneNumber' }) + '!'
                     }
                   ]
                 })(
@@ -252,17 +226,13 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="contactTimePeriod" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.contactTimePeriod" />}>
                 {getFieldDecorator('contactTimePeriod', {
                   initialValue: this.state.contentForm.contactTimePeriod,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Contact Time Period Eamil!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputContactTimePeriodEamil' }) + '!'
                     }
                   ]
                 })(
@@ -278,17 +248,13 @@ export default class StepFour extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="confirmationEmail" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.confirmationEmail" />}>
                 {getFieldDecorator('confirmationEmail', {
                   initialValue: this.state.contentForm.confirmationEmail,
                   rules: [
                     {
                       required: false,
-                      message: 'Please input Confirmation Email!'
+                      message: (window as any).RCi18n({ id: 'Setting.PleaseinputConfirmationEmail' }) + '!'
                     }
                   ]
                 })(
@@ -308,7 +274,7 @@ export default class StepFour extends React.Component<any, any> {
             <Col span={12}>
               <FormItem {...tailFormItemLayout}>
                 <Button type="primary" onClick={this._next}>
-                  <FormattedMessage id="save" />
+                  <FormattedMessage id="Setting.save" />
                 </Button>
               </FormItem>
             </Col>
@@ -332,10 +298,10 @@ export default class StepFour extends React.Component<any, any> {
     const { res } = await webapi.saveStoreContentInfo({
       ...contentForm
     });
-    if (res.code === 'K-000000') {
-      message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'save faild');
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success((window as any).RCi18n({ id: 'Setting.Operatesuccessfully' }));
     }
   };
 }
+
+export default injectIntl(StepFour);

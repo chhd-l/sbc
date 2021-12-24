@@ -39,9 +39,7 @@ export default class FreightTemplate extends React.Component<any, any> {
   store: AppStore;
 
   UNSAFE_componentWillMount() {
-    let { tab } = (this.props &&
-      this.props.location &&
-      this.props.location.state) || {
+    let { tab } = (this.props && this.props.location && this.props.location.state) || {
       tab: 0
     };
     // 初始化
@@ -64,18 +62,11 @@ export default class FreightTemplate extends React.Component<any, any> {
       // </Breadcrumb>,
       <div>
         <div className="container-search" key="container">
-          <Headline
-            title={<FormattedMessage id="freightTemplate"></FormattedMessage>}
-          />
+          <Headline title={<FormattedMessage id="Setting.freightTemplate"></FormattedMessage>} />
           <Alert
             message={
               <div>
-                Please set the shipping calculation mode first. When selecting a
-                single product, the order shipping uses the shipping charge of
-                each product; if the store shipping is selected, the single
-                product shipping template selected by the product will not be
-                effective, and the unified shipping will be charged according to
-                the order amount;
+                <FormattedMessage id="Setting.Please" />
               </div>
             }
             type="info"
@@ -83,7 +74,7 @@ export default class FreightTemplate extends React.Component<any, any> {
           />
           <AuthWrapper functionName="f_freight_type_set">
             <TitleBox>
-              Set the shipping calculation mode :
+              <FormattedMessage id="Setting.SetTheShippingCalculationMode" />:
               <RadioGroup
                 onChange={(e: any) =>
                   this.store.fieldSave({
@@ -94,44 +85,28 @@ export default class FreightTemplate extends React.Component<any, any> {
                 value={fMode}
               >
                 <Radio value={0} key="0">
-                  <FormattedMessage id="storeShipping"></FormattedMessage>
+                  <FormattedMessage id="Setting.storeShipping"></FormattedMessage>
                 </Radio>
                 <Radio value={1} key="1">
-                  <FormattedMessage id="singleProductShipping"></FormattedMessage>
+                  <FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>
                 </Radio>
               </RadioGroup>
               <Button type="primary" onClick={() => this._save()}>
-                Save settings
+                <FormattedMessage id="Setting.SaveSettings" />
               </Button>
             </TitleBox>
           </AuthWrapper>
         </div>
         <div className="container">
-          {(checkAuth('f_store_temp_list') ||
-            checkAuth('f_goods_temp_list')) && (
-            <Tabs
-              activeKey={tab + ''}
-              defaultActiveKey={tab + ''}
-              onChange={(value) =>
-                this.store.fieldSave({ field: 'tab', value })
-              }
-              tabBarStyle={{ marginTop: 16 }}
-            >
+          {(checkAuth('f_store_temp_list') || checkAuth('f_goods_temp_list')) && (
+            <Tabs activeKey={tab + ''} defaultActiveKey={tab + ''} onChange={(value) => this.store.fieldSave({ field: 'tab', value })} tabBarStyle={{ marginTop: 16 }}>
               {checkAuth('f_store_temp_list') && (
-                <Tabs.TabPane
-                  tab={<FormattedMessage id="storeShipping"></FormattedMessage>}
-                  key="0"
-                >
+                <Tabs.TabPane tab={<FormattedMessage id="Setting.storeShipping"></FormattedMessage>} key="0">
                   <StoreSetting />
                 </Tabs.TabPane>
               )}
               {checkAuth('f_goods_temp_list') && (
-                <Tabs.TabPane
-                  tab={
-                    <FormattedMessage id="singleProductShipping"></FormattedMessage>
-                  }
-                  key="1"
-                >
+                <Tabs.TabPane tab={<FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>} key="1">
                   <GoodsSetting />
                 </Tabs.TabPane>
               )}

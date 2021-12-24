@@ -41,3 +41,29 @@ type TResult = {
   message: string;
   context: any;
 };
+
+/*获取Group*/
+export const getAllGroups = (params) => {
+  return Fetch('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};
+
+
+/**
+ * Category
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const getGoodsCate = () => {
+  return Fetch('/store_cate/batch/cate');
+};
+
+
+/*获取Attribute*/
+export const getAllAttribute = (params) => {
+  return Fetch('/attribute_library/attributes', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};

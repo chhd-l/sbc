@@ -3,7 +3,8 @@ import { Relax } from 'plume2';
 import { Form, Input, Select, Button, message, Icon } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload } from 'qmkit';
+import { noop, Const, history, Tips, QMMethod, QMUpload, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -35,7 +36,7 @@ const FILE_MAX_SIZE = 5 * 1024 * 1024;
  * 退单form
  */
 @Relax
-export default class ReturnOrderForm extends React.Component<any, any> {
+class ReturnOrderForm extends React.Component<any, any> {
   props: {
     form?: any;
     relaxProps?: {
@@ -117,7 +118,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label="Return method" hasFeedback>
+            <FormItem {...formItemLayout} label={(window as any).RCi18n({id:'Order.Returnmethod'})} hasFeedback>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [
@@ -329,6 +330,8 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     }
   };
 }
+
+export default injectIntl(ReturnOrderForm)
 
 const styles = {
   container: {

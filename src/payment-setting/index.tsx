@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history } from 'qmkit';
-import { Row, Col, Form, Modal, message, Button, Card, Tooltip } from 'antd';
+import { Headline, SelectGroup, BreadCrumb, AuthWrapper, history, Const } from 'qmkit';
+import { Row, Col, Form, Modal, message, Button, Card, Tooltip, Spin } from 'antd';
 import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 import * as webapi from './webapi';
 import styled from 'styled-components';
 import PaymentModel from './components/payment-modal';
-
+import AppStore from './store';
+import { StoreProvider } from 'plume2';
+import { fromJS } from 'immutable';
+import './index.less'
 const ContainerDiv = styled.div`
   .methodItem {
     width: 100%;
@@ -39,8 +42,9 @@ const ContainerDiv = styled.div`
     }
   }
 `;
-
+@StoreProvider(AppStore, { debug: __DEV__ })
 export default class PaymentSetting extends React.Component<any, any> {
+  store: AppStore;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -49,47 +53,26 @@ export default class PaymentSetting extends React.Component<any, any> {
       paymentForm: {}, //edit
       paymentList: []
     };
-    this.closeModel = this.closeModel.bind(this);
   }
   componentDidMount() {
-    this.getPaymentSetting();
+    this.store.init();
   }
-  getPaymentSetting = async () => {
-    const { res } = await webapi.getPaymentSetting();
-    if (res.code === 'K-000000') {
-      this.setState({
-        paymentList: res.context.payGatewayVOList
-      });
-    } else {
-      message.error(res.message);
-    }
-  };
 
-  closeModel = () => {
-    this.setState({
-      paymentVisible: false
-    });
-  };
-  reflash() {
-    this.getPaymentSetting();
-  }
   render() {
-    const { paymentList } = this.state;
+    const paymentList  = this.store.state().get('paymentList') ? this.store.state().get('paymentList').toJS() : [];
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <div
-          className="container-search"
-          style={{ height: '100vh', background: '#fff' }}
-        >
-          <ContainerDiv>
+        <div className="container-search" style={{ background: '#fff' }}>
+          <ContainerDiv className="setting-container">
             <Headline title={<FormattedMessage id="paymentSetting" />} />
-            <Row>
-              {paymentList &&
+            {!this.store.state().get('loading') ?
+              <Row>
+                {paymentList &&
                 paymentList.map((item, index) => (
                   <Col span={8} key={index}>
-                    <Card style={{ width: 300 }} bodyStyle={{ padding: 10 }}>
+                    <Card style={{ width: 300, margin: 20 }} bodyStyle={{ padding: 10 }}>
                       <div className="methodItem">
                         <img
                           src={item.imgUrl}
@@ -101,19 +84,15 @@ export default class PaymentSetting extends React.Component<any, any> {
                         />
                       </div>
                       <div className="bar">
-                        <div className="status">
-                          {item.isOpen === 1 ? 'Enabled' : 'Disabled'}
-                        </div>
+                        <div className="status">{item.isOpen === 1 ? 'Enabled' : 'Disabled'}</div>
                         <div>
                           <Tooltip placement="top" title="Edit">
                             <a
-                              style={{ color: 'red' }}
+                              style={{ color: 'var(--primary-color)' }}
                               type="link"
                               onClick={() => {
-                                this.setState({
-                                  paymentVisible: true,
-                                  paymentForm: item
-                                });
+                                this.store.setCurrentPaymentForm(fromJS(item))
+                                this.store.handelModelOpenOClose(true)
                               }}
                               /* className="links"*/
                               className="iconfont iconEdit"
@@ -126,14 +105,10 @@ export default class PaymentSetting extends React.Component<any, any> {
                     </Card>
                   </Col>
                 ))}
-            </Row>
-
-            <PaymentModel
-              paymentForm={this.state.paymentForm}
-              visible={this.state.paymentVisible}
-              parent={this}
-              reflash={() => this.reflash()}
-            />
+              </Row> :
+              <Spin className="loading-spin" />
+            }
+            <PaymentModel />
           </ContainerDiv>
         </div>
       </div>

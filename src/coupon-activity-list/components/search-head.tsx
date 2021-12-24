@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Relax } from 'plume2';
 import { Button, DatePicker, Form, Input, Select } from 'antd';
 import { Const, noop, SelectGroup, util } from 'qmkit';
@@ -33,18 +33,13 @@ export default class SearchHead extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      form,
-      onFormFieldChange,
-      search,
-      levelList
-    } = this.props.relaxProps;
+    const { form, onFormFieldChange, search, levelList } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="优惠券活动名称"
+            addonBefore="Activity name"
             value={form.get('activityName')}
             onChange={(e: any) => {
               onFormFieldChange('activityName', e.target.value);
@@ -52,7 +47,7 @@ export default class SearchHead extends React.Component<any, any> {
           />
         </FormItem>
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label="活动类型"
@@ -74,9 +69,9 @@ export default class SearchHead extends React.Component<any, any> {
               进店赠券
             </Select.Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
 
-        <FormItem>
+        {/* <FormItem>
           <SelectGroup
             getPopupContainer={() => document.getElementById('page-content')}
             label="目标客户"
@@ -108,31 +103,13 @@ export default class SearchHead extends React.Component<any, any> {
               指定客户
             </Select.Option>
           </SelectGroup>
-        </FormItem>
+        </FormItem> */}
 
         <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledStartDate}
-            showTime={{ format: 'HH:mm' }}
-            format={Const.DATE_FORMAT}
-            value={startValue}
-            placeholder="开始时间"
-            onChange={this.onStartChange}
-            showToday={false}
-          />
+          <DatePicker allowClear={true} disabledDate={this.disabledStartDate} showTime={{ format: 'HH:mm' }} format={Const.DATE_FORMAT} value={startValue} placeholder="Start time" onChange={this.onStartChange} showToday={false} />
         </FormItem>
         <FormItem>
-          <DatePicker
-            allowClear={true}
-            disabledDate={this.disabledEndDate}
-            showTime={{ format: 'HH:mm' }}
-            format={Const.DATE_FORMAT}
-            value={endValue}
-            placeholder="结束时间"
-            onChange={this.onEndChange}
-            showToday={false}
-          />
+          <DatePicker allowClear={true} disabledDate={this.disabledEndDate} showTime={{ format: 'HH:mm' }} format={Const.DATE_FORMAT} value={endValue} placeholder="End time" onChange={this.onEndChange} showToday={false} />
         </FormItem>
 
         <FormItem>
@@ -146,7 +123,7 @@ export default class SearchHead extends React.Component<any, any> {
               search();
             }}
           >
-            搜索
+            <FormattedMessage id="Marketing.Search" />
           </Button>
         </FormItem>
       </Form>

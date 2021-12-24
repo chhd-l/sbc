@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
-import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs } from 'antd';
+import { BreadCrumb, Headline, Const, history, RCi18n, AuthWrapper, cache } from 'qmkit';
+import { Switch, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Alert, InputNumber, Tabs, Spin } from 'antd';
 
 import * as webapi from './webapi';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import './index.less';
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
+const { Option } = Select;
 
 class OrderSetting extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Order Setting',
-      message: 'Operation tips',
-      paymentSequence: 'Payment before delivery',
+      title: <FormattedMessage id="Order.Order" />,
+      message: <FormattedMessage id="Order.OperationTips" />,
+      paymentSequence: <FormattedMessage id="Order.PaymentBeforeDelivery" />,
       paymentCategory: 'Online payment',
+      loading: false,
+      btnLoading: false,
       paymentOnlineForm: {
         orderExpirationTimeStatus: false,
         orderExpirationTimeValue: 1,
@@ -25,8 +28,16 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
+        orderAllowZonePriceStatus: false,
+        orderAllowZonePriceValue: 1,
+        paymentWhen: 'None',
+        statusChangeWhen:'delivered',
       },
       paymentCashForm: {
         orderExpirationTimeStatus: false,
@@ -37,8 +48,14 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
+        paymentWhen: 'None',
+        statusChangeWhen:'delivered',
       },
       unlimitedForm: {
         orderExpirationTimeStatus: false,
@@ -49,29 +66,45 @@ class OrderSetting extends Component<any, any> {
         orderRefundsValue: 1,
         orderAutomaticReviewStatus: false,
         orderAutomaticReviewValue: 1,
+        orderAutomaticSkipStatus: false,
+        orderAutomaticSkipValue: 1,
         orderAutomaticConfirmationStatus: false,
-        orderAutomaticConfirmationValue: 1
+        orderAutomaticConfirmationValue: 1,
+        orderAutomaticTriggerStatus: false,
+        orderAutomaticTriggerValue: 1,
       },
+      sequenceRequestList: [],
       pcashList: [],
       ponlineList: [],
-      unLimitedList: []
+      unLimitedList: [],
+      fieldForm: {
+        orderField: '',
+        subscriptionField: '',
+        returnOrderField: ''
+      }
     };
   }
   componentDidMount() {
     this.getOrderSettingConfig();
+    this.getQueryOrderSequenceFn();
   }
 
   handleCategoryChange = (e) => {
-    console.log(e.target.value);
     this.setState({
       paymentCategory: e.target.value
     });
   };
-
-  paymentOnlineFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
+  //修改规则
+  getQueryOrderSequenceFn = async () => {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+    const { res } = await webapi.getQueryOrderSequence(storeId)
+    if (res.code === Const.SUCCESS_CODE) {
+      this.setState({
+        sequenceRequestList: res.context
+      })
     }
+  }
+  paymentOnlineFormChange = ({ field, value }) => {
     let data = this.state.paymentOnlineForm;
     data[field] = value;
     this.setState({
@@ -79,9 +112,6 @@ class OrderSetting extends Component<any, any> {
     });
   };
   paymentCashFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
-    }
     let data = this.state.paymentCashForm;
     data[field] = value;
     this.setState({
@@ -99,9 +129,6 @@ class OrderSetting extends Component<any, any> {
     });
   };
   unlimitedFormChange = ({ field, value }) => {
-    if (!value && value !== false) {
-      value = 1;
-    }
     let data = this.state.unlimitedForm;
     data[field] = value;
     this.setState({
@@ -110,6 +137,9 @@ class OrderSetting extends Component<any, any> {
   };
 
   getOrderSettingConfig = () => {
+    this.setState({
+      loading: true
+    })
     webapi
       .getOrderSettingConfig()
       .then((data) => {
@@ -120,6 +150,9 @@ class OrderSetting extends Component<any, any> {
           let ponlineList = res.context.ponlineList;
           let unLimitedList = res.context.unLimitedList;
           ponlineList.map((item) => {
+            if (item.configType === 'order_capture_payment_when') {
+              paymentOnlineForm.paymentWhen = item.context;
+            }
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {
               paymentOnlineForm.orderExpirationTimeStatus = !!item.status;
@@ -144,15 +177,36 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticReviewValue = context.day;
             }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              paymentOnlineForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAutomaticSkipValue = context.day;
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               paymentOnlineForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentOnlineForm.orderAutomaticConfirmationValue = context.day;
             }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              paymentOnlineForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAutomaticTriggerValue = context.day;
+            }
+            //允许0元订单
+            if (item.configType === 'order_setting_zero_order') {
+              paymentOnlineForm.orderAllowZonePriceStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentOnlineForm.orderAllowZonePriceValue = context.hour;
+            }
           });
 
           pcashList.map((item) => {
+            if (item.configType === 'order_capture_payment_when') {
+              paymentCashForm.paymentWhen = item.context;
+            }
             //订单失效时间
             if (item.configType === 'order_setting_timeout_cancel') {
               paymentCashForm.orderExpirationTimeStatus = !!item.status;
@@ -177,11 +231,23 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               paymentCashForm.orderAutomaticReviewValue = context.day;
             }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              paymentCashForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentCashForm.orderAutomaticSkipValue = context.day;
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               paymentCashForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               paymentCashForm.orderAutomaticConfirmationValue = context.day;
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              paymentCashForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              paymentCashForm.orderAutomaticTriggerValue = context.day;
             }
           });
 
@@ -210,11 +276,24 @@ class OrderSetting extends Component<any, any> {
               let context = JSON.parse(item.context);
               unlimitedForm.orderAutomaticReviewValue = context.day;
             }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              unlimitedForm.orderAutomaticSkipStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              unlimitedForm.orderAutomaticSkipValue = context.day;
+
+            }
             // 退单自动确认收货
             if (item.configType === 'order_setting_refund_auto_receive') {
               unlimitedForm.orderAutomaticConfirmationStatus = !!item.status;
               let context = JSON.parse(item.context);
               unlimitedForm.orderAutomaticConfirmationValue = context.day;
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              unlimitedForm.orderAutomaticTriggerStatus = !!item.status;
+              let context = JSON.parse(item.context);
+              unlimitedForm.orderAutomaticTriggerValue = context.day;
             }
           });
 
@@ -224,223 +303,494 @@ class OrderSetting extends Component<any, any> {
             unLimitedList,
             paymentOnlineForm,
             paymentCashForm,
-            unlimitedForm
+            unlimitedForm,
+            loading: false
           });
-        } else {
-          message.error(res.message || 'Get config failed');
+        }
+        else {
+          this.setState({
+            loading: false
+          })
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Get config failed');
+        this.setState({
+          loading: false
+        })
       });
   };
+  //校验配置项是否符合规范，配置项打开后，必须存在值，否则不能保存
+  verifyConfig = (status, value) => {
+    if (!status || (status && (value === 0 || value))) {
+      return true
+    }
+    else {
+      return false
+    }
+  }
+
 
   updateOrderSettingConfig = () => {
-    const { pcashList, ponlineList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
+    const { pcashList, ponlineList, sequenceRequestList, unLimitedList, paymentOnlineForm, paymentCashForm, unlimitedForm } = this.state;
+    let isVerify = true
     ponlineList.map((item) => {
+      if (item.configType === 'order_capture_payment_when') {
+          item.context = paymentOnlineForm.paymentWhen;
+      }
       //订单失效时间
       if (item.configType === 'order_setting_timeout_cancel') {
         item.status = +paymentOnlineForm.orderExpirationTimeStatus;
-        let context = {
-          hour: paymentOnlineForm.orderExpirationTimeValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderExpirationTimeValue)) {
+          let context = {
+            hour: paymentOnlineForm.orderExpirationTimeValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 自动收货
       if (item.configType === 'order_setting_auto_receive') {
         item.status = +paymentOnlineForm.orderConfirmReceiptStatus;
-        let context = {
-          day: paymentOnlineForm.orderConfirmReceiptValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderConfirmReceiptValue)) {
+          let context = {
+            day: paymentOnlineForm.orderConfirmReceiptValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 允许退单
       if (item.configType === 'order_setting_apply_refund') {
         item.status = +paymentOnlineForm.orderRefundsStatus;
-        let context = {
-          day: paymentOnlineForm.orderRefundsValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderRefundsValue)) {
+          let context = {
+            day: paymentOnlineForm.orderRefundsValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 待审核退单自动审核
       if (item.configType === 'order_setting_refund_auto_audit') {
         item.status = +paymentOnlineForm.orderAutomaticReviewStatus;
-        let context = {
-          day: paymentOnlineForm.orderAutomaticReviewValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAutomaticReviewValue)) {
+          let context = {
+            day: paymentOnlineForm.orderAutomaticReviewValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      // 自动跳过物流信息采集
+      if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+        item.status = +paymentOnlineForm.orderAutomaticSkipStatus;
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAutomaticSkipValue)) {
+          let context = {
+            day: paymentOnlineForm.orderAutomaticSkipValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +paymentOnlineForm.orderAutomaticConfirmationStatus;
-        let context = {
-          day: paymentOnlineForm.orderAutomaticConfirmationValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAutomaticConfirmationValue)) {
+          let context = {
+            day: paymentOnlineForm.orderAutomaticConfirmationValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +paymentOnlineForm.orderAutomaticTriggerStatus;
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAutomaticTriggerValue)) {
+          let context = {
+            day: paymentOnlineForm.orderAutomaticTriggerValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      //允许0元订单
+      if (item.configType === 'order_setting_zero_order') {
+        item.status = +paymentOnlineForm.orderAllowZonePriceStatus;
+        if (this.verifyConfig(item.status, paymentOnlineForm.orderAllowZonePriceValue)) {
+          let context = {
+            hour: paymentOnlineForm.orderAllowZonePriceValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
     });
+    if (!isVerify) {
+      return message.error(RCi18n({ id: 'Order.settingTips' }))
+    }
 
     pcashList.map((item) => {
+      if (item.configType === 'order_capture_payment_when') {
+        item.context = paymentCashForm.paymentWhen;
+      }
       //订单失效时间
       if (item.configType === 'order_setting_timeout_cancel') {
         item.status = +paymentCashForm.orderExpirationTimeStatus;
-        let context = {
-          hour: paymentCashForm.orderExpirationTimeValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentCashForm.orderExpirationTimeValue)) {
+          let context = {
+            hour: paymentCashForm.orderExpirationTimeValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 自动收货
       if (item.configType === 'order_setting_auto_receive') {
         item.status = +paymentCashForm.orderConfirmReceiptStatus;
-        let context = {
-          day: paymentCashForm.orderConfirmReceiptValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentCashForm.orderConfirmReceiptValue)) {
+          let context = {
+            day: paymentCashForm.orderConfirmReceiptValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 允许退单
       if (item.configType === 'order_setting_apply_refund') {
         item.status = +paymentCashForm.orderRefundsStatus;
-        let context = {
-          day: paymentCashForm.orderRefundsValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentCashForm.orderRefundsValue)) {
+          let context = {
+            day: paymentCashForm.orderRefundsValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 待审核退单自动审核
       if (item.configType === 'order_setting_refund_auto_audit') {
         item.status = +paymentCashForm.orderAutomaticReviewStatus;
-        let context = {
-          day: paymentCashForm.orderAutomaticReviewValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentCashForm.orderAutomaticReviewValue)) {
+          let context = {
+            day: paymentCashForm.orderAutomaticReviewValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      // 自动跳过物流信息采集
+      if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+        item.status = +paymentCashForm.orderAutomaticSkipStatus;
+        if (this.verifyConfig(item.status, paymentCashForm.orderAutomaticSkipValue)) {
+          let context = {
+            day: paymentCashForm.orderAutomaticSkipValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +paymentCashForm.orderAutomaticConfirmationStatus;
-        let context = {
-          day: paymentCashForm.orderAutomaticConfirmationValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, paymentCashForm.orderAutomaticConfirmationValue)) {
+          let context = {
+            day: paymentCashForm.orderAutomaticConfirmationValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +paymentCashForm.orderAutomaticTriggerStatus;
+        if (this.verifyConfig(item.status, paymentCashForm.orderAutomaticTriggerValue)) {
+          let context = {
+            day: paymentCashForm.orderAutomaticTriggerValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
     });
+    if (!isVerify) {
+      return message.error(RCi18n({ id: 'Order.settingTips' }))
+    }
 
     unLimitedList.map((item) => {
       //订单失效时间
       if (item.configType === 'order_setting_timeout_cancel') {
         item.status = +unlimitedForm.orderExpirationTimeStatus;
-        let context = {
-          hour: unlimitedForm.orderExpirationTimeValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, unlimitedForm.orderExpirationTimeValue)) {
+          let context = {
+            hour: unlimitedForm.orderExpirationTimeValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 自动收货
       if (item.configType === 'order_setting_auto_receive') {
         item.status = +unlimitedForm.orderConfirmReceiptStatus;
-        let context = {
-          day: unlimitedForm.orderConfirmReceiptValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, unlimitedForm.orderConfirmReceiptValue)) {
+          let context = {
+            day: unlimitedForm.orderConfirmReceiptValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 允许退单
       if (item.configType === 'order_setting_apply_refund') {
         item.status = +unlimitedForm.orderRefundsStatus;
-        let context = {
-          day: unlimitedForm.orderRefundsValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, unlimitedForm.orderRefundsValue)) {
+          let context = {
+            day: unlimitedForm.orderRefundsValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 待审核退单自动审核
       if (item.configType === 'order_setting_refund_auto_audit') {
         item.status = +unlimitedForm.orderAutomaticReviewStatus;
-        let context = {
-          day: unlimitedForm.orderAutomaticReviewValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, unlimitedForm.orderAutomaticReviewValue)) {
+          let context = {
+            day: unlimitedForm.orderAutomaticReviewValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      // 自动跳过物流信息采集
+      if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+        item.status = +unlimitedForm.orderAutomaticSkipStatus;
+        if (this.verifyConfig(item.status, unlimitedForm.orderAutomaticSkipValue)) {
+          let context = {
+            day: unlimitedForm.orderAutomaticSkipValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
       }
       // 退单自动确认收货
       if (item.configType === 'order_setting_refund_auto_receive') {
         item.status = +unlimitedForm.orderAutomaticConfirmationStatus;
-        let context = {
-          day: unlimitedForm.orderAutomaticConfirmationValue
-        };
-        item.context = JSON.stringify(context);
+        if (this.verifyConfig(item.status, unlimitedForm.orderAutomaticConfirmationValue)) {
+          let context = {
+            day: unlimitedForm.orderAutomaticConfirmationValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+        }
+      }
+      //自动触发全额退款
+      if (item.configType === 'order_setting_refund_auto_refund') {
+        item.status = +unlimitedForm.orderAutomaticTriggerStatus;
+        if (this.verifyConfig(item.status, unlimitedForm.orderAutomaticTriggerValue)) {
+          let context = {
+            day: unlimitedForm.orderAutomaticTriggerValue
+          };
+          item.context = JSON.stringify(context);
+        }
+        else {
+          isVerify = false
+          return
+
+        }
       }
     });
+    if (!isVerify) {
+      return message.error(RCi18n({ id: 'Order.settingTips' }))
+    }
 
     let params = {
-      pcashList: pcashList,
-      ponlineList: ponlineList,
-      unLimitedList: unLimitedList
+      orderConfigModifyRequest: {
+        pcashList: pcashList,
+        ponlineList: ponlineList,
+        unLimitedList: unLimitedList,
+      },
+      sequenceRequestList
     };
+    this.setState({
+      btnLoading: true
+    })
     webapi
       .updateOrderSettingConfig(params)
       .then((data) => {
+
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Save Successful');
+          message.success(res.message || RCi18n({ id: 'Order.SaveSuccessful' }));
+          this.setState({
+            btnLoading: false
+          })
         } else {
-          message.error(res.message || 'Save Failed');
+          this.setState({
+            btnLoading: false
+          })
         }
       })
       .catch((err) => {
-        message.error(err.toString() || 'Save Failed');
+        this.setState({
+          btnLoading: false
+        })
       });
   };
 
+
+
   render() {
-    const { title, message, paymentOnlineForm, paymentCashForm, unlimitedForm, paymentCategory } = this.state;
+    const { title, loading, btnLoading, message, paymentOnlineForm, sequenceRequestList, paymentCashForm, unlimitedForm, paymentCategory, fieldForm } = this.state;
     const description = (
       <div>
-        <p>1. Order settings are associated with the key process of order return processing, please operate with caution, all settings will take effect after clicking Save.</p>
-        <p>2. If the customer has overdue and unprocessed orders to be received, the receipt will be automatically confirmed.</p>
-        <p>3. If the completed order exceeds the set time, the customer will not be able to initiate a return or refund application.</p>
-        <p>4. The pending refund orders that have not been processed by the merchant will be automatically approved.</p>
-        <p>5. The merchant will automatically confirm the receipt of the pending return orders that have not been processed by the merchant.</p>
+        <p><FormattedMessage id="Order.Ordersution" /></p>
+        <p><FormattedMessage id="Order.IfTheCustomer" /></p>
+        <p><FormattedMessage id="Order.IfTheCmpleted" /></p>
+        <p><FormattedMessage id="Order.ThePending" /></p>
+        <p><FormattedMessage id="Order.TheMerchant" /></p>
       </div>
     );
 
-    return (
-      <div>
-        <BreadCrumb />
-        {/*导航面包屑*/}
-        <div className="container-search">
-          <Headline title={title} />
-          <Alert message={message} description={description} type="error" />
+    const filedType = {
+      order: <FormattedMessage id="Order.OrderNumber" />,
+      subscription: <FormattedMessage id="Order.SubscriptionNumber" />,
+      return: <FormattedMessage id="Order.ReturnOrderNumber" />
+    }
 
-          <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p>
-          <Tabs defaultActiveKey="Payment before delivery">
-            <TabPane tab="Payment before delivery" key="Payment before delivery">
-              <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label="Payment category">
-                  <div>
-                    <Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>
-                      <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Online payment">
-                        Online payment
-                      </Radio.Button>
-                      <Radio.Button style={{ width: 140, textAlign: 'center' }} value="Cash">
-                        Cash
-                      </Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </FormItem>
-                {paymentCategory === 'Online payment' ? (
-                  <>
-                    <FormItem label="Order expiration time">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentOnlineForm.orderExpirationTimeStatus}
-                            onChange={(value) =>
-                              this.paymentOnlineFormChange({
-                                field: 'orderExpirationTimeStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+
+    return (
+      <AuthWrapper functionName="f_order_setting_1">
+        <Spin spinning={loading}>
+
+          <BreadCrumb />
+          {/*导航面包屑*/}
+          <div className="container-search">
+            <Headline title={title} />
+            <Alert message={message} description={description} type="error" />
+
+            {/* <p style={styles.tipsStyle}>Select "Payment before delivery", the customer must pay for the order before the merchant can ship, select "Unlimited", regardless of whether the customer pays or not</p> */}
+            <Tabs defaultActiveKey="Delivery after payment" style={{ marginTop: 20 }}>
+              <TabPane tab={<FormattedMessage id="Order.deliveryAfterPayment" />} key="Delivery after payment">
+                <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
+                  <FormItem label={<FormattedMessage id="Order.PaymentCategory" />}>
+                    <div>
+                      <Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>
+                        <Radio style={{ width: 140, textAlign: 'center' }} value="Online payment">
+                          <FormattedMessage id="Order.OnlinePayment" />
+                        </Radio>
+                        <Radio style={{ width: 140, textAlign: 'center' }} value="Cash">
+                          <FormattedMessage id="Order.Cash" />
+                        </Radio>
+                      </Radio.Group>
+                    </div>
+                  </FormItem>
+
+                  {/*<FormItem label={<FormattedMessage id="Order.capturePaymentWhen" />}>*/}
+                  {/*  <Row>*/}
+                  {/*    <Select*/}
+                  {/*      value={paymentCategory === 'Online payment' ? paymentOnlineForm.paymentWhen : paymentCashForm.paymentWhen}*/}
+                  {/*      style={{ width: 140 }}*/}
+                  {/*      onChange={(value) => {*/}
+                  {/*        if (paymentCategory === 'Online payment') {*/}
+                  {/*          this.paymentOnlineFormChange({*/}
+                  {/*            field: 'paymentWhen',*/}
+                  {/*            value: value*/}
+                  {/*          });*/}
+                  {/*        } else {*/}
+                  {/*          this.paymentCashFormChange({*/}
+                  {/*            field: 'paymentWhen',*/}
+                  {/*            value: value*/}
+                  {/*          });*/}
+                  {/*        }*/}
+                  {/*      }}*/}
+                  {/*    >*/}
+                  {/*      <Option value="None"><FormattedMessage id="Order.none" /></Option>*/}
+                  {/*      <Option value="To be delivered"><FormattedMessage id="Order.toBeDelivered" /></Option>*/}
+                  {/*      <Option value="Shipped"><FormattedMessage id="Order.Shipped" /></Option>*/}
+                  {/*    </Select>*/}
+                  {/*  </Row>*/}
+                  {/*</FormItem>*/}
+                  <FormItem>
+                    <strong> sales order setting </strong>
+                  </FormItem>
+                  {paymentCategory === 'Online payment' ? (
+                    <>
+                      <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderExpirationTimeStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderExpirationTimeStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentOnlineForm.orderExpirationTimeStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={1}
@@ -454,35 +804,31 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
 
-                    <FormItem label="Automatically confirm receipt of order">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentOnlineForm.orderConfirmReceiptStatus}
-                            onChange={(value) =>
-                              this.paymentOnlineFormChange({
-                                field: 'orderConfirmReceiptStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.Automatically" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderConfirmReceiptStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderConfirmReceiptStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentOnlineForm.orderConfirmReceiptStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
+                              {/*<span>After</span>*/}
                               <InputNumber
                                 precision={0}
                                 min={1}
                                 max={9999}
+                                // style={{ margin: '0 5px' }}
                                 value={paymentOnlineForm.orderConfirmReceiptValue}
                                 onChange={(value) =>
                                   this.paymentOnlineFormChange({
@@ -491,108 +837,159 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDays" /></span>
+                              {/*<span > days of </span>*/}
+                              {/*    <Select*/}
+                              {/*      value={paymentCategory === 'Online payment' ? paymentOnlineForm.statusChangeWhen : paymentCashForm.statusChangeWhen}*/}
+                              {/*      style={{ width: 140 }}*/}
+                              {/*      onChange={(value) => {*/}
+                              {/*        if (paymentCategory === 'Online payment') {*/}
+                              {/*          this.paymentOnlineFormChange({*/}
+                              {/*            field: 'statusChangeWhen',*/}
+                              {/*            value: value*/}
+                              {/*          });*/}
+                              {/*        } else {*/}
+                              {/*          this.paymentCashFormChange({*/}
+                              {/*            field: 'statusChangeWhen',*/}
+                              {/*            value: value*/}
+                              {/*          });*/}
+                              {/*        }*/}
+                              {/*      }}*/}
+                              {/*    >*/}
+                              {/*      <Option value="delivered">delivered</Option>*/}
+                              {/*      <Option value="shipped"><FormattedMessage id="Order.Shipped" /></Option>*/}
+                              {/*    </Select>*/}
+                              {/*<span style={{ margin: '0 10px' }}>status,</span>*/}
+                              {/*<span >*/}
+                              {/*  the pending review return orders will be automatically approved.</span>*/}
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
 
-                    <FormItem label="Completed orders are allowed to apply for refunds">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentOnlineForm.orderRefundsStatus}
-                            onChange={(value) =>
-                              this.paymentOnlineFormChange({
-                                field: 'orderRefundsStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.AllowZoneOrder" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAllowZonePriceStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAllowZonePriceStatus',
+                              value: value
+                            })
+                          }
+                        />
+                      </FormItem>
+
+                      <FormItem> <strong> Return order setting </strong> </FormItem>
+
+                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAutomaticSkipStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAutomaticSkipStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentOnlineForm.orderAutomaticSkipStatus ? (
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                precision={0}
+                                min={0}
+                                max={9999}
+                                value={paymentOnlineForm.orderAutomaticSkipValue}
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderAutomaticSkipValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                            </div>
+                        ) : null}
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderRefundsStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderRefundsStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentOnlineForm.orderRefundsStatus ? (
-                          <Col span={20}>
-                            <div style={styles.inputStyle}>
-                              <InputNumber
-                                precision={0}
-                                min={1}
-                                max={9999}
-                                value={paymentOnlineForm.orderRefundsValue}
-                                onChange={(value) =>
-                                  this.paymentOnlineFormChange({
-                                    field: 'orderRefundsValue',
-                                    value: value
-                                  })
-                                }
-                              />
-                              <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
-                            </div>
-                          </Col>
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={1}
+                              max={9999}
+                              value={paymentOnlineForm.orderRefundsValue}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderRefundsValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
+                          </div>
                         ) : null}
-                      </Row>
-                    </FormItem>
-
-                    <FormItem label="Automatic review of pending return orders">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentOnlineForm.orderAutomaticReviewStatus}
-                            onChange={(value) =>
-                              this.paymentOnlineFormChange({
-                                field: 'orderAutomaticReviewStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automatic" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAutomaticReviewStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAutomaticReviewStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentOnlineForm.orderAutomaticReviewStatus ? (
-                          <Col span={20}>
-                            <div style={styles.inputStyle}>
-                              <InputNumber
-                                precision={0}
-                                min={1}
-                                max={9999}
-                                value={paymentOnlineForm.orderAutomaticReviewValue}
-                                onChange={(value) =>
-                                  this.paymentOnlineFormChange({
-                                    field: 'orderAutomaticReviewValue',
-                                    value: value
-                                  })
-                                }
-                              />
-                              <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
-                            </div>
-                          </Col>
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={0}
+                              max={9999}
+                              value={paymentOnlineForm.orderAutomaticReviewValue}
+                              onChange={(value) =>
+                                this.paymentOnlineFormChange({
+                                  field: 'orderAutomaticReviewValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysMerchant" /></span>
+                          </div>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
 
-                    <FormItem label="Automatic confirmation of receipt of return order">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentOnlineForm.orderAutomaticConfirmationStatus}
-                            onChange={(value) =>
-                              this.paymentOnlineFormChange({
-                                field: 'orderAutomaticConfirmationStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAutomaticConfirmationStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAutomaticConfirmationStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentOnlineForm.orderAutomaticConfirmationStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={0}
-                                min={1}
+                                min={0}
                                 max={9999}
                                 value={paymentOnlineForm.orderAutomaticConfirmationValue}
                                 onChange={(value) =>
@@ -604,34 +1001,59 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                                <FormattedMessage id="Order.AfterDaysAutomatically" />
                               </span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
-                  </>
-                ) : null}
-                {paymentCategory === 'Cash' ? (
-                  <>
-                    <FormItem label="Order expiration time">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentCashForm.orderExpirationTimeStatus}
-                            onChange={(value) =>
-                              this.paymentCashFormChange({
-                                field: 'orderExpirationTimeStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      </FormItem>
+
+                      <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentOnlineForm.orderAutomaticTriggerStatus}
+                          onChange={(value) =>
+                            this.paymentOnlineFormChange({
+                              field: 'orderAutomaticTriggerStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentOnlineForm.orderAutomaticTriggerStatus ? (
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                precision={0}
+                                min={0}
+                                max={9999}
+                                value={paymentOnlineForm.orderAutomaticTriggerValue}
+                                onChange={(value) =>
+                                  this.paymentOnlineFormChange({
+                                    field: 'orderAutomaticTriggerValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
+                            </div>
+                        ) : null}
+                      </FormItem>
+                    </>
+                  ) : null}
+                  {paymentCategory === 'Cash' ? (
+                    <>
+                      <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderExpirationTimeStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderExpirationTimeStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentCashForm.orderExpirationTimeStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={1}
@@ -645,30 +1067,24 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
 
-                    <FormItem label="Automatically confirm receipt of order">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentCashForm.orderConfirmReceiptStatus}
-                            onChange={(value) =>
-                              this.paymentCashFormChange({
-                                field: 'orderConfirmReceiptStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.AutomaticallyConfirm" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderConfirmReceiptStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderConfirmReceiptStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentCashForm.orderConfirmReceiptStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={0}
@@ -682,30 +1098,55 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysCustomer" /></span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
+                      <FormItem> <strong> Return order setting </strong> </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderAutomaticSkipStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderAutomaticSkipStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentCashForm.orderAutomaticSkipStatus ? (
+                          <div style={styles.inputStyle}>
+                            <InputNumber
+                              precision={0}
+                              min={0}
+                              max={9999}
+                              value={paymentCashForm.orderAutomaticSkipValue}
+                              onChange={(value) =>
+                                this.paymentCashFormChange({
+                                  field: 'orderAutomaticSkipValue',
+                                  value: value
+                                })
+                              }
+                            />
+                            <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                          </div>
+                        ) : null}
+                      </FormItem>
 
-                    <FormItem label="Completed orders are allowed to apply for refunds">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentCashForm.orderRefundsStatus}
-                            onChange={(value) =>
-                              this.paymentCashFormChange({
-                                field: 'orderRefundsStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.CompletedOrdersAllowed" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderRefundsStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderRefundsStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentCashForm.orderRefundsStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={0}
@@ -719,34 +1160,28 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
+                      </FormItem>
 
-                    <FormItem label="Automatic review of pending return orders">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentCashForm.orderAutomaticReviewStatus}
-                            onChange={(value) =>
-                              this.paymentCashFormChange({
-                                field: 'orderAutomaticReviewStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      <FormItem label={<FormattedMessage id="Order.AutomaticReview" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderAutomaticReviewStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderAutomaticReviewStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentCashForm.orderAutomaticReviewStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={0}
-                                min={1}
+                                min={0}
                                 max={9999}
                                 value={paymentCashForm.orderAutomaticReviewValue}
                                 onChange={(value) =>
@@ -756,34 +1191,27 @@ class OrderSetting extends Component<any, any> {
                                   })
                                 }
                               />
-                              <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysTheMerchant" /></span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
-
-                    <FormItem label="Automatic confirmation of receipt of return order">
-                      <Row>
-                        <Col span={1}>
-                          <Switch
-                            checkedChildren="On"
-                            unCheckedChildren="Off"
-                            checked={paymentCashForm.orderAutomaticConfirmationStatus}
-                            onChange={(value) =>
-                              this.paymentCashFormChange({
-                                field: 'orderAutomaticConfirmationStatus',
-                                value: value
-                              })
-                            }
-                          />
-                        </Col>
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.AutomaticReceipt" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderAutomaticConfirmationStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderAutomaticConfirmationStatus',
+                              value: value
+                            })
+                          }
+                        />
                         {paymentCashForm.orderAutomaticConfirmationStatus ? (
-                          <Col span={20}>
                             <div style={styles.inputStyle}>
                               <InputNumber
                                 precision={0}
-                                min={1}
+                                min={0}
                                 max={9999}
                                 value={paymentCashForm.orderAutomaticConfirmationValue}
                                 onChange={(value) =>
@@ -795,36 +1223,61 @@ class OrderSetting extends Component<any, any> {
                               />
                               <span style={{ marginLeft: 10 }}>
                                 {' '}
-                                After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                                <FormattedMessage id="Order.AfterTheMerchant" />
                               </span>
                             </div>
-                          </Col>
                         ) : null}
-                      </Row>
-                    </FormItem>
-                  </>
-                ) : null}
-              </Form>
-            </TabPane>
-            <TabPane tab="Unlimited" key="Unlimited">
-              <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                <FormItem label="Order expiration time">
-                  <Row>
-                    <Col span={1}>
-                      <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
-                        checked={unlimitedForm.orderExpirationTimeStatus}
-                        onChange={(value) =>
-                          this.unlimitedFormChange({
-                            field: 'orderExpirationTimeStatus',
-                            value: value
-                          })
-                        }
-                      />
-                    </Col>
+                      </FormItem>
+                      <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                        <Switch
+                          checkedChildren={RCi18n({ id: 'Order.On' })}
+                          unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                          checked={paymentCashForm.orderAutomaticTriggerStatus}
+                          onChange={(value) =>
+                            this.paymentCashFormChange({
+                              field: 'orderAutomaticTriggerStatus',
+                              value: value
+                            })
+                          }
+                        />
+                        {paymentCashForm.orderAutomaticTriggerStatus ? (
+                            <div style={styles.inputStyle}>
+                              <InputNumber
+                                precision={0}
+                                min={0}
+                                max={9999}
+                                value={paymentCashForm.orderAutomaticTriggerValue}
+                                onChange={(value) =>
+                                  this.paymentCashFormChange({
+                                    field: 'orderAutomaticTriggerValue',
+                                    value: value
+                                  })
+                                }
+                              />
+                              <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
+                            </div>
+                        ) : null}
+                      </FormItem>
+                    </>
+                  ) : null}
+                </Form>
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Order.cashOnDelivery" />} key="Cash on delivery">
+                <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
+                  <FormItem><strong> sales order setting </strong></FormItem>
+                  <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderExpirationTimeStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderExpirationTimeStatus',
+                          value: value
+                        })
+                      }
+                    />
                     {unlimitedForm.orderExpirationTimeStatus ? (
-                      <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
                             precision={1}
@@ -838,30 +1291,23 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After hours, if the customer fails to pay overdue, the order will be automatically voided.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterHours" /></span>
                         </div>
-                      </Col>
                     ) : null}
-                  </Row>
-                </FormItem>
-
-                <FormItem label="Automatically confirm receipt of order">
-                  <Row>
-                    <Col span={1}>
-                      <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
-                        checked={unlimitedForm.orderConfirmReceiptStatus}
-                        onChange={(value) =>
-                          this.unlimitedFormChange({
-                            field: 'orderConfirmReceiptStatus',
-                            value: value
-                          })
-                        }
-                      />
-                    </Col>
+                  </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.Automatically" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderConfirmReceiptStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderConfirmReceiptStatus',
+                          value: value
+                        })
+                      }
+                    />
                     {unlimitedForm.orderConfirmReceiptStatus ? (
-                      <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
                             precision={0}
@@ -875,30 +1321,24 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After days, the customer’s overdue and unprocessed pending orders will automatically confirm the receipt.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDays" /></span>
                         </div>
-                      </Col>
                     ) : null}
-                  </Row>
-                </FormItem>
-
-                <FormItem label="Completed orders are allowed to apply for refunds">
-                  <Row>
-                    <Col span={1}>
-                      <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
-                        checked={unlimitedForm.orderRefundsStatus}
-                        onChange={(value) =>
-                          this.unlimitedFormChange({
-                            field: 'orderRefundsStatus',
-                            value: value
-                          })
-                        }
-                      />
-                    </Col>
+                  </FormItem>
+                  <FormItem><strong> Return order setting </strong></FormItem>
+                  <FormItem label={<FormattedMessage id="Order.CompletedOrders" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderRefundsStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderRefundsStatus',
+                          value: value
+                        })
+                      }
+                    />
                     {unlimitedForm.orderRefundsStatus ? (
-                      <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
                             precision={0}
@@ -912,34 +1352,28 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>Within days, customers are allowed to initiate a return and refund application, and orders that have not been shipped can be returned at any time.</span>
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.applyRefunds" /></span>
                         </div>
-                      </Col>
                     ) : null}
-                  </Row>
-                </FormItem>
+                  </FormItem>
 
-                <FormItem label="Automatic review of pending return orders">
-                  <Row>
-                    <Col span={1}>
-                      <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
-                        checked={unlimitedForm.orderAutomaticReviewStatus}
-                        onChange={(value) =>
-                          this.unlimitedFormChange({
-                            field: 'orderAutomaticReviewStatus',
-                            value: value
-                          })
-                        }
-                      />
-                    </Col>
+                  <FormItem label={<FormattedMessage id="Order.Automatic" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderAutomaticReviewStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderAutomaticReviewStatus',
+                          value: value
+                        })
+                      }
+                    />
                     {unlimitedForm.orderAutomaticReviewStatus ? (
-                      <Col span={20}>
                         <div style={styles.inputStyle}>
                           <InputNumber
                             precision={0}
-                            min={1}
+                            min={0}
                             max={9999}
                             value={unlimitedForm.orderAutomaticReviewValue}
                             onChange={(value) =>
@@ -949,34 +1383,57 @@ class OrderSetting extends Component<any, any> {
                               })
                             }
                           />
-                          <span style={{ marginLeft: 10 }}>After days, the merchant’s overdue and pending refund orders will be automatically approved.</span>
+                          <span style={{ marginLeft: 10 }}>{<FormattedMessage id="Order.AfterDaysMerchant" />}</span>
                         </div>
-                      </Col>
                     ) : null}
-                  </Row>
-                </FormItem>
-
-                <FormItem label="Automatic confirmation of receipt of return order">
-                  <Row>
-                    <Col span={1}>
-                      <Switch
-                        checkedChildren="On"
-                        unCheckedChildren="Off"
-                        checked={unlimitedForm.orderAutomaticConfirmationStatus}
-                        onChange={(value) =>
-                          this.unlimitedFormChange({
-                            field: 'orderAutomaticConfirmationStatus',
-                            value: value
-                          })
-                        }
-                      />
-                    </Col>
-                    {unlimitedForm.orderAutomaticConfirmationStatus ? (
-                      <Col span={20}>
+                  </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.Automaticskip" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderAutomaticSkipStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderAutomaticSkipStatus',
+                          value: value
+                        })
+                      }
+                    />
+                    {unlimitedForm.orderAutomaticSkipStatus ? (
                         <div style={styles.inputStyle}>
                           <InputNumber
                             precision={0}
-                            min={1}
+                            min={0}
+                            max={9999}
+                            value={unlimitedForm.orderAutomaticSkipValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderAutomaticSkipValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysLogistics" /></span>
+                        </div>
+                    ) : null}
+                  </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.AutomaticConfirmation" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderAutomaticConfirmationStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderAutomaticConfirmationStatus',
+                          value: value
+                        })
+                      }
+                    />
+                    {unlimitedForm.orderAutomaticConfirmationStatus ? (
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            precision={0}
+                            min={0}
                             max={9999}
                             value={unlimitedForm.orderAutomaticConfirmationValue}
                             onChange={(value) =>
@@ -988,25 +1445,94 @@ class OrderSetting extends Component<any, any> {
                           />
                           <span style={{ marginLeft: 10 }}>
                             {' '}
-                            After days, the merchant will automatically confirm the receipt of the pending return order that is not processed by the merchant overdue. The return order returned by the non-express will start to count after the review is passed.
+                            <FormattedMessage id="Order.AfterDaysAutomatically" />
                           </span>
                         </div>
-                      </Col>
                     ) : null}
-                  </Row>
-                </FormItem>
-              </Form>
-            </TabPane>
-          </Tabs>
-        </div>
-        <div className="bar-button">
-          <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
-            {<FormattedMessage id="save" />}
-          </Button>
-        </div>
-      </div>
+                  </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.Automatictrigger" />}>
+                    <Switch
+                      checkedChildren={RCi18n({ id: 'Order.On' })}
+                      unCheckedChildren={RCi18n({ id: 'Order.Off' })}
+                      checked={unlimitedForm.orderAutomaticTriggerStatus}
+                      onChange={(value) =>
+                        this.unlimitedFormChange({
+                          field: 'orderAutomaticTriggerStatus',
+                          value: value
+                        })
+                      }
+                    />
+                    {unlimitedForm.orderAutomaticTriggerStatus ? (
+                        <div style={styles.inputStyle}>
+                          <InputNumber
+                            precision={0}
+                            min={0}
+                            max={9999}
+                            value={unlimitedForm.orderAutomaticTriggerValue}
+                            onChange={(value) =>
+                              this.unlimitedFormChange({
+                                field: 'orderAutomaticTriggerValue',
+                                value: value
+                              })
+                            }
+                          />
+                          <span style={{ marginLeft: 10 }}><FormattedMessage id="Order.AfterDaysFullrefund" /></span>
+                        </div>
+                    ) : null}
+                  </FormItem>
+                </Form>
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Order.fieldRuleSetting" />} key="Filed rule setting">
+                <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 10 }} labelAlign="right">
+                  {sequenceRequestList.map((item, index) => {
+
+                    return (
+                      <FormItem label={filedType[item.sequenceType]} key={item.sequenceType}>
+                        <div style={{ display: 'flex' }}>
+                          <Button >Prefix</Button> &nbsp;&nbsp;
+                          <Input  style={{ width: 100, margin: '0 20px'}} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
+                          <Input style={{ width: 100, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
+                          <InputNumber style={{ width: 100, margin: '0 20px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
+                          <sup className="ant-form-item-required"></sup>
+                        </div>
+                      </FormItem>
+                    )
+
+
+                  })}
+                  <Row>
+                    <Col span={13}></Col>
+                    <Col> <a className="ant-form-item-required"></a> Order Number Length </Col>
+                  </Row>                  {/* <FormItem label={<FormattedMessage id="Order.SubscriptionNumber" />}>
+                    <Input addonBefore="SRCF" value={fieldForm.subscriptionField} />
+                  </FormItem>
+                  <FormItem label={<FormattedMessage id="Order.ReturnOrderNumber" />}>
+                    <Input addonBefore="RRCF" value={fieldForm.returnOrderField} />
+                  </FormItem> */}
+                </Form>
+              </TabPane>
+            </Tabs>
+          </div>
+          <div className="bar-button">
+            <Button loading={btnLoading} type="primary" style={{ marginRight: 10 }} onClick={() => this.updateOrderSettingConfig()}>
+              {<FormattedMessage id="Order.save" />}
+            </Button>
+          </div>
+        </Spin>
+      </AuthWrapper>
     );
   }
+  changeInputValue = (e, key, index) => {
+    const { sequenceRequestList } = this.state;
+    let value = e.target && e.target.value || e
+    let findFiled = sequenceRequestList[index]
+    findFiled[key] = value;
+    this.setState({
+      sequenceRequestList
+    })
+  }
+
+
 }
 const styles = {
   inputStyle: {
@@ -1020,4 +1546,4 @@ const styles = {
   }
 } as any;
 
-export default Form.create()(OrderSetting);
+export default Form.create()(injectIntl(OrderSetting));

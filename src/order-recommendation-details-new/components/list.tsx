@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-import { DataGrid, cache, noop, Const, history } from 'qmkit';
+import { DataGrid, cache, noop, Const, history, RCi18n } from 'qmkit';
 import { Popconfirm, Select, Table, Tooltip } from 'antd';
 const Column = Table.Column;
 import styled from 'styled-components';
@@ -56,7 +56,6 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   //       recommendationNumber: v.recommendationNumber?v.recommendationNumber:1
   //     };
   //   });
-  //   debugger
   //   onCreateLink({
   //     field: 'recommendationGoodsInfoRels',
   //     value: arr
@@ -86,19 +85,16 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   render() {
     const { productselect } = this.props.relaxProps;
     //const pageNum = productForm && productForm.pageNum;
-    setTimeout(() => {
-      console.log(productselect, 111111111);
-    });
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
-          <Column title="Product Name" dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title="SPU" dataIndex="goodsNo" key="goodsNo" />
-          <Column title="SKU" dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title="Product category" dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title="Sales category" dataIndex="storeCateName" key="storeCateName" />
+          <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
+          <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" />
+          <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
+          <Column title={RCi18n({id:'Order.Product category'})}  dataIndex="goodsCateName" key="goodsCateName" />
+          <Column title={RCi18n({id:'Order.Sales category'})}  dataIndex="storeCateName" key="storeCateName" />
           <Column
-            title="Price"
+            title={RCi18n({id:'Order.Price'})}
             dataIndex="marketPrice"
             key="marketPrice"
             render={(value) => {
@@ -110,7 +106,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Weight"
+            title={RCi18n({id:'Order.Weight'})}
             dataIndex="goodsInfoWeight"
             key="goodsInfoWeight"
             render={(goodsInfoWeight) => {
@@ -119,7 +115,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Quantity"
+            title={RCi18n({id:'Order.Quantity'})}
             key="recommendationNumber"
             dataIndex="recommendationNumber"
             render={(text, row) => {
@@ -147,11 +143,11 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
           />
           <Column
-            title="Operation"
+            title={RCi18n({id:'Order.Operation'})}
             key="Operation"
             render={(text, row) => (
-              <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteProduct(row)} okText="Confirm" cancelText="Cancel">
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={RCi18n({id:'Order.DeleteTip'})} onConfirm={() => this.deleteProduct(row)} okText={RCi18n({id:'Order.btnConfirm'})} cancelText={RCi18n({id:'Order.btnCancel'})}>
+                <Tooltip placement="top" title={RCi18n({id:'Order.Delete'})}>
                   <a className="iconfont iconDelete" style={{ marginRight: 10 }}></a>
                 </Tooltip>
               </Popconfirm>

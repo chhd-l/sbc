@@ -2,6 +2,20 @@ import { Fetch } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { TResult } from '../../typings/global';
 
+/**整合接口1*/
+export const getPreEditProductResource = (params) => {
+  return Fetch('/preEditProductResource', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+/**整合接口2*/
+export const getEditProductResource = (res: any) => {
+  return Fetch('/EditProductResource', {
+    method: 'POST',
+    body: JSON.stringify(res)
+  });
+};
 /**
  * 获取商品详情
  */
@@ -28,7 +42,7 @@ export const getCateList = () => {
 /**
  * 获取店铺分类列表
  */
-export const getStoreCateList = () => {
+export const getStoreCateList = (param = '') => {
   let params = {};
   return Fetch('/storeCate/storeCateByCondition', {
     method: 'POST',
@@ -85,17 +99,9 @@ export const getUserList = (_customerName: any) => {
 /**
  * 获取平台客户列表
  */
-
-export const getEditProductResource = (res: any) => {
-  return Fetch('/EditProductResource', {
-    method: 'POST',
-    body: JSON.stringify(res)
-  });
-};
-
 export const getBossUserList = () => {
   return Fetch('/store/allBossCustomers', {
-    method: 'POST',
+    method: 'POST'
   });
 };
 
@@ -410,6 +416,19 @@ export const editSeo = (params) => {
 
 export const addSeo = (params) => {
   return Fetch<TResult>('/seo/setting', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getDescriptionTab = (cateId) => {
+  return Fetch(`/goods/description/description/${cateId}`, {
+    method: 'GET'
+  });
+};
+
+export const getSubSkuStock = (params) => {
+  return Fetch<TResult>('/bundleGoods/querySubSkuStockById', {
     method: 'POST',
     body: JSON.stringify(params)
   });

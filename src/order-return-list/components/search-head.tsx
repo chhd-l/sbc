@@ -1,29 +1,9 @@
 import React, { Component } from 'react';
 import { Relax } from 'plume2';
-import {
-  Button,
-  Dropdown,
-  Form,
-  Icon,
-  Input,
-  Menu,
-  Modal,
-  Select,
-  DatePicker,
-  message,
-  Row,
-  Col
-} from 'antd';
-import {
-  ExportModal,
-  Headline,
-  noop,
-  Const,
-  AuthWrapper,
-  checkAuth
-} from 'qmkit';
+import { Button, Dropdown, Form, Icon, Input, Menu, Modal, Select, DatePicker, message, Row, Col } from 'antd';
+import { ExportModal, Headline, noop, Const, AuthWrapper, checkAuth, RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -34,8 +14,9 @@ const RangePicker = DatePicker.RangePicker;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?: any;
     relaxProps?: {
       onSearch: Function;
       onBatchAudit: Function;
@@ -88,13 +69,10 @@ export default class SearchHead extends Component<any, any> {
   render() {
     const { exportModalData, onExportModalHide, tab } = this.props.relaxProps;
     const tabKey = tab.get('key');
-    let hasMenu =
-      (tabKey == 'flowState-INIT' && checkAuth('rolf002')) ||
-      (tabKey == 'flowState-DELIVERED' && checkAuth('rolf004')) ||
-      checkAuth('rolf006');
+    let hasMenu = (tabKey == 'flowState-INIT' && checkAuth('rolf002')) || (tabKey == 'flowState-DELIVERED' && checkAuth('rolf004')) || checkAuth('rolf006');
     const batchMenu = (
       <Menu>
-        {tabKey == 'flowState-INIT' ? (
+        {/* {tabKey == 'flowState-INIT' ? (
           <Menu.Item>
             <AuthWrapper functionName="rolf002">
               <a href="#" onClick={() => this._handleBatchAudit()}>
@@ -111,11 +89,11 @@ export default class SearchHead extends Component<any, any> {
               </a>
             </AuthWrapper>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
         <Menu.Item>
           <AuthWrapper functionName="rolf006">
             <a href="#" onClick={() => this._handleBatchExport()}>
-              Bulk export
+              <FormattedMessage id="Order.BatchExport" />
             </a>
           </AuthWrapper>
         </Menu.Item>
@@ -124,7 +102,7 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={<FormattedMessage id="refundList" />} />
+        <Headline title={<FormattedMessage id="Order.returnList" />} />
 
         <div>
           <Form className="filter-content" layout="inline">
@@ -133,12 +111,9 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="退单编号"
-                    addonBefore={<FormattedMessage id="chargebackNumber" />}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.ReturnOrderNumber" /></p>}
                     onChange={(e) => {
-                      this.setState(
-                        { rid: (e.target as any).value },
-                        this._paramChanged
-                      );
+                      this.setState({ rid: (e.target as any).value }, this._paramChanged);
                     }}
                   />
                 </FormItem>
@@ -147,13 +122,10 @@ export default class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="订单编号"
-                    addonBefore={<FormattedMessage id="orderNumber" />}
+                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.Ordernumber" /></p>}
                     maxLength={300}
                     onChange={(e) => {
-                      this.setState(
-                        { tid: (e.target as any).value },
-                        this._paramChanged
-                      );
+                      this.setState({ tid: (e.target as any).value }, this._paramChanged);
                     }}
                   />
                 </FormItem>
@@ -226,9 +198,7 @@ export default class SearchHead extends Component<any, any> {
                           },
                           this._paramChanged
                         );
-                      } else if (
-                        this.state.consigneeOptions === 'consigneePhone'
-                      ) {
+                      } else if (this.state.consigneeOptions === 'consigneePhone') {
                         this.setState(
                           {
                             consigneeName: '',
@@ -243,10 +213,9 @@ export default class SearchHead extends Component<any, any> {
               </Col>
               <Col span={8} id="Range-picker-width">
                 <FormItem>
-                  <RangePicker
-                    getCalendarContainer={() =>
-                      document.getElementById('page-content')
-                    }
+                  <div>
+                    <RangePicker
+                    getCalendarContainer={(trigger: any) => trigger.parentNode}
                     onChange={(e) => {
                       let beginTime = '';
                       let endTime = '';
@@ -254,12 +223,11 @@ export default class SearchHead extends Component<any, any> {
                         beginTime = e[0].format(Const.DAY_FORMAT);
                         endTime = e[1].format(Const.DAY_FORMAT);
                       }
-                      this.setState(
-                        { beginTime: beginTime, endTime: endTime },
-                        this._paramChanged
-                      );
+                      this.setState({ beginTime: beginTime, endTime: endTime }, this._paramChanged);
                     }}
                   />
+                  </div>
+                  
                 </FormItem>
               </Col>
               <Col span={24} style={{ textAlign: 'center' }}>
@@ -281,82 +249,74 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.Search" />
                     </span>
                   </Button>
                 </FormItem>
               </Col>
             </Row>
           </Form>
-          {hasMenu ? (
+          {/* {hasMenu ? (
             <div className="handle-bar ant-form-inline filter-content">
-              <Dropdown
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                overlay={batchMenu}
-                placement="bottomLeft"
-              >
+              <Dropdown getPopupContainer={(trigger: any) => trigger.parentNode} overlay={batchMenu} placement="bottomLeft">
                 <Button>
-                  <FormattedMessage id="order.bulkOperations" />{' '}
-                  <Icon type="down" />
+                  <FormattedMessage id="Order.bulkOperations" /> <Icon type="down" />
                 </Button>
               </Dropdown>
             </div>
-          ) : null}
+          ) : null} */}
         </div>
-        <ExportModal
-          data={exportModalData}
-          onHide={onExportModalHide}
-          handleByParams={exportModalData.get('exportByParams')}
-          handleByIds={exportModalData.get('exportByIds')}
-        />
+        <ExportModal data={exportModalData} onHide={onExportModalHide} handleByParams={exportModalData.get('exportByParams')} handleByIds={exportModalData.get('exportByIds')} />
       </div>
     );
   }
 
   _renderGoodsOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
-        onChange={(val) => {
-          if (val === 'skuName') {
-            this.setState(
-              {
-                skuName: this.state.skuNo,
-                skuNo: '',
-                goodsOptions: val
-              },
-              this._paramChanged
-            );
-          } else if (val === 'skuNo') {
-            this.setState(
-              {
-                skuName: '',
-                skuNo: this.state.skuName,
-                goodsOptions: val
-              },
-              this._paramChanged
-            );
-          }
-        }}
-        value={this.state.goodsOptions}
-        style={{ width: 130 }}
-      >
-        <Option value="skuName">
-          <FormattedMessage id="product.productName" />
-        </Option>
-        <Option value="skuNo">
-          <FormattedMessage id="product.SKU" />
-        </Option>
-      </Select>
+      <div style={{textAlign:"left"}}>
+        <Select
+          getPopupContainer={(trigger: any) => trigger.parentNode}
+          onChange={(val) => {
+            if (val === 'skuName') {
+              this.setState(
+                {
+                  skuName: this.state.skuNo,
+                  skuNo: '',
+                  goodsOptions: val
+                },
+                this._paramChanged
+              );
+            } else if (val === 'skuNo') {
+              this.setState(
+                {
+                  skuName: '',
+                  skuNo: this.state.skuName,
+                  goodsOptions: val
+                },
+                this._paramChanged
+              );
+            }
+          }}
+          value={this.state.goodsOptions}
+          style={{ width: '176px' }}
+        >
+          <Option value="skuName">
+            <FormattedMessage id="Order.productName" />
+          </Option>
+          <Option value="skuNo">
+            <FormattedMessage id="Order.skuCode" />
+          </Option>
+        </Select>
+
+      </div>
     );
   };
 
   _renderBuyerOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
+      <div style={{textAlign:"left"}}>
+        <Select
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         onChange={(val) => {
           if (val === 'buyerName') {
             this.setState(
@@ -379,22 +339,25 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.buyerOptions}
-        style={{ width: 150 }}
+        style={{ width: '176px' }}
       >
-        <Option value="buyerName">
-          <FormattedMessage id="consumerName" />
+        <Option value="buyerName" title={RCi18n({id: 'Order.consumerName'})}>
+          <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option value="buyerAccount">
-          <FormattedMessage id="consumerAccount" />
+        <Option value="buyerAccount" title={RCi18n({id: 'Order.consumerAccount'})}>
+          <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
-    );
+    
+      </div>
+      );
   };
 
   _renderConsigneeOptionSelect = () => {
     return (
-      <Select
-        getPopupContainer={() => document.getElementById('page-content')}
+      <div style={{textAlign:"left"}}>
+        <Select
+        getPopupContainer={(trigger: any) => trigger.parentNode}
         onChange={(val) => {
           if (val === 'consigneeName') {
             this.setState(
@@ -417,74 +380,78 @@ export default class SearchHead extends Component<any, any> {
           }
         }}
         value={this.state.consigneeOptions}
-        style={{ width: 150 }}
+        style={{ width: '176px' }}
       >
         <Option value="consigneeName">
-          <FormattedMessage id="recipient" />
+          <FormattedMessage id="Order.recipient" />
         </Option>
         <Option value="consigneePhone">
-          <FormattedMessage id="recipientPhone" />
+          <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
-    );
+   </div>
+       );
   };
 
   // 搜索条件变化，更新store的form参数
   _paramChanged() {
-    // console.log(this.props.relaxProps);
     this.props.relaxProps.onSearchFormChange(this.state);
   }
 
-  _handleBatchAudit() {
-    const { selected, onBatchAudit } = this.props.relaxProps;
-    if (selected.count() === 0) {
-      message.error('请选择退单');
-      return;
-    }
-    confirm({
-      title: '批量审核',
-      content: (
-        <div>
-          <div>您确定要批量通过已选择退单？</div>
-          <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
-        </div>
-      ),
-      onOk() {
-        return onBatchAudit(selected.toArray());
-      },
-      onCancel() {}
-    });
-  }
+  // _handleBatchAudit() {
+  //   const { selected, onBatchAudit } = this.props.relaxProps;
+  //   if (selected.count() === 0) {
+  //     message.error('请选择退单');
+  //     return;
+  //   }
+  //   confirm({
+  //     title: '批量审核',
+  //     content: (
+  //       <div>
+  //         <div>您确定要批量通过已选择退单？</div>
+  //         <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
+  //       </div>
+  //     ),
+  //     onOk() {
+  //       return onBatchAudit(selected.toArray());
+  //     },
+  //     onCancel() { }
+  //   });
+  // }
 
-  _handleBatchReceive() {
-    const { selected, onBatchReceive } = this.props.relaxProps;
-    if (selected.count() === 0) {
-      message.error('请选择退单');
-      return;
-    }
-    confirm({
-      title: '批量收货',
-      content: (
-        <div>
-          <div>您确定要批量收货已选择退单？</div>
-          <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
-        </div>
-      ),
-      onOk() {
-        return onBatchReceive(selected.toArray());
-      },
-      onCancel() {}
-    });
-  }
+  // _handleBatchReceive() {
+  //   const { selected, onBatchReceive } = this.props.relaxProps;
+  //   if (selected.count() === 0) {
+  //     message.error('请选择退单');
+  //     return;
+  //   }
+  //   confirm({
+  //     title: '批量收货',
+  //     content: (
+  //       <div>
+  //         <div>您确定要批量收货已选择退单？</div>
+  //         <div style={{ color: 'gray' }}>请先确保您已仔细查看过已选退单</div>
+  //       </div>
+  //     ),
+  //     onOk() {
+  //       return onBatchReceive(selected.toArray());
+  //     },
+  //     onCancel() { }
+  //   });
+  // }
 
   _handleBatchExport() {
+    const paramTitle = (window as any).RCi18n({id:'Order.Exportfilteredorders'});
+    const idTitle = (window as any).RCi18n({id:'Order.Exportselectedorders'});
     const { onExportByParams, onExportByIds } = this.props.relaxProps;
     this.props.relaxProps.onExportModalChange({
       visible: true,
-      byParamsTitle: '导出筛选出的订单',
-      byIdsTitle: '导出选中的订单',
+      byParamsTitle: paramTitle,
+      byIdsTitle: idTitle,
       exportByParams: onExportByParams,
       exportByIds: onExportByIds
     });
   }
 }
+
+export default injectIntl(SearchHead);

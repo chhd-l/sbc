@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Select, Button, Input } from 'antd';
-
+import { FormattedMessage } from 'react-intl';
 import { SelectGroup, noop, AuthWrapper } from 'qmkit';
 
 const FormItem = Form.Item;
@@ -95,33 +95,46 @@ export default class SearchForm extends React.Component<any, any> {
 
             <AuthWrapper functionName="f_finance_export">
               <FormItem>
-                {kind == 'income' ? (
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    /*disabled={incomeDetail.toJS().length <= 0}*/
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSearch();
-                    }}
-                  >
-                    Search
-                  </Button>
-                ) : (
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    /*disabled={refundDetail.toJS().length <= 0}*/
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onSearch();
-                      //exportRefundDetail();
-                    }}
-                  >
-                    Search
-                  </Button>
-                )}
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      // disabled={incomeDetail.toJS().length <= 0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onSearch();
+                      }}
+                    >
+                      <FormattedMessage id="Finance.Search" />
+                    </Button>
               </FormItem>
+              {/*<FormItem>*/}
+              {/*  {kind == 'income' ? (*/}
+              {/*    <Button*/}
+              {/*      type="primary"*/}
+              {/*      htmlType="submit"*/}
+              {/*      // disabled={incomeDetail.toJS().length <= 0}*/}
+              {/*      onClick={(e) => {*/}
+              {/*        e.preventDefault();*/}
+              {/*        onSearch();*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      <FormattedMessage id="Finance.Search" />*/}
+              {/*    </Button>*/}
+              {/*  ) : (*/}
+              {/*    <Button*/}
+              {/*      type="primary"*/}
+              {/*      htmlType="submit"*/}
+              {/*      // disabled={refundDetail.toJS().length <= 0}*/}
+              {/*      onClick={(e) => {*/}
+              {/*        e.preventDefault();*/}
+              {/*        onSearch();*/}
+              {/*        //exportRefundDetail();*/}
+              {/*      }}*/}
+              {/*    >*/}
+              {/*      <FormattedMessage id="Finance.Search" />*/}
+              {/*    </Button>*/}
+              {/*  )}*/}
+              {/*</FormItem>*/}
             </AuthWrapper>
           </Form>
           {/*<div>*/}

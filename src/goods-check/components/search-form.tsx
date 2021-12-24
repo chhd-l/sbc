@@ -57,38 +57,19 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      likeGoodsName,
-      likeGoodsInfoNo,
-      likeGoodsNo,
-      onSearch,
-      onFormFieldChange,
-      brandList,
-      cateList,
-      onEditSkuNo
-    } = this.props.relaxProps;
+    const { likeGoodsName, likeGoodsInfoNo, likeGoodsNo, onSearch, onFormFieldChange, brandList, cateList, onEditSkuNo } = this.props.relaxProps;
 
     //处理分类的树形图结构数据
     const loop = (cateList) =>
       cateList.map((item) => {
         if (item.get('children') && item.get('children').count()) {
           return (
-            <TreeNode
-              key={item.get('storeCateId')}
-              value={item.get('storeCateId')}
-              title={item.get('cateName')}
-            >
+            <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')}>
               {loop(item.get('children'))}
             </TreeNode>
           );
         }
-        return (
-          <TreeNode
-            key={item.get('storeCateId')}
-            value={item.get('storeCateId')}
-            title={item.get('cateName')}
-          />
-        );
+        return <TreeNode key={item.get('storeCateId')} value={item.get('storeCateId')} title={item.get('cateName')} />;
       });
     const formItemLayout = {
       labelCol: {
@@ -109,11 +90,11 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.productName" />
+                    <FormattedMessage id="Product.productName" />
                   </p>
                 }
                 value={likeGoodsName}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsName',
@@ -128,11 +109,11 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SPU" />
+                    <FormattedMessage id="Product.SPU" />
                   </p>
                 }
                 value={likeGoodsNo}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsNo',
@@ -147,11 +128,11 @@ export default class SearchForm extends React.Component<any, any> {
               <Input
                 addonBefore={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.SKU" />
+                    <FormattedMessage id="Product.SKU" />
                   </p>
                 }
                 value={likeGoodsInfoNo}
-                style={{ width: 300 }}
+                style={{ width: 351 }}
                 onChange={(e: any) => {
                   onFormFieldChange({
                     key: 'likeGoodsInfoNo',
@@ -166,12 +147,10 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span={8}>
             <FormItem>
               <TreeSelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label={
                   <p style={styles.label}>
-                    <FormattedMessage id="product.storeCategory" />
+                    <FormattedMessage id="Product.storeCategory" />
                   </p>
                 }
                 /* defaultValue="全部"*/
@@ -196,7 +175,7 @@ export default class SearchForm extends React.Component<any, any> {
                   style={styles.wrapper}
                   label={
                     <p style={styles.label}>
-                      <FormattedMessage id="product.brand" />
+                      <FormattedMessage id="Product.brand" />
                     </p>
                   }
                   defaultValue="All"
@@ -207,7 +186,7 @@ export default class SearchForm extends React.Component<any, any> {
                   }}
                 >
                   <Option key="-1" value="-1">
-                    <FormattedMessage id="all" />
+                    <FormattedMessage id="Product.all" />
                   </Option>
                   {brandList.map((v, i) => {
                     return (
@@ -234,7 +213,7 @@ export default class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="search" />
+                  <FormattedMessage id="Product.search" />
                 </span>
               </Button>
             </FormItem>
@@ -247,10 +226,10 @@ export default class SearchForm extends React.Component<any, any> {
 
 const styles = {
   label: {
-    width: 100,
+    width: 151,
     textAlign: 'center'
   },
   wrapper: {
-    width: 177
+    width: 177,
   }
 } as any;

@@ -11,18 +11,21 @@ export default class SearchTabList extends React.Component<any, any> {
     relaxProps?: {
       onTabChange: Function;
       tab: IMap;
+      tabConfig: IMap
     };
   };
 
   static relaxProps = {
     onTabChange: noop,
-    tab: 'tab'
+    tab: 'tab',
+    tabConfig: 'tabConfig'
   };
 
   render() {
-    const { onTabChange, tab } = this.props.relaxProps;
+    const { onTabChange, tab, tabConfig } = this.props.relaxProps;
     const key = tab.get('key');
-
+    
+  
     return (
       <div>
         <Tabs
@@ -31,53 +34,59 @@ export default class SearchTabList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="all" />} key="0">
+          <Tabs.TabPane tab={<FormattedMessage id="Order.all" />} key="0">
             {tab.get('key') === '0' ? <List /> : null}
           </Tabs.TabPane>
-          <Tabs.TabPane
-            tab={<FormattedMessage id="pendingReview" />}
-            key="flowState-INIT"
-          >
-            {tab.get('key') === 'flowState-INIT' ? <List /> : null}
-          </Tabs.TabPane>
+          {
+            tabConfig.get('pendingReview') ? <Tabs.TabPane
+              tab={<FormattedMessage id="Order.pendingReview" />}
+              key="PENDING_REVIEW"
+            >
+              {tab.get('key') === 'PENDING_REVIEW' ? <List /> : null}
+            </Tabs.TabPane> : null
+          }
+
           {/*{<FormattedMessage id="pendingReview" />}*/}
-          <Tabs.TabPane
-            tab={<FormattedMessage id="toBeFilledOutLogisticsInformation" />}
-            key="flowState-AUDIT"
-          >
-            {tab.get('key') === 'flowState-AUDIT' ? <List /> : null}
-          </Tabs.TabPane>
+          {
+            tabConfig.get('toBeDelivery') ? <Tabs.TabPane
+              tab={<FormattedMessage id="Order.toBeDelivered" />}
+              key="TO_BE_DELIVERED"
+            >
+              {tab.get('key') === 'TO_BE_DELIVERED' ? <List /> : null}
+            </Tabs.TabPane> : null
+          }
+
           <Tabs.TabPane
             tab={
-              <FormattedMessage id="waitingForTheMerchantToReceiveTheGoods" />
+              <FormattedMessage id="Order.toBeReceived" />
             }
-            key="flowState-DELIVERED"
+            key="TO_BE_RECEIVED"
           >
-            {tab.get('key') === 'flowState-DELIVERED' ? <List /> : null}
+            {tab.get('key') === 'TO_BE_RECEIVED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="pendingRefund" />}
-            key="flowState-RECEIVED"
+            tab={<FormattedMessage id="Order.pendingRefund" />}
+            key="PENDING_REFUND"
           >
-            {tab.get('key') === 'flowState-RECEIVED' ? <List /> : null}
+            {tab.get('key') === 'PENDING_REFUND' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="order.completed" />}
-            key="flowState-COMPLETED"
+            tab={<FormattedMessage id="Order.completed" />}
+            key="COMPLETED"
           >
-            {tab.get('key') === 'flowState-COMPLETED' ? <List /> : null}
+            {tab.get('key') === 'COMPLETED' ? <List /> : null}
           </Tabs.TabPane>
 
           <Tabs.TabPane
-            tab={<FormattedMessage id="rejected" />}
-            key="flowState-REJECT_RECEIVE"
+            tab={<FormattedMessage id="Order.rejected" />}
+            key="REJECTED"
           >
-            {tab.get('key') === 'flowState-REJECT_RECEIVE' ? <List /> : null}
+            {tab.get('key') === 'REJECTED' ? <List /> : null}
           </Tabs.TabPane>
 
-          <Tabs.TabPane
+          {/* <Tabs.TabPane
             tab={<FormattedMessage id="refusedToRefund" />}
             key="flowState-REJECT_REFUND"
           >
@@ -95,7 +104,7 @@ export default class SearchTabList extends React.Component<any, any> {
             key="flowState-REFUND_FAILED"
           >
             {tab.get('key') === 'flowState-REFUND_FAILED' ? <List /> : null}
-          </Tabs.TabPane>
+          </Tabs.TabPane> */}
         </Tabs>
       </div>
     );

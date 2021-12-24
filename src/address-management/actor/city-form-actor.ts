@@ -6,17 +6,14 @@ export default class CityFormActor extends Actor {
     return {
       cityModalVisible: false,
       isEdit: false,
-      stateNameList: [
-        { value: 'China', name: 'China' },
-        { value: 'China1', name: 'China1' }
-      ],
+      stateNameList: [],
       cityForm: {
-        country: 'United States',
+        country: '',
         state: '',
         city: '',
         postCodeArr: [
           {
-            id: new Date().getTime(),
+            value: new Date().getTime(),
             preCode: '',
             suffCode: ''
           }
@@ -42,12 +39,12 @@ export default class CityFormActor extends Actor {
   @Action('CityFormActor:resetForm')
   resetForm(state: IMap) {
     const cityForm = {
-      country: 'United States',
+      country: JSON.parse(sessionStorage.getItem('currentCountry')).name,
       state: '',
       city: '',
       postCodeArr: [
         {
-          id: new Date().getTime(),
+          value: new Date().getTime(),
           preCode: '',
           suffCode: ''
         }
@@ -58,5 +55,10 @@ export default class CityFormActor extends Actor {
   @Action('CityFormActor:field')
   changeField(state: IMap, { field, value }) {
     return state.setIn(['cityForm', field], value);
+  }
+
+  @Action('CityFormActor:stateNameList')
+  stateNameList(state, stateNameList) {
+    return state.set('stateNameList', stateNameList);
   }
 }

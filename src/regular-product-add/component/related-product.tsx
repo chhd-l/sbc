@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, checkAuth } from 'qmkit';
+import { noop, checkAuth, Const } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import update from 'immutability-helper';
+import { RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 declare type IList = List<any>;
 
@@ -50,14 +52,14 @@ class RelatedProduct extends React.Component<any, any> {
 
   render() {
     const { relatedList, enterpriseFlag } = this.props.relaxProps;
-
+    const disabled = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Table
         id="consent"
         rowKey="tabId"
         columns={this._columns}
-        dataSource={relatedList.toJS()}
-        onRow={(_record, index) => ({
+        dataSource={relatedList && relatedList.toJS()}
+        onRow={disabled ? null : (_record, index) => ({
           index,
           moveRow: this.moveRow
         })}
@@ -75,7 +77,7 @@ class RelatedProduct extends React.Component<any, any> {
   };
   _columns = [
     {
-      title: 'Image',
+      title: RCi18n({id:'Product.Image'}),
       dataIndex: 'goodsImg',
       key: 'goodsImg',
       /*render: (text, record, index) => `${index + 1}` + <img src={text.goodsImg} alt=""/>*/
@@ -84,7 +86,7 @@ class RelatedProduct extends React.Component<any, any> {
       }
     },
     {
-      title: 'SPU',
+      title: RCi18n({id:'Product.SPU'}),
       dataIndex: 'goodsNo',
       key: 'goodsNo'
       /*render: (text) => {
@@ -93,28 +95,28 @@ class RelatedProduct extends React.Component<any, any> {
       }*/
     },
     {
-      title: 'Product name',
+      title: RCi18n({id:'Product.productName'}),
       dataIndex: 'goodsName',
       key: 'goodsName'
     },
     {
-      title: 'Sales category',
+      title: RCi18n({id:'Product.SalesCategory'}),
       dataIndex: 'storeCateName',
       key: 'storeCateName'
     },
     {
-      title: 'Product category',
+      title: RCi18n({id:'Product.ProductCategory'}),
       dataIndex: 'goodsCateName',
       key: 'goodsCateName'
     },
     {
-      title: 'Brand',
+      title: RCi18n({id:'Product.Brand'}),
       dataIndex: 'brandName',
       key: 'brandName'
     },
 
     {
-      title: 'Operation',
+      title: RCi18n({id:'Product.Operation'}),
       dataIndex: 'operation',
       key: 'operation',
       render: (_text, _record) => this._getOption(_record)
@@ -143,6 +145,9 @@ class RelatedProduct extends React.Component<any, any> {
     rowInfo = fromJS(rowInfo);
     const check = +rowInfo.get('openFlag') === 0 ? false : true;
     // const check = +linkStatus === 0 ? true : false;
+    if (Const.SITE_NAME === 'MYVETRECO') {
+      return null;
+    }
 
     return (
       <div className="operation flex-end">

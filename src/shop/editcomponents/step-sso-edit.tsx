@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Icon,
-  DatePicker,
-  message,
-  Popover
-} from 'antd';
-import { QMUpload, noop, Const, ValidConst, QMMethod } from 'qmkit';
+import { Row, Col, Form, Input, Button, Icon, DatePicker, message, Popover } from 'antd';
+import { QMUpload, noop, Const, RCi18n, ValidConst, QMMethod } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 
@@ -49,17 +39,17 @@ export default class StepTwo extends React.Component<any, any> {
     this.state = {
       ssoForm: {}
     };
+  }
+  componentDidMount() {
     this.getContentInformation();
   }
 
   getContentInformation = async () => {
     const { res } = await webapi.getStoreSooSetting();
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         ssoForm: res.context
       });
-    } else {
-      message.error(res.message);
     }
   };
   onFormChange = ({ field, value }) => {
@@ -77,11 +67,7 @@ export default class StepTwo extends React.Component<any, any> {
         <Form>
           <Row>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="logIn" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.logIn" />}>
                 {getFieldDecorator('logIn', {
                   initialValue: this.state.ssoForm.logIn
                 })(
@@ -98,11 +84,7 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                required={false}
-                label={<FormattedMessage id="userinfoURL" />}
-              >
+              <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Setting.userinfoURL" />}>
                 {getFieldDecorator('userInfoUrl', {
                   initialValue: this.state.ssoForm.userInfoUrl
                 })(
@@ -121,10 +103,7 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="clientID" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.clientID" />}>
                 {getFieldDecorator('clientId', {
                   initialValue: this.state.ssoForm.clientId
                 })(
@@ -141,10 +120,7 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="issuer" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.issuer" />}>
                 {getFieldDecorator('issuer', {
                   initialValue: this.state.ssoForm.issuer
                 })(
@@ -163,10 +139,7 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="pedirectURL" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.pedirectURL" />}>
                 {getFieldDecorator('redirectUrl', {
                   initialValue: this.state.ssoForm.redirectUrl
                 })(
@@ -183,10 +156,7 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registration" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.registration" />}>
                 {getFieldDecorator('registration', {
                   initialValue: this.state.ssoForm.registration
                 })(
@@ -205,10 +175,7 @@ export default class StepTwo extends React.Component<any, any> {
           </Row>
           <Row>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registerPrefix" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.registerPrefix" />}>
                 {getFieldDecorator('registerPrefix', {
                   initialValue: this.state.ssoForm.registerPrefix
                 })(
@@ -225,10 +192,7 @@ export default class StepTwo extends React.Component<any, any> {
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem
-                {...formItemLayout}
-                label={<FormattedMessage id="registerCallback" />}
-              >
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.registerCallback" />}>
                 {getFieldDecorator('registerCallback', {
                   initialValue: this.state.ssoForm.registerCallback
                 })(
@@ -249,7 +213,7 @@ export default class StepTwo extends React.Component<any, any> {
             <Col span={12}>
               <FormItem {...tailFormItemLayout}>
                 <Button type="primary" onClick={this._next}>
-                  <FormattedMessage id="save" />
+                  <FormattedMessage id="Setting.save" />
                 </Button>
               </FormItem>
             </Col>
@@ -276,10 +240,8 @@ export default class StepTwo extends React.Component<any, any> {
     const { res } = await webapi.saveStoreCSooSetting({
       ...ssoForm
     });
-    if (res.code === 'K-000000') {
-      message.success('Operate successfully');
-    } else {
-      message.error(res.message || 'save faild');
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success((window as any).RCi18n({ id: 'Setting.Operatesuccessfully' }));
     }
   };
 }

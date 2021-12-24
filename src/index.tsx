@@ -3,65 +3,110 @@
 // import 'babel-polyfill';
 import 'core-js';
 import 'regenerator-runtime/runtime';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, Switch } from 'react-router-dom';
-import { Security, SecureRoute, LoginCallback } from '@okta/okta-react';
+import { Security } from '@okta/okta-react';
 import { Provider } from 'react-redux';
-import { routeWithSubRoutes, history, noop, cache, getRoutType } from 'qmkit';
+import { routeWithSubRoutes, history, util, noop, getRoutType, RCi18n } from 'qmkit';
 import { homeRoutes } from './router';
-import 'regenerator-runtime/runtime';
 import store from './redux/store';
 import './index.less';
 import Main from './main';
-import { ConfigProvider } from 'antd';
-//import zhCN from 'antd/lib/locale-provider/zh_CN';
-import enUS from 'antd/lib/locale-provider/en_US';
+import { ConfigProvider, Spin } from 'antd';
 import moment from 'moment';
-import 'moment/locale/zh-cn';
+import 'moment/locale/ru';
+import 'moment/locale/tr';
+import 'moment/locale/fr';
+import 'moment/locale/es';
+import 'moment/locale/de';
+import 'moment/locale/sv';
 import { IntlProvider } from 'react-intl';
-import es_ES from '../web_modules/qmkit/es_ES';
+import { cache } from 'qmkit';
+import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
 import configOkta from '../web_modules/qmkit/config-okta';
 
-moment.locale('zh-cn');
+//moment.locale('zh-cn');
 
-const PrescriberRouter = () => (
-  <IntlProvider locale="es" messages={es_ES}>
-    <ConfigProvider locale={enUS}>
-      <Provider store={store}>
-        <Router history={history}>
-          <Security {...configOkta.prescrberOidc}>
-            <div className="father">
-              <Switch>
-                {routeWithSubRoutes(homeRoutes, noop)}
-                <Route component={Main} />
-              </Switch>
-            </div>
-          </Security>
-        </Router>
-      </Provider>
-    </ConfigProvider>
-  </IntlProvider>
-);
+let localeLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
+(window as any).RCi18n = RCi18n;
 
-const RcRouter = () => (
-  <IntlProvider locale="es" messages={es_ES}>
-    <ConfigProvider locale={enUS}>
-      <Provider store={store}>
-        <Router history={history}>
-          <Security {...configOkta.RcOidc}>
-            <div className="father">
-              <Switch>
-                {routeWithSubRoutes(homeRoutes, noop)}
-                <Route component={Main} />
-              </Switch>
-            </div>
-          </Security>
-        </Router>
-      </Provider>
-    </ConfigProvider>
-  </IntlProvider>
-);
+const useDynamicLanguage = () => {
+  const [loading, setLoading] = useState(true);
+  const [dynamicLanguage, setDynamicLanguage] = useState({});
+
+  useEffect(() => {
+    async function getLanguage() {
+      setLoading(true);
+      const lang = await getDynamicLanguage();
+      setDynamicLanguage(lang);
+      setLoading(false);
+    }
+    getLanguage();
+  }, []);
+
+  return [loading, dynamicLanguage];
+};
+
+const PrescriberRouter = () => {
+  const [loading, dynamicLanguage] = useDynamicLanguage();
+  if (loading) {
+    return (
+      <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Spin />
+      </div>
+    );
+  }
+
+  return (
+    <IntlProvider locale="es" messages={dynamicLanguage}>
+      <ConfigProvider locale={antLanguage}>
+        <Provider store={store}>
+          <Router history={history}>
+            <Security {...configOkta.prescrberOidc}>
+              <div className="father">
+                <Switch>
+                  {routeWithSubRoutes(homeRoutes, noop)}
+                  <Route component={Main} />
+                </Switch>
+              </div>
+            </Security>
+          </Router>
+        </Provider>
+      </ConfigProvider>
+    </IntlProvider>
+  );
+};
+
+const RcRouter = () => {
+  const [loading, dynamicLanguage] = useDynamicLanguage();
+  if (loading) {
+    return (
+      <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Spin />
+      </div>
+    );
+  }
+  
+  return (
+    <IntlProvider locale={localeLang} messages={dynamicLanguage}>
+      <ConfigProvider locale={antLanguage}>
+        <Provider store={store}>
+          <Router history={history}>
+            <Security {...configOkta.RcOidc}>
+              <div className="father">
+                <Switch>
+                  {routeWithSubRoutes(homeRoutes, noop)}
+                  <Route component={Main} />
+                </Switch>
+              </div>
+            </Security>
+          </Router>
+        </Provider>
+      </ConfigProvider>
+    </IntlProvider>
+  )
+};
 
 switchRouter();
 

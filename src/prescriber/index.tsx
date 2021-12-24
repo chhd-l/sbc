@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col, Upload } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
+import { RCi18n } from 'qmkit';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -42,9 +43,22 @@ export default class ClinicList extends Component<any, any> {
     this.handleTableChange = this.handleTableChange.bind(this);
   }
   componentDidMount() {
-    this.querySysDictionary('city');
-    this.queryClinicsDictionary('clinicType');
-    this.init();
+    webapi.getListSystemConfig().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        if (res.context) {
+          let selectType = res.context.find(x=>x.configType === 'selection_type') 
+          this.setState({
+            isMapMode: selectType && selectType.status === 0
+          }, () => {
+            sessionStorage.setItem(cache.MAP_MODE, this.state.isMapMode ? '1' : '0')
+            this.querySysDictionary('city');
+            this.queryClinicsDictionary('clinicType');
+            this.init();
+          })
+        }
+      }
+    })
   }
   init = async ({ pageNum, pageSize } = { pageNum: 1, pageSize: 10 }) => {
     this.setState({
@@ -58,7 +72,7 @@ export default class ClinicList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let prescriberList = res.context.content;
       if (prescriberList.length > 0) {
@@ -92,45 +106,37 @@ export default class ClinicList extends Component<any, any> {
     const { res } = await webapi.queryClinicsDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         typeArr: res.context
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   querySysDictionary = async (type: String) => {
     const { res } = await webapi.querySysDictionary({
       type: type
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.setState({
         cityArr: res.context.sysDictionaryVOS
       });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   delClinic = async (id) => {
     const { res } = await webapi.deleteClinic({
       id: id
     });
-    if (res.code === 'K-000000') {
-      message.success('Operate successfully');
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   enableAndDisable = async (id) => {
     // message.info('API under development');
     const { res } = await webapi.enableAndDisable(id);
-    if (res.code === 'K-000000') {
-      message.success('Operate successfully');
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   onFormChange = ({ field, value }) => {
@@ -183,7 +189,18 @@ export default class ClinicList extends Component<any, any> {
   //   document.body.appendChild(link);
   //   link.click();
   // }
-
+  onUpload = (info)=>{
+    const {file} = info
+    if (file.status !== 'uploading') {
+    }
+    console.info('infoinfoinfo', info)
+    if (file.status === 'done'&&file.response&&file.response.code=='K-000000') {
+        this.init()
+        message.success(`${file.name} file uploaded successfully`);
+    } else if (file.status === 'error' || file.status === 'done') {
+      message.error(`${file.name} file upload failed:${file.response.message}`);
+    }
+  }
   onExport = () => {
     const params = this.state.searchForm;
     return new Promise((resolve) => {
@@ -198,7 +215,7 @@ export default class ClinicList extends Component<any, any> {
           const exportHref = Const.HOST + `/prescriber/exportPrescriber/${encrypted}`;
           window.open(exportHref);
         } else {
-          message.error('Unsuccessful');
+          message.error(<FormattedMessage id="Prescriber.Unsuccessful" />);
         }
 
         resolve();
@@ -209,7 +226,7 @@ export default class ClinicList extends Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: <FormattedMessage id="Prescriber.deleteThisItem" />,
       onOk() {
         return that.delClinic(id);
       },
@@ -221,26 +238,26 @@ export default class ClinicList extends Component<any, any> {
     const { cityArr, typeArr, searchForm } = this.state;
     const columns = [
       {
-        title: 'Prescriber ID',
+        title: <FormattedMessage id="Prescriber.PrescriberID" />,
         dataIndex: 'prescriberId',
         key: 'prescriberID',
         width: '10%'
       },
       {
-        title: 'Prescriber name',
+        title: <FormattedMessage id="Prescriber.PrescriberName" />,
         dataIndex: 'prescriberName',
         key: 'prescriberName',
         width: '15%',
         ellipsis: true
       },
       {
-        title: 'Prescriber phone',
+        title: <FormattedMessage id="Prescriber.PrescriberPhone" />,
         dataIndex: 'phone',
         key: 'prescriberPhone',
         width: '10%'
       },
       {
-        title: 'Prescriber city',
+        title: <FormattedMessage id="Prescriber.PrescriberCity" />,
         dataIndex: 'primaryCity',
         key: 'prescriberCity',
         width: '10%'
@@ -265,7 +282,7 @@ export default class ClinicList extends Component<any, any> {
       // },
 
       {
-        title: 'Prescriber type',
+        title: <FormattedMessage id="Prescriber.PrescriberType" />,
         dataIndex: 'prescriberType',
         key: 'prescriberType',
         width: '10%'
@@ -281,44 +298,44 @@ export default class ClinicList extends Component<any, any> {
       // },
 
       {
-        title: 'Recommendation code',
+        title: <FormattedMessage id="Prescriber.RecommendationCode" />,
         dataIndex: 'prescriberCode',
         key: 'prescriberCode',
         width: '10%',
-        render: (text, record) => <p>{this.state.isMapMode ? '' : text}</p>
+        render: (text, record) => <p>{this.state.isMapMode ? '--' : text}</p>
       },
       {
-        title: 'Prescriber status',
+        title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
         dataIndex: 'enabled',
         key: 'enabled',
         width: '10%',
-        render: (text, record) => <p>{record.enabled ? 'Enabled' : 'Disabled'}</p>
+        render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) :RCi18n({id:'Disabled'})}</p>
       },
+      // {
+      //   title: <FormattedMessage id="Prescriber.AuditAuthority" />,
+      //   dataIndex: 'auditAuthority',
+      //   key: 'auditAuthority',
+      //   width: '10%',
+      //   render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
+      // },
       {
-        title: 'Audit Authority',
-        dataIndex: 'auditAuthority',
-        key: 'auditAuthority',
-        width: '10%',
-        render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
-      },
-      {
-        title: 'Action',
+        title: <FormattedMessage id="Prescriber.Action" />,
         key: 'action',
         width: '10%',
         render: (text, record) => (
-          <span>
-            <Tooltip placement="top" title="Details">
+          <div>
+            <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             <Divider type="vertical" />
-            <Tooltip placement="top" title={record.enabled ? 'Disable' : 'Enable'}>
+            <Tooltip placement="top" title={record.enabled ? RCi18n({id:'Disable'}) : RCi18n({id:'Enable'})}>
               <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable">
                 {/*{record.enabled ? 'Disable' : 'Enable'}*/}
               </a>
             </Tooltip>
             {/* <Divider type="vertical" />
             <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
-          </span>
+          </div>
         )
       }
     ];
@@ -327,7 +344,7 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div id="inputs" className="container-search">
-          <Headline title="Prescriber list" />
+          <Headline title={<FormattedMessage id="Prescriber.PrescriberList" />} />
           {/*搜索条件*/}
           <Form layout="inline">
             <Row id="input-lable-wwidth">
@@ -338,7 +355,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberId" />
+                        <FormattedMessage id="Prescriber.prescriberId" />
                       </p>
                     }
                     onChange={(e) => {
@@ -355,7 +372,11 @@ export default class ClinicList extends Component<any, any> {
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem style={styles.formItemStyle}>
                   <Input
-                    addonBefore={<p className="PrescriberCity">Prescriber city</p>}
+                    addonBefore={
+                      <p className="PrescriberCity">
+                        <FormattedMessage id="Prescriber.PrescriberCity" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -392,7 +413,8 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue=""
-                    label="Prescriber type"
+                    getPopupContainer={() => document.getElementById('page-content')}
+                    label={<FormattedMessage id="Prescriber.PrescriberType" />}
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -404,7 +426,7 @@ export default class ClinicList extends Component<any, any> {
                     style={styles.wrapper}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />
+                      <FormattedMessage id="Prescriber.All" />
                     </Option>
                     {typeArr.map((item) => (
                       <Option value={item.valueEn} key={item.id}>
@@ -419,7 +441,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberName" />
+                        <FormattedMessage id="Prescriber.prescriberName" />
                       </p>
                     }
                     onChange={(e) => {
@@ -438,7 +460,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberZip" />
+                        <FormattedMessage id="Prescriber.prescriberZip" />
                       </p>
                     }
                     onChange={(e) => {
@@ -456,7 +478,7 @@ export default class ClinicList extends Component<any, any> {
                   <Input
                     addonBefore={
                       <p className="prescriber-iput-lable">
-                        <FormattedMessage id="prescriberPhone" />
+                        <FormattedMessage id="Prescriber.prescriberPhone" />
                       </p>
                     }
                     onChange={(e) => {
@@ -474,7 +496,8 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue="true"
-                    label="Prescriber status"
+                    label={<FormattedMessage id="Prescriber.PrescriberStatus" />}
+                    getPopupContainer={() => document.getElementById('page-content')}
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? '' : value;
@@ -486,13 +509,13 @@ export default class ClinicList extends Component<any, any> {
                     style={styles.wrapper}
                   >
                     <Option value="">
-                      <FormattedMessage id="all" />{' '}
+                      <FormattedMessage id="Prescriber.All" />{' '}
                     </Option>
                     <Option value="true" key="enabled">
-                      <FormattedMessage id="enabled" />
+                      <FormattedMessage id="Prescriber.enabled" />
                     </Option>
                     <Option value="false" key="disabled">
-                      <FormattedMessage id="disabled" />
+                      <FormattedMessage id="Prescriber.disabled" />
                     </Option>
                   </SelectGroup>
                 </FormItem>
@@ -505,7 +528,11 @@ export default class ClinicList extends Component<any, any> {
               <Col span="8">
                 <FormItem style={styles.formItemStyle}>
                   <Input
-                    addonBefore={<p className="prescriber-iput-lable">Recommendation code</p>}
+                    addonBefore={
+                      <p className="prescriber-iput-lable">
+                        <FormattedMessage id="Prescriber.RecommendationCode" />
+                      </p>
+                    }
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -535,46 +562,66 @@ export default class ClinicList extends Component<any, any> {
                       this.onSearch();
                     }}
                   >
-                    <span>
-                      <FormattedMessage id="search" />
-                    </span>
+                    <FormattedMessage id="Prescriber.search" />
                   </Button>
                 </FormItem>
                 {/* </div> */}
               </Col>
             </Row>
           </Form>
-          <div style={{ textAlign: 'left' }}>
+        </div>
+        <div className="container">
+          <div style={{ textAlign: 'left', marginBottom: 10 }}>
             <Button
-              style={{}}
               icon="download"
               onClick={(e) => {
                 e.preventDefault();
                 this.onExport();
               }}
             >
-              <FormattedMessage id="export" />
+              <FormattedMessage id="Prescriber.export" />
             </Button>
+            {(window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] === 'de'?<span
+            style={{
+              marginLeft: '20px'
+            }}>
+            <Upload
+              showUploadList={false}
+              name="file"
+              action={`${Const.HOST}/prescriber/list/excelImport`}
+              headers={{ 
+              authorization:
+              'Bearer' + ((window as any).token ? ' ' + (window as any).token : '') }}
+              onChange={this.onUpload}
+              accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              // accept='.xlsx'
+            >
+              <Button
+                icon="upload"
+              >
+                <FormattedMessage id="Prescriber.Upload" />
+              </Button>
+            </Upload>
+            </span>:null}
             <Button
               style={{
-                backgroundColor: '#e2001a',
+                backgroundColor: 'var(--primary-color)',
                 color: '#FFFFFF',
                 marginLeft: '20px'
               }}
             >
               <Link to="/prescriber-add">
-                <FormattedMessage id="add" />
+                <FormattedMessage id="Prescriber.add" />
               </Link>
             </Button>
           </div>
-        </div>
-        <div className="container">
+
           <Table
             rowKey="id"
             columns={columns}
             dataSource={this.state.prescriberList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />

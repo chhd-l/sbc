@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Button, DatePicker, Form, Input, message, Modal, Select, Table } from 'antd';
-import { AuthWrapper, Const, DataGrid, SelectGroup, cache } from 'qmkit';
+import { AuthWrapper, Const, DataGrid, SelectGroup, cache, RCi18n } from 'qmkit';
 import moment from 'moment';
 import * as webapi from './webapi';
-
+import '../index.less';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
@@ -54,7 +55,8 @@ export default class CouponsModal extends React.Component<any, any> {
         visible={true}
         title={
           <div>
-            Select coupons&nbsp;
+            <FormattedMessage id="Marketing.SelectCoupons" />
+            &nbsp;
             {/*<small>*/}
             {/*  已选*/}
             {/*  <span style={{ color: 'red' }}>*/}
@@ -67,8 +69,8 @@ export default class CouponsModal extends React.Component<any, any> {
         width={1200}
         onOk={() => this._onOk()}
         onCancel={() => this._onCancel()}
-        okText="Save"
-        cancelText="Delete"
+        okText={<FormattedMessage id="Marketing.Save" />}
+        cancelText={<FormattedMessage id="Marketing.Cancel" />}
       >
         {/*search*/}
         {this._renderSearchForm()}
@@ -88,7 +90,7 @@ export default class CouponsModal extends React.Component<any, any> {
             <Input addonBefore="Coupon name" onChange={(e) => this._onSearchParamChange({ likeCouponName: e.target.value })} />
           </FormItem>
 
-          <FormItem>
+          {/* <FormItem>
             <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Use range" dropdownStyle={{ zIndex: 1053 }} defaultValue="Unlimited" onChange={(val) => this._onSearchParamChange({ scopeType: val })}>
               <Option value="">unlimited</Option>
               <Option value="0">{Const.couponScopeType[0]}</Option>
@@ -96,7 +98,7 @@ export default class CouponsModal extends React.Component<any, any> {
               <Option value="3">{Const.couponScopeType[3]}</Option>
               <Option value="4">{Const.couponScopeType[4]}</Option>
             </SelectGroup>
-          </FormItem>
+          </FormItem> */}
 
           <FormItem>
             <RangePicker
@@ -122,18 +124,18 @@ export default class CouponsModal extends React.Component<any, any> {
             />
           </FormItem>
           <FormItem>
-            {/*<Button*/}
-            {/*  htmlType="submit"*/}
-            {/*  type="primary"*/}
-            {/*  shape="round"*/}
-            {/*  icon="search"*/}
-            {/*  onClick={(e) => {*/}
-            {/*    e.preventDefault();*/}
-            {/*    this._pageSearch(0);*/}
-            {/*  }}*/}
-            {/*>*/}
-            {/*  搜索*/}
-            {/*</Button>*/}
+            <Button
+              htmlType="submit"
+              type="primary"
+              shape="round"
+              icon="search"
+              onClick={(e) => {
+                e.preventDefault();
+                this._pageSearch(0);
+              }}
+            >
+              <FormattedMessage id="Marketing.Search" />
+            </Button>
           </FormItem>
         </Form>
       </div>
@@ -169,11 +171,11 @@ export default class CouponsModal extends React.Component<any, any> {
           }
         }}
       >
-        <Column title="Coupon name" dataIndex="couponName" key="couponName" width="15%" />
+        <Column title={<FormattedMessage id="Marketing.CouponName" />} dataIndex="couponName" key="couponName" width="15%" />
 
-        <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="10%" />
+        <Column title={`Face  value( ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} )`} dataIndex="denominationStr" key="denominationStr" width="15%" />
 
-        <Column title="Valid period" dataIndex="validity" key="validity" width="15%" />
+        <Column title={<FormattedMessage id="Marketing.ValidPeriod" />} dataIndex="validity" key="validity" width="25%" />
 
         {/*<Column*/}
         {/*  title="优惠券分类"*/}
@@ -185,22 +187,22 @@ export default class CouponsModal extends React.Component<any, any> {
         {/*  }*/}
         {/*/>*/}
 
-        <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} />
+        {/* <Column title="Use range" key="scopeNamesStr" dataIndex="scopeNamesStr" width="15%" render={(value) => (value.length > 12 ? `${value.substring(0, 12)}...` : value)} /> */}
 
-        <Column title="Status" key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
+        <Column title={<FormattedMessage id="Marketing.Status" />} key="couponStatusStr" dataIndex="couponStatusStr" width="15%" />
 
         <Column
-          title="Operation"
+          title={<FormattedMessage id="Marketing.Operation" />}
           key="operate"
           width="15%"
           render={(row) => {
             return (
               <div>
-                <AuthWrapper functionName={'f_coupon_detail'}>
-                  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">
-                    Details
-                  </a>
-                </AuthWrapper>
+                {/*<AuthWrapper functionName={'f_coupon_detail'}>*/}
+                {/*  <a style={{ textDecoration: 'none' }} href={`/coupon-detail/${row.couponId}`} target="_blank">*/}
+                {/*    {<FormattedMessage id="Marketing.Details" />}*/}
+                {/*  </a>*/}
+                {/*</AuthWrapper>*/}
               </div>
             );
           }}
@@ -249,7 +251,7 @@ export default class CouponsModal extends React.Component<any, any> {
   _onOk = () => {
     const selectedRows = this.state.selectedRows;
     if (selectedRows.length > 10) {
-      message.error('最多可选10张优惠券');
+      message.error(RCi18n({id: 'Marketing.Youcanchooseupto10coupons'}));
     } else {
       this.props.onOk(selectedRows);
     }
@@ -279,10 +281,13 @@ export default class CouponsModal extends React.Component<any, any> {
     let { res } = (await webapi.fetchCouponPage(params)) as any;
     if (res.code == Const.SUCCESS_CODE) {
       // 3.格式化返回结构
-      let couponInfos = res.context.couponInfos;
+      let couponInfos = res.context;
       couponInfos.content.forEach((coupon) => {
         // 3.1.面值
-        coupon.denominationStr = coupon.fullBuyType == 0 ? `over 0 minus${coupon.denomination}` : `over${coupon.fullBuyPrice}minus${coupon.denomination}`;
+        coupon.denominationStr =
+          coupon.fullBuyType == 0
+            ? `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}0 minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`
+            : `over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.fullBuyPrice} minus ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${coupon.denomination}`;
         // 3.2.有效期
         if (coupon.rangeDayType == 0) {
           // 按起止时间

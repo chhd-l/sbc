@@ -1,6 +1,6 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { AuthWrapper, DataGrid, noop } from 'qmkit';
+import { AuthWrapper, DataGrid, noop, Const } from 'qmkit';
 import { List } from 'immutable';
 import { Popconfirm, Tooltip, Divider, message } from 'antd';
 import { checkMenu } from '../../../web_modules/qmkit/checkAuth';
@@ -53,7 +53,7 @@ export default class EmployeeList extends React.Component<any, any> {
     const { loading, total, pageSize, selected, dataList, onSelect, init, current } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         rowSelection={{
           type: 'checkbox',
           selectedRowKeys: selected.toJS(),
@@ -206,7 +206,7 @@ export default class EmployeeList extends React.Component<any, any> {
       const { res: prescriberRes } = await webapi.getClinicById({
         id: prescriberKeyId
       });
-      if (prescriberRes.code === 'K-000000') {
+      if (prescriberRes.code === Const.SUCCESS_CODE) {
         prescriberIds.push(prescriberRes.context.prescriberId);
         if (prescriberIds.length === recored.prescriberIds.length) {
           let employeeName = recored.employeeName.split(' ');
@@ -217,10 +217,8 @@ export default class EmployeeList extends React.Component<any, any> {
             prescriberId: prescriberIds.join(',')
           };
           const { res } = await webapi.sendEmail(paramter);
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             message.success('send successful');
-          } else {
-            message.error(res.message || 'send failed');
           }
         }
       }
@@ -234,10 +232,12 @@ export default class EmployeeList extends React.Component<any, any> {
     }
     //所有的角色id集合
     const allIds = roles
-      .map((v) => {
-        return v.get('roleInfoId');
-      })
-      .toJS();
+      ? roles
+          .map((v) => {
+            return v && v.get('roleInfoId');
+          })
+          .toJS()
+      : [];
     const roleIds = rowInfo.roleIds
       ? rowInfo.roleIds.split(',').reduce((pre, cur) => {
           if (allIds.includes(Number(cur))) {

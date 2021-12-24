@@ -62,7 +62,7 @@ export default class GoodsGrid extends React.Component<any, any> {
         <SearchForm searchBackFun={this.searchBackFun} visible={visible} />
 
         <DataGrid
-          loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+          loading={loading}
           rowKey={(record) => record.goodsInfoId}
           isScroll={false}
           dataSource={goodsInfoPage.content}

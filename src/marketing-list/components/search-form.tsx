@@ -1,11 +1,13 @@
 import React from 'react';
 import { Relax, IMap } from 'plume2';
 import { Form, Select, Input, Button, DatePicker, Row, Col } from 'antd';
-import { SelectGroup, noop, Const, util } from 'qmkit';
+import { SelectGroup, noop, Const, RCi18n, util } from 'qmkit';
 import { List } from 'immutable';
 // import locale from 'antd/es/date-picker/locale/lv_LV';
 import moment from 'moment';
 import 'moment/locale/en-au';
+import { FormattedMessage, injectIntl } from 'react-intl';
+
 moment.locale('en-au');
 type TList = List<IMap>;
 
@@ -13,9 +15,10 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 @Relax
-export default class SearchForm extends React.Component<any, any> {
+class SearchForm extends React.Component<any, any> {
   props: {
     form?: any;
+    intl: any;
     relaxProps?: {
       customerLevels: TList;
       defaultLocalDateTime: any;
@@ -38,12 +41,7 @@ export default class SearchForm extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      onFormChange,
-      onSearch,
-      customerLevels,
-      defaultLocalDateTime
-    } = this.props.relaxProps;
+    const { onFormChange, onSearch, customerLevels, defaultLocalDateTime } = this.props.relaxProps;
     const { startValue, endValue } = this.state;
     return (
       <Form className="filter-content" layout="inline">
@@ -51,7 +49,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8">
             <FormItem>
               <Input
-                addonBefore="Campaign name"
+                addonBefore={<FormattedMessage id="Marketing.CampaignName" />}
                 onChange={(e) => {
                   const value = (e.target as any).value;
                   onFormChange({
@@ -65,12 +63,10 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
-                label="Promotion type"
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<FormattedMessage id="Marketing.PromotionType" />}
                 // style={{ width: 170 }}
-                defaultValue="All"
+                defaultValue=""
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -79,9 +75,12 @@ export default class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value="">All</Option>
-                <Option value="0">Normal promotion</Option>
-                <Option value="1">Subscription promotion</Option>
+                <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
+                <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>
+                <Option value="3"><FormattedMessage id="Marketing.Singlepurchase" /></Option>
+                <Option value="4"><FormattedMessage id="Marketing.Individualization" /></Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>
@@ -90,9 +89,7 @@ export default class SearchForm extends React.Component<any, any> {
           <Col span="8" id="select-group-width">
             <FormItem>
               <SelectGroup
-                getPopupContainer={() =>
-                  document.getElementById('page-content')
-                }
+                getPopupContainer={() => document.getElementById('page-content')}
                 label="Campaign Type"
                 // style={{ width: 160 }}
                 defaultValue="All"
@@ -104,16 +101,34 @@ export default class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value={null}>All</Option>
-                <Option value="0">Full amount reduction</Option>
-                <Option value="1">Full quantity reduction</Option>
-                <Option value="2">Full amount discount</Option>
-                <Option value="3">Full quantity discount</Option>
+                <Option value={null}><FormattedMessage id="Marketing.all" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.FullAmountReduction" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.FullQuantityReduction" /></Option>
+                <Option value="2"><FormattedMessage id="Marketing.FullAmountDiscount" /></Option>
+                <Option value="3"><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
+                <Option value="4"><FormattedMessage id="Marketing.Fullamountgift" /></Option>
+                <Option value="5"><FormattedMessage id="Marketing.Fullquantitygift" /></Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>
             </FormItem>
           </Col>{' '}
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="Marketing.PromotionCode" />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'promotionCode',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
           <Col span="8">
             <FormItem>
               <DatePicker
@@ -123,7 +138,11 @@ export default class SearchForm extends React.Component<any, any> {
                 showTime={{ format: 'HH:mm' }}
                 format={Const.DATE_FORMAT}
                 value={startValue}
-                placeholder="Start time"
+                placeholder={
+                  (window as any).RCi18n({
+                    id: 'Marketing.StartTime'
+                  })
+                }
                 onChange={this.onStartChange}
                 showToday={false}
               />
@@ -138,13 +157,42 @@ export default class SearchForm extends React.Component<any, any> {
                 showTime={{ format: 'HH:mm' }}
                 format={Const.DATE_FORMAT}
                 value={endValue}
-                placeholder="End time"
+                placeholder={
+                  (window as any).RCi18n({
+                    id: 'Marketing.EndTime'
+                  })
+                }
                 onChange={this.onEndChange}
                 showToday={false}
               />
             </FormItem>
           </Col>
-          <Col span="8">
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="8" id="select-group-width">
+            <FormItem>
+              <SelectGroup
+                getPopupContainer={() => document.getElementById('page-content')}
+                label={<FormattedMessage id="Marketing.CodeType" />}
+                // style={{ width: 170 }}
+                defaultValue=""
+                onChange={(value) => {
+                  value = value === '' ? null : value;
+                  onFormChange({
+                    field: 'publicStatus',
+                    value
+                  });
+                }}
+              >
+                <Option value=""><FormattedMessage id="Marketing.All" /></Option>
+                <Option value="0"><FormattedMessage id="Marketing.private" /></Option>
+                <Option value="1"><FormattedMessage id="Marketing.public" /></Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row id="input-lable-wwidth">
+          <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"
@@ -156,7 +204,7 @@ export default class SearchForm extends React.Component<any, any> {
                   onSearch();
                 }}
               >
-                Search
+                <FormattedMessage id="Marketing.Search" />
               </Button>
             </FormItem>
           </Col>
@@ -217,3 +265,4 @@ export default class SearchForm extends React.Component<any, any> {
     this.setState({ endOpen: open });
   };
 }
+export default injectIntl(SearchForm)

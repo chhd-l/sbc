@@ -32,18 +32,17 @@ export default class GoodsGrid extends React.Component<any, any> {
     };
   }
 
-   props: {
+  props: {
     relaxProps?: {
       productTooltip: any;
-      goodsId: any
+      goodsId: any;
     };
   };
 
   static relaxProps = {
     productTooltip: 'productTooltip',
-    goodsId: 'goodsId',
+    goodsId: 'goodsId'
   };
-
 
   componentDidMount() {
     this.init(this.props.searchParams ? this.props.searchParams : {});
@@ -53,13 +52,13 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
         searchParams: nextProps.searchParams ? nextProps.searchParams : {},
-        goodsInfoPage: nextProps.productTooltip,
+        goodsInfoPage: nextProps.productTooltip
       });
       this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
     this.setState({
       selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
-      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : [],
+      selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
@@ -71,7 +70,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       <div className="content">
         <RelatedForm form={this.props.form} searchBackFun={(res) => this.searchBackFun(res)} />
         <DataGrid
-          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+          loading={loading}
           rowKey={(record) => record.goodsId}
           dataSource={goodsInfoPage.content}
           isScroll={false}
@@ -92,20 +91,15 @@ export default class GoodsGrid extends React.Component<any, any> {
             onChange: (selectedRowKeys: any[], selectedTableRows: any[]) => {
               const sRows = fromJS(selectedRows).filter((f) => f);
               let rows = (sRows.isEmpty() ? Set([]) : sRows.toSet()).concat(fromJS(selectedTableRows).toSet()).toList();
-              let rowsArr = [];
-              rows.toJS().map((item) => {
-                rowsArr.push(item.goodsId);
-              });
-              //rows = selectedRowKeys.map((key) => {rows.filter((row) => row.get('goodsId') == key).first()}).filter((f) => f);
+              rows = selectedRowKeys.map((key) => rows.filter((row) => row.get('goodsId') == key).first()).filter((f) => f);
               this.setState({
-                selectedRows: rowsArr,
+                selectedRows: rows,
                 selectedRowKeys
               });
-
               rowChangeBackFun(selectedRowKeys, fromJS(rows));
             },
             getCheckboxProps: (record) => {
-              return {defaultChecked:record.selectedFlag}
+              return { defaultChecked: record.selectedFlag, disabled: record.selectedFlag };
             }
           }}
         >

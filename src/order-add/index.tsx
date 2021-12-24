@@ -30,30 +30,18 @@ class CreateOrder extends React.Component<any, any> {
         {/*面包屑*/}
         <BreadCrumb thirdLevel={this.props.edit && true}>
           {/* {this.props.edit ? <Breadcrumb.Item>订单列表</Breadcrumb.Item> : null} */}
-          <Breadcrumb.Item>
-            {this.props.edit ? <FormattedMessage id="order.editOrder" /> : ''}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item>{this.props.edit ? <FormattedMessage id="Order.editOrder" /> : ''}</Breadcrumb.Item>
         </BreadCrumb>
         <Form>
           <div className="container-search">
-            <Headline
-              title={
-                this.props.edit ? (
-                  <FormattedMessage id="order.editOrder" />
-                ) : (
-                  <FormattedMessage id="order.valetOrder" />
-                )
-              }
-            />
+            <Headline title={this.props.edit ? <FormattedMessage id="Order.editOrder" /> : <FormattedMessage id="Order.valetOrder" />} />
           </div>
           <div className="container">
             {/*客戶信息*/}
             <CustomerInfo
               form={this.props.form}
               {...{
-                selectedCustomerInfo: this.store
-                  .state()
-                  .get('selectedCustomerInfo'),
+                selectedCustomerInfo: this.store.state().get('selectedCustomerInfo'),
                 flushStatus: this.props.flushStatus,
                 selectedAddrId: this.store.state().get('selectedAddrId'),
                 edit: this.props.edit
@@ -61,16 +49,14 @@ class CreateOrder extends React.Component<any, any> {
             />
 
             <strong style={styles.title}>
-              <FormattedMessage id="product.productList" />:{' '}
+              <FormattedMessage id="Order.productList" />:{' '}
             </strong>
 
             {/*商品列表*/}
             <GoodsList
               form={this.props.form}
               {...{
-                selectedCustomerId: this.store
-                  .state()
-                  .get('selectedCustomerId'),
+                selectedCustomerId: this.store.state().get('selectedCustomerId'),
                 flushStatus: this.props.flushStatus,
                 edit: this.props.edit
               }}
@@ -127,19 +113,12 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
             flushStatus: this.state.flushStatus,
             edit: this.state.edit,
             sperator: this.store.state().getIn(['extra', 'sperator']),
-            selectedInvoiceAddrId: this.store
-              .state()
-              .get('selectedInvoiceAddrId')
+            selectedInvoiceAddrId: this.store.state().get('selectedInvoiceAddrId')
           }}
         />
         <div className="bar-button">
-          <Button
-            onClick={() => this._createOrder()}
-            type="primary"
-            htmlType="submit"
-            loading={this.state.submitting}
-          >
-            <FormattedMessage id="save" />
+          <Button onClick={() => this._createOrder()} type="primary" htmlType="submit" loading={this.state.submitting}>
+            <FormattedMessage id="Public.save" />
           </Button>
           &nbsp;&nbsp;
           <Button
@@ -148,7 +127,7 @@ export default class OrderRepresentCustomer extends React.Component<any, any> {
               this.props.history.go(-1);
             }}
           >
-            <FormattedMessage id="cancel" />
+            <FormattedMessage id="Public.cancel" />
           </Button>
         </div>
       </div>

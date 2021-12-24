@@ -37,14 +37,7 @@ export default class ListView extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      init,
-      currentPage
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, init, currentPage } = this.props.relaxProps;
 
     return (
       <div>
@@ -56,22 +49,22 @@ export default class ListView extends React.Component<any, any> {
                   <thead className="ant-table-thead">
                     <tr>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorAccount" />
+                        <FormattedMessage id="Setting.operatorAccount" />
+                      </th>
+                      <th style={{ width: '14%', paddingLeft: 10 }}>
+                        <FormattedMessage id="Setting.operatorName" />
+                      </th>
+                      <th style={{ width: '13%', paddingLeft: 10 }}>
+                        <FormattedMessage id="Setting.operatorIP" />
                       </th>
                       <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorName" />
+                        <FormattedMessage id="Setting.operatorTime" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorIP" />
-                      </th>
-                      <th style={{ width: '17%', paddingLeft: 10 }}>
-                        <FormattedMessage id="operatorTime" />
-                      </th>
-                      <th style={{ width: '10%', paddingLeft: 10 }}>
-                        <FormattedMessage id="module" />
+                        <FormattedMessage id="Setting.module" />
                       </th>
                       <th style={{ width: '10%', paddingLeft: 5 }}>
-                        <FormattedMessage id="operatorType" />
+                        <FormattedMessage id="Setting.operatorType" />
                       </th>
                       <th
                         style={{
@@ -81,22 +74,18 @@ export default class ListView extends React.Component<any, any> {
                           paddingLeft: 10
                         }}
                       >
-                        <FormattedMessage id="operatorContent" />
+                        <FormattedMessage id="Setting.operatorContent" />
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">
-                    {loading
-                      ? this._renderLoading()
-                      : this._renderContent(dataList)}
-                  </tbody>
+                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
                 </table>
               </div>
               {!loading && total == 0 ? (
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    No data
+                    <FormattedMessage id="Setting.NoData" />
                   </span>
                 </div>
               ) : null}
@@ -127,7 +116,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={9}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}/>
+          <Spin />
         </td>
       </tr>
     );
@@ -146,25 +135,23 @@ export default class ListView extends React.Component<any, any> {
               <table className="ant-table-self">
                 <tbody>
                   <tr>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '17%'}}>
                       {/*操作人账号*/}
                       {v.get('opAccount') || '-'}
                     </td>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*操作人姓名*/}
                       {v.get('opName') || '-'}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '13%' }}>
                       {/*操作人Ip*/}
                       {v.get('opIp') || '-'}
                     </td>
                     <td style={{ width: '17%' }}>
                       {/*操作时间*/}
-                      {opTime
-                        ? moment(opTime).format(Const.TIME_FORMAT).toString()
-                        : '-'}
+                      {opTime ? moment(opTime).format(Const.TIME_FORMAT).toString() : '-'}
                     </td>
-                    <td style={{ width: '10%' }}>
+                    <td style={{ width: '10%'}}>
                       {/*一级菜单*/}
                       {v.get('opModule') || '-'}
                     </td>
@@ -172,7 +159,7 @@ export default class ListView extends React.Component<any, any> {
                       {/*操作类型*/}
                       {v.get('opCode') || '-'}
                     </td>
-                    <td style={{ maxWidth: '200px', width: '200px' }}>
+                    <td style={{ maxWidth: '200px', width:'19%'}}>
                       {/*操作内容*/}
                       {v.get('opContext').length > 20 ? (
                         <Tooltip title={v.get('opContext')}>
@@ -205,7 +192,8 @@ const styles = {
     border: '1px solid #ddd',
     float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   },
   platform: {
     fontSize: 12,

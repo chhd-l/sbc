@@ -1,6 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -14,57 +14,34 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: RCi18n({id:"PetOwner.ConsumerAccount"}),
           dataIndex: 'customerAccount',
           key: 'consumerAccount'
         },
         {
-          title: 'Consumer name',
+          title: RCi18n({id:"PetOwner.ConsumerName"}),
           dataIndex: 'customerName',
           key: 'consumerName'
         },
         {
-          title: 'Consumer type',
+          title: RCi18n({id:"PetOwner.ConsumerType"}),
           dataIndex: 'customerLevelName',
           key: 'consumerType'
         },
         {
-          title: 'Email',
+          title: RCi18n({id:"PetOwner.Email"}),
           dataIndex: 'email',
           key: 'email'
         },
-
-        // {
-        //   title: 'Phone Number',
-        //   dataIndex: 'contactPhone',
-        //   key: 'phoneNumber'
-        // },
-        // {
-        //   title: 'Selected Prescriber ID',
-        //   dataIndex: 'selectedPrescriber',
-        //   key: 'selectedPrescriber'
-        // },
-        // {
-        //   title: 'Operation',
-        //   key: 'operation',
-        //   render: (text, record) => (
-
-        //     <span>
-        //       <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Visitor') + '/' + record.customerId + '/' + record.customerAccount}>Details</Link>
-        //     </span>
-        //   )
-        // },
         {
-          title: 'Operation',
+          title: RCi18n({id:"PetOwner.Operation"}),
           key: 'operation',
           width: '8%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Details">
-                <Link to={'/customer-clinic-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
+              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
+              <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccountOriginal}` : `/customer-details/Guest/${record.customerId}/${record.customerAccountOriginal}`} className="iconfont iconDetails"></Link>
               </Tooltip>
-              {/* <Divider type="vertical" />
-              <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>
           )
         }
@@ -92,13 +69,18 @@ export default class Customer extends React.Component<any, any> {
       },
       customerTypeArr: [
         {
-          value: 'Member',
-          name: 'Member',
+          value: 'Normal Member',
+          name: RCi18n({id:'PetOwner.NormalMember'}),
           id: 234
         },
         {
+          value: 'Club Member',
+          name: RCi18n({id:'PetOwner.ClubMember'}),
+          id: 235
+        },
+        {
           value: 'Guest',
-          name: 'Guest',
+          name: RCi18n({ id: 'PetOwner.Guest' }),
           id: 233
         }
       ],
@@ -154,7 +136,7 @@ export default class Customer extends React.Component<any, any> {
       })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = this.state.pagination;
           let searchList = res.context ? res.context.detailResponseList : [];
           pagination.total = res.context ? res.context.total : 0;
@@ -164,15 +146,12 @@ export default class Customer extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'get data filed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error('get data filed');
-
         this.setState({
           loading: false
         });
@@ -199,18 +178,16 @@ export default class Customer extends React.Component<any, any> {
     webapi
       .delCustomer(params)
       .then((data) => {
-        if (data.res.code === 'K-000000') {
+        if (data.res.code === Const.SUCCESS_CODE) {
           message.success(data.res.message || 'Delete success');
           this.init({ pageNum: this.state.pagination.current, pageSize: 10 });
         } else {
-          message.error(data.res.message || 'Delete failed');
           this.setState({
             loading: true
           });
         }
       })
       .catch((err) => {
-        message.error('Delete failed');
         this.setState({
           loading: true
         });
@@ -223,35 +200,17 @@ export default class Customer extends React.Component<any, any> {
       <AuthWrapper functionName="f_customer_0_prescriber">
         <div>
           <BreadCrumb />
-          {/*导航面包屑*/}
-          {/* <Breadcrumb separator=">">
-            <Breadcrumb.Item>客户</Breadcrumb.Item>
-            <Breadcrumb.Item>客户管理</Breadcrumb.Item>
-            <Breadcrumb.Item>客户列表</Breadcrumb.Item>
-          </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="consumerClinicList" />} />
+            <Headline title={<FormattedMessage id="Menu.Pet owner list(Prescriber)" />} />
             <Form className="filter-content" layout="inline">
-              {/* <FormItem>
-                <Input
-                  addonBefore={<FormattedMessage id="customerAccount" />}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    this.onFormChange({
-                      field: 'customerAccount',
-                      value
-                    });
-                  }}
-                />
-              </FormItem> */}
 
               <Row>
                 <Col span={8}>
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerName" />
+                        <p style={styles.label} title={RCi18n({id:"PetOwner.ConsumerName"})}>
+                          <FormattedMessage id="PetOwner.ConsumerName" />
                         </p>
                       }
                       onChange={(e) => {
@@ -267,7 +226,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8} id="tree-select-props-width">
                   <FormItem>
                     <SelectGroup
-                      label={<p style={styles.label}>Customer type</p>}
+                      label={<p style={styles.label} title={RCi18n({id:"PetOwner.ConsumerType"})}><FormattedMessage id="PetOwner.ConsumerType" /></p>}
                       // style={{ width: 80 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -277,7 +236,7 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">All</Option>
+                      <Option value="">{RCi18n({ id: 'PetOwner.All' })}</Option>
                       {customerTypeArr.map((item) => (
                         <Option title={item.name} value={item.id} key={item.id}>
                           {item.name}
@@ -299,7 +258,7 @@ export default class Customer extends React.Component<any, any> {
                       }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="PetOwner.search" />
                       </span>
                     </Button>
                   </FormItem>
@@ -352,7 +311,7 @@ export default class Customer extends React.Component<any, any> {
               rowKey="id"
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
-              loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+              loading={this.state.loading}
               onChange={this.handleTableChange}
             />
           </div>

@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import { Headline, SelectGroup, BreadCrumb } from 'qmkit';
-import {
-  Table,
-  Button,
-  Divider,
-  message,
-  Modal,
-  Popconfirm,
-  Tooltip
-} from 'antd';
+import { Headline, SelectGroup, BreadCrumb, Const } from 'qmkit';
+import { Table, Button, Divider, message, Modal, Popconfirm, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
@@ -21,42 +13,33 @@ export default class ClinicList extends Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Name',
+          title: <FormattedMessage id="Prescriber.Name" />,
           dataIndex: 'name',
           key: 'name',
           width: '30%',
           ellipsis: true
         },
         {
-          title: 'Description',
+          title: <FormattedMessage id="Prescriber.Description" />,
           dataIndex: 'description',
           key: 'description',
           width: '60%',
           ellipsis: true
         },
         {
-          title: 'Action',
+          title: <FormattedMessage id="Prescriber.Action" />,
           key: 'action',
           width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Edit">
-                <Link
-                  className="iconfont iconEdit"
-                  to={'/prescriber-type-edit/' + record.id}
-                ></Link>
+              <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Edit" />}>
+                <Link className="iconfont iconEdit" to={'/prescriber-type-edit/' + record.id}></Link>
               </Tooltip>
 
               <Divider type="vertical" />
 
-              <Popconfirm
-                placement="topLeft"
-                title="Are you sure to delete this item?"
-                onConfirm={() => this.delClinicType(record.id)}
-                okText="Confirm"
-                cancelText="Cancel"
-              >
-                <Tooltip placement="top" title="Delete">
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Prescriber.deleteThisItem" />} onConfirm={() => this.delClinicType(record.id)} okText={<FormattedMessage id="Prescriber.Confirm" />} cancelText={<FormattedMessage id="Prescriber.Cancel" />}>
+                <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Delete" />}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
               </Popconfirm>
@@ -92,7 +75,7 @@ export default class ClinicList extends Component<any, any> {
       .getClinicsDictionaryListPage(params)
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let typeList = res.context.prescriberDictionaryVOList;
 
           if (typeList.length > 0) {
@@ -118,20 +101,16 @@ export default class ClinicList extends Component<any, any> {
               typeList: typeList
             });
           }
-        } else {
-          message.error(res.message || 'Unsuccessful');
         }
       })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
+      .catch((err) => {});
   };
   delClinicType = async (id) => {
     const { res } = await webapi.delClinicsDictionary({
       id: id
     });
-    if (res.code === 'K-000000') {
-      message.success('Operate successfully');
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(<FormattedMessage id="Prescriber.OperateSuccessfully" />);
       const { pagination } = this.state;
       let params = {
         type: 'clinicType',
@@ -139,8 +118,6 @@ export default class ClinicList extends Component<any, any> {
         pageSize: pagination.pageSize
       };
       this.getTypeList(params);
-    } else {
-      message.error(res.message || 'Unsuccessful');
     }
   };
   handleTableChange = (pagination: any) => {
@@ -156,7 +133,7 @@ export default class ClinicList extends Component<any, any> {
   showConfirm(id) {
     const that = this;
     confirm({
-      title: 'Are you sure to delete this item?',
+      title: <FormattedMessage id="Prescriber.deleteThisItem" />,
       onOk() {
         return that.delClinicType(id);
       },
@@ -171,10 +148,12 @@ export default class ClinicList extends Component<any, any> {
         <BreadCrumb />
         {/*导航面包屑*/}
         <div className="container-search">
-          <Headline title="Prescriber type" />
+          <Headline title={<FormattedMessage id="Prescriber.PrescriberType" />} />
           {/*搜索条件*/}
           <Button style={{ backgroundColor: '#e2001a', color: '#FFFFFF' }}>
-            <Link to="/prescriber-type-add">Add</Link>
+            <Link to="/prescriber-type-add">
+              <FormattedMessage id="Prescriber.Add" />
+            </Link>
           </Button>
         </div>
         <div className="container">
@@ -183,7 +162,7 @@ export default class ClinicList extends Component<any, any> {
             rowKey={(record) => record.id}
             dataSource={this.state.typeList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             onChange={this.handleTableChange}
           />
         </div>

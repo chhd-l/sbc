@@ -1,11 +1,12 @@
-import { IOptions, Store, ViewAction } from 'plume2';
-import { message, Modal } from 'antd';
+import {IOptions, Store, ViewAction} from 'plume2';
+import {message, Modal} from 'antd';
 import LoadingActor from './actor/loading-actor';
 import SeoActor from './actor/seo-actor';
 import ImageActor from './actor/image-actor';
 import * as webapi from './webapi';
-import { fromJS } from 'immutable';
-import { cache, Const, history, util } from 'qmkit';
+import {fromJS} from 'immutable';
+import {cache, Const, history, util} from 'qmkit';
+import moment from 'moment';
 
 const confirm = Modal.confirm;
 export default class AppStore extends Store {
@@ -20,8 +21,9 @@ export default class AppStore extends Store {
   bindActor() {
     return [new LoadingActor(), new SeoActor()];
   }
-  updateSeoForm = ({ field, value }) => {
-    this.dispatch('seoActor: seoForm', { field, value });
+
+  updateSeoForm = ({field, value}) => {
+    this.dispatch('seoActor: seoForm', {field, value});
   };
   setSeoModalVisible = (visible) => {
     this.dispatch('seoActor: seoModal', visible);
@@ -41,15 +43,20 @@ export default class AppStore extends Store {
       this.setSeoModalVisible(true);
     }
     this.dispatch('loading:start');
-    const { res } = (await webapi.getSeo(type, pageName)) as any;
+    const {res} = (await webapi.getSeo(type, pageName)) as any;
     if (res.code === Const.SUCCESS_CODE && res.context && res.context.seoSettingVO) {
       this.dispatch('loading:end');
+      //console.log(momnet(res.context.seoSettingVO.priorityStartTime),2222222);
+      let priorityStartTime = moment(res.context.seoSettingVO.priorityStartTime != null? res.context.seoSettingVO.priorityStartTime: new Date(), 'YYYY-MM-DD')
+      let priorityEndTime = moment(res.context.seoSettingVO.priorityEndTime != null? res.context.seoSettingVO.priorityEndTime : new Date(), 'YYYY-MM-DD')
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
           title: res.context.seoSettingVO.titleSource,
           metaKeywords: res.context.seoSettingVO.metaKeywordsSource,
-          description: res.context.seoSettingVO.metaDescriptionSource
+          description: res.context.seoSettingVO.metaDescriptionSource,
+          priorityFlag: res.context.seoSettingVO.priorityFlag != null ? res.context.seoSettingVO.priorityFlag : 0,
+          priorityTime: [priorityStartTime, priorityEndTime],
         })
       );
     } else {
@@ -61,7 +68,7 @@ export default class AppStore extends Store {
   };
   editSeo = async (params, type = null) => {
     this.dispatch('loading:start');
-    const { res } = (await webapi.editSeo(params)) as any;
+    const {res} = (await webapi.editSeo(params)) as any;
     if (res.code === Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
       message.success('Save successfully.');
@@ -84,7 +91,7 @@ export default class AppStore extends Store {
 
   getPages = async (pageNum = 0, pageSize = 10) => {
     this.dispatch('loading:start');
-    const { res } = (await webapi.getPages({
+    const {res} = (await webapi.getPages({
       pageNum,
       pageSize,
       type: 'pageType'

@@ -2,14 +2,15 @@ import * as React from 'react';
 import { Relax } from 'plume2';
 import { Alert, Col, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { IList, IMap } from 'typings/globalType';
-import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
+import { noop, QMMethod, Tips, ValidConst, SelectGroup, Const } from 'qmkit';
 import { fromJS, Map } from 'immutable';
 
 import ImageLibraryUpload from './image-library-upload';
 import VideoLibraryUpload from './video-library-upload';
 //import { makeCreateNormalizedMessageFromEsLintFailure } from 'fork-ts-checker-webpack-plugin/lib/NormalizedMessageFactories';
-import { FormattedMessage } from 'react-intl';
 //import { consoleTestResultHandler } from 'tslint/lib/test';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -47,6 +48,7 @@ export default class Info extends React.Component<any, any> {
       isEditGoods: boolean;
       goods: IMap;
       editGoods: Function;
+      editGoodsItem: Function;
       onGoodsTaggingRelList: Function;
       onProductFilter: Function;
       statusHelpMap: IMap;
@@ -58,7 +60,8 @@ export default class Info extends React.Component<any, any> {
       images: IList;
       video: IMap;
       maxCount: number;
-
+      goodsList: any;
+      goodsSpecs: any;
       editImages: Function;
       showGoodsPropDetail: Function;
       changeStoreCategory: Function;
@@ -79,6 +82,9 @@ export default class Info extends React.Component<any, any> {
       goodsTaggingRelList: IList;
       productFilter: IList;
       sourceGoodCateList: IList;
+      purchaseTypeList: IList;
+      frequencyList: any;
+      changeDescriptionTab: Function;
     };
   };
 
@@ -88,6 +94,7 @@ export default class Info extends React.Component<any, any> {
     goods: 'goods',
     // 修改商品基本信息
     editGoods: noop,
+    editGoodsItem: noop,
     // 签约平台类目信息
     cateList: 'cateList',
     sourceCateList: 'sourceCateList',
@@ -101,11 +108,12 @@ export default class Info extends React.Component<any, any> {
     // 视频
     video: 'video',
     maxCount: 'maxCount',
-
+    goodsList: 'goodsList',
     // 修改图片
     editImages: noop,
     showGoodsPropDetail: noop,
     changeStoreCategory: noop,
+    changeDescriptionTab: noop, //动态改变tab编辑器
     updateGoodsForm: noop,
     // 显示品牌窗口
     showBrandModal: noop,
@@ -126,7 +134,11 @@ export default class Info extends React.Component<any, any> {
     onProductFilter: noop,
     goodsTaggingRelList: 'goodsTaggingRelList',
     productFilter: 'productFilter',
-    sourceGoodCateList: 'sourceGoodCateList'
+    sourceGoodCateList: 'sourceGoodCateList',
+    purchaseTypeList: 'purchaseTypeList',
+    frequencyList: 'frequencyList',
+    goodsSpecs: 'goodsSpecs',
+    updateSpecValues: noop
   };
 
   constructor(props) {
@@ -139,6 +151,7 @@ export default class Info extends React.Component<any, any> {
     const relaxProps = this.props.relaxProps;
     return (
       <div>
+        {/* Basic information */}
         <div
           style={{
             fontSize: 16,
@@ -149,6 +162,7 @@ export default class Info extends React.Component<any, any> {
         >
           <FormattedMessage id="product.basicInformation" />
         </div>
+        {/* BInfo Form */}
         <div>
           <WrapperForm
             ref={(form) => (this['_form'] = form)}
@@ -232,17 +246,17 @@ class GoodsForm extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter } = this.props.relaxProps;
+    const { goods, images, sourceGoodCateList, cateList, getGoodsCate, taggingTotal, modalVisible, clickImg, removeImg, brandList, removeVideo, video, goodsTaggingRelList, productFilter, purchaseTypeList, frequencyList } = this.props.relaxProps;
     const storeCateIds = this.state.storeCateIds;
     let parentIds = sourceGoodCateList ? sourceGoodCateList.toJS().map((x) => x.cateParentId) : [];
     const storeCateValues = [];
-
-    storeCateIds &&
+    if (storeCateIds) {
       storeCateIds.toJS().map((id) => {
         if (!parentIds.includes(id)) {
           storeCateValues.push({ value: id });
         }
       });
+    }
     const taggingRelListValues =
       (goodsTaggingRelList &&
         goodsTaggingRelList.map((x) => {
@@ -276,17 +290,32 @@ class GoodsForm extends React.Component<any, any> {
         }
       });
     }
+
+    let getFrequencyList = []
+    if (frequencyList && frequencyList.autoShip) {
+      if (goods.get('promotions') == "autoship" || !goods.get('promotions')) {
+        getFrequencyList = [...frequencyList.autoShip.dayList, ...frequencyList.autoShip.weekList, ...frequencyList.autoShip.monthList]
+      }else if (goods.get('promotions') == "club"){
+        getFrequencyList = [...frequencyList.club.dayClubList, ...frequencyList.club.weekClubList, ...frequencyList.club.monthClubList]
+      }else if (goods.get('promotions') == 'individual'){
+        getFrequencyList = [...frequencyList.individual.dayIndividualList, ...frequencyList.individual.weekIndividualList, ...frequencyList.individual.monthIndividualList]
+      }
+    }
+    //myvetreco禁止编辑
+    const disableFields = Const.SITE_NAME === 'MYVETRECO';
     return (
       <Form>
+        {/* The first line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* SPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.SPU" />}>
               {getFieldDecorator('goodsNo', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please fill in the SPU code'
+                    message: RCi18n({id:'Product.PleaseFill'})
                   },
                   {
                     min: 1,
@@ -301,17 +330,18 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsNo'),
                 initialValue: goods.get('goodsNo')
-              })(<Input />)}
+              })(<Input disabled={disableFields} />)}
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* InternalSPU */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.InternalSPU" />}>
               {getFieldDecorator('internalGoodsNo', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please fill in the SPU code'
+                    message: RCi18n({id:'Product.PleaseFill'})
                   },
                   {
                     min: 1,
@@ -330,15 +360,17 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* The second line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productName */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productName" />}>
               {getFieldDecorator('goodsName', {
                 rules: [
                   {
                     required: true,
                     whitespace: true,
-                    message: 'Please input product name'
+                    message: RCi18n({id:'Product.PleaseInputProductName'})
                   },
                   {
                     min: 1,
@@ -353,22 +385,23 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsName'),
                 initialValue: goods.get('goodsName')
-              })(<Input placeholder="Please input product name，no more than 225 words" />)}
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.morethanwords'})}/>)}
             </FormItem>
           </Col>
           <Col span={8}>
+            {/* onOrOffShelves */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.onOrOffShelves" />}>
               {getFieldDecorator('addedFlag', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select the status'
+                    message: RCi18n({id:'Product.PleaseSelect'})
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'addedFlag'),
-                initialValue: goods.get('addedFlag')
+                initialValue: goods.get('addedFlag') != 0? 1:0
               })(
-                <RadioGroup>
+                <RadioGroup disabled={disableFields}>
                   <Radio value={1}>
                     <FormattedMessage id="product.onShelves" />
                   </Radio>
@@ -385,58 +418,107 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+        {/* The third line */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* subscriptionStatus */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.subscriptionStatus" />}>
               {getFieldDecorator('subscriptionStatus', {
                 rules: [],
                 onChange: this._editGoods.bind(this, 'subscriptionStatus'),
                 // initialValue: 'Y'
-                initialValue: goods.get('subscriptionStatus') === 0 || goods.get('subscriptionStatus') == null ? 'N' : 'Y'
+                initialValue: goods.get('subscriptionStatus') || goods.get('subscriptionStatus') === 0 ? goods.get('subscriptionStatus') : 1
               })(
-                <Select getPopupContainer={() => document.getElementById('page-content')} placeholder="please select status">
-                  <Option value="1">Y</Option>
-                  <Option value="0">N</Option>
+                <Select disabled={disableFields} getPopupContainer={() => document.getElementById('page-content')} placeholder={RCi18n({id:'Product.selectstatus'})}>
+                  <Option value={1}><FormattedMessage id="Product.Y"/></Option>
+                  <Option value={0}><FormattedMessage id="Product.N"/></Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product tagging">
-              {getFieldDecorator('tagging', {
-                rules: [
-                  {
-                    required: false,
-                    message: 'Please select product tagging'
-                  }
-                ],
-                initialValue: taggingRelListValues
+            {/* subscriptionType */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.subscriptionType'})}>
+              {getFieldDecorator('promotions', {
+                rules: [],
+                onChange: this._editGoods.bind(this, 'promotions'),
+                // initialValue: 'Y'
+                initialValue: goods.get('promotions')
               })(
-                <TreeSelect
-                  getPopupContainer={() => document.getElementById('page-content')}
-                  treeCheckable={true}
-                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
-                  treeCheckStrictly={true}
-                  placeholder="Please select product tagging"
-                  notFoundContent="No classification"
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                  showSearch={false}
-                  onChange={this.taggingChange}
-                >
-                  {this.loopTagging(taggingTotal)}
-                </TreeSelect>
+                <Select getPopupContainer={() => document.getElementById('page-content')}  placeholder={<FormattedMessage id="Product.selectType" />} disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields} >
+                  <Option value='autoship'><FormattedMessage id="Product.Auto ship" /></Option>
+                  <Option value='club'><FormattedMessage id="Product.Club" /></Option>
+                  <Option value='individual'><FormattedMessage id="Product.Individual" /></Option>
+                </Select>
               )}
             </FormItem>
           </Col>
         </Row>
+
+        {/*修改*/}
+        {/* The fourth row */}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Product category">
+            {/* defaultPurchaseType */}
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultPurchaseType" />}>
+              {getFieldDecorator('defaultPurchaseType', {
+                // rules: [],
+                onChange: this._editGoods.bind(this, 'defaultPurchaseType'),
+                // initialValue: 'Y'
+                initialValue: goods.get('defaultPurchaseType')
+              })(
+                <Select
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  // value={goods.get('defaultPurchaseType')}
+                  placeholder={RCi18n({id:'Product.DefaultPurchaseType'})}
+                  disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields}>
+                  {purchaseTypeList&&purchaseTypeList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            {/* defaultFrequency */}
+            <FormItem {...formItemLayout} label={<FormattedMessage id="product.defaultFrequency" />}>
+              {getFieldDecorator('defaultFrequencyId', {
+                // rules: [
+                //   {
+                //     required: false,
+                //     message: 'Please select product tagging'
+                //   }
+                // ],
+                initialValue: goods.get('defaultFrequencyId'),
+                onChange: this._editGoods.bind(this, 'defaultFrequencyId')
+              })(
+                <Select
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  // value={goods.get('defaultFrequencyId')}
+                  placeholder={RCi18n({id:'Product.DefaultFrequency'})}
+                  disabled={Number(goods.get('subscriptionStatus')) === 0 || disableFields}>
+                  {getFrequencyList&&getFrequencyList.map((option) => (
+                    <Option value={option.id} key={option.id}>
+                      {option.name}
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        {/* 5 */}
+        <Row type="flex" justify="start">
+          <Col span={8}>
+            {/* Productcategory */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Productcategory'})}>
               {getFieldDecorator('cateId', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select platform product category'
+                    message: RCi18n({id:'Product.Productcategory'})
                   },
                   {
                     validator: (_rule, value, callback) => {
@@ -452,7 +534,7 @@ class GoodsForm extends React.Component<any, any> {
                       });
 
                       if (overLen) {
-                        callback(new Error('Please select the last category'));
+                        callback(new Error(RCi18n({id:'Product.selectthelastcategory'})));
                         return;
                       }
 
@@ -465,25 +547,27 @@ class GoodsForm extends React.Component<any, any> {
               })(
                 <TreeSelect
                   getPopupContainer={() => document.getElementById('page-content')}
-                  placeholder="Please select product category"
+                  placeholder={RCi18n({id:'Product.productCategory'})}
                   notFoundContent="No classification"
-                  // disabled={cateDisabled}
+                  disabled={disableFields}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                 >
                   {loop(cateList)}
                 </TreeSelect>
               )}
+             
             </FormItem>
           </Col>
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Sales category">
+            {/* SalesCategory */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.SalesCategory'})}>
               {getFieldDecorator('storeCateIds', {
                 rules: [
-                  {
-                    required: true,
-                    message: 'Please select sales category'
-                  }
+                  // {
+                  //   required: true,
+                  //   message: 'Please select sales category'
+                  // }
                 ],
 
                 initialValue: storeCateValues
@@ -495,12 +579,13 @@ class GoodsForm extends React.Component<any, any> {
                   treeCheckStrictly={true}
                   //treeData ={getGoodsCate}
                   // showCheckedStrategy = {SHOW_PARENT}
-                  placeholder="Please select sales category"
-                  notFoundContent="No sales category"
+                  placeholder={RCi18n({id:'Product.salesCategory'})}
+                  notFoundContent={RCi18n({id:'Product.Nosalescategory'})}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   showSearch={false}
                   onChange={this.storeCateChange}
                   treeDefaultExpandAll
+                  disabled={disableFields}
                 >
                   {this.generateStoreCateTree(getGoodsCate)}
                 </TreeSelect>
@@ -517,8 +602,10 @@ class GoodsForm extends React.Component<any, any> {
             </a>
           </Col> */}
         </Row>
+        {/* 6 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* brand */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.brand" />}>
               {getFieldDecorator(
                 'brandId',
@@ -532,7 +619,36 @@ class GoodsForm extends React.Component<any, any> {
                       rules: [],
                       onChange: this._editGoods.bind(this, 'brandId')
                     }
-              )(this._getBrandSelect())}
+              )(this._getBrandSelect(disableFields))}
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            {/* Producttagging */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Producttagging'})}>
+              {getFieldDecorator('tagging', {
+                rules: [
+                  {
+                    required: false,
+                    message: RCi18n({id:'Product.PleaseSelectProductTagging'})
+                  }
+                ],
+                initialValue: taggingRelListValues
+              })(
+                <TreeSelect
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  treeCheckable={true}
+                  showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                  treeCheckStrictly={true}
+                  placeholder={RCi18n({id:'Product.PleaseSelectProductTagging'})}
+                  notFoundContent="No classification"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  showSearch={false}
+                  onChange={this.taggingChange}
+                  disabled={disableFields}
+                >
+                  {this.loopTagging(taggingTotal)}
+                </TreeSelect>
+              )}
             </FormItem>
           </Col>
           {/*<Col span={8}>
@@ -552,8 +668,47 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>*/}
         </Row>
+        {/* 7 */}
         <Row>
           <Col span={16}>
+            {/* Productcardintro */}
+            <FormItem
+              // {...formItemLayout}
+              labelCol={{
+                span: 2,
+                xs: { span: 24 },
+                sm: { span: 6 }
+              }}
+              wrapperCol={{
+                span: 24,
+                xs: { span: 24 },
+                sm: { span: 18 }
+              }}
+              label={RCi18n({id:'Product.Productcardintro'})}
+            >
+              {getFieldDecorator('goodsNewSubtitle', {
+                rules: [
+                  {
+                    min: 1,
+                    max: 5000,
+                    message: '1-5000 characters'
+                  },
+                  {
+                    validator: (rule, value, callback) => {
+                      QMMethod.validatorEmoji(rule, value, callback, 'Product card intro.');
+                    }
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'goodsNewSubtitle'),
+                initialValue: goods.get('goodsNewSubtitle')
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.itemcardintro'})} />)}
+            </FormItem>
+          </Col>
+        </Row>
+        {/* 8 */}
+        <Row>
+          <Col span={16}>
+            {/* productSubtitle */}
             <FormItem
               // {...formItemLayout}
               labelCol={{
@@ -572,8 +727,8 @@ class GoodsForm extends React.Component<any, any> {
                 rules: [
                   {
                     min: 1,
-                    max: 225,
-                    message: '1-225 characters'
+                    max: 5000,
+                    message: '1-5000 characters'
                   },
                   {
                     validator: (rule, value, callback) => {
@@ -583,7 +738,7 @@ class GoodsForm extends React.Component<any, any> {
                 ],
                 onChange: this._editGoods.bind(this, 'goodsSubtitle'),
                 initialValue: goods.get('goodsSubtitle')
-              })(<Input placeholder="Please input the item subtitle, no more than 225 words" />)}
+              })(<Input disabled={disableFields} placeholder={RCi18n({id:'Product.itemcardintro'})}/>)}
             </FormItem>
           </Col>
         </Row>
@@ -617,52 +772,52 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>*/}
-
+        {/* 9 */}
         <Row type="flex" justify="start">
           <Col span={8}>
-            <FormItem {...formItemLayout} label="Sales status">
+            {/* Salesstatus */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Salesstatus'})}>
               {getFieldDecorator('saleableFlag', {
                 rules: [
                   {
                     required: true,
-                    message: 'Please select the status'
+                    message: RCi18n({id:'Product.PleaseSelect'})
                   }
                 ],
                 onChange: this._editGoods.bind(this, 'saleableFlag'),
                 initialValue: goods.get('saleableFlag')
               })(
-                <RadioGroup>
+                <RadioGroup disabled={disableFields}>
                   <span>
-                    <Radio value={1}>Saleable</Radio>
+                    <Radio value={1}><FormattedMessage id="Product.Saleable" /></Radio>
                   </span>
                   <span>
-                    <Radio value={0}>Not–Saleable</Radio>
+                    <Radio value={0}><FormattedMessage id="Product.Not–Saleable" /></Radio>
                   </span>
                 </RadioGroup>
               )}
             </FormItem>
           </Col>
-          {goods.get('saleableFlag') == 0 ? (
-            <Col span={12}>
-              <FormItem {...formItemLayout} label="Display on shop">
-                {getFieldDecorator('displayFlag', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please select the status'
-                    }
-                  ],
-                  onChange: this._editGoods.bind(this, 'displayFlag'),
-                  initialValue: goods.get('displayFlag')
-                })(
-                  <RadioGroup>
-                    <Radio value={1}>Yes</Radio>
-                    <Radio value={0}>No</Radio>
-                  </RadioGroup>
-                )}
-              </FormItem>
-            </Col>
-          ) : null}
+          <Col span={12}>
+            {/* Displayonshop */}
+            <FormItem {...formItemLayout} label={RCi18n({id:'Product.Displayonshop'})}>
+              {getFieldDecorator('displayFlag', {
+                rules: [
+                  {
+                    required: true,
+                    message: RCi18n({id:'Product.Displayonshop'})
+                  }
+                ],
+                onChange: this._editGoods.bind(this, 'displayFlag'),
+                initialValue: goods.get('displayFlag')
+              })(
+                <RadioGroup disabled={disableFields}>
+                  <Radio value={1}><FormattedMessage id="Product.Yes" /></Radio>
+                  <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
+                </RadioGroup>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         {/* <Row>
           <Col span={8}>
@@ -692,8 +847,10 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row> */}
+        {/* 10 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productImage */}
             <FormItem
               {...formItemLayout}
               label={
@@ -703,17 +860,19 @@ class GoodsForm extends React.Component<any, any> {
               }
             >
               <div style={{ width: 550 }}>
-                <ImageLibraryUpload images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
+                <ImageLibraryUpload disabled={disableFields} images={images} modalVisible={modalVisible} clickImg={clickImg} removeImg={removeImg} imgType={0} imgCount={10} skuId="" />
               </div>
               <Tips title={<FormattedMessage id="product.recommendedSizeImg" />} />
             </FormItem>
           </Col>
         </Row>
+        {/* 11 */}
         <Row type="flex" justify="start">
           <Col span={8}>
+            {/* productVideo */}
             <FormItem {...formItemLayout} label={<FormattedMessage id="product.productVideo" />}>
               <div style={{ width: 550 }}>
-                <VideoLibraryUpload modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
+                <VideoLibraryUpload disabled={disableFields} modalVisible={modalVisible} video={video} removeVideo={removeVideo} imgType={3} skuId="" />
               </div>
               <Tips title={<FormattedMessage id="product.recommendedSizeVideo" />} />
             </FormItem>
@@ -727,44 +886,120 @@ class GoodsForm extends React.Component<any, any> {
    * 选中平台类目时，实时显示对应类目下的所有属性信息
    */
   _onChange = (value) => {
-    const { showGoodsPropDetail, changeStoreCategory } = this.props.relaxProps;
+    const { showGoodsPropDetail, changeStoreCategory, changeDescriptionTab } = this.props.relaxProps;
     showGoodsPropDetail(value);
     changeStoreCategory(value);
+    changeDescriptionTab(value);
   };
   /**
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
-    const { editGoods, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm } = this.props.relaxProps;
+    const { editGoods, editGoodsItem, showBrandModal, showCateModal, checkFlag, enterpriseFlag, flashsaleGoods, updateGoodsForm, goodsList,goodsSpecs,updateSpecValues } = this.props.relaxProps;
     const { setFieldsValue } = this.props.form;
-
-    // if (key === 'saleableFlag') {
-    //   if (e.target.value == 0) {
-    //     this.setState({
-    //       saleableType: true
-    //     });
-    //   } else {
-    //     this.setState({
-    //       saleableType: false
-    //     });
-    //   }
-    // }
 
     if (e && e.target) {
       e = e.target.value;
     }
-    if (key === 'cateId') {
+    if (key === 'saleableFlag') {
+      if (e == 0) {
+        let goods = Map({
+          [key]: fromJS(0),
+        });
+        editGoods(goods);
+      } else {
+        let goods = Map({
+          [key]: fromJS(1),
+          displayFlag: fromJS(1)
+        });
+        editGoods(goods);
+      }
+    } else if (key === 'addedFlag') {
+      if (e == 0) {
+        this.setState({
+          saleableType: true
+        });
+        let goods = Map({
+          [key]: fromJS(0)
+        });
+        editGoods(goods);
+        // editGoodsItem(goods);
+        setFieldsValue({ saleableType: 0 });
+      } else {
+        this.setState({
+          saleableType: false
+        });
+        let goods = Map({
+          [key]: fromJS(1)
+        });
+        editGoods(goods);
+        // editGoodsItem(goods);
+        setFieldsValue({ saleableType: 1 });
+      }
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'addedFlag',e);
+      })
+    }
+
+    else if (key === 'displayFlag') {
+      if (e == 0) {
+        let goods = Map({
+          displayFlag: fromJS(0)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ displayFlag: 0 });
+      } else {
+        let goods = Map({
+          displayFlag: fromJS(1)
+        });
+        editGoods(goods);
+        editGoodsItem(goods);
+        setFieldsValue({ displayFlag: 0 });
+      }
+    }
+
+    else if (key === 'promotions') {
+      let goods = Map({
+        promotions: fromJS(e)
+      });
+      setFieldsValue({ promotions: e });
+      editGoods(goods);
+      goodsList.toJS()&&goodsList.toJS().map(item=>{
+        editGoodsItem(item.id,'promotions',e);
+      })
+      goodsSpecs.toJS() && goodsSpecs.toJS().forEach(item => {
+        let newItem = item.specValues.map(specValuesItem => {
+          return {
+            ...specValuesItem,
+            goodsPromotions: e
+          }
+        })
+        updateSpecValues(item.specId, 'specValues', fromJS(newItem))
+      })
+    }
+
+    else if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {
         showCateModal();
       }
-    } else if (key === 'brandId' && e === '0') {
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
+    }
+    else if (key === 'brandId' && e === '0') {
       showBrandModal();
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
     }
 
-    if (key === 'saleType' && e == 0) {
+    else if (key === 'saleType' && e == 0) {
       if (!flashsaleGoods.isEmpty()) {
-        message.error('This product is participating in a spike event, and the sales type cannot be changed!', 3, () => {
+        message.error(RCi18n({id:'Product.ThisProductIsParticipating'}), 3, () => {
           let goods = Map({
             [key]: fromJS(1)
           });
@@ -775,16 +1010,17 @@ class GoodsForm extends React.Component<any, any> {
         let message = '';
         //1:分销商品和企业购商品  2：企业购商品  3：分销商品  4：普通商品
         if (checkFlag == 'true') {
-          if (enterpriseFlag) {
+          message = RCi18n({id:'Product.suretoswitch'});
+          /*if (enterpriseFlag) {
             //分销商品和企业购商品
-            message = 'The product is participating in corporate purchasing and distribution activities, switching to wholesale mode, will exit corporate purchasing and distribution activities, sure to switch?';
+            message = RCi18n({id:'Product.suretoswitch'});
           } else {
             //分销商品
-            message = 'The product is participating in the distribution activity, switch to wholesale mode, will withdraw from the distribution activity, sure to switch?';
-          }
+            message = RCi18n({id:'Product.suretoswitch'});
+          }*/
         } else {
           if (enterpriseFlag) {
-            message = 'The product is participating in a corporate purchase activity and switched to the wholesale mode. Will it exit the corporate purchase activity? Are you sure you want to switch?';
+            message = RCi18n({id:'Product.suretoswitch'});
           }
         }
         if (message != '') {
@@ -804,8 +1040,8 @@ class GoodsForm extends React.Component<any, any> {
               editGoods(goods);
               setFieldsValue({ saleType: 1 });
             },
-            okText: 'OK',
-            cancelText: 'Cancel'
+            okText:RCi18n({id:'Product.OK'}),
+            cancelText: RCi18n({id:'Product.Cancel'})
           });
         } else {
           let goods = Map({
@@ -814,7 +1050,32 @@ class GoodsForm extends React.Component<any, any> {
           editGoods(goods);
         }
       }
-    } else {
+    }
+
+    else if (key === 'subscriptionStatus') {
+      if( e == 0) {
+        goodsList.toJS()&&goodsList.toJS().map(item=>{
+          editGoodsItem(item.id,'subscriptionStatus',0);
+        })
+      }else {
+        goodsList.toJS()&&goodsList.toJS().map(item=>{
+          editGoodsItem(item.id,'subscriptionStatus',1);
+        })
+      }
+      let goods = Map({
+        [key]: fromJS(e)
+      });
+      editGoods(goods);
+      this.props.form.setFieldsValue({
+        defaultPurchaseType: null
+      });
+      this.props.form.setFieldsValue({
+        defaultFrequencyId: null
+      });
+
+    }
+
+    else {
       let goods = Map({
         [key]: fromJS(e)
       });
@@ -902,7 +1163,7 @@ class GoodsForm extends React.Component<any, any> {
 
     let productFilter = [];
 
-    selectChildren.map((child) => {
+    selectChildren.forEach((child) => {
       productFilter.push({
         filterId: child.parentId,
         filterValueId: child.value
@@ -919,15 +1180,16 @@ class GoodsForm extends React.Component<any, any> {
   /**
    * 获取品牌下拉框
    */
-  _getBrandSelect = () => {
+  _getBrandSelect = (disabled: boolean) => {
     const { brandList } = this.props.relaxProps;
     return (
       <Select
         showSearch
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="please select brand"
+        placeholder={RCi18n({id:'Product.pleaseSelectBrand'})}
         notFoundContent="No brand"
         allowClear={true}
+        disabled={disabled}
         optionFilterProp="children"
         filterOption={(input, option: any) => {
           return typeof option.props.children == 'string' ? option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0 : true;
@@ -954,11 +1216,11 @@ class GoodsForm extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('File size cannot exceed 2M');
+        message.error(RCi18n({id:'Product.exceed2M'}));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error(RCi18n({id:'Product.FileFormatError'}));
       return false;
     }
   };
@@ -968,6 +1230,7 @@ class GoodsForm extends React.Component<any, any> {
    * @param storeCateList
    */
   generateStoreCateTree = (storeCateList) => {
+    const { sourceStoreCateList } = this.props.relaxProps;
     return (
       storeCateList &&
       storeCateList.map((item) => {

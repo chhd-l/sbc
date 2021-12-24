@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
 import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
+import { Const } from 'qmkit';
 
 export default class ListView extends React.Component<any, any> {
   constructor(props) {
@@ -52,7 +53,7 @@ export default class ListView extends React.Component<any, any> {
       .getSubscriptionList(params)
       .then((data) => {
         let { res } = data;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           let pagination = {
             current: res.context.currentPage + 1,
             pageSize: 10,
@@ -69,17 +70,15 @@ export default class ListView extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
       });
   };
-  onChecked = (index, checked) => {};
+  onChecked = (index, checked) => { };
 
   goodsSum = (array) => {
     let sum = 0;
@@ -96,21 +95,44 @@ export default class ListView extends React.Component<any, any> {
       .cancelSubscription({ subscribeId: id })
       .then((data) => {
         const { res } = data;
-        if (res.code === 'K-000000') {
-          message.success('Operate successfully');
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(<FormattedMessage id="Subscription.OperateSuccessfully" />);
           this.init();
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+      });
+  };
+
+  modifySubStatus = (id: string, status: string) => {
+    this.setState({ loading: true });
+    const handler = status === '1' ? webapi.pauseSubscription : webapi.restartSubscription;
+    handler(id)
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          const { dataList } = this.state;
+          dataList.forEach((item) => {
+            if (item.subscribeId === id) {
+              item.subscribeStatus = status;
+            }
+          });
+          this.setState({
+            loading: false,
+            dataList: dataList
+          });
+        } else {
+          this.setState({ loading: false });
+        }
+      })
+      .catch(() => {
+        this.setState({ loading: false });
       });
   };
 
@@ -140,11 +162,20 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th> */}
-                      <th style={{ width: '15%' }}>Product</th>
-                      <th style={{ width: '15%' }}>Product name</th>
-                      <th style={{ width: '10%' }}>Subscription status</th>
+                      <th style={{ width: '15%' }}>
+                        <FormattedMessage id="Subscription.Product" />
+                      </th>
+                      <th style={{ width: '15%' }}>
+                        <FormattedMessage id="Subscription.ProductName" />
+                      </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="subscription.consumerName" />
+                        <FormattedMessage id="Subscription.SubscriptionStatus" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Subscription.consumerName" />
+                      </th>
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Order.subscriptionType" />
                       </th>
                       {/* <th style={{ width: '10%' }}>
                         <FormattedMessage id="subscription.receiver" />
@@ -156,7 +187,7 @@ export default class ListView extends React.Component<any, any> {
                         <FormattedMessage id="subscription.quantity" />
                       </th> */}
                       <th style={{ width: '15%' }}>
-                        <FormattedMessage id="subscription.operation" />
+                        <FormattedMessage id="Subscription.Operation" />
                       </th>
                     </tr>
                   </thead>
@@ -167,7 +198,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Subscription.noData" />
                   </span>
                 </div>
               ) : null}
@@ -192,7 +223,7 @@ export default class ListView extends React.Component<any, any> {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -225,12 +256,17 @@ export default class ListView extends React.Component<any, any> {
                           />
                         </span> */}
 
-                        <div style={{ width: 310, display: 'inline-block' }}>
+                        <div style={{ width: 310, display: 'inline-block' }} className="sub_list_subId">
                           <span style={{ marginLeft: 20, color: '#000' }}>{v.subscribeId} </span>
+                          {v?.subscribeSource === "SUPPLIER" ? (
+                            <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                              <FormattedMessage id="Order.goodwillOrder" />
+                            </span>
+                          ) : null}
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
+                          <FormattedMessage id="Subscription.subscriptionDate" />:{v.createTime ? moment(new Date(v.createTime.replace(/ /g, 'T'))).format('YYYY-MM-DD HH:mm:ss') : ''}
                         </span>
                       </div>
                     </td>
@@ -255,8 +291,8 @@ export default class ListView extends React.Component<any, any> {
                               style={styles.imgFourth}
                             />
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.goodsInfo.size} <FormattedMessage id="piece" />
+                              <FormattedMessage id="Subscription.total" />
+                              {v.goodsInfo.size} <FormattedMessage id="Subscription.piece" />
                             </div>
                           </div>
                         ) : null
@@ -265,15 +301,20 @@ export default class ListView extends React.Component<any, any> {
                     <td style={{ width: '15%', paddingLeft: 20, minWidth: 150 }}>
                       {v.goodsInfo &&
                         v.goodsInfo.map((item, k) => (
-                          <p key={k} style={styles.ellipsisName} title={item.goodsName}>
-                            {item.goodsName}
+                          <p key={k} style={styles.ellipsisName} title={v.subscriptionType === 'Individualization' ? 'Your pet\'s personalized subscription' : item.goodsName}>
+                            {v.subscriptionType === 'Individualization' ? 'Your pet\'s personalized subscription' : item.goodsName}
                           </p>
                         ))}
                     </td>
                     {/*subscription status*/}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? 'Active' : 'Inactive'}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : v.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />}</td>
                     {/* consumerName */}
-                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.customerName ? v.customerName : ''}</td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>
+                      <p style={styles.ellipsisName100} title={v.customerName ? v.customerName : ''}>
+                        {v.customerName ? v.customerName : ''}
+                      </p>
+                    </td>
+                    <td style={{ width: '10%', paddingLeft: 20 }}>{v.subscriptionType ? v.subscriptionType.replace('_', ' & ') : ''}</td>
                     {/* Recipient */}
                     {/* <td style={{ width: '10%', paddingLeft: 20 }}>
                       {v.consignee ? v.consignee.consigneeName : ''}
@@ -288,26 +329,49 @@ export default class ListView extends React.Component<any, any> {
                     </td> */}
                     {/*Operation*/}
                     <td style={{ width: '15%' }} className="operation-td">
-                      <Tooltip placement="top" title="Details">
+                      <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail" />}>
                         <Button type="link" style={{ padding: '0 5px' }}>
                           <Link to={'/subscription-detail/' + v.subscribeId} className="iconfont iconDetails"></Link>
                         </Button>
                       </Tooltip>
+
+                      {/* Individualization类型的订阅商品不展示编辑按钮 */}
                       {v.subscribeStatus === '0' ? (
-                        <Tooltip placement="top" title="Edit">
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Edit" />}>
                           <Button type="link" style={{ padding: '0 5px' }}>
                             <Link to={'/subscription-edit/' + v.subscribeId} className="iconfont iconEdit"></Link>
                           </Button>
                         </Tooltip>
                       ) : null}
+
                       {v.subscribeStatus === '0' ? (
-                        <Popconfirm placement="topRight" title="Are you sure cancel the subscription?" onConfirm={() => this.cancelAll(v.subscribeId)} okText="Confirm" cancelText="Cancel">
-                          <Tooltip placement="top" title="Cancel all">
+                        <Popconfirm
+                          placement="topRight"
+                          title={<FormattedMessage id="Subscription.AreYouSureCancel" />}
+                          onConfirm={() => this.cancelAll(v.subscribeId)}
+                          okText={<FormattedMessage id="Subscription.Confirm" />}
+                          cancelText={<FormattedMessage id="Subscription.Cancel" />}
+                        >
+                          <Tooltip placement="top" title={<FormattedMessage id="Subscription.CancelAll" />}>
                             <a type="link" style={{ padding: '0 5px' }} className="iconfont iconbtn-cancelall">
                               {/*Cancel all*/}
                             </a>
                           </Tooltip>
                         </Popconfirm>
+                      ) : null}
+                      {v.subscribeStatus === '0' ? (
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Pause" />}>
+                          <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '1')}>
+                            <i className="iconfont iconbtn-pause"></i>
+                          </Button>
+                        </Tooltip>
+                      ) : null}
+                      {v.subscribeStatus === '1' ? (
+                        <Tooltip placement="top" title={<FormattedMessage id="Subscription.Restart" />}>
+                          <Button type="link" style={{ padding: '0 5px' }} onClick={() => this.modifySubStatus(v.subscribeId, '0')}>
+                            <i className="iconfont iconbtn-open"></i>
+                          </Button>
+                        </Tooltip>
                       ) : null}
                     </td>
                   </tr>
@@ -382,5 +446,20 @@ const styles = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: 150
+  },
+  ellipsisName100: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: 100
+  },
+  goodwillColor: {
+    fontSize: 12,
+    padding: '1px 3px',
+    display: 'inline-block',
+    marginLeft: 5,
+    border: ' 1px solid #2faf2b',
+    color: '#2faf2b',
+    borderRadius: 5
   }
 } as any;

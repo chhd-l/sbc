@@ -6,8 +6,8 @@ import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
 const defaultImg = require('../img/none.png');
 import Moment from 'moment';
 import { deleteGoodsById } from '../webapi';
-import { FormattedMessage } from 'react-intl';
-
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n } from 'qmkit';
 declare type IList = List<any>;
 import { message, Modal, Table, Tooltip } from 'antd';
 import AppStore from '../store';
@@ -24,14 +24,29 @@ const isShowFunction = (status) => {
   }
 };
 
+
+const goodsTypes = [
+  {label: <FormattedMessage id="Product.Regularproduct" />, value: 0},
+  {label: <FormattedMessage id="Product.Serviceproduct" />, value: 1},
+];
+
+const getEnum = (value, arr) => {
+  const item = arr.find(item => {
+    return item.value == value
+  })
+
+  return item?.label || <FormattedMessage id="Product.Regularproduct" />
+}
+
 @withRouter
 @Relax
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class CustomerList extends React.Component<any, any> {
+class CustomerList extends React.Component<any, any> {
   store: AppStore;
 
   props: {
     history?: any;
+    intl?:any;
     relaxProps?: {
       loading: boolean;
       dataList: IList;
@@ -61,9 +76,11 @@ export default class CustomerList extends React.Component<any, any> {
       evaluateId: evaluateId
     };
     const { evaluateDelete } = this.props.relaxProps;
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.deleteThisEvaluation'});
     confirm({
-      title: 'Prompt',
-      content: 'Are you sure you want to delete this evaluation?',
+      title: title,
+      content: content,
       onOk() {
         evaluateDelete(params);
       }
@@ -71,19 +88,11 @@ export default class CustomerList extends React.Component<any, any> {
   }
 
   render() {
-    const {
-      loading,
-      dataList,
-      pageSize,
-      total,
-      currentPage,
-      init,
-      goodsEvaluateDetail
-    } = this.props.relaxProps;
+    const { loading, dataList, pageSize, total, currentPage, init, goodsEvaluateDetail } = this.props.relaxProps;
 
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         className="resetTable"
         rowKey="evaluateId"
         pagination={{
@@ -97,7 +106,7 @@ export default class CustomerList extends React.Component<any, any> {
         dataSource={dataList.toJS()}
       >
         <Column
-          title={<FormattedMessage id="productName" />}
+          title={<FormattedMessage id="Product.productName" />}
           key="goodsInfoName"
           dataIndex="goodsInfoName"
           width={150}
@@ -105,28 +114,15 @@ export default class CustomerList extends React.Component<any, any> {
             return (
               <div style={styles.goodsName}>
                 {/*/!*商品图片*!/*/}
-                {rowData.goodsImg ? (
-                  <img
-                    src={rowData.goodsImg ? rowData.goodsImg : defaultImg}
-                    style={styles.imgItem}
-                  />
-                ) : (
-                  <img src={defaultImg} style={styles.imgItem} />
-                )}
+                {rowData.goodsImg ? <img src={rowData.goodsImg ? rowData.goodsImg : defaultImg} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />}
                 {goodsInfoName ? goodsInfoName : '-'}
               </div>
             );
           }}
         />
+        <Column title={<FormattedMessage id="Product.orderNumber" />} key="orderNo" width={170} dataIndex="orderNo" render={(orderNo) => (orderNo ? orderNo : '-')} />
         <Column
-          title={<FormattedMessage id="orderNumber" />}
-          key="orderNo"
-          width={170}
-          dataIndex="orderNo"
-          render={(orderNo) => (orderNo ? orderNo : '-')}
-        />
-        <Column
-          title={<FormattedMessage id="consumerName" />}
+          title={<FormattedMessage id="Product.consumerName" />}
           key="customerName,"
           dataIndex="customerName"
           width={220}
@@ -140,15 +136,8 @@ export default class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        <Column
-          title={<FormattedMessage id="productRatings" />}
-          key="evaluateScore"
-          dataIndex="evaluateScore"
-          width={150}
-          render={(evaluateScore) =>
-            evaluateScore ? evaluateScore + '  Star' : '-'
-          }
-        />
+        <Column title={<FormattedMessage id="Product.PriceTableColumnType" />} key="goodsTypeRelateEvaluate" dataIndex="goodsTypeRelateEvaluate" width={150} render={(goodsTypeRelateEvaluate) => getEnum(goodsTypeRelateEvaluate, goodsTypes)} />
+        <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}
         {/*  key="evaluateContent"*/}
@@ -202,28 +191,11 @@ export default class CustomerList extends React.Component<any, any> {
         {/*    );*/}
         {/*  }}*/}
         {/*/>*/}
-        <Column
-          title={<FormattedMessage id="anonymousStatus" />}
-          key="isAnonymous"
-          dataIndex="isAnonymous"
-          render={(isAnonymous) =>
-            isAnonymous ? isShowFunction(isAnonymous) : 'No'
-          }
-        />
-        <Column
-          title={<FormattedMessage id="reviewTime" />}
-          key="evaluateTime"
-          dataIndex="evaluateTime"
-          width={102}
-          render={(evaluateTime) =>
-            evaluateTime
-              ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString()
-              : ''
-          }
-        />
+        <Column title={<FormattedMessage id="Product.anonymousStatus" />} key="isAnonymous" dataIndex="isAnonymous" render={(isAnonymous) => (isAnonymous ? isShowFunction(isAnonymous) : 'No')} />
+        <Column title={<FormattedMessage id="Product.reviewTime" />} key="evaluateTime" dataIndex="evaluateTime" width={102} render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
 
         <Column
-          title={<FormattedMessage id="operation" />}
+          title={<FormattedMessage id="Product.operation" />}
           key="evaluateId"
           dataIndex="evaluateId"
           className="operation-th"
@@ -231,28 +203,15 @@ export default class CustomerList extends React.Component<any, any> {
             return (
               <div className="operation-th">
                 <AuthWrapper functionName={'f_coupon_detail'}>
-                  <Tooltip placement="top" title="View">
-                    <span
-                      style={styles.see}
-                      onClick={() => goodsEvaluateDetail(evaluateId, true)}
-                    >
-                      <span
-                        className="icon iconfont iconView"
-                        style={{ fontSize: 20 }}
-                      ></span>
+                  <Tooltip placement="top" title={RCi18n({id:'Product.View'})}>
+                    <span style={styles.see} onClick={() => goodsEvaluateDetail(evaluateId, true)}>
+                      <span className="icon iconfont iconView" style={{ fontSize: 20 }}></span>
                       {/* <FormattedMessage id="view" /> */}
                     </span>
                   </Tooltip>
-                  <Tooltip placement="top" title="Delete">
-                    <span
-                      style={styles.see}
-                      onClick={() => this.deleteEvaluate(evaluateId)}
-                      title="Delete"
-                    >
-                      <span
-                        className="icon iconfont iconDelete"
-                        style={{ fontSize: 20 }}
-                      ></span>
+                  <Tooltip placement="top" title={RCi18n({id:'Product.delete'})}>
+                    <span style={styles.see} onClick={() => this.deleteEvaluate(evaluateId)} title="Delete">
+                      <span className="icon iconfont iconDelete" style={{ fontSize: 20 }}></span>
                       {/* <FormattedMessage id="delete" /> */}
                     </span>
                   </Tooltip>
@@ -275,6 +234,8 @@ export default class CustomerList extends React.Component<any, any> {
   // };
 }
 
+export default injectIntl(CustomerList);
+
 const styles = {
   imgItem: {
     width: 60,
@@ -283,7 +244,8 @@ const styles = {
     border: '1px solid #ddd',
     float: 'left',
     marginRight: 10,
-    background: '#fff'
+    background: '#fff',
+    borderRadius: 3
   },
   goodsName: {
     display: 'flex',

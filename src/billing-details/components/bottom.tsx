@@ -4,11 +4,12 @@ import { IMap } from 'typings/globalType';
 import { Relax } from 'plume2';
 
 import { history, noop } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 const confirm = Modal.confirm;
 @Relax
-export default class Bottom extends React.Component<any, any> {
+class Bottom extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       settlement: IMap;
       changeSettleStatus: Function;
@@ -40,17 +41,12 @@ export default class Bottom extends React.Component<any, any> {
 
         {settlement.get('settleStatus') == 0 && (
           <div style={{ marginTop: 20 }}>
-            <Button
-              type="primary"
-              onClick={() =>
-                this._handleSettleStatus(settlement.get('settleId'), 1)
-              }
-            >
-              Set as settled
+            <Button type="primary" onClick={() => this._handleSettleStatus(settlement.get('settleId'), 1)}>
+              <FormattedMessage id="Finance.SetAsSettled" />
             </Button>
             {/* <Button style={{marginLeft: 10}} type="primary" onClick={() => this._handleSettleStatus(settlement.get('settleId'), 2)}>暂不处理</Button>*/}
             <Button style={{ marginLeft: 10 }} onClick={() => history.goBack()}>
-              back
+              <FormattedMessage id="Finance.back" />
             </Button>
           </div>
         )}
@@ -73,12 +69,10 @@ export default class Bottom extends React.Component<any, any> {
 
   _handleSettleStatus = (settleId, status) => {
     const { changeSettleStatus } = this.props.relaxProps;
+    const content = status == 1 ? (window as any).RCi18n({id:'Finance.recordAsSettled'}) : (window as any).RCi18n({id:'Finance.beProcessedTemporarily'});
     confirm({
       title: 'Tips',
-      content:
-        status == 1
-          ? 'Are you sure you want to set this settlement record as settled? '
-          : ' are you sure you want to set the settlement record to not be processed temporarily?',
+      content: content,
       onOk() {
         changeSettleStatus([settleId], status);
         history.goBack();
@@ -86,3 +80,5 @@ export default class Bottom extends React.Component<any, any> {
     });
   };
 }
+
+export default injectIntl(Bottom);

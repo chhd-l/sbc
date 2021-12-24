@@ -1,27 +1,11 @@
 import React from 'react';
-import {
-  Form,
-  Input,
-  InputNumber,
-  Button,
-  Select,
-  message,
-  Table,
-  Row,
-  Col,
-  Radio,
-  Menu,
-  Card,
-  DatePicker,
-  Empty,
-  Spin,
-  Popconfirm
-} from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, DatePicker, Empty, Spin, Popconfirm, TreeSelect } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import { Const } from 'qmkit';
 
 const { SubMenu } = Menu;
 const FormItem = Form.Item;
@@ -29,6 +13,7 @@ const Option = Select.Option;
 const { TabPane } = Tabs;
 
 const { Column } = Table;
+const { TreeNode } = TreeSelect;
 
 const layout = {
   labelCol: { span: 8 },
@@ -46,10 +31,12 @@ class PetInfomation extends React.Component<any, any> {
         petsSex: '',
         petsBreed: '',
         petsSizeValueName: '',
-        sterilized: null,
+        sterilized: 0,
         birthOfPets: '',
-        customerPetsPropRelations: []
+        customerPetsPropRelations: [],
+        selectedBind: []
       },
+      taggingList: [],
       petList: [],
       petsType: [
         {
@@ -94,13 +81,21 @@ class PetInfomation extends React.Component<any, any> {
       dogBreed: [],
       currentBirthDay: '2020-01-01',
       currentPet: {},
-      loading: true
+      loading: true,
+      storeId: ''
     };
   }
   componentDidMount() {
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    if (storeId) {
+      this.setState({ storeId });
+    }
+
     this.petsByConsumer();
     this.querySysDictionary('dogBreed');
     this.querySysDictionary('catBreed');
+    this.getTaggingList();
   }
   handleChange = (value) => {};
   onOpenChange = (value) => {};
@@ -117,6 +112,7 @@ class PetInfomation extends React.Component<any, any> {
     this.props.form.validateFields((err) => {
       if (!err) {
         this.editPets();
+        this.bindTagging();
       }
     });
   };
@@ -124,7 +120,7 @@ class PetInfomation extends React.Component<any, any> {
   querySysDictionary = (type: String) => {
     let params = {
       delFlag: 0,
-      storeId: 123456858,
+      storeId: this.state.storeId,
       type: type
     };
     webapi
@@ -175,9 +171,16 @@ class PetInfomation extends React.Component<any, any> {
           let petList = res.context.context;
           if (petList.length > 0) {
             let currentPet = petList[0];
-            currentPet.customerPetsPropRelations = this.getSpecialNeeds(
-              currentPet.customerPetsPropRelations
-            );
+
+            let selectedBind = [];
+            if (currentPet.segmentList) {
+              for (let i = 0; i < currentPet.segmentList.length; i++) {
+                const element = currentPet.segmentList[i].id;
+                selectedBind.push(element);
+              }
+            }
+            currentPet.selectedBind = selectedBind;
+            currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
 
             if (currentPet.petsType === 'dog') {
               this.props.form.setFieldsValue({
@@ -185,9 +188,10 @@ class PetInfomation extends React.Component<any, any> {
                 petsName: currentPet.petsName,
                 petsSex: currentPet.petsSex,
                 petsBreed: currentPet.petsBreed,
-                sterilized: currentPet.sterilized,
+                sterilized: +currentPet.sterilized,
                 petsSizeValueName: currentPet.petsSizeValueName,
-                customerPetsPropRelations: currentPet.customerPetsPropRelations
+                customerPetsPropRelations: currentPet.customerPetsPropRelations,
+                selectedBind: currentPet.selectedBind
               });
             } else {
               this.props.form.setFieldsValue({
@@ -196,8 +200,9 @@ class PetInfomation extends React.Component<any, any> {
                 petsSex: currentPet.petsSex,
                 petsBreed: currentPet.petsBreed,
 
-                sterilized: currentPet.sterilized,
-                customerPetsPropRelations: currentPet.customerPetsPropRelations
+                sterilized: +currentPet.sterilized,
+                customerPetsPropRelations: currentPet.customerPetsPropRelations,
+                selectedBind: currentPet.segmentList
               });
             }
             this.setState({
@@ -254,16 +259,15 @@ class PetInfomation extends React.Component<any, any> {
       petsName: petForm.petsName,
       petsSex: petForm.petsSex,
       petsSizeValueId: '0',
-      petsSizeValueName:
-        petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
+      petsSizeValueName: petForm.petsType === 'dog' ? petForm.petsSizeValueName : '',
       petsType: petForm.petsType,
-      sterilized: petForm.sterilized,
-      storeId: 123456858
+      sterilized: +petForm.sterilized,
+      storeId: this.state.storeId
     };
     let params = {
       customerPets: pets,
       customerPetsPropRelations: customerPetsPropRelations,
-      storeId: 123456858,
+      storeId: this.state.storeId,
       userId: this.props.customerAccount
     };
     webapi
@@ -292,18 +296,25 @@ class PetInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           let currentPet = res.context.context;
-          currentPet.customerPetsPropRelations = this.getSpecialNeeds(
-            currentPet.customerPetsPropRelations
-          );
+          let selectedBind = [];
+          if (currentPet.segmentList) {
+            for (let i = 0; i < currentPet.segmentList.length; i++) {
+              const element = currentPet.segmentList[i].id;
+              selectedBind.push(element);
+            }
+          }
+          currentPet.selectedBind = selectedBind;
+          currentPet.customerPetsPropRelations = this.getSpecialNeeds(currentPet.customerPetsPropRelations);
           if (currentPet.petsType === 'dog') {
             this.props.form.setFieldsValue({
               petsType: currentPet.petsType,
               petsName: currentPet.petsName,
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
-              sterilized: currentPet.sterilized,
+              sterilized: +currentPet.sterilized,
               petsSizeValueName: currentPet.petsSizeValueName,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           } else {
             this.props.form.setFieldsValue({
@@ -312,8 +323,9 @@ class PetInfomation extends React.Component<any, any> {
               petsSex: currentPet.petsSex,
               petsBreed: currentPet.petsBreed,
 
-              sterilized: currentPet.sterilized,
-              customerPetsPropRelations: currentPet.customerPetsPropRelations
+              sterilized: +currentPet.sterilized,
+              customerPetsPropRelations: currentPet.customerPetsPropRelations,
+              selectedBind: currentPet.selectedBind
             });
           }
 
@@ -363,16 +375,66 @@ class PetInfomation extends React.Component<any, any> {
     // }
   };
 
+  loopTagging = (taggingTotalTree) => {
+    return (
+      taggingTotalTree &&
+      taggingTotalTree.map((item) => {
+        return <TreeNode key={item.id} value={item.id} title={item.name} />;
+      })
+    );
+  };
+  getTaggingList = () => {
+    let params = {
+      pageNum: 0,
+      pageSize: 1000,
+      segmentType: 1,
+      isPublished: 1
+    };
+    webapi
+      .getTaggingList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let taggingList = res.context.segmentList;
+          this.setState({
+            taggingList
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+  bindTagging = () => {
+    const { petForm } = this.state;
+    let params = {
+      relationId: petForm.petsId,
+      segmentType: 1,
+      segmentIdList: petForm.selectedBind
+    };
+    webapi
+      .bindTagging(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || 'Operation failure');
+      });
+  };
+
   render() {
-    const {
-      petsType,
-      petGender,
-      sizeArr,
-      customerPetsPropRelations,
-      catBreed,
-      dogBreed,
-      petForm
-    } = this.state;
+    const { petsType, petGender, sizeArr, customerPetsPropRelations, catBreed, dogBreed, petForm, taggingList } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -386,7 +448,7 @@ class PetInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <Col span={3}>
             <h3>All Pets( {this.state.petList.length} )</h3>
             <ul>
@@ -407,9 +469,7 @@ class PetInfomation extends React.Component<any, any> {
             </ul>
           </Col>
           <Col span={20}>
-            {this.state.petList.length === 0 ? (
-              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            ) : null}
+            {this.state.petList.length === 0 ? <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} /> : null}
             <Card
               title={this.state.title}
               style={{
@@ -424,7 +484,7 @@ class PetInfomation extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please selected Pet Category!'
+                            message: 'Please select Pet Category!'
                           }
                         ]
                       })(
@@ -475,9 +535,7 @@ class PetInfomation extends React.Component<any, any> {
                   <Col span={12}>
                     <FormItem label="Gender">
                       {getFieldDecorator('petsSex', {
-                        rules: [
-                          { required: true, message: 'Please selected Gender!' }
-                        ]
+                        rules: [{ required: true, message: 'Please select Gender!' }]
                       })(
                         <Select
                           onChange={(value) => {
@@ -506,7 +564,7 @@ class PetInfomation extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: 'Please selected Breed!'
+                              message: 'Please select Breed!'
                             }
                           ]
                         })(
@@ -538,7 +596,7 @@ class PetInfomation extends React.Component<any, any> {
                           rules: [
                             {
                               required: true,
-                              message: 'Please selected Breed!'
+                              message: 'Please select Breed!'
                             }
                           ]
                         })(
@@ -573,9 +631,7 @@ class PetInfomation extends React.Component<any, any> {
                     >
                       <FormItem label="Weight">
                         {getFieldDecorator('petsSizeValueName', {
-                          rules: [
-                            { required: true, message: 'Please input Weight!' }
-                          ],
+                          rules: [{ required: true, message: 'Please input Weight!' }],
                           initialValue: petForm.petsSizeValueName
                         })(
                           <Select
@@ -610,9 +666,17 @@ class PetInfomation extends React.Component<any, any> {
                           }
                         ]
                       })(
-                        <Radio.Group>
-                          <Radio value={0}>Yes</Radio>
-                          <Radio value={1}>No</Radio>
+                        <Radio.Group
+                          onChange={(e) => {
+                            let value = e.target.value;
+                            this.onFormChange({
+                              field: 'sterilized',
+                              value
+                            });
+                          }}
+                        >
+                          <Radio value={1}>Yes</Radio>
+                          <Radio value={0}>No</Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
@@ -626,10 +690,7 @@ class PetInfomation extends React.Component<any, any> {
                             message: 'Please input Birth Date!'
                           }
                         ],
-                        initialValue: moment(
-                          new Date(this.state.currentBirthDay),
-                          'DD/MM/YYYY'
-                        )
+                        initialValue: moment(new Date(this.state.currentBirthDay), 'DD/MM/YYYY')
                       })(
                         <DatePicker
                           style={{ width: '100%' }}
@@ -654,7 +715,7 @@ class PetInfomation extends React.Component<any, any> {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Selected Special needs!'
+                            message: 'Please Select Special needs!'
                           }
                         ]
                       })(
@@ -681,26 +742,50 @@ class PetInfomation extends React.Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+
+                  <Col span={12}>
+                    <FormItem {...formItemLayout} label="Pet owner tagging">
+                      {getFieldDecorator('selectedBind', {
+                        rules: [
+                          {
+                            required: false,
+                            message: 'Please select product tagging'
+                          }
+                        ]
+                      })(
+                        <TreeSelect
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          treeCheckable={true}
+                          showCheckedStrategy={(TreeSelect as any).SHOW_ALL}
+                          // treeCheckStrictly={true}
+                          placeholder="Please select product tagging"
+                          notFoundContent="No classification"
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          showSearch={false}
+                          onChange={(value) =>
+                            this.onFormChange({
+                              field: 'selectedBind',
+                              value
+                            })
+                          }
+                        >
+                          {this.loopTagging(taggingList)}
+                        </TreeSelect>
+                      )}
+                    </FormItem>
+                  </Col>
+
                   <Col span={24}>
                     <FormItem>
                       <Button type="primary" htmlType="submit">
                         Save
                       </Button>
 
-                      <Popconfirm
-                        placement="topRight"
-                        title="Are you sure to delete this item?"
-                        onConfirm={() => this.delPets(petForm.petsId)}
-                        okText="Confirm"
-                        cancelText="Cancel"
-                      >
+                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delPets(petForm.petsId)} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginLeft: '20px',
-                            display:
-                              this.props.customerType === 'Guest'
-                                ? 'none'
-                                : null
+                            display: this.props.customerType === 'Guest' ? 'none' : null
                           }}
                         >
                           <FormattedMessage id="delete" />

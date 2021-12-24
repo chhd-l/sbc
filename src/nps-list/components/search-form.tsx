@@ -112,13 +112,14 @@ export default class SearchForm extends React.Component<any, any> {
           </Col>
           <Col span="8" id="select-group-width">
             <FormItem>
-              <SelectGroup
+              <SelectGroup  
                 defaultValue=""
                 getPopupContainer={() =>
                   document.getElementById('page-content')
                 }
                 label={<FormattedMessage id="ratingWithComment" />}
-                // style={{ width: 80 }}
+                style={{ minWidth: 80 }}
+               
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -141,7 +142,7 @@ export default class SearchForm extends React.Component<any, any> {
                   document.getElementById('page-content')
                 }
                 label={<FormattedMessage id="rating" />}
-                // style={{ width: 80 }}
+
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -149,7 +150,7 @@ export default class SearchForm extends React.Component<any, any> {
                     value
                   });
                 }}
-                // value={form.get('goodsScore')}
+              // value={form.get('goodsScore')}
               >
                 <Option value="">All</Option>
                 <Option value="5">5 star</Option>
@@ -205,7 +206,7 @@ export default class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="24">
+          <Col span="24" style={{ textAlign: 'center' }}>
             <FormItem>
               <Button
                 type="primary"

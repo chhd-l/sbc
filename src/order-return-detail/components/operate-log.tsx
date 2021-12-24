@@ -11,37 +11,38 @@ enum operatorDic {
   PLATFORM = 'Platform',
   CUSTOMER = 'Customer',
   THIRD = 'Third',
-  SUPPLIER = 'Supplier'
+  SUPPLIER = 'Supplier',
+  INTEGRATION = 'Integration'
 }
 
 const columns = [
   {
-    title: <FormattedMessage id="operatorType" />,
+    title: <FormattedMessage id="Order.OperatorType" />,
     dataIndex: 'operator',
     key: 'operator',
     render: (operator) => {
-      return operatorDic[operator.platform];
+      return operatorDic[operator.platform] || operator.platform;
     }
   },
   {
-    title: <FormattedMessage id="operator" />,
+    title: <FormattedMessage id="Order.Operator" />,
     dataIndex: 'operator',
     key: 'operatorName',
     render: (operator) => operator.name
   },
   {
-    title: <FormattedMessage id="time" />,
+    title: <FormattedMessage id="Order.Time" />,
     dataIndex: 'eventTime',
     key: 'eventTime',
     render: (t) => moment(t).format(Const.TIME_FORMAT)
   },
   {
-    title: <FormattedMessage id="operationCategory" />,
+    title: <FormattedMessage id="Order.OperationCategory" />,
     dataIndex: 'eventType',
     key: 'eventType'
   },
   {
-    title: <FormattedMessage id="operationLog" />,
+    title: <FormattedMessage id="Order.Operationlog" />,
     dataIndex: 'eventDetail',
     key: 'eventDetail',
     width: '50%'
@@ -90,18 +91,8 @@ export default class OperateLog extends React.Component<any, any> {
           }}
         >
           <Collapse>
-            <Panel
-              header={<FormattedMessage id="operationLog" />}
-              key="1"
-              style={customPanelStyle}
-            >
-              <Table
-                bordered
-                rowKey={() => Math.random().toString()}
-                columns={columns}
-                dataSource={logs}
-                pagination={false}
-              />
+            <Panel header={<FormattedMessage id="Order.Operationlog" />} key="1" style={customPanelStyle}>
+              <Table bordered rowKey={() => Math.random().toString()} columns={columns} dataSource={logs} pagination={false} />
             </Panel>
           </Collapse>
         </div>
@@ -112,7 +103,7 @@ export default class OperateLog extends React.Component<any, any> {
               history.back();
             }}
           >
-            Back
+            <FormattedMessage id="Order.Back"/>
           </Button>
         </div>
       </div>

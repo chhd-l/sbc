@@ -42,6 +42,7 @@ class SearchForm extends React.Component<any, any> {
       getGoodsCate: IList;
       sourceGoodCateList: IList;
     };
+    searchBackFun: Function
   };
 
   static relaxProps = {
@@ -160,14 +161,16 @@ class SearchForm extends React.Component<any, any> {
         <Row>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('likeGoodsName')(
+              {getFieldDecorator('likeGoodsName',{
+                initialValue: likeGoodsName
+              })(
                 <Input
                   addonBefore={
                     <p style={styles.label}>
-                      <FormattedMessage id="product.productName" />
+                      <FormattedMessage id="Product.ProductName" />
                     </p>
                   }
-                  value={likeGoodsName}
+                  // value={likeGoodsName}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
                     onFormFieldChange({
@@ -181,10 +184,12 @@ class SearchForm extends React.Component<any, any> {
           </Col>
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('likeGoodsNo')(
+              {getFieldDecorator('likeGoodsNo',{
+                initialValue: likeGoodsNo
+              })(
                 <Input
-                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="product.SKU" /> : <FormattedMessage id="product.SPU" />}</p>}
-                  value={likeGoodsNo}
+                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="Product.SKU" /> : <FormattedMessage id="Product.SPU" />}</p>}
+                  // value={likeGoodsNo}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
                     onFormFieldChange({
@@ -202,7 +207,11 @@ class SearchForm extends React.Component<any, any> {
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Product category</p>}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="Product.ProductCategory" />
+                    </p>
+                  }
                   /* defaultValue="全部"*/
                   // style={styles.wrapper}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -221,8 +230,13 @@ class SearchForm extends React.Component<any, any> {
               {getFieldDecorator('salesCategory')(
                 <TreeSelectGroup
                   allowClear
+                  className="tree-group"
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}>Sales category</p>}
+                  label={
+                    <p style={styles.label}>
+                      <FormattedMessage id="Product.SalesCategory" />
+                    </p>
+                  }
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                   onChange={(value) => {
@@ -237,17 +251,19 @@ class SearchForm extends React.Component<any, any> {
 
           <Col span={8}>
             <FormItem>
-              {getFieldDecorator('brandId')(
+              {getFieldDecorator('brandId',{
+                initialValue: ''
+              })(
                 <SelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
                     <p style={styles.label}>
-                      <FormattedMessage id="product.brand" />
+                      <FormattedMessage id="Product.brand" />
                     </p>
                   }
-                  defaultValue="All"
+                  // defaultValue="All"
                   showSearch
                   optionFilterProp="children"
                   onChange={(value) => {
@@ -279,7 +295,7 @@ class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <span>
-                  <FormattedMessage id="product.search" />
+                  <FormattedMessage id="Product.search" />
                 </span>
               </Button>
             </FormItem>

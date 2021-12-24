@@ -10,11 +10,16 @@
 var Common = require('./common');
 
 module.exports = {
-  host: 'http://124.71.151.9:8390',
+  /* dev */
   HOST: 'http://124.71.151.9:8390',
-  //host: 'https://store.royalcanin.com/api',
-  //HOST: 'https://store.royalcanin.com/api',
-  X_XITE_ADMIN_HOST: 'http://121.37.129.70:3000',
-  X_XITE_OPEN_HOST: 'http://121.37.129.70:3000',
+
+  /* stg */
+  //HOST: 'https://storestg.royalcanin.com/api',
+
+  /* product */
+  //HOST: 'https://eurostore.royalcanin.com/api',
+
+
+  CDN_PATH: '/',
   ...Common
 };

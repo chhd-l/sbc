@@ -3,9 +3,10 @@ import { Relax } from 'plume2';
 import { Table, Input, Row, Col, Checkbox, InputNumber, Form, Button, message, Tooltip, Icon, Select } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { fromJS, List } from 'immutable';
-import { cache, noop, ValidConst } from 'qmkit';
+import { cache, noop, RCi18n, ValidConst } from 'qmkit';
 import ImageLibraryUpload from './image-library-upload';
-import { FormattedMessage } from 'react-intl';
+import { any } from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -123,7 +124,7 @@ class SkuForm extends React.Component<any, any> {
 
   _getColumns = () => {
     const { getFieldDecorator } = this.props.form;
-    const { goodsSpecs, addSkUProduct, specSingleFlag, baseSpecId } = this.props.relaxProps;
+    const { goodsSpecs, addSkUProduct, specSingleFlag, goods, goodsList, baseSpecId } = this.props.relaxProps;
 
     let columns: any = List();
 
@@ -183,46 +184,140 @@ class SkuForm extends React.Component<any, any> {
         </div>
       ),
       key: 'stock',
-      render: (rowInfo) => {
+      render: (rowInfo,index) => {
         let a = null;
         let b = null;
-        let c = 0;
-        a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
-        // a == null? a = {minStock:''}: a
+        let c = rowInfo.stock || 0;
+        let d = true
+        if (rowInfo.goodsInfoBundleRels.length != 0) {
+          d = true
+        } else {
+          d = false
+        }
+
+
+        /*a = (addSkUProduct && addSkUProduct.filter((i) => i.pid == rowInfo.goodsInfoNo)[0]) || null;
         a = a ? a : { minStock: '' };
-        c = a.minStock - rowInfo.maxStock >= 0 ? rowInfo.stock : a.minStock;
-        if (a && a.minStock) {
+        c = rowInfo.stock || 0
+        if (a && a.minStock && rowInfo.maxStock) {
           b = a.minStock - rowInfo.maxStock >= 0 ? a.minStock : rowInfo.maxStock;
+        } else if (a && a.minStock) {
+          b = a.minStock;
+        } else if (a && a.maxStock) {
+          b = a.maxStock;
         } else {
           b = 999999;
-        }
+        }*/
+
+        /*let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+        c = Number(String(c / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))*/
+
+        /* if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1) {
+          console.log(c);
+          console.log(addSkUProduct[0].targetGoodsIds[0].bundleNum);
+          c = Number(String(c / addSkUProduct[0].targetGoodsIds[0].bundleNum).replace(/\.\d+/g, ''))
+        }*/
+        /*if (goods.get('goodsId') == null) {
+          if (goodsList.toJS().length == 1) {
+            let targetGoodsIds = addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds[0]
+            console.log(addSkUProduct.length,11111);
+            console.log(addSkUProduct[0]&&addSkUProduct[0].targetGoodsIds.length,2222222);
+            console.log(c,333333);
+            if(addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 1 ) {
+              //c = c * targetGoodsIds.bundleNum
+              console.log(c,666666);
+              c = Number(String(c / targetGoodsIds.bundleNum).replace(/\.\d+/g, ''))
+
+            }else if (addSkUProduct.length == 1 && addSkUProduct[0].targetGoodsIds.length == 0 ){
+              c = 0
+              console.log(c,77777);
+            }else if (addSkUProduct.length == 0 || addSkUProduct.length == undefined ){
+
+              c = 0
+              console.log(c,88888);
+            }
+          }else {
+            //c = 0
+            console.log(c,9999999);
+          }
+
+        }*/
+
         return (
           <Row>
             <Col span={12}>
               <FormItem style={styles.tableFormItem}>
-                {getFieldDecorator('stock_' + rowInfo.id, {
+                {/*getFieldDecorator('stock_' + rowInfo.id, {
                   rules: [
                     {
                       required: true,
-                      message: 'Please input inventory'
+                      message: RCi18n({id:'Product.PleaseInputInventory'})
                     },
                     {
-                      pattern: ValidConst.number,
-                      message: 'Please enter the correct value'
+                      validator: (_rule, value, callback) => {
+                        if (!ValidConst.zeroNumber.test(value)) {
+                          callback(RCi18n({id:'Product.enterthecorrectvalue'}));
+                        }
+                        callback();
+                      }
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'stock'),
                   initialValue: c
-                })(<InputNumber style={{ width: '121px' }} min={0} max={b} />)}
+                })(
+                  <InputNumber
+                    style={{ width: '121px' }}
+                    min={0}
+                    max={999999999}
+                    disabled={d}
+                    //max={b}
+                    //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
+                  />
+                )*/}
+                <InputNumber
+                  style={{ width: '121px' }}
+                  min={0}
+                  max={999999999}
+                  disabled={d}
+                  value={c}
+                  onChange={this._editGoodsItem.bind(this, rowInfo.id, 'stock')}
+                  //max={b}
+                  //onBlur={this.onInputNumber.bind(this, rowInfo.id, 'stock')}
+                />
               </FormItem>
             </Col>
           </Row>
         );
       }
     });
-
     columns = columns.push({
-      title: 'UOM',
+      title: <FormattedMessage id="Product.VirtualInventory" />,
+      key: 'virtualInventory',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualInventory_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: RCi18n({id:'Product.enterthecorrectvalue'})
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualInventory'),
+                initialValue: rowInfo.virtualInventory
+              })(<InputNumber style={{ width: '121px' }} min={0} max={999999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
+    });
+    columns = columns.push({
+      title: <FormattedMessage id="Product.UOM" />,
       key: 'goodsMeasureUnit',
       render: (rowInfo) => {
         return (
@@ -234,7 +329,7 @@ class SkuForm extends React.Component<any, any> {
                     {
                       required: true,
                       whitespace: true,
-                      message: 'Please input UOM'
+                      message: RCi18n({id:'Product.PleaseInputUOM'})
                     }
                   ],
                   onChange: this._editGoodsItem.bind(this, rowInfo.id, 'goodsMeasureUnit'),
@@ -245,6 +340,33 @@ class SkuForm extends React.Component<any, any> {
           </Row>
         );
       }
+    });
+
+    columns = columns.push({
+      title: RCi18n({id: 'Product.Inventory Alert'}),
+      key: 'virtualAlert',
+      render: (rowInfo) => (
+        <Row>
+          <Col span={12}>
+            <FormItem style={styles.tableFormItem}>
+              {getFieldDecorator('virtualAlert_' + rowInfo.id, {
+                rules: [
+                  // {
+                  //   required: true,
+                  //   message: 'Please input inventory'
+                  // },
+                  {
+                    pattern: ValidConst.number,
+                    message: RCi18n({id:'Product.enterthecorrectvalue'})
+                  }
+                ],
+                onChange: this._editGoodsItem.bind(this, rowInfo.id, 'virtualAlert'),
+                initialValue: rowInfo.virtualAlert
+              })(<InputNumber style={{ width: '121px' }} min={0} max={999999999} />)}
+            </FormItem>
+          </Col>
+        </Row>
+      )
     });
 
     columns = columns.push({
@@ -260,13 +382,23 @@ class SkuForm extends React.Component<any, any> {
    * 修改商品属性
    */
   _editGoodsItem = (id: string, key: string, e: any, flag?: any) => {
-    const { editGoodsItem, synchValue, updateBasePrice } = this.props.relaxProps;
+    const { editGoodsItem, synchValue, updateBasePrice, addSkUProduct } = this.props.relaxProps;
     const checked = this.props.relaxProps[`${key}Checked`];
     if (e && e.target) {
       e = e.target.value;
     }
-
     editGoodsItem(id, key, e);
+  };
+
+  onInputNumber = (id: string, key: string, e: any, flag?: any) => {
+    const { editGoodsItem,} = this.props.relaxProps;
+    if (e && e.target) {
+      e = e.target.value;
+    }
+    if (e == "") {
+      editGoodsItem(id, key, 0);
+    }
+
   };
 }
 

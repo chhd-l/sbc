@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const, AssetManagement } from 'qmkit';
 import { Table, Tooltip, Modal, Button, Form, Input, Row, Col, message, Select, Radio, Spin, Tabs, Popconfirm } from 'antd';
-
+import { RCi18n } from 'qmkit';
 import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,8 +12,11 @@ class AttributeLibrary extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Product tagging',
+      title: <FormattedMessage id="Product.ProductTagging" />,
       searchForm: {
+        taggingName: ''
+      },
+      oldSearchForm: {
         taggingName: ''
       },
       pagination: {
@@ -57,7 +60,14 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   onSearch = () => {
-    this.getTagging();
+    const {searchForm} = this.state
+    this.setState({
+      oldSearchForm:{
+        taggingName:searchForm.taggingName
+      }
+    },()=>{
+      this.getTagging();
+    })
   };
   handleTableChange = (pagination: any) => {
     this.setState(
@@ -77,20 +87,9 @@ class AttributeLibrary extends Component<any, any> {
   onTaggingFormChange = ({ field, value }) => {
     let data = this.state.taggingForm;
     data[field] = value;
-    this.setState(
-      {
-        taggingForm: data
-      }
-      // () => {
-      //   if(data !== 'taggingType' || value !=='Image'){
-      //     form.setFieldsValue({
-      //       taggingFillColor: this.getColour(data.taggingFillColor) ? this.getColour(data.taggingFillColor).name : '',
-      //       taggingFontColor: this.getColour(data.taggingFontColor) ? this.getColour(data.taggingFontColor).name : ''
-      //     });
-      //   }
-
-      // }
-    );
+    this.setState({
+      taggingForm: data
+    });
   };
 
   openAddPage = () => {
@@ -108,11 +107,11 @@ class AttributeLibrary extends Component<any, any> {
       visible: true,
       taggingForm,
       isEdit: false,
-      loading: false
+      loading: false,
+      images:[]
     });
   };
   openEditPage = (row) => {
-    const { form } = this.props;
     row.taggingType = row.taggingType ? row.taggingType : 'Text';
     let taggingForm = {
       taggingName: row.taggingName,
@@ -169,12 +168,12 @@ class AttributeLibrary extends Component<any, any> {
     });
   };
   getTagging = () => {
-    const { searchForm, pagination } = this.state;
+    const { oldSearchForm, pagination } = this.state;
     this.setState({
       loading: true
     });
     let params = {
-      taggingName: searchForm.taggingName,
+      taggingName: oldSearchForm.taggingName,
       pageSize: pagination.pageSize,
       pageNum: pagination.current - 1
     };
@@ -190,14 +189,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   querySysDictionary = (type: String) => {
@@ -219,12 +216,9 @@ class AttributeLibrary extends Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   addTagging = (params: object) => {
     this.setState({
@@ -235,7 +229,7 @@ class AttributeLibrary extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState(
             {
               visible: false,
@@ -247,14 +241,12 @@ class AttributeLibrary extends Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   deleteTagging = (id) => {
@@ -272,19 +264,17 @@ class AttributeLibrary extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           this.getTagging();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
 
@@ -302,19 +292,17 @@ class AttributeLibrary extends Component<any, any> {
             loading: false
           });
           this.getTagging();
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message.toString() || 'Operation failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failed');
       });
   };
   updateTaggingStatus = (checked, row) => {
@@ -356,88 +344,38 @@ class AttributeLibrary extends Component<any, any> {
   };
 
   render() {
-    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images } = this.state;
+    const { loading, title, taggingList, visible, modalName, colourList, taggingForm, shopPageList, images,searchForm } = this.state;
 
     const { getFieldDecorator } = this.props.form;
 
     const columns = [
       {
-        title: 'Tagging name',
+        title: <FormattedMessage id="Product.TaggingName" />,
         dataIndex: 'taggingName',
         key: 'taggingName'
       },
       {
-        title: 'Tagging type',
+        title: <FormattedMessage id="Product.TaggingType" />,
         dataIndex: 'taggingType',
         key: 'taggingType',
         render: (text) => <div>{text === 'Text' ? 'Text tag (Top left)' : 'Image tag (Top right)'}</div>
       },
       {
-        title: 'Tagging fill color',
-        dataIndex: 'taggingFillColor',
-        key: 'taggingFillColor',
-        render: (text) => (
-          <div>
-            {this.getColour(text) ? (
-              <>
-                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
-                {this.getColour(text).name}
-              </>
-            ) : (
-              <p>-</p>
-            )}
-          </div>
-        )
-      },
-      {
-        title: 'Tagging font color',
-        dataIndex: 'taggingFontColor',
-        key: 'taggingFontColor',
-        render: (text) => (
-          <div>
-            {this.getColour(text) ? (
-              <>
-                <div style={{ width: 12, height: 12, backgroundColor: this.getColour(text).valueEn, display: 'inline-block', borderRadius: '25%', border: '1px solid', marginRight: 5 }}></div>
-                {this.getColour(text).name}
-              </>
-            ) : (
-              <p>-</p>
-            )}
-          </div>
-        )
-      },
-      {
-        title: 'Tagging image',
-        dataIndex: 'taggingImgUrl',
-        key: 'taggingImgUrl',
-        render: (text) => (text ? <img style={styles.tableImage} src={text} alt="Image" /> : null)
-      },
-      // {
-      //   title: 'Display in shop',
-      //   dataIndex: 'displayStatus',
-      //   key: 'displayStatus',
-      //   render: (text, record) => (
-      //     <Popconfirm placement="topLeft" title={'Are you sure to ' + (+text ? 'disable' : 'enable') + ' this item?'} onConfirm={() => this.updateTaggingStatus(!+text, record)} okText="Confirm" cancelText="Cancel">
-      //       <Switch checked={+text ? true : false}></Switch>
-      //     </Popconfirm>
-      //   )
-      // },
-      {
-        title: 'Product count',
+        title: <FormattedMessage id="Product.ProductCount" />,
         dataIndex: 'productNum',
         key: 'productNum'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Edit">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Edit" />}>
               <a style={styles.edit} onClick={() => this.openEditPage(record)} className="iconfont iconEdit"></a>
             </Tooltip>
-            <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTagging(record.id)} okText="Confirm" cancelText="Cancel">
-              <Tooltip placement="top" title="Delete">
+            <Popconfirm placement="topLeft" title={<FormattedMessage id="Product.sureDeleteThisItem" />} onConfirm={() => this.deleteTagging(record.id)} okText={<FormattedMessage id="Product.Confirm" />} cancelText={<FormattedMessage id="Product.Cancel" />}>
+              <Tooltip placement="top" title={<FormattedMessage id="Product.Delete" />}>
                 <a className="iconfont iconDelete"></a>
               </Tooltip>
             </Popconfirm>
@@ -461,7 +399,7 @@ class AttributeLibrary extends Component<any, any> {
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
-        <Spin spinning={loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={loading}>
           <div className="container-search">
             <Headline title={title} />
             <Form layout="inline" style={{ marginBottom: 20 }}>
@@ -469,7 +407,8 @@ class AttributeLibrary extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore="Tagging name"
+                      addonBefore={RCi18n({id:'Product.Taggingname'})}
+                      value={searchForm.taggingName}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onSearchFormChange({
@@ -491,7 +430,7 @@ class AttributeLibrary extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Product.search" />
                     </span>
                   </Button>
                 </Col>
@@ -501,7 +440,9 @@ class AttributeLibrary extends Component<any, any> {
 
           <div className="container-search">
             <Button type="primary" style={{ margin: '10px 0 10px 0' }} onClick={() => this.openAddPage()}>
-              <span>Add new tagging</span>
+              <span>
+                <FormattedMessage id="Product.AddNewTagging" />
+              </span>
             </Button>
             <Table style={{ paddingRight: 20 }} rowKey="id" columns={columns} dataSource={taggingList} pagination={this.state.pagination} scroll={{ x: '100%' }} onChange={this.handleTableChange} />
           </div>
@@ -528,21 +469,21 @@ class AttributeLibrary extends Component<any, any> {
                     });
                   }}
                 >
-                  Close
+                  <FormattedMessage id="Product.Close" />
                 </Button>,
                 <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-                  Submit
+                  <FormattedMessage id="Product.Submit" />
                 </Button>
               ]}
             >
               <Form {...formItemLayout}>
-                <FormItem label="Tagging name">
+                <FormItem label={RCi18n({id:'Product.Taggingname'})}>
                   {getFieldDecorator('taggingName', {
                     rules: [
-                      { required: true, message: 'Tagging name is required' },
+                      { required: true, message: <FormattedMessage id="Product.TaggingNameIsRequired" /> },
                       {
                         max: 50,
-                        message: 'Exceed maximum length!'
+                        message: <FormattedMessage id="Product.ExceedMaximumLength" />
                       }
                     ],
                     initialValue: taggingForm.taggingName
@@ -562,7 +503,7 @@ class AttributeLibrary extends Component<any, any> {
                 <FormItem label="Tagging type">
                   {getFieldDecorator('taggingType', {
                     initialValue: taggingForm.taggingType,
-                    rules: [{ required: true, message: 'Please selected tagging type' }]
+                    rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelectedTaggingType" /> }]
                   })(
                     <Radio.Group
                       name="radiogroup"
@@ -574,8 +515,12 @@ class AttributeLibrary extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value="Text">Text tag (Top left)</Radio>
-                      <Radio value="Image">Image tag (Top right)</Radio>
+                      <Radio value="Text">
+                        <FormattedMessage id="Product.TextTopLeft" />
+                      </Radio>
+                      <Radio value="Image">
+                        <FormattedMessage id="Product.ImageTopRight" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </FormItem>
@@ -584,7 +529,7 @@ class AttributeLibrary extends Component<any, any> {
                   <div>
                     <FormItem label="Tagging font color">
                       {getFieldDecorator('taggingFontColor', {
-                        rules: [{ required: true, message: 'Tagging font color is required' }],
+                        rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFontColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : ''
                       })(
                         <Select
@@ -607,7 +552,7 @@ class AttributeLibrary extends Component<any, any> {
                     </FormItem>
                     <FormItem label="Tagging fill color">
                       {getFieldDecorator('taggingFillColor', {
-                        rules: [{ required: true, message: 'Tagging fill color is required' }],
+                        rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFillColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : ''
                       })(
                         <Select
@@ -632,8 +577,11 @@ class AttributeLibrary extends Component<any, any> {
                 ) : (
                   <FormItem label="Tagging Image">
                     {getFieldDecorator('taggingImgUrl', {
-                      rules: [{ required: true, message: 'Tagging image is required' }]
-                    })(<AssetManagement choosedImgCount={1} images={images} selectImgFunction={this.updateImg} deleteImgFunction={this.deleteImg} />)}
+                      rules: [{ required: true, message: <FormattedMessage id="Product.TaggingImage" /> }]
+                    })(<AssetManagement choosedImgCount={1} 
+                      images={images} 
+                      selectImgFunction={this.updateImg} 
+                      deleteImgFunction={this.deleteImg} />)}
                   </FormItem>
                 )}
                 <FormItem label="Display in shop">
@@ -649,15 +597,19 @@ class AttributeLibrary extends Component<any, any> {
                         });
                       }}
                     >
-                      <Radio value={true}>Yes</Radio>
-                      <Radio value={false}>No</Radio>
+                      <Radio value={true}>
+                        <FormattedMessage id="Product.Yes" />
+                      </Radio>
+                      <Radio value={false}>
+                        <FormattedMessage id="Product.No" />
+                      </Radio>
                     </Radio.Group>
                   )}
                 </FormItem>
                 {taggingForm.displayStatus ? (
                   <FormItem label="Shop page">
                     {getFieldDecorator('showPage', {
-                      rules: [{ required: true, message: 'Please selec shop page' }],
+                      rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelecShopPage" /> }],
                       initialValue: taggingForm.showPage
                     })(
                       <Select
@@ -672,7 +624,7 @@ class AttributeLibrary extends Component<any, any> {
                         }}
                       >
                         {shopPageList.map((item) => (
-                          <Option value={item.value} key={item.id}>
+                          <Option value={item.valueEn} key={item.id}>
                             {item.name}
                           </Option>
                         ))}

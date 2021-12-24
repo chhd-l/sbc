@@ -5,6 +5,7 @@ import { noop, QMMethod } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { Map } from 'immutable';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -63,17 +64,8 @@ export default class DepartmentModal extends React.Component<any, any> {
       return null;
     }
     return (
-      <Modal
-        maskClosable={false}
-        title={isAdd ? 'New department' : 'Edit department'}
-        visible={modalVisible}
-        onCancel={this._handleModelCancel}
-        onOk={this._handleSubmit}
-      >
-        <WrapperForm
-          ref={(form) => (this._form = form)}
-          relaxProps={this.props.relaxProps}
-        />
+      <Modal maskClosable={false} title={isAdd ? <FormattedMessage id="Setting.NewDepartment" /> : <FormattedMessage id="Setting.EditDepartment" />} visible={modalVisible} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
+        <WrapperForm ref={(form) => (this._form = form)} relaxProps={this.props.relaxProps} />
       </Modal>
     );
   }
@@ -128,28 +120,23 @@ class CateModalForm extends React.Component<any, any> {
     return (
       <Form className="login-form">
         {formData && formData.get('departmentParentName') ? (
-          <FormItem {...formItemLayout} label="Superior departments">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SuperiorDepartments" />}>
             {formData.get('departmentParentName')}
           </FormItem>
         ) : null}
 
-        <FormItem {...formItemLayout} label="Department name" hasFeedback>
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.DepartmentName" />} hasFeedback>
           {getFieldDecorator('departmentName', {
             rules: [
               {
                 required: true,
                 whitespace: true,
-                message: 'Please enter the department name'
+                message: <FormattedMessage id="Setting.PleaseEnterTheDepartmentName" />
               },
-              { max: 20, message: 'Maximum 20 characters' },
+              { max: 20, message: <FormattedMessage id="Setting.Maximum20Characters" /> },
               {
                 validator: (rule, value, callback) => {
-                  QMMethod.validatorEmoji(
-                    rule,
-                    value,
-                    callback,
-                    'Department name'
-                  );
+                  QMMethod.validatorEmoji(rule, value, callback, 'Department name');
                 }
               }
             ],

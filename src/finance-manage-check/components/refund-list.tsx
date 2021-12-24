@@ -92,13 +92,13 @@ export default class RefundList extends React.Component<any, any> {
           </ul>
         </div> */}
         <DataGrid
-          loading={{ spinning: loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px', position: 'initial', zIndex: 999 }} alt="" /> }}
+          loading={loading}
           dataSource={refundList.toJS().length > 0 ? refundList.toJS() : []}
           rowKey={(record, index) => index}
           pagination={false}
         >
           <Column
-            title="NO."
+            title={<FormattedMessage id="Finance.NO" />}
             dataIndex="index"
             key="index"
             width="50"
@@ -151,7 +151,7 @@ export default class RefundList extends React.Component<any, any> {
               return <span>{rowData.payItemAmountMap.UNIONPAY_B2B}</span>;
             }}
           /> */}
-          <Column title="Total revenue" dataIndex="totalAmount" key="totalAmount" />
+          <Column title={<FormattedMessage id="Finance.TotalRevenue" />} dataIndex="totalAmount" key="totalAmount" />
 
           {/*<Column
             title={<FormattedMessage id="balance" />}
@@ -191,14 +191,14 @@ export default class RefundList extends React.Component<any, any> {
           {/*/>*/}
           <Column title={payWay} dataIndex="totalAmount" key="supplierId" />
           <Column
-            title={<FormattedMessage id="operation" />}
+            title={<FormattedMessage id="Finance.Operation" />}
             dataIndex="operate"
             key="storeId"
             width="100"
             render={(_text, record: any, _index) => {
               return (
                 <AuthWrapper functionName="f_finance_manage_refund">
-                  <Tooltip placement="top" title="Details">
+                  <Tooltip placement="top" title={<FormattedMessage id="Finance.Details" />}>
                     <a
                       onClick={() =>
                         history.push({

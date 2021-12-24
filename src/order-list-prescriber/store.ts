@@ -6,7 +6,7 @@ import FormActor from './actor/form-actor';
 import TabActor from './actor/tab-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { Const, history, util, RCi18n } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -38,7 +38,7 @@ export default class AppStore extends Store {
       const [state, value] = key.split('-');
       form['tradeState'][state] = value;
     }
-    form['orderType'] = 'NORMAL_ORDER';
+    form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
     if (sessionStorage.getItem('PrescriberSelect')) {
       form['clinicsIds'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId.split(',') : null;
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
@@ -118,7 +118,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.batchAudit(checkedIds);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //refresh
       this.init();
     } else {
@@ -142,7 +142,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.audit(tid, audit, reason);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       } else {
         message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
@@ -157,9 +157,8 @@ export default class AppStore extends Store {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init();
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
     } else {
-      message.error(res.message);
     }
   };
 
@@ -170,13 +169,11 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Confirm successful receipt!');
+      message.success(RCi18n({id:'Order.receipt'}));
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
       message.error('订单状态已改变，请刷新页面后重试!');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -187,9 +184,7 @@ export default class AppStore extends Store {
    */
   onCheckReturn = async (tid: string) => {
     const { res } = await webapi.deliverVerify(tid);
-    if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
-    } else {
+    if (res.code === Const.SUCCESS_CODE) {
       history.push({
         pathname: `/order-detail/${tid}`,
         state: { tab: '2' }
@@ -224,7 +219,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('Please select the order to be exported');
+      message.error(RCi18n({id:'Order.exportedTip'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -246,7 +241,9 @@ export default class AppStore extends Store {
       const [state, value] = key.split('-');
       params['tradeState'][state] = value;
     }
-
+    if (sessionStorage.getItem('PrescriberSelect')) {
+      params['prescriberId'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId ? JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberId : null;
+    }
     const total = this.state().get('total');
     if (total > 0) {
       return this._onExport(params);
@@ -265,7 +262,7 @@ export default class AppStore extends Store {
         let base64 = new util.Base64();
         const token = (window as any).token;
         if (token) {
-          let result = JSON.stringify({ ...params, token: token });
+          let result = JSON.stringify({ ...params, from: 'prescriber', token: token });
           let encrypted = base64.urlEncode(result);
 
           // 新窗口下载
@@ -287,7 +284,7 @@ export default class AppStore extends Store {
   verify = async (tid: string, buyerId: string) => {
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('The customer has been deleted and cannot be modified！');
+      message.error((window as any).RCi18n({id:'Order.modifiedErr'}));
       return;
     } else {
       history.push('/order-edit/' + tid);

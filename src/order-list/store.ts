@@ -35,10 +35,9 @@ export default class AppStore extends Store {
     const key = this.state().getIn(['tab', 'key']);
 
     if (key != '0') {
-      const [state, value] = key.split('-');
-      form['tradeState'][state] = value;
+      form['tradeState']['flowState'] = key;
     }
-    form['orderType'] = 'NORMAL_ORDER';
+    form['orderType'] = form['orderType'] ? form['orderType'] : 'ALL_ORDER';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
@@ -49,8 +48,6 @@ export default class AppStore extends Store {
           this.btnLoading = false;
         });
       } else {
-        message.error(res.message);
-
         this.dispatch('loading:end');
       }
     });
@@ -108,7 +105,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.batchAudit(checkedIds);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
       //refresh
       this.init();
     } else {
@@ -132,7 +129,7 @@ export default class AppStore extends Store {
       const { res } = await webapi.audit(tid, audit, reason);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
         this.init();
       } else {
         message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
@@ -143,13 +140,28 @@ export default class AppStore extends Store {
     }
   };
 
+  onValidateAudit = async (tid: string, audit,curOrderAuditType='')=> {
+    this.dispatch('loading:start');
+    let result={code:''}
+    if(curOrderAuditType==='ManualReview'){
+      const { res } = await webapi.manualAudit(tid, audit);
+      result=res
+    }else{
+      const { res } = await webapi.audit(tid, audit);
+      result=res
+    }
+    if (result.code == Const.SUCCESS_CODE) {
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+      this.init();
+    }
+    this.dispatch('loading:end');
+  }
+
   onRetrial = async (tid: string) => {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init();
-      message.success('Operate successfully');
-    } else {
-      message.error(res.message);
+      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
     }
   };
 
@@ -157,16 +169,16 @@ export default class AppStore extends Store {
    * 确认收货
    */
   onConfirm = async (tid: string) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success('Confirm successful receipt!');
+      message.success(RCi18n({id:'Order.receipt'}));
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
+      this.dispatch('loading:end');
       message.error('订单状态已改变，请刷新页面后重试!');
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -177,9 +189,7 @@ export default class AppStore extends Store {
    */
   onCheckReturn = async (tid: string) => {
     const { res } = await webapi.deliverVerify(tid);
-    if (res.code !== Const.SUCCESS_CODE) {
-      message.error(res.message);
-    } else {
+    if (res.code === Const.SUCCESS_CODE) {
       history.push({
         pathname: `/order-detail/${tid}`,
         state: { tab: '2' }
@@ -214,7 +224,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error('Please select the order to be exported');
+      message.error(RCi18n({id:'Order.exportedTip'}));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -277,7 +287,7 @@ export default class AppStore extends Store {
   verify = async (tid: string, buyerId: string) => {
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error('The customer has been deleted and cannot be modified！');
+      message.error(RCi18n({id:'Order.modifiedErr'}));
       return;
     } else {
       history.push('/order-edit/' + tid);
@@ -291,10 +301,18 @@ export default class AppStore extends Store {
     this.dispatch('order:list:reject:show');
   };
 
+  showAuditModal = () => {
+    this.dispatch('order:list:audit:show');
+  };
+
   /**
    *关闭驳回弹框
    */
   hideRejectModal = () => {
     this.dispatch('order:list:reject:hide');
+  };
+
+  hideAuditModal = () => {
+    this.dispatch('order:list:audit:hide');
   };
 }

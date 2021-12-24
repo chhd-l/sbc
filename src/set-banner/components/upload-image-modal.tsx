@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import '../index.less';
-import { FormattedMessage } from 'react-intl';
-import { cache, Const, noop, SelectGroup } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { cache, Const, noop, SelectGroup, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
 import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
 import { IMap } from 'plume2';
@@ -30,7 +30,7 @@ const formItemLayout = {
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 
 @Relax
-export default class UploadImageModal extends Component<any, any> {
+class UploadImageModal extends Component<any, any> {
   _rejectForm;
 
   WrapperForm: any;
@@ -50,6 +50,7 @@ export default class UploadImageModal extends Component<any, any> {
   };
   props: {
     form: any;
+    intl?:any;
     relaxProps?: {
       modalVisible: boolean;
       tableDatas: TList;
@@ -105,7 +106,7 @@ export default class UploadImageModal extends Component<any, any> {
       okDisabled: true
     });
     if (tableDatas.size > 5) {
-      message.error('You can only add up to 5 banner.');
+      message.error(RCi18n({id:"Setting.addUpTo5banner"}));
       // this._handleModelCancel();
       return;
     }
@@ -113,11 +114,11 @@ export default class UploadImageModal extends Component<any, any> {
       if (!err) {
         let imageObj = imageForm.toJS();
         if (imageObj.fileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error('Please choose to upload pc resource!');
+          message.error(RCi18n({id:"Setting.uploadPcResource"}));
           return;
         }
         if (imageObj.mFileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error('Please choose to upload mobile resource!');
+          message.error(RCi18n({id:"Setting.uploadMobileResource"}));
           return;
         }
         if (imageObj.bannerId) {
@@ -175,10 +176,14 @@ export default class UploadImageModal extends Component<any, any> {
     const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
     const ref = this;
     const res = await uploadBanner(params);
+    const title = RCi18n({id:'Setting.Tip'});
+    const content = RCi18n({id:'Setting.AddBanner'});
+    const ok = RCi18n({id:'Setting.OK'});
+    const cancel = RCi18n({id:'Setting.Cancel'});
     if (res != -1) {
       confirm({
-        title: 'Tip',
-        content: 'Are you sure continue to add banner?',
+        title: title,
+        content: content,
         onOk() {
           ref.resetImageForm();
           getList({ storeId: getStoreId() });
@@ -187,8 +192,8 @@ export default class UploadImageModal extends Component<any, any> {
           ref._handleModelCancel();
           getList({ storeId: getStoreId() });
         },
-        okText: 'OK',
-        cancelText: 'Cancel'
+        okText: ok,
+        cancelText: cancel
       });
     }
   };
@@ -255,26 +260,26 @@ export default class UploadImageModal extends Component<any, any> {
       beforeUpload(file) {
         let fileName = file.name.toLowerCase();
         if (tableDatas.size > 5) {
-          message.error('You can only add up to 5 banner.');
+          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error('Please input a file name');
+          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
           return false;
         }
 
         if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error('Please enter the file name in the correct format');
+          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
           return false;
         }
         if (fileName.length > 40) {
-          message.error('File name is too long');
+          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
           return false;
         }
 
         if (list && list.length >= 1) {
-          message.error('Only can upload one resource.');
+          message.error(RCi18n({id:"Setting.uploadOneResource"}));
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
@@ -282,11 +287,11 @@ export default class UploadImageModal extends Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error('File size cannot exceed 2M');
+            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
             return false;
           }
         } else {
-          message.error('File format error');
+          message.error(RCi18n({id:"Setting.FileFormatError"}));
           return false;
         }
       },
@@ -351,26 +356,26 @@ export default class UploadImageModal extends Component<any, any> {
         let fileName = file.name.toLowerCase();
 
         if (tableDatas.size > 5) {
-          message.error('You can only add up to 5 banner.');
+          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error('Please input a file name');
+          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
           return false;
         }
 
         if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error('Please enter the file name in the correct format');
+          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error('File name is too long');
+          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
           return false;
         }
         if (mList && mList.length >= 1) {
-          message.error('Only can upload one resource.');
+          message.error(RCi18n({id:"Setting.uploadOneResource"}));
           return false;
         }
         // 支持的图片格式：jpg、jpeg、png、gif
@@ -378,11 +383,11 @@ export default class UploadImageModal extends Component<any, any> {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error('File size cannot exceed 2M');
+            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
             return false;
           }
         } else {
-          message.error('File format error');
+          message.error(RCi18n({id:"Setting.FileFormatError"}));
           return false;
         }
       },
@@ -432,7 +437,7 @@ export default class UploadImageModal extends Component<any, any> {
     return (
       <Modal
         maskClosable={false}
-        title={<FormattedMessage id="upload" />}
+        title={bannerId ? RCi18n({id:"Setting.Edit"}) : RCi18n({id:"Setting.Upload"})}
         visible={modalVisible}
         width={920}
         // confirmLoading={true}
@@ -442,10 +447,10 @@ export default class UploadImageModal extends Component<any, any> {
         <div>
           <div>
             <Form>
-              <FormItem {...formItemLayout} label="Banner No">
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.bannerNo" />}>
                 {getFieldDecorator('bannerNo', {
                   initialValue: bannerNo,
-                  rules: [{ required: true, message: 'Please select banner No.' }]
+                  rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseSelectBannerNo" /> }]
                 })(
                   <Select
                     style={{ width: 160 }}
@@ -464,10 +469,10 @@ export default class UploadImageModal extends Component<any, any> {
                   </Select>
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="Banner name">
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.BannerName" />}>
                 {getFieldDecorator('bannerName', {
                   initialValue: bannerName,
-                  rules: [{ required: true, message: 'Please enter banner name.' }]
+                  rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseEnterBannerName" /> }]
                 })(
                   <Input
                     onChange={(e) =>
@@ -479,7 +484,7 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="Pc url">
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.PcUrl" />}>
                 {getFieldDecorator('webSkipUrl', {
                   initialValue: webSkipUrl
                 })(
@@ -494,7 +499,7 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label="Mobile url">
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.MobileUrl" />}>
                 {getFieldDecorator('mobiSkipUrl', {
                   initialValue: mobiSkipUrl
                 })(
@@ -509,17 +514,17 @@ export default class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="selectResource" values={{ type: 'pc' }} />} required={true}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.selectResource" values={{ type: 'pc' }} />} required={true}>
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...props} fileList={list}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox" />
                     </p>
                     <p className="ant-upload-text">
-                      <FormattedMessage id="dragImagesOrVideos" />
+                      <FormattedMessage id="Setting.dragImagesOrVideos" />
                     </p>
                     <p className="ant-upload-hint">
-                      <FormattedMessage id="supportUpload" />
+                      <FormattedMessage id="Setting.supportUpload" />
                     </p>
                   </Dragger>
                 </div>
@@ -528,17 +533,17 @@ export default class UploadImageModal extends Component<any, any> {
           </div>
           <div>
             <Form>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="selectResource" values={{ type: 'mobile' }} />} required={true}>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.selectResource" values={{ type: 'mobile' }} />} required={true}>
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...mProps} fileList={mList}>
                     <p className="ant-upload-drag-icon">
                       <Icon type="inbox" />
                     </p>
                     <p className="ant-upload-text">
-                      <FormattedMessage id="dragImagesOrVideos" />
+                      <FormattedMessage id="Setting.dragImagesOrVideos" />
                     </p>
                     <p className="ant-upload-hint">
-                      <FormattedMessage id="supportUpload" />
+                      <FormattedMessage id="Setting.supportUpload" />
                     </p>
                   </Dragger>
                 </div>
@@ -550,3 +555,5 @@ export default class UploadImageModal extends Component<any, any> {
     );
   }
 }
+
+export default injectIntl(UploadImageModal);

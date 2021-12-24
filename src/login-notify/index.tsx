@@ -1,17 +1,12 @@
 import React, { useEffect } from 'react';
 import { Form, Button, Icon} from 'antd';
-import { StoreProvider } from 'plume2';
 const bg_login = require('./img/bg-notify.png');
 const img_review = require('./img/review.png');
-import AppStore from '../login/store';
 import { withOktaAuth } from '@okta/okta-react';
-import { cache} from 'qmkit';
+import { cache, Const, RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
-
-StoreProvider(AppStore, { debug: __DEV__ })
 export default withOktaAuth(class LoginNotify extends React.Component<any, any> {
-  store: AppStore;
   
   constructor(props: any) {
     super(props);
@@ -26,12 +21,11 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
             <img style={styles.reviewLogo} src={img_review} />
           </FormItem>
             <FormItem style={{ marginBottom: 30 }}>
-                <div style={styles.reviewWord}>Under Review</div>
+                <div style={styles.reviewWord}>{RCi18n({id:'Public.UnderReview'})}</div>
             </FormItem>
             <FormItem style={{ marginBottom: 40 }}>
                 <div style={styles.notifyWord}>
-                  Your application has been sent to the related prescriber and the user account is under audit.
-                  We will notify you of the result by email.
+                  {RCi18n({id:'Public.Yourapplication'})}
                 </div>
             </FormItem>
             <FormItem style={{ marginBottom: 30 }}>
@@ -41,7 +35,7 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
                 style={styles.returnBtn}
                 onClick={(e) => this._handleReturn(e)}
               >
-                <Icon type="arrow-left" /> Return
+                <Icon type="arrow-left" /> {RCi18n({id:'Public.Return'})}
               </Button>
             </FormItem>
           </Form>
@@ -50,8 +44,15 @@ export default withOktaAuth(class LoginNotify extends React.Component<any, any> 
   }
   _handleReturn = async (e) =>{
     e.preventDefault();
-    this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE));
-  }
+    let idToken = this.props.authState.idToken;
+    let redirectUri = window.origin + '/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE);
+    let issure = sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) ===  'staff' ? Const.REACT_APP_RC_ISSUER : Const.REACT_APP_PRESCRIBER_ISSUER;
+    if(sessionStorage.getItem(cache.OKTA_ROUTER_TYPE) === 'staff') {
+      this.props.authService.logout('/logout?type=' + sessionStorage.getItem(cache.OKTA_ROUTER_TYPE))
+    } else {
+      window.location.href = `${issure}/v1/logout?id_token_hint=${idToken}&post_logout_redirect_uri=${redirectUri}`;
+    }
+}
 })
 const styles = {
     reviewLogo: {

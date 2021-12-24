@@ -4,8 +4,8 @@ import { List, Map, fromJS } from 'immutable';
 import { Modal, Table, Icon, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { noop, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { noop, AuthWrapper, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const confirm = Modal.confirm;
 
@@ -19,6 +19,7 @@ const styles = {
 @Relax
 class DepartmentList extends React.Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       departments: IList;
       allDepartments: IList;
@@ -70,7 +71,7 @@ class DepartmentList extends React.Component<any, any> {
 
   _columns = [
     {
-      title: <FormattedMessage id="departmentName" />,
+      title: <FormattedMessage id="Setting.departmentName" />,
       dataIndex: 'departmentName',
       key: 'departmentName',
       className: 'namerow'
@@ -81,12 +82,12 @@ class DepartmentList extends React.Component<any, any> {
       render: (rowInfo) => this._setDirector(rowInfo)
     },*/
     {
-      title: <FormattedMessage id="employeeNumber" />,
+      title: <FormattedMessage id="Setting.employeeNumber" />,
       dataIndex: 'employeeNum',
       key: 'employeeNum'
     },
     {
-      title: <FormattedMessage id="operation" />,
+      title: <FormattedMessage id="Setting.operation" />,
       key: 'option',
       render: (rowInfo) => this._getOption(rowInfo)
     }
@@ -105,7 +106,7 @@ class DepartmentList extends React.Component<any, any> {
       </AuthWrapper>
     ) : (
       <AuthWrapper functionName={'f_department_modify_leader'}>
-        <Tooltip placement="top" title="Set supervisor">
+        <Tooltip placement="top" title={<FormattedMessage id="Setting.SetSupervisor" />}>
           <a style={styles.edit} onClick={this._showLeadrModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'), rowInfo.get('parentDepartmentIds'), '', '', rowInfo.get('employeeNum'))}>
             <Icon type="edit" />
           </a>
@@ -122,19 +123,19 @@ class DepartmentList extends React.Component<any, any> {
     return (
       <div>
         <AuthWrapper functionName={'f_department_add_node'}>
-          <Tooltip placement="top" title="Add subdivisions">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.AddSubdivisions" />}>
             <a style={styles.edit} onClick={this._addChildrenCate.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('departmentGrade'))} className="iconfont iconbtn-addsubvisionsaddcategory"></a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_edit'}>
-          <Tooltip placement="top" title="Edit">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
             <a style={styles.edit} onClick={this._showEditModal.bind(this, rowInfo.get('departmentId'), rowInfo.get('departmentName'), rowInfo.get('parentDepartmentId'))} className="iconfont iconEdit">
               {/*<FormattedMessage id="edit" />*/}
             </a>
           </Tooltip>
         </AuthWrapper>
         <AuthWrapper functionName={'f_department_delete'}>
-          <Tooltip placement="top" title="Delete">
+          <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
             <a onClick={this._delete.bind(this, rowInfo.get('departmentId'), rowInfo.get('employeeNum'))} className="iconfont iconDelete">
               {/*<FormattedMessage id="delete" />*/}
             </a>
@@ -176,10 +177,13 @@ class DepartmentList extends React.Component<any, any> {
       });
       showLeaderModal(department);
     } else {
+      const title = (window as any).RCi18n({id:'Setting.Prompt'});
+      const content = (window as any).RCi18n({id:'Setting.IfThere'});
+      const okText = (window as any).RCi18n({id:'Setting.ShutDown'});
       Modal.warning({
-        title: 'Prompt',
-        content: 'If there is no employee in the current department or sub-department, no supervisor can be appointed.',
-        okText: 'Shut Down'
+        title: title,
+        content: content,
+        okText: okText
       });
     }
   };
@@ -211,10 +215,13 @@ class DepartmentList extends React.Component<any, any> {
    */
   _delete = async (departmentId: number, employeeNum: number) => {
     if (employeeNum > 0) {
+      const title = (window as any).RCi18n({id:'Setting.Prompt'});
+      const content = (window as any).RCi18n({id:'Setting.TheExisting'});
+      const okText = (window as any).RCi18n({id:'Setting.ShutDown'});
       Modal.warning({
-        title: 'Prompt',
-        content: 'The existing staff in the current department and sub-department cannot be deleted.',
-        okText: 'Shut Down'
+        title: title,
+        content: content,
+        okText: okText
       });
     } else {
       this._confirm(departmentId);
@@ -226,12 +233,15 @@ class DepartmentList extends React.Component<any, any> {
    */
   _confirm = (departmentId: number) => {
     const { doDelete } = this.props.relaxProps;
-
+    const title = (window as any).RCi18n({id:'Setting.Prompt'});
+    const content = (window as any).RCi18n({id:'Setting.DeleteTheCurrent'});
+    const okText = (window as any).RCi18n({id:'Setting.Confirm'});
+    const cancelText = (window as any).RCi18n({id:'Setting.Close'});
     confirm({
-      title: 'Prompt',
-      content: 'Delete the current department, and all subdepartments under that department will also be deleted. Are you sure you want to delete?',
-      okText: 'Confirm',
-      cancelText: 'Close',
+      title: title,
+      content: content,
+      okText: okText,
+      cancelText: cancelText,
       iconType: 'exclamation-circle',
       onOk() {
         doDelete(departmentId);
@@ -330,4 +340,4 @@ _BodyRow = DropTarget('row', _rowTarget, (connect, monitor) => ({
   }))(_BodyRow)
 );
 
-export default DragDropContext(HTML5Backend)(DepartmentList);
+export default DragDropContext(HTML5Backend)(injectIntl(DepartmentList));

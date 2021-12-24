@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Form, Select, Input, Button, Table, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
-import { SelectGroup, cache } from 'qmkit';
+import { SelectGroup, cache, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
 import UserModal from './user-modal';
 import { QMMethod, ValidConst } from 'qmkit';
+
 const { confirm } = Modal;
 
 const FormItem = Form.Item;
@@ -35,12 +36,36 @@ class UserList extends Component<any, any> {
       userVisible: false,
       disabledModalVisible: false,
       disabledReason: '',
-      auditModalVisible: false
+      auditModalVisible: false,
+      hasPrescriberRole: false
     }),
       (this.getUsers = this.getUsers.bind(this));
     this.deleteUser = this.deleteUser.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.getAllRoles();
     this.getUsers();
+  }
+
+  getAllRoles() {
+    webapi
+      .fetchAllRoles()
+      .then((data) => {
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          let allRoles = res.context ? res.context.map((x) => x.roleName) : [];
+          this.setState({
+            hasPrescriberRole: allRoles.includes('Prescriber')
+          });
+        } else {
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+        }
+      })
+      .catch(() => {
+        message.error(RCi18n({ id: 'Prescriber.Get data failed' }));
+      });
   }
 
   getUsers = async ({ pageNum, pageSize } = { pageNum: 0, pageSize: 5 }) => {
@@ -57,7 +82,7 @@ class UserList extends Component<any, any> {
       pageNum,
       pageSize
     });
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       let pagination = this.state.pagination;
       let userData = res.context.content;
       pagination.total = res.context.total;
@@ -66,8 +91,6 @@ class UserList extends Component<any, any> {
         userData: userData,
         loading: false
       });
-    } else {
-      message.error(res.message || 'search failed');
     }
   };
 
@@ -82,10 +105,8 @@ class UserList extends Component<any, any> {
     let employeeIds = [];
     employeeIds.push(id);
     const { res } = await webapi.deleteEmployeeByIds(employeeIds);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.getUsers();
-    } else {
-      message.error(res.message || 'delete failed');
     }
   };
 
@@ -112,10 +133,8 @@ class UserList extends Component<any, any> {
 
   enableUser = async (record) => {
     const { res } = await webapi.enableEmployee([record.employeeId]);
-    if (res.code === 'K-000000') {
+    if (res.code === Const.SUCCESS_CODE) {
       this.getUsers();
-    } else {
-      message.error(res.message || 'enable failed');
     }
   };
 
@@ -131,48 +150,49 @@ class UserList extends Component<any, any> {
   handleAudit = async (agree: Boolean) => {
     if (agree) {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 0);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           auditModalVisible: false
         });
         this.getUsers();
-      } else {
-        message.error(res.message || 'audit failed');
       }
     } else {
       const { res } = await webapi.auditEmployee([this.state.userForm.id], 1);
-      if (res.code === 'K-000000') {
+      if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           auditModalVisible: false
         });
         this.getUsers();
-      } else {
-        message.error(res.message || 'audit failed');
       }
     }
   };
 
-  sendEmail = async (recored) => {
-    const { res: prescriberRes } = await webapi.getClinicById({
+  sendEmail = (recored) => {
+    this.setState({ loading: true });
+    webapi.getClinicById({
       id: this.props.prescriberKeyId
+    }).then((data)=>{
+      const prescriberRes = data.res;
+      let prescriberId = '';
+      if (prescriberRes.code === Const.SUCCESS_CODE) {
+        prescriberId = prescriberRes.context.prescriberId;
+      }
+      let employeeName = recored.employeeName.split(' ');
+      let paramter = {
+        baseUrl: window.origin,
+        email: recored.email,
+        lastName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[1] : '',
+        firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
+        prescriberId: prescriberId
+      };
+      webapi.sendEmail(paramter).then((data)=>{
+        const res = data.res;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({ loading: false });
+          message.success(RCi18n({ id: 'Prescriber.sendSuccessful' }));
+        }
+      });
     });
-    let prescriberId = '';
-    if (prescriberRes.code === 'K-000000') {
-      prescriberId = prescriberRes.context.prescriberId;
-    }
-    let employeeName = recored.employeeName.split(' ');
-    let paramter = {
-      baseUrl: window.origin,
-      email: recored.email,
-      firstName: employeeName && employeeName.length > 0 ? recored.employeeName.split(' ')[0] : '',
-      prescriberId: prescriberId
-    };
-    const { res } = await webapi.sendEmail(paramter);
-    if (res.code === 'K-000000') {
-      message.success('send successful');
-    } else {
-      message.error(res.message || 'send failed');
-    }
   };
 
   onFormChange = ({ field, value }) => {
@@ -217,7 +237,7 @@ class UserList extends Component<any, any> {
 
   addUser = () => {
     if (!this.props.alreadyHasPrescriber) {
-      message.error('Please add prescriber first');
+      message.error(RCi18n({ id: 'Prescriber.PleaseAddPrescriberFirst' }));
       return;
     }
     this.setState({
@@ -237,63 +257,63 @@ class UserList extends Component<any, any> {
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
     const columns = [
       {
-        title: 'User name',
+        title: RCi18n({ id: 'Prescriber.UserName' }),
         dataIndex: 'employeeName',
         key: 'employeeName'
       },
       {
-        title: 'User email',
+        title: RCi18n({ id: 'Prescriber.UserEmail' }),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: 'User status',
+        title: RCi18n({ id: 'Prescriber.UserStatus' }),
         dataIndex: 'accountState',
         key: 'accountState',
         render: (text, record) => {
           switch (text) {
             case 0:
-              return 'Enabled';
+              return RCi18n({ id: 'Prescriber.Enabled' });
             case 1:
-              return 'Disabled';
+              return RCi18n({ id: 'Prescriber.Disabled' });
             case 3:
-              return 'Inactivated';
+              return RCi18n({ id: 'Prescriber.Inactivated' });
             case 4:
-              return 'To be audit';
+              return RCi18n({ id: 'Prescriber.ToBeAudit' });
             default:
               return '';
           }
         }
       },
       {
-        title: 'Operation',
+        title: RCi18n({ id: 'Prescriber.operation' }),
         dataIndex: 'operation',
         key: 'operation',
         render: (text, record) => {
           if (record.accountState === 0 || record.accountState === 1) {
             return (
               <span className="operation-box">
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Edit' })}>
                   <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                 </Tooltip>
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={RCi18n({ id: 'Prescriber.removeTheUser' })}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={RCi18n({ id: 'Prescriber.OK' })}
+                  cancelText={RCi18n({ id: 'Prescriber.Cancel' })}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Delete' })}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 0 ? (
-                  <Tooltip placement="top" title="Disabled">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Disabled' })}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
                 ) : (
-                  <Tooltip placement="top" title="Enabled">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Enabled' })}>
                     <a onClick={() => this.enableUser(record)} className="iconfont iconEnabled"></a>
                   </Tooltip>
                 )}
@@ -305,28 +325,28 @@ class UserList extends Component<any, any> {
             return (
               <span className="operation-box">
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Edit">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Edit' })}>
                     <a onClick={() => this.editUser(record)} className="iconfont iconEdit"></a>
                   </Tooltip>
                 ) : null}
                 <Popconfirm
-                  title="Are you sure to remove the user?"
+                  title={RCi18n({ id: 'Prescriber.removeTheUser' })}
                   onConfirm={() => {
                     this.deleteUser(record.employeeId);
                   }}
-                  okText="OK"
-                  cancelText="Cancel"
+                  okText={RCi18n({ id: 'Prescriber.OK' })}
+                  cancelText={RCi18n({ id: 'Prescriber.Cancel' })}
                 >
-                  <Tooltip placement="top" title="Delete">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Disabled' })}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
                 {record.accountState === 3 ? (
-                  <Tooltip placement="top" title="Send">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Send' })}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
                 ) : prescriberId ? (
-                  <Tooltip placement="top" title="Audit">
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Audit' })}>
                     <a onClick={() => this.auditUser(record)} className="iconfont iconaudit"></a>
                   </Tooltip>
                 ) : null}
@@ -338,129 +358,149 @@ class UserList extends Component<any, any> {
     ];
     return (
       <div>
-        <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>*New added user still needs to register before logging in store portal</p>
-        <div className="container-search">
-          <Form layout="inline">
-            <FormItem>
-              <Input
-                addonBefore="User name"
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'userName',
-                    value
-                  });
-                }}
-                placeholder="Please input name"
-                style={{ width: 300 }}
-              />
-            </FormItem>
-            <FormItem>
-              <Input
-                addonBefore="User email"
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  this.onFormChange({
-                    field: 'email',
-                    value
-                  });
-                }}
-                placeholder="Please input email"
-                style={{ width: 300 }}
-              />
-            </FormItem>
-            <FormItem>
-              <SelectGroup
-                defaultValue="All"
-                label="User status"
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  this.onFormChange({
-                    field: 'accountState',
-                    value
-                  });
-                }}
-                style={{ width: 80 }}
-              >
-                <Option value="">All</Option>
-                <Option value={'3'}>Inactivated</Option>
-                <Option value={'4'}>To be audit</Option>
-                <Option value={'0'}>Enabled</Option>
-                <Option value={'1'}>Disabled</Option>
-              </SelectGroup>
-            </FormItem>
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                icon="search"
-                shape="round"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.getUsers();
-                }}
-              >
-                <span>
-                  <FormattedMessage id="search" />
-                </span>
+        {this.state.hasPrescriberRole ? (
+          <React.Fragment>
+            <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>
+              *<FormattedMessage id="Prescriber.NewAdded" />
+            </p>
+            <div className="container-search">
+              <Form layout="inline">
+                <FormItem>
+                  <Input
+                    addonBefore={RCi18n({ id: 'Prescriber.UserName' })}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'userName',
+                        value
+                      });
+                    }}
+                    placeholder={RCi18n({ id: 'Prescriber.inputname' })}
+                    style={{ width: 300 }}
+                  />
+                </FormItem>
+                <FormItem>
+                  <Input
+                    addonBefore={RCi18n({ id: 'Prescriber.UserEmail' })}
+                    onChange={(e) => {
+                      const value = (e.target as any).value;
+                      this.onFormChange({
+                        field: 'email',
+                        value
+                      });
+                    }}
+                    placeholder={RCi18n({ id: 'Prescriber.PleaseInputEmail' })}
+                    style={{ width: 300 }}
+                  />
+                </FormItem>
+                <FormItem>
+                  <SelectGroup
+                    defaultValue={RCi18n({id:"Prescriber.All"})}
+                    label={RCi18n({ id: 'Prescriber.UserStatus' })}
+                    onChange={(value) => {
+                      value = value === '' ? null : value;
+                      this.onFormChange({
+                        field: 'accountState',
+                        value
+                      });
+                    }}
+                    style={{ width: 80 }}
+                  >
+                    <Option value="">
+                      <FormattedMessage id="Prescriber.All" />
+                    </Option>
+                    <Option value={'3'}>
+                      <FormattedMessage id="Prescriber.Inactivated" />
+                    </Option>
+                    <Option value={'4'}>
+                      <FormattedMessage id="Prescriber.ToBeAudit" />
+                    </Option>
+                    <Option value={'0'}>
+                      <FormattedMessage id="Prescriber.Enabled" />
+                    </Option>
+                    <Option value={'1'}>
+                      <FormattedMessage id="Prescriber.Disabled" />
+                    </Option>
+                  </SelectGroup>
+                </FormItem>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    icon="search"
+                    shape="round"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.getUsers();
+                    }}
+                  >
+                    <span>
+                      <FormattedMessage id="Prescriber.search" />
+                    </span>
+                  </Button>
+                </Form.Item>
+              </Form>
+              <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
+                <FormattedMessage id={RCi18n({ id: 'Prescriber.add' })} />
               </Button>
-            </Form.Item>
-          </Form>
-          <Button type="primary" htmlType="submit" onClick={this.addUser} style={{ marginBottom: '10px', marginTop: '10px' }}>
-            <FormattedMessage id="add" />
-          </Button>
-        </div>
-        <div className="container">
-          <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
-        </div>
-        <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
-        <Modal maskClosable={false} title="Please input the reason for disabling" visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
-          <Form>
-            <FormItem>
-              {getFieldDecorator('reason', {
-                rules: [
-                  {
-                    validator: (rule, value, callback) => {
-                      QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Reason for disabling', 1, 100);
-                    }
-                  }
-                ]
-              })(
-                <Input.TextArea
-                  placeholder="Please input a reason for disabling"
-                  onChange={(e: any) =>
-                    this.setState({
-                      disabledReason: e.target.value
-                    })
-                  }
-                />
-              )}
-            </FormItem>
-          </Form>
-        </Modal>
-        <Modal
-          maskClosable={false}
-          visible={this.state.auditModalVisible}
-          footer={null}
-          title="Agree or Reject?"
-          onCancel={() =>
-            this.setState({
-              auditModalVisible: false
-            })
-          }
-        >
-          <Row>
-            <Col span={12}></Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
-                Reject
-              </Button>
-              <Button type="primary" onClick={() => this.handleAudit(true)}>
-                Agree
-              </Button>
-            </Col>
-          </Row>
-        </Modal>
+            </div>
+            <div className="container">
+              <Table rowKey={(record, index) => index} dataSource={this.state.userData} columns={columns} pagination={this.state.pagination} loading={this.state.loading} onChange={this.handleTableChange} />
+            </div>
+            <UserModal userForm={this.state.userForm} visible={this.state.userVisible} parent={this} prescriberKeyId={this.props.prescriberKeyId} reflash={() => this.getUsers()} />
+            <Modal maskClosable={false} title={RCi18n({ id: 'Prescriber.theReasonForDisabling' })} visible={this.state.disabledModalVisible} onCancel={this.cancelDisabled} onOk={this.handleDisabled}>
+              <Form>
+                <FormItem>
+                  {getFieldDecorator('reason', {
+                    rules: [
+                      {
+                        validator: (rule, value, callback) => {
+                          QMMethod.validatorTrimMinAndMax(rule, value, callback, 'Reason for disabling', 1, 100);
+                        }
+                      }
+                    ]
+                  })(
+                    <Input.TextArea
+                      placeholder={RCi18n({ id: 'Prescriber.inputreasonfordisabling' })}
+                      onChange={(e: any) =>
+                        this.setState({
+                          disabledReason: e.target.value
+                        })
+                      }
+                    />
+                  )}
+                </FormItem>
+              </Form>
+            </Modal>
+            <Modal
+              maskClosable={false}
+              visible={this.state.auditModalVisible}
+              footer={null}
+              title={RCi18n({ id: 'Prescriber.AgreeOrReject' })}
+              onCancel={() =>
+                this.setState({
+                  auditModalVisible: false
+                })
+              }
+            >
+              <Row>
+                <Col span={12}></Col>
+                <Col span={12} style={{ textAlign: 'right' }}>
+                  <Button onClick={() => this.handleAudit(false)} style={{ marginRight: '10px' }}>
+                    Reject
+                  </Button>
+                  <Button type="primary" onClick={() => this.handleAudit(true)}>
+                    Agree
+                  </Button>
+                </Col>
+              </Row>
+            </Modal>
+          </React.Fragment>
+        ) : (
+          <p style={{ color: '#f02637', fontWeight: 700, fontSize: '12px' }}>
+            *<FormattedMessage id="Prescriber.NoPrescriberRole" />
+          </p>
+        )}
       </div>
     );
   }

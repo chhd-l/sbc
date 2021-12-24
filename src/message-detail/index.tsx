@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin } from 'antd';
 
 import * as webapi from './webapi';
@@ -23,19 +23,19 @@ class MessageDetails extends Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: this.props.location.pathname === '/message-quick-send' ? 'Quick Send' : 'Message Details',
+      title: this.props.location.pathname === '/message-quick-send' ? RCi18n({id:'Marketing.QuickSend'}) : RCi18n({id:'Marketing.MessageDetails'}),
       isDetail: this.props.location.pathname.indexOf('/message-detail') !== -1 ? true : false,
       isEdit: this.props.location.pathname.indexOf('/message-edit') !== -1 ? true : false,
       isAdd: this.props.location.pathname === '/message-quick-send' ? true : false,
       emailStatus: 'Draft',
       loading: false,
-      objectTypeList: [],
-      categoryList: [],
+      // objectTypeList: [],
+      // categoryList: [],
       basicForm: {
         taskId: '',
         emailCategory: '',
         templateId: '',
-        emailTemplate: '',
+        messageTemplate: '',
         objectType: '',
         objectNo: '',
         status: 0,
@@ -48,9 +48,11 @@ class MessageDetails extends Component<any, any> {
         consumerAccount: '',
         consumerName: '',
         consumerType: '',
-        email: ''
+        email: '',
+        petId: '',
+        petName: '',
+        ccList: ''
       },
-      detailsList: [],
       emailTemplateList: [],
       objectNoList: [],
       objectFetching: false,
@@ -69,47 +71,45 @@ class MessageDetails extends Component<any, any> {
         }
       ],
       previewHtml: '',
-      consumerList: []
+      consumerList: [],
+      petList: []
     };
   }
   componentDidMount() {
-    this.querySysDictionary('objectType');
-    this.querySysDictionary('messageCategory');
+    // this.querySysDictionary('objectType');
+    // this.querySysDictionary('messageCategory');
     this.initPage();
   }
 
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          if (type === 'objectType') {
-            let objectTypeList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              objectTypeList
-            });
-          }
-          if (type === 'messageCategory') {
-            let categoryList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              categoryList
-            });
-          }
-          if (type === 'messageStatus') {
-            let statusList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              statusList
-            });
-          }
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
-  };
+  // querySysDictionary = (type: String) => {
+  //   webapi
+  //     .querySysDictionary({ type: type })
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         if (type === 'objectType') {
+  //           let objectTypeList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             objectTypeList
+  //           });
+  //         }
+  //         if (type === 'messageCategory') {
+  //           let categoryList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             categoryList
+  //           });
+  //         }
+  //         if (type === 'messageStatus') {
+  //           let statusList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             statusList
+  //           });
+  //         }
+  //       } else {
+  //       }
+  //     })
+  //     .catch((err) => {});
+  // };
 
   initPage = () => {
     if (this.state.isAdd) {
@@ -125,6 +125,10 @@ class MessageDetails extends Component<any, any> {
       this.findEmailTask();
       this.getTaskDetail();
     }
+
+    
+    let temp = this.props.match
+    console.log(temp);
   };
 
   onBasicFormChange = ({ field, value }) => {
@@ -141,17 +145,6 @@ class MessageDetails extends Component<any, any> {
         objectNo: '',
         objectNoList: []
       });
-      // } else {
-      //   data['objectNoDisable'] = true;
-      //   data['objectNo'] = ""
-      //   this.setState({
-      //     objectNoList: []
-      //   })
-      //   this.props.form.setFieldsValue({
-      //     objectNo: '',
-      //     objectNoList: []
-      //   });
-      // }
     }
     if (field === 'sendType' && data['sendType'] !== value) {
       data['sendTime'] = '';
@@ -170,10 +163,12 @@ class MessageDetails extends Component<any, any> {
       data['consumerAccount'] = '';
       data['consumerName'] = '';
       data['email'] = '';
+      data['relatedPet'] = '';
       this.props.form.setFieldsValue({
         consumerAccount: '',
         consumerName: '',
-        email: ''
+        email: '',
+        relatedPet: ''
       });
     }
     data[field] = value;
@@ -209,7 +204,7 @@ class MessageDetails extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList,
+          emailTemplateList: res.context.messageTemplateResponseList,
           templateFetching: false
         });
       }
@@ -229,7 +224,7 @@ class MessageDetails extends Component<any, any> {
           objectType: basicForm.objectType,
           objectNo: basicForm.objectNo,
           templateId: basicForm.templateId,
-          emailTemplate: basicForm.emailTemplate,
+          messageTemplate: basicForm.messageTemplate,
           category: basicForm.emailCategory,
           status: +basicForm.status === 1 ? basicForm.status : 0,
           sendType: basicForm.sendType,
@@ -239,7 +234,10 @@ class MessageDetails extends Component<any, any> {
             consumerAccount: detailForm.consumerAccount,
             consumerName: detailForm.consumerName,
             consumerType: detailForm.consumerType,
-            email: detailForm.email
+            email: detailForm.email,
+            petId: detailForm.petId,
+            petName: detailForm.petName,
+            ccList: detailForm.ccList
           }
         };
         if (params.id) {
@@ -262,7 +260,7 @@ class MessageDetails extends Component<any, any> {
           objectNo: basicForm.objectNo,
           baseUrl: basicForm.baseUrl,
           templateId: basicForm.templateId,
-          emailTemplate: basicForm.emailTemplate,
+          messageTemplate: basicForm.messageTemplate,
           category: basicForm.emailCategory,
           sendType: basicForm.sendType,
           sendTime: basicForm.sendTime || sessionStorage.getItem('defaultLocalDateTime'),
@@ -271,7 +269,10 @@ class MessageDetails extends Component<any, any> {
             consumerAccount: detailForm.consumerAccount,
             consumerName: detailForm.consumerName,
             consumerType: detailForm.consumerType,
-            email: detailForm.email
+            email: detailForm.email,
+            petId: detailForm.petId,
+            petName: detailForm.petName,
+            ccList: detailForm.ccList
           }
         };
         if (params.id) {
@@ -298,17 +299,16 @@ class MessageDetails extends Component<any, any> {
           }
           this.setState({
             loading: false,
+            id:res.context.id,
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || type + ' Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || type + ' Failed');
         this.setState({
           loading: false
         });
@@ -333,14 +333,12 @@ class MessageDetails extends Component<any, any> {
             previewHtml: res.context.emailTemplateHtml
           });
         } else {
-          message.error(res.message || type + ' Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || type + ' Failed');
         this.setState({
           loading: false
         });
@@ -423,7 +421,7 @@ class MessageDetails extends Component<any, any> {
           taskId: taskDetail.taskId,
           emailCategory: taskDetail.category,
           templateId: taskDetail.templateId,
-          emailTemplate: taskDetail.emailTemplate,
+          messageTemplate: taskDetail.messageTemplate,
           objectType: taskDetail.objectType,
           objectNo: taskDetail.objectNo,
           status: taskDetail.status,
@@ -435,8 +433,14 @@ class MessageDetails extends Component<any, any> {
           consumerAccount: consumerDetail.consumerAccount,
           consumerName: consumerDetail.consumerName,
           consumerType: consumerDetail.consumerType,
-          email: consumerDetail.email
+          email: consumerDetail.email,
+          ccList: consumerDetail.ccList,
+          petId: consumerDetail.petId,
+          petName: consumerDetail.petName
         };
+        if (consumerDetail.consumerAccount) {
+          this.getPetList(consumerDetail.consumerAccount);
+        }
         this.setState(
           {
             basicForm,
@@ -457,7 +461,9 @@ class MessageDetails extends Component<any, any> {
                 consumerAccount: detailForm.consumerAccount,
                 consumerName: detailForm.consumerName,
                 consumerType: detailForm.consumerType,
-                email: detailForm.email
+                email: detailForm.email,
+                ccList: detailForm.ccList,
+                pet: detailForm.petId
               });
             } else {
               this.props.form.setFieldsValue({
@@ -470,7 +476,9 @@ class MessageDetails extends Component<any, any> {
                 consumerAccount: detailForm.consumerAccount,
                 consumerName: detailForm.consumerName,
                 consumerType: detailForm.consumerType,
-                email: detailForm.email
+                email: detailForm.email,
+                ccList: detailForm.ccList,
+                pet: detailForm.petId
               });
             }
           }
@@ -499,7 +507,6 @@ class MessageDetails extends Component<any, any> {
     };
   }
   getConsumerList = (value) => {
-    const { detailForm } = this.state;
     this.setState({
       consumerFetching: true
     });
@@ -519,69 +526,64 @@ class MessageDetails extends Component<any, any> {
       }
     });
   };
+  getPetList = (value) => {
+    let params = {
+      consumerAccount: value
+    };
+    webapi.petsByConsumer(params).then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          petList: res.context.context
+        });
+      }
+    });
+  };
 
   render() {
-    const { title, emailStatus, objectTypeList, categoryList, detailsList, emailTemplateList, basicForm, detailForm, objectFetching, consumerFetching, templateFetching, objectNoList, customerTypeArr, previewHtml, consumerList } = this.state;
+    const { title, emailStatus, emailTemplateList, basicForm, detailForm, objectFetching, consumerFetching, templateFetching, objectNoList, customerTypeArr, previewHtml, consumerList, petList } = this.state;
     const { getFieldDecorator } = this.props.form;
 
-    const columns = [
+    const objectTypeList = [
       {
-        title: 'Consumer Account',
-        dataIndex: 'consumerAccount',
-        key: 'consumerAccount',
-        width: '15%'
+        value: 'Order',
+        name: 'Order'
       },
       {
-        title: 'Consumer Name',
-        dataIndex: 'consumerName',
-        key: 'consumerName',
-        width: '15%'
+        value: 'Subscription',
+        name: 'Subscription'
       },
       {
-        title: 'Consumer Type',
-        dataIndex: 'consumerType',
-        key: 'consumerType',
-        width: '15%'
+        value: 'Recommendation',
+        name: 'Recommendation'
       },
       {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-        width: '15%'
-      },
+        value: 'Prescriber creation',
+        name: 'Prescriber creation'
+      }
+    ];
+    const categoryList = [
       {
-        title: 'Sent Time',
-        dataIndex: 'sentTime',
-        key: 'sentTime',
-        width: '15%'
-      },
-      {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        width: '10%'
-      },
-      {
-        title: 'Requests Time',
-        dataIndex: 'requestsTime',
-        key: 'requestsTime',
-        width: '15%'
+        value: 'Notification',
+        name: 'Notification'
       }
     ];
 
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Message Details</Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="Marketing.MessageDetails" />
+          </Breadcrumb.Item>
         </BreadCrumb>
         {/*导航面包屑*/}
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <div className="container-search">
             <Headline title={title} />
 
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Basic Information</span>
+                <span style={styles.titleText}><FormattedMessage id="Marketing.BasicInformation" /></span>
                 {emailStatus === 'Draft' ? <Tag>{emailStatus}</Tag> : null}
                 {emailStatus === 'Finish' ? <Tag color="#87d068">{emailStatus}</Tag> : null}
                 {emailStatus === 'To do' ? <Tag color="#108ee9">{emailStatus}</Tag> : null}
@@ -589,19 +591,19 @@ class MessageDetails extends Component<any, any> {
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Task ID">
+                    <FormItem label={<FormattedMessage id="Marketing.TaskID" />}>
                       {getFieldDecorator('taskId', {
                         rules: [{ required: true }]
                       })(<Input disabled />)}
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Email Category">
+                    <FormItem label={<FormattedMessage id="Marketing.EmailCategory" />}>
                       {getFieldDecorator('emailCategory', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Email Category!'
+                            message: <FormattedMessage id="Marketing.PleaseInputEmailCategory" />
                           }
                         ]
                       })(
@@ -614,6 +616,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                         >
                           {categoryList &&
                             categoryList.map((item, index) => (
@@ -626,21 +629,21 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Email Template">
+                    <FormItem label={<FormattedMessage id="Marketing.EmailTemplate" />}>
                       {getFieldDecorator('templateId', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select Email Template!'
+                            message: <FormattedMessage id="Marketing.PleaseSelectEmailTemplate" />
                           }
                         ]
                       })(
                         <Select
-                          onChange={(value, option) => {
+                          onChange={(value, option: any) => {
                             let name = option.props.children;
                             value = value === '' ? null : value;
                             this.onBasicFormChange({
-                              field: 'emailTemplate',
+                              field: 'messageTemplate',
                               value: name
                             });
                             this.onBasicFormChange({
@@ -649,12 +652,13 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           notFoundContent={templateFetching ? <Spin size="small" /> : null}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           disabled={this.state.isDetail}
                         >
                           {emailTemplateList &&
                             emailTemplateList.map((item, index) => (
-                              <Option title={item.emailTemplate && item.emailTemplate.length > 15 ? item.emailTemplate : ''} value={item.templateId} key={index}>
-                                {item.emailTemplate}
+                              <Option title={item.messageTemplate && item.messageTemplate.length > 15 ? item.messageTemplate : ''} value={item.templateId} key={index}>
+                                {item.messageTemplate}
                               </Option>
                             ))}
                         </Select>
@@ -662,12 +666,12 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Object Type">
+                    <FormItem label={<FormattedMessage id="Marketing.ObjectType" />}>
                       {getFieldDecorator('objectType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Object Type!'
+                            message: <FormattedMessage id="Marketing.PleaseSelectObjectType" />
                           }
                         ]
                       })(
@@ -680,6 +684,7 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                         >
                           {objectTypeList &&
                             objectTypeList.map((item, index) => (
@@ -692,24 +697,25 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Object No">
+                    <FormItem label={<FormattedMessage id="Marketing.ObjectNo" />}>
                       {getFieldDecorator('objectNo', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please Select Object No!'
+                            message: <FormattedMessage id="Marketing.PleaseSelectObjectNo" />
                           },
                           {
                             max: 50,
-                            message: 'Object No exceed the maximum length!'
+                            message: <FormattedMessage id="Marketing.theMaximumLength" />
                           }
                         ]
                       })(
                         <Select
                           disabled={basicForm.objectNoDisable || this.state.isDetail}
                           showSearch
-                          placeholder="Select a Object No"
+                          placeholder={RCi18n({id:'Marketing.SelectAObjectNo'})}
                           optionFilterProp="children"
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             this.onBasicFormChange({
                               field: 'objectNo',
@@ -732,12 +738,12 @@ class MessageDetails extends Component<any, any> {
                   </Col>
 
                   <Col span={8}>
-                    <FormItem label="Send Time">
+                    <FormItem label={<FormattedMessage id="Marketing.SendTime" />}>
                       {getFieldDecorator('sendType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please select Send Time!'
+                            message: <FormattedMessage id="Marketing.PleaseSelectSendTime" />
                           }
                         ]
                       })(
@@ -751,23 +757,23 @@ class MessageDetails extends Component<any, any> {
                             });
                           }}
                         >
-                          <Radio value="Immediately">Immediately</Radio>
-                          <Radio value="Timing">Timing</Radio>
+                          <Radio value="Immediately"><FormattedMessage id="Marketing.Immediately" /></Radio>
+                          <Radio value="Timing"><FormattedMessage id="Marketing.Timing" /></Radio>
                         </Radio.Group>
                       )}
                     </FormItem>
                   </Col>
                   {basicForm.sendType === 'Timing' ? (
                     <Col span={8}>
-                      <FormItem label="Select Time">
+                      <FormItem label={<FormattedMessage id="Marketing.SelectTime" />}>
                         {getFieldDecorator('sendTime', {
-                          rules: [{ required: true, message: 'Please select Time!' }]
+                          rules: [{ required: true, message:<FormattedMessage id="Marketing.PleaseSelectTime" /> }]
                         })(
                           <DatePicker
                             showTime
                             disabledDate={this.disabledDate}
                             disabledTime={this.disabledDateTime}
-                            placeholder="Select Time"
+                            placeholder={RCi18n({id:'Marketing.SelectTime'})}
                             style={{ width: '100%' }}
                             disabled={this.state.isDetail}
                             onChange={(value, dateString) => {
@@ -785,38 +791,26 @@ class MessageDetails extends Component<any, any> {
               </Form>
             </div>
 
-            {/* {this.state.isDetail ?
             <div>
               <div style={styles.title}>
-                <span style={styles.titleText}>Recipient details</span>
-              </div>
-              <Table
-                style={{ marginTop: 20 }}
-                columns={columns}
-                dataSource={detailsList}
-                pagination={false}
-              />
-            </div>
-            : */}
-            <div>
-              <div style={styles.title}>
-                <span style={styles.titleText}>Recipient details</span>
+                <span style={styles.titleText}><FormattedMessage id="Marketing.RecipientDetails" /></span>
               </div>
 
               <Form layout="horizontal" labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} labelAlign="right">
                 <Row style={{ marginTop: 20 }}>
                   <Col span={8}>
-                    <FormItem label="Consumer Type">
+                    <FormItem label={<FormattedMessage id="Marketing.ConsumerType" />}>
                       {getFieldDecorator('consumerType', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Consumer Type!'
+                            message: <FormattedMessage id="Marketing.PleaseInputConsumerType" />
                           }
                         ]
                       })(
                         <Select
                           disabled={this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           onChange={(value) => {
                             value = value === '' ? null : value;
                             this.onDetailsFormChange({
@@ -835,17 +829,18 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Consumer Account">
+                    <FormItem label={<FormattedMessage id="Marketing.PetOwnerAccount" />}>
                       {getFieldDecorator(
                         'consumerAccount',
                         {}
                       )(
                         <Select
                           disabled={detailForm.consumerType !== 'Member' || this.state.isDetail}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
                           showSearch
-                          placeholder="Select a consumer"
+                          placeholder={RCi18n({id:'Marketing.SelectAConsumer'})}
                           optionFilterProp="children"
-                          onChange={(value, option) => {
+                          onChange={(value, option: any) => {
                             let consumer = option.props['data-consumer'];
                             let consumerName = consumer.customerName;
                             let email = consumer.email;
@@ -865,9 +860,10 @@ class MessageDetails extends Component<any, any> {
                               consumerName: consumerName,
                               email: email
                             });
+                            this.getPetList(value);
                           }}
                           notFoundContent={consumerFetching ? <Spin size="small" /> : null}
-                          onSearch={this.getConsumerList}
+                          onSearch={_.debounce(this.getConsumerList, 500)}
                           filterOption={(input, option) => option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
                           {consumerList &&
@@ -881,16 +877,16 @@ class MessageDetails extends Component<any, any> {
                     </FormItem>
                   </Col>
                   <Col span={8}>
-                    <FormItem label="Consumer Name">
+                    <FormItem label={<FormattedMessage id="Marketing.PetOwnerName" />}>
                       {getFieldDecorator('consumerName', {
                         rules: [
                           {
                             required: true,
-                            message: 'Please input Consumer Name!'
+                            message: <FormattedMessage id="Marketing.PleaseInputConsumerName" />
                           },
                           {
                             max: 50,
-                            message: 'Consumer Name exceed the maximum length!'
+                            message: <FormattedMessage id="Marketing.ConsumerNameMaximumLength" />
                           }
                         ]
                       })(
@@ -909,13 +905,15 @@ class MessageDetails extends Component<any, any> {
                   </Col>
 
                   <Col span={8}>
-                    <FormItem label="Email">
+                    <FormItem label={<FormattedMessage id="Marketing.Email"/>}>
                       {getFieldDecorator('email', {
                         rules: [
-                          { required: true, message: 'Please input Email!' },
+                          { required: true, 
+                            message: <FormattedMessage id="Marketing.PleaseInputEmail"/>
+                          },
                           {
                             max: 50,
-                            message: 'Email exceed the maximum length!'
+                            message: <FormattedMessage id="Marketing.EmailExceedTheMaximumLength"/>
                           }
                         ]
                       })(
@@ -932,6 +930,86 @@ class MessageDetails extends Component<any, any> {
                       )}
                     </FormItem>
                   </Col>
+
+                  <Col span={8}>
+                    <FormItem
+                      label={
+                        <span>
+                          <FormattedMessage id="Marketing.RelatedPet"/>
+                          &nbsp;
+                          <Tooltip title={<FormattedMessage id="Marketing.PleaseSelectPetOwnerAccountFirst"/>}>
+                            <Icon type="question-circle-o" />
+                          </Tooltip>
+                        </span>
+                      }
+                    >
+                      {getFieldDecorator(
+                        'pet',
+                        {}
+                      )(
+                        <Select
+                          disabled={detailForm.consumerAccount === '' || this.state.isDetail}
+                          placeholder={RCi18n({id:'Marketing.PleaseSelectPet'})}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value, option: any) => {
+                            let name = option.props.children;
+                            value = value === '' ? null : value;
+                            this.onDetailsFormChange({
+                              field: 'petId',
+                              value
+                            });
+
+                            this.onDetailsFormChange({
+                              field: 'petName',
+                              value: name
+                            });
+
+                            this.props.form.setFieldsValue({
+                              pet: name
+                            });
+                          }}
+                        >
+                          {petList &&
+                            petList.map((item) => (
+                              <Option value={item.petsId} key={item.id}>
+                                {item.petsName}
+                              </Option>
+                            ))}
+                        </Select>
+                      )}
+                    </FormItem>
+                  </Col>
+
+                  <Col span={8}>
+                    <FormItem
+                      label={
+                        <span>
+                          <FormattedMessage id="Marketing.CCList"/>
+                          &nbsp;
+                          <Tooltip title={<FormattedMessage id="Marketing.IfYouHaveMultiple"/>}>
+                            <Icon type="question-circle-o" />
+                          </Tooltip>
+                        </span>
+                      }
+                    >
+                      {getFieldDecorator(
+                        'ccList',
+                        {}
+                      )(
+                        <Input
+                          disabled={this.state.isDetail}
+                          title={detailForm.ccList}
+                          onChange={(e) => {
+                            const value = (e.target as any).value;
+                            this.onDetailsFormChange({
+                              field: 'ccList',
+                              value
+                            });
+                          }}
+                        />
+                      )}
+                    </FormItem>
+                  </Col>
                 </Row>
               </Form>
             </div>
@@ -939,7 +1017,7 @@ class MessageDetails extends Component<any, any> {
             {previewHtml ? (
               <div>
                 <div style={styles.title}>
-                  <span style={styles.titleText}>Preview</span>
+                  <span style={styles.titleText}><FormattedMessage id="Marketing.Preview"/>Preview</span>
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: previewHtml }}></div>
               </div>
@@ -949,18 +1027,18 @@ class MessageDetails extends Component<any, any> {
 
         <div className="bar-button">
           {!this.state.isDetail ? (
-            <Button type="primary" shape="round" onClick={() => this.submit()} style={{ marginRight: 10 }}>
-              Submit
+            <Button type="primary" onClick={() => this.submit()} style={{ marginRight: 10 }}>
+              {<FormattedMessage id="Marketing.Submit" />}
             </Button>
           ) : null}
           {!this.state.isDetail ? (
-            <Button type="primary" shape="round" style={{ marginRight: 10 }} onClick={() => this.save()}>
+            <Button type="primary" style={{ marginRight: 10 }} onClick={() => this.save()}>
               {<FormattedMessage id="save" />}
             </Button>
           ) : null}
 
-          <Button shape="round" onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
-            {<FormattedMessage id="cancel" />}
+          <Button onClick={() => (history as any).go(-1)} style={{ marginRight: 10 }}>
+            {<FormattedMessage id="back" />}
           </Button>
         </div>
       </div>

@@ -86,13 +86,19 @@ body {
   min-height: calc(100vh - 330px);
 }
 
+.container-info {
+  background: #fff;
+  margin: 12px 12px 0 12px;
+  padding: 20px;
+}
+
 .btn-link {
-  padding: 0;
+  padding: 10px;
   border: none;
   background: transparent;
 
   span {
-    color: #F56C1D;
+    color: #e2001a;
     font-weight: 400;
   }
 
@@ -192,6 +198,33 @@ body {
     background: rgba(0, 4, 40, 0.06);
   }
 }
+
+.header {
+  .headerRight-shop {
+    .headerRight-shop-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+.shop-list-box {
+  .shop-list-item {
+    display: flex;
+    height: 35px;
+    align-items: center;
+
+    .logo {
+      padding-right: 15px;
+      font-size: 14px;
+    }
+
+    .accountName {
+      color: #333;
+      font-size: 14px;
+    }
+  }
+}
+
 
 
 .leftHeader.ant-layout-sider {
@@ -569,6 +602,10 @@ body {
   padding: 8px;
 }
 
+.ant-tabs-tabpane .ant-table-self tbody td {
+  padding: 16px;
+}
+
 /*slide-menu*/
 
 .tips {
@@ -605,13 +642,14 @@ body {
   z-index: 1000;
   width: 100%;
   position: fixed;
-  left: 336px;
+  // left: 336px;
   bottom: 0;
   padding: 10px;
   padding-left: 20px;
   padding-right: 20px;
   box-shadow: 4px 2px 5px 5px #eee;
   background: #fff;
+  margin-left: 10px;
 }
 
 .ant-table-thead > tr > th,
@@ -702,9 +740,9 @@ body {
   content: '\E633';
 }
 
-.ant-input-group-addon {
-  min-width: 63px;
-}
+// .ant-input-group-addon {
+//   min-width: 63px;
+// }
 
 .goodsImg .ant-upload-list-picture-card .ant-upload-list-item {
   float: none;
@@ -1758,7 +1796,7 @@ body {
   background: none;
   margin-bottom: 10px;
   display: flex;
-  flex-direciton: row;
+  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
@@ -1914,7 +1952,7 @@ body {
   -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";
   zoom: 1;
   display: inline-block;
-  font-family: anticon;
+  font-family: anticon, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1935,7 +1973,7 @@ body {
   -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)";
   zoom: 1;
   display: inline-block;
-  font-family: anticon;
+  font-family: anticon, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2013,7 +2051,7 @@ body {
 
           h2,
           p {
-            color: #F56C1D;
+            color: var(--primary-color);
           }
         }
       }
@@ -3206,6 +3244,10 @@ form .ant-input-group-compact {
   overflow-x: hidden !important;
 }
 
+.table-overflow .ant-table-body {
+  overflow-x: auto !important;
+}
+
 // /*输入框样式*/
 // #inputs .ant-input-group-addon:first-child {
 //   width: 170px;
@@ -3263,6 +3305,10 @@ form .ant-input-group-compact {
   width: 185px;
 }
 
+.pets-search-app .ant-input {
+  width: 100% !important;
+}
+
 #input-lable-wwidth .ant-input-group-addon {
   width: 177px;
 }
@@ -3280,7 +3326,7 @@ form .ant-input-group-compact {
 }
 
 #range-picker-width-mx .ant-calendar-picker {
-  width: 386px !important;
+  width: 100% !important;
 }
 
 .red {
@@ -3434,5 +3480,69 @@ form .ant-input-group-compact {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 10;
+  z-index: 999;
 }
+
+.overFlowtext {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.global-indicator-loading {
+  transform-origin: 48% 48%;
+  animation: donutSpin .8s linear infinite;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+#mars-footer-panel {
+    position: fixed!important;
+    z-index: 0;
+  }
+  #mars-footer-panel .mars-footer-legal,#mars-footer-panel .mars-footer-label{
+    /* color: #fff!important; */
+  }
+  #onetrust-consent-sdk #onetrust-banner-sdk{
+    margin-bottom:0;
+  }
+  .header-border-opacity::before{
+    opacity: 1!important;
+  }
+  .ot-sdk-show-settings-wrapper{
+    position: absolute;
+    bottom: 0;
+    z-index:10;
+    left: 0;
+    background-color: #212CDB;
+  }
+  /* #mars-footer-panel .mars-footer-container{
+    padding-bottom: 36px;
+  } */
+  .optanon-show-settings-button.optanon-toggle-display,
+  .ot-sdk-show-settings {
+    color: #68b631;
+    border: 1px solid #68b631;
+    padding: 0.8em 2em;
+    /* position: fixed; */
+  
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    z-index: 10;
+  }
+  #ot-sdk-btn.ot-sdk-show-settings:hover {
+    color: #68b631;
+  }
+  
+  .optanon-show-settings-button.optanon-toggle-display
+    .optanon-show-settings-middle,
+  .ot-sdk-show-settings .optanon-show-settings-middle {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+  
+  #ot-sdk-btn.ot-sdk-show-settings {
+    background-color: #fff !important;
+  }

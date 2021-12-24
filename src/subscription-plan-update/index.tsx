@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Headline, BreadCrumb, history, Const } from 'qmkit';
+  import React, { Component } from 'react';
+import { Headline, BreadCrumb, history, cache, Const } from 'qmkit';
 import { Breadcrumb, message, Steps, Button, Icon, Form } from 'antd';
 import './index.less';
 import BasicInformation from './components/basicInformation';
@@ -8,25 +8,41 @@ import EntryCriteria from './components/entryCriteria';
 import ExitRules from './components/exitRules';
 import Details from './components/details';
 import * as webapi from './webapi';
+import { edit } from '@/regular-product-add/webapi';
+import {FormattedMessage} from 'react-intl';
 
 const { Step } = Steps;
 
 class SubscriptionPlanUpdate extends Component<any, any> {
   static propTypes = {};
-  static defaultProps = {};
+  static defaultProps = {
+    id: null,
+    editable: true
+  };
   constructor(props) {
     super(props);
+    const id = props.id || this.props.match.params.id;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId;
     this.state = {
-      id: this.props.match.params.id,
-      title: '',
-      current: 3,
+      id,
+      title: id ? <FormattedMessage id="Subscription.EditPlan"/> : <FormattedMessage id="Subscription.AddNewPlanFood"/>,
+      current: 0,
+      storeId,
       subscriptionPlan: {
         canCancelPlan: true,
-        canCancelChargedFee: true,
-        canChangeDelivery: true,
-        canSkipNextDelivery: true
+        subscriptionPlanFlag: true,
+        changeDeliveryDateFlag: true,
+        skipNextDeliveryFlag: false,
+        mainGoods: [],
+        mainGoodsIds: [],
+        frequency: [],
+        consentIds: [],
+        quantity: 100,
+        landingFlag: true
       },
-      allSkuProduct: []
+      allSkuProduct: [],
+      frequencyList: [],
+      planTypeList: []
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -35,38 +51,47 @@ class SubscriptionPlanUpdate extends Component<any, any> {
 
   componentWillMount() {
     const { id } = this.state;
-    this.setState({
-      title: id ? 'Edit Plan (Food Dispenser)' : 'Add New Plan (Food Dispenser)'
-    });
-    webapi.getAllSkuProducts() .then((data) => {
+    webapi.getWeekFrequency().then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
+        let defaultFrequency = res.context.sysDictionaryVOS.find((x) => parseInt(x.valueEn) === 4);
+        if (!id && defaultFrequency) {
+          this.addField('frequency', [defaultFrequency.id]);
+        }
         this.setState({
-          allSkuProduct: res.context.goodsInfos.content
+          frequencyList: res.context.sysDictionaryVOS.filter((x) => parseInt(x.valueEn) >= 3 && parseInt(x.valueEn) <= 5)
         });
-      } else {
-        message.error(res.message || 'Get data failed');
       }
-    })
-    .catch(() => {
-      message.error('Get data failed');
+    });
+    webapi.getSubscriptionPlanTypes().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        const defaultType = res.context.sysDictionaryVOS.find((vo) => vo.valueEn === 'Product');
+        if (!id && defaultType) {
+          this.addField('type', defaultType.name);
+        }
+        this.setState({
+          planTypeList: res.context.sysDictionaryVOS
+        });
+      }
     });
     if (id) {
-      webapi
-        .getSubscriptionPlanById(id)
-        .then((data) => {
-          const { res } = data;
-          if (res.code === 'K-000000') {
-            this.setState({
-              subscriptionPlan: res.context
-            });
-          } else {
-            message.error(res.message || 'Get Data Failed');
+      webapi.getSubscriptionPlanById(id).then((data) => {
+        const { res } = data;
+        if (res.code === 'K-000000') {
+          if (this.props.editable && res.context.status === 1) {
+            history.push('/subscription-plan');
           }
-        })
-        .catch((err) => {
-          message.error(err || 'Get Data Failed');
-        });
+          this.setState({
+            subscriptionPlan: {
+              ...res.context,
+              canCancelPlan: true,
+              subscriptionPlanFlag: true,
+              skipNextDeliveryFlag: false
+            }
+          });
+        }
+      });
     }
   }
 
@@ -92,79 +117,84 @@ class SubscriptionPlanUpdate extends Component<any, any> {
       subscriptionPlan: data
     });
   }
-  updateSubscriptionPlan(e) {
+  updateSubscriptionPlan(e, isDraft) {
     e.preventDefault();
     this.props.form.validateFields((err) => {
       if (!err) {
         const { subscriptionPlan, id } = this.state;
+        if (subscriptionPlan.mainGoods.findIndex((g) => !g.settingPrice || g.settingPrice <= 0) > -1) {
+          message.warning(<FormattedMessage id="Subscription.SettingPriceIs"/>);
+          return;
+        }
+        if (isDraft) {
+          subscriptionPlan.status = 0; // Draft
+        } else {
+          subscriptionPlan.status = 1; // Publish
+        }
+        subscriptionPlan.storeId = this.state.storeId;
         if (id) {
           subscriptionPlan.id = id; // edit by id
-          webapi
-            .updateSubscriptionPlan(subscriptionPlan)
-            .then((data) => {
-              const { res } = data;
-              if (res.code === 'K-000000') {
-                message.success('Operate successfully');
-                history.push({ pathname: '/subscriptionPlan-list' });
-              } else {
-                message.error(res.message || 'Update Failed');
-              }
-            })
-            .catch((err) => {
-              message.error(err || 'Update Failed');
-            });
+          webapi.updateSubscriptionPlan(subscriptionPlan).then((data) => {
+            const { res } = data;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+              history.push({ pathname: '/subscription-plan' });
+            }
+          });
         } else {
-          webapi
-            .addSubscriptionPlan(subscriptionPlan)
-            .then((data) => {
-              const { res } = data;
-              if (res.code === 'K-000000') {
-                message.success('Operate successfully');
-                history.push({ pathname: '/subscriptionPlan-list' });
-              } else {
-                message.error(res.message || 'Add Failed');
-              }
-            })
-            .catch((err) => {
-              message.error(err || 'Add Failed');
-            });
+          webapi.addSubscriptionPlan(subscriptionPlan).then((data) => {
+            const { res } = data;
+            if (res.code === Const.SUCCESS_CODE) {
+              message.success(<FormattedMessage id="Subscription.OperateSuccessfully"/>);
+              history.push({ pathname: '/subscription-plan' });
+            }
+          });
         }
       }
     });
   }
   render() {
-    const { current, title, subscriptionPlan, allSkuProduct } = this.state;
+    const editable = this.props.editable;
+    const { current, title, subscriptionPlan, allSkuProduct, frequencyList, planTypeList } = this.state;
+    let targetDisabled = false;
+    let saveDisabled = false;
+    if (current === 1) {
+      targetDisabled = !subscriptionPlan.targetGoods || subscriptionPlan.targetGoods.length === 0;
+    }
+    if (current === 4) {
+      saveDisabled = !subscriptionPlan.mainGoods || subscriptionPlan.mainGoods.length === 0;
+    }
     const steps = [
       {
-        title: 'Basic Information',
-        controller: <BasicInformation subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form}/>
+        title: <FormattedMessage id="Subscription.BasicInformation"/>,
+        controller: <BasicInformation subscriptionPlan={subscriptionPlan} frequencyList={frequencyList} planTypeList={planTypeList} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Target Product',
-        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct}/>
+        title: <FormattedMessage id="Subscription.TargetProduct"/>,
+        controller: <TargetProduct subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       },
       {
-        title: 'Entry Criteria',
-        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        title: <FormattedMessage id="Subscription.EntryCriteria"/>,
+        controller: <EntryCriteria subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Exit Rules',
-        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        title: <FormattedMessage id="Subscription.ExitRules"/>,
+        controller: <ExitRules subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} editable={editable} />
       },
       {
-        title: 'Details',
-        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} />
+        title: <FormattedMessage id="Subscription.Details"/>,
+        controller: <Details subscriptionPlan={subscriptionPlan} addField={this.addField} form={this.props.form} allSkuProduct={allSkuProduct} editable={editable} />
       }
     ];
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>{title}</Breadcrumb.Item>
+          <Breadcrumb.Item>{editable ? title : subscriptionPlan.name}</Breadcrumb.Item>
         </BreadCrumb>
 
-        <div className="container-search" id="subscriptionPlanStep">
+        <div className="container-search" id="SubscriptionStep">
           <Headline title={title} />
-          <Steps current={current} labelPlacement='vertical'>
+          <Steps current={current} labelPlacement="vertical">
             {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}
@@ -174,19 +204,24 @@ class SubscriptionPlanUpdate extends Component<any, any> {
           <div className="steps-action">
             {current > 0 && (
               <Button style={{ marginRight: 15 }} onClick={() => this.prev()}>
-                <Icon type="left" /> Return
+                <Icon type="left" /> <FormattedMessage id="Subscription.Return"/>
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.next(e)}>
-                Next step <Icon type="right" />
+              <Button type="primary" onClick={(e) => this.next(e)} disabled={targetDisabled}>
+                <FormattedMessage id="Subscription.NextStep"/> <Icon type="right" />
               </Button>
             )}
-            {current === steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.updateSubscriptionPlan(e)}>
-                Submit <Icon type="right" />
-              </Button>
-            )}
+            {current === steps.length - 1 && editable ? (
+              <div className="saveBtn">
+                <Button disabled={saveDisabled} style={{ marginRight: 15 }} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, true)}>
+                <FormattedMessage id="Subscription.Save"/> <Icon type="right" />
+                </Button>
+                <Button disabled={saveDisabled} type="primary" onClick={(e) => this.updateSubscriptionPlan(e, false)}>
+                <FormattedMessage id="Subscription.Publish"/> <Icon type="right" />
+                </Button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

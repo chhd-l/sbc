@@ -1,4 +1,4 @@
-import { cache, history } from 'qmkit';
+import { cache, Const, history } from 'qmkit';
 
 /**
  * 判断用户是否登陆
@@ -382,4 +382,91 @@ export function cycleBuild(list, source) {
   });
   return sortList;
 }
+
+export const isMobileApp = () => {
+  const devices = navigator.userAgent.toLowerCase();
+  return /iphone/.test(devices) || /android/.test(devices);
+}
+//导出方法
+export const onExport = (params,downloadUrl) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      let base64 = new Base64();
+      const token = (window as any).token;
+      if (token) {
+        let result = JSON.stringify({ ...params, token: token });
+        let encrypted = base64.urlEncode(result);
+
+        // 新窗口下载
+        const exportHref = Const.HOST + `${downloadUrl}/${encrypted}`;
+        window.open(exportHref);
+      } 
+      resolve();
+    }, 500);
+  });
+};
+/**
+ * 加载js
+ * @param fn 执行函数
+ * @param url 加载链接
+ *
+ */
+interface PropsLoadJS  {
+  url:string,
+  callback?:()=>void,
+  dataSets?:any,
+  code?:string,
+  className?:string,
+  type?:string,
+  id?:string
+}
+ export const loadJS = ({
+  url,
+  callback = function () {},
+  dataSets,
+  code,
+  className,
+  type,
+  id
+}:PropsLoadJS) => {
+  var script = document.createElement('script');
+
+  if (className) {
+    script.className = className;
+  }
+  script.type = type || 'text/javascript';
+
+  if (id) {
+    script.id = id;
+  }
+
+  if (dataSets) {
+    for (let key in dataSets) {
+      script.dataset[key] = dataSets[key];
+    }
+  }
+  if (code) {
+    script.innerHTML = code;
+  }
+  //IE
+  if (script.readyState) {
+    script.onreadystatechange = function () {
+      if (script.readyState === 'loaded' || script.readyState === 'complete') {
+        script.onreadystatechange = null;
+        callback();
+      }
+    };
+  } else {
+    //其他浏览器
+    script.onload = function () {
+      callback();
+    };
+  }
+  if (url) {
+    script.src = url;
+  }
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+
 

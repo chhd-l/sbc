@@ -31,7 +31,6 @@ export default class AppStore extends Store {
     if (util.isThirdStore()) {
       const levRes = await webapi.getUserLevelList();
       if (levRes.res.code != Const.SUCCESS_CODE) {
-        message.error(levRes.res.message);
         return;
       }
       levelList = levRes.res.context.storeLevelVOList;
@@ -54,7 +53,6 @@ export default class AppStore extends Store {
       });
     } else {
       this.dispatch('loading:end');
-      message.error(res.message);
     }
   };
 
@@ -85,44 +83,77 @@ export default class AppStore extends Store {
   };
 
   onDelete = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.deleteMarketing(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       this.dispatch('loading:end');
 
       message.success('Operate successfully');
     } else {
-      message.error(res.message);
       this.dispatch('loading:end');
     }
-    this.init();
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
   };
 
   onPause = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('Operate successfully');
-    } else {
-      message.error(res.message);
     }
-    this.init();
+    this.dispatch('loading:end');
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
   };
 
   close = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.close(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
       message.success('close successful');
-    } else {
-      message.error(res.message);
     }
-    this.init();
+    this.dispatch('loading:end');
+    this.init({
+      pageNum: this.state().get('currentPage') - 1,
+      pageSize: 10
+    });
+  };
+
+  download = async (marketingId) => {
+    const base64 = new util.Base64();
+    const token = (window as any).token;
+    if (token) {
+      const result = JSON.stringify({
+        marketingId,
+        token
+      });
+      const encrypted = base64.urlEncode(result);
+      const exportHref = Const.HOST + `/marketing/marketing-used-record/export/${encrypted}`;
+      window.open(exportHref);
+    }
+      message.success('download successful');
   };
   onStart = async (marketingId) => {
+    this.dispatch('loading:start');
     const { res } = await webapi.start(marketingId);
-    if (res.code == Const.SUCCESS_CODE) {
-      message.success('Operate successfully');
-    } else {
-      message.error(res.message);
-    }
-    this.init();
+    setTimeout(()=>{
+      if (res.code == Const.SUCCESS_CODE) {
+        message.success('Operate successfully');
+      }
+      this.dispatch('loading:end');
+      this.init({
+        pageNum: this.state().get('currentPage') - 1,
+        pageSize: 10
+      });
+    }, 1000)
   };
+
+  onPageChange = (pageNum = 1) => {
+    this.dispatch('list:currentPage', pageNum);
+  }
 }

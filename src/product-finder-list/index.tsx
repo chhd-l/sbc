@@ -88,14 +88,12 @@ class ProductFinderList extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
@@ -124,13 +122,13 @@ class ProductFinderList extends Component<any, any> {
         width: '10%'
       },
       {
-        title: 'Consumer account',
+        title: 'Pet owner account',
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '10%'
       },
       {
-        title: 'Consumer Type',
+        title: 'Pet Owner Type',
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '10%',
@@ -194,7 +192,7 @@ class ProductFinderList extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}>Consumer type</p>}
+                    label={<p style={styles.label}>Pet owner type</p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -221,7 +219,7 @@ class ProductFinderList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Consumer account</p>}
+                    addonBefore={<p style={styles.label}>Pet owner account</p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -237,7 +235,7 @@ class ProductFinderList extends Component<any, any> {
                   <SelectGroup
                     defaultValue=""
                     label={<p style={styles.label}>Pet type</p>}
-                    style={{ width: 195 }}
+                    style={{ width: 203 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
                       this.onFormChange({
@@ -287,7 +285,7 @@ class ProductFinderList extends Component<any, any> {
             columns={columns}
             dataSource={productFinderList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />

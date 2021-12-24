@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Input, Select, Button, Menu, Dropdown, Icon, DatePicker, Row, Col } from 'antd';
-import { noop, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
+import { noop, RCi18n, ExportModal, Const, AuthWrapper, checkAuth, Headline, SelectGroup } from 'qmkit';
 import Modal from 'antd/lib/modal/Modal';
 import { IList } from 'typings/globalType';
 import { message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -14,8 +14,9 @@ const Option = Select.Option;
  * 订单查询头
  */
 @Relax
-export default class SearchHead extends Component<any, any> {
+class SearchHead extends Component<any, any> {
   props: {
+    intl?:any;
     relaxProps?: {
       onProductForm: Function;
       onBatchAudit: Function;
@@ -59,15 +60,15 @@ export default class SearchHead extends Component<any, any> {
 
     return (
       <div>
-        <Headline title={'Product list'} />
+        <Headline title={RCi18n({id:"Order.Product list"})} />
         <div>
           <Form className="filter-content" layout="inline">
-            <Row style={{ width: '100vh', margin: '0 auto' }}>
-              <div style={{ width: '100%', margin: '0 auto' }} className="space-around">
+            <Row>
+              <div className="space-around">
                 <Col>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={{ width: '120px' }}>Product Name</p>}
+                      addonBefore={<p style={{ width: '120px' }}>{RCi18n({id:'Order.Product Name'})} </p>}
                       style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({
@@ -81,7 +82,7 @@ export default class SearchHead extends Component<any, any> {
                 <Col>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={{ width: '120px' }}>SKU</p>}
+                      addonBefore={<p style={{ width: '120px' }}>{RCi18n({id:'Order.SKU'})} </p>}
                       style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({
@@ -146,7 +147,7 @@ export default class SearchHead extends Component<any, any> {
                     }}
                   >
                     <span>
-                      <FormattedMessage id="search" />
+                      <FormattedMessage id="Order.search" />
                     </span>
                   </Button>
                 </FormItem>
@@ -256,8 +257,8 @@ export default class SearchHead extends Component<any, any> {
         <Option value="orderNumber">
           <FormattedMessage id="order.orderNumber" />
         </Option>
-        <Option value="subscriptioNumber">
-          <FormattedMessage id="order.subscriptioNumber" />
+        <Option value="subscriptionNumber">
+          <FormattedMessage id="order.subscriptionNumber" />
         </Option>
       </Select>
     );
@@ -301,9 +302,11 @@ export default class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({id:'order.audit'});
+    const content = (window as any).RCi18n({id:'order.confirmAudit'});
     confirm({
-      title: <FormattedMessage id="order.audit" />,
-      content: <FormattedMessage id="order.confirmAudit" />,
+      title: title,
+      content: content,
       onOk() {
         onBatchAudit();
       },
@@ -322,6 +325,8 @@ export default class SearchHead extends Component<any, any> {
     });
   }
 }
+
+export default injectIntl(SearchHead);
 
 const styles = {
   label: {

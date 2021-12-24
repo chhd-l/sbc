@@ -2,36 +2,48 @@ import React from 'react';
 
 import { StoreProvider } from 'plume2';
 import { Breadcrumb, Alert, Form } from 'antd';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
-
+import { Headline, AuthWrapper, BreadCrumb, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import AppStore from './store';
-import MarketingAddForm from '../common-components/marketing-add-form';
+import FullReductionForm from './components/full-reduction-form';
 import * as Enum from '../common-components/marketing-enum';
-
+import '../index.less';
+import FreeShipingForm from '@/marketing-add/common-components/free-shipping-add-form';
+const WrappedForm = Form.create()(FullReductionForm);
+const WrappedShippingForm = Form.create()(FreeShipingForm);
 @StoreProvider(AppStore, { debug: __DEV__ })
-export default class MarketingFullReductionAdd extends React.Component<
-  any,
-  any
-> {
+class MarketingFullReductionAdd extends React.Component<any, any> {
   store: AppStore;
   _form;
-
+  props: {
+    intl: any;
+    match;
+  }
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    const { marketingId } = this.props.match.params;
+    const { marketingType, marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
     if (marketingId) {
-      this.store.init(marketingId);
+      if( !marketingType) {
+        this.store.init(marketingId);
+      } else {
+        this.store.initShipping(marketingId);
+      }
+    } else {
+      this.store.initReductionDefualtLevelList();
+      this.store.setSelectedProductRows({ selectedRows: [], selectedSkuIds: [] })
     }
+    this.store.getAllGroups();
+    this.store.initCategory();
+    this.store.getAllAttribute();
   }
 
   render() {
-    const WrappedForm = Form.create()(MarketingAddForm);
-    const { marketingId } = this.props.match.params;
-    const state = this.props.location.state;
-    const { source } = (state || {}) as any;
+    const { marketingId } = this.props.match && this.props.match.params ? this.props.match.params : null;
+    // const state = this.props.location.state;
+    // const { source } = (state || {}) as any;
     return (
       <AuthWrapper functionName="f_marketing_reduction_add">
         <div>
@@ -39,9 +51,9 @@ export default class MarketingFullReductionAdd extends React.Component<
             {/* <Breadcrumb.Item>
               {source == 'marketCenter' ? '营销中心' : '促销活动'}
             </Breadcrumb.Item> */}
-            <Breadcrumb.Item>
-              {marketingId ? 'Edit' : 'Create'} reduction activity
-            </Breadcrumb.Item>
+            <Breadcrumb.Item>{marketingId ?<FormattedMessage id="Marketing.Editreductionactivity" /> :
+              <FormattedMessage id="Marketing.Createreductionactivity" />
+             } </Breadcrumb.Item>
           </BreadCrumb>
           {/* <Breadcrumb separator=">">
             <Breadcrumb.Item>营销</Breadcrumb.Item>
@@ -54,30 +66,44 @@ export default class MarketingFullReductionAdd extends React.Component<
             </Breadcrumb.Item>
           </Breadcrumb> */}
 
-          <div className="container-search" style={{ paddingBottom: 20 }}>
-            <Headline
-              title={
-                marketingId
-                  ? 'Edit reduction activity'
-                  : 'Create reduction activity'
-              }
-            />
-            <Alert
-              message="The same product can participate in different types of promotional activities at the same time, but can only participate in one full reduction activity;"
-              type="info"
-              showIcon
-            />
+          <div className="container-search marketing-container" style={{ paddingBottom: 20 }}>
+            <Headline title={marketingId ? (window as any).RCi18n({
+              id: 'Marketing.Editreductionactivity'
+            }):
+              (window as any).RCi18n({
+              id: 'Marketing.Createreductionactivity'
+            })
+            } />
+            <Alert message={
+              (window as any).RCi18n({
+                id: 'Marketing.reductionTip'
+              })
+            } type="info" showIcon />
 
-            <WrappedForm
-              ref={(form) => (this._form = form)}
-              {...{
-                store: this.store,
-                marketingType: Enum.MARKETING_TYPE.FULL_REDUCTION
-              }}
-            />
+
+            {
+
+              this.store.state().get('marketingType') === 0 ?
+                <WrappedForm
+                  ref={(form) => (this._form = form)}
+                  {...{
+                    store: this.store,
+                    marketingType: Enum.MARKETING_TYPE.FULL_REDUCTION
+                  }}
+                />
+               :
+                <WrappedShippingForm
+                  ref={(form) => (this._form = form)}
+                  {...{
+                    store: this.store,
+                    marketingType: Enum.MARKETING_TYPE.FREE_SHIPPING
+                  }}
+                />
+            }
           </div>
         </div>
       </AuthWrapper>
     );
   }
 }
+export default injectIntl(MarketingFullReductionAdd)

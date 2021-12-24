@@ -6,6 +6,8 @@ import * as webapi from './webapi';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
+import BindDescription from './components/bind-description';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const { TabPane } = Tabs;
@@ -14,7 +16,7 @@ class PeoductCategory extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: 'Product category',
+      title: <FormattedMessage id="Product.ProductCategory" />,
       currentId: '',
       visible: false,
       productCategoryList: [],
@@ -30,7 +32,10 @@ class PeoductCategory extends Component<any, any> {
         attributeName: '',
         attributeValue: ''
       },
-      loading: true
+      loading: true,
+      bindId: 0,
+      bindVisible: false,
+      bindDescriptionIds: []
     };
   }
   componentDidMount() {
@@ -88,13 +93,9 @@ class PeoductCategory extends Component<any, any> {
           pagination.total = res.context.total;
           const attributeList = res.context.attributesList;
           this.setState({ attributeList, pagination });
-        } else {
-          message.error(res.message || 'Operation failed');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failed');
-      });
+      .catch((err) => {});
   };
 
   getGoodsCates = () => {
@@ -177,7 +178,7 @@ class PeoductCategory extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState({
             visible: false,
             confirmLoading: false,
@@ -188,14 +189,12 @@ class PeoductCategory extends Component<any, any> {
             confirmLoading: false,
             loading: false
           });
-          message.error(res.message || 'Operate failed');
         }
       })
       .catch((err) => {
         this.setState({
           confirmLoading: false
         });
-        message.error(err.toString() || 'Operate failed');
       });
   };
   getAttributeValue = (attributeValueList) => {
@@ -235,30 +234,69 @@ class PeoductCategory extends Component<any, any> {
     );
   };
 
+  openBindModal = (id) => {
+    this.setState({ loading: true });
+    webapi
+      .getBindDescription(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            loading: false,
+            bindId: id,
+            bindVisible: true,
+            bindDescriptionIds: res.context.map((item) => item.id)
+          });
+        } else {
+          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        message.error(err || (window as any).RCi18n({id:'Public.GetDataFailed'}));
+        this.setState({
+          loading: false
+        });
+      });
+  };
+
+  onCloseBindingModal = (status: boolean) => {
+    this.setState({
+      bindVisible: status
+    });
+  };
+
   render() {
-    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination } = this.state;
+    const { title, productCategoryList, selectedRowKeys, confirmLoading, attributeList, searchForm, pagination, bindId, bindVisible, bindDescriptionIds } = this.state;
     const columns = [
       {
-        title: 'Category name',
+        title: <FormattedMessage id="Product.CategoryName" />,
         dataIndex: 'cateName',
         key: 'cateName'
       },
       {
-        title: 'Category images',
+        title: <FormattedMessage id="Product.CategoryImages" />,
         dataIndex: 'cateImg',
         key: 'cateImg',
         render: (text) => <div>{text ? <img src={text} alt="" style={{ width: 30 }} /> : '-'}</div>
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: '',
         key: 'x',
         render: (text, record) => (
           <div>
             {record.cateGrade === 3 ? (
-              <Tooltip placement="topLeft" title="Bind attribute">
-                <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
-              </Tooltip>
+              <div>
+                <Tooltip placement="topLeft" title={<FormattedMessage id="Product.BindAttribute" />}>
+                  <a style={styles.edit} className="iconfont iconbtn-addsubvisionsaddcategory" onClick={() => this.openBindAttribute(record.cateId)}></a>
+                </Tooltip>
+                <Tooltip placement="topLeft" title={<FormattedMessage id="Product.BindDescription" />}>
+                  <a className="iconfont iconbangding" onClick={() => this.openBindModal(record.cateId)}></a>
+                </Tooltip>
+              </div>
             ) : (
               '-'
             )}
@@ -268,17 +306,17 @@ class PeoductCategory extends Component<any, any> {
     ];
     const columns_attribute = [
       {
-        title: 'Attribute name',
+        title: <FormattedMessage id="Product.AttributeName" />,
         dataIndex: 'attributeName',
         key: 'attributeName'
       },
       {
-        title: 'Display name',
+        title: <FormattedMessage id="Product.DisplayName" />,
         dataIndex: 'attributeNameEn',
         key: 'attributeNameEn'
       },
       {
-        title: 'Attribute value',
+        title: <FormattedMessage id="Product.AttributeValue" />,
         dataIndex: 'attributeValue',
         key: 'attributeValue',
         width: '30%',
@@ -287,7 +325,9 @@ class PeoductCategory extends Component<any, any> {
     ];
     const description = (
       <div>
-        <p>Product category is set by RC staff, you can associate attribute to product category.</p>
+        <p>
+          <FormattedMessage id="Product.associateAttribute" />
+        </p>
       </div>
     );
 
@@ -303,14 +343,14 @@ class PeoductCategory extends Component<any, any> {
         {/*导航面包屑*/}
 
         <div className="container-search">
-          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+          <Spin style={{ position: 'fixed', top: '30%', left: '100px' }} spinning={this.state.loading}>
             <Headline title={title} />
             <Alert message={description} type="info" />
 
             <Table rowKey="cateId" columns={columns} dataSource={this.removeChildrenIsNull(productCategoryList)} style={{ marginRight: 10 }} />
           </Spin>
         </div>
-        <Modal title="Bind attribute" width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
+        <Modal title={<FormattedMessage id="Product.BindAttribute" />} width="800px" visible={this.state.visible} confirmLoading={confirmLoading} onOk={this.handleOk} onCancel={this.handleCancel}>
           <div>
             <div style={{ marginBottom: 16 }}>
               <Form className="filter-content" layout="inline">
@@ -318,7 +358,11 @@ class PeoductCategory extends Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute name</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeName" />
+                          </p>
+                        }
                         value={searchForm.attributeName}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -333,7 +377,11 @@ class PeoductCategory extends Component<any, any> {
                   <Col span={10}>
                     <FormItem>
                       <Input
-                        addonBefore={<p style={styles.label}>Attribute value</p>}
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="Product.AttributeValue" />
+                          </p>
+                        }
                         value={searchForm.attributeValue}
                         onChange={(e) => {
                           const value = (e.target as any).value;
@@ -358,7 +406,7 @@ class PeoductCategory extends Component<any, any> {
                         }}
                       >
                         <span>
-                          <FormattedMessage id="search" />
+                          <FormattedMessage id="Product.search" />
                         </span>
                       </Button>
                     </FormItem>
@@ -367,17 +415,31 @@ class PeoductCategory extends Component<any, any> {
               </Form>
 
               <Button type="primary" onClick={this.start} disabled={!hasSelected}>
-                Reload
+                <FormattedMessage id="Product.Reload" />
               </Button>
               <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
             </div>
             <Table rowKey="id" onChange={this.handleTableChange} rowSelection={rowSelection} columns={columns_attribute} dataSource={attributeList} pagination={pagination} />
           </div>
         </Modal>
+        {bindVisible && (
+          <BindDescription
+            id={bindId}
+            visible={bindVisible}
+            defaultIds={bindDescriptionIds}
+            onCloseModal={() => {
+              this.onCloseBindingModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }
 }
-const styles = {} as any;
+const styles = {
+  edit: {
+    paddingRight: 10
+  }
+} as any;
 
 export default Form.create()(PeoductCategory);

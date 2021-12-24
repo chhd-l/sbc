@@ -2,7 +2,7 @@ import React from 'react';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
 import { Headline, BreadCrumb } from 'qmkit';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Spin } from 'antd';
 
 import OrderStatusHead from './components/order-status-head';
 import GoodsList from './components/goods-list';
@@ -27,16 +27,24 @@ export default class ReturnOrderDetail extends React.Component<any, any> {
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <div style={styles.noBackgroundContainer}>
+          <Spin spinning={this.state.loading}></Spin>
+        </div>
+      );
+    }
+    
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
           <Breadcrumb.Item>
-            <FormattedMessage id="refundDetails" />
+            <FormattedMessage id="Order.orderDetails" />
           </Breadcrumb.Item>
         </BreadCrumb>
 
         <div className="container-search">
-          <Headline title={<FormattedMessage id="refundDetails" />} />
+          <Headline title={<FormattedMessage id="Order.orderDetails" />} />
         </div>
         <div className="container">
           <OrderStatusHead />
@@ -49,3 +57,12 @@ export default class ReturnOrderDetail extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  noBackgroundContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh'
+  } as any
+};

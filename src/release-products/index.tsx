@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Headline, AuthWrapper, BreadCrumb } from 'qmkit';
+import { Headline, AuthWrapper, BreadCrumb, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const icon1 = require('./img/icon1.png');
 const icon2 = require('./img/icon2.png');
 const icon3 = require('./img/icon3.png');
+const Blueicon1 = require('./img/icon1_blue.png');
+const Blueicon2 = require('./img/icon2_blue.png');
+const Blueicon3 = require('./img/icon3_blue.png');
 
 export default class ReleaseProducts extends React.Component<any, any> {
   render() {
@@ -18,12 +21,12 @@ export default class ReleaseProducts extends React.Component<any, any> {
           <Breadcrumb.Item>发布商品</Breadcrumb.Item>
         </Breadcrumb> */}
         <div className="container-search">
-          <Headline title={<FormattedMessage id="product.postGoods" />} />
+          <Headline title={<FormattedMessage id="Product.postGoods" />} />
         </div>
         <div className="container">
           <div className="release-box">
             <h1>
-              <FormattedMessage id="product.chooseAPublishingMethod" />
+              <FormattedMessage id="Product.chooseAPublishingMethod" />
             </h1>
 
             <div className="release-content">
@@ -31,13 +34,13 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-add">
                   <div className="item">
                     <div className="context">
-                      <img src={icon1} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon1 : icon1} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.publishDirectly" />
+                          <FormattedMessage id="Product.publishDirectly" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo1" />
+                          <FormattedMessage id="Product.publishItemInfo1" />
                         </p>
                       </div>
                     </div>
@@ -48,13 +51,13 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-import">
                   <div className="item">
                     <div className="context">
-                      <img src={icon2} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon2 : icon2} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.productTemplateImport" />
+                          <FormattedMessage id="Product.productTemplateImport" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo2" />
+                          <FormattedMessage id="Product.publishItemInfo2" />
                         </p>
                       </div>
                     </div>
@@ -65,13 +68,13 @@ export default class ReleaseProducts extends React.Component<any, any> {
                 <Link to="/goods-library">
                   <div className="item">
                     <div className="context">
-                      <img src={icon3} alt="" />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? Blueicon3 : icon3} alt="" />
                       <div>
                         <h2>
-                          <FormattedMessage id="product.productPoolImport" />
+                          <FormattedMessage id="Product.productPoolImport" />
                         </h2>
                         <p>
-                          <FormattedMessage id="product.publishItemInfo3" />
+                          <FormattedMessage id="Product.publishItemInfo3" />
                         </p>
                       </div>
                     </div>

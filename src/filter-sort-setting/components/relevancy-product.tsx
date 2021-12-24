@@ -182,13 +182,9 @@ export default class RelevancyProduct extends React.Component<any, any> {
             prpductList,
             pagination
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   getSelectedProductList = () => {
@@ -226,13 +222,9 @@ export default class RelevancyProduct extends React.Component<any, any> {
             selectedRowKeys,
             selectedRowList
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
   updateOverridedProduct = (params) => {
     webapi
@@ -240,17 +232,13 @@ export default class RelevancyProduct extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(<FormattedMessage id="Product.OperateSuccessfully" />);
           this.setState({
             visible: false
           });
-        } else {
-          message.error(res.message || 'Operation failure');
         }
       })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
-      });
+      .catch((err) => {});
   };
 
   onSortEnd = ({ oldIndex, newIndex }) => {
@@ -278,33 +266,33 @@ export default class RelevancyProduct extends React.Component<any, any> {
     const { confirmLoading, selectedRowKeys, prpductList, pagination, step, selectedRowList, searchForm } = this.state;
     const columns_product = [
       {
-        title: 'Image',
+        title: <FormattedMessage id="Product.Image" />,
         dataIndex: 'goodsImg',
         key: 'goodsImg',
         render: (text) => <img src={text} alt="" style={{ width: 20 }} />
       },
       {
-        title: 'SPU',
+        title: <FormattedMessage id="Product.SPU" />,
         dataIndex: 'goodsNo',
         key: 'goodsNo'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Product.ProductName" />,
         dataIndex: 'goodsName',
         key: 'goodsName'
       },
       {
-        title: 'Sales category',
+        title: <FormattedMessage id="Product.SalesCategory" />,
         dataIndex: 'storeCateName',
         key: 'storeCateName'
       },
       {
-        title: 'Product category',
+        title: <FormattedMessage id="Product.ProductCategory" />,
         dataIndex: 'goodsCateName',
         key: 'goodsCateName'
       },
       {
-        title: 'Brand',
+        title: <FormattedMessage id="Product.Brand" />,
         dataIndex: 'brandName',
         key: 'brandName'
       }
@@ -312,38 +300,38 @@ export default class RelevancyProduct extends React.Component<any, any> {
 
     const columns_product_sort = [
       {
-        title: 'Image',
+        title: <FormattedMessage id="Product.Image" />,
         dataIndex: 'goodsImg',
         key: 'goodsImg',
         render: (text) => <img src={text} alt="" style={{ width: 20 }} />
       },
       {
-        title: 'SPU',
+        title: <FormattedMessage id="Product.SPU" />,
         dataIndex: 'goodsNo',
         key: 'goodsNo'
       },
       {
-        title: 'Product name',
+        title: <FormattedMessage id="Product.ProductName" />,
         dataIndex: 'goodsName',
         key: 'goodsName'
       },
       {
-        title: 'Sales category',
+        title: <FormattedMessage id="Product.SalesCategory" />,
         dataIndex: 'storeCateName',
         key: 'storeCateName'
       },
       {
-        title: 'Product category',
+        title: <FormattedMessage id="Product.ProductCategory" />,
         dataIndex: 'goodsCateName',
         key: 'goodsCateName'
       },
       {
-        title: 'Brand',
+        title: <FormattedMessage id="Product.Brand" />,
         dataIndex: 'brandName',
         key: 'brandName'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         dataIndex: 'operation',
         className: 'drag-visible',
         render: (text, record) => (
@@ -363,11 +351,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
     const DraggableContainer = (props) => <SortableContainer useDragHandle helperClass="row-dragging" onSortEnd={this.onSortEnd} {...props} />;
     return (
       <div style={{ display: 'inline-block' }}>
-        <Tooltip placement="top" title="Overrided product">
+        <Tooltip placement="top" title={<FormattedMessage id="Product.OverridedProduct" />}>
           <a style={styles.edit} onClick={() => this.openModal()} className="iconfont iconEdit"></a>
         </Tooltip>
         <Modal
-          title="Overrided Product"
+          title={<FormattedMessage id="Product.OverridedProduct" />}
           visible={this.state.visible}
           width="1200px"
           onOk={this.handleOk}
@@ -389,7 +377,11 @@ export default class RelevancyProduct extends React.Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <Input
-                          addonBefore={<p style={styles.label}>Product name</p>}
+                          addonBefore={
+                            <p style={styles.label}>
+                              <FormattedMessage id="Product.ProductName" />
+                            </p>
+                          }
                           value={searchForm.productName}
                           onChange={(e) => {
                             const value = (e.target as any).value;
@@ -429,7 +421,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                           }}
                         >
                           <span>
-                            <FormattedMessage id="search" />
+                            <FormattedMessage id="Product.search" />
                           </span>
                         </Button>
                       </FormItem>
@@ -438,7 +430,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                 </Form>
 
                 <Button type="primary" onClick={this.start} disabled={!hasSelected}>
-                  Reload
+                  <FormattedMessage id="Product.Reload" />
                 </Button>
                 <span style={{ marginLeft: 8 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}</span>
               </div>

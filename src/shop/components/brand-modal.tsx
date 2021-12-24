@@ -3,13 +3,14 @@ import { Relax, IMap } from 'plume2';
 import { Modal, Input, Row, Col, Icon, Tooltip, Form, message } from 'antd';
 
 import styled from 'styled-components';
-import { noop, DataGrid, QMUpload, QMMethod, Const, ValidConst } from 'qmkit';
+import { noop, DataGrid, QMUpload, QMMethod, Const, ValidConst, RCi18n} from 'qmkit';
 import { IList } from 'typings/globalType';
 import Button from 'antd/lib/button/button';
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
 const Search = Input.Search;
 import { Table } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Column = Table.Column;
 const FormItem = Form.Item;
@@ -40,7 +41,7 @@ const TableBox = styled.div`
 `;
 
 @Relax
-export default class BrandModal extends React.Component<any, any> {
+class BrandModal extends React.Component<any, any> {
   _form: any;
 
   constructor(props) {
@@ -71,6 +72,7 @@ export default class BrandModal extends React.Component<any, any> {
       fetchSignInfo: Function;
       filterBrandName: Function; //根据名称检索
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -96,16 +98,7 @@ export default class BrandModal extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      brandVisible,
-      allBrands,
-      company,
-      otherBrands,
-      addNewOtherBrand,
-      deleteOtherBrand,
-      onBrandInputChange,
-      filterBrandName
-    } = this.props.relaxProps;
+    const { brandVisible, allBrands, company, otherBrands, addNewOtherBrand, deleteOtherBrand, onBrandInputChange, filterBrandName } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     const brandList = company.get('brandList').toJS();
 
@@ -126,11 +119,11 @@ export default class BrandModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            Edit Contracted Brand
+            <FormattedMessage id="Setting.EditContractedBrand" />
             <GreyText>
-              Signed {totalBrand}
-              Brand，Up to 50 brands can be signed, and the approval rate for
-              uploading authorization documents is higher.
+              <FormattedMessage id="Setting.Signed" />
+              {totalBrand}
+              <FormattedMessage id="Setting.BrandUpto50brands " />
             </GreyText>
           </div>
         }
@@ -142,12 +135,11 @@ export default class BrandModal extends React.Component<any, any> {
         <Form layout="inline">
           <Row>
             <Col span={6} style={styles.selectBrand}>
-              <h3 style={{ marginBottom: 5 }}>Choose Platform Brand</h3>
+              <h3 style={{ marginBottom: 5 }}>
+                <FormattedMessage id="Setting.ChoosePlatformBrand" />
+              </h3>
               <div style={{ paddingRight: 10 }}>
-                <Search
-                  placeholder=" Please enter the brand name"
-                  onChange={(e) => filterBrandName(e.target.value)}
-                />
+                <Search placeholder={(window as any).RCi18n({ id: 'Setting.Pleaseenterthebrandname' })} onChange={(e) => filterBrandName(e.target.value)} />
                 <div
                   style={{
                     height: 470,
@@ -161,15 +153,7 @@ export default class BrandModal extends React.Component<any, any> {
                 >
                   <ul>
                     {allBrands.toJS().map((v) => (
-                      <li
-                        style={
-                          brandIdArray.indexOf(v.brandId) == -1
-                            ? styles.li
-                            : styles.liBlue
-                        }
-                        key={v.brandId}
-                        onClick={() => this._addBrand(v)}
-                      >
+                      <li style={brandIdArray.indexOf(v.brandId) == -1 ? styles.li : styles.liBlue} key={v.brandId} onClick={() => this._addBrand(v)}>
                         <div>{v.brandName}</div>
                         {
                           //判断是否要显示勾号
@@ -187,15 +171,12 @@ export default class BrandModal extends React.Component<any, any> {
             </Col>
             <Col span={18}>
               <TableBox>
-                <DataGrid
-                  dataSource={brandList}
-                  scroll={{ y: 400 }}
-                  pagination={false}
-                >
+                <DataGrid dataSource={brandList} scroll={{ y: 400 }} pagination={false}>
                   <Column
                     title={
                       <div>
-                        <RedPoint>*</RedPoint>Brand Name
+                        <RedPoint>*</RedPoint>
+                        <FormattedMessage id="Setting.BrandName" />
                       </div>
                     }
                     dataIndex="brandName"
@@ -205,8 +186,12 @@ export default class BrandModal extends React.Component<any, any> {
                   <Column
                     title={
                       <div>
-                        <p>Brand Alias</p>
-                        <GreyText>Alias or English name</GreyText>
+                        <p>
+                          <FormattedMessage id="Setting.BrandAlias" />
+                        </p>
+                        <GreyText>
+                          <FormattedMessage id="Setting.AliasorEnglishname" />
+                        </GreyText>
                       </div>
                     }
                     dataIndex="nickName"
@@ -219,13 +204,14 @@ export default class BrandModal extends React.Component<any, any> {
                   <Column
                     title={
                       <div>
-                        <RedPoint>*</RedPoint>Brand Logo
-                        <Tooltip title="Size 120px*50px, support jpg, jpeg, png, gif, no more than 50kb">
+                        <RedPoint>*</RedPoint>
+                        <FormattedMessage id="Setting.BrandLogo" />
+                        <Tooltip
+                          title={`${(window as any).RCi18n({ id: 'Setting.Size' })} 120px*50px, 
+                        ${(window as any).RCi18n({ id: 'Setting.support' })}jpg, jpeg, png, gif, ${(window as any).RCi18n({ id: 'Setting.nomorethan' })} 50kb`}
+                        >
                           &nbsp;
-                          <Icon
-                            type="question-circle-o"
-                            style={{ color: '#F56C1D' }}
-                          />
+                          <Icon type="question-circle-o" style={{ color: '#F56C1D' }} />
                         </Tooltip>
                       </div>
                     }
@@ -233,29 +219,22 @@ export default class BrandModal extends React.Component<any, any> {
                     key="logo"
                     width="20%"
                     render={(text, record: any) => {
-                      return text ? (
-                        <img src={record.logo} width="140" height="50" alt="" />
-                      ) : (
-                        <span>-</span>
-                      );
+                      return text ? <img src={record.logo} width="140" height="50" alt="" /> : <span>-</span>;
                     }}
                   />
                   <Column
                     title={
                       <div>
                         <p>
-                          <RedPoint>*</RedPoint>Authorization Document
-                          <Tooltip title="Support jpg, jpeg, png, gif, single sheet no more than 2M, maximum upload 2 sheets">
+                          <RedPoint>*</RedPoint>
+                          <FormattedMessage id="Setting.BrandLogo" />
+                          <Tooltip title={(window as any).RCi18n({ id: 'Setting.Supportjpgjpegpng' })}>
                             &nbsp;
-                            <Icon
-                              type="question-circle-o"
-                              style={{ color: '#F56C1D' }}
-                            />
+                            <Icon type="question-circle-o" style={{ color: '#F56C1D' }} />
                           </Tooltip>
                         </p>
                         <GreyText>
-                          Trademark registration certificate / acceptance letter
-                          / brand authorization letter
+                          <FormattedMessage id="Setting.Trademarkregistration" />
                         </GreyText>
                       </div>
                     }
@@ -266,35 +245,20 @@ export default class BrandModal extends React.Component<any, any> {
                       return (
                         <div>
                           <FormItem>
-                            {getFieldDecorator(
-                              `${record.brandId}_brand_authorizePic`,
-                              {
-                                initialValue: text,
-                                rules: [{ validator: this.checkAuthImg }]
-                              }
-                            )(
+                            {getFieldDecorator(`${record.brandId}_brand_authorizePic`, {
+                              initialValue: text,
+                              rules: [{ validator: this.checkAuthImg }]
+                            })(
                               <QMUpload
                                 name="uploadFile"
                                 style={styles.box}
                                 listType="picture-card"
-                                action={
-                                  Const.HOST +
-                                  '/store/uploadStoreResource?resourceType=IMAGE'
-                                }
+                                action={Const.HOST + '/store/uploadStoreResource?resourceType=IMAGE'}
                                 fileList={text ? text : []}
                                 accept={'.jpg,.jpeg,.png,.gif'}
-                                onChange={(info) =>
-                                  this._editImages(
-                                    info,
-                                    record.contractId,
-                                    record.brandId,
-                                    'platForm'
-                                  )
-                                }
+                                onChange={(info) => this._editImages(info, record.contractId, record.brandId, 'platForm')}
                               >
-                                {(text ? text : []).length < 2 && (
-                                  <Icon type="plus" style={styles.plus} />
-                                )}
+                                {(text ? text : []).length < 2 && <Icon type="plus" style={styles.plus} />}
                               </QMUpload>
                             )}
                           </FormItem>
@@ -303,22 +267,14 @@ export default class BrandModal extends React.Component<any, any> {
                     }}
                   />
                   <Column
-                    title="Operating"
+                    title={(window as any).RCi18n({ id: 'Setting.Operating' })}
                     dataIndex="operation"
                     key="operation"
                     width="13%"
                     render={(_text, record: any) => {
                       return (
-                        <a
-                          href="#"
-                          onClick={() =>
-                            this._deleteBrand(
-                              record.contractBrandId,
-                              record.brandId
-                            )
-                          }
-                        >
-                          Delete
+                        <a href="#" onClick={() => this._deleteBrand(record.contractBrandId, record.brandId)}>
+                          <FormattedMessage id="Setting.Delete" />
                         </a>
                       );
                     }}
@@ -327,21 +283,14 @@ export default class BrandModal extends React.Component<any, any> {
               </TableBox>
               {company.get('storeInfo').get('auditState') == 1 ? null : (
                 <TableBox primary>
-                  <DataGrid
-                    dataSource={
-                      otherBrands.toJS().length > 0 ? otherBrands.toJS() : []
-                    }
-                    rowKey="key"
-                    scroll={{ y: 400 }}
-                    pagination={false}
-                  >
+                  <DataGrid dataSource={otherBrands.toJS().length > 0 ? otherBrands.toJS() : []} rowKey="key" scroll={{ y: 400 }} pagination={false}>
                     <Column
                       title={
                         <div>
-                          Custom Brand
+                          <FormattedMessage id="Setting.CustomBrand" />
                           {otherBrands.toJS().length == 0 ? (
                             <Button onClick={() => addNewOtherBrand()}>
-                              Add custom brand
+                              <FormattedMessage id="Setting.Addcustombrand" />
                             </Button>
                           ) : null}
                         </div>
@@ -353,37 +302,24 @@ export default class BrandModal extends React.Component<any, any> {
                         return (
                           <div>
                             <FormItem>
-                              {getFieldDecorator(
-                                record.key
-                                  ? `${record.key}_name`
-                                  : `${record.contractBrandId}_name`,
-                                {
-                                  initialValue: record.name,
-                                  rules: [
-                                    {
-                                      pattern: ValidConst.noChar,
-                                      message:
-                                        'Special characters are not allowed'
-                                    },
-                                    {
-                                      validator: (rule, value, callback) =>
-                                        this._checkBrandName(
-                                          rule,
-                                          value,
-                                          callback,
-                                          record
-                                        )
-                                    }
-                                  ]
-                                }
-                              )(
+                              {getFieldDecorator(record.key ? `${record.key}_name` : `${record.contractBrandId}_name`, {
+                                initialValue: record.name,
+                                rules: [
+                                  {
+                                    pattern: ValidConst.noChar,
+                                    message: (window as any).RCi18n({ id: 'Setting.Specialcharactersarenotallowed' })
+                                  },
+                                  {
+                                    validator: (rule, value, callback) => this._checkBrandName(rule, value, callback, record)
+                                  }
+                                ]
+                              })(
                                 <Input
                                   style={{ width: 100 }}
                                   onChange={(e: any) =>
                                     onBrandInputChange({
                                       id: (record as any).key,
-                                      contractId: (record as any)
-                                        .contractBrandId,
+                                      contractId: (record as any).contractBrandId,
                                       field: 'name',
                                       value: e.target.value
                                     })
@@ -403,35 +339,22 @@ export default class BrandModal extends React.Component<any, any> {
                         return (
                           <div>
                             <FormItem>
-                              {getFieldDecorator(
-                                record.key
-                                  ? `${record.key}_nickName`
-                                  : `${record.contractBrandId}_nickName`,
-                                {
-                                  initialValue: record.nickName,
-                                  rules: [
-                                    {
-                                      validator: (rule, value, callback) => {
-                                        QMMethod.validatorMinAndMax(
-                                          rule,
-                                          value,
-                                          callback,
-                                          'Brand alias',
-                                          1,
-                                          30
-                                        );
-                                      }
+                              {getFieldDecorator(record.key ? `${record.key}_nickName` : `${record.contractBrandId}_nickName`, {
+                                initialValue: record.nickName,
+                                rules: [
+                                  {
+                                    validator: (rule, value, callback) => {
+                                      QMMethod.validatorMinAndMax(rule, value, callback, (window as any).RCi18n({ id: 'Setting.Brandalias' }), 1, 30);
                                     }
-                                  ]
-                                }
-                              )(
+                                  }
+                                ]
+                              })(
                                 <Input
                                   style={{ width: 100 }}
                                   onChange={(e: any) =>
                                     onBrandInputChange({
                                       id: (record as any).key,
-                                      contractId: (record as any)
-                                        .contractBrandId,
+                                      contractId: (record as any).contractBrandId,
                                       field: 'nickName',
                                       value: e.target.value
                                     })
@@ -453,9 +376,7 @@ export default class BrandModal extends React.Component<any, any> {
                           if (text.length > 0 && typeof text != 'string') {
                             images = text;
                           } else {
-                            images = [
-                              { uid: 1, size: 1, url: text, name: 'logo' }
-                            ];
+                            images = [{ uid: 1, size: 1, url: text, name: 'logo' }];
                           }
                         } else {
                           images = [];
@@ -463,37 +384,21 @@ export default class BrandModal extends React.Component<any, any> {
                         return (
                           <div>
                             <FormItem>
-                              {getFieldDecorator(
-                                record.key
-                                  ? `${record.key}_logo`
-                                  : `${record.contractBrandId}_logo`,
-                                {
-                                  initialValue: images.length > 0 ? images : '',
-                                  rules: [{ validator: this.checkLogoImg }]
-                                }
-                              )(
+                              {getFieldDecorator(record.key ? `${record.key}_logo` : `${record.contractBrandId}_logo`, {
+                                initialValue: images.length > 0 ? images : '',
+                                rules: [{ validator: this.checkLogoImg }]
+                              })(
                                 <QMUpload
                                   beforeUpload={this._checkLogoUploadFile}
                                   name="uploadFile"
                                   style={styles.box}
                                   fileList={images}
                                   listType="picture-card"
-                                  action={
-                                    Const.HOST +
-                                    '/store/uploadStoreResource?resourceType=IMAGE'
-                                  }
+                                  action={Const.HOST + '/store/uploadStoreResource?resourceType=IMAGE'}
                                   accept={'.jpg,.jpeg,.png,.gif'}
-                                  onChange={(info) =>
-                                    this._editLogos(
-                                      info,
-                                      record.contractBrandId,
-                                      record.key
-                                    )
-                                  }
+                                  onChange={(info) => this._editLogos(info, record.contractBrandId, record.key)}
                                 >
-                                  {images.length < 1 && (
-                                    <Icon type="plus" style={styles.plus} />
-                                  )}
+                                  {images.length < 1 && <Icon type="plus" style={styles.plus} />}
                                 </QMUpload>
                               )}
                             </FormItem>
@@ -509,38 +414,21 @@ export default class BrandModal extends React.Component<any, any> {
                         return (
                           <div>
                             <FormItem>
-                              {getFieldDecorator(
-                                record.key
-                                  ? `${record.key}_authorizePic`
-                                  : `${record.contractBrandId}_authorizePic`,
-                                {
-                                  initialValue: text,
-                                  rules: [{ validator: this.checkAuthImg }]
-                                }
-                              )(
+                              {getFieldDecorator(record.key ? `${record.key}_authorizePic` : `${record.contractBrandId}_authorizePic`, {
+                                initialValue: text,
+                                rules: [{ validator: this.checkAuthImg }]
+                              })(
                                 <QMUpload
                                   beforeUpload={this._checkUploadFile}
                                   name="uploadFile"
                                   style={styles.box}
                                   fileList={text ? text : []}
                                   listType="picture-card"
-                                  action={
-                                    Const.HOST +
-                                    '/store/uploadStoreResource?resourceType=IMAGE'
-                                  }
+                                  action={Const.HOST + '/store/uploadStoreResource?resourceType=IMAGE'}
                                   accept={'.jpg,.jpeg,.png,.gif'}
-                                  onChange={(info) =>
-                                    this._editImages(
-                                      info,
-                                      record.contractBrandId,
-                                      record.key,
-                                      'other'
-                                    )
-                                  }
+                                  onChange={(info) => this._editImages(info, record.contractBrandId, record.key, 'other')}
                                 >
-                                  {(text ? text : []).length < 2 && (
-                                    <Icon type="plus" style={styles.plus} />
-                                  )}
+                                  {(text ? text : []).length < 2 && <Icon type="plus" style={styles.plus} />}
                                 </QMUpload>
                               )}
                             </FormItem>
@@ -553,23 +441,11 @@ export default class BrandModal extends React.Component<any, any> {
                       render={(_text, record: any) => {
                         return (
                           <div>
-                            <a
-                              href="#"
-                              style={{ marginRight: '5px' }}
-                              onClick={() => addNewOtherBrand()}
-                            >
-                              新增
+                            <a href="#" style={{ marginRight: '5px' }} onClick={() => addNewOtherBrand()}>
+                              <FormattedMessage id="Setting.New" />
                             </a>
-                            <a
-                              href="#"
-                              onClick={() =>
-                                deleteOtherBrand(
-                                  record.contractBrandId,
-                                  record.key
-                                )
-                              }
-                            >
-                              Delete
+                            <a href="#" onClick={() => deleteOtherBrand(record.contractBrandId, record.key)}>
+                              <FormattedMessage id="Setting.Delete" />
                             </a>
                           </div>
                         );
@@ -606,15 +482,11 @@ export default class BrandModal extends React.Component<any, any> {
   _editLogos = (info, contractId, brandId) => {
     const { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error('Upload Failed');
+      message.error((window as any).RCi18n({ id: 'Setting.UploadFailed' }));
       return;
     }
     const { changeLogoImg } = this.props.relaxProps;
-    if (
-      file.status == 'removed' ||
-      fileList.length == 0 ||
-      (fileList.length > 0 && this._checkLogoUploadFile(file))
-    ) {
+    if (file.status == 'removed' || fileList.length == 0 || (fileList.length > 0 && this._checkLogoUploadFile(file))) {
       changeLogoImg({ contractId, brandId, imgs: JSON.stringify(fileList) });
     }
   };
@@ -628,15 +500,11 @@ export default class BrandModal extends React.Component<any, any> {
   _editImages = (info, contractId, brandId, value) => {
     let { file, fileList } = info;
     if (file.status == 'error' || fileList == null) {
-      message.error('Upload Failed');
+      message.error((window as any).RCi18n({ id: 'Setting.UploadFailed' }));
       return;
     }
     const { changeBrandImg, changeOtherBrandImg } = this.props.relaxProps;
-    if (
-      file.status == 'removed' ||
-      fileList.length == 0 ||
-      (fileList.length > 0 && this._checkUploadFile(file))
-    ) {
+    if (file.status == 'removed' || fileList.length == 0 || (fileList.length > 0 && this._checkUploadFile(file))) {
       if (value == 'platForm') {
         //上传平台品牌授权文件
         changeBrandImg({ contractId, brandId, imgs: JSON.stringify(fileList) });
@@ -657,20 +525,15 @@ export default class BrandModal extends React.Component<any, any> {
   _checkLogoUploadFile = (file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= 50 * 1024) {
         return true;
       } else {
-        message.error('File size cannot exceed 50kb');
+        message.error((window as any).RCi18n({ id: 'Setting.Filesizecannotexceedkb' }));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error((window as any).RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };
@@ -681,20 +544,15 @@ export default class BrandModal extends React.Component<any, any> {
   _checkUploadFile = (file) => {
     let fileName = file.name.toLowerCase();
     // 支持的图片格式：jpg、jpeg、png、gif
-    if (
-      fileName.endsWith('.jpg') ||
-      fileName.endsWith('.jpeg') ||
-      fileName.endsWith('.png') ||
-      fileName.endsWith('.gif')
-    ) {
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif')) {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('File size cannot exceed 2M');
+        message.error((window as any).RCi18n({ id: 'Setting.Filesizecannotexceed2M' }));
         return false;
       }
     } else {
-      message.error('File format error');
+      message.error((window as any).RCi18n({ id: 'Setting.Fileformaterror' }));
       return false;
     }
   };
@@ -707,13 +565,9 @@ export default class BrandModal extends React.Component<any, any> {
     const form = this.props.form;
     const { otherBrands, company } = this.props.relaxProps;
     const brandList = company.get('brandList').toJS();
-    if (
-      brandList.length +
-        otherBrands.filter((v) => v.get('name') != '').toJS().length <
-      1
-    ) {
+    if (brandList.length + otherBrands.filter((v) => v.get('name') != '').toJS().length < 1) {
       //非空自定义品牌和选中的平台品牌加起来小于1时
-      message.error('Please add at least one contracted brand');
+      message.error((window as any).RCi18n({ id: 'Setting.Pleaseaddatleastonecontractedbrand' }));
     } else {
       //对非空的进行校验
       form.validateFields(null, (errs) => {
@@ -730,13 +584,13 @@ export default class BrandModal extends React.Component<any, any> {
   //检查授权文件
   checkAuthImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error('Please upload the brand authorization file'));
+      callback(new Error((window as any).RCi18n({ id: 'Setting.Pleaseuploadthebrandauthorization' })));
       return;
     }
     if (!value[0] || !value[0].url) {
       if (!value.fileList || value.fileList.length == 0) {
         if (!value.length) {
-          callback(new Error('Please upload the brand authorization file'));
+          callback(new Error((window as any).RCi18n({ id: 'Setting.Pleaseuploadthebrandauthorizationfile' })));
           return;
         }
       }
@@ -747,7 +601,7 @@ export default class BrandModal extends React.Component<any, any> {
   //检查logo文件
   checkLogoImg = (_rule, value, callback) => {
     if (!value) {
-      callback(new Error('Please upload the brand logo'));
+      callback(new Error((window as any).RCi18n({ id: 'Setting.Pleaseuploadthebrandlogo' })));
       return;
     }
     if (!value[0] || !value[0].url) {
@@ -756,7 +610,7 @@ export default class BrandModal extends React.Component<any, any> {
         return;
       }
       if (!value.fileList || value.fileList.length == 0) {
-        callback(new Error('Please upload the brand logo'));
+        callback(new Error((window as any).RCi18n({ id: 'Setting.Pleaseuploadthebrandlogo' })));
         return;
       }
     }
@@ -772,40 +626,26 @@ export default class BrandModal extends React.Component<any, any> {
    */
   _checkBrandName = (_rule, value, callback, record) => {
     if (!value) {
-      callback(new Error('Please input the brand name'));
+      callback(new Error((window as any).RCi18n({ id: 'Setting.Pleaseinputthebrandname' })));
       return;
     } else {
       if (value.length > 30 || value.length < 1) {
-        callback(new Error('Brand length is between 1-30 characters'));
+        callback(new Error((window as any).RCi18n({ id: 'Setting.Brandlengthisbetween' })));
         return;
       } else {
         const { allBrands, otherBrands } = this.props.relaxProps;
 
-        let repeatPlatForm = allBrands
-          .toJS()
-          .filter((v) => v.brandName == value);
-        let repeatOther = otherBrands
-          .toJS()
-          .filter(
-            (v) =>
-              v.name == value &&
-              ((v.contractBrandId &&
-                v.contractBrandId != record.contractBrandId) ||
-                (v.key && v.key != record.key))
-          );
+        let repeatPlatForm = allBrands.toJS().filter((v) => v.brandName == value);
+        let repeatOther = otherBrands.toJS().filter((v) => v.name == value && ((v.contractBrandId && v.contractBrandId != record.contractBrandId) || (v.key && v.key != record.key)));
         if (repeatPlatForm.length == 0 && repeatOther.length == 0) {
           //无重复的
         } else {
           if (repeatPlatForm.length > 0) {
-            callback(
-              new Error(
-                'Brand name duplicates existing brand name on the platform'
-              )
-            );
+            callback(new Error((window as any).RCi18n({ id: 'Setting.Brandnameduplicates' })));
             return;
           }
           if (repeatOther.length > 0) {
-            callback(new Error('Duplicate custom brand name'));
+            callback(new Error((window as any).RCi18n({ id: 'Setting.Duplicatecustombrandname' })));
             return;
           }
         }
@@ -826,6 +666,7 @@ export default class BrandModal extends React.Component<any, any> {
     addBrand(v);
   };
 }
+export default injectIntl(BrandModal);
 
 const styles = {
   box: {

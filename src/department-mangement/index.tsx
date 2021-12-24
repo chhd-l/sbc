@@ -23,20 +23,20 @@ export default class GoodsCate extends React.Component<any, any> {
       <div>
         <BreadCrumb />
         <div className="container-search">
-          <Headline title={<FormattedMessage id="departmentManagement" />} />
+          <Headline title={<FormattedMessage id="Setting.departmentManagement" />} />
           <div style={{ marginBottom: 16 }}>
             <Alert
               message=""
               description={
                 <div>
                   <p>
-                    <FormattedMessage id="departmentManagementInfo1" />
+                    <FormattedMessage id="Setting.departmentManagementInfo1" />
                   </p>
                   <p>
-                    <FormattedMessage id="departmentManagementInfo2" />
+                    <FormattedMessage id="Setting.departmentManagementInfo2" />
                   </p>
                   <p>
-                    <FormattedMessage id="departmentManagementInfo3" />
+                    <FormattedMessage id="Setting.departmentManagementInfo3" />
                   </p>
                 </div>
               }

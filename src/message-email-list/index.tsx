@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, RCi18n } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
+import { resendEmailTask } from './webapi';
+import MessageTemplateDetail from '@/message-email-list/messageTemplateDetail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,24 +24,31 @@ export default class ClinicList extends Component<any, any> {
         emailTemplate: '',
         category: '',
         status: '',
-        templateId: ''
+        templateId: '',
+        recipient: ''
       },
-      objectTypeList: [],
-      categoryList: [],
-      statusList: [],
+      // objectTypeList: [],
+      // categoryList: [],
+      // statusList: [],
       taskList: [],
       pagination: {
         current: 1,
         pageSize: 10,
         total: 0
       },
-      emailTemplateList: []
+      emailTemplateList: [],
+      resendParams: {
+        isReSend:true,
+        messageTaskId:'',
+      },
+      visibleMessageTemplate:false,
+      taskId:''
     };
   }
   componentDidMount() {
-    this.querySysDictionary('objectType');
-    this.querySysDictionary('messageCategory');
-    this.querySysDictionary('messageStatus');
+    // this.querySysDictionary('objectType');
+    // this.querySysDictionary('messageCategory');
+    // this.querySysDictionary('messageStatus');
     this.getTemplateList();
     this.getEmailTaskList();
   }
@@ -52,8 +61,62 @@ export default class ClinicList extends Component<any, any> {
     });
   };
   onSearch = () => {
-    this.getEmailTaskList();
+    const { pagination } = this.state;
+    this.setState(
+      {
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        }
+      },
+      () => this.getEmailTaskList()
+    );
   };
+  viewMessageTemplate=(id)=>{
+
+    this.setState(
+      {
+        visibleMessageTemplate:true,
+        taskId:id
+      }
+    )
+  }
+  closeMessageTemplate=()=>{
+    this.setState(
+      {
+        visibleMessageTemplate:false
+      }
+    )
+  }
+  resendEmail=(params)=>{
+    this.setState({
+      loading: true
+    });
+    const {resendParams}=this.state;
+    const fetchParams={
+      isReSend:true,
+      messageTaskId:parseInt(params),
+      storeId: 123457907,
+    }
+    webapi
+      .resendEmailTask(fetchParams)
+      .then((data)=>{
+        const {res}=data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully')
+          this.setState({
+            loading:false
+          })
+          this.getEmailTaskList();
+          console.log(res,'resend');
+        }
+      })
+      .catch((err)=>{
+        console.log(err,'resendWrong')
+      })
+  }
+
   getEmailTaskList = () => {
     const { searchForm, pagination } = this.state;
     let params = {
@@ -64,7 +127,8 @@ export default class ClinicList extends Component<any, any> {
       objectNo: searchForm.objectNo,
       templateId: searchForm.templateId,
       category: searchForm.category,
-      status: searchForm.status
+      status: searchForm.status,
+      toEmail: searchForm.recipient
     };
     this.setState({
       loading: true
@@ -81,57 +145,51 @@ export default class ClinicList extends Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           loading: false
         });
       });
   };
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({ type: type })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === 'K-000000') {
-          if (type === 'objectType') {
-            let objectTypeList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              objectTypeList
-            });
-          }
-          if (type === 'messageCategory') {
-            let categoryList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              categoryList
-            });
-          }
-          if (type === 'messageStatus') {
-            let statusList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              statusList
-            });
-          }
-        } else {
-          message.error(res.message || 'Unsuccessful');
-        }
-      })
-      .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-      });
-  };
+  // querySysDictionary = (type: String) => {
+  //   webapi
+  //     .querySysDictionary({ type: type })
+  //     .then((data) => {
+  //       const { res } = data;
+  //       if (res.code === Const.SUCCESS_CODE) {
+  //         if (type === 'objectType') {
+  //           let objectTypeList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             objectTypeList
+  //           });
+  //         }
+  //         if (type === 'messageCategory') {
+  //           let categoryList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             categoryList
+  //           });
+  //         }
+  //         if (type === 'messageStatus') {
+  //           let statusList = [...res.context.sysDictionaryVOS];
+  //           this.setState({
+  //             statusList
+  //           });
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => { });
+  // };
   handleTableChange = (pagination: any) => {
     this.setState(
       {
         pagination: pagination
       },
-      () => this.onSearch()
+      () => this.getEmailTaskList()
     );
   };
   overview = () => {
@@ -149,7 +207,7 @@ export default class ClinicList extends Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
-          emailTemplateList: res.context.emailTemplateResponseList
+          emailTemplateList: res.context.messageTemplateResponseList
         });
       }
     });
@@ -166,112 +224,227 @@ export default class ClinicList extends Component<any, any> {
           message.success('Operate successfully');
           this.getEmailTaskList();
         } else {
-          message.error(res.message || 'Delete Failed');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Delete Failed');
         this.setState({
           loading: false
         });
       });
   };
 
+
   render() {
-    const { title, searchForm, objectTypeList, categoryList, statusList, taskList, emailTemplateList } = this.state;
+    const { title, searchForm, taskList, emailTemplateList ,visibleMessageTemplate,taskId } = this.state;
+
+    const objectTypeList = [
+      {
+        value: 'Order',
+        name: 'Order'
+      },
+      {
+        value: 'Subscription',
+        name: 'Subscription'
+      },
+      {
+        value: 'Recommendation',
+        name: 'Recommendation'
+      },
+      {
+        value: 'Prescriber creation',
+        name: 'Prescriber creation'
+      },
+      {
+        value: 'Automation',
+        name: 'Automation'
+      }
+    ];
+    const categoryList = [
+      {
+        value: 'Notification',
+        name: 'Notification'
+      }
+    ];
+    const statusList = [
+      {
+        value: '0',
+        name: 'Draft'
+      },
+      {
+        value: '1',
+        name: 'Pending'
+      },
+      {
+        value: '2',
+        name: 'Todo'
+      },
+      {
+        value:'7',
+        name:'Timing'
+      },
+      {
+        value:'6',
+        name:'Building'
+      },
+      {
+        value: '3',
+        name: 'Sending'
+      },
+      {
+        value: '4'||'5',
+        name: 'Finish'
+      },
+    ];
 
     const columns = [
       {
-        title: 'Task ID',
+        title: <FormattedMessage id="Marketing.EmailTaskID" />,
         dataIndex: 'taskId',
         key: 'taskId',
         width: '10%'
       },
       {
-        title: 'Object Type',
+        title: <FormattedMessage id="Marketing.ObjectType" />,
         dataIndex: 'objectType',
         key: 'objectType',
-        width: '15%',
+        width: '10%',
         ellipsis: true
       },
       {
-        title: 'Object No',
+        title: <FormattedMessage id="Marketing.ObjectNo" />,
         dataIndex: 'objectNo',
         key: 'objectNo',
         width: '10%'
       },
       {
-        title: 'Email Template',
-        dataIndex: 'emailTemplate',
-        key: 'emailTemplate',
+        title: <FormattedMessage id="Marketing.EmailTemplate" />,
+        dataIndex: 'messageTemplate',
+        key: 'messageTemplate',
         width: '10%'
       },
       {
-        title: 'Category',
+        title: <FormattedMessage id="Marketing.Category" />,
         dataIndex: 'category',
         key: 'category',
         width: '10%'
       },
       {
-        title: 'Recipient',
+        title: <FormattedMessage id="Marketing.Recipient" />,
         dataIndex: 'recipient',
         key: 'recipient',
         width: '10%',
         render: (text, record) => <span>{record.detailsResponse.email}</span>
       },
       {
-        title: 'Status',
+        title: <FormattedMessage id="Marketing.Status" />,
         dataIndex: 'status',
         key: 'status',
-        width: '5%',
-        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'To do' : +text === 2 ? 'Finish' : ''}</span>
+        width: '7%',
+        render: (text) => <span>{+text === 0 ? 'Draft' : +text === 1 ? 'Pending' : +text === 2 ? 'To do' : +text === 3 ? 'Sending' : +text === 4 ? 'Finish' : +text === 5 ? 'Finish' : +text === 6 ? 'Building' : +text === 7 ? 'Timing' : '' }</span>
       },
-
       {
-        title: 'Operation',
+        title: 'Email Receive Status',
+        dataIndex: 'emailReceiveStatus',
+        key: 'emailReceiveStatus',
+        width: '9%',
+        render: (text) => <span>{text === 0 ? 'Success' : text === 1 ? 'Failed' : ''}</span>
+      },
+      {
+        title: <FormattedMessage id="Marketing.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
             {+record.status === 0 ? (
-              <div>
-                <Tooltip placement="top" title="Edit">
+              <>
+                <Tooltip placement="top" title={RCi18n({id:'edit'})}>
                   <Link to={'/message-edit/' + record.id} className="iconfont iconEdit"></Link>
                 </Tooltip>
-
                 <Divider type="vertical" />
-
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
+              </>
+            ) : null}
+            {+record.emailReceiveStatus === 1 ? (
+              <>
+                <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
+                <Tooltip placement="top" title={'Resend'} >
+                  <a className="iconfont iconReset"></a>
+                </Tooltip>
+                </div>
+                <Divider type="vertical" />
+              </>
             ) : null}
             {+record.status === 1 ? (
-              <div>
-                <Tooltip placement="top" title="Details">
+              <>
+              <div style={{display:'inline-block'}} onClick={()=>this.resendEmail(record.id)}>
+                <Tooltip placement="top" title={'Resend'}>
+                  <a className="iconfont iconReset"></a>
+                </Tooltip>
+              </div>
+                <Divider type="vertical" />
+
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+
+
+              </>
+            ) : null}
+            {+record.status === 2 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
 
                 <Divider type="vertical" />
 
-                <Popconfirm placement="topLeft" title="Are you sure to delete this item?" onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
-                  <Tooltip placement="top" title="Delete">
+                <Popconfirm placement="topLeft" title={<FormattedMessage id="Marketing.AreYouSureToDeleteThisItem" />} onConfirm={() => this.deleteTask(record.id)} okText="Confirm" cancelText="Cancel">
+                  <Tooltip placement="top" title={RCi18n({id:'delete'})}>
                     <a type="link" className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-              </div>
+              </>
             ) : null}
-            {+record.status === 2 ? (
-              <div>
-                <Tooltip placement="top" title="Details">
+            {+record.status === 3 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
                   <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
                 </Tooltip>
-              </div>
+              </>
+            ) : null}
+            {+record.status === 4 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+
+                <Divider type="vertical" />
+
+                  <Tooltip placement="top" title={RCi18n({id:'view'})}>
+                    <a onClick={()=>this.viewMessageTemplate(record.taskId)} type="link" className="iconfont iconView"></a>
+                  </Tooltip>
+              </>
+            ) : null}
+            {+record.status === 5 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+              </>
+            ) : null}
+            {+record.status === 7 ? (
+              <>
+                <Tooltip placement="top" title={<FormattedMessage id="Marketing.Details" />}>
+                  <Link to={'/message-detail/' + record.id} className="iconfont iconDetails"></Link>
+                </Tooltip>
+              </>
             ) : null}
           </div>
         )
@@ -283,31 +456,33 @@ export default class ClinicList extends Component<any, any> {
         {/*导航面包屑*/}
         <div className="container-search">
           <Headline
-            title={title}
+            title={<FormattedMessage id="Marketing.EmailTaskList" />}
             extra={
               <div>
                 <Button
-                  shape="round"
                   onClick={() => {
                     this.overview();
                   }}
                   style={{
                     marginRight: 20,
-                    borderColor: '#e2001a'
+                    borderColor: 'var(--primary-color)'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Overview</p>
+                  <p style={{ color: 'var(--primary-color)' }}>
+                    <FormattedMessage id="Marketing.Overview" />
+                  </p>
                 </Button>
                 <Button
-                  shape="round"
                   onClick={() => {
                     this.quickSend();
                   }}
                   style={{
-                    borderColor: '#e2001a'
+                    borderColor: 'var(--primary-color)'
                   }}
                 >
-                  <p style={{ color: '#e2001a' }}>Quick Send</p>
+                  <p style={{ color: 'var(--primary-color)' }}>
+                    <FormattedMessage id="Marketing.QuickSend" />
+                  </p>
                 </Button>
               </div>
             }
@@ -317,7 +492,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Task ID" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -334,9 +509,10 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object Type" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -351,7 +527,7 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {objectTypeList &&
                         objectTypeList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
@@ -362,7 +538,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Object No" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectNo'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -379,9 +555,10 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Email Template" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -396,43 +573,21 @@ export default class ClinicList extends Component<any, any> {
                       {emailTemplateList &&
                         emailTemplateList.map((item, index) => (
                           <Option value={item.templateId} key={index}>
-                            {item.emailTemplate}
+                            {item.messageTemplate}
                           </Option>
                         ))}
                     </Select>
                   </InputGroup>
-
-                  {/* <SelectGroup
-                    defaultValue=""
-                    label={<p style={styles.label}>Email Template</p>}
-                    onChange={(value) => {
-                      value = value === '' ? null : value;
-                      this.onFormChange({
-                        field: 'templateId',
-                        value
-                      });
-                    }}
-                  >
-                    <Option value="">
-                      <FormattedMessage id="all" />
-                    </Option>
-                    {emailTemplateList &&
-                      emailTemplateList.map((item, index) => (
-                        <Option value={item.templateId} key={index}>
-                          {item.emailTemplate}
-                        </Option>
-                      ))}
-                  </SelectGroup>
-                 */}
                 </FormItem>
               </Col>
 
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Category" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Category'})} />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -447,7 +602,7 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {categoryList &&
                         categoryList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
@@ -458,9 +613,10 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue="Status" />
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Status'})} />
                     <Select
                       style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
                       defaultValue=""
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -475,11 +631,28 @@ export default class ClinicList extends Component<any, any> {
                       </Option>
                       {statusList &&
                         statusList.map((item, index) => (
-                          <Option value={item.valueEn} key={index}>
+                          <Option value={item.value} key={index}>
                             {item.name}
                           </Option>
                         ))}
                     </Select>
+                  </InputGroup>
+                </FormItem>
+              </Col>
+              <Col span={8}>
+                <FormItem>
+                  <InputGroup compact style={styles.formItemStyle}>
+                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Recipient'})} />
+                    <Input
+                      style={styles.wrapper}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'recipient',
+                          value
+                        });
+                      }}
+                    />
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -504,13 +677,14 @@ export default class ClinicList extends Component<any, any> {
             </Row>
           </Form>
         </div>
+        <MessageTemplateDetail setVisibleTemplate={this.closeMessageTemplate} visibleTemplate={visibleMessageTemplate} taskId={taskId}/>
         <div className="container">
           <Table
             rowKey="id"
             columns={columns}
             dataSource={taskList}
             pagination={this.state.pagination}
-            loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+            loading={this.state.loading}
             scroll={{ x: '100%' }}
             onChange={this.handleTableChange}
           />
@@ -521,7 +695,7 @@ export default class ClinicList extends Component<any, any> {
 }
 const styles = {
   formItemStyle: {
-    width: 335
+    width: 295
   },
   label: {
     width: 135,
@@ -531,6 +705,6 @@ const styles = {
     cursor: 'text'
   },
   wrapper: {
-    width: 200
+    width: 160
   }
 } as any;

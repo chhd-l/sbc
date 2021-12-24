@@ -1,16 +1,14 @@
 import React from 'react';
 import { Relax } from 'plume2';
-import { Form, Input, Select, Button, Icon, message } from 'antd';
+import { Form, Input, Select, Button, Icon, message, InputNumber } from 'antd';
 import { fromJS } from 'immutable';
 import { IMap, IList } from 'typings/globalType';
-import { noop, Const, history, Tips, QMMethod, QMUpload } from 'qmkit';
+import { noop, Const, history, Tips, QMUpload, cache, RCi18n } from 'qmkit';
+import GoodsList from './goods-list';
+import { FormattedMessage,injectIntl } from 'react-intl';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-
-import GoodsList from './goods-list';
-import RefundAmount from './refund-amount';
-
 const formItemLayout = {
   labelCol: {
     sm: { span: 4 }
@@ -19,16 +17,16 @@ const formItemLayout = {
     sm: { span: 6 }
   } as any
 };
-
 const FILE_MAX_SIZE = 5 * 1024 * 1024;
 
 /**
  * 退单form
  */
 @Relax
-export default class ReturnOrderForm extends React.Component<any, any> {
+class ReturnOrderForm extends React.Component<any, any> {
   props: {
     form?: any;
+    intl;
     relaxProps?: {
       // 选中的退货原因
       selectedReturnReason: string;
@@ -47,6 +45,16 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       add: Function;
       // 是否为退货
       isReturn: Boolean;
+      applyStatus: boolean;
+      applyPrice: number;
+      applyIntegral: number;
+      editPriceItem: Function;
+      tradeDetail: IMap;
+      // 是否是在线支付  true 是  false 否
+      isOnLine: boolean;
+      // 可申请退款金额
+      canApplyPrice: number;
+      refundableAmount: string;
     };
   };
 
@@ -70,7 +78,19 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     // 提交
     add: noop,
     // 是否为退货
-    isReturn: 'isReturn'
+    isReturn: 'isReturn',
+    // 申请金额
+    applyPrice: 'applyPrice',
+    // 申请积分
+    applyIntegral: 'applyIntegral',
+    // 订单详情
+    tradeDetail: 'tradeDetail',
+    // 是否是在线支付  true 是  false 否
+    isOnLine: 'isOnLine',
+    // 可申请退款金额
+    canApplyPrice: 'canApplyPrice',
+    //退货金额
+    refundableAmount: 'refundableAmount',
   };
 
   constructor(props) {
@@ -86,59 +106,54 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       add,
       selectedReturnReason,
       selectedReturnWay,
-      isReturn
+      isReturn,
+      canApplyPrice
     } = this.props.relaxProps;
     const { getFieldDecorator } = this.props.form;
     let images = this.props.relaxProps.images.toJS();
     return (
       <div style={styles.container}>
-        <h3 style={styles.title}>Chargeback information</h3>
+        <h3 style={styles.title}>Return order information</h3>
         <Form>
-          <FormItem {...formItemLayout} label="Chargeback reason" hasFeedback>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returnreason" />}>
             {getFieldDecorator('returnReason', {
               initialValue: selectedReturnReason,
               rules: [
                 {
                   required: true,
-                  message: 'Please select chargeback reason'
+                  message: (window as any).RCi18n({
+                    id: 'Order.Pleaseselectchargebackreason'
+                  })
                 }
               ]
             })(this._getReturnReasonSelect())}
           </FormItem>
           {isReturn ? (
-            <FormItem {...formItemLayout} label="Return method" hasFeedback>
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returnmethod" />}>
               {getFieldDecorator('returnWay', {
                 initialValue: selectedReturnWay,
                 rules: [
                   {
                     required: true,
-                    message: 'Please select return method'
+                    message: (window as any).RCi18n({
+                      id: 'Order.Pleaseselectreturnmethod'
+                    })
                   }
                 ]
               })(this._getReturnWaySelect())}
             </FormItem>
           ) : null}
 
-          <FormItem {...formItemLayout} label="Return description" hasFeedback>
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Returndescription" />}>
             {getFieldDecorator('description', {
               initialValue: description,
               rules: [
                 {
                   required: true,
-                  message: '退货说明不能为空'
+                  message: (window as any).RCi18n({
+                    id: 'Order.Returndescriptioncannotbeblank'
+                  })
                 },
-                {
-                  validator: (rule, value, callback) => {
-                    QMMethod.validatorMinAndMax(
-                      rule,
-                      value,
-                      callback,
-                      '退货说明',
-                      1,
-                      100
-                    );
-                  }
-                }
               ]
             })(
               <Input.TextArea
@@ -146,7 +161,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="Attachment information">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Attachmentinformation" />}>
             <QMUpload
               name="uploadFile"
               style={styles.box}
@@ -163,19 +178,38 @@ export default class ReturnOrderForm extends React.Component<any, any> {
                 <Icon type="plus" style={styles.plus} />
               ) : null}
             </QMUpload>
-            <Tips title="Please add your return credentials to the attachment. Supported picture formats: JPG, JPEG, PNG, GIF, file size no more than 5M, and upload a maximum of 10" />
+            <Tips
+              title={<FormattedMessage id="Order.PleaseaddyourreturOrder.savencredentialsTip" />}
+           />
           </FormItem>
 
-          {isReturn ? (
+          {isReturn? (
             <GoodsList
               form={this.props.form}
               flushState={this.state.flushState}
             />
           ) : (
-            <RefundAmount
-              form={this.props.form}
-              flushState={this.state.flushState}
-            />
+            <>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Order.Refundableamount" />}>
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + canApplyPrice.toFixed(2)}
+              {getFieldDecorator('refundableAmount', {
+                initialValue: canApplyPrice,
+                 rules: [
+                  {
+                    required: true,
+                    message: (window as any).RCi18n({
+                      id: 'Order.Refundableamountcannotbeblank'
+                    })
+                  },
+                ]
+              })
+                (<InputNumber
+                  min={0}
+                  max={+canApplyPrice}
+                  style={{marginLeft:10}}
+                  onChange={this._editInfo.bind(this, 'applyPrice')} /> )}
+              </FormItem>
+            </>
           )}
         </Form>
         <div className="bar-button">
@@ -184,19 +218,21 @@ export default class ReturnOrderForm extends React.Component<any, any> {
             htmlType="submit"
             size="large"
             onClick={() => {
-              this.props.form.validateFieldsAndScroll(null, (errs) => {
-                //如果校验通过
-                if (!errs) {
-                  add();
-                } else {
-                  this.setState({
-                    flushState: Math.random()
-                  });
-                }
-              });
+              if(this._checkReturnNum()){
+                this.props.form.validateFieldsAndScroll(null, (errs) => {
+                  //如果校验通过
+                  if (!errs) {
+                    add();
+                  } else {
+                    this.setState({
+                      flushState: Math.random()
+                    });
+                  }
+                });
+              }
             }}
           >
-            Save
+            <FormattedMessage id="Order.save" />
           </Button>
           &nbsp;&nbsp;
           <Button
@@ -205,7 +241,7 @@ export default class ReturnOrderForm extends React.Component<any, any> {
               history.go(-1);
             }}
           >
-            Cancel
+            <FormattedMessage id="Order.cancel" />
           </Button>
         </div>
       </div>
@@ -220,14 +256,19 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="Please select chargeback reason"
-        notFoundContent="暂无退货原因"
+        placeholder={
+          (window as any).RCi18n({
+            id: 'Order.Pleaseselectchargebackreason'
+          })
+        }
+        notFoundContent={
+          (window as any).RCi18n({
+            id: 'Order.Thereisnoreasonforthereturn'
+          })
+        }
         onChange={this._editInfo.bind(this, 'selectedReturnReason')}
       >
-        <Option key={'key'} value={''}>
-          Please select chargeback reason
-        </Option>
-        {returnReasonList.map((item) => {
+        {returnReasonList && returnReasonList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
           const value = map.valueSeq().first();
@@ -249,14 +290,19 @@ export default class ReturnOrderForm extends React.Component<any, any> {
     return (
       <Select
         getPopupContainer={() => document.getElementById('page-content')}
-        placeholder="Please select return method"
-        notFoundContent="暂无退货方式"
+        placeholder={
+          (window as any).RCi18n({
+            id: 'Order.Pleaseselectreturnmethod'
+          })
+        }
+        notFoundContent={
+          (window as any).RCi18n({
+            id: 'Order.NoData'
+          })
+        }
         onChange={this._editInfo.bind(this, 'selectedReturnWay')}
       >
-        <Option key={'key'} value={''}>
-          Please select return method
-        </Option>
-        {returnWayList.map((item) => {
+        {returnWayList&&returnWayList.map((item) => {
           const map: IMap = item.toMap();
           const key = map.keySeq().first();
           const value = map.valueSeq().first();
@@ -286,9 +332,12 @@ export default class ReturnOrderForm extends React.Component<any, any> {
    */
   _editImages = ({ file, fileList }) => {
     if (file.status == 'error') {
-      message.error('上传失败');
+      message.error(
+        (window as any).RCi18n({
+          id: 'Order.Uploaderror'
+        })
+      );
     }
-
     const { editImages } = this.props.relaxProps;
     editImages(fromJS(fileList));
   };
@@ -308,16 +357,42 @@ export default class ReturnOrderForm extends React.Component<any, any> {
       if (file.size <= FILE_MAX_SIZE) {
         return true;
       } else {
-        message.error('文件大小不能超过5M');
+        message.error(
+          (window as any).RCi18n({
+            id: 'Order.Filesizecannotexceed'
+          })
+        );
         return false;
       }
     } else {
-      message.error('文件格式错误');
+      message.error(
+        (window as any).RCi18n({
+          id: 'Order.Fileformaterror'
+        })
+      );
       return false;
     }
   };
+  /**
+   * 检查是否只退了赠品没退商品的情况
+   */
+  _checkReturnNum=()=>{
+    const {tradeDetail}=this.props.relaxProps;
+    // 退货商品数量大于0的商品
+    const tradeItems = tradeDetail.get( 'tradeItems').filter((item) => item.get('num') > 0);
+    if(tradeDetail.get('subscriptionPlanGiftList')){
+      // 退货赠品数量大于0的赠品
+      const subGifts = tradeDetail.get('subscriptionPlanGiftList').filter((item) => item.get('num') > 0);
+      // 如果所有商品的退货数量都为0但是gift的数量有不为0的
+      if (tradeItems.size == 0&&subGifts.size>0) {
+        message.error(RCi18n({id: 'Order.returnOrder.checkReturnNum'}));
+        return false;
+      }
+    }
+    return true;
+  }
 }
-
+export default injectIntl(ReturnOrderForm)
 const styles = {
   container: {
     display: 'flex',

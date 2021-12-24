@@ -39,7 +39,7 @@ export default class AppStore extends Store {
       this.transaction(() => {
         this.dispatch('loading:end');
         this.dispatch('detail:init', orderInfo);
-        this.dispatch('receive-record-actor:init', payRecordResult.res.payOrderResponses);
+        this.dispatch('receive-record-actor:init', payRecordResult.res.context.payOrderResponses);
         this.dispatch('detail-actor:setSellerRemarkVisible', true);
         this.dispatch('logistics:init', logistics);
       });
@@ -106,7 +106,6 @@ export default class AppStore extends Store {
     } else if (res.code == 'K-000001') {
       message.error('订单状态已改变，请刷新页面后重试!');
     } else {
-      message.error(res.message);
     }
   };
 
@@ -157,8 +156,6 @@ export default class AppStore extends Store {
       message.success('Save deliver successfully!');
       //刷新
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 
@@ -210,8 +207,6 @@ export default class AppStore extends Store {
       message.success('Operate successfully');
       const tid = this.state().getIn(['detail', 'id']);
       this.init(tid);
-    } else {
-      message.error(res.message);
     }
   };
 

@@ -71,7 +71,7 @@ export function fetchOffLineAccout() {
 type TResult = {
   code: string;
   message: string;
-  context: Array<any>;
+  context: any;
 };
 
 export const audit = (tid: string, audit: string, reason: string) => {
@@ -123,7 +123,7 @@ export const retrial = (tid: string) => {
 };
 
 export function fetchLogistics() {
-  return Fetch<TResult>('/store/expressCompany');
+  return Fetch<TResult>('/store/expressCompany/findExpressCompanys');
 }
 
 /**
@@ -200,14 +200,62 @@ export function refresh(settleId) {
 }
 
 export function getPaymentInfo(tid: string) {
-  return Fetch(`/trade/record/${tid}`);
+  return Fetch(`/trade/payment/record/${tid}`);
 }
 
 export function queryCityById(filterParams = {}) {
+  if (!filterParams.id) {
+    return Promise.resolve({ res: { context: null } });
+  }
   return Fetch<TResult>('/system-city/query-system-city-by-id', {
     method: 'POST',
     body: JSON.stringify({
       ...filterParams
+    })
+  });
+}
+
+export function getComments(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/page', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function getCommentById(id) {
+  return Fetch<TResult>('/trade/detailComments/findById', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
+    })
+  });
+}
+
+export function addComment(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/add', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function updateComment(filterParams = {}) {
+  return Fetch<TResult>('/trade/detailComments/modify', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+export function deleteCommentById(id) {
+  return Fetch<TResult>('/trade/detailComments/deleteById', {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
     })
   });
 }

@@ -1,12 +1,14 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, Popconfirm } from 'antd';
+import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, Menu, Card, Checkbox, Empty, Spin, Popconfirm, AutoComplete } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
 import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { addressList } from '@/order-add-old/webapi';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import _ from 'lodash';
+
+import '../index.less';
 
 const { TextArea } = Input;
 
@@ -34,7 +36,8 @@ class BillingInfomation extends React.Component<any, any> {
         lastName: '',
         consigneeNumber: '',
         postCode: '',
-        cityId: '',
+        city: '',
+        state: '',
         countryId: '',
         address1: '',
         address2: '',
@@ -51,10 +54,19 @@ class BillingInfomation extends React.Component<any, any> {
       currentId: '',
       loading: true,
       objectFetching: false,
-      initCityName: ''
+      initCityName: '',
+      storeId: '',
+      stateList: ''
     };
   }
   componentDidMount() {
+    let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+    let storeId = loginInfo ? loginInfo.storeId : '';
+    if (storeId.toString() === '123457910') {
+      this.setState({ storeId });
+      this.getStateList();
+    }
+
     this.getDict();
     this.getAddressList();
     // this.getClinicList();
@@ -85,11 +97,11 @@ class BillingInfomation extends React.Component<any, any> {
             sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   handleSubmit = (e) => {
@@ -107,6 +119,8 @@ class BillingInfomation extends React.Component<any, any> {
       address1: billingForm.address1,
       address2: billingForm.address2,
       cityId: billingForm.cityId,
+      city: billingForm.city,
+      province: billingForm.state,
       consigneeName: billingForm.firstName + ' ' + billingForm.lastName,
       consigneeNumber: billingForm.consigneeNumber,
       countryId: billingForm.countryId,
@@ -118,7 +132,6 @@ class BillingInfomation extends React.Component<any, any> {
       isDefaltAddress: this.state.isDefault ? 1 : 0,
       lastName: billingForm.lastName,
       postCode: billingForm.postCode,
-      provinceId: billingForm.provinceId,
       rfc: billingForm.rfc,
       type: billingForm.type
     };
@@ -128,13 +141,13 @@ class BillingInfomation extends React.Component<any, any> {
         const res = data.res;
         if (res.code === 'K-000000') {
           this.getAddressList();
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -154,8 +167,11 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
+          this.setState({
+            loading: false
+          });
           let addressList = res.context.customerDeliveryAddressVOList;
-          if (addressList.length > 0) {
+          if (addressList && addressList.length > 0) {
             let billingForm = this.state.billingForm;
             if (this.state.currentId) {
               billingForm = addressList.find((item) => {
@@ -166,17 +182,17 @@ class BillingInfomation extends React.Component<any, any> {
             }
 
             let clinicsVOS = this.getSelectedClinic(res.context.clinicsVOS);
-            this.getCityNameById(billingForm.cityId);
 
             this.setState(
               {
+                customerAccount: res.context.customerAccount,
                 currentId: billingForm.deliveryAddressId,
                 clinicsVOS: res.context.clinicsVOS ? res.context.clinicsVOS : [],
                 addressList: addressList,
                 billingForm: billingForm,
                 title: billingForm.consigneeName,
-                isDefault: billingForm.isDefaltAddress === 1 ? true : false,
-                loading: false
+                isDefault: billingForm.isDefaltAddress === 1 ? true : false
+                // loading: false
               },
               () => {
                 this.props.form.setFieldsValue({
@@ -186,27 +202,32 @@ class BillingInfomation extends React.Component<any, any> {
                   lastName: billingForm.lastName,
                   consigneeNumber: billingForm.consigneeNumber,
                   postCode: billingForm.postCode,
-                  // cityId: billingForm.cityId,
+                  city: billingForm.city,
                   countryId: billingForm.countryId,
                   address1: billingForm.address1,
                   address2: billingForm.address2,
-                  rfc: billingForm.rfc
+                  rfc: billingForm.rfc,
+                  state: billingForm.province
                 });
               }
             );
+          } else {
+            this.setState({
+              loading: false
+            });
           }
         } else {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -224,14 +245,14 @@ class BillingInfomation extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === 'K-000000') {
-          message.success('Operate successfully');
+          message.success(RCi18n({id:"PetOwner.OperateSuccessfully"}));
           this.getAddressList();
         } else {
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
   clickDefault = () => {
@@ -257,14 +278,14 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Unsuccessful');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.message || 'Unsuccessful');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
@@ -279,7 +300,6 @@ class BillingInfomation extends React.Component<any, any> {
     let billingForm = addressList.find((item) => {
       return item.deliveryAddressId === id;
     });
-    this.getCityNameById(billingForm.cityId);
 
     this.setState(
       {
@@ -295,9 +315,11 @@ class BillingInfomation extends React.Component<any, any> {
           consigneeNumber: billingForm.consigneeNumber,
           postCode: billingForm.postCode,
           countryId: billingForm.countryId,
+          city: billingForm.city,
           address1: billingForm.address1,
           address2: billingForm.address2,
-          rfc: billingForm.rfc
+          rfc: billingForm.rfc,
+          state: billingForm.province
         });
       }
     );
@@ -305,20 +327,18 @@ class BillingInfomation extends React.Component<any, any> {
 
   //手机校验
   comparePhone = (rule, value, callback) => {
-    const { form } = this.props;
-    let reg = /^[0-9+-\s]{6,20}$/;
-    if (!reg.test(form.getFieldValue('consigneeNumber'))) {
-      callback('Please enter the correct phone');
+    let reg = /^[0-9+-\s\(\)]{6,20}$/;
+    if (!reg.test(value)) {
+      callback(RCi18n({id:"PetOwner.theCorrectPhone"}));
     } else {
       callback();
     }
   };
 
   compareZip = (rule, value, callback) => {
-    const { form } = this.props;
     let reg = /^[0-9]{3,10}$/;
-    if (!reg.test(form.getFieldValue('postCode'))) {
-      callback('Please enter the correct Post Code');
+    if (!reg.test(value)) {
+      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       callback();
     }
@@ -342,44 +362,31 @@ class BillingInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Operation failure');
+          message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error(err.toString() || 'Operation failure');
-      });
-  };
-  getCityNameById = (id) => {
-    let params = {
-      id: [id]
-    };
-    webapi
-      .queryCityById(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          if (res.context && res.context.systemCityVO && res.context.systemCityVO[0].cityName) {
-            this.setState({
-              initCityName: res.context.systemCityVO[0].cityName
-            });
-            this.props.form.setFieldsValue({
-              cityId: res.context.systemCityVO[0].cityName
-            });
-          }
-        } else {
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        message.error(err.toString() || 'Operation failure');
+        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
       });
   };
 
+  getStateList = () => {
+    webapi.queryStateList().then((data) => {
+      const { res } = data;
+      if (res.code === Const.SUCCESS_CODE) {
+        let stateList = res.context.systemStates;
+        this.setState({
+          stateList
+        });
+      }
+    });
+  };
+
   render() {
-    const { countryArr, cityArr, clinicList, objectFetching, initCityName } = this.state;
+    const { countryArr, cityArr, clinicList, storeId, stateList, billingForm } = this.state;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -392,10 +399,10 @@ class BillingInfomation extends React.Component<any, any> {
     };
     const { getFieldDecorator } = this.props.form;
     return (
-      <Row>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" />}>
+      <Spin spinning={this.state.loading}>
+        <Row>
           <Col span={3}>
-            <h3>All Address( {this.state.addressList.length} )</h3>
+            <h3><FormattedMessage id="PetOwner.AllAddress" />( {this.state.addressList.length} )</h3>
             <ul>
               {this.state.addressList
                 ? this.state.addressList.map((item) => (
@@ -421,7 +428,7 @@ class BillingInfomation extends React.Component<any, any> {
                 display: this.state.addressList.length === 0 ? 'none' : 'block'
               }}
             >
-              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+              <Form {...formItemLayout} onSubmit={this.handleSubmit} className="petowner-noedit-form">
                 <Row gutter={16}>
                   <Col
                     span={12}
@@ -429,18 +436,11 @@ class BillingInfomation extends React.Component<any, any> {
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
                     }}
                   >
-                    <FormItem label="Consumer account">
-                      {getFieldDecorator('customerAccount', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input First Name!'
-                          }
-                        ]
-                      })(<Input disabled={true} />)}
+                    <FormItem label={RCi18n({id:"PetOwner.ConsumerAccount"})}>
+                      {this.state.customerAccount}
                     </FormItem>
                   </Col>
-                  <Col
+                  {/* <Col
                     span={12}
                     style={{
                       display: this.props.customerType !== 'Guest' ? 'none' : 'block'
@@ -473,260 +473,77 @@ class BillingInfomation extends React.Component<any, any> {
                             this.onClinicChange(clinics);
                           }}
                         >
-                          {/* {
-                          clinicList.map((item) => (
-                            <Option value={item.clinicsId} key={item.clinicsId}>{item.clinicsName}</Option>
-                          ))} */}
+       
                           {clinicList
                             ? clinicList.map((item) => (
-                                <Option value={item.prescriberId.toString()} key={item.prescriberId}>
-                                  {item.prescriberId + ',' + item.prescriberName}
-                                </Option>
-                              ))
+                              <Option value={item.prescriberId.toString()} key={item.prescriberId}>
+                                {item.prescriberId + ',' + item.prescriberName}
+                              </Option>
+                            ))
                             : null}
                         </Select>
                       )}
                     </FormItem>
-                  </Col>
+                  </Col> */}
                   <Col span={12}>
-                    <FormItem label="First Name">
-                      {getFieldDecorator('firstName', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input First Name!'
-                          },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'firstName',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.First name"})}>
+                      {billingForm.firstName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Last Name">
-                      {getFieldDecorator('lastName', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Last Name!'
-                          },
-                          {
-                            max: 50,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'lastName',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Last name"})}>
+                      {billingForm.lastName}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Phone Number">
-                      {getFieldDecorator('consigneeNumber', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Phone Number!'
-                          },
-                          { validator: this.comparePhone }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'consigneeNumber',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Phone number"})}>
+                      {billingForm.consigneeNumber}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Post Code">
-                      {getFieldDecorator('postCode', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Post Code!'
-                          },
-                          { validator: this.compareZip }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'postCode',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Postal code"})}>
+                      {billingForm.postCode}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Country">
-                      {getFieldDecorator('countryId', {
-                        rules: [{ required: true, message: 'Please input Country!' }]
-                      })(
-                        <Select
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(value) => {
-                            value = value === '' ? null : value;
-                            this.onFormChange({
-                              field: 'countryId',
-                              value
-                            });
-                          }}
-                        >
-                          {countryArr
-                            ? countryArr.map((item) => (
-                                <Option value={item.id} key={item.id}>
-                                  {item.name}
-                                </Option>
-                              ))
-                            : null}
-                        </Select>
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Country"})}>
+                    {(countryArr.find(t => t.id === billingForm.countryId) || {})['name'] || ''}
+                    </FormItem>
+                  </Col>
+                  {storeId.toString() === '123457910' ? (
+                    <Col span={12}>
+                      <FormItem label={RCi18n({id:"PetOwner.State"})}>
+                        {billingForm.province}
+                      </FormItem>
+                    </Col>
+                  ) : null}
+
+                  <Col span={12}>
+                    <FormItem label={RCi18n({id:"PetOwner.City"})}>
+                      {billingForm.city}
+                    </FormItem>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={12}>
+                    <FormItem label={RCi18n({id:"PetOwner.Address1"})}>
+                      {billingForm.address1}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="City">
-                      {getFieldDecorator('cityId', {
-                        rules: [{ required: true, message: 'Please input City!' }],
-                        initialValue: initCityName
-                      })(
-                        <Select
-                          showSearch
-                          placeholder="Select a Order number"
-                          notFoundContent={objectFetching ? <Spin size="small" /> : null}
-                          onSearch={_.debounce(this.getCityList, 500)}
-                          filterOption={(input, option) => option.props.children && option.props.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(value) => {
-                            value = value === '' ? null : value;
-                            this.onFormChange({
-                              field: 'cityId',
-                              value
-                            });
-                          }}
-                        >
-                          {cityArr
-                            ? cityArr.map((item) => (
-                                <Option value={item.id} key={item.id}>
-                                  {item.cityName}
-                                </Option>
-                              ))
-                            : null}
-                        </Select>
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Address2"})}>
+                      {billingForm.address2}
                     </FormItem>
                   </Col>
                   <Col span={12}>
-                    <FormItem label="Address 1">
-                      {getFieldDecorator('address1', {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input Address 1!'
-                          },
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <TextArea
-                          disabled={this.props.customerType === 'Guest'}
-                          autoSize={{ minRows: 3, maxRows: 3 }}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'address1',
-                              value
-                            });
-                          }}
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem label="Address 2">
-                      {getFieldDecorator('address2', {
-                        rules: [
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <TextArea
-                          disabled={this.props.customerType === 'Guest'}
-                          autoSize={{ minRows: 3, maxRows: 3 }}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'address2',
-                              value
-                            });
-                          }}
-                        />
-                      )}
-                    </FormItem>
-                  </Col>
-                  <Col span={12}>
-                    <FormItem label="Reference">
-                      {getFieldDecorator('rfc', {
-                        rules: [
-                          {
-                            max: 200,
-                            message: 'Exceed maximum length!'
-                          }
-                        ]
-                      })(
-                        <Input
-                          disabled={this.props.customerType === 'Guest'}
-                          onChange={(e) => {
-                            const value = (e.target as any).value;
-                            this.onFormChange({
-                              field: 'rfc',
-                              value
-                            });
-                          }}
-                        />
-                      )}
+                    <FormItem label={RCi18n({id:"PetOwner.Reference"})}>
+                      {billingForm.rfc}
                     </FormItem>
                   </Col>
 
                   <Col span={24}>
                     <FormItem>
-                      <Button
+                      {/* <Button
                         type="primary"
                         htmlType="submit"
                         style={{
@@ -735,7 +552,7 @@ class BillingInfomation extends React.Component<any, any> {
                         }}
                       >
                         Save
-                      </Button>
+                      </Button> */}
 
                       {/* <Button
                         style={{
@@ -748,7 +565,7 @@ class BillingInfomation extends React.Component<any, any> {
                         Delete
                       </Button> */}
 
-                      <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
+                      {/* <Popconfirm placement="topRight" title="Are you sure to delete this item?" onConfirm={() => this.delAddress()} okText="Confirm" cancelText="Cancel">
                         <Button
                           style={{
                             marginRight: '20px',
@@ -757,19 +574,15 @@ class BillingInfomation extends React.Component<any, any> {
                         >
                           <FormattedMessage id="delete" />
                         </Button>
-                      </Popconfirm>
-
-                      <Button>
-                        <Link to="/customer-list">Cancel</Link>
-                      </Button>
+                      </Popconfirm> */}
                     </FormItem>
                   </Col>
                 </Row>
               </Form>
             </Card>
           </Col>
-        </Spin>
-      </Row>
+        </Row>
+      </Spin>
     );
   }
 }

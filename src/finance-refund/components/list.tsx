@@ -2,15 +2,7 @@ import React from 'react';
 import { Relax } from 'plume2';
 import { Const, DataGrid, noop, cache } from 'qmkit';
 import { List } from 'immutable';
-import {
-  Dropdown,
-  Icon,
-  Menu,
-  Popconfirm,
-  Tooltip,
-  Modal,
-  message
-} from 'antd';
+import { Dropdown, Icon, Menu, Popconfirm, Tooltip, Modal, message } from 'antd';
 import momnet from 'moment';
 const confirm = Modal.confirm;
 
@@ -72,17 +64,10 @@ export default class PayOrderList extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      loading,
-      total,
-      pageSize,
-      dataList,
-      init,
-      current
-    } = this.props.relaxProps;
+    const { loading, total, pageSize, dataList, init, current } = this.props.relaxProps;
     return (
       <DataGrid
-        loading={{ spinning: loading, indicator:<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px',height: '90px' }} alt="" /> }}
+        loading={loading}
         rowKey="refundId"
         pagination={{
           pageSize,
@@ -94,81 +79,16 @@ export default class PayOrderList extends React.Component<any, any> {
         }}
         dataSource={dataList.toJS()}
       >
-        <Column
-          title="退款流水号"
-          key="refundBillCode"
-          dataIndex="refundBillCode"
-          render={(refundBillCode) => (
-            <span>{refundBillCode ? refundBillCode : '-'}</span>
-          )}
-        />
-        <Column
-          title="退单号"
-          key="returnOrderCode"
-          dataIndex="returnOrderCode"
-        />
-        <Column
-          title="退单时间"
-          key="createTime"
-          dataIndex="createTime"
-          render={(createTime) => (
-            <span>
-              {momnet(createTime).format(Const.TIME_FORMAT).toString()}
-            </span>
-          )}
-        />
+        <Column title="退款流水号" key="refundBillCode" dataIndex="refundBillCode" render={(refundBillCode) => <span>{refundBillCode ? refundBillCode : '-'}</span>} />
+        <Column title="退单号" key="returnOrderCode" dataIndex="returnOrderCode" />
+        <Column title="退单时间" key="createTime" dataIndex="createTime" render={(createTime) => <span>{momnet(createTime).format(Const.TIME_FORMAT).toString()}</span>} />
 
         <Column title="客户名称" key="customerName" dataIndex="customerName" />
-        <Column
-          title="应退金额"
-          key="returnPrice"
-          dataIndex="returnPrice"
-          render={(returnPrice) => (
-            <span>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + returnPrice
-                ? returnPrice.toFixed(2)
-                : (0.0).toFixed(2)}
-            </span>
-          )}
-        />
-        <Column
-          title="实退金额"
-          key="actualReturnPrice"
-          dataIndex="actualReturnPrice"
-          render={(actualReturnPrice) => (
-            <span>
-              {actualReturnPrice
-                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                  actualReturnPrice.toFixed(2)
-                : '-'}
-            </span>
-          )}
-        />
-        <Column
-          width="100"
-          title="退款方式"
-          key="payType"
-          dataIndex="payType"
-          render={(payType) => <span>{payTypeDic[payType]}</span>}
-        />
-        <Column
-          width="10%"
-          title="退款账户"
-          key="returnAccountName"
-          dataIndex="returnAccountName"
-          render={(returnAccountName) => (
-            <span>{returnAccountName ? returnAccountName : '-'}</span>
-          )}
-        />
-        <Column
-          width="70"
-          title="状态"
-          key="refundStatus"
-          dataIndex="refundStatus"
-          render={(refundStatus) => (
-            <span>{refundOrderStatusDic[refundStatus]}</span>
-          )}
-        />
+        <Column title="应退金额" key="returnPrice" dataIndex="returnPrice" render={(returnPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + returnPrice ? returnPrice.toFixed(2) : (0.0).toFixed(2)}</span>} />
+        <Column title="实退金额" key="actualReturnPrice" dataIndex="actualReturnPrice" render={(actualReturnPrice) => <span>{actualReturnPrice ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + actualReturnPrice.toFixed(2) : '-'}</span>} />
+        <Column width="100" title="退款方式" key="payType" dataIndex="payType" render={(payType) => <span>{payTypeDic[payType]}</span>} />
+        <Column width="10%" title="退款账户" key="returnAccountName" dataIndex="returnAccountName" render={(returnAccountName) => <span>{returnAccountName ? returnAccountName : '-'}</span>} />
+        <Column width="70" title="状态" key="refundStatus" dataIndex="refundStatus" render={(refundStatus) => <span>{refundOrderStatusDic[refundStatus]}</span>} />
 
         <Column
           title="备注"
@@ -188,48 +108,24 @@ export default class PayOrderList extends React.Component<any, any> {
             );
           }}
         />
-        <Column
-          width="80"
-          title="操作"
-          render={(rowInfo) => this._renderOperate(rowInfo)}
-        />
+        <Column width="80" title="操作" render={(rowInfo) => this._renderOperate(rowInfo)} />
       </DataGrid>
     );
   }
 
   _renderComment(comment) {
-    return (
-      <div style={{ wordBreak: 'break-all', wordWrap: 'break-word' }}>
-        {comment}
-      </div>
-    );
+    return <div style={{ wordBreak: 'break-all', wordWrap: 'break-word' }}>{comment}</div>;
   }
 
   _renderOperate(rowInfo) {
-    const {
-      refundStatus,
-      refundId,
-      customerId,
-      payType,
-      returnOrderCode,
-      returnPrice
-    } = rowInfo;
+    const { refundStatus, refundId, customerId, payType, returnOrderCode, returnPrice } = rowInfo;
     const { onDestory } = this.props.relaxProps;
     //线下支付
     if (payType == 1) {
       //待退款
       if (refundStatus == 0) {
         return (
-          <Dropdown
-            getPopupContainer={() => document.getElementById('page-content')}
-            overlay={this._renderOfflineMenu(
-              refundId,
-              customerId,
-              returnOrderCode,
-              returnPrice
-            )}
-            trigger={['click']}
-          >
+          <Dropdown getPopupContainer={() => document.getElementById('page-content')} overlay={this._renderOfflineMenu(refundId, customerId, returnOrderCode, returnPrice)} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               操作 <Icon type="down" />
             </a>
@@ -255,14 +151,7 @@ export default class PayOrderList extends React.Component<any, any> {
     } else {
       if (refundStatus == 0) {
         return (
-          <Dropdown
-            overlay={this._renderOnlineMenu(
-              refundId,
-              customerId,
-              returnOrderCode
-            )}
-            trigger={['click']}
-          >
+          <Dropdown overlay={this._renderOnlineMenu(refundId, customerId, returnOrderCode)} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               操作 <Icon type="down" />
             </a>
@@ -277,23 +166,13 @@ export default class PayOrderList extends React.Component<any, any> {
     return <span>{'-'}</span>;
   }
 
-  _renderOfflineMenu = (
-    id: string,
-    customerId: string,
-    returnOrderCode: string,
-    returnPrice: number
-  ) => {
+  _renderOfflineMenu = (id: string, customerId: string, returnOrderCode: string, returnPrice: number) => {
     const { onCreateRefund, onCreateRefuse } = this.props.relaxProps;
 
     return (
       <Menu>
         <Menu.Item key="0">
-          <a
-            href="javascript:void(0);"
-            onClick={() =>
-              onCreateRefund(customerId, id, returnOrderCode, returnPrice)
-            }
-          >
+          <a href="javascript:void(0);" onClick={() => onCreateRefund(customerId, id, returnOrderCode, returnPrice)}>
             退款
           </a>
         </Menu.Item>
@@ -308,19 +187,12 @@ export default class PayOrderList extends React.Component<any, any> {
     );
   };
 
-  _renderOnlineMenu = (
-    id: string,
-    _customerId: string,
-    returnOrderCode: string
-  ) => {
+  _renderOnlineMenu = (id: string, _customerId: string, returnOrderCode: string) => {
     const { onCreateRefuse } = this.props.relaxProps;
     return (
       <Menu>
         <Menu.Item key="0">
-          <a
-            href="javascript:void(0);"
-            onClick={() => this._onlineRefund(returnOrderCode)}
-          >
+          <a href="javascript:void(0);" onClick={() => this._onlineRefund(returnOrderCode)}>
             Confirm Refund
           </a>
         </Menu.Item>
@@ -336,7 +208,6 @@ export default class PayOrderList extends React.Component<any, any> {
               if (res.code === Const.SUCCESS_CODE) {
                 onCreateRefuse(id);
               } else {
-                message.error(res.message);
               }
             }}
           >
@@ -350,11 +221,7 @@ export default class PayOrderList extends React.Component<any, any> {
 
   _renderAccountName(returnAccount) {
     const { offlineAccounts } = this.props.relaxProps;
-    return offlineAccounts
-      .find(
-        (offlineAccount) => offlineAccount.get('accountId') == returnAccount
-      )
-      .get('bankNo');
+    return offlineAccounts.find((offlineAccount) => offlineAccount.get('accountId') == returnAccount).get('bankNo');
   }
 
   async _onlineRefund(returnOrderCode: string) {
@@ -372,7 +239,6 @@ export default class PayOrderList extends React.Component<any, any> {
         onCancel() {}
       });
     } else {
-      message.error(res.message);
     }
   }
 }

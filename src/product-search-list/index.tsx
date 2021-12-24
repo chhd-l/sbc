@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, Headline, cache, util } from 'qmkit';
-import { Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker } from 'antd';
+import { BreadCrumb, Const, Headline, cache, util, AuthWrapper, history, QRScaner } from 'qmkit';
+import {Spin, Row, Col, Button, message, Tooltip, Table, Tabs, DatePicker, Icon, Dropdown, Menu, Modal, Input, Space} from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
 import './index.less';
+import { RCi18n } from 'qmkit';
+import SynonymsTable from '@/product-search-list/synonymsTable';
 
 const TabPane = Tabs.TabPane;
 const RangePicker = DatePicker.RangePicker;
+const { confirm } = Modal;
 
 export default class ProductSearchList extends React.Component<any, any> {
   static propTypes = {};
@@ -15,14 +19,15 @@ export default class ProductSearchList extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Search',
+      title: <FormattedMessage id="Product.search" />,
       allSerchResults: [],
       allPagination: {
         current: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        visible: false
       },
-      allSort: {},
+      allSort: { order: 'descend' },
       allLoading: false,
       noSearchResult: [],
       noResultPagination: {
@@ -30,7 +35,7 @@ export default class ProductSearchList extends React.Component<any, any> {
         pageSize: 10,
         total: 0
       },
-      noResultSort: {},
+      noResultSort: { order: 'descend' },
       noResultLoading: false,
       dateRange: [],
       tabKey: '1',
@@ -51,9 +56,15 @@ export default class ProductSearchList extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    //保持当前选中tab状态
+    if(sessionStorage.getItem('productSearchActive')){
+      this.onTabChange(sessionStorage.getItem('productSearchActive'))
+    }
     this.dateRangeChange([moment(sessionStorage.getItem(cache.CURRENT_YEAR)).add(-7, 'd'), moment(sessionStorage.getItem(cache.CURRENT_YEAR))]);
   }
-
+  componentWillUnmount() {
+    sessionStorage.removeItem('productSearchActive');
+  }
   onTabChange(key) {
     this.setState({
       tabKey: key
@@ -98,12 +109,9 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
         }
       })
-      .catch((err) => {
-        message.error(err || 'Get Data Failed');
-      });
+      .catch((err) => {});
   }
 
   allTableChange = (pagination, filters, sorter) => {
@@ -116,6 +124,118 @@ export default class ProductSearchList extends React.Component<any, any> {
       () => this.getAllSearchResult()
     );
   };
+
+  onRepair= () => {
+    this.setState({
+      allLoading: true,
+      loading: false
+    });
+    webapi
+      .getRepair()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message);
+          this.setState({
+            allLoading: false
+          });
+        } else {
+          this.setState({
+            allLoading: false
+          });
+          message.success(res.message);
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          allLoading: false,
+          loading: false
+        });
+      });
+  }
+
+  onRebuild = () => {
+    this.setState({
+      allLoading: true,
+      loading: false
+    });
+    webapi
+      .getRebuild()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message);
+          this.setState({
+            allLoading: false
+          });
+        } else {
+          this.setState({
+            allLoading: false
+          });
+          message.success(res.message);
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          allLoading: false,
+          loading: false
+        });
+      });
+  }
+
+  showModal = (res) => {
+    let _this = this
+    confirm({
+      title: 'Are you sure to '+ res +' index, which may affect the normal operation of shop',
+      onOk() {
+        if(res == 'repair') {
+          _this.onRepair()
+        }else {
+          _this.onRebuild()
+        }
+      },
+      onCancel() {},
+    });
+  };
+
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+  _menu = () => {
+    return (
+      <Menu>
+        {/* <Menu.Item>
+          <AuthWrapper functionName="f_goods_up_down">
+            <a
+              onClick={()=>this.showModal('repair')}
+            >
+             <FormattedMessage id="Product.Repair index" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item> */}
+        <Menu.Item>
+          <AuthWrapper functionName="f_goods_up_down">
+            <a
+              onClick={() => this.showModal('rebuild') }
+            >
+              <FormattedMessage id="Product.Rebuild index" />
+            </a>
+          </AuthWrapper>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
   onAllSerch() {
     this.setState(
       {
@@ -124,7 +244,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        allSort: {},
+        //allSort: {},
         loading: false
       },
       () => this.getAllSearchResult()
@@ -159,14 +279,12 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             allLoading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           allLoading: false,
           loading: false
@@ -192,7 +310,7 @@ export default class ProductSearchList extends React.Component<any, any> {
           pageSize: 10,
           total: 0
         },
-        noResultSort: {},
+        //noResultSort: {},
         loading: false
       },
       () => this.getNoSearchResults()
@@ -227,7 +345,6 @@ export default class ProductSearchList extends React.Component<any, any> {
             loading: false
           });
         } else {
-          message.error(res.message || 'Get Data Failed');
           this.setState({
             noResultLoading: false,
             loading: false
@@ -235,7 +352,6 @@ export default class ProductSearchList extends React.Component<any, any> {
         }
       })
       .catch((err) => {
-        message.error(err || 'Get Data Failed');
         this.setState({
           noResultLoading: false,
           loading: false
@@ -259,8 +375,6 @@ export default class ProductSearchList extends React.Component<any, any> {
 
           const exportHref = Const.HOST + `/search/details/term/statistics/export/${encrypted}`;
           window.open(exportHref);
-        } else {
-          message.error('Unsuccessful');
         }
         resolve();
       }, 500);
@@ -270,44 +384,45 @@ export default class ProductSearchList extends React.Component<any, any> {
     const { title, tabKey, dateRange, statistics, allSerchResults, allPagination, allLoading, noSearchResult, noResultPagination, noResultLoading } = this.state;
     const columnsAll = [
       {
-        title: 'Search Term',
+        title: <FormattedMessage id="Product.SearchTerm" />,
         dataIndex: 'searchTerm',
         key: 'searchTerm',
         width: '20%'
       },
       {
-        title: 'Searches With Results',
+        title: <FormattedMessage id="Product.SearchesWithResults" />,
         dataIndex: 'searchesCount',
         key: 'searchesCount',
         width: '15%'
       },
       {
-        title: 'Percent',
+        title: <FormattedMessage id="Product.Percent" />,
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
         sorter: true,
+        defaultSortOrder: 'descend',
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
-        title: 'Total # of pdt. found',
+        title: <FormattedMessage id="Product.TotalFound" />,
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
       },
       {
-        title: 'Avg. pdt found per search',
+        title: <FormattedMessage id="Product.AvgSearch" />,
         dataIndex: 'resultCount',
         key: 'resultCount',
         width: '15%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={RCi18n({id:'Product.Details'})}>
               <Link to={{ pathname: '/product-search-details', state: { type: 'all', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
@@ -316,44 +431,45 @@ export default class ProductSearchList extends React.Component<any, any> {
     ];
     const columnsNoResult = [
       {
-        title: 'Search Term',
+        title: <FormattedMessage id="Product.SearchTerm" />,
         dataIndex: 'searchTerm',
         key: 'searchTerm',
         width: '20%'
       },
       {
-        title: 'Searches With No-Result',
+        title: <FormattedMessage id="Product.SearchesWithNoResult" />,
         dataIndex: 'searchesCount',
         key: 'searchesCount',
         width: '15%'
       },
       {
-        title: 'Percent',
+        title: <FormattedMessage id="Product.Percent" />,
         dataIndex: 'percent',
         key: 'percent',
         width: '15%',
         sorter: true,
+        defaultSortOrder: 'descend',
         render: (text, record) => text.toFixed(2) + '%'
       },
       {
-        title: 'Last Not Found Date',
+        title: <FormattedMessage id="Product.LastNotFoundDate" />,
         dataIndex: 'lastNotFoundDate',
         key: 'lastNotFoundDate',
         width: '15%'
       },
       {
-        title: 'Last Found Date',
+        title: <FormattedMessage id="Product.LastFoundDate" />,
         dataIndex: 'lastFoundDate',
         key: 'lastFoundDate',
         width: '15%'
       },
       {
-        title: 'Operation',
+        title: <FormattedMessage id="Product.Operation" />,
         key: 'operation',
         width: '8%',
         render: (text, record) => (
           <div>
-            <Tooltip placement="top" title="Details">
+            <Tooltip placement="top" title={<FormattedMessage id="Product.Details" />}>
               <Link to={{ pathname: '/product-search-details', state: { type: 'noResult', searchTerm: record.searchTerm, startDate: dateRange[0], endDate: dateRange[1] } }} className="iconfont iconDetails"></Link>
             </Tooltip>
           </div>
@@ -363,7 +479,7 @@ export default class ProductSearchList extends React.Component<any, any> {
     return (
       <div id="productSearch">
         <BreadCrumb />
-        <Spin spinning={allLoading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={allLoading}>
           <div className="container-search">
             <Row>
               <Col span={8}>
@@ -382,7 +498,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Searches With Results</strong>
+                      <strong>
+                        <FormattedMessage id="Product.SearchesWithResults" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.searchesWithResults}</strong>
@@ -397,7 +515,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Total # of pdt. found</strong>
+                      <strong>
+                        <FormattedMessage id="Product.TotalFound" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultNo}</strong>
@@ -412,7 +532,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Avg. pdt found per search</strong>
+                      <strong>
+                        <FormattedMessage id="Product.AvgSearch" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.resultCount}</strong>
@@ -429,7 +551,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>Searches With No-Result</strong>
+                      <strong>
+                        <FormattedMessage id="Product.SearchesWithNoResult" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.searchesWithNoResults}</strong>
@@ -444,7 +568,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>No-result Rate</strong>
+                      <strong>
+                        <FormattedMessage id="Product.NoResultRate" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.noResultRate}%</strong>
@@ -459,7 +585,9 @@ export default class ProductSearchList extends React.Component<any, any> {
                   </Col>
                   <Col span={23}>
                     <div className="resultTitle">
-                      <strong>No-Result Term Count</strong>
+                      <strong>
+                        <FormattedMessage id="Product.NoResultTermCount" />
+                      </strong>
                     </div>
                     <div className="resultValue">
                       <strong>{statistics.noResultTermCount}</strong>
@@ -471,28 +599,45 @@ export default class ProductSearchList extends React.Component<any, any> {
           </div>
           <div className="container">
             <div className="exportContainer">
-              <Button
-                className="exportBtn"
-                type="primary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.onExport();
-                }}
-              >
-                Export
-              </Button>
+              <div className="flex-end">
+                {
+                  tabKey !== '3' ? (
+                    <Button
+                      style={{marginRight:'20px'}}
+                      type="primary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.onExport();
+                      }}
+                    >
+                      <FormattedMessage id="Product.Export" />
+                    </Button>
+                  ) : ''
+                }
+
+                <Dropdown overlay={this._menu()} getPopupContainer={() => document.getElementById('page-content')}>
+                  <Button>
+                  <FormattedMessage id="Product.Index operation" />
+                    <Icon type="down" />
+                  </Button>
+                </Dropdown>
+              </div>
+
             </div>
             <Tabs
-              defaultActiveKey={tabKey}
+              activeKey={tabKey}
               onChange={(key) => {
                 this.onTabChange(key);
               }}
             >
-              <TabPane tab="All" key="1">
+              <TabPane tab={<FormattedMessage id="Product.All" />} key="1">
                 <Table rowKey="id" columns={columnsAll} dataSource={allSerchResults} pagination={allPagination} scroll={{ x: '100%' }} onChange={this.allTableChange} />
               </TabPane>
-              <TabPane tab="No results searches" key="2">
+              <TabPane tab={<FormattedMessage id="Product.NoResultsSearches" />} key="2">
                 <Table rowKey="id" columns={columnsNoResult} dataSource={noSearchResult} pagination={noResultPagination} loading={noResultLoading} scroll={{ x: '100%' }} onChange={this.noResultTableChange} />
+              </TabPane>
+              <TabPane tab={<FormattedMessage id="Product.Synonyms" />} key="3">
+                <SynonymsTable />
               </TabPane>
             </Tabs>
           </div>

@@ -3,61 +3,12 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
 const defaultImg = require('../../goods-list/img/none.png');
-
-const deliverStatus = (status) => {
-  if (status == 'NOT_YET_SHIPPED') {
-    return <FormattedMessage id="order.notShipped" />;
-  } else if (status == 'SHIPPED') {
-    return <FormattedMessage id="order.allShipments" />;
-  } else if (status == 'PART_SHIPPED') {
-    return <FormattedMessage id="order.partialShipment" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.invalid" />;
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const payStatus = (status) => {
-  if (status == 'NOT_PAID') {
-    return <FormattedMessage id="order.unpaid" />;
-  } else if (status == 'UNCONFIRMED') {
-    return <FormattedMessage id="order.toBeConfirmed" />;
-  } else if (status == 'PAID') {
-    return <FormattedMessage id="order.paid" />;
-  } else if (status == 'REFUND') {
-    return <FormattedMessage id="Refund" />;
-  } else if (status == 'PAYING') {
-    return 'Paying';
-  } else {
-    return <FormattedMessage id="order.unknown" />;
-  }
-};
-
-const flowState = (status) => {
-  if (status == 'INIT') {
-    return <FormattedMessage id="order.pendingReview" />;
-  } else if (status == 'GROUPON') {
-    return <FormattedMessage id="order.toBeFormed" />;
-  } else if (status == 'AUDIT' || status == 'DELIVERED_PART') {
-    return <FormattedMessage id="order.toBeDelivered" />;
-  } else if (status == 'DELIVERED') {
-    return <FormattedMessage id="order.toBeReceived" />;
-  } else if (status == 'CONFIRMED') {
-    return <FormattedMessage id="order.received" />;
-  } else if (status == 'COMPLETED') {
-    return <FormattedMessage id="order.completed" />;
-  } else if (status == 'VOID') {
-    return <FormattedMessage id="order.outOfDate" />;
-  }
-};
-
 type TList = List<any>;
 
 class RejectForm extends React.Component<any, any> {
@@ -71,16 +22,16 @@ class RejectForm extends React.Component<any, any> {
             rules: [
               {
                 required: true,
-                message: <FormattedMessage id="order.rejectionReasonTip" />
+                message: <FormattedMessage id="Order.rejectionReasonTip" />
               },
               {
                 max: 100,
-                message: 'Please input less than 100 characters'
+                message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
             ]
           })(
             <div>
-              <Input.TextArea placeholder="comment" autosize={{ minRows: 4, maxRows: 4 }} />
+              <Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.Comment' })} autosize={{ minRows: 4, maxRows: 4 }} />
               <p>
                 <span
                   style={{
@@ -92,7 +43,7 @@ class RejectForm extends React.Component<any, any> {
                 >
                   *
                 </span>
-                Once rejected, we will return the payment for this order to the consumer
+                <FormattedMessage id="Order.OncerejectedTip" />
               </p>
             </div>
           )}
@@ -115,10 +66,10 @@ class RejectForm extends React.Component<any, any> {
   // };
 }
 
-const WrappedRejectForm = Form.create({})(RejectForm);
+const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
 
 @Relax
-export default class ListView extends React.Component<any, any> {
+class ListView extends React.Component<any, any> {
   _rejectForm;
 
   state: {
@@ -127,6 +78,7 @@ export default class ListView extends React.Component<any, any> {
 
   props: {
     histroy?: Object;
+    intl?: any;
     relaxProps?: {
       loading: boolean;
       orderRejectModalVisible: boolean;
@@ -196,30 +148,34 @@ export default class ListView extends React.Component<any, any> {
                           }}
                         />
                       </th>
-                      <th>
-                        <FormattedMessage id="productFirstLetterUpperCase" />
+                      <th style={{ width: 200 }}>
+                        <FormattedMessage id="Order.Product" />
                       </th>
                       <th style={{ width: '14%' }}>
-                        <FormattedMessage id="consumerName" />
+                        <FormattedMessage id="Order.consumerName" />
+                        {/* <br />
+                        <FormattedMessage id="Order.consumerAccount" /> */}
                       </th>
-                      <th style={{ width: '17%' }}>
-                        <FormattedMessage id="recipient" />
+                      <th style={{ width: '14%' }}>
+                        <FormattedMessage id="Order.recipient" />
                       </th>
                       <th style={{ width: '10%' }}>
-                        <FormattedMessage id="amount" />
+                        <FormattedMessage id="Order.amount" />
                         <br />
-                        <FormattedMessage id="quantity" />
+                        <FormattedMessage id="Order.quantity" />
                       </th>
-                      {/* <th style={{ width: '5%' }}>postCode</th> */}
                       {/* <th style={{ width: '5%' }}>rfc</th> */}
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.shippingStatus" />
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Order.shippingStatus" />
                       </th>
-                      <th style={{ width: '12%' }}>
-                        <FormattedMessage id="order.orderStatus" />
+                      {/* <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Order.orderStatus" />
+                      </th> */}
+                      <th style={{ width: '10%' }}>
+                        <FormattedMessage id="Order.createBy" />
                       </th>
-                      <th className="operation-th" style={{ width: '12%' }}>
-                        <FormattedMessage id="order.paymentStatus" />
+                      <th className="operation-th" style={{ width: '10%' }}>
+                        <FormattedMessage id="Order.paymentStatus" />
                       </th>
                     </tr>
                   </thead>
@@ -230,7 +186,7 @@ export default class ListView extends React.Component<any, any> {
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="noData" />
+                    <FormattedMessage id="Order.noData" />
                   </span>
                 </div>
               ) : null}
@@ -247,7 +203,7 @@ export default class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -259,11 +215,18 @@ export default class ListView extends React.Component<any, any> {
     );
   }
 
+  //判断价格显示位数，针对Individualization类型小数位数特殊处理
+  judgePriceNum(price,subscriberType){
+    // return price&&price.toFixed(subscriberType==='Individualization'?2:2)
+    return price&&price.toFixed(2);
+
+  }
+
   _renderLoading() {
     return (
       <tr style={styles.loading}>
         <td colSpan={8}>
-          <Spin indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />} />
+          <Spin />
         </td>
       </tr>
     );
@@ -276,6 +239,7 @@ export default class ListView extends React.Component<any, any> {
       dataList &&
       dataList.map((v, index) => {
         const id = v.get('id');
+        // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
         const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
         const num =
@@ -304,16 +268,16 @@ export default class ListView extends React.Component<any, any> {
         }
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
-            <td colSpan={8} style={{ padding: 0 }}>
+            <td colSpan={9} style={{ padding: 0 }}>
               <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
                 <thead>
                   <tr>
-                    <td colSpan={8} style={{ padding: 0, color: '#999' }}>
+                    <td colSpan={9} style={{ padding: 0, color: '#999' }}>
                       <div
                         style={{
                           marginTop: 12,
                           borderBottom: '1px solid #F5F5F5',
-                          height: 36
+                          height: 40
                         }}
                       >
                         <span style={{ marginLeft: '1%' }}>
@@ -338,7 +302,7 @@ export default class ListView extends React.Component<any, any> {
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.valetOrder" />
+                                <FormattedMessage id="Order.valetOrder" />
                               </span>
                             )}
                             {/* {orderType != '' && (
@@ -346,10 +310,14 @@ export default class ListView extends React.Component<any, any> {
                             )} */}
                             {v.get('grouponFlag') && (
                               <span style={styles.platform}>
-                                <FormattedMessage id="order.fightTogether" />
+                                <FormattedMessage id="Order.fightTogether" />
                               </span>
                             )}
-                            {v.get('isAutoSub') && <span style={styles.platform}>S</span>}
+                            {v.get('isAutoSub') && (
+                              <span style={styles.platform}>
+                                <FormattedMessage id="Order.subscription" />
+                              </span>
+                            )}
                             {v.get('isAutoSub') ? (
                               <span
                                 style={{
@@ -367,7 +335,7 @@ export default class ListView extends React.Component<any, any> {
                         </div>
 
                         <span style={{ marginLeft: 60 }}>
-                          <FormattedMessage id="orderTime" />：
+                          <FormattedMessage id="Order.OrderTime" />：
                           {v.getIn(['tradeState', 'createTime'])
                             ? Moment(v.getIn(['tradeState', 'createTime']))
                                 .format(Const.TIME_FORMAT)
@@ -377,8 +345,8 @@ export default class ListView extends React.Component<any, any> {
                         <span style={{ marginRight: 0, float: 'right' }}>
                           {/*只有未审核状态才显示修改*/}
                           {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && v.get('tradeItems') && !v.get('tradeItems').get(0).get('isFlashSaleGoods') && (
-                            <AuthWrapper functionName="edit_order_f_001_prescriber">
-                              <Tooltip placement="top" title="Edit">
+                            <AuthWrapper functionName="edit_order_f_001">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.Edit" />}>
                                 <a
                                   style={{ marginLeft: 20 }}
                                   onClick={() => {
@@ -391,101 +359,71 @@ export default class ListView extends React.Component<any, any> {
                               </Tooltip>
                             </AuthWrapper>
                           )}
-                          {/* 审核按钮显示 */}
+                          {/*审核按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
-                            <AuthWrapper functionName="fOrderList002_prescriber">
-                              <Tooltip placement="top" title="Audit">
-                                <a
-                                  onClick={() => {
-                                    // onAudit(id, 'CHECKED');
-                                    this._showAuditConfirm(id);
-                                  }}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                  className="iconfont iconaudit"
-                                >
-                                  {/*<FormattedMessage id="order.audit" />*/}
-                                </a>
-                              </Tooltip>
+                            <AuthWrapper functionName="fOrderList002">
+                              <a
+                                onClick={() => {
+                                  onAudit(id, 'CHECKED');
+                                }}
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                              >
+                                <FormattedMessage id="Order.audit" />
+                              </a>
                             </AuthWrapper>
                           )}
-                          {/* 驳回按钮显示 */}
+                          {/*驳回按钮显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
-                            <AuthWrapper functionName="fOrderList002_prescriber">
-                              <Tooltip placement="top" title="Reject">
-                                <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }} className="iconfont iconbtn-cancelall">
-                                  {/*<FormattedMessage id="order.turnDown" />*/}
-                                </a>
-                              </Tooltip>
+                            <AuthWrapper functionName="fOrderList002">
+                              <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }}>
+                                <FormattedMessage id="Order.turnDown" />
+                              </a>
                             </AuthWrapper>
                           )}
+
                           {/*待发货状态显示*/}
-                          {
-                            // needAudit && v.getIn(['tradeState', 'flowState']) === 'AUDIT' && v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' && v.getIn(['tradeState', 'payState']) === 'NOT_PAID' && (
-                            //   <AuthWrapper functionName="fOrderList002_prescriber">
-                            //     <Tooltip placement="top" title="Review">
-                            //       <a
-                            //         style={{ marginLeft: 20 }}
-                            //         onClick={() => {
-                            //           this._showRetrialConfirm(id);
-                            //         }}
-                            //         href="javascript:void(0)"
-                            //         className="iconfont iconbtn-review"
-                            //       >
-                            //         {/*<FormattedMessage id="order.review" />*/}
-                            //       </a>
-                            //     </Tooltip>
-                            //   </AuthWrapper>
-                            // )
-                          }
-                          {/* {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                            'NOT_YET_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
+                          {v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
+                            v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
+                            // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
+                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
                               <AuthWrapper functionName="fOrderDetail002">
-                                <a
-                                  onClick={() => this._toDeliveryForm(id)}
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="order.ship" />
-                                </a>
+                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                  <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
-                            )} */}
+                            )}
                           {/*部分发货状态显示*/}
-                          {/* {v.getIn(['tradeState', 'flowState']) ===
-                            'DELIVERED_PART' &&
-                            v.getIn(['tradeState', 'deliverStatus']) ===
-                            'PART_SHIPPED' &&
-                            !(
-                              v.get('paymentOrder') == 'PAY_FIRST' &&
-                              v.getIn(['tradeState', 'payState']) != 'PAID'
-                            ) && (
+                          {(v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
+                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
+                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
                               <AuthWrapper functionName="fOrderDetail002">
-                                <a onClick={() => this._toDeliveryForm(id)}>
-                                  <FormattedMessage id="order.ship" />
-                                </a>
+                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                  <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping">
+                                    {/*<FormattedMessage id="order.ship" />*/}
+                                  </a>
+                                </Tooltip>
                               </AuthWrapper>
-                            )} */}
+                            )}
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
-                            <AuthWrapper functionName="fOrderList003_prescriber">
-                              <Tooltip placement="top" title="Confirm receipt">
+                            <AuthWrapper functionName="fOrderList003">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
                                 <a
                                   onClick={() => {
                                     this._showConfirm(id);
                                   }}
                                   href="javascript:void(0)"
                                 >
-                                  <FormattedMessage id="order.confirmReceipt" />
+                                  <FormattedMessage id="Order.confirmReceipt" />
                                 </a>
                               </Tooltip>
                             </AuthWrapper>
                           )}
                           <AuthWrapper functionName="fOrderDetail001_prescriber">
-                            <Tooltip placement="top" title="See details">
+                            <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
                               <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail-prescriber/${id}`} className="iconfont iconDetails">
                                 {/*<FormattedMessage id="order.seeDetails" />*/}
                               </Link>
@@ -506,17 +444,17 @@ export default class ListView extends React.Component<any, any> {
                         alignItems: 'flex-end',
                         flexWrap: 'wrap',
                         padding: '16px 0',
-                        width: '100'
+                        width: '200'
                       }}
                     >
                       {/*商品图片*/}
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} className="img-item" key={k} /> : null))}
+                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} title={v.get('skuName') ? v.get('skuName') : ''} className="img-item" style={styles.imgItem} key={k} /> : null))}
 
                       {
-                        /*第4张特殊处理*/
+                        /*最后一张特殊处理*/
                         //@ts-ignore
                         v.get('tradeItems').concat(gifts).size > 4 ? (
                           <div style={styles.imgBg}>
@@ -527,8 +465,8 @@ export default class ListView extends React.Component<any, any> {
                             />
                             //@ts-ignore
                             <div style={styles.imgNum}>
-                              <FormattedMessage id="total" />
-                              {v.get('tradeItems').concat(gifts).size} <FormattedMessage id="items" />
+                              <FormattedMessage id="Order.total" /> {v.get('tradeItems').concat(gifts).size}
+                              <FormattedMessage id="Order.Items" />
                             </div>
                           </div>
                         ) : null
@@ -539,8 +477,12 @@ export default class ListView extends React.Component<any, any> {
                       <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
                         {v.getIn(['buyer', 'name'])}
                       </p>
+                      {/* <br />
+                      <p title={v.getIn(['buyer', 'name'])} className="line-ellipse">
+                        {v.getIn(['buyer', 'account'])}
+                      </p> */}
                     </td>
-                    <td style={{ width: '17%' }}>
+                    <td style={{ width: '14%' }}>
                       {/*收件人姓名*/}
                       {/* <FormattedMessage id="recipient" />： */}
                       <p title={v.getIn(['consignee', 'name'])} className="line-ellipse">
@@ -552,22 +494,27 @@ export default class ListView extends React.Component<any, any> {
                       {/* {v.getIn(['consignee', 'phone'])} */}
                     </td>
                     <td style={{ width: '10%' }}>
-                      {currencySymbol + ' ' + tradePrice.toFixed(2)}
-                      <br />（{num} <FormattedMessage id="piece" />)
+                      {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {this.judgePriceNum(tradePrice,v.get('subscriptionType'))}
+                      <br />（{num} <FormattedMessage id="Order.Piece" />)
                     </td>
-                    {/* <td style={{ width: '5%' }}> */}
-                    {/* 1{v.getIn(['invoice', 'postCode'])} */}
-                    {/* </td> */}
+                    {/* <td style={{ width: '10%' }}>
+                      <p title={v.getIn(['clinicsName', 'name'])} className="line-ellipse">
+                        {v.get('clinicsName')}
+                      </p>
+                    </td> */}
                     {/* <td style={{ width: '5%' }}> */}
                     {/* 1{v.getIn(['invoice', 'rfc'])} */}
                     {/* </td> */}
                     {/*发货状态*/}
-                    <td style={{ width: '12%' }}>{deliverStatus(v.getIn(['tradeState', 'deliverStatus']))}</td>
+                    <td style={{ width: '10%' }}>
+                      {' '}
+                      <FormattedMessage id={getOrderStatusValue('ShippStatus', v.getIn(['tradeState', 'deliverStatus']))} />
+                    </td>
                     {/*订单状态*/}
-                    <td style={{ width: '12%' }}>{flowState(v.getIn(['tradeState', 'flowState']))}</td>
+                    <td style={{ width: '10%' }}>{v.get('orderCreateBy') ? v.get('orderCreateBy') : ''}</td>
                     {/*支付状态*/}
-                    <td style={{ width: '12%', paddingRight: 22 }} className="operation-td">
-                      {payStatus(v.getIn(['tradeState', 'payState']))}
+                    <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
+                      <FormattedMessage id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))} />
                     </td>
                   </tr>
                 </tbody>
@@ -597,9 +544,11 @@ export default class ListView extends React.Component<any, any> {
     const { onRetrial } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({ id: 'Order.review' });
+    const content = (window as any).RCi18n({ id: 'Order.confirmReview' });
     confirm({
-      title: <FormattedMessage id="order.review" />,
-      content: <FormattedMessage id="order.confirmReview" />,
+      title: title,
+      content: content,
       onOk() {
         onRetrial(tdId);
       },
@@ -625,8 +574,9 @@ export default class ListView extends React.Component<any, any> {
     const { onAudit } = this.props.relaxProps;
 
     const confirmModal = Modal.confirm;
+    const content = (window as any).RCi18n({ id: 'Order.Doyouconfirmthat' });
     confirmModal({
-      content: 'Do you confirm that the order has been approved?',
+      content: content,
       onOk() {
         onAudit(tid, 'CHECKED');
       },
@@ -643,9 +593,11 @@ export default class ListView extends React.Component<any, any> {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({ id: 'Order.ConfirmReceipt' });
+    const content = (window as any).RCi18n({ id: 'Order.confirmReceivedAllProducts' });
     confirm({
-      title: 'Confirm receipt',
-      content: 'Confirm that all products have been received?',
+      title: title,
+      content: content,
       onOk() {
         onConfirm(tdId);
       },
@@ -686,19 +638,20 @@ export default class ListView extends React.Component<any, any> {
   };
 }
 
+export default injectIntl(ListView);
+
 const styles = {
   loading: {
     textAlign: 'center',
     height: 300
   },
   imgItem: {
-    width: '30%',
-    height: 'auto',
+    width: 60,
+    height: 60,
     padding: 5,
     border: '1px solid #ddd',
     float: 'left',
-    marginRight: 5,
-    marginBottom: 5,
+    marginRight: 10,
     background: '#fff',
     borderRadius: 3
   },
@@ -739,8 +692,8 @@ const styles = {
     padding: '1px 3px',
     display: 'inline-block',
     marginLeft: 5,
-    border: ' 1px solid #F56C1D',
-    color: '#F56C15',
+    border: ' 1px solid var(--primary-color)',
+    color: 'var(--primary-color)',
     borderRadius: 5
   }
 } as any;

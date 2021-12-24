@@ -1,11 +1,10 @@
 import React from 'react';
-import { Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin } from 'antd';
+import { Tabs, Form, Input, InputNumber, Button, Select, message, Table, Row, Col, Radio, DatePicker, Empty, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './../webapi';
-import { Tabs } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
-
+import { Const } from 'qmkit';
 const { TextArea } = Input;
 
 const FormItem = Form.Item;
@@ -75,8 +74,7 @@ class BasicInfomation extends React.Component<any, any> {
       .getBasicDetails(this.props.customerId)
       .then((data) => {
         let res = data.res;
-        if (res.code && res.code !== 'K-000000') {
-          message.error(res.message || 'Get data failed');
+        if (res.code && res.code !== Const.SUCCESS_CODE) {
         } else {
           let res2 = JSON.stringify(data.res);
 
@@ -119,9 +117,7 @@ class BasicInfomation extends React.Component<any, any> {
           });
         }
       })
-      .catch((err) => {
-        message.error('Get data failed');
-      });
+      .catch((err) => {});
   };
 
   onFormChange = ({ field, value }) => {
@@ -142,33 +138,31 @@ class BasicInfomation extends React.Component<any, any> {
 
   saveBasicInfomation = () => {
     const { basicForm, currentForm } = this.state;
-
-    (currentForm.firstName = basicForm.firstName),
-      (currentForm.lastName = basicForm.lastName),
-      (currentForm.birthDay = basicForm.birthDay),
-      (currentForm.email = basicForm.email),
-      (currentForm.contactPhone = basicForm.contactPhone),
-      (currentForm.postCode = basicForm.postCode),
-      (currentForm.city = basicForm.city),
-      (currentForm.country = basicForm.country),
-      (currentForm.house = basicForm.address1),
-      (currentForm.housing = basicForm.address2),
-      (currentForm.contactMethod = basicForm.preferredMethods),
-      (currentForm.reference = basicForm.reference),
-      (currentForm.clinicsVOS = basicForm.selectedClinics),
-      (currentForm.customerId = basicForm.customerId),
+      currentForm.firstName = basicForm.firstName;
+      currentForm.lastName = basicForm.lastName;
+      currentForm.birthDay = basicForm.birthDay;
+      currentForm.email = basicForm.email;
+      currentForm.contactPhone = basicForm.contactPhone;
+      currentForm.postCode = basicForm.postCode;
+      currentForm.city = basicForm.city;
+      currentForm.country = basicForm.country;
+      currentForm.house = basicForm.address1;
+      currentForm.housing = basicForm.address2;
+      currentForm.contactMethod = basicForm.preferredMethods;
+      currentForm.reference = basicForm.reference;
+      currentForm.clinicsVOS = basicForm.selectedClinics;
+      currentForm.customerId = basicForm.customerId;
       webapi
         .basicDetailsUpdate(currentForm)
         .then((data) => {
           const res = data.res;
-          if (res.code === 'K-000000') {
+          if (res.code === Const.SUCCESS_CODE) {
             message.success('Operate successfully');
           } else {
-            message.error(res.message || 'Update data failed');
           }
         })
-        .catch((err) => {
-          message.error('Update data failed');
+        .catch(() => {
+
         });
   };
 
@@ -180,7 +174,7 @@ class BasicInfomation extends React.Component<any, any> {
       })
       .then((data) => {
         const res = data.res;
-        if (res.code === 'K-000000') {
+        if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             loading: false,
             clinicList: res.context.content
@@ -189,14 +183,12 @@ class BasicInfomation extends React.Component<any, any> {
           this.setState({
             loading: false
           });
-          message.error(res.message || 'Get data failed');
         }
       })
       .catch((err) => {
         this.setState({
           loading: false
         });
-        message.error('Get data failed');
       });
   };
 
@@ -215,7 +207,7 @@ class BasicInfomation extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     return (
       <div>
-        <Spin spinning={this.state.loading} indicator={<img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" />}>
+        <Spin spinning={this.state.loading}>
           <Form {...formItemLayout} onSubmit={this.handleSubmit}>
             <Row gutter={16}>
               <Col span={12}>

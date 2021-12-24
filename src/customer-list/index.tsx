@@ -1,13 +1,15 @@
 import React from 'react';
-import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip } from 'antd';
-import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup } from 'qmkit';
+import { Breadcrumb, Table, Form, Button, Input, Divider, Select, Spin, message, Modal, Row, Col, Tooltip, TreeSelect } from 'antd';
+import { Headline, AuthWrapper, util, BreadCrumb, SelectGroup, TreeSelectGroup, RCi18n,cache } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import IMask from 'imask';
 import * as webapi from './webapi';
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TreeNode = TreeSelect.TreeNode;
 
 export default class Customer extends React.Component<any, any> {
   constructor(props: any) {
@@ -15,44 +17,51 @@ export default class Customer extends React.Component<any, any> {
     this.state = {
       columns: [
         {
-          title: 'Consumer account',
+          title: RCi18n({ id: 'PetOwner.ConsumerAccount' }),
           dataIndex: 'customerAccount',
           key: 'consumerAccount',
           width: '15%'
         },
         {
-          title: 'Consumer name',
+          title: RCi18n({ id: 'PetOwner.ConsumerName' }),
           dataIndex: 'customerName',
           key: 'consumerName',
           width: '15%',
-          render: (text, record) => <p>{record.firstName + ' ' + record.lastName}</p>
+          render: (text, record) => <p>{[record.firstName, record.lastName].join(' ')}</p>
         },
         {
-          title: 'Consumer type',
-          dataIndex: 'customerLevelName',
+          title: RCi18n({ id: 'PetOwner.ConsumerType' }),
+          dataIndex: 'customerLevelId',
           key: 'consumerType',
-          width: '15%'
+          width: '15%',
+          render: (text, record) => <p>{text === 233 ? RCi18n({id:'PetOwner.Guest'}) : record.customerClubFlag === 1 ? RCi18n({id:'PetOwner.ClubMember'}) : RCi18n({id:'PetOwner.NormalMember'})}</p>
         },
         {
-          title: 'Email',
+          title: RCi18n({ id: 'PetOwner.Email' }),
           dataIndex: 'email',
           key: 'email',
           width: '15%'
         },
 
         {
-          title: 'Phone number',
+          title: RCi18n({ id: 'PetOwner.PhoneNumber' }),
           dataIndex: 'contactPhone',
           key: 'phoneNumber',
           width: '15%'
         },
         {
-          title: 'Default prescriber name',
-          dataIndex: 'defaultClinics',
-          key: 'defaultClinics',
-          width: '15%',
-          render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+          title: RCi18n({ id: 'PetOwner.City' }),
+          dataIndex: 'city',
+          key: 'city',
+          width: '15%'
         },
+        // {
+        //   title: RCi18n({ id: 'PetOwner.DefaultPrescriberName' }),
+        //   dataIndex: 'defaultClinics',
+        //   key: 'defaultClinics',
+        //   width: '15%',
+        //   render: (text, record) => <p>{record.defaultClinics ? record.defaultClinics.clinicsName : ''}</p>
+        // },
         // {
         //   title: 'Selected Prescriber ID',
         //   dataIndex: 'clinicsIds',
@@ -60,14 +69,22 @@ export default class Customer extends React.Component<any, any> {
         //   width: 200
         // },
         {
-          title: 'Operation',
+          title: RCi18n({ id: 'PetOwner.Operation' }),
           key: 'operation',
           width: '10%',
           render: (text, record) => (
             <span>
-              <Tooltip placement="top" title="Details">
-                <Link to={'/customer-details/' + (record.customerLevelName ? record.customerLevelName : 'Guest') + '/' + record.customerId + '/' + record.customerAccount} className="iconfont iconDetails"></Link>
+              <Tooltip placement="top" title={RCi18n({id:'PetOwner.Details'})}>
+                <Link to={record.customerLevelId !== 233 ? `/petowner-details/${record.customerId}/${record.customerAccount}` : `/customer-details/Guest/${record.customerId}/${record.customerAccount}`} className="iconfont iconDetails"></Link>
               </Tooltip>
+              {record.customerLevelId !== 233 ? (
+                <span>
+                  <Divider type="vertical" />
+                  <Tooltip placement="top" title={RCi18n({ id: 'PetOwner.Activity' })}>
+                    <Link to={'/pet-owner-activity/' + record.customerId} className="iconfont iconhuanjie"></Link>
+                  </Tooltip>
+                </span>
+              ) : null}
               {/* <Divider type="vertical" />
               <a onClick={() => this.showConfirm(record.customerId)}>Delete</a> */}
             </span>
@@ -94,21 +111,31 @@ export default class Customer extends React.Component<any, any> {
         phoneNumber: '',
         //选中的诊所
         selectedPrescriberId: '',
-        defaultPrescriberName: ''
+        defaultPrescriberName: '',
+        subscriptionType: '',
+        // city
+        city: '',
       },
       customerTypeArr: [
         {
-          value: 'Member',
-          name: 'Member',
+          value: 'Normal Member',
+          name: RCi18n({id:'PetOwner.NormalMember'}),
           id: 234
         },
         {
+          value: 'Club Member',
+          name: RCi18n({id:'PetOwner.ClubMember'}),
+          id: 235
+        },
+        {
           value: 'Guest',
-          name: 'Guest',
+          name: RCi18n({ id: 'PetOwner.Guest' }),
           id: 233
         }
       ],
-      loading: false
+      subscriptionTypeList: [],
+      loading: false,
+      phoneReg:[]
     };
     this.onFormChange = this.onFormChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -117,7 +144,17 @@ export default class Customer extends React.Component<any, any> {
 
   componentDidMount() {
     this.init();
+    //this.getSubscriptionTypeList();
+    this.getPhoneNumberDefaultFormat();
   }
+
+  getSubscriptionTypeList = () => {
+    webapi.getSubscriptionPlanTypes().then((data) => {
+      this.setState({
+        subscriptionTypeList: data.res.context.sysDictionaryVOS
+      });
+    });
+  };
 
   onFormChange = ({ field, value }) => {
     let data = this.state.searchForm;
@@ -126,6 +163,56 @@ export default class Customer extends React.Component<any, any> {
       searchForm: data
     });
   };
+
+  getPhoneNumberDefaultFormat = () =>{
+    webapi.getPhoneNumberFormat().then((data) =>{
+      const phoneFormat = data.res.context.configVOList?.[0]?.context || "00000000000";
+      const phoneNumberFormat = phoneFormat?.split(",");
+      const phoneReg = phoneNumberFormat.map((item:string) =>{
+        return {mask:item}
+      })
+      this.setState({
+        phoneReg
+      },()=>{
+        this.setPhoneNumberReg();
+      })
+    })
+  }
+   // 设置手机号输入限制
+   setPhoneNumberReg = () => {
+    let element = document.getElementById('petOwnerPhoneNumber');
+    // 静态前端维护的电话格式改成接口获取
+    // let phoneReg = [];
+    // let country = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+    // switch (country) {
+    //   case 'fr':
+    //     phoneReg = [
+    //       { mask: '(+33) 0 00 00 00 00' },
+    //       { mask: '(+33) 00 00 00 00 00' }
+    //     ];
+    //     break;
+    //   case 'us':
+    //     phoneReg = [{ mask: '000-000-0000' }];
+    //     break;
+    //   case 'ru':
+    //     phoneReg = [{ mask: '+{7} (000) 000-00-00' }];
+    //     break;
+    //   case 'mx':
+    //     phoneReg = [{ mask: '+(52) 000 000 0000' }];
+    //     break;
+    //   case 'tr':
+    //     phoneReg = [{ mask: '{0} (000) 000-00-00' }];
+    //     break;
+    //   default:
+    //     phoneReg = [{ mask: '00000000000' }];
+    //     break;
+    // }
+    let maskOptions = {
+      mask: this.state.phoneReg
+    };
+    IMask(element, maskOptions);
+  };
+
   handleTableChange(pagination: any) {
     this.setState({
       pagination: pagination
@@ -140,6 +227,8 @@ export default class Customer extends React.Component<any, any> {
     const query = this.state.searchForm;
 
     let params = {
+      city: query.city,
+      subscriptionType: query.subscriptionType,
       contactPhone: query.phoneNumber,
       customerAccount: query.customerAccount,
       customerLevelId: query.customerTypeId,
@@ -185,15 +274,12 @@ export default class Customer extends React.Component<any, any> {
             });
           }
         } else {
-          message.error(res.message || 'Unsuccessful');
           this.setState({
             loading: false
           });
         }
       })
       .catch((err) => {
-        message.error(err.message || 'Unsuccessful');
-
         this.setState({
           loading: false
         });
@@ -250,7 +336,7 @@ export default class Customer extends React.Component<any, any> {
   // }
 
   render() {
-    const { customerTypeArr, columns } = this.state;
+    const { customerTypeArr, columns, subscriptionTypeList } = this.state;
     return (
       <AuthWrapper functionName="f_customer_0">
         <div>
@@ -262,17 +348,13 @@ export default class Customer extends React.Component<any, any> {
             <Breadcrumb.Item>客户列表</Breadcrumb.Item>
           </Breadcrumb> */}
           <div className="container-search">
-            <Headline title={<FormattedMessage id="consumerList" />} />
+            <Headline title={RCi18n({ id: 'PetOwner.PetownerList' })} />
             <Form className="filter-content" layout="inline">
               <Row>
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerAccount" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerAccount' })}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -286,11 +368,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={
-                        <p style={styles.label}>
-                          <FormattedMessage id="consumerName" />
-                        </p>
-                      }
+                      addonBefore={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerName' })}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -305,8 +383,8 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>Customer type</p>}
-                      style={{ width: 80 }}
+                      label={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerType' })}</p>}
+                      style={{ width: 177 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
                         this.onFormChange({
@@ -315,7 +393,7 @@ export default class Customer extends React.Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">All</Option>
+                      <Option value="">{RCi18n({ id: 'PetOwner.All' })}</Option>
                       {customerTypeArr.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.name}
@@ -329,7 +407,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="email" />
+                          <FormattedMessage id="PetOwner.Email" />
                         </p>
                       }
                       onChange={(e) => {
@@ -347,7 +425,7 @@ export default class Customer extends React.Component<any, any> {
                     <Input
                       addonBefore={
                         <p style={styles.label}>
-                          <FormattedMessage id="phoneNumber" />
+                          <FormattedMessage id="PetOwner.PhoneNumber" />
                         </p>
                       }
                       onChange={(e) => {
@@ -357,23 +435,68 @@ export default class Customer extends React.Component<any, any> {
                           value
                         });
                       }}
+                      id="petOwnerPhoneNumber"
                     />
                   </FormItem>
                 </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <TreeSelectGroup
+                      allowClear
+                      getPopupContainer={() => document.getElementById('page-content')}
+                      label={<p style={styles.label}>{RCi18n({ id: 'PetOwner.subscriptionType' })}</p>}
+                      dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
+                      treeDefaultExpandAll
+                      onChange={(value) => {
+                        this.onFormChange({ field: 'subscriptionType', value });
+                      }}
+                    >
+                      <TreeNode value="club" title={RCi18n({ id: 'PetOwner.Club' })} key="club">
+                        <TreeNode value="cat" title={RCi18n({ id: 'PetOwner.Cat' })} key="cat" />
+                        <TreeNode value="dog" title={RCi18n({ id: 'PetOwner.Dog' })} key="dog" />
+                      </TreeNode>
+                      <TreeNode value="Product" title={RCi18n({ id: 'PetOwner.Product' })} key="product">
+                        <TreeNode value="food dispenser" title={RCi18n({ id: 'PetOwner.FoodDispenser' })} key="food" />
+                      </TreeNode>
+                      <TreeNode value="autoship" title={RCi18n({ id: 'PetOwner.Autoship' })} key="autoship" />
+                    </TreeSelectGroup>
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <Input
+                        addonBefore={
+                          <p style={styles.label}>
+                            <FormattedMessage id="PetOwner.City" />
+                          </p>
+                        }
+                        onChange={(e) => {
+                          const value = (e.target as any).value;
+                          this.onFormChange({
+                            field: 'city',
+                            value
+                          });
+                        }}
+                    />
+                  </FormItem>
+                </Col>
+
+              </Row>
+              <Row>
                 <Col span={24} style={{ textAlign: 'center' }}>
                   <FormItem>
                     <Button
-                      type="primary"
-                      htmlType="submit"
-                      icon="search"
-                      shape="round"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.onSearch();
-                      }}
+                        type="primary"
+                        htmlType="submit"
+                        icon="search"
+                        shape="round"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.onSearch();
+                        }}
                     >
                       <span>
-                        <FormattedMessage id="search" />
+                        <FormattedMessage id="PetOwner.search" />
                       </span>
                     </Button>
                   </FormItem>
@@ -395,12 +518,13 @@ export default class Customer extends React.Component<any, any> {
             </Form>
           </div>
           <div className="container">
+           
             <Table
               columns={columns}
               rowKey="customerDetailId"
               dataSource={this.state.searchList}
               pagination={this.state.pagination}
-              loading={{ spinning: this.state.loading, indicator: <img className="spinner" src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202011020724162245.gif" style={{ width: '90px', height: '90px' }} alt="" /> }}
+              loading={this.state.loading}
               scroll={{ x: '100%' }}
               onChange={this.handleTableChange}
             />

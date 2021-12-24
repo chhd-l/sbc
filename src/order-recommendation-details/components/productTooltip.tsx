@@ -6,7 +6,7 @@ import { message, Modal } from 'antd';
 import ProductGrid from './product-grid';
 import { IList } from '../../../typings/globalType';
 import { Relax } from 'plume2';
-import { noop } from 'qmkit';
+import { noop, RCi18n } from 'qmkit';
 
 @Relax
 export default class GoodsModal extends React.Component<any, any> {
@@ -80,10 +80,10 @@ export default class GoodsModal extends React.Component<any, any> {
         maskClosable={false}
         title={
           <div>
-            Choose goods&nbsp;
+            {RCi18n({id:'Order.ChooseGoods'})}&nbsp;
             <small>
               <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
-              items have been selected
+              {RCi18n({id:'Order.itemsHaveBeenSelected'})}
             </small>
           </div>
         }
@@ -103,8 +103,8 @@ export default class GoodsModal extends React.Component<any, any> {
         onCancel={() => {
           onCancelBackFun();
         }}
-        okText="Confirm"
-        cancelText="Cancel"
+        okText={RCi18n({id:'Order.btnConfirm'})}
+        cancelText={RCi18n({id:'Order.btnCancel'})}
       >
         {
           <ProductGrid

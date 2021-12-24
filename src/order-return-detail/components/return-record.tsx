@@ -3,7 +3,8 @@ import { Relax } from 'plume2';
 import moment from 'moment';
 import { Table, Modal } from 'antd';
 import { IMap } from 'typings/globalType';
-import { Const, noop, util } from 'qmkit';
+import { Const, noop, RCi18n, util } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { confirm } = Modal;
 
@@ -32,7 +33,7 @@ export default class ReturnRecord extends React.Component<any, any> {
 
   columns = [
     {
-      title: 'Refund serial number',
+      title: RCi18n({id:'Order.refundSerialNumber'}),
       dataIndex: 'refundBillCode',
       key: 'refundBillCode',
       render: (text) => {
@@ -41,7 +42,7 @@ export default class ReturnRecord extends React.Component<any, any> {
       }
     },
     {
-      title: 'Refund time',
+      title:RCi18n({id:'Order.refundTime'}),
       dataIndex: 'refundBillTime',
       key: 'refundBillTime',
       render: (refundBillTime, rowData) =>
@@ -51,39 +52,39 @@ export default class ReturnRecord extends React.Component<any, any> {
             )
           : '-'
     },
+    // {
+    //   title:RCi18n({id:'Order.refundPoint'}),
+    //   dataIndex: 'returnPoints',
+    //   key: 'returnPoints',
+    //   render: (returnPoints) => <div>{returnPoints}</div>
+    // },
     {
-      title: 'Refund point',
-      dataIndex: 'returnPoints',
-      key: 'returnPoints',
-      render: (returnPoints) => <div>{returnPoints}</div>
-    },
-    {
-      title: 'Refund amount',
+      title: RCi18n({id:'Order.refundAmount'}),
       dataIndex: 'returnPrice',
       key: 'returnPrice',
       render: (returnPrice) => <div>${returnPrice.toFixed(2)}</div>
     },
     {
-      title: 'Chargeback price change',
+      title:RCi18n({id:'Order.priceChange'}),
       dataIndex: 'actualReturnPrice',
       key: 'actualReturnPrice',
       render: (price) => <div>${price.toFixed(2)}</div>
     },
     {
-      title: 'Refund method',
+      title:RCi18n({id:'Order.refundMethod'}),
       dataIndex: 'payType',
       key: 'payType',
       render: (payType) => Const.payType[payType]
     },
     {
-      title: 'Refund account',
+      title:RCi18n({id:'Order.refundAccount'}),
       dataIndex: 'returnAccountName',
       key: 'returnAccountName',
       render: (returnAccountName) =>
         returnAccountName ? this._desensitizeAccount(returnAccountName) : '-'
     },
     {
-      title: 'Customer collection account',
+      title:RCi18n({id:'Order.collectAccount'}),
       dataIndex: 'customerAccount',
       key: 'customerAccount',
       render: (_) => {
@@ -102,13 +103,13 @@ export default class ReturnRecord extends React.Component<any, any> {
       }
     },
     {
-      title: 'Refund status',
+      title:RCi18n({id:'Order.refundStatus'}),
       dataIndex: 'refundStatus',
       key: 'refundStatus',
       render: (refundStatus) => Const.refundStatus[refundStatus]
     },
     {
-      title: 'Remark',
+      title:RCi18n({id:'Order.remark'}),
       dataIndex: 'comment',
       key: 'comment',
       render: (comment) => (comment ? comment : 'None')
@@ -125,7 +126,7 @@ export default class ReturnRecord extends React.Component<any, any> {
 
     return list.length > 0 ? (
       <div style={styles.container}>
-        <h2 style={{ fontSize: 18, paddingBottom: 16 }}>Refund record</h2>
+        <h2 style={{ fontSize: 18, paddingBottom: 16 }}><FormattedMessage id="Order.Refundrecord" /></h2>
         <Table
           rowKey="refundId"
           columns={this.columns}
@@ -137,18 +138,18 @@ export default class ReturnRecord extends React.Component<any, any> {
     ) : null;
   }
 
-  _handleClickDestroy(refundId: string) {
-    const { onRefundDestroy } = this.props.relaxProps;
+  // _handleClickDestroy(refundId: string) {
+  //   const { onRefundDestroy } = this.props.relaxProps;
 
-    confirm({
-      title: '作废',
-      content: '是否确认作废这条退款记录？',
-      onOk() {
-        return onRefundDestroy(refundId);
-      },
-      onCancel() {}
-    });
-  }
+  //   confirm({
+  //     title: '作废',
+  //     content: '是否确认作废这条退款记录？',
+  //     onOk() {
+  //       return onRefundDestroy(refundId);
+  //     },
+  //     onCancel() {}
+  //   });
+  // }
 
   _desensitizeAccount(accountNm) {
     const strArr = accountNm.split(' ');

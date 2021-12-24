@@ -9,8 +9,10 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend';
 import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { RCi18n, Const } from 'qmkit'
 
-export default class Line extends React.Component {
+class Line extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,14 +27,12 @@ export default class Line extends React.Component {
       tooltip: {
         trigger: 'axis',
         formatter:function(params) {
-          let res = ""
+          let res = ''
           params&&params.map((item,index)=>{
             if(index == 0) {
-              res += '<div style=" "> '+ item.seriesName + "：" + item.value + "<br>"
-              '</div>';
+              res += '<div style=" "> '+ item.seriesName + '：' + item.value + '<br>' + '</div>';
             }else {
-              res += '<div style=" "> '+ item.seriesName + "：" + Number(item.value) +unit.unit2
-              '</div>';
+              res += '<div style=" "> '+ item.seriesName + '：' + Number(item.value) +unit.unit2 + '</div>';
             }
           })
           return res
@@ -59,7 +59,7 @@ export default class Line extends React.Component {
               color: '#999',
               fontsize: '11'
             },
-            formatter: 'Week-{value}'
+            formatter: (window as any).RCi18n({id:'Home.Week'})+'-{value}'
           },
           data: data.x
         }
@@ -125,7 +125,7 @@ export default class Line extends React.Component {
           nameLoaction: "left",
           itemStyle: {
             normal: {
-              color: '#F5828E',
+              color: Const.COLORS.PRIMARY_COLOR_1,
               label: {
                 show: true, //开启显示
                 position: 'top', //在上方显示
@@ -144,7 +144,7 @@ export default class Line extends React.Component {
           type: 'line',
           itemStyle: {
             normal: {
-              color: '#ED001B',
+              color: Const.COLORS.PRIMARY_COLOR,
               lineStyle: {
                 width: 2 //设置线条粗细
               }
@@ -166,3 +166,4 @@ export default class Line extends React.Component {
     );
   }
 }
+export default injectIntl(Line)

@@ -4,17 +4,19 @@ import { Relax } from 'plume2';
 import { withRouter } from 'react-router';
 import { fromJS } from 'immutable';
 import { IList } from 'typings/globalType';
+import { FormattedMessage } from 'react-intl';
 import { cache } from 'qmkit';
 const { Column } = Table;
 
 import styled from 'styled-components';
+import { FORMERR } from 'dns';
 
 const GreyBg = styled.div`
   padding: 15px 0 15px;
   color: #333333;
   margin-left: -28px;
   span {
-    width: 100px;
+    width: 200px;
     text-align: right;
     color: #666666;
     display: inline-block;
@@ -76,22 +78,29 @@ export default class GiftList extends React.Component<any, any> {
             <GreyBg>
               <Row>
                 <Col span={24}>
-                  <span>Rules:</span>Full
-                  {level.fullAmount ? level.fullAmount : level.fullCount}
-                  {subType == '4' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'Items'} {level.giftType == '1' ? 'An optional one' : 'The default all give'}
+                  <Col span={6}>
+                    <span>
+                      <FormattedMessage id="Marketing.Rules" />:
+                    </span>
+                  </Col>
+                  <Col span={18}>
+                    <FormattedMessage id="Marketing.Full" />
+                    {level.fullAmount ? level.fullAmount : level.fullCount}
+                    {subType == '4' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : 'Items'} {level.giftType == '1' ? <FormattedMessage id="Marketing.AnOptionalOne" /> : <FormattedMessage id="Marketing.TheDefaultAllGive" />}
+                  </Col>
                 </Col>
               </Row>
             </GreyBg>
 
             <Table dataSource={level.fullGiftDetailList} pagination={false} rowKey="giftDetailId">
-              <Column width="10%" title="SKU Code" key="goodsInfoNo" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>} />
-              <Column width="25%" title="Product Name" key="goodsInfoName" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoName}</div>} />
-              <Column width="10%" title="Specification" key="specText" render={(rowInfo) => <div>{rowInfo.sku.specText ? rowInfo.sku.specText : '-'}</div>} />
-              <Column width="12%" title="Category" key="cateName" render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>} />
-              <Column width="10%" title="Brand" key="brandName" render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>} />
-              <Column width="12%" key="priceType" title={'Price'} render={(rowInfo) => <div>{rowInfo.sku.salePrice}</div>} />
-              <Column width="8%" title="Inventory" key="stock" render={(rowInfo) => <div>{rowInfo.sku.stock}</div>} />
-              <Column width="15%" title="Give the number" key="productNum" dataIndex="productNum" />
+              <Column width="10%" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoNo}</div>} />
+              <Column width="25%" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" render={(rowInfo) => <div>{rowInfo.sku.goodsInfoName}</div>} />
+              <Column width="10%" title={<FormattedMessage id="Marketing.Specification" />} key="specText" render={(rowInfo) => <div>{rowInfo.sku.specText ? rowInfo.sku.specText : '-'}</div>} />
+              <Column width="12%" title={<FormattedMessage id="Marketing.Category" />} key="cateName" render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>} />
+              <Column width="10%" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>} />
+              <Column width="12%" key="priceType" title={<FormattedMessage id="Marketing.Price" />} render={(rowInfo) => <div>{rowInfo.sku.salePrice}</div>} />
+              <Column width="8%" title={<FormattedMessage id="Marketing.Inventory" />} key="stock" render={(rowInfo) => <div>{rowInfo.sku.stock}</div>} />
+              <Column width="15%" title={<FormattedMessage id="Marketing.GiveTheNumber" />} key="productNum" dataIndex="productNum" />
             </Table>
           </div>
         ))}

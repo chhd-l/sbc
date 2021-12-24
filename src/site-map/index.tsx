@@ -30,7 +30,7 @@ export default class SetBanner extends Component<any, any> {
         <div className="order-con">
           <BreadCrumb />
           <div className="container-search">
-            <Headline title={<FormattedMessage id="siteMap" />} />
+            <Headline title={<FormattedMessage id="Setting.siteMap" />} />
           </div>
           <div className="container">
             <_SeoSettingForm />

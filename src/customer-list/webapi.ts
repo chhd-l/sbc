@@ -163,3 +163,24 @@ export const checkFunctionAuth = (urlPath: string, requestType: string) => {
     })
   });
 };
+
+export function getSubscriptionPlanTypes() {
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'SubscriptionPlanType'
+    })
+  });
+}
+
+/**
+ * 获取不同国家的电话号码格式
+ */
+export function getPhoneNumberFormat() {
+  return Fetch<TResult>('/system/config/listByStoreIdAndKey', {
+    method: 'POST',
+    body: JSON.stringify({
+      configKey: 'po_setting'
+    })
+  });
+}

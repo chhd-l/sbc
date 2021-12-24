@@ -40,3 +40,23 @@ export function cancelSubscription(filterParams = {}) {
     })
   });
 }
+
+export function pauseSubscription(subscriptionId: string) {
+  return Fetch<TResult>('/sub/pauseSubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      subscribeId: subscriptionId,
+      subscribeStatus: '1'
+    })
+  });
+}
+
+export function restartSubscription(subscriptionId: string) {
+  return Fetch<TResult>('/sub/reStartSubscription', {
+    method: 'POST',
+    body: JSON.stringify({
+      subscribeId: subscriptionId,
+      subscribeStatus: '0'
+    })
+  });
+}

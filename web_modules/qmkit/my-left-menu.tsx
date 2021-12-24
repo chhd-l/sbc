@@ -3,9 +3,10 @@ import { Route } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
-import { history, cache } from 'qmkit';
+import { history, cache, RCi18n } from 'qmkit';
 import { fromJS } from 'immutable';
 import Fetch from './fetch';
+import {FormattedMessage} from "react-intl";
 
 export default class MyLeftMenu extends React.PureComponent<any, any> {
   constructor(props) {
@@ -32,6 +33,15 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
       this.setState({
         level2OpenedKeys: Object.keys(Array.from({ length: this.state.allGradeMenus.size }))
       });
+      if(nextProps.matchedPath.indexOf('/pet-owner-activity')  >= 0 || nextProps.matchedPath.indexOf('/automation-workflow')  >= 0) {
+        this.setState({
+          showSubMenu: false
+        });
+      } else {
+        this.setState({
+          showSubMenu: true
+        });
+      }
     }
   }
 
@@ -156,7 +166,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
                               style={styles.menuIcon}
                               src={util.requireLocalSrc(`icon/${item.icon}`)}
                             />*/}
-                            <span>{item.title}</span>
+                            <span title={RCi18n({id:`Menu.${item.title}`})}><FormattedMessage id={"Menu."+ item.title} /></span>
                           </div>
                         }
                       >
@@ -209,8 +219,8 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
         <Route
           path={v.url}
           children={() => (
-            <a href="#" onClick={() => this._goThirdMenu(v.url, index, i)}>
-              {v.title}
+            <a href="#" onClick={(e) => {e.preventDefault();this._goThirdMenu(v.url, index, i);return false;}} title={RCi18n({id:`Menu.${v.title}`})}>
+              <FormattedMessage id={"Menu."+ v.title} />
             </a>
           )}
         />
@@ -234,6 +244,7 @@ export default class MyLeftMenu extends React.PureComponent<any, any> {
    * @private
    */
   _goThirdMenu = (url, index, i) => {
+    this.props.onSecondActiveChange()
     sessionStorage.setItem(cache.SECOND_ACTIVE, index);
     // 缓存中记录当前选中的三级菜单
     sessionStorage.setItem(cache.THIRD_ACTIVE, i);
@@ -255,7 +266,7 @@ const styles = {
     width: '14px',
     height: '30px',
     lineHeight: '30px',
-    backgroundColor: '#ffe7e6',
+    backgroundColor: '#f5f5f5',
     position: 'absolute',
     top: '50%',
     left: '186px',
@@ -266,7 +277,7 @@ const styles = {
     width: '14px',
     height: '30px',
     lineHeight: '30px',
-    backgroundColor: '#ffe7e6',
+    backgroundColor: '#f5f5f5',
     position: 'absolute',
     top: '50%',
     zIndex: 2

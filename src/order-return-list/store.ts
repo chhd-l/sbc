@@ -1,7 +1,7 @@
 import { Store } from 'plume2';
 import { fromJS } from 'immutable';
 import { message } from 'antd';
-import { Const, util } from 'qmkit';
+import { Const, RCi18n, util } from 'qmkit';
 import TabActor from './actor/tab-actor';
 import ListActor from './actor/list-actor';
 import FormActor from './actor/form-actor';
@@ -10,12 +10,7 @@ import * as webapi from './webapi';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [
-      new TabActor(),
-      new ListActor(),
-      new FormActor(),
-      new LoadingActor()
-    ];
+    return [new TabActor(), new ListActor(), new FormActor(), new LoadingActor()];
   }
 
   constructor(props) {
@@ -35,34 +30,128 @@ export default class AppStore extends Store {
     //获取form数据
     let form = this.state().get('form').toJS();
     const key = this.state().getIn(['tab', 'key']);
-
-    if (key != '0') {
-      const values = key.split('-');
-      form['returnFlowState'] = values[1];
-    }
+    form['returnFlowState'] = +key === 0 ? '' : key
+    // if (key != '0') {
+    //   const values = key.split('-');
+    //   form['returnFlowState'] = values[1];
+    // }
 
     webapi
-      .fetchOrderReturnList({ ...form, pageNum, pageSize })
-      .then(({ res }) => {
+      .getOrderSettingConfig()
+      .then((data) => {
+        const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.transaction(() => {
-            this.dispatch('order-return-list:loading:end');
-            this.dispatch('order-return-list:init', {
-              flushSelected: flushSelected,
-              ...res.context
-            });
-            this.dispatch(
-              'order-return-list:page',
-              fromJS({ currentPage: pageNum + 1 })
-            );
-          });
-        } else {
-          message.error(res.message);
-          if (res.code === 'K-110001') {
-            this.dispatch('order-return-list:loading:end');
+          let pcashList = res.context.pcashList;
+          let ponlineList = res.context.ponlineList;
+          let unLimitedList = res.context.unLimitedList;
+          let returnOrderConfig = {
+            pendingReview: 0,
+            toBeDelivery: 0,
+            toBeReceived: 0,
+            pendingRefund: 0
           }
+          let pendingRefundConfig = {
+            online: 0,
+            cash: 0,
+            cashOnDelivery: 0
+          }
+
+          ponlineList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.online=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+
+          pcashList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cash=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+
+          unLimitedList.map((item) => {
+            // 待审核退单自动审核
+            if (item.configType === 'order_setting_refund_auto_audit') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.pendingReview = +(returnOrderConfig.pendingReview || context.day);
+            }
+            // 自动跳过物流信息采集
+            if (item.configType === 'order_setting_refund_auto_fill_logic_info') {
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeDelivery = +(returnOrderConfig.toBeDelivery || context.day);
+            }
+            // 退单自动确认收货
+            if (item.configType === 'order_setting_refund_auto_receive') {
+
+              let context = JSON.parse(item.context);
+              returnOrderConfig.toBeReceived = +(returnOrderConfig.toBeReceived || context.day);
+            }
+            //自动触发全额退款
+            if (item.configType === 'order_setting_refund_auto_refund') {
+              let context = JSON.parse(item.context);
+              pendingRefundConfig.cashOnDelivery=context.day
+              returnOrderConfig.pendingRefund = +(returnOrderConfig.pendingRefund || context.day);
+            }
+          });
+          this.dispatch('order-return-hide',fromJS(returnOrderConfig) )
+          this.dispatch('order-return-pending-refund-config',fromJS(pendingRefundConfig) )
         }
-      });
+      })
+
+    webapi.fetchOrderReturnList({ ...form, pageNum, pageSize }).then(({ res }) => {
+      if (res.code === Const.SUCCESS_CODE) {
+        this.transaction(() => {
+          this.dispatch('order-return-list:loading:end');
+          this.dispatch('order-return-list:init', {
+            flushSelected: flushSelected,
+            ...res.context
+          });
+          this.dispatch('order-return-list:page', fromJS({ currentPage: pageNum + 1 }));
+        });
+      } else {
+        if (res.code === 'K-110001') {
+          this.dispatch('order-return-list:loading:end');
+        }
+      }
+    });
+
   };
 
   onSearchFormChange = (searchFormParams) => {
@@ -117,10 +206,7 @@ export default class AppStore extends Store {
 
   //线上退款 modal状态改变
   onRefundOnlineModalChange = (status) => {
-    this.dispatch(
-      'order-return-detail:refund-online-modal:change',
-      fromJS(status)
-    );
+    this.dispatch('order-return-detail:refund-online-modal:change', fromJS(status));
   };
 
   onlineRefundModalHide = () => {
@@ -136,27 +222,33 @@ export default class AppStore extends Store {
       .audit(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
-  onRealRefund = (rid: string) => {
+  onRealRefund = (rid: string, applyPrice) => {
+    let refundPrice = this.state().get('refundPrice') ||
+      (this.state().get('refundPrice') && this.state().get('refundPrice').refundPrice === 0) ?
+      this.state().get('refundPrice').refundPrice : applyPrice
     return webapi
-      .realRefund(rid)
+      .realRefund(rid, refundPrice)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
+          this.dispatch('change-refund-price', {
+            refundPrice: null
+          });
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        this.dispatch('change-refund-price', {
+          refundPrice: null
+        });
+      });
   };
 
   onBatchAudit = (ids: string[]) => {
@@ -164,13 +256,11 @@ export default class AppStore extends Store {
       .batchAudit(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message || res.code);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onReject = (rid: string, reason: string) => {
@@ -178,13 +268,11 @@ export default class AppStore extends Store {
       .reject(rid, reason)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onDeliver = (rid: string, values) => {
@@ -192,13 +280,11 @@ export default class AppStore extends Store {
       .deliver(rid, values)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onReceive = (rid: string) => {
@@ -206,13 +292,11 @@ export default class AppStore extends Store {
       .receive(rid)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onBatchReceive = (ids: string[]) => {
@@ -220,22 +304,18 @@ export default class AppStore extends Store {
       .batchReceive(ids)
       .then(({ res }) => {
         if (res.code == Const.SUCCESS_CODE) {
-          message.success('Operate successfully');
+          message.success(res.message);
           this.init();
-        } else {
-          message.error(res.message);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onRejectReceive = (rid: string, reason: string) => {
     return webapi.rejectReceive(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(res.message);
         this.init();
-      } else {
-        message.error(res.message);
       }
     });
   };
@@ -243,10 +323,8 @@ export default class AppStore extends Store {
   onRejectRefund = (rid: string, reason: string) => {
     return webapi.rejectRefund(rid, reason).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
-        message.success('Operate successfully');
+        message.success(res.message);
         this.init();
-      } else {
-        message.error(res.message);
       }
     });
   };
@@ -259,14 +337,13 @@ export default class AppStore extends Store {
     return webapi.refundOnline(rid, fromData).then((result) => {
       const { res } = result;
       const code = res.code;
-      const errorInfo = res.message;
+      // const errorInfo = res.message;
 
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
       } else {
         // 退款的回调是异步的，立刻刷新页面可能退单的状态还没有被回调修改。所以先给个提示信息，延迟3秒后再刷新列表
-        message.success('Operate successfully');
+        message.success(res.message);
       }
 
       setTimeout(this.init, 3000);
@@ -280,13 +357,11 @@ export default class AppStore extends Store {
       const errorInfo = res.message;
       // 提示异常信息
       if (code != Const.SUCCESS_CODE) {
-        message.error(errorInfo);
-
         if (code === 'K-040017') {
           throw Error('K-040017');
         }
       } else {
-        message.success('Operate successfully');
+        message.success(errorInfo);
         this.init();
       }
     });
@@ -320,7 +395,7 @@ export default class AppStore extends Store {
     let selected = this.state().get('selected');
 
     if (selected.count() === 0) {
-      message.error('Please select data to export');
+      message.error(RCi18n({ id: 'Order.exportedTip2' }));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -361,8 +436,7 @@ export default class AppStore extends Store {
         } else {
           message.error('请登录');
         }
-
-        resolve();
+        resolve(true);
       }, 500);
     });
   };
@@ -375,4 +449,11 @@ export default class AppStore extends Store {
   checkRefundStatus = async (rid: string) => {
     return await webapi.checkRefundStatus(rid);
   };
+
+
+  changeRefundPrice = (refundPrice: number) => {
+    this.dispatch('change-refund-price', {
+      refundPrice
+    });
+  }
 }

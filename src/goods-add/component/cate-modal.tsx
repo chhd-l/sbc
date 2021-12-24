@@ -214,7 +214,6 @@ class CateModalForm extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
     let storeCateList = this.props.relaxProps.storeCateList;
     const { sourceCateList, goods, cateList, images, modalVisibleFun, clickImg, removeImg } = this.props.relaxProps;
-    console.log(images.toJS(), 'images');
     // 返回一级分类列表
     const loop = (cateList) =>
       cateList
@@ -358,7 +357,6 @@ class CateModalForm extends React.Component<any, any> {
     if (e && e.target) {
       e = e.target.value;
     }
-    console.log(key, 'key');
     if (key === 'cateId') {
       this._onChange(e);
       if (e === '-1') {
@@ -434,7 +432,6 @@ class CateModalForm extends React.Component<any, any> {
   // _onChange = (value) => {
   //   const { showGoodsPropDetail } = this.props.relaxProps;
   //   showGoodsPropDetail(value);
-  //   console.log(value, 'value')
   //   // changeStoreCategory
   // };
 }

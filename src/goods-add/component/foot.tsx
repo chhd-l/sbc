@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Button, Modal } from 'antd';
-import { noop, history, AuthWrapper } from 'qmkit';
-import { FormattedMessage } from 'react-intl';
+import { Button, message, Modal } from 'antd';
+import { noop, history, AuthWrapper, RCi18n } from 'qmkit';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import errorMsg from '@/goods-add/component/goods';
 const confirm = Modal.confirm;
 @Relax
-export default class Foot extends React.Component<any, any> {
+class Foot extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,7 +30,9 @@ export default class Foot extends React.Component<any, any> {
       saveSeoSetting: Function;
       saveSuccessful: string;
       getGoodsId: string;
+      goodsList: any;
     };
+    loading: any
   };
 
   static relaxProps = {
@@ -40,7 +43,8 @@ export default class Foot extends React.Component<any, any> {
     onMainTabChange: noop,
     saveSeoSetting: noop,
     saveSuccessful: 'saveSuccessful',
-    getGoodsId: 'getGoodsId'
+    getGoodsId: 'getGoodsId',
+    goodsList: 'goodsList'
   };
   _saveSeoSetting = () => {
     const { saveSeoSetting, getGoodsId } = this.props.relaxProps;
@@ -59,47 +63,56 @@ export default class Foot extends React.Component<any, any> {
   render() {
     const { saveLoading } = this.props.relaxProps;
     return (
-      <div className="bar-button">
+      <div className="bar-button" style={{marginLeft:'-20px'}}>
         {this.props.tabType == 'main' ? (
           <AuthWrapper key="001" functionName={this.props.goodsFuncName}>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'price' ? (
           <AuthWrapper key="002" functionName={this.props.goodsFuncName}>
-            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'inventory' ? (
           <AuthWrapper key="003" functionName={this.props.goodsFuncName}>
-            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+            <FormattedMessage id="Product.Next" />
+            </Button>
+          </AuthWrapper>
+        ) : this.props.tabType == 'shipping' ? (
+          <AuthWrapper key="007" functionName={this.props.goodsFuncName}>
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
+            <FormattedMessage id="Product.Prev" />
+            </Button>
+            <Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : this.props.tabType == 'related' ? (
           <AuthWrapper key="004" functionName={this.props.priceFuncName}>
-            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Next
+            <Button type="primary" onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Next" />
             </Button>
           </AuthWrapper>
         ) : (
           <AuthWrapper key="005" functionName={this.props.priceFuncName}>
-            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
-              Prev
+            <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }} loading={saveLoading}>
-              Save
+            <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }}>
+              <FormattedMessage id="Product.Save" />
             </Button>
           </AuthWrapper>
         )}
@@ -128,8 +141,8 @@ export default class Foot extends React.Component<any, any> {
           </AuthWrapper>
         )}*/}
         {this.props.isLeave && (
-          <Button type="primary" onClick={this._leavePage} style={{ marginRight: 10 }} loading={saveLoading}>
-            Leave
+          <Button type="primary" onClick={this._leavePage} style={{ marginRight: 10 }}>
+            <FormattedMessage id="Product.BackToList" />
           </Button>
         )}
       </div>
@@ -145,7 +158,7 @@ export default class Foot extends React.Component<any, any> {
   };
 
   _savePrice = async () => {
-    const { saveAll } = this.props.relaxProps;
+    const { saveAll, goodsList } = this.props.relaxProps;
     saveAll();
   };
 
@@ -154,6 +167,8 @@ export default class Foot extends React.Component<any, any> {
   };
 
   _next = (res) => {
+    // const errorMsg = <div>test <span className="icon iconfont iconOffShelves" style={{ fontSize: 20, color: "#E1021A" }}></span></div>
+    // message.error(errorMsg);
     this.props.onNext(res);
     // const { activeTabKey, onNext} = this.props.relaxProps;
     /*const result = validMain();
@@ -161,16 +176,22 @@ export default class Foot extends React.Component<any, any> {
       this.props.relaxProps.onMainTabChange('price');
     }*/
   };
-  _leavePage() {
+  _leavePage = () => {
     // this.props.onLeave();
+    const title = (window as any).RCi18n({id:'Product.Prompt'});
+    const content = (window as any).RCi18n({id:'Product.returnToTheListPage'});
+    const okText = (window as any).RCi18n({id:'Product.OK'});
+    const cancelText = (window as any).RCi18n({id:'Product.Cancel'});
     confirm({
-      title: 'Prompt',
-      content: 'Do you want to return to the list page? The information currently filled in will be lost.',
-      okText: 'OK',
-      cancelText: 'Cancel',
+      title: title,
+      content: content,
+      okText: okText,
+      cancelText: cancelText,
       onOk() {
         history.push('/goods-list');
       }
     });
   }
 }
+
+export default injectIntl(Foot);

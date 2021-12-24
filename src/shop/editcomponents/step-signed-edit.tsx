@@ -3,12 +3,13 @@ import { Relax, IMap } from 'plume2';
 
 import { Button, Modal, message, DatePicker, Radio } from 'antd';
 import styled from 'styled-components';
-import { noop, DataGrid } from 'qmkit';
+import { noop, DataGrid, RCi18n } from 'qmkit';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
 
 const RadioGroup = Radio.Group;
 import { Table } from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const Column = Table.Column;
 const { RangePicker } = DatePicker;
@@ -60,7 +61,7 @@ const PicBox = styled.div`
 `;
 
 @Relax
-export default class StepThree extends React.Component<any, any> {
+class StepThree extends React.Component<any, any> {
   props: {
     relaxProps?: {
       brandModal: Function;
@@ -73,6 +74,7 @@ export default class StepThree extends React.Component<any, any> {
       otherBrands: IList;
       allBrands: any;
     };
+    intl: any;
   };
 
   static relaxProps = {
@@ -110,18 +112,22 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>Signing Categories</H2>
-            <GreyText>Signed {cateList.length} Categories, Can sign up to 200 categories</GreyText>
+            <H2>
+              <FormattedMessage id="Setting.SigningCategories" />
+            </H2>
+            <GreyText>
+              <FormattedMessage id="Setting.Signed" /> {cateList.length} <FormattedMessage id="Setting.CategoriesCansignup" />
+            </GreyText>
             <Button onClick={this._showSortsModal} disabled>
-              Edit Contract Category
+              <FormattedMessage id="Setting.EditContractCategory" />
             </Button>
           </div>
           <TableBox>
             <DataGrid dataSource={cateList} scroll={{ y: 240 }} pagination={false}>
-              <Column title="Product category" dataIndex="cateName" key="cateName" width="15%" />
-              <Column title="Superior Category" dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
+              <Column title={(window as any).RCi18n({ id: 'Setting.Productcategory' })} dataIndex="cateName" key="cateName" width="15%" />
+              <Column title={(window as any).RCi18n({ id: 'Setting.Superiorcategory' })} dataIndex="parentGoodCateNames" key="parentGoodCateNames" width="20%" />
               <Column
-                title="Category Deduction Rate"
+                title={(window as any).RCi18n({ id: 'Setting.CategoryDeductionRate' })}
                 dataIndex="cateRate"
                 key="cateRate"
                 width="15%"
@@ -135,7 +141,7 @@ export default class StepThree extends React.Component<any, any> {
               />
               <Column
                 align="left"
-                title="Business Qualification"
+                title={(window as any).RCi18n({ id: 'Setting.BusinessQualification' })}
                 dataIndex="qualificationPics"
                 key="qualificationPics"
                 width="50%"
@@ -158,17 +164,21 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div>
             <Red>*</Red>
-            <H2>Signed Brand</H2>
-            <GreyText>Signed {totalBrand} brand, Up to 50 brands can be signed</GreyText>
+            <H2>
+              <FormattedMessage id="Setting.SignedBrand" />
+            </H2>
+            <GreyText>
+              <FormattedMessage id="Setting.Signed" /> {totalBrand} <FormattedMessage id="Setting.brandUpto50" />
+            </GreyText>
             <Button onClick={this._showModal} disabled>
-              Edit Contracted Brand
+              <FormattedMessage id="Setting.EditContractedBrand" />
             </Button>
           </div>
           <TableBox>
             <DataGrid dataSource={brandList} scroll={{ y: 240 }} pagination={false}>
               <Column title="Brand Name" dataIndex="brandName" key="brandName" width="15%" />
               <Column
-                title="Brand Alias"
+                title={(window as any).RCi18n({ id: 'Setting.BrandAlias' })}
                 dataIndex="nickName"
                 key="nickName"
                 width="20%"
@@ -177,7 +187,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="Brand Logo"
+                title={(window as any).RCi18n({ id: 'Setting.BrandLogo' })}
                 dataIndex="logo"
                 key="log"
                 width="15%"
@@ -192,7 +202,7 @@ export default class StepThree extends React.Component<any, any> {
                 }}
               />
               <Column
-                title="Authorization Document"
+                title={(window as any).RCi18n({ id: 'Setting.AuthorizationDocument' })}
                 dataIndex="authorizePic"
                 key="authorizePic"
                 width="50%"
@@ -210,7 +220,7 @@ export default class StepThree extends React.Component<any, any> {
             </DataGrid>
             {checkBrand.length == 0 ? null : (
               <DataGrid dataSource={checkBrand} rowKey="contractBrandId" scroll={{ y: 240 }} pagination={false}>
-                <Column title="Shop increase" dataIndex="name" key="name" width="15%" />
+                <Column title={(window as any).RCi18n({ id: 'Setting.Shopincrease' })} dataIndex="name" key="name" width="15%" />
                 <Column dataIndex="nickName" key="nickName" width="20%" />
                 <Column
                   dataIndex="logo"
@@ -244,24 +254,30 @@ export default class StepThree extends React.Component<any, any> {
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>Signing Period</H2>
-            <GreyText>Merchant store validity</GreyText>
+            <H2>
+              <FormattedMessage id="Setting.SigningPeriod" />
+            </H2>
+            <GreyText>
+              <FormattedMessage id="Setting.Merchantstorevalidity" />
+            </GreyText>
           </div>
           <RangePicker value={[moment(storeInfo.get('contractStartDate')), moment(storeInfo.get('contractEndDate'))]} format="YYYY-MM-DD HH:mm:ss" disabled />
         </Content>
         <Content>
           <div style={{ marginBottom: 10 }}>
             <Red>*</Red>
-            <H2>shop Type</H2>
+            <H2>
+              <FormattedMessage id="Setting.shopType" />
+            </H2>
           </div>
           <RadioGroup value={storeInfo.get('companyType')}>
             {storeInfo.get('companyType') == 0 ? (
               <Radio value={0} checked={true} disabled>
-                Self-employed Shop
+                <FormattedMessage id="Setting.Self-employedShop" />
               </Radio>
             ) : (
               <Radio value={1} checked={true} disabled>
-                Third-party Shop
+                <FormattedMessage id="Setting.Third-partyShop" />
               </Radio>
             )}
           </RadioGroup>
@@ -269,7 +285,7 @@ export default class StepThree extends React.Component<any, any> {
         {!storeInfo.get('storeId') && (
           <Content>
             <Button type="primary" onClick={this._next}>
-              Save
+              <FormattedMessage id="Setting.save" />
             </Button>
           </Content>
         )}
@@ -320,7 +336,7 @@ export default class StepThree extends React.Component<any, any> {
     if (count == 0) {
       storeRenewAll();
     } else {
-      message.error('Custom brand repeats with platform brand!');
+      message.error((window as any).RCi18n({ id: 'Setting.Custombrandrepeats' }) + '!');
     }
   };
 
@@ -332,3 +348,4 @@ export default class StepThree extends React.Component<any, any> {
     });
   };
 }
+export default injectIntl(StepThree);

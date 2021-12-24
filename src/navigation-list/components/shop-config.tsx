@@ -29,7 +29,7 @@ export default class NavigationHeader extends React.Component<any, any> {
     }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
-          footer: data.res.context.context
+          footer: base64.decode(data.res.context.context)
         });
       }
     });

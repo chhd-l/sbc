@@ -42,6 +42,7 @@ class CouponModal extends Component<any, any> {
           }else if(res.res.code == 'K-080106'){
             this.props.form.setFields({
               time:{
+                value:value.time,
                 errors:[
                   new Error((window as any).RCi18n({
                     id: 'Marketing.ValidityDates'
@@ -75,7 +76,7 @@ class CouponModal extends Component<any, any> {
              visible={isModalVisible}
              onOk={this.handleOk}
              onCancel={this.handleCancel}>
-        <Form className="filter-content"
+        <Form className="filter-content coupon-modal"
               labelCol={{ span: 7 }}
               wrapperCol={{ span: 16 }}
         >

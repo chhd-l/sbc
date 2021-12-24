@@ -14,7 +14,8 @@ export default class NavigationHeader extends React.Component<any, any> {
       changed: false,
       id: '',
       header: '',
-      footer: ''
+      footer: '',
+      marsFooter: ''
     }
   }
 
@@ -28,7 +29,8 @@ export default class NavigationHeader extends React.Component<any, any> {
         this.setState({
           id: data.res.context.id,
           header: data.res.context.header,
-          footer: data.res.context.footer
+          footer: data.res.context.footer,
+          marsFooter: data.res.context.marsFooter
         });
       }
     });
@@ -45,8 +47,8 @@ export default class NavigationHeader extends React.Component<any, any> {
     this.setState({ loading: true });
     saveStoreHeader({
       id: this.state.id,
-      header: this.state.header,
-      footer: this.state.footer
+      footer: this.state.footer,
+      marsFooter: this.state.marsFooter
     }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         message.success(RCi18n({id:'Setting.Operationsuccessful'}));
@@ -56,13 +58,19 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   render() {
-    const { footer, loading, changed } = this.state;
+    const { footer, marsFooter, loading, changed } = this.state;
     return (
       <div>
         <Row gutter={[24, 12]}>
           <Col span={3} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.footer"/>:</Col>
           <Col span={18}>
             <TextArea rows={6} value={footer} onChange={(e) => this.onChangeField('footer', e.target.value)}></TextArea>
+          </Col>
+        </Row>
+        <Row gutter={[24, 12]}>
+          <Col span={3} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.marsFooter"/>:</Col>
+          <Col span={18}>
+            <TextArea rows={6} value={marsFooter} onChange={(e) => this.onChangeField('marsFooter', e.target.value)}></TextArea>
           </Col>
         </Row>
         <Row gutter={[24,12]}>

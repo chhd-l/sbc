@@ -410,6 +410,10 @@ const routes = [
     path: '/customer-clinic-list',
     asyncComponent: () => import('./customer-clinic-list')
   },
+  {
+    path: '/pet-owner-blocklist',
+    asyncComponent: () => import('./pet-owner-blocklist')
+  },
   // clinic客户详情
   {
     path: '/customer-clinic-details/:type/:id/:account',
@@ -855,6 +859,11 @@ const routes = [
     path: '/navigation-add',
     asyncComponent: () => import('./navigation-update')
   },
+  // 营销横幅
+  {
+    path: '/marketing-banner',
+    asyncComponent: () => import('./marketing-banner')
+  },
   //商品评价
   {
     path: '/nps-list',
@@ -924,6 +933,10 @@ const routes = [
   {
     path: '/order-audit-setting',
     asyncComponent: () => import('./order-audit-setting-new')
+  },
+  {
+    path: '/customer-account-setting',
+    asyncComponent: () => import('./customer-account-setting')
   },
   {
     path: '/report-product',

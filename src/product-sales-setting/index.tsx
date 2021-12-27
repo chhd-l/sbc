@@ -35,6 +35,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionIndividualFrequencyId: '',
     defaultQuantitySelected: '',
     discountDisplayTypeInfo: '',
+    dailyPortion: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod: 0,

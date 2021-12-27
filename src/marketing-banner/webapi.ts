@@ -1,80 +1,40 @@
 import { Fetch } from 'qmkit';
 
-
-export function setButtonContent(buttonContent) {
-  console.log(buttonContent.value)
-  // return Fetch<TResult>('',{
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ buttonContent: buttonContent }]
-  //   })
-  // })
-}
-
-
-export function setBannerLink(buttonLink) {
-  console.log(buttonLink.value)
-
-  // return Fetch<TResult>('',{
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ buttonLink: buttonLink }]
-  //   })
-  // })
-}
-
-
-export function setBannerContent(bannerContent) {
-  console.log(bannerContent.value)
-
-  // return Fetch<TResult>('',{
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ bannerContent: bannerContent }]
-  //   })
-  // })
-}
-
-
 type TResult = {
   code: string;
   message: string;
   context: any;
 };
-export function GetBanner() {
-  return Fetch<TResult>('', {
-    method: 'POST',
-    body: JSON.stringify({
-      // type: 'BannerOption'
-      banner:'true'
-    })
-  });
-}
 
-export function getBannerForm() {
-  return Fetch<TResult>('', {
-    method: 'POST',
-    body: JSON.stringify({
-      type: 'BannerOption'
-    })
-  });
-}
-export function editDeliveryOption(status) {
-  return !status;
-}
+export function setBannerForm(data) {
+  // console.log(JSON.stringify({data}))
 
-export function editBannerOption(status) {
-  // return !status;
-  return Fetch<TResult>('',{
+  return Fetch<TResult>('/marketingBanner/saveMarketingBanner',{
     method: 'POST',
-    body: JSON.stringify({
-      requestList: [{ status: status }]
-    })
+    body: JSON.stringify(
+      data
+    )
   })
-  // return Fetch<TResult>('/system/config/batchEnableAndDisable', {
-  //   method: 'POST',
-  //   body: JSON.stringify({
-  //     requestList: [{ status: status }]
-  //   })
-  // });
 }
+
+export function GetBanner() {
+  return Fetch<TResult>('/marketingBanner/getMarketingBanner', {
+    method: 'GET',
+  });
+}
+
+// export function editBannerOption(status) {
+//   // return !status;
+//   return Fetch<TResult>('',{
+//     method: 'POST',
+//     body: JSON.stringify({
+//       requestList: [{ status: status }]
+//     })
+//   })
+//   // return Fetch<TResult>('/system/config/batchEnableAndDisable', {
+//   //   method: 'POST',
+//   //   body: JSON.stringify({
+//   //     requestList: [{ status: status }]
+//   //   })
+//   // });
+// }

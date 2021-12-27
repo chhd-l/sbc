@@ -11,7 +11,9 @@ import { RCi18n } from 'qmkit';
 import './index.less';
 import WeekCalender from './components/week-calender';
 // import * as webapi from './webapi';
+let   tempParams:any={};
 class NewAppointment extends React.Component<any, any> {
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -66,29 +68,34 @@ class NewAppointment extends React.Component<any, any> {
   }
   //初始化能预约的时间
   queryDate = (type: boolean = false, chooseData: any = {}) => {
-    const { getFieldsValue } = this.props.form;
+    const { getFieldsValue,setFieldsValue } = this.props.form;
     setTimeout(async () => {
+      let _tempParams=JSON.parse(JSON.stringify(tempParams))
       let { apptTypeId, minutes, expertTypeId } = getFieldsValue(['apptTypeId', 'minutes', 'expertTypeId'])
+
       const resources = await new Promise(async (reslove) => {
         const { res } = await queryDate({ appointmentTypeId: apptTypeId, minutes, expertTypeId });
         if (res.code === Const.SUCCESS_CODE) {
           let _resources = res.context.resources
-          if (type && minutes === chooseData.minutes) {
+          if (type) {
+            if(minutes == _tempParams.minutes&&apptTypeId==_tempParams.apptTypeId&&expertTypeId==_tempParams.expertTypeId){
+              chooseData=Object.assign({},_tempParams)
+            }else{
+              chooseData.bookSlotVO={}
+            }
+            setFieldsValue({bookSlotVO:chooseData.bookSlotVO})
             let _temp: any = {
               "date": chooseData.bookSlotVO.dateNo,
               "minutes": chooseData.minutes,
               "minuteSlotVOList": []
             }
             _temp.minuteSlotVOList.push({ ...chooseData.bookSlotVO, type: 'link', disabled: false })
-            console.log(_temp, ' _temp.minuteSlotVOList')
             if (_resources.length === 0) {
               _resources.push(_temp)
             } else {
 
               _resources.map(item => {
-                console.log(item.date, _temp.date)
                 if (item.date === _temp.date) {
-                  console.log(item, '===2121====1')
                   let isLoop = false;
                   item.minuteSlotVOList = item.minuteSlotVOList.map((it, index) => {
                     const _t = _temp.minuteSlotVOList.find(ii => ii.startTime === it.startTime)
@@ -125,6 +132,7 @@ class NewAppointment extends React.Component<any, any> {
       .then(({ res }) => {
         if (res.code === Const.SUCCESS_CODE) {
           let p = res.context
+          tempParams=Object.assign({}, p);
           this.setState({ params: p, loading: false }, () => {
             setFieldsValue(p);
             this.queryDate(true, p)
@@ -173,7 +181,6 @@ class NewAppointment extends React.Component<any, any> {
       customerId: memberInfo.customerId,
       // customerLevelId: memberInfo.customerLevelId
     }
-    console.log(memberInfo, 'memberInfo')
     this.setState({
       visible: false,
       params: {
@@ -206,7 +213,6 @@ class NewAppointment extends React.Component<any, any> {
         }
 
         let cc = { ...params, ...values, consumerName, serviceTypeId: '6', appointmentTypeId: values.apptTypeId, }
-        // console.log(cc);
         // return
         if (params.id) {
           d = await apptUpdate(cc)
@@ -290,7 +296,7 @@ class NewAppointment extends React.Component<any, any> {
                   <Radio key={15} value={15}><FormattedMessage id="Appointment.min15" /></Radio>
                   <Radio key={30} value={30}><FormattedMessage id="Appointment.min30" /></Radio>
                   <Radio key={45} value={45}><FormattedMessage id="Appointment.min45" /></Radio>
-                  <Radio key={45} value={60}><FormattedMessage id="Appointment.min60" /></Radio>
+                  <Radio key={60} value={60}><FormattedMessage id="Appointment.min60" /></Radio>
                 </Radio.Group>
               )}
             </Form.Item>

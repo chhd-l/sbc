@@ -1,5 +1,5 @@
 import { cache, Const, history } from 'qmkit';
-
+import CryptoJS from 'crypto-js'
 /**
  * 判断用户是否登陆
  * @returns {boolean}
@@ -24,7 +24,7 @@ export function isLogin() {
  * companyType==0 平台自营, companyType==1 第三方商家
  */
 export function isThirdStore() {
-  if (window.companyType == undefined){
+  if (window.companyType == undefined) {
     const data = sessionStorage.getItem(cache.LOGIN_DATA);
     window.companyType = JSON.parse(data).companyType;
   }
@@ -62,21 +62,21 @@ export function Base64() {
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
   const _keyStrUrl =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=';
-  this.encode = function(input) {
+  this.encode = function (input) {
     return encodebase(input, _keyStr);
   };
 
   // public method for decoding
-  this.decode = function(input) {
+  this.decode = function (input) {
     return decodebase(input, _keyStr);
   };
 
-  this.urlEncode = function(input) {
+  this.urlEncode = function (input) {
     //将/号替换为_  将+号替换为-  后端采用 new String(Base64.getUrlDecoder().decode(encrypted.getBytes())) 进行解码
     return encodebase(input, _keyStrUrl);
   };
 
-  this.urlDecode = function(input) {
+  this.urlDecode = function (input) {
     //将_号替换为/ 将-号替换为+
     return decodebase(input, _keyStrUrl);
   };
@@ -353,7 +353,7 @@ export function logout() {
 /**
  * 邮箱验证
  */
-export function checkEmail (str) {
+export function checkEmail(str) {
   let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
   if (re.test(str)) {
     return true
@@ -388,7 +388,7 @@ export const isMobileApp = () => {
   return /iphone/.test(devices) || /android/.test(devices);
 }
 //导出方法
-export const onExport = (params,downloadUrl) => {
+export const onExport = (params, downloadUrl) => {
   return new Promise<void>((resolve) => {
     setTimeout(() => {
       let base64 = new Base64();
@@ -400,7 +400,7 @@ export const onExport = (params,downloadUrl) => {
         // 新窗口下载
         const exportHref = Const.HOST + `${downloadUrl}/${encrypted}`;
         window.open(exportHref);
-      } 
+      }
       resolve();
     }, 500);
   });
@@ -411,24 +411,24 @@ export const onExport = (params,downloadUrl) => {
  * @param url 加载链接
  *
  */
-interface PropsLoadJS  {
-  url:string,
-  callback?:()=>void,
-  dataSets?:any,
-  code?:string,
-  className?:string,
-  type?:string,
-  id?:string
+interface PropsLoadJS {
+  url: string,
+  callback?: () => void,
+  dataSets?: any,
+  code?: string,
+  className?: string,
+  type?: string,
+  id?: string
 }
- export const loadJS = ({
+export const loadJS = ({
   url,
-  callback = function () {},
+  callback = function () { },
   dataSets,
   code,
   className,
   type,
   id
-}:PropsLoadJS) => {
+}: PropsLoadJS) => {
   var script = document.createElement('script');
 
   if (className) {
@@ -468,5 +468,38 @@ interface PropsLoadJS  {
   document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-
+/**
+ * 
+ * @param aseKey 密钥
+ * @param message 内容
+ * @returns 
+ */
+export function encryptAES(message , aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
+  var encrypt = CryptoJS.AES.encrypt(
+    message,
+    CryptoJS.enc.Utf8.parse(aseKey),
+    {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    }
+  ).toString();
+  return encrypt
+}
+/**
+ * 
+ * @param aseKey 密钥
+ * @param encrypt 加密字符串
+ * @returns 
+ */
+export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
+  var decrypt = CryptoJS.AES.decrypt(
+    encrypt,
+    CryptoJS.enc.Utf8.parse(aseKey),
+    {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    }
+  ).toString(CryptoJS.enc.Utf8);
+  return decrypt;
+}
 

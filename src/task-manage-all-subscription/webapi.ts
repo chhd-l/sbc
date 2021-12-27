@@ -247,3 +247,45 @@ export function updateManageAllSubscription(filterParams = {}) {
     })
   });
 }
+
+// 批量更新Subscription next delivery date
+export function updateManageAllSubscriptionNextDeliveryTime(filterParams = {}) {
+  return Fetch<TResult>('/sub/updateManageAllSubscriptionNextDeliveryTime', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 批量skip Subscription
+export function skipManageAllSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/skipManageAllSubscription', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 批量pause Subscription
+export function pauseManageAllSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/pauseManageAllSubscription', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+// 批量cancel Subscription
+export function cancelManageAllSubscription(filterParams = {}) {
+  return Fetch<TResult>('/sub/cancelManageAllSubscription', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+

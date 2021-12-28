@@ -119,36 +119,24 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   componentDidMount() {
     this.getManageAllSubscription();
-    this.getCurrencySymbol();
     this.getDeliveryDateStatus();
     this.setState({
-      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false
+      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false,
+      currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''
     });
   }
 
   // 获取 deliveryState 状态
   getDeliveryDateStatus = () => {
-    GetDelivery()
-      .then((data) => {
-        const res = data.res;
-        if (res.code === Const.SUCCESS_CODE) {
-          // deliveryDate 状态
-          if (res?.context?.systemConfigVO) {
-            let scon = res.context.systemConfigVO;
-            this.setState({
-              deliverDateStatus: scon.status
-            });
-          }
-        }
+    GetDelivery().then((data) => {
+      const res = data.res;
+      if (res.code === Const.SUCCESS_CODE) {
+        // deliveryDate 状态
         this.setState({
-          loading: false
+          deliverDateStatus: res?.context?.systemConfigVO?.status || 0
         });
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
-      });
+      }
+    });
   };
 
   //一个订阅含多个商品，进行订阅拆分
@@ -619,8 +607,13 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   };
 
   deliveryOK = async () => {
-    const { deliveryList, allAddressList, deliveryAddressId, checkedSubscriptionIdList,subscriptionList } =
-      this.state;
+    const {
+      deliveryList,
+      allAddressList,
+      deliveryAddressId,
+      checkedSubscriptionIdList,
+      subscriptionList
+    } = this.state;
     let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
@@ -648,13 +641,13 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         });
       });
       let apiParams = {
-        deliveryAddressId:deliveryAddressId,
+        deliveryAddressId: deliveryAddressId,
         subscriptionIdList: checkedSubscriptionIdList,
         goodsItems: goodsItems,
         customerId: this.state.customerId
       };
 
-     await webapi
+      await webapi
         .updateManageAllSubscription(apiParams)
         .then(() => {})
         .catch((error) => {
@@ -705,7 +698,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     //计算运费, 改为从后端getPromotionPirce接口获取
     this.setState({ addressLoading: true });
-
 
     if (this.state.sameFlag) {
       this.setState({
@@ -927,15 +919,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       .catch((err) => {
         message.error(err.toString() || RCi18n({ id: 'Subscription.OperationFailure' }));
       });
-  };
-
-  getCurrencySymbol = () => {
-    let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
-      ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
-      : '';
-    this.setState({
-      currencySymbol
-    });
   };
 
   onOpenAddressForm = (addressItem: any, type: string) => {
@@ -1242,7 +1225,13 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
-        render: (text: any, record: any) => <span>{record?.deliveryDate}<br/>{record?.timeSlot}</span>
+        render: (text: any, record: any) => (
+          <span>
+            {record?.deliveryDate}
+            <br />
+            {record?.timeSlot}
+          </span>
+        )
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,

@@ -45,8 +45,10 @@ const index = () => {
               setButtonContent(res.context.buttonContent)
               setButtonLink(res.context.buttonHyperlink)
                 bannerForm.id = data.id
-            console.log(bannerForm)
-          }else {
+          }else if (res.code === 'marketingBannerVO is not exist') {
+            message.warning('Data does not exist, please add it manually ')
+          }
+          else {
             message.error(res.message || []);
           }
         })
@@ -179,44 +181,52 @@ const index = () => {
                     <Switch checked={buttonStatus == 1 ? true : false} onChange={(checked) => onChangeButton(checked)} />
                   </Col>
                 </Row>
-                <Row gutter={[16, 16]}>
-                  <Col span={1}/>
-                  <Col span={3}><p  className="ant-form-item-required">Button Content</p></Col>
-                  <Col span={9}>
-                    <TextArea rows={3}
-                              value={buttonContent}
-                              onChange={(e) => {
-                                const value = (e.target as any).value;
-                                onTagFormChange({
-                                  field: 'buttonContent',
-                                  value
-                                });
-                              }}
-                    />
-                  </Col>
-                </Row>
-                <Row gutter={[16, 16]}>
-                  <Col span={1}/>
-                  <Col span={3}><p  className="ant-form-item-required">Button Hyperlink</p></Col>
-                  <Col span={9}>
-                    <TextArea rows={1}
-                              value={buttonLink}
-                              onChange={(e) => {
-                                const value = (e.target as any).value;
-                                onTagFormChange({
-                                  field: 'buttonLink',
-                                  value
-                                });
-                              }}
-                    />
 
-                  </Col>
-                </Row>
-                {/*<Row gutter={[16, 16]}>*/}
-                {/*  <Col  span={3}>*/}
-                {/*    <Button className="ant-btn ant-btn-primary">SAVE</Button>*/}
-                {/*  </Col>*/}
-                {/*</Row>*/}
+                {buttonStatus == 1 ? (
+                  <>
+                    <Row gutter={[16, 16]}>
+                      <Col span={1}/>
+                      <Col span={3}><p  className="ant-form-item-required">Button Content</p></Col>
+                      <Col span={9}>
+                        <TextArea rows={3}
+                                  value={buttonContent}
+                                  onChange={(e) => {
+                                    const value = (e.target as any).value;
+                                    onTagFormChange({
+                                      field: 'buttonContent',
+                                      value
+                                    });
+                                  }}
+                        />
+                      </Col>
+                    </Row>
+                    <Row gutter={[16, 16]}>
+                      <Col span={1}/>
+                      <Col span={3}><p  className="ant-form-item-required">Button Hyperlink</p></Col>
+                      <Col span={9}>
+                        <TextArea rows={1}
+                                  value={buttonLink}
+                                  onChange={(e) => {
+                                    const value = (e.target as any).value;
+                                    onTagFormChange({
+                                      field: 'buttonLink',
+                                      value
+                                    });
+                                  }}
+                        />
+
+                      </Col>
+                    </Row>
+                    {/*<Row gutter={[16, 16]}>*/}
+                    {/*  <Col  span={3}>*/}
+                    {/*    <Button className="ant-btn ant-btn-primary">SAVE</Button>*/}
+                    {/*  </Col>*/}
+                    {/*</Row>*/}
+                  </>
+
+                  ):null}
+
+
               </div>
 
               </>

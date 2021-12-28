@@ -10,7 +10,7 @@ function Step3({form}){
 
   const Context:any = useContext(FormContext);
   const { match,changeFormData,setStep,formData,formItemLayout } = Context
-  const {getFieldDecorator,validateFields} = form
+  const {getFieldDecorator, validateFields, setFieldsValue} = form
 
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
@@ -128,50 +128,38 @@ function Step3({form}){
             </Form.Item>
           </>
         )}
-        {/*{*/}
-        {/*  typeOfPromotion === 1 && (*/}
-        {/*    <Form.Item label="Prefix">*/}
-        {/*      {getFieldDecorator('prefix', {*/}
-        {/*        initialValue:'',*/}
-        {/*        rules: [*/}
-        {/*          {*/}
-        {/*            required: true,*/}
-        {/*            whitespace: true,*/}
-        {/*            message:*/}
-        {/*              (window as any).RCi18n({*/}
-        {/*                id: 'Marketing.PleaseInputCodeName'*/}
-        {/*              })*/}
-        {/*          },*/}
-        {/*          {*/}
-        {/*            max:10,*/}
-        {/*            message:*/}
-        {/*              (window as any).RCi18n({*/}
-        {/*                id: 'Marketing.PrefixLength'*/}
-        {/*              })*/}
-        {/*          },*/}
-        {/*          {*/}
-        {/*            validator: (_rule, value, callback) => {*/}
-        {/*              if (value) {*/}
-        {/*                let reg:any = /^[0-9A-Z]+$/*/}
-        {/*                if (!reg.text(value)) {*/}
-        {/*                  callback(*/}
-        {/*                    (window as any).RCi18n({*/}
-        {/*                      id: 'Marketing.0.01-99999999.99',*/}
-        {/*                    })*/}
-        {/*                  );*/}
-        {/*                }*/}
-        {/*              }*/}
-        {/*              callback();*/}
-        {/*            }*/}
-        {/*          }*/}
-        {/*        ],*/}
-        {/*      })(*/}
-        {/*        <Input size="large"*/}
-        {/*               style={{ width: 360 }}*/}
-        {/*               placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseInputCodeName' })}/>,*/}
-        {/*      )}*/}
-        {/*    </Form.Item>*/}
-        {/*  )}*/}
+        {
+          typeOfPromotion === 1 && (
+            <Form.Item label={<FormattedMessage id="Marketing.Prefix" />}>
+              {getFieldDecorator('couponCodePrefix', {
+                initialValue: formData.PromotionType.couponCodePrefix,
+                getValueFromEvent: (e) => {
+                  return e.target.value.toUpperCase()
+                },
+                rules: [
+                  {
+                    validator: (_rule, value, callback) => {
+                      // 最多10位的 数字 + 大写字母
+                      let reg:any = /^[A-Z0-9]{1,10}$/
+                      if (value && !reg.test(value)) {
+                        callback(
+                          (window as any).RCi18n({
+                            id: 'Marketing.PrefixLength',
+                          })
+                        );
+                      } else {
+                        callback();
+                      }
+                    }
+                  }
+                ],
+              })(
+                <Input size="large"
+                       style={{ width: 360 }}
+                       placeholder={(window as any).RCi18n({ id: 'Marketing.PleaseInputCodeName' })}/>,
+              )}
+            </Form.Item>
+          )}
       </Form>
 
       <ButtonLayer step={2} toNext={toNext} />

@@ -9,6 +9,7 @@ import './index.less';
 // @ts-ignore
 @Form.create()
 export default class Hub extends Component<any, any>{
+  private hubId: string;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -25,10 +26,11 @@ export default class Hub extends Component<any, any>{
     const { setFieldsValue } = this.props.form;
 
     this.setState({loading: true})
-    let { res } = await webapi.getHubStoreConfigList();
+    let { res } = await webapi.getHubStoreConfigList('hubConfig');
     this.setState({loading: false})
     if (res.code === Const.SUCCESS_CODE){
-      let {enableHub, url} = res.context;
+      let {enableHub, url, id} = res.context;
+      this.hubId = id;
       setFieldsValue({
         enableHub: !!enableHub,
         url: !!enableHub ? url : undefined,
@@ -43,7 +45,9 @@ export default class Hub extends Component<any, any>{
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        if (!this.hubId) return;
         const params = {
+          id: this.hubId,
           status: values.enableHub ? 1:0,
           url: values.enableHub ? values.url: null,
         }

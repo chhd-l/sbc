@@ -72,7 +72,7 @@ export default function Step6({setLoading}) {
         /**
          * 第三步
          */
-
+        couponCodePrefix: formData.PromotionType.couponCodePrefix,
         /**
          * 第四步
          */
@@ -451,6 +451,16 @@ export default function Step6({setLoading}) {
                       </div>
                     )
                   }
+                </>
+              )
+            }
+            {
+              formData.PromotionType.typeOfPromotion === 1 && (
+                <>
+                  <div className="step-summary-item">
+                    <div className="step-summary-sub-title"><FormattedMessage id="Marketing.Prefix" />:</div>
+                    <div className="step-summary-item-text">{formData.PromotionType.couponCodePrefix}</div>
+                  </div>
                 </>
               )
             }

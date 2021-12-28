@@ -29,7 +29,7 @@ export default class Cart extends React.Component<any, any> {
           <Col span={4}><FormattedMessage id="Order.Product" /></Col>
           <Col span={4}><FormattedMessage id="Order.ProductName" /></Col>
           <Col span={4}><FormattedMessage id="Order.Price" /></Col>
-          <Col span={6}><FormattedMessage id="Order.Weight" /></Col>
+          <Col span={6}><FormattedMessage id="Order.Quantity" /></Col>
           <Col span={4}><FormattedMessage id="Order.offline.totalPrice" /></Col>
           <Col span={2}></Col>
         </Row>
@@ -43,11 +43,11 @@ export default class Cart extends React.Component<any, any> {
                 <div className="input-num-group">
                   <Icon type="minus-circle" onClick={() => this.onMinus(cartItem)} />
                   <InputNumber className="input-num" value={cartItem.quantity} onChange={(value) => onSetQuantity(cartItem, value)} min={0.01} step={1} precision={2} />
-                  <span>kg</span>
+                  <span>{cartItem.goodsInfoUnit}</span>
                   <Icon type="plus-circle" onClick={() => this.onPlus(cartItem)} />
                 </div>
               </Col>
-              <Col span={4}>€{(cartItem.quantity * cartItem.marketPrice * 100).toFixed(2)}</Col>
+              <Col span={4}>€{(cartItem.quantity * cartItem.marketPrice).toFixed(2)}</Col>
               <Col span={2}>
                 <Button type="link" size="large" onClick={() => onRemoveProduct(cartItem)}>
                   <i className="iconfont iconDelete"></i>
@@ -58,7 +58,7 @@ export default class Cart extends React.Component<any, any> {
         </div>
         <div className="c-box-footer" style={{textAlign: 'right', lineHeight: '40px', fontSize: 16, fontWeight: 'bold'}}>
           <span style={{marginRight: 20}}><FormattedMessage id="Order.offline.noOfProducts" />: {list.length}</span>
-          <span><FormattedMessage id="Order.offline.totalWeight" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}kg</span>
+          <span><FormattedMessage id="Order.offline.totalQuantity" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}</span>
         </div>
       </>
     );

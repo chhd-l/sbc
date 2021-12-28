@@ -58,7 +58,6 @@ class WeekCalender extends Component {
                     _dataObj[item.date]['minuteList'][list.startTime] = list;
                 })
             })
-            console.log(_dataObj, '_dataObj')
             reslove(_dataObj)
         })
 

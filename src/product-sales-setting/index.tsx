@@ -35,6 +35,7 @@ class ProductSearchSetting extends Component<any, any> {
     defaultSubscriptionIndividualFrequencyId: '',
     defaultQuantitySelected: '',
     discountDisplayTypeInfo: '',
+    dailyPortion: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod: 0,
@@ -144,7 +145,7 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       basePricePDPShowedFlag
     } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-    let { defaultQuantitySelected, discountDisplayTypeInfo } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
+    let { defaultQuantitySelected, discountDisplayTypeInfo, dailyPortion } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -180,6 +181,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionIndividualFrequencyId,
       defaultQuantitySelected,
       discountDisplayTypeInfo,
+      dailyPortion,
       language,
       purchaseType,
       basePricePDPShowedFlag,
@@ -218,6 +220,7 @@ class ProductSearchSetting extends Component<any, any> {
       if (!err) {
         this.setState({ loading: true });
         values.basePricePDPShowedFlag = values.basePricePDPShowedFlag ? 1 : 0;
+        values.dailyPortion = values.dailyPortion ? '1' : '0';
         const res: any = await defaultProductSetting({
           ...values,
           systemConfigs: [{
@@ -226,6 +229,9 @@ class ProductSearchSetting extends Component<any, any> {
           },{
             configName: "discountDisplayTypeInfo",
             context: values.discountDisplayTypeInfo
+          },{
+            configName: "dailyPortion",
+            context: values.dailyPortion
           }]
         });
         this.setState({ loading: false });
@@ -233,7 +239,7 @@ class ProductSearchSetting extends Component<any, any> {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected, discountDisplayTypeInfo: values.discountDisplayTypeInfo }));
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected, discountDisplayTypeInfo: values.discountDisplayTypeInfo, dailyPortion: values.dailyPortion }));
         }
       }
     });
@@ -253,6 +259,7 @@ class ProductSearchSetting extends Component<any, any> {
       defaultSubscriptionIndividualFrequencyId,
       defaultQuantitySelected,
       discountDisplayTypeInfo,
+      dailyPortion,
       options,
       optionsClub,
       optionsIndividual,
@@ -572,6 +579,17 @@ class ProductSearchSetting extends Component<any, any> {
                 <Option value="Percentage" label="Percentage">Percentage</Option>
                 <Option value="Amount" label="Amount">Amount</Option>
               </Select>)}
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.DailyPortionTool' /></span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
+            >
+              {getFieldDecorator('dailyPortion', {
+                valuePropName: 'checked',
+                initialValue: dailyPortion === '1'
+              })(<Switch />)}
             </Form.Item>
 
             <div className='bar-button' style={{ marginLeft: -40 }}>

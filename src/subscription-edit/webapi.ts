@@ -228,3 +228,13 @@ export function getPickupPointStatus(id: String) {
     method: 'POST'
   });
 }
+
+// 获取pick point状态
+export function checkSubscriptionAddressPickPoint(filterParams={}) {
+  return Fetch<TResult>('/sub/checkSubscriptionAddressPickPoint', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}

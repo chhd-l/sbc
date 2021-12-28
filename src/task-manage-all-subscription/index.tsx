@@ -1237,12 +1237,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       // {
       //   title: <FormattedMessage id="subscription.deliveryDate" />,
       //   width: '6%',
-      //   render: (text: any, record: any) => record.firstDeliveryTime
+      //   render: (text: any, record: any) => record?.deliveryDate
       // },
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
-        render: (text: any, record: any) => <span>2021-12-25 12:40-20:20</span>
+        render: (text: any, record: any) => record?.timeSlot
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,

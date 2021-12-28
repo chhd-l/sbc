@@ -85,7 +85,7 @@ class LogisticSettingForm extends Component<any, any> {
             />
           )}
         </Form.Item>
-        <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Lang" />}>
+        <Form.Item {...formItemLayout} label={<FormattedMessage id="Setting.Language" />}>
               {getFieldDecorator('lang', {
                  initialValue:settingForm.get('lang')||'',
                 rules: [

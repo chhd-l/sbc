@@ -138,6 +138,7 @@ export default class OrderReceive extends React.Component<any, any> {
 
   render() {
     const { detail, paymentInfo } = this.props.relaxProps;
+
     const { showRemark, idx } = this.state;
     var payLogs = paymentInfo && paymentInfo.get('payPaymentLogsVOList') ? paymentInfo.get('payPaymentLogsVOList') : [];
     const id = detail.get('id');
@@ -181,6 +182,9 @@ export default class OrderReceive extends React.Component<any, any> {
                 </p>
                 <p>
                   {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
+                </p>
+                <p>
+                  {<FormattedMessage id="Order.PaymentMode"/>}: {detail.get('paymentItemDisplayName')}
                 </p>
                 <p>
                   {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}

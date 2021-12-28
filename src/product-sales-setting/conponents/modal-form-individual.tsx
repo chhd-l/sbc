@@ -167,4 +167,4 @@ class ModalFormIndividual extends Component<Props, any> {
         );
     }
 }
-export default Form.create()(ModalFormIndividual);
+export default Form.create<Props>()(ModalFormIndividual);

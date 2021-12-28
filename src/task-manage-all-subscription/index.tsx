@@ -692,7 +692,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
         this.getTimeSlot({
           cityNo: deliveryAddressInfo.provinceIdStr,
-          subscribeId: checkedSubscriptionIdList
+          subscribeId: checkedSubscriptionIdList[0]
         });
         this.setState({
           deliveryDate: undefined,

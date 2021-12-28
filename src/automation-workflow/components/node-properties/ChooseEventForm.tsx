@@ -128,6 +128,11 @@ export default class ChooseEventForm extends Component<any, any> {
             title: 'Inventory warning',
             value: 'inventoryWarning',
             key: '0-2-1'
+          },
+          {
+            title: 'Gift Inventory Warning',
+            value: 'giftInventoryWarning ',
+            key: '0-2-2'
           }
         ]
       },

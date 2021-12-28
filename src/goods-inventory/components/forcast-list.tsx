@@ -101,6 +101,15 @@ export default class ForcastList extends React.Component<any, any> {
         </p>)
       },
       {
+        title: <FormattedMessage id="product.subscriptionPrice" />,
+        dataIndex: 'subscriptionPrice',
+        key: 'subscriptionPrice',
+        render: (text) => (<p style={styles.lineThrough}>
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+          {text == null ? 0.0 : text.toFixed(2)}
+        </p>)
+      },
+      {
         title: <FormattedMessage id="Product.ProductCategory" />,
         dataIndex: 'productCate',
         key: 'productCate'
@@ -114,6 +123,11 @@ export default class ForcastList extends React.Component<any, any> {
         title:  <FormattedMessage id="Product.CurrentInventory" />,
         dataIndex: 'inventory',
         key: 'inventory'
+      },
+      {
+        title:  <FormattedMessage id="Product.AvgDailySales" />,
+        dataIndex: 'avgDailySales',
+        key: 'avgDailySales'
       },
       {
         title:  <FormattedMessage id="Product.stockCoverageInDays" />,

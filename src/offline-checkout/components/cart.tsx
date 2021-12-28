@@ -42,8 +42,8 @@ export default class Cart extends React.Component<any, any> {
               <Col span={6}>
                 <div className="input-num-group">
                   <Icon type="minus-circle" onClick={() => this.onMinus(cartItem)} />
-                  <InputNumber className="input-num" value={cartItem.quantity} onChange={(value) => onSetQuantity(cartItem, value)} min={0.01} step={1} precision={2} />
-                  <span>{cartItem.goodsInfoUnit}</span>
+                  <InputNumber className="input-num" value={cartItem.quantity} onChange={(value) => onSetQuantity(cartItem, value)} min={0}  max={cartItem.stock} step={1} precision={0}/>
+
                   <Icon type="plus-circle" onClick={() => this.onPlus(cartItem)} />
                 </div>
               </Col>
@@ -57,8 +57,8 @@ export default class Cart extends React.Component<any, any> {
           ))}
         </div>
         <div className="c-box-footer" style={{textAlign: 'right', lineHeight: '40px', fontSize: 16, fontWeight: 'bold'}}>
-          <span style={{marginRight: 20}}><FormattedMessage id="Order.offline.noOfProducts" />: {list.length}</span>
-          <span><FormattedMessage id="Order.offline.totalQuantity" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}</span>
+          <span style={{marginRight: 20}}><FormattedMessage id="Order.offline.noOfProducts" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}</span>
+          {/* <span><FormattedMessage id="Order.offline.totalWeight" />: {list.map(p => p.quantity).reduce((a, b) => a + b, 0)}kg</span> */}
         </div>
       </>
     );

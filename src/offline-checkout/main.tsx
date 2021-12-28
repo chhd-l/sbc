@@ -58,7 +58,7 @@ class Checkout extends React.Component<any, any> {
             goodsImg: goods.goods.goodsImg,
             marketPrice: goods.marketPrice,
             cateId: goods.cateId,
-            goodsInfoUnit: goods.priceUom?.uomName || goods.goodsInfoUnit
+            stock:goods.stock
           })),
           cateList: context.goodsCates.map(cate => ({
             cateId: cate.cateId,
@@ -105,7 +105,7 @@ class Checkout extends React.Component<any, any> {
           goodsInfoNos.forEach(item => {
             const targetProduct = products.find(p => p.goodsInfoNo === item.goodsInfoNo);
             if (targetProduct) {
-              recoProducts.push({ ...targetProduct, quantity: item.quantity });
+              recoProducts.push({ ...targetProduct, quantity: item.quantity / 100 });
             }
           });
         }
@@ -153,7 +153,6 @@ class Checkout extends React.Component<any, any> {
   }
 
   onAddProduct = (product: any) => {
-    console.log(product)
     const { list } = this.state;
     if (list.findIndex(p => p.goodsInfoId === product.goodsInfoId) === -1) {
       list.push({
@@ -207,9 +206,9 @@ class Checkout extends React.Component<any, any> {
       customerName,
       phone: contactPhone,
       email,
-      orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * b.quantity * 100), 0) / 100).toFixed(2),
+      orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100).toFixed(2),
       payPspItemEnum: paymentMethod,
-      tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
+      tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity * 100 }))
     };
     this.setState({ loading: true });
     webapi.checkout(params).then((data) => {

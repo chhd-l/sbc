@@ -147,4 +147,4 @@ class ModalFormClub extends Component<Props, any> {
     );
   }
 }
-export default Form.create()(ModalFormClub);
+export default Form.create<Props>()(ModalFormClub);

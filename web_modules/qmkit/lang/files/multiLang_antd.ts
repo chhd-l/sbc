@@ -23,14 +23,14 @@ import ie from 'antd/es/locale/ga_IE';
 import it from 'antd/es/locale/it_IT';
 import jp from 'antd/es/locale/ja_JP';
 import lv from 'antd/es/locale/lv_LV';
-// import lt from 'antd/es/locale/lt_LT'; //3.0版本的antd没有，4版本有
-import lt from 'antd/es/locale/en_US';
-import mt from 'antd/es/locale/en_US'; // mt Malta 马其他 antd没有
+import lt from '../antdEsLocaleReplenish/ltLT.json';
+import mt from 'antd/es/locale/en_US';
 import pl from 'antd/es/locale/pl_PL';
 import pt from 'antd/es/locale/pt_PT';
 import ro from 'antd/es/locale/ro_RO';
 import sk from 'antd/es/locale/sk_SK';
-import si from 'antd/es/locale/sl_SI'
+import si from 'antd/es/locale/sl_SI';
+
 const antdMultiLang = {
   mx: enUS,
   de: de,
@@ -61,7 +61,6 @@ const antdMultiLang = {
   "sk-SK":sk,
   'sl-SI':si
 };
-
 const key = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 
 const antdLang = antdMultiLang[key] || antdMultiLang['en-US'];

@@ -74,7 +74,7 @@ export default class MyLeftLevel1 extends React.PureComponent<any, any> {
     let myvetreco_shop_domain_url = '';
     if (shopDomain) {
       myvetreco_shop_domain_url = shopDomain.endsWith('/') ? shopDomain + 'admin' : shopDomain + '/admin';
-      myvetreco_shop_domain_url = myvetreco_shop_domain_url + '?token=' + (window as any).token;
+      myvetreco_shop_domain_url = myvetreco_shop_domain_url + '?authorize=' + util.encryptAES((window as any).token);
     }
 
     return (

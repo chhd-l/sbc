@@ -119,7 +119,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       timeSlot: undefined,
       deliveryDateList: [],
       timeSlotList: [],
-      deliverDateStatus: 0
+      deliverDateStatus: 0,
+      tempolineApiError: '',
     };
   }
 
@@ -748,7 +749,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   deliveryOK = async () => {
-    const { deliveryList, allAddressList, deliveryAddressId, subscriptionInfo } = this.state;
+    const { deliveryList, allAddressList, deliveryAddressId, subscriptionInfo,goodsInfo } = this.state;
     let deliveryAddressInfo = allAddressList.find((item: any) => {
       return item.deliveryAddressId === deliveryAddressId;
     });
@@ -760,6 +761,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           deliveryAddressInfo['pickupPointState'] = res.context;
         }
+      })
+      await webapi.checkSubscriptionAddressPickPoint(
+        {
+          deliveryAddressId: deliveryAddressId,
+          goodsItems: goodsInfo.map((ele)=>{
+            return {
+              subscribeGoodsId: ele.subscribeGoodsId,
+              subscribeNum: ele.subscribeNum,
+              subscribeId: ele.subscribeId,
+              skuId: ele.skuId
+            }
+          }),
+          subscribeId: subscriptionInfo.subscriptionNumber,
+          paymentId: this.state.paymentInfo.id,
+        }
+      ).then((data)=>{
+        console.log(data)
+      }).catch((err)=>{
+        this.setState({tempolineApiError:err.message})
+        return;
       })
     }
 
@@ -1174,6 +1195,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   // 选择配送类型
   handleSelectDeliveryMethod = (e: any) => {
     const { deliveryList, pickupAddress } = this.state;
+    this.setState({tempolineApiError:''})
     let value = e.target.value;
 
     let daId = '';
@@ -2002,6 +2024,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               visible={this.state.visibleShipping}
               confirmLoading={this.state.addressLoading}
               onOk={() => this.deliveryOK()}
+              okButtonProps={{ disabled: this.state.tempolineApiError !== '' }}
               onCancel={() => {
                 this.setState({
                   deliveryAddressId: this.state.originalParams.deliveryAddressId,
@@ -2063,6 +2086,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 )}
 
               </Row>
+
+              {this.state.tempolineApiError ? <div>{this.state.tempolineApiError}</div> : null}
 
               {/*如果是黑名单的地址，则不能选择*/}
               <Radio.Group

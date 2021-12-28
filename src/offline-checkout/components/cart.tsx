@@ -22,7 +22,6 @@ export default class Cart extends React.Component<any, any> {
 
   render() {
     const { list, onRemoveProduct, onSetQuantity } = this.props;
-    console.log(list,'====')
     return (
       <>
         <div className="c-box-title"><FormattedMessage id="Order.offline.shoppingCart" /></div>
@@ -44,7 +43,7 @@ export default class Cart extends React.Component<any, any> {
                 <div className="input-num-group">
                   <Icon type="minus-circle" onClick={() => this.onMinus(cartItem)} />
                   <InputNumber className="input-num" value={cartItem.quantity} onChange={(value) => onSetQuantity(cartItem, value)} min={0}  max={cartItem.stock} step={1} precision={0}/>
-               
+
                   <Icon type="plus-circle" onClick={() => this.onPlus(cartItem)} />
                 </div>
               </Col>

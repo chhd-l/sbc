@@ -58,6 +58,7 @@ class Checkout extends React.Component<any, any> {
             goodsImg: goods.goods.goodsImg,
             marketPrice: goods.marketPrice,
             cateId: goods.cateId,
+            stock:goods.stock
           })),
           cateList: context.goodsCates.map(cate => ({
             cateId: cate.cateId,
@@ -104,7 +105,7 @@ class Checkout extends React.Component<any, any> {
           goodsInfoNos.forEach(item => {
             const targetProduct = products.find(p => p.goodsInfoNo === item.goodsInfoNo);
             if (targetProduct) {
-              recoProducts.push({ ...targetProduct, quantity: item.quantity / 100 });
+              recoProducts.push({ ...targetProduct, quantity: item.quantity });
             }
           });
         }
@@ -205,9 +206,9 @@ class Checkout extends React.Component<any, any> {
       customerName,
       phone: contactPhone,
       email,
-      orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * 100 * b.quantity * 100), 0) / 100).toFixed(2),
+      orderPrice: +(list.reduce((a, b) => a + (b.marketPrice * b.quantity * 100), 0) / 100).toFixed(2),
       payPspItemEnum: paymentMethod,
-      tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity * 100 }))
+      tradeItems: list.map(p => ({ skuId: p.goodsInfoId, num: p.quantity }))
     };
     this.setState({ loading: true });
     webapi.checkout(params).then((data) => {

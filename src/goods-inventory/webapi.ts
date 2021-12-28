@@ -23,11 +23,19 @@ const getThreshold = () => {
   });
 };
 
-const getForcastList = () => {
+const getForcastList = (filterParams = {}) => {
   return Fetch<TResult>('/sub/getForecastList', {
     method: 'POST',
-    body: JSON.stringify({})
+    body: JSON.stringify({
+      ...filterParams
+    })
   });
 };
 
-export { goodsList, getThreshold, getForcastList };
+const exportForcastList = (encrypted) => {
+  return Fetch<TResult>(`/sub/inventory/forecast/export/${encrypted}`, {
+    method: 'GET'
+  });
+};
+
+export { goodsList, getThreshold, getForcastList, exportForcastList };

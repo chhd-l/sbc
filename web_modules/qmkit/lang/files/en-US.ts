@@ -5406,6 +5406,7 @@ export default {
   "task.manageAllSubBtn": "Manage All Subscription",
   "task.pickPointStatus": "Pick point status",
   "task.statusOfSubscription": "Status of subscription",
+
   "Marketing.Prefix": "Prefix",
   "Menu.Cookie Banner": "Cookie Banner",
   "Menu.Shop Config": "Shop Config",
@@ -5416,5 +5417,11 @@ export default {
   "Setting.cookieBanner": "Cookie Banner",
   "Setting.marsFooter": "Mars Footer",
   "Setting.shopConfig": "Shop Config",
-  "Survey.show_survey": "Show the survey to"
+  "Survey.show_survey": "Show the survey to",
+ 
+   'Menu.Checkout Setting':'Checkout Setting',
+  'Menu.Customer Account Setting':'Customer Account Setting',
+  'Menu.Banner':'Banner',
+  'Menu.Marketing Banner':'Marketing Banner'
+
 };

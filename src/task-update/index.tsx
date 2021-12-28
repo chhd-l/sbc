@@ -475,7 +475,10 @@ class TaskUpdate extends Component<any, any> {
         width: '17%',
         render: text =>
           <a
-            onClick={()=>{sessionStorage.setItem('taskId',id);sessionStorage.setItem('fromTaskToSubDetail','true');history.push(`/subscription-detail/${text}`)}}
+            onClick={()=>{sessionStorage.setItem('taskId',id);
+            sessionStorage.setItem('fromTaskToSubDetail','true');
+            sessionStorage.setItem('taskEventTriggerName',task.eventTriggerName)
+            history.push(`/subscription-detail/${text}`)}}
           >
             {text}
           </a>
@@ -1104,7 +1107,7 @@ class TaskUpdate extends Component<any, any> {
                             {...formTableItemLayout}
                             label={<FormattedMessage id="task.AssociateSubscription" />}
                           >
-                            {this.state.subscriptionTable.length>0 && JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId===123457907?(
+                            {this.state.subscriptionTable.length>0 && JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId===123457907 && task.eventTriggerName==='3DaysBeforeNextRefi'?(
                                 <Button
                                   style={{ marginBottom: '20px' }}
                                   type="primary"

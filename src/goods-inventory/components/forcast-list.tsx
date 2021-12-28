@@ -1,18 +1,23 @@
 import React from 'react';
-import { Table, Alert, Button, Tooltip, message } from 'antd';
+import { Table, Alert, Button, Tooltip, message, DatePicker } from 'antd';
 import { Const, cache, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getForcastList } from '../webapi';
+import { getForcastList, exportForcastList } from '../webapi';
+import moment from 'moment';
 
 const defaultImg = require('../img/none.png');
+const { RangePicker } = DatePicker;
 
 export default class ForcastList extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
       loading: false,
-      list: []
-    }
+      startDate: null,
+      endDate: null,
+      list: [],
+      columns:[]
+    };
   }
 
   componentDidMount() {
@@ -21,46 +26,19 @@ export default class ForcastList extends React.Component<any, any> {
 
   getForecastList = () => {
     this.setState({ loading: true });
-    getForcastList().then(data => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          loading: false,
-          list: (data.res.context?.forecastVOList ?? []).map(item => ({ ...item, futureListArr: (item.futureList || []).map(ft => Object.values(ft)[0]) }))
-        });
-      } else {
-        this.setState({
-          loading: false
-        })
-      }
-    });
-  }
-
-  handleExport = () => {
-    const base64 = new util.Base64();
-    const token = (window as any).token;
-    if (token) {
-      const result = JSON.stringify({
-        token: token
-      });
-      const encrypted = base64.urlEncode(result);
-      // 新窗口下载
-      const exportHref = Const.HOST + `/sub/inventory/forecast/export/${encrypted}`;
-      window.open(exportHref);
-    } else {
-      message.error('Please login in');
-    }
-  };
-
-  render() {
-    const { loading, list } = this.state;
-    const columns = [
+    const origialColumns = [
       {
         title: <FormattedMessage id="Product.image" />,
         dataIndex: 'skuImgUrl',
         key: 'skuImgUrl',
         width: 80,
         fixed: true,
-        render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
+        render: (img) =>
+          img ? (
+            <img src={img} style={styles.imgItem} />
+          ) : (
+            <img src={defaultImg} style={styles.imgItem} />
+          )
       },
       {
         title: <FormattedMessage id="Product.productName" />,
@@ -68,7 +46,7 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'skuName',
         width: 150,
         fixed: true,
-        align: "left" as "left" | "right" | "center",
+        align: 'left' as 'left' | 'right' | 'center',
         render: (text) => (
           <Tooltip
             overlayStyle={{
@@ -95,19 +73,23 @@ export default class ForcastList extends React.Component<any, any> {
         title: <FormattedMessage id="Product.marketPrice" />,
         dataIndex: 'marketingPrice',
         key: 'marketingPrice',
-        render: (text) => (<p style={styles.lineThrough}>
-          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {text == null ? 0.0 : text.toFixed(2)}
-        </p>)
+        render: (text) => (
+          <p style={styles.lineThrough}>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {text == null ? 0.0 : text.toFixed(2)}
+          </p>
+        )
       },
       {
         title: <FormattedMessage id="product.subscriptionPrice" />,
         dataIndex: 'subscriptionPrice',
         key: 'subscriptionPrice',
-        render: (text) => (<p style={styles.lineThrough}>
-          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-          {text == null ? 0.0 : text.toFixed(2)}
-        </p>)
+        render: (text) => (
+          <p style={styles.lineThrough}>
+            {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+            {text == null ? 0.0 : text.toFixed(2)}
+          </p>
+        )
       },
       {
         title: <FormattedMessage id="Product.ProductCategory" />,
@@ -120,110 +102,111 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'salesCate'
       },
       {
-        title:  <FormattedMessage id="Product.CurrentInventory" />,
+        title: <FormattedMessage id="Product.CurrentInventory" />,
         dataIndex: 'inventory',
         key: 'inventory'
       },
       {
-        title:  <FormattedMessage id="Product.AvgDailySales" />,
+        title: <FormattedMessage id="Product.AvgDailySales" />,
         dataIndex: 'avgDailySales',
-        key: 'avgDailySales'
+        key: 'avgDailySales',
+        render: (text) =>
+          text === 'Not sold in the last 30 days' ? (
+            text
+          ) : (
+            <p style={styles.lineThrough}>
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              {text}
+            </p>
+          )
       },
       {
-        title:  <FormattedMessage id="Product.stockCoverageInDays" />,
+        title: <FormattedMessage id="Product.stockCoverageInDays" />,
         dataIndex: 'stockCoverageInDays',
         key: 'stockCoverageInDays'
-      },
-      {
-        title:  <FormattedMessage id="Product.The1stDay" />,
-        dataIndex: 'futureListArr[0]',
-        width: 150,
-        key: 'f1'
-      },
-      {
-        title:  <FormattedMessage id="Product.The2ndDay" />,
-        dataIndex: 'futureListArr[1]',
-        width: 150,
-        key: 'f2'
-      },
-      {
-        title:  <FormattedMessage id="Product.The3rdDay" />,
-        dataIndex: 'futureListArr[2]',
-        width: 150,
-        key: 'f3'
-      },
-      {
-        title:  <FormattedMessage id="Product.The4thDay" />,
-        dataIndex: 'futureListArr[3]',
-        width: 150,
-        key: 'f4'
-      },
-      {
-        title:  <FormattedMessage id="Product.The5thDay" />,
-        dataIndex: 'futureListArr[4]',
-        width: 150,
-        key: 'f5'
-      },
-      {
-        title:  <FormattedMessage id="Product.The6thDay" />,
-        dataIndex: 'futureListArr[5]',
-        width: 150,
-        key: 'f6'
-      },
-      {
-        title:  <FormattedMessage id="Product.The7thDay" />,
-        dataIndex: 'futureListArr[6]',
-        width: 150,
-        key: 'f7'
-      },
-      {
-        title:  <FormattedMessage id="Product.The8thDay" />,
-        dataIndex: 'futureListArr[7]',
-        width: 150,
-        key: 'f8'
-      },
-      {
-        title:  <FormattedMessage id="Product.The9thDay" />,
-        dataIndex: 'futureListArr[8]',
-        width: 150,
-        key: 'f9'
-      },
-      {
-        title:  <FormattedMessage id="Product.The10thDay" />,
-        dataIndex: 'futureListArr[9]',
-        width: 150,
-        key: 'f10'
-      },
-      {
-        title:  <FormattedMessage id="Product.The11thDay" />,
-        dataIndex: 'futureListArr[10]',
-        width: 150,
-        key: 'f11'
-      },
-      {
-        title:  <FormattedMessage id="Product.The12thDay" />,
-        dataIndex: 'futureListArr[11]',
-        width: 150,
-        key: 'f12'
-      },
-      {
-        title:  <FormattedMessage id="Product.The13thDay" />,
-        dataIndex: 'futureListArr[12]',
-        width: 150,
-        key: 'f13'
-      },
-      {
-        title:  <FormattedMessage id="Product.The14thDay" />,
-        dataIndex: 'futureListArr[13]',
-        width: 150,
-        key: 'f14',
-        align: "left" as "left" | "right" | "center"
       }
-    ];
+    ]
+    const { startDate, endDate } = this.state;
+    getForcastList(startDate && endDate ? { startDate, endDate } : {}).then((data) => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        let dataList = (data.res.context?.forecastVOList ?? []).map((item) => ({
+          ...item,
+          futureListArr: (item.futureList || []).map((ft) => Object.values(ft)[0])
+        }));
+        let dymicColumns = dataList[0].futureList.map((item, index) => {
+          return {
+            title: Object.keys(item)[0],
+            dataIndex: `futureListArr[${index}]`,
+            width: 150,
+            key: 'f' + index
+          };
+        });
+        this.setState({
+          loading: false,
+          list: dataList,
+          columns: [...origialColumns, ...dymicColumns]
+        });
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
+    });
+  };
+
+  handleExport = () => {
+    const base64 = new util.Base64();
+    const { startDate, endDate } = this.state;
+    const token = (window as any).token;
+    if (token) {
+      const result = JSON.stringify({
+        token: token,
+        startDate,
+        endDate
+      });
+      const encrypted = base64.urlEncode(result);
+      // 新窗口下载
+      exportForcastList(encrypted).then(data=>{
+        if (data.res.code === Const.SUCCESS_CODE) {
+          message.success(data.res.message)
+        } else {
+          message.error(data.res.message)
+        }
+      }).catch(error=>{
+        message.error(error.message)
+      })
+    } else {
+      message.error('Please login in');
+    }
+  };
+
+  dateTimeChange = (date, dateString) => {
+    this.setState({
+      startDate: date[0] ? date[0].format('YYYY-MM-DD') : null,
+      endDate: date[1] ? date[1].format('YYYY-MM-DD') : null
+    });
+  };
+
+  disabledDate = (current) => {
+    return current && (current < moment().endOf('day') || current > moment().day(16).endOf('day'));
+  };
+
+  render() {
+    const { loading, list, columns } = this.state;
+
     return (
       <div className="table-overflow">
         <Alert message={<FormattedMessage id="Product.SetQuantity" />} type="info" />
-        <div className="inventory flex-start-align">
+        <div className="flex-start-align" style={{ marginBottom: 20 }}>
+          <RangePicker
+            allowClear
+            disabledDate={this.disabledDate}
+            style={{ marginRight: 10 }}
+            onChange={this.dateTimeChange}
+          />
+          <Button type="primary" onClick={this.getForecastList} style={{ marginRight: 10 }}>
+            <FormattedMessage id="Public.Search" />
+          </Button>
           <Button type="primary" onClick={this.handleExport}>
             <FormattedMessage id="Product.bulkExport" />
           </Button>
@@ -233,7 +216,7 @@ export default class ForcastList extends React.Component<any, any> {
           columns={columns}
           dataSource={list}
           loading={loading}
-          scroll={{x:true}}
+          scroll={{ x: true }}
         />
       </div>
     );

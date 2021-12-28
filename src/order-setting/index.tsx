@@ -774,7 +774,7 @@ class OrderSetting extends Component<any, any> {
                   {/*  </Row>*/}
                   {/*</FormItem>*/}
                   <FormItem>
-                    <strong> sales order setting </strong>
+                    <strong> Sales order setting </strong>
                   </FormItem>
                   {paymentCategory === 'Online payment' ? (
                     <>
@@ -1264,7 +1264,7 @@ class OrderSetting extends Component<any, any> {
               </TabPane>
               <TabPane tab={<FormattedMessage id="Order.cashOnDelivery" />} key="Cash on delivery">
                 <Form style={{ marginTop: 20 }} layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} labelAlign="right">
-                  <FormItem><strong> sales order setting </strong></FormItem>
+                  <FormItem><strong> Sales order setting </strong></FormItem>
                   <FormItem label={<FormattedMessage id="Order.OrderExpirationTime" />}>
                     <Switch
                       checkedChildren={RCi18n({ id: 'Order.On' })}
@@ -1491,8 +1491,8 @@ class OrderSetting extends Component<any, any> {
                         <div style={{ display: 'flex' }}>
                           <Button >Prefix</Button> &nbsp;&nbsp;
                           <Input  style={{ width: 100, margin: '0 20px'}} value={item.prefix} onChange={(e) => this.changeInputValue(e, 'prefix', index)} />
-                          <Input style={{ width: 100, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />
-                          <InputNumber style={{ width: 100, margin: '0 20px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
+                          {/*<Input style={{ width: 100, }} value={item.currentValue} onChange={(e) => this.changeInputValue(e, 'currentValue', index)} />*/}
+                          <InputNumber style={{ width: 120, margin: '0 20px' }} onChange={(e) => this.changeInputValue(e, 'sequenceBits', index)} value={item.sequenceBits} min={8} max={12} />
                           <sup className="ant-form-item-required"></sup>
                         </div>
                       </FormItem>

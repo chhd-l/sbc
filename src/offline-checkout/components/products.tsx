@@ -64,6 +64,8 @@ export default class ProductOverview extends React.Component<any, any> {
     const { searchStr } = this.state;
     const { products, cateList } = this.props;
 
+    // console.log(cateList,'cateListcateList',products)
+
     cateList.forEach(cate => {
       cate.childProducts = products.filter(childProduct => childProduct.cateId === cate.cateId);
     });

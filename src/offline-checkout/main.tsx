@@ -58,6 +58,7 @@ class Checkout extends React.Component<any, any> {
             goodsImg: goods.goods.goodsImg,
             marketPrice: goods.marketPrice,
             cateId: goods.cateId,
+            stock:goods.stock
           })),
           cateList: context.goodsCates.map(cate => ({
             cateId: cate.cateId,

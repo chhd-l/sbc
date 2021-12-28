@@ -25,7 +25,7 @@ export default class PetApi extends Component<any, any>{
   initForm = async () => {
     const { setFieldsValue } = this.props.form;
     this.setState({loading: true})
-    let { res } = await webapi.getPetApiInfo();
+    let { res } = await webapi.getPetApiInfo('petConfig');
     this.setState({loading: false})
     if (res.code === Const.SUCCESS_CODE){
       let {countryCode, url, id} = res.context;
@@ -86,7 +86,7 @@ export default class PetApi extends Component<any, any>{
               <Form.Item label={<FormattedMessage id='URL'/>}>
                 {getFieldDecorator('url', {
                   rules: [
-                    { required: true, message: 'Please input your URL!' },
+                    // { required: true, message: 'Please input your URL!' },
                     {
                       pattern: /[a-zA-z]+:\/\/[^s]*/,
                       message: 'Please enter the correct URL!'

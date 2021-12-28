@@ -89,7 +89,8 @@ const index = () => {
           </Row>
           <div style={{padding:'30px 20px 0 20px',margin:'20px 20px 0 20px',background: '#fff',borderRadius:'10px'}}>
             {/*<Radio.Group onChange={this.handleCategoryChange} value={paymentCategory}>*/}
-            <Radio.Group disabled={editDisable} value={roleChoice} >
+            <Radio.Group value={roleChoice} >
+              {/*<Radio.Group disabled={editDisable} value={roleChoice} >*/}
               <Radio  value="2" onClick={radioChange}>
                 <a style={{color:'#222'}}>Accounts are optional</a>
                 <p>Customers will be able to check out with a customer account or as a guest.</p>

@@ -318,6 +318,7 @@ export default function index({...props}) {
          */
         PromotionType:{
           typeOfPromotion: 1,
+          couponCodePrefix: detail.couponCodePrefix
         },
         /**
          * 第四步
@@ -399,7 +400,6 @@ export default function index({...props}) {
    * @param current
    */
   const changeSteps = (current)=>{
-    console.log(current)
     if(current < step){
       setStep(current)
     }
@@ -422,8 +422,7 @@ export default function index({...props}) {
         <div className="create-promotion">
           <BreadCrumb/>
           <div className="container-search marketing-container" style={{flex:1,position:'relative',paddingBottom: 70}}>
-            {/*onChange={changeSteps}*/}
-            <Steps current={step} className="step-container">
+            <Steps current={step} className="step-container" onChange={changeSteps}>
               <Step title={<FormattedMessage id="Marketing.Create" />} />
               <Step title={<FormattedMessage id="Marketing.BasicSetting" />} />
               <Step title={<FormattedMessage id="Marketing.PromotionType" />} />

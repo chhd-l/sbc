@@ -5404,5 +5404,10 @@ export default {
   "task.editAllSubLink": "Edit All Subscription",
   "task.manageAllSubBtn": "Manage All Subscription",
   "task.pickPointStatus": "Pick point status",
-  "task.statusOfSubscription": "Status of subscription"
+  "task.statusOfSubscription": "Status of subscription",
+  'Menu.Checkout Setting':'Menu.Checkout Setting',
+  'Menu.Customer Account Setting':'Customer Account Setting',
+  'Menu.Banner':'Banner',
+  'Menu.Marketing Banner':'Marketing Banner'
+
 };

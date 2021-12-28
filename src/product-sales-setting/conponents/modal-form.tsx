@@ -165,4 +165,4 @@ class ModalForm extends Component<Props, any> {
     );
   }
 }
-export default Form.create()(ModalForm);
+export default Form.create<Props>()(ModalForm);

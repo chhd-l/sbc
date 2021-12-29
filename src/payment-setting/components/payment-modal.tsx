@@ -95,7 +95,7 @@ class PaymentModal extends React.Component<any, any> {
                       <Col span={24}>
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="apiKey" />}>
                           {getFieldDecorator(item.id + 'apiKey', {
-                            initialValue: item.pspConfigVO&&item.pspConfigVO.apiKey,
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.apiKey,
                             rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputApiKey'}) }]
                           })(<Input onChange={(e) => {
                             onFormChange({
@@ -107,14 +107,14 @@ class PaymentModal extends React.Component<any, any> {
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="appID" />}>
-                          {getFieldDecorator(item.id+'appId', {
-                            initialValue: item.pspConfigVO&&item.pspConfigVO.appId,
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="merchantAccount" />}>
+                          {getFieldDecorator(item.id+'merchantAccount', {
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.merchantAccount,
                             rules: [{ required: false, message:  RCi18n({id: 'Setting.PleaseinputAppID'}) }]
                           })(<Input onChange={(e) => {
                             onFormChange({
                               id: key,
-                              field: 'appId',
+                              field: 'merchantAccount',
                               value: e.target.value
                             })
                           }} />)}
@@ -123,7 +123,7 @@ class PaymentModal extends React.Component<any, any> {
                       <Col span={24}>
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
                           {getFieldDecorator(item.id + 'privateKey', {
-                            initialValue: item.pspConfigVO&&item.pspConfigVO.privateKey,
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.privateKey,
                             rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPrivateKey'}) }]
                           })(<Input.TextArea onChange={(e) => {
                             onFormChange({
@@ -137,7 +137,7 @@ class PaymentModal extends React.Component<any, any> {
                       <Col span={24}>
                         <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
                           {getFieldDecorator(item.id + 'publicKey', {
-                            initialValue: item.pspConfigVO&&item.pspConfigVO.publicKey,
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.publicKey,
                             rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPublicKey'})}]
                           })(<Input.TextArea onChange={(e) => {
                             onFormChange({
@@ -149,13 +149,70 @@ class PaymentModal extends React.Component<any, any> {
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="Client Key" />}>
-                          {getFieldDecorator(item.id + 'openPlatformSecret', {
-                            initialValue: item.pspConfigVO&&item.pspConfigVO.openPlatformSecret
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="clientKey" />}>
+                          {getFieldDecorator(item.id + 'clientKey', {
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.clientKey
                           })(<Input.TextArea onChange={(e) => {
                             onFormChange({
                               id: key,
-                              field: 'openPlatformSecret',
+                              field: 'clientKey',
+                              value: e.target.value
+                            })
+                          }} />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentAccount" />}>
+                          {getFieldDecorator(item.id + 'paymentAccount', {
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.paymentAccount
+                          })(<Input.TextArea onChange={(e) => {
+                            onFormChange({
+                              id: key,
+                              field: 'paymentAccount',
+                              value: e.target.value
+                            })
+                          }} />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="environment" />}>
+                        {getFieldDecorator(item.id + 'environment', {
+                             initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.environment
+                            })(
+                              <Select  style={{ width: 120 }} onChange={(value) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'environment',
+                                  value: value
+                                })
+                              }}>
+                                <Option value="test"><FormattedMessage id="Setting.Test" /></Option>
+                                <Option value="live"><FormattedMessage id="Setting.Live" /></Option>
+                              </Select>
+                            )}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="checkoutApiPrefix" />}>
+                          {getFieldDecorator(item.id + 'checkoutApiPrefix', {
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.checkoutApiPrefix
+                          })(<Input.TextArea onChange={(e) => {
+                            onFormChange({
+                              id: key,
+                              field: 'checkoutApiPrefix',
+                              value: e.target.value
+                            })
+                          }} />)}
+                        </FormItem>
+                      </Col>
+                      <Col span={24}>
+                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="classicPaymentApiPrefix" />}>
+                          {getFieldDecorator(item.id + 'classicPaymentApiPrefix', {
+                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.classicPaymentApiPrefix
+                          })(<Input.TextArea onChange={(e) => {
+                            onFormChange({
+                              id: key,
+                              field: 'classicPaymentApiPrefix',
                               value: e.target.value
                             })
                           }} />)}
@@ -335,28 +392,32 @@ class PaymentModal extends React.Component<any, any> {
       //   pspItemCardTypeSaveRequestList.push({
       //     storeId: item.storeId,
       //     pspId: item.pspId,
-      //     pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
+      //     pspItemId: payPspItemVOList.pspConfigSupplierVO.pspItemId,
       //     cardType: item.cardType,
       //     imgUrl: item.imgUrl,
       //   })
       // })
       let  params = {}
       if (payPspItemVOList.name !== 'COD') {
-        if(payPspItemVOList.pspConfigVO) {
+        if(payPspItemVOList.pspConfigSupplierVO) {
           params = {
             pspConfigSaveRequest: Object.assign({
-              id: payPspItemVOList.pspConfigVO.id,
-              pspId: payPspItemVOList.pspConfigVO.pspId ,
-              pspItemId: payPspItemVOList.pspConfigVO.pspItemId,
-              apiKey: payPspItemVOList.pspConfigVO.apiKey,
-              secret: payPspItemVOList.pspConfigVO.secret,
-              appId: payPspItemVOList.pspConfigVO.appId,
-              privateKey: payPspItemVOList.pspConfigVO.privateKey,
-              publicKey: payPspItemVOList.pspConfigVO.publicKey,
-              openPlatformSecret: payPspItemVOList.pspConfigVO.openPlatformSecret,
+              id: payPspItemVOList.pspConfigSupplierVO.id,
+              pspId: payPspItemVOList.pspConfigSupplierVO.pspId ,
+              pspItemId: payPspItemVOList.pspConfigSupplierVO.pspItemId,
+              apiKey: payPspItemVOList.pspConfigSupplierVO.apiKey,
+              secret: payPspItemVOList.pspConfigSupplierVO.secret,
+              merchantAccount: payPspItemVOList.pspConfigSupplierVO.merchantAccount,
+              privateKey: payPspItemVOList.pspConfigSupplierVO.privateKey,
+              publicKey: payPspItemVOList.pspConfigSupplierVO.publicKey,
+              clientKey: payPspItemVOList.pspConfigSupplierVO.clientKey,
+              paymentAccount: payPspItemVOList.pspConfigSupplierVO.paymentAccount,
+              environment: payPspItemVOList.pspConfigSupplierVO.environment,
+              checkoutApiPrefix: payPspItemVOList.pspConfigSupplierVO.checkoutApiPrefix,
+              classicPaymentApiPrefix: payPspItemVOList.pspConfigSupplierVO.classicPaymentApiPrefix,
             }),
             payPspItemSaveRequest: Object.assign({
-              id: payPspItemVOList.pspConfigVO && payPspItemVOList.pspConfigVO.pspItemId ? payPspItemVOList.pspConfigVO.pspItemId : payPspItemVOList.id,
+              id: payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId ? payPspItemVOList.pspConfigSupplierVO.pspItemId : payPspItemVOList.id,
               isOpen: payPspItemVOList.isOpen,
               pspItemCardTypeSaveRequestList: payPspItemVOList.payPspItemCardTypeVOList,
               supportSubscription: payPspItemVOList.supportSubscription,
@@ -366,7 +427,7 @@ class PaymentModal extends React.Component<any, any> {
       } else {
         params = {
           payPspItemSaveRequest: Object.assign({
-            id: payPspItemVOList.pspConfigVO && payPspItemVOList.pspConfigVO.pspItemId ? payPspItemVOList.pspConfigVO.pspItemId : payPspItemVOList.id,
+            id: payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId ? payPspItemVOList.pspConfigSupplierVO.pspItemId : payPspItemVOList.id,
             isOpen: payPspItemVOList.isOpen,
             maxAmount: payPspItemVOList.maxAmount
           })

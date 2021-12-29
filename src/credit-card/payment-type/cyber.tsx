@@ -4,6 +4,7 @@ import '@adyen/adyen-web/dist/adyen.css';
 export default class CyberCreditCardForm extends Component {
   props:{
     country:string
+    saveCardCallBack?:Function //兼容subscription 使用credit-card采用组件方式而不是路由
   }
   constructor(props) {
     super(props);
@@ -13,7 +14,7 @@ export default class CyberCreditCardForm extends Component {
   componentDidMount() {
     this.initFormPay()
   }
-  
+
 
 
   initFormPay() {

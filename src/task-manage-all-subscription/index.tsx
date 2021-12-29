@@ -1725,7 +1725,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           </p>
                         </Col>
                       </>
-                    ) : paymentMethod.indexOf('COD') !== -1 ? (
+                    ) : this.state.payPspItemEnum.indexOf('COD') !== -1 ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.PaymentMethod" />:{' '}

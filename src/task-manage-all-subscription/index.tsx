@@ -63,7 +63,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       individualFrequencyList: [],
       frequencyClubList: [],
       petsId: '',
-      petsInfo: {},
       paymentInfo: null,
       deliveryAddressId: '',
       deliveryAddressInfo: {},
@@ -81,7 +80,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       billingList: [],
       customerAccount: '',
       sameFlag: false,
-      originalParams: {},
       isUnfoldedDelivery: false,
       isUnfoldedBilling: false,
       saveLoading: false,
@@ -1016,13 +1014,27 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   // 选择配送类型
   handleSelectDeliveryMethod = (e: any) => {
-    const { deliveryList, pickupAddress, subscriptionList, checkedSubscriptionIdList } = this.state;
+    const { deliveryList, pickupAddress,subscriptionList,checkedSubscriptionIdList } = this.state;
     let value = e.target.value;
     let daId = '';
     if (value === 'homeDelivery' && deliveryList?.length === 1) {
       daId = deliveryList[0].deliveryAddressId;
     } else if (value === 'pickupDelivery' && pickupAddress?.length) {
       daId = pickupAddress[0].deliveryAddressId;
+    }
+    if(value === 'pickupDelivery'){
+      let subscribeGoods = [];
+      subscriptionList.map((ele) => {
+        checkedSubscriptionIdList.map((item) => {
+          if (ele.subscribeId === item) {
+            subscribeGoods.push({
+              goodsInfoId: ele.goodsResponse.goodsInfoId,
+              quantity: ele.goodsResponse.subscribeNum
+            });
+          }
+        });
+      });
+      this.setState({subscribeGoods:subscribeGoods})
     }
     this.setState({
       deliveryAddressId: daId
@@ -1879,7 +1891,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 okButtonProps={{ disabled: this.state.tempolineApiError !== '' }}
                 onCancel={() => {
                   this.setState({
-                    deliveryAddressId: this.state.originalParams.deliveryAddressId,
+                    deliveryAddressId: '',
                     visibleShipping: false
                   });
                 }}
@@ -2125,7 +2137,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                   okText={RCi18n({ id: 'Subscription.SelectPickpoint' })}
                   onCancel={() => {
                     this.setState({
-                      deliveryAddressId: this.state.originalParams.deliveryAddressId,
+                      deliveryAddressId: '',
                       addOrEditPickup: false,
                       visibleShipping: true
                     });
@@ -2163,7 +2175,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 onOk={() => this.billingOK()}
                 onCancel={() => {
                   this.setState({
-                    billingAddressId: this.state.originalParams.billingAddressId,
+                    billingAddressId: '',
                     visibleBilling: false
                   });
                 }}

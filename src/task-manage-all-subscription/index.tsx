@@ -293,10 +293,10 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
-  onGoodsChange = ({ field, goodsId, value }) => {
+  onGoodsChange = ({ field, goodsId, value,subscribeId }) => {
     let data = this.state.subscriptionList;
     data = data.map((item) => {
-      if (item.goodsResponse.skuId === goodsId) {
+      if (item.goodsResponse.skuId === goodsId&&item.subscribeId===subscribeId) {
         if (field === 'subscribeNum') {
           item.goodsResponse.subscribeNum = value;
         } else {
@@ -1112,7 +1112,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                   this.onGoodsChange({
                     field: 'subscribeNum',
                     goodsId: record.goodsResponse.skuId,
-                    value
+                    value,
+                    subscribeId:record.subscribeId
                   });
                 }}
                 value={record.goodsResponse.subscribeNum}
@@ -1137,7 +1138,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 this.onGoodsChange({
                   field: 'periodTypeId',
                   goodsId: record.goodsResponse.skuId,
-                  value
+                  value,
+                  subscribeId:record.subscribeId
                 });
               }}
               disabled={record.subscriptionType === 'Peawee'}

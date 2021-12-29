@@ -134,7 +134,7 @@ export default class CreditCard extends Component<any> {
       <div>
         <div className="payment-method-content">
           {payPspItem.map((item) => {
-            return <img src={item.imgUrl} key={item.id} style={{ width: 40, marginRight: 10 }} />;
+            return <img alt="" src={item.imgUrl} key={item.id} style={{ width: 40, marginRight: 10 }} />;
           })}
           {clientKey?.pspItemCode && (
             <div style={{ marginTop: 10 }}>{this.renderCreditForm(payCode, clientKey)}</div>

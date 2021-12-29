@@ -33,7 +33,7 @@ export default class Hub extends Component<any, any>{
       this.hubId = id;
       setFieldsValue({
         enableHub: !!enableHub,
-        url: !!enableHub ? url : undefined,
+        // url: !!enableHub ? url : undefined,
       })
     }else {
       message.warn(res.message);
@@ -49,7 +49,7 @@ export default class Hub extends Component<any, any>{
         const params = {
           id: this.hubId,
           status: values.enableHub ? 1:0,
-          url: values.enableHub ? values.url: null,
+          // url: values.enableHub ? values.url: null,
         }
         this.setState({loading: true});
         let {res} = await webapi.updateHub(params);
@@ -95,24 +95,24 @@ export default class Hub extends Component<any, any>{
                   <Switch />
                 )}
               </Form.Item>
-              <Form.Item
-                style={{visibility: isEnabled ? 'visible':'hidden'}}
-                label={<FormattedMessage id='URL'/>}
-              >
-                {getFieldDecorator('url', {
-                  rules: [
-                    { required: true, message: 'Please input your URL!' },
-                    {
-                      pattern: /[a-zA-z]+:\/\/[^s]*/,
-                      message: 'Please enter the correct URL!'
-                    }
-                  ],
-                })(
-                  <Input
-                    placeholder="URL"
-                  />
-                )}
-              </Form.Item>
+              {/*<Form.Item*/}
+              {/*  style={{visibility: isEnabled ? 'visible':'hidden'}}*/}
+              {/*  label={<FormattedMessage id='URL'/>}*/}
+              {/*>*/}
+              {/*  {getFieldDecorator('url', {*/}
+              {/*    rules: [*/}
+              {/*      { required: true, message: 'Please input your URL!' },*/}
+              {/*      {*/}
+              {/*        pattern: /[a-zA-z]+:\/\/[^s]*/,*/}
+              {/*        message: 'Please enter the correct URL!'*/}
+              {/*      }*/}
+              {/*    ],*/}
+              {/*  })(*/}
+              {/*    <Input*/}
+              {/*      placeholder="URL"*/}
+              {/*    />*/}
+              {/*  )}*/}
+              {/*</Form.Item>*/}
             </Form>
           </div>
           <Row className='bar-button'>

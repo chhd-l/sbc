@@ -336,6 +336,27 @@ class PaymentModal extends React.Component<any, any> {
                                      }}
                           />)}
                         </FormItem>
+                        {
+                        item.isOpen == 1 &&
+                        <Col span={24}>
+                          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SupportSubscription" />}>
+                            {getFieldDecorator(item.id + 'supportSubscription', {
+                              initialValue: item.supportSubscription
+                            })(
+                              <Select  style={{ width: 120 }} onChange={(value) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'supportSubscription',
+                                  value: value
+                                })
+                              }}>
+                                <Option value={1}><FormattedMessage id="Setting.Yes" /></Option>
+                                <Option value={0}><FormattedMessage id="Setting.No" /></Option>
+                              </Select>
+                            )}
+                          </FormItem>
+                        </Col>
+                      }
                       </Col>
                     </Row>
                   </Form>
@@ -429,7 +450,8 @@ class PaymentModal extends React.Component<any, any> {
           payPspItemSaveRequest: Object.assign({
             id: payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId ? payPspItemVOList.pspConfigSupplierVO.pspItemId : payPspItemVOList.id,
             isOpen: payPspItemVOList.isOpen,
-            maxAmount: payPspItemVOList.maxAmount
+            maxAmount: payPspItemVOList.maxAmount,
+            supportSubscription: payPspItemVOList.supportSubscription
           })
         }
       }

@@ -1045,7 +1045,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Subscription.SubscriptionNumber" />,
         dataIndex: 'subscribeId',
         key: 'subscribeId',
-        width: '7%'
+        width: '8%'
       },
       {
         title: <FormattedMessage id="product.productName" />,
@@ -1083,8 +1083,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
-        dataIndex: 'externalSubscribeId',
-        width: '7%'
+        width: '7%',
+        render: (text: any, record: any) => record.goodsResponse.externalSku
       },
       {
         // title: <FormattedMessage id="task.statusOfSubscription" />,

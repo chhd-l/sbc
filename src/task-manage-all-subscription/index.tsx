@@ -30,6 +30,11 @@ import PickupDelivery from '../customer-details/component/pickup-delivery';
 import PaymentMethod from './component/payment-method';
 import { addAddress, updateAddress } from '../customer-details/webapi';
 import CreditCard from './component/credit-card';
+import {
+  skipManageAllSubscription,
+  cancelManageAllSubscription,
+  pauseManageAllSubscription
+} from './webapi';
 
 const { Option } = Select;
 const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -130,7 +135,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     GetDelivery().then((data) => {
       const res = data.res;
       if (res.code === Const.SUCCESS_CODE) {
-        // deliveryDate 状态
         this.setState({
           deliverDateStatus: res?.context?.systemConfigVO?.status || 0
         });
@@ -153,7 +157,14 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   getManageAllSubscription = () => {
     this.setState({
-      loading: true
+      loading: true,
+      checkedSubscriptionIdList: [],
+      deliveryAddressInfo: {},
+      paymentInfo: null,
+      deliveryAddressId: '',
+      paymentId: '',
+      deliveryDate: undefined,
+      timeSlot: undefined
     });
     webapi
       .getTaskSubscriptionList({
@@ -179,7 +190,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           );
         }
       })
-      .catch(() => {})
       .finally(() => {
         this.setState({
           loading: false
@@ -196,7 +206,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     } else {
       this.querySysDictionary('country');
     }
-
     this.querySysDictionary('Frequency_day');
     this.querySysDictionary('Frequency_day_club');
     this.querySysDictionary('Frequency_day_individual');
@@ -281,8 +290,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           }
         } else {
         }
-      })
-      .catch(() => {});
+      });
   };
 
   onGoodsChange = ({ field, goodsId, value }) => {
@@ -311,7 +319,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       deliveryDate,
       timeSlot,
       checkedSubscriptionIdList,
-      subscriptionList
+      subscriptionList,
+      paymentId
     } = this.state;
     this.setState({
       saveLoading: true,
@@ -348,24 +357,17 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         }
       });
     });
-    let apiParams = {
-      subscriptionIdList: this.state.checkedSubscriptionIdList,
-      goodsItems: goodsItems,
-      customerId: this.state.customerId
-    };
-    if (this.state.paymentId) {
-      apiParams = Object.assign(apiParams, { paymentId: this.state.paymentId });
-    }
-    if (deliveryAddressId) {
-      apiParams = Object.assign(apiParams, { deliveryAddressId: deliveryAddressId });
-    }
-    if (deliveryDate) {
-      apiParams = Object.assign(apiParams, { deliveryDate: deliveryDate });
-    }
-    if (timeSlot) {
-      apiParams = Object.assign(apiParams, { timeSlot: timeSlot });
-    }
-    console.log('apiParams', apiParams);
+    let apiParams = Object.assign(
+      {
+        subscriptionIdList: checkedSubscriptionIdList,
+        goodsItems: goodsItems,
+        customerId: this.state.customerId
+      },
+      paymentId ? { paymentId: paymentId } : {},
+      deliveryAddressId ? { deliveryAddressId: deliveryAddressId } : {},
+      deliveryDate ? { deliveryDate: deliveryDate } : {},
+      timeSlot ? { timeSlot: timeSlot } : {}
+    );
 
     webapi
       .updateManageAllSubscription(apiParams)
@@ -380,16 +382,16 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           setTimeout(() => {
             this.getManageAllSubscription();
           }, 1000);
-        } else {
-          this.setState({
-            saveLoading: false
-          });
         }
       })
       .catch((error) => {
         this.setState({
-          saveLoading: false,
           tempolineApiError: error.message
+        });
+      })
+      .finally(() => {
+        this.setState({
+          saveLoading: false
         });
       });
   };
@@ -540,14 +542,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         } else {
           message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
         }
-        this.setState({
-          addOrEditPickup: false,
-          pickupLoading: false,
-          visibleShipping: true
-        });
       })
       .catch((err) => {
         message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
+      })
+      .finally(() => {
         this.setState({
           addOrEditPickup: false,
           pickupLoading: false,
@@ -700,20 +699,15 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     if (this.state.sameFlag) {
       this.setState({
-        addressLoading: false,
-        deliveryAddressInfo: deliveryAddressInfo,
-        billingAddressInfo: deliveryAddressInfo,
-        deliveryList: addressList,
-        visibleShipping: false
-      });
-    } else {
-      this.setState({
-        addressLoading: false,
-        deliveryAddressInfo: deliveryAddressInfo,
-        deliveryList: addressList,
-        visibleShipping: false
+        billingAddressInfo: deliveryAddressInfo
       });
     }
+    this.setState({
+      addressLoading: false,
+      deliveryAddressInfo: deliveryAddressInfo,
+      deliveryList: addressList,
+      visibleShipping: false
+    });
   };
 
   billingOpen = () => {
@@ -757,78 +751,25 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     }
   };
 
-  skipNextSubscription = () => {
+  skipOrCancelOrPauseNextSubscription = (type) => {
     this.setState({
       loading: true
     });
-    webapi
-      .skipManageAllSubscription({ subscriptionIdList: this.state.checkedSubscriptionIdList })
+    const actionName =
+      type === 'skip'
+        ? skipManageAllSubscription
+        : type === 'cancel'
+        ? cancelManageAllSubscription
+        : pauseManageAllSubscription;
+    actionName({ subscriptionIdList: this.state.checkedSubscriptionIdList })
       .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({ checkedSubscriptionIdList: [] });
+        if (data?.res?.code === Const.SUCCESS_CODE) {
           this.getManageAllSubscription();
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
-        } else {
-          this.setState({
-            loading: false
-          });
         }
       })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
-      });
-  };
-
-  cancelManageAllSubscription = () => {
-    this.setState({
-      loading: true
-    });
-    webapi
-      .cancelManageAllSubscription({ subscriptionIdList: this.state.checkedSubscriptionIdList })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({ checkedSubscriptionIdList: [] });
-          this.getManageAllSubscription();
-          message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
-        } else {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
-      });
-  };
-
-  pauseManageAllSubscription = () => {
-    this.setState({
-      loading: true
-    });
-    webapi
-      .pauseManageAllSubscription({ subscriptionIdList: this.state.checkedSubscriptionIdList })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          this.setState({ checkedSubscriptionIdList: [] });
-          this.getManageAllSubscription();
-          message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
-        } else {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
+      .finally(() => {
+        this.setState({ loading: false });
       });
   };
 
@@ -864,13 +805,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.getManageAllSubscription();
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
-        } else {
-          this.setState({
-            loading: false
-          });
         }
       })
-      .catch(() => {
+      .finally(() => {
         this.setState({
           loading: false
         });
@@ -1014,7 +951,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   // 选择配送类型
   handleSelectDeliveryMethod = (e: any) => {
-    const { deliveryList, pickupAddress,subscriptionList,checkedSubscriptionIdList } = this.state;
+    const { deliveryList, pickupAddress, subscriptionList, checkedSubscriptionIdList } = this.state;
     let value = e.target.value;
     let daId = '';
     if (value === 'homeDelivery' && deliveryList?.length === 1) {
@@ -1022,7 +959,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     } else if (value === 'pickupDelivery' && pickupAddress?.length) {
       daId = pickupAddress[0].deliveryAddressId;
     }
-    if(value === 'pickupDelivery'){
+    if (value === 'pickupDelivery') {
       let subscribeGoods = [];
       subscriptionList.map((ele) => {
         checkedSubscriptionIdList.map((item) => {
@@ -1034,7 +971,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           }
         });
       });
-      this.setState({subscribeGoods:subscribeGoods})
+      this.setState({ subscribeGoods: subscribeGoods });
     }
     this.setState({
       deliveryAddressId: daId
@@ -1196,21 +1133,19 @@ export default class ManageAllSubsription extends React.Component<any, any> {
               }}
               disabled={record.subscriptionType === 'Peawee'}
             >
-              {/* individualFrequencyList */}
-              {record.subscriptionType == 'Individualization'
-                ? individualFrequencyList.map((item: any) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))
-                : ((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club'
-                    ? frequencyClubList
-                    : frequencyList
-                  ).map((item: any) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))}
+              {record.subscriptionType == 'Individualization' ? (
+                individualFrequencyList.map((item: any) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              ) : (
+                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
+                  <Option value={item.id} key={item.id}>
+                    {item.name}
+                  </Option>
+                ))
+              )}
             </Select>
           </div>
         )
@@ -1258,7 +1193,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
         render: (text: any, record: any) =>
-          record.consignee.pickupPointState ? 'Active' : 'Inactive'
+          record.deliveryType === 2 ? (
+            <span>{record.consignee.pickupPointState ? 'Active' : 'Inactive'}</span>
+          ) : null
       }
     ];
     const content = (
@@ -1822,7 +1759,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                         placement="topLeft"
                         title={<FormattedMessage id="Subscription.skipThisItem" />}
                         onConfirm={() => {
-                          this.skipNextSubscription();
+                          this.skipOrCancelOrPauseNextSubscription('skip');
                         }}
                         okText="Confirm"
                         cancelText="Cancel"
@@ -1844,7 +1781,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px', fontWeight: 600 }}
                           onClick={() => {
-                            this.cancelManageAllSubscription();
+                            this.skipOrCancelOrPauseNextSubscription('cancel');
                           }}
                         >
                           <i className="iconfont iconbtn-cancelall" />
@@ -1855,7 +1792,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px' }}
                           onClick={() => {
-                            this.pauseManageAllSubscription();
+                            this.skipOrCancelOrPauseNextSubscription('pause');
                           }}
                         >
                           <i className="iconfont iconbtn-pause" />

@@ -620,6 +620,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     // 切换pickup地址时，获取pick point 状态
     if (deliveryAddressInfo.receiveType === 'PICK_UP') {
+      this.setState({addressLoading: true})
       await webapi.getPickupPointStatus(deliveryAddressId).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -652,7 +653,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         .then(() => {})
         .catch((error) => {
           this.setState({
-            tempolineApiError: error.message
+            tempolineApiError: error.message,
+            addressLoading: false
           });
           return;
         });
@@ -967,7 +969,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         checkedSubscriptionIdList.map((item) => {
           if (ele.subscribeId === item) {
             subscribeGoods.push({
-              goodsInfoId: ele.goodsResponse.goodsInfoId,
+              goodsInfoId: ele.goodsResponse.skuId,
               quantity: ele.goodsResponse.subscribeNum
             });
           }

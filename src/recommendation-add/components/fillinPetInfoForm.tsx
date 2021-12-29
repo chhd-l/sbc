@@ -33,6 +33,7 @@ class FillinPetInfoForm extends Component {
         weightList: [
             { value: 'kg', name: 'kg' }
         ],
+        apptNo:'',
         currentPet:{}
 
     }
@@ -360,13 +361,19 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
         ))
 
     }
-
+    onSearchApptNo=(e)=>{
+        console.log(e)
+        this.setState({
+            apptNo:e.target.value
+        })
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form
         let { recommendParams, petsList, funType } = this.props;
-        const { appointmentVO } = recommendParams
+        const { appointmentVO,apptNo } = recommendParams
         const { loading, sourceKeys } = this.state
+        console.log(apptNo,'apptNoapptNoapptNoapptNo')
         getFieldDecorator('keys', { initialValue: sourceKeys || [] });
         // getFieldDecorator('customerPet', { initialValue: {} });
 
@@ -398,7 +405,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                         </Col> */}
                         <Col span={8} style={{ textAlign: 'center' }}>
                             {!funType && <div >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span>{(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}</span>
                                     <QRScaner id="scan" onScanEnd={this.findByApptNo}>
                                         <Icon type="scan" style={{
@@ -409,7 +416,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                     </QRScaner>
                                 </div>
                                 <div style={{ marginTop: 3 }} className="pets-search-app">
-                                    <Search style={{ width: '100%' }} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
+                                    <Search value={apptNo||this.state.apptNo} onChange={this.onSearchApptNo} disabled={!apptNo?false:true} style={{ width: '100%' }} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
                                 </div>
 
 

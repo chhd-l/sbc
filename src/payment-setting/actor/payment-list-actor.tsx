@@ -44,10 +44,10 @@ export default class PaymentSettingActor extends Actor {
         if(field == 'isOpen' || field == 'supportSubscription' || field == 'payPspItemCardTypeVOList' || field == 'maxAmount') {
           item[field] = value
         } else {
-          if(!item.pspConfigVO) {
-            item.pspConfigVO = {}
+          if(!item.pspConfigSupplierVO) {
+            item.pspConfigSupplierVO = {}
           }
-          item.pspConfigVO[field] = value
+          item.pspConfigSupplierVO[field] = value
         }
       }
     })

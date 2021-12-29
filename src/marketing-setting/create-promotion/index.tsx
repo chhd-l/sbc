@@ -401,7 +401,8 @@ export default function index({...props}) {
    */
   const changeSteps = (current)=>{
     if(current < step){
-      setStep(current)
+      console.log('sprint8解开注释')
+      // setStep(current)
     }
   }
   return (

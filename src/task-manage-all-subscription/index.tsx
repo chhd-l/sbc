@@ -320,7 +320,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       timeSlot,
       checkedSubscriptionIdList,
       subscriptionList,
-      paymentId
+      paymentId,
+      payPspItemEnum
     } = this.state;
     this.setState({
       saveLoading: true,
@@ -366,7 +367,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       paymentId ? { paymentId: paymentId } : {},
       deliveryAddressId ? { deliveryAddressId: deliveryAddressId } : {},
       deliveryDate ? { deliveryDate: deliveryDate } : {},
-      timeSlot ? { timeSlot: timeSlot } : {}
+      timeSlot ? { timeSlot: timeSlot } : {},
+      payPspItemEnum?{paymentMethod:payPspItemEnum}:{}
     );
 
     webapi
@@ -1067,7 +1069,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Order.paymentMethod" />,
         key: 'paymentMethod',
         width: '6%',
-        render: (text: any, record: any) => record.paymentMethod
+        render: (text: any, record: any) =>
+          record.paymentMethod === 'PAYU_RUSSIA_AUTOSHIP2' ? (
+            <FormattedMessage id="Subscription.DebitOrCreditCard" />
+          ) : (
+            <FormattedMessage id="Subscription.CashOnDelivery" />
+          )
       },
       {
         title: <FormattedMessage id="weight" />,
@@ -1133,19 +1140,19 @@ export default class ManageAllSubsription extends React.Component<any, any> {
               }}
               disabled={record.subscriptionType === 'Peawee'}
             >
-              {record.subscriptionType == 'Individualization' ? (
-                individualFrequencyList.map((item: any) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              ) : (
-                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              )}
+              {record.subscriptionType == 'Individualization'
+                ? individualFrequencyList.map((item: any) => (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  ))
+                : (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map(
+                    (item) => (
+                      <Option value={item.id} key={item.id}>
+                        {item.name}
+                      </Option>
+                    )
+                  )}
             </Select>
           </div>
         )

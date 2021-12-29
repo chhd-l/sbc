@@ -310,7 +310,12 @@ class Appointment extends React.Component<any, any> {
       {
         title: RCi18n({ id: 'Appointment.Phone number' }),
         dataIndex: 'consumerPhone',
-        key: 'consumerPhone'
+        key: 'consumerPhone',
+        render: (text, record) => {
+          return (<Tooltip title={text}>
+            <div style={{ width: 100, textOverflow: 'ellipsis', overflow: 'hidden' }}>{text}</div>
+          </Tooltip>)
+        }
       },
       {
         title: RCi18n({ id: 'Appointmention.Type' }),

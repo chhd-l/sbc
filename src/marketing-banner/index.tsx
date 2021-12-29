@@ -182,8 +182,8 @@ const index = () => {
                   </Col>
                 </Row>
 
-                {/*{buttonStatus == 1 ? (*/}
-                {/*  <>*/}
+                {buttonStatus == 1 ? (
+                  <>
                     <Row gutter={[16, 16]}>
                       <Col span={1}/>
                       <Col span={3}><p  className="ant-form-item-required">Button Content</p></Col>
@@ -222,9 +222,9 @@ const index = () => {
                     {/*    <Button className="ant-btn ant-btn-primary">SAVE</Button>*/}
                     {/*  </Col>*/}
                     {/*</Row>*/}
-                  {/*</>*/}
+                  </>
 
-                  {/*):null}*/}
+                  ):null}
 
 
               </div>

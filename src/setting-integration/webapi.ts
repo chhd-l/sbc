@@ -21,8 +21,8 @@ export function updateOKTA(params:any) {
 }
 
 /************** Pet-Api **************/
-export const getPetApiInfo = () => {
-  return Fetch<TResult>('/storeConfig/getStoreConfigPetList');
+export const getPetApiInfo = (configType) => {
+  return Fetch<TResult>(`/storeConfig/queryStoreConfig/${configType}`);
 };
 
 interface UpdatePetApiParams{
@@ -41,11 +41,14 @@ export function updatePetApi(params:UpdatePetApiParams) {
 
 /************** Hub *****************/
 
-export const getHubStoreConfigList = () => {
-  return Fetch<TResult>('/storeConfig/getStoreConfigHubList');
+export const getHubStoreConfigList = (configType) => {
+  // return Fetch<TResult>('/storeConfig/getStoreConfigHubList');
+  return Fetch<TResult>(`/storeConfig/queryStoreConfig/${configType}`);
+
 };
 
 interface UpdateHubParams{
+  id: string,
   status: number,
   url: string | null
 }
@@ -53,7 +56,6 @@ export function updateHub(params:UpdateHubParams) {
   return Fetch<TResult>('/storeConfig/updateHub', {
     method: 'POST',
     body: JSON.stringify({
-      configType: 'hubConfig',
       ...params
     })
   });

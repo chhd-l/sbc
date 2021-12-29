@@ -10,7 +10,7 @@ function Step3({form}){
 
   const Context:any = useContext(FormContext);
   const { match,changeFormData,setStep,formData,formItemLayout } = Context
-  const {getFieldDecorator,validateFields} = form
+  const {getFieldDecorator, validateFields, setFieldsValue} = form
 
   const [typeOfPromotion,setTypeOfPromotion] = useState<number>(0)
   const [promotionCode,setPromotionCode] = useState<string>('')
@@ -133,11 +133,14 @@ function Step3({form}){
             <Form.Item label={<FormattedMessage id="Marketing.Prefix" />}>
               {getFieldDecorator('couponCodePrefix', {
                 initialValue: formData.PromotionType.couponCodePrefix,
+                getValueFromEvent: (e) => {
+                  return e.target.value.toUpperCase()
+                },
                 rules: [
                   {
                     validator: (_rule, value, callback) => {
                       // 最多10位的 数字 + 大写字母
-                      let reg:any = /^(?![0-9]+$)(?![A-Z]+$)[0-9A-Z]{2,10}$/
+                      let reg:any = /^[A-Z0-9]{1,10}$/
                       if (value && !reg.test(value)) {
                         callback(
                           (window as any).RCi18n({

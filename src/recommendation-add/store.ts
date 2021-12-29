@@ -129,13 +129,9 @@ export default class AppStore extends Store {
         })
       } 
       let _recommendParams = this.state().get('recommendParams').toJS()
-      let _te={ ..._recommendParams,expert:settingVO.expertNames,apptId:settingVO.id, fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
-        // console.log(_te,'-------')
+      let _te={ ..._recommendParams,expert:settingVO.expertNames,apptNo:settingVO.apptNo, apptId:settingVO.id, fillDate:moment().format('YYYY-MM-DD'),storeId:settingVO.storeId, appointmentVO: settingVO, goodsQuantity }
       this.savepetsRecommendParams(_te)
       this.dispatch('pets:list', list)
-      // felinReco.fillDate=felinReco?.fillDate??moment().format('YYYY-MM-DD')
-      // let _felinReco = { ...felinReco, expert: this.state().get('felinReco').expert }
-      // this.initDistaptch({ felinReco: _felinReco, goodsQuantity, appointmentVO: settingVO, customerPet: list.length > 0 ? list[0] : {}, list });
       if (settingVO.apptNo) {
         message.success(res.message)
       } else {

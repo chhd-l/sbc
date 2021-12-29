@@ -103,7 +103,7 @@ export default class Hub extends Component<any, any>{
               {/*    rules: [*/}
               {/*      { required: true, message: 'Please input your URL!' },*/}
               {/*      {*/}
-              {/*        pattern: /[a-zA-z]+:\/\/[^s]*/,*/}
+              {/*        pattern: /[a-zA-z]+:\/\/[^s]/,*/}
               {/*        message: 'Please enter the correct URL!'*/}
               {/*      }*/}
               {/*    ],*/}

@@ -2111,6 +2111,7 @@ export default {
   "Order.shippingFeesDiscount": "Shipping fee discount",
   "Order.purchaseType": "Purchase type",
   "Order.PSP": "PSP",
+  "Order.PaymentMode": "Payment Mode",
   "Order.cardLast4Digits": "Card Last 4 Digits",
   "Order.paymentDetails": "Payment Details",
   "Order.previewThisOrder": "Please review this order manually",

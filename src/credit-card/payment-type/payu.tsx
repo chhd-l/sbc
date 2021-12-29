@@ -22,7 +22,8 @@ interface IProps {
   storeId: number
   form: any
   cardType: any
-  fromSubscroption:any
+  fromSubscroption?:any
+  saveCardCallBack?:Function //兼容subscription 使用credit-card采用组件方式而不是路由
 }
 class PayuCreditCardForm extends Component<IProps> {
   cardNumber: any;
@@ -119,7 +120,7 @@ class PayuCreditCardForm extends Component<IProps> {
     });
   }
   async save(params) {
- 
+
     this.setState({ loading: true })
     let param = {
       binNumber: params.bin_number,
@@ -135,7 +136,12 @@ class PayuCreditCardForm extends Component<IProps> {
     const { res } = await fetchAddPaymentInfo(this.props.storeId, param);
     if (res.code == Const.SUCCESS_CODE) {
       message.success(res.message);
-      history.go(-1);
+      if(this.props.saveCardCallBack){
+        //兼容subscription 使用credit-card采用组件方式而不是路由
+        this.props.saveCardCallBack()
+      }else{
+        history.go(-1);
+      }
     }
     this.setState({ loading: false })
   }
@@ -203,7 +209,7 @@ class PayuCreditCardForm extends Component<IProps> {
             </Form.Item> */}
             </>
            }
-           
+
             <div style={{ marginTop: 10, textAlign: 'right' }}>
               <Button type="primary" htmlType="submit"> Save</Button>
             </div>

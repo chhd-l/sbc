@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
+import { Modal, Radio, Row, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
 import * as webapi from '../webapi';
-import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
+import { Const, AuthWrapper, cache, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const PaymentMethod = (props) => {
@@ -13,7 +13,7 @@ const PaymentMethod = (props) => {
   const [cards, setCards] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
 
-  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || 0;
 
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
@@ -36,7 +36,7 @@ const PaymentMethod = (props) => {
         setSelectCardId(props.cardId);
       }
     } else {
-      setSelectCardId(null)
+      setSelectCardId(null);
       setDeliveryPay(true);
     }
   }, [paymentType, props.paymentMethodVisible]);
@@ -70,7 +70,7 @@ const PaymentMethod = (props) => {
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find(x => x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.find((x) => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -81,7 +81,6 @@ const PaymentMethod = (props) => {
 
   function deleteCard(paymentId) {
     setLoading(true);
-    // const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
       .deleteCard(storeId, paymentId)
       .then((data) => {
@@ -95,8 +94,7 @@ const PaymentMethod = (props) => {
           setLoading(false);
         }
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   }
 
   function showError(paymentId) {
@@ -124,22 +122,19 @@ const PaymentMethod = (props) => {
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
-        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : (
-          storeId === 123457907 ? (
-            <AuthWrapper functionName="f_cod_payment">
-              <Radio value={'PAYU_RUSSIA_COD'}>
-                <FormattedMessage id="Subscription.CashOnDelivery" />
-              </Radio>
-            </AuthWrapper>
-          ) : null
-        )}
+        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : storeId ===
+          123457907 ? (
+          <AuthWrapper functionName="f_cod_payment">
+            <Radio value={'PAYU_RUSSIA_COD'}>
+              <FormattedMessage id="Subscription.CashOnDelivery" />
+            </Radio>
+          </AuthWrapper>
+        ) : null}
       </Radio.Group>
       {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
         <Row className="paymentDoor">
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
-            <Spin
-              spinning={loading}
-            >
+            <Spin spinning={loading}>
               <>
                 {cards.map((item, index) => (
                   <Row key={index} className="payment-panel">
@@ -176,7 +171,7 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_add_card">
-            <Button onClick={() => history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
+            <Button onClick={() => props.addNewCard()} style={{ marginTop: 20 }} type="primary">
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>
@@ -185,7 +180,7 @@ const PaymentMethod = (props) => {
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
             <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
-            <span className="ant-form-item-required"></span>
+            <span className="ant-form-item-required" />
           </Checkbox>
         </Row>
       )}

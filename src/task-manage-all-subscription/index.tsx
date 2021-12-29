@@ -28,8 +28,8 @@ import { GetDelivery } from '../delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery';
 import PaymentMethod from './component/payment-method';
-
 import { addAddress, updateAddress } from '../customer-details/webapi';
+import CreditCard from './component/credit-card';
 
 const { Option } = Select;
 const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -113,7 +113,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       subscriptionList: [],
       checkedSubscriptionIdList: [],
       tempolineApiError: '',
-      petOwnerInfo: {}
+      petOwnerInfo: {},
+      showCreditCard: false
     };
   }
 
@@ -1395,6 +1396,14 @@ export default class ManageAllSubsription extends React.Component<any, any> {
             pickupEditNumber={pickupEditNumber}
             updatePickupEditNumber={this.updatePickupEditNumber}
           />
+        ) : this.state.showCreditCard ? (
+          <CreditCard
+            customerId={this.state.customerId}
+            customerAccount={sessionStorage.getItem('taskCustomerAccount')}
+            backToManageAllSub={() => {
+              this.setState({ showCreditCard: false });
+            }}
+          />
         ) : (
           <Spin spinning={this.state.loading}>
             {' '}
@@ -1730,6 +1739,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                               });
                             }}
                             paymentMethodVisible={this.state.paymentMethodVisible}
+                            addNewCard={() => {
+                              this.setState({ showCreditCard: true });
+                            }}
                           />
                         </>
                       )}

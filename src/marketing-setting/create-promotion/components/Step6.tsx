@@ -455,7 +455,8 @@ export default function Step6({setLoading}) {
               )
             }
             {
-              formData.PromotionType.typeOfPromotion === 1 && (
+              /* sprint8 typeOfPromotion === 1 */
+              formData.PromotionType.typeOfPromotion === 100 && (
                 <>
                   <div className="step-summary-item">
                     <div className="step-summary-sub-title"><FormattedMessage id="Marketing.Prefix" />:</div>

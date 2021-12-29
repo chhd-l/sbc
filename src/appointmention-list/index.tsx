@@ -233,7 +233,7 @@ class Appointment extends React.Component<any, any> {
       if(res.context.felinRecoId){
         history.push(`/recommendation-edit/${res.context.felinRecoId}`)
       }else{
-        history.push('/recommendation')
+        history.push(`/recommendation-add?apptNo=${row.apptNo}`)
       }
     }
   }

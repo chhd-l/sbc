@@ -40,6 +40,7 @@ export default class AdyenCreditCardForm extends Component {
     storeId: number
     cardType:any
     fromSubscroption?:any
+    saveCardCallBack?:Function //兼容subscription 使用credit-card采用组件方式而不是路由
   }
   constructor(props) {
     super(props);
@@ -86,13 +87,13 @@ export default class AdyenCreditCardForm extends Component {
       showPayButton,
       showBrandIcon,
       taxNumber,
-      
+
     }).mount('#component-container');
-   
+
   }
   /**
    * 当购物者提供所需的付款详细信息时调用
-   * @param state 
+   * @param state
    */
   handlerSubmit = (state) => {
     if (state.isValid) {
@@ -113,8 +114,8 @@ export default class AdyenCreditCardForm extends Component {
   }
   /**
    * 用于本机 3D Secure 2 和本机 QR 码支付方式
-   * @param state 
-   * @param component 
+   * @param state
+   * @param component
    */
   handleOnAdditionalDetails = (state, component) => {
     // Provides the data that you need to pass in the `/payments/details` call.
@@ -123,7 +124,7 @@ export default class AdyenCreditCardForm extends Component {
   }
   /**
    * 根据他们的国家/地区、设备和付款金额获取可用付款方式的列表
-   * @param res 
+   * @param res
    */
   paymentMethodsResponse = (res) => {
     console.log(res)
@@ -148,7 +149,12 @@ export default class AdyenCreditCardForm extends Component {
    const{res}= await fetchAddPaymentInfo(storeId, params);
    if(res.code==Const.SUCCESS_CODE){
      message.success(res.message);
-     history.go(-1);
+     if(this.props.saveCardCallBack){
+       //兼容subscription 使用credit-card采用组件方式而不是路由
+       this.props.saveCardCallBack()
+     }else{
+       history.go(-1);
+     }
    }
     this.setState({loading:false})
   }

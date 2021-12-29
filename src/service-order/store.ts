@@ -37,7 +37,8 @@ export default class AppStore extends Store {
     if (key != '0') {
       form['tradeState']['flowState'] = key;
     }
-    form['orderType'] = 'FELINE_ORDER';
+    form['orderType'] = 'SINGLE_PURCHASE';
+    form['orderSource'] ='L_ATELIER_FELIN';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {

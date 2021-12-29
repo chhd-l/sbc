@@ -28,10 +28,10 @@ export default class PetApi extends Component<any, any>{
     let { res } = await webapi.getPetApiInfo('petConfig');
     this.setState({loading: false})
     if (res.code === Const.SUCCESS_CODE){
-      let {countryCode, url, id} = res.context;
+      let {code, url, id} = res.context;
       this.petId = id;
       setFieldsValue({
-        countryCode,
+        countryCode: code,
         url,
       })
     }else {

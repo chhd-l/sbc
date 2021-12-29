@@ -612,7 +612,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </Option>
                 ))
               ) : (
-                ((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
+                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
                   <Option value={item.id} key={item.id}>
                     {item.name}
                   </Option>
@@ -896,7 +896,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               style={{ display: 'flex', justifyContent: 'space-between' }}
               title={<FormattedMessage id="Subscription.detail" />}
             >
-              {sessionStorage.getItem('fromTaskToSubDetail')&&storeId===123457907 &&sessionStorage.getItem('taskEventTriggerName')==='3DaysBeforeNextRefi'?(  <a
+              {sessionStorage.getItem('fromTaskToSubDetail')&&storeId===123457907 &&sessionStorage.getItem('taskEventTriggerName')==='3DaysBeforeNextRefillOrder'?(  <a
                 style={{ textAlign: 'right' }}
                 onClick={() => {
                   sessionStorage.setItem('subscriptionNo', subscriptionId);

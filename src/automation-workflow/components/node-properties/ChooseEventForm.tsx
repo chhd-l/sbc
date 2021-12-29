@@ -131,7 +131,7 @@ export default class ChooseEventForm extends Component<any, any> {
           },
           {
             title: 'Gift Inventory Warning',
-            value: 'giftInventoryWarning ',
+            value: 'giftInventoryWarning',
             key: '0-2-2'
           }
         ]

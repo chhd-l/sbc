@@ -60,11 +60,11 @@ export default class NavigationHeader extends React.Component<any, any> {
         <Row gutter={[24, 12]}>
           <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.contentHtml"/>:</Col>
           <Col span={18}>
-            <TextArea rows={6} value={footer} onChange={(e) => this.onChangeField('footer', e.target.value)}></TextArea>
+            <TextArea rows={6} value={footer} onChange={(e) => this.onChangeField('footer', e.target.value)}/>
           </Col>
         </Row>
-        <Row gutter={[24,12]}>
-          <Col span={6} push={4}>
+        <Row className='bar-button' style={{marginLeft: '-20px'}}>
+          <Col span={12}>
             <Button type="primary" disabled={!changed || footer.trim() === ''} loading={loading} onClick={this.saveData}><FormattedMessage id="Setting.save"/></Button>
           </Col>
         </Row>

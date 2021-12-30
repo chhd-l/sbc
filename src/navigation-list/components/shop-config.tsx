@@ -14,7 +14,7 @@ export default class NavigationHeader extends React.Component<any, any> {
       loading: false,
       changed: false,
       id: '',
-      hubConfigValue: false,
+      hubConfigChecked: false,
       baseConfigContext: '',
       baseHubConfigContext: ''
     }
@@ -29,7 +29,7 @@ export default class NavigationHeader extends React.Component<any, any> {
       if (data.res.code === Const.SUCCESS_CODE) {
         const {hubConfigValue, baseConfigContext, baseHubConfigContext} = data.res.context;
         this.setState({
-          hubConfigValue: !!hubConfigValue, // 1 启用hub 0不启用hub
+          hubConfigChecked: !!hubConfigValue, // 1 启用hub 0不启用hub
           baseConfigContext: decryptAES(baseConfigContext),
           baseHubConfigContext: decryptAES(baseHubConfigContext),
         });
@@ -45,10 +45,10 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   saveData = () => {
-    const {hubConfigValue, baseConfigContext, baseHubConfigContext} = this.state;
+    const {hubConfigChecked, baseConfigContext, baseHubConfigContext} = this.state;
     this.setState({ loading: true });
     saveShopConfig({
-      hubConfigValue: hubConfigValue ? 1 : 0, // 1 启用hub 0不启用hub
+      hubConfigValue: hubConfigChecked ? 1 : 0, // 1 启用hub 0不启用hub
       baseConfigContext,
       baseHubConfigContext
     }).then(data => {
@@ -60,25 +60,25 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   render() {
-    const { hubConfigValue, baseConfigContext, baseHubConfigContext, loading, changed } = this.state;
+    const { hubConfigChecked, baseConfigContext, baseHubConfigContext, loading, changed } = this.state;
     return (
       <div style={{paddingBottom: '20px'}}>
         <Row gutter={[24, 12]}>
           <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.enabledHub"/>:</Col>
           <Col span={18}>
-            <Switch checked={hubConfigValue} onChange={(e) => this.onChangeField('hubConfigValue', e)} />
+            <Switch checked={hubConfigChecked} onChange={(e) => this.onChangeField('hubConfigChecked', e)} />
           </Col>
         </Row>
         <Row gutter={[24, 12]}>
           <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.Content"/>:</Col>
           <Col span={18}>
-            <TextArea rows={6} value={baseConfigContext} onChange={(e) => this.onChangeField('baseConfigContext', e.target.value)}></TextArea>
+            <TextArea rows={6} value={baseConfigContext} onChange={(e) => this.onChangeField('baseConfigContext', e.target.value)}/>
           </Col>
         </Row>
         <Row gutter={[24, 12]}>
           <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.hubContent"/>:</Col>
           <Col span={18}>
-            <TextArea rows={6} value={baseHubConfigContext} onChange={(e) => this.onChangeField('baseHubConfigContext', e.target.value)}></TextArea>
+            <TextArea rows={6} value={baseHubConfigContext} onChange={(e) => this.onChangeField('baseHubConfigContext', e.target.value)}/>
           </Col>
         </Row>
         <Row className='bar-button' style={{marginLeft: '-20px'}}>

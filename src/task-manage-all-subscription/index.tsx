@@ -1046,7 +1046,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="task.AssociateSubscription" />,
         width: '7%',
-        key:'index',
+        key: 'index',
         render: (text, record) =>
           record.showCheckBox ? (
             <Checkbox
@@ -1101,14 +1101,14 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="weight" />,
-        key:'weight',
+        key: 'weight',
         width: '5%',
         render: (text: any, record: any) => record.goodsResponse.specText
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
         width: '7%',
-        key:'externalSku',
+        key: 'externalSku',
         render: (text: any, record: any) => record.goodsResponse.externalSku
       },
       {
@@ -1168,19 +1168,16 @@ export default class ManageAllSubscription extends React.Component<any, any> {
               }}
               disabled={record.subscriptionType === 'Peawee'}
             >
-              {record.subscriptionType == 'Individualization'
-                ? individualFrequencyList.map((item: any) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))
-                : (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map(
-                    (item) => (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    )
-                  )}
+              {(record.subscriptionType == 'Individualization'
+                ? individualFrequencyList
+                : record.subscriptionType === 'Club'
+                ? frequencyClubList
+                : frequencyList
+              ).map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </div>
         )
@@ -1193,7 +1190,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
         render: (text: any, record: any) => (
           <div>
             <span>
-              {(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'') +
+              {(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '') +
                 ' ' +
                 (+record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice).toFixed(
                   record.subscriptionType == 'Individualization' ? 4 : 2
@@ -1210,7 +1207,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
-        key:'timeSlot',
+        key: 'timeSlot',
         render: (text: any, record: any) => (
           <span>
             {record?.deliveryDate}
@@ -1221,7 +1218,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,
-        key:'DeliveryMethod',
+        key: 'DeliveryMethod',
         render: (text: any, record: any) =>
           record.deliveryType === 1
             ? 'Home Delivery'
@@ -1231,7 +1228,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
-        key:'pickPointStatus',
+        key: 'pickPointStatus',
         render: (text: any, record: any) =>
           record.deliveryType === 2 ? (
             <span>{record.consignee.pickupPointState ? 'Active' : 'Inactive'}</span>

@@ -129,8 +129,7 @@ function Step3({form}){
           </>
         )}
         {
-          /* sprint8 typeOfPromotion === 1 */
-          typeOfPromotion === 100 && (
+          typeOfPromotion === 1 && (
             <Form.Item label={<FormattedMessage id="Marketing.Prefix" />}>
               {getFieldDecorator('couponCodePrefix', {
                 initialValue: formData.PromotionType.couponCodePrefix,

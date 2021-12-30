@@ -59,7 +59,7 @@ const NEW_ADDRESS_TEMPLATE = {
 /**
  * Manage All Subscription
  */
-export default class ManageAllSubsription extends React.Component<any, any> {
+export default class ManageAllSubscription extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +68,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       frequencyList: [],
       individualFrequencyList: [],
       frequencyClubList: [],
-      petsId: '',
       paymentInfo: null,
       deliveryAddressId: '',
       deliveryAddressInfo: {},
@@ -77,7 +76,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       visibleShipping: false,
       pickupLoading: false,
       visibleBilling: false,
-      visiblePetInfo: false,
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
@@ -90,7 +88,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       isUnfoldedBilling: false,
       saveLoading: false,
       visibleDate: false,
-      currencySymbol: '',
       showAddressForm: false,
       addressLoading: false,
       addressItem: {},
@@ -126,8 +123,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     this.getManageAllSubscription();
     this.getDeliveryDateStatus();
     this.setState({
-      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false,
-      currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''
+      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false
     });
   }
 
@@ -214,6 +210,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
+  //获取相关数据字典
   getDict = () => {
     if (JSON.parse(sessionStorage.getItem('dict-country'))) {
       let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
@@ -312,7 +309,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   //改变订阅商品数量或者频率
   onGoodsChange = ({ field, goodsId, value, subscribeId }) => {
-    let data = this.state.subscriptionList;
+    let data = _.cloneDeep(this.state.subscriptionList);
     data = data.map((item) => {
       if (item.goodsResponse.skuId === goodsId && item.subscribeId === subscribeId) {
         if (field === 'subscribeNum') {
@@ -1023,7 +1020,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       billingAddressInfo,
       countryArr,
       billingList,
-      currencySymbol,
       visibleDate,
       paymentMethod,
       deliveryType,
@@ -1197,7 +1193,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         render: (text: any, record: any) => (
           <div>
             <span>
-              {currencySymbol +
+              {(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)||'') +
                 ' ' +
                 (+record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice).toFixed(
                   record.subscriptionType == 'Individualization' ? 4 : 2

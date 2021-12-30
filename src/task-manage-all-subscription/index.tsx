@@ -146,10 +146,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   //一个订阅含多个商品，进行订阅拆分
   handleSubscriptionGoods = (subscriptionList) => {
     let tempSubscriptionList = [];
-    subscriptionList.map((item) => {
+    const data = _.cloneDeep(subscriptionList);
+    data.map((item) => {
       item.goodsResponseVOList.map((e, index) => {
         tempSubscriptionList.push(
-          Object.assign(item, { goodsResponse: e, showCheckBox: index === 0 })
+          Object.assign({}, item, { goodsResponse: e, showCheckBox: index === 0 })
         );
       });
     });
@@ -178,6 +179,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           let subscriptionList = this.handleSubscriptionGoods(
             res?.context?.subscriptionResponseVOList
           );
+          console.log(
+            'res?.context?.subscriptionResponseVOList',
+            res?.context?.subscriptionResponseVOList
+          );
+          console.log('subscriptionList', subscriptionList);
           if (subscriptionList.length > 0) {
             this.getDict();
           }
@@ -575,9 +581,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   pickupConfirm = async () => {
     const { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
 
-    let tempPickup = Object.keys(deliveryList.length>0?deliveryList[0]:{}).reduce((pre, cur) => {
-      return Object.assign(pre, { [cur]: '' });
-    }, {});
+    let tempPickup = Object.keys(deliveryList.length > 0 ? deliveryList[0] : {}).reduce(
+      (pre, cur) => {
+        return Object.assign(pre, { [cur]: '' });
+      },
+      {}
+    );
 
     let params = Object.assign(tempPickup, pickupFormData, {
       customerId: customerId,
@@ -1041,7 +1050,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="task.AssociateSubscription" />,
         width: '7%',
-        key: 'index',
         render: (text, record) =>
           record.showCheckBox ? (
             <Checkbox
@@ -1187,7 +1195,9 @@ export default class ManageAllSubsription extends React.Component<any, any> {
             <span>
               {currencySymbol +
                 ' ' +
-                +record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice}
+                (+record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice).toFixed(
+                  record.subscriptionType == 'Individualization' ? 4 : 2
+                )}
             </span>
           </div>
         )

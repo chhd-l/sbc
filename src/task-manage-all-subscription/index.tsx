@@ -1050,6 +1050,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="task.AssociateSubscription" />,
         width: '7%',
+        key:'index',
         render: (text, record) =>
           record.showCheckBox ? (
             <Checkbox
@@ -1104,18 +1105,21 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="weight" />,
+        key:'weight',
         width: '5%',
         render: (text: any, record: any) => record.goodsResponse.specText
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
         width: '7%',
+        key:'externalSku',
         render: (text: any, record: any) => record.goodsResponse.externalSku
       },
       {
         // title: <FormattedMessage id="task.statusOfSubscription" />,
         title: <FormattedMessage id="Subscription.SubscriptionStatus" />,
         dataIndex: 'subscribeStatus',
+        key: 'subscribeStatus',
         render: (text: any, record: any) => <span>{text === '0' ? 'Active' : 'Pause'}</span>
       },
       {
@@ -1210,6 +1214,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
+        key:'timeSlot',
         render: (text: any, record: any) => (
           <span>
             {record?.deliveryDate}
@@ -1220,6 +1225,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,
+        key:'DeliveryMethod',
         render: (text: any, record: any) =>
           record.deliveryType === 1
             ? 'Home Delivery'
@@ -1229,6 +1235,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
+        key:'pickPointStatus',
         render: (text: any, record: any) =>
           record.deliveryType === 2 ? (
             <span>{record.consignee.pickupPointState ? 'Active' : 'Inactive'}</span>

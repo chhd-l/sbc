@@ -769,7 +769,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     }
   };
 
-  skipOrCancelOrPauseNextSubscription = (type) => {
+  //批量ship/cancel/pause subscription
+  skipOrCancelOrPauseSubscription = (type) => {
     this.setState({
       loading: true
     });
@@ -791,6 +792,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
+  //批量 update subscription next delivery date
   updateNextDeliveryTime = (date) => {
     const { subscriptionList, checkedSubscriptionIdList } = this.state;
     let goodsItems = [];
@@ -892,11 +894,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           showAddressForm: false
         },
         () => {
-          if (this.state.addressType === 'delivery') {
-            this.getAddressList(this.state.customerId, 'DELIVERY', true);
-          } else {
-            this.getAddressList(this.state.customerId, 'BILLING', true);
-          }
+          this.getAddressList(
+            this.state.customerId,
+            this.state.addressType === 'delivery' ? 'DELIVERY' : 'BILLING',
+            true
+          );
         }
       );
     } else {
@@ -1785,7 +1787,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                         placement="topLeft"
                         title={<FormattedMessage id="Subscription.skipThisItem" />}
                         onConfirm={() => {
-                          this.skipOrCancelOrPauseNextSubscription('skip');
+                          this.skipOrCancelOrPauseSubscription('skip');
                         }}
                         okText="Confirm"
                         cancelText="Cancel"
@@ -1807,7 +1809,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px', fontWeight: 600 }}
                           onClick={() => {
-                            this.skipOrCancelOrPauseNextSubscription('cancel');
+                            this.skipOrCancelOrPauseSubscription('cancel');
                           }}
                         >
                           <i className="iconfont iconbtn-cancelall" />
@@ -1818,7 +1820,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px' }}
                           onClick={() => {
-                            this.skipOrCancelOrPauseNextSubscription('pause');
+                            this.skipOrCancelOrPauseSubscription('pause');
                           }}
                         >
                           <i className="iconfont iconbtn-pause" />

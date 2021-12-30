@@ -59,7 +59,7 @@ const NEW_ADDRESS_TEMPLATE = {
 /**
  * Manage All Subscription
  */
-export default class ManageAllSubsription extends React.Component<any, any> {
+export default class ManageAllSubscription extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +68,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       frequencyList: [],
       individualFrequencyList: [],
       frequencyClubList: [],
-      petsId: '',
       paymentInfo: null,
       deliveryAddressId: '',
       deliveryAddressInfo: {},
@@ -77,7 +76,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       visibleShipping: false,
       pickupLoading: false,
       visibleBilling: false,
-      visiblePetInfo: false,
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
@@ -90,7 +88,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       isUnfoldedBilling: false,
       saveLoading: false,
       visibleDate: false,
-      currencySymbol: '',
       showAddressForm: false,
       addressLoading: false,
       addressItem: {},
@@ -126,8 +123,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     this.getManageAllSubscription();
     this.getDeliveryDateStatus();
     this.setState({
-      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false,
-      currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''
+      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false
     });
   }
 
@@ -146,10 +142,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   //一个订阅含多个商品，进行订阅拆分
   handleSubscriptionGoods = (subscriptionList) => {
     let tempSubscriptionList = [];
-    subscriptionList.map((item) => {
+    const data = _.cloneDeep(subscriptionList);
+    data.map((item) => {
       item.goodsResponseVOList.map((e, index) => {
         tempSubscriptionList.push(
-          Object.assign(item, { goodsResponse: e, showCheckBox: index === 0 })
+          Object.assign({}, item, { goodsResponse: e, showCheckBox: index === 0 })
         );
       });
     });
@@ -178,6 +175,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           let subscriptionList = this.handleSubscriptionGoods(
             res?.context?.subscriptionResponseVOList
           );
+          console.log(
+            'res?.context?.subscriptionResponseVOList',
+            res?.context?.subscriptionResponseVOList
+          );
+          console.log('subscriptionList', subscriptionList);
           if (subscriptionList.length > 0) {
             this.getDict();
           }
@@ -208,6 +210,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
+  //获取相关数据字典
   getDict = () => {
     if (JSON.parse(sessionStorage.getItem('dict-country'))) {
       let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
@@ -306,7 +309,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
   //改变订阅商品数量或者频率
   onGoodsChange = ({ field, goodsId, value, subscribeId }) => {
-    let data = this.state.subscriptionList;
+    let data = _.cloneDeep(this.state.subscriptionList);
     data = data.map((item) => {
       if (item.goodsResponse.skuId === goodsId && item.subscribeId === subscribeId) {
         if (field === 'subscribeNum') {
@@ -575,9 +578,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   pickupConfirm = async () => {
     const { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
 
-    let tempPickup = Object.keys(deliveryList.length>0?deliveryList[0]:{}).reduce((pre, cur) => {
-      return Object.assign(pre, { [cur]: '' });
-    }, {});
+    let tempPickup = Object.keys(deliveryList.length > 0 ? deliveryList[0] : {}).reduce(
+      (pre, cur) => {
+        return Object.assign(pre, { [cur]: '' });
+      },
+      {}
+    );
 
     let params = Object.assign(tempPickup, pickupFormData, {
       customerId: customerId,
@@ -1014,7 +1020,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       billingAddressInfo,
       countryArr,
       billingList,
-      currencySymbol,
       visibleDate,
       paymentMethod,
       deliveryType,
@@ -1096,18 +1101,21 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="weight" />,
+        key: 'weight',
         width: '5%',
         render: (text: any, record: any) => record.goodsResponse.specText
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
         width: '7%',
+        key: 'externalSku',
         render: (text: any, record: any) => record.goodsResponse.externalSku
       },
       {
         // title: <FormattedMessage id="task.statusOfSubscription" />,
         title: <FormattedMessage id="Subscription.SubscriptionStatus" />,
         dataIndex: 'subscribeStatus',
+        key: 'subscribeStatus',
         render: (text: any, record: any) => <span>{text === '0' ? 'Active' : 'Pause'}</span>
       },
       {
@@ -1160,19 +1168,16 @@ export default class ManageAllSubsription extends React.Component<any, any> {
               }}
               disabled={record.subscriptionType === 'Peawee'}
             >
-              {record.subscriptionType == 'Individualization'
-                ? individualFrequencyList.map((item: any) => (
-                    <Option value={item.id} key={item.id}>
-                      {item.name}
-                    </Option>
-                  ))
-                : (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map(
-                    (item) => (
-                      <Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Option>
-                    )
-                  )}
+              {(record.subscriptionType == 'Individualization'
+                ? individualFrequencyList
+                : record.subscriptionType === 'Club'
+                ? frequencyClubList
+                : frequencyList
+              ).map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </div>
         )
@@ -1185,9 +1190,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         render: (text: any, record: any) => (
           <div>
             <span>
-              {currencySymbol +
+              {(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '') +
                 ' ' +
-                +record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice}
+                (+record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice).toFixed(
+                  record.subscriptionType == 'Individualization' ? 4 : 2
+                )}
             </span>
           </div>
         )
@@ -1200,6 +1207,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
+        key: 'timeSlot',
         render: (text: any, record: any) => (
           <span>
             {record?.deliveryDate}
@@ -1210,6 +1218,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,
+        key: 'DeliveryMethod',
         render: (text: any, record: any) =>
           record.deliveryType === 1
             ? 'Home Delivery'
@@ -1219,6 +1228,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
+        key: 'pickPointStatus',
         render: (text: any, record: any) =>
           record.deliveryType === 2 ? (
             <span>{record.consignee.pickupPointState ? 'Active' : 'Inactive'}</span>

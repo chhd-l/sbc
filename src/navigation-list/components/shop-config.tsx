@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input, message, Row, Col, Button } from 'antd';
+import { Input, message, Row, Col, Button, Switch } from 'antd';
 import { Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { getConfigContext, saveShopConfig } from '../webapi';
+import { getShopConfig, saveShopConfig } from '../webapi';
 import { decryptAES } from '../../../web_modules/qmkit/util';
 
 const TextArea = Input.TextArea;
@@ -14,8 +14,9 @@ export default class NavigationHeader extends React.Component<any, any> {
       loading: false,
       changed: false,
       id: '',
-      header: '',
-      footer: ''
+      hubConfigValue: false,
+      baseConfigContext: '',
+      baseHubConfigContext: ''
     }
   }
 
@@ -24,12 +25,13 @@ export default class NavigationHeader extends React.Component<any, any> {
   }
 
   initData = () => {
-    getConfigContext({
-      configType: 'baseConfig'
-    }).then(data => {
+    getShopConfig().then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
+        const {hubConfigValue, baseConfigContext, baseHubConfigContext} = data.res.context;
         this.setState({
-          footer: decryptAES(data.res.context.context)
+          hubConfigValue: !!hubConfigValue, // 1 启用hub 0不启用hub
+          baseConfigContext: decryptAES(baseConfigContext),
+          baseHubConfigContext: decryptAES(baseHubConfigContext),
         });
       }
     });
@@ -43,9 +45,12 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   saveData = () => {
+    const {hubConfigValue, baseConfigContext, baseHubConfigContext} = this.state;
     this.setState({ loading: true });
     saveShopConfig({
-      context: this.state.footer
+      hubConfigValue: hubConfigValue ? 1 : 0, // 1 启用hub 0不启用hub
+      baseConfigContext,
+      baseHubConfigContext
     }).then(data => {
       if (data.res.code === Const.SUCCESS_CODE) {
         message.success(RCi18n({id:'Setting.Operationsuccessful'}));
@@ -55,18 +60,37 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   render() {
-    const { footer, loading, changed } = this.state;
+    const { hubConfigValue, baseConfigContext, baseHubConfigContext, loading, changed } = this.state;
     return (
-      <div>
+      <div style={{paddingBottom: '20px'}}>
         <Row gutter={[24, 12]}>
-          <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Menu.Content"/>:</Col>
+          <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.enabledHub"/>:</Col>
           <Col span={18}>
-            <TextArea rows={6} value={footer} onChange={(e) => this.onChangeField('footer', e.target.value)}></TextArea>
+            <Switch checked={hubConfigValue} onChange={(e) => this.onChangeField('hubConfigValue', e)} />
           </Col>
         </Row>
-        <Row gutter={[24,12]}>
-          <Col span={6} push={4}>
-            <Button type="primary" disabled={!changed || footer.trim() === ''} loading={loading} onClick={this.saveData}><FormattedMessage id="Setting.save"/></Button>
+        <Row gutter={[24, 12]}>
+          <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.Content"/>:</Col>
+          <Col span={18}>
+            <TextArea rows={6} value={baseConfigContext} onChange={(e) => this.onChangeField('baseConfigContext', e.target.value)}></TextArea>
+          </Col>
+        </Row>
+        <Row gutter={[24, 12]}>
+          <Col span={4} style={{textAlign:'right',color:'#333'}}><FormattedMessage id="Setting.hubContent"/>:</Col>
+          <Col span={18}>
+            <TextArea rows={6} value={baseHubConfigContext} onChange={(e) => this.onChangeField('baseHubConfigContext', e.target.value)}></TextArea>
+          </Col>
+        </Row>
+        <Row className='bar-button' style={{marginLeft: '-20px'}}>
+          <Col span={12}>
+            <Button
+              type="primary"
+              disabled={!changed || baseConfigContext.trim() === '' || baseHubConfigContext.trim() === ''}
+              loading={loading}
+              onClick={this.saveData}
+            >
+              <FormattedMessage id="Setting.save"/>
+            </Button>
           </Col>
         </Row>
       </div>

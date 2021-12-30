@@ -229,9 +229,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode
           };
-          console.log('subscriptionType',subscriptionDetail.subscriptionType);
-          const frequencyList=subscriptionDetail.subscriptionType==='Club'?this.state.frequencyClubList:this.state.frequencyList
-          console.log('frequencyList',frequencyList)
           this.setState(
             {
               subscribeGoods: subscribeGoods,

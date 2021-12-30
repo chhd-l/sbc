@@ -87,6 +87,7 @@ export default class PrescribInformation extends React.Component<Iprop, any> {
     this.setState({ editLoading: true });
     editPrescriberId({
       customerId: this.props.customerId,
+      prescriberPrimaryKey: id,
       prescriberIdBefore: prescriber.prescriberId,
       prescriberIdAfter: prescriber.newPrescriberId
     }).then(data => {

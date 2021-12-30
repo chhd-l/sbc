@@ -1,5 +1,5 @@
 import React from 'react';
-import { Const, Headline, history } from 'qmkit';
+import { Const, Headline, history,ValidConst } from 'qmkit';
 import { Radio, Button, Form, Breadcrumb, Input, Spin, Row, Col } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
@@ -361,7 +361,15 @@ class NewAppointment extends React.Component<any, any> {
             <Form.Item label={RCi18n({ id: 'Appointment.Phone number' })}>
               {getFieldDecorator('consumerPhone', {
                 initialValue: params.consumerPhone || '',
-                rules: [{ required: true, message: 'Phone number is required' }]
+                rules: [{ message: 'Phone number is required' },
+                  {required: true,validator:(rule, value, callback)=>{
+                    if(!ValidConst.validatePhoneNumber().test(value)){
+                      callback('Phone number is error')
+                    }else{
+                      callback()
+                    }
+                  }}
+              ]
               })(<Input />)}
             </Form.Item>
             <Form.Item label={RCi18n({ id: 'Appointment.Consumer email' })}>

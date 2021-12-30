@@ -406,3 +406,14 @@ export function validPostCodeBlock(postCode) {
     method: 'GET'
   });
 }
+
+//修改prescriber id
+export function editPrescriberId(params = {}) {
+  return Fetch<TResult>('/prescriber/modify-id', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params,
+      storeId: JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || ''
+    })
+  });
+}

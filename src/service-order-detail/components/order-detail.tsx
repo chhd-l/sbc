@@ -128,7 +128,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
-    const appointInfo = detail.get('settingVO').toJS();
+    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():{};
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -461,7 +461,7 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={
+                    title={detail.get('appointmentDate')?(
                       <div>
                         {
                           this._handleFelinAppointTime(detail.get('appointmentDate'))
@@ -470,12 +470,21 @@ class OrderDetailTab extends React.Component<any, any> {
                         -
                         {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                       </div>
+                      ):null
                     }
                   >
                     <p className="overFlowtext">
                       <FormattedMessage id="Order.appointmentTime" />:{' '}
-                      {this._handleFelinAppointTime(detail.get('appointmentDate')).appointStartTime}
-                      -{this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
+                      {detail.get('appointmentDate')?(
+                        <div>
+                          {
+                            this._handleFelinAppointTime(detail.get('appointmentDate'))
+                              .appointStartTime
+                          }
+                          -
+                          {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
+                        </div>
+                      ):null}
                     </p>
                   </Tooltip>
                   <p>

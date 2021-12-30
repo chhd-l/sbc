@@ -137,7 +137,7 @@ export default class ForcastList extends React.Component<any, any> {
           return {
             title: Object.keys(item)[0],
             dataIndex: `futureListArr[${index}]`,
-            width: 150,
+            width: 100,
             key: 'f' + index
           };
         });

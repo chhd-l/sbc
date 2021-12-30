@@ -43,6 +43,13 @@ export default class NavigationHeader extends React.Component<any, any> {
   };
 
   saveData = () => {
+    const { footer } = this.state;
+    try {
+      JSON.parse(footer);
+    } catch(e) {
+      message.error(e.message);
+      return;
+    }
     this.setState({ loading: true });
     saveShopConfig({
       context: this.state.footer

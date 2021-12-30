@@ -370,7 +370,7 @@ class NewAppointment extends React.Component<any, any> {
                     }
                   }}
               ]
-              })(<Input placeholder='(+33) 5 55 55 55 55'/>)}
+              })(<Input />)}
             </Form.Item>
             <Form.Item label={RCi18n({ id: 'Appointment.Consumer email' })}>
               {getFieldDecorator('consumerEmail', {

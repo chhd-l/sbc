@@ -35,6 +35,7 @@ import {
   cancelManageAllSubscription,
   pauseManageAllSubscription
 } from './webapi';
+import _ from 'lodash';
 
 const { Option } = Select;
 const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -155,6 +156,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     return tempSubscriptionList;
   };
 
+  //获取task全部的subscription
   getManageAllSubscription = () => {
     this.setState({
       loading: true,
@@ -173,19 +175,28 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getDict();
           let subscriptionList = this.handleSubscriptionGoods(
-            res.context.subscriptionResponseVOList
+            res?.context?.subscriptionResponseVOList
           );
+          if (subscriptionList.length > 0) {
+            this.getDict();
+          }
+          const customerId = res.context?.customerVO?.customerId;
           this.setState(
             {
               subscriptionList: subscriptionList,
               petOwnerInfo: subscriptionList.length > 0 ? subscriptionList[0] : {},
-              customerId: res.context.customerVO.customerId
+              customerId: customerId
+                ? customerId
+                : subscriptionList.length > 0
+                ? subscriptionList[0]?.customerId
+                : ''
             },
             () => {
-              this.getAddressList(this.state.customerId, 'DELIVERY');
-              this.getAddressList(this.state.customerId, 'BILLING');
+              if (this.state.customerId) {
+                this.getAddressList(this.state.customerId, 'DELIVERY');
+                this.getAddressList(this.state.customerId, 'BILLING');
+              }
             }
           );
         }
@@ -293,10 +304,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
-  onGoodsChange = ({ field, goodsId, value,subscribeId }) => {
+  //改变订阅商品数量或者频率
+  onGoodsChange = ({ field, goodsId, value, subscribeId }) => {
     let data = this.state.subscriptionList;
     data = data.map((item) => {
-      if (item.goodsResponse.skuId === goodsId&&item.subscribeId===subscribeId) {
+      if (item.goodsResponse.skuId === goodsId && item.subscribeId === subscribeId) {
         if (field === 'subscribeNum') {
           item.goodsResponse.subscribeNum = value;
         } else {
@@ -310,6 +322,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     });
   };
 
+  //save subscription update
   updateSubscription = () => {
     const {
       deliveryAddressId,
@@ -368,7 +381,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       deliveryAddressId ? { deliveryAddressId: deliveryAddressId } : {},
       deliveryDate ? { deliveryDate: deliveryDate } : {},
       timeSlot ? { timeSlot: timeSlot } : {},
-      payPspItemEnum?{paymentMethod:payPspItemEnum}:{}
+      payPspItemEnum ? { paymentMethod: payPspItemEnum } : {}
     );
 
     webapi
@@ -431,6 +444,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     return '';
   };
 
+  //获取编辑地址弹框里的地址列表
   getAddressList = (customerId, type, showModal = false) => {
     const { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
@@ -620,7 +634,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     // 切换pickup地址时，获取pick point 状态
     if (deliveryAddressInfo.receiveType === 'PICK_UP') {
-      this.setState({addressLoading: true})
+      this.setState({ addressLoading: true });
       await webapi.getPickupPointStatus(deliveryAddressId).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -772,7 +786,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
         }
       })
-      .finally(() => {
+      .catch(() => {
         this.setState({ loading: false });
       });
   };
@@ -1113,7 +1127,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                     field: 'subscribeNum',
                     goodsId: record.goodsResponse.skuId,
                     value,
-                    subscribeId:record.subscribeId
+                    subscribeId: record.subscribeId
                   });
                 }}
                 value={record.goodsResponse.subscribeNum}
@@ -1139,7 +1153,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                   field: 'periodTypeId',
                   goodsId: record.goodsResponse.skuId,
                   value,
-                  subscribeId:record.subscribeId
+                  subscribeId: record.subscribeId
                 });
               }}
               disabled={record.subscriptionType === 'Peawee'}
@@ -1400,6 +1414,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                     columns={columns}
                     dataSource={subscriptionList}
                     pagination={false}
+                    key={subscriptionList.length}
                   />
                 </Col>
               </Row>

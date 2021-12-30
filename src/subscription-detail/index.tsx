@@ -598,26 +598,11 @@ class SubscriptionDetail extends React.Component<any, any> {
           <div className="subscription_delivery_frequency">
 
             <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
-              {/* {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
+              {(subscriptionInfo.subscriptionType == 'Individualization'?individualFrequencyList:subscriptionInfo.subscriptionType == 'Club' ? frequencyClubList : frequencyList).map((item: any) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>
-              ))} */}
-
-              {/* individualFrequencyList */}
-              {subscriptionInfo.subscriptionType == 'Individualization' ? (
-                individualFrequencyList.map((item: any) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              ) : (
-                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              )}
+              ))}
             </Select>
           </div>
         )

@@ -46,6 +46,13 @@ export default class NavigationHeader extends React.Component<any, any> {
 
   saveData = () => {
     const {hubConfigChecked, baseConfigContext, baseHubConfigContext} = this.state;
+    try {
+      JSON.parse(baseConfigContext);
+      JSON.parse(baseHubConfigContext);
+    } catch(e) {
+      message.error(e.message);
+      return;
+    }
     this.setState({ loading: true });
     saveShopConfig({
       hubConfigValue: hubConfigChecked ? 1 : 0, // 1 启用hub 0不启用hub

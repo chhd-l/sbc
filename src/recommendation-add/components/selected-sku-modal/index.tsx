@@ -76,6 +76,7 @@ class GoodsModal extends React.Component<any, any> {
             message.error(`Choose up to ${skuLimit} items`);
             // message.error('Choose up to 20 items');
           } else {
+            if(this.state.selectedSkuIds.length==0)return
             onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows.toJS());
           }
         }}

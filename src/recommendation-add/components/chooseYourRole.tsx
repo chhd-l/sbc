@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Form, Input, Select, Spin, Button } from 'antd';
-import { noop, SelectGroup } from 'qmkit';
+import { history, noop, SelectGroup } from 'qmkit';
 import { Relax } from 'plume2';
 import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -15,14 +15,16 @@ class ChooseYourRole extends React.Component<any, any> {
       recommendParams:IMap,
       onChangeStep: Function
       savepetsRecommendParams: Function,
-      getGoodsInfoPage: Function
+      getGoodsInfoPage: Function,
+      findByApptNo:Function
     };
   }
   static relaxProps = {
     recommendParams: 'recommendParams',
     onChangeStep: noop,
     savepetsRecommendParams: noop,
-    getGoodsInfoPage: noop
+    getGoodsInfoPage: noop,
+    findByApptNo:noop
   };
   state = {
     options: [
@@ -49,6 +51,20 @@ class ChooseYourRole extends React.Component<any, any> {
     super(props);
   }
   async componentDidMount() {
+
+      let apptNo=history.location.search
+      if(apptNo){
+        apptNo=apptNo.split('=')[1]
+        const { findByApptNo ,onChangeStep} = this.props.relaxProps;
+        findByApptNo(apptNo)
+        setTimeout(() => {
+          onChangeStep(1);
+         }, 300);
+      }
+
+
+
+
   }
   _onChange=(value)=>{
     this.setState({

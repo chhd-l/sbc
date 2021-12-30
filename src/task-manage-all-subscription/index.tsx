@@ -35,6 +35,7 @@ import {
   cancelManageAllSubscription,
   pauseManageAllSubscription
 } from './webapi';
+import _ from 'lodash';
 
 const { Option } = Select;
 const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -58,7 +59,7 @@ const NEW_ADDRESS_TEMPLATE = {
 /**
  * Manage All Subscription
  */
-export default class ManageAllSubsription extends React.Component<any, any> {
+export default class ManageAllSubscription extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -67,7 +68,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       frequencyList: [],
       individualFrequencyList: [],
       frequencyClubList: [],
-      petsId: '',
       paymentInfo: null,
       deliveryAddressId: '',
       deliveryAddressInfo: {},
@@ -76,7 +76,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       visibleShipping: false,
       pickupLoading: false,
       visibleBilling: false,
-      visiblePetInfo: false,
       countryArr: [],
       billingCityArr: [],
       deliveryCityArr: [],
@@ -89,7 +88,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       isUnfoldedBilling: false,
       saveLoading: false,
       visibleDate: false,
-      currencySymbol: '',
       showAddressForm: false,
       addressLoading: false,
       addressItem: {},
@@ -125,8 +123,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     this.getManageAllSubscription();
     this.getDeliveryDateStatus();
     this.setState({
-      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false,
-      currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''
+      pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false
     });
   }
 
@@ -145,16 +142,18 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   //一个订阅含多个商品，进行订阅拆分
   handleSubscriptionGoods = (subscriptionList) => {
     let tempSubscriptionList = [];
-    subscriptionList.map((item) => {
+    const data = _.cloneDeep(subscriptionList);
+    data.map((item) => {
       item.goodsResponseVOList.map((e, index) => {
         tempSubscriptionList.push(
-          Object.assign(item, { goodsResponse: e, showCheckBox: index === 0 })
+          Object.assign({}, item, { goodsResponse: e, showCheckBox: index === 0 })
         );
       });
     });
     return tempSubscriptionList;
   };
 
+  //获取task全部的subscription
   getManageAllSubscription = () => {
     this.setState({
       loading: true,
@@ -173,19 +172,33 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getDict();
           let subscriptionList = this.handleSubscriptionGoods(
-            res.context.subscriptionResponseVOList
+            res?.context?.subscriptionResponseVOList
           );
+          console.log(
+            'res?.context?.subscriptionResponseVOList',
+            res?.context?.subscriptionResponseVOList
+          );
+          console.log('subscriptionList', subscriptionList);
+          if (subscriptionList.length > 0) {
+            this.getDict();
+          }
+          const customerId = res.context?.customerVO?.customerId;
           this.setState(
             {
               subscriptionList: subscriptionList,
               petOwnerInfo: subscriptionList.length > 0 ? subscriptionList[0] : {},
-              customerId: res.context.customerVO.customerId
+              customerId: customerId
+                ? customerId
+                : subscriptionList.length > 0
+                ? subscriptionList[0]?.customerId
+                : ''
             },
             () => {
-              this.getAddressList(this.state.customerId, 'DELIVERY');
-              this.getAddressList(this.state.customerId, 'BILLING');
+              if (this.state.customerId) {
+                this.getAddressList(this.state.customerId, 'DELIVERY');
+                this.getAddressList(this.state.customerId, 'BILLING');
+              }
             }
           );
         }
@@ -197,6 +210,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
+  //获取相关数据字典
   getDict = () => {
     if (JSON.parse(sessionStorage.getItem('dict-country'))) {
       let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
@@ -293,10 +307,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       });
   };
 
-  onGoodsChange = ({ field, goodsId, value }) => {
-    let data = this.state.subscriptionList;
+  //改变订阅商品数量或者频率
+  onGoodsChange = ({ field, goodsId, value, subscribeId }) => {
+    let data = _.cloneDeep(this.state.subscriptionList);
     data = data.map((item) => {
-      if (item.goodsResponse.skuId === goodsId) {
+      if (item.goodsResponse.skuId === goodsId && item.subscribeId === subscribeId) {
         if (field === 'subscribeNum') {
           item.goodsResponse.subscribeNum = value;
         } else {
@@ -310,6 +325,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     });
   };
 
+  //save subscription update
   updateSubscription = () => {
     const {
       deliveryAddressId,
@@ -320,7 +336,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       timeSlot,
       checkedSubscriptionIdList,
       subscriptionList,
-      paymentId
+      paymentId,
+      payPspItemEnum
     } = this.state;
     this.setState({
       saveLoading: true,
@@ -366,7 +383,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       paymentId ? { paymentId: paymentId } : {},
       deliveryAddressId ? { deliveryAddressId: deliveryAddressId } : {},
       deliveryDate ? { deliveryDate: deliveryDate } : {},
-      timeSlot ? { timeSlot: timeSlot } : {}
+      timeSlot ? { timeSlot: timeSlot } : {},
+      payPspItemEnum ? { paymentMethod: payPspItemEnum } : {}
     );
 
     webapi
@@ -429,6 +447,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     return '';
   };
 
+  //获取编辑地址弹框里的地址列表
   getAddressList = (customerId, type, showModal = false) => {
     const { deliveryAddressInfo, pickupIsOpen, pickupEditNumber } = this.state;
     webapi.getAddressListByType(customerId, type).then((data) => {
@@ -559,9 +578,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
   pickupConfirm = async () => {
     const { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
 
-    let tempPickup = Object.keys(deliveryList[0]).reduce((pre, cur) => {
-      return Object.assign(pre, { [cur]: '' });
-    }, {});
+    let tempPickup = Object.keys(deliveryList.length > 0 ? deliveryList[0] : {}).reduce(
+      (pre, cur) => {
+        return Object.assign(pre, { [cur]: '' });
+      },
+      {}
+    );
 
     let params = Object.assign(tempPickup, pickupFormData, {
       customerId: customerId,
@@ -618,6 +640,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
 
     // 切换pickup地址时，获取pick point 状态
     if (deliveryAddressInfo.receiveType === 'PICK_UP') {
+      this.setState({ addressLoading: true });
       await webapi.getPickupPointStatus(deliveryAddressId).then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -650,7 +673,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         .then(() => {})
         .catch((error) => {
           this.setState({
-            tempolineApiError: error.message
+            tempolineApiError: error.message,
+            addressLoading: false
           });
           return;
         });
@@ -751,7 +775,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
     }
   };
 
-  skipOrCancelOrPauseNextSubscription = (type) => {
+  //批量ship/cancel/pause subscription
+  skipOrCancelOrPauseSubscription = (type) => {
     this.setState({
       loading: true
     });
@@ -768,11 +793,12 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
         }
       })
-      .finally(() => {
+      .catch(() => {
         this.setState({ loading: false });
       });
   };
 
+  //批量 update subscription next delivery date
   updateNextDeliveryTime = (date) => {
     const { subscriptionList, checkedSubscriptionIdList } = this.state;
     let goodsItems = [];
@@ -874,11 +900,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
           showAddressForm: false
         },
         () => {
-          if (this.state.addressType === 'delivery') {
-            this.getAddressList(this.state.customerId, 'DELIVERY', true);
-          } else {
-            this.getAddressList(this.state.customerId, 'BILLING', true);
-          }
+          this.getAddressList(
+            this.state.customerId,
+            this.state.addressType === 'delivery' ? 'DELIVERY' : 'BILLING',
+            true
+          );
         }
       );
     } else {
@@ -965,7 +991,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         checkedSubscriptionIdList.map((item) => {
           if (ele.subscribeId === item) {
             subscribeGoods.push({
-              goodsInfoId: ele.goodsResponse.goodsInfoId,
+              goodsInfoId: ele.goodsResponse.skuId,
               quantity: ele.goodsResponse.subscribeNum
             });
           }
@@ -994,7 +1020,6 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       billingAddressInfo,
       countryArr,
       billingList,
-      currencySymbol,
       visibleDate,
       paymentMethod,
       deliveryType,
@@ -1043,7 +1068,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Subscription.SubscriptionNumber" />,
         dataIndex: 'subscribeId',
         key: 'subscribeId',
-        width: '7%'
+        width: '8%'
       },
       {
         title: <FormattedMessage id="product.productName" />,
@@ -1067,22 +1092,30 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         title: <FormattedMessage id="Order.paymentMethod" />,
         key: 'paymentMethod',
         width: '6%',
-        render: (text: any, record: any) => record.paymentMethod
+        render: (text: any, record: any) =>
+          record.paymentMethod === 'PAYU_RUSSIA_AUTOSHIP2' ? (
+            <FormattedMessage id="Subscription.DebitOrCreditCard" />
+          ) : (
+            <FormattedMessage id="Subscription.CashOnDelivery" />
+          )
       },
       {
         title: <FormattedMessage id="weight" />,
+        key: 'weight',
         width: '5%',
         render: (text: any, record: any) => record.goodsResponse.specText
       },
       {
         title: <FormattedMessage id="Product.ExternalSKU" />,
-        dataIndex: 'externalSubscribeId',
-        width: '7%'
+        width: '7%',
+        key: 'externalSku',
+        render: (text: any, record: any) => record.goodsResponse.externalSku
       },
       {
         // title: <FormattedMessage id="task.statusOfSubscription" />,
         title: <FormattedMessage id="Subscription.SubscriptionStatus" />,
         dataIndex: 'subscribeStatus',
+        key: 'subscribeStatus',
         render: (text: any, record: any) => <span>{text === '0' ? 'Active' : 'Pause'}</span>
       },
       {
@@ -1103,7 +1136,8 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                   this.onGoodsChange({
                     field: 'subscribeNum',
                     goodsId: record.goodsResponse.skuId,
-                    value
+                    value,
+                    subscribeId: record.subscribeId
                   });
                 }}
                 value={record.goodsResponse.subscribeNum}
@@ -1128,24 +1162,22 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                 this.onGoodsChange({
                   field: 'periodTypeId',
                   goodsId: record.goodsResponse.skuId,
-                  value
+                  value,
+                  subscribeId: record.subscribeId
                 });
               }}
               disabled={record.subscriptionType === 'Peawee'}
             >
-              {record.subscriptionType == 'Individualization' ? (
-                individualFrequencyList.map((item: any) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              ) : (
-                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              )}
+              {(record.subscriptionType == 'Individualization'
+                ? individualFrequencyList
+                : record.subscriptionType === 'Club'
+                ? frequencyClubList
+                : frequencyList
+              ).map((item) => (
+                <Option value={item.id} key={item.id}>
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </div>
         )
@@ -1158,9 +1190,11 @@ export default class ManageAllSubsription extends React.Component<any, any> {
         render: (text: any, record: any) => (
           <div>
             <span>
-              {currencySymbol +
+              {(sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || '') +
                 ' ' +
-                +record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice}
+                (+record.goodsResponse.subscribeNum * +record.goodsResponse.subscribePrice).toFixed(
+                  record.subscriptionType == 'Individualization' ? 4 : 2
+                )}
             </span>
           </div>
         )
@@ -1173,6 +1207,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.timeSlot" />,
         width: '8%',
+        key: 'timeSlot',
         render: (text: any, record: any) => (
           <span>
             {record?.deliveryDate}
@@ -1183,6 +1218,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Subscription.DeliveryMethod" />,
+        key: 'DeliveryMethod',
         render: (text: any, record: any) =>
           record.deliveryType === 1
             ? 'Home Delivery'
@@ -1192,6 +1228,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="task.pickPointStatus" />,
+        key: 'pickPointStatus',
         render: (text: any, record: any) =>
           record.deliveryType === 2 ? (
             <span>{record.consignee.pickupPointState ? 'Active' : 'Inactive'}</span>
@@ -1389,6 +1426,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                     columns={columns}
                     dataSource={subscriptionList}
                     pagination={false}
+                    key={subscriptionList.length}
                   />
                 </Col>
               </Row>
@@ -1718,7 +1756,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           </p>
                         </Col>
                       </>
-                    ) : paymentMethod.indexOf('COD') !== -1 ? (
+                    ) : this.state.payPspItemEnum.indexOf('COD') !== -1 ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
@@ -1759,7 +1797,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                         placement="topLeft"
                         title={<FormattedMessage id="Subscription.skipThisItem" />}
                         onConfirm={() => {
-                          this.skipOrCancelOrPauseNextSubscription('skip');
+                          this.skipOrCancelOrPauseSubscription('skip');
                         }}
                         okText="Confirm"
                         cancelText="Cancel"
@@ -1781,7 +1819,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px', fontWeight: 600 }}
                           onClick={() => {
-                            this.skipOrCancelOrPauseNextSubscription('cancel');
+                            this.skipOrCancelOrPauseSubscription('cancel');
                           }}
                         >
                           <i className="iconfont iconbtn-cancelall" />
@@ -1792,7 +1830,7 @@ export default class ManageAllSubsription extends React.Component<any, any> {
                           type="link"
                           style={{ padding: '0 5px' }}
                           onClick={() => {
-                            this.skipOrCancelOrPauseNextSubscription('pause');
+                            this.skipOrCancelOrPauseSubscription('pause');
                           }}
                         >
                           <i className="iconfont iconbtn-pause" />

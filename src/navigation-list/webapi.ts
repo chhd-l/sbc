@@ -84,10 +84,12 @@ export function saveCookieBanner(params = {}) {
   });
 }
 
-
+export function getShopConfig() {
+  return Fetch<TResult>('/storeConfig/findShopConfig');
+}
 
 export function saveShopConfig(params = {}) {
-  return Fetch<TResult>('/storeConfig/update', {
+  return Fetch<TResult>('/storeConfig/editShopConfig', {
     method: 'POST',
     body: JSON.stringify(params)
   });

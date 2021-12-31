@@ -36,6 +36,7 @@ import {
   pauseManageAllSubscription
 } from './webapi';
 import _ from 'lodash';
+import { getSubscriptionAllSysDictionary } from './module/querySysDictionary';
 
 const { Option } = Select;
 const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -175,13 +176,14 @@ export default class ManageAllSubscription extends React.Component<any, any> {
           let subscriptionList = this.handleSubscriptionGoods(
             res?.context?.subscriptionResponseVOList
           );
-          console.log(
-            'res?.context?.subscriptionResponseVOList',
-            res?.context?.subscriptionResponseVOList
-          );
-          console.log('subscriptionList', subscriptionList);
           if (subscriptionList.length > 0) {
-            this.getDict();
+            const dictionaryObj = getSubscriptionAllSysDictionary();
+            this.setState({
+              country: dictionaryObj.country,
+              frequencyList: dictionaryObj.frequencyList,
+              frequencyClubList: dictionaryObj.frequencyClubList,
+              individualFrequencyList: dictionaryObj.individualFrequencyList
+            });
           }
           const customerId = res.context?.customerVO?.customerId;
           this.setState(
@@ -207,103 +209,6 @@ export default class ManageAllSubscription extends React.Component<any, any> {
         this.setState({
           loading: false
         });
-      });
-  };
-
-  //获取相关数据字典
-  getDict = () => {
-    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
-      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
-      this.setState({
-        countryArr: countryArr
-      });
-    } else {
-      this.querySysDictionary('country');
-    }
-    this.querySysDictionary('Frequency_day');
-    this.querySysDictionary('Frequency_day_club');
-    this.querySysDictionary('Frequency_day_individual');
-  };
-
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({
-        type: type
-      })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          // Individualization Frequency
-          if (type == 'Frequency_day_individual') {
-            // Frequency_month_individual
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              individualFrequencyList: frequencyList
-            });
-          }
-
-          if (type === 'country') {
-            this.setState({
-              countryArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
-          }
-          if (type === 'Frequency_day') {
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_week')
-            );
-          }
-          if (type === 'Frequency_day_club') {
-            let frequencyClubList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_week_club')
-            );
-          }
-          if (type === 'Frequency_week') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_month')
-            );
-          }
-          if (type === 'Frequency_week_club') {
-            let frequencyClubList = [
-              ...this.state.frequencyClubList,
-              ...res.context.sysDictionaryVOS
-            ];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_month_club')
-            );
-          }
-          if (type === 'Frequency_month') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState({
-              frequencyList: frequencyList
-            });
-          }
-          if (type === 'Frequency_month_club') {
-            let frequencyClubList = [
-              ...this.state.frequencyClubList,
-              ...res.context.sysDictionaryVOS
-            ];
-            this.setState({
-              frequencyClubList: frequencyClubList
-            });
-          }
-        } else {
-        }
       });
   };
 

@@ -12,8 +12,8 @@ import { GetDelivery } from '../delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery'
 import PaymentMethod from './component/payment-method'
-
 import { addAddress, updateAddress } from '../customer-details/webapi';
+import {getCountrySubFrequency,getAutoSubFrequency,getClubSubFrequency,getIndividualSubFrequency} from '../task-manage-all-subscription/module/querySysDictionary'
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -51,8 +51,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       subscriptionType: '',
       recentOrderList: [],
       frequencyList: [],
-      individualFrequencyList: [],
-      frequencyClubList: [],
       goodsInfo: [],
       petsId: '',
       petsInfo: {},
@@ -125,17 +123,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.getDict();
     this.getSubscriptionDetail();
-    this.getCurrencySymbol();
     this.getDeliveryDateStatus();
-
-    let pickupIsOpen = JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || null;
-    if (pickupIsOpen) {
-      this.setState({
-        pickupIsOpen
-      })
-    }
+    this.setState({
+      currencySymbol:sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '',
+      pickupIsOpen:JSON.parse(sessionStorage.getItem('portal-pickup-isopen'))||false
+    });
   }
 
   // 获取 deliveryState 状态
@@ -144,23 +137,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          // deliveryDate 状态
-          if (res?.context?.systemConfigVO) {
-            let scon = res.context.systemConfigVO;
-            this.setState({
-              deliverDateStatus: scon.status
-            });
-          }
+          this.setState({
+            deliverDateStatus: res?.context?.systemConfigVO?.status||0
+          });
         }
-        this.setState({
-          loading: false
-        });
       })
-      .catch(() => {
-        this.setState({
-          loading: false
-        });
-      });
   }
 
   getSubscriptionDetail = () => {
@@ -187,6 +168,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
             customerId: subscriptionDetail.customerId
           };
+          this.setState({
+            countryArr:getCountrySubFrequency(),
+            frequencyList:subscriptionDetail.subscriptionType=='Individual'?getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?getClubSubFrequency():getAutoSubFrequency()
+          })
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
             orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.flowState : ''
@@ -294,97 +279,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .catch(() => { });
   };
 
-  getDict = () => {
-    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
-      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
-      this.setState({
-        countryArr: countryArr
-      });
-    } else {
-      this.querySysDictionary('country');
-    }
-
-    this.querySysDictionary('Frequency_day');
-    this.querySysDictionary('Frequency_day_club');
-    this.querySysDictionary('Frequency_day_individual');
-  };
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({
-        type: type
-      })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-
-          // Individualization Frequency
-          if (type == 'Frequency_day_individual') {
-            // Frequency_month_individual
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              individualFrequencyList: frequencyList
-            });
-          }
-
-          if (type === 'country') {
-            this.setState({
-              countryArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
-          }
-          if (type === 'Frequency_day') {
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_week')
-            );
-          }
-          if (type === 'Frequency_day_club') {
-            let frequencyClubList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_week_club')
-            );
-          }
-          if (type === 'Frequency_week') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_month')
-            );
-          }
-          if (type === 'Frequency_week_club') {
-            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_month_club')
-            );
-          }
-          if (type === 'Frequency_month') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState({
-              frequencyList: frequencyList
-            });
-          }
-          if (type === 'Frequency_month_club') {
-            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
-            this.setState({
-              frequencyClubList: frequencyClubList
-            });
-          }
-        } else {
-        }
-      })
-      .catch(() => { });
-  };
   onSubscriptionChange = ({ field, value }) => {
     let data = this.state.subscriptionInfo;
     data[field] = value;
@@ -1081,13 +975,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  getCurrencySymbol = () => {
-    let currencySymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) : '';
-    this.setState({
-      currencySymbol
-    });
-  };
-
   onOpenAddressForm = (addressItem: any, type: string) => {
     this.setState({
       showAddressForm: true,
@@ -1217,9 +1104,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     const {
       pickupIsOpen,
       subscriptionInfo,
-      individualFrequencyList,
       frequencyList,
-      frequencyClubList,
       goodsInfo,
       paymentInfo,
       deliveryAddressInfo,
@@ -1333,7 +1218,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               }}
               disabled={subscriptionType === 'Peawee' ? true : false}
             >
-              {(subscriptionType == 'Individualization'?individualFrequencyList:subscriptionType == 'Club' ? frequencyClubList : frequencyList).map((item: any) => (
+              {frequencyList.map((item: any) => (
                   <Option value={item.id} key={item.id}>
                     {item.name}
                   </Option>

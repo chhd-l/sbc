@@ -102,11 +102,6 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'salesCate'
       },
       {
-        title: <FormattedMessage id="Product.CurrentInventory" />,
-        dataIndex: 'inventory',
-        key: 'inventory'
-      },
-      {
         title: <FormattedMessage id="Product.AvgDailySales" />,
         dataIndex: 'avgDailySales',
         key: 'avgDailySales',
@@ -124,6 +119,11 @@ export default class ForcastList extends React.Component<any, any> {
         title: <FormattedMessage id="Product.stockCoverageInDays" />,
         dataIndex: 'stockCoverageInDays',
         key: 'stockCoverageInDays'
+      },
+      {
+        title: <FormattedMessage id="Product.CurrentInventory" />,
+        dataIndex: 'inventory',
+        key: 'inventory'
       }
     ];
     const { startDate, endDate } = this.state;

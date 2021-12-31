@@ -1108,7 +1108,7 @@ export default {
   "Marketing.EmailTemplateInformation": "Template Information",
   "Marketing.EmailTemplateId": "Template ID",
   "Marketing.EmailTemplateEdit": "Template Edit",
-  "Marketing.PrefixLength": "Prefix length should between 2-10 capital characters + numbers",
+  "Marketing.PrefixLength": "Prefix length should between 1-10 capital characters or numbers",
   "Marketing.ValidityDates": "Validity dates for coupon codes must fit in activity dates of the promotion",
   "Analysis.ProductReport": "Product Report",
   "Analysis.DownloadTheReport": "Download the report",
@@ -1523,7 +1523,7 @@ export default {
   "Prescriber.Next": "Next",
   "Prescriber.Done": "Done",
   "Prescriber.Role": "Role",
-  "Prescriber.Deleted": "Deleted",
+  "Prescriber.Deleted": "delete",
   "Prescriber.SelectRecommendedProduct": "Select Recommended Product",
   "Prescriber.Add Product": "Add Product",
   "Prescriber.apptNowasnotfind": "scan error,apptNo was not find.",
@@ -5406,7 +5406,6 @@ export default {
   "task.manageAllSubBtn": "Manage All Subscription",
   "task.pickPointStatus": "Pick point status",
   "task.statusOfSubscription": "Status of subscription",
-
   "Marketing.Prefix": "Prefix",
   "Menu.Cookie Banner": "Cookie Banner",
   "Menu.Shop Config": "Shop Config",
@@ -5418,10 +5417,18 @@ export default {
   "Setting.marsFooter": "Mars Footer",
   "Setting.shopConfig": "Shop Config",
   "Survey.show_survey": "Show the survey to",
- 
-   'Menu.Checkout Setting':'Checkout Setting',
-  'Menu.Customer Account Setting':'Customer Account Setting',
-  'Menu.Banner':'Banner',
-  'Menu.Marketing Banner':'Marketing Banner'
-
+  "Menu.Checkout Setting": "Checkout Setting",
+  "Menu.Customer Account Setting": "Customer Account Setting",
+  "Menu.Banner": "Banner",
+  "Menu.Marketing Banner": "Marketing Banner",
+  "checkoutApiPrefix": "Checkout Api Prefix",
+  "classicPaymentApiPrefix": "Payment Api Prefix",
+  "merchantAccount": "Merchant Account",
+  "Order.offline.totalQuantity": "Total Quantity",
+  "paymentAccount": "Payment Account",
+  "Setting.enabledHub": "Enabled Hub",
+  "Setting.hubContent": "Hub Content",
+  "Setting.Language": "Language",
+  "Setting.Live": "Live",
+  "Setting.Test": "Test"
 };

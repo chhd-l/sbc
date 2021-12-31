@@ -24,11 +24,11 @@ import { PostalCodeMsg } from 'biz';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
-import { GetDelivery } from '../delivery-date/webapi';
+import { GetDelivery } from '@/delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery';
 import PaymentMethod from './component/payment-method';
-import { addAddress, updateAddress } from '../customer-details/webapi';
+import { addAddress, updateAddress } from '@/customer-details/webapi';
 import CreditCard from './component/credit-card';
 import {
   skipManageAllSubscription,

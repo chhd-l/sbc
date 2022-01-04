@@ -44,11 +44,13 @@ export default class ProductApi extends Component<any, any>{
         'CatalogInfo.clientId': catalogData?.clientId ? this.base64.urlDecode(catalogData?.clientId):'',
         'CatalogInfo.clientSecret': catalogData?.clientSecret ? this.base64.urlDecode(catalogData?.clientSecret):'',
         'CatalogInfo.countryCode': catalogData?.countryCode,
+        'CatalogInfo.language': catalogData?.language,
 
         'ImageInfo.url': imageData?.url,
         'ImageInfo.clientId': imageData?.clientId ? this.base64.urlDecode(imageData?.clientId):'',
         'ImageInfo.clientSecret': imageData?.clientSecret ? this.base64.urlDecode(imageData?.clientSecret):'',
         'ImageInfo.countryCode': imageData?.countryCode,
+        'ImageInfo.language': imageData?.language,
 
       })
     }else {
@@ -65,7 +67,6 @@ export default class ProductApi extends Component<any, any>{
     } = this.state;
     this.props.form.validateFields( async (err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         let {
           CatalogInfo,
           ImageInfo
@@ -177,6 +178,21 @@ export default class ProductApi extends Component<any, any>{
                   </Form.Item>
                 </Col>
               </Row>
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={'Language'}>
+                    {getFieldDecorator('CatalogInfo.language', {
+                      rules: [
+                        { required: true, message: 'Please input your language!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="language"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Headline title='Product Image Info' />
               <Row>
@@ -239,6 +255,22 @@ export default class ProductApi extends Component<any, any>{
                   </Form.Item>
                 </Col>
               </Row>
+              <Row>
+                <Col span={12}>
+                  <Form.Item label={'Language'}>
+                    {getFieldDecorator('ImageInfo.language', {
+                      rules: [
+                        { required: true, message: 'Please input your language!' },
+                      ],
+                    })(
+                      <Input
+                        placeholder="language"
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+
             </Form>
           </div>
           <Row className='bar-button'>

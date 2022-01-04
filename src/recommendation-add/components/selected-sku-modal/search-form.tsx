@@ -137,7 +137,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   paramsOnChange = (key, value) => {
     let { searchParams } = this.state;
-    searchParams[key] = value;
+    searchParams[key] = value.replace(/^\s+|\s+$/g,"")||undefined;
     this.setState({ searchParams: searchParams });
   };
 
@@ -145,7 +145,8 @@ export default class SearchForm extends React.Component<any, any> {
     const { searchParams, likeType } = this.state;
     let { likeValue, ...rest } = searchParams;
     rest[likeType == LIKE_TYPE.LIKE_GOODS_INFO_NO ? LIKE_TYPE.LIKE_GOODS_INFO_NO : LIKE_TYPE.LIKE_GOODS_NO] = likeValue;
-    this.props.searchBackFun(rest);
+    
+   this.props.searchBackFun(rest);
   };
 
   goodsOptionSelect = () => (

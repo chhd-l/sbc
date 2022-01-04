@@ -183,6 +183,9 @@ export default class OrderReceive extends React.Component<any, any> {
                   {<FormattedMessage id="Order.PSP" />}: {paymentInfo.get('pspName')}
                 </p>
                 <p>
+                  {<FormattedMessage id="Order.PaymentMode"/>}: {detail.get('paymentItemDisplayName')}
+                </p>
+                <p>
                   {<FormattedMessage id="Order.cardType" />}: {paymentInfo.get('paymentVendor')}
                 </p>
                 <p>

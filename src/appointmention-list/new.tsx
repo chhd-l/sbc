@@ -363,14 +363,14 @@ class NewAppointment extends React.Component<any, any> {
                 initialValue: params.consumerPhone || '',
                 rules: [{ message: 'Phone number is required' },
                   {required: true,validator:(rule, value, callback)=>{
-                    if(!ValidConst.validatePhoneNumber().test(value)){
+                    if(!(/^\d{10}$/).test(value)){
                       callback('Phone number is error')
                     }else{
                       callback()
                     }
                   }}
               ]
-              })(<Input />)}
+              })(<Input type='phone' maxLength={10}/>)}
             </Form.Item>
             <Form.Item label={RCi18n({ id: 'Appointment.Consumer email' })}>
               {getFieldDecorator('consumerEmail', {

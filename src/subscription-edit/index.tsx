@@ -150,7 +150,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
     webapi
       .getSubscriptionDetail(this.state.subscriptionId)
-      .then((data) => {
+      .then(async (data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
@@ -168,9 +168,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
             customerId: subscriptionDetail.customerId
           };
+          const countryArr=await getCountrySubFrequency()
+          const frequencyList=subscriptionDetail.subscriptionType=='Individual'?await getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?await getClubSubFrequency():await getAutoSubFrequency()
           this.setState({
-            countryArr:getCountrySubFrequency(),
-            frequencyList:subscriptionDetail.subscriptionType=='Individual'?getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?getClubSubFrequency():getAutoSubFrequency()
+            countryArr:countryArr,
+            frequencyList:frequencyList
           })
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',

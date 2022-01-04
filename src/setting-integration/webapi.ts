@@ -50,7 +50,7 @@ export const getHubStoreConfigList = (configType) => {
 interface UpdateHubParams{
   id: string,
   status: number,
-  url: string | null
+  // url: string | null
 }
 export function updateHub(params:UpdateHubParams) {
   return Fetch<TResult>('/storeConfig/updateHub', {

@@ -212,15 +212,16 @@ class Header extends React.Component<any, any> {
           <Icon type="clock-circle" className="Header-date-icon" />
           <WeekPicker
             defaultValue={moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date())}
-            disabledDate={(current) => {
-              if (current && current.year() >= 2021 && current.week() > 3) {
-                if (current.week() > moment().endOf('day').week()) {
-                  return current.week();
-                }
-              } else if (current && current.year() <= 2021 && current.week() <= 3) {
-                return current && current.week();
-              }
-            }}
+            // disabledDate={(current) => {
+            //   if (current && current.year() >= 2021 && current.week() > 3) {
+            //     if (current.week() > moment().endOf('day').week()) {
+            //       return current.week();
+            //     }
+            //   } else if (current && current.year() <= 2021 && current.week() <= 3) {
+            //     return current && current.week();
+            //   }
+            // }}
+            disabledDate={current => current && current > moment().endOf('day') && current.week() > moment().week()}
             onChange={this.dateChange}
             placeholder={(window as any).RCi18n({id:'Home.SelectWeek'})}
           />

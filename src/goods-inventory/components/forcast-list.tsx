@@ -16,7 +16,7 @@ export default class ForcastList extends React.Component<any, any> {
       startDate: null,
       endDate: null,
       list: [],
-      columns:[]
+      columns: []
     };
   }
 
@@ -102,11 +102,6 @@ export default class ForcastList extends React.Component<any, any> {
         key: 'salesCate'
       },
       {
-        title: <FormattedMessage id="Product.CurrentInventory" />,
-        dataIndex: 'inventory',
-        key: 'inventory'
-      },
-      {
         title: <FormattedMessage id="Product.AvgDailySales" />,
         dataIndex: 'avgDailySales',
         key: 'avgDailySales',
@@ -124,8 +119,13 @@ export default class ForcastList extends React.Component<any, any> {
         title: <FormattedMessage id="Product.stockCoverageInDays" />,
         dataIndex: 'stockCoverageInDays',
         key: 'stockCoverageInDays'
+      },
+      {
+        title: <FormattedMessage id="Product.CurrentInventory" />,
+        dataIndex: 'inventory',
+        key: 'inventory'
       }
-    ]
+    ];
     const { startDate, endDate } = this.state;
     getForcastList(startDate && endDate ? { startDate, endDate } : {}).then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
@@ -137,7 +137,7 @@ export default class ForcastList extends React.Component<any, any> {
           return {
             title: Object.keys(item)[0],
             dataIndex: `futureListArr[${index}]`,
-            width: 150,
+            width: 100,
             key: 'f' + index
           };
         });
@@ -166,15 +166,17 @@ export default class ForcastList extends React.Component<any, any> {
       });
       const encrypted = base64.urlEncode(result);
       // 新窗口下载
-      exportForcastList(encrypted).then(data=>{
-        if (data.res.code === Const.SUCCESS_CODE) {
-          message.success(data.res.message)
-        } else {
-          message.error(data.res.message)
-        }
-      }).catch(error=>{
-        message.error(error.message)
-      })
+      exportForcastList(encrypted)
+        .then((data) => {
+          if (data.res.code === Const.SUCCESS_CODE) {
+            message.success(data.res.message);
+          } else {
+            message.error(data.res.message);
+          }
+        })
+        .catch((error) => {
+          message.error(error.message);
+        });
     } else {
       message.error('Please login in');
     }
@@ -215,6 +217,7 @@ export default class ForcastList extends React.Component<any, any> {
           rowKey="skuId"
           columns={columns}
           dataSource={list}
+          pagination={{ pageSize: 5 }}
           loading={loading}
           scroll={{ x: true }}
         />

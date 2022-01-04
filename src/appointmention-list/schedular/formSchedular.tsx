@@ -2,7 +2,7 @@ import { Form, Icon, Input, Button, Checkbox, Select, TimePicker, DatePicker, Ro
 import moment from 'moment';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
+import   './index.less'
 class FormSchedular extends React.Component {
     props: {
         form: any
@@ -90,7 +90,7 @@ class FormSchedular extends React.Component {
             },
         };
         return (
-            <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit} className="login-form" >
+            <Form labelAlign="left" {...formItemLayout} onSubmit={this.handleSubmit} className="blocked-form" >
 
                 <Form.Item label="Type">
                     {getFieldDecorator('bookType', {
@@ -101,8 +101,7 @@ class FormSchedular extends React.Component {
                             style={{ width: '100%' }}
                         >
                             <Select.Option value="1">{<FormattedMessage id="Appointment.Blocked" />}</Select.Option>
-                            {/* <Select.Option value="1">{<FormattedMessage id="Appointment.Arrived" />}</Select.Option>
-                            <Select.Option value="2">{<FormattedMessage id="Appointment.Canceled" />}</Select.Option> */}
+                          
                         </Select>
                     )}
                 </Form.Item>
@@ -110,16 +109,8 @@ class FormSchedular extends React.Component {
                     {getFieldDecorator('startTime', {
                         rules: [{ required: true, message: 'Please input your startTime!' }],
                     })(
-                        <TimePicker popupStyle={{width:200}} minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
-                        // <DatePicker disabledDate={this.disabledDate}
-                        //     disabledTime={this.disabledDateTime}
-                        //     format="YYYY-MM-DD HH:mm"
-                        //     style={{ width: '100%' }}
-                        //     showTime={{
-                        //         format: 'HH:mm',
-                        //         defaultValue: moment('HH:00:00', 'HH:mm'),
-                        //         minuteStep: 15
-                        //     }} />
+                        <TimePicker getPopupContainer={(trigger: any) => trigger.parentNode}  popupStyle={{width:200}} minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
+                 
                     )}
                 </Form.Item>
 
@@ -132,7 +123,7 @@ class FormSchedular extends React.Component {
                     ],
 
                     })(
-                        <TimePicker minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
+                        <TimePicker getPopupContainer={(trigger: any) => trigger.parentNode} className="className-time" popupStyle={{width:200}} minuteStep={15} disabledHours={this.disabledDateTime} style={{ width: '100%' }} format='HH:mm' />
 
                     )}
                 </Form.Item>

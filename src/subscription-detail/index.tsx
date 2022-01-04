@@ -19,15 +19,15 @@ import { PostalCodeMsg } from 'biz';
 import './index.less';
 import * as webapi from './webapi';
 import { GetDelivery } from '../delivery-date/webapi';
-const Panel = Collapse.Panel;
-
 import moment from 'moment';
 import { FORMERR } from 'dns';
+import {getCountrySubFrequency,getAutoSubFrequency,getClubSubFrequency,getIndividualSubFrequency} from '../task-manage-all-subscription/module/querySysDictionary'
 
 const { Search } = Input;
 
 const { Option } = Select;
 const { TabPane } = Tabs;
+const Panel = Collapse.Panel;
 
 const deliverStatus = (status) => {
   if (status == 'NOT_YET_SHIPPED') {
@@ -77,9 +77,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
       promotionVOList: [],
-      individualFrequencyList: [],
       frequencyList: [],
-      frequencyClubList: [],
       promotionDesc: 'Promotion',
       noStartOrder: [],
       completedOrder: [],
@@ -101,7 +99,6 @@ class SubscriptionDetail extends React.Component<any, any> {
       () => {
         this.getSubscriptionDetail(this.state.subscriptionId);
         this.getCurrencySymbol();
-        this.getDict();
         this.getDeliveryDateStatus();
         this.getBySubscribeId(this.state.subscriptionId);
       }
@@ -140,6 +137,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             subscribeSource: subscriptionDetail.subscribeSource,
@@ -160,6 +158,10 @@ class SubscriptionDetail extends React.Component<any, any> {
             subscriptionType: subscriptionDetail.subscriptionType,
             subscriptionPlanType: subscriptionDetail.subscriptionPlanType
           };
+          this.setState({
+            countryArr:getCountrySubFrequency(),
+            frequencyList:subscriptionDetail.subscriptionType=='Individual'?getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?getClubSubFrequency():getAutoSubFrequency()
+          })
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
             orderStatus: subscriptionDetail.trades ? subscriptionDetail.trades[0].tradeState.flowState : ''
@@ -316,109 +318,6 @@ class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
-  getDict = () => {
-    if (JSON.parse(sessionStorage.getItem('dict-country'))) {
-      let countryArr = JSON.parse(sessionStorage.getItem('dict-country'));
-      this.setState({
-        countryArr: countryArr
-      });
-    } else {
-      this.querySysDictionary('country');
-    }
-    if (JSON.parse(sessionStorage.getItem('dict-city'))) {
-      let cityArr = JSON.parse(sessionStorage.getItem('dict-city'));
-      this.setState({
-        cityArr: cityArr
-      });
-    } else {
-      this.querySysDictionary('city');
-    }
-    this.querySysDictionary('Frequency_day');
-    this.querySysDictionary('Frequency_day_club');
-
-    this.querySysDictionary('Frequency_day_individual');
-  };
-  querySysDictionary = (type: String) => {
-    webapi
-      .querySysDictionary({
-        type: type
-      })
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          // Individualization Frequency
-          if (type == 'Frequency_day_individual') {
-            // Frequency_month_individual
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState({
-              individualFrequencyList: frequencyList
-            });
-          }
-
-          if (type === 'country') {
-            this.setState({
-              countryArr: res.context.sysDictionaryVOS
-            });
-            sessionStorage.setItem('dict-country', JSON.stringify(res.context.sysDictionaryVOS));
-          }
-          if (type === 'Frequency_day') {
-            let frequencyList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_week')
-            );
-          }
-          if (type === 'Frequency_day_club') {
-            let frequencyClubList = [...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_week_club')
-            );
-          }
-          if (type === 'Frequency_week') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyList: frequencyList
-              },
-              () => this.querySysDictionary('Frequency_month')
-            );
-          }
-          if (type === 'Frequency_week_club') {
-            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
-            this.setState(
-              {
-                frequencyClubList: frequencyClubList
-              },
-              () => this.querySysDictionary('Frequency_month_club')
-            );
-          }
-          if (type === 'Frequency_month') {
-            let frequencyList = [...this.state.frequencyList, ...res.context.sysDictionaryVOS];
-            this.setState({
-              frequencyList: frequencyList
-            });
-          }
-          if (type === 'Frequency_month_club') {
-            let frequencyClubList = [...this.state.frequencyClubList, ...res.context.sysDictionaryVOS];
-            this.setState({
-              frequencyClubList: frequencyClubList
-            });
-          }
-          // if (type === 'Frequency') {
-          //   this.setState({
-          //     frequencyList: res.context.sysDictionaryVOS
-          //   });
-          // }
-        }
-      })
-      .catch((err) => { });
-  };
-
   getDictValue = (list, id) => {
     let tempId=id;
     if (list && list.length > 0) {
@@ -520,7 +419,7 @@ class SubscriptionDetail extends React.Component<any, any> {
   }
 
   render() {
-    const { title, orderInfo, recentOrderList,loading, subscriptionId, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, individualFrequencyList, frequencyList, frequencyClubList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
+    const { title, orderInfo, recentOrderList,loading, subscriptionId, subscriptionInfo, goodsInfo, paymentInfo, deliveryAddressInfo, billingAddressInfo, countryArr, operationLog, frequencyList, noStartOrder, completedOrder, currencySymbol, isActive, paymentMethod, deliverDateStatus } = this.state;
     const cartTitle = (
       <div className="cart-title">
         <span>
@@ -598,26 +497,11 @@ class SubscriptionDetail extends React.Component<any, any> {
           <div className="subscription_delivery_frequency">
 
             <Select style={{ width: '70%' }} value={record.periodTypeId} disabled>
-              {/* {((record.goodsInfoVO?.promotions ?? record.goodsVO?.promotions) === 'club' ? frequencyClubList : frequencyList).map((item) => (
+              {frequencyList.map((item: any) => (
                 <Option value={item.id} key={item.id}>
                   {item.name}
                 </Option>
-              ))} */}
-
-              {/* individualFrequencyList */}
-              {subscriptionInfo.subscriptionType == 'Individualization' ? (
-                individualFrequencyList.map((item: any) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              ) : (
-                (record.subscriptionType === 'Club' ? frequencyClubList : frequencyList).map((item) => (
-                  <Option value={item.id} key={item.id}>
-                    {item.name}
-                  </Option>
-                ))
-              )}
+              ))}
             </Select>
           </div>
         )

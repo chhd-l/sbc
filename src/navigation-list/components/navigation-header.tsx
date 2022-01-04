@@ -73,8 +73,8 @@ export default class NavigationHeader extends React.Component<any, any> {
             <TextArea rows={6} value={marsFooter} onChange={(e) => this.onChangeField('marsFooter', e.target.value)}></TextArea>
           </Col>
         </Row>
-        <Row gutter={[24,12]}>
-          <Col span={6} push={3}>
+        <Row className='bar-button' style={{marginLeft: '-20px'}}>
+          <Col span={12}>
             <Button type="primary" disabled={!changed} loading={loading} onClick={this.saveData}><FormattedMessage id="Setting.save"/></Button>
           </Col>
         </Row>

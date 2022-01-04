@@ -598,7 +598,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   <SubscribInformation startDate={startDate} endDate={endDate} customerAccount={this.state.customerAccount} />
                 </TabPane>
                 <TabPane tab={RCi18n({id:"PetOwner.PrescriberInformation"})} key="prescrib">
-                  <PrescribInformation customerAccount={this.state.customerAccount} />
+                  <PrescribInformation customerAccount={this.state.customerAccount} customerId={this.state.customerId} />
                 </TabPane>
                 <TabPane tab={RCi18n({id:"PetOwner.DeliveryInformation"})} key="delivery">
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}

@@ -1,3 +1,5 @@
+import cache from "./cache";
+
 // 校验规则常量
 export default {
   // 手机号码
@@ -48,5 +50,38 @@ export default {
   enterpriseRange:  /^(0|[1-9][0-9]{0,6})(\.([1-9]|[0-9][1-9]))?$/,
   //不能为负数
   noMinus: /^\d+(\.\d+)?$/,
-  Retimes: undefined
+  Retimes: undefined,
+  validatePhoneNumber:()=>{
+    let regExp=null;
+    const COUNTRY= (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '']
+    console.log(COUNTRY)
+    if (COUNTRY == 'fr') {
+      // 法国
+      regExp =
+        /^\(\+[3][3]\)[\s](([0][1-9])|[1-9])[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
+    } else if (COUNTRY == 'uk') {
+      // 英国
+      regExp =
+        /^\(\+[4][4]\)[\s](([0][1-9][1-9])|[1-9][1-9])[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}[\s][0-9]{2}$/;
+    } else if (COUNTRY == 'us') {
+      // 美国
+      regExp = /^[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
+    } else if (COUNTRY == 'mx') {
+      // 墨西哥
+      regExp = /^\+\([5][2]\)[\s\-][0-9]{3}[\s\-][0-9]{3}[\s\-][0-9]{4}$/;
+    } else if (COUNTRY == 'ru') {
+      // 俄罗斯
+      regExp =
+        /^(\+7|7|8)?[\s\-]?\(?[0-9][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+    } else if (COUNTRY == 'tr') {
+      // 土耳其
+      regExp =
+        /^0\s\(?([2-9][0-8][0-9])\)?\s([1-9][0-9]{2})[\-\. ]?([0-9]{2})[\-\. ]?([0-9]{2})(\s*x[0-9]+)?$/;
+    } else {
+      // 其他国家
+      regExp = /\S/;
+    }
+    return regExp;
+  }
 };
+

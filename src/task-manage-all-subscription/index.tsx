@@ -170,14 +170,14 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       .getTaskSubscriptionList({
         customerAccount: sessionStorage.getItem('taskCustomerAccount')
       })
-      .then((data) => {
+      .then(async(data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionList = this.handleSubscriptionGoods(
             res?.context?.subscriptionResponseVOList
           );
           if (subscriptionList.length > 0) {
-            const dictionaryObj = getSubscriptionAllSysDictionary();
+            const dictionaryObj = await getSubscriptionAllSysDictionary();
             this.setState({
               countryArr: dictionaryObj.countryArr,
               frequencyList: dictionaryObj.frequencyList,

@@ -202,7 +202,7 @@ class CustomerList extends React.Component<any, any> {
           render={(evaluateId) => {
             return (
               <div className="operation-th">
-                <AuthWrapper functionName={'f_coupon_detail'}>
+                <AuthWrapper functionName={'f_customer_review'}>
                   <Tooltip placement="top" title={RCi18n({id:'Product.View'})}>
                     <span style={styles.see} onClick={() => goodsEvaluateDetail(evaluateId, true)}>
                       <span className="icon iconfont iconView" style={{ fontSize: 20 }}></span>

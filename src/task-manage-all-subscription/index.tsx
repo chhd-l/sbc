@@ -179,7 +179,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
           if (subscriptionList.length > 0) {
             const dictionaryObj = getSubscriptionAllSysDictionary();
             this.setState({
-              country: dictionaryObj.country,
+              countryArr: dictionaryObj.countryArr,
               frequencyList: dictionaryObj.frequencyList,
               frequencyClubList: dictionaryObj.frequencyClubList,
               individualFrequencyList: dictionaryObj.individualFrequencyList

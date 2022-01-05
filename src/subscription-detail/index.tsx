@@ -464,9 +464,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             )}
             <p>
               {currencySymbol + ' '}
-              {this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
-              {/* {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))} */}
-              {/* {currencySymbol + this.getSubscriptionPrice(record.subscribePrice)} */}
+              {this.getSubscriptionPrice( +record.subscribePrice)}
             </p>
           </div>
         )

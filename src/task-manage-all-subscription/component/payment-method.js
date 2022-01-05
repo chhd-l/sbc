@@ -18,11 +18,7 @@ const PaymentMethod = (props) => {
   useEffect(() => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
-      if (props.cardId) {
-        setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
-      } else {
-        setPaymentType('PAYU_RUSSIA_COD');
-      }
+      setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
     }
   }, [props.paymentMethodVisible]);
 

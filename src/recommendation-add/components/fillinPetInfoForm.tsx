@@ -403,8 +403,13 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
                         </Col> */}
-                        <Col span={8} style={{ textAlign: 'center' }}>
-                            {!funType && <div >
+                        <Col span={8}>
+                        <Form.Item label={(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}>
+
+                        {!funType && <Search value={apptNo||this.state.apptNo} onChange={this.onSearchApptNo} disabled={!apptNo?false:true} style={{ width: '100%' }} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />}
+
+                        </Form.Item>
+                            {/* {!funType && <div >
                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span>{(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}</span>
                                     <QRScaner id="scan" onScanEnd={this.findByApptNo}>
@@ -416,12 +421,11 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                     </QRScaner>
                                 </div>
                                 <div style={{ marginTop: 3 }} className="pets-search-app">
-                                    <Search value={apptNo||this.state.apptNo} onChange={this.onSearchApptNo} disabled={!apptNo?false:true} style={{ width: '100%' }} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />
                                 </div>
 
 
                             </div>
-                            }
+                            } */}
                         </Col>
                     </Row>
                     <Row gutter={20}>

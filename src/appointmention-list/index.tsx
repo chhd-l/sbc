@@ -537,13 +537,13 @@ class Appointment extends React.Component<any, any> {
                 {<FormattedMessage id="Appointment.Add new" />}
               </Button>
             </Col>
-            <Col>
+            {/* <Col>
               <QRScaner id="scan" onScanEnd={this.findByApptNo}>
                 <Button type="primary">
                   {<FormattedMessage id="Appointment.STC" />}
                 </Button>
               </QRScaner>
-            </Col>
+            </Col> */}
           </Row>
           <Table
             rowKey="id"

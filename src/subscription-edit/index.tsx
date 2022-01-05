@@ -669,7 +669,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }
           }),
           subscribeId: subscriptionInfo.subscriptionNumber,
-          paymentId: this.state.paymentInfo.id,
+          paymentId: this.state.paymentInfo?.id,
         }
       ).then((data)=>{
         console.log(data)

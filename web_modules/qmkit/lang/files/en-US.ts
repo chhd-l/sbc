@@ -662,6 +662,7 @@ export default {
   "Setting.editOrderIdFormat": "Edit order ID format",
   "Setting.HeaderAndFooter": "Header & Footer",
   "Setting.header": "Header",
+  "Setting.shopContactInfo": "Shop contact information",
   "Content.Prompt": "Prompt",
   "Content.enableTheNavigation": "Are you sure to  enable  the navigation?",
   "Content.disableTheNavigation": "Are you sure to  disable  the navigation?",
@@ -5430,5 +5431,8 @@ export default {
   "Setting.hubContent": "Hub Content",
   "Setting.Language": "Language",
   "Setting.Live": "Live",
-  "Setting.Test": "Test"
+  "Setting.Test": "Test",
+  "PetOwner.AddBlocklist": "Add email to blocklist",
+  "PetOwner.EditErrorMessage": "Edit error massage",
+  "PetOwner.EmailExist": "The email already on the blocklist"
 };

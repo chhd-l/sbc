@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { Form, Input, InputNumber, Select, Row, Col, Spin, Icon, message, Button } from 'antd';
 import { Headline, BreadCrumb, Const, QMUpload, Tips, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -7,7 +7,7 @@ import SignedInfo from './components/signed-info';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const styles = {
+const styles: { [key: string]: CSSProperties } = {
   box: {
     display: 'flex',
     justifyContent: 'center',
@@ -254,6 +254,30 @@ class StoreDetail extends React.Component<any, any> {
                       </Select>
                     )}
                   </FormItem>
+              </Col>
+            </Row>
+            <div style={styles.title}><FormattedMessage id="Setting.shopContactInfo"/></div>
+            <Row gutter={[24,2]}>
+              <Col span={12}>
+                <FormItem label={<FormattedMessage id="Setting.storeContactEmail" />}>
+                  {getFieldDecorator('storeContactEmail', {
+                    initialValue: storeInfo.storeContactEmail ?? ''
+                  })(<Input onChange={this.modifyChangedStatus} />)}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label={<FormattedMessage id="Setting.storeContactPhoneNumber" />}>
+                  {getFieldDecorator('storeContactPhoneNumber', {
+                    initialValue: storeInfo.storeContactPhoneNumber ?? ''
+                  })(<Input onChange={this.modifyChangedStatus} />)}
+                </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem label={<FormattedMessage id="Setting.contactTimePeriod" />}>
+                  {getFieldDecorator('contactTimePeriod', {
+                    initialValue: storeInfo.contactTimePeriod ?? ''
+                  })(<Input onChange={this.modifyChangedStatus} />)}
+                </FormItem>
               </Col>
             </Row>
             <div style={styles.title}><FormattedMessage id="Setting.logo"/></div>

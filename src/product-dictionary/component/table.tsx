@@ -9,7 +9,7 @@ type Result = {
 }
 
 interface TablePageProps extends TableProps<any> {
-  searchFunc: (any) => Promise<Result>
+  searchFunc: (any) => Promise<false | Result>
   columns: ColumnProps<any>[];
   initLoad?: Boolean
   onFetchEnd?: (any) => void

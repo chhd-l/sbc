@@ -134,7 +134,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     });
     webapi
       .getSubscriptionDetail(id)
-      .then((data) => {
+      .then(async (data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
 
@@ -158,9 +158,11 @@ class SubscriptionDetail extends React.Component<any, any> {
             subscriptionType: subscriptionDetail.subscriptionType,
             subscriptionPlanType: subscriptionDetail.subscriptionPlanType
           };
+          const countryArr=await getCountrySubFrequency()
+          const frequencyList=subscriptionDetail.subscriptionType=='Individual'?await getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?await getClubSubFrequency():await getAutoSubFrequency()
           this.setState({
-            countryArr:getCountrySubFrequency(),
-            frequencyList:subscriptionDetail.subscriptionType=='Individual'?getIndividualSubFrequency():subscriptionDetail.subscriptionType=='Club'?getClubSubFrequency():getAutoSubFrequency()
+            countryArr:countryArr,
+            frequencyList:frequencyList
           })
           let orderInfo = {
             recentOrderId: subscriptionDetail.trades ? subscriptionDetail.trades[0].id : '',
@@ -462,9 +464,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             )}
             <p>
               {currencySymbol + ' '}
-              {this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))}
-              {/* {subscriptionInfo.subscriptionType == 'Individualization' ? this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice)) : this.getSubscriptionPrice((+record.subscribeNum * +record.subscribePrice))} */}
-              {/* {currencySymbol + this.getSubscriptionPrice(record.subscribePrice)} */}
+              {this.getSubscriptionPrice( +record.subscribePrice)}
             </p>
           </div>
         )

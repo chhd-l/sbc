@@ -24,11 +24,11 @@ import { PostalCodeMsg } from 'biz';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
 import * as webapi from './webapi';
-import { GetDelivery } from '../delivery-date/webapi';
+import { GetDelivery } from '@/delivery-date/webapi';
 import moment from 'moment';
 import PickupDelivery from '../customer-details/component/pickup-delivery';
 import PaymentMethod from './component/payment-method';
-import { addAddress, updateAddress } from '../customer-details/webapi';
+import { addAddress, updateAddress } from '@/customer-details/webapi';
 import CreditCard from './component/credit-card';
 import {
   skipManageAllSubscription,
@@ -170,16 +170,16 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       .getTaskSubscriptionList({
         customerAccount: sessionStorage.getItem('taskCustomerAccount')
       })
-      .then((data) => {
+      .then(async(data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionList = this.handleSubscriptionGoods(
             res?.context?.subscriptionResponseVOList
           );
           if (subscriptionList.length > 0) {
-            const dictionaryObj = getSubscriptionAllSysDictionary();
+            const dictionaryObj = await getSubscriptionAllSysDictionary();
             this.setState({
-              country: dictionaryObj.country,
+              countryArr: dictionaryObj.countryArr,
               frequencyList: dictionaryObj.frequencyList,
               frequencyClubList: dictionaryObj.frequencyClubList,
               individualFrequencyList: dictionaryObj.individualFrequencyList

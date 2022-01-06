@@ -290,7 +290,7 @@ class ListView extends React.Component<any, any> {
                           />
                         </span>
 
-                        <div style={{ width: 310, display: 'inline-block' }}>
+                        <div style={{ minWidth:300,maxWidth: 450, display: 'inline-block' }}>
                           <span
                             style={{
                               marginLeft: 20,
@@ -313,11 +313,12 @@ class ListView extends React.Component<any, any> {
                                 <FormattedMessage id="Order.fightTogether" />
                               </span>
                             )}
-                            {v.get('isAutoSub') && (
+                            {v.get('isAutoSub')&&(
                               <span style={styles.platform}>
                                 <FormattedMessage id="Order.subscription" />
                               </span>
                             )}
+
                             {v.get('isAutoSub') ? (
                               <span
                                 style={{
@@ -327,6 +328,7 @@ class ListView extends React.Component<any, any> {
                                 }}
                               >
                                 {v.get('subscribeId')}
+
                               </span>
                             ) : (
                               ''

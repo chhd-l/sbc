@@ -5431,5 +5431,8 @@ export default {
   "Setting.hubContent": "Hub Content",
   "Setting.Language": "Language",
   "Setting.Live": "Live",
-  "Setting.Test": "Test"
+  "Setting.Test": "Test",
+  "PetOwner.AddBlocklist": "Add email to blocklist",
+  "PetOwner.EditErrorMessage": "Edit error massage",
+  "PetOwner.EmailExist": "The email already on the blocklist"
 };

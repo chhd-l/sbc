@@ -825,7 +825,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       const { deliveryDate, timeSlot } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList = res.context.timeSlots;
+        let deliveryDateList = res.context?.timeSlots||[];
         this.setState({
           deliveryDateList: deliveryDateList,
           timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],

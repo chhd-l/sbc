@@ -662,6 +662,7 @@ export default {
   "Setting.editOrderIdFormat": "Edit order ID format",
   "Setting.HeaderAndFooter": "Header & Footer",
   "Setting.header": "Header",
+  "Setting.shopContactInfo": "Shop contact information",
   "Content.Prompt": "Prompt",
   "Content.enableTheNavigation": "Are you sure to  enable  the navigation?",
   "Content.disableTheNavigation": "Are you sure to  disable  the navigation?",

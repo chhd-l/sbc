@@ -142,7 +142,7 @@ class ProductDictionary extends Component<any, any> {
           width: '10%'
         },
         {
-          title: <FormattedMessage id='Setting.Priority' />,
+          title: <FormattedMessage id='PetOwner.Operation' />,
           dataIndex: 'operation',
           key: 'operation',
           width: '10%',

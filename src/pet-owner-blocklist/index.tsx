@@ -1,293 +1,292 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Const, RCi18n } from 'qmkit';
-import {
-  Table,
-  Tooltip,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  message,
-  Spin,
-  Popconfirm,
-  Modal
-} from 'antd';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { Input, Button, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
+
+import { Headline, BreadCrumb, Const, RCi18n, ValidConst } from 'qmkit';
 import * as webapi from './webapi';
+import TablePage from '../product-dictionary/component/table';
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 }
-  }
-};
-const FormItem = Form.Item;
 
-class PetOwnerBlockList extends Component<any, any> {
-  constructor(props: any) {
+class ProductDictionary extends Component<any, any> {
+  tableRef: any;
+
+  constructor(props) {
     super(props);
+
+    this.tableRef = React.createRef();
+
     this.state = {
-      loading: false,
-      title: 'Pet owner blocklist',
-      taggingList: [],
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0
-      },
-      modalName: '',
-      visible: false,
-      blocklistForm: {
-        name: ''
-      },
-      isEditErrorMessage: false
+      id: '',
+      email: '',
+      message: '',
+      errorMessage: '',
+      modalVisible: false,
+      modalLoading: false,
+      updateLoading: false
     };
   }
 
-  getBlockList = () => {
-    const { pagination } = this.state;
-    let params = {
-      pageNum: pagination.current - 1,
-      pageSize: pagination.pageSize
-    };
+  searchFunc = async (params) => {
+    const { res } = await webapi.getBlockList(params);
+
+    if (res.code === Const.SUCCESS_CODE) {
+      const { total, last, customerEmailFiltrList } = res.context;
+      return { total, last, content: customerEmailFiltrList };
+    } else {
+      return false;
+    }
+  };
+
+  handleSearch = (params) => {
+    this.tableRef.current?.resetSearch(params);
+  };
+
+  handleRefresh = () => {
+    this.tableRef.current?.search();
+  };
+
+  handleAdd = () => {
     this.setState({
-      loading: true
+      id: '',
+      email: '',
+      description: '',
+      errorMessage: '',
+      modalVisible: true
     });
-    webapi
-      .getTaggingList(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          const { pagination } = this.state;
-          let taggingList = res.context.segmentList;
-          pagination.total = res.context.total;
-          this.setState({
-            taggingList,
-            loading: false,
-            pagination
-          });
-        } else {
-          this.setState({
-            loading: false
-          });
-          message.error(res.message || 'Operation failure');
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failure');
+  };
+
+  handleEdit = (item) => {
+    const { id, name, description } = item;
+
+    this.setState({
+      id: id,
+      email: name,
+      description: description || '',
+      errorMessage: '',
+      modalVisible: true
+    });
+  };
+
+  handleUpdate = () => {
+    const { id } = this.state;
+
+    if (!id) {
+      // new email
+      this.addEmail();
+    } else {
+      // new error message
+      this.addDescription();
+    }
+  };
+
+  addEmail = async () => {
+    const { email } = this.state;
+
+    this.setState({
+      updateLoading: true
+    });
+
+    const { res } = await webapi.addBlockEmail({
+      name: email
+    });
+
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+      this.setState({
+        modalVisible: false
       });
-  };
-
-  handleTableChange = (pagination) => {
-    this.setState(
-      {
-        pagination: pagination
-      },
-      () => this.getBlockList()
-    );
-  };
-
-  openAddPage = () => {
-    let blocklistForm = {
-      name: ''
-    };
-    this.setState({
-      modalName: 'Add email to blocklist',
-      visible: true,
-      blocklistForm,
-      isEditErrorMessage: false
-    });
-  };
-
-  editErrorMessage = () => {
-    let blocklistForm = {
-      name: 'your email has be blocked'
-    };
-    this.setState({
-      modalName: 'Edit Error Message',
-      visible: true,
-      blocklistForm,
-      isEditErrorMessage: true
-    });
-  };
-
-  deleteTagging = (id) => {
-    let idList = [];
-    idList.push(id);
-    let params = {
-      idList: idList
-    };
-    webapi
-      .deleteTagging(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message || 'Operation successful');
-          this.getBlockList();
-        } else {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || 'Operation failure');
+      this.handleRefresh();
+    }
+    if (res.code === 'K-000001') {
+      this.setState({
+        errorMessage: RCi18n({ id: 'PetOwner.EmailExist' })
       });
-  };
-
-  handleClose = () => {
-    this.props.form.resetFields();
+    }
     this.setState({
-      visible: false,
-      isEditErrorMessage: false
+      updateLoading: false
     });
   };
 
-  handleSubmit = () => {
-    const { isEditErrorMessage} = this.state;
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
+  addDescription = async () => {
+    const { id, email, description } = this.state;
+
+    this.setState({
+      updateLoading: true
+    });
+
+    const { res } = await webapi.updateBlockMessage({
+      id,
+      name: email,
+      description
+    });
+
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+      this.setState({
+        modalVisible: false
+      });
+      this.handleRefresh();
+    }
+
+    this.setState({
+      updateLoading: false
+    });
+  };
+
+  handleDelete = async (id) => {
+    const { res } = await webapi.deleteBlock({
+      idList: [id]
+    });
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success('Operate successfully');
+      this.handleRefresh();
+    }
+  };
+
+  handleChange = (key, value) => {
+    if (key === 'email') {
+      if (!ValidConst.email.test(value)) {
+        this.setState({
+          errorMessage: RCi18n({ id: 'PetOwner.theCorrectEmail' })
+        });
+      } else {
+        this.setState({
+          errorMessage: ''
+        });
       }
+    }
+
+    this.setState({
+      [key]: value
     });
   };
 
   render() {
-    const {
-      loading,
-      title,
-      taggingList,
-      pagination,
-      blocklistForm,
-      modalName,
-      visible,
-      isEditErrorMessage
-    } = this.state;
-
+    const { id, email, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
     const columns = [
       {
-        title: 'Eamil',
-        dataIndex: 'email'
+        title: <FormattedMessage id='Survey.email' />,
+        dataIndex: 'name',
+        key: 'name'
       },
       {
-        title: 'Operation',
-        dataIndex: '',
-        key: 'x',
-        width: '10%',
+        title: <FormattedMessage id='Dashboard.Error Message' />,
+        dataIndex: 'description',
+        key: 'description'
+      },
+      {
+        title: <FormattedMessage id='Product.Operation' />,
+        dataIndex: 'operation',
+        key: 'operation',
+        width: '180px',
         render: (text, record) => (
-          <div>
-            <Popconfirm
-              placement="topLeft"
-              title="Are you sure you want to delete this email?"
-              onConfirm={() => this.deleteTagging(record.id)}
-              okText="Confirm"
-              cancelText="Cancel"
-            >
-              <Tooltip placement="top" title="Delete">
-                <a className="iconfont iconDelete"></a>
+          <span>
+            <Tooltip placement='top' title={`${RCi18n({ id: 'Setting.Edit' })}`}>
+              <a type='link' className='iconfont iconEdit' onClick={() => this.handleEdit(record)} />
+            </Tooltip>
+
+            <Divider type='vertical' />
+            <Popconfirm placement='topLeft' title={`${RCi18n({ id: 'Setting.Areyousuretodelete' })}`}
+                        onConfirm={() => this.handleDelete(record.id)}
+                        okText={(window as any).RCi18n({ id: 'Setting.Confirm' })}
+                        cancelText={(window as any).RCi18n({ id: 'Setting.Cancel' })}>
+              <Tooltip placement='top' title={`${RCi18n({ id: 'Setting.Delete' })}`}>
+                <a type='link' className='iconfont iconDelete' />
               </Tooltip>
             </Popconfirm>
-          </div>
+          </span>
         )
       }
     ];
-    const { getFieldDecorator } = this.props.form;
-    let field = isEditErrorMessage ? 'Error Message' : 'Email';
-    let fieldError = isEditErrorMessage ? 'Error Message is required' : 'Email is required';
-    let emailValidate = !isEditErrorMessage
-      ? { type: 'email', message: RCi18n({ id: 'Order.EmailFormatError' }) }
-      : {};
+
     return (
       <div>
-        <Spin spinning={loading}>
-          <BreadCrumb thirdLevel={true}></BreadCrumb>
-          <div className="container-search">
-            <Row>
-              <Col span={12} style={{ textAlign: 'left' }}>
-                <Button
-                  type="primary"
-                  style={{ margin: '10px 0 10px 0' }}
-                  onClick={() => this.openAddPage()}
-                >
-                  <span>Add email to blocklist</span>
-                </Button>
-              </Col>
-              <Col span={12} style={{ textAlign: 'right' }}>
-                <Button
-                  type="primary"
-                  style={{ margin: '10px 0 10px 0' }}
-                  onClick={() => this.editErrorMessage()}
-                >
-                  <span>Edit error message</span>
-                </Button>
-              </Col>
-            </Row>
+        <BreadCrumb />
 
-            <Table
-              style={{ paddingRight: 20 }}
-              rowKey="id"
-              columns={columns}
-              dataSource={taggingList}
-              pagination={pagination}
-              scroll={{ x: '100%' }}
-              onChange={this.handleTableChange}
-            />
-          </div>
-        </Spin>
+        <div className='container-search'>
+          <Headline title={`${RCi18n({ id: 'Menu.Pet owner blocklist' })}`} />
+
+          <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleAdd}>
+            <FormattedMessage id='Setting.Add' />
+          </Button>
+        </div>
+
+        <div className='container'>
+          <TablePage
+            ref={this.tableRef}
+            initLoad={true}
+            searchFunc={this.searchFunc}
+            columns={columns}
+          />
+        </div>
+
         <Modal
           zIndex={1000}
-          width="600px"
-          title={modalName}
-          visible={visible}
-          confirmLoading={loading}
+          width='600px'
+          title={!id ? RCi18n({ id: 'PetOwner.AddBlocklist' }) : RCi18n({ id: 'PetOwner.EditErrorMessage' })}
+          visible={modalVisible}
+          confirmLoading={modalLoading}
           maskClosable={false}
-          onCancel={this.handleClose}
+          onCancel={() =>
+            this.setState({
+              modalVisible: false
+            })
+          }
           footer={[
-            <Button key="back" onClick={this.handleClose}>
-              Close
+            <Button
+              key='back'
+              onClick={() => {
+                this.setState({
+                  modalVisible: false
+                });
+              }}
+            >
+              <FormattedMessage id='Product.Close' />
             </Button>,
-            <Button key="submit" type="primary" onClick={() => this.handleSubmit()}>
-              Submit
+            <Button
+              type='primary'
+              key='submit'
+              loading={updateLoading}
+              disabled={errorMessage || id && !description.trim() || !id && !email}
+              onClick={this.handleUpdate}
+            >
+              <FormattedMessage id='Product.Submit' />
             </Button>
           ]}
         >
-          <Form {...formItemLayout}>
-            <FormItem label={field}>
-              {getFieldDecorator('taggingName', {
-                rules: [
-                  {
-                    required: true,
-                    message: fieldError
-                  },
-                  emailValidate
-                ],
-                initialValue: blocklistForm.name
-              })(
-                <Input
-                  style={{ width: '80%' }}
-                  onChange={(e) => {
-                    const value = (e.target as any).value;
-                    blocklistForm.name = value;
-                    this.setState({
-                      blocklistForm
-                    });
-                  }}
-                />
-              )}
-            </FormItem>
-          </Form>
+          <div style={{ padding: '60px 0' }}>
+            {
+              !id ? (
+                <Row gutter={[24, 12]}>
+                  <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                    <FormattedMessage id='PetOwner.Email' />:
+                  </Col>
+                  <Col span={14}>
+                    <Input value={email} onChange={e => this.handleChange('email', e.target.value)} />
+                  </Col>
+                </Row>
+              ) : (
+                <Row gutter={[24, 12]}>
+                  <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                    <FormattedMessage id='Dashboard.Error Message' />:
+                  </Col>
+                  <Col span={14}>
+                    <Input value={description} onChange={e => this.handleChange('description', e.target.value)} />
+                  </Col>
+                </Row>
+              )
+            }
+            <Row gutter={[24, 12]}>
+              <Col span={6} />
+              <Col span={14} style={{ color: '#e2001a' }}>
+                {errorMessage}
+              </Col>
+            </Row>
+          </div>
         </Modal>
       </div>
     );
   }
 }
-export default Form.create()(PetOwnerBlockList);
+
+export default injectIntl(ProductDictionary);

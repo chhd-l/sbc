@@ -1,48 +1,47 @@
 import { Fetch } from 'qmkit';
+
 type TResult = {
   code: string;
   message: string;
   context: any;
 };
 
-//new
 
-// 分页获取 tag list
-export function getTaggingList(filterParams = {}) {
-  return Fetch<TResult>('/customer/segment/segment/query', {
+export function getBlockList(params = {}) {
+  return Fetch<TResult>('/customer/filter/query', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+      ...params
     })
   });
 }
 
-// 新增tag
-export function addTagging(filterParams = {}) {
-  return Fetch<TResult>('/customer/segment/segment', {
+export function addBlockEmail(params = {}) {
+  return Fetch<TResult>('/customer/filter', {
     method: 'POST',
     body: JSON.stringify({
-      ...filterParams
+      ...params
     })
+  }, {
+    isHandleResult: true,
+    customerTip: true
   });
 }
 
-// 编辑tag
-export function editTagging(filterParams = {}) {
-  return Fetch<TResult>('/customer/segment/segment', {
+export function updateBlockMessage(params = {}) {
+  return Fetch<TResult>('/customer/filter', {
     method: 'PUT',
     body: JSON.stringify({
-      ...filterParams
+      ...params
     })
   });
 }
 
-// 删除tag
-export function deleteTagging(filterParams = {}) {
-  return Fetch<TResult>('/customer/segment/segment', {
+export function deleteBlock(params = {}) {
+  return Fetch<TResult>('/customer/filter', {
     method: 'DELETE',
     body: JSON.stringify({
-      ...filterParams
+      ...params
     })
   });
 }

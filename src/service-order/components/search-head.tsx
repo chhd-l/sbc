@@ -172,7 +172,7 @@ class SearchHead extends Component<any, any> {
         )}
         <Menu.Item>
           <AuthWrapper functionName="fOrderList004">
-            <Link to="/batch-export/order-list">
+            <Link to="/batch-export/service-order-list">
               <FormattedMessage id="Order.batchExport" />
             </Link>
           </AuthWrapper>

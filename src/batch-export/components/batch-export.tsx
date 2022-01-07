@@ -16,6 +16,7 @@ interface BatchExportProps {
   history: any;
   title: string;
   exportType: number;
+  isServiceOrder:boolean
 }
 
 class BatchExport extends Component<BatchExportProps, any> {
@@ -194,11 +195,11 @@ class BatchExport extends Component<BatchExportProps, any> {
       loading: true
     });
     let { fieldKey, selectKey, exportField } = this.state;
-    let { exportType, form } = this.props;
+    let { exportType, form, isServiceOrder } = this.props;
     let params = {
-      "module": exportType,
-      "pickColums": selectKey,
-      "tradeExportRequest": {}
+      'module': exportType,
+      'pickColums': selectKey,
+      'tradeExportRequest': {}
     };
     let bChecked = true;
     if (exportField === 'search') {
@@ -236,6 +237,10 @@ class BatchExport extends Component<BatchExportProps, any> {
               obj[fieldKey[key]] = values[key] || '';
             }
           }
+          if(isServiceOrder){
+            obj['orderType'] = 'SINGLE_PURCHASE';
+            obj['orderSource'] ='L_ATELIER_FELIN';
+          }
 
           params.tradeExportRequest = obj;
         } else {
@@ -250,7 +255,7 @@ class BatchExport extends Component<BatchExportProps, any> {
       });
       return;
     }
-    
+
     batchExportMain(params).then(({ res }) => {
       this.setState({
         loading: false
@@ -273,7 +278,7 @@ class BatchExport extends Component<BatchExportProps, any> {
         });
       }
     });
-    
+
   }
 
   render() {
@@ -347,4 +352,4 @@ const styles = {
   wrapper: {
     width: 200
   }
-};
+} as any;

@@ -25,6 +25,10 @@ const images = {
   shipping_icon:require('../images/full/icon_Free shipping.png'),
   gift_icon:require('../images/full/icon_Gift.png'),
   first_order_icon:require('../images/full/icon_First order discount.png'),
+  myvet_coupon_creation: require('../images/myvet/creation.png'),
+  myvet_distribution: require('../images/myvet/distribution.png'),
+  myvet_reduction: require('../images/myvet/reduction.png'),
+  myvet_discount: require('../images/myvet/discount.png'),
 };
 
 const iconSpanStyle = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
@@ -96,7 +100,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left" style={iconSpanStyle}>
-                      <img src={images.order_001} style={iconStyle} />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? images.myvet_coupon_creation : images.order_001} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>
@@ -151,7 +155,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left" style={iconSpanStyle}>
-                      <img src={images.order_003} style={iconStyle} />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? images.myvet_distribution : images.order_003} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>
@@ -229,7 +233,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left" style={iconSpanStyle}>
-                      <img src={images.full_001} style={iconStyle} />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? images.myvet_reduction : images.full_001} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>
@@ -257,7 +261,7 @@ export default class List extends React.Component<any, any> {
                     }
                   >
                     <span className="left" style={iconSpanStyle}>
-                      <img src={images.full_002} style={iconStyle} />
+                      <img src={Const.SITE_NAME === 'MYVETRECO' ? images.myvet_discount : images.full_002} style={iconStyle} />
                     </span>
                     <div className="info">
                       <h5>

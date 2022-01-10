@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
-import { getPreviewEmailTemp, EnhanceEmailTemp } from '../../web_modules/qmkit/previewEmail';
+import { getPreviewEmailTemp } from '../../web_modules/qmkit/previewEmail';
 
-const enhance = new EnhanceEmailTemp();
 
 const MessageTemplateDetail = ({ visibleTemplate, setVisibleTemplate, taskId }) => {
 
@@ -43,13 +42,6 @@ const MessageTemplateDetail = ({ visibleTemplate, setVisibleTemplate, taskId }) 
     }
   }, [visibleTemplate]);
 
-
-  useEffect(() => {
-    enhance.init();
-    return () => {
-      enhance.destroy();
-    }
-  }, [previewHtml]);
 
   return (
     <>

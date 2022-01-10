@@ -178,14 +178,14 @@ export default class MyHeader extends React.Component {
               <FormattedMessage id="Public.ChooseLocation" />
             </span>
           </p>
-          <p style={styles.languageMore}>
+          {this.state.frontLanguageList.length>7?<p style={styles.languageMore}>
             <a onClick={() => this.handleMoreLanguage()}>
               <span style={this.state.showMoreLang?{display:"block"}:{display:"none"}}>
                 <FormattedMessage id="Public.more" />
                 <span style={styles.languageGt}>&gt;</span>
               </span>
             </a>
-          </p>
+          </p>:null}
           <div style={styles.languageListWrap}>
             {this.state.frontLanguageList?.map((item) => {
               return (

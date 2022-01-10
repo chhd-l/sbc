@@ -477,7 +477,7 @@ class CouponInfoForm extends Component<any, any> {
                 value={couponPurchaseType}>
                 <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
                 <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
-                <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+                {Const.SITE_NAME !== 'MYVETRECO' && <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>}
                 <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
               </Radio.Group>
             </div>
@@ -872,9 +872,9 @@ class CouponInfoForm extends Component<any, any> {
                     <Radio value={0}>
                       <span style={styles.darkColor}><FormattedMessage id="Marketing.AllProducts" /></span>
                     </Radio>
-                    <Radio value={5}>
+                    {Const.SITE_NAME !== 'MYVETRECO' && <Radio value={5}>
                       <span style={styles.darkColor}><FormattedMessage id="Marketing.Category" /></span>
-                    </Radio>
+                    </Radio>}
                     <Radio value={4}>
                       <span style={styles.darkColor}><FormattedMessage id="Marketing.Custom" /></span>
                     </Radio>

@@ -385,7 +385,7 @@ class FullDiscountForm extends React.Component<any, any> {
             <Radio.Group onChange={e => this.promotionType(e)} value={marketingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              {Const.SITE_NAME !== 'MYVETRECO' && <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>}
               <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
               {/* <Radio value={4}><FormattedMessage id="Marketing.Individualization" /></Radio> */}
             </Radio.Group>
@@ -846,7 +846,7 @@ class FullDiscountForm extends React.Component<any, any> {
           })(
             <Radio.Group onChange={(e) => this.scopeTypeOnChange(e.target.value)} >
               <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
+              {Const.SITE_NAME !== 'MYVETRECO' && <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>}
               <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
               <Radio value={3}><FormattedMessage id="Marketing.Attribute" /></Radio>
             </Radio.Group>

@@ -5400,7 +5400,7 @@ export default {
   "siteMap": "Site map",
   "clientKey": "Client Key",
   "Menu.Pet owner blocklist": "Pet owner blocklist",
-  "Order.orderSource felin": "L’Atellier Feline",
+  "Order.orderSource felin": "L_ATELIER_FELIN",
   "PetOwner.TaggingTypeLabel": "Tagging type",
   "Setting.timeSolt": "Time slot",
   "task.editAllSubLink": "Edit All Subscription",

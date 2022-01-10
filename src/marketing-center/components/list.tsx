@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Col, message, Row } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { AuthWrapper, Headline, history } from 'qmkit';
+import { AuthWrapper, Headline, history, Const } from 'qmkit';
 
 const images = {
   new_01: require('../images/new/01.png'),
@@ -296,7 +296,7 @@ export default class List extends React.Component<any, any> {
               {/*  </Col>*/}
               {/*</AuthWrapper>*/}
 
-              <AuthWrapper functionName="f_marketing_gift_add">
+              {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_marketing_gift_add">
                 <Col span={6}>
                   <a
                     className="createMarket"
@@ -318,7 +318,7 @@ export default class List extends React.Component<any, any> {
                     </div>
                   </a>
                 </Col>
-              </AuthWrapper>
+              </AuthWrapper>}
             </Row>
             <Row>
               {/*<AuthWrapper functionName="f_marketing_gift_add">*/}

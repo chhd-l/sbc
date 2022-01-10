@@ -69,7 +69,7 @@ async function getDynamicLanguage() {
     }
 
   }).catch((err) => {
-    console.log('phrase langugage fetch error', err);
+    console.log('phrase language fetch error', err);
   });
 
   language = assignObj(enUSLang, retRes);

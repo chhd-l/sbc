@@ -212,7 +212,7 @@ class FreeShippingAddForm extends React.Component<any, any> {
             }} value={shippingBean.get('promotionType')}>
               <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
-              <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>
+              {Const.SITE_NAME !== 'MYVETRECO' && <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio>}
               <Radio value={3}><FormattedMessage id="Marketing.Singlepurchase" /></Radio>
             </Radio.Group>
           </div>

@@ -601,7 +601,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   pickupConfirm = async () => {
     const { deliveryList, pickupAddress, pickupFormData, customerId, countryArr } = this.state;
 
-    let tempPickup = Object.keys(deliveryList[0]).reduce((pre, cur) => {
+    let tempPickup = Object.keys(deliveryList.length > 0 ? deliveryList[0] : {}).reduce((pre, cur) => {
       return Object.assign(pre, { [cur]: '' });
     }, {});
 

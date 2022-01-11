@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form, Input, Row, Col, message, Select, Spin } from 'antd';
+import { Modal, Button, Spin } from 'antd';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
 import { getPreviewEmailTemp } from '../../web_modules/qmkit/previewEmail';
@@ -41,6 +41,7 @@ const MessageTemplateDetail = ({ visibleTemplate, setVisibleTemplate, taskId }) 
       getEmailTask();
     }
   }, [visibleTemplate]);
+
 
   return (
     <>

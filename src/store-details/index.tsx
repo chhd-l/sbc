@@ -347,7 +347,7 @@ class StoreDetail extends React.Component<any, any> {
                     <Select onChange={this.modifyChangedStatus}>
                       {languageList.map((item) => (
                         <Option value={item.id.toString()} key={item.id.toString()}>
-                          {item.valueEn}
+                          {item.name}
                         </Option>
                       ))}
                     </Select>

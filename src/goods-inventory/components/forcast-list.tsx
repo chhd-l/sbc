@@ -110,7 +110,7 @@ export default class ForcastList extends React.Component<any, any> {
             text
           ) : (
             <p style={styles.lineThrough}>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+              {/*{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}*/}
               {text}
             </p>
           )

@@ -454,7 +454,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           </span>
         ),
         key: 'Price',
-        width: '15%',
+        width: '10%',
         render: (text, record) => (
           <div>
             {subscriptionInfo.subscriptionType == 'Individualization' ? null : (
@@ -477,7 +477,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         ),
         dataIndex: 'subscribeNum',
         key: 'subscribeNum',
-        width: '15%',
+        width: '10%',
         render: (text: any) => (
           <>
             {subscriptionInfo.subscriptionType == 'Individualization' ? 1 : (text)}
@@ -522,6 +522,23 @@ class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
+
+    //sprint8需求
+    // if(false){
+    //   columns.splice(
+    //     3,
+    //     0,
+    //     {
+    //       title:  <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+    //         <FormattedMessage id="subscription.realtimeStock" />
+    //       </span>,
+    //       dataIndex: 'subscribeNum',
+    //       key: 'realtime',
+    //       width: '10%',
+    //       render: (text, record) => (<span>{text}</span>)
+    //     }
+    //   );
+    // }
 
     const operatorColumns = [
       {

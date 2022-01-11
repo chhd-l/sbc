@@ -29,6 +29,7 @@ class CustomerList extends React.Component<any, any> {
     this.setState({ loading: true });
     getCustomerList({
       email: searchTxt,
+      customerLevelId: 234,  //过滤调Guest数据
       pageNum: pagination.current - 1,
       pageSize: pagination.pageSize
     })

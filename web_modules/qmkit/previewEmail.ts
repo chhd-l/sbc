@@ -49,7 +49,8 @@ export class EnhanceEmailTemp {
     this._phraseKeys = this._tempOutBox.querySelectorAll("[phrase]");
     this._phraseKeys.forEach(el => {
       if (el.nodeName === 'A') {
-        el.setAttribute('href', 'javascript:;')
+        el.setAttribute('href', 'javascript:;');
+        el.removeAttribute('target');
       }
       el.addEventListener("mouseover", this._tempAddMouseOver);
       el.addEventListener("mouseleave", this._tempAddMouseLeave);
@@ -91,6 +92,7 @@ export class EnhanceEmailTemp {
     layerEl.style.margin = "0 auto";
     layerEl.style.padding = "10px 16px";
     layerEl.style.width = "220px";
+    layerEl.style.borderLeft = "2px solid #b7eb8f";
     layerEl.style.boxShadow = "0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d";
     layerEl.style.borderRadius = "2px";
     layerEl.style.fontSize = "14px";

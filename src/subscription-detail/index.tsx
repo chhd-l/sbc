@@ -142,6 +142,8 @@ class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionInfo = {
             subscribeSource: subscriptionDetail.subscribeSource,
             deliveryTimes: subscriptionDetail.deliveryTimes,
+            showRealTimeStock:subscriptionDetail.subscribeStatus==='0'||subscriptionDetail.subscribeStatus==='1',
+            subscribeStatus:subscriptionDetail.subscribeStatus,
             subscriptionStatus: subscriptionDetail.subscribeStatus === '0' ? <FormattedMessage id="Subscription.Active" /> : subscriptionDetail.subscribeStatus === '1' ? <FormattedMessage id="Subscription.Pause" /> : <FormattedMessage id="Subscription.Inactive" />,
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
@@ -524,7 +526,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     ];
 
     //sprint8需求
-    // if(false){
+    // if(subscriptionInfo.showRealTimeStock){
     //   columns.splice(
     //     3,
     //     0,

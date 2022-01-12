@@ -98,11 +98,11 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
     return dataList.map((item, idx) => {
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={idx}>
-          <td colSpan={7} style={{ padding: 0 }}>
+          <td colSpan={6} style={{ padding: 0 }}>
             <table className="ant-table-self" style={{ border: '1px solid #ddd' }}>
               <thead>
                 <tr>
-                  <td colSpan={7}>
+                  <td colSpan={6}>
                     <div style={styles.orderCon}>
                       <Link to={'/subscription-detail/' + item.subscribeId} style={styles.orderId}>{item.subscribeId}</Link>
                       <span style={styles.orderTime}><FormattedMessage id="PetOwner.SubscriptionTime" />: {moment(item.createTime).format(Const.TIME_FORMAT)}</span>
@@ -115,19 +115,19 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                   item.goodsInfo.map((v, k) => (
                     <>
                       <tr key={k}>
-                        <td style={{ width: '30%' }}>
+                        <td style={{ width: '20%' }}>
                           <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
                         </td>
                         <td style={{ width: '15%' }}>{item.subscriptionType==='Individualization'?'Your pet\'s personalized subscription':v.goodsName}</td>
                         {k === 0 && (
                           <>
-                            <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
+                            <td rowSpan={item.goodsInfo.length} style={{ width: '15%' }}>
                               {item.subscriptionType}
                             </td>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '25%' }}>
                               {item.petsInfo && item.petsInfo.petsId ? item.petsInfo.petsId : ''}
                             </td>
-                            <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
+                            <td rowSpan={item.goodsInfo.length} style={{ width: '15%' }}>
                               {item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}
                             </td>
                             <td rowSpan={item.goodsInfo.length} style={{ width: '10%' }}>
@@ -140,11 +140,11 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                   ))
                 ) : (
                   <tr>
-                    <td style={{ width: '30%' }}></td>
+                    <td style={{ width: '20%' }}></td>
                     <td style={{ width: '15%' }}></td>
-                    <td style={{ width: '10%' }}>{item.subscriptionType}</td>
+                    <td style={{ width: '15%' }}>{item.subscriptionType}</td>
                     <td style={{ width: '25%' }}>{item.petsInfo && item.petsInfo.petsId ? item.petsInfo.petsId : ''}</td>
-                    <td style={{ width: '10%' }}>{item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}</td>
+                    <td style={{ width: '15%' }}>{item.petsInfo && item.petsInfo.petsName ? item.petsInfo.petsName : ''}</td>
                     <td style={{ width: '10%' }}>{item.subscribeStatus === '0' ? RCi18n({id:"Subscription.Active"}) : item.subscribeStatus === '1' ? RCi18n({id:"Subscription.Pause"}) : RCi18n({id:"Subscription.Inactive"})}</td>
                   </tr>
                 )}
@@ -167,11 +167,11 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                 <table style={{ borderCollapse: 'separate', borderSpacing: '0 1em' }}>
                   <thead className="ant-table-thead">
                     <tr>
-                      <th style={{ width: '30%' }}><FormattedMessage id="PetOwner.Product" /></th>
+                      <th style={{ width: '20%' }}><FormattedMessage id="PetOwner.Product" /></th>
                       <th style={{ width: '15%' }}><FormattedMessage id="PetOwner.ProductName" /></th>
-                      <th style={{ width: '10%' }}><FormattedMessage id="PetOwner.subscriptionType" /></th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="PetOwner.subscriptionType" /></th>
                       <th style={{ width: '25%' }}><FormattedMessage id="PetOwner.petID" /></th>
-                      <th style={{ width: '10%' }}><FormattedMessage id="PetOwner.PetName" /></th>
+                      <th style={{ width: '15%' }}><FormattedMessage id="PetOwner.PetName" /></th>
                       <th style={{ width: '10%', textAlign: 'left' }}><FormattedMessage id="PetOwner.SubscriptionStatus" /></th>
                     </tr>
                   </thead>

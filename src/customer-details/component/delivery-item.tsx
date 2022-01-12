@@ -145,11 +145,11 @@ class DeliveryItem extends React.Component<Iprop, any> {
   };
 
   validateAddress = () => {
+    this.setState({ loading: true });
     //us fedex进行弹框显示建议地址
     if (this.state.suggestionMethodName === 'FEDEX') {
       this.props.form.validateFields((err, fields) => {
         if (!err) {
-          this.setState({ loading: true });
           validateAddress({
             ...fields,
             deliveryAddress: [fields.address1, fields.address2].join('')
@@ -326,6 +326,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
           .catch(() => {
             this.setState({ loading: false });
           });
+      } else {
+        this.setState({ loading: false });
       }
     });
   };

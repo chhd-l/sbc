@@ -126,8 +126,10 @@ export default class MyHeader extends React.Component {
   returnTask(item, type) {
     if (type === 'reminderTasks') {
       this.readTask(item);
+      history.push(`/edit-task/${item.ownerId}`);
+    } else {
+      history.push(`/edit-task/${item.id}`);
     }
-    history.push(`/edit-task/${item.id}`);
   }
 
   async readTask(item) {

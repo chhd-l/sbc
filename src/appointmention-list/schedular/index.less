@@ -121,10 +121,22 @@
     }
 .top-border-white{
   border-top: 1px solid #fff;
+  border-bottom: 1px solid #ffe7e5!important;
+  .each-duration {
+    &::before {
+      height: 106%;
+    }
+  }
 }
 .top-border-none{
-  // border-top: 1px solid #ffe7e5!important;
-  margin-top: -1px;
+  border-top: 1px solid #ffe7e5!important;
+  border-bottom: 1px solid #ffe7e5!important;
+  // margin-top: -1px;
+  .each-duration {
+    &::before {
+      height: 106%;
+    }
+  }
 }
 .popup-class{
   

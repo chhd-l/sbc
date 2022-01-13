@@ -219,12 +219,16 @@ class ListView extends React.Component<any, any> {
         console.info('....',err)
       }
     }
+    debugger
     let tempArr = oldUrl.split('?');
     let pcWebsite = JSON.parse(sessionStorage.getItem(cache.SYSTEM_BASE_CONFIG)).pcWebsite;
     let newUrl = couponCode ? `${oldUrl}?couponCode=${couponCode}`:oldUrl
-    if (pcWebsite && tempArr[1]) {
-      newUrl =  pcWebsite + '?' + tempArr[1]+ couponCode?`&couponCode=${couponCode}`:'';
-    } 
+    if(tempArr[1]){
+      newUrl = couponCode ? `${oldUrl}&couponCode=${couponCode}`:oldUrl
+    }
+    // if (pcWebsite && tempArr[1]) {
+    //   newUrl =  pcWebsite + '?' + tempArr[1]+ (couponCode?`&couponCode=${couponCode}`:'');
+    // } 
     return newUrl
 
   };

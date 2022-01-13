@@ -58,7 +58,7 @@ class WriteTipsForm extends React.Component<any, any> {
       isSend: recommendParams.isSend,
       suggest: recommendParams.suggest || '',
       disabled: recommendParams.isSend,
-      optimal: _type,
+      optimal: recommendParams.optimal || _type,
     }, () => {
       setFieldsValue({
         suggest: recommendParams.suggest || '',

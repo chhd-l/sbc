@@ -37,7 +37,7 @@ class NavigationList extends Component<any, any> {
     getStoreLanguages().then((res) => {
       this.setState({
         languages: res,
-        defaultLanguage: res[0].name
+        defaultLanguage: res && res.length ? res[0].valueEn : ''
       });
       if (this.props.location.state && this.props.location.state.language) {
         this.setState({
@@ -262,8 +262,8 @@ class NavigationList extends Component<any, any> {
                     >
                       {languages &&
                         languages.map((item, index) => (
-                          <Option value={item.name} key={index}>
-                            <img style={{ height: '20px', width: '20px' }} src={item.description} alt="Image" /> {item.name}
+                          <Option value={item.valueEn} key={index}>
+                            <img style={{ height: '20px', width: '20px' }} src={item.description} alt="Image" /> {item.valueEn}
                           </Option>
                         ))}
                     </Select>

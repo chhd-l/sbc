@@ -20,7 +20,7 @@ export async function getStoreLanguages() {
       });
       sessionStorage.setItem(cache.STORE_LANGUAGES, JSON.stringify(languages));
       if (languages && languages.length > 0) {
-        sessionStorage.setItem(cache.DEFAULT_LANGUAGE, languages[0].name);
+        sessionStorage.setItem(cache.DEFAULT_LANGUAGE, languages[0].valueEn);
       }
       return languages;
     }

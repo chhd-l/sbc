@@ -405,7 +405,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                         </Col> */}
                         <Col span={8}>
                         <Form.Item label={(window as any).RCi18n({ id: 'Prescriber.appointmentId' })}>
-
+                        {funType && <Search value={appointmentVO?.apptNo} disabled />}
                         {!funType && <Search value={apptNo||this.state.apptNo} onChange={this.onSearchApptNo} disabled={!apptNo?false:true} style={{ width: '100%' }} placeholder={(window as any).RCi18n({ id: 'Prescriber.enterPlaceholder' })} onSearch={value => this.findByApptNo(value)} enterButton />}
 
                         </Form.Item>

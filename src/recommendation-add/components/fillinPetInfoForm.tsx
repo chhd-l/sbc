@@ -381,6 +381,11 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
             <Spin spinning={loading}>
                 <Form onSubmit={this.next}>
                     <Row gutter={20}>
+                        <Col span={20}>
+                            <div style={{fontSize: '18px', color: '#e2001a', padding: '10px 0 10px'}}><FormattedMessage id="Prescriber.AppointmentInfo" /></div>
+                        </Col>
+                    </Row>
+                    <Row gutter={20}>
                         <Col span={8}>
                             <Form.Item label={RCi18n({ id: 'Prescriber.Date' })}>
                                 {getFieldDecorator('fillDate', {
@@ -451,6 +456,11 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                     initialValue: appointmentVO?.consumerEmail ?? '',
                                 })(<Input disabled={recommendParams.felinRecoId?true:false} />)}
                             </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={20}>
+                        <Col span={20}>
+                            <div style={{fontSize: '18px', color: '#e2001a', padding: '20px 0 20px'}}><FormattedMessage id="Prescriber.PetsInfo" /></div>
                         </Col>
                     </Row>
                     <Row gutter={20} >

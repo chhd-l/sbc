@@ -24,20 +24,22 @@ import 'moment/locale/sv';
 import { IntlProvider } from 'react-intl';
 import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
+import enUSLang from '../web_modules/qmkit/lang/files/en-US';
 import configOkta from '../web_modules/qmkit/config-okta';
-
-//moment.locale('zh-cn');
 
 let localeLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
 (window as any).RCi18n = RCi18n;
 
+
+const lastLang = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || enUSLang;
+
 const useDynamicLanguage = () => {
-  const [loading, setLoading] = useState(true);
-  const [dynamicLanguage, setDynamicLanguage] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [dynamicLanguage, setDynamicLanguage] = useState({...lastLang});
 
   useEffect(() => {
     async function getLanguage() {
-      setLoading(true);
+      setLoading(window.location.pathname !== '/login');
       const lang = await getDynamicLanguage();
       setDynamicLanguage(lang);
       setLoading(false);

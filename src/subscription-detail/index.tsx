@@ -106,13 +106,10 @@ class SubscriptionDetail extends React.Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionDetail = res.context;
-          let subscriptionInfo = {
-            subscribeSource: subscriptionDetail.subscribeSource,
-            deliveryTimes: subscriptionDetail.deliveryTimes,
+          let subscriptionInfo = Object.assign({}, subscriptionDetail, {
             showRealTimeStock:
               subscriptionDetail.subscribeStatus === '0' ||
               subscriptionDetail.subscribeStatus === '1',
-            subscribeStatus: subscriptionDetail.subscribeStatus,
             subscriptionStatus:
               subscriptionDetail.subscribeStatus === '0' ? (
                 <FormattedMessage id="Subscription.Active" />
@@ -121,23 +118,11 @@ class SubscriptionDetail extends React.Component<any, any> {
               ) : (
                 <FormattedMessage id="Subscription.Inactive" />
               ),
-            subscriptionNumber: subscriptionDetail.subscribeId,
-            subscriptionTime: subscriptionDetail.createTime,
-            presciberID: subscriptionDetail.prescriberId,
-            presciberName: subscriptionDetail.prescriberName,
-            consumer: subscriptionDetail.customerName,
-            consumerAccount: subscriptionDetail.customerAccount,
-            consumerType: subscriptionDetail.customerType,
-            phoneNumber: subscriptionDetail.customerPhone,
-            frequency: subscriptionDetail.cycleTypeId,
-            frequencyName: subscriptionDetail.frequency,
             nextDeliveryTime: moment(new Date(subscriptionDetail.nextDeliveryTime)).format(
               'MMMM Do YYYY'
             ),
-            promotionCode: subscriptionDetail.promotionCode,
-            subscriptionType: subscriptionDetail.subscriptionType,
-            subscriptionPlanType: subscriptionDetail.subscriptionPlanType
-          };
+            frequency: subscriptionDetail.cycleTypeId
+          });
           const countryArr = await getCountrySubFrequency();
           const frequencyList =
             subscriptionDetail.subscriptionType == 'Individual'
@@ -659,7 +644,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             {record.id ? (
               <Link to={'/order-detail/' + record.id}>
                 <Tooltip placement="top" title={<FormattedMessage id="Subscription.Detail" />}>
-                  <a style={styles.edit} className="iconfont iconDetails"/>
+                  <a style={styles.edit} className="iconfont iconDetails" />
                 </Tooltip>
               </Link>
             ) : null}
@@ -789,7 +774,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               <Col span={11} className="basic-info">
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionNumber" /> :{' '}
-                  <span>{subscriptionInfo.subscriptionNumber}</span>
+                  <span>{subscriptionInfo.subscribeId}</span>
                   {subscriptionInfo?.subscribeSource === 'SUPPLIER' ? (
                     <span>
                       [<FormattedMessage id="Order.goodwillOrder" />]
@@ -799,14 +784,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionDate" /> :
                   <span>
-                    {moment(new Date(subscriptionInfo.subscriptionTime)).format(
-                      'YYYY-MM-DD HH:mm:ss'
-                    )}
+                    {moment(new Date(subscriptionInfo.createTime)).format('YYYY-MM-DD HH:mm:ss')}
                   </span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.AuditorID" /> :{' '}
-                  <span>{subscriptionInfo.presciberID}</span>
+                  <span>{subscriptionInfo.prescriberId}</span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.AuditorName" /> :{' '}
@@ -824,19 +807,19 @@ class SubscriptionDetail extends React.Component<any, any> {
               <Col span={11} className="basic-info">
                 <p>
                   <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
-                  <span>{subscriptionInfo.consumer}</span>
+                  <span>{subscriptionInfo.customerName}</span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
-                  <span>{subscriptionInfo.consumerAccount}</span>
+                  <span>{subscriptionInfo.customerAccount}</span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.ConsumerType" /> :{' '}
-                  <span>{subscriptionInfo.consumerType}</span>
+                  <span>{subscriptionInfo.customerType}</span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.PhoneNumber" /> :{' '}
-                  <span>{subscriptionInfo.phoneNumber}</span>
+                  <span>{subscriptionInfo.customerPhone}</span>
                 </p>
               </Col>
             </Row>

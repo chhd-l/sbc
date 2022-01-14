@@ -207,7 +207,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                    <Col span={24}>
                    <div style={{ display: "flex", justifyContent: "space-between",padding:'0 20px' }}>
                         <span className="ant-form-text" style={{ fontWeight: 'bolder' }}><FormattedMessage id="Prescriber.Pet" />{index + 1}:</span>
-                        {(!stateCustomPet[item]?.petsId||!this.props.recommendParams.felinRecoId)&&<Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>}
+                       <Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>
                     </div>
                    </Col>
                     <Col span={12}>
@@ -215,7 +215,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                             {getFieldDecorator(`customerPet[${item}].petsName`, {
                                 initialValue: stateCustomPet[item]?.petsName ?? '',
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.inputpetName' }) }],
-                            })(<Input disabled={stateCustomPet[item]?.petsId?true:false} />)}
+                            })(<Input />)}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -224,7 +224,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 initialValue: stateCustomPet[item]?.petsSex ?? 1,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectGender' }) }],
 
-                            })(<Radio.Group disabled={stateCustomPet[item]?.petsId?true:false}>
+                            })(<Radio.Group>
                                 <Radio value={1}><FormattedMessage id="Prescriber.Female" /></Radio>
                                 <Radio value={0}><FormattedMessage id="Prescriber.Male" /></Radio>
                             </Radio.Group>)}
@@ -236,7 +236,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 initialValue: stateCustomPet[item]?.birthOfPets && moment(stateCustomPet[item]?.birthOfPets ?? null, 'YYYY-MM-DD') || null,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectDateofbirth:' }) }],
 
-                            })(<DatePicker disabled={stateCustomPet[item]?.petsId?true:false} style={{ width: '100%' }} />)}
+                            })(<DatePicker style={{ width: '100%' }} />)}
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -253,7 +253,6 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 defaultActiveFirstOption={false}
                                 filterOption={false}
                                 onSearch={this.onSearch}
-                                disabled={stateCustomPet[item]?.petsId?true:false}
                             >
                                 {
                                     petsBreedList.map(((it) => (<Option key={it.id} value={it.valueEn} label={it.valueEn}>{it.valueEn}</Option>)))
@@ -270,7 +269,6 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 //  rules: [{ required: true, message: 'Please select Sensitvities!' }],
 
                             })(<Select
-                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
@@ -287,7 +285,6 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 rules: [{ required: true, message: 'Please selected!' }],
 
                             })(<Select
-                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
@@ -304,7 +301,6 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 rules: [{ required: true, message: 'Please selected!' }],
 
                             })(<Select
-                                disabled={stateCustomPet[item]?.petsId?true:false}
                                 getPopupContainer={(trigger: any) => trigger.parentNode}
                             >
 
@@ -323,7 +319,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                     {getFieldDecorator(`customerPet[${item}].measure`, {
                                         initialValue: stateCustomPet[item]?.measure ?? 0,
                                         rules: [{ required: true, message: RCi18n({ id: 'Prescriber.inputWeight' }) }],
-                                    })(<Input disabled={stateCustomPet[item]?.petsId?true:false} />)}
+                                    })(<Input />)}
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
@@ -331,7 +327,6 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                     {getFieldDecorator(`customerPet[${item}].measureUnit`, {
                                         initialValue: stateCustomPet[item]?.measureUnit ?? 'kg',
                                     })(<Select
-                                        disabled={stateCustomPet[item]?.petsId?true:false}
                                         getPopupContainer={(trigger: any) => trigger.parentNode}
                                     >
 
@@ -349,7 +344,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 defaultValue: 0,
                                 initialValue: stateCustomPet[item]?.sterilized ?? 1,
                                 rules: [{ required: true, message: RCi18n({ id: 'Prescriber.selectSterilzed' }) }],
-                            })(<Radio.Group disabled={stateCustomPet[item]?.petsId?true:false}>
+                            })(<Radio.Group>
                                 <Radio value={1}><FormattedMessage id="Prescriber.Yes" /></Radio>
                                 <Radio value={0}><FormattedMessage id="Prescriber.No" /></Radio>
                             </Radio.Group>)}
@@ -467,7 +462,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                         <Col span={8}>
                             <Form.Item>
                                 <Select style={{ width: '100%' }}
-                               disabled={recommendParams.felinRecoId?true:false}
+
                                 allowClear
                                     onChange={this._onChangePets}
                                 >
@@ -478,11 +473,11 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 </Select>
                             </Form.Item>
                         </Col>
-                       {!recommendParams.felinRecoId&&<Col span={2} >
+                        <Col span={2} >
                             <Form.Item>
                                 <Button type="primary" onClick={this.addPet}>+ Add Pets</Button>
                             </Form.Item>
-                        </Col>} 
+                        </Col>
 
                     </Row>
                     <Row gutter={20}>

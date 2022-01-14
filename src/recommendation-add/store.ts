@@ -41,7 +41,27 @@ export default class AppStore extends Store {
         return item;
       }) || []
 
-      this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: [] });
+      // 编辑进来 主动根据 apptNo 查询一次pets list
+      let  petsList = [];
+      if (appointmentVO?.apptNo) {
+        const { res } = await webapi.fetchFelinFindByNoScan({ apptNo: appointmentVO?.apptNo });
+        if (res.code === Const.SUCCESS_CODE) {
+          const { pets } = res.context;
+          petsList = pets.map(item => {
+            let _tempWeight = item.weight ? JSON.parse(item.weight) : {}
+            item.measure = _tempWeight?.measure ?? 0;
+            item.measureUnit = _tempWeight?.measureUnit ?? 'kg';
+            return item
+          })
+          if (petsList.length > 0) {
+            petsList.map(item => {
+              item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD')
+            })
+          }
+        }
+      }
+
+      this.initDistaptch({ felinReco, goodsQuantity, appointmentVO, customerPet, list: petsList });
     } else {
       this.dispatch('loading:end');
     }

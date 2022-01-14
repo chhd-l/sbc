@@ -30,8 +30,8 @@ export default class NavigationHeader extends React.Component<any, any> {
         const {hubConfigValue, baseConfigContext, baseHubConfigContext} = data.res.context;
         this.setState({
           hubConfigChecked: !!hubConfigValue, // 1 启用hub 0不启用hub
-          baseConfigContext: decryptAES(baseConfigContext),
-          baseHubConfigContext: decryptAES(baseHubConfigContext),
+          baseConfigContext: baseConfigContext ? decryptAES(baseConfigContext) : '',
+          baseHubConfigContext: baseHubConfigContext ? decryptAES(baseHubConfigContext) : '',
         });
       }
     });

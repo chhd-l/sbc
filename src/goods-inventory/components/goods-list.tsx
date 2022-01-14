@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, noop, Const, cache } from 'qmkit';
+import { DataGrid, noop, Const, cache, util } from 'qmkit';
 import { List } from 'immutable';
 import { Modal, Tooltip } from 'antd';
 
@@ -53,7 +53,7 @@ export default class CateList extends React.Component<any, any> {
         }}
         dataSource={dataList}
       >
-        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (img ? <img src={util.optimizeImage(img)} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)} />
         <Column
           // title="商品名称"
           title={<FormattedMessage id="Product.productName" />}

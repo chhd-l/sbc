@@ -1,7 +1,7 @@
 import { Badge, Button, Checkbox, Col, Divider, Dropdown, Form, Icon, Input, InputNumber, Menu, message, Modal, Pagination, Radio, Row, Table } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import { i } from 'plume2';
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getGoodsSKUS, addGoodsIntoCarts } from '../webapi';
@@ -246,7 +246,7 @@ export default class AddProductModal extends Component {
         title: 'Image',
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
-        render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
+        render: (img) => (img ? <img src={util.optimizeImage(img)} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
         title: 'SKU',

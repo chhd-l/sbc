@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Modal, Input } from 'antd';
 import { Relax, IMap } from 'plume2';
-import { noop } from 'qmkit';
+import { noop, util } from 'qmkit';
 import moment from 'moment';
 import { message, Rate } from 'antd';
 import GoodsImage from '../../goods-detail/components/image';
@@ -64,7 +64,7 @@ export default class See extends React.Component<any, any> {
       <Modal maskClosable={false} title={<FormattedMessage id="Product.reviewDetail" />} visible={modalVisible} width={920} onCancel={this._handleModelCancel} onOk={this._handleSubmit}>
         <div className="comment-Detail-box">
           <div className="left-container">
-            <div className="product">{goodsImg ? <img className="img" src={goodsImg} /> : <img src={defaultImg} className="img" />}</div>
+            <div className="product">{goodsImg ? <img className="img" src={util.optimizeImage(goodsImg)} /> : <img src={defaultImg} className="img" />}</div>
           </div>
           <div className="right-container">
             <label className="title">{goodsEvaluate.goodsInfoName}</label>

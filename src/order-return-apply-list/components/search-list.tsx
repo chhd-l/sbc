@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import { Spin, Pagination, Tooltip } from 'antd';
 import moment from 'moment';
 import { IList } from 'typings/globalType';
-import { cache, Const, getOrderStatusValue, noop } from 'qmkit';
+import { cache, Const, getOrderStatusValue, noop, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 const defaultImg = require('../img/none.png');
@@ -170,7 +170,7 @@ export default class SearchList extends React.Component<any, any> {
                       .concat(gifts)
                       .map((v, k) => {
                         if (k < 3) {
-                          const imageSrc = v.get('pic') ? v.get('pic') : defaultImg;
+                          const imageSrc = v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg;
                           return <img src={imageSrc} key={k} style={styles.imgItem} title={v.get('skuName') || ''} />;
                         } else if (k == 4) {
                           return <label>...</label>;
@@ -184,7 +184,7 @@ export default class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
+                            src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic')) : defaultImg}
                             style={styles.imgFourth}
                           />
                           //@ts-ignore

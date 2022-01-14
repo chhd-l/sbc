@@ -174,7 +174,7 @@ export default class addTargetProduct extends Component<any, any> {
         title: <FormattedMessage id="Subscription.Image"/>,
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
-        render: (text) => <img src={text} alt="" style={{ width: 20 }} />,
+        render: (text) => <img src={util.optimizeImage(text)} alt="" style={{ width: 20 }} />,
         width: '10%'
       },
       {

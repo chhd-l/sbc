@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, getOrderStatusValue } from 'qmkit';
+import { noop, Const, AuthWrapper, getOrderStatusValue, util } from 'qmkit';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage } from 'react-intl';
@@ -258,7 +258,7 @@ export default class ListView extends React.Component<any, any> {
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) => (k < 3 ? <img src={v.get('pic') ? v.get('pic') : defaultImg} style={styles.imgItem} key={k} /> : null))}
+                        .map((v, k) => (k < 3 ? <img src={v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg} style={styles.imgItem} key={k} /> : null))}
                       {
                         /*第4张特殊处理*/
                         //@ts-ignore
@@ -266,7 +266,7 @@ export default class ListView extends React.Component<any, any> {
                           <div style={styles.imgBg}>
                             <img
                               //@ts-ignore
-                              src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? v.get('tradeItems').concat(gifts).get(3).get('pic') : defaultImg}
+                              src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic')) : defaultImg}
                               style={styles.imgFourth}
                             />
                             //@ts-ignore

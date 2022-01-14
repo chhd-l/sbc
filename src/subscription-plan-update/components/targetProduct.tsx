@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Spin, Popconfirm, Tooltip } from 'antd';
 import AddProduct from '../modals/addProduct';
 import { FormattedMessage } from 'react-intl';
+import { util } from 'qmkit';
 export default class targetProduct extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -93,7 +94,7 @@ export default class targetProduct extends Component<any, any> {
                           subscriptionPlan.targetGoods.map((item) => (
                             <tr key={item.goodsInfoId}>
                               <td>
-                                <img src={item.goodsInfoImg} />
+                                <img src={util.optimizeImage(item.goodsInfoImg)} />
                               </td>
                               <td>{item.goodsInfoNo}</td>
                               <td>

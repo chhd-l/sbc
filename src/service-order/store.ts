@@ -38,7 +38,7 @@ export default class AppStore extends Store {
       form['tradeState']['flowState'] = key;
     }
     form['orderType'] = 'SINGLE_PURCHASE';
-    form['orderSource'] ='L_ATELIER_FELIN';
+    form['orderSource'] ='FELINE_ORDER';
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {

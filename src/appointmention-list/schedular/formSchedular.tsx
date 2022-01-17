@@ -74,9 +74,9 @@ class FormSchedular extends React.Component {
     disabledDateTime = (e) => {
         let _b= moment(moment(this.props.dateNo).format('YYYY-MM-DD 17:00')).diff(moment(moment().format('YYYY-MM-DD 17:00')),'minutes')
         if(_b>0){
-            return [...this.range(0, 24).splice(0,9), ...this.range(0, 24).splice(17,9)]
+            return [...this.range(0, 24).splice(0,10), ...this.range(0, 24).splice(17,9)]
         }else{
-        return [...this.range(0, 24).splice(0,9),...this.range(0, 24).splice(0,(moment().hour())), ...this.range(0, 24).splice(17,9)]
+        return [...this.range(0, 24).splice(0,10),...this.range(0, 24).splice(0,(moment().hour())), ...this.range(0, 24).splice(17,9)]
         }
     }
     render() {

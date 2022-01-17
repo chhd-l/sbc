@@ -129,7 +129,7 @@ function Step3({form}){
           </>
         )}
         {
-          typeOfPromotion === 100 && (
+          typeOfPromotion === 1 && (
             <Form.Item label={<FormattedMessage id="Marketing.Prefix" />}>
               {getFieldDecorator('couponCodePrefix', {
                 initialValue: formData.PromotionType.couponCodePrefix,

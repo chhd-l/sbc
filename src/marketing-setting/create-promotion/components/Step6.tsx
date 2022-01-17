@@ -455,7 +455,7 @@ export default function Step6({setLoading}) {
               )
             }
             {
-              formData.PromotionType.typeOfPromotion === 100 && (
+              formData.PromotionType.typeOfPromotion === 1 && (
                 <>
                   <div className="step-summary-item">
                     <div className="step-summary-sub-title"><FormattedMessage id="Marketing.Prefix" />:</div>

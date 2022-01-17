@@ -128,7 +128,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
-    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():{};
+    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():null;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -184,7 +184,7 @@ class OrderDetailTab extends React.Component<any, any> {
       deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
     const addressHour =
       deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
-    const address1 = consignee.detailAddress1 + ' ' + (addressHour || '');
+    const address1 = consignee?.detailAddress1 + ' ' + (addressHour || '');
 
     const columns = [
       {
@@ -430,52 +430,39 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*Appointment panel*/}
-          <Col span={12}>
-            <Row>
-              <div className="headBox">
-                <h4>
-                  <FormattedMessage id="Order.appointment" />
-                </h4>
-                <Col span={12}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{appointInfo?.apptNo}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+          {appointInfo?(
+            <Col span={12}>
+              <Row>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.appointment" />
+                  </h4>
+                  <Col span={12}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{appointInfo?.apptNo}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.appointmentStatus" />:{' '}
+                      {appointInfo?.status === 0
+                        ? 'Booked'
+                        : appointInfo?.status === 1
+                          ? 'Arrived'
+                          : 'Cancel'}
                     </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.appointmentStatus" />:{' '}
-                    {appointInfo?.status === 0
-                      ? 'Booked'
-                      : appointInfo?.status === 1
-                      ? 'Arrived'
-                      : 'Cancel'}
-                  </p>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={detail.get('appointmentDate')?(
-                      <div>
-                        {
-                          this._handleFelinAppointTime(detail.get('appointmentDate'))
-                            .appointStartTime
-                        }
-                        -
-                        {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
-                      </div>
-                      ):null
-                    }
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.appointmentTime" />:{' '}
-                      {detail.get('appointmentDate')?(
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={detail.get('appointmentDate')?(
                         <div>
                           {
                             this._handleFelinAppointTime(detail.get('appointmentDate'))
@@ -484,31 +471,46 @@ class OrderDetailTab extends React.Component<any, any> {
                           -
                           {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                         </div>
-                      ):null}
+                      ):null
+                      }
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.appointmentTime" />:{' '}
+                        {detail.get('appointmentDate')?(
+                          <div>
+                            {
+                              this._handleFelinAppointTime(detail.get('appointmentDate'))
+                                .appointStartTime
+                            }
+                            -
+                            {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
+                          </div>
+                        ):null}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
                     </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
-                  </p>
-                </Col>
+                  </Col>
 
-                <Col span={12}>
-                  <p>
-                    <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentLocation" />:
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
-                  </p>
-                </Col>
-              </div>
-            </Row>
-          </Col>
+                  <Col span={12}>
+                    <p>
+                      <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.appointmentLocation" />:
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
+                    </p>
+                  </Col>
+                </div>
+              </Row>
+            </Col>
+          ):null}
         </Row>
 
         {/*Subscription panel*/}
@@ -721,176 +723,179 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*deliveryAddress panel*/}
-          <Col span={12}>
-            <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
-              <h4>
-                <FormattedMessage id="Order.deliveryAddress" />
-              </h4>
-              <Row>
-                <Col span={12}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.firstName}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
-                    </p>
-                  </Tooltip>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.lastName}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
-                    </p>
-                  </Tooltip>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{address1}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.address1" />: {address1}
-                    </p>
-                  </Tooltip>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.detailAddress2}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
-                    </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.country" />:{' '}
-                    {consignee.countryId ? (
-                      <>
-                        {countryDict
-                          ? countryDict.find((c) => c.id == consignee.countryId)
-                            ? countryDict.find((c) => c.id == consignee.countryId).name
-                            : consignee.countryId
-                          : ''}
-                      </>
-                    ) : (
-                      consignee.country
-                    )}
-                  </p>
-                  {consignee?.county ? (
-                    <p>
-                      <FormattedMessage id="Order.county" />: {consignee.county}
-                    </p>
-                  ) : null}
-                  <p>
-                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
-                  </p>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.comment}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
-                    </p>
-                  </Tooltip>
-                </Col>
-
-                <Col span={12}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{consignee.city}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.city" />: {consignee.city}
-                    </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.state" />: {consignee.province}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.region" />: {consignee.area}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
-                  </p>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.deliveryDate" />:{' '}
-                      {getFormatDeliveryDateStr(consignee.deliveryDate)}
-                    </p>
-                  </Tooltip>
-                  {storeId === 123457907 && (
+          {consignee?(
+            <Col span={12}>
+              <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
+                <h4>
+                  <FormattedMessage id="Order.deliveryAddress" />
+                </h4>
+                <Row>
+                  <Col span={12}>
                     <Tooltip
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
                       placement="bottomLeft"
-                      title={<div>{deliveryMethod}</div>}
+                      title={<div>{consignee.firstName}</div>}
                     >
                       <p className="overFlowtext">
-                        <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
+                        <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
                       </p>
                     </Tooltip>
-                  )}
-                </Col>
-                {storeId === 123457907 ? (
-                  <Col span={24}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{consignee.lastName}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.LastName" />: {consignee.lastName}
+                      </p>
+                    </Tooltip>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{address1}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.address1" />: {address1}
+                      </p>
+                    </Tooltip>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{consignee.detailAddress2}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
+                      </p>
+                    </Tooltip>
                     <p>
-                      <FormattedMessage id="Order.estimatedDeliveryDate" />:
-                      {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
-                        detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
-                          <FormattedMessage
-                            id="Order.estimatedDeliveryDateDesc"
-                            values={{
-                              minDay: detail.get('minDeliveryTime'),
-                              maxDay: detail.get('maxDeliveryTime')
-                            }}
-                          />
-                        ) : (
-                          <FormattedMessage
-                            id="Order.estimatedDeliveryDateDescEqual"
-                            values={{ day: detail.get('minDeliveryTime') }}
-                          />
-                        )
-                      ) : null}
+                      <FormattedMessage id="Order.country" />:{' '}
+                      {consignee.countryId ? (
+                        <>
+                          {countryDict
+                            ? countryDict.find((c) => c.id == consignee.countryId)
+                              ? countryDict.find((c) => c.id == consignee.countryId).name
+                              : consignee.countryId
+                            : ''}
+                        </>
+                      ) : (
+                        consignee.country
+                      )}
                     </p>
+                    {consignee?.county ? (
+                      <p>
+                        <FormattedMessage id="Order.county" />: {consignee.county}
+                      </p>
+                    ) : null}
+                    <p>
+                      <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                    </p>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{consignee.comment}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                      </p>
+                    </Tooltip>
                   </Col>
-                ) : null}
-              </Row>
-            </div>
-          </Col>
+
+                  <Col span={12}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{consignee.city}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.city" />: {consignee.city}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.state" />: {consignee.province}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.region" />: {consignee.area}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
+                    </p>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.deliveryDate" />:{' '}
+                        {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                      </p>
+                    </Tooltip>
+                    {storeId === 123457907 && (
+                      <Tooltip
+                        overlayStyle={{
+                          overflowY: 'auto'
+                        }}
+                        placement="bottomLeft"
+                        title={<div>{deliveryMethod}</div>}
+                      >
+                        <p className="overFlowtext">
+                          <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
+                        </p>
+                      </Tooltip>
+                    )}
+                  </Col>
+                  {storeId === 123457907 ? (
+                    <Col span={24}>
+                      <p>
+                        <FormattedMessage id="Order.estimatedDeliveryDate" />:
+                        {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                          detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                            <FormattedMessage
+                              id="Order.estimatedDeliveryDateDesc"
+                              values={{
+                                minDay: detail.get('minDeliveryTime'),
+                                maxDay: detail.get('maxDeliveryTime')
+                              }}
+                            />
+                          ) : (
+                            <FormattedMessage
+                              id="Order.estimatedDeliveryDateDescEqual"
+                              values={{ day: detail.get('minDeliveryTime') }}
+                            />
+                          )
+                        ) : null}
+                      </p>
+                    </Col>
+                  ) : null}
+                </Row>
+              </div>
+            </Col>
+          ):null}
+
           {/*billingAddress panel*/}
-          {storeId !== 123457907 ? (
+          {storeId !== 123457907 && invoice ? (
             <Col span={12}>
               <div className="headBox order_detail_billing_address" style={{ height: 220 }}>
                 <h4>

@@ -6,7 +6,6 @@ import TabActor from './actor/tab-actor';
 import PayRecordActor from './actor/pay-record-actor';
 import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
-
 import * as webapi from './webapi';
 import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh,findAppointmentByApptNo } from './webapi';
 import { message } from 'antd';
@@ -40,16 +39,12 @@ export default class AppStore extends Store {
         webapi.getPaymentInfo(orderInfo.id),
         queryDictionary({
           type: 'country'
-        }),
-        findAppointmentByApptNo(orderInfo.appointmentNo)
+        })
       ]).then((results) => {
         const { res: payRecordResult } = results[0] as any;
         const { res: logistics } = results[1] as any;
         const { res: payRecordResult2 } = results[2] as any;
         const { res: countryDictRes } = results[3] as any;
-        const { context: appointInfoRes } = results[4]?.res as any;
-        orderInfo=Object.assign(orderInfo,appointInfoRes)
-        console.log('3333',orderInfo)
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('detail:init', orderInfo);
@@ -61,6 +56,13 @@ export default class AppStore extends Store {
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         });
       });
+      if(orderInfo?.appointmentNo){
+        await  findAppointmentByApptNo(orderInfo.appointmentNo).then((data)=>{
+          this.transaction(() => {
+            this.dispatch('detail:init', Object.assign(orderInfo,data?.res?.context));
+          });
+        })
+      }
     } else {
       this.dispatch('loading:end');
     }

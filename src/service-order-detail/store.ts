@@ -34,22 +34,24 @@ export default class AppStore extends Store {
     let { code, context: orderInfo, message: errorInfo } = res;
 
     if (code == Const.SUCCESS_CODE) {
+      if(orderInfo?.appointmentNo){
+        const data=await findAppointmentByApptNo(orderInfo.appointmentNo);
+        if(data?.res?.code==Const.SUCCESS_CODE){
+          orderInfo=Object.assign(orderInfo,data?.res?.context)
+        }
+      }
       await Promise.all([
         payRecord(orderInfo.id),
         fetchLogistics(),
         webapi.getPaymentInfo(orderInfo.id),
         queryDictionary({
           type: 'country'
-        }),
-        findAppointmentByApptNo(orderInfo.appointmentNo)
+        })
       ]).then((results) => {
         const { res: payRecordResult } = results[0] as any;
         const { res: logistics } = results[1] as any;
         const { res: payRecordResult2 } = results[2] as any;
         const { res: countryDictRes } = results[3] as any;
-        const { context: appointInfoRes } = results[4]?.res as any;
-        orderInfo=Object.assign(orderInfo,appointInfoRes)
-        console.log('3333',orderInfo)
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('detail:init', orderInfo);

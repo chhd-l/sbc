@@ -128,7 +128,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
-    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():{};
+    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():null;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -184,7 +184,7 @@ class OrderDetailTab extends React.Component<any, any> {
       deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
     const addressHour =
       deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
-    const address1 = consignee.detailAddress1 + ' ' + (addressHour || '');
+    const address1 = consignee?.detailAddress1 + ' ' + (addressHour || '');
 
     const columns = [
       {
@@ -430,52 +430,39 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*Appointment panel*/}
-          <Col span={12}>
-            <Row>
-              <div className="headBox">
-                <h4>
-                  <FormattedMessage id="Order.appointment" />
-                </h4>
-                <Col span={12}>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={<div>{appointInfo?.apptNo}</div>}
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+          {appointInfo?(
+            <Col span={12}>
+              <Row>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.appointment" />
+                  </h4>
+                  <Col span={12}>
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{appointInfo?.apptNo}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.appointmentNumber" />:{appointInfo?.apptNo}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.appointmentStatus" />:{' '}
+                      {appointInfo?.status === 0
+                        ? 'Booked'
+                        : appointInfo?.status === 1
+                          ? 'Arrived'
+                          : 'Cancel'}
                     </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.appointmentStatus" />:{' '}
-                    {appointInfo?.status === 0
-                      ? 'Booked'
-                      : appointInfo?.status === 1
-                      ? 'Arrived'
-                      : 'Cancel'}
-                  </p>
-                  <Tooltip
-                    overlayStyle={{
-                      overflowY: 'auto'
-                    }}
-                    placement="bottomLeft"
-                    title={detail.get('appointmentDate')?(
-                      <div>
-                        {
-                          this._handleFelinAppointTime(detail.get('appointmentDate'))
-                            .appointStartTime
-                        }
-                        -
-                        {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
-                      </div>
-                      ):null
-                    }
-                  >
-                    <p className="overFlowtext">
-                      <FormattedMessage id="Order.appointmentTime" />:{' '}
-                      {detail.get('appointmentDate')?(
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={detail.get('appointmentDate')?(
                         <div>
                           {
                             this._handleFelinAppointTime(detail.get('appointmentDate'))
@@ -484,31 +471,46 @@ class OrderDetailTab extends React.Component<any, any> {
                           -
                           {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                         </div>
-                      ):null}
+                      ):null
+                      }
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.appointmentTime" />:{' '}
+                        {detail.get('appointmentDate')?(
+                          <div>
+                            {
+                              this._handleFelinAppointTime(detail.get('appointmentDate'))
+                                .appointStartTime
+                            }
+                            -
+                            {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
+                          </div>
+                        ):null}
+                      </p>
+                    </Tooltip>
+                    <p>
+                      <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
                     </p>
-                  </Tooltip>
-                  <p>
-                    <FormattedMessage id="Order.expertType" />: {detail.get('specialistType')}
-                  </p>
-                </Col>
+                  </Col>
 
-                <Col span={12}>
-                  <p>
-                    <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.appointmentLocation" />:
-                  </p>
-                  <p>
-                    <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
-                  </p>
-                </Col>
-              </div>
-            </Row>
-          </Col>
+                  <Col span={12}>
+                    <p>
+                      <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.appointmentLocation" />:
+                    </p>
+                    <p>
+                      <FormattedMessage id="Order.expertName" />: {appointInfo.expertNames}
+                    </p>
+                  </Col>
+                </div>
+              </Row>
+            </Col>
+          ):null}
         </Row>
 
         {/*Subscription panel*/}
@@ -721,7 +723,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*deliveryAddress panel*/}
-          <Col span={12}>
+          {consignee?(<Col span={12}>
             <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
@@ -888,9 +890,10 @@ class OrderDetailTab extends React.Component<any, any> {
                 ) : null}
               </Row>
             </div>
-          </Col>
+          </Col>):null}
+
           {/*billingAddress panel*/}
-          {storeId !== 123457907 ? (
+          {storeId !== 123457907 && invoice ? (
             <Col span={12}>
               <div className="headBox order_detail_billing_address" style={{ height: 220 }}>
                 <h4>

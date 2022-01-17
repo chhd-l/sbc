@@ -28,8 +28,6 @@ const dayOrWeek = [{
 const Schedular = () => {
   const [dayPlanList, setDayPlanList] = useState([])
   const [timeRange] = useState([{
-    hour: "09",
-  }, {
     hour: "10",
   }, {
     hour: "11",
@@ -121,7 +119,7 @@ const Schedular = () => {
 
   // 组装页面表格所需的数据结构
   const bookedDataFormat = async (list) => {
-    const allTimeArr: any = await intervals("20210101 09:00", "20210101 21:00");//todo:等确认起始值
+    const allTimeArr: any = await intervals("20210101 10:00", "20210101 21:00");//todo:等确认起始值
     setTimePeriod(allTimeArr)
     let bookedTypeAllList = Promise.all(list.map(async (elx) =>
       elx.bookedTimeSlot.map(item => {

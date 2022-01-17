@@ -55,7 +55,9 @@ const SetDayTable = (props) => {
   }
 
   // 更改时间区间操作事件
-  const timeChange = (timeStr, type, sort, idx) => {
+  const timeChange = (timeString, type, sort, idx) => {
+    let timeStr = timeString
+    if(timeString.includes('20')) timeStr ="20:00"
     if (weekList.sort == sort) {
       const timeSlot = weekList.timeSlotVO.timeSlot || ''
       let newTimesStr = ''
@@ -82,6 +84,14 @@ const SetDayTable = (props) => {
     updateTableData(weekList)
   }
 
+  const handleDisabledMinutes = (selectedHour) =>{
+    let disabledMinutes = []
+    if(selectedHour == 20) {
+      disabledMinutes.push(15,30,45)
+    }
+    return disabledMinutes
+  }
+
   // 时间区间的显示处理
   const handleTimeSlotFormat = (weekList) => {
     const timeSlot = weekList.timeSlotVO.timeSlot || ''
@@ -105,7 +115,8 @@ const SetDayTable = (props) => {
                 value={timeRange[0].length ? moment(timeRange[0], timeFormat) : undefined}
                 onChange={(time, timeStr) => { timeChange(timeStr, 'start', weekList.sort, idx) }}
                 allowClear={false}
-                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23]}
+                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 21, 22, 23]}
+                disabledMinutes={(selectedHour)=>handleDisabledMinutes(selectedHour)}
               />
               <span>-</span>
               <TimePicker
@@ -116,7 +127,8 @@ const SetDayTable = (props) => {
                 value={timeRange[1] && timeRange[1] !== "undefined" ? moment(timeRange[1], timeFormat) : undefined}
                 onChange={(time, timeStr) => { timeChange(timeStr, 'end', weekList.sort, idx) }}
                 allowClear={false}
-                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23]}
+                disabledHours={() => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 21, 22, 23]}
+                disabledMinutes={(selectedHour)=>handleDisabledMinutes(selectedHour)}
               />
               <Icon type="plus-square" onClick={handleAddTime} />
               {_time.length > 1 ? <Icon type="minus-square" onClick={() => handleDeleteTime(idx)} /> : null}

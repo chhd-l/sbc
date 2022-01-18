@@ -203,7 +203,7 @@ class ProductSearchSetting extends Component<any, any> {
   showConfirm(item, type) {
     const _this = this;
     confirm({
-      content: 'Are you sure you want to delete this frequency?',
+      content: RCi18n({id:'Product.Areyousuretodelete'}),
       onOk() {
         _this.deleteDict(item, type);
       },
@@ -627,7 +627,7 @@ export default Form.create()(ProductSearchSetting);
 const styles = {
   container: {
     background: 'rgb(255, 255, 255)',
-    height: 'calc(100vh - 170px)'
+    paddingBottom: 20
   },
   formContainer: {
     marginTop: '30px',

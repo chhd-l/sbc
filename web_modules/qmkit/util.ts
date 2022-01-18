@@ -511,8 +511,9 @@ export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62')
  * @returns 
  */
 export function optimizeImage(originImageUrl: string, width: number = 150, height?: number): string {
-  return originImageUrl && originImageUrl.startsWith('http')
-    ? `https://d2c-cdn.royalcanin.com/cdn-cgi/image/width=${width},h=${height ?? width}/${originImageUrl}`
+  const CDN_PREFIX = sessionStorage.getItem(cache.PRODUCT_IMAGE_CDN) || 'https://d2c-cdn.royalcanin.com/cdn-cgi/image/';
+  return originImageUrl && originImageUrl.startsWith('http') && !originImageUrl.startsWith(CDN_PREFIX)
+    ? `${CDN_PREFIX}width=${width},h=${height ?? width}/${originImageUrl}`
     : originImageUrl;
 }
 

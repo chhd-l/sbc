@@ -985,7 +985,7 @@ class OrderDetailTab extends React.Component<any, any> {
   //处理预约信息里面的预约时间
   _handleFelinAppointTime(appointTime) {
     if (!appointTime) {
-      return '';
+      return {showTime: ''};
     }
     const apptTime = appointTime.split('#');
     const appointStartTime =

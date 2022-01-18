@@ -35,7 +35,7 @@ export default class ForcastList extends React.Component<any, any> {
         fixed: true,
         render: (img) =>
           img ? (
-            <img src={img} style={styles.imgItem} />
+            <img src={util.optimizeImage(img)} style={styles.imgItem} />
           ) : (
             <img src={defaultImg} style={styles.imgItem} />
           )

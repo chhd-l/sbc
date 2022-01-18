@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { cache, Const, noop } from 'qmkit';
+import { cache, Const, noop, util } from 'qmkit';
 import { Form, Rate, DatePicker, Spin, Button } from 'antd';
 import '../index.less';
 const { RangePicker } = DatePicker;
@@ -215,7 +215,7 @@ export default class ProductOverView extends Component<any, any> {
                   return (
                     <div className="sellers-container row-flex" key={index}>
                       <div>
-                        <img src={item.skuImg} />
+                        <img src={util.optimizeImage(item.skuImg)} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">
@@ -245,7 +245,7 @@ export default class ProductOverView extends Component<any, any> {
                   return (
                     <div className="sellers-container row-flex" key={item.topNum}>
                       <div>
-                        <img src={item.skuImg} />
+                        <img src={util.optimizeImage(item.skuImg)} />
                       </div>
                       <div className="column-flex goods-container">
                         <div className="column-flex goods-info">

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import * as webapi from './../webapi';
 import moment from 'moment';
 const defaultImg = require('../../goods-list/img/none.png');
-import { Const } from 'qmkit';
+import { Const, util } from 'qmkit';
 
 export default class ListView extends React.Component<any, any> {
   constructor(props) {
@@ -278,7 +278,7 @@ export default class ListView extends React.Component<any, any> {
                     {/* <td style={{ width: '3%' }} /> */}
                     <td style={{ width: '15%' }}>
                       {/*商品图片*/}
-                      {v.goodsInfo && v.goodsInfo.map((item, k) => (k < 4 ? <img src={item.goodsPic ? item.goodsPic : defaultImg} style={styles.imgItem} key={k} /> : null))}
+                      {v.goodsInfo && v.goodsInfo.map((item, k) => (k < 4 ? <img src={item.goodsPic ? util.optimizeImage(item.goodsPic) : defaultImg} style={styles.imgItem} key={k} /> : null))}
 
                       {
                         /*第4张特殊处理*/
@@ -287,7 +287,7 @@ export default class ListView extends React.Component<any, any> {
                           <div style={styles.imgBg}>
                             <img
                               //@ts-ignore
-                              src={item.goodsPic ? item.goodsPic : defaultImg}
+                              src={item.goodsPic ? util.optimizeImage(item.goodsPic) : defaultImg}
                               style={styles.imgFourth}
                             />
                             <div style={styles.imgNum}>

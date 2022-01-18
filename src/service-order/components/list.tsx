@@ -3,7 +3,7 @@ import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
 import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n, util } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -523,7 +523,7 @@ class ListView extends React.Component<any, any> {
                         .map((v, k) =>
                           k < 4 ? (
                             <img
-                              src={v.get('pic') ? v.get('pic') : defaultImg}
+                              src={v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg}
                               title={v.get('skuName') ? v.get('skuName') : ''}
                               className="img-item"
                               style={styles.imgItem}
@@ -541,7 +541,7 @@ class ListView extends React.Component<any, any> {
                               //@ts-ignore
                               src={
                                 v.get('tradeItems').concat(gifts).get(3).get('pic')
-                                  ? v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                  ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic'))
                                   : defaultImg
                               }
                               style={styles.imgFourth}

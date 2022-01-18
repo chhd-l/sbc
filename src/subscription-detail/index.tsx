@@ -3,7 +3,7 @@ import { Breadcrumb, Tabs, Row, Col, Button } from 'antd';
 import { Select, message, Table, Collapse, Spin, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
 import FeedBack from './component/feedback';
-import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, history } from 'qmkit';
+import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, history, util } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { PostalCodeMsg } from 'biz';
 import './index.less';
@@ -358,7 +358,7 @@ class SubscriptionDetail extends React.Component<any, any> {
         width: '40%',
         render: (text, record) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
+            <img src={util.optimizeImage(record.goodsPic)} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
@@ -517,7 +517,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} style={styles.imgItem} className="img-item" alt="" />
+                  <img src={util.optimizeImage(item.pic)} style={styles.imgItem} className="img-item" alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'
@@ -676,7 +676,7 @@ class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} style={{ width: 60, height: 80 }} alt="" />
+                  <img src={util.optimizeImage(item.pic)} style={{ width: 60, height: 80 }} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'

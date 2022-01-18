@@ -503,3 +503,16 @@ export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62')
   return decrypt;
 }
 
+/**
+ * 通过添加CDN前缀和width优化图片size
+ * @param originImageUrl 源图片url
+ * @param width width 默认150
+ * @param height height 默认等于width
+ * @returns 
+ */
+export function optimizeImage(originImageUrl: string, width: number = 150, height?: number): string {
+  return originImageUrl && originImageUrl.startsWith('http')
+    ? `https://d2c-cdn.royalcanin.com/cdn-cgi/image/width=${width},h=${height ?? width}/${originImageUrl}`
+    : originImageUrl;
+}
+

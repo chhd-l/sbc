@@ -4,7 +4,7 @@ import { Pagination, Spin, Row, Col, Empty } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import { getSubscriptionList } from '../../subscription/webapi';
 import moment from 'moment';
-import { Const, RCi18n } from 'qmkit';
+import { Const, RCi18n, util } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
@@ -116,7 +116,7 @@ export default class SubscribInformation extends React.Component<Iprop, any> {
                     <>
                       <tr key={k}>
                         <td style={{ width: '20%' }}>
-                          <img src={v.goodsPic ? v.goodsPic : defaultImg} className="img-item" />
+                          <img src={v.goodsPic ? util.optimizeImage(v.goodsPic) : defaultImg} className="img-item" />
                         </td>
                         <td style={{ width: '15%' }}>{item.subscriptionType==='Individualization'?'Your pet\'s personalized subscription':v.goodsName}</td>
                         {k === 0 && (

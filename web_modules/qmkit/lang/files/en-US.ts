@@ -5438,5 +5438,6 @@ export default {
   "waitingForTheMerchantToReceiveTheGoods": "Waiting for the merchant to receive the goods",
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
-  "yes": "Yes"
+  "yes": "Yes",
+  'subscription.realtimeStock':'Real-time stock'
 };

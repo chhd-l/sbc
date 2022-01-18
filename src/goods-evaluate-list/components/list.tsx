@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Relax, StoreProvider } from 'plume2';
 import { List } from 'immutable';
 import { withRouter } from 'react-router';
-import { DataGrid, noop, AuthWrapper, Const } from 'qmkit';
+import { DataGrid, noop, AuthWrapper, Const, util } from 'qmkit';
 const defaultImg = require('../img/none.png');
 import Moment from 'moment';
 import { deleteGoodsById } from '../webapi';
@@ -114,7 +114,7 @@ class CustomerList extends React.Component<any, any> {
             return (
               <div style={styles.goodsName}>
                 {/*/!*商品图片*!/*/}
-                {rowData.goodsImg ? <img src={rowData.goodsImg ? rowData.goodsImg : defaultImg} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />}
+                {rowData.goodsImg ? <img src={rowData.goodsImg ? util.optimizeImage(rowData.goodsImg) : defaultImg} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />}
                 {goodsInfoName ? goodsInfoName : '-'}
               </div>
             );

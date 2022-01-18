@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { fetchOrderList } from '../../order-list/webapi';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { Const, cache, getOrderStatusValue, RCi18n } from 'qmkit';
+import { Const, cache, getOrderStatusValue, RCi18n, util } from 'qmkit';
 const defaultImg = require('../../goods-list/img/none.png');
 
 interface Iprop {
@@ -137,7 +137,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                       }}
                     >
                       {/*商品图片*/}
-                      {imgList.map((v: any, k: number) => (k < 4 ? <img src={v.pic ? v.pic : defaultImg} className="img-item" key={k} /> : null))}
+                      {imgList.map((v: any, k: number) => (k < 4 ? <img src={v.pic ? util.optimizeImage(v.pic) : defaultImg} className="img-item" key={k} /> : null))}
                       {
                         /*最后一张特殊处理*/
                         //@ts-ignore
@@ -145,7 +145,7 @@ export default class OrderInformation extends React.Component<Iprop, any> {
                           <div style={styles.imgBg}>
                             <img
                               //@ts-ignore
-                              src={imgList[3]['pic'] ? imgList[3]['pic'] : defaultImg}
+                              src={imgList[3]['pic'] ? util.optimizeImage(imgList[3]['pic']) : defaultImg}
                               style={styles.imgFourth}
                             />
                             //@ts-ignore

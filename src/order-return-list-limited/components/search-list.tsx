@@ -4,7 +4,7 @@ import { fromJS, List } from 'immutable';
 import momnet from 'moment';
 import { Link } from 'react-router-dom';
 import { Checkbox, message, Modal, Pagination, Spin, Tooltip } from 'antd';
-import { AuthWrapper, Const, noop } from 'qmkit';
+import { AuthWrapper, Const, noop, util } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -354,7 +354,7 @@ export default class SearchList extends React.Component<any, any> {
                       .get('returnItems')
                       .concat(returnGifts)
                       .map((v, k) => {
-                        const img = v.get('pic') ? v.get('pic') : defaultImg;
+                        const img = v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg;
                         return k < 3 ? <img style={styles.listImages} src={img} title={v.get('skuName')} key={k} /> : null;
                       })}
 
@@ -365,7 +365,7 @@ export default class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? v.get('returnItems').concat(returnGifts).get(3).get('pic') : defaultImg}
+                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? util.optimizeImage(v.get('returnItems').concat(returnGifts).get(3).get('pic')) : defaultImg}
                             style={styles.imgFourth}
                           />
                           //@ts-ignore

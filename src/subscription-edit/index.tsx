@@ -4,7 +4,7 @@ import { InputNumber, Modal, Radio, Checkbox, Spin, Tooltip } from 'antd';
 import { Popconfirm, Popover, Calendar } from 'antd';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
-import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n } from 'qmkit';
+import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n, util } from 'qmkit';
 import { PostalCodeMsg } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -1144,7 +1144,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         width: '30%',
         render: (text: any, record: any) => (
           <div style={{ display: 'flex' }}>
-            <img src={record.goodsPic} className="img-item" style={styles.imgItem} alt="" />
+            <img src={util.optimizeImage(record.goodsPic)} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
@@ -1358,7 +1358,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
+                  <img src={util.optimizeImage(item.pic)} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'
@@ -1492,7 +1492,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item: any) => (
                 <div style={{ display: 'flex' }}>
-                  <img src={item.pic} className="img-item" style={styles.imgItem} alt="" />
+                  <img src={util.optimizeImage(item.pic)} className="img-item" style={styles.imgItem} alt="" />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'

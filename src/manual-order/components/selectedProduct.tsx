@@ -2,7 +2,7 @@ import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd
 import React from 'react';
 import AddProductModal from './addProductModal';
 import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
-import { cache, AuthWrapper } from 'qmkit';
+import { cache, AuthWrapper, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
@@ -160,7 +160,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         title: 'Image',
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
-        render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
+        render: (img) => (img ? <img src={util.optimizeImage(img)} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
         title: 'SKU',

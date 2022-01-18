@@ -26,7 +26,7 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
-const showRealStock = checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
+const showRealStock = false&&checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
 
 /**
  * 拒绝表单，只为校验体验

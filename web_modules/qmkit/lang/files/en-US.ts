@@ -1323,7 +1323,7 @@ export default {
   "Menu.Manual return order": "Manual return order",
   "Menu.Market Automation": "Market Automation",
   "Menu.Marketing": "Marketing",
-  "Menu.Marketing Center": "Marketing Center",
+  "Menu.Marketing Center": "Promotion Center",
   "Menu.Marketing List": "Marketing List",
   "Menu.Marketing Settings": "Marketing Settings",
   "Menu.Member companies": "Member companies",
@@ -5438,5 +5438,17 @@ export default {
   "waitingForTheMerchantToReceiveTheGoods": "Waiting for the merchant to receive the goods",
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
-  "yes": "Yes"
+  "yes": "Yes",
+  "Menu.Banner": "Banner",
+  "Menu.Buy from Retailer": "Buy from Retailer",
+  "Menu.Checkout Setting": "Checkout Setting",
+  "Menu.Customer Account Setting": "Customer Account Setting",
+  "Menu.Marketing Banner": "Marketing Banner",
+  "Retailer.DisplayLanguage": "Display Language",
+  "Retailer.IdRetailerProducts": "Id Retailer Products",
+  "Retailer.IdVetProducts": "Id Vet Products",
+  "Retailer.Local": "Local",
+  "Retailer.Token": "Token",
+  "Retailer.TrackingIdPrefix": "Tracking Id Prefix",
+  "Retailer.Type": "Type"
 };

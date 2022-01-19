@@ -447,7 +447,7 @@ class SubscriptionDetail extends React.Component<any, any> {
     ];
 
     // sprint8需求
-    if(false&&subscriptionInfo.showRealTimeStock){
+    if(subscriptionInfo.showRealTimeStock){
       columns.splice(
         3,
         0,

@@ -41,5 +41,6 @@ export default {
   TASKSHOWSEARCH: 'TaskShowSearch',
   TASKVIEWTYPE: 'TaskViewType',
   TASKQueryType: 'TaskQueryType',
-  TASKFROMDATA: 'TaskFormData'
+  TASKFROMDATA: 'TaskFormData',
+  PRODUCT_IMAGE_CDN: 'product_image_cdn'
 };

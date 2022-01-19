@@ -865,7 +865,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       loading: true
     });
     webapi
-      .cancelNextSubscription({ subscribeId: this.state.subscriptionId })
+      .cancelNextSubscription({ subscribeId: this.state.subscriptionId,changeField:'Skipping Next Delivery' })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {

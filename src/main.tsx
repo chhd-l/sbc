@@ -57,6 +57,7 @@ export default class Main extends React.Component<any, any> {
             }
             const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
             sessionStorage.setItem(cache.SITE_LOGO, configLog);
+            sessionStorage.setItem(cache.PRODUCT_IMAGE_CDN, resIco.res.context?.cdn ?? '');
           }
         })
         .catch((err) => {});

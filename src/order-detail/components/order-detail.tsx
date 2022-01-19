@@ -26,7 +26,7 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
-const showRealStock = false && checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
+const showRealStock = true; //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限(checkAuth('f_order_show_realtime_stock'))
 
 /**
  * 拒绝表单，只为校验体验
@@ -278,7 +278,7 @@ class OrderDetailTab extends React.Component<any, any> {
         title: storeId === 123457934 ? <FormattedMessage id="Order.Specification" /> : <FormattedMessage id="Order.Weight" />,
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '9%'
+        width: '8%'
       },
       {
         title: showRealStock ? (
@@ -288,7 +288,7 @@ class OrderDetailTab extends React.Component<any, any> {
         ),
         dataIndex: 'num',
         key: 'num',
-        width: '6%',
+        width: '7%',
         render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {

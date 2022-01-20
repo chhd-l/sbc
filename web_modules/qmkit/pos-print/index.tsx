@@ -43,7 +43,7 @@ const WsPrint = () => {
       }
     };
 
-    getPosUrl();
+    (window as any).token && getPosUrl();
   }, []);
 
   return null;

@@ -76,3 +76,29 @@ export const fetchConsentDetailDelete = (params) => {
     method: 'DELETE'
   });
 };
+
+/**
+ * batch update consent version
+ * @param ids 
+ * @param consentVersion 
+ * @returns 
+ */
+export function batchUpdateConsentVersion(ids: number[], consentVersion: string) {
+  return Fetch<TResult>('/consent/updateVersion', {
+    method: 'POST',
+    body: JSON.stringify({
+      ids,
+      consentVersion
+    })
+  });
+}
+
+/**
+ * get parent consent data list for selection
+ * @returns 
+ */
+export function getParentConsentList() {
+  return Fetch<TResult>('/consent/parents', {
+    method: 'POST'
+  });
+}

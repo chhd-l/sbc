@@ -142,6 +142,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   }
 
+  /**
+  *  CORE, FR, RU, TR for Club
+  **/
+  get isShowSkuEdit(){
+    let bool = true;
+    const storeIdArr = ['123457907', '123457909', '123457911']
+    const { subscriptionType } = this.state;
+
+    if (storeIdArr.includes(storeId.toString())){
+      bool = subscriptionType?.toLowerCase() === 'club';
+    }
+
+    return bool;
+  }
+
   // 获取 deliveryState 状态
   getDeliveryDateStatus = () => {
     GetDelivery().then((data) => {
@@ -1190,11 +1205,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 ? record.petsName + "'s personalized subscription"
                 : record.goodsName}
             </span>
-            <a
-              style={{flex: 1, textAlign: 'center'}}
-              onClick={() => this.showProductModal()}
-              className="iconfont iconEdit "
-            />
+            {
+              this.isShowSkuEdit
+                ? (
+                  <a
+                    style={{flex: 1, textAlign: 'center'}}
+                    onClick={() => this.showProductModal()}
+                    className="iconfont iconEdit "
+                  />
+                )
+                : null
+            }
+
           </div>
         )
       },

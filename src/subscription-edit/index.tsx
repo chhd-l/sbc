@@ -5,7 +5,7 @@ import { Popconfirm, Popover, Calendar } from 'antd';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n, util } from 'qmkit';
-import { PostalCodeMsg } from 'biz';
+import { PostalCodeMsg, GoodsModal } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -21,6 +21,7 @@ import {
   getClubSubFrequency,
   getIndividualSubFrequency
 } from '../task-manage-all-subscription/module/querySysDictionary';
+import { fromJS } from 'immutable';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -123,7 +124,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDateList: [],
       timeSlotList: [],
       deliverDateStatus: 0,
-      tempolineApiError: ''
+      tempolineApiError: '',
+      productModalVisible: false,
+      selectedSkuIds: [],
+      selectedRows: [],
     };
   }
 
@@ -1095,6 +1099,38 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  skuSelectedBackFun = (selectedSkuIds, selectedRows: any) => {
+    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
+    console.log('selectedSkuIds', selectedSkuIds);
+    console.log('selectedRows', selectedRows);
+    /**
+     * 请求接口 TODO
+     * 1. 请求接口，替换sku,
+     * 2. 成功， 重新请求this.getSubscriptionDetail();
+     * 3. 失败，出现错误提示信息
+     **/
+
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows,
+    })
+
+    this.closeProductModal();
+  }
+
+  closeProductModal = () => {
+    this.setState({
+      productModalVisible: false
+    })
+  }
+
+  showProductModal = () => {
+    this.setState({
+      productModalVisible: true
+    })
+  }
+
+
   render() {
     const {
       pickupIsOpen,
@@ -1129,7 +1165,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDateList,
       timeSlotList,
       timeSlot,
-      deliverDateStatus
+      deliverDateStatus,
+
+      productModalVisible,
+      selectedSkuIds,
+      selectedRows,
       // operationLog
     } = this.state;
 
@@ -1143,13 +1183,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text: any, record: any) => (
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex',alignItems: 'center' }}>
             <img src={util.optimizeImage(record.goodsPic)} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
                 : record.goodsName}
             </span>
+            <a
+              style={{flex: 1, textAlign: 'center'}}
+              onClick={() => this.showProductModal()}
+              className="iconfont iconEdit "
+            />
           </div>
         )
       },
@@ -2639,6 +2684,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </div>
           </Spin>
         )}
+
+        <GoodsModal
+          skuLimit={1}
+          visible={productModalVisible}
+          selectedSkuIds={selectedSkuIds}
+          selectedRows={selectedRows}
+          onOkBackFun={this.skuSelectedBackFun}
+          onCancelBackFun={this.closeProductModal}
+        />
       </div>
     );
   }

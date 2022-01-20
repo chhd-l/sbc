@@ -106,7 +106,8 @@ export default class FreightTemp extends React.Component<any, any> {
     freightTempId: 'freightTempId',
     freightTempName: 'freightTempName',
     destinationArea: 'destinationArea',
-    freightType: 'freightType',
+    // freightType: 'freightType',
+    freightType: 1,
     satisfyPrice: 'satisfyPrice',
     satisfyFreight: 'satisfyFreight',
     fixedFreight: 'fixedFreight',
@@ -182,126 +183,161 @@ export default class FreightTemp extends React.Component<any, any> {
               ]
             })(<TreeSelect {...tProps} filterTreeNode={(input, treeNode) => treeNode.props.title.toLowerCase().indexOf(input.toLowerCase()) >= 0} />)}
           </FormItem>
-          <FormItem {...formItemLayout} label="Charging rule" required={true}>
-            <RadioGroup defaultValue={freightType} value={freightType} onChange={(e) => this._changeFreightType(e.target.value)}>
-              <div className="radio-item">
-                <Radio value={0}>If orders less than </Radio>
-                <FormItem>
-                  {getFieldDecorator('satisfyPrice', {
-                    initialValue: satisfyPrice,
-                    rules: this._validMoney(freightType, 0)
-                  })(
-                    <InputNumber
-                      disabled={freightType == 1}
-                      onChange={(value) =>
-                        storeFreightFieldsValue({
-                          field: 'satisfyPrice',
-                          value: value
-                        })
-                      }
-                    />
-                  )}
-                </FormItem>
-                <span
-                  style={{
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, the freight would be
-                </span>
-                <FormItem>
-                  {getFieldDecorator('satisfyFreight', {
-                    initialValue: satisfyFreight,
-                    rules: this._validMoney(freightType, 0)
-                  })(
-                    <InputNumber
-                      disabled={freightType == 1}
-                      onChange={(value) =>
-                        storeFreightFieldsValue({
-                          field: 'satisfyFreight',
-                          value: value
-                        })
-                      }
-                    />
-                  )}
-                </FormItem>
-                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.</span>
-              </div>
-              <div style={{marginTop: 20, marginBottom: 20}}>
-                Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount.
-              </div>
 
-              <div className="radio-item">
-                <Radio value={1}> Minimum delivery amount is</Radio>
-                {/* <span
-                  style={{
-                    paddingLeft: 23,
-                    paddingRight: 17,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  Minimum delivery amount is
-                </span> */}
-                <FormItem>
-                  {getFieldDecorator('minimumDeliveryFee', {
-                    initialValue: minimumDeliveryFee,
-                    rules: this._validMoney(freightType, 1)
-                  })(
-                    <InputNumber
-                      disabled={freightType === 0}
-                      onChange={(value) => {
-                        storeFreightFieldsValue({
-                          field: 'minimumDeliveryFee',
-                          value: value
-                        });
-                      }}
-                    />
-                  )}
+          {/*<FormItem {...formItemLayout} label="Delivery rule" required={true}>*/}
+          {/*  <p> Minimum delivery amount is*/}
+          {/*    {getFieldDecorator('minimumDeliveryFee', {*/}
+          {/*      initialValue: minimumDeliveryFee,*/}
+          {/*      rules: this._validMoney(freightType, 1)*/}
+          {/*    })(*/}
+          {/*      <InputNumber*/}
+          {/*        style={{margin:'0 5px'}}*/}
+          {/*        disabled={freightType === 0}*/}
+          {/*        onChange={(value) => {*/}
+          {/*          storeFreightFieldsValue({*/}
+          {/*            field: 'minimumDeliveryFee',*/}
+          {/*            value: value*/}
+          {/*          });*/}
+          {/*        }}*/}
+          {/*      />*/}
+          {/*    )}*/}
+          {/*    € </p>*/}
+          {/*  <p >*/}
+          {/*    <a className="ant-form-item-required"></a>*/}
+          {/*    The minimum delivery amount is the discounted order amount and does not include shipping fee*/}
+          {/*  </p>*/}
+          {/*</FormItem>*/}
+          {/*<FormItem {...formItemLayout} label="Charging rule" required={true}>*/}
+          {/*  <RadioGroup defaultValue={freightType} value={freightType} onChange={(e) => this._changeFreightType(e.target.value)}>*/}
+          {/*    <div className="radio-item">*/}
+          {/*      <Radio value={0}>If orders less than </Radio>*/}
+          {/*      <FormItem>*/}
+          {/*        {getFieldDecorator('satisfyPrice', {*/}
+          {/*          initialValue: satisfyPrice,*/}
+          {/*          rules: this._validMoney(freightType, 0)*/}
+          {/*        })(*/}
+          {/*          <InputNumber*/}
+          {/*            disabled={freightType == 1}*/}
+          {/*            onChange={(value) =>*/}
+          {/*              storeFreightFieldsValue({*/}
+          {/*                field: 'satisfyPrice',*/}
+          {/*                value: value*/}
+          {/*              })*/}
+          {/*            }*/}
+          {/*          />*/}
+          {/*        )}*/}
+          {/*      </FormItem>*/}
+          {/*      <span*/}
+          {/*        style={{*/}
+          {/*          paddingLeft: 10,*/}
+          {/*          paddingRight: 10,*/}
+          {/*          marginTop: '10px',*/}
+          {/*          display: 'inline-block'*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}, the freight would be*/}
+          {/*      </span>*/}
+          {/*      <FormItem>*/}
+          {/*        {getFieldDecorator('satisfyFreight', {*/}
+          {/*          initialValue: satisfyFreight,*/}
+          {/*          rules: this._validMoney(freightType, 0)*/}
+          {/*        })(*/}
+          {/*          <InputNumber*/}
+          {/*            disabled={freightType == 1}*/}
+          {/*            onChange={(value) =>*/}
+          {/*              storeFreightFieldsValue({*/}
+          {/*                field: 'satisfyFreight',*/}
+          {/*                value: value*/}
+          {/*              })*/}
+          {/*            }*/}
+          {/*          />*/}
+          {/*        )}*/}
+          {/*      </FormItem>*/}
+          {/*      <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.</span>*/}
+          {/*    </div>*/}
+          {/*    <div style={{marginTop: 20, marginBottom: 20}}>*/}
+          {/*      Freight after meeting the conditions will be free.Order is judged whether it meets the free shipping conditions according to the amount after excluding the discount.*/}
+          {/*    </div>*/}
+
+          {/*    <div className="radio-item">*/}
+          {/*      <Radio value={1}> Minimum delivery amount is</Radio>*/}
+          {/*      /!* <span*/}
+          {/*        style={{*/}
+          {/*          paddingLeft: 23,*/}
+          {/*          paddingRight: 17,*/}
+          {/*          marginTop: '10px',*/}
+          {/*          display: 'inline-block'*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        Minimum delivery amount is*/}
+          {/*      </span> *!/*/}
+          {/*      <FormItem>*/}
+          {/*        {getFieldDecorator('minimumDeliveryFee', {*/}
+          {/*          initialValue: minimumDeliveryFee,*/}
+          {/*          rules: this._validMoney(freightType, 1)*/}
+          {/*        })(*/}
+          {/*          <InputNumber*/}
+          {/*            disabled={freightType === 0}*/}
+          {/*            onChange={(value) => {*/}
+          {/*              storeFreightFieldsValue({*/}
+          {/*                field: 'minimumDeliveryFee',*/}
+          {/*                value: value*/}
+          {/*              });*/}
+          {/*            }}*/}
+          {/*          />*/}
+          {/*        )}*/}
+          {/*      </FormItem>*/}
+          {/*    </div>*/}
+          {/*  </RadioGroup>*/}
+          {/*</FormItem>*/}
+
+          <FormItem {...formItemLayout}>
+                <FormItem {...formItemLayout} label="Shipping fee rule" required={true} className={'ant-col-20'}>
+                  <p> fixed shipping
+                    {getFieldDecorator('fixedFreight', {
+                      initialValue: fixedFreight,
+                      rules: this._validMoney(freightType, 1)
+                    })(
+                      <InputNumber
+                        style={{margin:'0 5px'}}
+                        disabled={freightType === 0}
+                        onChange={(value) => {
+                          storeFreightFieldsValue({
+                            field: 'fixedFreight',
+                            value: value
+                          });
+                        }}
+                      />
+                    )}
+                      € </p>
                 </FormItem>
-                <span style={{ paddingLeft: 10 }}>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.</span>
-                <span
-                  style={{
-                    paddingLeft: 23,
-                    paddingRight: 17,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  Fixed shipping
-                </span>
-                {/* <Radio value={1}>Fixed shipping</Radio> */}
-                <FormItem>
-                  {getFieldDecorator('fixedFreight', {
-                    initialValue: fixedFreight,
-                    rules: this._validMoney(freightType, 1)
-                  })(
-                    <InputNumber
-                      disabled={freightType === 0}
-                      onChange={(value) => {
-                        storeFreightFieldsValue({
-                          field: 'fixedFreight',
-                          value: value
-                        });
-                      }}
-                    />
-                  )}
+
+                <FormItem {...formItemLayout} label="Delivery rule" required={true} className={'ant-col-20'}>
+                  <p> Minimum delivery amount is
+                    {getFieldDecorator('minimumDeliveryFee', {
+                      initialValue: minimumDeliveryFee,
+                      rules: this._validMoney(freightType, 1)
+                    })(
+                      <InputNumber
+                        style={{margin:'0 5px 14px'}}
+                        disabled={freightType === 0}
+                        onChange={(value) => {
+                          storeFreightFieldsValue({
+                            field: 'minimumDeliveryFee',
+                            value: value
+                          });
+                        }}
+                      />
+                    )}
+                    € </p>
+                  <p >
+                    <a className="ant-form-item-required"></a>
+                    The minimum delivery amount is the discounted order amount and does not include shipping fee
+                  </p>
                 </FormItem>
-                <span
-                  style={{
-                    paddingLeft: 10,
-                    marginTop: '10px',
-                    display: 'inline-block'
-                  }}
-                >
-                  {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}.
-                </span>
-              </div>
-            </RadioGroup>
+            {/*</RadioGroup>*/}
           </FormItem>
+
           <div className="bar-button">
             <Button onClick={() => this._save()} type="primary" style={{ marginRight: 20, marginLeft: 22 }}>
               Save

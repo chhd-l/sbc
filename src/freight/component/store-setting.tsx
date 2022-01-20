@@ -47,9 +47,10 @@ export default class StoreSetting extends React.Component<any, any> {
     ).toJS();
     return [
       checkAuth('f_store_temp_edit') ? (
-        <Button type="primary" onClick={() => history.push('/store-freight')} key="button">
-          <FormattedMessage id="Setting.AddStoreShippingTemplate" />
-        </Button>
+        // <Button type="primary" onClick={() => history.push('/store-freight')} key="button">
+        //   <FormattedMessage id="Setting.AddStoreShippingTemplate" />
+        // </Button>
+        null
       ) : null,
       <FreightList key="freightList" data={content} isStore={true} />,
       <Pagination key="Pagination" onChange={(pageNum, pageSize) => freightTemplateStore(pageNum - 1, pageSize)} current={number} total={totalElements} pageSize={size} />

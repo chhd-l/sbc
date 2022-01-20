@@ -38,6 +38,14 @@ export default class AppStore extends Store {
     }
   };
 
+  getParentConsentList = () => {
+    webApi.getParentConsentList().then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.dispatch('consent:parentConsentList', fromJS(data.res.context?.consentVOList ?? []));
+      }
+    });
+  };
+
   //语言
   getLanguage = async (callback) => {
     const { res } = await webApi.fetchQuerySysDictionary({
@@ -186,6 +194,26 @@ export default class AppStore extends Store {
       this.transaction(() => {
         //this.getConsentList();
       });
+    }
+  };
+
+  //select consent ids for batch updating in consent list
+  onSelectConsentIds = (selectedRowKeys) => {
+    this.dispatch('consent:setSelectedConsentIds', fromJS(selectedRowKeys));
+  };
+
+  //batch update consent version
+  batchUpdateConsentVersion = async (ids: number[], consentVersion: string) => {
+    const { res } = await webApi.batchUpdateConsentVersion(ids, consentVersion);
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(res.message);
+      this.transaction(() => {
+        this.dispatch('consent:setSelectedConsentIds', fromJS([]));
+        this.getConsentList();
+      });
+      return true;
+    } else {
+      return false;
     }
   };
 }

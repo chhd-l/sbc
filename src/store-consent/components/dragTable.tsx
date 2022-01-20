@@ -27,6 +27,8 @@ class TabList extends React.Component<any, any> {
       onSwitch: Function;
       pageChange: Function;
       linkStatus: any;
+      selectedConsentIds: IList;
+      onSelectConsentIds: Function;
     };
     intl: any;
   };
@@ -38,17 +40,28 @@ class TabList extends React.Component<any, any> {
     propSort: noop,
     onSwitch: noop,
     pageChange: noop,
-    linkStatus: 'linkStatus'
+    linkStatus: 'linkStatus',
+    selectedConsentIds: 'selectedConsentIds',
+    onSelectConsentIds: noop
   };
 
   componentDidMount() {}
 
+  handleTableChange = (selectedRowKeys) => {
+    const { onSelectConsentIds } = this.props.relaxProps;
+    onSelectConsentIds(selectedRowKeys);
+  };
+
   render() {
-    const { consentList } = this.props.relaxProps;
+    const { consentList, selectedConsentIds } = this.props.relaxProps;
+    const rowSelection = {
+      selectedRowKeys: selectedConsentIds.toJS(),
+      onChange: this.handleTableChange
+    };
     return (
       <Table
         id="consent"
-        rowKey="tabId"
+        rowKey="id"
         columns={this._columns}
         dataSource={consentList.toJS()}
         onRow={(_record, index) => ({
@@ -57,6 +70,7 @@ class TabList extends React.Component<any, any> {
         })}
         components={this.components}
         pagination={false}
+        rowSelection={rowSelection}
         size="middle"
       />
     );
@@ -77,7 +91,7 @@ class TabList extends React.Component<any, any> {
     {
       title: <FormattedMessage id="Setting.Consenttitle" />,
       dataIndex: 'consentTitle',
-      width: '40%',
+      width: '30%',
       key: 'consentTitle',
       render: (text) => {
         let html = { __html: text };
@@ -93,6 +107,11 @@ class TabList extends React.Component<any, any> {
       title: <FormattedMessage id="Setting.Consentcode" />,
       dataIndex: 'consentCode',
       key: 'consentCode'
+    },
+    {
+      title: 'consent Version',
+      dataIndex: 'consentVersion',
+      key: 'consentVersion'
     },
     {
       title: <FormattedMessage id="Setting.Consenttype" />,

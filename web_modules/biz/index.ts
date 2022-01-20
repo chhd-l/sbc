@@ -20,6 +20,7 @@ import LogoLoadingIcon from './LogoLoadingIcon';
 import AntIcon from './antIcon';
 import AntSpin from './antSpin';
 import PostalCodeMsg from './PostalCodeMsg';
+import ConfirmMessage from './confirm-message';
 
 export {
   LogoLoadingIcon,
@@ -44,4 +45,5 @@ export {
   AntIcon,
   AntSpin,
   PostalCodeMsg,
+  ConfirmMessage
 };

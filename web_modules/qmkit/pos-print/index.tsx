@@ -20,8 +20,8 @@ const WsPrint = () => {
 
         posPrint.connect(item.value);
         posPrint.onReady(() => {
-          const { storeId, employeeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
-          const socketUrl = [storeId, employeeId].join('_');
+          const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+          const socketUrl = storeId;
           socket.connect(socketUrl);
           socket.addEventListener('message', (msg) => {
             console.log('ws message', msg);

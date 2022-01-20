@@ -185,7 +185,7 @@ class Printer {
     //启动居右显示
     this.$printer.addTextAlign(this.$printer.ALIGN_RIGHT);
     // 电话 居右显示
-    this.$printer.addText(tel + '\n');
+    // this.$printer.addText(tel + '\n');
     // 时间 居右显示
     this.$printer.addText(time + '\n')
     // 恢复居左显示

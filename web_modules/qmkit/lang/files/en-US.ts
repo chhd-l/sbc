@@ -5439,5 +5439,17 @@ export default {
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
   "yes": "Yes",
-  'subscription.realtimeStock':'Real-time stock'
+  'subscription.realtimeStock':'Real-time stock',
+  "Menu.Banner": "Banner",
+  "Menu.Buy from Retailer": "Buy from Retailer",
+  "Menu.Checkout Setting": "Checkout Setting",
+  "Menu.Customer Account Setting": "Customer Account Setting",
+  "Menu.Marketing Banner": "Marketing Banner",
+  "Retailer.DisplayLanguage": "Display Language",
+  "Retailer.IdRetailerProducts": "Id Retailer Products",
+  "Retailer.IdVetProducts": "Id Vet Products",
+  "Retailer.Local": "Local",
+  "Retailer.Token": "Token",
+  "Retailer.TrackingIdPrefix": "Tracking Id Prefix",
+  "Retailer.Type": "Type"
 };

@@ -26,7 +26,8 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
-const showRealStock = checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
+const showRealStock = true; //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限(checkAuth('f_order_show_realtime_stock'))
+const showRealStockBtn = false;
 
 /**
  * 拒绝表单，只为校验体验
@@ -554,7 +555,7 @@ class OrderDetailTab extends React.Component<any, any> {
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
               (!detail.get('subscribeId') &&
                 (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-              showRealStock ? (
+            showRealStockBtn ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -579,7 +580,7 @@ class OrderDetailTab extends React.Component<any, any> {
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
           (!detail.get('subscribeId') &&
             !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-          showRealStock ? (
+        showRealStockBtn ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">

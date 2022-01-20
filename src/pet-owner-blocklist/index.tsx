@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Input, Button, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
+import { Input, Button, Select, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
 
 import { Headline, BreadCrumb, Const, RCi18n, ValidConst } from 'qmkit';
 import * as webapi from './webapi';
 import TablePage from '../product-dictionary/component/table';
 
+
+const { Option } = Select;
 
 class ProductDictionary extends Component<any, any> {
   tableRef: any;
@@ -19,6 +21,7 @@ class ProductDictionary extends Component<any, any> {
       id: '',
       email: '',
       message: '',
+      periodTime: '',
       errorMessage: '',
       modalVisible: false,
       modalLoading: false,
@@ -49,6 +52,7 @@ class ProductDictionary extends Component<any, any> {
     this.setState({
       id: '',
       email: '',
+      periodTime: '',
       description: '',
       errorMessage: '',
       modalVisible: true
@@ -56,7 +60,7 @@ class ProductDictionary extends Component<any, any> {
   };
 
   handleEdit = (item) => {
-    const { id, name, description } = item;
+    const { id = '1', name, description } = item;
 
     this.setState({
       id: id,
@@ -162,30 +166,32 @@ class ProductDictionary extends Component<any, any> {
   };
 
   render() {
-    const { id, email, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
+    const { id, email, periodTime, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
     const columns = [
       {
         title: <FormattedMessage id='Survey.email' />,
-        dataIndex: 'name',
-        key: 'name'
+        dataIndex: 'name'
       },
       {
-        title: <FormattedMessage id='Dashboard.Error Message' />,
-        dataIndex: 'description',
-        key: 'description'
+        title: <FormattedMessage id='PetOwner.ValidPeriod' />,
+        dataIndex: 'time'
+      },
+      {
+        title: <FormattedMessage id='PetOwner.FromTo' />,
+        dataIndex: 'range',
+        render: () => (
+          <div>
+            <p>2022-01-18</p>
+            <p>forever</p>
+          </div>
+        )
       },
       {
         title: <FormattedMessage id='Product.Operation' />,
         dataIndex: 'operation',
-        key: 'operation',
         width: '180px',
         render: (text, record) => (
           <span>
-            <Tooltip placement='top' title={`${RCi18n({ id: 'Setting.Edit' })}`}>
-              <a type='link' className='iconfont iconEdit' onClick={() => this.handleEdit(record)} />
-            </Tooltip>
-
-            <Divider type='vertical' />
             <Popconfirm placement='topLeft' title={`${RCi18n({ id: 'Setting.Areyousuretodelete' })}`}
                         onConfirm={() => this.handleDelete(record.id)}
                         okText={(window as any).RCi18n({ id: 'Setting.Confirm' })}
@@ -206,9 +212,15 @@ class ProductDictionary extends Component<any, any> {
         <div className='container-search'>
           <Headline title={`${RCi18n({ id: 'Menu.Pet owner blocklist' })}`} />
 
-          <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleAdd}>
-            <FormattedMessage id='Setting.Add' />
-          </Button>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleAdd}>
+              <FormattedMessage id='PetOwner.AddBlocklist' />
+            </Button>
+            <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleEdit}>
+              <FormattedMessage id='PetOwner.EditErrorMessage' />
+            </Button>
+          </div>
+
         </div>
 
         <div className='container'>
@@ -257,14 +269,32 @@ class ProductDictionary extends Component<any, any> {
           <div style={{ padding: '60px 0' }}>
             {
               !id ? (
-                <Row gutter={[24, 12]}>
-                  <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
-                    <FormattedMessage id='PetOwner.Email' />:
-                  </Col>
-                  <Col span={14}>
-                    <Input value={email} onChange={e => this.handleChange('email', e.target.value)} />
-                  </Col>
-                </Row>
+                <div>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                      <FormattedMessage id='PetOwner.Email' />:
+                    </Col>
+                    <Col span={14}>
+                      <Input value={email} onChange={e => this.handleChange('email', e.target.value)} />
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} />
+                    <Col span={14} style={{ color: '#e2001a' }}>
+                      {errorMessage}
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                      <FormattedMessage id='PetOwner.ValidateUntil' />:
+                    </Col>
+                    <Col span={14}>
+                      <Select value={periodTime} onChange={e => this.handleChange('periodTime', e)} style={{ width: '312px' }}>
+                        <Option value="lucy">Forever</Option>
+                      </Select>
+                    </Col>
+                  </Row>
+                </div>
               ) : (
                 <Row gutter={[24, 12]}>
                   <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
@@ -276,12 +306,6 @@ class ProductDictionary extends Component<any, any> {
                 </Row>
               )
             }
-            <Row gutter={[24, 12]}>
-              <Col span={6} />
-              <Col span={14} style={{ color: '#e2001a' }}>
-                {errorMessage}
-              </Col>
-            </Row>
           </div>
         </Modal>
       </div>

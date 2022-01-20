@@ -1255,6 +1255,10 @@ const routes = [
     path:'/product-api',
     asyncComponent: () => import('./setting-integration/product-api')
   },
+  {
+    path:'/retailer',
+    asyncComponent: () => import('./setting-integration/retailer')
+  },
 ];
 
 const homeRoutes = [

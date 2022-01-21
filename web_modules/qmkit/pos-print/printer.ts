@@ -19,6 +19,7 @@ class Printer {
     this.$crypto = crypto;
     this.$buffer = buffer;
     this.$events = [];
+    this.$subscribes = [];
   }
 
   connect = (url) => {
@@ -28,7 +29,6 @@ class Printer {
     }
     this.$url = url;
     this.$printer = null;
-    this.$subscribes = [];
     const [ip, port] = this.$url.split(':');
     this.$ePosDev = new (window as any).epson.ePOSDevice();
     this.$ePosDev.connect(ip, port, this.connectCallback);

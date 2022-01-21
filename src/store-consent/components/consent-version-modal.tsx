@@ -10,7 +10,8 @@ class ConsentVersionModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      value: null
+      value: null,
+      hasError: false
     };
   }
 
@@ -45,23 +46,33 @@ class ConsentVersionModal extends React.Component<any, any> {
   handleBatchUpdateConsentVersion = () => {
     const { selectedConsentIds, batchUpdateConsentVersion } = this.props.relaxProps;
     const { value } = this.state;
+    if (!value) {
+      this.setState({
+        hasError: true
+      });
+      return Promise.resolve(false);
+    } else {
+      this.setState({
+        hasError: false
+      });
+    }
     return batchUpdateConsentVersion(selectedConsentIds.toJS(), value);
   };
 
   render() {
-    const { value } = this.state;
+    const { value, hasError } = this.state;
     return (
       <ConfirmMessage
         title={RCi18n({id:'Setting.Confirm'})}
-        triggerButtonText="Update consent version"
+        triggerButtonText={RCi18n({id:'Setting.UpdateConsentVersion'})}
         onTriggerClick={this.onBatchUpdateClick}
         triggerButtonProps={{
           type:'primary'
         }}
         onOk={this.handleBatchUpdateConsentVersion}
       >
-        <span>Consent version: </span>
-        <InputNumber value={value} min={1} step={1} precision={0} onChange={this.handleValueChange} />
+        <span>{RCi18n({id:'Setting.ConsentVersion'})}: </span>
+        <InputNumber value={value} min={1} step={1} precision={0} style={hasError ? {borderColor:'red'} : {}} onChange={this.handleValueChange} />
       </ConfirmMessage>
     );
   };

@@ -109,7 +109,7 @@ class TabList extends React.Component<any, any> {
       key: 'consentCode'
     },
     {
-      title: 'consent Version',
+      title: <FormattedMessage id="Setting.ConsentVersion" />,
       dataIndex: 'consentVersion',
       key: 'consentVersion'
     },

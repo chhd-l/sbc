@@ -309,7 +309,7 @@ export default class FreightTemp extends React.Component<any, any> {
                         }}
                       />
                     )}
-                      € </p>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} </p>
                 </FormItem>
 
                 <FormItem {...formItemLayout} label="Delivery rule" required={true} className={'ant-col-20'}>
@@ -329,7 +329,7 @@ export default class FreightTemp extends React.Component<any, any> {
                         }}
                       />
                     )}
-                    € </p>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} </p>
                   <p >
                     <a className="ant-form-item-required"></a>
                     The minimum delivery amount is the discounted order amount and does not include shipping fee

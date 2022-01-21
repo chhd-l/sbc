@@ -18,15 +18,31 @@ class ProductDictionary extends Component<any, any> {
     this.tableRef = React.createRef();
 
     this.state = {
-      id: '',
+      type: '',
       email: '',
       message: '',
       periodTime: '',
       errorMessage: '',
       modalVisible: false,
       modalLoading: false,
-      updateLoading: false
+      updateLoading: false,
+      times: [],
+      firstItemDescription: ''
     };
+  }
+
+  componentDidMount() {
+    this.getTimeEnums();
+  }
+
+  getTimeEnums = async () => {
+    const { res } = await webapi.getEnums();
+    if (res.code === Const.SUCCESS_CODE) {
+      const items = Object.keys(res.context) || [];
+      this.setState({
+        times: items,
+      })
+    }
   }
 
   searchFunc = async (params) => {
@@ -34,6 +50,9 @@ class ProductDictionary extends Component<any, any> {
 
     if (res.code === Const.SUCCESS_CODE) {
       const { total, last, customerEmailFiltrList } = res.context;
+      this.setState({
+        firstItemDescription: customerEmailFiltrList[0]?.description || '',
+      })
       return { total, last, content: customerEmailFiltrList };
     } else {
       return false;
@@ -49,32 +68,31 @@ class ProductDictionary extends Component<any, any> {
   };
 
   handleAdd = () => {
+    const {times, firstItemDescription} = this.state;
     this.setState({
-      id: '',
+      type: '',
       email: '',
-      periodTime: '',
-      description: '',
+      periodTime: times[0],
+      description: firstItemDescription,
       errorMessage: '',
       modalVisible: true
     });
   };
 
-  handleEdit = (item) => {
-    const { id = '1', name, description } = item;
-
+  handleEdit = () => {
+    const {firstItemDescription} = this.state;
     this.setState({
-      id: id,
-      email: name,
-      description: description || '',
+      type: 'desc',
+      description: firstItemDescription,
       errorMessage: '',
       modalVisible: true
     });
   };
 
   handleUpdate = () => {
-    const { id } = this.state;
+    const { type } = this.state;
 
-    if (!id) {
+    if (!type) {
       // new email
       this.addEmail();
     } else {
@@ -84,14 +102,16 @@ class ProductDictionary extends Component<any, any> {
   };
 
   addEmail = async () => {
-    const { email } = this.state;
+    const { email, periodTime, description } = this.state;
 
     this.setState({
       updateLoading: true
     });
 
     const { res } = await webapi.addBlockEmail({
-      name: email
+      name: email,
+      timeType: periodTime,
+      description,
     });
 
     if (res.code === Const.SUCCESS_CODE) {
@@ -112,15 +132,13 @@ class ProductDictionary extends Component<any, any> {
   };
 
   addDescription = async () => {
-    const { id, email, description } = this.state;
+    const { description } = this.state;
 
     this.setState({
       updateLoading: true
     });
 
     const { res } = await webapi.updateBlockMessage({
-      id,
-      name: email,
       description
     });
 
@@ -166,7 +184,7 @@ class ProductDictionary extends Component<any, any> {
   };
 
   render() {
-    const { id, email, periodTime, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
+    const { type, times, email, periodTime, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
     const columns = [
       {
         title: <FormattedMessage id='Survey.email' />,
@@ -174,15 +192,15 @@ class ProductDictionary extends Component<any, any> {
       },
       {
         title: <FormattedMessage id='PetOwner.ValidPeriod' />,
-        dataIndex: 'time'
+        dataIndex: 'timeType'
       },
       {
         title: <FormattedMessage id='PetOwner.FromTo' />,
         dataIndex: 'range',
-        render: () => (
+        render: (text, record) => (
           <div>
-            <p>2022-01-18</p>
-            <p>forever</p>
+            <p>{record.timeHorizonStart ? record.timeHorizonStart.split('.')[0] : '' }</p>
+            <p>{record.timeHorizonEnd ? record.timeHorizonEnd.split('.')[0] : record.timeType}</p>
           </div>
         )
       },
@@ -235,7 +253,7 @@ class ProductDictionary extends Component<any, any> {
         <Modal
           zIndex={1000}
           width='600px'
-          title={!id ? RCi18n({ id: 'PetOwner.AddBlocklist' }) : RCi18n({ id: 'PetOwner.EditErrorMessage' })}
+          title={!type ? RCi18n({ id: 'PetOwner.AddBlocklist' }) : RCi18n({ id: 'PetOwner.EditErrorMessage' })}
           visible={modalVisible}
           confirmLoading={modalLoading}
           maskClosable={false}
@@ -259,7 +277,7 @@ class ProductDictionary extends Component<any, any> {
               type='primary'
               key='submit'
               loading={updateLoading}
-              disabled={errorMessage || id && !description.trim() || !id && !email}
+              disabled={errorMessage || type && !description.trim() || !type && !email}
               onClick={this.handleUpdate}
             >
               <FormattedMessage id='Product.Submit' />
@@ -268,7 +286,7 @@ class ProductDictionary extends Component<any, any> {
         >
           <div style={{ padding: '60px 0' }}>
             {
-              !id ? (
+              !type ? (
                 <div>
                   <Row gutter={[24, 12]}>
                     <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
@@ -290,7 +308,11 @@ class ProductDictionary extends Component<any, any> {
                     </Col>
                     <Col span={14}>
                       <Select value={periodTime} onChange={e => this.handleChange('periodTime', e)} style={{ width: '312px' }}>
-                        <Option value="lucy">Forever</Option>
+                        {
+                          times.map(time => (
+                            <Option value={time} key={time}>{time}</Option>
+                          ))
+                        }
                       </Select>
                     </Col>
                   </Row>

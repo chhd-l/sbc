@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Select, Button, Icon } from 'antd';
+import { Select, Button, Icon, message } from 'antd';
 import './editcomponents/style.less';
 import { Relax } from 'plume2';
+import { List } from 'immutable';
 import DragTable from './components/dragTable'
 import Detail from './components/consent-detail';
+import ConsentVersionModal from './components/consent-version-modal';
 
 //import { bool } from 'prop-types';
 import { noop, SelectGroup, RCi18n } from 'qmkit';
@@ -35,6 +37,7 @@ export default class StepConsent extends Component<any, any> {
       pageChange: Function;
       editId: any;
       editList: any;
+      getParentConsentList: Function;
     };
   };
 
@@ -46,13 +49,15 @@ export default class StepConsent extends Component<any, any> {
     getLanguage: noop,
     pageChange: noop,
     editId: 'editId',
-    editList: 'editList'
+    editList: 'editList',
+    getParentConsentList: noop
   };
 
   componentDidMount() {
-    const { getConsentList, getLanguage } = this.props.relaxProps;
+    const { getConsentList, getParentConsentList, getLanguage } = this.props.relaxProps;
     getConsentList();
     getLanguage();
+    getParentConsentList();
   }
 
   handleChange = (value) => {
@@ -102,9 +107,16 @@ export default class StepConsent extends Component<any, any> {
                 </Select>
               </div>
             </div>
-            <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
-              <FormattedMessage id="Setting.NewConsent" />
-            </Button>
+            <div className="space-between">
+              <div>
+                <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
+                  <FormattedMessage id="Setting.NewConsent" />
+                </Button>
+              </div>
+              <div style={{marginTop:15}}>
+                <ConsentVersionModal />
+              </div>
+            </div>
             <div id="consent" className="consent-table">
               <DragTable />
             </div>

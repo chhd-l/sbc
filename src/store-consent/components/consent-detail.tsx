@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { Select, Input, TreeSelect, Icon, Form, Col, Button, message } from 'antd';
+import { Select, Input, TreeSelect, Icon, Form, Row, Col, Button, message } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
-//import { fromJS } from 'immutable';
+import { List } from 'immutable';
 
 import { SelectGroup, noop, ReactEditor, RCi18n } from 'qmkit';
 const { Option } = Select;
 const FormItem = Form.Item;
 const { SHOW_PARENT } = TreeSelect;
 import { FormattedMessage, injectIntl } from 'react-intl';
+
+type TParentConsentItem = {
+  id: number;
+  consentId: string;
+  consentDesc: string;
+};
 
 @Relax
 class StepConsentDetail extends Component<any, any> {
@@ -51,6 +57,7 @@ class StepConsentDetail extends Component<any, any> {
       detailList: any;
       getConsentDetailDelete: Function;
       onDetailList: Function;
+      parentConsentList: List<TParentConsentItem>;
     };
     intl: any;
   };
@@ -67,7 +74,8 @@ class StepConsentDetail extends Component<any, any> {
     editId: 'editId',
     detailList: 'detailList',
     getConsentDetailDelete: noop,
-    onDetailList: noop
+    onDetailList: noop,
+    parentConsentList: 'parentConsentList'
   };
 
   handleChange = (value) => {};
@@ -208,7 +216,7 @@ class StepConsentDetail extends Component<any, any> {
   };
 
   render() {
-    const { onFormChange, editId, consentForm } = this.props.relaxProps;
+    const { onFormChange, editId, consentForm, parentConsentList } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
     const htmlString = editList.consentTitle ? editList.consentTitle : '';
     const editor = htmlString; // BraftEditor.createEditorState(htmlString);
@@ -247,8 +255,8 @@ class StepConsentDetail extends Component<any, any> {
 
     return (
       <div className="consent-detail">
-        <div className="detail space-between">
-          <div className="detail-form">
+        <Row gutter={[24, 4]}>
+          <Col span={8}>
             <FormItem className="input-consent">
               <SelectGroup
                 label={(window as any).RCi18n({ id: 'Setting.Category' })}
@@ -272,20 +280,8 @@ class StepConsentDetail extends Component<any, any> {
                 </Option>
               </SelectGroup>
             </FormItem>
-            <FormItem className="input-consent">
-              <Input
-                addonBefore={(window as any).RCi18n({ id: 'Setting.Consentid' })}
-                defaultValue={editList.consentId ? editList.consentId : ''}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  consentForm.consentId = value;
-                  onFormChange(consentForm);
-                }}
-              />
-            </FormItem>
-          </div>
-
-          <div className="detail-form">
+          </Col>
+          <Col span={8}>
             <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.filedType ? editList.filedType : 'Optional'}
@@ -305,6 +301,43 @@ class StepConsentDetail extends Component<any, any> {
                 </Option>
               </SelectGroup>
             </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <SelectGroup
+                defaultValue={editList.consentType ? editList.consentType : (window as any).RCi18n({ id: 'Setting.E-mailin' })}
+                label={(window as any).RCi18n({ id: 'Setting.Consenttype' })}
+                style={{ width: 280 }}
+                onChange={(value, index) => {
+                  value = value === '' ? null : value;
+                  consentForm.consentType = value;
+                  onFormChange(consentForm);
+                }}
+              >
+                <Option value="0">&nbsp;</Option>
+                <Option value="E-mail in">
+                  <FormattedMessage id="Setting.Emailin" />
+                </Option>
+                <Option value="E-mail out">
+                  <FormattedMessage id="Setting.Emailout" />
+                </Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <Input
+                addonBefore={(window as any).RCi18n({ id: 'Setting.Consentid' })}
+                defaultValue={editList.consentId ? editList.consentId : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  consentForm.consentId = value;
+                  onFormChange(consentForm);
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
             <FormItem className="input-consent">
               <Input
                 addonBefore={(window as any).RCi18n({ id: 'Setting.Consentcode' })}
@@ -320,33 +353,123 @@ class StepConsentDetail extends Component<any, any> {
                 }}
               />
             </FormItem>
-          </div>
-
-          <div className="detail-form">
-            {/* <FormItem>
-              <TreeSelect {...tProps} />
-            </FormItem> */}
+          </Col>
+          <Col span={8}>
             <FormItem className="input-consent">
               <SelectGroup
-                defaultValue={editList.consentType ? editList.consentType : (window as any).RCi18n({ id: 'Setting.E-mailin' })}
-                label={(window as any).RCi18n({ id: 'Setting.Consenttype' })}
+                defaultValue={editList.parentId ? editList.parentId : ''}
+                label={RCi18n({id:"Setting.ParentConsent"})}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
-                  consentForm.consentType = value;
+                  consentForm.parentId = value;
                   onFormChange(consentForm);
                 }}
               >
-                <Option value="E-mail in">
-                  <FormattedMessage id="Setting.Emailin" />
-                </Option>
-                <Option value="E-mail out">
-                  <FormattedMessage id="Setting.Emailout" />
-                </Option>
+                <Option value="">&nbsp;</Option>
+                {parentConsentList.toJS().map(item => (
+                  <Option value={item.id} key={item.id}>
+                    <div><b>{item.consentDesc}</b></div>
+                    <div>{item.consentId}</div>
+                  </Option>
+                ))}
               </SelectGroup>
             </FormItem>
-          </div>
-
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <Input
+                addonBefore={RCi18n({id:"Setting.ConsentVersion"})}
+                defaultValue={editList.consentVersion ? editList.consentVersion : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  consentForm.consentVersion = value;
+                  onFormChange(consentForm);
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <Input
+                addonBefore={RCi18n({id:'Setting.ConsentDesc'})}
+                defaultValue={editList.consentDesc ? editList.consentDesc : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  consentForm.consentDesc = value;
+                  onFormChange(consentForm);
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <Input
+                addonBefore={RCi18n({id:"Setting.ConsentGroup"})}
+                defaultValue={editList.consentGroup ? editList.consentGroup : ''}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  consentForm.consentGroup = value;
+                  onFormChange(consentForm);
+                }}
+              />
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <SelectGroup
+                defaultValue={editList.communicationType ? editList.communicationType : ''}
+                label={RCi18n({id:'PetOwner.PreferChannel'})}
+                style={{ width: 280 }}
+                onChange={(value, index) => {
+                  value = value === '' ? null : value;
+                  consentForm.communicationType = value;
+                  onFormChange(consentForm);
+                }}
+              >
+                <Option value="">&nbsp;</Option>
+                <Option value="email">{RCi18n({id:'PetOwner.Email'})}</Option>
+                <Option value="phone">{RCi18n({id:'PetOwner.Phone'})}</Option>
+                <Option value="print">{RCi18n({id:'PetOwner.Message'})}</Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <SelectGroup
+                defaultValue={editList.pushOktaFlag ? editList.pushOktaFlag : 0}
+                label={RCi18n({id:"Setting.PushToOkta"})}
+                style={{ width: 280 }}
+                onChange={(value, index) => {
+                  value = value === '' ? null : value;
+                  consentForm.pushOktaFlag = value;
+                  onFormChange(consentForm);
+                }}
+              >
+                <Option value={1}>{RCi18n({id:'Setting.Yes'})}</Option>
+                <Option value={0}>{RCi18n({id:'Setting.No'})}</Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span={8}>
+            <FormItem className="input-consent">
+              <SelectGroup
+                defaultValue={editList.sendEmailFlag ? editList.sendEmailFlag : 0}
+                label={RCi18n({id:"Setting.SendEmail"})}
+                style={{ width: 280 }}
+                onChange={(value, index) => {
+                  value = value === '' ? null : value;
+                  consentForm.sendEmailFlag = value;
+                  onFormChange(consentForm);
+                }}
+              >
+                <Option value={1}>{RCi18n({id:'Setting.Yes'})}</Option>
+                <Option value={0}>{RCi18n({id:'Setting.No'})}</Option>
+              </SelectGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <div className="detail">
           <div className="edit">
             <div className="edit-consent">
               <FormItem className="input-consent">

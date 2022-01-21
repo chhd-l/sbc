@@ -36,7 +36,7 @@ export default class AppStore extends Store {
     if (expressAll.res.code == Const.SUCCESS_CODE) {
       this.dispatch('exp:init', expressAll.res.context);
     } else {
-      message.error(expressAll.res.message);
+      //message.error(expressAll.res.message);
     }
   };
 
@@ -63,10 +63,10 @@ export default class AppStore extends Store {
         this.initList()
       }, 1000)
     } else if(res.res.code === 'K-000072'){
-      message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanynamecannotrepeat'}))
+      //message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanynamecannotrepeat'}))
       this.dispatch('formActor:field', {field: 'saveLoading', value: false })
     } else if (res.res.code === 'K-000073'){
-      message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanycodecannotrepeat'}))
+      //message.error(res.res.message || RCi18n({id: 'Setting.Logisticcompanycodecannotrepeat'}))
       this.dispatch('formActor:field', {field: 'saveLoading', value: false })
     }
     else {

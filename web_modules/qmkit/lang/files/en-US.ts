@@ -5451,5 +5451,12 @@ export default {
   "Retailer.Local": "Local",
   "Retailer.Token": "Token",
   "Retailer.TrackingIdPrefix": "Tracking Id Prefix",
-  "Retailer.Type": "Type"
+  "Retailer.Type": "Type",
+  "Setting.UpdateConsentVersion": "Update consent version",
+  "Setting.ConsentVersion": "Consent version",
+  "Setting.ParentConsent": "Parent consent",
+  "Setting.ConsentDesc": "Consent description",
+  "Setting.ConsentGroup": "Consent group",
+  "Setting.PushToOkta": "Push to OKTA",
+  "Setting.SendEmail": "Send Email"
 };

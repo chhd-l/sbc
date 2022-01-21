@@ -26,7 +26,7 @@ const WsPrint = () => {
           socket.addEventListener('message', (msg) => {
             console.log('ws message', msg);
             if (msg.type === 'print') {
-              posPrint.print(msg.data);
+              posPrint.addPrint(msg.data);
             }
           });
           socket.addEventListener('close', () => {
@@ -34,11 +34,14 @@ const WsPrint = () => {
             setTimeout(() => {
               console.log('ws reConnect...');
               socket.reConnect(socketUrl);
-            }, 3000);
+            }, 1000);
           });
           socket.addEventListener('error', () => {
             console.log('ws error');
           });
+        });
+        posPrint.onPrintSuccess((data) => {
+          socket.send({type: 'printed', data});
         });
       }
     };

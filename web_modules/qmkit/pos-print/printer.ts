@@ -7,6 +7,8 @@ class Printer {
   $ePosDev = null;
   $printer = null;
   $events = [];
+  $subscribes = [];
+  $printData = [];
 
   $lineCharsLength = 43;
   $lineCharsSecondSizeFontBLength = 29;
@@ -26,6 +28,7 @@ class Printer {
     }
     this.$url = url;
     this.$printer = null;
+    this.$subscribes = [];
     const [ip, port] = this.$url.split(':');
     this.$ePosDev = new (window as any).epson.ePOSDevice();
     this.$ePosDev.connect(ip, port, this.connectCallback);
@@ -71,8 +74,14 @@ class Printer {
 
     this.$printer.onreceive = (res) => {
       console.log('Print' + (res.success ? 'Success' : 'Failure') + '\nCode:' + res.code + '\nBattery:' + res.battery + '\n' + me.getStatusText(me.$printer, res.status));
+      if (res.status === me.$printer.ASB_PRINT_SUCCESS) {
+        const finishData = me.$printData.shift();
+        me.$subscribes.forEach(subscribe => {subscribe(finishData)});
+        if (me.$printData.length) {
+          me.print(me.$printData[0]);
+        }
+      }
     }
-
   }
 
   getStatusText = (e, status) => {
@@ -159,11 +168,18 @@ class Printer {
     this.$events.push(callback);
   };
 
-  print = (data) => {
-    if (!this.$printer) {
-      return;
-    }
+  onPrintSuccess = (callback) => {
+    this.$subscribes.push(callback);
+  };
 
+  addPrint = (data) => {
+    this.$printData.push(data);
+    if (this.$printData.length === 1) {
+      this.print(this.$printData[0]);
+    }
+  };
+
+  print = (data) => {
     const {
       currency,
       titles = [],
@@ -236,7 +252,7 @@ class Printer {
     // this.$printer.addText(this.makePrintString(this.$lineCharsLength, 'Change', currency + change) + '\n');
 
     // 换行 接下一次打印有一个换行
-    this.$printer.addText('\n');
+    this.$printer.addText('\n\n\n');
 
     // 打印
     this.$printer.send();

@@ -41,6 +41,7 @@ const WsPrint = () => {
           });
         });
         posPrint.onPrintSuccess((data) => {
+          console.log('Print complete', data)
           socket.send({type: 'printed', data});
         });
       }

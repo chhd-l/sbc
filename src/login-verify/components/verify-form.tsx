@@ -24,6 +24,7 @@ export default withOktaAuth(
 
     async componentDidMount() {
       // this.search('123457908-098111')
+      window.token = sessionStorage.getItem('token-for-verify')
       debugger
      let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
      if(userId){
@@ -69,7 +70,9 @@ export default withOktaAuth(
         }
       });
     }
-
+    componentWillUnmount(){
+      sessionStorage.setItem('token-for-verify','')
+    }
     render() {
       const { getFieldDecorator } = this.props.form;
       const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);

@@ -9,6 +9,7 @@ type TResult = {
   message: string;
   context: any;
 };
+let shouldChangeLanguageSetting = false;
 
 export function getRoutType(callbackUrl: string) {
   var callBackType = ''
@@ -25,7 +26,23 @@ export function getRoutType(callbackUrl: string) {
     return sessionStorage.getItem(cache.OKTA_ROUTER_TYPE)
   }
 }
+async function handleInitLanguage(){
 
+  // 初始化用户当前的语言
+  if (Const.SITE_NAME !== 'MYVETRECO') {
+    const langRes = await InitLanguage()
+    if (langRes.res.code === Const.SUCCESS_CODE) {
+      // const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US';
+      const lang = 'fr'
+      const initLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
+      if (lang !== initLang) {
+        shouldChangeLanguageSetting = true;
+      }
+      sessionStorage.setItem(cache.LANGUAGE, lang);
+      localStorage.setItem(cache.LANGUAGE, lang);
+    }
+  }
+}
 export async function login(routerType, oktaToken: string, callback?: Function) {
   var res = {} as TResult;
   if (oktaToken) {
@@ -62,6 +79,11 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
   if ((res as any).code === Const.SUCCESS_CODE) {
     if (res.context.checkState === 1) { // need checked
       window.token = res.context.token; 
+      // verify login需要初始化语言，刷新页面后拿不到token，需要存一个处理
+      sessionStorage.setItem(
+        'token-for-verify',
+         res.context.token
+      );
       sessionStorage.setItem(
         cache.LOGIN_ACCOUNT_NAME,
         res.context.accountName
@@ -70,7 +92,12 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         cache.LOGIN_EMPLOYEE_NAME,
         res.context.employeeName
       );
-      history.push('login-verify')
+      await handleInitLanguage()
+      if(shouldChangeLanguageSetting){
+        location.href = `${location.origin}/login-verify`
+      }else{
+        history.push('login-verify')
+      }
       return
     }
     if (res.context.accountState === 4) {
@@ -132,22 +159,8 @@ export async function login(routerType, oktaToken: string, callback?: Function) 
         menusRes.res.context.systemTaxSettingResponse &&
         menusRes.res.context.systemTaxSettingResponse.configVOList
         sessionStorage.setItem(cache.LANGUAGE, 'en-US');
+        await handleInitLanguage()
 
-      let shouldChangeLanguageSetting = false;
-
-      // 初始化用户当前的语言
-      if (Const.SITE_NAME !== 'MYVETRECO') {
-        const langRes = await InitLanguage()
-        if (langRes.res.code === Const.SUCCESS_CODE) {
-          const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US';
-          const initLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
-          if (lang !== initLang) {
-            shouldChangeLanguageSetting = true;
-          }
-          sessionStorage.setItem(cache.LANGUAGE, lang);
-          localStorage.setItem(cache.LANGUAGE, lang);
-        }
-      }
       if (settingConfigList) {
         let element = settingConfigList.find((item) => item.configKey === 'enter_price_type');
         if (element) {

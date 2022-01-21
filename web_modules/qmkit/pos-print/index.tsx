@@ -30,7 +30,7 @@ const WsPrint = () => {
             }
           });
           socket.addEventListener('close', () => {
-            console.log('ws closed')
+            console.log('ws closed');
             setTimeout(() => {
               console.log('ws reConnect...');
               socket.reConnect(socketUrl);
@@ -42,7 +42,7 @@ const WsPrint = () => {
         });
         posPrint.onPrintSuccess((data) => {
           console.log('send ws...', data);
-          socket.send({type: 'printed', data});
+          socket.send({ type: 'printed', data });
         });
       }
     };

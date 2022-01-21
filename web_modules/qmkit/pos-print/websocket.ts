@@ -1,6 +1,6 @@
 import { Const } from 'qmkit';
 
-let host = 'wss://' +  window.location.host + '/api';
+let host = 'wss://' + window.location.host + '/api';
 
 if (Const.HOST.includes('https:')) {
   host = Const.HOST.replace('https:', 'wss:');
@@ -9,13 +9,12 @@ if (Const.HOST.includes('https:')) {
 const WS_DOMAIN = `${host}/WebSocket`;
 
 
-
 // 支持的事件
 const Events = {
   open: 'open',
   close: 'close',
   error: 'error',
-  message: 'message',
+  message: 'message'
 };
 
 class WS {
@@ -48,7 +47,7 @@ class WS {
     this.$ws.addEventListener('close', this.onClose);
     this.$ws.addEventListener('error', this.onError);
     this.$ws.addEventListener('message', this.onMessage);
-  }
+  };
 
   isConnect = () => {
     return this.$ws && this.$ws.readyState === WebSocket.OPEN;
@@ -69,14 +68,14 @@ class WS {
 
   onMessage = (e) => {
     try {
-      const {type, data} = JSON.parse(e.data);
-      this.dispatchEvent(Events.message, {type, data});
+      const { type, data } = JSON.parse(e.data);
+      this.dispatchEvent(Events.message, { type, data });
     } catch (e) {
       // ignore json parse error
     }
   };
 
-  send = ({type, data}, repeat = 0) => {
+  send = ({ type, data }, repeat = 0) => {
     if (!this.$ws && !this.isConnect()) {
       repeat++;
       if (repeat > 10) {
@@ -84,14 +83,14 @@ class WS {
         return;
       }
       setTimeout(() => {
-        this.send({type, data}, repeat);
+        this.send({ type, data }, repeat);
       }, 2000);
       return;
     }
     if (!type) {
       throw new Error('推送类型非空');
     }
-    this.$ws.send(JSON.stringify({type, data}));
+    this.$ws.send(JSON.stringify({ type, data }));
   };
 
   dispatchEvent = (event, ...args) => {

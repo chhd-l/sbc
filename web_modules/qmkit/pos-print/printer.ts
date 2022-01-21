@@ -1,4 +1,3 @@
-
 class Printer {
   $deviceID = 'local_printer';
   $url = '';
@@ -12,7 +11,7 @@ class Printer {
 
   $lineCharsLength = 43;
   $lineCharsSecondSizeFontBLength = 29;
-  $hLne = "------------------------------------------";
+  $hLne = '------------------------------------------';
 
 
   constructor(crypto = true, buffer = true) {
@@ -45,7 +44,7 @@ class Printer {
   };
 
   connectCallback = (state) => {
-    const options = {crypto: this.$crypto, buffer: this.$buffer};
+    const options = { crypto: this.$crypto, buffer: this.$buffer };
 
     if (state === 'OK') {
       console.log('connected to ePOS Device Service Interface.');
@@ -77,12 +76,12 @@ class Printer {
       console.log('Print res', res);
       if (res.success && res.status & me.$printer.ASB_PRINT_SUCCESS) {
         const finishData = me.$printData.shift();
-        me.$subscribes.forEach(subscribe => {subscribe(finishData)});
+        me.$subscribes.forEach(subscribe => subscribe(finishData));
         if (me.$printData.length) {
           me.print(me.$printData[0]);
         }
       }
-    }
+    };
   };
 
   getStatusText = (e, status) => {
@@ -143,12 +142,12 @@ class Printer {
     let tab = '';
     // 如果2个字符加起来的总长度大于了字符长度限制，则在商品名称上做截取,留一个空格
     if ((text1.length + text2.length) > lineChars) {
-      text1 = text1.substr(0, lineChars - text2.length - 2)
+      text1 = text1.substr(0, lineChars - text2.length - 2);
     }
     try {
       spaces = lineChars - (text1.length + text2.length);
       for (let j = 0; j < spaces - 1; j++) {
-        tab += " ";
+        tab += ' ';
       }
     } catch (e) {
       console.log(e);
@@ -197,7 +196,7 @@ class Printer {
 
     for (let i = 0; i < titles.length; i++) {
       this.$printer.addText(titles[i] + '\n');
-    };
+    }
 
     //启动居右显示
     this.$printer.addTextAlign(this.$printer.ALIGN_RIGHT);
@@ -209,7 +208,7 @@ class Printer {
     this.$printer.addTextAlign(this.$printer.ALIGN_LEFT);
 
     // 换4行
-    this.$printer.addText("\n\n");
+    this.$printer.addText('\n\n');
 
     // 遍历商品
     let printData = '';

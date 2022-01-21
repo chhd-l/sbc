@@ -113,7 +113,7 @@ export default class StepConsent extends Component<any, any> {
                   <FormattedMessage id="Setting.NewConsent" />
                 </Button>
               </div>
-              <div className="btn">
+              <div style={{marginTop:15}}>
                 <ConsentVersionModal />
               </div>
             </div>

@@ -358,7 +358,7 @@ class StepConsentDetail extends Component<any, any> {
             <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.parentId ? editList.parentId : ''}
-                label="Parent consent"
+                label={RCi18n({id:"Setting.ParentConsent"})}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
@@ -379,7 +379,7 @@ class StepConsentDetail extends Component<any, any> {
           <Col span={8}>
             <FormItem className="input-consent">
               <Input
-                addonBefore="Consent version"
+                addonBefore={RCi18n({id:"Setting.ConsentVersion"})}
                 defaultValue={editList.consentVersion ? editList.consentVersion : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -392,7 +392,7 @@ class StepConsentDetail extends Component<any, any> {
           <Col span={8}>
             <FormItem className="input-consent">
               <Input
-                addonBefore="Consent description"
+                addonBefore={RCi18n({id:'Setting.ConsentDesc'})}
                 defaultValue={editList.consentDesc ? editList.consentDesc : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -405,7 +405,7 @@ class StepConsentDetail extends Component<any, any> {
           <Col span={8}>
             <FormItem className="input-consent">
               <Input
-                addonBefore="Consent group"
+                addonBefore={RCi18n({id:"Setting.ConsentGroup"})}
                 defaultValue={editList.consentGroup ? editList.consentGroup : ''}
                 onChange={(e) => {
                   const value = (e.target as any).value;
@@ -438,7 +438,7 @@ class StepConsentDetail extends Component<any, any> {
             <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.pushOktaFlag ? editList.pushOktaFlag : 0}
-                label="Push to OKTA"
+                label={RCi18n({id:"Setting.PushToOkta"})}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
@@ -455,7 +455,7 @@ class StepConsentDetail extends Component<any, any> {
             <FormItem className="input-consent">
               <SelectGroup
                 defaultValue={editList.sendEmailFlag ? editList.sendEmailFlag : 0}
-                label="Send email"
+                label={RCi18n({id:"Setting.SendEmail"})}
                 style={{ width: 280 }}
                 onChange={(value, index) => {
                   value = value === '' ? null : value;

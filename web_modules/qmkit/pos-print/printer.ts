@@ -59,7 +59,7 @@ class Printer {
         this.connect(this.$url);
       }, 5000);
     }
-  }
+  };
 
   createDevice = (data, code) => {
     if (data === null) {
@@ -82,7 +82,7 @@ class Printer {
         }
       }
     }
-  }
+  };
 
   getStatusText = (e, status) => {
     let s = 'Status: \n';
@@ -135,7 +135,7 @@ class Printer {
       s += ' Stop the spooler\n';
     }
     return s;
-  }
+  };
 
   makePrintString = (lineChars, text1 = '', text2 = '') => {
     let spaces = 0;
@@ -153,7 +153,7 @@ class Printer {
       console.log(e);
     }
     return text1 + tab + text2;
-  }
+  };
 
 
   dispatchEvent = (...args) => {
@@ -196,19 +196,19 @@ class Printer {
 
     for (let i = 0; i < titles.length; i++) {
       this.$printer.addText(titles[i] + '\n');
-    }
+    };
 
     //启动居右显示
     this.$printer.addTextAlign(this.$printer.ALIGN_RIGHT);
     // 电话 居右显示
     // this.$printer.addText(tel + '\n');
     // 时间 居右显示
-    this.$printer.addText(time + '\n')
+    this.$printer.addText(time + '\n');
     // 恢复居左显示
     this.$printer.addTextAlign(this.$printer.ALIGN_LEFT);
 
     // 换4行
-    this.$printer.addText("\n\n")
+    this.$printer.addText("\n\n");
 
     // 遍历商品
     let printData = '';
@@ -225,7 +225,7 @@ class Printer {
     }
 
     // 换行
-    this.$printer.addText('\n')
+    this.$printer.addText('\n');
 
     // 税费 普通字体加粗  颜色有4种 printer.COLOR_NONE | printer.COLOR_2 | printer.COLOR_3 | printer.COLOR_4
     this.$printer.addTextStyle(false, false, true, this.$printer.COLOR_1);
@@ -256,7 +256,7 @@ class Printer {
 
     // 打印
     this.$printer.send();
-  }
+  };
 
 }
 

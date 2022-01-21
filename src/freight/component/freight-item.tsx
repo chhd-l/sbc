@@ -4,6 +4,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Table, Modal, message, Tooltip } from 'antd';
 import { history, noop, QMFloat, AuthWrapper, cache, checkAuth, RCi18n } from 'qmkit';
 import styled from 'styled-components';
+import { doc } from 'prettier';
+
 const TableDiv = styled.div`
   margin-top: 20px;
   #freightTempName {
@@ -12,6 +14,10 @@ const TableDiv = styled.div`
   .ant-table-thead > tr > th {
     background-color: #fff;
   }
+  .ant-table-thead>tr:first-child>th:last-child, .ant-table-tbody>tr>td:last-child {
+    text-align: left!important;
+  }
+
   .ant-table-title {
     background-color: #fafafa;
     .table-title-box {
@@ -90,26 +96,27 @@ class FreightItem extends React.Component<any, any> {
   render() {
     let { data, title, isDefault, typeFlag, valuationType, freightId, isStore } = this.props;
     let columns = [
-      {
-        title: <FormattedMessage id="Setting.Courier" />,
-        width: typeFlag ? '20%' : '30%',
-        dataIndex: 'deliverWay',
-        render: (text) => {
-          return text == 1 ? 'Express delivery' : '';
-        }
-      } as any,
-      {
-        title: <FormattedMessage id="Setting.ShipTo" />,
-        width: typeFlag ? '20%' : '35%',
-        dataIndex: 'destinationAreaName',
-        render: (text) => {
-          return text.replace(',', ' ');
-        }
-      }
+
     ];
     // 单品
     if (typeFlag) {
       columns = columns.concat([
+        {
+          title: <FormattedMessage id="Setting.Courier" />,
+          width: typeFlag ? '20%' : '30%',
+          dataIndex: 'deliverWay',
+          render: (text) => {
+            return text == 1 ? 'Express delivery' : '';
+          }
+        } as any,
+        {
+          title: <FormattedMessage id="Setting.ShipTo" />,
+          width: typeFlag ? '20%' : '35%',
+          dataIndex: 'destinationAreaName',
+          render: (text) => {
+            return text.replace(',', ' ');
+          }
+        },
         {
           title: `First ${operateWay[valuationType].label}(${operateWay[valuationType].unit})`,
           dataIndex: 'freightStartNum',
@@ -206,7 +213,7 @@ class FreightItem extends React.Component<any, any> {
       <div>
         {data && data.length > 0 ? (
           <TableDiv>
-            <Table rowKey={(record: any) => record.id || record.freightTempId} {...params} />
+            <Table rowKey={(record: any) => record.id || record.freightTempId} {...params}/>
           </TableDiv>
         ) : null}
       </div>

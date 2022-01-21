@@ -146,7 +146,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   *  CORE, FR, RU, TR for Club
   **/
   get isShowSkuEdit(){
-    let bool = true;
+    let bool = false;
     const storeIdArr = ['123457907', '123457909', '123457911']
     const { subscriptionType } = this.state;
 
@@ -1145,6 +1145,32 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     })
   }
 
+  titleContent = () => {
+    let url = '#';
+    switch (storeId) {
+      case 123457907:
+        url = 'https://www.royalcanin.com/ru/product-finder';
+        break;
+      case 123457909:
+        url = 'https://www.royalcanin.com/fr/product-finder';
+        break;
+      case 123457911:
+        url = 'https://www.royalcanin.com/tr/product-finder';
+        break;
+      default: break;
+    }
+    return (
+      <ul className='titleContent-wrap'>
+        <li>
+          <p style={{paddingBottom: '10px'}}>1、Find the right product for your customer by filling the product finder</p>
+          <Button  type="primary" href={url} target='_blank'>Fill the Product Finder</Button>
+        </li>
+        <li>2、See the product recommended</li>
+        <li>3、Select it here</li>
+      </ul>
+    )
+  }
+
 
   render() {
     const {
@@ -1695,6 +1721,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
+
+    const titleContent = this.titleContent();
 
     return (
       <div>
@@ -2708,6 +2736,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )}
 
         <GoodsModal
+          titleContent={titleContent}
           skuLimit={1}
           visible={productModalVisible}
           selectedSkuIds={selectedSkuIds}

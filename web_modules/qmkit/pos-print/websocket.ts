@@ -21,7 +21,6 @@ class WS {
   $ws = null;
   $wsDomain = null;
   $events = {};
-  $sendData = [];
 
   constructor(url = WS_DOMAIN) {
     this.$wsDomain = url;

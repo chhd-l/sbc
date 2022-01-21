@@ -1,6 +1,14 @@
 import { Const } from 'qmkit';
 
-const WS_DOMAIN = `ws:${Const.HOST.split(':')[1]}/WebSocket`;
+let host = 'wss://' +  window.location.host + '/api';
+
+if (Const.HOST.includes('https:')) {
+  host = Const.HOST.replace('https:', 'wss:');
+}
+
+const WS_DOMAIN = `${host}/WebSocket`;
+
+
 
 // 支持的事件
 const Events = {
@@ -14,6 +22,7 @@ class WS {
   $ws = null;
   $wsDomain = null;
   $events = {};
+  $sendData = [];
 
   constructor(url = WS_DOMAIN) {
     this.$wsDomain = url;
@@ -65,6 +74,24 @@ class WS {
     } catch (e) {
       // ignore json parse error
     }
+  };
+
+  send = ({type, data}, repeat = 0) => {
+    if (!this.$ws && !this.isConnect()) {
+      repeat++;
+      if (repeat > 10) {
+        console.error(`websocket error.`);
+        return;
+      }
+      setTimeout(() => {
+        this.send({type, data}, repeat);
+      }, 2000);
+      return;
+    }
+    if (!type) {
+      throw new Error('推送类型非空');
+    }
+    this.$ws.send(JSON.stringify({type, data}));
   };
 
   dispatchEvent = (event, ...args) => {

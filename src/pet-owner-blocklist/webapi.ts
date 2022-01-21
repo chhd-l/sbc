@@ -16,6 +16,12 @@ export function getBlockList(params = {}) {
   });
 }
 
+export function getEnums() {
+  return Fetch<TResult>('/customer/filter/enumTimeType', {
+    method: 'GET',
+  });
+}
+
 export function addBlockEmail(params = {}) {
   return Fetch<TResult>('/customer/filter', {
     method: 'POST',

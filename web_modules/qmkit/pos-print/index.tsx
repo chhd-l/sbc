@@ -20,13 +20,13 @@ const WsPrint = () => {
 
         posPrint.connect(item.value);
         posPrint.onReady(() => {
-          const { storeId, employeeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
-          const socketUrl = [storeId, employeeId].join('_');
+          const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
+          const socketUrl = storeId;
           socket.connect(socketUrl);
           socket.addEventListener('message', (msg) => {
             console.log('ws message', msg);
             if (msg.type === 'print') {
-              posPrint.print(msg.data);
+              posPrint.addPrint(msg.data);
             }
           });
           socket.addEventListener('close', () => {
@@ -34,16 +34,20 @@ const WsPrint = () => {
             setTimeout(() => {
               console.log('ws reConnect...');
               socket.reConnect(socketUrl);
-            }, 3000);
+            }, 1000);
           });
           socket.addEventListener('error', () => {
             console.log('ws error');
           });
         });
+        posPrint.onPrintSuccess((data) => {
+          console.log('Print complete', data)
+          socket.send({type: 'printed', data});
+        });
       }
     };
 
-    getPosUrl();
+    (window as any).token && getPosUrl();
   }, []);
 
   return null;

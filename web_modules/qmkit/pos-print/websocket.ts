@@ -1,6 +1,14 @@
 import { Const } from 'qmkit';
 
-const WS_DOMAIN = `${Const.HOST.replace('https', 'wss')}/WebSocket`;
+let host = 'wss://' +  window.location.host + '/api';
+
+if (Const.HOST.includes('https')) {
+  host = Const.HOST.replace('https', 'wss');
+}
+
+const WS_DOMAIN = `${host}/WebSocket`;
+
+
 
 // 支持的事件
 const Events = {

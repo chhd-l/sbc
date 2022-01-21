@@ -76,7 +76,7 @@ class Printer {
       console.log('Print' + (res.success ? 'Success' : 'Failure') + '\nCode:' + res.code + '\nBattery:' + res.battery + '\n' + me.getStatusText(me.$printer, res.status));
       console.log('Print res', res)
       console.log('me.$printer.ASB_PRINT_SUCCESS', me.$printer.ASB_PRINT_SUCCESS)
-      if (res.status === me.$printer.ASB_PRINT_SUCCESS) {
+      if (res.success && res.status & me.$printer.ASB_PRINT_SUCCESS) {
         const finishData = me.$printData.shift();
         me.$subscribes.forEach(subscribe => {subscribe(finishData)});
         if (me.$printData.length) {

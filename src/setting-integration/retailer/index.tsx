@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { BreadCrumb, Headline, Const } from 'qmkit';
-import { Form, Radio, Icon, Input, Button, Row, Col, Switch, Spin, message } from 'antd';
+import { Form, Radio, Input, Button, Row, Col, Switch, Spin, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from '../webapi';
+import { decryptAES } from '../../../web_modules/qmkit/util';
 
 // @ts-ignore
 @Form.create()
-export default class Hub extends Component<any, any>{
+export default class Hub extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      loading: false,
+      loading: true,
       enabled: false,
-      type: 1,
-    }
+      type: '',
+      local: '',
+      token: '',
+      displayLanguage: '',
+      retailerProductsIds: '',
+      vetProductsIds: '',
+      trackingPrefixId: '',
+      url: ''
+    };
   }
 
   componentDidMount() {
@@ -21,35 +29,64 @@ export default class Hub extends Component<any, any>{
   }
 
   initForm = async () => {
-    const { setFieldsValue } = this.props.form;
+    this.setState({ loading: true });
+    let { res } = await webapi.findBuyFromRetailer();
+    this.setState({ loading: false });
+    if (res.code === Const.SUCCESS_CODE) {
+      let params = res.context.apiContext ? decryptAES(res.context.buyFromRetailerContext) : {};
+      console.log(params, 'params1');
 
-    this.setState({loading: true})
-    let { res } = await webapi.getHubStoreConfigList('hubConfig');
-    this.setState({loading: false})
-    if (res.code === Const.SUCCESS_CODE){
-      let {enable, url, id} = res.context;
-      setFieldsValue({
-        enabled: !!enable,
-      })
-    }else {
+      this.setState({
+        enabled: true,
+        type: 0,
+        local: '00000',
+        token: '11111',
+        displayLanguage: '22222',
+        retailerProductsIds: '3333',
+        vetProductsIds: '4444',
+        trackingPrefixId: '5555',
+        url: '6666'
+      });
+    } else {
       message.warn(res.message);
     }
-  }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
+      console.log(err, values);
+      return;
       if (!err) {
+        const {
+          enabled,
+          type,
+          local,
+          token,
+          displayLanguage,
+          retailerProductsIds,
+          vetProductsIds,
+          trackingPrefixId,
+          url
+        } = this.state;
 
         const params = {
-          status: values.enableHub ? 1:0,
-        }
-        this.setState({loading: true});
-        let {res} = await webapi.updateHub(params);
-        this.setState({loading: false});
-        if (res.code === Const.SUCCESS_CODE){
+          enabled,
+          type,
+          local,
+          token,
+          displayLanguage,
+          retailerProductsIds,
+          vetProductsIds,
+          trackingPrefixId,
+          url
+        };
+        this.setState({ loading: true });
+        let { res } = await webapi.editBuyFromRetailer(params);
+        this.setState({ loading: false });
+        if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
-        }else {
+        } else {
           message.warn(res.message);
         }
       }
@@ -59,137 +96,164 @@ export default class Hub extends Component<any, any>{
   onChange = (type, value) => {
     this.setState({
       [type]: value
-    })
-  }
+    });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 4 },
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 8 },
-      },
+        sm: { span: 8 }
+      }
     };
 
-    const { loading, enabled, type } = this.state;
+    const {
+      loading,
+      enabled,
+      type,
+      local,
+      token,
+      displayLanguage,
+      retailerProductsIds,
+      vetProductsIds,
+      trackingPrefixId,
+      url
+    } = this.state;
 
     return (
       <div>
         <BreadCrumb />
         <Spin spinning={loading}>
-          <div className="container-search" style={{paddingBottom: '20px'}}>
-            <Headline title={<FormattedMessage id='Menu.Buy from Retailer'/>} />
-            <Form {...formItemLayout}>
-              <Form.Item label={<FormattedMessage id='enabled'/>}>
-                {getFieldDecorator('enabled', {
-                  valuePropName: 'checked',
-                  rules: [
-                    { required: true }
-                  ],
-                })(
-                  <Switch onChange={(e) => this.onChange('enabled', e)}/>
-                )}
-              </Form.Item>
-              <div style={{display: enabled ? 'block' : 'none'}}>
-                <Form.Item label={<FormattedMessage id='Retailer.Type'/>}>
-                  {getFieldDecorator('type', {
-                    rules: [
-                      { required: true }
-                    ],
-                  })(
-                    <Radio.Group onChange={(e) => this.onChange('type', e.target.value)}>
-                      <Radio value={1}>API</Radio>
-                      <Radio value={2}>URL</Radio>
-                    </Radio.Group>
-                  )}
-                </Form.Item>
-                {
-                  /*type 选择API*/
-                  type === 1 && (
+          <div className='container-search' style={{ paddingBottom: '20px' }}>
+            <Headline title={<FormattedMessage id='Menu.Buy from Retailer' />} />
+            {!loading && (
+              <>
+                <Form {...formItemLayout}>
+                  <Form.Item label={<FormattedMessage id='enabled' />}>
+                    {getFieldDecorator('enabled', {
+                      valuePropName: 'checked',
+                      initialValue: enabled,
+                      rules: [
+                        { required: true }
+                      ]
+                    })(
+                      <Switch onChange={(e) => this.onChange('enabled', e)} />
+                    )}
+                  </Form.Item>
+                  {enabled && (
                     <>
-                      <Form.Item label={<FormattedMessage id='Retailer.Local'/>}>
-                        {getFieldDecorator('Local', {
+                      <Form.Item label={<FormattedMessage id='Retailer.Type' />}>
+                        {getFieldDecorator('type', {
+                          initialValue: type,
                           rules: [
                             { required: true }
-                          ],
+                          ]
                         })(
-                          <Input/>
+                          <Radio.Group onChange={(e) => this.onChange('type', e.target.value)}>
+                            <Radio value={1}>API</Radio>
+                            <Radio value={0}>URL</Radio>
+                          </Radio.Group>
                         )}
                       </Form.Item>
-                      <Form.Item label={<FormattedMessage id='Retailer.Token'/>}>
-                        {getFieldDecorator('token', {
-                          rules: [
-                            { required: true }
-                          ],
-                        })(
-                          <Input/>
-                        )}
-                      </Form.Item>
-                      <Form.Item label={<FormattedMessage id='Retailer.DisplayLanguage'/>}>
-                        {getFieldDecorator('displayLanguage', {
-                          rules: [
-                            { required: true }
-                          ],
-                        })(
-                          <Input/>
-                        )}
-                      </Form.Item>
-                      <Form.Item label={<FormattedMessage id='Retailer.IdRetailerProducts'/>}>
-                        {getFieldDecorator('retailerProductsIds', {
-                          rules: [
-                            { required: true }
-                          ],
-                        })(
-                          <Input/>
-                        )}
-                      </Form.Item>
-                      <Form.Item label={<FormattedMessage id='Retailer.IdVetProducts'/>}>
-                        {getFieldDecorator('vetProductsIds', {
-                          rules: [
-                            { required: true }
-                          ],
-                        })(
-                          <Input/>
-                        )}
-                      </Form.Item>
-                      <Form.Item label={<FormattedMessage id='Retailer.TrackingIdPrefix'/>}>
-                        {getFieldDecorator('trackingPrefixId', {
-                          rules: [
-                            { required: true }
-                          ],
-                        })(
-                          <Input/>
-                        )}
-                      </Form.Item>
+                      {
+                        /*type 选择API*/
+                        type === 1 && (
+                          <>
+                            <Form.Item label={<FormattedMessage id='Retailer.Local' />}>
+                              {getFieldDecorator('local', {
+                                initialValue: local,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                            <Form.Item label={<FormattedMessage id='Retailer.Token' />}>
+                              {getFieldDecorator('token', {
+                                initialValue: token,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                            <Form.Item label={<FormattedMessage id='Retailer.DisplayLanguage' />}>
+                              {getFieldDecorator('displayLanguage', {
+                                initialValue: displayLanguage,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                            <Form.Item label={<FormattedMessage id='Retailer.IdRetailerProducts' />}>
+                              {getFieldDecorator('retailerProductsIds', {
+                                initialValue: retailerProductsIds,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                            <Form.Item label={<FormattedMessage id='Retailer.IdVetProducts' />}>
+                              {getFieldDecorator('vetProductsIds', {
+                                initialValue: vetProductsIds,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                            <Form.Item label={<FormattedMessage id='Retailer.TrackingIdPrefix' />}>
+                              {getFieldDecorator('trackingPrefixId', {
+                                initialValue: trackingPrefixId,
+                                rules: [
+                                  { required: true }
+                                ]
+                              })(
+                                <Input />
+                              )}
+                            </Form.Item>
+                          </>
+                        )
+                      }
+                      {
+                        /*type 选择URL*/
+                        type === 0 && (
+                          <Form.Item label={<FormattedMessage id='Setting.URL' />}>
+                            {getFieldDecorator('url', {
+                              initialValue: url,
+                              rules: [
+                                { required: true }
+                              ]
+                            })(
+                              <Input />
+                            )}
+                          </Form.Item>
+                        )
+                      }
                     </>
-                  )
-                }
-                {
-                  /*type 选择URL*/
-                  type === 2 && (
-                    <Form.Item label={<FormattedMessage id='Setting.URL'/>}>
-                      {getFieldDecorator('url', {
-                        rules: [
-                          { required: true }
-                        ],
-                      })(
-                        <Input/>
-                      )}
-                    </Form.Item>
-                  )
-                }
-              </div>
-            </Form>
+                  )}
+                </Form>
+              </>
+            )}
+
           </div>
           <Row className='bar-button'>
             <Col span={12}>
               <Row>
                 <Col span={12}>
-                  <Button type="primary" onClick={this.handleSubmit}>Save</Button>
+                  <Button type='primary' onClick={this.handleSubmit}>Save</Button>
                 </Col>
               </Row>
             </Col>

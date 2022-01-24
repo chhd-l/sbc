@@ -9,8 +9,10 @@ export default class Cart extends React.Component<any, any> {
   }
 
   onPlus = (product) => {
-    const { onSetQuantity } = this.props;
-    onSetQuantity(product, product.quantity + 1);
+    if (product.quantity < product.stock) {
+      const { onSetQuantity } = this.props;
+      onSetQuantity(product, product.quantity + 1);
+    }
   }
 
   onMinus = (product) => {

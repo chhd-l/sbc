@@ -5448,7 +5448,7 @@ export default {
   "Retailer.DisplayLanguage": "Display Language",
   "Retailer.IdRetailerProducts": "Id Retailer Products",
   "Retailer.IdVetProducts": "Id Vet Products",
-  "Retailer.Local": "Local",
+  "Retailer.Local": "Locale",
   "Retailer.Token": "Token",
   "Retailer.TrackingIdPrefix": "Tracking Id Prefix",
   "Retailer.Type": "Type",

@@ -14,7 +14,7 @@ export default class Hub extends Component<any, any> {
       loading: true,
       enabled: false,
       type: '',
-      local: '',
+      locale: '',
       token: '',
       displayLanguage: '',
       retailerProductsIds: '',
@@ -33,19 +33,18 @@ export default class Hub extends Component<any, any> {
     let { res } = await webapi.findBuyFromRetailer();
     this.setState({ loading: false });
     if (res.code === Const.SUCCESS_CODE) {
-      let params = res.context.apiContext ? decryptAES(res.context.buyFromRetailerContext) : {};
-      console.log(params, 'params1');
+      let params = res.context.buyFromRetailerContext ? JSON.parse(decryptAES(res.context.buyFromRetailerContext)) : {};
 
       this.setState({
-        enabled: true,
-        type: 0,
-        local: '00000',
-        token: '11111',
-        displayLanguage: '22222',
-        retailerProductsIds: '3333',
-        vetProductsIds: '4444',
-        trackingPrefixId: '5555',
-        url: '6666'
+        enabled: !!params.retailerEnable || false,
+        type: params.type || '',
+        locale: params.locale || '',
+        token: params.token || '',
+        displayLanguage: params.displayLanguage || '',
+        retailerProductsIds: params.idRetailProducts || '',
+        vetProductsIds: params.idVetProducts || '',
+        trackingPrefixId: params.trackingIdPrefix || '',
+        url: params.url || '',
       });
     } else {
       message.warn(res.message);
@@ -55,13 +54,11 @@ export default class Hub extends Component<any, any> {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
-      console.log(err, values);
-      return;
       if (!err) {
         const {
           enabled,
           type,
-          local,
+          locale,
           token,
           displayLanguage,
           retailerProductsIds,
@@ -71,21 +68,23 @@ export default class Hub extends Component<any, any> {
         } = this.state;
 
         const params = {
-          enabled,
-          type,
-          local,
-          token,
-          displayLanguage,
-          retailerProductsIds,
-          vetProductsIds,
-          trackingPrefixId,
-          url
+          retailerEnable:  enabled ? 1 : 0,
+          type: type,
+          locale: locale,
+          token: token,
+          displayLanguage: displayLanguage,
+          idRetailProducts: retailerProductsIds,
+          idVetProducts: vetProductsIds,
+          trackingIdPrefix: trackingPrefixId,
+          url: url,
         };
+
         this.setState({ loading: true });
-        let { res } = await webapi.editBuyFromRetailer(params);
+        let { res } = await webapi.editBuyFromRetailer({buyFromRetailerContext: params});
         this.setState({ loading: false });
         if (res.code === Const.SUCCESS_CODE) {
           message.success('Operate successfully');
+          this.initForm();
         } else {
           message.warn(res.message);
         }
@@ -116,7 +115,7 @@ export default class Hub extends Component<any, any> {
       loading,
       enabled,
       type,
-      local,
+      locale,
       token,
       displayLanguage,
       retailerProductsIds,
@@ -155,23 +154,23 @@ export default class Hub extends Component<any, any> {
                           ]
                         })(
                           <Radio.Group onChange={(e) => this.onChange('type', e.target.value)}>
-                            <Radio value={1}>API</Radio>
-                            <Radio value={0}>URL</Radio>
+                            <Radio value="API">API</Radio>
+                            <Radio value="URL">URL</Radio>
                           </Radio.Group>
                         )}
                       </Form.Item>
                       {
                         /*type 选择API*/
-                        type === 1 && (
+                        type === 'API' && (
                           <>
                             <Form.Item label={<FormattedMessage id='Retailer.Local' />}>
-                              {getFieldDecorator('local', {
-                                initialValue: local,
+                              {getFieldDecorator('locale', {
+                                initialValue: locale,
                                 rules: [
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('locale', e.target.value)}/>
                               )}
                             </Form.Item>
                             <Form.Item label={<FormattedMessage id='Retailer.Token' />}>
@@ -181,7 +180,7 @@ export default class Hub extends Component<any, any> {
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('token', e.target.value)}/>
                               )}
                             </Form.Item>
                             <Form.Item label={<FormattedMessage id='Retailer.DisplayLanguage' />}>
@@ -191,7 +190,7 @@ export default class Hub extends Component<any, any> {
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('displayLanguage', e.target.value)}/>
                               )}
                             </Form.Item>
                             <Form.Item label={<FormattedMessage id='Retailer.IdRetailerProducts' />}>
@@ -201,7 +200,7 @@ export default class Hub extends Component<any, any> {
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('retailerProductsIds', e.target.value)} />
                               )}
                             </Form.Item>
                             <Form.Item label={<FormattedMessage id='Retailer.IdVetProducts' />}>
@@ -211,7 +210,7 @@ export default class Hub extends Component<any, any> {
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('vetProductsIds', e.target.value)}/>
                               )}
                             </Form.Item>
                             <Form.Item label={<FormattedMessage id='Retailer.TrackingIdPrefix' />}>
@@ -221,7 +220,7 @@ export default class Hub extends Component<any, any> {
                                   { required: true }
                                 ]
                               })(
-                                <Input />
+                                <Input onChange={(e) => this.onChange('trackingPrefixId', e.target.value)}/>
                               )}
                             </Form.Item>
                           </>
@@ -229,7 +228,7 @@ export default class Hub extends Component<any, any> {
                       }
                       {
                         /*type 选择URL*/
-                        type === 0 && (
+                        type === 'URL' && (
                           <Form.Item label={<FormattedMessage id='Setting.URL' />}>
                             {getFieldDecorator('url', {
                               initialValue: url,
@@ -237,7 +236,7 @@ export default class Hub extends Component<any, any> {
                                 { required: true }
                               ]
                             })(
-                              <Input />
+                              <Input onChange={(e) => this.onChange('url', e.target.value)}/>
                             )}
                           </Form.Item>
                         )

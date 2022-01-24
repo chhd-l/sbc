@@ -74,8 +74,6 @@ async function getDynamicLanguage() {
 
   language = assignObj(enUSLang, retRes);
 
-  console.log(language)
-
   return language;
 }
 

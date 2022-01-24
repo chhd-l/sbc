@@ -1,4 +1,3 @@
-
 class Printer {
   $deviceID = 'local_printer';
   $url = '';
@@ -12,7 +11,7 @@ class Printer {
 
   $lineCharsLength = 43;
   $lineCharsSecondSizeFontBLength = 29;
-  $hLne = "------------------------------------------";
+  $hLne = '------------------------------------------';
 
 
   constructor(crypto = true, buffer = true) {
@@ -45,7 +44,7 @@ class Printer {
   };
 
   connectCallback = (state) => {
-    const options = {crypto: this.$crypto, buffer: this.$buffer};
+    const options = { crypto: this.$crypto, buffer: this.$buffer };
 
     if (state === 'OK') {
       console.log('connected to ePOS Device Service Interface.');
@@ -59,7 +58,7 @@ class Printer {
         this.connect(this.$url);
       }, 5000);
     }
-  }
+  };
 
   createDevice = (data, code) => {
     if (data === null) {
@@ -74,15 +73,16 @@ class Printer {
 
     this.$printer.onreceive = (res) => {
       console.log('Print' + (res.success ? 'Success' : 'Failure') + '\nCode:' + res.code + '\nBattery:' + res.battery + '\n' + me.getStatusText(me.$printer, res.status));
-      if (res.status === me.$printer.ASB_PRINT_SUCCESS) {
+      console.log('Print res', res);
+      if (res.success && res.status & me.$printer.ASB_PRINT_SUCCESS) {
         const finishData = me.$printData.shift();
-        me.$subscribes.forEach(subscribe => {subscribe(finishData)});
+        me.$subscribes.forEach(subscribe => subscribe(finishData));
         if (me.$printData.length) {
           me.print(me.$printData[0]);
         }
       }
-    }
-  }
+    };
+  };
 
   getStatusText = (e, status) => {
     let s = 'Status: \n';
@@ -135,25 +135,25 @@ class Printer {
       s += ' Stop the spooler\n';
     }
     return s;
-  }
+  };
 
   makePrintString = (lineChars, text1 = '', text2 = '') => {
     let spaces = 0;
     let tab = '';
     // 如果2个字符加起来的总长度大于了字符长度限制，则在商品名称上做截取,留一个空格
     if ((text1.length + text2.length) > lineChars) {
-      text1 = text1.substr(0, lineChars - text2.length - 2)
+      text1 = text1.substr(0, lineChars - text2.length - 2);
     }
     try {
       spaces = lineChars - (text1.length + text2.length);
       for (let j = 0; j < spaces - 1; j++) {
-        tab += " ";
+        tab += ' ';
       }
     } catch (e) {
       console.log(e);
     }
     return text1 + tab + text2;
-  }
+  };
 
 
   dispatchEvent = (...args) => {
@@ -203,12 +203,12 @@ class Printer {
     // 电话 居右显示
     // this.$printer.addText(tel + '\n');
     // 时间 居右显示
-    this.$printer.addText(time + '\n')
+    this.$printer.addText(time + '\n');
     // 恢复居左显示
     this.$printer.addTextAlign(this.$printer.ALIGN_LEFT);
 
     // 换4行
-    this.$printer.addText("\n\n")
+    this.$printer.addText('\n\n');
 
     // 遍历商品
     let printData = '';
@@ -225,7 +225,7 @@ class Printer {
     }
 
     // 换行
-    this.$printer.addText('\n')
+    this.$printer.addText('\n');
 
     // 税费 普通字体加粗  颜色有4种 printer.COLOR_NONE | printer.COLOR_2 | printer.COLOR_3 | printer.COLOR_4
     this.$printer.addTextStyle(false, false, true, this.$printer.COLOR_1);
@@ -252,11 +252,11 @@ class Printer {
     // this.$printer.addText(this.makePrintString(this.$lineCharsLength, 'Change', currency + change) + '\n');
 
     // 换行 接下一次打印有一个换行
-    this.$printer.addText('\n\n\n');
+    this.$printer.addText('\n\n');
 
     // 打印
     this.$printer.send();
-  }
+  };
 
 }
 

@@ -7,6 +7,8 @@ import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import WsPrint from '../web_modules/qmkit/pos-print';
+
 const pcLogo = require('../public/images/login/logo1.png');
 
 const { Content } = Layout;
@@ -148,6 +150,7 @@ export default class Main extends React.Component<any, any> {
                 </Content>
               </ErrorBoundary>
             </Layout>
+            <WsPrint/>
           </Layout>
         </Spin>
       </div>

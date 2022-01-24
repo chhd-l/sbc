@@ -107,13 +107,13 @@ export default class StepConsent extends Component<any, any> {
                 </Select>
               </div>
             </div>
-            <div className="space-between">
+            <div className="space-between" style={{marginTop:15}}>
               <div>
-                <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
+                <Button type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
                   <FormattedMessage id="Setting.NewConsent" />
                 </Button>
               </div>
-              <div style={{marginTop:15}}>
+              <div>
                 <ConsentVersionModal />
               </div>
             </div>

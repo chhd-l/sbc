@@ -157,7 +157,7 @@ class Checkout extends React.Component<any, any> {
     if (list.findIndex(p => p.goodsInfoId === product.goodsInfoId) === -1) {
       list.push({
         ...product,
-        quantity: 1
+        quantity: product.stock > 0 ? 1 : 0,
       });
       this.setState({ list });
     }

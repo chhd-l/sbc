@@ -5,7 +5,7 @@ import { Popconfirm, Popover, Calendar } from 'antd';
 import FeedBack from '../subscription-detail/component/feedback';
 import DeliveryItem from '../customer-details/component/delivery-item';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n, util } from 'qmkit';
-import { PostalCodeMsg } from 'biz';
+import { PostalCodeMsg, GoodsModal } from 'biz';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import './index.less';
@@ -21,6 +21,7 @@ import {
   getClubSubFrequency,
   getIndividualSubFrequency
 } from '../task-manage-all-subscription/module/querySysDictionary';
+import { fromJS } from 'immutable';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -123,7 +124,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDateList: [],
       timeSlotList: [],
       deliverDateStatus: 0,
-      tempolineApiError: ''
+      tempolineApiError: '',
+      productModalVisible: false,
+      selectedSkuIds: [],
+      selectedRows: [],
     };
   }
 
@@ -136,6 +140,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         : '',
       pickupIsOpen: JSON.parse(sessionStorage.getItem('portal-pickup-isopen')) || false
     });
+  }
+
+  /**
+  *  CORE, FR, RU, TR for Club
+  **/
+  get isShowSkuEdit(){
+    let bool = false;
+    const storeIdArr = ['123457907', '123457909', '123457911']
+    const { subscriptionType } = this.state;
+
+    if (storeIdArr.includes(storeId.toString())){
+      bool = subscriptionType?.toLowerCase() === 'club';
+    }
+
+    return bool;
   }
 
   // 获取 deliveryState 状态
@@ -1095,6 +1114,77 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
+    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
+
+    const {
+      subscriptionId,
+      goodsInfo,
+    } = this.state;
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows,
+    })
+   this.setState({loading: true})
+
+    let params = {
+      subscribeId: subscriptionId,
+      deleteSkuId: goodsInfo[0]?.skuId,
+      addSkuId: selectedSkuIds[0],
+    }
+
+    let { res } = await webapi.changeSubscriptionGoods(params);
+
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+      this.getSubscriptionDetail();
+    } else {
+      this.setState({ loading: false });
+      message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
+    }
+
+    this.closeProductModal();
+  }
+
+  closeProductModal = () => {
+    this.setState({
+      productModalVisible: false
+    })
+  }
+
+  showProductModal = () => {
+    this.setState({
+      productModalVisible: true
+    })
+  }
+
+  titleContent = () => {
+    let url = '#';
+    switch (storeId) {
+      case 123457907:
+        url = 'https://www.royalcanin.com/ru/product-finder';
+        break;
+      case 123457909:
+        url = 'https://www.royalcanin.com/fr/product-finder';
+        break;
+      case 123457911:
+        url = 'https://www.royalcanin.com/tr/product-finder';
+        break;
+      default: break;
+    }
+    return (
+      <ul className='titleContent-wrap'>
+        <li>
+          <p style={{paddingBottom: '10px'}}>1、Find the right product for your customer by filling the product finder</p>
+          <Button  type="primary" href={url} target='_blank'>Fill the Product Finder</Button>
+        </li>
+        <li>2、See the product recommended</li>
+        <li>3、Select it here</li>
+      </ul>
+    )
+  }
+
+
   render() {
     const {
       pickupIsOpen,
@@ -1129,7 +1219,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDateList,
       timeSlotList,
       timeSlot,
-      deliverDateStatus
+      deliverDateStatus,
+
+      productModalVisible,
+      selectedSkuIds,
+      selectedRows,
       // operationLog
     } = this.state;
 
@@ -1143,13 +1237,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text: any, record: any) => (
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex',alignItems: 'center' }}>
             <img src={util.optimizeImage(record.goodsPic)} className="img-item" style={styles.imgItem} alt="" />
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
                 : record.goodsName}
             </span>
+            {
+              this.isShowSkuEdit
+                ? (
+                  <a
+                    style={{flex: 1, textAlign: 'center'}}
+                    onClick={() => this.showProductModal()}
+                    className="iconfont iconEdit "
+                  />
+                )
+                : null
+            }
+
           </div>
         )
       },
@@ -1628,6 +1734,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )
       }
     ];
+
+    const titleContent = this.titleContent();
 
     return (
       <div>
@@ -2639,6 +2747,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </div>
           </Spin>
         )}
+
+        <GoodsModal
+          titleContent={titleContent}
+          skuLimit={1}
+          visible={productModalVisible}
+          selectedSkuIds={selectedSkuIds}
+          selectedRows={selectedRows}
+          onOkBackFun={this.skuSelectedBackFun}
+          onCancelBackFun={this.closeProductModal}
+        />
       </div>
     );
   }

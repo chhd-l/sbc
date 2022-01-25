@@ -30,7 +30,8 @@ export default class FillInPetInfoActor extends Actor {
           sterilized: 1,
           type: undefined,
           measure: 0,
-          measureUnit: 'kg'
+          measureUnit: 'kg',
+          petSourceId: ''
         }]
       },
       funType: false,

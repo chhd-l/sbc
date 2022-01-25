@@ -210,6 +210,13 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                        <Button size="small" type="primary" onClick={() => this.remove(item, index)}><FormattedMessage id="Prescriber.Deleted" /></Button>
                     </div>
                    </Col>
+                    <Col span={12} style={{display: 'none'}}>
+                        <Form.Item label={RCi18n({ id: 'Prescriber.petSourceId' })}>
+                            {getFieldDecorator(`customerPet[${item}].petSourceId`, {
+                                initialValue: stateCustomPet[item]?.petSourceId ?? '',
+                            })(<Input />)}
+                        </Form.Item>
+                    </Col>
                     <Col span={12}>
                         <Form.Item label={RCi18n({ id: 'Prescriber.Name' })}>
                             {getFieldDecorator(`customerPet[${item}].petsName`, {

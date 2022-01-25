@@ -1114,21 +1114,34 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
-  skuSelectedBackFun = (selectedSkuIds, selectedRows: any) => {
+  skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
-    console.log('selectedSkuIds', selectedSkuIds);
-    console.log('selectedRows', selectedRows);
-    /**
-     * 请求接口 TODO
-     * 1. 请求接口，替换sku,
-     * 2. 成功， 重新请求this.getSubscriptionDetail();
-     * 3. 失败，出现错误提示信息
-     **/
 
+    const {
+      subscriptionId,
+      goodsInfo,
+    } = this.state;
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows,
     })
+   this.setState({loading: true})
+
+    let params = {
+      subscribeId: subscriptionId,
+      deleteSkuId: goodsInfo[0]?.skuId,
+      addSkuId: selectedSkuIds[0],
+    }
+
+    let { res } = await webapi.changeSubscriptionGoods(params);
+
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+      this.getSubscriptionDetail();
+    } else {
+      this.setState({ loading: false });
+      message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
+    }
 
     this.closeProductModal();
   }

@@ -19,12 +19,13 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
   const handleClose = () => {
     setVisible(false);
     setList([]);
+    setPager({ total: 0, current: 1, pageSize: 10 });
   };
 
   const handleTriggerClick = () => {
     setVisible(true);
     if (list.length === 0) {
-      getOperationLogList(pager.current - 1, pager.pageSize);
+      getOperationLogList(0, pager.pageSize);
     }
   };
 
@@ -38,40 +39,40 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
     const { res } = await getOperationLog({ goodsId: props.goodsId, pageNum, pageSize });
     if (res.code === Const.SUCCESS_CODE) {
       setList(res.context?.opLogPage?.content ?? []);
-      setPager(Object.assign({}, pager, { total: res.context?.opLogPage?.total ?? 0 }));
+      setPager(Object.assign({}, pager, { total: res.context?.opLogPage?.total ?? 0, current: pageNum + 1 }));
     }
     setLoading(false);
   };
 
   const columns: ColumnProps<any>[] = [
     {
-      title: 'Operator',
+      title: <FormattedMessage id="Subscription.operatorColumns.Operator" />,
       dataIndex: 'opAccount',
       key: 'opAccount'
     },
     {
-      title: 'Time',
+      title: <FormattedMessage id="Subscription.operatorColumns.Time" />,
       dataIndex: 'opTime',
       key: 'opTime',
       render: (text) => <span>{text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : ''}</span>
     },
     {
-      title: 'Code',
+      title: <FormattedMessage id="Subscription.operatorColumns.OperationCategory" />,
       dataIndex: 'opCode',
       key: 'opCode'
     },
     {
-      title: 'Log',
+      title: <FormattedMessage id="Subscription.operatorColumns.OperationLog" />,
       dataIndex: 'opContext',
       key: 'opContext'
     }
   ];
 
   return (
-    <div>
-      <Button type="primary" onClick={handleTriggerClick}>Operation log</Button>
+    <div style={{marginBottom:16}}>
+      <Button type="primary" onClick={handleTriggerClick}><FormattedMessage id="Order.Operation Log" /></Button>
       <Modal
-        title="Operation log"
+        title={<FormattedMessage id="Order.Operation Log" />}
         width={880}
         visible={visible}
         footer={null}

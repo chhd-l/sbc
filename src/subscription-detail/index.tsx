@@ -402,6 +402,15 @@ class SubscriptionDetail extends React.Component<any, any> {
           <>{subscriptionInfo.subscriptionType == 'Individualization' ? 1 : text}</>
         )
       },
+      subscriptionInfo.subscribeStatus === '0'||subscriptionInfo.subscribeStatus === '1'?{
+        title:  <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+            <FormattedMessage id="subscription.realtimeStock" />
+          </span>,
+        dataIndex: 'stock',
+        key: 'realtime',
+        width: '10%',
+        render: (text, record) => (<span>{record?.goodsInfoVO?.stock}</span>)
+      }:{title:''},
       {
         title: (
           <span
@@ -446,22 +455,22 @@ class SubscriptionDetail extends React.Component<any, any> {
       }
     ];
 
-    // sprint8需求
-    if(subscriptionInfo.showRealTimeStock){
-      columns.splice(
-        3,
-        0,
-        {
-          title:  <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
-            <FormattedMessage id="subscription.realtimeStock" />
-          </span>,
-          dataIndex: 'stock',
-          key: 'realtime',
-          width: '10%',
-          render: (text, record) => (<span>{record?.goodsInfoVO?.stock}</span>)
-        }
-      );
-    }
+    // // sprint8需求
+    // if(subscriptionInfo.showRealTimeStock){
+    //   columns.splice(
+    //     3,
+    //     0,
+    //     {
+    //       title:  <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+    //         <FormattedMessage id="subscription.realtimeStock" />
+    //       </span>,
+    //       dataIndex: 'stock',
+    //       key: 'realtime',
+    //       width: '10%',
+    //       render: (text, record) => (<span>{record?.goodsInfoVO?.stock}</span>)
+    //     }
+    //   );
+    // }
 
     const operatorColumns = [
       {

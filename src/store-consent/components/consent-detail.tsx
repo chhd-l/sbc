@@ -252,7 +252,7 @@ class StepConsentDetail extends Component<any, any> {
         width: '100%'
       }
     };
-
+    console.log('consent consent', editList);
     return (
       <div className="consent-detail">
         <Row gutter={[24, 4]}>

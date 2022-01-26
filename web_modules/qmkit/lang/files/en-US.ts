@@ -5463,5 +5463,7 @@ export default {
   "PetOwner.ValidateUntil": "Validate until",
   "PetOwner.ValidPeriod": "Valid period",
   "Menu.Pretotype": "Pretotype",
-  "Menu.Landing page": "Landing page"
+  "Menu.Landing page": "Landing page",
+  "Marketing.DeleteConfirm": "Are you sure to delete the activity?",
+  "Marketing.EditConfirm": "You are about to edit a promotion which is currently active. Do you want to add any changes to this active promotion?"
 };

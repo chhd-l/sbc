@@ -98,10 +98,15 @@ export default class AppStore extends Store {
     });
   };
 
-  onPause = async (marketingId) => {
+  onPause = async (marketingId, callback) => {
     this.dispatch('loading:start');
     const { res } = await webapi.pause(marketingId);
     if (res.code == Const.SUCCESS_CODE) {
+      if (callback) {
+        this.dispatch('loading:end');
+        callback();
+        return;
+      }
       message.success('Operate successfully');
     }
     this.dispatch('loading:end');

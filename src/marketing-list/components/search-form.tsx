@@ -102,12 +102,12 @@ class SearchForm extends React.Component<any, any> {
                 }}
               >
                 <Option value={null}><FormattedMessage id="Marketing.all" /></Option>
-                <Option value="0"><FormattedMessage id="Marketing.FullAmountReduction" /></Option>
-                <Option value="1"><FormattedMessage id="Marketing.FullQuantityReduction" /></Option>
-                <Option value="2"><FormattedMessage id="Marketing.FullAmountDiscount" /></Option>
-                <Option value="3"><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
-                <Option value="4"><FormattedMessage id="Marketing.Fullamountgift" /></Option>
-                <Option value="5"><FormattedMessage id="Marketing.Fullquantitygift" /></Option>
+                <Option value={0}><FormattedMessage id="Marketing.FullAmountReduction" /></Option>
+                <Option value={1}><FormattedMessage id="Marketing.FullQuantityReduction" /></Option>
+                <Option value={2}><FormattedMessage id="Marketing.FullAmountDiscount" /></Option>
+                <Option value={3}><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
+                <Option value={4}><FormattedMessage id="Marketing.Fullamountgift" /></Option>
+                <Option value={5}><FormattedMessage id="Marketing.Fullquantitygift" /></Option>
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>

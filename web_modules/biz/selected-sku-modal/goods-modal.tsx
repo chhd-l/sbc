@@ -22,6 +22,7 @@ class GoodsModal extends React.Component<any, any> {
     searchParams?: Object;
     //应用标示。如添加秒杀商品：saleType
     application?: string;
+    titleContent?: any;
   };
 
   constructor(props) {
@@ -53,7 +54,8 @@ class GoodsModal extends React.Component<any, any> {
       skuLimit,
       showValidGood,
       searchParams,
-      application
+      application,
+      titleContent=null
     } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     return (
@@ -85,6 +87,9 @@ class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
+        {
+          titleContent
+        }
         {
           <GoodsGrid
             visible={visible}

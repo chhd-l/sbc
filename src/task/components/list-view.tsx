@@ -117,7 +117,7 @@ export default class ListView extends Component<any, any> {
       {
         title: <FormattedMessage id="task.TaskName" />,
         dataIndex: 'name',
-        width: '10%'
+        width: '15%'
       },
       {
         title: <FormattedMessage id="task.GoldenMoment" />,
@@ -151,7 +151,7 @@ export default class ListView extends Component<any, any> {
       {
         title: <FormattedMessage id="task.DueTime" />,
         dataIndex: 'dueTime',
-        width: '15%',
+        width: '10%',
         render: (text, record) =>
           moment(text) < moment(new Date()) &&
           (record.status === 'To Do' || record.status === 'On-going') ? (
@@ -163,6 +163,11 @@ export default class ListView extends Component<any, any> {
           ) : (
             ''
           )
+      },
+      {
+        title: <FormattedMessage id="Setting.timeZone" />,
+        dataIndex: 'timeZone',
+        width: '10%'
       },
       {
         title: <FormattedMessage id="Order.Operation" />,

@@ -255,7 +255,7 @@ let    d = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.L
                                 onSearch={this.onSearch}
                             >
                                 {
-                                    petsBreedList.map(((it) => (<Option key={it.id} value={it.valueEn} label={it.valueEn}>{it.valueEn}</Option>)))
+                                    petsBreedList.map(((it) => (<Option key={it.id} value={it.valueEn} label={it.valueEn}>{it.name}</Option>)))
                                 }
                             </Select>)}
                         </Form.Item>

@@ -219,7 +219,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         render: (text, record, index) => {
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
-          return [1, 2].includes(record.goodsInfoFlag) ? (
+          return [1, 2].includes(record.goodsInfoFlag) && record.subscriptionStatus === 1 ? (
             <Select style={{ width: 100 }}
               value={text} getPopupContainer={(trigger: any) => trigger.parentNode}
               placeholder="Select a person" optionFilterProp="children"

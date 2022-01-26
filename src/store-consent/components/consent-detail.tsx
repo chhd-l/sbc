@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Input, TreeSelect, Icon, Form, Row, Col, Button, message } from 'antd';
+import { Select, Input, TreeSelect, InputNumber, Form, Row, Col, Button, message } from 'antd';
 import '../editcomponents/style.less';
 import { Relax } from 'plume2';
 import { List } from 'immutable';
@@ -252,7 +252,7 @@ class StepConsentDetail extends Component<any, any> {
         width: '100%'
       }
     };
-
+    console.log('consent consent', editList);
     return (
       <div className="consent-detail">
         <Row gutter={[24, 4]}>
@@ -378,15 +378,20 @@ class StepConsentDetail extends Component<any, any> {
           </Col>
           <Col span={8}>
             <FormItem className="input-consent">
-              <Input
-                addonBefore={RCi18n({id:"Setting.ConsentVersion"})}
-                defaultValue={editList.consentVersion ? editList.consentVersion : ''}
-                onChange={(e) => {
-                  const value = (e.target as any).value;
-                  consentForm.consentVersion = value;
-                  onFormChange(consentForm);
-                }}
-              />
+              <Input.Group compact>
+                <Input value={RCi18n({id:"Setting.ConsentVersion"})} disabled style={{width: '30%', textAlign: 'center', color:'rgba(0, 0, 0, 0.65)', backgroundColor: '#fff', cursor: 'default'}} />
+                <InputNumber
+                  style={{width: '70%'}}
+                  min={1}
+                  step={1}
+                  precision={0}
+                  defaultValue={editList.consentVersion ? editList.consentVersion : null}
+                  onChange={(value) => {
+                    consentForm.consentVersion = value;
+                    onFormChange(consentForm);
+                  }}
+                />
+              </Input.Group>
             </FormItem>
           </Col>
           <Col span={8}>

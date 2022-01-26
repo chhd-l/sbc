@@ -1259,6 +1259,10 @@ const routes = [
     path:'/retailer',
     asyncComponent: () => import('./setting-integration/retailer')
   },
+  {
+    path: '/landing-page',
+    asyncComponent: () => import('./landing-page')
+  }
 ];
 
 const homeRoutes = [

@@ -32,8 +32,7 @@ async function handleInitLanguage(){
   if (Const.SITE_NAME !== 'MYVETRECO') {
     const langRes = await InitLanguage()
     if (langRes.res.code === Const.SUCCESS_CODE) {
-      // const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US';
-      const lang = 'fr'
+      const lang = langRes?.res?.context?.replace('es-MX', 'es') || 'en-US';
       const initLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
       if (lang !== initLang) {
         shouldChangeLanguageSetting = true;

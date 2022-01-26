@@ -5461,5 +5461,7 @@ export default {
   "Setting.SendEmail": "Send Email",
   "PetOwner.FromTo": "From to",
   "PetOwner.ValidateUntil": "Validate until",
-  "PetOwner.ValidPeriod": "Valid period"
+  "PetOwner.ValidPeriod": "Valid period",
+  "Menu.Pretotype": "Pretotype",
+  "Menu.Landing page": "Landing page"
 };

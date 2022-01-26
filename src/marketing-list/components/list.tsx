@@ -306,7 +306,7 @@ class MarketingList extends React.Component<any, any> {
                   {/* !==12 && !==13 && 状态 1 显示编辑按钮*/}
                   {((rowInfo.subType !== 12 && rowInfo.subType!== 13) && ([1].includes(Number(rowInfo['marketingStatus'])))) && (
                     <Popconfirm
-                      title="You are about to edit a promotion which is currently active. Do you want to add any changes to this active promotion?"
+                      title={<FormattedMessage id="Marketing.EditConfirm" />}
                       onConfirm={() => {
                         /* 先暂停 再去编辑 */
                         onPause(rowInfo['marketingId'], () => {
@@ -341,7 +341,7 @@ class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
-                    <Popconfirm title="Are you sure to delete the activity?" onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm title={<FormattedMessage id="Marketing.DeleteConfirm" />} onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
                       <Tooltip placement="top" title={<FormattedMessage id="Marketing.Delete" />}>
                         <a href="javascript:void(0);" style={{ marginRight: 5 }} className="iconfont iconDelete"></a>
                       </Tooltip>

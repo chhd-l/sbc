@@ -1115,7 +1115,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
-    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows.toJS())) return this.closeProductModal();
+    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
+    if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
 
     const {
       subscriptionId,

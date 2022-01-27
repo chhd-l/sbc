@@ -270,7 +270,9 @@ class MarketingList extends React.Component<any, any> {
                   <Tooltip placement="top" title={<FormattedMessage id="Marketing.Download" />}>
                     <a style={{ marginRight: 5 }} onClick={() => download(rowInfo['marketingId'])} className="iconfont iconbtn-offshelf"></a>
                   </Tooltip>
-                  {(rowInfo['marketingStatus'] == 3 || rowInfo['marketingStatus'] == 2 && (rowInfo.subType !== 12 && rowInfo.subType !== 13) || ([1,3].includes(Number(rowInfo['marketingStatus'])) && (rowInfo.subType === 12 || rowInfo.subType === 13))) && (
+
+                  {/* ==12 || ==13  && 状态 1 3 显示编辑按钮*/}
+                  {((rowInfo.subType === 12 || rowInfo.subType === 13) && ([1,3].includes(Number(rowInfo['marketingStatus'])))) && (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
                       <a
                         href="javascript:void(0)"
@@ -284,6 +286,45 @@ class MarketingList extends React.Component<any, any> {
                       ></a>
                     </Tooltip>
                   )}
+
+                  {/* !==12 && !==13 && 状态 2 3 显示编辑按钮*/}
+                  {((rowInfo.subType !== 12 && rowInfo.subType!== 13) && ([2,3].includes(Number(rowInfo['marketingStatus'])))) && (
+                    <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
+                      <a
+                        href="javascript:void(0)"
+                        style={{ marginRight: 5 }}
+                        onClick={() =>
+                          history.push({
+                            pathname: url
+                          })
+                        }
+                        className="iconfont iconEdit"
+                      ></a>
+                    </Tooltip>
+                  )}
+
+                  {/* !==12 && !==13 && 状态 1 显示编辑按钮*/}
+                  {((rowInfo.subType !== 12 && rowInfo.subType!== 13) && ([1].includes(Number(rowInfo['marketingStatus'])))) && (
+                    <Popconfirm
+                      title={<FormattedMessage id="Marketing.EditConfirm" />}
+                      onConfirm={() => {
+                        /* 先暂停 再去编辑 */
+                        onPause(rowInfo['marketingId'], () => {
+                          history.push({
+                            pathname: url
+                          })
+                        })
+                      }}
+                      okText="Confirm"
+                      cancelText="Cancel"
+                    >
+                      <Tooltip placement="top" title={<FormattedMessage id="Marketing.Edit" />}>
+                        <a href="javascript:void(0)" style={{ marginRight: 5 }} className="iconfont iconEdit"></a>
+                      </Tooltip>
+                    </Popconfirm>
+                  )}
+
+
                   {rowInfo['marketingStatus'] == 2 && rowInfo['marketingName'] !== '40% скидка'  &&  rowInfo['marketingName'] !== '25% скидка'&& (
                     <Tooltip placement="top" title={<FormattedMessage id="Marketing.Open" />}>
                       <a href="javascript:void(0);" style={{ marginRight: 5 }} onClick={() => onStart(rowInfo['marketingId'])} className="iconfont iconbtn-open"></a>
@@ -300,7 +341,7 @@ class MarketingList extends React.Component<any, any> {
                     </Tooltip>
                   )}
                   {rowInfo['marketingStatus'] == 3 && (
-                    <Popconfirm title="Are you sure to delete the activity?" onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
+                    <Popconfirm title={<FormattedMessage id="Marketing.DeleteConfirm" />} onConfirm={() => onDelete(rowInfo['marketingId'])} okText="Confirm" cancelText="Cancel">
                       <Tooltip placement="top" title={<FormattedMessage id="Marketing.Delete" />}>
                         <a href="javascript:void(0);" style={{ marginRight: 5 }} className="iconfont iconDelete"></a>
                       </Tooltip>

@@ -397,7 +397,7 @@ export default class Task extends React.Component<any, any> {
                           value
                         });
                       }}
-                      value={taskForm.goldenMoment}
+                      value={taskForm.timeZone}
                     >
                       <Option value="">
                         <FormattedMessage id="Order.All" />

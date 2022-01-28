@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Table, message } from 'antd';
 import { Const, RCi18n } from 'qmkit';
-import { getOperationLog } from '../webapi';
+import { getOperationLog, getOperationJsonLog } from '../webapi';
 import { FormattedMessage } from 'react-intl';
+import JsonModal from '@/Integration/components/JsonModal';
 import moment from 'moment';
 import { ColumnProps } from 'antd/es/table';
 
@@ -15,6 +16,9 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
   const [visible, setVisible] = useState(false);
   const [pager, setPager] = useState({ total: 0, current: 1, pageSize: 10 });
   const [list, setList] = useState([]);
+
+  const [jsonVisible, setJsonVisible] = useState(false);
+  const [jsonLog, setJsonLog] = useState({});
 
   const handleClose = () => {
     setVisible(false);
@@ -44,6 +48,16 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
     setLoading(false);
   };
 
+  const getOperationLogDetail = async (opDetailId: string) => {
+    setVisible(false);
+    setJsonVisible(true);
+    setJsonLog({});
+    const { res } = await getOperationJsonLog(opDetailId);
+    if (res.code === Const.SUCCESS_CODE) {
+      setJsonLog(res.context ?? {});
+    }
+  };
+
   const columns: ColumnProps<any>[] = [
     {
       title: <FormattedMessage id="Subscription.operatorColumns.Operator" />,
@@ -65,6 +79,12 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
       title: <FormattedMessage id="Subscription.operatorColumns.OperationLog" />,
       dataIndex: 'opContext',
       key: 'opContext'
+    },
+    {
+      title: <FormattedMessage id="Product.Details" />,
+      dataIndex: 'opDetailId',
+      key: 'opDetailId',
+      render: (text) => text ? <Button type="link" onClick={() => getOperationLogDetail(text)}><i className="iconfont iconDetails"></i></Button> : null
     }
   ];
 
@@ -73,7 +93,7 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
       <Button type="primary" onClick={handleTriggerClick}><FormattedMessage id="Order.Operation Log" /></Button>
       <Modal
         title={<FormattedMessage id="Order.Operation Log" />}
-        width={880}
+        width={1010}
         visible={visible}
         footer={null}
         onCancel={handleClose}
@@ -89,6 +109,11 @@ const OperationLog: React.FC<IProp> = (props: IProp) => {
           }}
         />
       </Modal>
+      <JsonModal
+        visible={jsonVisible}
+        title={<FormattedMessage id="Product.Details" />}
+        showJson={jsonLog}
+        modalCancel={() => { setJsonVisible(false); setVisible(true); }} />
     </div>
   );
 };

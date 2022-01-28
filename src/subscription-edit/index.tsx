@@ -127,7 +127,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       tempolineApiError: '',
       productModalVisible: false,
       selectedSkuIds: [],
-      selectedRows: [],
+      selectedRows: []
     };
   }
 
@@ -143,14 +143,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   }
 
   /**
-  *  CORE, FR, RU, TR for Club
-  **/
-  get isShowSkuEdit(){
+   *  CORE, FR, RU, TR for Club
+   **/
+  get isShowSkuEdit() {
     let bool = false;
-    const storeIdArr = ['123457907', '123457909', '123457911']
+    const storeIdArr = ['123457907', '123457909', '123457911'];
     const { subscriptionType } = this.state;
 
-    if (storeIdArr.includes(storeId.toString())){
+    if (storeIdArr.includes(storeId.toString())) {
       bool = subscriptionType?.toLowerCase() === 'club';
     }
 
@@ -308,7 +308,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .petsById({ petsId: id })
       .then((data) => {
         this.setState({
-          petsInfo: data?.res?.context?.context||{}
+          petsInfo: data?.res?.context?.context || {}
         });
       })
       .catch(() => {});
@@ -884,7 +884,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       loading: true
     });
     webapi
-      .cancelNextSubscription({ subscribeId: this.state.subscriptionId,changeField:'Skipping Next Delivery' })
+      .cancelNextSubscription({
+        subscribeId: this.state.subscriptionId,
+        changeField: 'Skipping Next Delivery'
+      })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -950,7 +953,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   getCityNameById = (ids, type) => {
     webapi
-      .queryCityById({  id: ids })
+      .queryCityById({ id: ids })
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
@@ -1118,21 +1121,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
 
-    const {
-      subscriptionId,
-      goodsInfo,
-    } = this.state;
+    const { subscriptionId, goodsInfo } = this.state;
     this.setState({
       selectedSkuIds: selectedSkuIds,
-      selectedRows: selectedRows,
-    })
-   this.setState({loading: true})
+      selectedRows: selectedRows
+    });
+    this.setState({ loading: true });
 
     let params = {
       subscribeId: subscriptionId,
       deleteSkuId: goodsInfo[0]?.skuId,
-      addSkuId: selectedSkuIds[0],
-    }
+      addSkuId: selectedSkuIds[0]
+    };
 
     let { res } = await webapi.changeSubscriptionGoods(params);
 
@@ -1145,19 +1145,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
 
     this.closeProductModal();
-  }
+  };
 
   closeProductModal = () => {
     this.setState({
       productModalVisible: false
-    })
-  }
+    });
+  };
 
   showProductModal = () => {
     this.setState({
       productModalVisible: true
-    })
-  }
+    });
+  };
 
   titleContent = () => {
     let url = '#';
@@ -1171,20 +1171,24 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       case 123457911:
         url = 'https://www.royalcanin.com/tr/product-finder';
         break;
-      default: break;
+      default:
+        break;
     }
     return (
-      <ul className='titleContent-wrap'>
+      <ul className="titleContent-wrap">
         <li>
-          <p style={{paddingBottom: '10px'}}>1、Find the right product for your customer by filling the product finder</p>
-          <Button  type="primary" href={url} target='_blank'>Fill the Product Finder</Button>
+          <p style={{ paddingBottom: '10px' }}>
+            1、Find the right product for your customer by filling the product finder
+          </p>
+          <Button type="primary" href={url} target="_blank">
+            Fill the Product Finder
+          </Button>
         </li>
         <li>2、See the product recommended</li>
         <li>3、Select it here</li>
       </ul>
-    )
-  }
-
+    );
+  };
 
   render() {
     const {
@@ -1224,7 +1228,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
       productModalVisible,
       selectedSkuIds,
-      selectedRows,
+      selectedRows
       // operationLog
     } = this.state;
 
@@ -1238,25 +1242,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text: any, record: any) => (
-          <div style={{ display: 'flex',alignItems: 'center' }}>
-            <img src={util.optimizeImage(record.goodsPic)} className="img-item" style={styles.imgItem} alt="" />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src={util.optimizeImage(record.goodsPic)}
+              className="img-item"
+              style={styles.imgItem}
+              alt=""
+            />
             <span style={{ margin: 'auto 10px' }}>
               {record.goodsName === 'individualization'
                 ? record.petsName + "'s personalized subscription"
                 : record.goodsName}
             </span>
-            {
-              this.isShowSkuEdit
-                ? (
-                  <a
-                    style={{flex: 1, textAlign: 'center'}}
-                    onClick={() => this.showProductModal()}
-                    className="iconfont iconEdit "
-                  />
-                )
-                : null
-            }
-
+            {this.isShowSkuEdit ? (
+              <a
+                style={{ flex: 1, textAlign: 'center' }}
+                onClick={() => this.showProductModal()}
+                className="iconfont iconEdit "
+              />
+            ) : null}
           </div>
         )
       },
@@ -1314,6 +1318,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           </div>
         )
       },
+      subscriptionInfo.subscribeStatus === '0' || subscriptionInfo.subscribeStatus === '1'
+        ? {
+            title: (
+              <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+                <FormattedMessage id="subscription.realtimeStock" />
+              </span>
+            ),
+            dataIndex: 'stock',
+            key: 'realtime',
+            width: '10%',
+            render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
+          }
+        : { title: '' },
       {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
@@ -1465,7 +1482,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item, index) => (
                 <div style={{ display: 'flex' }} key={index}>
-                  <img src={util.optimizeImage(item.pic)} className="img-item" style={styles.imgItem} alt="" />
+                  <img
+                    src={util.optimizeImage(item.pic)}
+                    className="img-item"
+                    style={styles.imgItem}
+                    alt=""
+                  />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'
@@ -1599,7 +1621,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {record.tradeItems &&
               record.tradeItems.map((item: any) => (
                 <div style={{ display: 'flex' }}>
-                  <img src={util.optimizeImage(item.pic)} className="img-item" style={styles.imgItem} alt="" />
+                  <img
+                    src={util.optimizeImage(item.pic)}
+                    className="img-item"
+                    style={styles.imgItem}
+                    alt=""
+                  />
                   <div style={{ margin: 'auto 10px' }}>
                     <p>
                       {item.skuName === 'individualization'

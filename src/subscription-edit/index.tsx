@@ -181,6 +181,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           let subscriptionDetail = res.context;
           let subscriptionInfo = {
             deliveryTimes: subscriptionDetail.deliveryTimes,
+            subscribeStatus: subscriptionDetail.subscribeStatus,
             subscriptionStatus:
               subscriptionDetail.subscribeStatus === '0'
                 ? RCi18n({ id: 'Subscription.Active' })
@@ -1330,7 +1331,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             width: '10%',
             render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
           }
-        : { title: '' },
+        : { title: '', width: '0%' },
       {
         title: (
           <span style={{ color: '#8E8E8E', fontWeight: 500 }}>

@@ -46,10 +46,10 @@ export default class LandingPageDetail extends React.Component<any, any> {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
           loading: false,
-          responderList: data.res.context?.content ?? [],
+          responderList: data.res.context?.landingPageRegiterSumVOS?.content ?? [],
           pagination: {
             ...this.state.pagination,
-            total: data.res.context?.totalElements ?? 0
+            total: data.res.context?.landingPageRegiterSumVOS?.total ?? 0
           }
         });
       } else {

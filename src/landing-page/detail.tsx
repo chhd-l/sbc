@@ -1,76 +1,145 @@
 import React from 'react';
-import { Row, Col, Table, Breadcrumb, Button, Modal } from 'antd';
-import { Headline, BreadCrumb } from 'qmkit';
+import { Row, Col, Table, Breadcrumb, Button, Spin } from 'antd';
+import { Headline, BreadCrumb, Const, history } from 'qmkit';
 import EditModal from './components/edit-modal';
+import { getLandingPageDetail, getResponderList } from './webapi';
+import moment from 'moment';
+import { FormattedMessage } from 'react-intl';
 
 export default class LandingPageDetail extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      landingPage: {}
+      landingPage: {},
+      responderList: [],
+      pagination: { current: 1, pageSize: 10, total: 0 },
+      loading: false
     };
   }
+
+  componentDidMount() {
+    this.landingPageDetail();
+    this.responderList();
+  }
+
+  landingPageDetail = () => {
+    this.setState({ loading: true });
+    getLandingPageDetail(this.props.match?.params?.id).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          loading: false,
+          landingPage: data.res.context ?? {}
+        });
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => { this.setState({ loading: false }); });
+  };
+
+  responderList = () => {
+    this.setState({ loading: true });
+    getResponderList({
+      landingPageId: this.props.match?.params?.id,
+      pageNum: this.state.pagination.current - 1,
+      pageSize: this.state.pagination.pageSize
+    }).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          loading: false,
+          responderList: data.res.context?.content ?? [],
+          pagination: {
+            ...this.state.pagination,
+            total: data.res.context?.totalElements ?? 0
+          }
+        });
+      } else {
+        this.setState({ loading: false });
+      }
+    }).catch(() => { this.setState({ loading: false }); });
+  };
+
+  handlePageChange = (current) => {
+    this.setState({
+      pageination: {
+        ...this.state.pagination,
+        current
+      }
+    }, this.responderList);
+  };
 
   render() {
     const columns = [
       {
-        title: 'Pet owner account'
+        title: <FormattedMessage id="Survey.pet_owner_account" />,
+        dataIndex: 'account',
+        key: 'account'
       },
       {
-        title: 'Pet owner name'
+        title: <FormattedMessage id="Survey.pet_owner_name" />,
+        dataIndex: 'name',
+        key: 'name'
       },
       {
-        title: 'Pet owner type'
+        title: <FormattedMessage id="Survey.pet_owner_type" />,
+        dataIndex: 'type',
+        key: 'type'
       },
       {
-        title: 'Email'
+        title: <FormattedMessage id="Survey.email" />,
+        dataIndex: 'email',
+        key: 'email'
       }
     ];
+    const { landingPage, loading, responderList, pagination } = this.state;
+    const tablePage = {
+      pagination: pagination,
+      onChange: this.handlePageChange
+    };
     return (
-      <div>
+      <Spin spinning={loading}>
         <BreadCrumb thirdLevel={true}>
-          <Breadcrumb.Item>Landing page details</Breadcrumb.Item>
+          <Breadcrumb.Item><FormattedMessage id="Marketing.LandingPageDetails" /></Breadcrumb.Item>
         </BreadCrumb>
         <div className="container-search">
-          <Headline title="Landing page details" />
-          <Row gutter={[24, 12]}>
+          <Headline title={<FormattedMessage id="Marketing.LandingPageDetails" />} />
+          <Row gutter={[24, 12]} style={{fontSize: 14}}>
             <Col span={16}>
-              <div style={{backgroundColor:'#fafafa',padding:10}}>
-                <div style={{marginBottom: 10}}><strong>Basic info</strong></div>
+              <div style={{backgroundColor:'#fafafa',padding:15}}>
+                <div style={{marginBottom: 10}}><strong><FormattedMessage id="Survey.basic_info" /></strong></div>
                 <Row>
-                  <Col span={12}>Landing page ID:</Col>
-                  <Col span={12}>Creation date:</Col>
+                  <Col span={12}><FormattedMessage id="Survey.pet_owner_type" />: {landingPage.number}</Col>
+                  <Col span={12}><FormattedMessage id="Survey.creation_time" />: {landingPage.registerTime && moment(landingPage.registerTime).format('YYYY-MM-DD HH:mm:ss')}</Col>
                 </Row>
               </div>
             </Col>
             <Col span={8}>
-              <div style={{backgroundColor:'#fafafa',padding:10}}>
-                <div style={{marginBottom: 10}}><strong>KPI</strong></div>
+              <div style={{backgroundColor:'#fafafa',padding:15}}>
+                <div style={{marginBottom: 10}}><strong><FormattedMessage id="Survey.kpi" /></strong></div>
                 <Row>
-                  <Col span={12}>Views:</Col>
-                  <Col span={12}>Clicks:</Col>
+                  <Col span={12}><FormattedMessage id="Survey.views" />: {landingPage.views}</Col>
+                  <Col span={12}><FormattedMessage id="Survey.clicks" />: {landingPage.clicks}</Col>
                 </Row>
               </div>
             </Col>
             <Col span={16}>
-              <div style={{backgroundColor:'#fafafa',padding:10}}>
-                <div style={{marginBottom: 10}}><strong>Landing page content</strong></div>
-                <div>Title:</div>
-                <div>Description:</div>
-                <div>State:</div>
+              <div style={{backgroundColor:'#fafafa',padding:15}}>
+                <div style={{marginBottom: 10}}><strong><FormattedMessage id="Marketing.LandingPageContent" /></strong></div>
+                <div><FormattedMessage id="Setting.Title" />: {landingPage.title}</div>
+                <div><FormattedMessage id="Setting.Description" />: {landingPage.description}</div>
+                <div><FormattedMessage id="Marketing.status" />: {landingPage.status ? <FormattedMessage id="Subscription.Active" /> : <FormattedMessage id="Subscription.Inactive" />}</div>
               </div>
             </Col>
           </Row>
         </div>
         <div className="container-search">
-          <Headline title="Responder list" />
-          <Table rowKey="id" columns={columns} dataSource={[]} />
+          <Headline title={<FormattedMessage id="Survey.responder_list" />} />
+          <Table rowKey="id" columns={columns} dataSource={responderList} pagination={tablePage} />
         </div>
         <div className="bar-button">
-          <EditModal />
-          <Button style={{marginLeft: 10}}>Back</Button>
+          <EditModal id={landingPage.id} title={landingPage.title} description={landingPage.description} callback={this.landingPageDetail} />
+          <Button style={{marginLeft: 10}} onClick={() => history.go(-1)}><FormattedMessage id="Marketing.back" /></Button>
         </div>
-      </div>
+      </Spin>
     );
   }
 };

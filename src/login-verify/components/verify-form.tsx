@@ -70,9 +70,10 @@ export default withOktaAuth(
         }
       });
     }
-    componentWillUnmount(){
-      sessionStorage.setItem('token-for-verify','')
-    }
+    // componentWillUnmount(){
+    //   debugger;
+    //   sessionStorage.setItem('token-for-verify','')
+    // }
     render() {
       const { getFieldDecorator } = this.props.form;
       const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);

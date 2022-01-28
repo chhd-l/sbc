@@ -334,8 +334,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   <Input size="large"
                          onChange={(e)=>{
                            if(Const.SITE_NAME === 'MYVETRECO'){
-                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase()
-                             form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase();
+                             const postfix = window.location.host.match(/\.\w+$/) ? window.location.host.match(/\.\w+$/)[0] : '';
+                             form.setFieldsValue({domainName:'https://'+value+'.myvetreco'+postfix});
                            }
                           }}
                   />

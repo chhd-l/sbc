@@ -58,12 +58,9 @@ export default class LandingPageDetail extends React.Component<any, any> {
     }).catch(() => { this.setState({ loading: false }); });
   };
 
-  handlePageChange = (current) => {
+  handlePageChange = (pagination) => {
     this.setState({
-      pageination: {
-        ...this.state.pagination,
-        current
-      }
+      pagination: pagination
     }, this.responderList);
   };
 
@@ -125,6 +122,7 @@ export default class LandingPageDetail extends React.Component<any, any> {
               <div style={{backgroundColor:'#fafafa',padding:15}}>
                 <div style={{marginBottom: 10}}><strong><FormattedMessage id="Marketing.LandingPageContent" /></strong></div>
                 <div><FormattedMessage id="Setting.Title" />: {landingPage.title}</div>
+                <div><FormattedMessage id="Setting.URL" />: {landingPage.url}</div>
                 <div><FormattedMessage id="Setting.Description" />: {landingPage.description}</div>
                 <div><FormattedMessage id="Marketing.status" />: {landingPage.status ? <FormattedMessage id="Subscription.Active" /> : <FormattedMessage id="Subscription.Inactive" />}</div>
               </div>
@@ -133,10 +131,10 @@ export default class LandingPageDetail extends React.Component<any, any> {
         </div>
         <div className="container-search">
           <Headline title={<FormattedMessage id="Survey.responder_list" />} />
-          <Table rowKey="id" columns={columns} dataSource={responderList} pagination={tablePage} />
+          <Table rowKey="id" columns={columns} dataSource={responderList} {...tablePage} />
         </div>
         <div className="bar-button">
-          <EditModal id={landingPage.id} title={landingPage.title} description={landingPage.description} callback={this.landingPageDetail} />
+          <EditModal id={landingPage.id} title={landingPage.title} url={landingPage.url} description={landingPage.description} callback={this.landingPageDetail} />
           <Button style={{marginLeft: 10}} onClick={() => history.go(-1)}><FormattedMessage id="Marketing.back" /></Button>
         </div>
       </Spin>

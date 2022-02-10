@@ -9,6 +9,7 @@ const FormItem = Form.Item;
 interface IProps extends FormComponentProps {
   id: string;
   title?: string;
+  url?: string;
   description?: string;
   callback?: Function;
 }
@@ -53,6 +54,14 @@ const EditModal: React.FC<IProps> = (props: IProps) => {
         <Form>
           <FormItem label={RCi18n({id:"Setting.Title"})} {...formItemLayout}>
             {getFieldDecorator('title', {
+              initialValue: props.title,
+              rules: [{ required: true, message: RCi18n({id: "PetOwner.ThisFieldIsRequired"}) }]
+            })(
+              <Input />
+            )}
+          </FormItem>
+          <FormItem label={RCi18n({id:"Setting.URL"})} {...formItemLayout}>
+            {getFieldDecorator('url', {
               initialValue: props.title,
               rules: [{ required: true, message: RCi18n({id: "PetOwner.ThisFieldIsRequired"}) }]
             })(

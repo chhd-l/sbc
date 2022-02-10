@@ -62,7 +62,7 @@ const EditModal: React.FC<IProps> = (props: IProps) => {
           </FormItem>
           <FormItem label={RCi18n({id:"Setting.URL"})} {...formItemLayout}>
             {getFieldDecorator('url', {
-              initialValue: props.title,
+              initialValue: props.url,
               rules: [{ required: true, message: RCi18n({id: "PetOwner.ThisFieldIsRequired"}) }]
             })(
               <Input />

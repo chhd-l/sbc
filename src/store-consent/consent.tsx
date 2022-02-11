@@ -104,8 +104,6 @@ export default class StepConsent extends Component<any, any> {
                   {consentCategory.map((item) => {
                     return <Option key={item.valueEn} value={item.valueEn}>{item.valueEn}</Option>;
                   })}
-                  <Option value="Prescriber"><FormattedMessage id="Setting.Prescriber" /></Option>
-                  <Option value="Consumer"><FormattedMessage id="Setting.Consumer" /></Option>
                 </Select>
                 <Select style={{ width: 120 }} defaultValue="" onChange={(e, v) => this.onDescription(e, v)}>
                   <Option value=""><FormattedMessage id="Setting.All" /></Option>

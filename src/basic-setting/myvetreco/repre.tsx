@@ -220,7 +220,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
           </Col>
           <Col span={12}>
             <FormItem label="House number">
-              {getFieldDecorator('houseNumber', {
+              {getFieldDecorator('houseNumberOrName', {
                 rules: [{ required: true, message: 'Please input house number' }]
               })(
                 <Input disabled={adyenAuditState === 0} />
@@ -437,7 +437,7 @@ class Signatories extends React.Component<RepreFormProps, any> {
           </Col>
           <Col span={12}>
             <FormItem label="House number">
-              {getFieldDecorator('houseNumber', {
+              {getFieldDecorator('houseNumberOrName', {
                 rules: [{ required: true, message: 'Please input house number' }]
               })(
                 <Input disabled={adyenAuditState === 0} />

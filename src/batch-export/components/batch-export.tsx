@@ -158,7 +158,7 @@ class BatchExport extends Component<BatchExportProps, any> {
     });
     return (
       <Form className="batch_export_form">
-        <Row gutter={96}>{children}</Row>
+        <Row gutter={24}>{children}</Row>
       </Form>
     );
   }

@@ -48,6 +48,7 @@ class StepConsentDetail extends Component<any, any> {
       dataList: any;
       onFormChange: Function;
       consentLanguage: any;
+      consentCategory: any;
       consentForm: any;
       refDetailEditor: Function;
       onEditSave: Function;
@@ -67,6 +68,7 @@ class StepConsentDetail extends Component<any, any> {
     dataList: 'dataList',
     onFormChange: noop,
     consentLanguage: 'consentLanguage',
+    consentCategory: 'consentCategory',
     consentForm: 'consentForm',
     refDetailEditor: noop,
     onEditSave: noop,
@@ -216,7 +218,7 @@ class StepConsentDetail extends Component<any, any> {
   };
 
   render() {
-    const { onFormChange, editId, consentForm, parentConsentList } = this.props.relaxProps;
+    const { onFormChange, editId, consentForm, parentConsentList, consentCategory } = this.props.relaxProps;
     const { editList, consentLanguage, editorState } = this.state;
     const htmlString = editList.consentTitle ? editList.consentTitle : '';
     const editor = htmlString; // BraftEditor.createEditorState(htmlString);
@@ -272,12 +274,9 @@ class StepConsentDetail extends Component<any, any> {
                   })*/
                 }}
               >
-                <Option value="Prescriber">
-                  <FormattedMessage id="Setting.Prescriber" />
-                </Option>
-                <Option value="Consumer">
-                  <FormattedMessage id="Setting.Consumer" />
-                </Option>
+                {consentCategory.map((item) => (
+                  <Option key={item.valueEn} value={item.valueEn}>{item.valueEn}</Option>
+                ))}
               </SelectGroup>
             </FormItem>
           </Col>

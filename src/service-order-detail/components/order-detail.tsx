@@ -8,7 +8,8 @@ import {
   cache,
   getFelineOrderStatusValue,
   getFormatDeliveryDateStr,
-  RCi18n
+  RCi18n,
+  checkAuth
 } from 'qmkit';
 import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
@@ -25,6 +26,8 @@ const orderTypeList = [
   { value: 'SUBSCRIPTION', name: 'Subscription' },
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
+
+const showRealStock = false && checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
 
 /**
  * 拒绝表单，只为校验体验
@@ -125,20 +128,47 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
-    const appointInfo = detail.get('settingVO') ? detail.get('settingVO').toJS() : null;
+    const appointInfo = detail.get('settingVO')?detail.get('settingVO').toJS():null;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
+    //订阅赠品信息
+    let giftList = detail.get('subscriptionPlanGiftList')
+      ? detail.get('subscriptionPlanGiftList').toJS()
+      : [];
+    giftList = giftList.map((gift) => {
+      let tempGift = {
+        skuNo: gift.goodsInfoNo,
+        skuName: gift.goodsInfoName,
+        num: gift.quantity,
+        originalPrice: 0,
+        price: 0,
+        isGift: true
+      };
+      return tempGift;
+    });
+    //满赠赠品信息
+    let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
+    gifts = gifts
+      .map((gift) =>
+        gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
+      )
+      .toJS();
+
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
+
     //收货人信息
     const consignee = detail.get('consignee')
       ? (detail.get('consignee').toJS() as Consignee | null)
       : null;
+
     //发票信息
     const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : null;
+
     //交易状态
     const tradeState = detail.get('tradeState');
+
     //满减、满折金额
     tradePrice.discountsPriceDetails = tradePrice.discountsPriceDetails || fromJS([]);
     tradeItems.forEach((tradeItems) => {
@@ -146,14 +176,15 @@ class OrderDetailTab extends React.Component<any, any> {
         tradeItems.levelPrice = tradeItems.price;
       }
     });
+    let firstTradeItems = tradeItems && tradeItems.length > 0 ? tradeItems[0] : {};
     const installmentPrice = tradePrice.installmentPrice;
+
     const deliverWay = detail.get('deliverWay');
     const deliveryMethod =
       deliverWay === 1 ? 'Home Delivery' : deliverWay === 2 ? 'Pickup Delivery' : '';
     const addressHour =
       deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
     const address1 = consignee?.detailAddress1 + ' ' + (addressHour || '');
-    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderCategory'));
 
     const columns = [
       {
@@ -183,16 +214,17 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
+          const productName = text === 'individualization' ? record.petsName + "'s" + text : text;
           return (
             <Tooltip
               overlayStyle={{
                 overflowY: 'auto'
               }}
               placement="bottomLeft"
-              title={<div>{text}</div>}
+              title={<div>{productName}</div>}
             >
               <p className="overFlowtext" style={{ width: 100 }}>
-                {text}
+                {productName}
               </p>
             </Tooltip>
           );
@@ -205,11 +237,15 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '9%'
       },
       {
-        title: <FormattedMessage id="Order.Quantity" />,
+        title: showRealStock ? (
+          <FormattedMessage id="Order.realTimeQuantity" values={{ br: <br /> }} />
+        ) : (
+          <FormattedMessage id="Order.Quantity" />
+        ),
         dataIndex: 'num',
         key: 'num',
         width: '6%',
-        render: (text, record) => text
+        render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
         title: <FormattedMessage id="Order.Price" />,
@@ -221,14 +257,27 @@ class OrderDetailTab extends React.Component<any, any> {
           record.subscriptionStatus === 1 &&
           record.isSuperimposeSubscription === 1 ? (
             <div>
-              <span>{this._handlePriceFormat(record.subscriptionPrice)}</span>
+              <span>
+                {this._handlePriceFormat(
+                  record.subscriptionPrice,
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
+              </span>
               <br />
               <span style={{ textDecoration: 'line-through' }}>
-                {this._handlePriceFormat(originalPrice)}
+                {this._handlePriceFormat(
+                  originalPrice,
+                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                )}
               </span>
             </div>
           ) : (
-            <span>{this._handlePriceFormat(originalPrice)}</span>
+            <span>
+              {this._handlePriceFormat(
+                originalPrice,
+                detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+              )}
+            </span>
           )
       },
       {
@@ -293,15 +342,14 @@ class OrderDetailTab extends React.Component<any, any> {
       }
     ];
 
+    let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderCategory'));
+
     return (
       <div className="orderDetail">
         <div className="display-flex direction-row justify-between mb-20">
-          <label className="green-text">
+          <label style={styles.greenText}>
             <FormattedMessage
-              id={getFelineOrderStatusValue(
-                'OrderStatus',
-                detail.getIn(['tradeState', 'flowState'])
-              )}
+              id={getFelineOrderStatusValue('OrderStatus', detail.getIn(['tradeState', 'flowState']))}
             />
           </label>
           {this._renderBtnAction(tid)}
@@ -320,10 +368,10 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{tid}</div>}
+                    title={<div>{detail.get('id')}</div>}
                   >
                     <p className="overFlowtext">
-                      {<FormattedMessage id="Order.OrderNumber" />}: {tid}
+                      {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
                     </p>
                   </Tooltip>
                   <p>
@@ -350,8 +398,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     {moment(tradeState.get('createTime')).format(Const.TIME_FORMAT)}
                   </p>
                   <p>
-                    <FormattedMessage id="Order.orderSource" />:{' '}
-                    <FormattedMessage id="Order.orderSource felin" />
+                    <FormattedMessage id="Order.orderSource" />:  <FormattedMessage id="Order.orderSource felin" />
                   </p>
                   <p>
                     <FormattedMessage id="Order.createBy" />: {detail.get('orderCreateBy')}
@@ -383,7 +430,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*Appointment panel*/}
-          {appointInfo ? (
+          {appointInfo?(
             <Col span={12}>
               <Row>
                 <div className="headBox">
@@ -407,25 +454,38 @@ class OrderDetailTab extends React.Component<any, any> {
                       {appointInfo?.status === 0
                         ? 'Booked'
                         : appointInfo?.status === 1
-                        ? 'Arrived'
-                        : 'Cancel'}
+                          ? 'Arrived'
+                          : 'Cancel'}
                     </p>
                     <Tooltip
                       overlayStyle={{
                         overflowY: 'auto'
                       }}
                       placement="bottomLeft"
-                      title={
+                      title={detail.get('appointmentDate')?(
                         <div>
-                          {this._handleFelinAppointTime(detail.get('appointmentDate')).showTime}
+                          {
+                            this._handleFelinAppointTime(detail.get('appointmentDate'))
+                              .appointStartTime
+                          }
+                          -
+                          {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
                         </div>
+                      ):null
                       }
                     >
                       <p className="overFlowtext">
                         <FormattedMessage id="Order.appointmentTime" />:{' '}
-                        <div>
-                          {this._handleFelinAppointTime(detail.get('appointmentDate')).showTime}
-                        </div>
+                        {detail.get('appointmentDate')?(
+                          <div>
+                            {
+                              this._handleFelinAppointTime(detail.get('appointmentDate'))
+                                .appointStartTime
+                            }
+                            -
+                            {this._handleFelinAppointTime(detail.get('appointmentDate')).appointEndTime}
+                          </div>
+                        ):null}
                       </p>
                     </Tooltip>
                     <p>
@@ -438,8 +498,7 @@ class OrderDetailTab extends React.Component<any, any> {
                       <FormattedMessage id="Order.bookingTime" />: {appointInfo?.createTime}
                     </p>
                     <p>
-                      <FormattedMessage id="Order.appointmentType" />:{' '}
-                      {detail.get('appointmentType')}
+                      <FormattedMessage id="Order.appointmentType" />: {detail.get('appointmentType')}
                     </p>
                     <p>
                       <FormattedMessage id="Order.appointmentLocation" />:
@@ -451,14 +510,113 @@ class OrderDetailTab extends React.Component<any, any> {
                 </div>
               </Row>
             </Col>
-          ) : null}
+          ):null}
         </Row>
+
+        {/*Subscription panel*/}
+        {detail.get('subscribeId') ||
+        detail.get('clinicsId') ||
+        firstTradeItems.recommendationId ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            {detail.get('subscribeId') ? (
+              <Col span={12} style={{ alignSelf: 'flex-start' }}>
+                <div className="headBox" style={{ height: 120 }}>
+                  <h4>
+                    <FormattedMessage id="Order.subscription" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionType" />:{' '}
+                    {detail.get('subscriptionTypeQuery')
+                      ? detail.get('subscriptionTypeQuery').replace('_', ' & ')
+                      : ''}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.subscriptionPlanType" />:{' '}
+                    {detail.get('subscriptionPlanType')}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
+
+            {detail.get('clinicsId') || firstTradeItems.recommendationId ? (
+              <Col span={12}>
+                <div className="headBox">
+                  <h4>
+                    <FormattedMessage id="Order.partner" />
+                  </h4>
+                  <p>
+                    <FormattedMessage id="Order.Auditorname" />: {detail.get('clinicsName')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Auditorid" />: {detail.get('clinicsId')}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommenderid" />:{' '}
+                    {firstTradeItems.recommendationId}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Recommendername" />:{' '}
+                    {firstTradeItems.recommendationName}
+                  </p>
+                </div>
+              </Col>
+            ) : null}
+
+            {((detail.get('subscribeId') &&
+              !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+              (!detail.get('subscribeId') &&
+                (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+            showRealStock ? (
+              <Col span={12}>
+                <AuthWrapper functionName="fOrderDetail001">
+                  <div
+                    style={{
+                      color: '#E1021A',
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      textDecoration: 'underline',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => this._refreshRealtimeStock(tid)}
+                  >
+                    Real-time stock
+                  </div>
+                </AuthWrapper>
+              </Col>
+            ) : null}
+          </Row>
+        ) : null}
+
+        {((detail.get('subscribeId') &&
+          (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
+          (!detail.get('subscribeId') &&
+            !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
+        showRealStock ? (
+          <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
+            <Col span={24}>
+              <AuthWrapper functionName="fOrderDetail001">
+                <div
+                  style={{
+                    color: '#E1021A',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => this._refreshRealtimeStock(tid)}
+                >
+                  Real-time stock
+                </div>
+              </AuthWrapper>
+            </Col>
+          </Row>
+        ) : null}
 
         <div className="display-flex mb-20 mt-20 direction-column word-break-break">
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={columns}
-            dataSource={tradeItems}
+            dataSource={tradeItems.concat(gifts, giftList)}
             pagination={false}
             bordered
             rowClassName={() => 'order-detail-row'}
@@ -505,7 +663,7 @@ class OrderDetailTab extends React.Component<any, any> {
           </Modal>
 
           {/*订单相关价格 panel*/}
-          <div className="detailBox">
+          <div style={styles.detailBox as any}>
             <div style={styles.inputBox as any} />
             <div style={styles.priceBox}>
               <label style={styles.priceItem as any}>
@@ -565,176 +723,174 @@ class OrderDetailTab extends React.Component<any, any> {
 
         <Row gutter={30}>
           {/*deliveryAddress panel*/}
-          {consignee ? (
-            <Col span={12}>
-              <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
-                <h4>
-                  <FormattedMessage id="Order.deliveryAddress" />
-                </h4>
-                <Row>
-                  <Col span={12}>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.firstName}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.lastName}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.LastName" />: {consignee.lastName}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{address1}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.address1" />: {address1}
-                      </p>
-                    </Tooltip>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.detailAddress2}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
-                      </p>
-                    </Tooltip>
-                    <p>
-                      <FormattedMessage id="Order.country" />:{' '}
-                      {consignee.countryId ? (
-                        <>
-                          {countryDict
-                            ? countryDict.find((c) => c.id == consignee.countryId)
-                              ? countryDict.find((c) => c.id == consignee.countryId).name
-                              : consignee.countryId
-                            : ''}
-                        </>
-                      ) : (
-                        consignee.country
-                      )}
+          {consignee?(<Col span={12}>
+            <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
+              <h4>
+                <FormattedMessage id="Order.deliveryAddress" />
+              </h4>
+              <Row>
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.firstName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.FirstName" />: {consignee.firstName}
                     </p>
-                    {consignee?.county ? (
-                      <p>
-                        <FormattedMessage id="Order.county" />: {consignee.county}
-                      </p>
-                    ) : null}
-                    <p>
-                      <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.lastName}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.LastName" />: {consignee.lastName}
                     </p>
-                    <p>
-                      <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{address1}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address1" />: {address1}
                     </p>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.comment}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.Comment" />: {consignee.comment}
-                      </p>
-                    </Tooltip>
-                  </Col>
-
-                  <Col span={12}>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{consignee.city}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.city" />: {consignee.city}
-                      </p>
-                    </Tooltip>
-                    <p>
-                      <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
+                  </Tooltip>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.detailAddress2}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.address2" />: {consignee.detailAddress2}
                     </p>
-                    <p>
-                      <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.state" />: {consignee.province}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.region" />: {consignee.area}
-                    </p>
-                    <p>
-                      <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
-                    </p>
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
-                    >
-                      <p className="overFlowtext">
-                        <FormattedMessage id="Order.deliveryDate" />:{' '}
-                        {getFormatDeliveryDateStr(consignee.deliveryDate)}
-                      </p>
-                    </Tooltip>
-                    {storeId === 123457907 && (
-                      <Tooltip
-                        overlayStyle={{
-                          overflowY: 'auto'
-                        }}
-                        placement="bottomLeft"
-                        title={<div>{deliveryMethod}</div>}
-                      >
-                        <p className="overFlowtext">
-                          <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
-                        </p>
-                      </Tooltip>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.country" />:{' '}
+                    {consignee.countryId ? (
+                      <>
+                        {countryDict
+                          ? countryDict.find((c) => c.id == consignee.countryId)
+                            ? countryDict.find((c) => c.id == consignee.countryId).name
+                            : consignee.countryId
+                          : ''}
+                      </>
+                    ) : (
+                      consignee.country
                     )}
-                  </Col>
-                  {storeId === 123457907 ? (
-                    <Col span={24}>
-                      <p>
-                        <FormattedMessage id="Order.estimatedDeliveryDate" />:
-                        {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
-                          detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
-                            <FormattedMessage
-                              id="Order.estimatedDeliveryDateDesc"
-                              values={{
-                                minDay: detail.get('minDeliveryTime'),
-                                maxDay: detail.get('maxDeliveryTime')
-                              }}
-                            />
-                          ) : (
-                            <FormattedMessage
-                              id="Order.estimatedDeliveryDateDescEqual"
-                              values={{ day: detail.get('minDeliveryTime') }}
-                            />
-                          )
-                        ) : null}
-                      </p>
-                    </Col>
+                  </p>
+                  {consignee?.county ? (
+                    <p>
+                      <FormattedMessage id="Order.county" />: {consignee.county}
+                    </p>
                   ) : null}
-                </Row>
-              </div>
-            </Col>
-          ) : null}
+                  <p>
+                    <FormattedMessage id="Order.Entrance" />: {consignee.entrance}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.timeSlot" />: {consignee.timeSlot}
+                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.comment}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.Comment" />: {consignee.comment}
+                    </p>
+                  </Tooltip>
+                </Col>
+
+                <Col span={12}>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{consignee.city}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.city" />: {consignee.city}
+                    </p>
+                  </Tooltip>
+                  <p>
+                    <FormattedMessage id="Order.Postalcode" />: {consignee.postCode}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.phoneNumber" />: {consignee.phone}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.state" />: {consignee.province}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.region" />: {consignee.area}
+                  </p>
+                  <p>
+                    <FormattedMessage id="Order.Apartment" />: {consignee.apartment}
+                  </p>
+                  <Tooltip
+                    overlayStyle={{
+                      overflowY: 'auto'
+                    }}
+                    placement="bottomLeft"
+                    title={<div>{getFormatDeliveryDateStr(consignee.deliveryDate)}</div>}
+                  >
+                    <p className="overFlowtext">
+                      <FormattedMessage id="Order.deliveryDate" />:{' '}
+                      {getFormatDeliveryDateStr(consignee.deliveryDate)}
+                    </p>
+                  </Tooltip>
+                  {storeId === 123457907 && (
+                    <Tooltip
+                      overlayStyle={{
+                        overflowY: 'auto'
+                      }}
+                      placement="bottomLeft"
+                      title={<div>{deliveryMethod}</div>}
+                    >
+                      <p className="overFlowtext">
+                        <FormattedMessage id="Order.chosenDeliveryMethods" />: {deliveryMethod}
+                      </p>
+                    </Tooltip>
+                  )}
+                </Col>
+                {storeId === 123457907 ? (
+                  <Col span={24}>
+                    <p>
+                      <FormattedMessage id="Order.estimatedDeliveryDate" />:
+                      {detail.get('minDeliveryTime') && detail.get('maxDeliveryTime') ? (
+                        detail.get('minDeliveryTime') !== detail.get('maxDeliveryTime') ? (
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDesc"
+                            values={{
+                              minDay: detail.get('minDeliveryTime'),
+                              maxDay: detail.get('maxDeliveryTime')
+                            }}
+                          />
+                        ) : (
+                          <FormattedMessage
+                            id="Order.estimatedDeliveryDateDescEqual"
+                            values={{ day: detail.get('minDeliveryTime') }}
+                          />
+                        )
+                      ) : null}
+                    </p>
+                  </Col>
+                ) : null}
+              </Row>
+            </div>
+          </Col>):null}
 
           {/*billingAddress panel*/}
           {storeId !== 123457907 && invoice ? (
@@ -871,6 +1027,13 @@ class OrderDetailTab extends React.Component<any, any> {
     return sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (price || 0).toFixed(num);
   }
 
+  //刷新商品实时库存
+  _refreshRealtimeStock = async (tid: string) => {
+    const { refreshGoodsRealtimeStock } = this.props.relaxProps;
+    await refreshGoodsRealtimeStock(tid);
+    this.setState({ tableLoading: false });
+  };
+
   _renderBtnAction(tid: string) {
     const { detail, onDelivery } = this.props.relaxProps;
     const flowState = detail.getIn(['tradeState', 'flowState']);
@@ -889,10 +1052,11 @@ class OrderDetailTab extends React.Component<any, any> {
                   <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
                     <a
                       href="javascript:void(0);"
+                      style={styles.pr20}
                       onClick={() => {
                         onDelivery();
                       }}
-                      className="iconfont iconbtn-shipping pr-20"
+                      className="iconfont iconbtn-shipping"
                     />
                   </Tooltip>
                 </AuthWrapper>
@@ -912,7 +1076,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   this._showConfirm(tid);
                 }}
                 href="javascript:void(0)"
-                className="pr-20"
+                style={styles.pr20}
               >
                 <FormattedMessage id="Order.confirmReceipt" />
               </a>
@@ -921,6 +1085,7 @@ class OrderDetailTab extends React.Component<any, any> {
         </div>
       );
     }
+
     return null;
   }
 
@@ -945,6 +1110,27 @@ class OrderDetailTab extends React.Component<any, any> {
     const { hideRejectModal } = this.props.relaxProps;
     hideRejectModal();
     this._rejectForm.setFieldsValue({ comment: '' });
+  };
+
+  /**
+   * 回审订单确认提示
+   * @param tdId
+   * @private
+   */
+  _showRetrialConfirm = (tdId: string) => {
+    const { retrial } = this.props.relaxProps;
+
+    const confirm = Modal.confirm;
+    const title = (window as any).RCi18n({ id: 'Order.Re-review' });
+    const content = (window as any).RCi18n({ id: 'Order.Confirmtoreturntheselected' });
+    confirm({
+      title: title,
+      content: content,
+      onOk() {
+        retrial(tdId);
+      },
+      onCancel() {}
+    });
   };
 
   /**
@@ -984,9 +1170,6 @@ class OrderDetailTab extends React.Component<any, any> {
 
   //处理预约信息里面的预约时间
   _handleFelinAppointTime(appointTime) {
-    if (!appointTime) {
-      return {showTime: ''};
-    }
     const apptTime = appointTime.split('#');
     const appointStartTime =
       apptTime.length > 0
@@ -996,19 +1179,9 @@ class OrderDetailTab extends React.Component<any, any> {
       apptTime.length > 1
         ? moment(apptTime[1].split(' ')[0]).format('YYYY-MM-DD') + ' ' + apptTime[1].split(' ')[1]
         : '';
-    const endTime = appointEndTime
-      ? moment(new Date(new Date(appointEndTime).valueOf() - 15 * 60 * 1000)).format(
-          'YYYY-MM-DD HH:mm'
-        )
-      : appointEndTime;
-    const showTime =
-      appointStartTime && endTime.split(' ').length > 1
-        ? appointStartTime + '-' + endTime.split(' ')[1]
-        : '';
     return {
       appointStartTime,
-      appointEndTime,
-      showTime
+      appointEndTime
     };
   }
 }
@@ -1016,6 +1189,26 @@ class OrderDetailTab extends React.Component<any, any> {
 export default injectIntl(OrderDetailTab);
 
 const styles = {
+  greenText: {
+    color: '#339966'
+  },
+  greyText: {
+    marginLeft: 20
+  },
+  pr20: {
+    paddingRight: 20
+  },
+  detailBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 20,
+    border: '1px solid #e9e9e9',
+    borderTop: 0,
+    marginTop: -4,
+    borderRadius: 4
+  },
   priceBox: {
     display: 'flex',
     flexDirection: 'column'
@@ -1038,5 +1231,35 @@ const styles = {
     flexDirection: 'column',
     height: 70,
     justifyContent: 'space-between'
+  },
+  inforItem: {
+    paddingTop: 10,
+    marginLeft: 20
+  } as any,
+
+  imgItem: {
+    width: 40,
+    height: 40,
+    border: '1px solid #ddd',
+    display: 'inline-block',
+    marginRight: 10,
+    background: '#fff'
+  },
+  attachment: {
+    maxWidth: 40,
+    maxHeight: 40,
+    marginRight: 5
+  },
+  attachmentView: {
+    maxWidth: 400,
+    maxHeight: 400
+  },
+  platform: {
+    fontSize: 12,
+    color: '#fff',
+    padding: '1px 3px',
+    background: '#F56C1D',
+    display: 'inline-block',
+    marginLeft: 5
   }
 } as any;

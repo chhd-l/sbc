@@ -363,9 +363,52 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="Province" name="province">
+                {getFieldDecorator('province', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="City" name="cityId">
+                {getFieldDecorator('cityId', {
+                  initialValue: {key:'',label:''}
+                })(
+                  <DebounceSelect
+                    size="large"
+                    placeholder="Select users"
+                    fetchOptions={fetchUserList}
+                    defaultOptions={defaultOptions}
+                    style={{
+                      width: '100%',
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            {Const.SITE_NAME === 'MYVETRECO' ? <Col span={12}>
+              <FormItem label="Street name" name="addressDetail">
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col> : <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
                 {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>}
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="House number" name="houseNumber">
+                {getFieldDecorator('houseNumber', {
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -393,23 +436,6 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   initialValue: ''
                 })(
                   <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="City" name="cityId">
-                {getFieldDecorator('cityId', {
-                  initialValue: {key:'',label:''}
-                })(
-                  <DebounceSelect
-                    size="large"
-                    placeholder="Select users"
-                    fetchOptions={fetchUserList}
-                    defaultOptions={defaultOptions}
-                    style={{
-                      width: '100%',
-                    }}
-                  />
                 )}
               </FormItem>
             </Col>

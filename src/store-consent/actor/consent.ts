@@ -11,6 +11,8 @@ export default class ModalActor extends Actor {
       consentList: [],
       //语言
       consentLanguage: [],
+      //category
+      consentCategory: [],
       //new consent
       consentForm: {
         languageTypeId: '',
@@ -58,6 +60,12 @@ export default class ModalActor extends Actor {
   @Action('consent:consentLanguage')
   consentLanguage(state: IMap, res) {
     return state.set('consentLanguage', res);
+  }
+
+  //category
+  @Action('consent:consentCategory')
+  consentCategory(state: IMap, res) {
+    return state.set('consentCategory', res);
   }
 
   //new

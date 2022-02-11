@@ -172,19 +172,10 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={24}>
-            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>The Store address should include both street name and house number. E.g. City 35</div>}>
-              {getFieldDecorator('address1', {
-                rules: [{ required: true, message: 'Please input address' }]
-              })(
-                <Input disabled={adyenAuditState === 0} />
-              )}
-            </FormItem>
-          </Col>
           <Col span={12}>
-            <FormItem label="Postcode">
-              {getFieldDecorator('postCode', {
-                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+            <FormItem label="Province">
+              {getFieldDecorator('province', {
+                rules: [{ required: true, message: 'Please input province' }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
@@ -219,9 +210,27 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Province">
-              {getFieldDecorator('province', {
-                rules: [{ required: true, message: 'Please input province' }],
+            <FormItem label="Street name">
+              {getFieldDecorator('address1', {
+                rules: [{ required: true, message: 'Please input street name' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="House number">
+              {getFieldDecorator('houseNumber', {
+                rules: [{ required: true, message: 'Please input house number' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Postcode">
+              {getFieldDecorator('postCode', {
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
@@ -380,19 +389,10 @@ class Signatories extends React.Component<RepreFormProps, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={24}>
-            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>The Store address should include both street name and house number. E.g. City 35</div>}>
-              {getFieldDecorator('address1', {
-                rules: [{ required: true, message: 'Please input address' }]
-              })(
-                <Input disabled={adyenAuditState === 0} />
-              )}
-            </FormItem>
-          </Col>
           <Col span={12}>
-            <FormItem label="Postcode">
-              {getFieldDecorator('postCode', {
-                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+            <FormItem label="Province">
+              {getFieldDecorator('province', {
+                rules: [{ required: true, message: 'Please input province' }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
@@ -427,9 +427,27 @@ class Signatories extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Province">
-              {getFieldDecorator('province', {
-                rules: [{ required: true, message: 'Please input province' }],
+            <FormItem label="Street name">
+              {getFieldDecorator('address1', {
+                rules: [{ required: true, message: 'Please input street name' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="House number">
+              {getFieldDecorator('houseNumber', {
+                rules: [{ required: true, message: 'Please input house number' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Postcode">
+              {getFieldDecorator('postCode', {
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}

@@ -129,6 +129,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
             setLoading(false)
           }else {
             setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5)   //FGS去掉第4、5步
+            setLoading(false)
           }
         });
       }

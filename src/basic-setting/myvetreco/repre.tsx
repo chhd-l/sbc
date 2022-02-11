@@ -25,6 +25,9 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
 
   constructor(props: RepreFormProps) {
     super(props);
+    this.state = {
+      defaultOptions: {}
+    }
   }
 
   validateJobTitle = () => {
@@ -46,6 +49,15 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
     }
   };
 
+  setDefaultOptions = () => {
+    const cityObj = this.props.form.getFieldValue('cityId');
+    const defaultOptions = {
+      id: cityObj.key,
+      cityName: cityObj.label
+    };
+    this.setState({ defaultOptions });
+  };
+
   validateForm = () => {
     return new Promise((resolve, reject) => {
       this.props.form.validateFields((errors, values) => {
@@ -64,6 +76,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
 
   render() {
     const { form: { getFieldDecorator }, form, adyenAuditState } = this.props;
+    const { defaultOptions } = this.state;
     const formLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 12 }
@@ -81,7 +94,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
               {getFieldDecorator('shareholderType', {
                 initialValue: "0"
               })(
-              <Select onChange={this.validateJobTitle} disabled={adyenAuditState === 0}>
+              <Select disabled={adyenAuditState === 0}>
                 <Option value="0">Owner</Option>
                 <Option value="1">Controller</Option>
               </Select>
@@ -109,6 +122,27 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
+            <FormItem label="Gender">
+              {getFieldDecorator('gender', {
+                rules: [{ required: true, message: 'Please select gender' }],
+              })(
+                <Select disabled={adyenAuditState === 0}>
+                  <Option value="1">Female</Option>
+                  <Option value="0">Male</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Date of birth">
+              {getFieldDecorator('dateOfBirth', {
+                rules: [{ required: true, message: 'Please select birthday' }],
+              })(
+                <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
             <FormItem label="Email">
               {getFieldDecorator('email', {
                 rules:[
@@ -130,16 +164,71 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>Only needed if shareholder type is controller</div>}>
+            <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}}>
               {getFieldDecorator('jobTitle', {
-                rules: [{ required: form.getFieldValue('shareholderType') === "1", message: 'Please input job title' }]
+                rules: [{ required: true, message: 'Please input job title' }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
+            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>The Store address should include both street name and house number. E.g. City 35</div>}>
+              {getFieldDecorator('address1', {
+                rules: [{ required: true, message: 'Please input address' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Postcode">
+              {getFieldDecorator('postCode', {
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="City" required>
+              {getFieldDecorator('cityId', {
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      if (!value || !value.key) {
+                        callback('Please select city');
+                      }
+                      callback();
+                    }
+                  }
+                ],
+                initialValue: {key:'',value:'',label:''}
+              })(
+                <DebounceSelect
+                  disabled={adyenAuditState === 0}
+                  size="default"
+                  placeholder="Select city"
+                  fetchOptions={fetchUserList}
+                  defaultOptions={defaultOptions}
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Province">
+              {getFieldDecorator('province', {
+                rules: [{ required: true, message: 'Please input province' }],
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={24}>
+            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>
@@ -241,6 +330,27 @@ class Signatories extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
+            <FormItem label="Gender">
+              {getFieldDecorator('gender', {
+                rules: [{ required: true, message: 'Please select gender' }],
+              })(
+                <Select disabled={adyenAuditState === 0}>
+                  <Option value="1">Female</Option>
+                  <Option value="0">Male</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Date of birth">
+              {getFieldDecorator('dateOfBirth', {
+                rules: [{ required: true, message: 'Please select birthday' }],
+              })(
+                <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
             <FormItem label="Email">
               {getFieldDecorator('email', {
                 rules:[
@@ -271,7 +381,7 @@ class Signatories extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>including street name and number</div>}>
+            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>The Store address should include both street name and house number. E.g. City 35</div>}>
               {getFieldDecorator('address1', {
                 rules: [{ required: true, message: 'Please input address' }]
               })(
@@ -325,17 +435,8 @@ class Signatories extends React.Component<RepreFormProps, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={12}>
-            <FormItem label="Date of birth">
-              {getFieldDecorator('dateOfBirth', {
-                rules: [{ required: true, message: 'Please select birthday' }],
-              })(
-                <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
-              )}
-            </FormItem>
-          </Col>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
+            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>

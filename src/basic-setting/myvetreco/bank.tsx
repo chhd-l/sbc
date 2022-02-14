@@ -43,6 +43,8 @@ class BankInformation extends React.Component<BankFormProps, any> {
         if (!errors) {
           resolve({
             ...values,
+            cityId: values.cityId.key,
+            city: values.cityId.label,
             documentType: 'BANK_STATEMENT',
             supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument, 'BANK_STATEMENT')
           });

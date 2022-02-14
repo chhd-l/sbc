@@ -154,6 +154,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           //初始化bank information
           this.bankForm.props.form.setFieldsValue({
             ...(storeInfoResp.bankRequest ?? {}),
+            cityId: { key: storeInfoResp.bankRequest?.cityId ?? '', value: storeInfoResp.bankRequest?.cityId ?? '', label: storeInfoResp.bankRequest.city ?? '' },
             supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.bankRequest?.supportedDocument, 'BANK_STATEMENT')
           });
           this.bankForm.setDefaultOptions();

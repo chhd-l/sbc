@@ -64,6 +64,8 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
         if (!errors) {
           resolve({
             ...values,
+            cityId: values.cityId.key,
+            city: values.cityId.label,
             documentType: values.supportedDocument.documentType,
             supportedDocument: SupportedDocumentUtil.mapUploadObjToProps(values.supportedDocument)
           });

@@ -407,8 +407,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>}
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="House number" name="houseNumber">
-                {getFieldDecorator('houseNumber', {
+              <FormItem label="House number" name="houseNumberOrName">
+                {getFieldDecorator('houseNumberOrName', {
                   initialValue: ''
                 })(
                   <Input size="large" />

@@ -48,6 +48,7 @@ export function exportPriceList(params = {}) {
       const token = (window as any).token;
       if (token) {
         let result = JSON.stringify({ ...params, token: token });
+        console.log('export param:', result);
         let encrypted = base64.urlEncode(result);
         // 新窗口下载
         const exportHref = Const.HOST + `/goods/price/export/${encrypted}`;

@@ -2468,8 +2468,8 @@ export default class AppStore extends Store {
             keywords = null
             break;
           case 123457916: // uk
-            title = '{name} – {tagging} | Royal Canin Shop';
-            description = ' Buy Royal Canin {name} food, {subtitle} Place an order on the Royal Canin online store today!'
+            title = '{name} – {sales category} | Royal Canin Shop';
+            description = 'Buy Royal Canin {name} food, {subtitle} Place an order on the Royal Canin online store today!'
             break;
           default:
             title = '{name} | Royal Canin Shop';

@@ -252,7 +252,9 @@ class Printer {
     // this.$printer.addText(this.makePrintString(this.$lineCharsLength, 'Change', currency + change) + '\n');
 
     // 换行 接下一次打印有一个换行
-    this.$printer.addText('\n\n');
+    this.$printer.addText('\n');
+    this.$printer.addCut(this.$printer.CUT_FEED);
+
 
     // 打印
     this.$printer.send();

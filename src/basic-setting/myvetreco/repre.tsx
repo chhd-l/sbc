@@ -180,7 +180,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
               {getFieldDecorator('province', {
                 rules: [{ required: true, message: 'Please input province' }]
               })(
-                <Input disabled={adyenAuditState === 0} />
+                <Input disabled={adyenAuditState === 0} maxLength={3} />
               )}
             </FormItem>
           </Col>
@@ -397,7 +397,7 @@ class Signatories extends React.Component<RepreFormProps, any> {
               {getFieldDecorator('province', {
                 rules: [{ required: true, message: 'Please input province' }],
               })(
-                <Input disabled={adyenAuditState === 0} />
+                <Input disabled={adyenAuditState === 0} maxLength={3} />
               )}
             </FormItem>
           </Col>

@@ -2471,6 +2471,10 @@ export default class AppStore extends Store {
             title = '{name} – {sales category} | Royal Canin Shop';
             description = 'Buy Royal Canin {name} food, {subtitle} Place an order on the Royal Canin online store today!'
             break;
+            case 123457915: // se
+            title = ' {Product Name} – {sales category}| Royal Canin Shop';
+            description = ' Köp Royal Canin {Product Name} djurmat, {subtitle}. Gör en beställning på Royal Canin onlinebutik idag!'
+            break;
           default:
             title = '{name} | Royal Canin Shop';
             description = '{description}';

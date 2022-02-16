@@ -11,7 +11,21 @@ import ImageActor from './actor/image-actor';
 import SeoActor from './actor/seo-actor';
 import { RCi18n } from 'qmkit';
 
-import { getSeo, editSeo, getCateList, getSignCateList, addCate, deleteCate, editCate, chkChild, chkGoods, dragSort, getCateIdsPropDetail, getImgCates, fetchImages } from './webapi';
+import {
+  getSeo,
+  editSeo,
+  getCateList,
+  getSignCateList,
+  addCate,
+  deleteCate,
+  editCate,
+  chkChild,
+  chkGoods,
+  dragSort,
+  getCateIdsPropDetail,
+  getImgCates,
+  fetchImages
+} from './webapi';
 import { getDictionaryByType } from '@/shop/webapi';
 
 export default class AppStore extends Store {
@@ -114,7 +128,7 @@ export default class AppStore extends Store {
       formDataJs.cateImg = JSON.stringify(imagesJs);
     }
 
-    if (Array.isArray(formDataJs.period) && formDataJs.period.length){
+    if (Array.isArray(formDataJs.period) && formDataJs.period.length) {
       formDataJs.periodBeginTime = formDataJs.period[0].format(Const.TIME_FORMAT);
       formDataJs.periodEndTime = formDataJs.period[1].format(Const.TIME_FORMAT);
       delete formDataJs.period;
@@ -309,7 +323,11 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = (goods: IMap) => {
-    if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
+    if (
+      goods.get('saleType') !== undefined &&
+      goods.get('saleType') === 1 &&
+      this.state().getIn(['goods', 'priceType']) === 1
+    ) {
       this.editPriceSetting('priceOpt', 2);
     }
     this.dispatch('cateActor: editGoods', goods);
@@ -357,7 +375,10 @@ export default class AppStore extends Store {
         this.dispatch('modal: imgCates', fromJS(cateList.res.context.storeResourceCateVOList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
-          this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
+          this.dispatch(
+            'modal: chooseImgs',
+            fromJS(imageList.res.context).get('content').slice(0, successCount)
+          );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 0 }));
@@ -410,10 +431,14 @@ export default class AppStore extends Store {
     let cateIdList = new Array();
     if (cateId) {
       cateIdList.push(cateId);
-      const secondCateList = cateListIm && cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
+      const secondCateList =
+        cateListIm && cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
         cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
-        const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
+        const thirdCateList = cateListIm.filter(
+          (item) =>
+            secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0
+        ); //找第三层子节点
         if (thirdCateList && thirdCateList.size > 0) {
           cateIdList = cateIdList.concat(thirdCateList.map((item) => item.get('cateId')).toJS());
         }
@@ -549,9 +574,9 @@ export default class AppStore extends Store {
       if (loginInfo) {
         switch (loginInfo.storeId) {
           case 123457910: //"美国"
-            title = 'Royal Canin | {name}s'
-            description = null
-            keywords = null
+            title = 'Royal Canin | {name}s';
+            description = null;
+            keywords = null;
             break;
           // case 123457911: //"土耳其"
           //   title = '{name} {subtitle} | Royal Canin Türkiye';
@@ -565,8 +590,13 @@ export default class AppStore extends Store {
           //   break;
           case 123456858: //墨西哥
             title = 'TIENDA OFICIAL DE PRODUCTOS VETERINARIOS ROYAL CANIN MEXICO';
-            description = null
-            keywords = null
+            description = null;
+            keywords = null;
+            break;
+          case 123457915: // se
+            title = ' {Product Name} – {sales category}| Royal Canin Shop';
+            description =
+              ' Köp Royal Canin {Product Name} djurmat, {subtitle}. Gör en beställning på Royal Canin onlinebutik idag!';
             break;
           default:
             title = 'Royal Canin | {name}s';
@@ -577,9 +607,18 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
-          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : '',
-          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : '',
+          titleSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.titleSource
+              : title,
+          metaKeywordsSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.metaKeywordsSource
+              : '',
+          metaDescriptionSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.metaDescriptionSource
+              : '',
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );

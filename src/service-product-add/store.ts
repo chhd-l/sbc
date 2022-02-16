@@ -66,7 +66,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
-let _tempGoodsDescriptionDetailList:any={}
+let _tempGoodsDescriptionDetailList: any = {};
 export default class AppStore extends Store {
   constructor(props: IOptions) {
     super(props);
@@ -76,7 +76,21 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new GoodsActor(), new ImageActor(), new SpecActor(), new PriceActor(), new UserActor(), new FormActor(), new BrandActor(), new CateActor(), new ModalActor(), new PropActor(), new FreightActor(), new relatedActor(), new LoadingActor()];
+    return [
+      new GoodsActor(),
+      new ImageActor(),
+      new SpecActor(),
+      new PriceActor(),
+      new UserActor(),
+      new FormActor(),
+      new BrandActor(),
+      new CateActor(),
+      new ModalActor(),
+      new PropActor(),
+      new FreightActor(),
+      new relatedActor(),
+      new LoadingActor()
+    ];
   }
 
   /**
@@ -106,55 +120,124 @@ export default class AppStore extends Store {
 
     let editResource: any;
     let editProductResource: any;
-    await Promise.all([getPreEditProductResource(params), getEditProductResource(resource)]).then((results) => {
-      if ((results[0].res as any).code === Const.SUCCESS_CODE) {
-        this.transaction(() => {
-          this.dispatch('goodsActor: initCateList', fromJS((results[0].res as any).context.cateList));
-          this.dispatch('goodsActor:getGoodsCate', fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList));
-          this.dispatch('goodsActor: initBrandList', fromJS((results[0].res as any).context.brandList));
-          this.dispatch('formActor:check', fromJS((results[0].res as any).context.distributionCheck));
-          this.dispatch('goodsActor:flashsaleGoods', fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList));
-          this.dispatch('goodsActor: setGoodsDetailTab', fromJS((results[0].res as any).context.querySysDictionary));
+    await Promise.all([getPreEditProductResource(params), getEditProductResource(resource)]).then(
+      (results) => {
+        if ((results[0].res as any).code === Const.SUCCESS_CODE) {
+          this.transaction(() => {
+            this.dispatch(
+              'goodsActor: initCateList',
+              fromJS((results[0].res as any).context.cateList)
+            );
+            this.dispatch(
+              'goodsActor:getGoodsCate',
+              fromJS((results[0].res as any).context.storeCateByCondition.storeCateResponseVOList)
+            );
+            this.dispatch(
+              'goodsActor: initBrandList',
+              fromJS((results[0].res as any).context.brandList)
+            );
+            this.dispatch(
+              'formActor:check',
+              fromJS((results[0].res as any).context.distributionCheck)
+            );
+            this.dispatch(
+              'goodsActor:flashsaleGoods',
+              fromJS((results[0].res as any).context.flashsalegoodsList.flashSaleGoodsVOList)
+            );
+            this.dispatch(
+              'goodsActor: setGoodsDetailTab',
+              fromJS((results[0].res as any).context.querySysDictionary)
+            );
 
-          this.dispatch('goodsActor:purchaseTypeList', (results[0].res as any).context.purchase_type.sysDictionaryPage.content);
-          this.dispatch('goodsActor:frequencyList', {
-            autoShip: {
-              dayList: (results[0].res as any).context.frequency_day ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content : [],
-              weekList: (results[0].res as any).context.frequency_week ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content : [],
-              monthList: (results[0].res as any).context.frequency_month ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content : [],
-            },
-            club: {
-              dayClubList: (results[0].res as any).context.frequency_day_club ? (results[0].res as any).context.frequency_day_club.sysDictionaryPage.content : [],
-              weekClubList: (results[0].res as any).context.frequency_week_club ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content : [],
-              monthClubList: (results[0].res as any).context.frequency_month_club ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content : []
-            },
-            individual: {
-              dayIndividualList: (results[0].res as any).context.frequency_day_individual ? (results[0].res as any).context.frequency_day_individual.sysDictionaryPage.content : [],
-              weekIndividualList: (results[0].res as any).context.frequency_week_individual ? (results[0].res as any).context.frequency_week_individual.sysDictionaryPage.content : [],
-              monthIndividualList: (results[0].res as any).context.frequency_month_individual ? (results[0].res as any).context.frequency_month_individual.sysDictionaryPage.content : []
-            }
+            this.dispatch(
+              'goodsActor:purchaseTypeList',
+              (results[0].res as any).context.purchase_type.sysDictionaryPage.content
+            );
+            this.dispatch('goodsActor:frequencyList', {
+              autoShip: {
+                dayList: (results[0].res as any).context.frequency_day
+                  ? (results[0].res as any).context.frequency_day.sysDictionaryPage.content
+                  : [],
+                weekList: (results[0].res as any).context.frequency_week
+                  ? (results[0].res as any).context.frequency_week.sysDictionaryPage.content
+                  : [],
+                monthList: (results[0].res as any).context.frequency_month
+                  ? (results[0].res as any).context.frequency_month.sysDictionaryPage.content
+                  : []
+              },
+              club: {
+                dayClubList: (results[0].res as any).context.frequency_day_club
+                  ? (results[0].res as any).context.frequency_day_club.sysDictionaryPage.content
+                  : [],
+                weekClubList: (results[0].res as any).context.frequency_week_club
+                  ? (results[0].res as any).context.frequency_week_club.sysDictionaryPage.content
+                  : [],
+                monthClubList: (results[0].res as any).context.frequency_month_club
+                  ? (results[0].res as any).context.frequency_month_club.sysDictionaryPage.content
+                  : []
+              },
+              individual: {
+                dayIndividualList: (results[0].res as any).context.frequency_day_individual
+                  ? (results[0].res as any).context.frequency_day_individual.sysDictionaryPage
+                      .content
+                  : [],
+                weekIndividualList: (results[0].res as any).context.frequency_week_individual
+                  ? (results[0].res as any).context.frequency_week_individual.sysDictionaryPage
+                      .content
+                  : [],
+                monthIndividualList: (results[0].res as any).context.frequency_month_individual
+                  ? (results[0].res as any).context.frequency_month_individual.sysDictionaryPage
+                      .content
+                  : []
+              }
+            });
+
+            this.dispatch(
+              'related:relatedList',
+              fromJS(
+                (results[0].res as any).context.goodsRelation.relationGoods
+                  ? (results[0].res as any).context.goodsRelation.relationGoods
+                  : []
+              )
+            );
+            this.dispatch(
+              'goodsActor:filtersTotal',
+              fromJS((results[0].res as any).context.filtersTotal)
+            );
+            this.dispatch(
+              'goodsActor:taggingTotal',
+              fromJS((results[0].res as any).context.taggingTotal)
+            );
+            this.dispatch(
+              'goodsActor:resourceCates',
+              (results[0].res as any).context.resourceCates
+            );
+            this.dispatch(
+              'goodsActor:serviceTypeList',
+              (results[0].res as any).context.service_type?.goodsDictionaryPage?.content ?? []
+            );
+            this.dispatch(
+              'goodsActor:expertTypeList',
+              (results[0].res as any).context.expert_type?.goodsDictionaryPage?.content ?? []
+            );
+
+            this.dispatch('related:goodsId', goodsId);
+            this.dispatch('goodsActor:getGoodsId', goodsId);
           });
-
-          this.dispatch('related:relatedList', fromJS((results[0].res as any).context.goodsRelation.relationGoods ? (results[0].res as any).context.goodsRelation.relationGoods : []));
-          this.dispatch('goodsActor:filtersTotal', fromJS((results[0].res as any).context.filtersTotal));
-          this.dispatch('goodsActor:taggingTotal', fromJS((results[0].res as any).context.taggingTotal));
-          this.dispatch('goodsActor:resourceCates', (results[0].res as any).context.resourceCates);
-          this.dispatch('goodsActor:serviceTypeList',(results[0].res as any).context.service_type?.goodsDictionaryPage?.content ?? []);
-          this.dispatch('goodsActor:expertTypeList', (results[0].res as any).context.expert_type?.goodsDictionaryPage?.content ?? []);
-
-          this.dispatch('related:goodsId', goodsId);
-          this.dispatch('goodsActor:getGoodsId', goodsId);
-        });
-      } else {
-        this.dispatch('loading:end');
+        } else {
+          this.dispatch('loading:end');
+        }
+        editProductResource = results[1].res as any;
       }
-      editProductResource = results[1].res as any;
-    });
+    );
 
     editResource = editProductResource.context;
     // 如果是编辑则判断是否有企业购商品
     if (goodsId) {
-      this.dispatch('formActor:enterpriseFlag', fromJS(editResource.enterpriseCheck).get('checkFlag'));
+      this.dispatch(
+        'formActor:enterpriseFlag',
+        fromJS(editResource.enterpriseCheck).get('checkFlag')
+      );
     } else {
       this.dispatch('formActor:enterpriseFlag', false);
     }
@@ -213,7 +296,7 @@ export default class AppStore extends Store {
         }
       });
       this.dispatch('goodsActor: goodsTabs', tabs);
-    
+
       //新增产品，初始化价格为0
       const goodsList = this.state().get('goodsList');
       if (goodsList) {
@@ -243,7 +326,10 @@ export default class AppStore extends Store {
   initServiceSpec = () => {
     const expertTypeList = this.state().get('expertTypeList');
     //新增service产品，设置默认spec
-    [{ id: 100001, name: 'Duration' }, { id: 100002, name: 'Expert type' }].forEach(item => {
+    [
+      { id: 100001, name: 'Duration' },
+      { id: 100002, name: 'Expert type' }
+    ].forEach((item) => {
       this.dispatch('goodsSpecActor: addSpec', {
         promotions: this.state().get('goods'),
         id: item.id,
@@ -289,15 +375,17 @@ export default class AppStore extends Store {
       specId: 100002,
       priceOpt: 2,
       mtkPrice: 0,
-      specValues: fromJS(expertTypeList.map(expertItem => ({
-        goodsPromotions: 'autoship',
-        isMock: true,
-        specDetailId: 2000000 + parseInt(expertItem.id),
-        mockSpecDetailId: 2000000 + parseInt(expertItem.id),
-        detailName: expertItem.name,
-        subscriptionStatus: 1,
-        editable: false
-      })))
+      specValues: fromJS(
+        expertTypeList.map((expertItem) => ({
+          goodsPromotions: 'autoship',
+          isMock: true,
+          specDetailId: 2000000 + parseInt(expertItem.id),
+          mockSpecDetailId: 2000000 + parseInt(expertItem.id),
+          detailName: expertItem.name,
+          subscriptionStatus: 1,
+          editable: false
+        }))
+      )
     });
   };
 
@@ -337,7 +425,10 @@ export default class AppStore extends Store {
         this.dispatch('cateActor: init', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
-          this.dispatch('modal: chooseVideos', fromJS(videoList.res.context).get('content').slice(0, successCount));
+          this.dispatch(
+            'modal: chooseVideos',
+            fromJS(videoList.res.context).get('content').slice(0, successCount)
+          );
         }
         this.dispatch('modal: videos', fromJS(videoList.res.context)); //初始化视频分页列表
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 1 }));
@@ -382,7 +473,10 @@ export default class AppStore extends Store {
         this.dispatch('modal: imgCates', fromJS(cateList));
         if (successCount > 0) {
           //表示上传成功之后需要选中这些图片
-          this.dispatch('modal: chooseImgs', fromJS(imageList.res.context).get('content').slice(0, successCount));
+          this.dispatch(
+            'modal: chooseImgs',
+            fromJS(imageList.res.context).get('content').slice(0, successCount)
+          );
         }
         this.dispatch('modal: imgs', fromJS(imageList.res.context));
         this.dispatch('modal: page', fromJS({ currentPage: pageNum + 1, resourceType: 0 }));
@@ -434,18 +528,18 @@ export default class AppStore extends Store {
     }
     let productFilter = tmpContext.filterList
       ? tmpContext.filterList.map((x) => {
-        return {
-          filterId: x.filterId,
-          filterValueId: x.id
-        };
-      })
+          return {
+            filterId: x.filterId,
+            filterValueId: x.id
+          };
+        })
       : [];
     this.onProductFilter(productFilter);
 
     let taggingIds = tmpContext.taggingList
       ? tmpContext.taggingList.map((x) => {
-        return { taggingId: x.id };
-      })
+          return { taggingId: x.id };
+        })
       : [];
 
     this.onGoodsTaggingRelList(taggingIds);
@@ -480,14 +574,17 @@ export default class AppStore extends Store {
       // 商品基本信息
       let goods = goodsDetail.get('goods');
       //设置编辑器是否为空数组，是空数组，根据cateId去查找，不为空，直接展示
-      if (!tmpContext.goodsDescriptionDetailList || tmpContext.goodsDescriptionDetailList.length === 0) {
+      if (
+        !tmpContext.goodsDescriptionDetailList ||
+        tmpContext.goodsDescriptionDetailList.length === 0
+      ) {
         const cateId = goods.get('cateId');
         this.changeDescriptionTab(cateId);
       } else {
-        _tempGoodsDescriptionDetailList={
-          _cateId:goods.get('cateId'),
-          _list:tmpContext.goodsDescriptionDetailList
-        }
+        _tempGoodsDescriptionDetailList = {
+          _cateId: goods.get('cateId'),
+          _list: tmpContext.goodsDescriptionDetailList
+        };
         this.editEditorContent(tmpContext.goodsDescriptionDetailList);
       }
 
@@ -510,7 +607,11 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: editGoods', goods);
 
       //this.dispatch('goodsActor: goodsDetailTabContentOld', goods.get('goodsDetail'));
-      this.dispatch('goodsSpecActor: editSpecSingleFlag', { specSingleFlag: goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0, promotions: goodsDetail.getIn(['goods', 'promotions']), subscriptionStatus: goodsDetail.getIn(['goods', 'subscriptionStatus'])});
+      this.dispatch('goodsSpecActor: editSpecSingleFlag', {
+        specSingleFlag: goodsDetail.getIn(['goods', 'moreSpecFlag']) == 0,
+        promotions: goodsDetail.getIn(['goods', 'promotions']),
+        subscriptionStatus: goodsDetail.getIn(['goods', 'subscriptionStatus'])
+      });
 
       // 商品图片
       let images = goodsDetail.get('images').map((image, index) => {
@@ -552,7 +653,10 @@ export default class AppStore extends Store {
 
       // this.dispatch('goodsActor: goodsTabs', tabs);
       // 属性信息
-      this.showGoodsPropDetail(goodsDetail.getIn(['goods', 'cateId']), goodsDetail.get('goodsPropDetailRels'));
+      this.showGoodsPropDetail(
+        goodsDetail.getIn(['goods', 'cateId']),
+        goodsDetail.get('goodsPropDetailRels')
+      );
       // 是否为多规格
       if (goodsDetail.getIn(['goods', 'moreSpecFlag']) == 1) {
         // 规格，按照id升序排列
@@ -564,7 +668,11 @@ export default class AppStore extends Store {
           // 规格值列表，按照id升序排列
           const specValues = goodsSpecDetails
             .filter((detailItem) => detailItem.get('specId') == item.get('specId'))
-            .map((detailItem) => detailItem.set('isMock', false).set('goodsPromotions', goods.get('promotions') || 'autoship'))
+            .map((detailItem) =>
+              detailItem
+                .set('isMock', false)
+                .set('goodsPromotions', goods.get('promotions') || 'autoship')
+            )
             .sort((o1, o2) => {
               return o1.get('specDetailId') - o2.get('specDetailId');
             });
@@ -573,18 +681,24 @@ export default class AppStore extends Store {
 
         // 商品列表
         let basePriceType;
-        
+
         let goodsList = goodsDetail.get('goodsInfos').map((item, index) => {
           // 获取规格值并排序
           const mockSpecDetailIds = item.get('mockSpecDetailIds').sort();
           basePriceType = item.get('basePriceType') ? Number(item.get('basePriceType')) : 0;
           item.get('mockSpecIds').forEach((specId) => {
             // 规格值保存的顺序可能不是按照规格id的顺序，多个sku的规格值列表顺序是乱序，因此此处不能按照顺序获取规格值。只能从规格规格值对应关系里面去捞一遍。
-            const detail = goodsSpecDetails.find((detail) => detail.get('specId') == specId && item.get('mockSpecDetailIds').contains(detail.get('specDetailId')));
+            const detail = goodsSpecDetails.find(
+              (detail) =>
+                detail.get('specId') == specId &&
+                item.get('mockSpecDetailIds').contains(detail.get('specDetailId'))
+            );
 
-            if(detail) {
+            if (detail) {
               const detailId = detail.get('specDetailId');
-              const goodsSpecDetail = goodsSpecDetails.find((d) => d.get('specDetailId') == detailId);
+              const goodsSpecDetail = goodsSpecDetails.find(
+                (d) => d.get('specDetailId') == detailId
+              );
               item = item.set('specId-' + specId, goodsSpecDetail.get('detailName'));
               item = item.set('specDetailId-' + specId, goodsSpecDetail.get('mockSpecDetailId'));
             }
@@ -655,7 +769,11 @@ export default class AppStore extends Store {
    */
   _getPriceInfo = async (goodsDetail) => {
     // 价格
-    const priceOpt = goodsDetail.getIn(['goods', 'saleType']) === 1 && goodsDetail.getIn(['goods', 'priceType']) === 1 ? 2 : goodsDetail.getIn(['goods', 'priceType']);
+    const priceOpt =
+      goodsDetail.getIn(['goods', 'saleType']) === 1 &&
+      goodsDetail.getIn(['goods', 'priceType']) === 1
+        ? 2
+        : goodsDetail.getIn(['goods', 'priceType']);
     const openUserPrice = goodsDetail.getIn(['goods', 'customFlag']) == 1;
     const levelDiscountFlag = goodsDetail.getIn(['goods', 'levelDiscountFlag']) == 1;
     this.dispatch('priceActor: editPriceSetting', {
@@ -708,7 +826,9 @@ export default class AppStore extends Store {
 
         let userPriceMap = OrderedMap();
         goodsDetail.get('goodsCustomerPrices').forEach((item) => {
-          const user = customerList.find((userItem) => userItem.get('customerId') == item.get('customerId'));
+          const user = customerList.find(
+            (userItem) => userItem.get('customerId') == item.get('customerId')
+          );
           if (user != null) {
             item = item.set('userLevelName', user.get('customerLevelName'));
             item = item.set('userName', user.get('customerName'));
@@ -737,11 +857,18 @@ export default class AppStore extends Store {
    * 修改商品基本信息
    */
   editGoods = async (goods: IMap) => {
-    if (goods.get('saleType') !== undefined && goods.get('saleType') === 1 && this.state().getIn(['goods', 'priceType']) === 1) {
+    if (
+      goods.get('saleType') !== undefined &&
+      goods.get('saleType') === 1 &&
+      this.state().getIn(['goods', 'priceType']) === 1
+    ) {
       this.editPriceSetting('priceOpt', 2);
     }
     if (goods.get('goodsNo')) {
-      goods = goods.set('internalGoodsNo', localStorage.getItem('storeCode') + '_' + goods.get('goodsNo'));
+      goods = goods.set(
+        'internalGoodsNo',
+        localStorage.getItem('storeCode') + '_' + goods.get('goodsNo')
+      );
     }
 
     if (Number(goods.get('subscriptionStatus')) === 0) {
@@ -768,8 +895,14 @@ export default class AppStore extends Store {
     goodsInfos.forEach((item) => {
       specValue = item['specId-' + specId];
       if (specValue) {
-        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
-        const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue))
+          ? '0'
+          : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+        const subscriptionBasePrice = isNaN(
+          parseFloat(item.subscriptionPrice) / parseFloat(specValue)
+        )
+          ? '0'
+          : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
         this.editGoodsItem(item.id, 'basePrice', basePrice);
         this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
       } else {
@@ -836,8 +969,14 @@ export default class AppStore extends Store {
     goodsInfo.forEach((item) => {
       const specValue = item.goodsInfoWeight;
       if (specValue) {
-        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
-        const subscriptionBasePrice = isNaN(parseFloat(item.subscriptionPrice) / parseFloat(specValue)) ? '0' : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
+        const basePrice = isNaN(parseFloat(item.marketPrice) / parseFloat(specValue))
+          ? '0'
+          : (parseFloat(item.marketPrice) / parseFloat(specValue)).toFixed(2);
+        const subscriptionBasePrice = isNaN(
+          parseFloat(item.subscriptionPrice) / parseFloat(specValue)
+        )
+          ? '0'
+          : (parseFloat(item.subscriptionPrice) / parseFloat(specValue)).toFixed(2);
         this.editGoodsItem(item.id, 'basePrice', basePrice);
         this.editGoodsItem(item.id, 'subscriptionBasePrice', subscriptionBasePrice);
       } else {
@@ -858,7 +997,11 @@ export default class AppStore extends Store {
    */
   editSpecSingleFlag = (specSingleFlag: boolean) => {
     const goods = this.state().get('goods');
-    this.dispatch('goodsSpecActor: editSpecSingleFlag', { specSingleFlag, promotions: goods.get('promotions'), subscriptionStatus: goods.get('subscriptionStatus') });
+    this.dispatch('goodsSpecActor: editSpecSingleFlag', {
+      specSingleFlag,
+      promotions: goods.get('promotions'),
+      subscriptionStatus: goods.get('subscriptionStatus')
+    });
   };
 
   /**
@@ -886,9 +1029,14 @@ export default class AppStore extends Store {
    */
   addSpec = () => {
     //console.log(this.state().get('goods')&&this.state().get('goods').toJS(),112);
-    this.dispatch('goodsSpecActor: addSpec', { promotions: this.state().get('goods'), id: 0, name: '', editable: true });
+    this.dispatch('goodsSpecActor: addSpec', {
+      promotions: this.state().get('goods'),
+      id: 0,
+      name: '',
+      editable: true
+    });
   };
-  
+
   updateSpecValues = (specId, key, value) => {
     this.dispatch('goodsSpecActor: updateSpecValues', { specId, key, value });
   };
@@ -1071,12 +1219,12 @@ export default class AppStore extends Store {
     let valid = true;
     // 校验表单
     this.state()
-        .get('goodsForm')
-        .validateFieldsAndScroll(null, (errs) => {
-          valid = valid && !errs;
-          if (!errs) {
-          }
-        });
+      .get('goodsForm')
+      .validateFieldsAndScroll(null, (errs) => {
+        valid = valid && !errs;
+        if (!errs) {
+        }
+      });
     // this.state()
     //   .get('skuForm')
     //   .validateFieldsAndScroll(null, (errs) => {
@@ -1086,30 +1234,36 @@ export default class AppStore extends Store {
     //   });
     if (this.state().get('specForm') && this.state().get('specForm').validateFieldsAndScroll) {
       this.state()
-          .get('specForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('specForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
-    if (this.state().get('logisticsForm') && this.state().get('logisticsForm').validateFieldsAndScroll) {
+    if (
+      this.state().get('logisticsForm') &&
+      this.state().get('logisticsForm').validateFieldsAndScroll
+    ) {
       this.state()
-          .get('logisticsForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('logisticsForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
-    if (this.state().get('attributesForm') && this.state().get('attributesForm').validateFieldsAndScroll) {
+    if (
+      this.state().get('attributesForm') &&
+      this.state().get('attributesForm').validateFieldsAndScroll
+    ) {
       this.state()
-          .get('attributesForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('attributesForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
 
     // let a = this.state().get('goodsList').filter((item)=>item.get('subscriptionStatus') == 0)
@@ -1128,7 +1282,6 @@ export default class AppStore extends Store {
     //   return;
     // }
 
-
     // let c = this.state().get('goodsList').filter((item)=>item.get('promotions') == 'autoship')
     // if ( this.state().get('goodsList').toJS().length>0 && (this.state().get('goodsList').toJS().length === c.toJS().length) &&
     //   this.state().get('goods').get('promotions') == 'club' ) {
@@ -1143,24 +1296,27 @@ export default class AppStore extends Store {
   }
 
   checkGoodsStatus() {
-    const { subscriptionStatus, addedFlag, promotions} = this.state().get('goods').toJS();
+    const { subscriptionStatus, addedFlag, promotions } = this.state().get('goods').toJS();
     const goodsList = this.state().get('goodsList').toJS();
 
     //至少要有一个上架状态的sku为Y
-    if(subscriptionStatus === 1) {
-      if(!goodsList.some(item => item.subscriptionStatus === 1) || goodsList.every(item => item.subscriptionStatus === 0)) {
-        message.error(RCi18n({id:'Product.subscriptionstatusinSPUisY'}));
+    if (subscriptionStatus === 1) {
+      if (
+        !goodsList.some((item) => item.subscriptionStatus === 1) ||
+        goodsList.every((item) => item.subscriptionStatus === 0)
+      ) {
+        message.error(RCi18n({ id: 'Product.subscriptionstatusinSPUisY' }));
         return false;
       }
     }
 
-    if ((addedFlag == 1 || addedFlag == 2) && goodsList.every(item => item.addedFlag == 0)){
-      message.error(RCi18n({id:'Product.shelvesstatusinSPUisY'}));
+    if ((addedFlag == 1 || addedFlag == 2) && goodsList.every((item) => item.addedFlag == 0)) {
+      message.error(RCi18n({ id: 'Product.shelvesstatusinSPUisY' }));
       return false;
     }
 
-    if(promotions === 'club' && goodsList.every(item => item.promotions === 'autoship')) {
-      message.error(RCi18n({id:'Product.subscriptiontypeinSPUisclub'}));
+    if (promotions === 'club' && goodsList.every((item) => item.promotions === 'autoship')) {
+      message.error(RCi18n({ id: 'Product.subscriptiontypeinSPUisclub' }));
       return false;
     }
 
@@ -1172,7 +1328,10 @@ export default class AppStore extends Store {
    */
   beSureVideos = () => {
     const chooseVideo = this.state().get('chooseVideos');
-    this.dispatch('imageActor: editVideo', List.isList(chooseVideo) ? chooseVideo.get(0) : chooseVideo);
+    this.dispatch(
+      'imageActor: editVideo',
+      List.isList(chooseVideo) ? chooseVideo.get(0) : chooseVideo
+    );
   };
 
   /**
@@ -1183,32 +1342,41 @@ export default class AppStore extends Store {
   _validPriceForms() {
     let valid = true;
     // 校验表单
-    if (this.state().get('levelPriceForm') && this.state().get('levelPriceForm').validateFieldsAndScroll) {
+    if (
+      this.state().get('levelPriceForm') &&
+      this.state().get('levelPriceForm').validateFieldsAndScroll
+    ) {
       this.state()
-          .get('levelPriceForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('levelPriceForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
-    if (this.state().get('userPriceForm') && this.state().get('userPriceForm').validateFieldsAndScroll) {
+    if (
+      this.state().get('userPriceForm') &&
+      this.state().get('userPriceForm').validateFieldsAndScroll
+    ) {
       this.state()
-          .get('userPriceForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('userPriceForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
-    if (this.state().get('areaPriceForm') && this.state().get('areaPriceForm').validateFieldsAndScroll) {
+    if (
+      this.state().get('areaPriceForm') &&
+      this.state().get('areaPriceForm').validateFieldsAndScroll
+    ) {
       this.state()
-          .get('areaPriceForm')
-          .validateFieldsAndScroll(null, (errs) => {
-            valid = valid && !errs;
-            if (!errs) {
-            }
-          });
+        .get('areaPriceForm')
+        .validateFieldsAndScroll(null, (errs) => {
+          valid = valid && !errs;
+          if (!errs) {
+          }
+        });
     }
 
     return valid;
@@ -1234,7 +1402,6 @@ export default class AppStore extends Store {
       //     }
       //   }
 
-
       //   if (this.state().get('goods').get('saleableFlag') != 0) {
       //     if(item.get('subscriptionPrice') == undefined && item.get('subscriptionStatus') != 0) {
       //       tip = 2;
@@ -1248,7 +1415,6 @@ export default class AppStore extends Store {
       //       }
       //     }
       //   }
-
 
       //   /*if (!(item.get('marketPrice') || item.get('marketPrice') == 0)) {
       //     valid = false;
@@ -1283,12 +1449,21 @@ export default class AppStore extends Store {
       //    }*/
       // });
       goodsList.forEach((item) => {
-        if (item.get('marketPrice') === '' || item.get('marketPrice') === null || item.get('marketPrice') === undefined) {
+        if (
+          item.get('marketPrice') === '' ||
+          item.get('marketPrice') === null ||
+          item.get('marketPrice') === undefined
+        ) {
           tip = 1;
           valid = false;
           return;
         }
-        if (item.get('subscriptionStatus') === 1 && (item.get('subscriptionPrice') === '' || item.get('subscriptionPrice') === null || item.get('subscriptionPrice') === undefined)) {
+        if (
+          item.get('subscriptionStatus') === 1 &&
+          (item.get('subscriptionPrice') === '' ||
+            item.get('subscriptionPrice') === null ||
+            item.get('subscriptionPrice') === undefined)
+        ) {
           tip = 2;
           valid = false;
           return;
@@ -1298,7 +1473,11 @@ export default class AppStore extends Store {
           valid = false;
           return;
         }
-        if (saleableFlag && item.get('subscriptionStatus') === 1 && item.get('subscriptionPrice') == 0) {
+        if (
+          saleableFlag &&
+          item.get('subscriptionStatus') === 1 &&
+          item.get('subscriptionPrice') == 0
+        ) {
           tip = 4;
           valid = false;
           return;
@@ -1306,20 +1485,20 @@ export default class AppStore extends Store {
       });
     }
     if (tip === 1) {
-      message.error(RCi18n({id:'Product.inputMarketPrice'}));
+      message.error(RCi18n({ id: 'Product.inputMarketPrice' }));
     } else if (tip === 2) {
-      message.error(RCi18n({id:'Product.subscriptionPrice'}));
+      message.error(RCi18n({ id: 'Product.subscriptionPrice' }));
     } else if (tip === 3) {
-      message.error(RCi18n({id:'Product.Marketpricecannotbezero'}));
+      message.error(RCi18n({ id: 'Product.Marketpricecannotbezero' }));
     } else if (tip === 4) {
-      message.error(RCi18n({id:'Product.Subscriptionpricecannotbezero'}));
+      message.error(RCi18n({ id: 'Product.Subscriptionpricecannotbezero' }));
     }
     return valid;
   }
   _validInventoryFormsNew() {
     let valid = true;
     let goodsList = this.state().get('goodsList');
-    let reg=/^[1-9]\d*$|^0$/;
+    let reg = /^[1-9]\d*$|^0$/;
     if (goodsList) {
       goodsList.forEach((item) => {
         if (!reg.test(item.get('stock'))) {
@@ -1329,7 +1508,7 @@ export default class AppStore extends Store {
       });
     }
     if (!valid) {
-      message.error(RCi18n({id:'Product.PleaseInputInventory'}));
+      message.error(RCi18n({ id: 'Product.PleaseInputInventory' }));
     }
     return valid;
     /*let valid = true;
@@ -1456,14 +1635,12 @@ export default class AppStore extends Store {
 
     // -----商品相关图片-------
     const images = data.get('images').map((item) => {
-        return Map({
-          artworkUrl: item.get('artworkUrl'),
-          imageId: item.get('imageId'),
-          imageType: item.get('imageType'),
-        })
-    }
-
-    );
+      return Map({
+        artworkUrl: item.get('artworkUrl'),
+        imageId: item.get('imageId'),
+        imageType: item.get('imageType')
+      });
+    });
 
     param = param.set('images', images);
     // -----商品属性列表-------
@@ -1508,7 +1685,8 @@ export default class AppStore extends Store {
             mockSpecId: item.get('mockSpecId'),
             specName: item.get('specName').trim(),
             specDetailId: specValueItem.get('isMock') ? null : specValueItem.get('specDetailId'),
-            mockSpecDetailId: specValueItem.get('mockSpecDetailId') || specValueItem.get('specDetailId'),
+            mockSpecDetailId:
+              specValueItem.get('mockSpecDetailId') || specValueItem.get('specDetailId'),
             detailName: specValueItem.get('detailName').trim(),
             editable: specValueItem.get('editable')
           })
@@ -1537,7 +1715,8 @@ export default class AppStore extends Store {
         if (key && key.indexOf('specId-') != -1) {
           mockSpecIds = mockSpecIds.push(parseInt(key.split('-')[1]));
         }
-        if (key && key.indexOf('specDetailId-') != -1) {//specDetailId
+        if (key && key.indexOf('specDetailId-') != -1) {
+          //specDetailId
           mockSpecDetailIds = mockSpecDetailIds.push(value);
         }
       });
@@ -1570,11 +1749,24 @@ export default class AppStore extends Store {
           goodsMeasureUnit: item.get('goodsMeasureUnit') || '',
           subscriptionPrice: item.get('subscriptionPrice') || 0,
           addedFlag: item.get('addedFlag'),
-          subscriptionStatus: item.get('subscriptionStatus') != undefined ? (goods.get('subscriptionStatus') == 0 ? 0 : item.get('subscriptionStatus')) : goods.get('subscriptionStatus') == 0 ? 0 : 1,
+          subscriptionStatus:
+            item.get('subscriptionStatus') != undefined
+              ? goods.get('subscriptionStatus') == 0
+                ? 0
+                : item.get('subscriptionStatus')
+              : goods.get('subscriptionStatus') == 0
+              ? 0
+              : 1,
           description: item.get('description'),
           basePriceType: data.get('baseSpecId') ? data.get('baseSpecId') : '',
-          basePrice: data.get('selectedBasePrice') !== 'None' && item.get('basePrice') ? item.get('basePrice') : null,
-          subscriptionBasePrice: data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice') ? item.get('subscriptionBasePrice') : null,
+          basePrice:
+            data.get('selectedBasePrice') !== 'None' && item.get('basePrice')
+              ? item.get('basePrice')
+              : null,
+          subscriptionBasePrice:
+            data.get('selectedBasePrice') !== 'None' && item.get('subscriptionBasePrice')
+              ? item.get('subscriptionBasePrice')
+              : null,
           virtualInventory: item.get('virtualInventory') ? item.get('virtualInventory') : null,
           virtualAlert: item.get('virtualAlert') ? item.get('virtualAlert') : null,
           depth: item.get('depth') || 0,
@@ -1582,7 +1774,7 @@ export default class AppStore extends Store {
           width: item.get('width') || 0,
           widthUnit: item.get('widthUnit') || 'mm',
           height: item.get('height') || 0,
-          heightUnit: item.get('heightUnit') || 'mm',
+          heightUnit: item.get('heightUnit') || 'mm'
         })
       );
     });
@@ -1597,7 +1789,7 @@ export default class AppStore extends Store {
     }
 
     if (goodsList.count() > Const.spuMaxSku) {
-      message.error(RCi18n({id:'Product.Supportupto20specifications'}));
+      message.error(RCi18n({ id: 'Product.Supportupto20specifications' }));
       return false;
     }
 
@@ -1620,7 +1812,11 @@ export default class AppStore extends Store {
     // -----商品等级价格列表-------
     let isErr = false;
     data.get('userLevelPrice').forEach((value) => {
-      if (value.get('count') != null && value.get('maxCount') != null && value.get('count') > value.get('maxCount')) {
+      if (
+        value.get('count') != null &&
+        value.get('maxCount') != null &&
+        value.get('count') > value.get('maxCount')
+      ) {
         isErr = true;
       }
     });
@@ -1634,7 +1830,11 @@ export default class AppStore extends Store {
 
     // -----商品客户价格列表-------
     data.get('userPrice').forEach((value) => {
-      if (value.get('count') != null && value.get('maxCount') != null && value.get('count') > value.get('maxCount')) {
+      if (
+        value.get('count') != null &&
+        value.get('maxCount') != null &&
+        value.get('count') > value.get('maxCount')
+      ) {
         isErr = true;
       }
     });
@@ -1664,7 +1864,7 @@ export default class AppStore extends Store {
         return false;
       }
     }
-    let detailsList=this.state().get('goodsDescriptionDetailList');
+    let detailsList = this.state().get('goodsDescriptionDetailList');
     param = param.set('goodsIntervalPrices', areaPrice);
     param = param.set('goodsTaggingRelList', this.state().get('goodsTaggingRelList'));
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
@@ -1734,8 +1934,8 @@ export default class AppStore extends Store {
     //判断是否是自营店铺 自营店铺根据用户名查询 非自营店铺前台过滤查询
     if (util.isThirdStore()) {
       const userList = this.state()
-                           .get('sourceUserList')
-                           .filter((user) => user.get('customerName').indexOf(customerName) > -1);
+        .get('sourceUserList')
+        .filter((user) => user.get('customerName').indexOf(customerName) > -1);
       this.dispatch('userActor: setUserList', userList);
     } else {
       if (customerName) {
@@ -1811,8 +2011,8 @@ export default class AppStore extends Store {
       this.dispatch('goodsActor: initBrandList', fromJS(brandList.res));
 
       this.state()
-          .get('goodsForm')
-          .setFieldsValue({ brandId: result.res.context + '' });
+        .get('goodsForm')
+        .setFieldsValue({ brandId: result.res.context + '' });
       this.dispatch('goodsActor: editGoods', Map({ ['brandId']: result.res.context + '' }));
     }
   };
@@ -2029,18 +2229,18 @@ export default class AppStore extends Store {
     } else {
       if (this.state().get('editor') === 'detail') {
         this.state()
-            .get('detailEditor')
-            .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+          .get('detailEditor')
+          .execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       } else {
         const name = this.state().get('editor');
         this.state()
-            .get(name)
-            .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
+          .get(name)
+          .val.execCommand('insertimage', (chooseImgs || fromJS([])).toJS());
       }
     }
   };
-  goodsDescriptionSort(data){
-    return data.sort((a,b)=>a.sort-b.sort)
+  goodsDescriptionSort(data) {
+    return data.sort((a, b) => a.sort - b.sort);
   }
   /**
    * 设置富文本框的值
@@ -2109,7 +2309,11 @@ export default class AppStore extends Store {
         this.saveAll();
       }
     } else if (nextKey === 'seo') {
-      if (!this._validMainForms() || !this._validPriceFormsNew() || !this.state().get('getGoodsId')) {
+      if (
+        !this._validMainForms() ||
+        !this._validPriceFormsNew() ||
+        !this.state().get('getGoodsId')
+      ) {
         return;
       } else {
         this.saveAll('seo');
@@ -2133,12 +2337,12 @@ export default class AppStore extends Store {
           isSingle: a.attributeType === 'Single choice',
           goodsPropDetails: a.attributesValuesVOList
             ? a.attributesValuesVOList.map((v) => {
-              return {
-                detailId: v.id,
-                propId: v.attributeId,
-                detailName: v.attributeDetailName
-              };
-            })
+                return {
+                  detailId: v.id,
+                  propId: v.attributeId,
+                  detailName: v.attributeDetailName
+                };
+              })
             : []
         });
       });
@@ -2193,7 +2397,10 @@ export default class AppStore extends Store {
   changeStoreCategory = async (goodsCateId) => {
     const result: any = await getStoreCateList();
     if (result.res.code === Const.SUCCESS_CODE) {
-      this.dispatch('goodsActor: initStoreCateList', fromJS((result.res as any).context.storeCateResponseVOList));
+      this.dispatch(
+        'goodsActor: initStoreCateList',
+        fromJS((result.res as any).context.storeCateResponseVOList)
+      );
     }
   };
   /**
@@ -2215,11 +2422,11 @@ export default class AppStore extends Store {
           goodsCateId: cateId,
           descriptionId: item.id,
           descriptionName: item.descriptionName,
-          contentType: item?.contentType??'text',
+          contentType: item?.contentType ?? 'text',
           content: '',
-          sort: item?.sort??1,
+          sort: item?.sort ?? 1,
           editable: true,
-          created:false
+          created: false
         };
       });
       this.editEditorContent(res);
@@ -2299,7 +2506,10 @@ export default class AppStore extends Store {
       const secondCateList = cateListIm.filter((item) => item.get('cateParentId') == cateId); //找第二层子节点
       if (secondCateList && secondCateList.size > 0) {
         cateIdList = cateIdList.concat(secondCateList.map((item) => item.get('cateId')).toJS());
-        const thirdCateList = cateListIm.filter((item) => secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0); //找第三层子节点
+        const thirdCateList = cateListIm.filter(
+          (item) =>
+            secondCateList.filter((sec) => item.get('cateParentId') == sec.get('cateId')).size > 0
+        ); //找第三层子节点
         if (thirdCateList && thirdCateList.size > 0) {
           cateIdList = cateIdList.concat(thirdCateList.map((item) => item.get('cateId')).toJS());
         }
@@ -2312,7 +2522,10 @@ export default class AppStore extends Store {
     const { res } = await getRelatedList(param);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch('related:relatedList', fromJS(res.context != null ? res.context.relationGoods : []));
+        this.dispatch(
+          'related:relatedList',
+          fromJS(res.context != null ? res.context.relationGoods : [])
+        );
       });
     }
   };
@@ -2341,7 +2554,10 @@ export default class AppStore extends Store {
     const { res } = await fetchAdd(addProduct);
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
-        this.dispatch('related:addRelated', fromJS(res.context != null ? res.context.relationGoods : []));
+        this.dispatch(
+          'related:addRelated',
+          fromJS(res.context != null ? res.context.relationGoods : [])
+        );
         this.onRelatedList(this.state().get('getGoodsId'));
       });
     }
@@ -2416,22 +2632,30 @@ export default class AppStore extends Store {
             break;
           case 123457911: //"土耳其"
             title = '{name} {subtitle} | Royal Canin Türkiye';
-            description = '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
+            description =
+              '{name} {subtitle} Royal Canin resmi mağazasında. "X" TL üzeri siparişlerinizde ücretsiz kargo. Sipariş verin veya mama aboneliğinizi başlatın!';
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123457907: //"俄罗斯"
             title = 'Купить {technology} корм Royal Canin {name} в официальном интернет-магазине';
-            description = 'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
+            description =
+              'Купить {technology} корм Royal Canin {name} со скидкой 10% при оформлении подписки. Сделайте заказ в интернет-магазине Royal Canin уже сегодня!';
             keywords = '{name}, {subtitle}, {sales category}, {tagging}';
             break;
           case 123456858: //墨西哥
-            title = RCi18n({id:'Product.MEXICO'});
-            description = null
-            keywords = null
+            title = RCi18n({ id: 'Product.MEXICO' });
+            description = null;
+            keywords = null;
             break;
           case 123457916: // uk
             title = '{name} – {sales category} | Royal Canin Shop';
-            description = ' Buy Royal Canin {name} food, {subtitle} Place an order on the Royal Canin online store today!'
+            description =
+              ' Buy Royal Canin {name} food, {subtitle} Place an order on the Royal Canin online store today!';
+            break;
+          case 123457915: // se
+            title = ' {Product Name} – {sales category}| Royal Canin Shop';
+            description =
+              ' Köp Royal Canin {Product Name} djurmat, {subtitle}. Gör en beställning på Royal Canin onlinebutik idag!';
             break;
           default:
             title = '{name} | Royal Canin Shop';
@@ -2442,9 +2666,18 @@ export default class AppStore extends Store {
       this.dispatch(
         'seoActor: setSeoForm',
         fromJS({
-          titleSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.titleSource : title,
-          metaKeywordsSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaKeywordsSource : keywords, //{name}, {subtitle}, {sales category}, {tagging}
-          metaDescriptionSource: res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0 ? res.context.seoSettingVO.metaDescriptionSource : description, //{description}
+          titleSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.titleSource
+              : title,
+          metaKeywordsSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.metaKeywordsSource
+              : keywords, //{name}, {subtitle}, {sales category}, {tagging}
+          metaDescriptionSource:
+            res.context.seoSettingVO.updateNumbers && res.context.seoSettingVO.updateNumbers > 0
+              ? res.context.seoSettingVO.metaDescriptionSource
+              : description, //{description}
           headingTag: res.context.seoSettingVO.headingTag ? res.context.seoSettingVO.headingTag : ''
         })
       );
@@ -2500,10 +2733,10 @@ export default class AppStore extends Store {
   };
   setDefaultBaseSpecId = () => {
     const item = this.state()
-                     .get('goodsSpecs')
-                     .find((item) => {
-                       return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
-                     });
+      .get('goodsSpecs')
+      .find((item) => {
+        return item.get('specName') === sessionStorage.getItem(cache.SYSTEM_GET_WEIGHT);
+      });
     this.dispatch('goodsSpecActor: baseSpecId', item.get('mockSpecId'));
   };
 

@@ -31,9 +31,11 @@ export default class StepConsent extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       consentLanguage: any;
+      consentCategory: any;
       pageChangeType: any;
       getConsentList: Function;
       getLanguage: Function;
+      getCategories: Function;
       pageChange: Function;
       editId: any;
       editList: any;
@@ -44,9 +46,11 @@ export default class StepConsent extends Component<any, any> {
   static relaxProps = {
     loading: 'loading',
     consentLanguage: 'consentLanguage',
+    consentCategory: 'consentCategory',
     pageChangeType: 'pageChangeType',
     getConsentList: noop,
     getLanguage: noop,
+    getCategories: noop,
     pageChange: noop,
     editId: 'editId',
     editList: 'editList',
@@ -54,9 +58,10 @@ export default class StepConsent extends Component<any, any> {
   };
 
   componentDidMount() {
-    const { getConsentList, getParentConsentList, getLanguage } = this.props.relaxProps;
+    const { getConsentList, getParentConsentList, getLanguage, getCategories } = this.props.relaxProps;
     getConsentList();
     getLanguage();
+    getCategories();
     getParentConsentList();
   }
 
@@ -85,7 +90,7 @@ export default class StepConsent extends Component<any, any> {
   };
 
   render() {
-    const { consentLanguage, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
+    const { consentLanguage, consentCategory, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
 
     return (
       <div className="consent">
@@ -96,13 +101,14 @@ export default class StepConsent extends Component<any, any> {
               <div className="consent-select-data space-between">
                 <Select defaultValue="" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value=""><FormattedMessage id="Setting.All" /></Option>
-                  <Option value="Prescriber"><FormattedMessage id="Setting.Prescriber" /></Option>
-                  <Option value="Consumer"><FormattedMessage id="Setting.Consumer" /></Option>
+                  {consentCategory.map((item) => {
+                    return <Option key={item.valueEn} value={item.valueEn}>{item.valueEn}</Option>;
+                  })}
                 </Select>
                 <Select style={{ width: 120 }} defaultValue="" onChange={(e, v) => this.onDescription(e, v)}>
                   <Option value=""><FormattedMessage id="Setting.All" /></Option>
                   {consentLanguage.map((item) => {
-                    return <Option value={item.id}>{item.description}</Option>;
+                    return <Option key={item.id} value={item.id}>{item.description}</Option>;
                   })}
                 </Select>
               </div>

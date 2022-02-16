@@ -33,6 +33,12 @@ export default class AppStore extends Store {
     let { code, context: orderInfo, message: errorInfo } = res;
 
     if (code == Const.SUCCESS_CODE) {
+      if(orderInfo?.appointmentNo){
+        const data=await findAppointmentByApptNo(orderInfo.appointmentNo);
+        if(data?.res?.code==Const.SUCCESS_CODE){
+          orderInfo=Object.assign(orderInfo,data?.res?.context)
+        }
+      }
       await Promise.all([
         payRecord(orderInfo.id),
         fetchLogistics(),

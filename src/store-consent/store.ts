@@ -59,6 +59,19 @@ export default class AppStore extends Store {
     }
   };
 
+  //category
+  getCategories = async (callback) => {
+    const { res } = await webApi.fetchQuerySysDictionary({
+      type: 'consentCategory'
+    });
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('consent:consentCategory', res.context.sysDictionaryVOS);
+      });
+      //callback&&callback(res.context.sysDictionaryVOS)
+    }
+  };
+
   propSort = async (param?: any) => {
     const { res } = await webApi.fetchPropSort(param);
 

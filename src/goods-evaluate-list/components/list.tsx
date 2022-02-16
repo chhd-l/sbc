@@ -109,7 +109,7 @@ class CustomerList extends React.Component<any, any> {
           title={<FormattedMessage id="Product.productName" />}
           key="goodsInfoName"
           dataIndex="goodsInfoName"
-          width={150}
+          width="20%"
           render={(goodsInfoName, rowData: any) => {
             return (
               <div style={styles.goodsName}>
@@ -120,12 +120,12 @@ class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="Product.orderNumber" />} key="orderNo" width={170} dataIndex="orderNo" render={(orderNo) => (orderNo ? orderNo : '-')} />
+        <Column title={<FormattedMessage id="Product.orderNumber" />} key="orderNo" width="15%" dataIndex="orderNo" render={(orderNo) => (orderNo ? orderNo : '-')} />
         <Column
           title={<FormattedMessage id="Product.consumerName" />}
           key="customerName,"
           dataIndex="customerName"
-          width={220}
+          width="15%"
           render={(customerName, rowData) => {
             return (
               <div>
@@ -136,8 +136,8 @@ class CustomerList extends React.Component<any, any> {
             );
           }}
         />
-        <Column title={<FormattedMessage id="Product.PriceTableColumnType" />} key="goodsTypeRelateEvaluate" dataIndex="goodsTypeRelateEvaluate" width={150} render={(goodsTypeRelateEvaluate) => getEnum(goodsTypeRelateEvaluate, goodsTypes)} />
-        <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width={150} render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
+        <Column title={<FormattedMessage id="Product.PriceTableColumnType" />} key="goodsTypeRelateEvaluate" dataIndex="goodsTypeRelateEvaluate" width="10%" render={(goodsTypeRelateEvaluate) => getEnum(goodsTypeRelateEvaluate, goodsTypes)} />
+        <Column title={<FormattedMessage id="Product.productRatings" />} key="evaluateScore" dataIndex="evaluateScore" width="10%" render={(evaluateScore) => (evaluateScore ? evaluateScore + '  Star' : '-')} />
         {/*<Column*/}
         {/*  title="评价内容"*/}
         {/*  key="evaluateContent"*/}
@@ -191,12 +191,13 @@ class CustomerList extends React.Component<any, any> {
         {/*    );*/}
         {/*  }}*/}
         {/*/>*/}
-        <Column title={<FormattedMessage id="Product.anonymousStatus" />} key="isAnonymous" dataIndex="isAnonymous" render={(isAnonymous) => (isAnonymous ? isShowFunction(isAnonymous) : 'No')} />
-        <Column title={<FormattedMessage id="Product.reviewTime" />} key="evaluateTime" dataIndex="evaluateTime" width={102} render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
+        <Column title={<FormattedMessage id="Product.anonymousStatus" />} key="isAnonymous" dataIndex="isAnonymous" width="10%" render={(isAnonymous) => (isAnonymous ? isShowFunction(isAnonymous) : 'No')} />
+        <Column title={<FormattedMessage id="Product.reviewTime" />} key="evaluateTime" dataIndex="evaluateTime" width="10%" render={(evaluateTime) => (evaluateTime ? Moment(evaluateTime).format(Const.TIME_FORMAT).toString() : '')} />
 
         <Column
           title={<FormattedMessage id="Product.operation" />}
           key="evaluateId"
+          width="10%"
           dataIndex="evaluateId"
           className="operation-th"
           render={(evaluateId) => {

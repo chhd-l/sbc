@@ -171,12 +171,12 @@ function Step5({ form }) {
               <Radio value={1}>
                 <FormattedMessage id="Marketing.Percentage" />
               </Radio>
-              <Radio value={3}>
+              {Const.SITE_NAME !== 'MYVETRECO' ? <Radio value={3}>
                 <FormattedMessage id="Marketing.Freeshipping" />
-              </Radio>
-              <Radio value={4}>
+              </Radio> : null}
+              {Const.SITE_NAME !== 'MYVETRECO' ? <Radio value={4}>
                 <FormattedMessage id="Marketing.Gifts" />
-              </Radio>
+              </Radio> : null}
             </Radio.Group>
           )}
         </Form.Item>

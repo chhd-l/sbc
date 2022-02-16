@@ -129,7 +129,7 @@ export default class BillingDetails extends React.Component<any, any> {
                 )}
               </div>
             ) : current == 3 ? (
-              <div className="btn">
+              <div className="publishContainer">
                 <PublishTooltip onRef={this.onRef} />
               </div>
             ) : null}

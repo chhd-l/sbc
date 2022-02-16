@@ -440,3 +440,7 @@ export const getOperationLog = (params) => {
     body: JSON.stringify(params)
   });
 };
+
+export const getOperationJsonLog = (opDetailId: string) => {
+  return Fetch<TResult>(`/goodsOperationLog/${opDetailId}`, { method: 'GET' });
+};

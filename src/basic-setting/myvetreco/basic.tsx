@@ -126,23 +126,27 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('legalBusinessName', {
                 rules: [{ required: true, message: 'Please input Legal company name!' }],
               })(
-                <Input
-                  onChange={(e) => {
-                    onChangeName(e.target.value);
-                  }}
-                  disabled={adyenAuditState === 0}
-                />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="Chamber of Commerce number" required>
+            <FormItem label="Chamber of Commerce number" required extra={<div style={{color:'#000'}}>This is the registration number (KVK number).</div>}>
               {getFieldDecorator('chamberOfCommerceNumber', {
                 rules:[{ required: true, message: 'Please input Chamber of Commerce number!' }],
               })(
                 <Input disabled />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="Tax ID" required>
+              {getFieldDecorator('taxId', {
+                rules:[{ required: true, message: 'Please input Tax ID!' }],
+              })(
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -174,21 +178,12 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               )}
             </FormItem>
           </Col>
-          <Col span={24}>
-            <FormItem label="Store address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>including street name and number</div>}>
-              {getFieldDecorator('storeAddress1', {
-                rules: [{ required: true, message: 'Please input address' }]
-              })(
-                <Input disabled={adyenAuditState === 0} />
-              )}
-            </FormItem>
-          </Col>
           <Col span={12}>
-            <FormItem label="Postcode">
-              {getFieldDecorator('postCode', {
-                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+            <FormItem label="Province">
+              {getFieldDecorator('province', {
+                rules: [{ required: true, message: 'Please input province' }]
               })(
-                <Input disabled={adyenAuditState === 0} />
+                <Input disabled={adyenAuditState === 0} maxLength={3} />
               )}
             </FormItem>
           </Col>
@@ -220,6 +215,37 @@ class BusinessBasicInformation extends React.Component<BasicFormProps, any> {
               )}
             </FormItem>
           </Col>
+          <Col span={12}>
+            <FormItem label="Street name">
+              {getFieldDecorator('storeAddress1', {
+                rules: [{ required: true, message: 'Please input street name' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem label="House number">
+              {getFieldDecorator('houseNumberOrName', {
+                rules: [{ required: true, message: 'Please input house number' }]
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={[24,12]}>
+          <Col span={12}>
+            <FormItem label="Postcode">
+              {getFieldDecorator('postCode', {
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+              })(
+                <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={[24,12]}>
           <Col span={12}>
             <FormItem label="Email">
               {getFieldDecorator('email', {
@@ -325,12 +351,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('firstName', {
                 rules: [{ required: true, message: 'Please input first name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input
-                  onChange={(e) => {
-                    onChangeName(`${e.target.value} ${form.getFieldValue('lastName')}`)
-                  }}
-                  disabled={adyenAuditState === 0}
-                />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -339,12 +360,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
               {getFieldDecorator('lastName', {
                 rules:[{ required: true, message: 'Please input last name' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
               })(
-                <Input
-                  onChange={(e) => {
-                    onChangeName(`${form.getFieldValue('firstName')} ${e.target.value}`);
-                  }}
-                  disabled={adyenAuditState === 0}
-                />
+                <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
@@ -371,7 +387,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={24}>
-            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>including street name and number</div>}>
+            <FormItem label="Address 1" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>The Store address should include both street name and house number. E.g. City 35</div>}>
               {getFieldDecorator('address1', {
                 rules: [{ required: true, message: 'Please input address' }]
               })(
@@ -426,7 +442,7 @@ class IndividualBasicInformation extends React.Component<BasicFormProps, any> {
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
+            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>

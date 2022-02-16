@@ -1262,6 +1262,10 @@ const routes = [
   {
     path: '/landing-page',
     asyncComponent: () => import('./landing-page')
+  },
+  {
+    path: '/landing-page-detail/:id',
+    asyncComponent: () => import('./landing-page/detail')
   }
 ];
 

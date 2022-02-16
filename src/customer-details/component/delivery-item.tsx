@@ -152,7 +152,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
         if (!err) {
           validateAddress({
             ...fields,
-            deliveryAddress: [fields.address1, fields.address2].join('')
+            countryId: this.state.countryList[0]?.id,
+            deliveryAddress: [fields.address1, fields.address2].join(''),
+            addressApiType: 1
           })
             .then((data) => {
               if (data.res.code === Const.SUCCESS_CODE) {

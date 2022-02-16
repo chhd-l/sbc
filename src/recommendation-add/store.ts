@@ -120,7 +120,8 @@ export default class AppStore extends Store {
       }
     })
     // let isSend=params.isSend===0?false:true
-    const { res } = await webapi.fetchFelinSave({...params,customerPet})
+    const oktaToken = JSON.parse(localStorage.getItem('okta-token-storage') || '{}')?.accessToken?.value || ''
+    const { res } = await webapi.fetchFelinSave({...params, customerPet, oktaToken})
     if (res.code === Const.SUCCESS_CODE) {
       history.push('/recommendation')
     }

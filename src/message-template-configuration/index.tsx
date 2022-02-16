@@ -35,10 +35,6 @@ const statusList = [
   {
     value:'0',
     name:'Email'
-  },
-  {
-    value:'1',
-    name:'Text'
   }
 ]
 

@@ -129,8 +129,8 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
                 rules: [{ required: true, message: 'Please select gender' }],
               })(
                 <Select disabled={adyenAuditState === 0}>
-                  <Option value="1">Female</Option>
-                  <Option value="0">Male</Option>
+                  <Option value={1}>Female</Option>
+                  <Option value={0}>Male</Option>
                 </Select>
               )}
             </FormItem>
@@ -346,8 +346,8 @@ class Signatories extends React.Component<RepreFormProps, any> {
                 rules: [{ required: true, message: 'Please select gender' }],
               })(
                 <Select disabled={adyenAuditState === 0}>
-                  <Option value="1">Female</Option>
-                  <Option value="0">Male</Option>
+                  <Option value={1}>Female</Option>
+                  <Option value={0}>Male</Option>
                 </Select>
               )}
             </FormItem>

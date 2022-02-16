@@ -112,11 +112,11 @@ export default class AppStore extends Store {
       }
     } else {
       if (data.consentId != '' && data.consentCode != '' && data.consentTitleType != '' && data.consentTitle != '') {
-        if(data.consentCategory=="Prescriber"){
-          data.consentGroup = 'default'
-        }else{
-          delete data.consentGroup //之前也没传值，保持不变
-        }
+        // if(data.consentCategory=="Prescriber"){  //consentGroup为新增填写字段
+        //   data.consentGroup = 'default'
+        // }else{
+        //   delete data.consentGroup //之前也没传值，保持不变
+        // }
         const { res } = await webApi.fetchNewConsent(data);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {

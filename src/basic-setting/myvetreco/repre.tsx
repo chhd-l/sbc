@@ -66,6 +66,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             ...values,
             cityId: values.cityId.key,
             city: values.cityId.label,
+            dateOfBirth: values.dateOfBirth ? values.dateOfBirth.format('YYYY-MM-DD') : undefined,
             documentType: values.supportedDocument.documentType,
             supportedDocument: SupportedDocumentUtil.mapUploadObjToProps(values.supportedDocument)
           });

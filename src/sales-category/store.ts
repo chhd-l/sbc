@@ -594,9 +594,9 @@ export default class AppStore extends Store {
             keywords = null;
             break;
           case 123457915: // se
-            title = ' {Product Name} – {sales category}| Royal Canin Shop';
+            title = ' {name} – {sales category}| Royal Canin Shop';
             description =
-              ' Köp Royal Canin {Product Name} djurmat, {subtitle}. Gör en beställning på Royal Canin onlinebutik idag!';
+              ' Köp Royal Canin {name} djurmat, {subtitle}. Gör en beställning på Royal Canin onlinebutik idag!';
             break;
           default:
             title = 'Royal Canin | {name}s';

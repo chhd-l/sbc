@@ -23,20 +23,9 @@ import { Link } from 'react-router-dom';
 import value from '*.json';
 import TemplateDetail from '@/message-template-configuration/templateDetail';
 
-
 const FormItem = Form.Item;
 const Option = Select.Option;
 const InputGroup = Input.Group;
-
-
-
-//假数据
-const statusList = [
-  {
-    value:'0',
-    name:'Email'
-  }
-]
 
 const MessageTemplateConfiguration=()=>{
 
@@ -206,13 +195,9 @@ const MessageTemplateConfiguration=()=>{
                     <Option value="">
                       <FormattedMessage id="all" />
                     </Option>
-                    {
-                      statusList && statusList.map((item,index)=>(
-                        <Option value={item.value} key={index}>
-                          {item.name}
-                        </Option>
-                      ))
-                    }
+                    <Option value="0">
+                      Email
+                    </Option>
                   </Select>
                 </InputGroup>
               </FormItem>

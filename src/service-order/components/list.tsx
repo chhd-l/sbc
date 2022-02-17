@@ -541,7 +541,9 @@ class ListView extends React.Component<any, any> {
                               //@ts-ignore
                               src={
                                 v.get('tradeItems').concat(gifts).get(3).get('pic')
-                                  ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic'))
+                                  ? util.optimizeImage(
+                                      v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                    )
                                   : defaultImg
                               }
                               style={styles.imgFourth}

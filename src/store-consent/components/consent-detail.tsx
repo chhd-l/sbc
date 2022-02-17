@@ -359,15 +359,16 @@ class StepConsentDetail extends Component<any, any> {
                 defaultValue={editList.parentId ? editList.parentId : ''}
                 label={RCi18n({id:"Setting.ParentConsent"})}
                 style={{ width: 280 }}
+                optionLabelProp="label"
                 onChange={(value, index) => {
                   value = value === '' ? null : value;
                   consentForm.parentId = value;
                   onFormChange(consentForm);
                 }}
               >
-                <Option value="">&nbsp;</Option>
+                <Option value="" label="">&nbsp;</Option>
                 {parentConsentList.toJS().map(item => (
-                  <Option value={item.id} key={item.id}>
+                  <Option value={item.id} key={item.id} label={item.consentDesc}>
                     <div><b>{item.consentDesc}</b></div>
                     <div>{item.consentId}</div>
                   </Option>

@@ -320,8 +320,8 @@ export default Form.create({ name: 'batch_export' })(BatchExport);
 
 const fieldStyle = {
   // width: '80%',
-  padding: 40,
-  paddingTop: 10
+  padding: 10,
+  paddingBottom: 40
 }
 
 const radioStyle = {
@@ -337,7 +337,7 @@ const contentStyle = {
 
 const styles = {
   formItemStyle: {
-    width: 370
+    width: 350
   },
   leftLabel: {
     width: 170,
@@ -350,6 +350,6 @@ const styles = {
     overflow: 'hidden'
   },
   wrapper: {
-    width: 200
+    width: 180
   }
 } as any;

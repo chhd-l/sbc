@@ -4843,6 +4843,7 @@ export default {
   "Subscription.Billing information": "Billing information",
   "Subscription.BillingAddress": "Billing Address",
   "subscription.BillingAddress": "Billing address",
+  "subscription.realtimeStock": "Real-time stock",
   "Subscription.BillingAddressIs": "Billing address is the same as",
   "Subscription.Brand": "Brand",
   "Subscription.brand": "Brand",

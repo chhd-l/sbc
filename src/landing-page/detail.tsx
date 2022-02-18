@@ -104,7 +104,7 @@ export default class LandingPageDetail extends React.Component<any, any> {
               <div style={{backgroundColor:'#fafafa',padding:15}}>
                 <div style={{marginBottom: 10}}><strong><FormattedMessage id="Survey.basic_info" /></strong></div>
                 <Row>
-                  <Col span={12}><FormattedMessage id="Survey.pet_owner_type" />: {landingPage.number}</Col>
+                  <Col span={12}><FormattedMessage id="Marketing.LandingPageId" />: {landingPage.number}</Col>
                   <Col span={12}><FormattedMessage id="Survey.creation_time" />: {landingPage.registerDate}</Col>
                 </Row>
               </div>

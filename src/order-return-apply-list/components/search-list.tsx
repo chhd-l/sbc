@@ -68,7 +68,7 @@ export default class SearchList extends React.Component<any, any> {
                   </tr>
                 </thead>
                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
-                 
+
               </table>
               {!loading && total == 0 ? (
                   <div className="ant-table-placeholder">
@@ -113,6 +113,8 @@ export default class SearchList extends React.Component<any, any> {
       const id = v.get('id');
       const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
       const deliveryPrice = v.getIn(['tradePrice', 'deliveryPrice']) || 0;
+      const freeShippingDiscountPrice=v.getIn(['tradePrice', 'freeShippingDiscountPrice']) || 0;
+      const amountPrice=(deliveryPrice-freeShippingDiscountPrice)>=0?tradePrice - (deliveryPrice-freeShippingDiscountPrice):tradePrice
       const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
       const num =
         v
@@ -205,7 +207,7 @@ export default class SearchList extends React.Component<any, any> {
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '10%' }}>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (tradePrice - deliveryPrice).toFixed(2)}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + amountPrice.toFixed(2)}
                     <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}

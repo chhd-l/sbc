@@ -88,3 +88,16 @@ export const deliverVerify = (tid: string) => {
 export const verifyBuyer = (buyerId: string) => {
   return Fetch(`/customer/customerDelFlag/${buyerId}`);
 };
+
+/**
+ * cancel order
+ * @param ids
+ */
+export const cancelOrder = (ids) => {
+  return Fetch<TResult>('/trade/audit', {
+    method: 'POST',
+    body: JSON.stringify({
+      ids
+    })
+  });
+};

@@ -43,11 +43,11 @@ export const orderSeachField: fieldDataType[] = [
   },
   {
     label: RCi18n({ id: 'Order.orderTag' }),
-    key: 'orderTag',
+    key: 'goodWillFlag',
     options: {
-      orderTag: [
-        { value: 'Regular order', name: RCi18n({ id: 'order.regularOrder' }) },
-        { value: 'Good will order', name: RCi18n({ id: 'Order.goodWillOrder' }) }
+      goodWillFlag: [
+        { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
+        { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
       ]
     }
   },
@@ -274,10 +274,10 @@ export const subscriptionSeachField: fieldDataType[] = [
     key: 'subscriptionStatus',
     options: {
       subscriptionStatus: [
-        { value: 'active', name: RCi18n({ id: 'Subscription.Active' }) },
-        { value: 'inactive', name: RCi18n({ id: 'Subscription.Inactive' }) },
-        { value: 'paused', name: RCi18n({ id: 'Subscription.Paused' }) },
-        { value: 'all', name: RCi18n({ id: 'Subscription.all' }) },
+        { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
+        { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
+        { value: '', name: RCi18n({ id: 'Subscription.all' }) },
       ]
     },
     valueLink: 'subscriptionStatus'

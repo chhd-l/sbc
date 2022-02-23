@@ -75,13 +75,13 @@ export default class SubscriptionList extends Component<any, any> {
       ],
       subscriptionStatusValue:'',
       subscriptionStatusList:[
-        { value: 'active', name: RCi18n({ id: 'Subscription.Active' }) },
-        { value: 'inactive', name: RCi18n({ id: 'Subscription.Inactive' }) },
-        { value: 'paused', name: RCi18n({ id: 'Subscription.Paused' }) },
-        { value: 'all', name: RCi18n({ id: 'Subscription.all' }) },
+        { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
+        { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
+        { value: '', name: RCi18n({ id: 'Subscription.all' }) },
       ],
-      beginTime:'',
-      endTime:''
+      nextRefillStartTime:'',
+      nextRefillEndTime:''
     };
   }
 
@@ -134,7 +134,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType } = this.state;
+    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType,nextRefillStartTime,nextRefillEndTime,subscriptionStatusValue } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
@@ -149,12 +149,14 @@ export default class SubscriptionList extends Component<any, any> {
         JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null && Const.SITE_NAME !== 'MYVETRECO' ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
       prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
-      status: activeKey,
+      status: activeKey==='all'?'':activeKey,
       subscriptionType,
       subscriptionPlanType,
       phoneNum: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
       consigneeNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
-      deliveryType
+      deliveryType,
+      nextRefillStartTime:nextRefillStartTime,
+      nextRefillEndTime:nextRefillEndTime
     };
     this.setState(
       () => {
@@ -164,7 +166,7 @@ export default class SubscriptionList extends Component<any, any> {
             customerName: param.consumerName ? param.consumerName : '',
             subscribeId: param.subscriptionNumber,
             cycleTypeId: param.frequency,
-            subscribeStatus: param.status === 'all' ? '' : param.status,
+            subscribeStatus: subscriptionStatusValue||param.status,
             consigneeName: param.recipient ? param.recipient : '',
             // consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
@@ -176,7 +178,9 @@ export default class SubscriptionList extends Component<any, any> {
             subscriptionPlanType,
             phoneNum: param.phoneNum ? param.phoneNum : '',
             consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
-            deliveryType
+            deliveryType,
+            nextRefillStartTime,
+            nextRefillEndTime
           }
         };
       },
@@ -731,13 +735,13 @@ export default class SubscriptionList extends Component<any, any> {
                       className="rang-picker-width"
                       style={styles.formItemStyle}
                       onChange={(e) => {
-                        let beginTime = '';
-                        let endTime = '';
+                        let nextRefillStartTime = '';
+                        let nextRefillEndTime = '';
                         if (e.length > 0) {
-                          beginTime = e[0].format(Const.DAY_FORMAT);
-                          endTime = e[1].format(Const.DAY_FORMAT);
+                          nextRefillStartTime = e[0].format(Const.DAY_FORMAT);
+                          nextRefillEndTime = e[1].format(Const.DAY_FORMAT);
                         }
-                        this.setState({ beginTime: beginTime, endTime: endTime });
+                        this.setState({ nextRefillStartTime: nextRefillStartTime, nextRefillEndTime: nextRefillEndTime });
                       }}
                     />
                   </FormItem>

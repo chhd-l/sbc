@@ -216,6 +216,14 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
           delete fieldKey['beginTime'];
 
+          // 单独处理时间值
+          let nextRefillDateArr = values.nextRefillDate;
+          if (nextRefillDateArr && nextRefillDateArr.length) {
+            obj['nextRefillStartTime'] = nextRefillDateArr[0]?.format(Const.DAY_FORMAT);
+            obj['nextRefillEndTime'] = nextRefillDateArr[1]?.format(Const.DAY_FORMAT);
+          }
+          delete fieldKey['nextRefillDate'];
+
           // 单独处理 Frequency
           let cycleTypeId = values.cycleTypeId_autoship;
           if (cycleTypeId) {
@@ -233,6 +241,8 @@ class BatchExport extends Component<BatchExportProps, any> {
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
             } else if(key === 'payState') {
               obj['tradeState'][fieldKey[key]] = values[key] || '';
+            }else if (key === 'goodWillFlag') {
+              obj[fieldKey[key]] = +values[key] || '';
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }

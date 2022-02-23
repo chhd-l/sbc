@@ -133,8 +133,8 @@ class SearchHead extends Component<any, any> {
       orderTagType:'Order Tag',
       orderTagValue:'',
       orderTagList:[
-        { value: 'Regular order', name: RCi18n({ id: 'order.regularOrder' }) },
-        { value: 'Good will order', name: RCi18n({ id: 'Order.goodWillOrder' }) }
+        { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
+        { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
       ],
       tradeState: {
         deliverStatus: '',
@@ -1033,7 +1033,8 @@ class SearchHead extends Component<any, any> {
       emailAddressValue,
       citySearchType,
       citySearchValue,
-      orderCreateByType
+      orderCreateByType,
+      orderTagValue
     } = this.state;
 
     const ts = {} as any;
@@ -1067,7 +1068,8 @@ class SearchHead extends Component<any, any> {
       [codeSelect]: codeSelectValue,
       [emailAddressType]: emailAddressValue,
       [citySearchType]: citySearchValue,
-      orderCreateByType
+      orderCreateByType,
+      goodWillFlag:+orderTagValue||''
     };
     onSearch(params);
   };

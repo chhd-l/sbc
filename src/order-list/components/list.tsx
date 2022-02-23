@@ -8,7 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
-import {cancelOrder} from '../webapi'
+import { cancelOrder } from '../webapi';
 
 const defaultImg = require('../../goods-list/img/none.png');
 
@@ -587,7 +587,10 @@ class ListView extends React.Component<any, any> {
 
                           {/*Cancel all*/}
                           {storeId === 123457919 ? (
-                            <Tooltip placement="top" title="Cancel Order">
+                            <Tooltip
+                              placement="top"
+                              title={<FormattedMessage id="Order.cancelOrder" />}
+                            >
                               <a
                                 onClick={() => {
                                   this.setState({

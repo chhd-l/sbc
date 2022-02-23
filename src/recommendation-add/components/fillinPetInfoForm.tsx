@@ -197,12 +197,19 @@ dict:specialneeds_cat
           }
           customerPet.push({ ...values.customerPet[item], petsId, uuid: item });
         }
+        // 处理birthOfPets日期格式不正确的问题
+        customerPet = customerPet.map((item) => {
+          item.birthOfPets = moment(item.birthOfPets).format('YYYY-MM-DD');
+          return item;
+        });
+
         let params = Object.assign({}, recommendParams, {
           ...values,
           fillDate: moment(values.fillDate).format('YYYY-MM-DD'),
+
           customerPet
         });
-        // console.log(params,values)
+        console.log('params：', params, 'values:', values);
         // return
         savepetsRecommendParams(params);
 

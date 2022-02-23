@@ -322,7 +322,7 @@ export default class ClinicList extends Component<any, any> {
         title: <FormattedMessage id="Prescriber.Action" />,
         key: 'action',
         width: '10%',
-        render: (text, record) => (
+        render: (text, record) => record.prescriberName && record.prescriberType ? (
           <div>
             <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
@@ -336,7 +336,7 @@ export default class ClinicList extends Component<any, any> {
             {/* <Divider type="vertical" />
             <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
           </div>
-        )
+        ) : null
       }
     ];
     return (

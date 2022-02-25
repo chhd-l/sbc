@@ -3,6 +3,7 @@ import {Button, Row, Col, Input, Checkbox, InputNumber, message, Spin} from 'ant
 import ProductList from './price/ProductList';
 import {listCategory, listGoodsByCategory, priceSetting} from "../webapi";
 import {bignumber, multiply, round, format} from "mathjs";
+import { cache } from 'qmkit';
 
 export const FormContext = React.createContext({});
 
@@ -176,7 +177,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     priceSetting({
       email: userInfo.accountName,
       storeId: userInfo.storeId,
-      sourceStoreId: sourceStoreId,
+      sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
       priceSettingList: array,
       companyInfoId:userInfo.companyInfoId
     }).then(res=>{

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Form, Button, Input, Row, Col, Spin, Select } from 'antd';
 import { checkCompanyInfoExists, saveLegalInfo } from "../webapi";
 import { FormattedMessage } from 'react-intl';
-import { Const } from 'qmkit';
+import { Const, cache } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -30,7 +30,7 @@ const { Option } = Select;
           email: userInfo.accountName,
           storeId: userInfo.storeId,
           companyInfoId: userInfo.companyInfoId,
-          sourceStoreId: sourceStoreId,
+          sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
           ...values
         }).then(res => {
           setStep(2)

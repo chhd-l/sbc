@@ -4407,6 +4407,9 @@ export default {
   "Setting.Onlinepayment": "Online payment",
   "Setting.onlyAddUpTo5banner": "You can only add up to 5 banner.",
   "Setting.openCityCondition": "Open city condition",
+  "Setting.availableDatePeriod": "Available date period",
+  "Setting.deliveryInterval": "Delivery interval",
+
   "Setting.openingHours": "Opening Hours",
   "Setting.Operatesuccessfully": "Operate successfully",
   "Setting.Operating": "Operating",

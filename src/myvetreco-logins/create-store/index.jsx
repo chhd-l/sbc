@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import { Steps } from 'antd';
-import { RCi18n,Const } from 'qmkit';
+import { RCi18n,Const, cache } from 'qmkit';
 import {getUserStatus} from '../login/webapi'
 import logo from '../assets/images/login_logo.png';
 import fgsLogo from '../../login-admin/img/logo.png';
@@ -14,9 +14,14 @@ import StoreAudit from './components/Audit';
 import './index.less';
 import '../assets/App.less'
 const { Step } = Steps;
-  const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909
-  const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053
-  const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo
+const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909;
+const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053;
+const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
+
+//sourceStoreId and sourceCompanyInfoId into sessionStorage
+sessionStorage.setItem(cache.CREATESTORE_SOURCE_STORE_ID, sourceStoreId);
+sessionStorage.setItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID, sourceCompanyInfoId);
+
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')) || {}
   const [current, setCurrent] = useState(0);

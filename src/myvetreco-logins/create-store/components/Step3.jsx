@@ -117,7 +117,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
           storeLogo:imgUrl,
           currentCompanyInfoId: userInfo?.companyInfoId,
           currentStoreId: userInfo?.storeId,
-          sourceCompanyInfoId: sessionStorage.getItem(CREATESTORE_SOURCE_COMPANYINFO_ID) || sourceCompanyInfoId,
+          sourceCompanyInfoId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID) || sourceCompanyInfoId,
           sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
           storeSign:faviconUrl,
           ...values,

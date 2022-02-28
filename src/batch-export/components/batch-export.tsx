@@ -138,7 +138,7 @@ class BatchExport extends Component<BatchExportProps, any> {
               ],
               initialValue: [null, null]
             })(<RangePicker
-              disabledDate={current => current && current > moment().endOf('day')}
+              disabledDate={current => item.key!=='nextRefillDate'&&current && current > moment().endOf('day')}
               disabled={exportField === 'all'}
               placeholder={item.key==='nextRefillDate'?['Next refill date: Start date','End date']:item.key==='subscribeDate'?['Subscription date: Start date','End date']:['Start date','End date']}
               className="rang-picker-width"

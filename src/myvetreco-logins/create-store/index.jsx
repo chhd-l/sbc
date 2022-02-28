@@ -14,8 +14,8 @@ import StoreAudit from './components/Audit';
 import './index.less';
 import '../assets/App.less'
 const { Step } = Steps;
-const sourceStoreId = Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909;
-const sourceCompanyInfoId = Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053;
+const sourceStoreId = sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) ? sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) : (Const.SITE_NAME === 'MYVETRECO' ? 123457915 : 123457909);
+const sourceCompanyInfoId = sessionStorage.getItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID) ? sessionStorage.getItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID) : (Const.SITE_NAME === 'MYVETRECO' ? 1062 : 1053);
 const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
 
 //sourceStoreId and sourceCompanyInfoId into sessionStorage

@@ -166,7 +166,7 @@ export default class SubscriptionList extends Component<any, any> {
             customerName: param.consumerName ? param.consumerName : '',
             subscribeId: param.subscriptionNumber,
             cycleTypeId: param.frequency,
-            subscribeStatus: subscriptionStatusValue||param.status,
+            subscribeStatus: param.status,
             consigneeName: param.recipient ? param.recipient : '',
             // consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
@@ -703,31 +703,31 @@ export default class SubscriptionList extends Component<any, any> {
                   ):null
                 }
 
-                <Col span={8}>
-                  <FormItem>
-                    <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.SubscriptionStatus' })} disabled defaultValue={RCi18n({ id: 'Subscription.SubscriptionStatus' })} />
-                      <Select
-                        style={styles.newWrapper}
-                        allowClear
-                        value={subscriptionStatusValue}
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) => {
-                          this.setState({
-                            subscriptionStatusValue: value
-                          });
-                        }}
-                      >
-                        {subscriptionStatusList &&
-                        subscriptionStatusList.map((item, index) => (
-                          <Option value={item.value} title={item.name} key={index}>
-                            {item.name}
-                          </Option>
-                        ))}
-                      </Select>
-                    </InputGroup>
-                  </FormItem>
-                </Col>
+                {/*<Col span={8}>*/}
+                {/*  <FormItem>*/}
+                {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                {/*      <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.SubscriptionStatus' })} disabled defaultValue={RCi18n({ id: 'Subscription.SubscriptionStatus' })} />*/}
+                {/*      <Select*/}
+                {/*        style={styles.newWrapper}*/}
+                {/*        allowClear*/}
+                {/*        value={subscriptionStatusValue}*/}
+                {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                {/*        onChange={(value) => {*/}
+                {/*          this.setState({*/}
+                {/*            subscriptionStatusValue: value*/}
+                {/*          });*/}
+                {/*        }}*/}
+                {/*      >*/}
+                {/*        {subscriptionStatusList &&*/}
+                {/*        subscriptionStatusList.map((item, index) => (*/}
+                {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                {/*            {item.name}*/}
+                {/*          </Option>*/}
+                {/*        ))}*/}
+                {/*      </Select>*/}
+                {/*    </InputGroup>*/}
+                {/*  </FormItem>*/}
+                {/*</Col>*/}
 
                 <Col span={8} id="Range-picker-width">
                   <FormItem>

@@ -140,6 +140,7 @@ class BatchExport extends Component<BatchExportProps, any> {
             })(<RangePicker
               disabledDate={current => current && current > moment().endOf('day')}
               disabled={exportField === 'all'}
+              placeholder={item.key==='nextRefillDate'?['Next refill date: Start date','End date']:item.key==='subscribeDate'?['Subscription date: Start date','End date']:['Start date','End date']}
               className="rang-picker-width"
               style={styles.formItemStyle}
             />)}
@@ -209,12 +210,13 @@ class BatchExport extends Component<BatchExportProps, any> {
             tradeState: {}
           };
           // 单独处理时间值
-          let timeArr = values.beginTime;
+          let timeArr = values.beginTime || values.subscribeDate;
           if (timeArr && timeArr.length) {
             obj['beginTime'] = timeArr[0]?.format(Const.DAY_FORMAT);
             obj['endTime'] = timeArr[1]?.format(Const.DAY_FORMAT);
           }
           delete fieldKey['beginTime'];
+          delete fieldKey['subscribeDate'];
 
           // 单独处理时间值
           let nextRefillDateArr = values.nextRefillDate;

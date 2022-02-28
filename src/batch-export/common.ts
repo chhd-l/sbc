@@ -266,7 +266,7 @@ export const subscriptionSeachField: fieldDataType[] = [
   },
   {
     label: '',
-    key: 'beginTime',
+    key: 'subscribeDate',
     type: 'rangePicker'
   },
   {

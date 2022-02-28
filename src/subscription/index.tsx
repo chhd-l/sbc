@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Breadcrumb, Button, Form, Input, DatePicker, Select, Menu, Dropdown, Icon, Tabs, message, Spin, Row, Col } from 'antd';
+import { Button, Form, Input, Select, Menu, Dropdown, Icon, Tabs, Spin, Row, Col, DatePicker } from 'antd';
 import './index.less';
 import { AuthWrapper, BreadCrumb, Headline, SelectGroup, Const, RCi18n, cache } from 'qmkit';
 import List from './components/list-new';
@@ -9,7 +9,8 @@ import * as webapi from './webapi';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const InputGroup = Input.Group
+const InputGroup = Input.Group;
+const RangePicker = DatePicker.RangePicker;
 
 export default class SubscriptionList extends Component<any, any> {
   constructor(props) {
@@ -72,6 +73,15 @@ export default class SubscriptionList extends Component<any, any> {
         { value: '1', name: RCi18n({ id: 'Subscription.HomeDelivery' }) },
         { value: '2', name: RCi18n({ id: 'Subscription.PickupDelivery' }) },
       ],
+      subscriptionStatusValue:'',
+      subscriptionStatusList:[
+        { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
+        { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
+        { value: '', name: RCi18n({ id: 'Subscription.all' }) },
+      ],
+      nextRefillStartTime:'',
+      nextRefillEndTime:''
     };
   }
 
@@ -124,7 +134,7 @@ export default class SubscriptionList extends Component<any, any> {
   };
 
   onSearch = () => {
-    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType } = this.state;
+    const { searchForm, activeKey, subscriptionType, subscriptionPlanType,deliveryType,nextRefillStartTime,nextRefillEndTime,subscriptionStatusValue } = this.state;
     let prescriberType = JSON.parse(sessionStorage.getItem('PrescriberType')) ? JSON.parse(sessionStorage.getItem('PrescriberType')).value : null;
     let param = {
       orderNumber: searchForm.subscriptionOption === 'Order Number' ? searchForm.number : '',
@@ -139,12 +149,14 @@ export default class SubscriptionList extends Component<any, any> {
         JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds != null && Const.SITE_NAME !== 'MYVETRECO' ? prescriberType : searchForm.prescriberOption === 'Auditor ID' ? searchForm.prescriber : '',
       prescriberName: searchForm.prescriberOption === 'Auditor Name' ? searchForm.prescriber : '',
       frequency: searchForm.frequency,
-      status: activeKey,
+      status: activeKey==='all'?'':activeKey,
       subscriptionType,
       subscriptionPlanType,
       phoneNum: searchForm.phoneNumber === 'Phone number' ? searchForm.phone : '',
       consigneeNumber: searchForm.phoneNumber === 'Delivery address phone number' ? searchForm.phone : '',
-      deliveryType
+      deliveryType,
+      nextRefillStartTime:nextRefillStartTime,
+      nextRefillEndTime:nextRefillEndTime
     };
     this.setState(
       () => {
@@ -154,7 +166,7 @@ export default class SubscriptionList extends Component<any, any> {
             customerName: param.consumerName ? param.consumerName : '',
             subscribeId: param.subscriptionNumber,
             cycleTypeId: param.frequency,
-            subscribeStatus: param.status === 'all' ? '' : param.status,
+            subscribeStatus: param.status,
             consigneeName: param.recipient ? param.recipient : '',
             // consigneeNumber: param.recipientPhone ? param.recipientPhone : '',
             orderCode: param.orderNumber ? param.orderNumber : '',
@@ -166,7 +178,9 @@ export default class SubscriptionList extends Component<any, any> {
             subscriptionPlanType,
             phoneNum: param.phoneNum ? param.phoneNum : '',
             consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
-            deliveryType
+            deliveryType,
+            nextRefillStartTime,
+            nextRefillEndTime
           }
         };
       },
@@ -308,7 +322,7 @@ export default class SubscriptionList extends Component<any, any> {
     const { searchForm, subscriptionOption, productOption, consumerOption,phoneNumber,
       recipientOption, frequencyOption, frequencyList, frequencyListClub, activeKey,
       prescriberOption, prescriberList, subscriptionType,
-      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList,subscriptionDeliveryMethodList,deliveryType } = this.state;
+      subscriptionPlanType, subscriptionTypeList, subscriptionPlanTypeList,subscriptionDeliveryMethodList,deliveryType,subscriptionStatusValue,subscriptionStatusList } = this.state;
     // 将frequencyListClub和frequencyList存起来，以便导出页面使用
     sessionStorage.setItem('frequencyList', JSON.stringify((frequencyList || []).map(item => ({ value: item.id, name: item.name }))));
     sessionStorage.setItem('frequencyListClub', JSON.stringify((frequencyListClub || []).map(item => ({ value: item.id, name: item.name }))));
@@ -688,6 +702,50 @@ export default class SubscriptionList extends Component<any, any> {
                     </Col>
                   ):null
                 }
+
+                {/*<Col span={8}>*/}
+                {/*  <FormItem>*/}
+                {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                {/*      <Input style={styles.leftLabel} title={RCi18n({ id: 'Subscription.SubscriptionStatus' })} disabled defaultValue={RCi18n({ id: 'Subscription.SubscriptionStatus' })} />*/}
+                {/*      <Select*/}
+                {/*        style={styles.newWrapper}*/}
+                {/*        allowClear*/}
+                {/*        value={subscriptionStatusValue}*/}
+                {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                {/*        onChange={(value) => {*/}
+                {/*          this.setState({*/}
+                {/*            subscriptionStatusValue: value*/}
+                {/*          });*/}
+                {/*        }}*/}
+                {/*      >*/}
+                {/*        {subscriptionStatusList &&*/}
+                {/*        subscriptionStatusList.map((item, index) => (*/}
+                {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                {/*            {item.name}*/}
+                {/*          </Option>*/}
+                {/*        ))}*/}
+                {/*      </Select>*/}
+                {/*    </InputGroup>*/}
+                {/*  </FormItem>*/}
+                {/*</Col>*/}
+
+                <Col span={8} id="Range-picker-width">
+                  <FormItem>
+                    <RangePicker
+                      className="rang-picker-width"
+                      style={styles.formItemStyle}
+                      onChange={(e) => {
+                        let nextRefillStartTime = '';
+                        let nextRefillEndTime = '';
+                        if (e.length > 0) {
+                          nextRefillStartTime = e[0].format(Const.DAY_FORMAT);
+                          nextRefillEndTime = e[1].format(Const.DAY_FORMAT);
+                        }
+                        this.setState({ nextRefillStartTime: nextRefillStartTime, nextRefillEndTime: nextRefillEndTime });
+                      }}
+                    />
+                  </FormItem>
+                </Col>
 
 
                 <Col span={24} style={{ textAlign: 'center' }}>

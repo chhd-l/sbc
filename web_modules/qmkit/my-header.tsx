@@ -116,7 +116,7 @@ export default class MyHeader extends React.Component {
       })
     })
 
-    const _frontLanguageList = _languageList.length && _languageList.slice(0,7) || []
+    const _frontLanguageList = _languageList.length && _languageList.slice(0,8) || []
     this.setState({
       languageList: _languageList,
       frontLanguageList:_frontLanguageList
@@ -171,16 +171,16 @@ export default class MyHeader extends React.Component {
     ];
 
     return (
-      <div style={{height: 640,display:'flex',alignItems:'center' }}>
-        <div>
-          <p style={{ textAlign: 'center', fontSize: 50, color: 'var(--primary-color)'}}>
-            <Icon type="environment" style={{ fontSize: 48 }} />
-            &nbsp;&nbsp;
-            <span>
-              <FormattedMessage id="Public.ChooseLocation" />
-            </span>
-          </p>
-          {this.state.frontLanguageList.length>7?<p style={styles.languageMore}>
+      <div style={{padding: '70px 0', textAlign: 'center'}}>
+        <p style={{ textAlign: 'center', fontSize: 50, color: 'var(--primary-color)'}}>
+          <Icon type="environment" style={{ fontSize: 48 }} />
+          &nbsp;&nbsp;
+          <span>
+            <FormattedMessage id="Public.ChooseLocation" />
+          </span>
+        </p>
+        <div style={{width: 600,display:'inline-block'}}>
+          {this.state.frontLanguageList.length>8?<p style={styles.languageMore}>
             <a onClick={() => this.handleMoreLanguage()}>
               <span style={this.state.showMoreLang?{display:"block"}:{display:"none"}}>
                 <FormattedMessage id="Public.more" />
@@ -195,7 +195,7 @@ export default class MyHeader extends React.Component {
                   key={item.lang}
                   style={{
                     cursor: 'pointer',
-                    width: '14.2%'
+                    width: '25%'
                   }}
                   onMouseLeave={(e) => {
                     // this.setImgSrc(item.name, item.value, '');

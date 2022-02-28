@@ -133,6 +133,13 @@ const PaymentMethod = (props) => {
             </AuthWrapper>
           ) : null
         )}
+        { false&&storeId === 123457909 ? (
+          // <AuthWrapper functionName="f_paypal_payment">
+            <Radio value={'PAYU_RUSSIA_PAYPAL'}>
+              <FormattedMessage id="Subscription.Paypal" />
+            </Radio>
+          // </AuthWrapper>
+        ) : null}
       </Radio.Group>
       {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
         <Row className="paymentDoor">
@@ -181,14 +188,44 @@ const PaymentMethod = (props) => {
             </Button>
           </AuthWrapper>
         </Row>
-      ) : (
+      ) : paymentType === 'PAYU_RUSSIA_COD'?(
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
             <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
             <span className="ant-form-item-required"></span>
           </Checkbox>
         </Row>
-      )}
+      ):paymentType === 'PAYU_RUSSIA_PAYPAL'?(
+        //todo paypal逻辑
+        <Row className="payment-panel">
+          <Radio value={1}>
+            <div className="cardInfo">
+              <h4><FormattedMessage id="Subscription.Paypal"/></h4>
+              <p>{'**** **** **** ' }</p>
+            </div>
+          </Radio>
+          <Row>
+            <AuthWrapper functionName="f_delete_card">
+              <Popconfirm
+                placement="topLeft"
+                title={`Are you sure to delete this card?`}
+                onConfirm={() => deleteCard(1)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <a>
+                  <FormattedMessage id="Subscription.Delete" />
+                </a>
+              </Popconfirm>
+              {/*{item.showError ? (*/}
+              {/*  <div className="errorMessage">*/}
+              {/*    <FormattedMessage id="Subscription.RemoveAssociationFirst" />*/}
+              {/*  </div>*/}
+              {/*) : null}*/}
+            </AuthWrapper>
+          </Row>
+        </Row>
+      ):null}
     </Modal>
   );
 };

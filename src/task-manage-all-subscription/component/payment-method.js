@@ -4,6 +4,8 @@ import * as webapi from '../webapi';
 import { Const, AuthWrapper, cache, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
+const codCodEnum = { 123457907: 'PAYU_RUSSIA_COD', 123457919: 'JAPAN_COD' };
+
 const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -118,10 +120,11 @@ const PaymentMethod = (props) => {
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
-        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : storeId ===
-          123457907 ? (
+        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : codCodEnum[
+            storeId
+          ] ? (
           <AuthWrapper functionName="f_cod_payment">
-            <Radio value={'PAYU_RUSSIA_COD'}>
+            <Radio value={codCodEnum[storeId]}>
               <FormattedMessage id="Subscription.CashOnDelivery" />
             </Radio>
           </AuthWrapper>

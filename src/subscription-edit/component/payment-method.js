@@ -4,6 +4,8 @@ import * as webapi from '../webapi';
 import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
+const codCodEnum = { 123457907: 'PAYU_RUSSIA_COD', 123457919: 'JAPAN_COD' };
+
 const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,7 +23,7 @@ const PaymentMethod = (props) => {
       if (props.cardId) {
         setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
       } else {
-        setPaymentType('PAYU_RUSSIA_COD');
+        setPaymentType(codCodEnum[storeId]);
       }
     }
   }, [props.paymentMethodVisible]);
@@ -36,7 +38,7 @@ const PaymentMethod = (props) => {
         setSelectCardId(props.cardId);
       }
     } else {
-      setSelectCardId(null)
+      setSelectCardId(null);
       setDeliveryPay(true);
     }
   }, [paymentType, props.paymentMethodVisible]);
@@ -70,7 +72,7 @@ const PaymentMethod = (props) => {
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find(x => x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.find((x) => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -95,8 +97,7 @@ const PaymentMethod = (props) => {
           setLoading(false);
         }
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   }
 
   function showError(paymentId) {
@@ -124,29 +125,27 @@ const PaymentMethod = (props) => {
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
-        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : (
-          storeId === 123457907 ? (
-            <AuthWrapper functionName="f_cod_payment">
-              <Radio value={'PAYU_RUSSIA_COD'}>
-                <FormattedMessage id="Subscription.CashOnDelivery" />
-              </Radio>
-            </AuthWrapper>
-          ) : null
-        )}
-        { false&&storeId === 123457909 ? (
-          // <AuthWrapper functionName="f_paypal_payment">
-            <Radio value={'PAYU_RUSSIA_PAYPAL'}>
-              <FormattedMessage id="Subscription.Paypal" />
+        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : codCodEnum[
+            storeId
+          ] ? (
+          <AuthWrapper functionName="f_cod_payment">
+            <Radio value={codCodEnum[storeId]}>
+              <FormattedMessage id="Subscription.CashOnDelivery" />
             </Radio>
-          // </AuthWrapper>
+          </AuthWrapper>
         ) : null}
+        {false && storeId === 123457909 ? (
+          // <AuthWrapper functionName="f_paypal_payment">
+          <Radio value={'PAYU_RUSSIA_PAYPAL'}>
+            <FormattedMessage id="Subscription.Paypal" />
+          </Radio>
+        ) : // </AuthWrapper>
+        null}
       </Radio.Group>
       {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
         <Row className="paymentDoor">
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
-            <Spin
-              spinning={loading}
-            >
+            <Spin spinning={loading}>
               <>
                 {cards.map((item, index) => (
                   <Row key={index} className="payment-panel">
@@ -183,25 +182,35 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_add_card">
-            <Button onClick={() => history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
+            <Button
+              onClick={() =>
+                history.push(
+                  `/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`
+                )
+              }
+              style={{ marginTop: 20 }}
+              type="primary"
+            >
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>
         </Row>
-      ) : paymentType === 'PAYU_RUSSIA_COD'?(
+      ) : paymentType === codCodEnum[storeId] ? (
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
             <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
             <span className="ant-form-item-required"></span>
           </Checkbox>
         </Row>
-      ):paymentType === 'PAYU_RUSSIA_PAYPAL'?(
+      ) : paymentType === 'PAYU_RUSSIA_PAYPAL' ? (
         //todo paypal逻辑
         <Row className="payment-panel">
           <Radio value={1}>
             <div className="cardInfo">
-              <h4><FormattedMessage id="Subscription.Paypal"/></h4>
-              <p>{'**** **** **** ' }</p>
+              <h4>
+                <FormattedMessage id="Subscription.Paypal" />
+              </h4>
+              <p>{'**** **** **** '}</p>
             </div>
           </Radio>
           <Row>
@@ -225,7 +234,7 @@ const PaymentMethod = (props) => {
             </AuthWrapper>
           </Row>
         </Row>
-      ):null}
+      ) : null}
     </Modal>
   );
 };

@@ -5475,5 +5475,17 @@ export default {
   "waitingForTheMerchantToReceiveTheGoods": "Waiting for the merchant to receive the goods",
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
-  "yes": "Yes"
+  "yes": "Yes",
+
+  "PetOwner.AddressForm.First name": "First name",
+  "PetOwner.AddressForm.Last name": "Last name",
+  "PetOwner.AddressForm.Last name katakana": "Last name (Fariguna)",
+  "PetOwner.AddressForm.First name katakana": "First name (Fariguna)",
+  "PetOwner.AddressForm.Postal code": "Zip code",
+  "PetOwner.AddressForm.State": "Prefecture",
+  "PetOwner.AddressForm.City": "Address 1 - City name",
+  "PetOwner.AddressForm.Region": "Address 2 - Place name",
+  "PetOwner.AddressForm.Address1": "Address 3 - Street, appartment",
+  "PetOwner.AddressForm.Phone number": "Phone number",
+  "Subscription.Name katakana": "Name (Fariguna)",
 };

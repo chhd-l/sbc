@@ -1165,7 +1165,16 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <FormattedMessage id="Subscription.CashOnDelivery" />
                       </p>
                     </Col>
-                  ) : null}
+                  ) :paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
+                    <Col span={24}>
+                      <p style={{ width: 140 }}>
+                        <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                      </p>
+                      <p>
+                        <FormattedMessage id="Subscription.Paypal" />
+                      </p>
+                    </Col>
+                  ): null}
                 </Row>
               </Col>
             </Row>

@@ -24,6 +24,8 @@ export interface Consignee {
   timeSlot: string;
   deliveryDate: string;
   workTime: string;
+  firstNameKatakana: string;
+  lastNameKatakana: string;
 }
 
 export interface Invoice{

@@ -35,6 +35,8 @@ const catImg = require('./img/cat.png');
 export const FORM_FIELD_MAP = {
   'First name': 'firstName',
   'Last name': 'lastName',
+  'Last name katakana': 'lastNameKatakana',
+  'First name katakana': 'firstNameKatakana',
   Country: 'countryId',
   Region: 'area',
   State: 'province',
@@ -335,6 +337,7 @@ export default class CustomerDetails extends React.Component<any, any> {
     }
 
     let isClubMember = memberShip && memberShip.isClubMember;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
       <>
@@ -415,7 +418,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                     
                       {this.state.fieldList.map((field, idx) => (
                         <>
-                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${field.fieldName}`})}</Col>
+                          <Col key={`label${idx*Math.random()}`} span={4} className="text-tip">{RCi18n({id:`PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}`})}</Col>
                           <Col key={`field${idx*Math.random()}`} span={8} className="text-highlight">
                             {
                               field.fieldName === 'Country'
@@ -604,7 +607,7 @@ export default class CustomerDetails extends React.Component<any, any> {
                   {displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="DELIVERY" onEdit={(record) => this.openDeliveryPage('delivery', record)} />}
                 </TabPane>
                 {
-                  (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0] !== 'ru'
+                  [123457907, 123457919].indexOf(storeId) === -1
                   ? <TabPane tab={RCi18n({id:"PetOwner.BillingInfomation"})} key="billing">{displayPage === 'detail' && <DeliveryList customerId={this.state.customerId} type="BILLING" onEdit={(record) => this.openDeliveryPage('billing', record)} />}</TabPane>
                   : null
                 }

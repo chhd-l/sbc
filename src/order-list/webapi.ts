@@ -11,6 +11,7 @@ type TResult = {
   code: string;
   message: string;
   context: any;
+  defaultLocalDateTime?:any
 };
 
 /**
@@ -93,11 +94,11 @@ export const verifyBuyer = (buyerId: string) => {
  * cancel order
  * @param ids
  */
-export const cancelOrder = (ids) => {
-  return Fetch<TResult>('/trade/audit', {
+export const cancelOrderForJp = (tid) => {
+  return Fetch<TResult>('/trade/order/cancel', {
     method: 'POST',
     body: JSON.stringify({
-      ids
+      tid
     })
   });
 };

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Select, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList, checkCountryInfoExists} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const } from 'qmkit';
+import { Const, cache } from 'qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -117,8 +117,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
           storeLogo:imgUrl,
           currentCompanyInfoId: userInfo?.companyInfoId,
           currentStoreId: userInfo?.storeId,
-          sourceCompanyInfoId: sourceCompanyInfoId,
-          sourceStoreId: sourceStoreId,
+          sourceCompanyInfoId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID) || sourceCompanyInfoId,
+          sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
           storeSign:faviconUrl,
           ...values,
           cityId:values.cityId.key,

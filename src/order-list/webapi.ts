@@ -11,6 +11,7 @@ type TResult = {
   code: string;
   message: string;
   context: any;
+  defaultLocalDateTime?:any
 };
 
 /**
@@ -87,4 +88,17 @@ export const deliverVerify = (tid: string) => {
  */
 export const verifyBuyer = (buyerId: string) => {
   return Fetch(`/customer/customerDelFlag/${buyerId}`);
+};
+
+/**
+ * cancel order
+ * @param ids
+ */
+export const cancelOrderForJp = (tid) => {
+  return Fetch<TResult>('/trade/order/cancel', {
+    method: 'POST',
+    body: JSON.stringify({
+      tid
+    })
+  });
 };

@@ -216,7 +216,7 @@ class SpecForm extends React.Component<any, any> {
                                         }
 
                                         // 重复校验
-                                        const duplicatedIndex = valueList.findIndex((v1, index1) => index1 != k && v1.trim() === trimValue);
+                                        const duplicatedIndex = valueList.findIndex((v1, index1) => index1 != k && v1.trim().toLowerCase() === trimValue.toLowerCase());
                                         if (duplicatedIndex > -1) {
                                           duplicated = true;
                                         }

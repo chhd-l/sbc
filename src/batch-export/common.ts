@@ -1,7 +1,7 @@
 import { RCi18n, ShippStatus, PaymentStatus } from 'qmkit';
 import type { fieldDataType, labelDataType } from './data.d';
 
-export const orderSeachField:fieldDataType[] = [
+export const orderSeachField: fieldDataType[] = [
   {
     label: [
       {
@@ -13,7 +13,7 @@ export const orderSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.subscriptionNumber' })
       }
     ],
-    key: 'id',
+    key: 'id'
   },
   {
     label: [
@@ -26,7 +26,7 @@ export const orderSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.consumerAccount' })
       }
     ],
-    key: 'buyerName',
+    key: 'buyerName'
   },
   {
     label: [
@@ -39,7 +39,17 @@ export const orderSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.recipientPhone' })
       }
     ],
-    key: 'consigneeName',
+    key: 'consigneeName'
+  },
+  {
+    label: RCi18n({ id: 'Order.orderTag' }),
+    key: 'goodWillFlag',
+    options: {
+      goodWillFlag: [
+        { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
+        { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
+      ]
+    }
   },
   {
     label: [
@@ -76,7 +86,7 @@ export const orderSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.skuCode' })
       }
     ],
-    key: 'skuName',
+    key: 'skuName'
   },
   {
     label: [
@@ -150,10 +160,20 @@ export const orderSeachField:fieldDataType[] = [
     label: '',
     key: 'beginTime',
     type: 'rangePicker'
+  },
+  {
+    label: RCi18n({ id: 'Order.createdBy' }),
+    key: 'orderCreateByType',
+    options: {
+      orderCreateByType: [
+        { value: 'CC', name: RCi18n({ id: 'Order.customerCare' }) },
+        { value: 'PO', name: RCi18n({ id: 'Order.petOwner' }) }
+      ]
+    }
   }
 ];
 
-export const subscriptionSeachField:fieldDataType[] = [
+export const subscriptionSeachField: fieldDataType[] = [
   {
     label: [
       {
@@ -165,7 +185,7 @@ export const subscriptionSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.OrderNumber' })
       }
     ],
-    key: 'subscribeId',
+    key: 'subscribeId'
   },
   {
     label: [
@@ -178,17 +198,18 @@ export const subscriptionSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.skuCode' })
       }
     ],
-    key: 'goodsName',
+    key: 'goodsName'
   },
   {
     label: [
       {
         value: 'cycleTypeId_autoship',
-        name: RCi18n({ id: 'Subscription.Frequency' }) + "(" + RCi18n({ id: 'Order.autoship' }) + ")"
+        name:
+          RCi18n({ id: 'Subscription.Frequency' }) + '(' + RCi18n({ id: 'Order.autoship' }) + ')'
       },
       {
         value: 'cycleTypeId_club',
-        name: RCi18n({ id: 'Subscription.Frequency' }) + "(" + RCi18n({ id: 'Order.club' }) + ")"
+        name: RCi18n({ id: 'Subscription.Frequency' }) + '(' + RCi18n({ id: 'Order.club' }) + ')'
       }
     ],
     key: 'cycleTypeId_autoship',
@@ -208,7 +229,7 @@ export const subscriptionSeachField:fieldDataType[] = [
         name: RCi18n({ id: 'Order.consumerAccount' })
       }
     ],
-    key: 'customerName',
+    key: 'customerName'
   },
   {
     label: [
@@ -245,7 +266,25 @@ export const subscriptionSeachField:fieldDataType[] = [
   },
   {
     label: '',
-    key: 'beginTime',
+    key: 'subscribeDate',
+    type: 'rangePicker'
+  },
+  {
+    label: RCi18n({ id: 'Subscription.SubscriptionStatus' }),
+    key: 'subscriptionStatus',
+    options: {
+      subscriptionStatus: [
+        { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
+        { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
+        { value: '', name: RCi18n({ id: 'Subscription.all' }) },
+      ]
+    },
+    valueLink: 'subscriptionStatus'
+  },
+  {
+    label: '',
+    key: 'nextRefillDate',
     type: 'rangePicker'
   }
 ];

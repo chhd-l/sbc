@@ -45,6 +45,7 @@ export default class AppStore extends Store {
           this.dispatch('loading:end');
           this.dispatch('list:init', res.context);
           this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          this.dispatch('list:defaultLocalDateTime', fromJS({ defaultLocalDateTime: res.defaultLocalDateTime }));
           this.btnLoading = false;
         });
       } else {

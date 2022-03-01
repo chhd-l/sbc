@@ -8,7 +8,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
-import { cancelOrder } from '../webapi';
+import { cancelOrderForJp } from '../webapi';
 
 const defaultImg = require('../../goods-list/img/none.png');
 
@@ -86,6 +86,7 @@ class ListView extends React.Component<any, any> {
       verify: Function;
       hideRejectModal: Function;
       showRejectModal: Function;
+      defaultLocalDateTime?:string
     };
   };
 
@@ -99,6 +100,7 @@ class ListView extends React.Component<any, any> {
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
+    defaultLocalDateTime:'defaultLocalDateTime',
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -253,10 +255,10 @@ class ListView extends React.Component<any, any> {
           {this.state.cancelOrderModalVisible ? (
             <Modal
               maskClosable={false}
-              title={<FormattedMessage id="Order cancellation" />}
+              title={<FormattedMessage id="Order.cancelOrderModalTitle" />}
               visible={this.state.cancelOrderModalVisible}
-              cancelText={<FormattedMessage id="No,I don't want to cancel" />}
-              okText={<FormattedMessage id="Yes,I want to cancel this order" />}
+              cancelText={<FormattedMessage id="Order.noCancelOrder" />}
+              okText={<FormattedMessage id="Order.sureCancelOrder" />}
               onOk={() => this._handleCancelOrder()}
               okButtonProps={{ loading: this.state.cancelOrderLoading }}
               onCancel={() => {
@@ -264,7 +266,7 @@ class ListView extends React.Component<any, any> {
               }}
             >
               <p style={{ margin: '10px 0' }}>
-                <FormattedMessage id="Are you sure you want to cancel this order?" />
+                <FormattedMessage id="Order.cancelOrderContent" />
               </p>
             </Modal>
           ) : null}
@@ -290,7 +292,7 @@ class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, onValidateAudit } = this.props.relaxProps;
+    const { onChecked, onAudit, verify, onValidateAudit,defaultLocalDateTime } = this.props.relaxProps;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
@@ -585,8 +587,14 @@ class ListView extends React.Component<any, any> {
                           ) : // </AuthWrapper>
                           null}
 
-                          {/*Cancel all*/}
-                          {storeId === 123457919 ? (
+                          {/*Japan Cancel all*/}
+                          {storeId === 123457919 &&
+                          new Date(defaultLocalDateTime).getTime() <
+                            new Date(v.get('orderCancelTimeOut')).getTime() &&
+                          ((v.get('paymentItem') === 'cod_japan' && flowState === 'INIT') ||
+                            (v.get('paymentItem') !== 'cod_japan' &&
+                              v.get('paymentItem') !== 'adyen_convenience_store' &&
+                              v.getIn(['tradeState', 'payState']) === 'PAID')) ? (
                             <Tooltip
                               placement="top"
                               title={<FormattedMessage id="Order.cancelOrder" />}
@@ -819,8 +827,7 @@ class ListView extends React.Component<any, any> {
   _handleCancelOrder = async () => {
     try {
       this.setState({ cancelOrderLoading: true });
-      //todo cancel order 接口联调
-      const res = await cancelOrder(this.state.selectedOrderId);
+      const res = await cancelOrderForJp(this.state.selectedOrderId);
       if (res?.res?.code === Const.SUCCESS_CODE) {
         this.setState({ cancelOrderModalVisible: false });
       }

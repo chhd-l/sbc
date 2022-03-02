@@ -2376,19 +2376,22 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>
                             {paymentInfo && paymentInfo.paymentVendor
                               ? paymentInfo.paymentVendor
-                              : ''}
+                              : paymentInfo?.paymentItem === 'adyen_paypal' ?<FormattedMessage id="Subscription.Paypal" />:''}
                           </p>
                         </Col>
-                        <Col span={24}>
-                          <p style={{ width: 140 }}>
-                            <FormattedMessage id="Subscription.CardNumber" />:{' '}
-                          </p>
-                          <p>
-                            {paymentInfo && paymentInfo.lastFourDigits
-                              ? '**** **** **** ' + paymentInfo.lastFourDigits
-                              : ''}
-                          </p>
-                        </Col>
+                        {paymentInfo?.paymentItem !== 'adyen_paypal'?(
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                            </p>
+                            <p>
+                              {paymentInfo && paymentInfo.lastFourDigits
+                                ? '**** **** **** ' + paymentInfo.lastFourDigits
+                                : ''}
+                            </p>
+                          </Col>
+                        ):null}
+
                       </>
                     ) : paymentMethod.indexOf('COD') !== -1 ? (
                       <Col span={24}>
@@ -2397,6 +2400,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </p>
                         <p>
                           <FormattedMessage id="Subscription.CashOnDelivery" />
+                        </p>
+                      </Col>
+                    ):paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                        </p>
+                        <p>
+                          <FormattedMessage id="Subscription.Paypal" />
                         </p>
                       </Col>
                     ) : null}

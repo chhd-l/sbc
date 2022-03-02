@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
+import { Modal, Radio, Row, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
 import * as webapi from '../webapi';
 import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
@@ -13,6 +13,7 @@ const PaymentMethod = (props) => {
   const [paymentType, setPaymentType] = useState('');
   const [deliveryPay, setDeliveryPay] = useState(true);
   const [cards, setCards] = useState([]);
+  const [paypalCard, setPaypalCard] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
 
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -58,21 +59,26 @@ const PaymentMethod = (props) => {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          setCards(res.context);
-          setLoading(false);
+          const card = res.context;
+          const paypalCardIndex = card.findIndex((item) => item.paymentItem === 'adyen_paypal');
+          if (paypalCardIndex > -1) {
+            setPaypalCard([res.context[paypalCardIndex]]);
+            card.splice(paypalCardIndex, 1);
+          }
+          setCards(card);
         } else {
           message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
-          setLoading(false);
         }
       })
       .catch(() => {
         message.error(RCi18n({ id: 'Public.GetDataFailed' }));
-        setLoading(false);
-      });
+      }).finally(()=>{
+        setLoading(false)
+    });
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find((x) => x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -83,7 +89,6 @@ const PaymentMethod = (props) => {
 
   function deleteCard(paymentId) {
     setLoading(true);
-    // const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
       .deleteCard(storeId, paymentId)
       .then((data) => {
@@ -108,6 +113,13 @@ const PaymentMethod = (props) => {
       return item;
     });
     setCards(newPaymentMethods);
+    let newPaypalCard = paypalCard.map((item) => {
+      if (item.id === paymentId) {
+        item.showError = true;
+      }
+      return item;
+    });
+    setPaypalCard(newPaypalCard)
   }
 
   return (
@@ -134,9 +146,9 @@ const PaymentMethod = (props) => {
             </Radio>
           </AuthWrapper>
         ) : null}
-        {false && storeId === 123457909 ? (
+        {storeId === 123457909 ? (
           // <AuthWrapper functionName="f_paypal_payment">
-          <Radio value={'PAYU_RUSSIA_PAYPAL'}>
+          <Radio value={'ADYEN_PAYPAL'}>
             <FormattedMessage id="Subscription.Paypal" />
           </Radio>
         ) : // </AuthWrapper>
@@ -199,40 +211,49 @@ const PaymentMethod = (props) => {
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
             <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
-            <span className="ant-form-item-required"></span>
+            <span className="ant-form-item-required" />
           </Checkbox>
         </Row>
-      ) : paymentType === 'PAYU_RUSSIA_PAYPAL' ? (
-        //todo paypal逻辑
-        <Row className="payment-panel">
-          <Radio value={1}>
-            <div className="cardInfo">
-              <h4>
-                <FormattedMessage id="Subscription.Paypal" />
-              </h4>
-              <p>{'**** **** **** '}</p>
-            </div>
-          </Radio>
-          <Row>
-            <AuthWrapper functionName="f_delete_card">
-              <Popconfirm
-                placement="topLeft"
-                title={`Are you sure to delete this card?`}
-                onConfirm={() => deleteCard(1)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <a>
-                  <FormattedMessage id="Subscription.Delete" />
-                </a>
-              </Popconfirm>
-              {/*{item.showError ? (*/}
-              {/*  <div className="errorMessage">*/}
-              {/*    <FormattedMessage id="Subscription.RemoveAssociationFirst" />*/}
-              {/*  </div>*/}
-              {/*) : null}*/}
-            </AuthWrapper>
-          </Row>
+      ) : paymentType === 'ADYEN_PAYPAL' ? (
+        <Row className="paymentDoor">
+          <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
+            <Spin spinning={loading}>
+              <>
+                {paypalCard.map((item, index) => (
+                  <Row key={index} className="payment-panel">
+                    <Radio value={item.id}>
+                      <div className="cardInfo">
+                        <h4>
+                          <FormattedMessage id="Subscription.Paypal" />
+                        </h4>
+                        <p>{item.email}</p>
+                      </div>
+                    </Radio>
+                    <Row>
+                      <AuthWrapper functionName="f_delete_card">
+                        <Popconfirm
+                          placement="topLeft"
+                          title={`Are you sure to delete this card?`}
+                          onConfirm={() => deleteCard(item.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <a>
+                            <FormattedMessage id="Subscription.Delete" />
+                          </a>
+                        </Popconfirm>
+                        {item.showError ? (
+                          <div className="errorMessage">
+                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                          </div>
+                        ) : null}
+                      </AuthWrapper>
+                    </Row>
+                  </Row>
+                ))}
+              </>
+            </Spin>
+          </Radio.Group>
         </Row>
       ) : null}
     </Modal>

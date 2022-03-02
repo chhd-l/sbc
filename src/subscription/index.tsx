@@ -729,23 +729,23 @@ export default class SubscriptionList extends Component<any, any> {
                 {/*  </FormItem>*/}
                 {/*</Col>*/}
 
-                <Col span={8} id="Range-picker-width">
-                  <FormItem>
-                    <RangePicker
-                      className="rang-picker-width"
-                      style={styles.formItemStyle}
-                      onChange={(e) => {
-                        let nextRefillStartTime = '';
-                        let nextRefillEndTime = '';
-                        if (e.length > 0) {
-                          nextRefillStartTime = e[0].format(Const.DAY_FORMAT);
-                          nextRefillEndTime = e[1].format(Const.DAY_FORMAT);
-                        }
-                        this.setState({ nextRefillStartTime: nextRefillStartTime, nextRefillEndTime: nextRefillEndTime });
-                      }}
-                    />
-                  </FormItem>
-                </Col>
+                {/*<Col span={8} id="Range-picker-width">*/}
+                {/*  <FormItem>*/}
+                {/*    <RangePicker*/}
+                {/*      className="rang-picker-width"*/}
+                {/*      style={styles.formItemStyle}*/}
+                {/*      onChange={(e) => {*/}
+                {/*        let nextRefillStartTime = '';*/}
+                {/*        let nextRefillEndTime = '';*/}
+                {/*        if (e.length > 0) {*/}
+                {/*          nextRefillStartTime = e[0].format(Const.DAY_FORMAT);*/}
+                {/*          nextRefillEndTime = e[1].format(Const.DAY_FORMAT);*/}
+                {/*        }*/}
+                {/*        this.setState({ nextRefillStartTime: nextRefillStartTime, nextRefillEndTime: nextRefillEndTime });*/}
+                {/*      }}*/}
+                {/*    />*/}
+                {/*  </FormItem>*/}
+                {/*</Col>*/}
 
 
                 <Col span={24} style={{ textAlign: 'center' }}>

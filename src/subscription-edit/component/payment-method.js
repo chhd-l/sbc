@@ -226,7 +226,7 @@ const PaymentMethod = (props) => {
                         <h4>
                           <FormattedMessage id="Subscription.Paypal" />
                         </h4>
-                        <p>{item.email}</p>
+                        <p>{item.email?item.email.split('@')[0].substring(0, 4) + '***@' + item.email.split('@')[1]:''}</p>
                       </div>
                     </Radio>
                     <Row>

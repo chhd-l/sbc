@@ -2,20 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Headline, BreadCrumb, Const } from 'qmkit';
 import * as webapi from './webapi';
 import { editDeliveryOption } from '../shipping-fee-setting/webapi';
-import { Select, Row, Col, Button, Switch, Radio, TimePicker, Spin, message, InputNumber} from 'antd';
+import {
+  Select,
+  Row,
+  Col,
+  Button,
+  Switch,
+  Radio,
+  TimePicker,
+  Spin,
+  message,
+  InputNumber
+} from 'antd';
 import { FormattedMessage, useIntl } from 'react-intl';
 import './style.less';
 import OpenTable from './openTable';
 import CloseTable from './closeTable';
 import moment from 'moment';
 import { cache } from '../../web_modules/qmkit';
+import { e } from 'mathjs';
 
 const format = 'HH:mm';
 const Option = Select.Option;
 
 const index = () => {
-  const intl = useIntl()
-  const storeId =  JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || ''
+  const intl = useIntl();
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
   const isJapan = String(storeId) === '123457919';
 
   const [loading, setLoading] = useState(false);
@@ -36,7 +48,7 @@ const index = () => {
         closeDay: null,
         sort: 1
       }
-    ],
+    ]
   });
   const [cities, setCities] = useState(deliveryForm.city);
   const [deliveryOptions, setDeliveryOptions] = useState([]);
@@ -70,7 +82,7 @@ const index = () => {
           // 日本需要设置 availableDates 和 deliveryInterval
           if (isJapan) {
             setDatePeriod(res?.context?.availableDates ?? 0);
-            setDeliveryInterval(res?.context?.deliveryInterval ?? 0)
+            setDeliveryInterval(res?.context?.deliveryInterval ?? 0);
           }
           // deliveryDate 状态
           if (res?.context?.systemConfigVO) {
@@ -106,7 +118,7 @@ const index = () => {
   }, [dateSwitch]);
 
   useEffect(() => {
-    let newSelectWeeks =  deliveryForm.openDate.map((item) =>(item.weeks));
+    let newSelectWeeks = deliveryForm.openDate.map((item) => item.weeks);
     setAllSelectWeeks(newSelectWeeks);
   }, [deliveryForm.openDate]);
 
@@ -116,7 +128,12 @@ const index = () => {
   }, [deliveryForm.closeDate]);
 
   useEffect(() => {
-    setCityOk(deliveryForm.city && deliveryForm.city.length > 0);
+    // 日本不要城市信息
+    if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
+      setCityOk(true);
+    } else {
+      setCityOk(deliveryForm.city && deliveryForm.city.length > 0);
+    }
   }, [deliveryForm.city]);
 
   useEffect(() => {
@@ -189,7 +206,7 @@ const index = () => {
     //   });
     // change code
 
-    newOpenDate= deliveryForm.openDate
+    newOpenDate = deliveryForm.openDate
       .sort((a, b) => a.sort - b.sort)
       .filter((item) => item.sort !== sort);
     handleChange('openDate', newOpenDate);
@@ -207,7 +224,7 @@ const index = () => {
 
     // change code
 
-    newOpenDate=deliveryForm.openDate.map((item) => {
+    newOpenDate = deliveryForm.openDate.map((item) => {
       if (item.sort === openTableItem.sort) {
         // newOpenDate.push(openTableItem);
         return openTableItem;
@@ -243,11 +260,11 @@ const index = () => {
     //     }
     //   });
 
-// change code Nathan
+    // change code Nathan
 
-newCloseDate=deliveryForm.closeDate
+    newCloseDate = deliveryForm.closeDate
       .sort((a, b) => a.sort - b.sort)
-      .filter((item) => (item.sort !== sort));
+      .filter((item) => item.sort !== sort);
 
     handleChange('closeDate', newCloseDate);
   }
@@ -263,12 +280,11 @@ newCloseDate=deliveryForm.closeDate
     // });
 
     //change code Nathan
-    newCloseDate=deliveryForm.closeDate.map((item) => {
+    newCloseDate = deliveryForm.closeDate.map((item) => {
       if (item.sort === closeTableItem.sort) {
         return closeTableItem;
       }
-        return item;
-
+      return item;
     });
 
     handleChange('closeDate', newCloseDate);
@@ -288,12 +304,12 @@ newCloseDate=deliveryForm.closeDate
      *  日本 新增 availableDates，deliveryInterval 2个字段
      **/
     let params = deliveryForm;
-    if(isJapan){
+    if (isJapan) {
       params = {
         ...deliveryForm,
         availableDates: parseInt(datePeriod) ?? 0,
-        deliveryInterval: parseInt(deliveryInterval) ?? 0,
-      }
+        deliveryInterval: parseInt(deliveryInterval) ?? 0
+      };
     }
 
     setLoading(true);
@@ -330,7 +346,7 @@ newCloseDate=deliveryForm.closeDate
       .catch((err) => {
         message.error(err || 'Update Failed');
       });
-  };
+  }
 
   return (
     <div>
@@ -338,9 +354,7 @@ newCloseDate=deliveryForm.closeDate
       <div className="container-search">
         <Headline title={<FormattedMessage id="Setting.orderDeliveryDateSettings" />} />
       </div>
-      <Spin
-        spinning={loading}
-      >
+      <Spin spinning={loading}>
         <div
           className="container setting_delivery_date"
           id="deliveryDateSettings"
@@ -353,7 +367,10 @@ newCloseDate=deliveryForm.closeDate
               </p>
             </Col>
             <Col span={4}>
-              <Switch checked={deliverDateStatus == 1 ? true : false} onChange={(checked) => onChangeField(checked)} />
+              <Switch
+                checked={deliverDateStatus == 1 ? true : false}
+                onChange={(checked) => onChangeField(checked)}
+              />
             </Col>
           </Row>
 
@@ -368,7 +385,9 @@ newCloseDate=deliveryForm.closeDate
                 <Col span={20}>
                   <Radio.Group
                     value={
-                      deliveryOptions && deliveryOptions.length > 0 ? deliveryOptions[0].valueEn : null
+                      deliveryOptions && deliveryOptions.length > 0
+                        ? deliveryOptions[0].valueEn
+                        : null
                     }
                     onChange={(e) => handleChange('deliveryOption', e.target.value)}
                   >
@@ -380,24 +399,22 @@ newCloseDate=deliveryForm.closeDate
                   </Radio.Group>
                 </Col>
               </Row>
-              {
-                isJapan
-                  ? (
-                    <Row>
-                      <Col span={4}>
-                        <p className="center">{intl.formatMessage({id: 'Setting.availableDatePeriod'})}:</p>
-                      </Col>
-                      <Col span={6}>
-                        <InputNumber
-                          min={0}
-                          value={datePeriod}
-                          onChange={(value) => setDatePeriod(value)}
-                        />
-                      </Col>
-                    </Row>
-                  )
-                  : null
-              }
+              {isJapan ? (
+                <Row>
+                  <Col span={4}>
+                    <p className="center">
+                      {intl.formatMessage({ id: 'Setting.availableDatePeriod' })}:
+                    </p>
+                  </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      min={0}
+                      value={datePeriod}
+                      onChange={(value) => setDatePeriod(value)}
+                    />
+                  </Col>
+                </Row>
+              ) : null}
               <Row>
                 <Col span={4}>
                   <p className="center">
@@ -476,24 +493,22 @@ newCloseDate=deliveryForm.closeDate
                   </p>
                 </Col>
               </Row>
-              {
-                isJapan
-                  ? (
-                    <Row>
-                      <Col span={4}>
-                        <p className="center">{intl.formatMessage({id: 'Setting.deliveryInterval'})}:</p>
-                      </Col>
-                      <Col span={6}>
-                        <InputNumber
-                          min={0}
-                          value={deliveryInterval}
-                          onChange={(value) => setDeliveryInterval(value)}
-                        />
-                      </Col>
-                    </Row>
-                  )
-                  : null
-              }
+              {isJapan ? (
+                <Row>
+                  <Col span={4}>
+                    <p className="center">
+                      {intl.formatMessage({ id: 'Setting.deliveryInterval' })}:
+                    </p>
+                  </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      min={0}
+                      value={deliveryInterval}
+                      onChange={(value) => setDeliveryInterval(value)}
+                    />
+                  </Col>
+                </Row>
+              ) : null}
               <Row style={{ marginBottom: 0 }}>
                 <Col span={3}>
                   <p className="center">
@@ -555,7 +570,6 @@ newCloseDate=deliveryForm.closeDate
               </Row>
             </>
           ) : null}
-
         </div>
       </Spin>
     </div>

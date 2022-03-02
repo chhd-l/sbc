@@ -72,12 +72,13 @@ const PaymentMethod = (props) => {
       })
       .catch(() => {
         message.error(RCi18n({ id: 'Public.GetDataFailed' }));
-        setLoading(false);
-      });
+      }).finally(()=>{
+        setLoading(false)
+    });
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find((x) => x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -112,6 +113,13 @@ const PaymentMethod = (props) => {
       return item;
     });
     setCards(newPaymentMethods);
+    let newPaypalCard = paypalCard.map((item) => {
+      if (item.id === paymentId) {
+        item.showError = true;
+      }
+      return item;
+    });
+    setPaypalCard(newPaypalCard)
   }
 
   return (
@@ -140,7 +148,7 @@ const PaymentMethod = (props) => {
         ) : null}
         {storeId === 123457909 ? (
           // <AuthWrapper functionName="f_paypal_payment">
-          <Radio value={'PAYU_RUSSIA_PAYPAL'}>
+          <Radio value={'ADYEN_PAYPAL'}>
             <FormattedMessage id="Subscription.Paypal" />
           </Radio>
         ) : // </AuthWrapper>
@@ -206,7 +214,7 @@ const PaymentMethod = (props) => {
             <span className="ant-form-item-required" />
           </Checkbox>
         </Row>
-      ) : paymentType === 'PAYU_RUSSIA_PAYPAL' ? (
+      ) : paymentType === 'ADYEN_PAYPAL' ? (
         <Row className="paymentDoor">
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
             <Spin spinning={loading}>

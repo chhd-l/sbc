@@ -184,7 +184,9 @@ class OrderDetailTab extends React.Component<any, any> {
           area: '',
           timeSlot: '',
           deliveryDate: '',
-          workTime: ''
+          workTime: '',
+          firstNameKatakana: '',
+          lastNameKatakana: ''
         };
 
     //发票信息
@@ -751,7 +753,24 @@ class OrderDetailTab extends React.Component<any, any> {
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>
-              <Row>
+              {storeId === 123457919 ? <Row>
+                <Col span={10}><FormattedMessage id="Subscription.Name" />:</Col>
+                <Col span={14}>{consignee.lastName && consignee.firstName ? `${consignee.lastName} ${consignee.firstName}` : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="Subscription.Name katakana" />:</Col>
+                <Col span={14}>{consignee.lastNameKatakana && consignee.firstNameKatakana ? `${consignee.lastNameKatakana} ${consignee.firstNameKatakana}` : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.Postal code" />:</Col>
+                <Col span={14}>{consignee.postCode ? consignee.postCode : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.State" />:</Col>
+                <Col span={14}>{consignee.province ? consignee.province : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.City" />:</Col>
+                <Col span={14}>{consignee.city ? consignee.city : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.Region" />:</Col>
+                <Col span={14}>{consignee.area ? consignee.area : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.Address1" />:</Col>
+                <Col span={14}>{consignee.detailAddress1 ? consignee.detailAddress1 : <br/>}</Col>
+                <Col span={10}><FormattedMessage id="PetOwner.AddressForm.Phone number" />:</Col>
+                <Col span={14}>{consignee.phone ? consignee.phone : <br/>}</Col>
+              </Row> : <Row>
                 <Col span={12}>
                   <Tooltip
                     overlayStyle={{
@@ -911,11 +930,11 @@ class OrderDetailTab extends React.Component<any, any> {
                     </p>
                   </Col>
                 ) : null}
-              </Row>
+              </Row>}
             </div>
           </Col>
           {/*billingAddress panel*/}
-          {storeId !== 123457907 ? (
+          {storeId !== 123457907 && storeId !== 123457919 ? (
             <Col span={12}>
               <div className="headBox order_detail_billing_address" style={{ height: 220 }}>
                 <h4>

@@ -17,6 +17,8 @@ interface Iprop {
 const NEW_ADDRESS_TEMPLATE = {
   firstName: '',
   lastName: '',
+  firstNameKatakana: '',
+  lastNameKatakana: '',
   consigneeNumber: '',
   postCode: '',
   countryId: null,

@@ -15,6 +15,8 @@ type TDelivery = {
   deliveryAddressId?: string;
   firstName?: string;
   lastName?: string;
+  firstNameKatakana?: string;
+  lastNameKatakana?: string;
   consigneeNumber?: string;
   postCode?: string;
   countryId?: number;
@@ -43,6 +45,8 @@ interface Iprop extends FormComponentProps {
 export const FORM_FIELD_MAP = {
   'First name': 'firstName',
   'Last name': 'lastName',
+  'Last name katakana': 'lastNameKatakana',
+  'First name katakana': 'firstNameKatakana',
   Country: 'countryId',
   Region: 'area',
   State: 'province',
@@ -568,7 +572,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   // 邮编校验
   compareZip = async (rule, value, callback) => {
-    if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
+    if (!/^[0-9A-Za-z-\s]{3,10}$/.test(value)) {
       callback(RCi18n({ id: "PetOwner.theCorrectPostCode" }));
     } else {
       // 邮编黑名单校验
@@ -611,16 +615,16 @@ class DeliveryItem extends React.Component<Iprop, any> {
 
   render() {
     const { delivery, addressType } = this.props;
-    const { fields, suggestionAddress, checkedAddress, validationSuccess } = this.state;
+    const { fields, suggestionAddress, checkedAddress, validationSuccess, storeId } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = (col: number) => ({
       labelCol: {
         xs: { span: 24 },
-        sm: { span: col === 1 ? 8 : 4 }
+        sm: { span: col === 1 ? 10 : 5 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: col === 1 ? 12 : 18 }
+        sm: { span: col === 1 ? 10 : 17 }
       }
     });
     return (
@@ -641,7 +645,7 @@ class DeliveryItem extends React.Component<Iprop, any> {
               <Row>
                 {this.state.formFieldList.map((field, colIdx) => (
                   <Col span={12 * field.occupancyNum} key={colIdx}>
-                    <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({ id: `PetOwner.${field.fieldName}` })}>
+                    <Form.Item {...formItemLayout(field.occupancyNum)} label={RCi18n({ id: `PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}` })}>
                       {getFieldDecorator(`${FORM_FIELD_MAP[field.fieldName]}`,
                         {
                           initialValue: delivery[FORM_FIELD_MAP[field.fieldName]],

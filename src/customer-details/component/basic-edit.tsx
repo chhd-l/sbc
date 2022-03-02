@@ -288,7 +288,7 @@ class BasicEdit extends React.Component<any, any> {
   };
 
   render() {
-    const { customer, countryList, stateList, cityList, editable, clinicList, objectFetching, initCityName, initPreferChannel } = this.state;
+    const { customer, countryList, stateList, cityList, editable, clinicList, objectFetching, initCityName, initPreferChannel, storeId } = this.state;
     const options = [
       {
         label: 'Phone',
@@ -345,7 +345,7 @@ class BasicEdit extends React.Component<any, any> {
                 </Col>
                 {this.state.fieldList.map((field, idx) => (
                   <Col key={idx} span={12}>
-                    <FormItem label={RCi18n({id:`PetOwner.${field.fieldName}`})}>
+                    <FormItem label={RCi18n({id:`PetOwner.${storeId === 123457919 ? 'AddressForm.' : ''}${field.fieldName}`})}>
                       <span>
                         {field.fieldName === 'Country' ? (customer.countryId ? this.state.countryList.find(c => c.id === customer.countryId)?.name : customer.country) : (customer[FORM_FIELD_MAP[field.fieldName]])}
                       </span>

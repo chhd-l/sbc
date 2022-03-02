@@ -22,6 +22,7 @@ import {
   getIndividualSubFrequency
 } from '../task-manage-all-subscription/module/querySysDictionary';
 import { fromJS } from 'immutable';
+import { debug } from 'console';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -282,9 +283,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
+                // 日本的timeSlot需要显示
                 if (
                   subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
-                  +storeId === 123457907
+                  (+storeId === 123457907 || +storeId === 123457919)
                 ) {
                   this.getTimeSlot({
                     cityNo: subscriptionDetail.consignee.provinceIdStr,
@@ -703,6 +705,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   return;
       // })
     }
+    //如果是HOME_DELIVERY 查询timeslot信息
+    // if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
+    //   debugger;
+    //   this.getTimeSlot({
+    //     cityNo: deliveryAddressInfo.provinceIdStr,
+    //     subscribeId: subscriptionInfo.subscriptionNumber
+    //   });
+    //   this.setState({
+    //     deliveryDate: undefined,
+    //     timeSlot: undefined
+    //   });
+    // }
 
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (
@@ -711,6 +725,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
       ] === 'ru'
     ) {
+      debugger;
       if (
         !deliveryAddressInfo.street ||
         !deliveryAddressInfo.postCode ||
@@ -729,6 +744,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
+        debugger;
         this.getTimeSlot({
           cityNo: deliveryAddressInfo.provinceIdStr,
           subscribeId: subscriptionInfo.subscriptionNumber
@@ -2007,146 +2023,148 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     </Col>
 
                     {storeId === 123457919 ? (
-                    <>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="Subscription.Name" />:{' '}
-                        </p>
-                        <p>
-                          {deliveryAddressInfo
-                            ? deliveryAddressInfo.lastName + ' ' + deliveryAddressInfo.firstName
-                            : ''}
-                        </p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="Subscription.Name katakana" />:{' '}
-                        </p>
-                        <p>
-                          {deliveryAddressInfo
-                            ? deliveryAddressInfo.lastNameKatakana + ' ' + deliveryAddressInfo.firstNameKatakana
-                            : ''}
-                        </p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.Postal code" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.postCode}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.State" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.province}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.City" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.city}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.Region" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.area}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.Address1" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.address1}</p>
-                      </Col>
-                      <Col span={24}>
-                        <p style={{ width: 210 }}>
-                          <FormattedMessage id="PetOwner.AddressForm.Phone number" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.consigneeNumber}</p>
-                      </Col>
-                    </>
-                  ) : (
-                  <>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Name" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo
-                          ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
-                          : ''}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.City" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo.city}</p>
-                    </Col>
-                    {deliveryAddressInfo.province ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.State" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.province}</p>
-                      </Col>
-                    ) : null}
+                      <>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="Subscription.Name" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.lastName + ' ' + deliveryAddressInfo.firstName
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="Subscription.Name katakana" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.lastNameKatakana +
+                                ' ' +
+                                deliveryAddressInfo.firstNameKatakana
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Postal code" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.postCode}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.State" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.province}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.City" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.city}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Region" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.area}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Address1" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.address1}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Phone number" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.consigneeNumber}</p>
+                        </Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Name" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.City" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.city}</p>
+                        </Col>
+                        {deliveryAddressInfo.province ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.State" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo.province}</p>
+                          </Col>
+                        ) : null}
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Country" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo.countryId
-                          ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
-                          : deliveryAddressInfo.country}
-                      </p>
-                    </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Country" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo.countryId
+                              ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
+                              : deliveryAddressInfo.country}
+                          </p>
+                        </Col>
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address1" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address2" />:{' '}
-                      </p>
-                      <p className="delivery_edit_address2">
-                        {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
-                      </p>
-                    </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Address1" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Address2" />:{' '}
+                          </p>
+                          <p className="delivery_edit_address2">
+                            {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                          </p>
+                        </Col>
 
-                    {deliveryAddressInfo?.county ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.County" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
-                      </Col>
-                    ) : null}
+                        {deliveryAddressInfo?.county ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.County" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                          </Col>
+                        ) : null}
 
-                    {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.WorkTime" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
-                      </Col>
-                    ) : null}
+                        {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.WorkTime" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                          </Col>
+                        ) : null}
 
-                    <Col span={24}>
-                      {deliveryAddressInfo.receiveType === 'PICK_UP'
-                        ? null
-                        : deliveryAddressInfo.validFlag
-                        ? null
-                        : deliveryAddressInfo.alert && (
-                            <PostalCodeMsg text={deliveryAddressInfo.alert} />
-                          )}
-                    </Col>
-                  </>
-                )}
+                        <Col span={24}>
+                          {deliveryAddressInfo.receiveType === 'PICK_UP'
+                            ? null
+                            : deliveryAddressInfo.validFlag
+                            ? null
+                            : deliveryAddressInfo.alert && (
+                                <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                              )}
+                        </Col>
+                      </>
+                    )}
                   </Row>
                 </Col>
                 {/* 如果是俄罗斯 且 deliverDateStatus为1 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
@@ -2437,7 +2455,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   {/* billingAddress是否和deliveryAddress一样 */}
                   <Col>
-                    {storeId === 123457907 || storeId === 123457910 || storeId === 123457919 ? null : (
+                    {storeId === 123457907 ||
+                    storeId === 123457910 ||
+                    storeId === 123457919 ? null : (
                       <Checkbox
                         checked={this.state.sameFlag}
                         onChange={(e) => {
@@ -2541,24 +2561,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               key={item.deliveryAddressId}
                             >
                               <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                {storeId === 123457919 ? <div style={{ display: 'inline-grid' }}>
-                                  <p>{item.lastName + '  ' + item.firstName}</p>
-                                  <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
-                                  <p>{item.postCode}</p>
-                                  <p>{item.city}, {item.area}, {item.address1}</p>
-                                  <p>{item.consigneeNumber}</p>
-                                </div> : <div style={{ display: 'inline-grid' }}>
-                                  <p>{item.firstName + '  ' + item.lastName}</p>
-                                  <p>{item.city}</p>
-                                  {item.province ? <p>{item.province}</p> : null}
+                                {storeId === 123457919 ? (
+                                  <div style={{ display: 'inline-grid' }}>
+                                    <p>{item.lastName + '  ' + item.firstName}</p>
+                                    <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
+                                    <p>{item.postCode}</p>
+                                    <p>
+                                      {item.city}, {item.area}, {item.address1}
+                                    </p>
+                                    <p>{item.consigneeNumber}</p>
+                                  </div>
+                                ) : (
+                                  <div style={{ display: 'inline-grid' }}>
+                                    <p>{item.firstName + '  ' + item.lastName}</p>
+                                    <p>{item.city}</p>
+                                    {item.province ? <p>{item.province}</p> : null}
 
-                                  <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                  <p>{item.address1}</p>
-                                  <p>{item.address2}</p>
-                                  {!item.validFlag
-                                    ? item.alert && <PostalCodeMsg text={item.alert} />
-                                    : null}
-                                </div>}
+                                    <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                    <p>{item.address1}</p>
+                                    <p>{item.address2}</p>
+                                    {!item.validFlag
+                                      ? item.alert && <PostalCodeMsg text={item.alert} />
+                                      : null}
+                                  </div>
+                                )}
                               </Radio>
                               <div>
                                 <Button
@@ -2584,23 +2610,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 key={item.deliveryAddressId}
                               >
                                 <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                  {storeId === 123457919 ? <div style={{ display: 'inline-grid' }}>
-                                    <p>{item.lastName + '  ' + item.firstName}</p>
-                                    <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
-                                    <p>{item.postCode}</p>
-                                    <p>{item.city}, {item.area}, {item.address1}</p>
-                                    <p>{item.consigneeNumber}</p>
-                                  </div> : <div style={{ display: 'inline-grid' }}>
-                                    <p>{item.firstName + '  ' + item.lastName}</p>
-                                    <p>{item.city}</p>
-                                    {item.province ? <p>{item.province}</p> : null}
-                                    <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                    <p>{item.address1}</p>
-                                    <p>{item.address2}</p>
-                                    {!item.validFlag
-                                      ? item.alert && <PostalCodeMsg text={item.alert} />
-                                      : null}
-                                  </div>}
+                                  {storeId === 123457919 ? (
+                                    <div style={{ display: 'inline-grid' }}>
+                                      <p>{item.lastName + '  ' + item.firstName}</p>
+                                      <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
+                                      <p>{item.postCode}</p>
+                                      <p>
+                                        {item.city}, {item.area}, {item.address1}
+                                      </p>
+                                      <p>{item.consigneeNumber}</p>
+                                    </div>
+                                  ) : (
+                                    <div style={{ display: 'inline-grid' }}>
+                                      <p>{item.firstName + '  ' + item.lastName}</p>
+                                      <p>{item.city}</p>
+                                      {item.province ? <p>{item.province}</p> : null}
+                                      <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                      <p>{item.address1}</p>
+                                      <p>{item.address2}</p>
+                                      {!item.validFlag
+                                        ? item.alert && <PostalCodeMsg text={item.alert} />
+                                        : null}
+                                    </div>
+                                  )}
                                 </Radio>
                                 <div>
                                   <Button

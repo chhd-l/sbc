@@ -591,7 +591,7 @@ class ListView extends React.Component<any, any> {
                           {storeId === 123457919 &&
                           new Date(defaultLocalDateTime).getTime() <
                             new Date(v.get('orderCancelTimeOut')).getTime() &&
-                          ((v.get('paymentItem') === 'cod_japan' && flowState === 'INIT') ||
+                          ((v.get('paymentItem') === 'cod_japan' && flowState === 'PENDING_REVIEW') ||
                             (v.get('paymentItem') !== 'cod_japan' &&
                               v.get('paymentItem') !== 'adyen_convenience_store' &&
                               v.getIn(['tradeState', 'payState']) === 'PAID')) ? (

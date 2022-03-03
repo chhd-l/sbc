@@ -179,8 +179,8 @@ export default class SubscriptionList extends Component<any, any> {
             phoneNum: param.phoneNum ? param.phoneNum : '',
             consigneeNumber: param.consigneeNumber ? param.consigneeNumber : '',
             deliveryType,
-            nextRefillStartTime,
-            nextRefillEndTime
+            // nextRefillStartTime,
+            // nextRefillEndTime
           }
         };
       },

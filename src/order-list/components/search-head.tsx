@@ -267,45 +267,45 @@ class SearchHead extends Component<any, any> {
               </Row>
               {showAdvanceSearch ? (
                 <Row>
-                  <Col span={8}>
-                    <FormItem>
-                      <InputGroup compact style={styles.formItemStyle}>
-                        <Select
-                          allowClear
-                          value={orderTagType}
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
-                            this.setState({
-                              orderTagType: value
-                            });
-                          }}
-                          style={styles.label}
-                        >
-                          <Option value="Order Tag" title={RCi18n({ id: 'Order.orderTag' })}>
-                            <FormattedMessage id="Order.orderTag"/>
-                          </Option>
-                        </Select>
-                        <Select
-                          style={styles.wrapper}
-                          allowClear
-                          value={orderTagValue}
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
-                            this.setState({
-                              orderTagValue: value
-                            });
-                          }}
-                        >
-                          {orderTagList &&
-                          orderTagList.map((item, index) => (
-                            <Option value={item.value} title={item.name} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
-                      </InputGroup>
-                    </FormItem>
-                  </Col>
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      <Select*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderTagType}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderTagType: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option value="Order Tag" title={RCi18n({ id: 'Order.orderTag' })}>*/}
+                  {/*          <FormattedMessage id="Order.orderTag"/>*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Select*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderTagValue}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderTagValue: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      >*/}
+                  {/*        {orderTagList &&*/}
+                  {/*        orderTagList.map((item, index) => (*/}
+                  {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                  {/*            {item.name}*/}
+                  {/*          </Option>*/}
+                  {/*        ))}*/}
+                  {/*      </Select>*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
 
                   <Col span={8}>
                     <FormItem>
@@ -655,44 +655,44 @@ class SearchHead extends Component<any, any> {
                   </Col>
                   {/*</AuthWrapper>*/}
 
-                  <Col span={8}>
-                    <FormItem>
-                      <InputGroup compact style={styles.formItemStyle}>
-                        <Select
-                          onChange={(val, a) => {
-                            this.setState({
-                              orderCreatedByTypeValue: val
-                            });
-                          }}
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          value={this.state.orderCreatedByTypeValue}
-                          style={styles.label}
-                        >
-                          <Option title={RCi18n({ id: 'Order.createdBy' })} value="Created by">
-                            <FormattedMessage id="Order.createdBy" />
-                          </Option>
-                        </Select>
-                        <Select
-                          style={styles.wrapper}
-                          allowClear
-                          value={orderCreateByType}
-                          getPopupContainer={(trigger: any) => trigger.parentNode}
-                          onChange={(value) => {
-                            this.setState({
-                              orderCreateByType: value
-                            });
-                          }}
-                        >
-                          {orderCreatedByList &&
-                          orderCreatedByList.map((item, index) => (
-                            <Option value={item.value} title={item.name} key={index}>
-                              {item.name}
-                            </Option>
-                          ))}
-                        </Select>
-                      </InputGroup>
-                    </FormItem>
-                  </Col>
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      <Select*/}
+                  {/*        onChange={(val, a) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderCreatedByTypeValue: val*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        value={this.state.orderCreatedByTypeValue}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.createdBy' })} value="Created by">*/}
+                  {/*          <FormattedMessage id="Order.createdBy" />*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Select*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderCreateByType}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderCreateByType: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      >*/}
+                  {/*        {orderCreatedByList &&*/}
+                  {/*        orderCreatedByList.map((item, index) => (*/}
+                  {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                  {/*            {item.name}*/}
+                  {/*          </Option>*/}
+                  {/*        ))}*/}
+                  {/*      </Select>*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
                 </Row>
               ) : null}
 

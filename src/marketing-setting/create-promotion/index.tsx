@@ -221,18 +221,16 @@ export default function index({...props}) {
         detail?.fullGiftLevelList?.[0].fullGiftDetailList.forEach(item=>{
           giftIds.push(item.productId)
         })
-        detail.marketingScopeList.forEach(item=>{
-          customIds.push(item.scopeId)
-        })
-        customRowList = detail.goodsList?.goodsInfoPage?.content.filter(item=>{
-          return customIds.includes(item.goodsInfoId)
-        })
-      }else {
-        detail.marketingScopeList.forEach(item=>{
-          customIds.push(item.scopeId)
-        })
-        customRowList = detail.goodsList?.goodsInfoPage?.content
       }
+      detail.marketingScopeList.forEach(item=>{
+        customIds.push(item.scopeId)
+      })
+      detail.goodsList?.goodsInfoPage?.content.forEach(item => {
+        const scopeItem = detail.marketingScopeList.find(el => el.scopeId === item.goodsInfoId);
+        if (scopeItem) {
+          customRowList.push({ ...item, productNumber: scopeItem.number || 1 });
+        }
+      });
       setFormData({
         /**
          * 第二步
@@ -339,7 +337,7 @@ export default function index({...props}) {
           skuIds:detail.scopeIds,
           selectedRows:goodsList?.goodsInfoPage?.content.filter(item=>{
             return detail.scopeIds.includes(item.goodsInfoId)
-          }),
+          }).map(item => ({ ...item, productNumber: (detail.scopeNumber || {})[item.goodsInfoId] || 1 })),
         },
         /**
          * 第五步

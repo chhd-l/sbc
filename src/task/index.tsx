@@ -40,6 +40,7 @@ export default class Task extends React.Component<any, any> {
       title: <FormattedMessage id="task.TaskBoard" />,
       isCardView: sessionStorage.getItem(cache.TASKVIEWTYPE) === 'False' ? false : true,
       goldenMomentList: [],
+      timeZoneList: [],
       taskStatus: [
         { name: <FormattedMessage id="task.ToDo" />, value: 'To Do' },
         { name: <FormattedMessage id="task.On-going" />, value: 'On-going' },
@@ -72,13 +73,15 @@ export default class Task extends React.Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
-        } else {
-          message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
         }
-      })
-      .catch(() => {
-        message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       });
+    webapi.getTimeZoneList().then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          timeZoneList: data.res.context?.sysDictionaryVOS ?? []
+        });
+      }
+    });
   }
 
   onFormChange = ({ field, value }) => {
@@ -135,15 +138,12 @@ export default class Task extends React.Component<any, any> {
             }
           }
         });
-      } else {
-        message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
       }
 
       this.setState({
         exportLoading: false
       })
     }).catch(() => {
-      message.error((window as any).RCi18n({id:'Public.GetDataFailed'}));
       this.setState({
         exportLoading: false
       })
@@ -152,7 +152,7 @@ export default class Task extends React.Component<any, any> {
   };
 
   render() {
-    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch, exportLoading } = this.state;
+    const { title, goldenMomentList, taskStatus, priorityList, isCardView, taskForm, queryType, showAdvanceSearch, exportLoading, timeZoneList } = this.state;
     return (
       <div>
         <Breadcrumb>
@@ -377,6 +377,39 @@ export default class Task extends React.Component<any, any> {
                     value={taskForm.dueTimeStart && taskForm.dueTimeEnd ? [moment(taskForm.dueTimeStart), moment(taskForm.dueTimeEnd)] : null}
                     style={{ width: 360 }}
                   />
+                </Col>
+                <Col span={8}>
+                  <FormItem>
+                    <SelectGroup
+                      defaultValue=""
+                      showSearch
+                      dropdownMatchSelectWidth={false}
+                      label={
+                        <p style={styles.label}>
+                          <FormattedMessage id="Setting.timeZone" />
+                        </p>
+                      }
+                      style={{ width: 194, maxWidth: 194 }}
+                      onChange={(value) => {
+                        value = value === '' ? null : value;
+                        this.onFormChange({
+                          field: 'timeZone',
+                          value
+                        });
+                      }}
+                      value={taskForm.timeZone}
+                    >
+                      <Option value="">
+                        <FormattedMessage id="Order.All" />
+                      </Option>
+                      {timeZoneList &&
+                        timeZoneList.map((item) => (
+                          <Option value={item.name} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                    </SelectGroup>
+                  </FormItem>
                 </Col>
               </Row>
               <Row>

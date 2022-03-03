@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { DataGrid, noop, history, AuthWrapper, Const, cache, checkAuth } from 'qmkit';
+import { DataGrid, noop, history, AuthWrapper, Const, cache, checkAuth, util } from 'qmkit';
 import { List, fromJS } from 'immutable';
 import { Menu, Dropdown, Icon, Modal, Tooltip, Popconfirm } from 'antd';
 import { withRouter } from 'react-router';
 import { IList } from 'typings/globalType';
 import { Table } from 'antd';
-import ImgWithFallback from './fallback-image';
+//import ImgWithFallback from './fallback-image';
 
 const Column = Table.Column;
 const confirm = Modal.confirm;
@@ -98,7 +98,7 @@ class CateList extends React.Component<any, any> {
         pagination={{ total, current: pageNum + 1, onChange: this._getData }}
       >
         {/* Image */}
-        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img, record) => (img && record.weShareId ? <ImgWithFallback src={img} style={styles.imgItem} /> : <img src={img ?? defaultImg} style={styles.imgItem} />)} />
+        <Column title={<FormattedMessage id="Product.image" />} dataIndex="goodsImg" key="goodsImg" render={(img) => (<img src={img ? util.optimizeImage(img) : defaultImg} style={styles.imgItem} />)} />
         {/* Product name */}
         <Column
           // title="商品名称"

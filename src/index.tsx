@@ -52,61 +52,64 @@ const useDynamicLanguage = () => {
 
 const PrescriberRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
-  if (loading) {
-    return (
-      <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Spin />
-      </div>
-    );
-  }
 
   return (
-    <IntlProvider locale="es" messages={dynamicLanguage}>
-      <ConfigProvider locale={antLanguage}>
-        <Provider store={store}>
-          <Router history={history}>
-            <Security {...configOkta.prescrberOidc}>
-              <div className="father">
-                <Switch>
-                  {routeWithSubRoutes(homeRoutes, noop)}
-                  <Route component={Main} />
-                </Switch>
-              </div>
-            </Security>
-          </Router>
-        </Provider>
-      </ConfigProvider>
-    </IntlProvider>
+    <>
+      <IntlProvider locale="es" messages={dynamicLanguage}>
+        <ConfigProvider locale={antLanguage}>
+          <Provider store={store}>
+            <Router history={history}>
+              <Security {...configOkta.prescrberOidc}>
+                <div className="father">
+                  <Switch>
+                    {routeWithSubRoutes(homeRoutes, noop)}
+                    <Route component={Main} />
+                  </Switch>
+                </div>
+              </Security>
+            </Router>
+          </Provider>
+        </ConfigProvider>
+      </IntlProvider>
+
+      {loading && (
+        <div style={{position: 'fixed', zIndex: 1234567890, inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#fff'}}>
+          <Spin />
+        </div>
+      )}
+    </>
+
   );
 };
 
 const RcRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
-  if (loading) {
-    return (
-      <div style={{position: 'fixed', inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Spin />
-      </div>
-    );
-  }
   
   return (
-    <IntlProvider locale={localeLang} messages={dynamicLanguage}>
-      <ConfigProvider locale={antLanguage}>
-        <Provider store={store}>
-          <Router history={history}>
-            <Security {...configOkta.RcOidc}>
-              <div className="father">
-                <Switch>
-                  {routeWithSubRoutes(homeRoutes, noop)}
-                  <Route component={Main} />
-                </Switch>
-              </div>
-            </Security>
-          </Router>
-        </Provider>
-      </ConfigProvider>
-    </IntlProvider>
+    <>
+      <IntlProvider locale={localeLang} messages={dynamicLanguage}>
+        <ConfigProvider locale={antLanguage}>
+          <Provider store={store}>
+            <Router history={history}>
+              <Security {...configOkta.RcOidc}>
+                <div className="father">
+                  <Switch>
+                    {routeWithSubRoutes(homeRoutes, noop)}
+                    <Route component={Main} />
+                  </Switch>
+                </div>
+              </Security>
+            </Router>
+          </Provider>
+        </ConfigProvider>
+      </IntlProvider>
+
+      {loading && (
+        <div style={{position: 'fixed', zIndex: 1234567890, inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#fff'}}>
+          <Spin />
+        </div>
+      )}
+    </>
   )
 };
 

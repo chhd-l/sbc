@@ -238,3 +238,12 @@ export function checkSubscriptionAddressPickPoint(filterParams={}) {
     })
   });
 }
+// 更新订阅的sku
+export function changeSubscriptionGoods(params={}) {
+  return Fetch<TResult>('/sub/changeSubscriptionGoods', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

@@ -11,6 +11,8 @@ export default class ModalActor extends Actor {
       consentList: [],
       //语言
       consentLanguage: [],
+      //category
+      consentCategory: [],
       //new consent
       consentForm: {
         languageTypeId: '',
@@ -22,13 +24,22 @@ export default class ModalActor extends Actor {
         consentType: 'Email in',
         consentTitleType: 'Content',
         consentTitle: '',
-        consentDetailList: []
+        consentDetailList: [],
+        parentId: '',
+        consentVersion: '',
+        consentDesc: '',
+        consentGroup: '',
+        communicationType: '',
+        pushOktaFlag: 0,
+        sendEmailFlag: 0
       },
       pageChangeType: 'List',
       editList: {},
       detailList: [],
       editId: null,
-      formEdit: []
+      formEdit: [],
+      selectedConsentIds: [],
+      parentConsentList: []
     };
   }
 
@@ -40,10 +51,21 @@ export default class ModalActor extends Actor {
     return state.set('consentList', res);
   }
 
+  @Action('consent:parentConsentList')
+  parentConsentList(state: IMap, payload) {
+    return state.set('parentConsentList', payload);
+  }
+
   //语言
   @Action('consent:consentLanguage')
   consentLanguage(state: IMap, res) {
     return state.set('consentLanguage', res);
+  }
+
+  //category
+  @Action('consent:consentCategory')
+  consentCategory(state: IMap, res) {
+    return state.set('consentCategory', res);
   }
 
   //new
@@ -91,5 +113,10 @@ export default class ModalActor extends Actor {
   @Action('loading:end')
   end(state: IMap) {
     return state.set('loading', false);
+  }
+
+  @Action('consent:setSelectedConsentIds')
+  setSelectedConsentIds(state: IMap, ids) {
+    return state.set('selectedConsentIds', ids);
   }
 }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Select, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList, checkCountryInfoExists} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const } from 'qmkit';
+import { Const, cache } from 'qmkit';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -117,8 +117,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
           storeLogo:imgUrl,
           currentCompanyInfoId: userInfo?.companyInfoId,
           currentStoreId: userInfo?.storeId,
-          sourceCompanyInfoId: sourceCompanyInfoId,
-          sourceStoreId: sourceStoreId,
+          sourceCompanyInfoId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID) || sourceCompanyInfoId,
+          sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
           storeSign:faviconUrl,
           ...values,
           cityId:values.cityId.key,
@@ -129,6 +129,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
             setLoading(false)
           }else {
             setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5)   //FGS去掉第4、5步
+            setLoading(false)
           }
         });
       }
@@ -334,8 +335,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   <Input size="large"
                          onChange={(e)=>{
                            if(Const.SITE_NAME === 'MYVETRECO'){
-                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase()
-                             form.setFieldsValue({domainName:'https://'+value+'.myvetreco.co'})
+                             let value = e.target.value.replace(/[^\w]/ig,'').substring(0,50).toLowerCase();
+                             const postfix = window.location.host.match(/\.\w+$/) ? window.location.host.match(/\.\w+$/)[0] : '';
+                             form.setFieldsValue({domainName:'https://'+value+'.myvetreco'+postfix});
                            }
                           }}
                   />
@@ -361,9 +363,52 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col>
-            <Col span={24}>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="Province" name="province">
+                {getFieldDecorator('province', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="City" name="cityId">
+                {getFieldDecorator('cityId', {
+                  initialValue: {key:'',label:''}
+                })(
+                  <DebounceSelect
+                    size="large"
+                    placeholder="Select users"
+                    fetchOptions={fetchUserList}
+                    defaultOptions={defaultOptions}
+                    style={{
+                      width: '100%',
+                    }}
+                  />
+                )}
+              </FormItem>
+            </Col>
+            {Const.SITE_NAME === 'MYVETRECO' ? <Col span={12}>
+              <FormItem label="Street name" name="addressDetail">
+                {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col> : <Col span={24}>
               <FormItem label="Store address 1" name="addressDetail">
                 {getFieldDecorator('addressDetail', {
+                  initialValue: ''
+                })(
+                  <Input size="large" />
+                )}
+              </FormItem>
+            </Col>}
+            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
+              <FormItem label="House number" name="houseNumberOrName">
+                {getFieldDecorator('houseNumberOrName', {
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -391,23 +436,6 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                   initialValue: ''
                 })(
                   <Input size="large" />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="City" name="cityId">
-                {getFieldDecorator('cityId', {
-                  initialValue: {key:'',label:''}
-                })(
-                  <DebounceSelect
-                    size="large"
-                    placeholder="Select users"
-                    fetchOptions={fetchUserList}
-                    defaultOptions={defaultOptions}
-                    style={{
-                      width: '100%',
-                    }}
-                  />
                 )}
               </FormItem>
             </Col>

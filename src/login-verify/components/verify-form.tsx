@@ -24,6 +24,7 @@ export default withOktaAuth(
 
     async componentDidMount() {
       // this.search('123457908-098111')
+      window.token = sessionStorage.getItem('token-for-verify')
       debugger
      let userId = sessionStorage.getItem(cache.LOGIN_ACCOUNT_NAME)
      if(userId){
@@ -69,7 +70,10 @@ export default withOktaAuth(
         }
       });
     }
-
+    // componentWillUnmount(){
+    //   debugger;
+    //   sessionStorage.setItem('token-for-verify','')
+    // }
     render() {
       const { getFieldDecorator } = this.props.form;
       const loginLogo = sessionStorage.getItem(cache.SITE_LOGO);
@@ -143,12 +147,12 @@ export default withOktaAuth(
             </FormItem>
             <FormItem>
               <Col span={10}>
-                <OktaLogout type="button" text="Cancel" />
+                <OktaLogout type="button" text={<FormattedMessage id="Verify.Cancel" />} />
               </Col>
               <Col span={4}></Col>
               <Col span={10}>
                 <Button type="primary" size="large" htmlType="submit" style={styles.loginBtn} onClick={(e) => this._handlePrcess(e)} disabled={this.state.prcessDisabled} loading={this.state.prcessLoadding}>
-                  <FormattedMessage id="Public.Proceed" />
+                  <FormattedMessage id="Verify.Proceed" />
                 </Button>
               </Col>
             </FormItem>
@@ -171,7 +175,7 @@ export default withOktaAuth(
     };
 
     renderReuired(id) {
-      return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? <div style={styles.requiredLable}>This is required field</div> : null;
+      return !this.state.checkContentIds.includes(id) && this.state.clickProcess ? <div style={styles.requiredLable}><FormattedMessage id="Verify.required" /></div> : null;
     }
 
     search = async (value) => {

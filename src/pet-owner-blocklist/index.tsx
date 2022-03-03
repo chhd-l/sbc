@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Input, Button, Divider, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
+import { Input, Button, Select, message, Tooltip, Popconfirm, Modal, Row, Col } from 'antd';
 
 import { Headline, BreadCrumb, Const, RCi18n, ValidConst } from 'qmkit';
 import * as webapi from './webapi';
 import TablePage from '../product-dictionary/component/table';
 
+
+const { Option } = Select;
 
 class ProductDictionary extends Component<any, any> {
   tableRef: any;
@@ -16,14 +18,31 @@ class ProductDictionary extends Component<any, any> {
     this.tableRef = React.createRef();
 
     this.state = {
-      id: '',
+      type: '',
       email: '',
       message: '',
+      periodTime: '',
       errorMessage: '',
       modalVisible: false,
       modalLoading: false,
-      updateLoading: false
+      updateLoading: false,
+      times: [],
+      firstItemDescription: ''
     };
+  }
+
+  componentDidMount() {
+    this.getTimeEnums();
+  }
+
+  getTimeEnums = async () => {
+    const { res } = await webapi.getEnums();
+    if (res.code === Const.SUCCESS_CODE) {
+      const items = Object.keys(res.context) || [];
+      this.setState({
+        times: items,
+      })
+    }
   }
 
   searchFunc = async (params) => {
@@ -31,6 +50,9 @@ class ProductDictionary extends Component<any, any> {
 
     if (res.code === Const.SUCCESS_CODE) {
       const { total, last, customerEmailFiltrList } = res.context;
+      this.setState({
+        firstItemDescription: customerEmailFiltrList[0]?.description || '',
+      })
       return { total, last, content: customerEmailFiltrList };
     } else {
       return false;
@@ -46,31 +68,31 @@ class ProductDictionary extends Component<any, any> {
   };
 
   handleAdd = () => {
+    const {times, firstItemDescription} = this.state;
     this.setState({
-      id: '',
+      type: '',
       email: '',
-      description: '',
+      periodTime: times[0],
+      description: firstItemDescription,
       errorMessage: '',
       modalVisible: true
     });
   };
 
-  handleEdit = (item) => {
-    const { id, name, description } = item;
-
+  handleEdit = () => {
+    const {firstItemDescription} = this.state;
     this.setState({
-      id: id,
-      email: name,
-      description: description || '',
+      type: 'desc',
+      description: firstItemDescription,
       errorMessage: '',
       modalVisible: true
     });
   };
 
   handleUpdate = () => {
-    const { id } = this.state;
+    const { type } = this.state;
 
-    if (!id) {
+    if (!type) {
       // new email
       this.addEmail();
     } else {
@@ -80,14 +102,16 @@ class ProductDictionary extends Component<any, any> {
   };
 
   addEmail = async () => {
-    const { email } = this.state;
+    const { email, periodTime, description } = this.state;
 
     this.setState({
       updateLoading: true
     });
 
     const { res } = await webapi.addBlockEmail({
-      name: email
+      name: email,
+      timeType: periodTime,
+      description,
     });
 
     if (res.code === Const.SUCCESS_CODE) {
@@ -108,15 +132,13 @@ class ProductDictionary extends Component<any, any> {
   };
 
   addDescription = async () => {
-    const { id, email, description } = this.state;
+    const { description } = this.state;
 
     this.setState({
       updateLoading: true
     });
 
     const { res } = await webapi.updateBlockMessage({
-      id,
-      name: email,
       description
     });
 
@@ -162,30 +184,32 @@ class ProductDictionary extends Component<any, any> {
   };
 
   render() {
-    const { id, email, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
+    const { type, times, email, periodTime, description, errorMessage, modalVisible, modalLoading, updateLoading } = this.state;
     const columns = [
       {
         title: <FormattedMessage id='Survey.email' />,
-        dataIndex: 'name',
-        key: 'name'
+        dataIndex: 'name'
       },
       {
-        title: <FormattedMessage id='Dashboard.Error Message' />,
-        dataIndex: 'description',
-        key: 'description'
+        title: <FormattedMessage id='PetOwner.ValidPeriod' />,
+        dataIndex: 'timeType'
+      },
+      {
+        title: <FormattedMessage id='PetOwner.FromTo' />,
+        dataIndex: 'range',
+        render: (text, record) => (
+          <div>
+            <p>{record.timeHorizonStart ? record.timeHorizonStart.split('.')[0] : '' }</p>
+            <p>{record.timeHorizonEnd ? record.timeHorizonEnd.split('.')[0] : record.timeType}</p>
+          </div>
+        )
       },
       {
         title: <FormattedMessage id='Product.Operation' />,
         dataIndex: 'operation',
-        key: 'operation',
         width: '180px',
         render: (text, record) => (
           <span>
-            <Tooltip placement='top' title={`${RCi18n({ id: 'Setting.Edit' })}`}>
-              <a type='link' className='iconfont iconEdit' onClick={() => this.handleEdit(record)} />
-            </Tooltip>
-
-            <Divider type='vertical' />
             <Popconfirm placement='topLeft' title={`${RCi18n({ id: 'Setting.Areyousuretodelete' })}`}
                         onConfirm={() => this.handleDelete(record.id)}
                         okText={(window as any).RCi18n({ id: 'Setting.Confirm' })}
@@ -206,9 +230,15 @@ class ProductDictionary extends Component<any, any> {
         <div className='container-search'>
           <Headline title={`${RCi18n({ id: 'Menu.Pet owner blocklist' })}`} />
 
-          <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleAdd}>
-            <FormattedMessage id='Setting.Add' />
-          </Button>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleAdd}>
+              <FormattedMessage id='PetOwner.AddBlocklist' />
+            </Button>
+            <Button type='primary' style={{ marginBottom: '10px' }} onClick={this.handleEdit}>
+              <FormattedMessage id='PetOwner.EditErrorMessage' />
+            </Button>
+          </div>
+
         </div>
 
         <div className='container'>
@@ -223,7 +253,7 @@ class ProductDictionary extends Component<any, any> {
         <Modal
           zIndex={1000}
           width='600px'
-          title={!id ? RCi18n({ id: 'PetOwner.AddBlocklist' }) : RCi18n({ id: 'PetOwner.EditErrorMessage' })}
+          title={!type ? RCi18n({ id: 'PetOwner.AddBlocklist' }) : RCi18n({ id: 'PetOwner.EditErrorMessage' })}
           visible={modalVisible}
           confirmLoading={modalLoading}
           maskClosable={false}
@@ -247,7 +277,7 @@ class ProductDictionary extends Component<any, any> {
               type='primary'
               key='submit'
               loading={updateLoading}
-              disabled={errorMessage || id && !description.trim() || !id && !email}
+              disabled={errorMessage || type && !description.trim() || !type && !email}
               onClick={this.handleUpdate}
             >
               <FormattedMessage id='Product.Submit' />
@@ -256,15 +286,37 @@ class ProductDictionary extends Component<any, any> {
         >
           <div style={{ padding: '60px 0' }}>
             {
-              !id ? (
-                <Row gutter={[24, 12]}>
-                  <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
-                    <FormattedMessage id='PetOwner.Email' />:
-                  </Col>
-                  <Col span={14}>
-                    <Input value={email} onChange={e => this.handleChange('email', e.target.value)} />
-                  </Col>
-                </Row>
+              !type ? (
+                <div>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                      <FormattedMessage id='PetOwner.Email' />:
+                    </Col>
+                    <Col span={14}>
+                      <Input value={email} onChange={e => this.handleChange('email', e.target.value)} />
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} />
+                    <Col span={14} style={{ color: '#e2001a' }}>
+                      {errorMessage}
+                    </Col>
+                  </Row>
+                  <Row gutter={[24, 12]}>
+                    <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
+                      <FormattedMessage id='PetOwner.ValidateUntil' />:
+                    </Col>
+                    <Col span={14}>
+                      <Select value={periodTime} onChange={e => this.handleChange('periodTime', e)} style={{ width: '312px' }}>
+                        {
+                          times.map(time => (
+                            <Option value={time} key={time}>{time}</Option>
+                          ))
+                        }
+                      </Select>
+                    </Col>
+                  </Row>
+                </div>
               ) : (
                 <Row gutter={[24, 12]}>
                   <Col span={6} style={{ textAlign: 'right', color: '#333', lineHeight: '32px' }}>
@@ -276,12 +328,6 @@ class ProductDictionary extends Component<any, any> {
                 </Row>
               )
             }
-            <Row gutter={[24, 12]}>
-              <Col span={6} />
-              <Col span={14} style={{ color: '#e2001a' }}>
-                {errorMessage}
-              </Col>
-            </Row>
           </div>
         </Modal>
       </div>

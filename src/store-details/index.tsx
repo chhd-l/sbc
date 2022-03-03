@@ -48,10 +48,16 @@ class StoreDetail extends React.Component<any, any> {
 
   getInitStoreInfo = () => {
     this.setState({ loading: true });
-    getStoreInfo().then((data) => {
+    Promise.all([
+      getStoreInfo(),
+      getDictionaryByType('country'),
+      getDictionaryByType('city')
+    ]).then(([data, countryList, cityList]) => {
       if (data.res.code === Const.SUCCESS_CODE) {
         this.setState({
           loading: false,
+          countryList: countryList,
+          cityList: cityList,
           storeInfo: data.res.context ?? {},
           storeLogoImage: data.res.context.storeLogo ? [{ uid: 'store-logo-1', name: data.res.context.storeLogo, size: 1, url: data.res.context.storeLogo, status: 'done' }] : [],
           storeSignImage: data.res.context.storeSign ? [{ uid: 'store-sign-1', name: data.res.context.storeSign, size: 1, url: data.res.context.storeSign, status: 'done' }] : []
@@ -61,10 +67,8 @@ class StoreDetail extends React.Component<any, any> {
         this.setState({ loading: false });
       }
     }).catch(() => { this.setState({ loading: false }); });
-    Promise.all([getDictionaryByType('country'), getDictionaryByType('city'), getDictionaryByType('language'), getDictionaryByType('timeZone'), getDictionaryByType('currency')]).then(([countryList, cityList, languageList, timezoneList, currencyList]) => {
+    Promise.all([getDictionaryByType('language'), getDictionaryByType('timeZone'), getDictionaryByType('currency')]).then(([languageList, timezoneList, currencyList]) => {
       this.setState({
-        countryList: countryList,
-        cityList: cityList,
         languageList: languageList,
         timezoneList: timezoneList,
         currencyList: currencyList
@@ -225,7 +229,7 @@ class StoreDetail extends React.Component<any, any> {
                     {getFieldDecorator('countryId', {
                       initialValue: storeInfo.countryId
                     })(
-                      <Select onChange={this.modifyChangedStatus}>
+                      <Select onChange={this.modifyChangedStatus} getPopupContainer={() => document.getElementById('page-content')}>
                         {countryList.map((item) => (
                           <Option value={item.id} key={item.id}>
                             {item.valueEn}
@@ -245,6 +249,7 @@ class StoreDetail extends React.Component<any, any> {
                         showSearch
                         filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         onChange={this.modifyChangedStatus}
+                        getPopupContainer={() => document.getElementById('page-content')}
                       >
                         {cityList.map((item) => (
                           <Option value={item.id.toString()} key={item.id.toString()}>
@@ -344,7 +349,7 @@ class StoreDetail extends React.Component<any, any> {
                 {getFieldDecorator('languageId', {
                     initialValue: null
                   })(
-                    <Select onChange={this.modifyChangedStatus}>
+                    <Select onChange={this.modifyChangedStatus} getPopupContainer={() => document.getElementById('page-content')}>
                       {languageList.map((item) => (
                         <Option value={item.id.toString()} key={item.id.toString()}>
                           {item.name}
@@ -363,6 +368,7 @@ class StoreDetail extends React.Component<any, any> {
                       showSearch
                       filterOption={(input, option: { props }) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                       onChange={this.modifyChangedStatus}
+                      getPopupContainer={() => document.getElementById('page-content')}
                     >
                       {timezoneList.map((item) => (
                         <Option value={item.id} key={item.id}>
@@ -392,7 +398,7 @@ class StoreDetail extends React.Component<any, any> {
                   {getFieldDecorator('currencyId', {
                     initialValue: storeInfo.currencyId
                   })(
-                    <Select onChange={this.modifyChangedStatus}>
+                    <Select onChange={this.modifyChangedStatus} getPopupContainer={() => document.getElementById('page-content')}>
                       {currencyList.map((item) => (
                         <Option value={item.id} key={item.id}>
                           {item.valueEn}

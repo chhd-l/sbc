@@ -71,3 +71,10 @@ export function exportTask(filterParams = {}) {
     })
   });
 }
+
+export function getTimeZoneList() {
+  return Fetch<TResult>('/sysdict/queryWorkflowTimeZones', {
+    method: 'POST',
+    body: JSON.stringify({})
+  });
+}

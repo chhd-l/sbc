@@ -9,7 +9,8 @@ import {
   getOrderStatusValue,
   getFormatDeliveryDateStr,
   RCi18n,
-  checkAuth, util
+  checkAuth,
+  util
 } from 'qmkit';
 import { fromJS, List } from 'immutable';
 import FormItem from 'antd/lib/form/FormItem';
@@ -26,7 +27,8 @@ const orderTypeList = [
   { value: 'MIXED_ORDER', name: 'Mixed Order' }
 ];
 
-const showRealStock = false && checkAuth('f_order_show_realtime_stock'); //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限
+const showRealStock = true; //增加变量控制要不要显示商品实时库存 是否有f_order_show_realtime_stock权限(checkAuth('f_order_show_realtime_stock'))
+const showRealStockBtn = false;
 
 /**
  * 拒绝表单，只为校验体验
@@ -160,57 +162,59 @@ class OrderDetailTab extends React.Component<any, any> {
     const consignee = detail.get('consignee')
       ? (detail.get('consignee').toJS() as Consignee | null)
       : {
-        detailAddress: '',
-        name: '',
-        phone:'',
-        countryId: '',
-        country: '',
-        city: '',
-        province: '',
-        county: '',
-        cityId: '',
-        address: '',
-        detailAddress1: '',
-        detailAddress2: '',
-        rfc: '',
-        postCode: '',
-        firstName: '',
-        lastName: '',
-        comment: '',
-        entrance: '',
-        apartment: '',
-        area: '',
-        timeSlot: '',
-        deliveryDate: '',
-        workTime:'',
-      };
+          detailAddress: '',
+          name: '',
+          phone: '',
+          countryId: '',
+          country: '',
+          city: '',
+          province: '',
+          county: '',
+          cityId: '',
+          address: '',
+          detailAddress1: '',
+          detailAddress2: '',
+          rfc: '',
+          postCode: '',
+          firstName: '',
+          lastName: '',
+          comment: '',
+          entrance: '',
+          apartment: '',
+          area: '',
+          timeSlot: '',
+          deliveryDate: '',
+          workTime: ''
+        };
 
     //发票信息
-    const invoice = detail.get('invoice') ? (detail.get('invoice').toJS() as Invoice | null) : {
-      open: '',
-      type: '',
-      title: '',
-      projectName: '',
-      address:'',
-      address1: '',
-      address2: '',
-      contacts: '',
-      phone: '',
-      provinceId: '',
-      cityId:'',
-      province: '',
-      county: '',
-      countryId: '',
-      country: '',
-      firstName: '',
-      lastName:'',
-      postCode: '',
-      city: '',
-      comment: '',
-      entrance: '',
-      apartment:'',
-      area: '',
-    };
+    const invoice = detail.get('invoice')
+      ? (detail.get('invoice').toJS() as Invoice | null)
+      : {
+          open: '',
+          type: '',
+          title: '',
+          projectName: '',
+          address: '',
+          address1: '',
+          address2: '',
+          contacts: '',
+          phone: '',
+          provinceId: '',
+          cityId: '',
+          province: '',
+          county: '',
+          countryId: '',
+          country: '',
+          firstName: '',
+          lastName: '',
+          postCode: '',
+          city: '',
+          comment: '',
+          entrance: '',
+          apartment: '',
+          area: ''
+        };
 
     //交易状态
     const tradeState = detail.get('tradeState');
@@ -258,7 +262,7 @@ class OrderDetailTab extends React.Component<any, any> {
         key: 'skuName',
         width: '9%',
         render: (text, record) => {
-          const productName = text === 'individualization' ? record.petsName + '\'s' + text : text;
+          const productName = text === 'individualization' ? record.petsName + "'s" + text : text;
           return (
             <Tooltip
               overlayStyle={{
@@ -275,10 +279,15 @@ class OrderDetailTab extends React.Component<any, any> {
         }
       },
       {
-        title: storeId === 123457934 ? <FormattedMessage id="Order.Specification" /> : <FormattedMessage id="Order.Weight" />,
+        title:
+          storeId === 123457934 ? (
+            <FormattedMessage id="Order.Specification" />
+          ) : (
+            <FormattedMessage id="Order.Weight" />
+          ),
         dataIndex: 'specDetails',
         key: 'specDetails',
-        width: '9%'
+        width: '8%'
       },
       {
         title: showRealStock ? (
@@ -288,7 +297,7 @@ class OrderDetailTab extends React.Component<any, any> {
         ),
         dataIndex: 'num',
         key: 'num',
-        width: '6%',
+        width: '7%',
         render: (text, record) => (showRealStock ? record.quantityAndRealtimestock : text)
       },
       {
@@ -298,8 +307,8 @@ class OrderDetailTab extends React.Component<any, any> {
         width: '8%',
         render: (originalPrice, record) =>
           record.subscriptionPrice > 0 &&
-            record.subscriptionStatus === 1 &&
-            record.isSuperimposeSubscription === 1 ? (
+          record.subscriptionStatus === 1 &&
+          record.isSuperimposeSubscription === 1 ? (
             <div>
               <span>
                 {this._handlePriceFormat(
@@ -327,7 +336,11 @@ class OrderDetailTab extends React.Component<any, any> {
       {
         title: <FormattedMessage id="Order.Subtotal" />,
         width: '8%',
-        render: (row) => <span>{this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}</span>
+        render: (row) => (
+          <span>
+            {this._handlePriceFormat(storeId === 123457907 ? row.adaptedSubtotalPrice : row.price)}
+          </span>
+        )
       },
       {
         title: <FormattedMessage id="Order.purchaseType" />,
@@ -389,16 +402,21 @@ class OrderDetailTab extends React.Component<any, any> {
         {
           title: <FormattedMessage id="Order.RegulationDiscount" />,
           width: '8%',
-          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}</span>
+          render: (row) => (
+            <span>
+              {storeId === 123457907 ? this._handlePriceFormat(row.regulationDiscount) : ''}
+            </span>
+          )
         },
         {
           title: <FormattedMessage id="Order.RealSubtotal" />,
           width: '7%',
-          render: (row) => <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
+          render: (row) => (
+            <span>{storeId === 123457907 ? this._handlePriceFormat(row.price) : ''}</span>
+          )
         }
       );
     }
-
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
 
@@ -412,7 +430,12 @@ class OrderDetailTab extends React.Component<any, any> {
               />
             </label>
             {canDownInvoice ? (
-              <a className="ml-20" onClick={() => {this._handleDownInvoice(detail)}}>
+              <a
+                className="ml-20"
+                onClick={() => {
+                  this._handleDownInvoice(detail);
+                }}
+              >
                 <FormattedMessage id="Download invoice" />
               </a>
             ) : null}
@@ -433,14 +456,25 @@ class OrderDetailTab extends React.Component<any, any> {
                       overflowY: 'auto'
                     }}
                     placement="bottomLeft"
-                    title={<div>{detail.get('id')}{detail.get('goodWillFlag') === 1 ? (
-                      <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
-                      ):''}</div>}
+                    title={
+                      <div>
+                        {detail.get('id')}
+                        {detail.get('goodWillFlag') === 1 ? (
+                          <span>
+                            [<FormattedMessage id="Order.goodwillOrder" />]
+                          </span>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    }
                   >
                     <p className="overFlowtext">
                       {<FormattedMessage id="Order.OrderNumber" />}: {detail.get('id')}
                       {detail.get('goodWillFlag') === 1 && (
-                        <span>[<FormattedMessage id="Order.goodwillOrder" />]</span>
+                        <span>
+                          [<FormattedMessage id="Order.goodwillOrder" />]
+                        </span>
                       )}
                     </p>
                   </Tooltip>
@@ -503,8 +537,8 @@ class OrderDetailTab extends React.Component<any, any> {
 
         {/*Subscription panel*/}
         {detail.get('subscribeId') ||
-          detail.get('clinicsId') ||
-          firstTradeItems.recommendationId ? (
+        detail.get('clinicsId') ||
+        firstTradeItems.recommendationId ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             {detail.get('subscribeId') ? (
               <Col span={12} style={{ alignSelf: 'flex-start' }}>
@@ -554,7 +588,7 @@ class OrderDetailTab extends React.Component<any, any> {
               !(detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
               (!detail.get('subscribeId') &&
                 (detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-              showRealStock ? (
+            showRealStockBtn ? (
               <Col span={12}>
                 <AuthWrapper functionName="fOrderDetail001">
                   <div
@@ -579,7 +613,7 @@ class OrderDetailTab extends React.Component<any, any> {
           (detail.get('clinicsId') || firstTradeItems.recommendationId)) ||
           (!detail.get('subscribeId') &&
             !(detail.get('clinicsId') || firstTradeItems.recommendationId))) &&
-          showRealStock ? (
+        showRealStockBtn ? (
           <Row gutter={30} style={{ display: 'flex', alignItems: 'flex-end' }}>
             <Col span={24}>
               <AuthWrapper functionName="fOrderDetail001">
@@ -608,6 +642,7 @@ class OrderDetailTab extends React.Component<any, any> {
             pagination={false}
             bordered
             rowClassName={() => 'order-detail-row'}
+            key={Math.random()}
           />
 
           <Modal
@@ -661,11 +696,11 @@ class OrderDetailTab extends React.Component<any, any> {
 
               {tradePrice.promotionVOList && tradePrice.promotionVOList.length > 0
                 ? tradePrice.promotionVOList.map((promotion) => (
-                  <label style={styles.priceItem as any}>
-                    <span style={styles.name}>{promotion.marketingName}</span>
-                    <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
-                  </label>
-                ))
+                    <label style={styles.priceItem as any}>
+                      <span style={styles.name}>{promotion.marketingName}</span>
+                      <strong>-{this._handlePriceFormat(promotion.discountPrice)}</strong>
+                    </label>
+                  ))
                 : null}
 
               {tradePrice.subscriptionDiscountPrice ? (
@@ -765,8 +800,16 @@ class OrderDetailTab extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Order.country" />:{' '}
                     {consignee.countryId ? (
-                      <>{countryDict ? countryDict.find((c) => c.id == consignee.countryId) ? countryDict.find((c) => c.id == consignee.countryId).name : consignee.countryId : ''}</>
-                    ) : consignee.country}
+                      <>
+                        {countryDict
+                          ? countryDict.find((c) => c.id == consignee.countryId)
+                            ? countryDict.find((c) => c.id == consignee.countryId).name
+                            : consignee.countryId
+                          : ''}
+                      </>
+                    ) : (
+                      consignee.country
+                    )}
                   </p>
                   {consignee?.county ? (
                     <p>
@@ -932,7 +975,9 @@ class OrderDetailTab extends React.Component<any, any> {
                             ? countryDict.find((c) => c.id == invoice.countryId).name
                             : invoice.countryId}
                         </>
-                      ) : invoice.country}
+                      ) : (
+                        invoice.country
+                      )}
                     </p>
                     {invoice?.county ? (
                       <p>
@@ -1013,14 +1058,17 @@ class OrderDetailTab extends React.Component<any, any> {
 
   //下载发票 download invoice
   _handleDownInvoice(detail) {
-    let orderInvoiceIdList = detail.getIn(['invoice','orderInvoiceIdList']).toJS()
+    let orderInvoiceIdList = detail.getIn(['invoice', 'orderInvoiceIdList']).toJS();
     let params = {
-      orderInvoiceIds:orderInvoiceIdList
+      orderInvoiceIds: orderInvoiceIdList
     };
     const token = (window as any).token;
     let result = JSON.stringify({ ...params, token: token });
     let base64 = new util.Base64();
-    const exportHref = `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
+    const exportHref =
+      Const.SITE_NAME === 'MYVETRECO'
+        ? `${Const.HOST}/account/orderInvoice/myVetreco/exportPDF/${base64.urlEncode(result)}`
+        : `${Const.HOST}/account/orderInvoice/exportPDF/${base64.urlEncode(result)}`;
     window.open(exportHref);
   }
 
@@ -1141,7 +1189,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         retrial(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
@@ -1162,7 +1210,7 @@ class OrderDetailTab extends React.Component<any, any> {
       onOk() {
         confirm(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
   _openPetDetails = (petsInfo) => {

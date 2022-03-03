@@ -152,7 +152,9 @@ class DeliveryItem extends React.Component<Iprop, any> {
         if (!err) {
           validateAddress({
             ...fields,
-            deliveryAddress: [fields.address1, fields.address2].join('')
+            countryId: this.state.countryList[0]?.id,
+            deliveryAddress: [fields.address1, fields.address2].join(''),
+            addressApiType: 1
           })
             .then((data) => {
               if (data.res.code === Const.SUCCESS_CODE) {
@@ -305,6 +307,8 @@ class DeliveryItem extends React.Component<Iprop, any> {
             provinceId: rFields.province ? (this.state.stateList.find(st => st.name === rFields.province) ?? {})['id'] : null
           }),
           ...rFields,
+          cityId: rFields.city ? ((this.state.cityList.concat(this.state.searchCityList)).find(st => st.cityName === rFields.city) ?? {})['id'] : undefined,
+          areaId: rFields.area ? (this.state.regionList.find(st => st.name === rFields.area) ?? {})['id'] : undefined,
           customerId: this.props.customerId,
           consigneeName: rFields.firstName + ' ' + rFields.lastName,
           deliveryAddress: [rFields.address1, rFields.address2].join(''),

@@ -401,7 +401,7 @@ export default function index({...props}) {
    */
   const changeSteps = (current)=>{
     if(current < step){
-      // setStep(current)
+      setStep(current)
     }
   }
   return (

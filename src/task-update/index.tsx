@@ -608,7 +608,7 @@ class TaskUpdate extends Component<any, any> {
                       <FormItem {...formItemLayout} label={<FormattedMessage id="task.TaskName" />}>
                         {getFieldDecorator('name', {
                           initialValue: task.name,
-                          rules: [{ required: true, message: 'Please input task name' }]
+                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseinputname" /> }]
                         })(
                           editable ? (
                             <Input
@@ -920,7 +920,8 @@ class TaskUpdate extends Component<any, any> {
                         {getFieldDecorator('contactId', {
                           initialValue: task.petOwner
                             ? task.petOwner + '(' + task.customerAccount + ')'
-                            : ''
+                            : '',
+                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseinputpetowneraccountorname" /> }]
                         })(
                           editable ? (
                             <Select

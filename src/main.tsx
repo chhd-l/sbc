@@ -7,6 +7,9 @@ import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
 import UUID from 'uuid-js';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+
+import PosPrint from '../web_modules/qmkit/pos-print';
+
 const pcLogo = require('../public/images/login/logo1.png');
 
 const { Content } = Layout;
@@ -57,6 +60,7 @@ export default class Main extends React.Component<any, any> {
             }
             const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
             sessionStorage.setItem(cache.SITE_LOGO, configLog);
+            sessionStorage.setItem(cache.PRODUCT_IMAGE_CDN, resIco.res.context?.cdn ?? '');
           }
         })
         .catch((err) => {});
@@ -148,6 +152,7 @@ export default class Main extends React.Component<any, any> {
                 </Content>
               </ErrorBoundary>
             </Layout>
+            <PosPrint/>
           </Layout>
         </Spin>
       </div>

@@ -38,6 +38,14 @@ export default class AppStore extends Store {
     }
   };
 
+  getParentConsentList = () => {
+    webApi.getParentConsentList().then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.dispatch('consent:parentConsentList', fromJS(data.res.context?.consentVOList ?? []));
+      }
+    });
+  };
+
   //语言
   getLanguage = async (callback) => {
     const { res } = await webApi.fetchQuerySysDictionary({
@@ -46,6 +54,19 @@ export default class AppStore extends Store {
     if (res.code == Const.SUCCESS_CODE) {
       this.transaction(() => {
         this.dispatch('consent:consentLanguage', res.context.sysDictionaryVOS);
+      });
+      //callback&&callback(res.context.sysDictionaryVOS)
+    }
+  };
+
+  //category
+  getCategories = async (callback) => {
+    const { res } = await webApi.fetchQuerySysDictionary({
+      type: 'consentCategory'
+    });
+    if (res.code == Const.SUCCESS_CODE) {
+      this.transaction(() => {
+        this.dispatch('consent:consentCategory', res.context.sysDictionaryVOS);
       });
       //callback&&callback(res.context.sysDictionaryVOS)
     }
@@ -91,11 +112,11 @@ export default class AppStore extends Store {
       }
     } else {
       if (data.consentId != '' && data.consentCode != '' && data.consentTitleType != '' && data.consentTitle != '') {
-        if(data.consentCategory=="Prescriber"){
-          data.consentGroup = 'default'
-        }else{
-          delete data.consentGroup //之前也没传值，保持不变
-        }
+        // if(data.consentCategory=="Prescriber"){  //consentGroup为新增填写字段
+        //   data.consentGroup = 'default'
+        // }else{
+        //   delete data.consentGroup //之前也没传值，保持不变
+        // }
         const { res } = await webApi.fetchNewConsent(data);
         if (res.code == Const.SUCCESS_CODE) {
           this.transaction(() => {
@@ -186,6 +207,26 @@ export default class AppStore extends Store {
       this.transaction(() => {
         //this.getConsentList();
       });
+    }
+  };
+
+  //select consent ids for batch updating in consent list
+  onSelectConsentIds = (selectedRowKeys) => {
+    this.dispatch('consent:setSelectedConsentIds', fromJS(selectedRowKeys));
+  };
+
+  //batch update consent version
+  batchUpdateConsentVersion = async (ids: number[], consentVersion: string) => {
+    const { res } = await webApi.batchUpdateConsentVersion(ids, consentVersion);
+    if (res.code === Const.SUCCESS_CODE) {
+      message.success(res.message);
+      this.transaction(() => {
+        this.dispatch('consent:setSelectedConsentIds', fromJS([]));
+        this.getConsentList();
+      });
+      return true;
+    } else {
+      return false;
     }
   };
 }

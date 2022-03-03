@@ -91,6 +91,8 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               const shodDocumentType = storeInfoResp.representativeRequest?.shareholder?.documentType ?? 'PASSPORT';
               this.shodForm.props.form.setFieldsValue({
                 ...(storeInfoResp.representativeRequest?.shareholder ?? {}),
+                cityId: { key: storeInfoResp.representativeRequest?.shareholder?.cityId ?? '', value: storeInfoResp.representativeRequest?.shareholder?.cityId ?? '', label: storeInfoResp.representativeRequest?.shareholder?.city ?? '' },
+                dateOfBirth: storeInfoResp.representativeRequest?.shareholder?.dateOfBirth ? moment(storeInfoResp.representativeRequest.shareholder.dateOfBirth, 'YYYY-MM-DD') : null,
                 supportedDocument: {
                   documentType: shodDocumentType,
                   ...(
@@ -105,6 +107,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
                   )
                 }
               });
+              this.shodForm.setDefaultOptions();
               const signDocumentType = storeInfoResp.representativeRequest?.signatories?.documentType ?? 'PASSPORT';
               this.signForm.props.form.setFieldsValue({
                 ...(storeInfoResp.representativeRequest?.signatories ?? {}),
@@ -151,8 +154,10 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           //初始化bank information
           this.bankForm.props.form.setFieldsValue({
             ...(storeInfoResp.bankRequest ?? {}),
+            cityId: { key: storeInfoResp.bankRequest?.cityId ?? '', value: storeInfoResp.bankRequest?.cityId ?? '', label: storeInfoResp.bankRequest.city ?? '' },
             supportedDocument: SupportedDocumentUtil.mapPropsToFormData(storeInfoResp.bankRequest?.supportedDocument, 'BANK_STATEMENT')
           });
+          this.bankForm.setDefaultOptions();
         });
       }
     });

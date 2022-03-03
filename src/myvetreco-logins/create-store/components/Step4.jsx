@@ -3,6 +3,7 @@ import {Button, Row, Col, Input, Checkbox, InputNumber, message, Spin} from 'ant
 import ProductList from './price/ProductList';
 import {listCategory, listGoodsByCategory, priceSetting} from "../webapi";
 import {bignumber, multiply, round, format} from "mathjs";
+import { cache } from 'qmkit';
 
 export const FormContext = React.createContext({});
 
@@ -140,6 +141,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
         allObj.Cat[i] = {
           isChecked: allObj.Cat[i].isChecked,
           salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
+          salePriceExclVat: format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01)))))),
           sku: allObj.Cat[i].sku,
           spu: allObj.Cat[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Cat[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
@@ -152,6 +154,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
         allObj.Dog[i] = {
           isChecked: allObj.Dog[i].isChecked,
           salePrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01))))))), bignumber(1.21))),
+          salePriceExclVat: format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(salesPercentage), bignumber(0.01)))))),
           sku: allObj.Dog[i].sku,
           spu: allObj.Dog[i].spu,
           subscriptionPrice: format(multiply(bignumber(format(multiply(bignumber(allObj.Dog[i].marketPrice), bignumber(format(multiply(bignumber(subscriptionPercentage), bignumber(0.01))))))), bignumber(1.21))),
@@ -165,6 +168,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     for(let i in newChooseObj){
       newChooseObj[i]['salePrice'] = parseFloat(newChooseObj[i]['salePrice']);
       newChooseObj[i]['subscriptionPrice'] = parseFloat(newChooseObj[i]['subscriptionPrice']);
+      newChooseObj[i]['salePriceExclVat'] = parseFloat(newChooseObj[i]['salePriceExclVat']);
       if(newChooseObj[i].isChecked){
         array.push(newChooseObj[i])
       }
@@ -173,7 +177,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
     priceSetting({
       email: userInfo.accountName,
       storeId: userInfo.storeId,
-      sourceStoreId: sourceStoreId,
+      sourceStoreId: sessionStorage.getItem(cache.CREATESTORE_SOURCE_STORE_ID) || sourceStoreId,
       priceSettingList: array,
       companyInfoId:userInfo.companyInfoId
     }).then(res=>{

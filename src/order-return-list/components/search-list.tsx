@@ -8,7 +8,7 @@ import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { cache, RCi18n } from 'qmkit';
+import { cache, RCi18n, util } from 'qmkit';
 const defaultImg = require('../img/none.png');
 
 const confirm = Modal.confirm;
@@ -371,7 +371,7 @@ class SearchList extends React.Component<any, any> {
                       .get('returnItems')
                       .concat(returnGifts)
                       .map((v, k) => {
-                        const img = v.get('pic') ? v.get('pic') : defaultImg;
+                        const img = v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg;
                         return k < 3 ? <img style={styles.imgItem} src={img} title={v.get('skuName')} key={k} /> : null;
                       })}
 
@@ -382,7 +382,7 @@ class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? v.get('returnItems').concat(returnGifts).get(3).get('pic') : defaultImg}
+                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? util.optimizeImage(v.get('returnItems').concat(returnGifts).get(3).get('pic')) : defaultImg}
                             style={styles.imgFourth}
                           />
                           //@ts-ignore

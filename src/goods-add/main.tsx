@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IOptions, StoreProvider } from 'plume2';
 import { Breadcrumb, Tabs, Form, Alert, Spin } from 'antd';
-import { Const, Headline, history, checkAuth, BreadCrumb, RCi18n } from 'qmkit';
+import { Const, Headline, history, checkAuth, BreadCrumb, RCi18n, AuthWrapper } from 'qmkit';
 import './index.less';
 import AppStore from './store';
 import Goods from './component/goods';
@@ -27,6 +27,7 @@ import ProductPrice from './component/productPrice';
 import ProductInventory from './component/productInventory';
 import { FormattedMessage } from 'react-intl';
 import ShippingInformation from './component/shippingInformation';
+import OperationLog from './component/operation-log';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class Main extends React.Component<any, any> {
@@ -126,8 +127,9 @@ export default class Main extends React.Component<any, any> {
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>{gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />}</Breadcrumb.Item>
           </BreadCrumb>
-          <div className="container-search">
+          <div className="container-search space-between">
             <Headline title={gid ? <FormattedMessage id="Product.EditProduct" /> : <FormattedMessage id="Product.NewProduct" />} state={this._getState(gid)} />
+            {gid ? <AuthWrapper functionName="f_product_oplog"><OperationLog goodsId={gid} /></AuthWrapper> : null}
           </div>
           <div className="container ">
             <Tabs

@@ -2,14 +2,12 @@ import React from 'react';
 import { Breadcrumb, Tabs, Spin, Button } from 'antd';
 import { StoreProvider } from 'plume2';
 import AppStore from './store';
-
 import OperateLog from './components/operate-log';
 import OrderDetailTab from './components/order-detail';
 import Fulfillment from './components/order-fulfillment';
 import OrderReceive from './components/order-receive';
 import Comment from './components/comment';
-
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 /**
@@ -33,7 +31,7 @@ export default class OrderDetail extends React.Component<any, any> {
     if (this.state.loading) {
       return (
         <div style={styles.noBackgroundContainer}>
-          <Spin spinning={this.state.loading}></Spin>
+          <Spin spinning={this.state.loading}/>
         </div>
       );
     }
@@ -63,7 +61,10 @@ export default class OrderDetail extends React.Component<any, any> {
         </div>
         {detail.size > 0 ? (
           <div className="container service_order_detail">
-            <Tabs onChange={(key) => this.store.onTabsChange(key)} activeKey={this.store.state().get('tab')}>
+            <Tabs
+              onChange={(key) => this.store.onTabsChange(key)}
+              activeKey={this.store.state().get('tab')}
+            >
               <Tabs.TabPane tab={<FormattedMessage id="Order.OrderDetails" />} key="1">
                 <OrderDetailTab />
               </Tabs.TabPane>
@@ -77,7 +78,7 @@ export default class OrderDetail extends React.Component<any, any> {
                 <Comment orderNumber={tid} petOwnerName={detail.getIn(['buyer', 'name'])} />
               </Tabs.TabPane>
             </Tabs>
-            {this.store.state().get('tab')!=='2'?(<OperateLog />):null}
+            {this.store.state().get('tab') !== '2' ? <OperateLog /> : null}
           </div>
         ) : (
           <div

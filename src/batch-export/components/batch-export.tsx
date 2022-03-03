@@ -120,7 +120,7 @@ class BatchExport extends Component<BatchExportProps, any> {
       }
 
       const component = item.type === 'rangePicker' ? (
-        <Col span={8} id="Range-picker-width" key={item.key}>
+        <Col span={8} key={item.key}>
           <FormItem>
             {getFieldDecorator(item.key, {
               rules: [
@@ -158,7 +158,7 @@ class BatchExport extends Component<BatchExportProps, any> {
     });
     return (
       <Form className="batch_export_form">
-        <Row gutter={96}>{children}</Row>
+        <Row gutter={24}>{children}</Row>
       </Form>
     );
   }
@@ -320,8 +320,8 @@ export default Form.create({ name: 'batch_export' })(BatchExport);
 
 const fieldStyle = {
   // width: '80%',
-  padding: 40,
-  paddingTop: 10
+  padding: 10,
+  paddingBottom: 40
 }
 
 const radioStyle = {
@@ -337,10 +337,10 @@ const contentStyle = {
 
 const styles = {
   formItemStyle: {
-    width: 370
+    width: '100%'
   },
   leftLabel: {
-    width: 170,
+    width: '40%',
     textAlign: 'left',
     color: 'rgba(0, 0, 0, 0.65)',
     backgroundColor: '#fff',
@@ -350,6 +350,6 @@ const styles = {
     overflow: 'hidden'
   },
   wrapper: {
-    width: 200
+    width: '60%'
   }
 } as any;

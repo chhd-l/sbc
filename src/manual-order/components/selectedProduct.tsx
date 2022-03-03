@@ -2,7 +2,7 @@ import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd
 import React from 'react';
 import AddProductModal from './addProductModal';
 import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
-import { cache, AuthWrapper } from 'qmkit';
+import { cache, AuthWrapper, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
 const { Option } = Select;
@@ -97,7 +97,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       }
 
       if (item.subscriptionStatus === 1) {
-        console.log(item.subscriptionStatus)
+        //console.log(item.subscriptionStatus)
         if (item.promotions === 'club') {
           item.options = this.state.clubOptions
         } else {
@@ -160,7 +160,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         title: 'Image',
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
-        render: (img) => (img ? <img src={img} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
+        render: (img) => (img ? <img src={util.optimizeImage(img)} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
         title: 'SKU',
@@ -219,7 +219,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         render: (text, record, index) => {
           // let value=record.goodsInfoFlag===1?(text?text:options[0].id):null
 
-          return [1, 2].includes(record.goodsInfoFlag) ? (
+          return [1, 2].includes(record.goodsInfoFlag) && record.subscriptionStatus === 1 ? (
             <Select style={{ width: 100 }}
               value={text} getPopupContainer={(trigger: any) => trigger.parentNode}
               placeholder="Select a person" optionFilterProp="children"

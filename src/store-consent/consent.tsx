@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Select, Button, Icon } from 'antd';
+import { Select, Button, Icon, message } from 'antd';
 import './editcomponents/style.less';
 import { Relax } from 'plume2';
+import { List } from 'immutable';
 import DragTable from './components/dragTable'
 import Detail from './components/consent-detail';
+import ConsentVersionModal from './components/consent-version-modal';
 
 //import { bool } from 'prop-types';
 import { noop, SelectGroup, RCi18n } from 'qmkit';
@@ -29,30 +31,38 @@ export default class StepConsent extends Component<any, any> {
     relaxProps?: {
       loading: boolean;
       consentLanguage: any;
+      consentCategory: any;
       pageChangeType: any;
       getConsentList: Function;
       getLanguage: Function;
+      getCategories: Function;
       pageChange: Function;
       editId: any;
       editList: any;
+      getParentConsentList: Function;
     };
   };
 
   static relaxProps = {
     loading: 'loading',
     consentLanguage: 'consentLanguage',
+    consentCategory: 'consentCategory',
     pageChangeType: 'pageChangeType',
     getConsentList: noop,
     getLanguage: noop,
+    getCategories: noop,
     pageChange: noop,
     editId: 'editId',
-    editList: 'editList'
+    editList: 'editList',
+    getParentConsentList: noop
   };
 
   componentDidMount() {
-    const { getConsentList, getLanguage } = this.props.relaxProps;
+    const { getConsentList, getParentConsentList, getLanguage, getCategories } = this.props.relaxProps;
     getConsentList();
     getLanguage();
+    getCategories();
+    getParentConsentList();
   }
 
   handleChange = (value) => {
@@ -80,7 +90,7 @@ export default class StepConsent extends Component<any, any> {
   };
 
   render() {
-    const { consentLanguage, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
+    const { consentLanguage, consentCategory, pageChange, pageChangeType, editId, editList } = this.props.relaxProps;
 
     return (
       <div className="consent">
@@ -91,20 +101,28 @@ export default class StepConsent extends Component<any, any> {
               <div className="consent-select-data space-between">
                 <Select defaultValue="" style={{ width: 120 }} onChange={this.handleChange}>
                   <Option value=""><FormattedMessage id="Setting.All" /></Option>
-                  <Option value="Prescriber"><FormattedMessage id="Setting.Prescriber" /></Option>
-                  <Option value="Consumer"><FormattedMessage id="Setting.Consumer" /></Option>
+                  {consentCategory.map((item) => {
+                    return <Option key={item.valueEn} value={item.valueEn}>{item.valueEn}</Option>;
+                  })}
                 </Select>
                 <Select style={{ width: 120 }} defaultValue="" onChange={(e, v) => this.onDescription(e, v)}>
                   <Option value=""><FormattedMessage id="Setting.All" /></Option>
                   {consentLanguage.map((item) => {
-                    return <Option value={item.id}>{item.description}</Option>;
+                    return <Option key={item.id} value={item.id}>{item.description}</Option>;
                   })}
                 </Select>
               </div>
             </div>
-            <Button className="btn" style={{ width: 140 }} type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
-              <FormattedMessage id="Setting.NewConsent" />
-            </Button>
+            <div className="space-between" style={{marginTop:15}}>
+              <div>
+                <Button type="primary" shape="round" icon="plus" onClick={() => pageChange('Detail', '000')}>
+                  <FormattedMessage id="Setting.NewConsent" />
+                </Button>
+              </div>
+              <div>
+                <ConsentVersionModal />
+              </div>
+            </div>
             <div id="consent" className="consent-table">
               <DragTable />
             </div>

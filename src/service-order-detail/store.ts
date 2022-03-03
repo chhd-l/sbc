@@ -6,7 +6,6 @@ import TabActor from './actor/tab-actor';
 import PayRecordActor from './actor/pay-record-actor';
 import dictActor from './actor/dict-actor';
 import { fromJS, Map } from 'immutable';
-
 import * as webapi from './webapi';
 import { addPay, fetchLogistics, fetchOrderDetail, payRecord, queryDictionary, refresh,findAppointmentByApptNo } from './webapi';
 import { message } from 'antd';
@@ -63,6 +62,13 @@ export default class AppStore extends Store {
           this.dispatch('dict:initCountry', countryDictRes.context.sysDictionaryVOS);
         });
       });
+      if(orderInfo?.appointmentNo){
+        await  findAppointmentByApptNo(orderInfo.appointmentNo).then((data)=>{
+          this.transaction(() => {
+            this.dispatch('detail:init', Object.assign(orderInfo,data?.res?.context));
+          });
+        })
+      }
     } else {
       this.dispatch('loading:end');
     }

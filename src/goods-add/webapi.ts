@@ -433,3 +433,14 @@ export const getSubSkuStock = (params) => {
     body: JSON.stringify(params)
   });
 };
+
+export const getOperationLog = (params) => {
+  return Fetch<TResult>('/goodsOperationLog/page', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  });
+};
+
+export const getOperationJsonLog = (opDetailId: string) => {
+  return Fetch<TResult>(`/goodsOperationLog/${opDetailId}`, { method: 'GET' });
+};

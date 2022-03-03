@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { noop, checkAuth } from 'qmkit';
+import { noop, checkAuth, util } from 'qmkit';
 import { List, Map, fromJS } from 'immutable';
 import { Table, Popconfirm, Switch, message, Tooltip } from 'antd';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
@@ -82,7 +82,7 @@ class RelatedProduct extends React.Component<any, any> {
       key: 'goodsImg',
       /*render: (text, record, index) => `${index + 1}` + <img src={text.goodsImg} alt=""/>*/
       render: (text, record, index) => {
-        return <img src={record.goodsImg} width="24" />;
+        return <img src={util.optimizeImage(record.goodsImg)} width="24" />;
       }
     },
     {

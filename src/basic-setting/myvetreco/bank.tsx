@@ -1,5 +1,7 @@
 import React from 'react';
 import { Form, Input, Row, Col } from 'antd';
+import DebounceSelect from '../../myvetreco-logins/create-store/components/debounceSelect';
+import { cityList } from '../webapi';
 import FileItem from './fileitem';
 import { SupportedDocumentUtil } from './main';
 import { FormComponentProps } from 'antd/es/form';
@@ -11,11 +13,29 @@ interface BankFormProps extends FormComponentProps {
 
 const FormItem = Form.Item;
 
+const fetchUserList = async (cityName) => {
+  return cityList({cityName,storeId:123457915}).then(({res})=>{
+    return res.context.systemCityVO
+  })
+}
+
 class BankInformation extends React.Component<BankFormProps, any> {
 
   constructor(props) {
     super(props);
+    this.state = {
+      defaultOptions: {}
+    }
   }
+
+  setDefaultOptions = () => {
+    const cityObj = this.props.form.getFieldValue('cityId');
+    const defaultOptions = {
+      id: cityObj.key,
+      cityName: cityObj.label
+    };
+    this.setState({ defaultOptions });
+  };
 
   validateForm = () => {
     return new Promise((resolve, reject) => {
@@ -23,6 +43,8 @@ class BankInformation extends React.Component<BankFormProps, any> {
         if (!errors) {
           resolve({
             ...values,
+            cityId: values.cityId.key,
+            city: values.cityId.label,
             documentType: 'BANK_STATEMENT',
             supportedDocument: SupportedDocumentUtil.mapFormDataToProps(values.supportedDocument, 'BANK_STATEMENT')
           });
@@ -35,6 +57,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
 
   render() {
     const { form: { getFieldDecorator }, isBusiness, adyenAuditState } = this.props;
+    const { defaultOptions } = this.state;
     const formLayout = {
       labelCol: { span: 8 },
       wrapperCol: { span: 12 }
@@ -48,7 +71,37 @@ class BankInformation extends React.Component<BankFormProps, any> {
                 rules: [{ required: isBusiness, message: 'Please input owner name' }],
                 initialValue: ''
               })(
-              <Input disabled />
+              <Input disabled={adyenAuditState === 0} />
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={[24,12]}>
+          <Col span={12}>
+            <FormItem label="Owner city" required>
+              {getFieldDecorator('cityId', {
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      if (!value || !value.key) {
+                        callback('Please select city');
+                      }
+                      callback();
+                    }
+                  }
+                ],
+                initialValue: {key:'',value:'',label:''}
+              })(
+                <DebounceSelect
+                  disabled={adyenAuditState === 0}
+                  size="default"
+                  placeholder="Select city"
+                  fetchOptions={fetchUserList}
+                  defaultOptions={defaultOptions}
+                  style={{
+                    width: '100%',
+                  }}
+                />
               )}
             </FormItem>
           </Col>
@@ -67,7 +120,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'red'}}>
+            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>You can upload Bank Statement, Letter from bank, Screenshot online banking environment</div>
               <div>Allowed formats: JPEG, JPG, PNG, PDF.</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats.</div>

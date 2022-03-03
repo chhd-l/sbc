@@ -176,7 +176,8 @@ class ProductPrice extends Component<any, any> {
     })
   }
   exportExcel=async()=>{
-    const res=await webapi.exportPriceList()
+    const { goodsInfoIds } = this.state;
+    const res=await webapi.exportPriceList(goodsInfoIds ? {ids: goodsInfoIds} : {})
     console.log(res)
     // const exportHref = Const.HOST + `/goods/price/export`;
     // window.open(exportHref);

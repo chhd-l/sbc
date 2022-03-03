@@ -280,6 +280,10 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon iconshizhong" />
                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontimezone" />
+                            {item.timeZone}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -327,6 +331,10 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon iconshizhong" />
                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontimezone" />
+                            {item.timeZone}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -371,6 +379,10 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon iconshizhong" />
                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
                           </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontimezone" />
+                            {item.timeZone}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -414,6 +426,10 @@ export default class CardView extends Component<any, any> {
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
                             {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
+                          </div>
+                          <div className="contentInfo">
+                            <span className="icon iconfont addTaskIcon icontimezone" />
+                            {item.timeZone}
                           </div>
                         </Col>
                       </Row>

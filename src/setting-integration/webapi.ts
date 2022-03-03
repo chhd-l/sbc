@@ -85,3 +85,20 @@ export function updateProductApi(params:{
     })
   });
 }
+
+
+/************** retailer *****************/
+export const findBuyFromRetailer = () => {
+  return Fetch<TResult>('/storeConfig/findBuyFromRetailer', {
+    method: 'GET',
+  });
+};
+
+export const editBuyFromRetailer = (params) => {
+  return Fetch<TResult>('/storeConfig/editBuyFromRetailer', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+};

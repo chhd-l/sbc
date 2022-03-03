@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import {Spin} from 'antd';
 //import { fromJS } from 'immutable';
 
-import {AuthWrapper, cache, RCi18n, history, noop} from 'qmkit';
+import {AuthWrapper, cache, RCi18n, history, noop, util} from 'qmkit';
 /*import { IList } from 'typings/globalType';
 // import { FormattedMessage } from 'react-intl';*/
 import PieChart from 'web_modules/biz/chart-pie/index.tsx';
@@ -388,7 +388,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
                       <div className="seller-pro flex-start" key={i}>
                         <div className="text"><FormattedMessage id="Home.TOP"/> {i + 1}</div>
                         <div className="seller-content flex-content-start">
-                          <img src={item.goodsInfoImg} alt="" style={{width:66,height:94,margin:'0 auto'}} />
+                          <img src={util.optimizeImage(item.goodsInfoImg)} alt="" style={{width:66,height:94,margin:'0 auto'}} />
                           <div className="content-text1 font-line1">{item.goodsInfoName}</div>
                           <div className="content-text2">{item.marketPrice + ' ' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</div>
                           <div className="content-text3">{item.salesVolume} <FormattedMessage id="Home.units"/></div>

@@ -1255,6 +1255,18 @@ const routes = [
     path:'/product-api',
     asyncComponent: () => import('./setting-integration/product-api')
   },
+  {
+    path:'/retailer',
+    asyncComponent: () => import('./setting-integration/retailer')
+  },
+  {
+    path: '/landing-page',
+    asyncComponent: () => import('./landing-page')
+  },
+  {
+    path: '/landing-page-detail/:id',
+    asyncComponent: () => import('./landing-page/detail')
+  }
 ];
 
 const homeRoutes = [

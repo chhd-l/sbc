@@ -1,9 +1,9 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col } from 'antd';
+import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col, message } from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache, getOrderStatusValue, util } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, util, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
@@ -830,6 +830,9 @@ class ListView extends React.Component<any, any> {
       const res = await cancelOrderForJp(this.state.selectedOrderId);
       if (res?.res?.code === Const.SUCCESS_CODE) {
         this.setState({ cancelOrderModalVisible: false });
+        message.success(RCi18n({ id: 'Order.cancelOrderSuccessfully' }));
+        const {init,pageSize,currentPage}=this.props.relaxProps
+        init({pageNum:currentPage-1,pageSize});
       }
     } finally {
       this.setState({ cancelOrderLoading: false });

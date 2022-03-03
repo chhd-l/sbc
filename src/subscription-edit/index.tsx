@@ -162,6 +162,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   getDeliveryDateStatus = () => {
     GetDelivery().then((data) => {
       const res = data.res;
+      console.log('GetDelivery', res);
+
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           deliverDateStatus: res?.context?.systemConfigVO?.status || 0
@@ -283,6 +285,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
+                console.log('storeId', storeId);
                 // 日本的timeSlot需要显示
                 if (
                   subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
@@ -705,18 +708,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   return;
       // })
     }
-    //如果是HOME_DELIVERY 查询timeslot信息
-    // if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-    //   debugger;
-    //   this.getTimeSlot({
-    //     cityNo: deliveryAddressInfo.provinceIdStr,
-    //     subscribeId: subscriptionInfo.subscriptionNumber
-    //   });
-    //   this.setState({
-    //     deliveryDate: undefined,
-    //     timeSlot: undefined
-    //   });
-    // }
+    // 如果是日本
+    if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
+      // 如果是HOME_DELIVERY 查询timeslot信息
+      if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
+        this.getTimeSlot({
+          cityNo: deliveryAddressInfo.provinceIdStr,
+          subscribeId: subscriptionInfo.subscriptionNumber
+        });
+        this.setState({
+          deliveryDate: undefined,
+          timeSlot: undefined
+        });
+      }
+    }
 
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (
@@ -725,7 +730,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
       ] === 'ru'
     ) {
-      debugger;
       if (
         !deliveryAddressInfo.street ||
         !deliveryAddressInfo.postCode ||
@@ -2374,12 +2378,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
                           </p>
                           <p>
-                            {paymentInfo && paymentInfo.paymentVendor
-                              ? paymentInfo.paymentVendor
-                              : paymentInfo?.paymentItem === 'adyen_paypal' ?<FormattedMessage id="Subscription.Paypal" />:''}
+                            {paymentInfo && paymentInfo.paymentVendor ? (
+                              paymentInfo.paymentVendor
+                            ) : paymentInfo?.paymentItem === 'adyen_paypal' ? (
+                              <FormattedMessage id="Subscription.Paypal" />
+                            ) : (
+                              ''
+                            )}
                           </p>
                         </Col>
-                        {paymentInfo?.paymentItem !== 'adyen_paypal'?(
+                        {paymentInfo?.paymentItem !== 'adyen_paypal' ? (
                           <Col span={24}>
                             <p style={{ width: 140 }}>
                               <FormattedMessage id="Subscription.CardNumber" />:{' '}
@@ -2390,8 +2398,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 : ''}
                             </p>
                           </Col>
-                        ):null}
-
+                        ) : null}
                       </>
                     ) : paymentMethod.indexOf('COD') !== -1 ? (
                       <Col span={24}>
@@ -2402,7 +2409,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <FormattedMessage id="Subscription.CashOnDelivery" />
                         </p>
                       </Col>
-                    ):paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
+                    ) : paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
                           <FormattedMessage id="Subscription.PaymentMethod" />:{' '}

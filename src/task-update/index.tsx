@@ -953,15 +953,16 @@ class TaskUpdate extends Component<any, any> {
                                 </Option>
                               ))}
                             </Select>
-                          ) : (
+                          ) : (<>
                             <Link
                               to={`/petowner-details/${task.contactId}/${task.customerAccount}`}
                             >
                               {task.petOwner
                                 ? task.petOwner + '(' + task.customerAccount + ')'
                                 : ''}
-                            </Link>
-                          )
+                            </Link> 
+                            {task.commentNumber ? <Link to={`/pet-owner-activity/${task.contactId}`}>[{task.commentNumber} comments available]</Link> : null}
+                          </>)
                         )}
                       </FormItem>
                     </Col>

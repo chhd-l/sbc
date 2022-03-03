@@ -175,6 +175,11 @@ export default class CardView extends Component<any, any> {
         message.error(err || 'Update Failed');
       });
   };
+
+  handleCommentNumberClick = (e, petOwnerId) => {
+    e.stopPropagation();
+    history.push(`/pet-owner-activity/${petOwnerId}`);
+  };
   render() {
     const { toDoList, onGoingList, completedList, cancelledList, taskCardLength, loading, maxHeight } = this.state;
     return (
@@ -284,6 +289,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
+                          <div className="contentInfo comment-number">
+                            {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -335,6 +343,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
+                          <div className="contentInfo comment-number">
+                            {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -383,6 +394,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
+                          <div className="contentInfo comment-number">
+                            {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -430,6 +444,9 @@ export default class CardView extends Component<any, any> {
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
+                          </div>
+                          <div className="contentInfo comment-number">
+                            {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
                           </div>
                         </Col>
                       </Row>

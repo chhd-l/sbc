@@ -1068,8 +1068,8 @@ class SearchHead extends Component<any, any> {
       [codeSelect]: codeSelectValue,
       [emailAddressType]: emailAddressValue,
       [citySearchType]: citySearchValue,
-      orderCreateByType,
-      goodWillFlag:orderTagValue?+orderTagValue:''
+      // orderCreateByType,
+      // goodWillFlag:orderTagValue?+orderTagValue:''
     };
     onSearch(params);
   };

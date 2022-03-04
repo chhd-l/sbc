@@ -311,6 +311,7 @@ const index = () => {
         deliveryInterval: parseInt(deliveryInterval) ?? 0
       };
     }
+    console.log('params', params);
 
     setLoading(true);
     webapi

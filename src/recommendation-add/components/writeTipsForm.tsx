@@ -105,6 +105,7 @@ class WriteTipsForm extends React.Component<any, any> {
       o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
       o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
     }
+    // let _type = `${o || ''} ${html.toString()}`;
     let _type = `${html.toString()}`;
     setFieldsValue({
       [type]: _type
@@ -125,9 +126,20 @@ class WriteTipsForm extends React.Component<any, any> {
     this.setState({ visible: false }, () => {
       this.chooseItems = [];
     });
+    // this.setState({ visible: false });
   };
-  _onChangeCheckBox = (e) => {
-    this.chooseItems = e;
+  _onChangeCheckBox = (e: Array<any>) => {
+    // console.log('e', Object.prototype.toString.call(e));
+    let tempArr = [];
+    if (this.chooseItems) {
+      tempArr = this.chooseItems?.map((item) => {
+        return item;
+      });
+      tempArr = tempArr.concat(e);
+      this.chooseItems = [...new Set(tempArr)];
+    } else {
+      this.chooseItems = e;
+    }
   };
   done = (e) => {
     e.preventDefault();

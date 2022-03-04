@@ -1057,13 +1057,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then((data) => {
-      const { deliveryDate, timeSlot } = this.state;
+      let { deliveryDate, timeSlot, timeSlotList } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList = res.context.timeSlots;
+        timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate).dateTimeInfos;
         this.setState({
           deliveryDateList: deliveryDateList,
-          timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
+          timeSlotList: timeSlotList || [],
           deliveryDate: deliveryDate
             ? deliveryDate
             : deliveryDateList[0] && deliveryDateList[0].date,

@@ -129,7 +129,7 @@ const index = () => {
 
   useEffect(() => {
     // 日本不要城市信息
-    if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
+    if (JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId == '123457919') {
       setCityOk(true);
     } else {
       setCityOk(deliveryForm.city && deliveryForm.city.length > 0);

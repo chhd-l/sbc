@@ -59,11 +59,12 @@ const PaymentMethod = (props) => {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          const card = res.context;
-          const paypalCardIndex = card.findIndex((item) => item.paymentItem === 'adyen_paypal');
+          let card = res?.context||[];
+          const paypalCardIndex = card?.findIndex((item) => item.paymentItem === 'adyen_paypal');
           if (paypalCardIndex > -1) {
-            setPaypalCard([res.context[paypalCardIndex]]);
-            card.splice(paypalCardIndex, 1);
+            const paypalCard=card.filter((item)=>item.paymentItem === 'adyen_paypal')
+            setPaypalCard(paypalCard);
+            card=card.filter((item)=>item.paymentItem !== 'adyen_paypal');
           }
           setCards(card);
         } else {

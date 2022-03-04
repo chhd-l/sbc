@@ -90,7 +90,7 @@ export default function Step6({setLoading}) {
         customProductsType: formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
         attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : null,//改版用到的字段
         scopeIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
-        scopeNumber: formData.Conditions.scopeType === 1 && formData.Conditions.customProductsType === 0 ? formData.Conditions.scopeNumber : undefined,
+        scopeNumber: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeNumber : {},
         /**
          * 第五步
          */
@@ -138,7 +138,7 @@ export default function Step6({setLoading}) {
           emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
           customProductsType: formData.Conditions.customProductsType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
-          skuNumbers: formData.Conditions.scopeType === 1 && formData.Conditions.customProductsType === 0 ? formData.Conditions.scopeNumber : undefined,
+          skuNumbers: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeNumber : {},
         }
       }
 

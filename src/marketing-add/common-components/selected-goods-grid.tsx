@@ -60,14 +60,12 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             title={<FormattedMessage id="Marketing.ProductName"/>}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
-            width="20%"
           />
 
           <Column
             title={<FormattedMessage id="Marketing.Specification"/>}
             dataIndex="specText"
             key="specText"
-            width="20%"
             render={(value) => {
               if (value) {
                 return value;

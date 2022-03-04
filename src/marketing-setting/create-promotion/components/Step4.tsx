@@ -72,7 +72,7 @@ function Step4({form}){
           ...values,
           isSuperimposeSubscription:isSuperimposeSubscription ? 0 : 1,//判断是有选中isSuperimposeSubscription
           scopeIds:selectedSkuIds,
-          scopeNumber: selectedRows.toJS().reduce((prev, curr) => { prev[curr.goodsInfoId] = curr.productNumber; return prev; }, {})
+          scopeNumber: selectedRows.toJS().reduce((prev, curr) => { prev[curr.goodsInfoId] = customProductsType === 0 ? curr.productNumber : 1; return prev; }, {}), //includes products传具体数字，exclude直接传1
         })
         setStep(4)
       }

@@ -93,7 +93,7 @@ class WriteTipsForm extends React.Component<any, any> {
         let _hh = result[item];
         for (let dd in _hh) {
           html += `
-          <p>${dd}.</p>
+          <p>${dd}</p>
           <p>${_hh[dd]}</p>
           `;
         }
@@ -105,7 +105,7 @@ class WriteTipsForm extends React.Component<any, any> {
       o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
       o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
     }
-    let _type = `${o || ''} ${html.toString()}`;
+    let _type = `${html.toString()}`;
     setFieldsValue({
       [type]: _type
     });

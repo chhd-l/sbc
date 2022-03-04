@@ -960,7 +960,7 @@ class TaskUpdate extends Component<any, any> {
                               {task.petOwner
                                 ? task.petOwner + '(' + task.customerAccount + ')'
                                 : ''}
-                            </Link> 
+                            </Link><span style={{margin:"0 5px"}}></span>
                             {task.commentNumber ? <Link to={`/pet-owner-activity/${task.contactId}`}>[{task.commentNumber} comments available]</Link> : null}
                           </>)
                         )}

@@ -446,7 +446,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           this.setState({
             saveLoading: false,
-            payPspItemEnum: ''
+            payPspItemEnum: '',
+            SelectDateStatus: 0
           });
           message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
           setTimeout(() => {

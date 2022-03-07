@@ -120,6 +120,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       confirmPickupDisabled: true, // pickup地址确认按钮状态
       subscribeGoods: null, // 订阅商品数据，传给pickup组件
 
+      SelectDateStatus: 0, // 是否在Operation下选择时间 1选择 0未选择
       deliveryDate: undefined,
       timeSlot: undefined,
       deliveryDateList: [],
@@ -748,7 +749,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-        debugger;
         this.getTimeSlot({
           cityNo: deliveryAddressInfo.provinceIdStr,
           subscribeId: subscriptionInfo.subscriptionNumber
@@ -925,7 +925,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   updateNextDeliveryTime = (date) => {
-    const { currentOrder } = this.state;
+    const { currentOrder, SelectDateStatus } = this.state;
     let goodsItems = [];
     if (currentOrder && currentOrder.tradeItems) {
       for (let i = 0; i < currentOrder.tradeItems.length; i++) {
@@ -951,8 +951,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getSubscriptionDetail();
-          message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+          this.setState(
+            {
+              SelectDateStatus: 1
+            },
+            () => {
+              this.getSubscriptionDetail();
+              message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+            }
+          );
         }
       })
       .catch(() => {})
@@ -1057,22 +1064,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then((data) => {
-      let { deliveryDate, timeSlot, timeSlotList } = this.state;
+      let { deliveryDate, timeSlot, timeSlotList, SelectDateStatus } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList = res.context.timeSlots;
-        // timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
-        timeSlotList = deliveryDateList[0]?.dateTimeInfos;
-        this.setState({
-          deliveryDateList: deliveryDateList,
-          timeSlotList: timeSlotList || [],
-          deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
-          timeSlot:
-            deliveryDateList[0] &&
-            deliveryDateList[0].dateTimeInfos[0].startTime +
-              '-' +
-              deliveryDateList[0].dateTimeInfos[0].endTime
-        });
+        let deliveryDateList: any[] = res.context.timeSlots;
+        if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
+          timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
+          this.setState({
+            deliveryDateList: deliveryDateList,
+            timeSlotList: timeSlotList || [],
+            deliveryDate: deliveryDate
+              ? deliveryDate
+              : deliveryDateList[0] && deliveryDateList[0].date,
+            timeSlot: timeSlot
+              ? timeSlot
+              : deliveryDateList[0] &&
+                deliveryDateList[0].dateTimeInfos[0].startTime +
+                  '-' +
+                  deliveryDateList[0].dateTimeInfos[0].endTime
+          });
+        } else {
+          this.setState({
+            deliveryDateList: deliveryDateList,
+            timeSlotList: deliveryDateList[0].dateTimeInfos || [],
+            deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
+            timeSlot:
+              deliveryDateList[0] &&
+              deliveryDateList[0].dateTimeInfos[0].startTime +
+                '-' +
+                deliveryDateList[0].dateTimeInfos[0].endTime
+          });
+        }
       }
     });
   };
@@ -1080,11 +1102,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state;
     let timeSlots = deliveryDateList.find((item) => item.date === value).dateTimeInfos || [];
-    console.log('timeSlots', timeSlots);
     this.setState({
       deliveryDate: value,
       timeSlotList: timeSlots,
-      timeSlot: (timeSlots[0] && timeSlots[0].startTime + '-' + timeSlots[0].endTime) || undefined
+      timeSlot:
+        deliveryDate === value
+          ? timeSlot
+          : timeSlots[0] && timeSlots[0].startTime + '-' + timeSlots[0].endTime
     });
   };
 

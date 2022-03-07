@@ -1,7 +1,19 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col, message } from 'antd';
+import {
+  Checkbox,
+  Spin,
+  Pagination,
+  Modal,
+  Form,
+  Input,
+  Tooltip,
+  Radio,
+  Row,
+  Col,
+  message
+} from 'antd';
 import { List, fromJS } from 'immutable';
 import { noop, Const, AuthWrapper, cache, getOrderStatusValue, util, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -86,7 +98,6 @@ class ListView extends React.Component<any, any> {
       verify: Function;
       hideRejectModal: Function;
       showRejectModal: Function;
-      defaultLocalDateTime?:string
     };
   };
 
@@ -100,7 +111,6 @@ class ListView extends React.Component<any, any> {
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
-    defaultLocalDateTime:'defaultLocalDateTime',
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -292,9 +302,7 @@ class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, onValidateAudit,defaultLocalDateTime } = this.props.relaxProps;
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
-
+    const { onChecked, onAudit } = this.props.relaxProps;
     return (
       dataList &&
       dataList.map((v, index) => {
@@ -312,10 +320,6 @@ class ListView extends React.Component<any, any> {
               a = a + b;
               return a;
             }, 0) || 0;
-        const buyerId = v.getIn(['buyer', 'id']);
-        const flowState = v.getIn(['tradeState', 'flowState']); //订单状态
-        const isAutoAudit = v.get('isAuditOpen'); //订单审核方式 true:手动审核  false:自动审核
-        const auditState = v.getIn(['tradeState', 'auditState']); //订单审核状态
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={9} style={{ padding: 0 }}>
@@ -323,13 +327,7 @@ class ListView extends React.Component<any, any> {
                 <thead>
                   <tr>
                     <td colSpan={9} style={{ padding: 0, color: '#999' }}>
-                      <div
-                        style={{
-                          marginTop: 12,
-                          borderBottom: '1px solid #F5F5F5',
-                          height: 40
-                        }}
-                      >
+                      <div className="order-list-checkbox">
                         <span style={{ marginLeft: '1%' }}>
                           <Checkbox
                             checked={v.get('checked')}
@@ -341,15 +339,7 @@ class ListView extends React.Component<any, any> {
                         </span>
 
                         <div style={{ width: 600, display: 'inline-block' }}>
-                          <span
-                            style={{
-                              marginLeft: 20,
-                              color: '#000',
-                              display: 'inline-block',
-                              position: 'relative',
-                              width: 600
-                            }}
-                          >
+                          <span className="order-list-order-number-label">
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
@@ -364,7 +354,7 @@ class ListView extends React.Component<any, any> {
                             {v.get('goodWillFlag') === 1 && (
                               <span
                                 style={styles.goodwillColor}
-                                className="order_list_goodwill_flag"
+                                className="order_list_goodwill_flag goodwill-color"
                               >
                                 <FormattedMessage id="Order.goodwillOrder" />
                               </span>
@@ -420,98 +410,56 @@ class ListView extends React.Component<any, any> {
                             : ''}
                         </span>
                         <span style={{ marginRight: 0, float: 'right' }}>
-                          {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' ||
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
-                            v.getIn(['tradeState', 'payState']) === 'NOT_PAID' &&
-                            v.get('tradeItems') &&
-                            !v.get('tradeItems').get(0).get('isFlashSaleGoods') &&
-                            // <AuthWrapper functionName="edit_order_f_001">
-                            //   <Tooltip placement="top" title="Edit">
-                            //     <a
-                            //       style={{ marginLeft: 20 }}
-                            //       onClick={() => {
-                            //         verify(id, buyerId);
-                            //       }}
-                            //       className="iconfont iconEdit"
-                            //     >
-                            //       {/*<FormattedMessage id="edit" />*/}
-                            //     </a>
-                            //   </Tooltip>
-                            // </AuthWrapper>
-                            null}
                           {/*审核按钮显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' &&
-                            v.getIn(['tradeState', 'payState']) === 'PAID' &&
-                            this.isPrescriber() && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => {
-                                    onAudit(id, 'CHECKED');
-                                  }}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="Order.audit" />
-                                </a>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showAuditBtn') && (
+                            <AuthWrapper functionName="fOrderList002">
+                              <a
+                                onClick={() => {
+                                  onAudit(id, 'CHECKED');
+                                }}
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                              >
+                                <FormattedMessage id="Order.audit" />
+                              </a>
+                            </AuthWrapper>
+                          )}
                           {/*驳回按钮显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' &&
-                            v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' &&
-                            v.getIn(['tradeState', 'payState']) === 'PAID' &&
-                            this.isPrescriber() && (
-                              <AuthWrapper functionName="fOrderList002">
-                                <a
-                                  onClick={() => this._showRejectedConfirm(id)}
-                                  href="javascript:void(0)"
-                                  style={{ marginLeft: 20 }}
-                                >
-                                  <FormattedMessage id="Order.turnDown" />
-                                </a>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showRejectBtn') && (
+                            <AuthWrapper functionName="fOrderList002">
+                              <a
+                                onClick={() => this._showRejectedConfirm(id)}
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                              >
+                                <FormattedMessage id="Order.turnDown" />
+                              </a>
+                            </AuthWrapper>
+                          )}
 
                           {/*待发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' &&
-                            (auditState === 'INSIDE_CHECKED' || auditState === 'CHECKED') &&
-                            v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
-                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip
-                                  placement="top"
-                                  title={<FormattedMessage id="Order.ship" />}
-                                >
-                                  <a
-                                    onClick={() => this._toDeliveryForm(id)}
-                                    style={{ marginLeft: 20 }}
-                                    className="iconfont iconbtn-shipping"
-                                  />
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showToBeDeliverStatus') && (
+                            <AuthWrapper functionName="fOrderDetail002">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                <a
+                                  onClick={() => this._toDeliveryForm(id)}
+                                  className="iconfont iconbtn-shipping ml-20"
+                                />
+                              </Tooltip>
+                            </AuthWrapper>
+                          )}
                           {/*部分发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' &&
-                            (v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' ||
-                              v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
-                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' ||
-                              v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
-                            (v.getIn(['tradeState', 'payState']) === 'PAID' ||
-                              v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip
-                                  placement="top"
-                                  title={<FormattedMessage id="Order.ship" />}
-                                >
-                                  <a
-                                    onClick={() => this._toDeliveryForm(id)}
-                                    className="iconfont iconbtn-shipping"
-                                  />
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showPartShippedStatus') && (
+                            <AuthWrapper functionName="fOrderDetail002">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                <a
+                                  onClick={() => this._toDeliveryForm(id)}
+                                  className="iconfont iconbtn-shipping"
+                                />
+                              </Tooltip>
+                            </AuthWrapper>
+                          )}
+                          {/*deliverd状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'SHIPPED' && (
                             <AuthWrapper functionName="fOrderList003">
                               <Tooltip
@@ -558,43 +506,32 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
 
-                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED人工审核，人工审核条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
-                          {isAutoAudit &&
-                          (flowState === 'PENDING_REVIEW' || flowState === 'TO_BE_DELIVERED') &&
-                          auditState === 'NON_CHECKED' ? (
+                          {/*人工审核按钮显示条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
+                          {v.get('showManualReviewBtn') ? (
                             <AuthWrapper functionName="f_order_manual_audit">
                               <Tooltip placement="top" title="Audit">
                                 <a
                                   onClick={() => this._showAuditConfirm(id, 'ManualReview')}
-                                  className="iconfont iconshenhe"
-                                  style={{ marginLeft: 20 }}
+                                  className="iconfont iconshenhe ml-20"
                                 />
                               </Tooltip>
                             </AuthWrapper>
                           ) : null}
 
-                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
-                          {/*||(flowState === 'TO_BE_DELIVERED'&&storeId==='123457911')*/}
-                          {flowState === 'PENDING_REVIEW' && auditState === 'INSIDE_CHECKED' ? (
+                          {/*下游审核库存按钮显示：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
+                          {v.get('showDownstreamReviewBtn') ? (
                             // <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
                               <a
                                 onClick={() => this._showAuditConfirm(id, 'DownstreamAudit')}
-                                className="iconfont iconaudit"
-                                style={{ marginLeft: 20 }}
+                                className="iconfont iconaudit ml-20"
                               />
                             </Tooltip>
                           ) : // </AuthWrapper>
                           null}
 
                           {/*Japan Cancel all*/}
-                          {storeId === 123457919 &&
-                          new Date(defaultLocalDateTime).getTime() <
-                            new Date(v.get('orderCancelTimeOut')).getTime() &&
-                          ((v.get('paymentItem') === 'cod_japan' && flowState === 'PENDING_REVIEW') ||
-                            (v.get('paymentItem') !== 'cod_japan' &&
-                              v.get('paymentItem') !== 'adyen_convenience_store' &&
-                              v.getIn(['tradeState', 'payState']) === 'PAID')) ? (
+                          {v.get('showJpCancelOrderBtn') ? (
                             <Tooltip
                               placement="top"
                               title={<FormattedMessage id="Order.cancelOrder" />}
@@ -606,8 +543,7 @@ class ListView extends React.Component<any, any> {
                                     selectedOrderId: id
                                   });
                                 }}
-                                className="iconfont iconbtn-cancelall"
-                                style={{ marginLeft: 20 }}
+                                className="iconfont iconbtn-cancelall ml-20"
                               />
                             </Tooltip>
                           ) : null}
@@ -618,9 +554,8 @@ class ListView extends React.Component<any, any> {
                               title={<FormattedMessage id="Order.seeDetails" />}
                             >
                               <Link
-                                style={{ marginLeft: 20, marginRight: 20 }}
                                 to={`/order-detail/${id}`}
-                                className="iconfont iconDetails order_list_detail"
+                                className="iconfont iconDetails order_list_detail ml-20 mr-20"
                               />
                             </Tooltip>
                           </AuthWrapper>
@@ -632,16 +567,7 @@ class ListView extends React.Component<any, any> {
                 <tbody>
                   <tr>
                     <td style={{ width: '3%' }} />
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        flexWrap: 'wrap',
-                        padding: '16px 0',
-                        width: '200'
-                      }}
-                    >
+                    <td className="good-image-td">
                       {/*商品图片*/}
                       {v
                         .get('tradeItems')
@@ -652,7 +578,6 @@ class ListView extends React.Component<any, any> {
                               src={v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg}
                               title={v.get('skuName') ? v.get('skuName') : ''}
                               className="img-item"
-                              style={styles.imgItem}
                               key={k}
                             />
                           ) : null
@@ -662,7 +587,7 @@ class ListView extends React.Component<any, any> {
                         /*最后一张特殊处理*/
                         //@ts-ignore
                         v.get('tradeItems').concat(gifts).size > 4 ? (
-                          <div style={styles.imgBg}>
+                          <div className="img-bg">
                             <img
                               //@ts-ignore
                               src={
@@ -672,10 +597,10 @@ class ListView extends React.Component<any, any> {
                                     )
                                   : defaultImg
                               }
-                              style={styles.imgFourth}
+                              className="img-fourth"
                             />
                             //@ts-ignore
-                            <div style={styles.imgNum}>
+                            <div className="imgNum">
                               <FormattedMessage id="Order.total" />{' '}
                               {v.get('tradeItems').concat(gifts).size}
                               <FormattedMessage id="Order.Items" />
@@ -831,8 +756,8 @@ class ListView extends React.Component<any, any> {
       if (res?.res?.code === Const.SUCCESS_CODE) {
         this.setState({ cancelOrderModalVisible: false });
         message.success(RCi18n({ id: 'Order.cancelOrderSuccessfully' }));
-        const {init,pageSize,currentPage}=this.props.relaxProps
-        init({pageNum:currentPage-1,pageSize});
+        const { init, pageSize, currentPage } = this.props.relaxProps;
+        init({ pageNum: currentPage - 1, pageSize });
       }
     } finally {
       this.setState({ cancelOrderLoading: false });
@@ -866,48 +791,6 @@ const styles = {
     textAlign: 'center',
     height: 300
   },
-  imgItem: {
-    width: 60,
-    height: 60,
-    padding: 5,
-    border: '1px solid #ddd',
-    float: 'left',
-    marginRight: 10,
-    background: '#fff',
-    borderRadius: 3
-  },
-  imgFourth: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: 60,
-    height: 60,
-    borderRadius: 3
-  },
-  imgBg: {
-    position: 'relative',
-    width: 60,
-    height: 60,
-    padding: 5,
-    border: '1px solid #ddd',
-    float: 'left',
-    marginRight: 10,
-    borderRadius: 3
-  },
-  imgNum: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 60,
-    height: 60,
-    background: 'rgba(0,0,0,0.6)',
-    borderRadius: 3,
-    fontSize: 9,
-    color: '#fff'
-  },
   platform: {
     fontSize: 12,
     padding: '1px 3px',
@@ -915,15 +798,6 @@ const styles = {
     marginLeft: 5,
     border: ' 1px solid var(--primary-color)',
     color: 'var(--primary-color)',
-    borderRadius: 5
-  },
-  goodwillColor: {
-    fontSize: 12,
-    padding: '1px 3px',
-    display: 'inline-block',
-    marginLeft: 5,
-    border: ' 1px solid #2faf2b',
-    color: '#2faf2b',
     borderRadius: 5
   }
 } as any;

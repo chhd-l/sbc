@@ -129,17 +129,18 @@ class WriteTipsForm extends React.Component<any, any> {
     // this.setState({ visible: false });
   };
   _onChangeCheckBox = (e: Array<any>) => {
+    this.chooseItems = e;
     // console.log('e', Object.prototype.toString.call(e));
-    let tempArr = [];
-    if (this.chooseItems) {
-      tempArr = this.chooseItems?.map((item) => {
-        return item;
-      });
-      tempArr = tempArr.concat(e);
-      this.chooseItems = [...new Set(tempArr)];
-    } else {
-      this.chooseItems = e;
-    }
+    // let tempArr = [];
+    // if (this.chooseItems) {
+    //   tempArr = this.chooseItems?.map((item) => {
+    //     return item;
+    //   });
+    //   tempArr = tempArr.concat(e);
+    //   this.chooseItems = [...new Set(tempArr)];
+    // } else {
+    //   this.chooseItems = e;
+    // }
   };
   done = (e) => {
     e.preventDefault();

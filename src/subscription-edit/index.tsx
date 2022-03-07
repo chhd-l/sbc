@@ -749,7 +749,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
       //如果是HOME_DELIVERY 查询timeslot信息
       if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
-        debugger;
         this.getTimeSlot({
           cityNo: deliveryAddressInfo.provinceIdStr,
           subscribeId: subscriptionInfo.subscriptionNumber
@@ -1069,7 +1068,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList: any[] = res.context.timeSlots;
-        if (SelectDateStatus == 0) {
+        if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
           timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
           this.setState({
             deliveryDateList: deliveryDateList,

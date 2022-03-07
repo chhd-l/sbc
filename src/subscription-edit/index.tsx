@@ -1061,7 +1061,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList = res.context.timeSlots;
-        timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate).dateTimeInfos;
+        timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
         this.setState({
           deliveryDateList: deliveryDateList,
           timeSlotList: timeSlotList || [],
@@ -1091,6 +1091,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   //timeslot
   timeSlotChange = (value: any) => {
+    console.log('value', value);
     this.setState({
       timeSlot: value
     });

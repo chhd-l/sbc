@@ -1061,19 +1061,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList = res.context.timeSlots;
-        timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
+        // timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
+        timeSlotList = deliveryDateList[0]?.dateTimeInfos;
         this.setState({
           deliveryDateList: deliveryDateList,
           timeSlotList: timeSlotList || [],
-          deliveryDate: deliveryDate
-            ? deliveryDate
-            : deliveryDateList[0] && deliveryDateList[0].date,
-          timeSlot: timeSlot
-            ? timeSlot
-            : deliveryDateList[0] &&
-              deliveryDateList[0].dateTimeInfos[0].startTime +
-                '-' +
-                deliveryDateList[0].dateTimeInfos[0].endTime
+          deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
+          timeSlot:
+            deliveryDateList[0] &&
+            deliveryDateList[0].dateTimeInfos[0].startTime +
+              '-' +
+              deliveryDateList[0].dateTimeInfos[0].endTime
         });
       }
     });
@@ -1082,10 +1080,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   deliveryDateChange = (value: any) => {
     const { deliveryDateList, deliveryDate, timeSlot } = this.state;
     let timeSlots = deliveryDateList.find((item) => item.date === value).dateTimeInfos || [];
+    console.log('timeSlots', timeSlots);
     this.setState({
       deliveryDate: value,
       timeSlotList: timeSlots,
-      timeSlot: deliveryDate === value ? timeSlot : undefined
+      timeSlot: (timeSlots[0] && timeSlots[0].startTime + '-' + timeSlots[0].endTime) || undefined
     });
   };
 

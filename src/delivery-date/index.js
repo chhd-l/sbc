@@ -409,7 +409,8 @@ const index = () => {
                   </Col>
                   <Col span={6}>
                     <InputNumber
-                      min={0}
+                      min={1}
+                      max={14}
                       value={datePeriod}
                       onChange={(value) => setDatePeriod(value)}
                     />

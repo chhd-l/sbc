@@ -13,7 +13,7 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
   const [showAddBtn, setShowAddBtn] = useState(false)
   const [cannotSelect, setCannotSelect] = useState([])
   const [selectedDateNos, setSelectedDateNos] = useState([])
-  const [allWeeks] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+  const [allWeeks] = useState([...Array(28).keys()]);
   const [daysList, setDaysList] = useState({
     days: [],
     dates: []
@@ -22,8 +22,9 @@ const ServiceSetting = ({ serviceData, serviceTypeDict, updateServiceData, updat
 
   useEffect(() => {
     // let _date = moment(sessionStorage.getItem(cache.CURRENT_YEAR) ? sessionStorage.getItem(cache.CURRENT_YEAR) : new Date());
-    let dates =  allWeeks.map(item =>({
-      date: moment(new Date()).day(item).format('YYYYMMDD')
+    let dates =  allWeeks.map((item,idx) =>({
+      date: moment(new Date()).day(item).format('YYYYMMDD'),
+      sort:idx
     }));
     let days = dates.map(item => moment(item.date).format('M.DD'))
     setDaysList({

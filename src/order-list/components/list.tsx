@@ -532,6 +532,7 @@ class ListView extends React.Component<any, any> {
 
                           {/*Japan Cancel all*/}
                           {v.get('showJpCancelOrderBtn') ? (
+                            <AuthWrapper functionName="f_cancel_order_btn">
                             <Tooltip
                               placement="top"
                               title={<FormattedMessage id="Order.cancelOrder" />}
@@ -546,6 +547,7 @@ class ListView extends React.Component<any, any> {
                                 className="iconfont iconbtn-cancelall ml-20"
                               />
                             </Tooltip>
+                             </AuthWrapper>
                           ) : null}
 
                           <AuthWrapper functionName="fOrderDetail001">

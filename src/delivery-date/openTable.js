@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, TimePicker, Icon } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
+import { e } from 'mathjs';
 
 const format = 'HH:mm';
 const openTable = (props) => {
@@ -46,6 +47,7 @@ const openTable = (props) => {
   }
   function timeChange(isStartTime, timeString, sort) {
     var newTime = [];
+    timeString = timeString === '' ? '00-00' : timeString;
     props.openDate.times.map((item) => {
       if (item.sort === sort) {
         newTime.push({
@@ -57,6 +59,7 @@ const openTable = (props) => {
         newTime.push(item);
       }
     });
+
     changeTime(newTime);
   }
 
@@ -118,6 +121,7 @@ const openTable = (props) => {
                   value={moment(time.startTime, format)}
                   onChange={(timeObject, timeString) => timeChange(true, timeString, time.sort)}
                   allowClear={false}
+                  placeholder="Select Time"
                 />
                 <span>-</span>
                 <TimePicker
@@ -125,6 +129,7 @@ const openTable = (props) => {
                   value={moment(time.endTime, format)}
                   onChange={(timeObject, timeString) => timeChange(false, timeString, time.sort)}
                   allowClear={false}
+                  placeholder="Select Time"
                 />
                 <Icon type="plus-square" onClick={() => addTime()} />
                 {props.openDate.times.length > 1 ? (

@@ -129,6 +129,8 @@ class WriteTipsForm extends React.Component<any, any> {
     // this.setState({ visible: false });
   };
   _onChangeCheckBox = (e: Array<any>) => {
+    // if (this.chooseItems) this.chooseItems = [...this.chooseItems, ...e];
+    // else
     this.chooseItems = e;
     // console.log('e', Object.prototype.toString.call(e));
     // let tempArr = [];

@@ -308,10 +308,10 @@ export default class PlanningSetting extends React.Component<any, any>{
                 updateTimeRangeErrInfo={(bol)=>this.updateTimeRangeErrInfo(bol)}
               />
               <Row>
-                <Col span={2} offset={9}>
+                <Col span={3} offset={9}>
                   <Button type="primary" htmlType="submit"><FormattedMessage id="save" /></Button>
                 </Col>
-                <Col span={2} >
+                <Col span={3} >
                   <Button onClick={this.handleCancel} ><FormattedMessage id="cancel" /></Button>
                 </Col>
               </Row>

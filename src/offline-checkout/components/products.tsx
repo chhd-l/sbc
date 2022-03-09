@@ -43,7 +43,7 @@ export default class ProductOverview extends React.Component<any, any> {
       <Row gutter={[16, 16]}>
         {products.length ? (
           products.map((product, idx) => (
-            <Col span={12} key={idx}>
+            <Col span={6} key={idx}>
               <div
                 className={`c-product-item ${
                   list.findIndex((p) => p.goodsInfoId === product.goodsInfoId) > -1
@@ -55,7 +55,14 @@ export default class ProductOverview extends React.Component<any, any> {
                   onAddProduct(product);
                 }}
               >
-                <img src={product.goodsImg} alt="product" />
+                {product.goodsImg ? (
+                  <img src={product.goodsImg} alt="product" />
+                ) : (
+                  <div style={{ height: '60px' }}>
+                    <img src={product.goodsImg} alt="product" />
+                  </div>
+                )}
+
                 <div className="name">{product.goodsInfoName}</div>
                 <div className="ean">
                   WEIGHT:{product?.weight}

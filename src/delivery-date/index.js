@@ -81,7 +81,7 @@ const index = () => {
           }
           // 日本需要设置 availableDates 和 deliveryInterval
           if (isJapan) {
-            setDatePeriod(res?.context?.availableDates ?? 0);
+            setDatePeriod(res?.context?.availableDates ?? 1);
             setDeliveryInterval(res?.context?.deliveryInterval ?? 0);
           }
           // deliveryDate 状态
@@ -412,7 +412,7 @@ const index = () => {
                       min={1}
                       max={14}
                       value={datePeriod}
-                      onChange={(value) => setDatePeriod(value)}
+                      onChange={(value) => (value ? setDatePeriod(value) : setDatePeriod(1))}
                     />
                   </Col>
                 </Row>
@@ -506,7 +506,9 @@ const index = () => {
                     <InputNumber
                       min={0}
                       value={deliveryInterval}
-                      onChange={(value) => setDeliveryInterval(value)}
+                      onChange={(value) =>
+                        value ? setDeliveryInterval(value) : setDeliveryInterval(0)
+                      }
                     />
                   </Col>
                 </Row>

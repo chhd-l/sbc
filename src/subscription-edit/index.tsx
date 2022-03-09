@@ -278,7 +278,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               completedOrder: subscriptionDetail.completedTradeList,
               paymentMethod: subscriptionDetail.paymentMethod,
               deliveryDate: subscriptionDetail.consignee.deliveryDate,
-              timeSlot: subscriptionDetail.consignee.timeSlot
+              timeSlot: subscriptionDetail.consignee.timeSlot,
+              cityNo: subscriptionDetail.consignee.provinceIdStr
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -444,15 +445,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            saveLoading: false,
-            payPspItemEnum: '',
-            SelectDateStatus: 0
-          });
-          message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
-          setTimeout(() => {
-            this.getSubscriptionDetail();
-          }, 1000);
+          this.setState(
+            {
+              saveLoading: false,
+              payPspItemEnum: '',
+              SelectDateStatus: 0
+            },
+            () => {
+              message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+              this.getSubscriptionDetail();
+            }
+          );
         }
       })
       .catch(() => {})
@@ -926,7 +929,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   updateNextDeliveryTime = (date) => {
-    const { currentOrder, SelectDateStatus } = this.state;
+    const { currentOrder, SelectDateStatus, cityNo, subscriptionInfo } = this.state;
     let goodsItems = [];
     if (currentOrder && currentOrder.tradeItems) {
       for (let i = 0; i < currentOrder.tradeItems.length; i++) {
@@ -957,8 +960,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               SelectDateStatus: 1
             },
             () => {
-              this.getSubscriptionDetail();
-              message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+              this.getTimeSlot({
+                cityNo,
+                subscribeId: subscriptionInfo.subscriptionNumber
+              });
+              setTimeout(() => {
+                this.updateSubscription();
+                message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+              }, 1000);
             }
           );
         }

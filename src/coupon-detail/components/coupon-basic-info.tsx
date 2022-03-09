@@ -61,37 +61,35 @@ const columns = [
     title: <FormattedMessage id="Marketing.Price" />,
     key: 'marketPrice',
     dataIndex: 'marketPrice',
-    render: (text) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + QMFloat.addZero(text)}</span>,
+    render: (text) => (
+      <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + QMFloat.addZero(text)}</span>
+    ),
     width: '20%'
   }
 ];
 const style = {
   marginLeft: 20,
   display: 'flex'
-}
-const checkboxStyle = {
-
-
-}
+};
+const checkboxStyle = {};
 const checkboxContainerStyle = {
   display: 'flex',
-  flexDirection: 'row',
-}
+  flexDirection: 'row'
+};
 const PROMOTION_TYPE = {
-  0:  RCi18n({
+  0: RCi18n({
     id: 'Marketing.All'
   }),
-  1:  RCi18n({
+  1: RCi18n({
     id: 'Marketing.Autoship'
   }),
-  2:
-    RCi18n({
-      id: 'Marketing.Club'
-    }),
+  2: RCi18n({
+    id: 'Marketing.Club'
+  }),
   3: RCi18n({
     id: 'Marketing.Singlepurchase'
   })
-}
+};
 
 @Relax
 export default class CouponBasicInfo extends Component<any, any> {
@@ -127,32 +125,63 @@ export default class CouponBasicInfo extends Component<any, any> {
   };
 
   render() {
-    const { couponCates, coupon, skuBrands, skuCates, skus, goodsList,currentCategary,currentAttribute, currentGroup } = this.props.relaxProps;
-    const { couponName, rangeDayType, startTime, endTime, effectiveDays, denomination, fullBuyType,
-      fullBuyPrice, scopeType, couponDesc, couponPurchaseType, isSuperimposeSubscription, scopeIds,
-      couponPromotionType, fullbuyCount,couponJoinLevel, emailSuffixList,fullGiftDetailList,couponDiscount,
+    const {
+      couponCates,
+      coupon,
+      skuBrands,
+      skuCates,
+      skus,
+      goodsList,
+      currentCategary,
+      currentAttribute,
+      currentGroup
+    } = this.props.relaxProps;
+    const {
+      couponName,
+      rangeDayType,
+      startTime,
+      endTime,
+      effectiveDays,
+      denomination,
+      fullBuyType,
+      fullBuyPrice,
+      scopeType,
+      couponDesc,
+      couponPurchaseType,
+      isSuperimposeSubscription,
+      scopeIds,
+      couponPromotionType,
+      fullbuyCount,
+      couponJoinLevel,
+      emailSuffixList,
+      fullGiftDetailList,
+      couponDiscount,
       limitAmount
     } = coupon.toJS();
-    console.log(coupon.toJS())
-    let dataSource = fromJS([])
+    console.log(coupon.toJS());
+    let dataSource = fromJS([]);
     // const goodsInfoPage = goodsList.goodsInfoPage.content
+    // debugger;
     if (scopeType === 4) {
-      const cates = goodsList.get('cates')
-      const brands = goodsList.get('brands')
-      console.log(cates)
-      let array = []
-      scopeIds.map((scope) => {
-        if(goodsList.get('goodsInfoPage')) {
-          let goodInfo = fromJS(goodsList.get('goodsInfoPage').get('content')).find((s) => s.get('goodsInfoId') == scope);
-          if (goodInfo) {
-            const cId = goodInfo.get('cateId');
-            const cate = fromJS(cates || []).find((s) => s.get('cateId') === cId);
-            goodInfo = goodInfo.set('cateName', cate ? cate.get('cateName') : '-');
+      const cates = goodsList?.get('cates');
+      const brands = goodsList?.get('brands');
+      console.log(cates);
 
-            const bId = goodInfo.get('brandId');
-            const brand = fromJS(brands || []).find((s) => s.get('brandId') === bId);
-            goodInfo = goodInfo.set('brandName', brand ? brand.get('brandName') : '-');
-            array.push(goodInfo.toJS())
+      let array = [];
+      scopeIds.map((scope) => {
+        if (goodsList?.get('goodsInfoPage')) {
+          let goodInfo = fromJS(goodsList?.get('goodsInfoPage')?.get('content'))?.find(
+            (s) => s?.get('goodsInfoId') == scope
+          );
+          if (goodInfo) {
+            const cId = goodInfo?.get('cateId');
+            const cate = fromJS(cates || []).find((s) => s?.get('cateId') === cId);
+            goodInfo = goodInfo?.set('cateName', cate ? cate?.get('cateName') : '-');
+
+            const bId = goodInfo?.get('brandId');
+            const brand = fromJS(brands || []).find((s) => s?.get('brandId') === bId);
+            goodInfo = goodInfo?.set('brandName', brand ? brand?.get('brandName') : '-');
+            array.push(goodInfo.toJS());
           }
         }
       });
@@ -161,22 +190,27 @@ export default class CouponBasicInfo extends Component<any, any> {
     /**
      *  gift列表获取
      */
-    let giftDataSource = []
-    let giftIds = fullGiftDetailList?.map(item=>{
-      return item.productId
-    })
-    if(couponPromotionType === 2){
-      const cates = goodsList.get('cates')
-      const brands = goodsList.get('brands')
-      if(goodsList.get('goodsInfoPage')){
-        goodsList.get('goodsInfoPage')?.toJS().content.forEach(item=>{
-          if(giftIds.includes(item?.goodsInfoId)){
-            item.brandName = brands.toJS().find((s) => s.brandId === item.brandId)?.brandName
-            item.cateName = cates.toJS().find((s) => s.cateId === item.cateId)?.cateName
-            item.productNum = fullGiftDetailList.find((s) => s.productId === item.goodsInfoId)?.productNum
-            giftDataSource.push(item)
-          }
-        })
+    let giftDataSource = [];
+    let giftIds = fullGiftDetailList?.map((item) => {
+      return item.productId;
+    });
+    if (couponPromotionType === 2) {
+      const cates = goodsList?.get('cates');
+      const brands = goodsList?.get('brands');
+      if (goodsList?.get('goodsInfoPage')) {
+        goodsList
+          ?.get('goodsInfoPage')
+          ?.toJS()
+          ?.content?.forEach((item) => {
+            if (giftIds?.includes(item?.goodsInfoId)) {
+              item.brandName = brands?.toJS()?.find((s) => s?.brandId === item?.brandId)?.brandName;
+              item.cateName = cates?.toJS()?.find((s) => s?.cateId === item?.cateId)?.cateName;
+              item.productNum = fullGiftDetailList?.find(
+                (s) => s?.productId === item?.goodsInfoId
+              )?.productNum;
+              giftDataSource.push(item);
+            }
+          });
       }
     }
     return (
@@ -185,16 +219,24 @@ export default class CouponBasicInfo extends Component<any, any> {
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.CouponName" />}>
             <div style={style}>{couponName}</div>
           </FormItem>
-          <FormItem labelCol={{span:3}} wrapperCol={{span: 21}} label={<FormattedMessage id="Marketing.PromotionType" />}>
-            <div style={style}>{PROMOTION_TYPE[couponPurchaseType]}
-              {
-                couponPurchaseType != 3 &&
-                <Checkbox className="checkboxStyle"checked={isSuperimposeSubscription === 0} disabled={true}>
-                  <div >
+          <FormItem
+            labelCol={{ span: 3 }}
+            wrapperCol={{ span: 21 }}
+            label={<FormattedMessage id="Marketing.PromotionType" />}
+          >
+            <div style={style}>
+              {PROMOTION_TYPE[couponPurchaseType]}
+              {couponPurchaseType != 3 && (
+                <Checkbox
+                  className="checkboxStyle"
+                  checked={isSuperimposeSubscription === 0}
+                  disabled={true}
+                >
+                  <div>
                     <FormattedMessage id="Marketing.Idontwanttocumulate" />
                   </div>
                 </Checkbox>
-              }
+              )}
             </div>
           </FormItem>
           {/* <FormItem {...formItemLayout} label="Coupon classify">
@@ -205,137 +247,298 @@ export default class CouponBasicInfo extends Component<any, any> {
             </div>
           </FormItem> */}
           <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
-            <div style={style}>{this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}</div>
+            <div style={style}>
+              {this._buildRangeDayType(rangeDayType, startTime, endTime, effectiveDays)}
+            </div>
           </FormItem>
-          {
-            couponPromotionType === 0 &&
+          {couponPromotionType === 0 && (
             <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
-              <div style={style}>{`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${denomination}`}</div>
+              <div style={style}>{`${sessionStorage.getItem(
+                cache.SYSTEM_GET_CONFIG
+              )}${denomination}`}</div>
             </FormItem>
-          }
-          {
-            couponPromotionType === 1 &&
+          )}
+          {couponPromotionType === 1 && (
             <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Coupon" />}>
               <div style={style}>
-                {`${100 - couponDiscount*100}%, ${(window as any).RCi18n({id: 'Marketing.DiscountLimit'})} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${limitAmount}`}
+                {`${100 - couponDiscount * 100}%, ${(window as any).RCi18n({
+                  id: 'Marketing.DiscountLimit'
+                })} ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${limitAmount}`}
               </div>
             </FormItem>
-          }
-          {
-            couponPromotionType !== 3 ? (
-              <>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
-                  <div style={style}>{this._buildFullBuyType(fullBuyType, fullBuyPrice, fullbuyCount)}</div>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
+          )}
+          {couponPromotionType !== 3 ? (
+            <>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Threshold" />}>
+                <div style={style}>
+                  {this._buildFullBuyType(fullBuyType, fullBuyPrice, fullbuyCount)}
+                </div>
+              </FormItem>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
+                <div style={style}>
+                  {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
+
+                  {scopeType === 0 ? (
+                    <span className="left-span">
+                      <FormattedMessage id="Marketing.all" />
+                    </span>
+                  ) : scopeType === 4 && dataSource.size > 0 ? (
+                    <Table
+                      dataSource={dataSource.toJS()}
+                      pagination={false}
+                      scroll={{ y: 500 }}
+                      rowKey="goodsInfoId"
+                      className="goods-table"
+                    >
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.SKUCode" />}
+                        key="goodsInfoNo"
+                        dataIndex="goodsInfoNo"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.ProductName" />}
+                        key="goodsInfoName"
+                        dataIndex="goodsInfoName"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Specification" />}
+                        key="specText"
+                        dataIndex="specText"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Category" />}
+                        key="cateName"
+                        dataIndex="cateName"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Brand" />}
+                        key="brandName"
+                        dataIndex="brandName"
+                      />
+                      <Column
+                        align="center"
+                        key="priceType"
+                        title={<FormattedMessage id="Marketing.price" />}
+                        render={(rowInfo) => <div>{rowInfo.salePrice}</div>}
+                      />
+                    </Table>
+                  ) : scopeType === 5 ? (
+                    currentCategary &&
+                    currentCategary.map((item) => (
+                      <span className="coupon-mgr10" key={item.storeCateId}>
+                        {item.get('cateName')}
+                      </span>
+                    ))
+                  ) : (
+                    currentAttribute &&
+                    currentAttribute.map((item) => (
+                      <span key={item.id} className="coupon-mgr10">
+                        {item.get('attributeName') || item.get('attributeDetailName')}{' '}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Marketing.TargetConsumer" />}
+              >
+                <div style={style}>
+                  {couponJoinLevel == 0 && (
+                    <span className="left-span">
+                      <FormattedMessage id="Marketing.all" />
+                    </span>
+                  )}
+                  {couponJoinLevel == -3 && (
+                    <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
+                  )}
+                  {couponJoinLevel == -4 && <span className="left-span">{emailSuffixList[0]}</span>}
+                </div>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Marketing.InstructionsForUse" />}
+              >
+                <div
+                  style={{ wordBreak: 'break-all', marginLeft: 20 }}
+                  dangerouslySetInnerHTML={{
+                    __html: couponDesc ? couponDesc.replace(/\n/g, '<br/>') : ''
+                  }}
+                />
+              </FormItem>
+            </>
+          ) : (
+            <>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Marketing.Freeshippingtype" />}
+              >
+                {fullBuyType === 1 ? (
                   <div style={style}>
-                    {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
-
-                    {
-                      scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
-                        scopeType === 4 && dataSource.size > 0?
-                          <Table dataSource={ dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
-                            <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
-                            <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
-                          </Table> :  scopeType === 5 ?
-                          currentCategary && currentCategary.map(item=> (
-                            <span className="coupon-mgr10" key={item.storeCateId}>{item.get('cateName')}</span>
-                          ))
-                          :
-                          currentAttribute && currentAttribute.map(item=> (
-                            <span key={item.id} className="coupon-mgr10" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
-                          ))
-                    }
-
+                    <FormattedMessage id="Marketing.Orderreach" /> &nbsp;
+                    {`${fullBuyPrice}${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}
                   </div>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
+                ) : (
                   <div style={style}>
-                    { couponJoinLevel == 0 && <span className="left-span"><FormattedMessage id="Marketing.all" /></span> }
-                    { couponJoinLevel == -3 && <span className="left-span">{currentGroup && currentGroup.get('name')}</span> }
-                    { couponJoinLevel == -4 && <span className="left-span">{emailSuffixList[0]}</span> }
+                    {' '}
+                    <FormattedMessage id="Marketing.Orderreach" />
+                    &nbsp;{`${fullbuyCount}`}&nbsp;
+                    <FormattedMessage id="Marketing.items" />
                   </div>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.InstructionsForUse" />}>
-                  <div
-                    style={{ wordBreak: 'break-all', marginLeft: 20}}
-                    dangerouslySetInnerHTML={{
-                      __html: couponDesc ? couponDesc.replace(/\n/g, '<br/>') : ''
-                    }}
-                  />
-                </FormItem>
-              </>
-            ) : (
-              <>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Freeshippingtype" />}>
-                  {
-                    fullBuyType === 1 ?
-                      <div style={style}><FormattedMessage id="Marketing.Orderreach" /> &nbsp;{`${fullBuyPrice}${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}`}</div> :
-                      <div style={style}> <FormattedMessage id="Marketing.Orderreach" />&nbsp;{`${fullbuyCount}`}&nbsp;<FormattedMessage id="Marketing.items" /></div>
-                  }
-                </FormItem>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
-                  <div style={style}>
-                    {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
+                )}
+              </FormItem>
+              <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.Products" />}>
+                <div style={style}>
+                  {/*{this._buildSkus(scopeType, skuBrands, skuCates, skus)}*/}
 
-                    {
-                      scopeType === 0 ? <span  className="left-span"><FormattedMessage id="Marketing.all" /></span> :
-                        scopeType === 4 && dataSource.size > 0?
-                          <Table dataSource={ dataSource.toJS()} pagination={false} scroll={{ y: 500 }} rowKey="goodsInfoId" className="goods-table">
-                            <Column  align="center" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" dataIndex="goodsInfoNo" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" dataIndex="goodsInfoName" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Specification" />} key="specText" dataIndex="specText" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Category" />} key="cateName" dataIndex="cateName" />
-                            <Column  align="center" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" dataIndex="brandName" />
-                            <Column  align="center" key="priceType" title={<FormattedMessage id="Marketing.price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
-                          </Table> :  scopeType === 5 ?
-                          currentCategary && currentCategary.map(item=> (
-                            <span className="coupon-mgr10" key={item.storeCateId}>{item.get('cateName')}</span>
-                          ))
-                          :
-                          currentAttribute && currentAttribute.map(item=> (
-                            <span key={item.id} className="coupon-mgr10" >{item.get('attributeName') || item.get('attributeDetailName')} </span>
-                          ))
-                    }
+                  {scopeType === 0 ? (
+                    <span className="left-span">
+                      <FormattedMessage id="Marketing.all" />
+                    </span>
+                  ) : scopeType === 4 && dataSource.size > 0 ? (
+                    <Table
+                      dataSource={dataSource.toJS()}
+                      pagination={false}
+                      scroll={{ y: 500 }}
+                      rowKey="goodsInfoId"
+                      className="goods-table"
+                    >
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.SKUCode" />}
+                        key="goodsInfoNo"
+                        dataIndex="goodsInfoNo"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.ProductName" />}
+                        key="goodsInfoName"
+                        dataIndex="goodsInfoName"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Specification" />}
+                        key="specText"
+                        dataIndex="specText"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Category" />}
+                        key="cateName"
+                        dataIndex="cateName"
+                      />
+                      <Column
+                        align="center"
+                        title={<FormattedMessage id="Marketing.Brand" />}
+                        key="brandName"
+                        dataIndex="brandName"
+                      />
+                      <Column
+                        align="center"
+                        key="priceType"
+                        title={<FormattedMessage id="Marketing.price" />}
+                        render={(rowInfo) => <div>{rowInfo.salePrice}</div>}
+                      />
+                    </Table>
+                  ) : scopeType === 5 ? (
+                    currentCategary &&
+                    currentCategary.map((item) => (
+                      <span className="coupon-mgr10" key={item.storeCateId}>
+                        {item.get('cateName')}
+                      </span>
+                    ))
+                  ) : (
+                    currentAttribute &&
+                    currentAttribute.map((item) => (
+                      <span key={item.id} className="coupon-mgr10">
+                        {item.get('attributeName') || item.get('attributeDetailName')}{' '}
+                      </span>
+                    ))
+                  )}
+                </div>
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Marketing.TargetConsumer" />}
+              >
+                <div style={style}>
+                  {couponJoinLevel == 0 ? (
+                    <span className="left-span">
+                      <FormattedMessage id="Marketing.all" />
+                    </span>
+                  ) : couponJoinLevel == -3 ? (
+                    <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
+                  ) : couponJoinLevel == -4 ? (
+                    <span className="left-span">{emailSuffixList && emailSuffixList[0]}</span>
+                  ) : null}
+                </div>
+              </FormItem>
+            </>
+          )}
 
-                  </div>
-                </FormItem>
-                <FormItem {...formItemLayout} label={<FormattedMessage id="Marketing.TargetConsumer" />}>
-                  <div style={style}>
-                    {
-                      couponJoinLevel == 0 ?
-                        <span className="left-span"><FormattedMessage id="Marketing.all" /></span> : couponJoinLevel == -3 ?
-                        <span className="left-span">{currentGroup && currentGroup.get('name')}</span>
-                        : couponJoinLevel == -4 ?
-                          <span className="left-span">
-                            {emailSuffixList && emailSuffixList[0]}
-                          </span>: null
-                    }
-                  </div>
-                </FormItem>
-              </>
-            )
-          }
-
-          {
-            couponPromotionType === 2 &&
-            (<FormItem  labelCol={{span:3}} wrapperCol={{span: 21}} label={<FormattedMessage id="Marketing.Gift" />}>
+          {couponPromotionType === 2 && (
+            <FormItem
+              labelCol={{ span: 3 }}
+              wrapperCol={{ span: 21 }}
+              label={<FormattedMessage id="Marketing.Gift" />}
+            >
               <Table dataSource={giftDataSource} pagination={false} rowKey="giftDetailId">
-                <Column width="10%" title={<FormattedMessage id="Marketing.SKUCode" />} key="goodsInfoNo" render={(rowInfo) => <div>{rowInfo.goodsInfoNo}</div>} />
-                <Column width="25%" title={<FormattedMessage id="Marketing.ProductName" />} key="goodsInfoName" render={(rowInfo) => <div>{rowInfo.goodsInfoName}</div>} />
-                <Column width="10%" title={<FormattedMessage id="Marketing.Specification" />} key="specText" render={(rowInfo) => <div>{rowInfo.specText ? rowInfo.specText : '-'}</div>} />
-                <Column width="12%" title={<FormattedMessage id="Marketing.Category" />} key="cateName" render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>} />
-                <Column width="10%" title={<FormattedMessage id="Marketing.Brand" />} key="brandName" render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>} />
-                <Column width="12%" key="priceType" title={<FormattedMessage id="Marketing.Price" />} render={(rowInfo) => <div>{rowInfo.salePrice}</div>} />
-                <Column width="8%" title={<FormattedMessage id="Marketing.Inventory" />} key="stock" render={(rowInfo) => <div>{rowInfo.stock}</div>} />
-                <Column width="15%" title={<FormattedMessage id="Marketing.GiveTheNumber" />} key="productNum" dataIndex="productNum" />
+                <Column
+                  width="10%"
+                  title={<FormattedMessage id="Marketing.SKUCode" />}
+                  key="goodsInfoNo"
+                  render={(rowInfo) => <div>{rowInfo.goodsInfoNo}</div>}
+                />
+                <Column
+                  width="25%"
+                  title={<FormattedMessage id="Marketing.ProductName" />}
+                  key="goodsInfoName"
+                  render={(rowInfo) => <div>{rowInfo.goodsInfoName}</div>}
+                />
+                <Column
+                  width="10%"
+                  title={<FormattedMessage id="Marketing.Specification" />}
+                  key="specText"
+                  render={(rowInfo) => <div>{rowInfo.specText ? rowInfo.specText : '-'}</div>}
+                />
+                <Column
+                  width="12%"
+                  title={<FormattedMessage id="Marketing.Category" />}
+                  key="cateName"
+                  render={(rowInfo) => <div>{rowInfo.cateName ? rowInfo.cateName : '-'}</div>}
+                />
+                <Column
+                  width="10%"
+                  title={<FormattedMessage id="Marketing.Brand" />}
+                  key="brandName"
+                  render={(rowInfo) => <div>{rowInfo.brandName ? rowInfo.brandName : '-'}</div>}
+                />
+                <Column
+                  width="12%"
+                  key="priceType"
+                  title={<FormattedMessage id="Marketing.Price" />}
+                  render={(rowInfo) => <div>{rowInfo.salePrice}</div>}
+                />
+                <Column
+                  width="8%"
+                  title={<FormattedMessage id="Marketing.Inventory" />}
+                  key="stock"
+                  render={(rowInfo) => <div>{rowInfo.stock}</div>}
+                />
+                <Column
+                  width="15%"
+                  title={<FormattedMessage id="Marketing.GiveTheNumber" />}
+                  key="productNum"
+                  dataIndex="productNum"
+                />
               </Table>
-            </FormItem>)
-          }
+            </FormItem>
+          )}
         </Form>
       </FormDiv>
     );
@@ -346,7 +549,11 @@ export default class CouponBasicInfo extends Component<any, any> {
    */
   _buildRangeDayType = (rangeDayType, beginTime, endTime, effectiveDays) => {
     if (rangeDayType === 0) {
-      return moment(beginTime).format(Const.TIME_FORMAT).toString() + ' ~ ' + moment(endTime).format(Const.TIME_FORMAT).toString();
+      return (
+        moment(beginTime).format(Const.TIME_FORMAT).toString() +
+        ' ~ ' +
+        moment(endTime).format(Const.TIME_FORMAT).toString()
+      );
     } else if (rangeDayType === 1) {
       return `Valid for ${effectiveDays} days from the day of collection`;
     }
@@ -360,8 +567,10 @@ export default class CouponBasicInfo extends Component<any, any> {
       return 'No threshold';
     } else if (fullBuyType === 1) {
       return `Over ${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}${fullBuyPrice} is available`;
-    }else if (fullBuyType === 2) {
-      return `Over ${fullbuyCount}${(window as any).RCi18n({ id: 'Marketing.items' })} is available`;
+    } else if (fullBuyType === 2) {
+      return `Over ${fullbuyCount}${(window as any).RCi18n({
+        id: 'Marketing.items'
+      })} is available`;
     }
   };
 
@@ -375,14 +584,22 @@ export default class CouponBasicInfo extends Component<any, any> {
       return (
         <div>
           <h3>按品牌</h3>
-          <div className="bubbleBox">{skuBrands.size == 0 ? '-' : skuBrands.map((brand, index) => <span key={index}>{brand}</span>)}</div>
+          <div className="bubbleBox">
+            {skuBrands.size == 0
+              ? '-'
+              : skuBrands.map((brand, index) => <span key={index}>{brand}</span>)}
+          </div>
         </div>
       );
     } else if (scopeType === 3) {
       return (
         <div>
           <h3>按店铺分类</h3>
-          <div className="bubbleBox">{skuCates.size == 0 ? '-' : skuCates.map((cate, index) => <span key={index}>{cate}</span>)}</div>
+          <div className="bubbleBox">
+            {skuCates.size == 0
+              ? '-'
+              : skuCates.map((cate, index) => <span key={index}>{cate}</span>)}
+          </div>
         </div>
       );
     } else if (scopeType === 4) {
@@ -397,7 +614,14 @@ export default class CouponBasicInfo extends Component<any, any> {
       return (
         <div>
           {/* <h3>自定义选择</h3> */}
-          <Table pagination={false} rowKey={(record: any) => record.skuId} columns={columns} dataSource={skuList} bordered scroll={{ y: 216 }} />
+          <Table
+            pagination={false}
+            rowKey={(record: any) => record.skuId}
+            columns={columns}
+            dataSource={skuList}
+            bordered
+            scroll={{ y: 216 }}
+          />
         </div>
       );
     }

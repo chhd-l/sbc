@@ -33,7 +33,6 @@ class WriteTipsForm extends React.Component<any, any> {
       disabled: false,
       chexs: [],
       chooseItems: [],
-      chexs2: [],
       chooseItems2: [],
     };
   }
@@ -80,7 +79,22 @@ class WriteTipsForm extends React.Component<any, any> {
   }
   showTipModal = (type, fillAutoType) => {
     const { getFillAutofindAllTitle } = this.props;
-    this.setState({ visible: true, type, fillAutoType }, () => {
+
+    if(fillAutoType){
+      this.setState({
+        chexs: this.state.chooseItems
+      })
+    } else {
+      this.setState({
+        chexs: this.state.chooseItems2
+      })
+    }
+
+    this.setState({ 
+      visible: true, 
+      type, 
+      fillAutoType, 
+    }, () => {
       getFillAutofindAllTitle({ fillAutoType });
     });
   };
@@ -89,7 +103,7 @@ class WriteTipsForm extends React.Component<any, any> {
     const { type, fillAutoType } = this.state;
     if (!type) return;
     let html: string = '';
-    if(fillAutoType === 0) {
+    if(!fillAutoType) {
       console.log('type',type)
       const { res } = await acquireContent({ categoryId: this.state.chooseItems2, fillAutoType: 1 });
       if (res.code === Const.SUCCESS_CODE) {
@@ -142,18 +156,18 @@ class WriteTipsForm extends React.Component<any, any> {
       }
     );
 
-    if(fillAutoType === 1) {
-      this.setState({chexs2: this.state.chooseItems2})
+    if(!fillAutoType) {
+      this.setState({chexs: this.state.chooseItems2})
     } else {
       this.setState({chexs: this.state.chooseItems})
     }
   };
 
   handleCancel = () => {
-    if(this.state.fillAutoType === 1) {
+    if(!this.state.fillAutoType) {
       this.setState({ 
         visible: false,
-        chooseItems2: this.state.chexs2,
+        chooseItems2: this.state.chexs,
        });
     } else {
       this.setState({ 

@@ -1,6 +1,5 @@
-import { Button, Checkbox, Collapse, Form, Input, Modal, Radio, Spin } from 'antd';
-import { Relax } from 'plume2';
-import { Const, noop, ReactEditor } from 'qmkit';
+import { Button, Checkbox, Collapse, Form, Input, Modal, Radio, Spin  } from 'antd';
+import { Const, ReactEditor } from 'qmkit';
 import React from 'react';
 import { RCi18n } from 'qmkit';
 import { IList, IMap } from 'typings/globalType';
@@ -31,7 +30,11 @@ class WriteTipsForm extends React.Component<any, any> {
       paris: false,
       suggest: '',
       optimal: '',
-      disabled: false
+      disabled: false,
+      chexs: [],
+      chooseItems: [],
+      chexs2: [],
+      chooseItems2: [],
     };
   }
 
@@ -55,7 +58,7 @@ class WriteTipsForm extends React.Component<any, any> {
     let o = this.state['optimal'] || '';
     o = o.replace(RCi18n({ id: 'Prescriber.Recommendation.optimal' }), '');
     o = RCi18n({ id: 'Prescriber.Recommendation.optimal' }) + o;
-    let _type = `${o || ''}`;
+    // let _type = `${o || ''}`;
     this.setState(
       {
         index: +new Date(),
@@ -77,27 +80,45 @@ class WriteTipsForm extends React.Component<any, any> {
   }
   showTipModal = (type, fillAutoType) => {
     const { getFillAutofindAllTitle } = this.props;
-    this.setState({ visible: true, type }, () => {
+    this.setState({ visible: true, type, fillAutoType }, () => {
       getFillAutofindAllTitle({ fillAutoType });
     });
   };
   handleOk = async () => {
     const { setFieldsValue } = this.props.form;
-    const { type } = this.state;
+    const { type, fillAutoType } = this.state;
     if (!type) return;
     let html: string = '';
-    const { res } = await acquireContent({ categoryId: this.chooseItems, fillAutoType: 1 });
-    if (res.code === Const.SUCCESS_CODE) {
-      const result = res.context.content;
-      this.chooseItems.forEach((item) => {
-        let _hh = result[item];
-        for (let dd in _hh) {
-          html += `
-          <p>${dd}</p>
-          <p>${_hh[dd]}</p>
-          `;
-        }
-      });
+    if(fillAutoType === 0) {
+      console.log('type',type)
+      const { res } = await acquireContent({ categoryId: this.state.chooseItems2, fillAutoType: 1 });
+      if (res.code === Const.SUCCESS_CODE) {
+        const result = res.context.content;
+        this.state.chooseItems2.forEach((item) => {
+          let _hh = result[item];
+          for (let dd in _hh) {
+            html += `
+            <p>${dd}</p>
+            <p>${_hh[dd]}</p>
+            `;
+          }
+        });
+      }
+    } else {
+      console.log('type',type)
+      const { res } = await acquireContent({ categoryId: this.state.chooseItems, fillAutoType: 1 });
+      if (res.code === Const.SUCCESS_CODE) {
+        const result = res.context.content;
+        this.state.chooseItems.forEach((item) => {
+          let _hh = result[item];
+          for (let dd in _hh) {
+            html += `
+            <p>${dd}</p>
+            <p>${_hh[dd]}</p>
+            `;
+          }
+        });
+      }
     }
 
     let o = this.state[type] || '';
@@ -110,40 +131,59 @@ class WriteTipsForm extends React.Component<any, any> {
     setFieldsValue({
       [type]: _type
     });
+    
     this.setState(
       {
         index: +new Date(),
         type: undefined,
         visible: false,
-        [type]: _type
-      },
-      () => {
-        this.chooseItems = [];
+        [type]: _type,
+        chexs: this.state.chooseItems
       }
     );
+
+    if(fillAutoType === 1) {
+      this.setState({chexs2: this.state.chooseItems2})
+    } else {
+      this.setState({chexs: this.state.chooseItems})
+    }
   };
+
   handleCancel = () => {
-    this.setState({ visible: false }, () => {
-      this.chooseItems = [];
-    });
-    // this.setState({ visible: false });
+    if(this.state.fillAutoType === 1) {
+      this.setState({ 
+        visible: false,
+        chooseItems2: this.state.chexs2,
+       });
+    } else {
+      this.setState({ 
+        visible: false,
+        chooseItems: this.state.chexs,
+       });
+    }
   };
-  _onChangeCheckBox = (e: Array<any>) => {
-    // if (this.chooseItems) this.chooseItems = [...this.chooseItems, ...e];
-    // else
-    this.chooseItems = e;
-    // console.log('e', Object.prototype.toString.call(e));
-    // let tempArr = [];
-    // if (this.chooseItems) {
-    //   tempArr = this.chooseItems?.map((item) => {
-    //     return item;
-    //   });
-    //   tempArr = tempArr.concat(e);
-    //   this.chooseItems = [...new Set(tempArr)];
-    // } else {
-    //   this.chooseItems = e;
-    // }
+
+  _onChangeCheckBox = (e: any) => {
+    const value = e.target.value;
+    const index = this.state.chooseItems.findIndex((item) => item === value);
+    const aaa = index === -1
+    ? [...this.state.chooseItems, value]
+    : this.state.chooseItems.filter((item) => item !== value);
+    this.setState({
+      chooseItems: aaa
+    })
   };
+  _onChangeCheckBox2 = (e: any) => {
+    const value = e.target.value;
+    const index = this.state.chooseItems2.findIndex((item) => item === value);
+    const aaa = index === -1
+    ? [...this.state.chooseItems2, value]
+    : this.state.chooseItems2.filter((item) => item !== value);
+    this.setState({
+      chooseItems2: aaa
+    })
+  };
+
   done = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -156,7 +196,7 @@ class WriteTipsForm extends React.Component<any, any> {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { loading, fillAutoList, onChangeStep } = this.props;
-    const { suggest, optimal, index, isSend, type, pickup, paris } = this.state;
+    const { suggest, optimal, index, isSend, type, pickup, paris, chooseItems, chooseItems2 } = this.state;
     const formItemLayout = {
       labelCol: {
         sm: { span: 2 }
@@ -267,68 +307,59 @@ class WriteTipsForm extends React.Component<any, any> {
                           </span>
                         }
                       >
-                        <Checkbox.Group style={{ width: '100%' }} onChange={this._onChangeCheckBox}>
-                          {item.children &&
-                            item.children.length > 0 &&
-                            item.children.map((child) => {
-                              return (
-                                <div style={{ padding: 10 }}>
-                                  <Checkbox value={child.categoryId}>{child.categoryName}</Checkbox>{' '}
-                                </div>
-                              );
-                            })}
-                        </Checkbox.Group>
+                      {item.children &&
+                        item.children.length > 0 &&
+                        item.children.map((child) => {
+                          return (
+                            <div key={child.categoryId} style={{ padding: 10 }}>
+                              <Checkbox checked={chooseItems2.includes(child.categoryId)} onChange={this._onChangeCheckBox2} value={child.categoryId}>{child.categoryName}</Checkbox>{' '}
+                            </div>
+                          );
+                        })}
                       </Panel>
                     ))}
                 </Collapse>
               ) : (
-                <div>
-                  <Collapse>
-                    {fillAutoList &&
-                      fillAutoList.toJS().map((item, index) => (
-                        <Panel
-                          key={item.id}
-                          header={
-                            <span>
-                              {index + 1}、{item.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;
-                            </span>
-                          }
-                        >
-                          {item.children &&
-                            item.children.length > 0 &&
-                            item.children.map((child) => {
-                              return (
-                                <Collapse bordered={false}>
-                                  <Panel
-                                    key={child.id}
-                                    header={
-                                      <span>{child.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                    }
-                                  >
-                                    <Checkbox.Group
-                                      style={{ width: '100%' }}
-                                      onChange={this._onChangeCheckBox}
-                                    >
-                                      {child.children &&
-                                        child.children.length > 0 &&
-                                        child.children.map((_child) => {
-                                          return (
-                                            <div style={{ padding: 10 }}>
-                                              <Checkbox value={_child.categoryId}>
-                                                {_child.categoryName}
-                                              </Checkbox>{' '}
-                                            </div>
-                                          );
-                                        })}
-                                    </Checkbox.Group>
-                                  </Panel>
-                                </Collapse>
-                              );
-                            })}
-                        </Panel>
-                      ))}
-                  </Collapse>
-                </div>
+                <Collapse>
+                  {fillAutoList &&
+                    fillAutoList.toJS().map((item, index) => (
+                      <Panel
+                        key={item.id}
+                        header={
+                          <span>
+                            {index + 1}、{item.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;
+                          </span>
+                        }
+                      >
+                        {item.children &&
+                          item.children.length > 0 &&
+                          item.children.map((child) => {
+                            return (
+                              <Collapse key={child.id}  bordered={false}>
+                                <Panel
+                                  key={child.id}
+                                  header={
+                                    <span>{child.categoryName}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                  }
+                                >
+                                {child.children &&
+                                  child.children.length > 0 &&
+                                  child.children.map((_child) => {
+                                    return (
+                                      <div key={_child.categoryId} style={{ padding: 10 }}>
+                                        <Checkbox checked={chooseItems.includes(_child.categoryId)} value={_child.categoryId}  onChange={this._onChangeCheckBox}>
+                                          {_child.categoryName}
+                                        </Checkbox>{' '}
+                                      </div>
+                                    );
+                                  })}
+                                </Panel>
+                              </Collapse>
+                            );
+                          })}
+                      </Panel>
+                    ))}
+                </Collapse>
               )}
             </div>
           </Spin>

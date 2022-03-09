@@ -63,7 +63,7 @@ const index = () => {
   const [deliverDateStatus, setDeliverDateStatus] = useState(0);
   const [deliverDateId, setDeliverDateId] = useState(0);
 
-  const [datePeriod, setDatePeriod] = useState(0);
+  const [datePeriod, setDatePeriod] = useState(1);
   const [deliveryInterval, setDeliveryInterval] = useState(0);
 
   useEffect(() => {
@@ -307,7 +307,7 @@ const index = () => {
     if (isJapan) {
       params = {
         ...deliveryForm,
-        availableDates: parseInt(datePeriod) ?? 0,
+        availableDates: parseInt(datePeriod) ?? 1,
         deliveryInterval: parseInt(deliveryInterval) ?? 0
       };
     }

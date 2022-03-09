@@ -5,6 +5,7 @@ import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const codCodEnum = { 123457907: 'PAYU_RUSSIA_COD', 123457919: 'JAPAN_COD' };
+const cardCodEnum= { 123457909: 'ADYEN_CREDIT_CARD', default: 'PAYU_RUSSIA_AUTOSHIP2' };
 
 const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
@@ -22,7 +23,7 @@ const PaymentMethod = (props) => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
       if (props.cardId) {
-        setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
+        setPaymentType(cardCodEnum[storeId]||cardCodEnum['default']);
       } else {
         setPaymentType(codCodEnum[storeId]);
       }
@@ -33,7 +34,7 @@ const PaymentMethod = (props) => {
     if (!props.paymentMethodVisible) {
       return;
     }
-    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
       getCards();
       if (props.cardId) {
         setSelectCardId(props.cardId);
@@ -45,7 +46,7 @@ const PaymentMethod = (props) => {
   }, [paymentType, props.paymentMethodVisible]);
 
   useEffect(() => {
-    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
       setDisabled(!selectCardId);
     } else {
       setDisabled(!deliveryPay);
@@ -134,7 +135,7 @@ const PaymentMethod = (props) => {
       }}
     >
       <Radio.Group onChange={(e) => setPaymentType(e.target.value)} value={paymentType}>
-        <Radio value={'PAYU_RUSSIA_AUTOSHIP2'}>
+        <Radio value={cardCodEnum[storeId]||cardCodEnum['default']}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
@@ -155,7 +156,7 @@ const PaymentMethod = (props) => {
         ) : // </AuthWrapper>
         null}
       </Radio.Group>
-      {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
+      {paymentType === (cardCodEnum[storeId]||cardCodEnum['default']) ? (
         <Row className="paymentDoor">
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
             <Spin spinning={loading}>

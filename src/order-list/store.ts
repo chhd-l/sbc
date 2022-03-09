@@ -6,7 +6,7 @@ import FormActor from './actor/form-actor';
 import TabActor from './actor/tab-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { cache, Const, history, RCi18n, util } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -41,6 +41,7 @@ export default class AppStore extends Store {
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
+        res.context.content=this.handleOrderList(res.context.content,res.defaultLocalDateTime);
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('list:init', res.context);
@@ -53,6 +54,58 @@ export default class AppStore extends Store {
       }
     });
   };
+
+  handleOrderList=(orderList,defaultLocalDateTime)=>{
+    return Array.from(orderList, (ele:any) => {
+      const tradeState=ele.tradeState;
+      return Object.assign(ele, {
+        //只有未审核状态才显示修改
+        canEdit:(tradeState.flowState === 'INIT' ||
+          tradeState.flowState === 'AUDIT') &&
+          tradeState.payState === 'NOT_PAID' &&
+          ele.tradeItems &&
+          !ele.tradeItems[0]?.isFlashSaleGoods,
+        //审核按钮显示
+        showAuditBtn:tradeState.flowState === 'INIT' &&
+          tradeState.auditState === 'NON_CHECKED' &&
+          tradeState.payState === 'PAID' &&
+          JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))?.roleName?.indexOf('Prescriber') !== -1,
+        //驳回按钮显示
+        showRejectBtn:tradeState.flowState === 'INIT' &&
+          tradeState.auditState === 'NON_CHECKED' &&
+          tradeState.payState === 'PAID' &&
+          JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))?.roleName?.indexOf('Prescriber') !== -1,
+        //待发货状态显示
+        showToBeDeliverStatus:Const.SITE_NAME !== 'MYVETRECO' &&
+          (tradeState.auditState === 'INSIDE_CHECKED' || tradeState.auditState === 'CHECKED') &&
+          tradeState.flowState === 'AUDIT' &&
+          tradeState.deliverStatus === 'NOT_YET_SHIPPED' &&
+          tradeState.payState === 'PAID',
+        //部分发货状态显示
+        showPartShippedStatus:Const.SITE_NAME !== 'MYVETRECO' &&
+          (tradeState.flowState === 'TO_BE_DELIVERED' ||
+            tradeState.flowState === 'PARTIALLY_SHIPPED') &&
+          (tradeState.deliverStatus === 'PART_SHIPPED' ||
+            tradeState.deliverStatus === 'NOT_YET_SHIPPED') &&
+          (tradeState.payState === 'PAID' ||
+            tradeState.payState === 'AUTHORIZED'),
+        //人工审核按钮显示  isAuditOpen:订单审核方式 true:手动审核  false:自动审核
+        showManualReviewBtn:ele.isAuditOpen &&
+          (tradeState.flowState === 'PENDING_REVIEW' || tradeState.flowState === 'TO_BE_DELIVERED') &&
+          tradeState.auditState === 'NON_CHECKED',
+        //下游审核按钮显示
+        showDownstreamReviewBtn:tradeState.flowState === 'PENDING_REVIEW' && tradeState.auditState === 'INSIDE_CHECKED',
+        //日本取消订单按钮显示
+        showJpCancelOrderBtn:JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457919 &&
+          new Date(defaultLocalDateTime).getTime() <
+          new Date(ele.orderCancelTimeOut).getTime() &&
+          ((ele.paymentItem === 'cod_japan' && tradeState.flowState === 'PENDING_REVIEW') ||
+            (ele.paymentItem !== 'cod_japan' &&
+              ele.paymentItem !== 'adyen_convenience_store' &&
+              tradeState.payState === 'PAID'))
+      });
+    });
+  }
 
   onTabChange = (key) => {
     this.dispatch('tab:init', key);
@@ -127,7 +180,7 @@ export default class AppStore extends Store {
       //set loading true
       // this.dispatch('detail-actor:setButtonLoading', true)
 
-      const { res } = await webapi.audit(tid, audit, reason);
+      const { res } = await webapi.audit(tid, audit);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
         message.success(RCi18n({id:'Order.OperateSuccessfully'}));
@@ -276,7 +329,7 @@ export default class AppStore extends Store {
           message.error('请登录');
         }
 
-        resolve();
+        resolve(()=>{});
       }, 500);
     });
   };

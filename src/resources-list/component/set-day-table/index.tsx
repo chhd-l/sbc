@@ -144,7 +144,7 @@ const SetDayTable = (props) => {
   }
 
   // 根据接口返回的数据遍历出选中的日期，设置选中的复选框
-  const handlePlanDatesChecked = (daysList) => {
+  const handlePlanDatesChecked = (daysList,dates) => {
     let selectedDates = []
     props.weekList.resourceDatePlanVOS?.map(planItem => {
       selectedDates.push(planItem.dateNo)
@@ -152,11 +152,11 @@ const SetDayTable = (props) => {
 
     return (
       <>
-        {daysList.dates.map((dateItem, idx) =>
-          <td key={idx}>
+        {dates.map((dateItem) =>
+          <td key={dateItem.sort}>
             <Checkbox
-              disabled={!selectedDates.includes(dateItem.date) && cannotSelect.includes(idx)}
-              onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked, idx)}
+              disabled={!selectedDates.includes(dateItem.date) && cannotSelect.includes(dateItem.sort)}
+              onChange={(e) => dateCheck(e, dateItem.date, daysList, dateItem.dateChecked, dateItem.sort)}
               checked={selectedDates.includes(dateItem.date)}
             ></Checkbox>
           </td>
@@ -170,11 +170,9 @@ const SetDayTable = (props) => {
       <table className="set-day-table">
         <thead>
           <tr>
-            {daysList.days.map((day, idx) =>
-              <th key={idx} style={{ width: '4.5%' }}>
-                {day}
-              </th>
-            )}
+            <th colSpan={14}>
+              Date
+            </th>
             <th style={{ width: '31%' }}>
               <FormattedMessage id="Setting.timeSlot" />
             </th>
@@ -185,17 +183,34 @@ const SetDayTable = (props) => {
         </thead>
         <tbody>
           <tr>
-            {handlePlanDatesChecked(daysList)}
-            <td style={{ paddingTop: 0 }}>
+               {daysList.days.slice(0,14).map((day, idx) =>
+              <td key={idx} className='date'>
+                {day}
+              </td>
+            )}
+            <td style={{ paddingTop: 0 }} rowSpan={4}>
               {handleTimeSlotFormat(props.weekList)}
             </td>
-            <td>
+            <td  rowSpan={4}>
               <a
                 type="link"
                 className="iconfont iconDelete"
                 onClick={() => deleteLinePlanList(props.weekList.sort)}
               ></a>
             </td>
+          </tr>
+          <tr>
+            {handlePlanDatesChecked(daysList,daysList.dates.slice(0,14))}
+          </tr>
+          <tr>
+               {daysList.days.slice(14).map((day, idx) =>
+              <td key={idx} className='date'>
+                {day}
+              </td>
+            )}
+          </tr>
+          <tr>
+            {handlePlanDatesChecked(daysList,daysList.dates.slice(14))}
           </tr>
         </tbody>
       </table>

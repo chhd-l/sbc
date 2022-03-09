@@ -65,7 +65,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         message.success(data.res.message);
         this.getCardList();
       }
-   
+
       })
       .catch(() => {
         message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
@@ -173,12 +173,13 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({id:"PetOwner.CardNumber"}),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => <div>{text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>}</div>
+        render: (text, record) => <div>{record.paymentItem=== 'adyen_paypal'?record.email:text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>}</div>
       },
       {
         title: RCi18n({id:"PetOwner.CardType"}),
         dataIndex: 'paymentVendor',
-        key: 'type'
+        key: 'type',
+        render: (text, record) => <div>{record.paymentItem=== 'adyen_paypal'?'PAYPAL':text}</div>
       },
       {
         title: RCi18n({id:"PetOwner.CardHolder"}),

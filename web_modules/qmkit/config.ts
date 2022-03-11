@@ -10,11 +10,24 @@ const COLORS = {
 };
 
 export default {
-  /* dev */
+  /* fgs storeportal dev */
   // HOST: 'http://121.36.199.41:8390',
 
-  /* stg */
+  /* fgs storeportal sit */
   HOST: 'https://storesit.royalcanin.com/api',
+
+  /* fgs storeportal uat */
+  // HOST: 'https://storeuat.royalcanin.com/api',
+
+  /* fgs storeportal stg */
+  // HOST: 'https://storestg.royalcanin.com/api',
+
+  /* myvet storeportal 本地调试接口地址 */
+  // HOST: 'https://portal.myvetreco.co/api',
+
+  /* peawee storeportal uat */
+  // HOST: 'https://storeuat.peawee.co/api',
+
   PAYMENT_ENVIRONMENT: 'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',

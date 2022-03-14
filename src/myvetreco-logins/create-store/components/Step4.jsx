@@ -3,7 +3,8 @@ import {Button, Row, Col, Input, Checkbox, InputNumber, message, Spin} from 'ant
 import ProductList from './price/ProductList';
 import {listCategory, listGoodsByCategory, priceSetting} from "../webapi";
 import {bignumber, multiply, round, format} from "mathjs";
-import { cache } from 'qmkit';
+import { cache, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 export const FormContext = React.createContext({});
 
@@ -92,7 +93,7 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
    */
   const applyPercentage =useCallback(()=>{
     if (salesPercentage < subscriptionPercentage) {
-      message.error('Market price percentage should larger than subscription price percentage!');
+      message.error(RCi18n({id:"Product.ProductPrice.priceprompt"}));
       return;
     }
     setPercentageObj({
@@ -201,14 +202,14 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
           }}
       >
         <Spin spinning={loading} size="large">
-          <div className="vmargin-level-4 align-item-center word big">4 / 5 Set a price for your product</div>
+          <div className="vmargin-level-4 align-item-center word big">4 / 5 <FormattedMessage id="Store.setprice"/></div>
           <div style={{width:850,margin:'20px auto'}}>
             <Row gutter={24} style={{marginBottom:'10px'}}>
               <Col span={6}>
-                <div className="word small tip">Market price percentage</div>
+                <div className="word small tip"><FormattedMessage id="Store.marketpriceper"/></div>
               </Col>
               <Col span={6}>
-                <div className="word small tip">Subscription price percentage</div>
+                <div className="word small tip"><FormattedMessage id="Store.subscriptionper"/></div>
               </Col>
             </Row>
             <Row gutter={24} type="flex" align="middle">
@@ -237,9 +238,9 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
               </Col> */}
               <Col span={12}>
                 <div style={{display:'inline-flex'}}>
-                  <Button type="primary" onClick={applyPercentage} style={{marginRight:6}}>Apply</Button>
-                  <Button loading={loading} type="primary" onClick={savePrice} style={{marginRight:6}}>Save and Next</Button>
-                  <Button onClick={() => setStep(2)}>back</Button>
+                  <Button type="primary" onClick={applyPercentage} style={{marginRight:6}}><FormattedMessage id="payment.apply"/></Button>
+                  <Button loading={loading} type="primary" onClick={savePrice} style={{marginRight:6}}><FormattedMessage id="Store.savetonext"/></Button>
+                  <Button onClick={() => setStep(2)}><FormattedMessage id="back"/></Button>
                 </div>
               </Col>
             </Row>
@@ -248,12 +249,12 @@ export default function Step4({ setStep,userInfo,step,sourceStoreId }) {
             <Row gutter={24}>
               <Col span={12}>
                 <ProductList dataSource={dataSource?.Cat?.array}
-                             title="Cat"
+                             title={RCi18n({id:"Order.cat"})}
                 />
               </Col>
               <Col span={12}>
                 <ProductList dataSource={dataSource?.Dog?.array}
-                             title="Dog"
+                             title={RCi18n({id:"Order.dog"})}
                 />
               </Col>
             </Row>

@@ -5,6 +5,8 @@ import { cityList } from '../webapi';
 import FileItem from './fileitem';
 import { SupportedDocumentUtil } from './main';
 import { FormComponentProps } from 'antd/es/form';
+import { RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 interface BankFormProps extends FormComponentProps {
   isBusiness: boolean;
@@ -66,9 +68,9 @@ class BankInformation extends React.Component<BankFormProps, any> {
       <Form layout="horizontal" {...formLayout}>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="Owner name">
+            <FormItem label={RCi18n({id:"Store.ownername"})}>
               {getFieldDecorator('ownerName', {
-                rules: [{ required: isBusiness, message: 'Please input owner name' }],
+                rules: [{ required: isBusiness, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                 initialValue: ''
               })(
               <Input disabled={adyenAuditState === 0} />
@@ -78,13 +80,13 @@ class BankInformation extends React.Component<BankFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="Owner city" required>
+            <FormItem label={RCi18n({id:"Store.ownercity"})} required>
               {getFieldDecorator('cityId', {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
                       if (!value || !value.key) {
-                        callback('Please select city');
+                        callback(RCi18n({id:"PetOwner.ThisFieldIsRequired"}));
                       }
                       callback();
                     }
@@ -95,7 +97,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
                 <DebounceSelect
                   disabled={adyenAuditState === 0}
                   size="default"
-                  placeholder="Select city"
+                  placeholder=""
                   fetchOptions={fetchUserList}
                   defaultOptions={defaultOptions}
                   style={{
@@ -108,9 +110,9 @@ class BankInformation extends React.Component<BankFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="IBAN">
+            <FormItem label={RCi18n({id:"Store.iban"})}>
               {getFieldDecorator('iban', {
-                rules: [{ required: isBusiness, message: 'Please input IBAN' }],
+                rules: [{ required: isBusiness, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                 initialValue: ''
               })(
               <Input disabled={adyenAuditState < 2} />
@@ -120,7 +122,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
+            <FormItem label={RCi18n({id:"Store.supportdoc"})} labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>You can upload Bank Statement, Letter from bank, Screenshot online banking environment</div>
               <div>Allowed formats: JPEG, JPG, PNG, PDF.</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats.</div>
@@ -129,7 +131,7 @@ class BankInformation extends React.Component<BankFormProps, any> {
               <div>The document needs to contain the following information: Bank logo or bank name in a unique font，bank account details  and name of the account holder.</div>
             </div>}>
               {getFieldDecorator('supportedDocument', {
-                rules: [{ required: isBusiness, type: 'array', message: 'Please upload supported document!' }]
+                rules: [{ required: isBusiness, type: 'array', message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <FileItem disabled={adyenAuditState === 0} />
               )}

@@ -552,7 +552,7 @@ function Step5({ form }) {
                     placeholder={(window as any).RCi18n({
                       id: 'Marketing.integerfrom1to99999'
                     })}
-                    prefix={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    addonBefore={sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     maxLength={5}
                     style={{ width: 360 }}
                   />

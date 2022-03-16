@@ -21,6 +21,7 @@ import 'moment/locale/fr';
 import 'moment/locale/es';
 import 'moment/locale/de';
 import 'moment/locale/sv';
+import 'moment/locale/ja';
 import { IntlProvider } from 'react-intl';
 import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
@@ -32,6 +33,13 @@ let localeLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
 
 
 const lastLang = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || enUSLang;
+// 如果需要weebpicker展示设置和美国标准一致，则需要调用下面api设置
+// moment.updateLocale(antLanguage.locale, {
+//   week: {
+//     dow: 0,
+//     doy: 6
+//   }
+// });
 
 const useDynamicLanguage = () => {
   const [loading, setLoading] = useState(false);

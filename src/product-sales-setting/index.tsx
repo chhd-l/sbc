@@ -590,9 +590,9 @@ class ProductSearchSetting extends Component<any, any> {
               required
             >
               {getFieldDecorator('maximum_number_of_orders_per_sku', {
-                rules: [{ required: true, type: 'number', max: 20, min: 1, message: RCi18n({id: "Product.maxOfSkuErr"}) }],
+                rules: [{ required: true, type: 'integer', max: 20, min: 1, message: RCi18n({id: "Product.maxOfSkuErr"}) }],
                 initialValue: maximum_number_of_orders_per_sku ? parseInt(maximum_number_of_orders_per_sku) : 20
-              })(<InputNumber style={{width: 220}} />)}
+              })(<InputNumber precision={0} style={{width: 220}} />)}
             </Form.Item>
 
             <Form.Item
@@ -601,9 +601,9 @@ class ProductSearchSetting extends Component<any, any> {
               required
             >
               {getFieldDecorator('maximum_number_of_items_per_cart', {
-                rules: [{ required: true, type: 'number', max: 100, min: 10, message: RCi18n({id: "Product.maxOfCartErr"}) }],
+                rules: [{ required: true, type: 'integer', max: 100, min: 10, message: RCi18n({id: "Product.maxOfCartErr"}) }],
                 initialValue: maximum_number_of_items_per_cart ? parseInt(maximum_number_of_items_per_cart) : null
-              })(<InputNumber style={{width: 220}} />)}
+              })(<InputNumber precision={0} style={{width: 220}} />)}
             </Form.Item>
 
             <Form.Item

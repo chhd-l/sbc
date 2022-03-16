@@ -236,7 +236,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
         key: 'cardno',
         render: (text, record) => (
           <div>
-            {record.email}
+            {record.email?record.email.split('@')[0].substring(0, 4) + '***@' + record.email.split('@')[1]:''}
             {record.isDefault == 1 && (
               <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
             )}
@@ -249,21 +249,21 @@ export default class PaymentList extends React.Component<Iprop, any> {
         key: 'type',
         render: (text, record) => (
           <div>
-            <FormattedMessage id="Paypal" />
+            <FormattedMessage id="Subscription.Paypal" />
           </div>
         )
       },
       {
         title: '',
-        width: '15%'
+        width: '20%'
       },
       {
         title: '',
-        width: '15%'
+        width: '20%'
       },
       {
         title: '',
-        width: '15%'
+        width: '20%'
       },
       {
         title: RCi18n({ id: 'PetOwner.Operation' }),
@@ -306,10 +306,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
             </Button>
           </AuthWrapper>
         )}
+        {/*credit cards*/}
         <p
           style={{ margin: '10px 0', fontSize: '18px', fontWeight: 500, color: 'rgba(0, 0, 0, 1)' }}
         >
-          <FormattedMessage id="CREDIT CARDS" />
+          <FormattedMessage id="PetOwner.creditCards" />
         </p>
         <Table
           rowKey="id"
@@ -318,6 +319,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
           dataSource={list.filter((el) => el.paymentItem !== 'adyen_paypal')}
           pagination={false}
         />
+        {/*paypal*/}
         {JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457909 ? (
           <>
             <p
@@ -328,7 +330,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
                 color: 'rgba(0, 0, 0, 1)'
               }}
             >
-              <FormattedMessage id="PAYPAL" />
+              <FormattedMessage id="PetOwner.paypal" />
             </p>
             <Table
               rowKey="id"

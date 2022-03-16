@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Col,
-  Divider,
-  message,
-  Modal,
-  Popconfirm,
-  Row,
-  Spin,
-  Table,
-  Tag,
-  Tooltip
-} from 'antd';
+import { Button, Col, Divider, message, Modal, Popconfirm, Row, Table, Tag, Tooltip } from 'antd';
 import { deleteCard, getPaymentMethods } from '../webapi';
 import { AuthWrapper, cache, RCi18n, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
@@ -232,11 +220,12 @@ export default class PaymentList extends React.Component<Iprop, any> {
     const paypalColumns = [
       {
         title: RCi18n({ id: 'PetOwner.CardNumber' }),
-        dataIndex: 'lastFourDigits',
-        key: 'cardno',
+        dataIndex: 'email',
+        key: 'email',
+        width: '20%',
         render: (text, record) => (
           <div>
-            {record.email?record.email.split('@')[0].substring(0, 4) + '***@' + record.email.split('@')[1]:''}
+            {text ? text.split('@')[0].substring(0, 4) + '***@' + text.split('@')[1] : ''}
             {record.isDefault == 1 && (
               <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
             )}
@@ -247,23 +236,12 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({ id: 'PetOwner.CardType' }),
         dataIndex: 'paymentVendor',
         key: 'type',
+        width: '20%',
         render: (text, record) => (
           <div>
             <FormattedMessage id="Subscription.Paypal" />
           </div>
         )
-      },
-      {
-        title: '',
-        width: '20%'
-      },
-      {
-        title: '',
-        width: '20%'
-      },
-      {
-        title: '',
-        width: '20%'
       },
       {
         title: RCi18n({ id: 'PetOwner.Operation' }),

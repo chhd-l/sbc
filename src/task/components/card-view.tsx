@@ -289,9 +289,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
-                          <div className="contentInfo comment-number">
+                          {/* <div className="contentInfo comment-number">
                             {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
-                          </div>
+                          </div> */}
                         </Col>
                       </Row>
                     </Card>
@@ -343,9 +343,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
-                          <div className="contentInfo comment-number">
+                          {/* <div className="contentInfo comment-number">
                             {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
-                          </div>
+                          </div> */}
                         </Col>
                       </Row>
                     </Card>
@@ -394,9 +394,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
-                          <div className="contentInfo comment-number">
+                          {/* <div className="contentInfo comment-number">
                             {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
-                          </div>
+                          </div> */}
                         </Col>
                       </Row>
                     </Card>
@@ -445,9 +445,9 @@ export default class CardView extends Component<any, any> {
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
-                          <div className="contentInfo comment-number">
+                          {/* <div className="contentInfo comment-number">
                             {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
-                          </div>
+                          </div> */}
                         </Col>
                       </Row>
                     </Card>

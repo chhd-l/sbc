@@ -168,17 +168,8 @@ export default class BindDescription extends Component<Iprop, any> {
       },
       {
         title: <FormattedMessage id="Product.DisplayName" />,
-        key: 'dipName',
-        render: (text, record) => (
-          <div>
-            {record.translateList && record.translateList.length
-              ? record.translateList
-                  .filter((r) => r.translateName.trim() !== '')
-                  .map((r) => r.translateName)
-                  .join(';')
-              : ''}
-          </div>
-        )
+        dataIndex: 'displayName',
+        key: 'displayName'
       }
     ];
     const rowSelection = {

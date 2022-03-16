@@ -1,16 +1,25 @@
 import React from 'react';
-import {Button, Col, Divider, message, Modal, Popconfirm, Row, Spin, Table, Tag, Tooltip,} from 'antd';
 import {
-  deleteCard,
-  getPaymentMethods,
-} from '../webapi';
-import {AuthWrapper, cache, RCi18n, Const} from 'qmkit';
-import {Link} from 'react-router-dom';
-import {FormattedMessage} from 'react-intl';
+  Button,
+  Col,
+  Divider,
+  message,
+  Modal,
+  Popconfirm,
+  Row,
+  Spin,
+  Table,
+  Tag,
+  Tooltip
+} from 'antd';
+import { deleteCard, getPaymentMethods } from '../webapi';
+import { AuthWrapper, cache, RCi18n, Const } from 'qmkit';
+import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 interface Iprop {
   customerId: string;
-  customerAccount:string
+  customerAccount: string;
 }
 
 export default class PaymentList extends React.Component<Iprop, any> {
@@ -21,18 +30,17 @@ export default class PaymentList extends React.Component<Iprop, any> {
       list: [],
       visible: false,
       detailsList: [],
-      paymentInfo: {},
-
+      paymentInfo: {}
     };
   }
 
   componentDidMount() {
-   this.getCardList();
+    this.getCardList();
   }
 
   getCardList = () => {
     this.setState({ loading: true });
-    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
+    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA || '{}'));
     getPaymentMethods({
       customerId: this.props.customerId,
       storeId
@@ -50,25 +58,24 @@ export default class PaymentList extends React.Component<Iprop, any> {
       });
   };
 
-  deleteCard = ({id,canDelFlag}) => {
-    if(!canDelFlag){
-      message.error(RCi18n({id:"PetOwner.cannotDeletePaymentCard"}));
-      return
+  deleteCard = ({ id, canDelFlag }) => {
+    if (!canDelFlag) {
+      message.error(RCi18n({ id: 'PetOwner.cannotDeletePaymentCard' }));
+      return;
     }
     this.setState({ loading: true });
-    const {storeId}=JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA||'{}'))
-    deleteCard({storeId, id })
+    const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA || '{}'));
+    deleteCard({ storeId, id })
       .then((data) => {
-      if(data.res.code==='K-100209'){
-        message.error(data.res.message);
-      }else{
-        message.success(data.res.message);
-        this.getCardList();
-      }
-
+        if (data.res.code === 'K-100209') {
+          message.error(data.res.message);
+        } else {
+          message.success(data.res.message);
+          this.getCardList();
+        }
       })
       .catch(() => {
-        message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
+        message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
         this.setState({
           loading: false
         });
@@ -77,150 +84,211 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
   handleDetails = (record) => {
     if (!record) return;
-    let {
-      bindCardLogs,
-      bindCardRecord,
-    } = record;
+    let { bindCardLogs, bindCardRecord } = record;
 
     this.setState({
       detailsList: !!bindCardLogs ? bindCardLogs : [],
-      paymentInfo: !!bindCardRecord ? bindCardRecord : {},
-    })
+      paymentInfo: !!bindCardRecord ? bindCardRecord : {}
+    });
 
     this.showModal();
-
-  }
+  };
 
   showModal = () => {
     this.setState({
       visible: true
-    })
-  }
+    });
+  };
 
   closeModal = () => {
     this.setState({
-      visible: false,
-    })
-  }
+      visible: false
+    });
+  };
 
   getPaymentColumns = () => {
     return [
       {
-        title: RCi18n({id: "PetOwner.EventType"}),
+        title: RCi18n({ id: 'PetOwner.EventType' }),
         dataIndex: 'eventType',
-        key: 'eventType',
+        key: 'eventType'
       },
       {
-        title: RCi18n({id: "PetOwner.PspReference"}),
+        title: RCi18n({ id: 'PetOwner.PspReference' }),
         dataIndex: 'pspReference',
-        key: 'pspReference',
+        key: 'pspReference'
       },
       {
-        title: RCi18n({id: "PetOwner.CollectionTime"}),
+        title: RCi18n({ id: 'PetOwner.CollectionTime' }),
         dataIndex: 'createTime',
-        key: 'createTime',
+        key: 'createTime'
       },
       {
-        title: RCi18n({id: "PetOwner.Amount"}),
+        title: RCi18n({ id: 'PetOwner.Amount' }),
         dataIndex: 'amount',
         key: 'amount',
         render: (text, record) => {
           const tradePrice = text || 0;
-          return (`${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${tradePrice.toFixed(2)}`);
+          return `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${tradePrice.toFixed(2)}`;
         }
       },
       {
-        title: RCi18n({id: "PetOwner.EventCode"}),
+        title: RCi18n({ id: 'PetOwner.EventCode' }),
         dataIndex: 'eventCode',
-        key: 'eventCode',
+        key: 'eventCode'
       },
       {
-        title: RCi18n({id: "PetOwner.Result"}),
+        title: RCi18n({ id: 'PetOwner.Result' }),
         dataIndex: 'result',
-        key: 'result',
+        key: 'result'
       },
       {
-        title: RCi18n({id: "PetOwner.Remarks"}),
+        title: RCi18n({ id: 'PetOwner.Remarks' }),
         dataIndex: 'remark',
         key: 'remark',
         render: (remark) => (
-            <span>
-          {remark ? (
+          <span>
+            {remark ? (
               <Tooltip title={remark} placement="top">
                 {remark}
               </Tooltip>
-          ) : (
+            ) : (
               '-'
-          )}
-        </span>
+            )}
+          </span>
         )
-      },
+      }
     ];
-  }
+  };
 
   render() {
-    const {
-      list,
-      loading,
-      visible,
-      detailsList,
-      paymentInfo,
-    } = this.state;
+    const { list, loading, visible, detailsList, paymentInfo } = this.state;
     const customerId = this.props.customerId || '';
     const customerAccount = this.props.customerAccount || '';
     const columns = [
       {
-        title: RCi18n({id:"PetOwner.CardNumber"}),
+        title: RCi18n({ id: 'PetOwner.CardNumber' }),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => <div>{record.paymentItem=== 'adyen_paypal'?record.email:text ? '**** **** **** ' + text : ''} {record.isDefault==1&&<Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>}</div>
+        render: (text, record) => (
+          <div>
+            {'**** **** **** ' + text}{' '}
+            {record.isDefault == 1 && (
+              <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+            )}
+          </div>
+        )
       },
       {
-        title: RCi18n({id:"PetOwner.CardType"}),
+        title: RCi18n({ id: 'PetOwner.CardType' }),
         dataIndex: 'paymentVendor',
-        key: 'type',
-        render: (text, record) => <div>{record.paymentItem=== 'adyen_paypal'?'PAYPAL':text}</div>
+        key: 'type'
       },
       {
-        title: RCi18n({id:"PetOwner.CardHolder"}),
+        title: RCi18n({ id: 'PetOwner.CardHolder' }),
         dataIndex: 'holderName',
         key: 'holder'
       },
       {
-        title: RCi18n({id:"PetOwner.EmailAddress"}),
+        title: RCi18n({ id: 'PetOwner.EmailAddress' }),
         dataIndex: 'email',
         key: 'email'
       },
       {
-        title: RCi18n({id:"PetOwner.phoneNumber"}),
+        title: RCi18n({ id: 'PetOwner.phoneNumber' }),
         dataIndex: 'phone',
         key: 'phoneNumber'
       },
       {
-        title: RCi18n({id:"PetOwner.Operation"}),
+        title: RCi18n({ id: 'PetOwner.Operation' }),
         key: 'oper',
         render: (_, record) => {
-
           return (
-              <span>
-                {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_create_credit_card">
+            <span>
+              {Const.SITE_NAME !== 'MYVETRECO' && (
+                <AuthWrapper functionName="f_create_credit_card">
                   <Popconfirm
-                      placement="topRight"
-                      title={RCi18n({id:"PetOwner.DeleteThisItem"})}
-                      onConfirm={() => this.deleteCard(record)}
-                      okText={RCi18n({id:"PetOwner.Confirm"})}
-                      cancelText={RCi18n({id:"PetOwner.Cancel"})}
+                    placement="topRight"
+                    title={RCi18n({ id: 'PetOwner.DeleteThisItem' })}
+                    onConfirm={() => this.deleteCard(record)}
+                    okText={RCi18n({ id: 'PetOwner.Confirm' })}
+                    cancelText={RCi18n({ id: 'PetOwner.Cancel' })}
                   >
-                    <Tooltip title={RCi18n({id:"PetOwner.Delete"})}>
+                    <Tooltip title={RCi18n({ id: 'PetOwner.Delete' })}>
                       <Button type="link">
-                        <a className="iconfont iconDelete"/>
+                        <a className="iconfont iconDelete" />
                       </Button>
                     </Tooltip>
                     <Divider type="vertical" />
                   </Popconfirm>
-                </AuthWrapper>}
-                <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />
-              </span>
+                </AuthWrapper>
+              )}
+              <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />
+            </span>
+          );
+        }
+      }
+    ];
+    const paypalColumns = [
+      {
+        title: RCi18n({ id: 'PetOwner.CardNumber' }),
+        dataIndex: 'lastFourDigits',
+        key: 'cardno',
+        render: (text, record) => (
+          <div>
+            {record.email?record.email.split('@')[0].substring(0, 4) + '***@' + record.email.split('@')[1]:''}
+            {record.isDefault == 1 && (
+              <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+            )}
+          </div>
+        )
+      },
+      {
+        title: RCi18n({ id: 'PetOwner.CardType' }),
+        dataIndex: 'paymentVendor',
+        key: 'type',
+        render: (text, record) => (
+          <div>
+            <FormattedMessage id="Subscription.Paypal" />
+          </div>
+        )
+      },
+      {
+        title: '',
+        width: '20%'
+      },
+      {
+        title: '',
+        width: '20%'
+      },
+      {
+        title: '',
+        width: '20%'
+      },
+      {
+        title: RCi18n({ id: 'PetOwner.Operation' }),
+        key: 'oper',
+        render: (_, record) => {
+          return (
+            <span>
+              {Const.SITE_NAME !== 'MYVETRECO' && (
+                <AuthWrapper functionName="f_create_credit_card">
+                  <Popconfirm
+                    placement="topRight"
+                    title={RCi18n({ id: 'PetOwner.DeleteThisItem' })}
+                    onConfirm={() => this.deleteCard(record)}
+                    okText={RCi18n({ id: 'PetOwner.Confirm' })}
+                    cancelText={RCi18n({ id: 'PetOwner.Cancel' })}
+                  >
+                    <Tooltip title={RCi18n({ id: 'PetOwner.Delete' })}>
+                      <Button type="link">
+                        <a className="iconfont iconDelete" />
+                      </Button>
+                    </Tooltip>
+                  </Popconfirm>
+                </AuthWrapper>
+              )}
+            </span>
           );
         }
       }
@@ -229,70 +297,96 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
     return (
       <div>
-        {Const.SITE_NAME !== 'MYVETRECO' && <AuthWrapper functionName="f_create_credit_card">
-          <Button type="primary">
-            <Link to={`/credit-card/${customerId}/${customerAccount}`}>
-              {RCi18n({id:'payment.add'})}
-            </Link>
-          </Button>
-        </AuthWrapper>}
+        {Const.SITE_NAME !== 'MYVETRECO' && (
+          <AuthWrapper functionName="f_create_credit_card">
+            <Button type="primary">
+              <Link to={`/credit-card/${customerId}/${customerAccount}`}>
+                {RCi18n({ id: 'payment.add' })}
+              </Link>
+            </Button>
+          </AuthWrapper>
+        )}
+        {/*credit cards*/}
+        <p
+          style={{ margin: '10px 0', fontSize: '18px', fontWeight: 500, color: 'rgba(0, 0, 0, 1)' }}
+        >
+          <FormattedMessage id="PetOwner.creditCards" />
+        </p>
         <Table
           rowKey="id"
           loading={loading}
           columns={columns}
-          dataSource={list}
+          dataSource={list.filter((el) => el.paymentItem !== 'adyen_paypal')}
           pagination={false}
         />
-        <Modal
-            width='75%'
-            onCancel={this.closeModal}
-            visible={visible}
-            footer={null}
-        >
-          <div style={{minHeight: 300, width: '100%', paddingTop: 25}}>
-              <Table
-                  rowKey="id"
-                  columns={detailsColumns}
-                  dataSource={detailsList}
-                  pagination={false}
-              />
-              <Row>
-                <Col span={24} className="headBox" style={{ height: 200, marginTop: 10 }}>
-                  <h3>
-                    <FormattedMessage id="Order.paymentDetails" />
-                  </h3>
-                  <Col span={24}>
-                    <Row>
-                      <Col span={12}>
-                        <p>
-                          {<FormattedMessage id="Order.cardHolderName" />}: {paymentInfo.holderName || ''}
-                        </p>
-                        <p>
-                          {<FormattedMessage id="Order.PSP" />}: {paymentInfo.pspName || ''}
-                        </p>
-                        <p>
-                          {<FormattedMessage id="Order.cardType" />}: {paymentInfo.paymentVendor || ''}
-                        </p>
-                        <p>
-                          {<FormattedMessage id="Order.cardLast4Digits" />}: {paymentInfo.lastFourDigits || ''}
-                        </p>
-                        <p>
-                          {<FormattedMessage id="paymentId" />}: {paymentInfo.chargeId || ''}
-                        </p>
-                        <p>
-                          {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.phone || ''}
-                        </p>
-                      </Col>
-                    </Row>
+        {/*paypal*/}
+        {JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457909 ? (
+          <>
+            <p
+              style={{
+                margin: '10px 0',
+                fontSize: '18px',
+                fontWeight: 500,
+                color: 'rgba(0, 0, 0, 1)'
+              }}
+            >
+              <FormattedMessage id="PetOwner.paypal" />
+            </p>
+            <Table
+              rowKey="id"
+              loading={loading}
+              columns={paypalColumns}
+              dataSource={list.filter((el) => el.paymentItem === 'adyen_paypal')}
+              pagination={false}
+            />
+          </>
+        ) : null}
 
-                  </Col>
+        <Modal width="75%" onCancel={this.closeModal} visible={visible} footer={null}>
+          <div style={{ minHeight: 300, width: '100%', paddingTop: 25 }}>
+            <Table
+              rowKey="id"
+              columns={detailsColumns}
+              dataSource={detailsList}
+              pagination={false}
+            />
+            <Row>
+              <Col span={24} className="headBox" style={{ height: 200, marginTop: 10 }}>
+                <h3>
+                  <FormattedMessage id="Order.paymentDetails" />
+                </h3>
+                <Col span={24}>
+                  <Row>
+                    <Col span={12}>
+                      <p>
+                        {<FormattedMessage id="Order.cardHolderName" />}:{' '}
+                        {paymentInfo.holderName || ''}
+                      </p>
+                      <p>
+                        {<FormattedMessage id="Order.PSP" />}: {paymentInfo.pspName || ''}
+                      </p>
+                      <p>
+                        {<FormattedMessage id="Order.cardType" />}:{' '}
+                        {paymentInfo.paymentVendor || ''}
+                      </p>
+                      <p>
+                        {<FormattedMessage id="Order.cardLast4Digits" />}:{' '}
+                        {paymentInfo.lastFourDigits || ''}
+                      </p>
+                      <p>
+                        {<FormattedMessage id="paymentId" />}: {paymentInfo.chargeId || ''}
+                      </p>
+                      <p>
+                        {<FormattedMessage id="Order.phoneNumber" />}: {paymentInfo.phone || ''}
+                      </p>
+                    </Col>
+                  </Row>
                 </Col>
-              </Row>
-
-            </div>
+              </Col>
+            </Row>
+          </div>
         </Modal>
       </div>
     );
   }
 }
-

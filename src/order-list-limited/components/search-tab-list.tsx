@@ -5,6 +5,17 @@ import List from './list';
 import { noop } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
+const limitedTabList = [
+  { langKey: 'Order.All', key: '0', listShow: true },
+  { langKey: 'Order.Pendingreview', key: 'flowState-INIT', listShow: true },
+  { langKey: 'Order.toBeFormed', key: 'flowState-GROUPON', listShow: false },
+  { langKey: 'Order.Tobedelivered', key: 'flowState-AUDIT', listShow: true },
+  { langKey: 'Order.Tobereceived', key: 'flowState-DELIVERED', listShow: true },
+  { langKey: 'Order.received', key: 'flowState-CONFIRMED', listShow: false },
+  { langKey: 'Order.Completed', key: 'flowState-COMPLETED', listShow: true },
+  { langKey: 'Order.Outofdate', key: 'flowState-VOID', listShow: true }
+];
+
 @Relax
 export default class SearchList extends React.Component<any, any> {
   props: {
@@ -31,42 +42,13 @@ export default class SearchList extends React.Component<any, any> {
           }}
           activeKey={key}
         >
-          <Tabs.TabPane tab={<FormattedMessage id="Order.All" />} key="0">
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab={<FormattedMessage id="Order.Pendingreview" />} key="flowState-INIT">
-            <List />
-          </Tabs.TabPane>
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="Order.toBeFormed" />}
-            key="flowState-GROUPON"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane tab={<FormattedMessage id="Order.Tobedelivered" />} key="flowState-AUDIT">
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab={<FormattedMessage id="Order.Tobereceived" />} key="flowState-DELIVERED">
-            <List />
-          </Tabs.TabPane>
-
-          {/* <Tabs.TabPane
-            tab={<FormattedMessage id="Order.received" />}
-            key="flowState-CONFIRMED"
-          >
-            <List />
-          </Tabs.TabPane> */}
-
-          <Tabs.TabPane tab={<FormattedMessage id="Order.Completed" />} key="flowState-COMPLETED">
-            <List />
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab={<FormattedMessage id="Order.Outofdate" />} key="flowState-VOID">
-            <List />
-          </Tabs.TabPane>
+          {limitedTabList
+            .filter((item) => item.listShow)
+            .map((el) => (
+              <Tabs.TabPane tab={<FormattedMessage id={el.langKey} />} key={el.key}>
+                <List />
+              </Tabs.TabPane>
+            ))}
         </Tabs>
       </div>
     );

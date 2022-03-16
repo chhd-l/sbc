@@ -5489,6 +5489,17 @@ export default {
   "PetOwner.AddressForm.Phone number": "Phone number",
   "Subscription.Name katakana": "Name (Fariguna)",
 
+  "Order.customAccount": "Custom Account",
+  "Order.customAccountTip": "Choose if you want to prompt your customer to create an account when they check out",
+  "Order.accountOpt": "Accounts are optional",
+  "Order.accountMdt": "Accounts are required",
+  "Order.accountOptTip": "Customers will be able to check out with a customer account or as a guest.",
+  "Order.accountMdtTip": "Customers will only be able to check out if they have a customer account.",
+  "Product.maxOfSku": "Maximum number of orders per SKU",
+  "Product.maxOfCart": "Maximum number of items per cart",
+  "Product.maxOfSkuErr": "The value must be between 1 and 20",
+  "Product.maxOfCartErr": "Number must be between 10 and 100 included",
+
   //myvetreco
   "Product.ProductPrice.priceprompt": "Market price percentage should larger than subscription price percentage!",
   "Product.ProductPrice.updateall": "All the products will update to new price",

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
 import { Button, Modal } from 'antd';
-import { noop, history, AuthWrapper } from 'qmkit';
+import { noop, history, AuthWrapper, Const } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 @Relax
@@ -108,9 +108,9 @@ class Foot extends React.Component<any, any> {
             <Button type="primary" onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }} loading={saveLoading}>
+            {Const.SITE_NAME !== 'MYVETRECO' ? (<Button type="primary" onClick={this._saveSeoSetting} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Save" />
-            </Button>
+            </Button>) : null}
           </AuthWrapper>
         )}
         {/*{activeTabKey === 'main' || activeTabKey === 'price' || activeTabKey === 'inventory' ? (

@@ -165,7 +165,11 @@ function Step5({ form }) {
               }
             ]
           })(
-            <Radio.Group onChange={(e) => setCouponPromotionType(e.target.value)}>
+            <Radio.Group
+              onChange={(e) => {
+                setCouponPromotionType(e.target.value);
+              }}
+            >
               <Radio value={0}>
                 <FormattedMessage id="Marketing.Amount" />
               </Radio>
@@ -569,6 +573,7 @@ function Step5({ form }) {
                   <Form.Item>
                     {getFieldDecorator('couponDiscount', {
                       // initialValue: 99,
+                      initialValue: formData.Advantage.couponDiscount,
                       rules: [
                         {
                           required: true,

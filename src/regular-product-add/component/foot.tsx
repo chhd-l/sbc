@@ -90,9 +90,11 @@ class Foot extends React.Component<any, any> {
             <Button type="primary" disabled={this.props.loading} onClick={() => this._prev(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Prev" />
             </Button>
-            <Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
+            {Const.SITE_NAME === 'MYVETRECO' ? (<Button type="primary" disabled={this.props.loading} onClick={() => this._next(this.props.tabType)} style={{ marginRight: 10 }} loading={saveLoading}>
             <FormattedMessage id="Product.Next" />
-            </Button>
+            </Button>) : (<Button type="primary" disabled={this.props.loading} onClick={() => this._savePrice()} style={{ marginRight: 10 }} loading={saveLoading}>
+            <FormattedMessage id="Product.Next" />
+            </Button>)}
           </AuthWrapper>
         ) : this.props.tabType == 'related' ? (
           <AuthWrapper key="004" functionName={this.props.priceFuncName}>

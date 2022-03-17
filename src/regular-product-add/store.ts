@@ -2246,7 +2246,7 @@ export default class AppStore extends Store {
         this.saveAll('seo');
       }
     }
-    if (nextKey !== 'related') {
+    if (nextKey !== 'related' || Const.SITE_NAME === 'MYVETRECO') {
       this.dispatch('goodsActor: tabChange', nextKey);
     }
   };

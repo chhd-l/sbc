@@ -294,6 +294,7 @@ export default class MyHeader extends React.Component {
   };
 
   languageChange = (value) => {
+    // 
     // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
     // sessionStorage.setItem(cache.LANGUAGE, value);
     // history.go(0);

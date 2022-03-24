@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Radio } from 'antd';
+import { Row, Col, Radio, Form } from 'antd';
 import { SupportedDocumentUtil } from './main';
 import FileItem from './fileitem';
+import { FormattedMessage } from 'react-intl';
 
 type FileItemProp = {
   filePath: string;
@@ -52,9 +53,9 @@ export default class UploadItem extends React.Component<any, any> {
     return (
       <div>
         <Radio.Group value={value.documentType} onChange={this.handleFileTypeChange} disabled={disabled}>
-          <Radio value="PASSPORT">Passport</Radio>
-          <Radio value="ID_CARD">ID</Radio>
-          <Radio value="DRIVING_LICENCE">Driving License</Radio>
+          <Radio value="PASSPORT"><FormattedMessage id="Store.CardType.passport"/></Radio>
+          <Radio value="ID_CARD"><FormattedMessage id="Store.CardType.id"/></Radio>
+          <Radio value="DRIVING_LICENCE"><FormattedMessage id="Store.CardType.drivelic"/></Radio>
         </Radio.Group>
         <Row gutter={24}>
           {value.documentType === 'PASSPORT' ? <Col span={24}>
@@ -81,8 +82,8 @@ export default class UploadItem extends React.Component<any, any> {
           </>}
         </Row>
         {value.documentType !== 'PASSPORT' && <Row gutter={24}>
-          <Col span={12}><div style={{width:72,textAlign:'center'}}>Front</div></Col>
-          <Col span={12}><div style={{width:72,textAlign:'center'}}>Back</div></Col>
+          <Col span={12}><div style={{width:72,textAlign:'center'}}><FormattedMessage id="Store.CardFront"/></div></Col>
+          <Col span={12}><div style={{width:72,textAlign:'center'}}><FormattedMessage id="Store.CardBack"/></div></Col>
         </Row>}
       </div>
     );

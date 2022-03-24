@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BreadCrumb, SelectGroup, Const, Headline, cache } from 'qmkit';
-import { Form, Input, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip, Switch } from 'antd';
+import { Form, InputNumber, Select, Modal, Button, Radio, message, Col, Row, Popconfirm, Tooltip, Switch } from 'antd';
 import ModalForm from './conponents/modal-form';
 import ModalFormClub from './conponents/modal-form-club';
 import ModalFormIndividual from './conponents/modal-form-individual';
@@ -36,6 +36,9 @@ class ProductSearchSetting extends Component<any, any> {
     defaultQuantitySelected: '',
     discountDisplayTypeInfo: '',
     dailyPortion: '',
+    maximum_number_of_orders_per_sku: '20',
+    maximum_number_of_items_per_cart: '',
+    maximum_number_of_orders_sku_total: '',
     language: [],
     purchaseType: [],
     priceDisplayMethod: 0,
@@ -145,7 +148,14 @@ class ProductSearchSetting extends Component<any, any> {
       priceDisplayMethod,
       basePricePDPShowedFlag
     } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
-    let { defaultQuantitySelected, discountDisplayTypeInfo, dailyPortion } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
+    let {
+      defaultQuantitySelected,
+      discountDisplayTypeInfo,
+      dailyPortion,
+      maximum_number_of_orders_per_sku,
+      maximum_number_of_items_per_cart,
+      maximum_number_of_orders_sku_total
+    } = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_CONFIG) || '{}');
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
     let weeksClub = result[2].res?.context?.sysDictionaryVOS ?? [];
@@ -185,8 +195,10 @@ class ProductSearchSetting extends Component<any, any> {
       language,
       purchaseType,
       basePricePDPShowedFlag,
-      priceDisplayMethod
-
+      priceDisplayMethod,
+      maximum_number_of_items_per_cart,
+      maximum_number_of_orders_per_sku,
+      maximum_number_of_orders_sku_total
     });
   }
 
@@ -232,6 +244,12 @@ class ProductSearchSetting extends Component<any, any> {
           },{
             configName: "dailyPortion",
             context: values.dailyPortion
+          }, {
+            configName: "maximum_number_of_orders_per_sku",
+            context: `${values.maximum_number_of_orders_per_sku}`
+          }, {
+            configName: "maximum_number_of_orders_sku_total",
+            context: `${values.maximum_number_of_orders_sku_total}`
           }]
         });
         this.setState({ loading: false });
@@ -239,7 +257,13 @@ class ProductSearchSetting extends Component<any, any> {
           message.success(res.res.message);
           let obj = JSON.parse(sessionStorage.getItem(cache.PRODUCT_SALES_SETTING) || '{}');
           sessionStorage.setItem(cache.PRODUCT_SALES_SETTING, JSON.stringify({ ...obj, ...values }));
-          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({ defaultQuantitySelected: values.defaultQuantitySelected, discountDisplayTypeInfo: values.discountDisplayTypeInfo, dailyPortion: values.dailyPortion }));
+          sessionStorage.setItem(cache.PRODUCT_SALES_CONFIG, JSON.stringify({
+            defaultQuantitySelected: values.defaultQuantitySelected,
+            discountDisplayTypeInfo: values.discountDisplayTypeInfo,
+            dailyPortion: values.dailyPortion,
+            maximum_number_of_orders_per_sku: `${values.maximum_number_of_orders_per_sku}`,
+            maximum_number_of_orders_sku_total: `${values.maximum_number_of_orders_sku_total}`
+          }));
         }
       }
     });
@@ -266,7 +290,10 @@ class ProductSearchSetting extends Component<any, any> {
       language,
       purchaseType,
       basePricePDPShowedFlag,
-      priceDisplayMethod
+      priceDisplayMethod,
+      maximum_number_of_orders_per_sku,
+      maximum_number_of_items_per_cart,
+      maximum_number_of_orders_sku_total
     } = this.state;
 
     return (
@@ -559,6 +586,28 @@ class ProductSearchSetting extends Component<any, any> {
                 <Option value="1" label="Second smallest one">Second smallest one</Option>
                 <Option value="2" label="The largest">The largest</Option>
               </Select>)}
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.maxOfSku' /></span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
+            >
+              {getFieldDecorator('maximum_number_of_orders_per_sku', {
+                rules: [{ required: true, type: 'integer', max: 20, min: 1, message: RCi18n({id: "Product.maxOfSkuErr"}) }],
+                initialValue: maximum_number_of_orders_per_sku ? parseInt(maximum_number_of_orders_per_sku) : 20
+              })(<InputNumber precision={0} style={{width: 220}} />)}
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ color: '#666' }}><FormattedMessage id='Product.maxOfCart' /></span>}
+              style={{display:Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block'}}
+              required
+            >
+              {getFieldDecorator('maximum_number_of_orders_sku_total', {
+                rules: [{ required: true, type: 'integer', max: 100, min: 10, message: RCi18n({id: "Product.maxOfCartErr"}) }],
+                initialValue: maximum_number_of_orders_sku_total ? parseInt(maximum_number_of_orders_sku_total) : null
+              })(<InputNumber precision={0} style={{width: 220}} />)}
             </Form.Item>
 
             <Form.Item

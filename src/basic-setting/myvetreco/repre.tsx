@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Input, Select, Row, Col, DatePicker } from 'antd';
 import DebounceSelect from '../../myvetreco-logins/create-store/components/debounceSelect';
 import { cityList } from '../webapi';
+import { RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import UploadItem from './uploaditem';
 import moment from 'moment';
@@ -88,12 +89,12 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
       <Form layout="horizontal" {...formLayout}>
         <Row gutter={[24,12]}>
           <Col span={24}>
-            <div style={{fontWeight:500}}>Shareholder</div>
+            <div style={{fontWeight:500}}><FormattedMessage id="Store.shareHolder"/></div>
           </Col>
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="Shareholder type" required>
+            <FormItem label={RCi18n({id:"Store.shareHolderType"})} required>
               {getFieldDecorator('shareholderType', {
                 initialValue: "0"
               })(
@@ -107,59 +108,59 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="First name">
+            <FormItem label={RCi18n({id:"PetOwner.First name"})}>
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { pattern: /^((?![0-9]).)*$/, message: RCi18n({id:"Store.namenono"}) }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Last name">
+            <FormItem label={RCi18n({id:"PetOwner.Last name"})}>
               {getFieldDecorator('lastName', {
-                rules: [{ required: true, message: 'Please input last name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { pattern: /^((?![0-9]).)*$/, message: RCi18n({id:"Store.namenono"}) }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Gender">
+            <FormItem label={RCi18n({id:"PetOwner.Gender"})}>
               {getFieldDecorator('gender', {
-                rules: [{ required: true, message: 'Please select gender' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
               })(
                 <Select disabled={adyenAuditState === 0}>
-                  <Option value={1}>Female</Option>
-                  <Option value={0}>Male</Option>
+                  <Option value={1}>{RCi18n({id:"Prescriber.Female"})}</Option>
+                  <Option value={0}>{RCi18n({id:"Prescriber.Male"})}</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Date of birth">
+            <FormItem label={RCi18n({id:"Store.dateofbirth"})}>
               {getFieldDecorator('dateOfBirth', {
-                rules: [{ required: true, message: 'Please select birthday' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
               })(
                 <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Email">
+            <FormItem label={RCi18n({id:"PetOwner.Email"})}>
               {getFieldDecorator('email', {
                 rules:[
-                  { required: true, message: 'Please input your Email!' },
+                  { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                   { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
               })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Phone number">
+            <FormItem label={RCi18n({id:"PetOwner.Phone number"})}>
               {getFieldDecorator('phoneNumber', {
                 rules:[
-                  { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
+                  { required: true, pattern: /^\+31[0-9]{9}$/, message: `${RCi18n({id:"inputPhoneNumberTip2"})} +31xxxxxxxxx` }
                 ]
               })(
                 <Input maxLength={12} disabled={adyenAuditState === 0} onChange={this.onChangePhoneNumber} />
@@ -167,31 +168,31 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}}>
+            <FormItem label={RCi18n({id:"Store.jobTitle"})} labelCol={{span: 4}} wrapperCol={{span: 12}}>
               {getFieldDecorator('jobTitle', {
-                rules: [{ required: true, message: 'Please input job title' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Province">
+            <FormItem label={RCi18n({id:"Store.province"})}>
               {getFieldDecorator('province', {
-                rules: [{ required: true, message: 'Please input province' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} maxLength={3} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="City" required>
+            <FormItem label={RCi18n({id:"PetOwner.City"})} required>
               {getFieldDecorator('cityId', {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
                       if (!value || !value.key) {
-                        callback('Please select city');
+                        callback(RCi18n({id:"PetOwner.ThisFieldIsRequired"}));
                       }
                       callback();
                     }
@@ -202,7 +203,7 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
                 <DebounceSelect
                   disabled={adyenAuditState === 0}
                   size="default"
-                  placeholder="Select city"
+                  placeholder=""
                   fetchOptions={fetchUserList}
                   defaultOptions={defaultOptions}
                   style={{
@@ -213,34 +214,34 @@ class ShareHolder extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Street name">
+            <FormItem label={RCi18n({id:"Store.street"})}>
               {getFieldDecorator('address1', {
-                rules: [{ required: true, message: 'Please input street name' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="House number">
+            <FormItem label={RCi18n({id:"Store.housenumber"})}>
               {getFieldDecorator('houseNumberOrName', {
-                rules: [{ required: true, message: 'Please input house number' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Postcode">
+            <FormItem label={RCi18n({id:"Store.postcode"})}>
               {getFieldDecorator('postCode', {
-                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: `${RCi18n({id:"PetOwner.theCorrectPostCode"})}: 1234 AB` }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
+            <FormItem label={RCi18n({id:"Store.supportdoc"})} labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>
@@ -319,64 +320,64 @@ class Signatories extends React.Component<RepreFormProps, any> {
       <Form layout="horizontal" {...formLayout}>
         <Row gutter={[24,12]}>
           <Col span={24}>
-            <div style={{fontWeight:500}}>Signatories</div>
+            <div style={{fontWeight:500}}><FormattedMessage id="Store.signatories"/></div>
           </Col>
         </Row>
         <Row gutter={[24,12]}>
           <Col span={12}>
-            <FormItem label="First name">
+            <FormItem label={RCi18n({id:"PetOwner.First name"})}>
               {getFieldDecorator('firstName', {
-                rules: [{ required: true, message: 'Please input first name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { pattern: /^((?![0-9]).)*$/, message: RCi18n({id:"Store.namenono"}) }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Last name">
+            <FormItem label={RCi18n({id:"PetOwner.Last name"})}>
               {getFieldDecorator('lastName', {
-                rules: [{ required: true, message: 'Please input last name!' }, { pattern: /^((?![0-9]).)*$/, message: 'Last name should not contain numbers' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }, { pattern: /^((?![0-9]).)*$/, message: RCi18n({id:"Store.namenono"}) }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Gender">
+            <FormItem label={RCi18n({id:"PetOwner.Gender"})}>
               {getFieldDecorator('gender', {
-                rules: [{ required: true, message: 'Please select gender' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
               })(
                 <Select disabled={adyenAuditState === 0}>
-                  <Option value={1}>Female</Option>
-                  <Option value={0}>Male</Option>
+                  <Option value={1}>{RCi18n({id:"Prescriber.Female"})}</Option>
+                  <Option value={0}>{RCi18n({id:"Prescriber.Male"})}</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Date of birth">
+            <FormItem label={RCi18n({id:"Store.dateofbirth"})}>
               {getFieldDecorator('dateOfBirth', {
-                rules: [{ required: true, message: 'Please select birthday' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
               })(
                 <DatePicker disabled={adyenAuditState === 0} format="YYYY-MM-DD" disabledDate={current => current > moment().startOf('day')} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Email">
+            <FormItem label={RCi18n({id:"PetOwner.Email"})}>
               {getFieldDecorator('email', {
                 rules:[
-                  { required: true, message: 'Please input your Email!' },
+                  { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) },
                   { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                 ],
               })(<Input disabled={adyenAuditState === 0} />)}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Phone number">
+            <FormItem label={RCi18n({id:"PetOwner.Phone number"})}>
               {getFieldDecorator('phoneNumber', {
                 rules:[
-                  { required: true, pattern: /^\+31[0-9]{9}$/, message: 'Please input the right format: +31xxxxxxxxx' }
+                  { required: true, pattern: /^\+31[0-9]{9}$/, message: `${RCi18n({id:"inputPhoneNumberTip2"})} +31xxxxxxxxx` }
                 ]
               })(
                 <Input maxLength={12} onChange={this.onChangePhoneNumber} disabled={adyenAuditState === 0} />
@@ -384,31 +385,31 @@ class Signatories extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Job title" labelCol={{span: 4}} wrapperCol={{span: 12}}>
+            <FormItem label={RCi18n({id:"Store.jobTitle"})} labelCol={{span: 4}} wrapperCol={{span: 12}}>
               {getFieldDecorator('jobTitle', {
-                rules: [{ required: true, message: 'Please input job title' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Province">
+            <FormItem label={RCi18n({id:"Store.province"})}>
               {getFieldDecorator('province', {
-                rules: [{ required: true, message: 'Please input province' }],
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
               })(
                 <Input disabled={adyenAuditState === 0} maxLength={3} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="City" required>
+            <FormItem label={RCi18n({id:"PetOwner.City"})} required>
               {getFieldDecorator('cityId', {
                 rules: [
                   {
                     validator: (rule, value, callback) => {
                       if (!value || !value.key) {
-                        callback('Please select city');
+                        callback(RCi18n({id:"PetOwner.ThisFieldIsRequired"}));
                       }
                       callback();
                     }
@@ -419,7 +420,7 @@ class Signatories extends React.Component<RepreFormProps, any> {
                 <DebounceSelect
                   disabled={adyenAuditState === 0}
                   size="default"
-                  placeholder="Select city"
+                  placeholder=""
                   fetchOptions={fetchUserList}
                   defaultOptions={defaultOptions}
                   style={{
@@ -430,34 +431,34 @@ class Signatories extends React.Component<RepreFormProps, any> {
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Street name">
+            <FormItem label={RCi18n({id:"Store.street"})}>
               {getFieldDecorator('address1', {
-                rules: [{ required: true, message: 'Please input street name' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="House number">
+            <FormItem label={RCi18n({id:"Store.housenumber"})}>
               {getFieldDecorator('houseNumberOrName', {
-                rules: [{ required: true, message: 'Please input house number' }]
+                rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }]
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={12}>
-            <FormItem label="Postcode">
+            <FormItem label={RCi18n({id:"Store.postcode"})}>
               {getFieldDecorator('postCode', {
-                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: 'Enter a valid postcode, example: 1234 AB' }],
+                rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: `${RCi18n({id:"PetOwner.theCorrectPostCode"})}: 1234 AB` }],
               })(
                 <Input disabled={adyenAuditState === 0} />
               )}
             </FormItem>
           </Col>
           <Col span={24}>
-            <FormItem label="Supported document" labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
+            <FormItem label={RCi18n({id:"Store.supportdoc"})} labelCol={{span: 4}} wrapperCol={{span: 12}} extra={<div style={{color:'#000'}}>
               <div>Allowed formats: JPEG, JPG, PNG, or PDF (max. 2 pages)</div>
               <div>Minimum allowed size: 1 KB for PDF, 100 KB for other formats</div>
               <div>Maximum allowed size: 4 MB</div>

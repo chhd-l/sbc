@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { fromJS, List } from 'immutable';
-import { DataGrid, cache, noop, Const, history, RCi18n } from 'qmkit';
+import { DataGrid, cache, noop, Const, history, RCi18n, util } from 'qmkit';
 import { Popconfirm, Select, Table, Tooltip } from 'antd';
+import defaultImg from '../../images/none.png';
 const Column = Table.Column;
 import styled from 'styled-components';
 import { Relax } from 'plume2';
@@ -88,11 +89,12 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     return (
       <TableRow>
         <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record, index) => index} dataSource={productselect instanceof Array ? productselect : []} pagination={false}>
+          {Const.SITE_NAME === 'MYVETRECO' ? <Column title={RCi18n({id:'Product.image'})} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (<img src={img ? util.optimizeImage(img) : defaultImg} style={styles.imgItem} />)} /> : null}
           <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" />
-          <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title={RCi18n({id:'Order.Product category'})}  dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title={RCi18n({id:'Order.Sales category'})}  dataIndex="storeCateName" key="storeCateName" />
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.Product category'})}  dataIndex="goodsCateName" key="goodsCateName" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.Sales category'})}  dataIndex="storeCateName" key="storeCateName" /> : null}
           <Column
             title={RCi18n({id:'Order.Price'})}
             dataIndex="marketPrice"
@@ -158,3 +160,16 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
     );
   }
 }
+
+const styles = {
+  imgItem: {
+    width: 60,
+    height: 60,
+    padding: 5,
+    border: '1px solid #ddd',
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
+  } as any
+} as any;

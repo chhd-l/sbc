@@ -238,18 +238,9 @@ class DescriptionManagement extends Component<any, any> {
       },
       {
         title: <FormattedMessage id="Product.DisplayName" />,
-        key: 'dipName',
-        width: '35%',
-        render: (text, record) => (
-          <div>
-            {record.translateList && record.translateList.length
-              ? record.translateList
-                  .filter((r) => r.translateName.trim() !== '')
-                  .map((r) => r.translateName)
-                  .join(';')
-              : ''}
-          </div>
-        )
+        dataIndex: 'displayName',
+        key: 'displayName',
+        width: '35%'
       },
       {
         title: <FormattedMessage id="Product.DescriptionType" />,

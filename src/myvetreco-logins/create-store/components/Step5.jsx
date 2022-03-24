@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { Button, Row, Col, Input, Form } from 'antd';
 import {savePaymentInfo} from "../webapi";
+import { RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 
@@ -39,7 +41,7 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
 
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">5 / 5 add a bank account so you can get paid</div>
+      <div className="vmargin-level-4 align-item-center word big">5 / 5 <FormattedMessage id="Store.addpayment"/></div>
       <div style={{width:800,margin:'20px auto'}}>
         <Row gutter={24}>
           <Col span={6}></Col>
@@ -49,10 +51,10 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24, 24]}>
             <Col span={24}>
-              <FormItem label="IBAN">
+              <FormItem label={RCi18n({id:"Store.addpayment"})}>
                 {getFieldDecorator('iban', {
                   rules: [
-                    { required: true, message: 'Please input IBAN!' }
+                    { required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }
                   ],
                   initialValue: ''
                 })(
@@ -79,11 +81,11 @@ function Step5({ setStep,userInfo,paymentInfoRequest,form }) {
             {/*  </FormItem>*/}
             {/*</Col>*/}
             <Col span={12} className="align-item-right">
-              <Button size="large" onClick={() => setStep(3)}>Back</Button>
+              <Button size="large" onClick={() => setStep(3)}><FormattedMessage id="back"/></Button>
             </Col>
             <Col span={12}>
               <FormItem>
-                <Button loading={loading} size="large" type="primary" htmlType="submit">Next</Button>
+                <Button loading={loading} size="large" type="primary" htmlType="submit"><FormattedMessage id="Setting.Next"/></Button>
               </FormItem>
             </Col>
           </Row>

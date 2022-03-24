@@ -1,0 +1,84 @@
+#azure-pipelines.yml
+#分支触发构建
+trigger:
+- test
+
+variables:
+- name: namespace
+  value: sit-front
+- name: app
+  value: sit-store
+- name: dockerReg
+  value: k8sregistrysit.azurecr.io
+- name: group
+  value: front
+##k8s conn (service connections)
+- name: k8sconn
+  value: k8s-sit
+##容器注册表 (service connections)
+- name: dockerAuth
+  value: k8sregistrysit
+  
+pool:
+  name: D2C-FGS-NPM-POOL
+
+stages:
+- stage: buildCode
+  jobs:
+  - job: npm
+    steps:
+    - script: |
+        pwd
+        ls
+    - task: Npm@1
+      displayName: npm install
+      inputs:
+        command: 'install'
+        workingDir: './'
+    - task: Npm@1
+      displayName: 'npm run build'
+      inputs:
+        command: custom
+        customCommand: 'run build'
+        workingDir: './'
+- stage: buildImage
+  jobs:
+  - job: dockerBuildImage
+    steps:
+    - task: Docker@2
+      displayName: Login to dockerReg
+      inputs:
+        command: login
+        containerRegistry: '$(dockerAuth)'
+    - task: Docker@2
+      displayName: 'Build and Push image'
+      inputs:
+        command: buildAndPush
+        containerRegistry: '$(dockerAuth)'
+        buildContext: '$(Build.Repository.LocalPath)'
+        Dockerfile: 'Dockerfile'
+        repository: '$(group)/$(app)'
+        tags: |
+          $(Build.BuildNumber)
+- stage: kubectlDeploy
+  jobs:
+  - job: kubectlSetImage
+    steps:
+    - task: Kubernetes@1
+      displayName: 'kubectl set'
+      inputs:
+        kubernetesServiceEndpoint: '$(k8sconn)'
+        namespace: '$(namespace)'
+        command: set
+        arguments: 'image deploy $(app) *=$(dockerReg)/$(group)/$(app):$(Build.BuildNumber)'
+#- stage: kubectlgetDeploy
+#  jobs:
+#  - job: kubectlgetDeploy
+#    steps:
+#    - task: Kubernetes@1
+#      displayName: 'kubectl get'
+#      inputs:
+#        kubernetesServiceEndpoint: '$(k8sconn)'
+#        namespace: '$(namespace)'
+#        command: get
+#        arguments: 'ns '

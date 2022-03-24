@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Checkbox, Button, Skeleton} from 'antd';
 import {onContactAgreement} from "../webapi";
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 export default function Step1({ setStep,userInfo }) {
     const [check,setCheck] = useState(false)
@@ -61,11 +62,11 @@ export default function Step1({ setStep,userInfo }) {
                     onChange={(checkedValue)=>{
                         setCheck(checkedValue.target.checked)
                     }}>
-              I agree with the legal contract
+            <FormattedMessage id="Store.agreewith" />
           </Checkbox>
         </div>
         <div>
-          <Button loading={loading} disabled={!check} size="large" type="primary" onClick={toNext}>Next</Button>
+          <Button loading={loading} disabled={!check} size="large" type="primary" onClick={toNext}><FormattedMessage id="Setting.Next"/></Button>
         </div>
       </div>
         {/*<Skeleton active />*/}

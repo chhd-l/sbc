@@ -73,7 +73,7 @@ class ProductPrice extends Component<any, any> {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         if (values.marketPricePercentage < (values.subscriptionPricePercentage || 100)) {
-          message.error('Market price percentage should larger than subscription price percentage!');
+          message.error(RCi18n({id:"Product.ProductPrice.priceprompt"}));
           return;
         }
         let goodsInfoIds = this.state.goodsInfoIds;
@@ -99,7 +99,7 @@ class ProductPrice extends Component<any, any> {
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
-      message.success('operation success')
+      message.success(RCi18n({id:"Setting.Operationsuccessful"}))
     }
     this.setState({ loading: false })
   }
@@ -109,7 +109,7 @@ class ProductPrice extends Component<any, any> {
     const { code } = res;
     if (code === Const.SUCCESS_CODE) {
       this.getGoodsPriceFun();
-      message.success('operation success')
+      message.success(RCi18n({id:"Setting.Operationsuccessful"}))
     }
   }
 
@@ -185,8 +185,8 @@ class ProductPrice extends Component<any, any> {
 
   showConfirm = (param) => {
     confirm({
-      title: 'Do you want to apply all items?',
-      content: 'When clicked the OK button, there are product list will update new price ,are you got it',
+      title: RCi18n({id:"Finance.doThis"}),
+      content: RCi18n({id:"Product.ProductPrice.updateall"}),
       onOk: () => {
         this.updatePriceAllFun(param)
       },
@@ -197,8 +197,8 @@ class ProductPrice extends Component<any, any> {
     style={{ width: 200, padding: 15 }} >
     <InputNumber min={1} onChange={(e) => this.changPrice(e)} value={this.state.currentPrice} style={{ width: '100%' }} />
     <div style={{ marginTop: 10, display: "flex" }}>
-      <Button type="primary" key="ok" style={{ flex: 1 }} onClick={() => this.submitPrice(item, name)}>OK</Button>
-      <Button key="cancel" style={{ flex: 1, marginLeft: 10 }} onClick={() => this.hide()}>Cancel</Button>
+      <Button type="primary" key="ok" style={{ flex: 1 }} onClick={() => this.submitPrice(item, name)}>{RCi18n({id:"Product.OK"})}</Button>
+      <Button key="cancel" style={{ flex: 1, marginLeft: 10 }} onClick={() => this.hide()}>{RCi18n({id:"Product.Cancel"})}</Button>
     </div>
   </div>
   );
@@ -367,14 +367,14 @@ class ProductPrice extends Component<any, any> {
                 </Form.Item> */}
                 <Form.Item>
                   <Button type="primary" htmlType="submit" disabled={isDisabled}>
-                    apply
+                    <FormattedMessage id="payment.apply" />
                   </Button>
                 </Form.Item>
               </Form>
             </Col>
             <Col span={6}>
               <div style={{ textAlign: "right" }}>
-                <span>{totalColumn} SKU</span> <Button type="primary" onClick={()=>this.exportExcel()}>export</Button>
+                <span>{totalColumn} <FormattedMessage id="Product.SKU" /></span> <Button type="primary" onClick={()=>this.exportExcel()}><FormattedMessage id="Product.Export" /></Button>
               </div>
             </Col>
           </Row>

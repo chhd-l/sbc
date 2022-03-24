@@ -66,14 +66,30 @@ class SearchHead extends Component<any, any> {
         payState: '',
         orderSource: ''
       },
-      orderCategory: ''
+      orderCategory: '',
+      payStateList:[{langKey:'Order.All',value:''},
+        {langKey:'Order.unpaid',value:'NOT_PAID'},
+        {langKey:'Order.toBeConfirmed',value:'UNCONFIRMED'},
+        {langKey:'Order.paid',value:'PAID'},
+        {langKey:'Order.Paying',value:'PAYING'},
+      ],
+      deliverStatusList:[{langKey:'Order.All',value:''},
+        {langKey:'Order.notShipped',value:'NOT_YET_SHIPPED'},
+        {langKey:'Order.partialShipment',value:'PART_SHIPPED'},
+        {langKey:'Order.allShipments',value:'SHIPPED'},
+      ],
+      orderCategoryList:[{langKey:'Order.All',value:'',title:''},
+        {langKey:'Order.SinglePurchase',value:'SINGLE',title:'Single purchase'},
+        {langKey:'Order.1stAutoshipOrder',value:'FIRST_AUTOSHIP',title:'1st autoship order'},
+        {langKey:'Order.RecurrentOrders',value:'RECURRENT_AUTOSHIP',title:'Recurrent orders of autoship'},
+      ]
     };
   }
 
   render() {
     const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState } = this.state;
+    const { tradeState,payStateList,deliverStatusList,statusSelect,orderCategoryList } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004_3pl')) {
       hasMenu = true;
@@ -174,64 +190,26 @@ class SearchHead extends Component<any, any> {
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
-                        style={styles.wrapper}
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="Order.All" />
+                    <Select
+                      style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) =>
+                        this.setState({
+                          tradeState: {
+                            deliverStatus: statusSelect === 'paymentStatus'?'':value,
+                            payState: statusSelect === 'paymentStatus'?value:'',
+                            orderSource: ''
+                          }
+                        })
+                      }
+                      value={statusSelect === 'paymentStatus'?tradeState.payState:tradeState.deliverStatus}
+                    >
+                      {(statusSelect === 'paymentStatus'?payStateList:deliverStatusList).map((item)=>(
+                        <Option value={item.value}>
+                          <FormattedMessage id={item.langKey} />
                         </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="Order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="Order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="Order.paid" />
-                        </Option>
-                        <Option value="PAYING"><FormattedMessage id="Order.Paying" /></Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="Order.All" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="Order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="Order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="Order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
+                      ))}
+                    </Select>
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -250,18 +228,11 @@ class SearchHead extends Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">
-                        <FormattedMessage id="Order.All" />
-                      </Option>
-                      <Option value="SINGLE" title="Single purchase">
-                        <FormattedMessage id="Order.SinglePurchase"/>
-                      </Option>
-                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
-                      <FormattedMessage id="Order.1stAutoshipOrder"/>
-                      </Option>
-                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
-                      <FormattedMessage id="Order.RecurrentOrders"/>
-                      </Option>
+                      {orderCategoryList.map((item)=>(
+                        <Option value={item.value} title={item.title}>
+                          <FormattedMessage id={item.langKey} />
+                        </Option>
+                      ))}
                     </Select>
                   </InputGroup>
                 </FormItem>
@@ -284,6 +255,7 @@ class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>

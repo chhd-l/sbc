@@ -208,9 +208,13 @@ export function getCards(customerId) {
 }
 
 export function deleteCard(storeId, paymentId) {
-  return Fetch<TResult>('/' + storeId + '/pay-payment-info-del/' + paymentId, {
-    method: 'DELETE'
-  }, { isHandleResult: true, customerTip: true });
+  return Fetch<TResult>(
+    '/' + storeId + '/pay-payment-info-del/' + paymentId,
+    {
+      method: 'DELETE'
+    },
+    { isHandleResult: true, customerTip: true }
+  );
 }
 
 export function getTimeSlot(filterParams = {}) {
@@ -230,7 +234,7 @@ export function getPickupPointStatus(id: String) {
 }
 
 // 获取pick point状态
-export function checkSubscriptionAddressPickPoint(filterParams={}) {
+export function checkSubscriptionAddressPickPoint(filterParams = {}) {
   return Fetch<TResult>('/sub/checkSubscriptionAddressPickPoint', {
     method: 'POST',
     body: JSON.stringify({
@@ -239,8 +243,20 @@ export function checkSubscriptionAddressPickPoint(filterParams={}) {
   });
 }
 // 更新订阅的sku
-export function changeSubscriptionGoods(params={}) {
+export function changeSubscriptionGoods(params = {}) {
   return Fetch<TResult>('/sub/changeSubscriptionGoods', {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}
+
+/**
+ * 删除订阅商品
+ */
+export function deleteProduct(params = {}) {
+  return Fetch<TResult>('/sub/deleteSubscriptionGoods', {
     method: 'PUT',
     body: JSON.stringify({
       ...params

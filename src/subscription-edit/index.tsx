@@ -1216,6 +1216,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  _deleteProduct = async (item) => {
+    try {
+      console.log('item', item);
+      this.setState({ loading: true });
+      await webapi.deleteProduct({
+        subscribeGoodsId: item.subscribeGoodsId,
+        subscribeId: item.subscribeId
+      });
+      this.getSubscriptionDetail();
+    } catch (err) {
+    } finally {
+      // this.setState({ loading: false });
+    }
+  };
+
   titleContent = () => {
     let url = '#';
     switch (storeId) {
@@ -1289,6 +1304,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       // operationLog
     } = this.state;
 
+    /* 需要有多条产品数据，才能删除 */
+    const canDeleteProduct = goodsInfo.length > 1;
+
     const columns = [
       {
         title: (
@@ -1299,25 +1317,39 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text: any, record: any) => (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={util.optimizeImage(record.goodsPic)}
-              className="img-item"
-              style={styles.imgItem}
-              alt=""
-            />
-            <span style={{ margin: 'auto 10px' }}>
-              {record.goodsName === 'individualization'
-                ? record.petsName + "'s personalized subscription"
-                : record.goodsName}
-            </span>
-            {this.isShowSkuEdit ? (
-              <a
-                style={{ flex: 1, textAlign: 'center' }}
-                onClick={() => this.showProductModal()}
-                className="iconfont iconEdit "
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <img
+                src={util.optimizeImage(record.goodsPic)}
+                className="img-item"
+                style={styles.imgItem}
+                alt=""
               />
-            ) : null}
+              <span style={{ margin: 'auto 10px' }}>
+                {record.goodsName === 'individualization'
+                  ? record.petsName + "'s personalized subscription"
+                  : record.goodsName}
+              </span>
+            </div>
+            <span>
+              {this.isShowSkuEdit ? (
+                <a onClick={() => this.showProductModal()} className="iconfont iconEdit " />
+              ) : null}
+
+              {canDeleteProduct ? (
+                <Popconfirm
+                  placement="topLeft"
+                  title={<FormattedMessage id="Subscription.DeleteTip" />}
+                  onConfirm={() => this._deleteProduct(record)}
+                  okText={<FormattedMessage id="Subscription.Confirm" />}
+                  cancelText={<FormattedMessage id="Subscription.Cancel" />}
+                >
+                  <Tooltip placement="top" title={<FormattedMessage id="Subscription.DeleteTip" />}>
+                    <a className="iconfont iconDelete" />
+                  </Tooltip>
+                </Popconfirm>
+              ) : null}
+            </span>
           </div>
         )
       },

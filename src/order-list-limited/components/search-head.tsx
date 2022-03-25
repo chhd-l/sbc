@@ -217,7 +217,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.OrderCategory'})} />
+                    <Input style={styles.leftLabel} disabled title={RCi18n({id:'Order.OrderCategory'})} defaultValue={RCi18n({id:'Order.OrderCategory'})} />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -370,10 +370,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Pet owner name " value="buyerName">
+        <Option title={RCi18n({id:'Order.consumerName'})} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Pet owner account" value="buyerAccount">
+        <Option title={RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -392,10 +392,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
+        <Option title={RCi18n({id:'Order.productName'})} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
+        <Option title={RCi18n({id:'Order.skuCode'})} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -414,10 +414,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
+        <Option title={RCi18n({id:'Order.recipient'})} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
+        <Option title={RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -457,10 +457,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
+        <Option title={RCi18n({id:"Order.orderNumber"})} value="orderNumber">
           <FormattedMessage id="Order.orderNumber" />
         </Option>
-        <Option title="Subscription number" value="subscriptionNumber">
+        <Option title={RCi18n({id:"Order.subscriptionNumber"})} value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -479,10 +479,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title="Payment status" value="paymentStatus">
+        <Option title={RCi18n({id:'Order.paymentStatus'})} value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title="Shipping status" value="shippingStatus">
+        <Option title={RCi18n({id:'Order.shippingStatus'})} value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -500,10 +500,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recommender id" value="recommenderId">
+        <Option title={RCi18n({id:'Order.recommenderId'})} value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title="Recommender name" value="recommenderName">
+        <Option title={RCi18n({id:'Order.recommenderName'})} value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>

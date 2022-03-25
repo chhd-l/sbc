@@ -354,7 +354,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberId'})}>
                         <FormattedMessage id="Prescriber.prescriberId" />
                       </p>
                     }
@@ -373,7 +373,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="PrescriberCity">
+                      <p className="PrescriberCity" title={RCi18n({id:'Prescriber.PrescriberCity'})}>
                         <FormattedMessage id="Prescriber.PrescriberCity" />
                       </p>
                     }
@@ -440,7 +440,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberName'})}>
                         <FormattedMessage id="Prescriber.prescriberName" />
                       </p>
                     }
@@ -459,7 +459,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberZip'})}>
                         <FormattedMessage id="Prescriber.prescriberZip" />
                       </p>
                     }
@@ -477,7 +477,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberPhone'})}>
                         <FormattedMessage id="Prescriber.prescriberPhone" />
                       </p>
                     }
@@ -529,7 +529,7 @@ export default class ClinicList extends Component<any, any> {
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.RecommendationCode'})}>
                         <FormattedMessage id="Prescriber.RecommendationCode" />
                       </p>
                     }

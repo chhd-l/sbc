@@ -307,7 +307,7 @@ export default class SkuMappingModal extends React.Component<any, any>{
                             disabled
                             value={sku}
                             addonBefore={
-                                <p style={styles.label}>
+                                <p style={styles.label} title={RCi18n({id:'Product.SKU'})}>
                                     <FormattedMessage id="Product.SKU" />
                                 </p>
                             }

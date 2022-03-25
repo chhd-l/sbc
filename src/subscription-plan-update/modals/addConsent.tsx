@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message, Table } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup, util, Const } from 'qmkit';
+import { noop, SelectGroup, TreeSelectGroup, util, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
@@ -139,7 +139,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <SelectGroup
-                    label={<p className="formLable"><FormattedMessage id="Subscription.Category"/></p>}
+                    label={<p className="formLable" title={RCi18n({id:'Subscription.Category'})}><FormattedMessage id="Subscription.Category"/></p>}
                     allowClear={true}
                     style={{ width: 280 }}
                     onChange={(value) => {
@@ -155,7 +155,7 @@ export default class addConsent extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     allowClear={true}
-                    label={<p className="formLable"><FormattedMessage id="Subscription.FieldType"/></p>}
+                    label={<p className="formLable" title={RCi18n({id:'Subscription.FieldType'})}><FormattedMessage id="Subscription.FieldType"/></p>}
                     style={{ width: 280 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -171,7 +171,7 @@ export default class addConsent extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     allowClear={true}
-                    label={<p className="formLable"><FormattedMessage id="Subscription.ConsentType"/></p>}
+                    label={<p className="formLable" title={RCi18n({id:'Subscription.ConsentType'})}><FormattedMessage id="Subscription.ConsentType"/></p>}
                     style={{ width: 280 }}
                     onChange={(value, index) => {
                       value = value === '' ? null : value;
@@ -187,7 +187,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable"><FormattedMessage id="Subscription.ConsentId"/></p>}
+                    addonBefore={<p className="formLable" title={RCi18n({id:'Subscription.ConsentId'})}><FormattedMessage id="Subscription.ConsentId"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentId', value);
@@ -198,7 +198,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable"><FormattedMessage id="Subscription.ConsentCode"/></p>}
+                    addonBefore={<p className="formLable" title={RCi18n({id:'Subscription.ConsentCode'})}><FormattedMessage id="Subscription.ConsentCode"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentCode', value);
@@ -209,7 +209,7 @@ export default class addConsent extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p className="formLable"><FormattedMessage id="Subscription.ConsentTitle"/></p>}
+                    addonBefore={<p className="formLable" title={RCi18n({id:'Subscription.ConsentTitle'})}><FormattedMessage id="Subscription.ConsentTitle"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormFieldChange('consentTitle', value);

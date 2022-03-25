@@ -1,7 +1,7 @@
 import { Badge, Button, Checkbox, Col, Divider, Dropdown, Form, Icon, Input, InputNumber, Menu, message, Modal, Pagination, Radio, Row, Table } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import { i } from 'plume2';
-import { Const, util } from 'qmkit';
+import { Const, util, RCi18n } from 'qmkit';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getGoodsSKUS, addGoodsIntoCarts } from '../webapi';
@@ -345,7 +345,7 @@ export default class AddProductModal extends Component {
               <FormItem>
                 <Input
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'product.SKU'})}>
                       <FormattedMessage id="product.SKU" />
                     </p>
                   }
@@ -356,7 +356,7 @@ export default class AddProductModal extends Component {
             </Col>
             <Col span={12}>
               <FormItem>
-                <Input addonBefore={<p style={styles.label}><FormattedMessage id="Order.Product name" /></p>} value={likeGoodsName} onChange={(e) => this.onChange(e, 'likeGoodsName')} />
+                <Input addonBefore={<p style={styles.label} title={RCi18n({id:'Order.Product name'})}><FormattedMessage id="Order.Product name" /></p>} value={likeGoodsName} onChange={(e) => this.onChange(e, 'likeGoodsName')} />
               </FormItem>
             </Col>
             <Col span={24} style={{ textAlign: 'center' }}>

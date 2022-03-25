@@ -15,7 +15,7 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
-const WrapperCol = {offset: 4,span:20}
+const WrapperCol = {offset: 5,span: 19}
 function Step4({form}){
   const { match,formData,changeFormData,setStep,formItemLayout } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields,setFields} = form

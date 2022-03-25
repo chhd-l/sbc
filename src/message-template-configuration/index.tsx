@@ -161,7 +161,7 @@ const MessageTemplateConfiguration=()=>{
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplateName'})} />
+                  <Input style={styles.label} disabled title={RCi18n({id:'Marketing.EmailTemplateName'})} defaultValue={RCi18n({id:'Marketing.EmailTemplateName'})} />
                   <Input
                     style={styles.wrapper}
                     onChange={(e) => {
@@ -179,7 +179,7 @@ const MessageTemplateConfiguration=()=>{
             <Col span={8}>
               <FormItem>
                 <InputGroup compact style={styles.formItemStyle}>
-                  <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplateType'})} />
+                  <Input style={styles.label} disabled title={RCi18n({id:'Marketing.EmailTemplateType'})} defaultValue={RCi18n({id:'Marketing.EmailTemplateType'})} />
                   <Select
                     style={styles.wrapper}
                     getPopupContainer={(trigger: any) => trigger.parentNode}

@@ -5575,5 +5575,9 @@ export default {
   "waitingForTheMerchantToReceiveTheGoods": "Waiting for the merchant to receive the goods",
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
-  "yes": "Yes"
+  "yes": "Yes",
+
+  "Prescriber.PublishStatus": "Publish status",
+  "Product.Taggingimage": "Tagging image",
+  "Product.Shoppage": "Shop page",
 };

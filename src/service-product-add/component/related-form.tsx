@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { noop, SelectGroup, TreeSelectGroup, RCi18n } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -427,7 +427,7 @@ class RelatedSearchForm extends React.Component<any, any>{
               {getFieldDecorator('likeGoodsName')(
                 <Input
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'product.productName'})}>
                       <FormattedMessage id="product.productName" />
                     </p>
                   }
@@ -441,7 +441,7 @@ class RelatedSearchForm extends React.Component<any, any>{
               {getFieldDecorator('likeGoodsNo')(
                 <Input
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'product.SPU'})}>
                       <FormattedMessage id="product.SPU" />
                     </p>
                   }
@@ -456,7 +456,7 @@ class RelatedSearchForm extends React.Component<any, any>{
                 <TreeSelectGroup
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}><FormattedMessage id="Product.Productcategory" /></p>}
+                  label={<p style={styles.label} title={RCi18n({id:'Product.Productcategory'})}><FormattedMessage id="Product.Productcategory" /></p>}
                   /* defaultValue="全部"*/
                   // style={styles.wrapper}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -474,7 +474,7 @@ class RelatedSearchForm extends React.Component<any, any>{
                   className="tree-group"
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
-                  label={<p style={styles.label}><FormattedMessage id="Product.Salescategory" /></p>}
+                  label={<p style={styles.label} title={RCi18n({id:'Product.Salescategory'})}><FormattedMessage id="Product.Salescategory" /></p>}
                   dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                   treeDefaultExpandAll
                 >
@@ -492,7 +492,7 @@ class RelatedSearchForm extends React.Component<any, any>{
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'product.brand'})}>
                       <FormattedMessage id="product.brand" />
                     </p>
                   }

@@ -333,10 +333,10 @@ class SearchHead extends Component<any, any> {
         // value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="consumerName">
+        <Option value="consumerName" title={RCi18n({id:'Order.RecipientName'})}>
           <FormattedMessage id="Order.RecipientName" />
         </Option>
-        <Option value="consumerEmail">
+        <Option value="consumerEmail" title={RCi18n({id:'Order.RecipientMail'})}>
           <FormattedMessage id="Order.RecipientMail" />
         </Option>
       </Select>
@@ -355,10 +355,10 @@ class SearchHead extends Component<any, any> {
         // value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option value="goodsInfoName">
+        <Option value="goodsInfoName" title={RCi18n({id:'Order.Product Name'})}>
           <FormattedMessage id="Order.Product Name" />
         </Option>
-        <Option value="goodsInfoNo">
+        <Option value="goodsInfoNo" title={RCi18n({id:'Order.ProductSKU'})}>
           <FormattedMessage id="Order.ProductSKU" />
         </Option>
       </Select>
@@ -398,10 +398,10 @@ class SearchHead extends Component<any, any> {
         style={styles.label}
         disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
       >
-        <Option value="clinicsName">
+        <Option value="clinicsName" title={RCi18n({id:'Order.PrescriberName'})}>
           <FormattedMessage id="Order.PrescriberName" />
         </Option>
-        <Option value="clinicsIds">
+        <Option value="clinicsIds" title={RCi18n({id:'Order.PrescriberId'})}>
           <FormattedMessage id="Order.PrescriberId" />
         </Option>
       </Select>

@@ -367,7 +367,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {subscriptionOption.map((item) => (
-                            <Option value={item} key={item}>
+                            <Option value={item} key={item} title={RCi18n({id:`Subscription.${item}`})}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
@@ -400,7 +400,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {productOption.map((item) => (
-                            <Option value={item} key={item}>
+                            <Option value={item} key={item} title={RCi18n({id:`Subscription.${item}`})}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
@@ -432,7 +432,7 @@ export default class SubscriptionList extends Component<any, any> {
                         }}
                       >
                         {frequencyOption.map((item) => (
-                          <Option value={item} key={item}>
+                          <Option value={item} key={item} title={`${RCi18n({ id: 'Subscription.Frequency' })} (${RCi18n({ id: `Order.${item}` })})`}>
                             {RCi18n({ id: 'Subscription.Frequency' })} ({RCi18n({ id: `Order.${item}` })})
                           </Option>
                         ))}
@@ -504,7 +504,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {consumerOption.map((item) => (
-                            <Option value={item} key={item}>
+                            <Option value={item} key={item} title={RCi18n({id:`Subscription.${item}`})}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}
@@ -529,7 +529,7 @@ export default class SubscriptionList extends Component<any, any> {
                         disabled={JSON.parse(sessionStorage.getItem('s2b-employee@data')).clinicsIds ? true : false}
                         value={clinicsIds ? prescriberType : searchForm.prescriber}
                         // value={searchForm.prescriber}
-                        label={<p style={styles.label}><FormattedMessage id="Subscription.Prescriber" /></p>}
+                        label={<p style={styles.label} title={RCi18n({id:'Subscription.Prescriber'})}><FormattedMessage id="Subscription.Prescriber" /></p>}
                         onChange={(value) => {
                           value = value === '' ? null : value;
                           this.onFormChange({
@@ -563,7 +563,7 @@ export default class SubscriptionList extends Component<any, any> {
                             }}
                           >
                             {prescriberOption.map((item) => (
-                              <Option value={item} key={item}>
+                              <Option value={item} key={item} title={RCi18n({id:`Subscription.${item}`})}>
                                 <FormattedMessage id={`Subscription.${item}`} />
                               </Option>
                             ))}
@@ -584,7 +584,7 @@ export default class SubscriptionList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.leftLabel} disabled defaultValue={RCi18n({ id: 'Order.subscriptionType' })} />
+                      <Input style={styles.leftLabel} disabled title={RCi18n({ id: 'Order.subscriptionType' })} defaultValue={RCi18n({ id: 'Order.subscriptionType' })} />
                       <Select
                         style={styles.newWrapper}
                         dropdownMatchSelectWidth={false}
@@ -655,7 +655,7 @@ export default class SubscriptionList extends Component<any, any> {
                           }}
                         >
                           {phoneNumber.map((item: any) => (
-                            <Option title={item} value={item} key={item}>
+                            <Option title={RCi18n({id:`Subscription.${item}`})} value={item} key={item}>
                               <FormattedMessage id={`Subscription.${item}`} />
                             </Option>
                           ))}

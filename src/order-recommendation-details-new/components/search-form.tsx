@@ -68,7 +68,7 @@ class SearchHead extends Component<any, any> {
                 <Col>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={{ width: '120px' }}>{RCi18n({id:'Order.Product Name'})} </p>}
+                      addonBefore={<p style={{ width: '120px' }} title={RCi18n({id:'Order.Product Name'})}>{RCi18n({id:'Order.Product Name'})} </p>}
                       style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({
@@ -82,7 +82,7 @@ class SearchHead extends Component<any, any> {
                 <Col>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={{ width: '120px' }}>{RCi18n({id:'Order.SKU'})} </p>}
+                      addonBefore={<p style={{ width: '120px' }} title={RCi18n({id:'Order.SKU'})}>{RCi18n({id:'Order.SKU'})} </p>}
                       style={{ width: '300px' }}
                       onChange={(e) => {
                         this.setState({

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Button, Select, DatePicker } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const styles = {
   label: {
@@ -56,7 +57,7 @@ export default class SearchForm extends React.Component<any, any>{
                   getFieldDecorator('surveyNumber')(
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'Survey.survey_number'})}>
                           <FormattedMessage id="Survey.survey_number" />
                         </p>
                       }
@@ -72,7 +73,7 @@ export default class SearchForm extends React.Component<any, any>{
                   getFieldDecorator('title')(
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'Survey.title'})}>
                           <FormattedMessage id="Survey.title" />
                         </p>
                       }

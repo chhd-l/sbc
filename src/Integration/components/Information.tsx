@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Row, Col, Input } from 'antd';
 import { FormattedMessage } from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 interface  IProps{
   infoList:any, // 数据源
@@ -26,7 +27,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.InterfaceID'})}>
                         <FormattedMessage id="Interface.InterfaceID" />
                       </p>
                     }
@@ -42,7 +43,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.System'})}>
                         <FormattedMessage id="Interface.System" />
                       </p>
                     }
@@ -58,7 +59,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Method'})}>
                         <FormattedMessage id="Interface.Method" />
                       </p>
                     }
@@ -73,7 +74,7 @@ class Information extends Component<any> {
                 <Input
                   disabled
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Interface.URL'})}>
                       <FormattedMessage id="Interface.URL" />
                     </p>
                   }
@@ -88,7 +89,7 @@ class Information extends Component<any> {
                 <Input
                   disabled
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Interface.MiddleLayer'})}>
                       <FormattedMessage id="Interface.MiddleLayer" />
                     </p>
                   }
@@ -104,7 +105,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Type'})}>
                         <FormattedMessage id="Interface.Type" />
                       </p>
                     }
@@ -120,7 +121,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Provider'})}>
                         <FormattedMessage id="Interface.Provider" />
                       </p>
                     }
@@ -136,7 +137,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Invoker'})}>
                         <FormattedMessage id="Interface.Invoker" />
                       </p>
                     }
@@ -152,7 +153,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.DataFlow'})}>
                         <FormattedMessage id="Interface.DataFlow" />
                       </p>
                     }
@@ -168,7 +169,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Function'})}>
                         <FormattedMessage id="Interface.Function" />
                       </p>
                     }
@@ -184,7 +185,7 @@ class Information extends Component<any> {
                   <Input
                     disabled
                     addonBefore={
-                      <p style={styles.label}>
+                      <p style={styles.label} title={RCi18n({id:'Interface.Uptime'})}>
                         <FormattedMessage id="Interface.Uptime" />
                       </p>
                     }

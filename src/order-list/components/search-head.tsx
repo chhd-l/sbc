@@ -425,6 +425,7 @@ class SearchHead extends Component<any, any> {
                         <Input
                           style={styles.leftLabel}
                           disabled
+                          title={RCi18n({ id: 'Order.subscriptionType' })}
                           defaultValue={RCi18n({ id: 'Order.subscriptionType' })}
                         />
                         <Select

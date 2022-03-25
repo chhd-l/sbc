@@ -527,8 +527,8 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.nameSelect}
         style={styles.label}
       >
-        <Option value="attributeName"><FormattedMessage id="Product.Attributename" /></Option>
-        <Option value="displayName"><FormattedMessage id="Product.Displayname" /></Option>
+        <Option value="attributeName" title={RCi18n({id:'Product.Attributename'})}><FormattedMessage id="Product.Attributename" /></Option>
+        <Option value="displayName" title={RCi18n({id:'Product.Displayname'})}><FormattedMessage id="Product.Displayname" /></Option>
       </Select>
     );
   };
@@ -544,8 +544,8 @@ class AttributeLibrary extends Component<any, any> {
         value={this.state.valueSelect}
         style={styles.label}
       >
-        <Option value="attributeValue"><FormattedMessage id="Product.Attributevalue" /></Option>
-        <Option value="displayValue"><FormattedMessage id="Product.Displayvalue" /></Option>
+        <Option value="attributeValue" title={RCi18n({id:'Product.Attributevalue'})}><FormattedMessage id="Product.Attributevalue" /></Option>
+        <Option value="displayValue" title={RCi18n({id:'Product.Displayvalue'})}><FormattedMessage id="Product.Displayvalue" /></Option>
       </Select>
     );
   };

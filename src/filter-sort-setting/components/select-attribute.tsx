@@ -1,5 +1,5 @@
 import { Button, Col, Form, Icon, Input, message, Modal, Row, Table } from 'antd';
-import { Const } from 'qmkit';
+import { Const, RCi18n } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
 import { FormattedMessage } from 'react-intl';
@@ -241,7 +241,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={
-                          <p style={styles.label}>
+                          <p style={styles.label} title={RCi18n({id:'Product.AttributeName'})}>
                             <FormattedMessage id="Product.AttributeName" />
                           </p>
                         }
@@ -260,7 +260,7 @@ export default class SelectAttribute extends React.Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={
-                          <p style={styles.label}>
+                          <p style={styles.label} title={RCi18n({id:'Product.AttributeValue'})}>
                             <FormattedMessage id="Product.AttributeValue" />
                           </p>
                         }

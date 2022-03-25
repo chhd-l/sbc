@@ -186,6 +186,9 @@ function Step5({ form }) {
                   <FormattedMessage id="Marketing.Gifts" />
                 </Radio>
               ) : null}
+              {Const.SITE_NAME !== 'MYVETRECO' && formData.PromotionType.typeOfPromotion === 0 ? (
+                <Radio value={5}>Commercial leaflet</Radio>
+              ) : null}
             </Radio.Group>
           )}
         </Form.Item>

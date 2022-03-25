@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb } from 'antd';
 
@@ -258,7 +258,7 @@ class TagManagementList extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tag name" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'PetOwner.TagName'})} defaultValue={RCi18n({id:'PetOwner.TagName'})} />
                         <Input
                           style={styles.wrapper}
                           onChange={(e) => {
@@ -276,7 +276,7 @@ class TagManagementList extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tag description" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'Subscription.TagDescription'})} defaultValue={RCi18n({id:'Subscription.TagDescription'})} />
                         <Input
                           style={styles.wrapper}
                           onChange={(e) => {
@@ -294,7 +294,7 @@ class TagManagementList extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Publish status" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'Prescriber.PublishStatus'})} defaultValue={RCi18n({id:'Prescriber.PublishStatus'})} />
                         <Select
                           style={styles.wrapper}
                           onChange={(value) => {

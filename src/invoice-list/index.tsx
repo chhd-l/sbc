@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, SelectGroup, history, Const, util, cache } from 'qmkit';
+import { BreadCrumb, Headline, SelectGroup, history, Const, util, cache, RCi18n } from 'qmkit';
 import { Form, Spin, Row, Col, Select, Input, Button, message, Tooltip, Divider, Table, Popconfirm, DatePicker, Dropdown, Menu, Icon, Modal } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';
@@ -582,7 +582,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({id:'Finance.OrderNumber'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Finance.OrderNumber'})} defaultValue={RCi18n({id:'Finance.OrderNumber'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -600,7 +600,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({id:'Finance.ConsumerType'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Finance.ConsumerType'})} defaultValue={RCi18n({id:'Finance.ConsumerType'})} />
                     <Select
                       style={styles.wrapper}
                       onChange={(value) => {
@@ -628,7 +628,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({id:'Finance.ConsumerName'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Finance.ConsumerName'})} defaultValue={RCi18n({id:'Finance.ConsumerName'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -646,7 +646,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({id:'Finance.InvoiceDate'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Finance.InvoiceDate'})} defaultValue={RCi18n({id:'Finance.InvoiceDate'})} />
                     <RangePicker style={styles.wrapper} onChange={this.onChangeDate} disabledDate={this.disabledDate} format={'YYYY-MM-DD'} />
                   </InputGroup>
                 </FormItem>
@@ -655,7 +655,7 @@ class InvoiceList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({id:'Finance.InvoiceStatus'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Finance.InvoiceStatus'})} defaultValue={RCi18n({id:'Finance.InvoiceStatus'})} />
                     <Select
                       defaultValue=""
                       style={styles.wrapper}

@@ -172,7 +172,7 @@ class SearchHead extends Component<any, any> {
                 {/*商品名称、SKU编码*/}
                 <FormItem>
                   <InputGroup compact>
-                    <Input  style={{width: '47%', textAlign: 'center' }} readOnly defaultValue='Created date' />
+                    <Input  style={{width: '47%', textAlign: 'center' }} readOnly title={RCi18n({id:'Order.CreatedTime'})} defaultValue={RCi18n({id:'Order.CreatedTime'})} />
                     <DatePicker
                     value={fillDate}
                       style={{ width: '53%' }}
@@ -274,8 +274,8 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option value="PO name"> <FormattedMessage id="Prescriber.PO Name" /></Option>
-        <Option value="PO e-mail"><FormattedMessage id="Prescriber.PO E-mail" /></Option>
+        <Option value="PO name" title={RCi18n({id:'Prescriber.PO Name'})}> <FormattedMessage id="Prescriber.PO Name" /></Option>
+        <Option value="PO e-mail" title={RCi18n({id:'Prescriber.PO E-mail'})}><FormattedMessage id="Prescriber.PO E-mail" /></Option>
       </Select>
     );
   };
@@ -299,8 +299,8 @@ class SearchHead extends Component<any, any> {
     }
 
     const confirm = Modal.confirm;
-    const title = (window as any).RCi18n({ id: 'Prescriber.audit' });
-    const content = (window as any).RCi18n({ id: 'Prescriber.confirmAudit' });
+    const title = RCi18n({ id: 'Prescriber.audit' });
+    const content = RCi18n({ id: 'Prescriber.confirmAudit' });
     confirm({
       title: title,
       content: content,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Row, Col, Input, Button } from 'antd';
 import {FormattedMessage} from 'react-intl';
+import { RCi18n } from 'qmkit';
 
 const styles = {
     label: {
@@ -52,7 +53,7 @@ export default class SearchForm extends React.Component<any, any>{
                                     getFieldDecorator('productName')(
                                         <Input
                                             addonBefore={
-                                                <p style={styles.label}>
+                                                <p style={styles.label} title={RCi18n({id:'Product.productName'})}>
                                                     <FormattedMessage id="Product.productName" />
                                                 </p>
                                             }
@@ -68,7 +69,7 @@ export default class SearchForm extends React.Component<any, any>{
                                     getFieldDecorator('spu')(
                                         <Input
                                             addonBefore={
-                                                <p style={styles.label}>
+                                                <p style={styles.label} title={RCi18n({id:'Product.SPU'})}>
                                                     <FormattedMessage id="Product.SPU" />
                                                 </p>
                                             }
@@ -84,7 +85,7 @@ export default class SearchForm extends React.Component<any, any>{
                                     getFieldDecorator('sku')(
                                         <Input
                                             addonBefore={
-                                                <p style={styles.label}>
+                                                <p style={styles.label} title={RCi18n({id:'Product.SKU'})}>
                                                     <FormattedMessage id="Product.SKU" />
                                                 </p>
                                             }
@@ -101,7 +102,7 @@ export default class SearchForm extends React.Component<any, any>{
                                     getFieldDecorator('externalSku')(
                                         <Input
                                             addonBefore={
-                                                <p style={styles.label}>
+                                                <p style={styles.label} title={RCi18n({id:'Product.ExternalSKU'})}>
                                                     <FormattedMessage id="Product.ExternalSKU" />
                                                 </p>
                                             }

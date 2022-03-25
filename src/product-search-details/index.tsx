@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, RCi18n } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, DatePicker, Breadcrumb } from 'antd';
 import { Link } from 'react-router-dom';
 import * as webapi from './webapi';
@@ -38,7 +38,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
   componentDidMount() {
     this.setState(
       {
-        title: this.state.type === 'all' ? 'Search Result Details' : 'No-Result Search Details'
+        title: this.state.type === 'all' ? RCi18n({id:'Product.SearchResultDetails'}) : RCi18n({id:'Product.NoResultSearchDetails'})
       },
       () => this.getSearchResultDetails()
     );
@@ -119,31 +119,31 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     let test = searchForm;
     const columns = [
       {
-        title: 'Search No.',
+        title: <FormattedMessage id="Product.SearchNo"/>,
         dataIndex: 'searchNo',
         key: 'searchNo',
         width: '15%'
       },
       {
-        title: 'Search Time',
+        title: <FormattedMessage id="Product.SearchTime"/>,
         dataIndex: 'searchTime',
         key: 'searchTime',
         width: '15%'
       },
       {
-        title: 'Pet Owner Type',
+        title: <FormattedMessage id="PetOwner.ConsumerType"/>,
         dataIndex: 'consumerType',
         key: 'consumerType',
         width: '15%'
       },
       {
-        title: 'Pet owner account',
+        title: <FormattedMessage id="PetOwner.ConsumerAccount"/>,
         dataIndex: 'consumerAccount',
         key: 'consumerAccount',
         width: '15%'
       },
       {
-        title: 'Pet owner name',
+        title: <FormattedMessage id="PetOwner.ConsumerName"/>,
         dataIndex: 'consumerName',
         key: 'consumerName',
         width: '15%'
@@ -151,7 +151,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
     ];
     if (type === 'all') {
       columns.push({
-        title: 'Total # of pdt. found',
+        title: <FormattedMessage id="Product.TotalFound"/>,
         dataIndex: 'resultNo',
         key: 'resultNo',
         width: '15%'
@@ -169,7 +169,7 @@ export default class ProductSearchDetails extends React.Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}>Pet owner account</p>}
+                    addonBefore={<p style={styles.label} title={RCi18n({id:'PetOwner.ConsumerAccount'})}><FormattedMessage id="PetOwner.ConsumerAccount"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({

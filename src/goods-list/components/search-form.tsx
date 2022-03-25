@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { noop, RCi18n, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -110,7 +110,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.productName'})}>
                     <FormattedMessage id="Product.productName" />
                   </p>
                 }
@@ -129,7 +129,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.SPU'})}>
                     <FormattedMessage id="Product.SPU" />
                   </p>
                 }
@@ -148,7 +148,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.SKU'})}>
                     <FormattedMessage id="Product.SKU" />
                   </p>
                 }
@@ -170,7 +170,7 @@ export default class SearchForm extends React.Component<any, any> {
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.Salescategory'})}>
                     <FormattedMessage id="Product.Salescategory" />
                   </p>
                 }
@@ -211,7 +211,7 @@ export default class SearchForm extends React.Component<any, any> {
                 allowClear
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.Productcategory'})}>
                     <FormattedMessage id="Product.Productcategory" />
                   </p>
                 }
@@ -235,7 +235,7 @@ export default class SearchForm extends React.Component<any, any> {
                 getPopupContainer={() => document.getElementById('page-content')}
                 style={styles.wrapper}
                 label={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.brand'})}>
                     <FormattedMessage id="Product.brand" />
                   </p>
                 }

@@ -16,8 +16,8 @@ import * as webapi from '../webapi';
 const { Step } = Steps;
 export const FormContext = React.createContext({});
 const formItemLayout = {
-  labelCol: { span: 4 },
-  wrapperCol: { span: 20 }
+  labelCol: { span: 5 },
+  wrapperCol: { span: 19 }
 };
 export default function index({ ...props }) {
   const InitFormData = {

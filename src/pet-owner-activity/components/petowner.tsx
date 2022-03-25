@@ -38,94 +38,64 @@ export default class petowner extends Component<any, any> {
               </span>
             </div>
           </Row>
-          <Row type="flex" className="ui-row-detail">
+          <div style={{display:'flex', flexWrap:'nowrap', paddingLeft: 10}}>
             <span className="icon iconfont iconposition" />
-            <div className="detail-content">
-              <Row>
-                <Col span={6}>
-                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Location'})}</span>
-                </Col>
-                <Col span={18}>
-                  <span className="content">
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={
-                        <div>
-                          {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
-                        </div>
-                      }
-                    >
-                      <p style={styles.text}>
-                        {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
-                      </p>
-                    </Tooltip>
-                  </span>
-                </Col>
-              </Row>
-            </div>
-          </Row>
-          <br />
-          <Row type="flex" className="ui-row-detail">
-            <span className="icon iconfont iconEmail" />
-            <div className="detail-content">
-              <Row>
-                <Col span={6}>
-                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Email'})}</span>
-                </Col>
-                <Col span={18}>
-                  <span className="content">
-                    <Tooltip
-                      overlayStyle={{
-                        overflowY: 'auto'
-                      }}
-                      placement="bottomLeft"
-                      title={<div> {petOwner.email}</div>}
-                    >
-                      <p style={styles.text}> {petOwner.email}</p>
-                    </Tooltip>
-                  </span>
-                </Col>
-              </Row>
-            </div>
-          </Row>
-          <br />
-          <Row type="flex" className="ui-row-detail">
-            <span className="icon iconfont iconPhone" />
-            <div className="detail-content">
-              <Row>
-                <Col span={6}>
-                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Phone'})}</span>
-                </Col>
-                <Col span={18}>
-                  <span className="content">{petOwner.contactPhone}</span>
-                </Col>
-              </Row>
-            </div>
-          </Row>
-          <br />
-          <Row type="flex" className="ui-row-detail">
-            <span className="icon iconfont iconsegments" />
-            <div className="detail-content">
-              <Row>
-                <Col span={6}>
-                  <span className="ui-lighter">{RCi18n({id:'PetOwner.Taggings'})}</span>
-                </Col>
-                <Col span={18}>
-                  <div className="contactSegments">
-                    {petOwner.segmentList &&
-                      petOwner.segmentList.map((item) => (
-                        <div className="segment-item" key={item.id}>
-                          {item.name}
-                        </div>
-                      ))}
+            <div style={{marginLeft: 10}}>{RCi18n({id:'PetOwner.Location'})}:</div>
+            <div style={{flex: 'auto', overflow: 'hidden', marginLeft: 10}}>
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                }}
+                placement="bottomLeft"
+                title={
+                  <div>
+                    {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
                   </div>
-                </Col>
-              </Row>
+                }
+              >
+                <p style={styles.text}>
+                  {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
+                </p>
+              </Tooltip>
             </div>
-          </Row>
+          </div>
+          <br />
+          <div style={{display:'flex', flexWrap:'nowrap', paddingLeft: 10}}>
+            <span className="icon iconfont iconEmail" />
+            <div style={{marginLeft: 10}}>{RCi18n({id:'PetOwner.Email'})}:</div>
+            <div style={{flex: 'auto', overflow: 'hidden', marginLeft: 10}}>
+              <Tooltip
+                overlayStyle={{
+                  overflowY: 'auto'
+                }}
+                placement="bottomLeft"
+                title={<div> {petOwner.email}</div>}
+              >
+                <p style={styles.text}> {petOwner.email}</p>
+              </Tooltip>
+            </div>
+          </div>
+          <br />
+          <div style={{display:'flex', flexWrap:'nowrap', paddingLeft: 10}}>
+            <span className="icon iconfont iconPhone" />
+            <div style={{marginLeft: 10}}>{RCi18n({id:'PetOwner.Phone'})}:</div>
+            <div style={{flex: 'auto', overflow: 'hidden', marginLeft: 10}}>
+              {petOwner.contactPhone}
+            </div>
+          </div>
+          <br />
+          <div style={{display:'flex', flexWrap:'nowrap', paddingLeft: 10}}>
+            <span className="icon iconfont iconsegments" />
+            <div style={{marginLeft: 10}}>{RCi18n({id:'PetOwner.Taggings'})}:</div>
+            <div style={{flex: 'auto', overflow: 'hidden', marginLeft: 10}}>
+              {petOwner.segmentList &&
+                petOwner.segmentList.map((item) => (
+                  <div className="segment-item" key={item.id}>
+                    {item.name}
+                  </div>
+              ))}
+            </div>
+          </div>
         </Card>
       </div>
     );
@@ -135,8 +105,6 @@ const styles = {
   text: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: 170,
-    display: 'inline-block'
+    whiteSpace: 'nowrap'
   }
 };

@@ -294,6 +294,7 @@ export default class MyHeader extends React.Component {
   };
 
   languageChange = (value) => {
+    // 
     // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
     // sessionStorage.setItem(cache.LANGUAGE, value);
     // history.go(0);
@@ -539,11 +540,11 @@ export default class MyHeader extends React.Component {
             <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item> */}
-        {Const.SITE_NAME !== 'MYVETRECO' && <Menu.Item key="1">
+        {/* {Const.SITE_NAME !== 'MYVETRECO' && <Menu.Item key="1">
           <a onClick={() => this.setState({ modalVisible: true })}>
             <Icon type="global" /> Language
           </a>
-        </Menu.Item>}
+        </Menu.Item>} */}
         <Menu.Item key="2">
           <OktaLogout type="link" text="Exit" />
         </Menu.Item>
@@ -578,7 +579,6 @@ export default class MyHeader extends React.Component {
 
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
-
     return (
       <div className="my-header">
         <Header className="header" style={{ paddingLeft: '0' }}>
@@ -647,6 +647,13 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
+              <Icon type="global" style={styles.languageIcon} />
+              <Select
+                defaultValue={sessionStorage.getItem(cache.LANGUAGE)}
+                onChange={this.languageChange}
+                style={{ width: 180 }}>
+                {this.state.languageList.map(item => <Option key={item.lang} value={item.lang}>{item.langCountry}</Option>)}
+              </Select>
               {
                 Const.SITE_NAME !== 'MYVETRECO' ? (
                   <div className='headerRight-shop'>
@@ -764,5 +771,11 @@ const styles = {
     flexWrap: "wrap",
     maxHeight: "470px",
     overflowY: "auto"
+  },
+  languageIcon: {
+    marginLeft:'25px',
+    fontSize: '24px',
+    transform: 'scale(.8)',
+    color: '#7e7e7e'
   }
 } as any;

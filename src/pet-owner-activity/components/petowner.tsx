@@ -49,12 +49,12 @@ export default class petowner extends Component<any, any> {
                 placement="bottomLeft"
                 title={
                   <div>
-                    {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
+                    {[petOwner.city, petOwner.country].filter(item => !!item).join(', ')}
                   </div>
                 }
               >
                 <p style={styles.text}>
-                  {petOwner.city} {petOwner.country ? (', ' + petOwner.country) : ''}
+                  {[petOwner.city, petOwner.country].filter(item => !!item).join(', ')}
                 </p>
               </Tooltip>
             </div>

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { Const, DataGrid, cache } from 'qmkit';
+import { Const, DataGrid, cache, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 import SearchForm from './search-form';
 import * as webapi from './webapi';
@@ -59,11 +60,11 @@ export default class GoodsGrid extends React.Component<any, any> {
       selectedRows,
       showValidGood
     } = this.state;
-    const { rowChangeBackFun, visible } = this.props;
+    const { rowChangeBackFun, visible, goodsCate } = this.props;
     return (
       <div className="content">
         {/*search*/}
-        <SearchForm searchBackFun={this.searchBackFun} visible={visible} />
+        <SearchForm searchBackFun={this.searchBackFun} goodsCate={goodsCate} visible={visible} />
 
         <DataGrid
           loading={loading}
@@ -114,14 +115,14 @@ export default class GoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU Code"
+            title={<FormattedMessage id="Product.SKUCode"/>}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
           />
 
           <Column
-            title="Product Name"
+            title={<FormattedMessage id="Product.ProductName"/>}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
@@ -129,7 +130,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Specification"
+            title={<FormattedMessage id="Product.Specification"/>}
             dataIndex="specText"
             key="specText"
             width="20%"
@@ -143,11 +144,11 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title="Product category" key="goodsCate" dataIndex="cateName"  width="15%"
+          <Column title={<FormattedMessage id="Product.Productcategory"/>} key="goodsCate" dataIndex="cateName"  width="15%"
           />
 
           <Column
-            title="Brand"
+            title={<FormattedMessage id="Product.Brand"/>}
             key="goodsBrand"
             dataIndex="brandName"
             render={(value) => {
@@ -160,7 +161,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Price"
+            title={<FormattedMessage id="Product.Price"/>}
             key="marketPrice"
             dataIndex="marketPrice"
             render={(data) => {

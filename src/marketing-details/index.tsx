@@ -9,13 +9,15 @@ import MarketingDes from './common/components/marketing-des';
 import GoodsList from './common/components/goods-list';
 import Bottom from './common/components/bottom';
 import GiftList from './gift-details/components/gift-list';
+import LeafletList from './leaflet-details/components/leaflet-list';
 import MarketingRule from './common/components/marketing-rule';
 import './index.css'
 const MAK_TYPE = {
   0: 'Full reduction ',
   1: 'Full discount ',
   2: 'Gift ',
-  3: 'Free shipping '
+  3: 'Free shipping ',
+  4: 'Leaflet '
 };
 
 @StoreProvider(AppStore, { debug: __DEV__ })
@@ -53,6 +55,8 @@ class MarketingDetails extends React.Component<any, any> {
                   <MarketingRule />
                 ) : marketingType === 2 ? (
                   <GiftList />
+                ) : marketingType === 4 ? (
+                  <LeafletList />
                 ) : marketingType === 3 ? null : (
                   <MarketingRule />
                 )}

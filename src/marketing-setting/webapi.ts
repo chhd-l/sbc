@@ -211,6 +211,27 @@ export const updateFullGift = (giftBean) => {
   });
 };
 
+/**
+ * 新增leaflet
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const addFullLeaflet = (leafletBean) => {
+  return Fetch<TResult>('/marketing/fullLeaflet', {
+    method: 'POST',
+    body: JSON.stringify(leafletBean)
+  });
+};
+
+/**
+ * 编辑leaflet
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export const updateFullLeaflet = (leafletBean) => {
+  return Fetch<TResult>('/marketing/fullLeaflet', {
+    method: 'PUT',
+    body: JSON.stringify(leafletBean)
+  });
+};
 
 /**
  * 删除优惠券

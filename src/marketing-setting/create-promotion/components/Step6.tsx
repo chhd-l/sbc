@@ -347,6 +347,52 @@ export default function Step6({setLoading}) {
           detail = await webapi.addFullGift(params)
         }
       }
+      if(formData.Advantage.couponPromotionType === 5){
+        if(formData.Conditions.CartLimit === 1){
+          subType = 15
+        }else {
+          subType = 14
+        }
+        let fullLeafletLevelList = [...formData.Advantage.fullLeafletLevelList]
+        if(formData.Conditions.CartLimit === 0){
+          fullLeafletLevelList[0].fullCount = '1'
+        }
+        if(formData.Conditions.CartLimit === 1){
+          fullLeafletLevelList[0].fullAmount = formData.Conditions.fullMoney
+        }
+        if(formData.Conditions.CartLimit === 2){
+          fullLeafletLevelList[0].fullCount = formData.Conditions.fullItem
+        }
+        let params =  {
+          marketingType: 4,
+          /**
+           * 第二步
+           */
+          ...commonParams.BasicSetting,
+          /**
+           * 第三步
+           */
+          ...commonParams.PromotionType,
+          /**
+           * 第四步
+           */
+          ...commonParams.Conditions,
+          /**
+           * 其他
+           */
+          fullLeafletLevelList: fullLeafletLevelList,
+          subType: subType,
+          isClub: false,
+        }
+        if(match.params.id && match.params.type === 'promotion'){
+          detail = await webapi.updateFullLeaflet({...params,marketingId:match.params.id,storeId:formData.storeId})
+        }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
+          detail = await webapi.addFullLeaflet(params)
+        }
+      }
     }
     setLoading(false)
     if(detail.res && detail.res.code === Const.SUCCESS_CODE) {

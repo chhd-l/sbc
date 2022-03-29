@@ -155,7 +155,7 @@ class OrderDelivery extends React.Component<any, any> {
                     <div style={styles.stateBox}>
                       {logistic ? (
                         <div>
-                          <label style={styles.information} className="flex-start-align">
+                          <div style={styles.information} className="flex-start-align">
                             【<FormattedMessage id="Product.logisticsInformation" />】
                             <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
                             <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
@@ -166,7 +166,7 @@ class OrderDelivery extends React.Component<any, any> {
                             {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
                           </Button> */}
-                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={()=>onRefresh()}>
                               <FormattedMessage id="Order.Refresh" />
                             </Button>
                             {v.get('trackingUrl') ? (
@@ -174,7 +174,7 @@ class OrderDelivery extends React.Component<any, any> {
                                 <FormattedMessage id="Order.Trackdelivery" />
                               </Button>
                             ) :null}
-                          </label>
+                          </div>
                           <div style={{ marginTop: 20 }}>
                             <Timeline>
                               {tradeLogisticsDetails.map((item, index) => {

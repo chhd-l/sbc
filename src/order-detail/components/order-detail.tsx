@@ -718,6 +718,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 <span style={styles.name}>{<FormattedMessage id="Order.shippingFees" />}: </span>
                 <strong>{this._handlePriceFormat(tradePrice.deliveryPrice)}</strong>
               </label>
+              
               {tradePrice.freeShippingFlag ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
@@ -726,10 +727,20 @@ class OrderDetailTab extends React.Component<any, any> {
                   <strong>-{this._handlePriceFormat(tradePrice.freeShippingDiscountPrice)}</strong>
                 </label>
               ) : null}
+
               {+sessionStorage.getItem(cache.TAX_SWITCH) === 1 ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>{<FormattedMessage id="Order.Tax" />}: </span>
                   <strong>{this._handlePriceFormat(tradePrice.taxFeePrice)}</strong>
+                </label>
+              ) : null}
+
+              {tradePrice.loyaltyPoints ? (
+                <label style={styles.priceItem as any}>
+                  <span style={styles.name}>
+                    <FormattedMessage id="Order.loyaltyPoints" />:
+                  </span>
+                  <strong>-{this._handlePriceFormat(tradePrice.loyaltyPoints)}</strong>
                 </label>
               ) : null}
 

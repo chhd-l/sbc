@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "11349732",
+      "name": "medal-l",
+      "font_class": "medal-l",
+      "unicode": "e6ba",
+      "unicode_decimal": 59066
+    },
+    {
       "icon_id": "13054127",
       "name": "timezone",
       "font_class": "timezone",

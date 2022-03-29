@@ -392,6 +392,18 @@ export default class MyHeader extends React.Component {
     })
   }
 
+  //跳转CRM
+  handleCRMSRedirect = () => {
+    Modal.confirm({
+      title: RCi18n({id:'Setting.leaveStorePortal'}),
+      okText: RCi18n({id:'Setting.Yes'}),
+      cancelText: RCi18n({id:'back'}),
+      onOk: () => {
+        window.location.href = sessionStorage.getItem(cache.POXDOMAINNAME) + 'login?toOkta=staff';
+      }
+    });
+  }
+
   render() {
     const loginInfo = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA));
     if (!loginInfo) {
@@ -608,6 +620,12 @@ export default class MyHeader extends React.Component {
               //   </Dropdown>
               // )
             }
+
+            <AuthWrapper functionName="f_to_scrm">
+              <a className="ant-dropdown-link" href="javascript:;" onClick={this.handleCRMSRedirect}>
+                <i className="iconfont iconmedal-l"></i>
+              </a>
+            </AuthWrapper>
           </div>
 
           <div className="align-items-center">

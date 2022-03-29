@@ -513,6 +513,7 @@ export async function switchLogin(params, callback?: Function) {
     const { res } = (await webapi.fetchStore()) as any;
     if (res.code == Const.SUCCESS_CODE) {
       sessionStorage.setItem(cache.DOMAINNAME,res.context.domainName); //domain
+      sessionStorage.setItem(cache.POXDOMAINNAME,res.context.poxDomainName); //CRMS domain
     }
   };
 

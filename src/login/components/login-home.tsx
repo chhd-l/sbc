@@ -14,6 +14,7 @@ import MyvetrecoLoginForm from '../../myvetreco-logins/login';
 let LoginHome = (props) => {
   let { authState, authService } = useOktaAuth();
   let toOkta = props.parent.location.search === '?toOkta=true';
+  let fromPox = props.parent.location.search === '?toOkta=staff';
   let loginpPercriberOkta = () => {
     sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
     switchRouter();
@@ -39,6 +40,8 @@ let LoginHome = (props) => {
       }
       if (toOkta) {
         loginpPercriberOkta();
+      } else if (fromPox) {
+        loginpRcOkta();
       }
     }
 

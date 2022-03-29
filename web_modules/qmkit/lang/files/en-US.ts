@@ -5580,4 +5580,7 @@ export default {
   "Prescriber.PublishStatus": "Publish status",
   "Product.Taggingimage": "Tagging image",
   "Product.Shoppage": "Shop page",
+  "Marketing.AddLeafletRule": "Add leaflet rule",
+  "Marketing.InventoryTooLow": "Insufficient inventory",
+  "Setting.leaveStorePortal": "Are you sure you want to leave Store Portal?",
 };

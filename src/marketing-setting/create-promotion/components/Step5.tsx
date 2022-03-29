@@ -16,6 +16,9 @@ function Step5({ form }) {
   const [selectedGiftRows, setSelectedGiftRows] = useState<any>(fromJS([]));
   const [fullGiftLevelList, setFullGiftLevelList] = useState<any>([]);
 
+  const [selectedLeafletRows, setSelectedLeafletRows] = useState<any>(fromJS([]));
+  const [leafletLevelList, setLeafletLevelList] = useState<any>([]);
+
   useEffect(() => {
     setFullGiftLevelList([
       {
@@ -24,6 +27,15 @@ function Step5({ form }) {
         fullCount: null,
         giftType: 1,
         fullGiftDetailList: []
+      }
+    ]);
+    setLeafletLevelList([
+      {
+        key: makeRandom(),
+        fullAmount: null,
+        fullCount: null,
+        giftType: 1,
+        fullLeafletDetailList: []
       }
     ]);
     if (match.params.id) {
@@ -35,6 +47,10 @@ function Step5({ form }) {
       ) {
         setFullGiftLevelList(formData.Advantage.fullGiftLevelList);
         setSelectedGiftRows(fromJS(formData.Advantage.selectedGiftRows) || fromJS([]));
+      }
+      if (formData.subType === 14 || formData.subType === 15 || formData.Advantage.couponPromotionType) {
+        setLeafletLevelList(formData.Advantage.fullLeafletLevelList);
+        setSelectedLeafletRows(fromJS(formData.Advantage.selectedLeafletRows) || fromJS([]));
       }
     }
   }, []);
@@ -56,11 +72,28 @@ function Step5({ form }) {
         });
         return;
       }
+      if (couponPromotionType === 5 && selectedLeafletRows.length === 0) {
+        setFields({
+          leaflet: {
+            value: null,
+            errors: [
+              new Error(
+                (window as any).RCi18n({
+                  id: 'Marketing.PleaseSettingRules'
+                })
+              )
+            ]
+          }
+        });
+        return;
+      }
       if (!err) {
         changeFormData(enumConst.stepEnum[4], {
           ...values,
           fullGiftLevelList,
-          selectedGiftRows: selectedGiftRows.toJS()
+          selectedGiftRows: selectedGiftRows.toJS(),
+          fullLeafletLevelList: leafletLevelList,
+          selectedLeafletRows: selectedLeafletRows.toJS()
         });
         setStep(5);
       }
@@ -74,7 +107,7 @@ function Step5({ form }) {
 
   //当前面选项影响到gift时，处理默认选中项
   useEffect(() => {
-    if (couponPromotionType === 4) {
+    if (couponPromotionType === 4 || couponPromotionType === 5) {
       if (formData.PromotionType.typeOfPromotion === 1) {
         console.log('切换coupon');
         setFieldsValue({
@@ -133,6 +166,40 @@ function Step5({ form }) {
     } else {
       setFields({
         rules: {
+          value: null,
+          errors: null
+        }
+      });
+    }
+  };
+
+  const onLeafletChange = (rules) => {
+    setLeafletLevelList(rules);
+    changeFormData(enumConst.stepEnum[4], {
+      fullLeafletLevelList: rules,
+      couponPromotionType: couponPromotionType
+    });
+  };
+  const LeafletRowsOnChange = (rows) => {
+    console.log(rows);
+    setSelectedLeafletRows(rows);
+
+    if (rows.length == 0) {
+      setFields({
+        leaflet: {
+          value: null,
+          errors: [
+            new Error(
+              (window as any).RCi18n({
+                id: 'Marketing.PleaseSettingRules'
+              })
+            )
+          ]
+        }
+      });
+    } else {
+      setFields({
+        leaflet: {
           value: null,
           errors: null
         }
@@ -665,6 +732,28 @@ function Step5({ form }) {
                 isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
                 GiftRowsOnChange={GiftRowsOnChange}
                 noMulti={true}
+                addText={<FormattedMessage id="Marketing.Addgift" />}
+              />
+            )}
+          </Form.Item>
+        )}
+        {couponPromotionType === 5 && (
+          <Form.Item wrapperCol={{ offset: 0, span: 24 }} required={true} labelAlign="left">
+            {getFieldDecorator(
+              'leaflet',
+              {}
+            )(
+              <GiftLevels
+                form={form}
+                selectedRows={selectedLeafletRows}
+                isNormal={false}
+                fullGiftLevelList={leafletLevelList}
+                onChangeBack={onLeafletChange}
+                isFullCount={formData.Conditions.CartLimit === 1 ? 0 : 1}
+                GiftRowsOnChange={LeafletRowsOnChange}
+                noMulti={true}
+                addText={<FormattedMessage id="Marketing.AddLeafletRule" />}
+                goodsCate="commercial leaflet"
               />
             )}
           </Form.Item>

@@ -27,6 +27,7 @@ export default class SearchForm extends React.Component<any, any> {
         likeValue: '',
         likeGoodsName: ''
       },
+      cateIdDisabled: false,
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
     };
   }
@@ -67,7 +68,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   render() {
     const { searchParams } = this.state;
-    const { cates, brands } = this.state;
+    const { cates, brands, cateIdDisabled } = this.state;
 
     return (
       <div id="modal-head">
@@ -83,7 +84,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={RCi18n({id:'Product.Productcategory'})} dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
+            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={RCi18n({id:'Product.Productcategory'})} dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()} disabled={cateIdDisabled}>
               <TreeNode key="0" value="0" title="All">
                 {this.loop(fromJS(cates), fromJS(cates), 0)}
               </TreeNode>
@@ -124,6 +125,7 @@ export default class SearchForm extends React.Component<any, any> {
   }
 
   init = async () => {
+    const { goodsCate } = this.props;
     const fetchBrand = await webapi.fetchBrandList();
     const fetchCates = await webapi.fetchCateList();
 
@@ -132,7 +134,25 @@ export default class SearchForm extends React.Component<any, any> {
     const { res: catesRes } = fetchCates as any;
     const { context: cates } = catesRes;
 
-    this.setState({ brands: brands, cates: cates });
+    let defaultGoodsCategoryId = 0, isGoodsCategoryDisabled = false;
+    if (goodsCate) {
+      defaultGoodsCategoryId = (cates.find(ca => (ca.cateName || '').toLowerCase() === goodsCate) ?? {})['cateId'] ?? 0;
+      isGoodsCategoryDisabled = !!defaultGoodsCategoryId;
+    }
+
+    this.setState({
+      brands: brands,
+      cates: cates,
+      searchParams: {
+        ...this.state.searchParams,
+        cateId: defaultGoodsCategoryId
+      },
+      cateIdDisabled: isGoodsCategoryDisabled
+    }, () => {
+      if (defaultGoodsCategoryId) {
+        this.searchBackFun();
+      }
+    });
   };
 
   paramsOnChange = (key, value) => {

@@ -131,6 +131,10 @@ export default function index({ ...props }) {
         return 1;
       case 11:
         return 2;
+      case 14:
+        return 2;
+      case 15:
+        return 1;
     }
   };
   const switchFullMoney = (detail: any) => {
@@ -147,6 +151,8 @@ export default function index({ ...props }) {
         return detail?.fullDiscountLevelList?.[0].fullAmount || '';
       case 10:
         return detail.marketingFreeShippingLevel?.fullAmount;
+      case 15:
+        return detail?.fullLeafletLevelList?.[0].fullAmount || '';
       default:
         return '';
     }
@@ -165,6 +171,8 @@ export default function index({ ...props }) {
         return detail?.fullDiscountLevelList?.[0].fullCount || '';
       case 11:
         return detail.marketingFreeShippingLevel?.fullCount;
+      case 14:
+        return detail?.fullLeafletLevelList?.[0].fullCount || '';
       default:
         return '';
     }
@@ -191,6 +199,10 @@ export default function index({ ...props }) {
         return 3;
       case 11:
         return 3;
+      case 14:
+        return 5;
+      case 15:
+        return 5;
     }
   };
   const switchScopeType = (ScopeType) => {
@@ -213,12 +225,18 @@ export default function index({ ...props }) {
       result = await webapi.getMarketingInfo(props.match.params.id);
       let detail = result.res.context;
       let giftIds = []; //gift product id 集合
+      let leafletIds = []; //leaflet product id集合
       let customIds = []; //custom product id 集合
       let customRowList = []; //custom product 集合
       //当为gift时 去筛选custom和gift的product
       if (detail.subType === 4 || detail.subType === 5) {
         detail?.fullGiftLevelList?.[0].fullGiftDetailList.forEach((item) => {
           giftIds.push(item.productId);
+        });
+      }
+      if (detail.subType === 14 || detail.subType === 15) {
+        detail?.fullLeafletLevelList?.[0].fullLeafletDetailList.forEach((item) => {
+          leafletIds.push(item.productId);
         });
       }
       detail.marketingScopeList.forEach((item) => {
@@ -312,6 +330,11 @@ export default function index({ ...props }) {
             detail.subType === 4 || detail.subType === 5 ? detail.fullGiftLevelList : [],
           selectedGiftRows: detail.goodsList?.goodsInfoPage?.content.filter((item) => {
             return giftIds.includes(item.goodsInfoId);
+          }),
+          fullLeafletLevelList:
+            detail.subType === 14 || detail.subType === 15 ? detail.fullLeafletLevelList : [],
+          selectedLeafletRows: detail.goodsList?.goodsInfoPage?.content.filter((item) => {
+            return leafletIds.includes(item.goodsInfoId);
           })
         },
         /**

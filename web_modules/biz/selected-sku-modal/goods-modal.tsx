@@ -23,6 +23,8 @@ class GoodsModal extends React.Component<any, any> {
     //应用标示。如添加秒杀商品：saleType
     application?: string;
     titleContent?: any;
+    //英文的product category name
+    goodsCate?: string;
   };
 
   constructor(props) {
@@ -55,7 +57,8 @@ class GoodsModal extends React.Component<any, any> {
       showValidGood,
       searchParams,
       application,
-      titleContent=null
+      titleContent=null,
+      goodsCate
     } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     return (
@@ -100,6 +103,7 @@ class GoodsModal extends React.Component<any, any> {
             selectedRows={selectedRows}
             rowChangeBackFun={this.rowChangeBackFun}
             searchParams={searchParams}
+            goodsCate={goodsCate}
           />
         }
       </Modal>

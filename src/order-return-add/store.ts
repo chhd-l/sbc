@@ -473,7 +473,7 @@ export default class AppStore extends Store {
         okText: okText,
         cancelText: cancelText,
         onOk: () => {
-          return this.onAdd(param);
+          this.onAdd(param);
         }
       });
       return;

@@ -363,6 +363,7 @@ export default function Step6({setLoading}) {
         if(formData.Conditions.CartLimit === 2){
           fullLeafletLevelList[0].fullCount = formData.Conditions.fullItem
         }
+        fullLeafletLevelList[0]['fullLeafletDetailList'] = fullLeafletLevelList[0]['fullGiftDetailList'];
         let params =  {
           marketingType: 4,
           /**

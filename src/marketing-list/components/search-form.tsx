@@ -108,8 +108,8 @@ class SearchForm extends React.Component<any, any> {
                 <Option value={3}><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
                 {Const.SITE_NAME !== 'MYVETRECO' && <Option value={4}><FormattedMessage id="Marketing.Fullamountgift" /></Option>}
                 {Const.SITE_NAME !== 'MYVETRECO' && <Option value={5}><FormattedMessage id="Marketing.Fullquantitygift" /></Option>}
-                {/* <Option value="4">满金额赠</Option>
-            <Option value="5">满数量赠</Option> */}
+                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={14}><FormattedMessage id="Marketing.Fullquantityleaflet" /></Option>}
+                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={15}><FormattedMessage id="Marketing.Fullamountleaflet" /></Option>}
               </SelectGroup>
             </FormItem>
           </Col>{' '}

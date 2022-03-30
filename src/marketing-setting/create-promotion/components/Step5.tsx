@@ -35,7 +35,7 @@ function Step5({ form }) {
         fullAmount: null,
         fullCount: null,
         giftType: 1,
-        fullLeafletDetailList: []
+        fullGiftDetailList: []
       }
     ]);
     if (match.params.id) {

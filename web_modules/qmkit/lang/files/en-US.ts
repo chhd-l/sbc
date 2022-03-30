@@ -5583,4 +5583,6 @@ export default {
   "Marketing.AddLeafletRule": "Add leaflet rule",
   "Marketing.InventoryTooLow": "Insufficient inventory",
   "Setting.leaveStorePortal": "Are you sure you want to leave Store Portal?",
+  "Marketing.Fullamountleaflet": "Full amount leaflet",
+  "Marketing.Fullquantityleaflet": "Full quantity leaflet",
 };

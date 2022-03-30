@@ -34,7 +34,10 @@ export default class GoodsGrid extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this.init(this.props.searchParams? this.props.searchParams : {});
+    //如果有指定的product category传入，不执行立即搜索。等search form初始化完后触发指定的product category搜索
+    if (!this.props.goodsCate) {
+      this.init(this.props.searchParams? this.props.searchParams : {});
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {

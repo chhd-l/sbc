@@ -234,8 +234,9 @@ export default function index({ ...props }) {
           giftIds.push(item.productId);
         });
       }
-      if (detail.subType === 14 || detail.subType === 15) {
-        detail?.fullLeafletLevelList?.[0].fullLeafletDetailList.forEach((item) => {
+      if ((detail.subType === 14 || detail.subType === 15) && (detail?.fullLeafletLevelList ?? []).length > 0) {
+        detail.fullLeafletLevelList[0]['fullGiftDetailList'] = detail.fullLeafletLevelList[0]['fullLeafletDetailList'];
+        detail.fullLeafletLevelList[0].fullLeafletDetailList.forEach((item) => {
           leafletIds.push(item.productId);
         });
       }

@@ -19,7 +19,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new MarketingActor(), new GiftActor(), new LoadingActor()];
+    return [new MarketingActor(), new GiftActor(), new LoadingActor(), new LeafletActor()];
   }
 
   init = async (marketingId?: string) => {
@@ -40,7 +40,7 @@ export default class AppStore extends Store {
       if (marketing.res.context.marketingType == '4') {
         const leaflet = await webapi.fetchLeafletList({ marketingId: marketingId });
         if (leaflet.res.code === Const.SUCCESS_CODE) {
-          this.dispatch('leafletActor:init', fromJS(leaflet.res.context));
+          this.dispatch('leafletActor:init', fromJS({ leafletLevelList: leaflet.res.context?.levelList ?? [], leafletList: leaflet.res.context?.giftList ?? []}));
         }
       }
       if(marketing.res.context.scopeType == 2) { //category

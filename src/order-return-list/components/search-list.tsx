@@ -155,7 +155,7 @@ class SearchList extends React.Component<any, any> {
                       <th style={{ width: '10%' }}>
                         <FormattedMessage id="Order.consumerName" />
                       </th>
-                      <th style={{ width: '12%' }}>
+                      <th style={{ width: '10%' }}>
                         <FormattedMessage id="Order.originalAmount" />
                       </th>
                       <th style={{ width: '12%' }}>
@@ -533,11 +533,13 @@ class SearchList extends React.Component<any, any> {
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
                   {/* original amount */}
-                  <td style={{ width: '12%' }}>
+                  <td style={{ width: '10%' }}>
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                      v.get('returnItems').reduce((prev, cur) => {
-                        return Number(prev) + Number(cur.get('price'));
-                      }, 0)}
+                      parseFloat(
+                        v.get('returnItems').reduce((prev, cur) => {
+                          return Number(prev) + Number(cur.get('price'));
+                        }, 0)
+                      ).toFixed(2)}
                   </td>
                   <td style={{ width: '12%' }}>
                     {/* 退货/退款 都取totalPrice */}

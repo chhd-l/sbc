@@ -101,13 +101,14 @@ export default class AppStore extends Store {
   tableRulesDelete = (id) => {
     this.dispatch('freight: rules: delete', { id });
   };
-  tableRulesEdit = ({ id, field, value }) => {
-    this.dispatch('freight: rules: edit', { id, field, value });
+  tableRulesEdit = ({ id, index, field, value }) => {
+    this.dispatch('freight: rules: edit', { id, field, index, value });
     let { ruleTableList } = this.state().toJS();
-    const targetItem = ruleTableList.find((r) => r.id == id);
+    const targetItem = id ? ruleTableList.find((r) => r.id == id) : ruleTableList[index];
     this.dispatch('freight: rules: edit', {
       id,
       field: 'valid',
+      index,
       value:
         targetItem.orderInitialAmount !== '' &&
         targetItem.orderMaxAmount !== '' &&

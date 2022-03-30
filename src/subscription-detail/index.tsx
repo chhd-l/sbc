@@ -277,6 +277,7 @@ class SubscriptionDetail extends React.Component<any, any> {
           freeShippingFlag: res.context.freeShippingFlag ?? false,
           freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
           subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
+          serviceFeePrice: res.context.serviceFeePrice ?? 0,
           promotionVOList: res.context.promotionVOList ?? []
         });
       }
@@ -856,6 +857,21 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ))}
 
+                {this.state.taxFeePrice && (
+                  <div className="flex-between">
+                    <span>
+                      <FormattedMessage id="Order.consumptionTax" />
+                    </span>
+                    <span style={styles.priceStyle}>
+                      {currencySymbol +
+                        ' -' +
+                        this.getSubscriptionPrice(
+                          this.state.taxFeePrice ? this.state.taxFeePrice : 0
+                        )}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex-between">
                   <span>
                     <FormattedMessage id="Subscription.Shipping" />
@@ -897,6 +913,20 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ) : null}
 
+                {this.state.serviceFeePrice && (
+                  <div className="flex-between">
+                    <span>
+                      <FormattedMessage id="Order.serviceFeePrice" />
+                    </span>
+                    <span style={styles.priceStyle}>
+                      {currencySymbol +
+                        ' -' +
+                        this.getSubscriptionPrice(
+                          this.state.serviceFeePrice ? this.state.serviceFeePrice : 0
+                        )}
+                    </span>
+                  </div>
+                )}
                 <div className="flex-between">
                   <span>
                     <span>
@@ -950,7 +980,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                         </p>
                         <p>
                           {deliveryAddressInfo
-                            ? deliveryAddressInfo.lastNameKatakana + ' ' + deliveryAddressInfo.firstNameKatakana
+                            ? deliveryAddressInfo.lastNameKatakana +
+                              ' ' +
+                              deliveryAddressInfo.firstNameKatakana
                             : ''}
                         </p>
                       </Col>
@@ -992,86 +1024,86 @@ class SubscriptionDetail extends React.Component<any, any> {
                       </Col>
                     </>
                   ) : (
-                  <>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Name" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo
-                          ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
-                          : ''}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.City" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo.city}</p>
-                    </Col>
-                    {deliveryAddressInfo.province ? (
+                    <>
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.State" />:{' '}
+                          <FormattedMessage id="Subscription.Name" />:{' '}
                         </p>
-                        <p>{deliveryAddressInfo.province}</p>
+                        <p>
+                          {deliveryAddressInfo
+                            ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
+                            : ''}
+                        </p>
                       </Col>
-                    ) : null}
-
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Country" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo.countryId
-                          ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
-                          : deliveryAddressInfo.country}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address1" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
-                    </Col>
-
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address2" />:{' '}
-                      </p>
-                      <p className="delivery_detail_address2">
-                        {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
-                      </p>
-                    </Col>
-
-                    {deliveryAddressInfo?.county ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.County" />:{' '}
+                          <FormattedMessage id="Subscription.City" />:{' '}
                         </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                        <p>{deliveryAddressInfo.city}</p>
                       </Col>
-                    ) : null}
+                      {deliveryAddressInfo.province ? (
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.State" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.province}</p>
+                        </Col>
+                      ) : null}
 
-                    {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
                       <Col span={24}>
                         <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.WorkTime" />:{' '}
+                          <FormattedMessage id="Subscription.Country" />:{' '}
                         </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                        <p>
+                          {deliveryAddressInfo.countryId
+                            ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
+                            : deliveryAddressInfo.country}
+                        </p>
                       </Col>
-                    ) : null}
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.Address1" />:{' '}
+                        </p>
+                        <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
+                      </Col>
 
-                    {/*根据地址是否属于黑名单进而决定是否显示*/}
-                    <Col span={24}>
-                      {!deliveryAddressInfo.validFlag
-                        ? deliveryAddressInfo.alert && (
-                            <PostalCodeMsg text={deliveryAddressInfo.alert} />
-                          )
-                        : null}
-                    </Col>
-                  </>
-                )}
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.Address2" />:{' '}
+                        </p>
+                        <p className="delivery_detail_address2">
+                          {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                        </p>
+                      </Col>
+
+                      {deliveryAddressInfo?.county ? (
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.County" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                        </Col>
+                      ) : null}
+
+                      {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.WorkTime" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                        </Col>
+                      ) : null}
+
+                      {/*根据地址是否属于黑名单进而决定是否显示*/}
+                      <Col span={24}>
+                        {!deliveryAddressInfo.validFlag
+                          ? deliveryAddressInfo.alert && (
+                              <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                            )
+                          : null}
+                      </Col>
+                    </>
+                  )}
                 </Row>
               </Col>
               {/* 如果是俄罗斯or日本 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
@@ -1235,7 +1267,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <FormattedMessage id="Subscription.CashOnDelivery" />
                       </p>
                     </Col>
-                  ) :paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
+                  ) : paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
                     <Col span={24}>
                       <p style={{ width: 140 }}>
                         <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
@@ -1244,7 +1276,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                         <FormattedMessage id="Subscription.Paypal" />
                       </p>
                     </Col>
-                  ): null}
+                  ) : null}
                 </Row>
               </Col>
             </Row>

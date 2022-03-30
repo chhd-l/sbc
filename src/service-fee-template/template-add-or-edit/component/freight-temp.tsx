@@ -257,7 +257,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   render: (text, record, index) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(`orderInitialAmount_${record.id}`, {
+                        {getFieldDecorator(`orderInitialAmount_${index}`, {
                           initialValue: text,
                           rules: this._validMoney()
                         })(
@@ -267,6 +267,7 @@ export default class FreightTemp extends React.Component<any, any> {
                             onChange={(e) => {
                               tableRulesEdit({
                                 id: record.id,
+                                index,
                                 field: 'orderInitialAmount',
                                 value: e.target.value
                               });
@@ -286,7 +287,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   render: (text, record, index) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(`orderMaxAmount_${record.id}`, {
+                        {getFieldDecorator(`orderMaxAmount_${index}`, {
                           initialValue: text,
                           rules: this._validMaxAmountMoney(record)
                         })(
@@ -296,6 +297,7 @@ export default class FreightTemp extends React.Component<any, any> {
                             onChange={(e) => {
                               tableRulesEdit({
                                 id: record.id,
+                                index,
                                 field: 'orderMaxAmount',
                                 value: e.target.value
                               });
@@ -315,7 +317,7 @@ export default class FreightTemp extends React.Component<any, any> {
                   render: (text, record, index) => {
                     return (
                       <FormItem>
-                        {getFieldDecorator(`ruleSetting_${record.id}`, {
+                        {getFieldDecorator(`ruleSetting_${index}`, {
                           initialValue: text,
                           rules: [{ required: true, message: 'Please select...' }]
                         })(
@@ -324,7 +326,7 @@ export default class FreightTemp extends React.Component<any, any> {
                             disabled={index !== ruleTableList.length - 1}
                             style={{ width: 100 }}
                             onChange={(value) => {
-                              tableRulesEdit({ id: record.id, field: 'ruleSetting', value });
+                              tableRulesEdit({ id: record.id, index, field: 'ruleSetting', value });
                             }}
                           >
                             <Option value={2}>
@@ -350,7 +352,7 @@ export default class FreightTemp extends React.Component<any, any> {
                       <>
                         <FormItem>
                           <InlineBDiv>
-                            {getFieldDecorator(`amountOrPercentageVal_${record.id}`, {
+                            {getFieldDecorator(`amountOrPercentageVal_${index}`, {
                               initialValue: text,
                               rules:
                                 record.ruleSetting === 1 ? this._validMoney() : this._validPercent()
@@ -362,6 +364,7 @@ export default class FreightTemp extends React.Component<any, any> {
                                 onChange={(e) => {
                                   tableRulesEdit({
                                     id: record.id,
+                                    index,
                                     field: 'amountOrPercentageVal',
                                     value: e.target.value
                                   });

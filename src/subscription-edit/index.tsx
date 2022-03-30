@@ -1304,8 +1304,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       // operationLog
     } = this.state;
 
-    /* 需要有多条产品数据，才能删除 */
-    const canDeleteProduct = goodsInfo.length > 1;
+    /* 需要有多条产品数据，才能删除, 移到sp11上线 */
+    const canDeleteProduct = false && goodsInfo.length > 1;
 
     const columns = [
       {
@@ -1344,9 +1344,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   okText={<FormattedMessage id="Subscription.Confirm" />}
                   cancelText={<FormattedMessage id="Subscription.Cancel" />}
                 >
-                  <Tooltip placement="top" title={<FormattedMessage id="Subscription.DeleteTip" />}>
-                    <a className="iconfont iconDelete" />
-                  </Tooltip>
+                  <a className="iconfont iconDelete" />
                 </Popconfirm>
               ) : null}
             </span>

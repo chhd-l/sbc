@@ -3,7 +3,17 @@ import { IMap, Relax } from 'plume2';
 import { fromJS, List } from 'immutable';
 import momnet from 'moment';
 import { Link } from 'react-router-dom';
-import { Checkbox, Input, InputNumber, message, Modal, Pagination, Popconfirm, Spin, Tooltip } from 'antd';
+import {
+  Checkbox,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Pagination,
+  Popconfirm,
+  Spin,
+  Tooltip
+} from 'antd';
 import { AuthWrapper, Const, getOrderStatusValue, noop } from 'qmkit';
 import { DeliverModal, OnlineRefundModal, RefundModal, RejectModal } from 'biz';
 import { allCheckedQL } from '../ql';
@@ -56,7 +66,7 @@ class SearchList extends React.Component<any, any> {
       onlineRefundModalData: IMap;
       onlineRefundModalHide: Function;
       changeRefundPrice: Function;
-      pendingRefundConfig:IMap;
+      pendingRefundConfig: IMap;
     };
   };
 
@@ -95,11 +105,26 @@ class SearchList extends React.Component<any, any> {
     onlineRefundModalData: 'onlineRefundModalData',
     onlineRefundModalHide: noop,
     changeRefundPrice: noop,
-    pendingRefundConfig:'pendingRefundConfig'
+    pendingRefundConfig: 'pendingRefundConfig'
   };
 
   render() {
-    const { loading, total, pageSize, currentPage, init,  dataList,  rejectModalData, onRejectModalHide, deliverModalData, onDeliverModalHide, refundModalData, onRefundModalHide, onlineRefundModalData, onlineRefundModalHide } = this.props.relaxProps;
+    const {
+      loading,
+      total,
+      pageSize,
+      currentPage,
+      init,
+      dataList,
+      rejectModalData,
+      onRejectModalHide,
+      deliverModalData,
+      onDeliverModalHide,
+      refundModalData,
+      onRefundModalHide,
+      onlineRefundModalData,
+      onlineRefundModalHide
+    } = this.props.relaxProps;
     return (
       <div>
         <div className="ant-table-wrapper">
@@ -131,6 +156,9 @@ class SearchList extends React.Component<any, any> {
                         <FormattedMessage id="Order.consumerName" />
                       </th>
                       <th style={{ width: '12%' }}>
+                        <FormattedMessage id="Order.originalAmount" />
+                      </th>
+                      <th style={{ width: '12%' }}>
                         <FormattedMessage id="Order.refundableAmount" />
                       </th>
                       {/* <th style={{ width: '10%' }}>
@@ -147,14 +175,16 @@ class SearchList extends React.Component<any, any> {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
+                  <tbody className="ant-table-tbody">
+                    {loading ? this._renderLoading() : this._renderContent(dataList)}
+                  </tbody>
                 </table>
               </div>
               {total == 0 ? (
                 <div className="ant-table-placeholder">
                   <span>
                     <i className="anticon anticon-frown-o" />
-                    <FormattedMessage id="Order.noData"/>
+                    <FormattedMessage id="Order.noData" />
                   </span>
                 </div>
               ) : null}
@@ -175,9 +205,21 @@ class SearchList extends React.Component<any, any> {
             />
           ) : null}
         </div>
-        <RejectModal data={rejectModalData} onHide={onRejectModalHide} handleOk={rejectModalData.get('onOk')} />
-        <DeliverModal data={deliverModalData} onHide={onDeliverModalHide} handleOk={deliverModalData.get('onOk')} />
-        <RefundModal data={refundModalData} onHide={onRefundModalHide} handleOk={refundModalData.get('onOk')} />
+        <RejectModal
+          data={rejectModalData}
+          onHide={onRejectModalHide}
+          handleOk={rejectModalData.get('onOk')}
+        />
+        <DeliverModal
+          data={deliverModalData}
+          onHide={onDeliverModalHide}
+          handleOk={deliverModalData.get('onOk')}
+        />
+        <RefundModal
+          data={refundModalData}
+          onHide={onRefundModalHide}
+          handleOk={refundModalData.get('onOk')}
+        />
 
         <OnlineRefundModal data={onlineRefundModalData} onHide={onlineRefundModalHide} />
       </div>
@@ -195,7 +237,18 @@ class SearchList extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, onRealRefund, onReject, onDeliver, onReceive, onRejectReceive, onOnlineRefund, onOfflineRefund, onRejectRefund } = this.props.relaxProps;
+    const {
+      onChecked,
+      onAudit,
+      onRealRefund,
+      onReject,
+      onDeliver,
+      onReceive,
+      onRejectReceive,
+      onOnlineRefund,
+      onOfflineRefund,
+      onRejectRefund
+    } = this.props.relaxProps;
 
     return dataList.map((v, index) => {
       const rid = v.get('id');
@@ -227,7 +280,12 @@ class SearchList extends React.Component<any, any> {
 
       const refundStatus = v.get('refundStatus');
 
-      const enableReturn = (returnFlowState === 'RECEIVED' || (returnType == 'REFUND' && returnFlowState === 'AUDIT')) && refundStatus != null && refundStatus != 2 && refundStatus != 3;
+      const enableReturn =
+        (returnFlowState === 'RECEIVED' ||
+          (returnType == 'REFUND' && returnFlowState === 'AUDIT')) &&
+        refundStatus != null &&
+        refundStatus != 2 &&
+        refundStatus != 3;
 
       return (
         <tr className="ant-table-row  ant-table-row-level-0" key={Math.random()}>
@@ -259,49 +317,76 @@ class SearchList extends React.Component<any, any> {
                         />
                       </span> */}
                       <span style={{ marginLeft: 20, color: '#000' }}>
-                        {rid} {v.get('platform') != 'CUSTOMER' && <span style={styles.platform}><FormattedMessage id="Order.Return" /></span>}
+                        {rid}{' '}
+                        {v.get('platform') != 'CUSTOMER' && (
+                          <span style={styles.platform}>
+                            <FormattedMessage id="Order.Return" />
+                          </span>
+                        )}
                       </span>
                       <span style={{ marginRight: 0, float: 'right' }}>
                         {returnFlowState === 'PENDING_REVIEW' && (
                           <AuthWrapper functionName="f_return_review">
-
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.Approve'})}>
-                              <a style={{ marginLeft: 20 }} onClick={
-                                () => {
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.Approve' })}
+                            >
+                              <a
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
                                   this._showAudit(onAudit, rid);
-                                }
-                              }>
+                                }}
+                              >
                                 <FormattedMessage id="Order.Approve" />
-                                </a>
-
+                              </a>
                             </Tooltip>
 
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.Reject'})}>
-                              <a style={{ marginLeft: 20 }} onClick={
-                                () => {
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.Reject' })}
+                            >
+                              <a
+                                style={{ marginLeft: 20 }}
+                                onClick={() => {
                                   this._showReject(onReject, rid);
-                                }
-                              }>
+                                }}
+                              >
                                 <FormattedMessage id="Order.Reject" />
-                                </a>
+                              </a>
                             </Tooltip>
                           </AuthWrapper>
                         )}
 
                         {returnFlowState === 'TO_BE_DELIVERED' && (
                           <AuthWrapper functionName="f_return_delivered">
-                            <Popconfirm placement="topLeft" title={<FormattedMessage id="Order.skipLogisticsAlert"/>} onConfirm={() => {
-                              this._showDeliver(onDeliver, rid, false)
-                            }} okText={<FormattedMessage id="Order.btnConfirm"/>} cancelText={<FormattedMessage id="Order.btnCancel"/>}>
-                              <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.skipLogistics'})}>
+                            <Popconfirm
+                              placement="topLeft"
+                              title={<FormattedMessage id="Order.skipLogisticsAlert" />}
+                              onConfirm={() => {
+                                this._showDeliver(onDeliver, rid, false);
+                              }}
+                              okText={<FormattedMessage id="Order.btnConfirm" />}
+                              cancelText={<FormattedMessage id="Order.btnCancel" />}
+                            >
+                              <Tooltip
+                                placement="top"
+                                title={(window as any).RCi18n({ id: 'Order.skipLogistics' })}
+                              >
                                 <a style={{ marginLeft: 20 }}>
-                                  <FormattedMessage id="Order.skipLogistics"/>
+                                  <FormattedMessage id="Order.skipLogistics" />
                                 </a>
                               </Tooltip>
                             </Popconfirm>
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.fillLogistics'})}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showDeliver(onDeliver, rid, true)}>
-                                <FormattedMessage id="Order.fillLogistics"/>
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.fillLogistics' })}
+                            >
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => this._showDeliver(onDeliver, rid, true)}
+                              >
+                                <FormattedMessage id="Order.fillLogistics" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>
@@ -309,22 +394,39 @@ class SearchList extends React.Component<any, any> {
 
                         {returnFlowState === 'TO_BE_RECEIVED' && (
                           <AuthWrapper functionName="f_return_received">
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RecipientAccepted'})}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showReceive(onReceive, rid)}>
-                                <FormattedMessage id="Order.RecipientAccepted"/>
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.RecipientAccepted' })}
+                            >
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => this._showReceive(onReceive, rid)}
+                              >
+                                <FormattedMessage id="Order.RecipientAccepted" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RecipientRejected'})}>
-                              <a href="javascript:void(0)" style={{ marginLeft: 20 }} onClick={() => this._showRejectReceive(onRejectReceive, rid)}>
-                                <FormattedMessage id="Order.RecipientRejected"/>
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.RecipientRejected' })}
+                            >
+                              <a
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                                onClick={() => this._showRejectReceive(onRejectReceive, rid)}
+                              >
+                                <FormattedMessage id="Order.RecipientRejected" />
                               </a>
                             </Tooltip>
-
                           </AuthWrapper>
                         )}
-                        {returnFlowState === 'PENDING_REFUND' && this.showPendingRefundBtn(payType)? (
+                        {returnFlowState === 'PENDING_REFUND' &&
+                        this.showPendingRefundBtn(payType) ? (
                           <AuthWrapper functionName="f_return_refund">
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.refusedToRefund'})}>
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.refusedToRefund' })}
+                            >
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
@@ -336,23 +438,37 @@ class SearchList extends React.Component<any, any> {
                                 <FormattedMessage id="Order.refusedToRefund" />
                               </a>
                             </Tooltip>
-                            <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.RealRefund'})}>
+                            <Tooltip
+                              placement="top"
+                              title={(window as any).RCi18n({ id: 'Order.RealRefund' })}
+                            >
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
                                 onClick={() => {
-                                  this._showRealRefund(onRealRefund, rid, returnType == 'REFUND' ? applyPrice : totalPrice);
+                                  this._showRealRefund(
+                                    onRealRefund,
+                                    rid,
+                                    returnType == 'REFUND' ? applyPrice : totalPrice
+                                  );
                                 }}
                               >
                                 <FormattedMessage id="Order.RealRefund" />
                               </a>
                             </Tooltip>
                           </AuthWrapper>
-                        ):null}
+                        ) : null}
 
                         <AuthWrapper functionName="f_retrun_detail">
-                          <Tooltip placement="top" title={(window as any).RCi18n({id:'Order.detail'})}>
-                            <Link style={{ marginRight: 18, marginLeft: 20 }} to={`/order-return-detail/${rid}`} className="iconfont iconDetails">
+                          <Tooltip
+                            placement="top"
+                            title={(window as any).RCi18n({ id: 'Order.detail' })}
+                          >
+                            <Link
+                              style={{ marginRight: 18, marginLeft: 20 }}
+                              to={`/order-return-detail/${rid}`}
+                              className="iconfont iconDetails"
+                            >
                               {/*<FormattedMessage id="order.seeDetails" />*/}
                             </Link>
                           </Tooltip>
@@ -372,7 +488,9 @@ class SearchList extends React.Component<any, any> {
                       .concat(returnGifts)
                       .map((v, k) => {
                         const img = v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg;
-                        return k < 3 ? <img style={styles.imgItem} src={img} title={v.get('skuName')} key={k} /> : null;
+                        return k < 3 ? (
+                          <img style={styles.imgItem} src={img} title={v.get('skuName')} key={k} />
+                        ) : null;
                       })}
 
                     {
@@ -382,11 +500,20 @@ class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('returnItems').concat(returnGifts).get(3).get('pic') ? util.optimizeImage(v.get('returnItems').concat(returnGifts).get(3).get('pic')) : defaultImg}
+                            src={
+                              v.get('returnItems').concat(returnGifts).get(3).get('pic')
+                                ? util.optimizeImage(
+                                    v.get('returnItems').concat(returnGifts).get(3).get('pic')
+                                  )
+                                : defaultImg
+                            }
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}><FormattedMessage id="Order.Total"/> {v.get('returnItems').concat(returnGifts).size}</div>
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="Order.Total" />{' '}
+                            {v.get('returnItems').concat(returnGifts).size}
+                          </div>
                         </div>
                       ) : null
                     }
@@ -397,21 +524,40 @@ class SearchList extends React.Component<any, any> {
                   </td>
                   <td style={{ width: '12%' }}>
                     {/*退单时间*/}
-                    {v.get('createTime') ? momnet(v.get('createTime')).format(Const.TIME_FORMAT).toString() : ''}
+                    {v.get('createTime')
+                      ? momnet(v.get('createTime')).format(Const.TIME_FORMAT).toString()
+                      : ''}
                   </td>
                   <td style={{ width: '12%' }}>
                     {/*收件人姓名*/}
                     {v.get('buyer') ? v.getIn(['buyer', 'name']) : ''}
                   </td>
-                  <td style={{ width: '12%' }}>{
-                    returnType === 'REFUND' ?
-                      (applyPrice || applyPrice === 0 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(applyPrice).toFixed(2) : '-') :
-                      (totalPrice || totalPrice === 0 ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(totalPrice).toFixed(2) : '-')}</td>
+                  {/* original amount */}
+                  <td style={{ width: '12%' }}>
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      v.get('returnItems').reduce((prev, cur) => {
+                        return Number(prev) + Number(cur.get('price'));
+                      }, 0)}
+                  </td>
+                  <td style={{ width: '12%' }}>
+                    {/* 退货/退款 都取totalPrice */}
+                    {returnType === 'REFUND' && false
+                      ? applyPrice || applyPrice === 0
+                        ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                          parseFloat(applyPrice).toFixed(2)
+                        : '-'
+                      : totalPrice || totalPrice === 0
+                      ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                        parseFloat(totalPrice).toFixed(2)
+                      : '-'}
+                  </td>
                   {/*应退积分*/}
                   {/* <td style={{ width: '10%' }}>{applyPoints}</td> */}
                   {/*状态*/}
                   <td style={{ width: '12%' }}>
-                    <FormattedMessage id={getOrderStatusValue('ReturnOrderStatus', returnFlowState)} />
+                    <FormattedMessage
+                      id={getOrderStatusValue('ReturnOrderStatus', returnFlowState)}
+                    />
                     {/* {returnFlowState == 'REFUND_FAILED' && (
                       <Tooltip title={v.get('refundFailedReason')}>
                         <a style={{ display: 'block' }}>原因</a>
@@ -419,7 +565,12 @@ class SearchList extends React.Component<any, any> {
                     )} */}
                   </td>
                   {/*实退金额*/}
-                  <td style={{ width: '12%' }}>{returnFlowState == 'COMPLETED' ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + parseFloat(actualReturnPrice).toFixed(2) : '-'}</td>
+                  <td style={{ width: '12%' }}>
+                    {returnFlowState == 'COMPLETED'
+                      ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                        parseFloat(actualReturnPrice).toFixed(2)
+                      : '-'}
+                  </td>
                   {/*实退积分*/}
                   {/* <td
                     style={{
@@ -444,51 +595,54 @@ class SearchList extends React.Component<any, any> {
   }
 
   async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
-    const title = (window as any).RCi18n({id:'Order.confirmRefund'});
-    const alert1 = (window as any).RCi18n({id:'Order.refundAlert1'});
-    const alert2 = (window as any).RCi18n({id:'Order.refundAlert2'});
+    const title = (window as any).RCi18n({ id: 'Order.confirmRefund' });
+    const alert1 = (window as any).RCi18n({ id: 'Order.refundAlert1' });
+    const alert2 = (window as any).RCi18n({ id: 'Order.refundAlert2' });
+    const alert3 = (window as any).RCi18n({ id: 'Order.refundAlert3' });
     confirm({
       title: title,
-      okText: (window as any).RCi18n({id:'Order.OK'}),
-      content: <div>
-        <p>{alert1}</p>
-        <p>{alert2}</p>
-
-        {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
-        <InputNumber
-          min={0.01}
-          max={applyPrice}
-          defaultValue={applyPrice}
-          // formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
-          // parser={value => {
-          //   let currentSymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG).trim()
-          //   value = value.replace(currentSymbol, '');
-          //   value = value.replace(/\s?|(,*)/g, '');
-          //   return value;
-          // }}
-          onChange={this.changeRealRefund}
-        />
-      </div>,
+      okText: (window as any).RCi18n({ id: 'Order.OK' }),
+      content: (
+        <div>
+          <p>{alert1}</p>
+          <p>{alert2}</p>
+          {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
+          <InputNumber
+            min={0.01}
+            max={applyPrice}
+            defaultValue={applyPrice}
+            // formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
+            // parser={value => {
+            //   let currentSymbol = sessionStorage.getItem(cache.SYSTEM_GET_CONFIG).trim()
+            //   value = value.replace(currentSymbol, '');
+            //   value = value.replace(/\s?|(,*)/g, '');
+            //   return value;
+            // }}
+            onChange={this.changeRealRefund}
+          />
+          <p>
+            <span style={{ color: 'red' }}>*</span> {alert3}
+          </p>
+        </div>
+      ),
       onOk() {
         return onRealRefund(rid, applyPrice);
       },
-      onCancel() {
-
-      }
+      onCancel() {}
     });
   }
 
   // 审核
   async _showAudit(onAudit: Function, rid: string) {
-    const alert = (window as any).RCi18n({id:'Order.approveAlert'});
-    const title = (window as any).RCi18n({id:'Order.Approve'});
+    const alert = (window as any).RCi18n({ id: 'Order.approveAlert' });
+    const title = (window as any).RCi18n({ id: 'Order.Approve' });
     confirm({
       title: title,
       content: alert,
       onOk() {
         return onAudit(rid);
       },
-      onCancel() { }
+      onCancel() {}
     });
   }
 
@@ -511,24 +665,21 @@ class SearchList extends React.Component<any, any> {
         rid: rid
       });
     } else {
-      onDeliver(rid, false)
+      onDeliver(rid, false);
     }
-
-
-
   }
 
   // 收货
   _showReceive(onReceive: Function, rid: string) {
-    const title = (window as any).RCi18n({id:'Order.ConfirmReceipt'});
-    const alert = (window as any).RCi18n({id:'Order.receiptAlert'});
+    const title = (window as any).RCi18n({ id: 'Order.ConfirmReceipt' });
+    const alert = (window as any).RCi18n({ id: 'Order.receiptAlert' });
     confirm({
       title: title,
       content: alert,
       onOk() {
         return onReceive(rid);
       },
-      onCancel() { }
+      onCancel() {}
     });
   }
 
@@ -543,7 +694,13 @@ class SearchList extends React.Component<any, any> {
   }
 
   // 在线退款
-  async _showOnlineRefund(onOnlineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
+  async _showOnlineRefund(
+    onOnlineRefund: Function,
+    rid: string,
+    customerId: string,
+    refundAmount: number,
+    applyPoints: number
+  ) {
     this.props.relaxProps.onRefundOnlineModalChange({
       visible: true,
       onOk: onOnlineRefund,
@@ -555,7 +712,13 @@ class SearchList extends React.Component<any, any> {
   }
 
   // 线下退款
-  async _showOfflineRefund(onOfflineRefund: Function, rid: string, customerId: string, refundAmount: number, applyPoints: number) {
+  async _showOfflineRefund(
+    onOfflineRefund: Function,
+    rid: string,
+    customerId: string,
+    refundAmount: number,
+    applyPoints: number
+  ) {
     this.props.relaxProps.onRefundModalChange({
       visible: true,
       onOk: onOfflineRefund,
@@ -596,30 +759,29 @@ class SearchList extends React.Component<any, any> {
       });
     }
 
-
     // } else {
     //   message.error('此功能您没有权限访问');
     //   return;
     // }
   }
-  changeRealRefund = (value) => {    
+  changeRealRefund = (value) => {
     this.props.relaxProps.changeRefundPrice({
       refundPrice: value
-    })
-  }
-  showPendingRefundBtn=(payType)=>{
-    const {pendingRefundConfig}= this.props.relaxProps;
-    if(payType===0){
-      return pendingRefundConfig.get('online')
+    });
+  };
+  showPendingRefundBtn = (payType) => {
+    const { pendingRefundConfig } = this.props.relaxProps;
+    if (payType === 0) {
+      return pendingRefundConfig.get('online');
     }
-    if(payType===1){
-      return pendingRefundConfig.get('cashOnDelivery')
+    if (payType === 1) {
+      return pendingRefundConfig.get('cashOnDelivery');
     }
-    if(payType===2){
-      return pendingRefundConfig.get('cash')
+    if (payType === 2) {
+      return pendingRefundConfig.get('cash');
     }
-    return 1
-  }
+    return 1;
+  };
 }
 
 export default injectIntl(SearchList);

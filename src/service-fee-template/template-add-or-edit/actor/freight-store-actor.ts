@@ -157,8 +157,8 @@ export default class FreightStoreActor extends Actor {
    * @param param1
    */
   @Action('freight: rules: edit')
-  tableRulesEdit(state: IMap, { id, field, value }) {
-    const index = state.get('ruleTableList').findIndex((r) => r.get('id') == id);
-    return state.updateIn(['ruleTableList', index, field], () => value);
+  tableRulesEdit(state: IMap, { id, index, field, value }) {
+    const idx = id ? state.get('ruleTableList').findIndex((r) => r.get('id') == id) : index;
+    return state.updateIn(['ruleTableList', idx, field], () => value);
   }
 }

@@ -5585,4 +5585,7 @@ export default {
   "Setting.leaveStorePortal": "Are you sure you want to leave Store Portal?",
   "Marketing.Fullamountleaflet": "Full amount leaflet",
   "Marketing.Fullquantityleaflet": "Full quantity leaflet",
+  "Marketing.leaflet": "Commercial leaflet",
+  "Marketing.FirstSubRec": "First subscription order reduction",
+  "Marketing.RestSubRec": "Rest subscription order reduction",
 };

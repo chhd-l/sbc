@@ -39,6 +39,7 @@ export const enumConst = {
     0: <FormattedMessage id="Marketing.Amount" />,
     1: <FormattedMessage id="Marketing.Percentage" />,
     3: <FormattedMessage id="Marketing.Freeshipping" />,
-    4: <FormattedMessage id="Marketing.Gifts" />
+    4: <FormattedMessage id="Marketing.Gifts" />,
+    5: <FormattedMessage id="Marketing.leaflet" />,
   }
 }

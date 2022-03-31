@@ -529,13 +529,13 @@ export default function Step6({setLoading}) {
                     (
                       <>
                         <div className="step-summary-item">
-                          <div className="step-summary-sub-title">First subscription order reduction:</div>
+                          <div className="step-summary-sub-title"><FormattedMessage id="Marketing.FirstSubRec"/>:</div>
                           <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                         </div>
                         {
                           formData.Advantage.restSubscriptionOrderReduction && (
                             <div className="step-summary-item">
-                              <div className="step-summary-sub-title">Rest subscription order reduction:</div>
+                              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.RestSubRec"/>:</div>
                               <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                             </div>
                           )
@@ -581,7 +581,7 @@ export default function Step6({setLoading}) {
               ) : (
                 <>
                   {
-                    formData.Advantage.couponPromotionType !== 4 &&
+                    formData.Advantage.couponPromotionType !== 4 && formData.Advantage.couponPromotionType !== 5 ?
                     (<div className="step-summary-item">
                       <div className="step-summary-sub-title">
                         {
@@ -596,7 +596,7 @@ export default function Step6({setLoading}) {
                         {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                         {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       </div>
-                    </div>)
+                    </div>) : null
                   }
                   {
                     formData.Advantage.couponPromotionType === 1 && (
@@ -610,7 +610,7 @@ export default function Step6({setLoading}) {
               )
             }
             {
-              formData.Advantage.couponPromotionType === 4 &&
+              formData.Advantage.couponPromotionType === 4 || formData.Advantage.couponPromotionType === 5 ?
               (
                 <div className="step-summary-item">
                   <div className="step-summary-sub-title">
@@ -622,14 +622,14 @@ export default function Step6({setLoading}) {
                   <div className="step-summary-item-text">
                     <>
                       {
-                        (formData.Advantage.selectedGiftRows || []).map(item=>
+                        ((formData.Advantage.couponPromotionType === 4 ? formData.Advantage.selectedGiftRows : formData.Advantage.selectedLeafletRows) || []).map(item=>
                           <span style={{paddingRight:6}}>{item.goodsInfoName}</span>
                         )
                       }
                     </>
                   </div>
                 </div>
-              )
+              ) : null
             }
           </div>
         </div>

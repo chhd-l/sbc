@@ -248,6 +248,9 @@ export default function index({ ...props }) {
         if (scopeItem) {
           customRowList.push({ ...item, productNumber: scopeItem.number || 1 });
         }
+        //goodsInfo添加cateName和brandName
+        item.cateName = ((detail.goodsList?.cates ?? []).find(ct => ct.cateId === item.cateId) ?? {})['cateName'] ?? '';
+        item.brandName = ((detail.goodsList?.brands ?? []).find(bd => bd.brandId === item.brandId) ?? {})['brandName'] ?? '';
       });
       setFormData({
         /**

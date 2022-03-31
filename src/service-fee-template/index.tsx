@@ -50,7 +50,7 @@ export default class FreightTemplate extends React.Component<any, any> {
           }}
         >
           <Headline
-            title={<FormattedMessage id="Menu.Service fee" />}
+            title={<FormattedMessage id="Menu.Service fee template" />}
             style={{ marginBottom: 0 }}
           />
           <Button

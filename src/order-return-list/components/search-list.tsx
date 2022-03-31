@@ -449,7 +449,8 @@ class SearchList extends React.Component<any, any> {
                                   this._showRealRefund(
                                     onRealRefund,
                                     rid,
-                                    returnType == 'REFUND' ? applyPrice : totalPrice
+                                    applyPrice // 退款退货都改成applyPrice
+                                    // returnType == 'REFUND' ? applyPrice : totalPrice
                                   );
                                 }}
                               >

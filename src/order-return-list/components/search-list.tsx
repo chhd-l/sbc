@@ -445,13 +445,15 @@ class SearchList extends React.Component<any, any> {
                               <a
                                 href="javascript:void(0)"
                                 style={{ marginLeft: 20 }}
+                                // 退款退货都改成applyPrice
+                                // returnType == 'REFUND' ? applyPrice : totalPrice
                                 onClick={() => {
-                                  this._showRealRefund(
+                                  this._showRealRefund({
                                     onRealRefund,
                                     rid,
-                                    applyPrice // 退款退货都改成applyPrice
-                                    // returnType == 'REFUND' ? applyPrice : totalPrice
-                                  );
+                                    applyPrice,
+                                    totalPrice
+                                  });
                                 }}
                               >
                                 <FormattedMessage id="Order.RealRefund" />
@@ -597,7 +599,17 @@ class SearchList extends React.Component<any, any> {
     });
   }
 
-  async _showRealRefund(onRealRefund: Function, rid: string, applyPrice: number) {
+  async _showRealRefund({
+    onRealRefund,
+    rid,
+    applyPrice,
+    totalPrice
+  }: {
+    onRealRefund: Function;
+    rid: string;
+    applyPrice: number;
+    totalPrice: number;
+  }) {
     const title = (window as any).RCi18n({ id: 'Order.confirmRefund' });
     const alert1 = (window as any).RCi18n({ id: 'Order.refundAlert1' });
     const alert2 = (window as any).RCi18n({ id: 'Order.refundAlert2' });
@@ -612,7 +624,7 @@ class SearchList extends React.Component<any, any> {
           {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}{' '}
           <InputNumber
             min={0.01}
-            max={applyPrice}
+            max={totalPrice}
             defaultValue={applyPrice}
             // formatter={value => `${sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} ${value}`}
             // parser={value => {

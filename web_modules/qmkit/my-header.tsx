@@ -552,11 +552,11 @@ export default class MyHeader extends React.Component {
             <Icon type="lock" /> Change My Password
           </a>
         </Menu.Item> */}
-        {/* {Const.SITE_NAME !== 'MYVETRECO' && <Menu.Item key="1">
+        {Const.SITE_NAME !== 'MYVETRECO' && <Menu.Item key="1">
           <a onClick={() => this.setState({ modalVisible: true })}>
             <Icon type="global" /> Language
           </a>
-        </Menu.Item>} */}
+        </Menu.Item>}
         <Menu.Item key="2">
           <OktaLogout type="link" text="Exit" />
         </Menu.Item>
@@ -665,13 +665,13 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
-              <Icon type="global" style={styles.languageIcon} />
+              {/* <Icon type="global" style={styles.languageIcon} />
               <Select
                 defaultValue={sessionStorage.getItem(cache.LANGUAGE)}
                 onChange={this.languageChange}
                 style={{ width: 180 }}>
                 {this.state.languageList.map(item => <Option key={item.lang} value={item.lang}>{item.langCountry}</Option>)}
-              </Select>
+              </Select> */}
               {
                 Const.SITE_NAME !== 'MYVETRECO' ? (
                   <div className='headerRight-shop'>

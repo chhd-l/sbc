@@ -263,8 +263,26 @@ class SubscriptionDetail extends React.Component<any, any> {
       promotionCode: promotionCode,
       isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId,
-      customerAccount: subscriptionInfo.consumerAccount
+      customerAccount: subscriptionInfo.consumerAccount,
+      paymentCode: subscriptionInfo.paymentMethod,
+      totalPrice: this.getSubscriptionPrice(
+        this.subTotal() -
+          +this.state.discountsPrice +
+          +this.state.deliveryPrice +
+          +this.state.taxFeePrice -
+          +this.state.freeShippingDiscountPrice,
+        'total'
+      )
     };
+    console.log(
+      'this.subTotal()this.subTotal()',
+      this.subTotal(),
+      this.state.discountsPrice,
+      +this.state.discountsPrice +
+        +this.state.deliveryPrice +
+        +this.state.taxFeePrice -
+        +this.state.freeShippingDiscountPrice
+    );
     webapi.getPromotionPrice(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
@@ -857,7 +875,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ))}
 
-                {this.state.taxFeePrice && (
+                {storeId === 123457919 && this.state.taxFeePrice > 0 && (
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Order.consumptionTax" />
@@ -913,7 +931,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ) : null}
 
-                {this.state.serviceFeePrice && (
+                {this.state.serviceFeePrice > 0 && (
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Order.serviceFeePrice" />
@@ -936,6 +954,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                     ):
                   </span>
                   <span className="total-iva-include" style={styles.priceStyle}>
+                    {this.subTotal()}|{' '}
+                    {+this.state.discountsPrice +
+                      +this.state.deliveryPrice +
+                      +this.state.taxFeePrice -
+                      +this.state.freeShippingDiscountPrice}
+                    |
                     {currencySymbol +
                       this.getSubscriptionPrice(
                         this.subTotal() -

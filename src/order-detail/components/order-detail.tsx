@@ -705,7 +705,7 @@ class OrderDetailTab extends React.Component<any, any> {
                   ))
                 : null}
 
-              {tradePrice.taxFeePrice ? (
+              {storeId === 123457919 && tradePrice.taxFeePrice > 0 ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.consumptionTax" />:

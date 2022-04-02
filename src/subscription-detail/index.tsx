@@ -52,6 +52,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
+      serviceFeePrice: 0,
       promotionVOList: [],
       frequencyList: [],
       promotionDesc: 'Promotion',
@@ -148,7 +149,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
               isActive: subscriptionDetail.subscribeStatus === '0',
-              paymentMethod: paymentMethod
+              paymentMethod: paymentMethod,
+              serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0
             },
             () => {
               this.applyPromotionCode(this.state.promotionCode);
@@ -295,7 +297,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           freeShippingFlag: res.context.freeShippingFlag ?? false,
           freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
           subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
-          serviceFeePrice: res.context.serviceFeePrice ?? 0,
           promotionVOList: res.context.promotionVOList ?? []
         });
       }
@@ -938,7 +939,6 @@ class SubscriptionDetail extends React.Component<any, any> {
                     </span>
                     <span style={styles.priceStyle}>
                       {currencySymbol +
-                        ' -' +
                         this.getSubscriptionPrice(
                           this.state.serviceFeePrice ? this.state.serviceFeePrice : 0
                         )}
@@ -954,19 +954,14 @@ class SubscriptionDetail extends React.Component<any, any> {
                     ):
                   </span>
                   <span className="total-iva-include" style={styles.priceStyle}>
-                    {this.subTotal()}|{' '}
-                    {+this.state.discountsPrice +
-                      +this.state.deliveryPrice +
-                      +this.state.taxFeePrice -
-                      +this.state.freeShippingDiscountPrice}
-                    |
                     {currencySymbol +
                       this.getSubscriptionPrice(
                         this.subTotal() -
                           +this.state.discountsPrice +
                           +this.state.deliveryPrice +
                           +this.state.taxFeePrice -
-                          +this.state.freeShippingDiscountPrice,
+                          +this.state.freeShippingDiscountPrice +
+                          +this.state.serviceFeePrice,
                         'total'
                       )}
                   </span>

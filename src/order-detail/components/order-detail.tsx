@@ -129,6 +129,7 @@ class OrderDetailTab extends React.Component<any, any> {
   render() {
     const { currentPet } = this.state;
     const { detail, countryDict, orderRejectModalVisible } = this.props.relaxProps;
+
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     //当前的订单号
     const tid = detail.get('id');
@@ -531,7 +532,7 @@ class OrderDetailTab extends React.Component<any, any> {
               </p>
               <p>
                 <FormattedMessage id="Order.Petowneraccount" />:{' '}
-                {detail.getIn(['buyer', 'account'])}
+                {detail.getIn(['buyer', 'email'])}
               </p>
             </div>
           </Col>

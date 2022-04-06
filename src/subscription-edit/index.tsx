@@ -256,7 +256,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             periodTypeArr: periodTypeArr,
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode,
-            paymentMethod: subscriptionDetail.paymentMethod
+            paymentMethod: subscriptionDetail.paymentMethod,
+            deliveryDate: subscriptionDetail.consignee.deliveryDate,
+            timeSlot: subscriptionDetail.consignee.timeSlot
           };
           this.setState(
             {
@@ -435,6 +437,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     }
     if (periodTypeArr.join(',') !== originalParams.periodTypeArr.join(',')) {
       changeFieldArr.push('Frequency');
+    }
+    if (
+      deliveryDate !== originalParams.deliveryDate &&
+      timeSlot !== originalParams.originalParams
+    ) {
+      console.log('timeSlot:', timeSlot, originalParams);
+      // timeSlot.join(',') !== originalParams.timeSlot.join(',')
+      changeFieldArr.push('changeTimeSlot');
     }
     if (changeFieldArr.length > 0) {
       params.changeField = changeFieldArr.join(',');
@@ -966,7 +976,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               });
               setTimeout(() => {
                 this.updateSubscription();
-
                 // message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
               }, 1000);
             }

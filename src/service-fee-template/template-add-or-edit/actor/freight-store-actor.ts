@@ -38,7 +38,7 @@ export default class FreightStoreActor extends Actor {
       ruleTableList: [
         {
           //id
-          id: 'add_' + Math.random(),
+          id: new Date().getTime(),
           // 最小订单金额
           orderInitialAmount: 0,
           // 最大订单金额
@@ -128,7 +128,7 @@ export default class FreightStoreActor extends Actor {
         fromJS([
           {
             //id
-            id: 'add_' + Math.random(),
+            id: new Date().getTime(),
             // 最小订单金额
             orderInitialAmount: parseFloat(lastItem.get('orderMaxAmount')) + 1,
             // 最大订单金额

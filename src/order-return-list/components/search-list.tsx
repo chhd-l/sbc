@@ -540,7 +540,7 @@ class SearchList extends React.Component<any, any> {
                     {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
                       parseFloat(
                         v.get('returnItems').reduce((prev, cur) => {
-                          return Number(prev) + Number(cur.get('price'));
+                          return Number(prev) + Number(cur.get('originalPrice'));
                         }, 0)
                       ).toFixed(2)}
                   </td>

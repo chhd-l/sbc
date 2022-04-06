@@ -33,7 +33,7 @@ export default class AppStore extends Store {
       minimumServiceFee: minAcount,
       ruleTableList: fromJS(
         ruleList.map((r) => ({
-          id: '',
+          id: r.id,
           orderInitialAmount: r.initAmount,
           orderMaxAmount: r.maxAmount,
           ruleSetting: r.type,
@@ -61,9 +61,7 @@ export default class AppStore extends Store {
     try {
       let { ruleName, paymentMethodList, paymentMethodCode, minimumServiceFee, ruleTableList } =
         this.state().toJS();
-      console.log(111111, this.state().toJS(), paymentMethodList);
       const targetPaymentItem = paymentMethodList.find((f) => f.code === paymentMethodCode);
-      console.log('save service fee request', this.state().toJS(), targetPaymentItem);
       await (id ? webapi.updateServiceFeeRule : webapi.saveServiceFeeRule)({
         id,
         ruleName,
@@ -71,13 +69,16 @@ export default class AppStore extends Store {
         paymentMethodCode: targetPaymentItem.code,
         paymentMethodName: targetPaymentItem.name,
         minAcount: minimumServiceFee,
-        ruleList: ruleTableList.map((r, idx) => ({
-          initAmount: parseFloat(r.orderInitialAmount),
-          maxAmount: parseFloat(r.orderMaxAmount),
-          type: r.ruleSetting,
-          fee: parseFloat(r.amountOrPercentageVal),
-          sort: idx
-        }))
+        ruleList: ruleTableList
+          .filter((el) => el.delFlag == 0)
+          .map((r, idx) => ({
+            id: r.id,
+            initAmount: parseFloat(r.orderInitialAmount),
+            maxAmount: parseFloat(r.orderMaxAmount),
+            type: r.ruleSetting,
+            fee: parseFloat(r.amountOrPercentageVal),
+            sort: idx
+          }))
       });
       message.success('Operate successfully');
       history.push({

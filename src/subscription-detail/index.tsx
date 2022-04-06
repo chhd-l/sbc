@@ -52,6 +52,7 @@ class SubscriptionDetail extends React.Component<any, any> {
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
+      serviceFeePrice: 0,
       promotionVOList: [],
       frequencyList: [],
       promotionDesc: 'Promotion',
@@ -148,7 +149,8 @@ class SubscriptionDetail extends React.Component<any, any> {
               noStartOrder: subscriptionDetail.noStartTradeList,
               completedOrder: subscriptionDetail.completedTradeList,
               isActive: subscriptionDetail.subscribeStatus === '0',
-              paymentMethod: paymentMethod
+              paymentMethod: paymentMethod,
+              serviceFeePrice: subscriptionInfo.serviceFeePrice ?? 0
             },
             () => {
               this.applyPromotionCode(this.state.promotionCode);
@@ -263,8 +265,26 @@ class SubscriptionDetail extends React.Component<any, any> {
       promotionCode: promotionCode,
       isAutoSub: true,
       deliveryAddressId: this.state.deliveryAddressId,
-      customerAccount: subscriptionInfo.consumerAccount
+      customerAccount: subscriptionInfo.consumerAccount,
+      paymentCode: subscriptionInfo.paymentMethod,
+      totalPrice: this.getSubscriptionPrice(
+        this.subTotal() -
+          +this.state.discountsPrice +
+          +this.state.deliveryPrice +
+          +this.state.taxFeePrice -
+          +this.state.freeShippingDiscountPrice,
+        'total'
+      )
     };
+    console.log(
+      'this.subTotal()this.subTotal()',
+      this.subTotal(),
+      this.state.discountsPrice,
+      +this.state.discountsPrice +
+        +this.state.deliveryPrice +
+        +this.state.taxFeePrice -
+        +this.state.freeShippingDiscountPrice
+    );
     webapi.getPromotionPrice(params).then((data) => {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
@@ -277,7 +297,6 @@ class SubscriptionDetail extends React.Component<any, any> {
           freeShippingFlag: res.context.freeShippingFlag ?? false,
           freeShippingDiscountPrice: res.context.freeShippingDiscountPrice ?? 0,
           subscriptionDiscountPrice: res.context.subscriptionDiscountPrice ?? 0,
-          serviceFeePrice: res.context.serviceFeePrice ?? 0,
           promotionVOList: res.context.promotionVOList ?? []
         });
       }
@@ -857,7 +876,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ))}
 
-                {this.state.taxFeePrice && (
+                {storeId === 123457919 && this.state.taxFeePrice > 0 && (
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Order.consumptionTax" />
@@ -913,14 +932,13 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </div>
                 ) : null}
 
-                {this.state.serviceFeePrice && (
+                {this.state.serviceFeePrice > 0 && (
                   <div className="flex-between">
                     <span>
                       <FormattedMessage id="Order.serviceFeePrice" />
                     </span>
                     <span style={styles.priceStyle}>
                       {currencySymbol +
-                        ' -' +
                         this.getSubscriptionPrice(
                           this.state.serviceFeePrice ? this.state.serviceFeePrice : 0
                         )}
@@ -942,7 +960,8 @@ class SubscriptionDetail extends React.Component<any, any> {
                           +this.state.discountsPrice +
                           +this.state.deliveryPrice +
                           +this.state.taxFeePrice -
-                          +this.state.freeShippingDiscountPrice,
+                          +this.state.freeShippingDiscountPrice +
+                          +this.state.serviceFeePrice,
                         'total'
                       )}
                   </span>

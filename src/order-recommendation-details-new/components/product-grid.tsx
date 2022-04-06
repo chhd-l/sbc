@@ -231,7 +231,8 @@ export default class GoodsGrid extends React.Component<any, any> {
       goodsName: params.likeGoodsName,
       goodsInfoNo: params.likeGoodsInfoNo,
       pageNum: params.pageNum,
-      pageSize: params.pageSize
+      pageSize: params.pageSize,
+      addedFlag: Const.SITE_NAME === 'MYVETRECO' ? '1' : undefined
     };
 
     webapi

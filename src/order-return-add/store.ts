@@ -370,6 +370,12 @@ export default class AppStore extends Store {
     }
 
     param = param.set('returnItems', tradeItems);
+    if (data.getIn(['tradeDetail', 'gifts'])) {
+      const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
+      if (gifts.size > 0) {
+        param = param.set('returnGifts', data.getIn(['tradeDetail', 'gifts']));
+      }
+    }
 
     if (data.getIn(['tradeDetail', 'subscriptionPlanGiftList'])) {
       // 只保存退货赠品数量大于0的订阅赠品

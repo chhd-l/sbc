@@ -2451,7 +2451,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             changePaymentMethod={(paymentId, payPspItemEnum, selectCard) => {
                               this.setState({
                                 paymentId,
-                                payPspItemEnum,
+                                payPspItemEnum: selectCard?.paymentItem || payPspItemEnum,
                                 paymentInfo: selectCard,
                                 paymentMethod: payPspItemEnum
                               });

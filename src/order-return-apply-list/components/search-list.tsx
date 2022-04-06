@@ -60,27 +60,32 @@ export default class SearchList extends React.Component<any, any> {
                       <br />
                       {<FormattedMessage id="Order.quantity" />}
                     </th>
-                    <th style={{ width: '10%' }}>{<FormattedMessage id="Order.shippingStatus" />}</th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="Order.shippingStatus" />}
+                    </th>
                     <th style={{ width: '10%' }}>{<FormattedMessage id="Order.orderStatus" />}</th>
-                    <th style={{ width: '10%' }}>{<FormattedMessage id="Order.totalReturnableNumber" />}</th>
+                    <th style={{ width: '10%' }}>
+                      {<FormattedMessage id="Order.totalReturnableNumber" />}
+                    </th>
 
-                    <th style={{ width: '10%', textAlign: 'right' }}>{<FormattedMessage id="Order.paymentStatus" />}</th>
+                    <th style={{ width: '10%', textAlign: 'right' }}>
+                      {<FormattedMessage id="Order.paymentStatus" />}
+                    </th>
                   </tr>
                 </thead>
-                 <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(orderList, apply)}</tbody>
-
+                <tbody className="ant-table-tbody">
+                  {loading ? this._renderLoading() : this._renderContent(orderList, apply)}
+                </tbody>
               </table>
               {!loading && total == 0 ? (
-                  <div className="ant-table-placeholder">
-                    <span>
-                      <i className="anticon anticon-frown-o" />
-                      <FormattedMessage id="Order.noData" />
-                    </span>
-                  </div>
-                ) : null}
+                <div className="ant-table-placeholder">
+                  <span>
+                    <i className="anticon anticon-frown-o" />
+                    <FormattedMessage id="Order.noData" />
+                  </span>
+                </div>
+              ) : null}
             </div>
-
-
           </div>
         </div>
         {total > 0 ? (
@@ -108,13 +113,15 @@ export default class SearchList extends React.Component<any, any> {
   }
 
   _renderContent(orderList, apply) {
-
     return orderList.map((v) => {
       const id = v.get('id');
       const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
       const deliveryPrice = v.getIn(['tradePrice', 'deliveryPrice']) || 0;
-      const freeShippingDiscountPrice=v.getIn(['tradePrice', 'freeShippingDiscountPrice']) || 0;
-      const amountPrice=(deliveryPrice-freeShippingDiscountPrice)>=0?tradePrice - (deliveryPrice-freeShippingDiscountPrice):tradePrice
+      const freeShippingDiscountPrice = v.getIn(['tradePrice', 'freeShippingDiscountPrice']) || 0;
+      const amountPrice =
+        deliveryPrice - freeShippingDiscountPrice >= 0
+          ? tradePrice - (deliveryPrice - freeShippingDiscountPrice)
+          : tradePrice;
       const gifts = v.get('gifts') ? v.get('gifts') : fromJS([]);
       const num =
         v
@@ -142,16 +149,23 @@ export default class SearchList extends React.Component<any, any> {
                     >
                       <span style={{ marginLeft: 20, color: '#000' }}>{id}</span>
                       <span style={{ marginLeft: 60 }}>
-                        {<FormattedMessage id="Order.OrderTime" />}:{moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
+                        {<FormattedMessage id="Order.OrderTime" />}:
+                        {moment(v.getIn(['tradeState', 'createTime'])).format(Const.TIME_FORMAT)}
                       </span>
-                      {
-                        +v.get('totalReturnableNumber') === 0 ? null : <span style={{ marginRight: 20, float: 'right' }}>
-                          <Tooltip placement="top" title={<FormattedMessage id="Order.Application" />}>
-                            <Link to={`/order-return-add/${id}`} className="iconfont iconApplication" style={{ padding: '0 5px' }}></Link>
+                      {+v.get('totalReturnableNumber') === 0 ? null : (
+                        <span style={{ marginRight: 20, float: 'right' }}>
+                          <Tooltip
+                            placement="top"
+                            title={<FormattedMessage id="Order.Application" />}
+                          >
+                            <Link
+                              to={`/order-return-add/${id}`}
+                              className="iconfont iconApplication"
+                              style={{ padding: '0 5px' }}
+                            ></Link>
                           </Tooltip>
                         </span>
-                      }
-
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -172,8 +186,17 @@ export default class SearchList extends React.Component<any, any> {
                       .concat(gifts)
                       .map((v, k) => {
                         if (k < 3) {
-                          const imageSrc = v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg;
-                          return <img src={imageSrc} key={k} style={styles.imgItem} title={v.get('skuName') || ''} />;
+                          const imageSrc = v.get('pic')
+                            ? util.optimizeImage(v.get('pic'))
+                            : defaultImg;
+                          return (
+                            <img
+                              src={imageSrc}
+                              key={k}
+                              style={styles.imgItem}
+                              title={v.get('skuName') || ''}
+                            />
+                          );
                         } else if (k == 4) {
                           return <label>...</label>;
                         }
@@ -186,11 +209,20 @@ export default class SearchList extends React.Component<any, any> {
                         <div style={styles.imgBg}>
                           <img
                             //@ts-ignore
-                            src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic')) : defaultImg}
+                            src={
+                              v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                ? util.optimizeImage(
+                                    v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                  )
+                                : defaultImg
+                            }
                             style={styles.imgFourth}
                           />
                           //@ts-ignore
-                          <div style={styles.imgNum}><FormattedMessage id="Order.total" /> {v.get('tradeItems').concat(gifts).size}</div>
+                          <div style={styles.imgNum}>
+                            <FormattedMessage id="Order.total" />{' '}
+                            {v.get('tradeItems').concat(gifts).size}
+                          </div>
                         </div>
                       ) : null
                     }
@@ -207,21 +239,29 @@ export default class SearchList extends React.Component<any, any> {
                     {v.getIn(['consignee', 'phone'])}
                   </td>
                   <td style={{ width: '10%' }}>
-                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + amountPrice.toFixed(2)}
+                    {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + amountPrice.toFixed(2)} */}
+                    {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                      (v.getIn(['tradePrice', 'totalPrice']) || 0).toFixed(2)}
                     <br />( <FormattedMessage id="Order.total" /> {num})
                   </td>
                   {/*发货状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.deliverStatus[v.getIn(['tradeState', 'deliverStatus'])]}</td> */}
                   <td style={{ width: '10%' }}>
                     {/* {v.getIn(['tradeState', 'deliverStatus'])}*/}
-                    <FormattedMessage id={getOrderStatusValue('ShippStatus', v.getIn(['tradeState', 'deliverStatus']))} />
+                    <FormattedMessage
+                      id={getOrderStatusValue(
+                        'ShippStatus',
+                        v.getIn(['tradeState', 'deliverStatus'])
+                      )}
+                    />
                   </td>
-
 
                   {/*订单状态*/}
                   {/* <td style={{ width: '10%' }}>{Const.flowState[v.getIn(['tradeState', 'flowState'])]}</td> */}
                   <td style={{ width: '10%' }}>
-                    <FormattedMessage id={getOrderStatusValue('OrderStatus', v.getIn(['tradeState', 'flowState']))} />
+                    <FormattedMessage
+                      id={getOrderStatusValue('OrderStatus', v.getIn(['tradeState', 'flowState']))}
+                    />
                     {/* {v.getIn(['tradeState', 'flowState'])} */}
                   </td>
 
@@ -229,8 +269,6 @@ export default class SearchList extends React.Component<any, any> {
                     {v.get('totalReturnableNumber')}
                     {/* {v.getIn(['tradeState', 'flowState'])} */}
                   </td>
-
-
 
                   {/*支付状态*/}
                   <td
@@ -240,7 +278,9 @@ export default class SearchList extends React.Component<any, any> {
                       paddingRight: 20
                     }}
                   >
-                    <FormattedMessage id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))} />
+                    <FormattedMessage
+                      id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))}
+                    />
                     {/* {Const.payState[v.getIn(['tradeState', 'payState'])]} */}
                     {/* {v.getIn(['tradeState', 'payState'])} */}
                   </td>

@@ -124,7 +124,7 @@ export default class GoodsList extends React.Component<any, any> {
         dataIndex: 'skuName',
         key: 'skuName',
         width: 150,
-        render: (text) => `${itemType == 1 ||itemType == 2 ? '[Gift]' : ''}${text}`
+        render: (text) => `${itemType == 1 || itemType == 2 ? '[Gift]' : ''}${text}`
       },
       {
         title: <FormattedMessage id="Order.Specification" />,
@@ -140,7 +140,8 @@ export default class GoodsList extends React.Component<any, any> {
         render: (text, rowInfo) => {
           return (
             <div>
-              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + (rowInfo.unitPrice||0).toFixed(2)}
+              {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                (rowInfo.unitPrice || 0).toFixed(2)}
             </div>
           );
         }
@@ -151,10 +152,8 @@ export default class GoodsList extends React.Component<any, any> {
         width: 100,
         className: 'centerItem',
         render: (_text, rowInfo: any, index) => {
-          return itemType == 1 ? (
-            <div style={{ display: 'inline-block', width: '90px' }}>
-              {rowInfo.num || 0}
-            </div>
+          return false && itemType == 1 ? (
+            <div style={{ display: 'inline-block', width: '90px' }}>{rowInfo.num || 0}</div>
           ) : (
             <FormItem>
               {getFieldDecorator(rowInfo.skuId + index, {
@@ -183,10 +182,13 @@ export default class GoodsList extends React.Component<any, any> {
                 <InputNumber
                   min={0}
                   max={rowInfo.canReturnNum}
-                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId,itemType)}
+                  onChange={this._editGoodsNum.bind(this, rowInfo.skuId, itemType)}
                 />
               )}
-              <p><FormattedMessage id="Order.Returnablenumber" />{` ${rowInfo.canReturnNum}`}</p>
+              <p>
+                <FormattedMessage id="Order.Returnablenumber" />
+                {` ${rowInfo.canReturnNum}`}
+              </p>
             </FormItem>
           );
         }

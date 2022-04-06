@@ -90,6 +90,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
+      serviceFeePrice: 0,
       promotionVOList: [],
 
       isPromotionCodeValid: false,
@@ -281,7 +282,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               paymentMethod: subscriptionDetail.paymentMethod,
               deliveryDate: subscriptionDetail.consignee.deliveryDate,
               timeSlot: subscriptionDetail.consignee.timeSlot,
-              cityNo: subscriptionDetail.consignee.provinceIdStr
+              cityNo: subscriptionDetail.consignee.provinceIdStr,
+              serviceFeePrice: subscriptionDetail.serviceFeePrice
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -2056,6 +2058,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       </span>
                     </div>
                   ) : null}
+                  {this.state.serviceFeePrice > 0 && (
+                    <div className="flex-between">
+                      <span>
+                        <FormattedMessage id="Order.serviceFeePrice" />
+                      </span>
+                      <span style={styles.priceStyle}>
+                        {currencySymbol +
+                          this.getSubscriptionPrice(
+                            this.state.serviceFeePrice ? this.state.serviceFeePrice : 0
+                          )}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex-between">
                     <span>
                       <span>
@@ -2072,7 +2087,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             +this.state.discountsPrice +
                             +this.state.taxFeePrice +
                             +this.state.deliveryPrice -
-                            +this.state.freeShippingDiscountPrice
+                            +this.state.freeShippingDiscountPrice +
+                            +this.state.serviceFeePrice
                         )}
                     </span>
                   </div>

@@ -316,7 +316,7 @@ class TodoItems extends React.Component<any, any> {
                           <div className="mode-text">
                             <FormattedMessage id="Home.ToDo"/>
                           </div>
-                          <div className="mode-num">
+                          <div className="mode-num num">
                             <span> {<CountUp end={taskEmployeeStatisticsView?.toDoTaskCount ?? 0} {...countUpProps} />}</span>
                           </div>
                         </div>

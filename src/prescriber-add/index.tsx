@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Headline, BreadCrumb, cache } from 'qmkit';
+import { Headline, BreadCrumb, cache, Const } from 'qmkit';
 import ClinicForm from './components/prescriber-form';
+import MyvetForm from './components/myvetreco-form';
 import { Breadcrumb, message } from 'antd';
 import { FormattedMessage } from 'react-intl';
 export default class ClinicList extends Component<any, any> {
@@ -53,7 +54,7 @@ export default class ClinicList extends Component<any, any> {
               this.props.match.params.id ? 'Edit Prescriber' : 'New Prescriber'
             }
           /> */}
-          <ClinicForm pageType={this.state.pageType} prescriberId={this.state.prescriberId} />
+          {Const.SITE_NAME === 'MYVETRECO' ? <MyvetForm pageType={this.state.pageType} prescriberId={this.state.prescriberId} /> :<ClinicForm pageType={this.state.pageType} prescriberId={this.state.prescriberId} />}
         </div>
       </div>
     );

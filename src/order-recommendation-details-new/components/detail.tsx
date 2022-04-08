@@ -5,7 +5,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
-import { cache, history, noop, SelectGroup, RCi18n } from 'qmkit';
+import { cache, history, noop, SelectGroup, RCi18n, Const } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -79,9 +79,9 @@ export default class BillingDetails extends React.Component<any, any> {
         <div className="space-between" style={{ marginTop: 15, marginBottom: 10 }}>
           <div style={{ width: 150, margin: '0 auto' }}>
             {history.location.state ? (
-              <SelectGroup label={RCi18n({id:'Order.Prescriber'})} disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
+              <SelectGroup label={RCi18n({id:Const.SITE_NAME==='MYVETRECO'?'Menu.Clinic':'Order.Prescriber'})} disabled={true} value={detailProductList.prescriberName} disabled={localStorage.getItem('enable') ? true : false}></SelectGroup>
             ) : (
-              <SelectGroup label={RCi18n({id:'Order.Prescriber'})} defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
+              <SelectGroup label={RCi18n({id:Const.SITE_NAME==='MYVETRECO'?'Menu.Clinic':'Order.Prescriber'})} defaultValue={sharing.get('prescriberId') ? sharing.get('prescriberId') : employee.prescribers[0].id} disabled={localStorage.getItem('enable') ? true : false} onChange={(value, name) => this._prescriberChange(value, name)}>
                 {allPrescribers.map((item) => (
                   <Option value={item.id} key={item.id}>
                     {item.prescriberName}

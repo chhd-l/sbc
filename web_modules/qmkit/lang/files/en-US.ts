@@ -5606,5 +5606,22 @@ export default {
   "waitingForTheMerchantToReceiveTheGoods": "Waiting for the merchant to receive the goods",
   "weight": "Weight",
   "whetherToActivateTheMemberAccount": "Whether to activate the member account",
-  "yes": "Yes"
+  "yes": "Yes",
+
+  "Menu.Clinic": "Clinic",
+  "Menu.Clinic list": "Clinic list",
+  "Menu.Clinic recommendation": "Clinic recommendation",
+  "Clinic.ClinicId": "Clinic ID",
+  "Clinic.ClinicName": "Clinic name",
+  "Clinic.ClinicType": "Clinic type",
+  "Clinic.ClinicDomain": "Clinic domain",
+  "Clinic.ClinicIntro": "Clinic intro",
+  "Clinic.ClinicLogo": "Clinic logo",
+  "Clinic.ClinicAddr": "Clinic address",
+  "Clinic.ClinicIntroduction": "Clinic introduction",
+  "Clinic.OpenTip": "Please use ‘/’ to wrap the line. E.g., Mon - Sat: 08:00 - 12:30, 13:30-15:30 /Sat: 09:00 - 12:00 /Sun: Closed",
+  "Clinic.ClinicCity": "Clinic city",
+  "Clinic.ClinicPhone": "Clinic phone",
+  "Clinic.AddClinic": "Add clinic",
+  "Clinic.EditClinic": "Edit clinic",
 };

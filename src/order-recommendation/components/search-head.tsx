@@ -191,7 +191,7 @@ class SearchHead extends Component<any, any> {
 
               <Col span={8}>
                 <FormItem>
-                  {sessionStorage.getItem('PrescriberSelect') ? (
+                  {sessionStorage.getItem('PrescriberSelect') && Const.SITE_NAME !== 'MYVETRECO' ? (
                     <Input
                       addonBefore={this._renderClinicSelect()}
                       value={this.state.clinicSelectValue}
@@ -396,13 +396,13 @@ class SearchHead extends Component<any, any> {
         }}
         value={this.state.clinicSelect}
         style={styles.label}
-        disabled={sessionStorage.getItem('PrescriberSelect') ? true : false}
+        disabled={sessionStorage.getItem('PrescriberSelect') && Const.SITE_NAME !== 'MYVETRECO' ? true : false}
       >
-        <Option value="clinicsName" title={RCi18n({id:'Order.PrescriberName'})}>
-          <FormattedMessage id="Order.PrescriberName" />
+        <Option value="clinicsName" title={RCi18n({id:Const.SITE_NAME==='MYVETRECO'?'Clinic.ClinicName':'Order.PrescriberName'})}>
+          <FormattedMessage id={Const.SITE_NAME==='MYVETRECO'?'Clinic.ClinicName':"Order.PrescriberName"} />
         </Option>
-        <Option value="clinicsIds" title={RCi18n({id:'Order.PrescriberId'})}>
-          <FormattedMessage id="Order.PrescriberId" />
+        <Option value="clinicsIds" title={RCi18n({id:Const.SITE_NAME==='MYVETRECO'?'Clinic.ClinicId':'Order.PrescriberId'})}>
+          <FormattedMessage id={Const.SITE_NAME==='MYVETRECO'?'Clinic.ClinicId':"Order.PrescriberId"} />
         </Option>
       </Select>
     );

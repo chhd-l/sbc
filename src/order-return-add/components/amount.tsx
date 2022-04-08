@@ -108,8 +108,8 @@ export default class Amount extends React.Component<any, any> {
                 <FormattedMessage id="Order.Refundableamount" />:
               </span>
               <strong>
-                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {applyStatus ? applyPrice.toFixed(2) : QMFloat.addZero(shouldPrice)}
+                {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}11199.99
+                {/* {applyStatus ? applyPrice.toFixed(2) : QMFloat.addZero(shouldPrice)} */}
               </strong>
             </label>
             {/* <label style={styles.priceItem as any}>
@@ -174,7 +174,7 @@ const styles = {
     display: 'inline-block'
   },
   priceItem: {
-    width: 200,
+    // width: 200,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

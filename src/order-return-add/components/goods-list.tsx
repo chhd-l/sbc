@@ -156,7 +156,7 @@ export default class GoodsList extends React.Component<any, any> {
             <div style={{ display: 'inline-block', width: '90px' }}>{rowInfo.num || 0}</div>
           ) : (
             <FormItem>
-              {getFieldDecorator(rowInfo.skuId + index, {
+              {getFieldDecorator(rowInfo.skuId + index + itemType, {
                 initialValue: rowInfo.num,
                 rules: [
                   {

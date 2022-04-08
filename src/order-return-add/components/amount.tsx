@@ -40,12 +40,7 @@ export default class Amount extends React.Component<any, any> {
   };
 
   render() {
-    const {
-      applyStatus,
-      applyPrice,
-      applyIntegral,
-      tradeDetail
-    } = this.props.relaxProps;
+    const { applyStatus, applyPrice, applyIntegral, tradeDetail } = this.props.relaxProps;
     const shouldPrice = tradeDetail
       .get('tradeItems')
       .filter((sku) => sku.get('num') > 0)
@@ -65,6 +60,14 @@ export default class Amount extends React.Component<any, any> {
         //   );
         // }
       })
+      .concat(
+        tradeDetail
+          .get('gifts')
+          .filter((sku) => sku.get('num') > 0)
+          .map((sku) => {
+            return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+          })
+      )
       .reduce((one, two) => QMFloat.accAdd(one, two));
 
     // 可退积分
@@ -72,33 +75,28 @@ export default class Amount extends React.Component<any, any> {
       tradeDetail.getIn(['tradePrice', 'points']) == null
         ? 0
         : tradeDetail
-          .get('tradeItems')
-          .filter((sku) => sku.get('num') > 0)
-          .map((sku) => {
-            if (sku.get('num') < sku.get('canReturnNum')) {
-              // 小于可退数量,直接均摊积分乘以数量
-              return Math.floor(
-                QMFloat.accMul(sku.get('skuPoint'), sku.get('num'))
-              );
-            } else {
-              // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
-              return Math.floor(
-                QMFloat.accSubtr(
-                  sku.get('points'),
-                  Math.floor(
-                    QMFloat.accMul(
-                      sku.get('skuPoint'),
-                      QMFloat.accSubtr(
-                        sku.get('totalNum'),
-                        sku.get('canReturnNum')
+            .get('tradeItems')
+            .filter((sku) => sku.get('num') > 0)
+            .map((sku) => {
+              if (sku.get('num') < sku.get('canReturnNum')) {
+                // 小于可退数量,直接均摊积分乘以数量
+                return Math.floor(QMFloat.accMul(sku.get('skuPoint'), sku.get('num')));
+              } else {
+                // 大于等于可退数量 , 使用积分 - 已退积分(均摊积分*(购买数量-可退数量))
+                return Math.floor(
+                  QMFloat.accSubtr(
+                    sku.get('points'),
+                    Math.floor(
+                      QMFloat.accMul(
+                        sku.get('skuPoint'),
+                        QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))
                       )
                     )
                   )
-                )
-              );
-            }
-          })
-          .reduce((one, two) => one + two) || 0;
+                );
+              }
+            })
+            .reduce((one, two) => one + two) || 0;
 
     return (
       <div style={{ marginBottom: 20 }}>
@@ -111,9 +109,7 @@ export default class Amount extends React.Component<any, any> {
               </span>
               <strong>
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                {applyStatus
-                  ? applyPrice.toFixed(2)
-                  : QMFloat.addZero(shouldPrice)}
+                {applyStatus ? applyPrice.toFixed(2) : QMFloat.addZero(shouldPrice)}
               </strong>
             </label>
             {/* <label style={styles.priceItem as any}>

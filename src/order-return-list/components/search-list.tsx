@@ -541,7 +541,10 @@ class SearchList extends React.Component<any, any> {
                       parseFloat(
                         v.get('returnItems').reduce((prev, cur) => {
                           return Number(prev) + Number(cur.get('originalPrice'));
-                        }, 0)
+                        }, 0) +
+                          v.get('returnGifts').reduce((prev, cur) => {
+                            return Number(prev) + Number(cur.get('originalPrice'));
+                          }, 0)
                       ).toFixed(2)}
                   </td>
                   <td style={{ width: '12%' }}>

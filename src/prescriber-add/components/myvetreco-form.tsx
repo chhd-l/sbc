@@ -34,6 +34,7 @@ type IState = {
   clinicTypeList: TClinicType[];
   clinic?: TClinic;
   loading: boolean;
+  roleId?: number;
 };
 
 interface IProps extends FormComponentProps {
@@ -60,7 +61,8 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
     this.state = {
       loading: false,
       clinicTypeList: [],
-      clinic: null
+      clinic: null,
+      roleId: null
     }
   }
 
@@ -68,6 +70,8 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
     this.queryClinicsDictionary();
     if (this.props.pageType === 'edit') {
       this.getDetail(this.props.prescriberId);
+    } else {
+      this.getSystemRole();
     }
   }
 
@@ -81,6 +85,13 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
         });
       });
     }
+  };
+
+  getSystemRole = async () => {
+    const { res: { context: roleList } } = await webapi.getAllRoles();
+    this.setState({
+      roleId: ((roleList || []).find(x => x.roleName === 'Admin') ?? {})['roleInfoId'] ?? 0
+    });
   };
 
   queryClinicsDictionary = async () => {
@@ -139,6 +150,15 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
           headImg: values.logo[0]['url']
         }).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
+            if (this.props.pageType === 'create' && this.state.roleId) {
+              webapi.addUser({
+                employeeName: values['prescriberName'],
+                email: values.email,
+                prescriberIds: [data.res.context.id],
+                roleIdList: [this.state.roleId],
+                accountState: 3
+              });
+            }
             message.success(RCi18n({id:'Prescriber.OperateSuccessfully'}));
             history.push('/prescriber');
           } else {
@@ -208,7 +228,7 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
               </FormItem>
             </Col>
           </Row>
-          <Row><Col span={2} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicAddr"/>}</b></Col></Row>
+          <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicAddr"/>}</b></Col></Row>
           <Row>
             <Col span={12}>
               <FormItem label={<FormattedMessage id="PetOwner.City"/>} {...formItemLayout2}>
@@ -289,7 +309,7 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
               </FormItem>
             </Col>
           </Row>
-          <Row><Col span={2} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicIntro"/>}</b></Col></Row>
+          <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicIntro"/>}</b></Col></Row>
           <Row>
             <Col span={24}>
               <FormItem label={<FormattedMessage id="Setting.openingHours"/>} {...formItemLayout1} extra={<div style={{color:'#999'}}><FormattedMessage id="Clinic.OpenTip"/></div>}>

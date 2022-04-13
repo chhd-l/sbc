@@ -134,6 +134,7 @@ class OrderDetailTab extends React.Component<any, any> {
     //当前的订单号
     const tid = detail.get('id');
     const tradeItems = detail.get('tradeItems') ? detail.get('tradeItems').toJS() : [];
+
     //订阅赠品信息
     let giftList = detail.get('subscriptionPlanGiftList')
       ? detail.get('subscriptionPlanGiftList').toJS()
@@ -149,13 +150,16 @@ class OrderDetailTab extends React.Component<any, any> {
       };
       return tempGift;
     });
+
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
+
+
     gifts = gifts
-      .map((gift) =>
-        gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
-      )
-      .toJS();
+      .map((gift) =>{
+        return !gift.get('spuName').includes('Leatlet') ? gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName')):gift.set('skuName', gift.get('skuName'))
+      }).toJS();
+
 
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
@@ -422,6 +426,7 @@ class OrderDetailTab extends React.Component<any, any> {
     }
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
+
 
     return (
       <div className="orderDetail">

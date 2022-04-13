@@ -111,7 +111,6 @@ export default class GoodsList extends React.Component<any, any> {
    */
   _getColumns = (itemType) => {
     const { getFieldDecorator } = this.props.form;
-
     return [
       {
         title: <FormattedMessage id="Order.SKU Code" />,

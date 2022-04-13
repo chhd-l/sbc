@@ -277,7 +277,7 @@ export default class ClinicList extends Component<any, any> {
             </Tooltip>
             {record.enabled ? <>
               <Divider type="vertical" />
-              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.Areyousuretodelete" />} onConfirm={() => this.delClinic(record.prescriberId)} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.Areyousuretodelete" />} onConfirm={() => this.delClinic(record.id)} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
                 <Tooltip placement="top" title={RCi18n({id:"Prescriber.Delete"})}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>

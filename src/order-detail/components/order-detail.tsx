@@ -157,9 +157,7 @@ class OrderDetailTab extends React.Component<any, any> {
 
     gifts = gifts
       .map((gift) =>{
-        if(!gift.get('cateName')?.includes('Leaflet')){
-          return gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
-        }
+        return !gift.get('cateName')?.includes('Leaflet') ? gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName')):gift.set('skuName', gift.get('skuName'))
       }).toJS();
 
 

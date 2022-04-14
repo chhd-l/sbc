@@ -40,7 +40,7 @@ export default class AppStore extends Store {
     if (key != '0') {
       obj.linkStatus = key == 'Invalid' ? 1 : 0;
     }
-    if (sessionStorage.getItem('PrescriberSelect')) {
+    if (sessionStorage.getItem('PrescriberSelect') && Const.SITE_NAME !== 'MYVETRECO') {
       form['clinicsName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
       form['prescriberName'] = JSON.parse(sessionStorage.getItem('PrescriberSelect')).prescriberName;
     }

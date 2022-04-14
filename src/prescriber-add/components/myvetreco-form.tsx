@@ -156,7 +156,7 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
                 email: values.email,
                 prescriberIds: [data.res.context.id],
                 roleIdList: [this.state.roleId],
-                accountState: 3
+                accountState: 0
               });
             }
             message.success(RCi18n({id:'Prescriber.OperateSuccessfully'}));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, InputNumber } from 'antd';
-import './css/style.css';
+import './css/style.less';
 
 const InputGroup = Input.Group;
 

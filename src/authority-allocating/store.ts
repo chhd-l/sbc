@@ -6,11 +6,12 @@ import BossMenuActor from './actor/boss-menu-actor';
 import { message } from 'antd';
 import VisibleActor from './actor/visible-actor';
 import EditActor from './actor/edit-actor';
+import LoadingActor from './actor/loading-actor';
 import { Const, history } from 'qmkit';
 
 export default class AppStore extends Store {
   bindActor() {
-    return [new RoleActor(), new BossMenuActor(), new VisibleActor(), new EditActor()];
+    return [new RoleActor(), new BossMenuActor(), new VisibleActor(), new EditActor(), new LoadingActor()];
   }
 
   constructor(props) {
@@ -85,12 +86,14 @@ export default class AppStore extends Store {
     const menuIdList = this.state().get('menuIdList');
     const functionIdList = this.state().get('functionIdList');
     if (roleInfoId) {
+      this.dispatch('loading:start');
       const { res } = (await webapi.updateBossMenus({
         roleInfoId,
         menuIdList,
         functionIdList
       })) as any;
       this.messageByResult(res);
+      this.dispatch('loading:end');
       if (res.code === Const.SUCCESS_CODE) {
         history.push('/role-list');
       }

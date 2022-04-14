@@ -41,12 +41,18 @@ export default class FreightStoreActor extends Actor {
           id: new Date().getTime(),
           // 最小订单金额
           orderInitialAmount: 0,
+          // 最小订单金额校验状态
+          orderInitialAmountValid: false,
           // 最大订单金额
           orderMaxAmount: '',
+          // 最大订单金额校验状态
+          orderMaxAmountValid: false,
           // 规则类型: Percent/Amount
           ruleSetting: '',
           // 具体额度
           amountOrPercentageVal: '',
+          // 具体额度校验状态
+          amountOrPercentageValValid: false,
           valid: false,
           // 是否删除 0: 否   1: 是
           delFlag: 0
@@ -131,12 +137,18 @@ export default class FreightStoreActor extends Actor {
             id: new Date().getTime(),
             // 最小订单金额
             orderInitialAmount: parseFloat(lastItem.get('orderMaxAmount')) + 1,
+            // 最小订单金额校验状态
+            orderInitialAmountValid: true,
             // 最大订单金额
             orderMaxAmount: '',
+            // 最大订单金额校验状态
+            orderMaxAmountValid: false,
             // 规则类型: Percent/Amount
             ruleSetting: '',
             // 具体额度
             amountOrPercentageVal: '',
+            // 具体额度校验状态
+            amountOrPercentageValValid: false,
             valid: false,
             // 是否删除 0: 否   1: 是
             delFlag: 0

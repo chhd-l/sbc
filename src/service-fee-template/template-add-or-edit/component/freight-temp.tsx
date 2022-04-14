@@ -265,11 +265,26 @@ export default class FreightTemp extends React.Component<any, any> {
                             // 第一列永远不许修改，只有第一行且不是最后一行允许修改，其他行是自动带入上一行最大值+1
                             disabled={true}
                             onChange={(e) => {
-                              tableRulesEdit({
-                                id: record.id,
-                                index,
-                                field: 'orderInitialAmount',
-                                value: e.target.value
+                              const val = e.target.value;
+                              setTimeout(() => {
+                                this.props.form.validateFields(
+                                  [`orderInitialAmount_${index}`],
+                                  (errs) => {
+                                    tableRulesEdit({
+                                      id: record.id,
+                                      index,
+                                      field: 'orderInitialAmount',
+                                      value: val
+                                    });
+
+                                    tableRulesEdit({
+                                      id: record.id,
+                                      index,
+                                      field: 'orderInitialAmountValid',
+                                      value: errs ? false : true
+                                    });
+                                  }
+                                );
                               });
                             }}
                           />
@@ -295,11 +310,26 @@ export default class FreightTemp extends React.Component<any, any> {
                             // 只有最后一行允许修改
                             disabled={index !== ruleTableList.length - 1}
                             onChange={(e) => {
-                              tableRulesEdit({
-                                id: record.id,
-                                index,
-                                field: 'orderMaxAmount',
-                                value: e.target.value
+                              const val = e.target.value;
+                              setTimeout(() => {
+                                this.props.form.validateFields(
+                                  [`orderMaxAmount_${index}`],
+                                  (errs) => {
+                                    tableRulesEdit({
+                                      id: record.id,
+                                      index,
+                                      field: 'orderMaxAmount',
+                                      value: val
+                                    });
+
+                                    tableRulesEdit({
+                                      id: record.id,
+                                      index,
+                                      field: 'orderMaxAmountValid',
+                                      value: errs ? false : true
+                                    });
+                                  }
+                                );
                               });
                             }}
                           />
@@ -362,11 +392,26 @@ export default class FreightTemp extends React.Component<any, any> {
                                 // 只有最后一行允许修改
                                 disabled={index !== ruleTableList.length - 1}
                                 onChange={(e) => {
-                                  tableRulesEdit({
-                                    id: record.id,
-                                    index,
-                                    field: 'amountOrPercentageVal',
-                                    value: e.target.value
+                                  const val = e.target.value;
+                                  setTimeout(() => {
+                                    this.props.form.validateFields(
+                                      [`amountOrPercentageVal_${index}`],
+                                      (errs) => {
+                                        tableRulesEdit({
+                                          id: record.id,
+                                          index,
+                                          field: 'amountOrPercentageVal',
+                                          value: val
+                                        });
+
+                                        tableRulesEdit({
+                                          id: record.id,
+                                          index,
+                                          field: 'amountOrPercentageValValid',
+                                          value: errs ? false : true
+                                        });
+                                      }
+                                    );
                                   });
                                 }}
                               />
@@ -390,11 +435,13 @@ export default class FreightTemp extends React.Component<any, any> {
                   // width: '13%',
                   render: (_text, record, index) => {
                     return index == 0 ? (
-                      <Icon
-                        type="plus"
-                        onClick={() => (canAddNewTableRow ? tableRulesAdd() : noop)}
-                        style={canAddNewTableRow ? styles.icon : styles.disabledIcon}
-                      />
+                      <>
+                        <Icon
+                          type="plus"
+                          onClick={() => (canAddNewTableRow ? tableRulesAdd() : noop)}
+                          style={canAddNewTableRow ? styles.icon : styles.disabledIcon}
+                        />
+                      </>
                     ) : (
                       <Icon
                         type="minus"

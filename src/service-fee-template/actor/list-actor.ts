@@ -5,7 +5,7 @@ export default class ListActor extends Actor {
   defaultState() {
     return {
       // 表格数据
-      tableDatas: [{ ruleName: 'haha', paymentMethod: 'heheh' }],
+      tableDatas: [],
       settingStatus: true
     };
   }

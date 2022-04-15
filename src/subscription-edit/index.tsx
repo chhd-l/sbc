@@ -1689,6 +1689,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Tooltip>
             </Popover>
             <Popconfirm
+              //避免确认框跟随滚动条滚动
+              getPopupContainer={(trigger: any) => trigger.parentNode}
               placement="topLeft"
               title={<FormattedMessage id="Subscription.skipThisItem" />}
               onConfirm={() => {

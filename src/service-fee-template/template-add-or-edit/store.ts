@@ -35,9 +35,12 @@ export default class AppStore extends Store {
         ruleList.map((r) => ({
           id: r.id,
           orderInitialAmount: r.initAmount,
+          orderInitialAmountValid: true,
           orderMaxAmount: r.maxAmount,
+          orderMaxAmountValid: true,
           ruleSetting: r.type,
           amountOrPercentageVal: r.fee,
+          amountOrPercentageValValid: true,
           valid: true,
           delFlag: 0
         }))
@@ -105,16 +108,17 @@ export default class AppStore extends Store {
   tableRulesEdit = ({ id, index, field, value }) => {
     this.dispatch('freight: rules: edit', { id, field, index, value });
     let { ruleTableList } = this.state().toJS();
-    const targetItem = id ? ruleTableList.find((r) => r.id == id) : ruleTableList[index];
+    const targetItem = id ? ruleTableList.find((r) => r.id == id) : ruleTableList[index];debugger
     this.dispatch('freight: rules: edit', {
       id,
       field: 'valid',
       index,
+      // 是否valid，需要看是否校验过，而不只是是否有值
       value:
-        targetItem.orderInitialAmount !== '' &&
-        targetItem.orderMaxAmount !== '' &&
+        targetItem.orderInitialAmountValid &&
+        targetItem.orderMaxAmountValid &&
         targetItem.ruleSetting !== '' &&
-        targetItem.amountOrPercentageVal !== ''
+        targetItem.amountOrPercentageValValid
     });
   };
 }

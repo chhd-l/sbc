@@ -2473,14 +2473,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>
                             {paymentInfo && paymentInfo.paymentVendor ? (
                               paymentInfo.paymentVendor
-                            ) : paymentInfo?.paymentItem === 'adyen_paypal' ? (
+                            ) : paymentInfo?.paymentItem?.toLowerCase() === 'adyen_paypal' ? (
                               <FormattedMessage id="Subscription.Paypal" />
                             ) : (
                               ''
                             )}
                           </p>
                         </Col>
-                        {paymentInfo?.paymentItem !== 'adyen_paypal' ? (
+                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' ? (
                           <Col span={24}>
                             <p style={{ width: 140 }}>
                               <FormattedMessage id="Subscription.CardNumber" />:{' '}

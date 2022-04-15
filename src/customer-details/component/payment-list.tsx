@@ -294,7 +294,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
           rowKey="id"
           loading={loading}
           columns={columns}
-          dataSource={list.filter((el) => el.paymentItem !== 'adyen_paypal')}
+          dataSource={list.filter((el) => el.paymentItem?.toLowerCase() !== 'adyen_paypal')}
           pagination={false}
         />
         {/*paypal*/}
@@ -314,7 +314,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
               rowKey="id"
               loading={loading}
               columns={paypalColumns}
-              dataSource={list.filter((el) => el.paymentItem === 'adyen_paypal')}
+              dataSource={list.filter((el) => el.paymentItem?.toLowerCase() === 'adyen_paypal')}
               pagination={false}
             />
           </>

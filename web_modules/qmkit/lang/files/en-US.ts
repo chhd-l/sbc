@@ -5624,4 +5624,7 @@ export default {
   "Clinic.ClinicPhone": "Clinic phone",
   "Clinic.AddClinic": "Add clinic",
   "Clinic.EditClinic": "Edit clinic",
+  "Home.recommendations": "Recommendations",
+  "Home.sendby": "Send by {val}",
+  "Product.router": "Router",
 };

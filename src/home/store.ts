@@ -53,6 +53,7 @@ export default class AppStore extends Store {
       this.dispatch('home:prescriberTradeItemTopView', res.context ? res.context.prescriberTradeItemTopView : []);
       this.dispatch('home:prescriberTradeAndItemTopView', res.context ? res.context.prescriberTradeAndItemTopView : []);
       this.dispatch('home:prescriberRecommentCodeUseView', res.context ? res.context.prescriberRecommentCodeUseView : []);
+      this.dispatch('prescriber:countByPrescriberIdView', res.context?.countByPrescriberIdView ?? []);
 
       //this.dispatch('home:searchData', getListAll.context);
     } else {

@@ -13,7 +13,7 @@ import {
   DatePicker,
 } from 'antd';
 import { Relax } from 'plume2';
-import {Const, noop, QMMethod, Tips} from 'qmkit';
+import {Const, noop, QMMethod, Tips, RCi18n} from 'qmkit';
 import { Map, fromJS } from 'immutable';
 import Store from '../store';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
@@ -233,11 +233,11 @@ class CateModalForm extends React.Component<any, any> {
             onChange: this._changeCateName
           })(<Input />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="Parent category">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Parentcategory" />}>
           {formData.get('cateParentName') ? formData.get('cateParentName') : 'none'}
         </FormItem>
         {formData.get('cateParentName') ? null : (
-          <FormItem {...formItemLayout} label="Display in shop">
+          <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Displayinshop"/>}>
             {getFieldDecorator('displayStatus', {
               rules: [
                 {
@@ -262,7 +262,7 @@ class CateModalForm extends React.Component<any, any> {
         {formData.get('cateParentName')
             ? null
             : (
-                <FormItem {...formItemLayout} label="Filter status">
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Filterstatus"/>}>
                   {getFieldDecorator('filterStatus', {
                     rules: [],
                     valuePropName: 'checked',
@@ -277,7 +277,7 @@ class CateModalForm extends React.Component<any, any> {
         {formData.get('cateParentName')
             ? null
             : (
-                <FormItem {...formItemLayout} label="Period">
+                <FormItem {...formItemLayout} label={<FormattedMessage id="Prescriber.Period"/>}>
                   {getFieldDecorator('period', {
                     rules: [],
                     initialValue: period || [],
@@ -295,7 +295,7 @@ class CateModalForm extends React.Component<any, any> {
         }
 
         {formData.get('cateParentName') ? null : (
-            <FormItem {...formItemLayout} label="Router">
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.router"/>}>
               {getFieldDecorator('cateRouter', {
                 rules: [
                   {
@@ -312,7 +312,7 @@ class CateModalForm extends React.Component<any, any> {
             </FormItem>
         )}
         {formData.get('cateParentName') ? null : (
-            <FormItem {...formItemLayout} label="ALT name">
+            <FormItem {...formItemLayout} label={<FormattedMessage id="Product.ALTname"/>}>
               {getFieldDecorator('altName', {
                 rules: [
                   {
@@ -327,7 +327,7 @@ class CateModalForm extends React.Component<any, any> {
               })(<Input />)}
             </FormItem>
         )}
-        <FormItem labelCol={2} {...formItemLayout} label="Category type">
+        <FormItem labelCol={2} {...formItemLayout} label={<FormattedMessage id="Product.Categorytype"/>}>
           {getFieldDecorator('cateType', {
             // rules: [
             //   {
@@ -423,7 +423,7 @@ class CateModalForm extends React.Component<any, any> {
           <Tips title={<FormattedMessage id="Product.recommendedSizeImg" />} />
         </FormItem>
 
-        <FormItem {...formItemLayout} label="Description title">
+        <FormItem {...formItemLayout} label={<FormattedMessage id="Product.Descriptiontitle"/>}>
           {getFieldDecorator('cateTitle', {
             rules: [{ max: 100, message: <FormattedMessage id="Product.Up100Characters" /> }],
             onChange: this._editGoods.bind(this, 'cateTitle'),
@@ -442,7 +442,7 @@ class CateModalForm extends React.Component<any, any> {
             ],
             onChange: this._editGoods.bind(this, 'cateDescription'),
             initialValue: goodsDescription
-          })(<TextArea rows={4} placeholder="Please input the product description" />)}
+          })(<TextArea rows={4} placeholder={RCi18n({id:"Product.Categorydescriptionplaceholder"})} />)}
         </FormItem>
       </Form>
     );

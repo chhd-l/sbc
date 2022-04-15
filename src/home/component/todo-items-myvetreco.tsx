@@ -2,7 +2,7 @@ import React from 'react';
 import {Relax} from 'plume2';
 import {Link} from 'react-router-dom';
 
-import {Spin} from 'antd';
+import {Spin, Row, Col} from 'antd';
 //import { fromJS } from 'immutable';
 
 import {AuthWrapper, cache, RCi18n, history, noop, util} from 'qmkit';
@@ -432,7 +432,22 @@ class TodoItemsMyvet extends React.Component<any, any> {
             </div>
           </div>
 
-          
+          <div className="item-btm space-between">
+            <div className="item-btm-m">
+              <div className="top-text space-between">
+                <span><FormattedMessage id="Home.recommendations"/></span>
+                <span></span>
+              </div>
+              <div className="seller">
+                <Row gutter={[24, 32]}>
+                  <Col span={6}><span className="text">Send by clinic1</span></Col>
+                  <Col span={6}><CountUp end={15} /></Col>
+                  <Col span={6}><span className="text">Send by clinic1</span></Col>
+                  <Col span={6}><CountUp end={15} /></Col>
+                </Row>
+              </div>
+            </div>
+          </div>
 
           
 

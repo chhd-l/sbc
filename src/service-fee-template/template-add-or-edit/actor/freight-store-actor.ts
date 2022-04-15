@@ -42,7 +42,7 @@ export default class FreightStoreActor extends Actor {
           // 最小订单金额
           orderInitialAmount: 0,
           // 最小订单金额校验状态
-          orderInitialAmountValid: false,
+          orderInitialAmountValid: true,
           // 最大订单金额
           orderMaxAmount: '',
           // 最大订单金额校验状态

@@ -448,8 +448,8 @@ class TodoItemsMyvet extends React.Component<any, any> {
                   <Row gutter={[24, 20]}>
                   {countByPrescriberIdView.map((item, key) => (
                     <React.Fragment key={key}>
-                      <Col span={8}><FormattedMessage id="Home.sendby" values={{ val: item.prescriber }}/></Col>
-                      <Col span={4}><CountUp end={item.reAmount} /></Col>
+                      <Col span={8}><div className="overFlowtext" title={item.prescriber}><FormattedMessage id="Home.sendby" values={{ val: item.prescriber }}/></div></Col>
+                      <Col span={4}><div style={{color:'#000',fontWeight:'bold'}}><CountUp end={item.reAmount} /></div></Col>
                     </React.Fragment>
                   ))}
                   </Row>

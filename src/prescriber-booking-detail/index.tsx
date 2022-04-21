@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, history, RCi18n } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Card, Avatar, Pagination, Icon, DatePicker, Empty, Modal } from 'antd';
 
@@ -105,7 +105,7 @@ class BookingDetail extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Pet owner name" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'PetOwner.ConsumerName'})} defaultValue={RCi18n({id:'PetOwner.ConsumerName'})} />
                         <Input
                           style={styles.wrapper}
                           onChange={(e) => {
@@ -123,7 +123,7 @@ class BookingDetail extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Publish status" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'Prescriber.PublishStatus'})} defaultValue={RCi18n({id:'Prescriber.PublishStatus'})} />
                         <Select
                           style={styles.wrapper}
                           onChange={(value) => {
@@ -150,7 +150,7 @@ class BookingDetail extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue={<FormattedMessage id="Prescriber.BookDate" />} />
+                        <Input style={styles.label} disabled title={RCi18n({id:'Prescriber.BookDate'})} defaultValue={RCi18n({id:'Prescriber.BookDate'})} />
                         <RangePicker style={styles.wrapper} onChange={this.onChangeDate} format={'YYYY-MM-DD'} />
                       </InputGroup>
                     </FormItem>

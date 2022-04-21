@@ -116,7 +116,7 @@ export default class MyHeader extends React.Component {
       })
     })
 
-    const _frontLanguageList = _languageList.length && _languageList.slice(0,7) || []
+    const _frontLanguageList = _languageList.length && _languageList.slice(0,8) || []
     this.setState({
       languageList: _languageList,
       frontLanguageList:_frontLanguageList
@@ -171,16 +171,16 @@ export default class MyHeader extends React.Component {
     ];
 
     return (
-      <div style={{height: 640,display:'flex',alignItems:'center' }}>
-        <div>
-          <p style={{ textAlign: 'center', fontSize: 50, color: 'var(--primary-color)'}}>
-            <Icon type="environment" style={{ fontSize: 48 }} />
-            &nbsp;&nbsp;
-            <span>
-              <FormattedMessage id="Public.ChooseLocation" />
-            </span>
-          </p>
-          {this.state.frontLanguageList.length>7?<p style={styles.languageMore}>
+      <div style={{padding: '70px 0', textAlign: 'center'}}>
+        <p style={{ textAlign: 'center', fontSize: 50, color: 'var(--primary-color)'}}>
+          <Icon type="environment" style={{ fontSize: 48 }} />
+          &nbsp;&nbsp;
+          <span>
+            <FormattedMessage id="Public.ChooseLocation" />
+          </span>
+        </p>
+        <div style={{width: 600,display:'inline-block'}}>
+          {this.state.frontLanguageList.length>8?<p style={styles.languageMore}>
             <a onClick={() => this.handleMoreLanguage()}>
               <span style={this.state.showMoreLang?{display:"block"}:{display:"none"}}>
                 <FormattedMessage id="Public.more" />
@@ -195,7 +195,7 @@ export default class MyHeader extends React.Component {
                   key={item.lang}
                   style={{
                     cursor: 'pointer',
-                    width: '14.2%'
+                    width: '25%'
                   }}
                   onMouseLeave={(e) => {
                     // this.setImgSrc(item.name, item.value, '');
@@ -294,6 +294,7 @@ export default class MyHeader extends React.Component {
   };
 
   languageChange = (value) => {
+    // 
     // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
     // sessionStorage.setItem(cache.LANGUAGE, value);
     // history.go(0);
@@ -389,6 +390,18 @@ export default class MyHeader extends React.Component {
 
       }
     })
+  }
+
+  //跳转CRM
+  handleCRMSRedirect = () => {
+    Modal.confirm({
+      title: RCi18n({id:'Setting.leaveStorePortal'}),
+      okText: RCi18n({id:'Setting.Yes'}),
+      cancelText: RCi18n({id:'back'}),
+      onOk: () => {
+        window.location.href = sessionStorage.getItem(cache.POXDOMAINNAME) + 'login?toOkta=staff';
+      }
+    });
   }
 
   render() {
@@ -578,7 +591,6 @@ export default class MyHeader extends React.Component {
 
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
     const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
-
     return (
       <div className="my-header">
         <Header className="header" style={{ paddingLeft: '0' }}>
@@ -608,6 +620,12 @@ export default class MyHeader extends React.Component {
               //   </Dropdown>
               // )
             }
+
+            <AuthWrapper functionName="f_to_scrm">
+              <a className="ant-dropdown-link" href="javascript:;" onClick={this.handleCRMSRedirect}>
+                <i className="iconfont iconmedal-l"></i>
+              </a>
+            </AuthWrapper>
           </div>
 
           <div className="align-items-center">
@@ -647,6 +665,13 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
+              {/* <Icon type="global" style={styles.languageIcon} />
+              <Select
+                defaultValue={sessionStorage.getItem(cache.LANGUAGE)}
+                onChange={this.languageChange}
+                style={{ width: 180 }}>
+                {this.state.languageList.map(item => <Option key={item.lang} value={item.lang}>{item.langCountry}</Option>)}
+              </Select> */}
               {
                 Const.SITE_NAME !== 'MYVETRECO' ? (
                   <div className='headerRight-shop'>
@@ -764,5 +789,11 @@ const styles = {
     flexWrap: "wrap",
     maxHeight: "470px",
     overflowY: "auto"
+  },
+  languageIcon: {
+    marginLeft:'25px',
+    fontSize: '24px',
+    transform: 'scale(.8)',
+    color: '#7e7e7e'
   }
 } as any;

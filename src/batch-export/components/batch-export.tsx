@@ -138,8 +138,9 @@ class BatchExport extends Component<BatchExportProps, any> {
               ],
               initialValue: [null, null]
             })(<RangePicker
-              disabledDate={current => current && current > moment().endOf('day')}
+              disabledDate={current => item.key!=='nextRefillDate'&&current && current > moment().endOf('day')}
               disabled={exportField === 'all'}
+              placeholder={item.key==='nextRefillDate'?['Next refill date: Start date','End date']:item.key==='subscribeDate'?['Subscription date: Start date','End date']:['Start date','End date']}
               className="rang-picker-width"
               style={styles.formItemStyle}
             />)}
@@ -209,12 +210,21 @@ class BatchExport extends Component<BatchExportProps, any> {
             tradeState: {}
           };
           // 单独处理时间值
-          let timeArr = values.beginTime;
+          let timeArr = values.beginTime || values.subscribeDate;
           if (timeArr && timeArr.length) {
             obj['beginTime'] = timeArr[0]?.format(Const.DAY_FORMAT);
             obj['endTime'] = timeArr[1]?.format(Const.DAY_FORMAT);
           }
           delete fieldKey['beginTime'];
+          delete fieldKey['subscribeDate'];
+
+          // 单独处理时间值
+          let nextRefillDateArr = values.nextRefillDate;
+          if (nextRefillDateArr && nextRefillDateArr.length) {
+            obj['nextRefillStartTime'] = nextRefillDateArr[0]?.format(Const.DAY_FORMAT);
+            obj['nextRefillEndTime'] = nextRefillDateArr[1]?.format(Const.DAY_FORMAT);
+          }
+          delete fieldKey['nextRefillDate'];
 
           // 单独处理 Frequency
           let cycleTypeId = values.cycleTypeId_autoship;
@@ -233,6 +243,8 @@ class BatchExport extends Component<BatchExportProps, any> {
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
             } else if(key === 'payState') {
               obj['tradeState'][fieldKey[key]] = values[key] || '';
+            }else if (key === 'goodWillFlag') {
+              obj[fieldKey[key]] = +values[key] || '';
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }

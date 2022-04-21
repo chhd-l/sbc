@@ -31,6 +31,19 @@ export const fetchGiftList = (filterParams = {}) => {
 };
 
 /**
+ * 获取leaflet规则
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+ export const fetchLeafletList = (filterParams = {}) => {
+  return Fetch<TResult>('/marketing/fullLeaflet/leafletList', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+};
+
+/**
  * 结果
  * @param checkState
  * @param customerIds

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { Form, Input, Select, Button, Tree } from 'antd';
-import { TreeSelectGroup, SelectGroup } from 'qmkit';
+import { TreeSelectGroup, SelectGroup, RCi18n } from 'qmkit';
 
 import * as webapi from './webapi';
 
@@ -27,6 +27,7 @@ export default class SearchForm extends React.Component<any, any> {
         likeValue: '',
         likeGoodsName: ''
       },
+      cateIdDisabled: false,
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
     };
   }
@@ -67,7 +68,7 @@ export default class SearchForm extends React.Component<any, any> {
 
   render() {
     const { searchParams } = this.state;
-    const { cates, brands } = this.state;
+    const { cates, brands, cateIdDisabled } = this.state;
 
     return (
       <div id="modal-head">
@@ -79,11 +80,11 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <Input addonBefore="Product Name" value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
+            <Input addonBefore={RCi18n({id:'Product.ProductName'})} value={searchParams.likeGoodsName} onChange={(e) => this.paramsOnChange('likeGoodsName', e.target.value)} />
           </FormItem>
 
           <FormItem>
-            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Product category" dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()}>
+            <TreeSelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={RCi18n({id:'Product.Productcategory'})} dropdownStyle={{ zIndex: 1053 }} onChange={(value) => this.paramsOnChange('cateId', value)} value={searchParams.cateId.toString()} disabled={cateIdDisabled}>
               <TreeNode key="0" value="0" title="All">
                 {this.loop(fromJS(cates), fromJS(cates), 0)}
               </TreeNode>
@@ -91,7 +92,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label="Brand" dropdownStyle={{ zIndex: 1053 }} onChange={(val) => this.paramsOnChange('brandId', val)} value={searchParams.brandId.toString()}>
+            <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={RCi18n({id:'Product.Brand'})} dropdownStyle={{ zIndex: 1053 }} onChange={(val) => this.paramsOnChange('brandId', val)} value={searchParams.brandId.toString()}>
               <Option key="0" value="0">
                 All
               </Option>
@@ -115,7 +116,7 @@ export default class SearchForm extends React.Component<any, any> {
                 this.searchBackFun();
               }}
             >
-              Search
+              {RCi18n({id:'Product.Search'})}
             </Button>
           </FormItem>
         </Form>
@@ -124,6 +125,7 @@ export default class SearchForm extends React.Component<any, any> {
   }
 
   init = async () => {
+    const { goodsCate } = this.props;
     const fetchBrand = await webapi.fetchBrandList();
     const fetchCates = await webapi.fetchCateList();
 
@@ -132,7 +134,25 @@ export default class SearchForm extends React.Component<any, any> {
     const { res: catesRes } = fetchCates as any;
     const { context: cates } = catesRes;
 
-    this.setState({ brands: brands, cates: cates });
+    let defaultGoodsCategoryId = 0, isGoodsCategoryDisabled = false;
+    if (goodsCate) {
+      defaultGoodsCategoryId = (cates.find(ca => (ca.cateName || '').toLowerCase() === goodsCate) ?? {})['cateId'] ?? 0;
+      isGoodsCategoryDisabled = !!defaultGoodsCategoryId;
+    }
+
+    this.setState({
+      brands: brands,
+      cates: cates,
+      searchParams: {
+        ...this.state.searchParams,
+        cateId: defaultGoodsCategoryId
+      },
+      cateIdDisabled: isGoodsCategoryDisabled
+    }, () => {
+      if (defaultGoodsCategoryId) {
+        this.searchBackFun();
+      }
+    });
   };
 
   paramsOnChange = (key, value) => {
@@ -157,8 +177,8 @@ export default class SearchForm extends React.Component<any, any> {
       }}
       getPopupContainer={() => document.getElementById('modal-head')}
     >
-      <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option>
-      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU Code</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_NO} title={RCi18n({id:'Order.spuCode'})}>{RCi18n({id:'Order.spuCode'})}</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO} title={RCi18n({id:'Product.SKUCode'})}>{RCi18n({id:'Product.SKUCode'})}</Option>
     </Select>
   );
 }

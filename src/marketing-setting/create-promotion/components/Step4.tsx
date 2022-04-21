@@ -15,7 +15,7 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
-const WrapperCol = {offset: 4,span:20}
+const WrapperCol = {offset: 5,span: 19}
 function Step4({form}){
   const { match,formData,changeFormData,setStep,formItemLayout } = useContext<any>(FormContext);
   const {getFieldDecorator,validateFields,setFields} = form
@@ -72,6 +72,7 @@ function Step4({form}){
           ...values,
           isSuperimposeSubscription:isSuperimposeSubscription ? 0 : 1,//判断是有选中isSuperimposeSubscription
           scopeIds:selectedSkuIds,
+          scopeNumber: selectedRows.toJS().reduce((prev, curr) => { prev[curr.goodsInfoId] = customProductsType === 0 ? curr.productNumber : 1; return prev; }, {}), //includes products传具体数字，exclude直接传1
         })
         setStep(4)
       }
@@ -147,7 +148,7 @@ function Step4({form}){
   const skuSelectedBackFun = async (selectedSkuIds, selectedRows) => {
     form.resetFields('goods');
     setSelectedSkuIds(selectedSkuIds);
-    setSelectedRows(selectedRows);
+    setSelectedRows(selectedRows.map(item => item.set('productNumber', 1)));
     if(selectedSkuIds.length === 0){
       setFields({
         goods:{
@@ -177,6 +178,14 @@ function Step4({form}){
     let SelectedRows = selectedRows.delete(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId));
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(SelectedRows);
+  };
+  /**
+   * 修改已选择商品件数
+   * @param skuId 
+   * @param productNumber 
+   */
+  const changeSelectedProductNumber = (skuId, productNumber) => {
+    setSelectedRows(selectedRows.update(selectedRows.findIndex((row) => row.get('goodsInfoId') == skuId), (item) => item.set('productNumber', productNumber)));
   };
 
   //展示相关
@@ -392,7 +401,7 @@ function Step4({form}){
                           <FormattedMessage id="Marketing.AddProducts" />
                         </Button>
                         &nbsp;&nbsp;
-                        <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} />
+                        <SelectedGoodsGrid selectedRows={selectedRows} skuExists={[]} deleteSelectedSku={deleteSelectedSku} customProductsType={customProductsType} changeNumber={changeSelectedProductNumber} />
                       </div>
                     )}
                   </Form.Item>

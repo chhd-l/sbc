@@ -2,13 +2,19 @@ import { IOptions, Store } from 'plume2';
 import { fromJS, Map } from 'immutable';
 import { message, Modal } from 'antd';
 import { IList } from 'typings/globalType';
-import { cache, Const, history, QMFloat,RCi18n } from 'qmkit';
+import { cache, Const, history, QMFloat, RCi18n } from 'qmkit';
 import FormActor from './actor/form-actor';
 import TradeActor from './actor/trade-actor';
 import PriceActor from './actor/price-actor';
 import ImageActor from './actor/image-actor';
-import LoadingActor from './actor/loading-actor'
-import { addApply, fetchOrderReturnList, getReturnReasons, getReturnWays, getTradeDetail } from './webapi';
+import LoadingActor from './actor/loading-actor';
+import {
+  addApply,
+  fetchOrderReturnList,
+  getReturnReasons,
+  getReturnWays,
+  getTradeDetail
+} from './webapi';
 
 const confirm = Modal.confirm;
 
@@ -21,7 +27,13 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new FormActor(), new TradeActor(), new PriceActor(), new ImageActor(),new LoadingActor()];
+    return [
+      new FormActor(),
+      new TradeActor(),
+      new PriceActor(),
+      new ImageActor(),
+      new LoadingActor()
+    ];
   }
 
   init = async (tid: string) => {
@@ -36,7 +48,8 @@ export default class AppStore extends Store {
     //获取订单详情
     let tradeDetail = (await getTradeDetail(tid)) as any;
     // 判断是否发货， 未发货的订单直接退款
-    let isReturn = tradeDetail.res.context.tradeState.flowState !== 'TO_BE_DELIVERED' ? true : false;
+    let isReturn =
+      tradeDetail.res.context.tradeState.flowState !== 'TO_BE_DELIVERED' ? true : false;
     // 判断是否是线上订单
     // let isOnLine = tradeDetail.res.context.payInfo.payTypeId == '0';
     //订单里原来的所有商品信息
@@ -46,7 +59,6 @@ export default class AppStore extends Store {
     // 已申请退货订单
     let returnOrderList = [];
 
-
     if (isReturn) {
       let orderReturnListRes = await fetchOrderReturnList(tid);
 
@@ -55,11 +67,18 @@ export default class AppStore extends Store {
       }
       // 计算剩余退款金额
       // if (isOnLine) {
-        returnOrderList&&returnOrderList
+      returnOrderList &&
+        returnOrderList
           .filter((v) => {
             return v.returnFlowState == 'COMPLETED';
           })
-          .forEach((v) => (canApplyPrice = QMFloat.accSubtr(canApplyPrice, v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice)));
+          .forEach(
+            (v) =>
+              (canApplyPrice = QMFloat.accSubtr(
+                canApplyPrice,
+                v.returnPrice.applyStatus ? v.returnPrice.applyPrice : v.returnPrice.totalPrice
+              ))
+          );
       // }
 
       // 退货申请，设置商品可退数量
@@ -79,12 +98,12 @@ export default class AppStore extends Store {
 
       if (tradeDetail.res.context.subscriptionPlanGiftList) {
         tradeDetail.res.context.subscriptionPlanGiftList.forEach((v) => {
-            v.skuNo= v.goodsInfoNo;
-            v.skuName=v.goodsInfoName;
-            v.specDetails='';
-            v.unitPrice=0;
-            v.num=0;//初始化默认的退货数量
-            v.skuId=v.goodsInfoId
+          v.skuNo = v.goodsInfoNo;
+          v.skuName = v.goodsInfoName;
+          v.specDetails = '';
+          v.unitPrice = 0;
+          v.num = 0; //初始化默认的退货数量
+          v.skuId = v.goodsInfoId;
         });
       }
 
@@ -97,15 +116,8 @@ export default class AppStore extends Store {
       });
     }
 
-
-
-
-
-
     // 已完结订单，则为退货申请，否则认为是退款申请
     this.dispatch('loading:end');
-
-
 
     this.dispatch('tradeActor: init', {
       tradeDetail: fromJS(tradeDetail.res.context),
@@ -134,10 +146,10 @@ export default class AppStore extends Store {
   /**
    * 修改数量
    */
-  editGoodsNum = (skuId: string, value: number,itemType:number|null) => {
+  editGoodsNum = (skuId: string, value: number, itemType: number | null) => {
     this.transaction(() => {
       // 1.修改退货商品数量
-      this.dispatch('tradeActor: editGoodsNum', { skuId, value,itemType });
+      this.dispatch('tradeActor: editGoodsNum', { skuId, value, itemType });
       // 2.判断是否更新勾选的赠品,以及赠品数量(若修改数量的sku已被勾选,则计算并更新赠品数量)
       const skuIndex = this.state()
         .get('tradeDetail')
@@ -156,7 +168,9 @@ export default class AppStore extends Store {
     const trade = this.state().get('tradeDetail');
     const tradeMarketings = trade.get('tradeMarketings');
     if (tradeMarketings && tradeMarketings.size > 0) {
-      const giftMarketings = tradeMarketings.filter((tradeMarketing) => tradeMarketing.get('marketingType') == 2); //找到满赠活动
+      const giftMarketings = tradeMarketings.filter(
+        (tradeMarketing) => tradeMarketing.get('marketingType') == 2
+      ); //找到满赠活动
       if (giftMarketings && giftMarketings.size > 0) {
         const tradeItems = this.state().get('originTradeItems'); //订单中的所有商品
         const giftItems = trade.get('gifts'); //订单中的赠品
@@ -171,7 +185,10 @@ export default class AppStore extends Store {
           reOrder.get('returnItems').forEach((returnItem) => {
             const currItem = comReturnSkus.get(returnItem.get('skuId'));
             if (currItem) {
-              comReturnSkus = comReturnSkus.set(returnItem.get('skuId'), currItem.set('num', currItem.get('num') + returnItem.get('num')));
+              comReturnSkus = comReturnSkus.set(
+                returnItem.get('skuId'),
+                currItem.set('num', currItem.get('num') + returnItem.get('num'))
+              );
             } else {
               comReturnSkus = comReturnSkus.set(returnItem.get('skuId'), returnItem);
             }
@@ -181,7 +198,10 @@ export default class AppStore extends Store {
             reOrder.get('returnGifts').forEach((returnGift) => {
               const currGiftItemNum = comReturnGifts.get(returnGift.get('skuId'));
               if (currGiftItemNum) {
-                comReturnGifts = comReturnGifts.set(returnGift.get('skuId'), currGiftItemNum + returnGift.get('num'));
+                comReturnGifts = comReturnGifts.set(
+                  returnGift.get('skuId'),
+                  currGiftItemNum + returnGift.get('num')
+                );
               } else {
                 comReturnGifts = comReturnGifts.set(returnGift.get('skuId'), returnGift.get('num'));
               }
@@ -196,11 +216,18 @@ export default class AppStore extends Store {
             const leftSkuAmount = giftMarketing
               .get('skuIds')
               .map((skuId) => {
-                const skuItem = tradeItems.get(tradeItems.findIndex((item) => item.get('skuId') == skuId));
-                const comReSkuCount = comReturnSkus.get(skuId) ? comReturnSkus.get(skuId).get('num') : 0;
+                const skuItem = tradeItems.get(
+                  tradeItems.findIndex((item) => item.get('skuId') == skuId)
+                );
+                const comReSkuCount = comReturnSkus.get(skuId)
+                  ? comReturnSkus.get(skuId).get('num')
+                  : 0;
                 const indexTmp = currReturnSkus.findIndex((item) => item.get('skuId') == skuId);
                 const currReSkuCount = indexTmp > -1 ? currReturnSkus.get(indexTmp).get('num') : 0;
-                return skuItem.get('levelPrice') * (skuItem.get('deliveredNum') - comReSkuCount - currReSkuCount); //某商品的发货商品价格 - 已退商品价格 - 当前准备退的商品价格
+                return (
+                  skuItem.get('levelPrice') *
+                  (skuItem.get('deliveredNum') - comReSkuCount - currReSkuCount)
+                ); //某商品的发货商品价格 - 已退商品价格 - 当前准备退的商品价格
               })
               .reduce((sum, x) => sum + x, 0); //剩余商品价格汇总
 
@@ -212,8 +239,12 @@ export default class AppStore extends Store {
             const leftSkuCount = giftMarketing
               .get('skuIds')
               .map((skuId) => {
-                const skuItem = tradeItems.get(tradeItems.findIndex((item) => item.get('skuId') == skuId));
-                const comReSkuCount = comReturnSkus.get(skuId) ? comReturnSkus.get(skuId).get('num') : 0;
+                const skuItem = tradeItems.get(
+                  tradeItems.findIndex((item) => item.get('skuId') == skuId)
+                );
+                const comReSkuCount = comReturnSkus.get(skuId)
+                  ? comReturnSkus.get(skuId).get('num')
+                  : 0;
                 const indexTmp = currReturnSkus.findIndex((item) => item.get('skuId') == skuId);
                 const currReSkuCount = indexTmp > -1 ? currReturnSkus.get(indexTmp).get('num') : 0;
                 return skuItem.get('deliveredNum') - comReSkuCount - currReSkuCount; //某商品的发货商品数 - 已退商品数 - 当前准备退的商品数
@@ -247,7 +278,10 @@ export default class AppStore extends Store {
       .forEach((gift) => {
         let currGiftItemCount = allReturnGifts.get(gift.get('productId'));
         if (currGiftItemCount) {
-          allReturnGifts = allReturnGifts.set(gift.get('productId'), currGiftItemCount + gift.get('productNum'));
+          allReturnGifts = allReturnGifts.set(
+            gift.get('productId'),
+            currGiftItemCount + gift.get('productNum')
+          );
         } else {
           allReturnGifts = allReturnGifts.set(gift.get('productId'), gift.get('productNum'));
         }
@@ -327,7 +361,7 @@ export default class AppStore extends Store {
 
       // 如果所有商品的退货数量都为0
       if (tradeItems.size == 0) {
-        message.error(RCi18n({id: 'Order.returnOrder.returnQuantity'}));
+        message.error(RCi18n({ id: 'Order.returnOrder.returnQuantity' }));
         return;
       }
 
@@ -336,28 +370,36 @@ export default class AppStore extends Store {
     }
 
     param = param.set('returnItems', tradeItems);
+    if (data.getIn(['tradeDetail', 'gifts'])) {
+      const gifts = data.getIn(['tradeDetail', 'gifts']).filter((item) => item.get('num') > 0);
+      if (gifts.size > 0) {
+        param = param.set('returnGifts', data.getIn(['tradeDetail', 'gifts']));
+      }
+    }
 
-    if(data.getIn(['tradeDetail', 'subscriptionPlanGiftList'])){
+    if (data.getIn(['tradeDetail', 'subscriptionPlanGiftList'])) {
       // 只保存退货赠品数量大于0的订阅赠品
-      const subGifts = data.getIn(['tradeDetail', 'subscriptionPlanGiftList']).filter((item) => item.get('num') > 0);
+      const subGifts = data
+        .getIn(['tradeDetail', 'subscriptionPlanGiftList'])
+        .filter((item) => item.get('num') > 0);
       if (subGifts.size > 0) {
-        let returnSubGifts=[]
+        let returnSubGifts = [];
         subGifts.toJS().forEach((v) => {
-          const obj={
-            canReturnNum:v.canReturnNum,
-            num:v.num,
-            orderSplitPrice:0,
-            pic:v.goodsInfoImg,
-            price:0,
-            skuId:v.goodsInfoId,
-            skuName:v.goodsInfoName,
-            skuNo:v.goodsInfoNo,
-            specDetails:'',
-            splitPrice:0,
-            unit:'',
-            externalSkuNo:v.externalSkuNo
-          }
-          returnSubGifts.push(obj)
+          const obj = {
+            canReturnNum: v.canReturnNum,
+            num: v.num,
+            orderSplitPrice: 0,
+            pic: v.goodsInfoImg,
+            price: 0,
+            skuId: v.goodsInfoId,
+            skuName: v.goodsInfoName,
+            skuNo: v.goodsInfoNo,
+            specDetails: '',
+            splitPrice: 0,
+            unit: '',
+            externalSkuNo: v.externalSkuNo
+          };
+          returnSubGifts.push(obj);
         });
         param = param.set('returnSubscriptionPlanGift', returnSubGifts);
       }
@@ -368,17 +410,17 @@ export default class AppStore extends Store {
 
     let totalPrice = data.get('isReturn')
       ? tradeItems
-        .map((sku) => {
-          return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
-          // if (sku.get('num') < sku.get('canReturnNum')) {
-          //   //小于可退数量,直接单价乘以数量
-          //   return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
-          // } else {
-          //   //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
-          //   return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('unitPrice'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
-          // }
-        })
-        .reduce((one, two) => QMFloat.accAdd(one, two))
+          .map((sku) => {
+            return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+            // if (sku.get('num') < sku.get('canReturnNum')) {
+            //   //小于可退数量,直接单价乘以数量
+            //   return QMFloat.accMul(sku.get('unitPrice'), sku.get('num'));
+            // } else {
+            //   //大于等于可退数量 , 使用分摊小计金额 - 已退金额(单价*(购买数量-可退数量))
+            //   return QMFloat.accSubtr(sku.get('splitPrice'), QMFloat.accMul(sku.get('unitPrice'), QMFloat.accSubtr(sku.get('totalNum'), sku.get('canReturnNum'))));
+            // }
+          })
+          .reduce((one, two) => QMFloat.accAdd(one, two))
       : data.getIn(['tradeDetail', 'tradePrice', 'totalPrice']);
 
     // const tradeDetail = data.get('tradeDetail');
@@ -417,20 +459,30 @@ export default class AppStore extends Store {
     // });
 
     // 退款金额大于可退金额时
-    if (data.get('applyStatus') ? data.get('applyPrice') > data.get('canApplyPrice') : totalPrice > data.get('canApplyPrice')) {
+    if (
+      data.get('applyStatus')
+        ? data.get('applyPrice') > data.get('canApplyPrice')
+        : totalPrice > data.get('canApplyPrice')
+    ) {
       // 在线支付要判断退款金额不能大于剩余退款金额
       // if (data.get('isOnLine')) {
-        let title = RCi18n({id: 'Order.refundableAmountTips'}) + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data.get('canApplyPrice')
-        let content = RCi18n({id: 'Order.refundableAmountTips2'})
-        let okText=RCi18n({id: 'Order.btnConfirm'})
-        let cancelText = RCi18n({id: 'Order.btnCancel'})
-        Modal.warning({
-          title: title,
-          content: content,
-          okText: okText,
-          cancelText: cancelText
-        });
-        return;
+      let title =
+        RCi18n({ id: 'Order.refundableAmountTips' }) +
+        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+        data.get('canApplyPrice');
+      let content = RCi18n({ id: 'Order.refundableAmountTips2' });
+      let okText = RCi18n({ id: 'Order.btnConfirm' });
+      let cancelText = RCi18n({ id: 'Order.btnCancel' });
+      confirm({
+        title: title,
+        content: content,
+        okText: okText,
+        cancelText: cancelText,
+        onOk: () => {
+          this.onAdd(param);
+        }
+      });
+      return;
       // }
       // else {
       //   let onAdd = this.onAdd;

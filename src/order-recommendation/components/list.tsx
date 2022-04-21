@@ -180,7 +180,7 @@ class ListView extends React.Component<any, any> {
                         <FormattedMessage id="Order.LinkStatus" />
                       </th>
                       <th style={{ width: '12.5%' }}>
-                        <FormattedMessage id="Order.Perscriber" />
+                        <FormattedMessage id={Const.SITE_NAME==='MYVETRECO'?'Menu.Clinic':"Order.Perscriber"} />
                       </th>
                       <th style={{ width: '7.1%' }}>
                         <FormattedMessage id="Order.Operation" />
@@ -328,20 +328,12 @@ class ListView extends React.Component<any, any> {
                   <td
                     style={{
                       width: '10.2%',
-                      color: '#E1021A',
-                      cursor: 'pointer',
                       textAlign: 'right',
                       paddingRight: 20
                     }}
-                    onClick={() =>
-                      history.push({
-                        pathname: '/recomm-page-detail',
-                        state: { id: v.id }
-                      })
-                    }
                   >
                     <Tooltip placement="top" title={<FormattedMessage id="Order.detail" />}>
-                      <span className="iconfont iconDetails"></span>
+                      <Link to={{ pathname: '/recomm-page-detail', state: { id: v.id } }} className="iconfont iconDetails" />
                     </Tooltip>
                   </td>
                 </tr>

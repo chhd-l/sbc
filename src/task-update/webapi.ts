@@ -107,3 +107,9 @@ export function getPetOwnerSubscriptions(consumerAccount) {
     })
   });
 }
+
+export function getSubscriptionBySubno(subscriptionNumber) {
+  return Fetch<TResult>(`/task/getTaskSubscription?subscriptionNumber=${subscriptionNumber}`, {
+    method: 'GET'
+  });
+}

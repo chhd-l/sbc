@@ -30,6 +30,7 @@ export default class HomeAuthActor extends Actor {
       p_transactionTrendView: '',
       p_trafficDashboardView: '',
       p_prescriberRecommentCodeUseView: '',
+      countByPrescriberIdView: []
     };
   }
 
@@ -123,6 +124,10 @@ export default class HomeAuthActor extends Actor {
   @Action('prescriber:p_prescriberRecommentCodeUseView')
   p_prescriberRecommentCodeUseView(state: IMap, res) {
     return state.set('p_prescriberRecommentCodeUseView', res);
+  }
+  @Action('prescriber:countByPrescriberIdView')
+  countByPrescriberIdView(state: IMap, res) {
+    return state.set('countByPrescriberIdView', res);
   }
 
 

@@ -19,7 +19,8 @@ export default class ListActor extends Actor {
       // 当前页数，从1开始
       currentPage: 1,
       // 导出对话框 modal状态
-      exportModalData: {}
+      exportModalData: {},
+      defaultLocalDateTime:''
     };
   }
 
@@ -85,6 +86,11 @@ export default class ListActor extends Actor {
   @Action('list:page')
   page(state: IMap, page: IMap) {
     return state.set('currentPage', page.get('currentPage'));
+  }
+
+  @Action('list:defaultLocalDateTime')
+  defaultLocalDateTime(state: IMap, page: IMap) {
+    return state.set('defaultLocalDateTime', page.get('defaultLocalDateTime'));
   }
 
   @Action('list:export-modal:hide')

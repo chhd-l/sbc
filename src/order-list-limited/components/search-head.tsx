@@ -66,14 +66,30 @@ class SearchHead extends Component<any, any> {
         payState: '',
         orderSource: ''
       },
-      orderCategory: ''
+      orderCategory: '',
+      payStateList:[{langKey:'Order.All',value:''},
+        {langKey:'Order.unpaid',value:'NOT_PAID'},
+        {langKey:'Order.toBeConfirmed',value:'UNCONFIRMED'},
+        {langKey:'Order.paid',value:'PAID'},
+        {langKey:'Order.Paying',value:'PAYING'},
+      ],
+      deliverStatusList:[{langKey:'Order.All',value:''},
+        {langKey:'Order.notShipped',value:'NOT_YET_SHIPPED'},
+        {langKey:'Order.partialShipment',value:'PART_SHIPPED'},
+        {langKey:'Order.allShipments',value:'SHIPPED'},
+      ],
+      orderCategoryList:[{langKey:'Order.All',value:'',title:''},
+        {langKey:'Order.SinglePurchase',value:'SINGLE',title:'Single purchase'},
+        {langKey:'Order.1stAutoshipOrder',value:'FIRST_AUTOSHIP',title:'1st autoship order'},
+        {langKey:'Order.RecurrentOrders',value:'RECURRENT_AUTOSHIP',title:'Recurrent orders of autoship'},
+      ]
     };
   }
 
   render() {
     const { onSearch, tab, exportModalData, onExportModalHide } = this.props.relaxProps;
 
-    const { tradeState } = this.state;
+    const { tradeState,payStateList,deliverStatusList,statusSelect,orderCategoryList } = this.state;
     let hasMenu = false;
     if ((tab.get('key') == 'flowState-INIT' && checkAuth('fOrderList002')) || checkAuth('fOrderList004_3pl')) {
       hasMenu = true;
@@ -174,64 +190,26 @@ class SearchHead extends Component<any, any> {
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
                     {this._renderStatusSelect()}
-                    {this.state.statusSelect === 'paymentStatus' ? (
-                      <Select
-                        style={styles.wrapper}
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) =>
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: '',
-                              payState: value,
-                              orderSource: ''
-                            }
-                          })
-                        }
-                        value={tradeState.payState}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="Order.All" />
+                    <Select
+                      style={styles.wrapper}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={(value) =>
+                        this.setState({
+                          tradeState: {
+                            deliverStatus: statusSelect === 'paymentStatus'?'':value,
+                            payState: statusSelect === 'paymentStatus'?value:'',
+                            orderSource: ''
+                          }
+                        })
+                      }
+                      value={statusSelect === 'paymentStatus'?tradeState.payState:tradeState.deliverStatus}
+                    >
+                      {(statusSelect === 'paymentStatus'?payStateList:deliverStatusList).map((item)=>(
+                        <Option value={item.value}>
+                          <FormattedMessage id={item.langKey} />
                         </Option>
-                        <Option value="NOT_PAID">
-                          <FormattedMessage id="Order.unpaid" />
-                        </Option>
-                        <Option value="UNCONFIRMED">
-                          <FormattedMessage id="Order.toBeConfirmed" />
-                        </Option>
-                        <Option value="PAID">
-                          <FormattedMessage id="Order.paid" />
-                        </Option>
-                        <Option value="PAYING"><FormattedMessage id="Order.Paying" /></Option>
-                      </Select>
-                    ) : (
-                      <Select
-                        value={tradeState.deliverStatus}
-                        style={styles.wrapper}
-                        getPopupContainer={(trigger: any) => trigger.parentNode}
-                        onChange={(value) => {
-                          this.setState({
-                            tradeState: {
-                              deliverStatus: value,
-                              payState: '',
-                              orderSource: ''
-                            }
-                          });
-                        }}
-                      >
-                        <Option value="">
-                          <FormattedMessage id="Order.All" />
-                        </Option>
-                        <Option value="NOT_YET_SHIPPED">
-                          <FormattedMessage id="Order.notShipped" />
-                        </Option>
-                        <Option value="PART_SHIPPED">
-                          <FormattedMessage id="Order.partialShipment" />
-                        </Option>
-                        <Option value="SHIPPED">
-                          <FormattedMessage id="Order.allShipments" />
-                        </Option>
-                      </Select>
-                    )}
+                      ))}
+                    </Select>
                   </InputGroup>
                 </FormItem>
               </Col>
@@ -239,7 +217,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={(window as any).RCi18n({id:'Order.OrderCategory'})} />
+                    <Input style={styles.leftLabel} disabled title={RCi18n({id:'Order.OrderCategory'})} defaultValue={RCi18n({id:'Order.OrderCategory'})} />
                     <Select
                       style={styles.wrapper}
                       defaultValue=""
@@ -250,18 +228,11 @@ class SearchHead extends Component<any, any> {
                         });
                       }}
                     >
-                      <Option value="">
-                        <FormattedMessage id="Order.All" />
-                      </Option>
-                      <Option value="SINGLE" title="Single purchase">
-                        <FormattedMessage id="Order.SinglePurchase"/>
-                      </Option>
-                      <Option value="FIRST_AUTOSHIP" title="1st autoship order">
-                      <FormattedMessage id="Order.1stAutoshipOrder"/>
-                      </Option>
-                      <Option value="RECURRENT_AUTOSHIP" title="Recurrent orders of autoship">
-                      <FormattedMessage id="Order.RecurrentOrders"/>
-                      </Option>
+                      {orderCategoryList.map((item)=>(
+                        <Option value={item.value} title={item.title}>
+                          <FormattedMessage id={item.langKey} />
+                        </Option>
+                      ))}
                     </Select>
                   </InputGroup>
                 </FormItem>
@@ -284,6 +255,7 @@ class SearchHead extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
+
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
@@ -398,10 +370,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={styles.label}
       >
-        <Option title="Pet owner name " value="buyerName">
+        <Option title={RCi18n({id:'Order.consumerName'})} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Pet owner account" value="buyerAccount">
+        <Option title={RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -420,10 +392,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
+        <Option title={RCi18n({id:'Order.productName'})} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
+        <Option title={RCi18n({id:'Order.skuCode'})} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -442,10 +414,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
+        <Option title={RCi18n({id:'Order.recipient'})} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
+        <Option title={RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>
@@ -485,10 +457,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.numberSelect}
         style={styles.label}
       >
-        <Option title="Order number" value="orderNumber">
+        <Option title={RCi18n({id:"Order.orderNumber"})} value="orderNumber">
           <FormattedMessage id="Order.orderNumber" />
         </Option>
-        <Option title="Subscription number" value="subscriptionNumber">
+        <Option title={RCi18n({id:"Order.subscriptionNumber"})} value="subscriptionNumber">
           <FormattedMessage id="Order.subscriptionNumber" />
         </Option>
       </Select>
@@ -507,10 +479,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.statusSelect}
         style={styles.label}
       >
-        <Option title="Payment status" value="paymentStatus">
+        <Option title={RCi18n({id:'Order.paymentStatus'})} value="paymentStatus">
           <FormattedMessage id="Order.paymentStatus" />
         </Option>
-        <Option title="Shipping status" value="shippingStatus">
+        <Option title={RCi18n({id:'Order.shippingStatus'})} value="shippingStatus">
           <FormattedMessage id="Order.shippingStatus" />
         </Option>
       </Select>
@@ -528,10 +500,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.recommenderSelect}
         style={styles.label}
       >
-        <Option title="Recommender id" value="recommenderId">
+        <Option title={RCi18n({id:'Order.recommenderId'})} value="recommenderId">
           <FormattedMessage id="Order.recommenderId" />
         </Option>
-        <Option title="Recommender name" value="recommenderName">
+        <Option title={RCi18n({id:'Order.recommenderName'})} value="recommenderName">
           <FormattedMessage id="Order.recommenderName" />
         </Option>
       </Select>

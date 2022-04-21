@@ -4,6 +4,7 @@ import { fromJS } from 'immutable';
 import { message } from 'antd';
 import MarketingActor from './common/actor/marketing-actor';
 import GiftActor from './gift-details/actor/gift-actor';
+import LeafletActor from './leaflet-details/actor/leaflet-actor';
 import LoadingActor from './common/actor/loading-actor';
 import { Const, util } from 'qmkit';
 import * as commonWebapi from '@/marketing-add/webapi';
@@ -18,7 +19,7 @@ export default class AppStore extends Store {
   }
 
   bindActor() {
-    return [new MarketingActor(), new GiftActor(), new LoadingActor()];
+    return [new MarketingActor(), new GiftActor(), new LoadingActor(), new LeafletActor()];
   }
 
   init = async (marketingId?: string) => {
@@ -34,6 +35,12 @@ export default class AppStore extends Store {
         const gift = await webapi.fetchGiftList({ marketingId: marketingId });
         if (gift.res.code == Const.SUCCESS_CODE) {
           this.dispatch('giftActor:init', fromJS(gift.res.context));
+        }
+      }
+      if (marketing.res.context.marketingType == '4') {
+        const leaflet = await webapi.fetchLeafletList({ marketingId: marketingId });
+        if (leaflet.res.code === Const.SUCCESS_CODE) {
+          this.dispatch('leafletActor:init', fromJS({ leafletLevelList: leaflet.res.context?.levelList ?? [], leafletList: leaflet.res.context?.giftList ?? []}));
         }
       }
       if(marketing.res.context.scopeType == 2) { //category

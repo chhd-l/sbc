@@ -67,7 +67,7 @@ class SearchHead extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.leftLabel} disabled defaultValue={RCi18n({id:'Order.orderNumber'})} />
+                    <Input style={styles.leftLabel} disabled title={RCi18n({id:'Order.orderNumber'})} defaultValue={RCi18n({id:'Order.orderNumber'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -190,10 +190,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={styles.label}
       >
-        <Option title="Product name" value="skuName">
+        <Option title={RCi18n({id:'Order.productName'})} value="skuName">
           <FormattedMessage id="Order.productName" />
         </Option>
-        <Option title="Sku code" value="skuNo">
+        <Option title={RCi18n({id:'Order.skuCode'})} value="skuNo">
           <FormattedMessage id="Order.skuCode" />
         </Option>
       </Select>
@@ -213,10 +213,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.buyerSelect}
         style={styles.label}
       >
-        <Option title="Pet owner name " value="buyerName">
+        <Option title={RCi18n({id:'Order.consumerName'})} value="buyerName">
           <FormattedMessage id="Order.consumerName" />
         </Option>
-        <Option title="Pet owner account" value="buyerAccount">
+        <Option title={RCi18n({id:'Order.consumerAccount'})} value="buyerAccount">
           <FormattedMessage id="Order.consumerAccount" />
         </Option>
       </Select>
@@ -236,10 +236,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={styles.label}
       >
-        <Option title="Recipient" value="consigneeName">
+        <Option title={RCi18n({id:'Order.recipient'})} value="consigneeName">
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option title="Recipient phone" value="consigneePhone">
+        <Option title={RCi18n({id:'Order.recipientPhone'})} value="consigneePhone">
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>

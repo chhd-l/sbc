@@ -14,7 +14,7 @@ import { Relax } from 'plume2';
 import { IMap, IList } from 'typings/globalType';
 import DetailList from './list';
 import ProductTooltip from './productTooltip';
-import { cache, history, noop, SelectGroup, RCi18n } from 'qmkit';
+import { cache, history, noop, SelectGroup, RCi18n, Const } from 'qmkit';
 const Option = Select.Option;
 //import moment from 'moment';
 
@@ -125,7 +125,7 @@ export default class BillingDetails extends React.Component<any, any> {
           <div style={{ width: 150 }}>
             {history.location.state ? (
               <SelectGroup
-                label={RCi18n({id:'Order.Prescriber'})}
+                label={RCi18n({id:Const.SITE_NAME==='MYVETRECO'?'Menu.Clinic':'Order.Prescriber'})}
                 disabled
                 value={detailProductList.prescriberName}
               ></SelectGroup>

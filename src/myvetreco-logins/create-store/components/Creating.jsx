@@ -24,14 +24,14 @@ const autoLogin = () => {
 
 const getInitStatusList = () => {
   let statusList = [
-    {title:'Contract Agreement', message: null, result: 'pending'},
-    {title:'Legal Info', message: null, result: 'pending'},
-    {title:'Store Details', message: null, result: 'pending'}
+    {title:RCi18n({id: "Login.create_store_step1"}), message: null, result: 'pending'},
+    {title:RCi18n({id: "Login.create_store_step2"}), message: null, result: 'pending'},
+    {title:RCi18n({id: "Login.create_store_step3"}), message: null, result: 'pending'}
   ];
   if (Const.SITE_NAME === 'MYVETRECO') {
     statusList = statusList.concat([
-      {title:'Price Setting', message: null, result: 'pending'},
-      {title:'Payment Info', message: null, result: 'pending'}
+      {title:RCi18n({id: "Login.create_store_step4"}), message: null, result: 'pending'},
+      {title:RCi18n({id: "Login.create_store_step5"}), message: null, result: 'pending'}
     ]);
   }
   return statusList;
@@ -137,8 +137,8 @@ export default function Creating({userInfo,setStep}) {
         <h1 style={{ color: '#30465a',minWidth: 400 }}>
           {
             classText === '' ? <FormattedMessage id={`Login.create_store_ing`}/> : (
-              classText === 'ok' ? 'Success! You are ready to go' : (
-                classText === 'finished' ? 'Logging...' : 'Store creation failed. Please try again'
+              classText === 'ok' ? <FormattedMessage id="Login.create_store_success" /> : (
+                classText === 'finished' ? <FormattedMessage id="Login.loging" /> : <FormattedMessage id="Login.create_store_error" />
               )
             )
           }

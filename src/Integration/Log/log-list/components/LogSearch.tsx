@@ -127,7 +127,7 @@ class LogSearch extends Component<any, any> {
           <Col span={8}>
             <FormItem>
               <InputGroup compact style={styles.formItemStyle}>
-                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.RequestID' })} />
+                <Input style={styles.label} disabled title={RCi18n({ id: 'Log.RequestID' })} defaultValue={RCi18n({ id: 'Log.RequestID' })} />
                 <Input
                   style={styles.wrapper}
                   onChange={(e) => {
@@ -146,7 +146,7 @@ class LogSearch extends Component<any, any> {
           <Col span={8}>
             <FormItem>
               <InputGroup compact style={styles.formItemStyle}>
-                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.System' })} />
+                <Input style={styles.label} disabled title={RCi18n({ id: 'Log.System' })} defaultValue={RCi18n({ id: 'Log.System' })} />
                 <Select
                   style={styles.wrapper}
                   getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -170,7 +170,7 @@ class LogSearch extends Component<any, any> {
           <Col span={8}>
             <FormItem>
               <InputGroup compact style={styles.formItemStyle}>
-                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.Interface' })} />
+                <Input style={styles.label} disabled title={RCi18n({ id: 'Log.Interface' })} defaultValue={RCi18n({ id: 'Log.Interface' })} />
                 <Select
                   style={styles.wrapper}
                   allowClear
@@ -207,7 +207,7 @@ class LogSearch extends Component<any, any> {
           <Col span={8}>
             <FormItem>
               <InputGroup compact style={styles.formItemStyle}>
-                <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Log.Keywords' })} />
+                <Input style={styles.label} disabled title={RCi18n({ id: 'Log.Keywords' })} defaultValue={RCi18n({ id: 'Log.Keywords' })} />
                 <Input
                   style={styles.wrapper}
                   onChange={(e) => {
@@ -225,7 +225,7 @@ class LogSearch extends Component<any, any> {
           <Col span={8}>
             <FormItem>
               <InputGroup compact style={styles.formItemStyle}>
-                <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({ id: 'Log.LogDate' })} />
+                <Input style={styles.label} disabled title={RCi18n({ id: 'Log.LogDate' })} defaultValue={RCi18n({ id: 'Log.LogDate' })} />
                 <RangePicker style={styles.wrapper} onChange={this.onChangeDate} format={'YYYY-MM-DD'} />
               </InputGroup>
             </FormItem>

@@ -37,7 +37,7 @@ export default class SearchHead extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore="Coupon Name"
+            addonBefore={<FormattedMessage id="Marketing.CouponName"/>}
             value={form.get('likeCouponName')}
             onChange={(e: any) => {
               onFormFieldChange('likeCouponName', e.target.value);

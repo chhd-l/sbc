@@ -242,7 +242,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationName'})} />
+                          <Input style={styles.label} disabled title={RCi18n({id:'Marketing.AutomationName'})} defaultValue={RCi18n({id:'Marketing.AutomationName'})} />
                           <Input
                             style={styles.wrapper}
                             onChange={(e) => {
@@ -260,7 +260,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationCategory'})} />
+                          <Input style={styles.label} disabled title={RCi18n({id:'Marketing.AutomationCategory'})} defaultValue={RCi18n({id:'Marketing.AutomationCategory'})} />
                           <Select
                             style={styles.wrapper}
                             onChange={(value) => {
@@ -285,7 +285,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationStatus'})} />
+                          <Input style={styles.label} disabled title={RCi18n({id:'Marketing.AutomationStatus'})} defaultValue={RCi18n({id:'Marketing.AutomationStatus'})} />
                           <Select
                             style={styles.wrapper}
                             onChange={(value) => {
@@ -310,7 +310,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8} >
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.TestStatus'})} />
+                          <Input style={styles.label} disabled title={RCi18n({id:'Marketing.TestStatus'})} defaultValue={RCi18n({id:'Marketing.TestStatus'})} />
                           <Select
                             defaultValue=""
                             style={styles.wrapper}
@@ -336,7 +336,7 @@ class AutomationList extends Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <InputGroup compact style={styles.formItemStyle}>
-                          <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.AutomationPeriod'})} />
+                          <Input style={styles.label} disabled title={RCi18n({id:'Marketing.AutomationPeriod'})} defaultValue={RCi18n({id:'Marketing.AutomationPeriod'})} />
                           <Select
                             defaultValue=""
                             style={styles.wrapper}

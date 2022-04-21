@@ -610,6 +610,25 @@ const routes = [
     path: '/goods-library',
     asyncComponent: () => import('./goods-library')
   },
+  // Service fee
+  {
+    path: '/service-fee',
+    asyncComponent: () => import('./service-fee')
+  },
+  {
+    path: '/service-fee-template-add',
+    asyncComponent: () => import('./service-fee-template/template-add-or-edit')
+  },
+  {
+    path: '/service-fee-template-edit/:id?',
+    asyncComponent: () => import('./service-fee-template/template-add-or-edit')
+  },
+  // Service fee template
+  {
+    path: '/service-fee-template',
+    asyncComponent: () => import('./service-fee-template')
+  },
+
   // 运费模板
   { path: '/freight', asyncComponent: () => import('./freight') },
 
@@ -890,23 +909,23 @@ const routes = [
   },
   //message-template-configuration
   {
-    path:'/message-template-configuration',
+    path: '/message-template-configuration',
     asyncComponent: () => import('./message-template-configuration')
   },
   //message-template-detail
   {
-    path:'/template-details/:id',
-    asyncComponent:()=>import('./message-template-configuration/templateDetail')
+    path: '/template-details/:id',
+    asyncComponent: () => import('./message-template-configuration/templateDetail')
   },
   //message-template-edit
   {
-    path:'/template-edit/:id',
-    asyncComponent:()=>import('./message-template-configuration/templateEdit')
+    path: '/template-edit/:id',
+    asyncComponent: () => import('./message-template-configuration/templateEdit')
   },
   //message-template-add
   {
-    path:'/template-add',
-    asyncComponent:()=>import('./message-template-configuration/templateAdd')
+    path: '/template-add',
+    asyncComponent: () => import('./message-template-configuration/templateAdd')
   },
   //message-overview
   {
@@ -1131,7 +1150,6 @@ const routes = [
     asyncComponent: () => import('./appointmention-list/schedular')
   },
 
-
   {
     path: '/offline-checkout',
     asyncComponent: () => import('./offline-checkout')
@@ -1148,9 +1166,9 @@ const routes = [
     path: '/uom-list',
     asyncComponent: () => import('./uom-list')
   },
-    /**
-     * Integration  -------------------------------------------------------
-     * **/
+  /**
+   * Integration  -------------------------------------------------------
+   * **/
   {
     path: '/integration-dashboard',
     asyncComponent: () => import('./Integration/Dashboard')
@@ -1201,15 +1219,15 @@ const routes = [
     asyncComponent: () => import('./resources-list/schedular')
   },
   {
-    path:'/survey-list',
+    path: '/survey-list',
     asyncComponent: () => import('./survey-list')
   },
   {
-    path:'/new-survey',
+    path: '/new-survey',
     asyncComponent: () => import('./survey-list/new-survey')
   },
   {
-    path:'/survey-detail/:id',
+    path: '/survey-detail/:id',
     asyncComponent: () => import('./survey-list/survey-detail')
   },
   {
@@ -1240,23 +1258,23 @@ const routes = [
    * setting-integration
    * **/
   {
-    path:'/hub',
+    path: '/hub',
     asyncComponent: () => import('./setting-integration/hub')
   },
   {
-    path:'/OKTA',
+    path: '/OKTA',
     asyncComponent: () => import('./setting-integration/OKTA')
   },
   {
-    path:'/pet-api',
+    path: '/pet-api',
     asyncComponent: () => import('./setting-integration/pet-api')
   },
   {
-    path:'/product-api',
+    path: '/product-api',
     asyncComponent: () => import('./setting-integration/product-api')
   },
   {
-    path:'/retailer',
+    path: '/retailer',
     asyncComponent: () => import('./setting-integration/retailer')
   },
   {
@@ -1357,6 +1375,5 @@ const auditDidNotPass = [
     asyncComponent: () => import('./shop/process-index')
   }
 ];
-
 
 export { routes, homeRoutes, auditDidNotPass };

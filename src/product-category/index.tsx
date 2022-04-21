@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Icon, Table, Tooltip, Divider, Switch, Modal, Button, Form, Input, Row, Col, Breadcrumb, Tag, message, Select, Radio, DatePicker, Spin, Alert, InputNumber, Tabs } from 'antd';
 
 import * as webapi from './webapi';
@@ -359,7 +359,7 @@ class PeoductCategory extends Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={
-                          <p style={styles.label}>
+                          <p style={styles.label} title={RCi18n({id:'Product.AttributeName'})}>
                             <FormattedMessage id="Product.AttributeName" />
                           </p>
                         }
@@ -378,7 +378,7 @@ class PeoductCategory extends Component<any, any> {
                     <FormItem>
                       <Input
                         addonBefore={
-                          <p style={styles.label}>
+                          <p style={styles.label} title={RCi18n({id:'Product.AttributeValue'})}>
                             <FormattedMessage id="Product.AttributeValue" />
                           </p>
                         }

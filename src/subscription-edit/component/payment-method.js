@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Col, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
+import { Modal, Radio, Row, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
 import * as webapi from '../webapi';
 import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+
+const codCodEnum = { 123457907: 'PAYU_RUSSIA_COD', 123457919: 'JAPAN_COD' };
+const cardCodEnum= { 123457909: 'ADYEN_CREDIT_CARD', default: 'PAYU_RUSSIA_AUTOSHIP2' };
 
 const PaymentMethod = (props) => {
   const [visible, setVisible] = useState(false);
@@ -11,6 +14,7 @@ const PaymentMethod = (props) => {
   const [paymentType, setPaymentType] = useState('');
   const [deliveryPay, setDeliveryPay] = useState(true);
   const [cards, setCards] = useState([]);
+  const [paypalCard, setPaypalCard] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
 
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
@@ -19,9 +23,9 @@ const PaymentMethod = (props) => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
       if (props.cardId) {
-        setPaymentType('PAYU_RUSSIA_AUTOSHIP2');
+        setPaymentType(cardCodEnum[storeId]||cardCodEnum['default']);
       } else {
-        setPaymentType('PAYU_RUSSIA_COD');
+        setPaymentType(codCodEnum[storeId]);
       }
     }
   }, [props.paymentMethodVisible]);
@@ -30,19 +34,19 @@ const PaymentMethod = (props) => {
     if (!props.paymentMethodVisible) {
       return;
     }
-    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
       getCards();
       if (props.cardId) {
         setSelectCardId(props.cardId);
       }
     } else {
-      setSelectCardId(null)
+      setSelectCardId(null);
       setDeliveryPay(true);
     }
   }, [paymentType, props.paymentMethodVisible]);
 
   useEffect(() => {
-    if (paymentType === 'PAYU_RUSSIA_AUTOSHIP2') {
+    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
       setDisabled(!selectCardId);
     } else {
       setDisabled(!deliveryPay);
@@ -56,21 +60,27 @@ const PaymentMethod = (props) => {
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
-          setCards(res.context);
-          setLoading(false);
+          let card = res?.context||[];
+          const paypalCardIndex = card?.findIndex((item) => item.paymentItem?.toLowerCase() === 'adyen_paypal');
+          if (paypalCardIndex > -1) {
+            const paypalCard=card.filter((item)=>item.paymentItem?.toLowerCase() === 'adyen_paypal')
+            setPaypalCard(paypalCard);
+            card=card.filter((item)=>item.paymentItem?.toLowerCase() !== 'adyen_paypal');
+          }
+          setCards(card);
         } else {
           message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
-          setLoading(false);
         }
       })
       .catch(() => {
         message.error(RCi18n({ id: 'Public.GetDataFailed' }));
-        setLoading(false);
-      });
+      }).finally(()=>{
+        setLoading(false)
+    });
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.find(x => x.id === selectCardId) : null;
+    let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
     props.changePaymentMethod(selectCardId, paymentType, selectCard);
     props.cancel();
   }
@@ -81,7 +91,6 @@ const PaymentMethod = (props) => {
 
   function deleteCard(paymentId) {
     setLoading(true);
-    // const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || ''
     webapi
       .deleteCard(storeId, paymentId)
       .then((data) => {
@@ -95,8 +104,7 @@ const PaymentMethod = (props) => {
           setLoading(false);
         }
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   }
 
   function showError(paymentId) {
@@ -107,6 +115,13 @@ const PaymentMethod = (props) => {
       return item;
     });
     setCards(newPaymentMethods);
+    let newPaypalCard = paypalCard.map((item) => {
+      if (item.id === paymentId) {
+        item.showError = true;
+      }
+      return item;
+    });
+    setPaypalCard(newPaypalCard)
   }
 
   return (
@@ -120,26 +135,31 @@ const PaymentMethod = (props) => {
       }}
     >
       <Radio.Group onChange={(e) => setPaymentType(e.target.value)} value={paymentType}>
-        <Radio value={'PAYU_RUSSIA_AUTOSHIP2'}>
+        <Radio value={cardCodEnum[storeId]||cardCodEnum['default']}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
-        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : (
-          storeId === 123457907 ? (
-            <AuthWrapper functionName="f_cod_payment">
-              <Radio value={'PAYU_RUSSIA_COD'}>
-                <FormattedMessage id="Subscription.CashOnDelivery" />
-              </Radio>
-            </AuthWrapper>
-          ) : null
-        )}
+        {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : codCodEnum[
+            storeId
+          ] ? (
+          <AuthWrapper functionName="f_cod_payment">
+            <Radio value={codCodEnum[storeId]}>
+              <FormattedMessage id="Subscription.CashOnDelivery" />
+            </Radio>
+          </AuthWrapper>
+        ) : null}
+        {storeId === 123457909 && paypalCard.length>0 ? (
+          // <AuthWrapper functionName="f_paypal_payment">
+          <Radio value={'ADYEN_PAYPAL'}>
+            <FormattedMessage id="Subscription.Paypal" />
+          </Radio>
+        ) : // </AuthWrapper>
+        null}
       </Radio.Group>
-      {paymentType === 'PAYU_RUSSIA_AUTOSHIP2' ? (
+      {paymentType === (cardCodEnum[storeId]||cardCodEnum['default']) ? (
         <Row className="paymentDoor">
           <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
-            <Spin
-              spinning={loading}
-            >
+            <Spin spinning={loading}>
               <>
                 {cards.map((item, index) => (
                   <Row key={index} className="payment-panel">
@@ -176,19 +196,68 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
           <AuthWrapper functionName="f_add_card">
-            <Button onClick={() => history.push(`/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`)} style={{ marginTop: 20 }} type="primary">
+            <Button
+              onClick={() =>
+                history.push(
+                  `/credit-card/${props.customerId}/${props.customerAccount}?fromSubscroption=true`
+                )
+              }
+              style={{ marginTop: 20 }}
+              type="primary"
+            >
               <FormattedMessage id="Subscription.AddNew" />
             </Button>
           </AuthWrapper>
         </Row>
-      ) : (
+      ) : paymentType === codCodEnum[storeId] ? (
         <Row className="payment-panel">
           <Checkbox checked={deliveryPay} onChange={(e) => setDeliveryPay(e.target.checked)}>
             <FormattedMessage id="Subscription.PayByCashOrCard" />{' '}
-            <span className="ant-form-item-required"></span>
+            <span className="ant-form-item-required" />
           </Checkbox>
         </Row>
-      )}
+      ) : paymentType === 'ADYEN_PAYPAL' ? (
+        <Row className="paymentDoor">
+          <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
+            <Spin spinning={loading}>
+              <>
+                {paypalCard.map((item, index) => (
+                  <Row key={index} className="payment-panel">
+                    <Radio value={item.id}>
+                      <div className="cardInfo">
+                        <h4>
+                          <FormattedMessage id="Subscription.Paypal" />
+                        </h4>
+                        <p>{item.email?item.email.split('@')[0].substring(0, 4) + '***@' + item.email.split('@')[1]:''}</p>
+                      </div>
+                    </Radio>
+                    <Row>
+                      <AuthWrapper functionName="f_delete_card">
+                        <Popconfirm
+                          placement="topLeft"
+                          title={`Are you sure to delete this card?`}
+                          onConfirm={() => deleteCard(item.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <a>
+                            <FormattedMessage id="Subscription.Delete" />
+                          </a>
+                        </Popconfirm>
+                        {item.showError ? (
+                          <div className="errorMessage">
+                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                          </div>
+                        ) : null}
+                      </AuthWrapper>
+                    </Row>
+                  </Row>
+                ))}
+              </>
+            </Spin>
+          </Radio.Group>
+        </Row>
+      ) : null}
     </Modal>
   );
 };

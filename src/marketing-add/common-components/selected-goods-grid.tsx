@@ -2,7 +2,8 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { DataGrid, cache } from 'qmkit';
-import { Table } from 'antd';
+import { Table, InputNumber } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 const Column = Table.Column;
 
@@ -30,7 +31,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
   }
 
   render() {
-    const { selectedRows, deleteSelectedSku } = this.props;
+    const { selectedRows, deleteSelectedSku, customProductsType, changeNumber } = this.props;
     const { skuExists } = this.state;
     return (
       <TableRow>
@@ -49,24 +50,22 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           }}
         >
           <Column
-            title="SKU code"
+            title={<FormattedMessage id="Marketing.SKUCode"/>}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
           />
 
           <Column
-            title="Product Name"
+            title={<FormattedMessage id="Marketing.ProductName"/>}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
-            width="20%"
           />
 
           <Column
-            title="Specification"
+            title={<FormattedMessage id="Marketing.Specification"/>}
             dataIndex="specText"
             key="specText"
-            width="20%"
             render={(value) => {
               if (value) {
                 return value;
@@ -77,14 +76,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Category"
+            title={<FormattedMessage id="Marketing.Category"/>}
             key="cateName"
             dataIndex="cateName"
             width="10%"
           />
 
           <Column
-            title="Brand"
+            title={<FormattedMessage id="Marketing.Brand"/>}
             key="brandName"
             dataIndex="brandName"
             width="10%"
@@ -98,7 +97,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title="Price"
+            title={<FormattedMessage id="Marketing.Price"/>}
             key="marketPrice"
             dataIndex="marketPrice"
             width="10%"
@@ -109,13 +108,30 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
           />
 
+          {/* {customProductsType === 0 && <Column
+            title={<FormattedMessage id="Marketing.Inventory"/>}
+            key="stock"
+            dataIndex="stock"
+            width="10%"
+          />} */}
+
+          {/* {customProductsType === 0 && <Column
+            title={<FormattedMessage id="Marketing.GiveTheNumber"/>}
+            key="productNumber"
+            dataIndex="productNumber"
+            width="15%"
+            render={(data, record: any) => (
+              <InputNumber defaultValue={1} value={data} min={1} step={1} onChange={(val) => changeNumber(record.goodsInfoId, val)} />
+            )}
+          />} */}
+
           <Column
-            title="Operation"
+            title={<FormattedMessage id="Marketing.Operation"/>}
             key="operate"
             width="10%"
             render={(row) => {
               return (
-                <a onClick={() => deleteSelectedSku(row.goodsInfoId)}>Delete</a>
+                <a onClick={() => deleteSelectedSku(row.goodsInfoId)}><FormattedMessage id="Marketing.Delete"/></a>
               );
             }}
           />

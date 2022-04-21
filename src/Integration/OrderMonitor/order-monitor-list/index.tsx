@@ -348,7 +348,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Order.OrderNumber' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Order.OrderNumber' })} defaultValue={RCi18n({ id: 'Order.OrderNumber' })} />
                       <Input
                         style={styles.wrapper}
                         onChange={(e) => {
@@ -367,7 +367,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={(window as any).RCi18n({ id: 'Finance.OrderDate' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Finance.OrderDate' })} defaultValue={RCi18n({ id: 'Finance.OrderDate' })} />
                       <RangePicker style={styles.wrapper} onChange={this.onChangeDate} format={'YYYY-MM-DD'} />
                     </InputGroup>
                   </FormItem>
@@ -376,7 +376,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'OrderMonitor.ExceptionType' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'OrderMonitor.ExceptionType' })} defaultValue={RCi18n({ id: 'OrderMonitor.ExceptionType' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -404,7 +404,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'OrderMonitor.ExportStatus' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'OrderMonitor.ExportStatus' })} defaultValue={RCi18n({ id: 'OrderMonitor.ExportStatus' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -432,7 +432,7 @@ export default class OrderMonitorList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Order.OrderStatus' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Order.OrderStatus' })} defaultValue={RCi18n({ id: 'Order.OrderStatus' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}

@@ -90,6 +90,7 @@ export default function Step6({setLoading}) {
         customProductsType: formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
         attributeValueIds: formData.Conditions.scopeType === 3 ? getAttributeValue(formData.Conditions.attributeValueIds) : null,//改版用到的字段
         scopeIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
+        scopeNumber: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeNumber : {},
         /**
          * 第五步
          */
@@ -137,6 +138,7 @@ export default function Step6({setLoading}) {
           emailSuffixList: formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
           customProductsType: formData.Conditions.customProductsType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
+          skuNumbers: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeNumber : {},
         }
       }
 
@@ -345,6 +347,53 @@ export default function Step6({setLoading}) {
           detail = await webapi.addFullGift(params)
         }
       }
+      if(formData.Advantage.couponPromotionType === 5){
+        if(formData.Conditions.CartLimit === 1){
+          subType = 15
+        }else {
+          subType = 14
+        }
+        let fullLeafletLevelList = [...formData.Advantage.fullLeafletLevelList]
+        if(formData.Conditions.CartLimit === 0){
+          fullLeafletLevelList[0].fullCount = '1'
+        }
+        if(formData.Conditions.CartLimit === 1){
+          fullLeafletLevelList[0].fullAmount = formData.Conditions.fullMoney
+        }
+        if(formData.Conditions.CartLimit === 2){
+          fullLeafletLevelList[0].fullCount = formData.Conditions.fullItem
+        }
+        fullLeafletLevelList[0]['fullLeafletDetailList'] = fullLeafletLevelList[0]['fullGiftDetailList'];
+        let params =  {
+          marketingType: 4,
+          /**
+           * 第二步
+           */
+          ...commonParams.BasicSetting,
+          /**
+           * 第三步
+           */
+          ...commonParams.PromotionType,
+          /**
+           * 第四步
+           */
+          ...commonParams.Conditions,
+          /**
+           * 其他
+           */
+          fullLeafletLevelList: fullLeafletLevelList,
+          subType: subType,
+          isClub: false,
+        }
+        if(match.params.id && match.params.type === 'promotion'){
+          detail = await webapi.updateFullLeaflet({...params,marketingId:match.params.id,storeId:formData.storeId})
+        }else {
+          if(match.params.type === 'coupon'){
+            await webapi.deleteCoupon(match.params.id)
+          }
+          detail = await webapi.addFullLeaflet(params)
+        }
+      }
     }
     setLoading(false)
     if(detail.res && detail.res.code === Const.SUCCESS_CODE) {
@@ -480,13 +529,13 @@ export default function Step6({setLoading}) {
                     (
                       <>
                         <div className="step-summary-item">
-                          <div className="step-summary-sub-title">First subscription order reduction:</div>
+                          <div className="step-summary-sub-title"><FormattedMessage id="Marketing.FirstSubRec"/>:</div>
                           <div className="step-summary-item-text">{formData.Advantage.firstSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                         </div>
                         {
                           formData.Advantage.restSubscriptionOrderReduction && (
                             <div className="step-summary-item">
-                              <div className="step-summary-sub-title">Rest subscription order reduction:</div>
+                              <div className="step-summary-sub-title"><FormattedMessage id="Marketing.RestSubRec"/>:</div>
                               <div className="step-summary-item-text">{formData.Advantage.restSubscriptionOrderReduction + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }</div>
                             </div>
                           )
@@ -532,7 +581,7 @@ export default function Step6({setLoading}) {
               ) : (
                 <>
                   {
-                    formData.Advantage.couponPromotionType !== 4 &&
+                    formData.Advantage.couponPromotionType !== 4 && formData.Advantage.couponPromotionType !== 5 ?
                     (<div className="step-summary-item">
                       <div className="step-summary-sub-title">
                         {
@@ -547,7 +596,7 @@ export default function Step6({setLoading}) {
                         {formData.Advantage.couponPromotionType === 3 && formData.Conditions.CartLimit === 0 && `1${(window as any).RCi18n({ id: 'Marketing.items' })}` }
                         {formData.Advantage.couponPromotionType === 3 && formData.Conditions.fullMoney && formData.Conditions.fullMoney+sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) }
                       </div>
-                    </div>)
+                    </div>) : null
                   }
                   {
                     formData.Advantage.couponPromotionType === 1 && (
@@ -561,7 +610,7 @@ export default function Step6({setLoading}) {
               )
             }
             {
-              formData.Advantage.couponPromotionType === 4 &&
+              formData.Advantage.couponPromotionType === 4 || formData.Advantage.couponPromotionType === 5 ?
               (
                 <div className="step-summary-item">
                   <div className="step-summary-sub-title">
@@ -573,14 +622,14 @@ export default function Step6({setLoading}) {
                   <div className="step-summary-item-text">
                     <>
                       {
-                        (formData.Advantage.selectedGiftRows || []).map(item=>
+                        ((formData.Advantage.couponPromotionType === 4 ? formData.Advantage.selectedGiftRows : formData.Advantage.selectedLeafletRows) || []).map(item=>
                           <span style={{paddingRight:6}}>{item.goodsInfoName}</span>
                         )
                       }
                     </>
                   </div>
                 </div>
-              )
+              ) : null
             }
           </div>
         </div>

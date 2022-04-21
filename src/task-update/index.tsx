@@ -121,7 +121,8 @@ class TaskUpdate extends Component<any, any> {
       associatedSubscriptionList: [],
       loading: false,
       petAssistantLoading: false,
-      petOwnerLoading: false
+      petOwnerLoading: false,
+      subscriptionLoading: false
     };
     this.onChange = this.onChange.bind(this);
     this.searchAssignedTo = this.searchAssignedTo.bind(this);
@@ -170,9 +171,11 @@ class TaskUpdate extends Component<any, any> {
             this.setState({
               task: res.context.task,
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
-              subscriptionTable: res.context.subscribeList,
               loading: false,
             });
+            if (res.context.task.subscriptionNumber) {
+              this.getSubscriptionTableBySubscriptionNumber(res.context.task.subscriptionNumber);
+            }
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
               sessionStorage.setItem('taskCustomerAccount',customerAccount)
@@ -346,6 +349,20 @@ class TaskUpdate extends Component<any, any> {
       });
   }
 
+  getSubscriptionTableBySubscriptionNumber(subscriptionNumber) {
+    this.setState({ subscriptionLoading: true });
+    webapi.getSubscriptionBySubno(subscriptionNumber).then(data => {
+      if (data.res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          subscriptionTable: data.res.context?.subscribeList ?? [],
+          subscriptionLoading: false
+        });
+      } else {
+        this.setState({ subscriptionLoading: false });
+      }
+    }).catch(() => { this.setState({ subscriptionLoading: false }); });
+  }
+
   onChange = ({ field, value }) => {
     const { associatedPetOwners } = this.state;
     let data = this.state.task;
@@ -453,7 +470,8 @@ class TaskUpdate extends Component<any, any> {
       taskCompleted,
       assignedUsers,
       petAssistantLoading,
-      petOwnerLoading
+      petOwnerLoading,
+      subscriptionLoading
     } = this.state;
     const { associatedPetOwners, associatedPetList, associatedOrderList } = this.state;
     const {
@@ -953,7 +971,7 @@ class TaskUpdate extends Component<any, any> {
                                 </Option>
                               ))}
                             </Select>
-                          ) : (
+                          ) : (<>
                             <Link
                               to={`/petowner-details/${task.contactId}/${task.customerAccount}`}
                             >
@@ -961,7 +979,9 @@ class TaskUpdate extends Component<any, any> {
                                 ? task.petOwner + '(' + task.customerAccount + ')'
                                 : ''}
                             </Link>
-                          )
+                            {/* <span style={{margin:"0 5px"}}></span> */}
+                            {/* {task.commentNumber ? <Link to={`/pet-owner-activity/${task.contactId}`}>[{task.commentNumber} comments available]</Link> : null} */}
+                          </>)
                         )}
                       </FormItem>
                     </Col>
@@ -1121,7 +1141,7 @@ class TaskUpdate extends Component<any, any> {
                             {getFieldDecorator('subscriptionNumber', {
                               initialValue: subscriptionNumbers
                             })(
-                              < Table bordered columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
+                              <Table bordered loading={subscriptionLoading} columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
                             )}
                           </FormItem>
                         </Col>

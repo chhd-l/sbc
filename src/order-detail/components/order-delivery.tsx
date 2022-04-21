@@ -15,7 +15,6 @@ import orderToBeDelivered from '../icon/order_to_be_delivered.svg';
 
 const DeliveryFormDetail = Form.create({})(DeliveryForm);
 
-
 /**
  * 订单发货记录
  */
@@ -82,10 +81,23 @@ class OrderDelivery extends React.Component<any, any> {
   }*/
 
   render() {
-    const { detail, deliver, modalVisible, saveDelivery, refresh, onRefresh, isFetchingLogistics, isSavingShipment, logisticsLoading } = this.props.relaxProps;
+    const {
+      detail,
+      deliver,
+      modalVisible,
+      saveDelivery,
+      refresh,
+      onRefresh,
+      isFetchingLogistics,
+      isSavingShipment,
+      logisticsLoading
+    } = this.props.relaxProps;
 
     const refreshList = fromJS(refresh);
-    const tradeDelivers = refreshList && refreshList.toJS().length > 0 ? fromJS(refresh) : (detail.get('tradeDelivers') as IList);
+    const tradeDelivers =
+      refreshList && refreshList.toJS().length > 0
+        ? fromJS(refresh)
+        : (detail.get('tradeDelivers') as IList);
     const flowState = detail.getIn(['tradeState', 'flowState']);
     const payState = detail.getIn(['tradeState', 'payState']);
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
@@ -108,8 +120,17 @@ class OrderDelivery extends React.Component<any, any> {
             wordBreak: 'break-word'
           }}
         >
-          <Table rowKey={(_record, index) => index.toString()} columns={this._deliveryColumns()} dataSource={detail.get('tradeItems').concat(gifts).toJS()} pagination={false} bordered />
-          {Const.SITE_NAME !== 'MYVETRECO' && (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') && (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') && (payState === 'PAID' || payState === 'AUTHORIZED') ? (
+          <Table
+            rowKey={(_record, index) => index.toString()}
+            columns={this._deliveryColumns()}
+            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
+            pagination={false}
+            bordered
+          />
+          {Const.SITE_NAME !== 'MYVETRECO' &&
+          (flowState === 'TO_BE_DELIVERED' || flowState === 'PARTIALLY_SHIPPED') &&
+          (deliverStatus == 'NOT_YET_SHIPPED' || deliverStatus === 'PART_SHIPPED') &&
+          (payState === 'PAID' || payState === 'AUTHORIZED') ? (
             <div style={styles.buttonBox as any}>
               <AuthWrapper functionName="fOrderDetail002">
                 <Button type="primary" loading={isFetchingLogistics} onClick={() => deliver()}>
@@ -122,24 +143,40 @@ class OrderDelivery extends React.Component<any, any> {
         <Spin spinning={logisticsLoading}>
           {tradeDelivers.count() > 0
             ? tradeDelivers &&
-            tradeDelivers.map((v, i) => {
-              const logistic = v.get('logistics');
-              const tradeLogisticsData = v.get('tradeLogisticsDetails') ? v.get('tradeLogisticsDetails').toJS() : [];
-              const tradeLogisticsDetails = tradeLogisticsData
-                .filter((x) => x.shown)
-                .sort((a, b) => {
-                  return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-                });
-              const deliverTime = v.get('deliverTime') ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT) : null;
-              //处理赠品
-              const deliversGifts = (v.get('giftItemList') ? v.get('giftItemList') : fromJS([])).map((gift) => gift.set('itemName', `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`));
-              return (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
-                  <label style={styles.title}>{<FormattedMessage id="Order.DeliveryRecord" />}</label>
-                  <Table rowKey={(_record, index) => index.toString()}
-                    columns={this._deliveryRecordColumns()}
-                    dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
-                    pagination={false} bordered />
+              tradeDelivers.map((v, i) => {
+                const logistic = v.get('logistics');
+                const tradeLogisticsData = v.get('tradeLogisticsDetails')
+                  ? v.get('tradeLogisticsDetails').toJS()
+                  : [];
+                const tradeLogisticsDetails = tradeLogisticsData
+                  .filter((x) => x.shown)
+                  .sort((a, b) => {
+                    return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+                  });
+                const deliverTime = v.get('deliverTime')
+                  ? Moment(v.get('deliverTime')).format(Const.DAY_FORMAT)
+                  : null;
+                //处理赠品
+                const deliversGifts = (
+                  v.get('giftItemList') ? v.get('giftItemList') : fromJS([])
+                ).map((gift) =>
+                  gift.set(
+                    'itemName',
+                    `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`
+                  )
+                );
+                return (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <label style={styles.title}>
+                      {<FormattedMessage id="Order.DeliveryRecord" />}
+                    </label>
+                    <Table
+                      rowKey={(_record, index) => index.toString()}
+                      columns={this._deliveryRecordColumns()}
+                      dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
+                      pagination={false}
+                      bordered
+                    />
                     {/* 土耳其跳转第三方物流 */}
                     {/*{*/}
                     {/*  storeId === 123457911 && v.get('trackingUrl')? <div>*/}
@@ -151,64 +188,84 @@ class OrderDelivery extends React.Component<any, any> {
                     {/*</div>:null*/}
                     {/*}*/}
 
-                  <div style={styles.expressBox as any}>
-                    <div style={styles.stateBox}>
-                      {logistic ? (
-                        <div>
-                          <label style={styles.information} className="flex-start-align">
-                            【<FormattedMessage id="Product.logisticsInformation" />】
-                            <FormattedMessage id="Order.deliveryDate" />：{deliverTime}&nbsp;&nbsp;
-                            <FormattedMessage id="Order.logisticsCompany" />：{logistic.get('logisticCompanyName')} &nbsp;&nbsp;
-                            <FormattedMessage id="Order.logisticsSingleNumber" />：{logistic.get('logisticNo')}&nbsp;&nbsp;
-                            {logistic.get('deliverBagNo') ? (<><FormattedMessage id="Order.TraceabilityBagNumber" /><span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span></>) : null}
-
-                            {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
-                            {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
+                    <div style={styles.expressBox as any}>
+                      <div style={styles.stateBox}>
+                        {logistic ? (
+                          <div>
+                            <div style={styles.information} className="flex-start-align">
+                              【<FormattedMessage id="Product.logisticsInformation" />】
+                              <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
+                              &nbsp;&nbsp;
+                              <FormattedMessage id="Order.logisticsCompany" />：
+                              {logistic.get('logisticCompanyName')} &nbsp;&nbsp;
+                              <FormattedMessage id="Order.logisticsSingleNumber" />：
+                              {logistic.get('logisticNo')}&nbsp;&nbsp;
+                              {logistic.get('deliverBagNo') ? (
+                                <>
+                                  <FormattedMessage id="Order.TraceabilityBagNumber" />
+                                  <span>：{logistic.get('deliverBagNo')}&nbsp;&nbsp;</span>
+                                </>
+                              ) : null}
+                              {/* <Logistics companyInfo={logistic}  deliveryTime={deliverTime}/> */}
+                              {/* <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
                             Refresh
                           </Button> */}
-                            <Button type="primary" shape="round" style={{ marginLeft: 15 }} onClick={() => onRefresh()}>
-                              <FormattedMessage id="Order.Refresh" />
-                            </Button>
-                            {v.get('trackingUrl') ? (
-                              <Button type="primary" shape="round" style={{ marginLeft: 15 }} href={v.get('trackingUrl')} target="_blank" rel="noopener">
-                                <FormattedMessage id="Order.Trackdelivery" />
+                              <Button
+                                type="primary"
+                                shape="round"
+                                style={{ marginLeft: 15 }}
+                                onClick={() => onRefresh()}
+                              >
+                                <FormattedMessage id="Order.Refresh" />
                               </Button>
-                            ) :null}
-                          </label>
-                          <div style={{ marginTop: 20 }}>
-                            <Timeline>
-                              {tradeLogisticsDetails.map((item, index) => {
-                                let color = index === 0 ? 'red' : 'gray';
-                                return (
-                                  <Timeline.Item color={color}>
-                                    <p>
-                                      {moment(item.timestamp).format('YYYY-MM-DD HH:mm')} {item.longDescription}
-                                    </p>
-                                  </Timeline.Item>
-                                );
-                              })}
-                            </Timeline>
+                              {v.get('trackingUrl') ? (
+                                <Button
+                                  type="primary"
+                                  shape="round"
+                                  style={{ marginLeft: 15 }}
+                                  href={v.get('trackingUrl')}
+                                  target="_blank"
+                                  rel="noopener"
+                                >
+                                  <FormattedMessage id="Order.Trackdelivery" />
+                                </Button>
+                              ) : null}
+                            </div>
+                            <div style={{ marginTop: 20 }}>
+                              <Timeline>
+                                {tradeLogisticsDetails.map((item, index) => {
+                                  let color = index === 0 ? 'red' : 'gray';
+                                  return (
+                                    <Timeline.Item color={color}>
+                                      <p>
+                                        {moment(item.timestamp).format('YYYY-MM-DD HH:mm')}{' '}
+                                        {item.longDescription}
+                                      </p>
+                                    </Timeline.Item>
+                                  );
+                                })}
+                              </Timeline>
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                    {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                      {/*{flowState === 'CONFIRMED' || flowState === 'COMPLETED' || flowState === 'VOID' ? null : (
                       <AuthWrapper functionName="fOrderDetail002">
                         <a style={{ color: 'blue' }} href="#" onClick={() => this._showCancelConfirm(v.get('deliverId'))}>
                           Invalid
                         </a>
                       </AuthWrapper>
                     )}*/}
+                    </div>
                   </div>
-                </div>
-              );
-            })
+                );
+              })
             : null}
         </Spin>
-
-        { storeId == 123457911 ? this._renderStatusTip(detail) : null}
+        {/* 日本也需要展示发货状态 */}
+        {storeId == 123457911 || storeId == 123457919 ? this._renderStatusTip(detail) : null}
 
         <div style={styles.expressBox as any}>
           <div style={styles.stateBox} />
@@ -248,7 +305,9 @@ class OrderDelivery extends React.Component<any, any> {
             });
           }}
         >
-          {modalVisible && <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />}
+          {modalVisible && (
+            <DeliveryFormDetail ref={(_receiveAdd) => (this['_receiveAdd'] = _receiveAdd)} />
+          )}
         </Modal>
       </div>
     );
@@ -256,31 +315,29 @@ class OrderDelivery extends React.Component<any, any> {
 
   //渲染订单状态提示语
   _renderStatusTip(orderDetail) {
-    console.log('orderToBePaid',orderToBePaid)
+    console.log('orderToBePaid', orderToBePaid);
     const orderStatus = orderDetail.getIn(['tradeState', 'flowState']);
-    const logisticsList = orderDetail.get('tradeDelivers').toJS() || []
+    const logisticsList = orderDetail.get('tradeDelivers').toJS() || [];
     const RenderTip = (props) => {
       return (
-        <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+        <div
+          style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+        >
           <div style={{ marginRight: '10px' }}>{props.icon}</div>
           <div>{props.tip}</div>
           {props.operation ? (
-            <div className="text-md-right text-center">
-              {props.operation}
-            </div>
+            <div className="text-md-right text-center">{props.operation}</div>
           ) : null}
         </div>
-      )
-    }
+      );
+    };
     let ret = null;
     switch (orderStatus) {
       case 'INIT':
         // order create订单创建
         ret = (
           <RenderTip
-            icon={
-              <Icon component={orderToBePaid} style={{ fontSize: '20px' }}/>
-            }
+            icon={<Icon component={orderToBePaid} style={{ fontSize: '20px' }} />}
             tip={<FormattedMessage id="Order.createOrderTip" />}
           />
         );
@@ -289,7 +346,7 @@ class OrderDelivery extends React.Component<any, any> {
         // waiting for shipping等待发货
         ret = (
           <RenderTip
-            icon={<Icon component={orderToBeDelivered} style={{ fontSize: '24px' }}/>}
+            icon={<Icon component={orderToBeDelivered} style={{ fontSize: '24px' }} />}
             tip={<FormattedMessage id="Order.waitShipping" />}
           />
         );
@@ -298,7 +355,7 @@ class OrderDelivery extends React.Component<any, any> {
         // order in shipping发货运输中
         ret = (
           <RenderTip
-            icon={<Icon component={orderInTransit} style={{ fontSize: '24px' }}/>}
+            icon={<Icon component={orderInTransit} style={{ fontSize: '24px' }} />}
             tip={
               <FormattedMessage
                 id="Order.inTranistTip"
@@ -306,11 +363,7 @@ class OrderDelivery extends React.Component<any, any> {
                   val:
                     logisticsList[0] && logisticsList[0].trackingUrl ? (
                       <span>
-                        <a
-                          href={logisticsList[0].trackingUrl}
-                          target="_blank"
-                          rel="nofollow"
-                        >
+                        <a href={logisticsList[0].trackingUrl} target="_blank" rel="nofollow">
                           <FormattedMessage id="Order.viewLogisticDetail" /> &gt;
                         </a>
                       </span>
@@ -325,7 +378,7 @@ class OrderDelivery extends React.Component<any, any> {
         // order completes完成订单
         ret = (
           <RenderTip
-            icon={<Icon component={orderCompleted} style={{ fontSize: '24px' }}/>}
+            icon={<Icon component={orderCompleted} style={{ fontSize: '24px' }} />}
             tip={<FormattedMessage id="Order.completeTip" />}
           />
         );
@@ -356,7 +409,12 @@ class OrderDelivery extends React.Component<any, any> {
         width: '40%'
       },
       {
-        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
+        title:
+          storeId === 123457934 ? (
+            <FormattedMessage id="Order.Specification" />
+          ) : (
+            <FormattedMessage id="Order.Weight" />
+          ),
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
@@ -409,7 +467,12 @@ class OrderDelivery extends React.Component<any, any> {
         key: 'itemName'
       },
       {
-        title: storeId===123457934?<FormattedMessage id="Order.Specification" />:<FormattedMessage id="Order.Weight" />,
+        title:
+          storeId === 123457934 ? (
+            <FormattedMessage id="Order.Specification" />
+          ) : (
+            <FormattedMessage id="Order.Weight" />
+          ),
         dataIndex: 'specDetails',
         key: 'specDetails'
       },
@@ -454,7 +517,7 @@ class OrderDelivery extends React.Component<any, any> {
       onOk() {
         obsoleteDeliver(tdId);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 
@@ -475,7 +538,7 @@ class OrderDelivery extends React.Component<any, any> {
       onOk() {
         confirm(tid);
       },
-      onCancel() { }
+      onCancel() {}
     });
   };
 }

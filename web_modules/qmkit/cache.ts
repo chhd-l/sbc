@@ -38,6 +38,7 @@ export default {
   TAX_SWITCH:'s2b-supplier@taxSwitch',
   LANGUAGE:'language',
   DOMAINNAME:'domainName',
+  POXDOMAINNAME: 'poxDomainName',
   TASKSHOWSEARCH: 'TaskShowSearch',
   TASKVIEWTYPE: 'TaskViewType',
   TASKQueryType: 'TaskQueryType',

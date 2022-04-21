@@ -1,5 +1,5 @@
 import React from 'react';
-import { Const, Headline, history,ValidConst } from 'qmkit';
+import { Const, Headline, history, ValidConst } from 'qmkit';
 import { Radio, Button, Form, Breadcrumb, Input, Spin, Row, Col } from 'antd';
 import moment from 'moment';
 import CustomerList from './components/customer-list';
@@ -11,9 +11,8 @@ import { RCi18n } from 'qmkit';
 import './index.less';
 import WeekCalender from './components/week-calender';
 // import * as webapi from './webapi';
-let   tempParams:any={};
+let tempParams: any = {};
 class NewAppointment extends React.Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -30,9 +29,9 @@ class NewAppointment extends React.Component<any, any> {
         customerId: undefined,
         customerLevelId: 234,
         bookSlotVO: {
-          dateNo: "",
-          startTime: "",
-          endTime: "",
+          dateNo: '',
+          startTime: '',
+          endTime: '',
           employeeIds: []
         },
         minutes: 15,
@@ -43,7 +42,7 @@ class NewAppointment extends React.Component<any, any> {
       appointmentType: {},
       serviceType: {},
       resources: [],
-      key: (+new Date())
+      key: +new Date()
     };
   }
 
@@ -57,73 +56,90 @@ class NewAppointment extends React.Component<any, any> {
   }
   //获取字典
   initDict = async () => {
-    const appointmentType = await getAllDict('appointment_type')
-    const expertType = await getAllDict('expert_type')
-    const serviceType = await getAllDict('service_type')
-    this.setState({
-      expertType,
-      appointmentType,
-      serviceType
-    })
-  }
+    const appointmentType = await getAllDict('appointment_type');
+    const expertType = await getAllDict('expert_type');
+    const serviceType = await getAllDict('service_type');
+    this.setState(
+      {
+        expertType,
+        appointmentType,
+        serviceType
+      },
+      // 初始化时间
+      () => {
+        this.queryDate(false, this.state.params);
+      }
+    );
+  };
   //初始化能预约的时间
   queryDate = (type: boolean = false, chooseData: any = {}) => {
-    const { getFieldsValue,setFieldsValue } = this.props.form;
+    // debugger;
+    const { getFieldsValue, setFieldsValue } = this.props.form;
     setTimeout(async () => {
-      let _tempParams=JSON.parse(JSON.stringify(tempParams))
-      let { apptTypeId, minutes, expertTypeId } = getFieldsValue(['apptTypeId', 'minutes', 'expertTypeId'])
+      let _tempParams = JSON.parse(JSON.stringify(tempParams));
+      let { apptTypeId, minutes, expertTypeId } = getFieldsValue([
+        'apptTypeId',
+        'minutes',
+        'expertTypeId'
+      ]);
 
       const resources = await new Promise(async (reslove) => {
         const { res } = await queryDate({ appointmentTypeId: apptTypeId, minutes, expertTypeId });
         if (res.code === Const.SUCCESS_CODE) {
-          let _resources = res.context.resources
+          let _resources = res.context.resources;
           if (type) {
-            if(minutes == _tempParams.minutes&&apptTypeId==_tempParams.apptTypeId&&expertTypeId==_tempParams.expertTypeId){
-              chooseData=Object.assign({},_tempParams)
-            }else{
-              chooseData.bookSlotVO={}
-            }
-            setFieldsValue({bookSlotVO:chooseData.bookSlotVO})
-            let _temp: any = {
-              "date": chooseData.bookSlotVO.dateNo,
-              "minutes": chooseData.minutes,
-              "minuteSlotVOList": []
-            }
-            _temp.minuteSlotVOList.push({ ...chooseData.bookSlotVO, type: 'link', disabled: false })
-            if (_resources.length === 0) {
-              _resources.push(_temp)
+            if (
+              minutes == _tempParams.minutes &&
+              apptTypeId == _tempParams.apptTypeId &&
+              expertTypeId == _tempParams.expertTypeId
+            ) {
+              chooseData = Object.assign({}, _tempParams);
             } else {
-
-              _resources.map(item => {
+              chooseData.bookSlotVO = {};
+            }
+            setFieldsValue({ bookSlotVO: chooseData.bookSlotVO });
+            let _temp: any = {
+              date: chooseData.bookSlotVO.dateNo,
+              minutes: chooseData.minutes,
+              minuteSlotVOList: []
+            };
+            _temp.minuteSlotVOList.push({
+              ...chooseData.bookSlotVO,
+              type: 'link',
+              disabled: false
+            });
+            if (_resources.length === 0) {
+              _resources.push(_temp);
+            } else {
+              _resources.map((item) => {
                 if (item.date === _temp.date) {
                   let isLoop = false;
                   item.minuteSlotVOList = item.minuteSlotVOList.map((it, index) => {
-                    const _t = _temp.minuteSlotVOList.find(ii => ii.startTime === it.startTime)
+                    const _t = _temp.minuteSlotVOList.find((ii) => ii.startTime === it.startTime);
                     if (_t) {
-                      isLoop = true
-                      it = { ...it, ..._t }
+                      isLoop = true;
+                      it = { ...it, ..._t };
                     }
                     return it;
                     //if(item.minuteSlotVOList.length===(index+1)&&!_t)isLoop=false
-                  })
+                  });
                   if (!isLoop) {
-                    item.minuteSlotVOList = item.minuteSlotVOList.concat(_temp.minuteSlotVOList)
+                    item.minuteSlotVOList = item.minuteSlotVOList.concat(_temp.minuteSlotVOList);
                   }
                 }
-              })
+              });
             }
           }
           reslove(_resources);
         }
-      })
-
+      });
 
       this.setState({
         resources,
-        key: (+new Date())
-      })
+        key: +new Date()
+      });
     });
-  }
+  };
 
   getAppointmentById = (id: number) => {
     this.setState({ loading: true });
@@ -131,16 +147,15 @@ class NewAppointment extends React.Component<any, any> {
     findAppointmentById(id)
       .then(({ res }) => {
         if (res.code === Const.SUCCESS_CODE) {
-          let p = res.context
-          tempParams=Object.assign({}, p);
+          let p = res.context;
+          tempParams = Object.assign({}, p);
           this.setState({ params: p, loading: false }, () => {
             setFieldsValue(p);
-            this.queryDate(true, p)
+            this.queryDate(true, p);
           });
         } else {
           this.setState({ loading: false });
         }
-
       })
       .catch(() => {
         this.setState({ loading: false });
@@ -162,13 +177,11 @@ class NewAppointment extends React.Component<any, any> {
     });
   };
 
-
   onOpenMemberModal = (visible) => {
     this.setState({
       visible
     });
   };
-
 
   onChooseMember = (memberInfo) => {
     const { setFieldsValue } = this.props.form;
@@ -178,9 +191,9 @@ class NewAppointment extends React.Component<any, any> {
       consumerLastName: memberInfo.lastName,
       consumerPhone: memberInfo.contactPhone,
       consumerEmail: memberInfo.email,
-      customerId: memberInfo.customerId,
+      customerId: memberInfo.customerId
       // customerLevelId: memberInfo.customerLevelId
-    }
+    };
     this.setState({
       visible: false,
       params: {
@@ -205,23 +218,30 @@ class NewAppointment extends React.Component<any, any> {
       if (!err) {
         this.setState({ loading: true });
         const { params, appointmentType } = this.state;
-        let d: any = {}, consumerName = '';
+        let d: any = {},
+          consumerName = '';
         if (values.customerLevelId === 233) {
-          consumerName = `${values.consumerFirstName} ${values.consumerLastName}`
+          consumerName = `${values.consumerFirstName} ${values.consumerLastName}`;
         } else {
-          consumerName = params.consumerName
+          consumerName = params.consumerName;
         }
 
-        let cc = { ...params, ...values, consumerName, serviceTypeId: '6', appointmentTypeId: values.apptTypeId, }
+        let cc = {
+          ...params,
+          ...values,
+          consumerName,
+          serviceTypeId: '6',
+          appointmentTypeId: values.apptTypeId
+        };
         // return
         if (params.id) {
-          d = await apptUpdate(cc)
+          d = await apptUpdate(cc);
         } else {
-          d = await apptSave(cc)
+          d = await apptSave(cc);
         }
         if (d.res.code === Const.SUCCESS_CODE) {
           this.setState({ loading: false });
-          history.push('/appointment-list')
+          history.push('/appointment-list');
         }
       }
     });
@@ -236,67 +256,100 @@ class NewAppointment extends React.Component<any, any> {
       <Spin spinning={this.state.loading}>
         <Breadcrumb>
           <Breadcrumb.Item>
-            <a href="/appointment-list"><FormattedMessage id="Appointment.list" /></a>
+            <a href="/appointment-list">
+              <FormattedMessage id="Appointment.list" />
+            </a>
           </Breadcrumb.Item>
-          <Breadcrumb.Item><FormattedMessage id="Appointment.Appointment" /></Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <FormattedMessage id="Appointment.Appointment" />
+          </Breadcrumb.Item>
         </Breadcrumb>
         <div className="container">
-          <Headline title={this.props.match.params.id ? RCi18n({ id: 'Appointment.Update appointment' }) : RCi18n({ id: 'Appointment.ANA' })} />
+          <Headline
+            title={
+              this.props.match.params.id
+                ? RCi18n({ id: 'Appointment.Update appointment' })
+                : RCi18n({ id: 'Appointment.ANA' })
+            }
+          />
 
-          <Form onSubmit={this.onSaveAppointment} wrapperCol={{ sm: { span: 16 } }} labelCol={{ sm: { span: 4 } }}>
+          <Form
+            onSubmit={this.onSaveAppointment}
+            wrapperCol={{ sm: { span: 16 } }}
+            labelCol={{ sm: { span: 4 } }}
+          >
             <Form.Item label={RCi18n({ id: 'Appointment.SAType' })}>
               {getFieldDecorator('apptTypeId', {
                 initialValue: params.apptTypeId || ((appointmentType?.list ?? [])[0]?.id ?? ''),
-                rules: [{
-                  required: true,
-                  message: 'Please Select appointment type',
-                },],
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please Select appointment type'
+                  }
+                ],
                 onChange: () => this.queryDate(params.id ? true : false, params)
               })(
                 <Radio.Group>
-                  {(appointmentType?.list ?? []).map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
+                  {(appointmentType?.list ?? []).map((item: any) => (
+                    <Radio key={item.id} value={item.id}>
+                      {item.name}
+                    </Radio>
+                  ))}
                   {/* <Radio value="1"><FormattedMessage id="Appointment.Offline" /></Radio>
                   <Radio value="0"><FormattedMessage id="Appointment.Online" /></Radio> */}
                 </Radio.Group>
               )}
             </Form.Item>
 
-
             <Form.Item label={RCi18n({ id: 'Appointment.Select.expert.type' })}>
               {getFieldDecorator('expertTypeId', {
                 initialValue: params.expertTypeId || ((expertType?.list ?? [])[0]?.id ?? ''),
-                rules: [{
-                  required: true,
-                  message: 'Please Select expert type',
-                },],
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please Select expert type'
+                  }
+                ],
                 onChange: () => this.queryDate(params.id ? true : false, params)
               })(
                 <Radio.Group>
-                  {(expertType?.list ?? []).map((item: any) => (<Radio key={item.id} value={item.id}>{item.name}</Radio>))}
+                  {(expertType?.list ?? []).map((item: any) => (
+                    <Radio key={item.id} value={item.id}>
+                      {item.name}
+                    </Radio>
+                  ))}
 
                   {/* <Radio value="1"><FormattedMessage id="Appointment.Behaviorist" /></Radio>
                   <Radio value="0"><FormattedMessage id="Appointment.Nutritionist" /></Radio>
                   <Radio value="2"><FormattedMessage id="Appointment.Orthopedist" /></Radio> */}
-
                 </Radio.Group>
               )}
             </Form.Item>
 
-
             <Form.Item label={RCi18n({ id: 'Appointment.Duration' })}>
               {getFieldDecorator('minutes', {
                 initialValue: params.minutes || 15,
-                rules: [{
-                  required: true,
-                  message: 'Please Select Duration',
-                },],
+                rules: [
+                  {
+                    required: true,
+                    message: 'Please Select Duration'
+                  }
+                ],
                 onChange: () => this.queryDate(params.id ? true : false, params)
               })(
                 <Radio.Group>
-                  <Radio key={15} value={15}><FormattedMessage id="Appointment.min15" /></Radio>
-                  <Radio key={30} value={30}><FormattedMessage id="Appointment.min30" /></Radio>
-                  <Radio key={45} value={45}><FormattedMessage id="Appointment.min45" /></Radio>
-                  <Radio key={60} value={60}><FormattedMessage id="Appointment.min60" /></Radio>
+                  <Radio key={15} value={15}>
+                    <FormattedMessage id="Appointment.min15" />
+                  </Radio>
+                  <Radio key={30} value={30}>
+                    <FormattedMessage id="Appointment.min30" />
+                  </Radio>
+                  <Radio key={45} value={45}>
+                    <FormattedMessage id="Appointment.min45" />
+                  </Radio>
+                  <Radio key={60} value={60}>
+                    <FormattedMessage id="Appointment.min60" />
+                  </Radio>
                 </Radio.Group>
               )}
             </Form.Item>
@@ -305,11 +358,8 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('bookSlotVO', {
                 initialValue: params.bookSlotVO || {},
                 rules: [{ validator: this.validateDateTime }]
-              })(<WeekCalender key={key} data={resources} />)
-
-              }
+              })(<WeekCalender key={key} data={resources} />)}
             </Form.Item>
-
 
             <div style={{ fontWeight: 'bolder' }}>PO’s Info:</div>
 
@@ -317,20 +367,25 @@ class NewAppointment extends React.Component<any, any> {
               {getFieldDecorator('customerLevelId', {
                 initialValue: params.customerLevelId,
                 onChange: this.onSelectMemberType
-              })(<Radio.Group
-                disabled={params.id !== undefined}
-              >
-                <Radio value={234}><FormattedMessage id="Appointment.Member" /></Radio>
-                <Radio value={233}><FormattedMessage id="Appointment.Guest" /></Radio>
-              </Radio.Group>)}
-              {!params.id && <div style={{ margin: '10px 0' }} >
-                {customerLevelId === 234 && (
-                  <Button type="primary" onClick={() => this.onOpenMemberModal(true)}>
-                    <FormattedMessage id="Appointment.Select member" />
-                  </Button>
-                )}
-              </div>
-              }
+              })(
+                <Radio.Group disabled={params.id !== undefined}>
+                  <Radio value={234}>
+                    <FormattedMessage id="Appointment.Member" />
+                  </Radio>
+                  <Radio value={233}>
+                    <FormattedMessage id="Appointment.Guest" />
+                  </Radio>
+                </Radio.Group>
+              )}
+              {!params.id && (
+                <div style={{ margin: '10px 0' }}>
+                  {customerLevelId === 234 && (
+                    <Button type="primary" onClick={() => this.onOpenMemberModal(true)}>
+                      <FormattedMessage id="Appointment.Select member" />
+                    </Button>
+                  )}
+                </div>
+              )}
             </Form.Item>
             {/* <Form.Item label={RCi18n({ id: 'Appointment.PON' })}>
               {getFieldDecorator('consumerName', {
@@ -340,7 +395,11 @@ class NewAppointment extends React.Component<any, any> {
             </Form.Item> */}
             <Row>
               <Col span={12}>
-                <Form.Item label={RCi18n({ id: 'PetOwner.FirstName' })} wrapperCol={{ sm: { span: 13 } }} labelCol={{ sm: { span: 8 } }}>
+                <Form.Item
+                  label={RCi18n({ id: 'PetOwner.FirstName' })}
+                  wrapperCol={{ sm: { span: 13 } }}
+                  labelCol={{ sm: { span: 8 } }}
+                >
                   {getFieldDecorator('consumerFirstName', {
                     initialValue: params.consumerFirstName || '',
                     rules: [{ required: true, message: 'The first name  is required' }]
@@ -348,7 +407,11 @@ class NewAppointment extends React.Component<any, any> {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label={RCi18n({ id: 'PetOwner.LastName' })} wrapperCol={{ sm: { span: 12 } }} labelCol={{ sm: { span: 4 } }}>
+                <Form.Item
+                  label={RCi18n({ id: 'PetOwner.LastName' })}
+                  wrapperCol={{ sm: { span: 12 } }}
+                  labelCol={{ sm: { span: 4 } }}
+                >
                   {getFieldDecorator('consumerLastName', {
                     initialValue: params.consumerLastName || '',
                     rules: [{ required: true, message: 'The last name  is required' }]
@@ -357,34 +420,44 @@ class NewAppointment extends React.Component<any, any> {
               </Col>
             </Row>
 
-
             <Form.Item label={RCi18n({ id: 'Appointment.Phone number' })}>
               {getFieldDecorator('consumerPhone', {
                 initialValue: params.consumerPhone || '',
-                rules: [{ message: 'Phone number is required' },
-                  {required: true,validator:(rule, value, callback)=>{
-                    if(!(/^\d{10}$/).test(value)){
-                      callback('Phone number is error')
-                    }else{
-                      callback()
+                rules: [
+                  { message: 'Phone number is required' },
+                  {
+                    required: true,
+                    validator: (rule, value, callback) => {
+                      if (!/^\d{10}$/.test(value)) {
+                        callback('Phone number is error');
+                      } else {
+                        callback();
+                      }
                     }
-                  }}
-              ]
-              })(<Input type='phone' maxLength={10}/>)}
+                  }
+                ]
+              })(<Input type="phone" maxLength={10} />)}
             </Form.Item>
             <Form.Item label={RCi18n({ id: 'Appointment.Consumer email' })}>
               {getFieldDecorator('consumerEmail', {
                 initialValue: params.consumerEmail || '',
-                rules: [{ required: true, message: 'email is required' }, {
-                  type: 'email',
-                  message: 'The input is not valid E-mail!',
-                }]
+                rules: [
+                  { required: true, message: 'email is required' },
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!'
+                  }
+                ]
               })(<Input disabled={customerLevelId === 234 || params.id !== undefined} />)}
             </Form.Item>
 
-            <CustomerList visible={this.state.visible} onConfirm={this.onChooseMember} onClose={() => this.onOpenMemberModal(false)} />
+            <CustomerList
+              visible={this.state.visible}
+              onConfirm={this.onChooseMember}
+              onClose={() => this.onOpenMemberModal(false)}
+            />
             <div className="bar-button">
-              <Button htmlType="submit" type="primary" >
+              <Button htmlType="submit" type="primary">
                 <FormattedMessage id="Appointment.Save" />
               </Button>
               <Button style={{ marginLeft: 20 }} onClick={() => history.push('/appointment-list')}>

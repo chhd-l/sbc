@@ -302,11 +302,20 @@ body {
 .ant-menu-item {
   line-height: 32px !important;
   padding-top: 10px !important;
+  padding-bottom: 10px !important;
   //height: 50px!important;
 }
 
 .leftSideNav.ant-layout-sider .ant-menu-inline .ant-menu-item {
-  height: 50px !important;
+  //height: 50px !important;
+  height: auto !important;
+  min-height: 50px !important;
+  > a {
+    display: block;
+    overflow: hidden;
+    white-space: initial;
+    line-height: 24px;
+  }
 }
 
 .leftSideNav.ant-layout-sider {
@@ -375,6 +384,13 @@ body {
       background-color: #F56C1D;
       margin-right: 10px;
     }
+
+    > span {
+      display: block;
+      overflow: hidden;
+      white-space: initial;
+      line-height: 24px;
+    }
   }
 
   .ant-menu-dark .ant-menu-submenu-open,
@@ -388,7 +404,8 @@ body {
 
   .ant-menu-inline .ant-menu-submenu-title {
     margin-top: 0;
-    margin-bottom: 4px;
+    margin-bottom: 15px;
+    height: auto;
   }
 
   .ant-menu-inline .ant-menu-item {
@@ -3545,4 +3562,24 @@ form .ant-input-group-compact {
   
   #ot-sdk-btn.ot-sdk-show-settings {
     background-color: #fff !important;
+  }
+
+  .ant-input-group .ant-input-group-addon {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    * {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ant-select {
+      margin: -10px -11px;
+    }
+  }
+
+  .ant-input-group-compact input[disabled]:first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }

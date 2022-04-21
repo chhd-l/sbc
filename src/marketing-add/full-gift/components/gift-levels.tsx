@@ -35,6 +35,8 @@ class GiftLevels extends React.Component<any, any> {
     isNormal;
     selectedRows;
     noMulti;
+    addText;
+    goodsCate;
   }
   constructor(props) {
     super(props);
@@ -91,7 +93,7 @@ class GiftLevels extends React.Component<any, any> {
   // }
 
   render() {
-    const { isFullCount, fullGiftLevelList, isNormal, selectedRows,noMulti = false } = this.props;
+    const { isFullCount, fullGiftLevelList, isNormal, selectedRows, noMulti = false, addText, goodsCate } = this.props;
     const { goodsModal } = this.state
     const { form } = this.props;
     const { getFieldDecorator } = form;
@@ -176,7 +178,7 @@ class GiftLevels extends React.Component<any, any> {
                     </div>
                   )}
                   <Button type="primary" icon="plus" onClick={() => this.openGoodsModal(index)} style={{ marginTop: 3.5,marginBottom:24 }}>
-                    <FormattedMessage id="Marketing.Addgift" />
+                    {addText || <FormattedMessage id="Marketing.Addgift" />}
                   </Button>
                   {/*&nbsp;&nbsp;*/}
                   {/*<Select*/}
@@ -191,7 +193,7 @@ class GiftLevels extends React.Component<any, any> {
                   {/*  <Option value={0}>The default all give</Option>*/}
                   {/*</Select>*/}
                   &nbsp;&nbsp;&nbsp;
-                  {index > 0 && <a onClick={() => this.deleteLevels(index)}>Delete</a>}
+                  {index > 0 && <a onClick={() => this.deleteLevels(index)}><FormattedMessage id="Marketing.Delete"/></a>}
                 </HasError>
 
                 <DataGrid scroll={{ y: 500 }} size="small" rowKey={(record) => record.goodsInfoId} dataSource={level.fullGiftDetailList ? this.getSelectedRowByIds(this.getIdsFromLevel(level.fullGiftDetailList)) : []} pagination={false}>
@@ -253,7 +255,7 @@ class GiftLevels extends React.Component<any, any> {
                         return (
                           <div className="has-error">
                             <p>{stock}</p>
-                            <div className="ant-form-explain">Inventory is too low</div>
+                            <div className="ant-form-explain"><FormattedMessage id="Marketing.InventoryTooLow"/></div>
                           </div>
                         );
                       } else {
@@ -313,7 +315,7 @@ class GiftLevels extends React.Component<any, any> {
                     title={<FormattedMessage id="Marketing.Operation" />}
                     key="operate"
                     render={(row) => {
-                      return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}>Delete</a>;
+                      return <a onClick={() => this.deleteRows(index, row.goodsInfoId)}><FormattedMessage id="Marketing.Delete"/></a>;
                     }}
                   />
                 </DataGrid>
@@ -338,6 +340,7 @@ class GiftLevels extends React.Component<any, any> {
             selectedRows={fromJS(this.getSelectedRowByIds(this.getIdsFromLevel(fullGiftLevelList[goodsModal._forIndex]['fullGiftDetailList'])))}
             onOkBackFun={(selectedSkuIds, selectedRows) => this.skuSelectedBackFun(goodsModal._forIndex, selectedSkuIds, selectedRows)}
             onCancelBackFun={this.closeGoodsModal}
+            goodsCate={goodsCate}
           />
         )}
       </div>

@@ -192,7 +192,7 @@ export default class Task extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'task.TaskName'})}>
                           <FormattedMessage id="task.TaskName" />
                         </p>
                       }
@@ -214,7 +214,7 @@ export default class Task extends React.Component<any, any> {
                       showSearch
                       dropdownMatchSelectWidth={false}
                       label={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'task.GoldenMoment'})}>
                           <FormattedMessage id="task.GoldenMoment" />
                         </p>
                       }
@@ -246,7 +246,7 @@ export default class Task extends React.Component<any, any> {
                       dropdownMatchSelectWidth={false}
                       value={taskForm.status}
                       label={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'task.TaskStatus'})}>
                           <FormattedMessage id="task.TaskStatus" />
                         </p>
                       }
@@ -277,7 +277,7 @@ export default class Task extends React.Component<any, any> {
                     <SelectGroup
                       defaultValue=""
                       label={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'task.Priority'})}>
                           <FormattedMessage id="task.Priority" />
                         </p>
                       }
@@ -385,7 +385,7 @@ export default class Task extends React.Component<any, any> {
                       showSearch
                       dropdownMatchSelectWidth={false}
                       label={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'Setting.timeZone'})}>
                           <FormattedMessage id="Setting.timeZone" />
                         </p>
                       }

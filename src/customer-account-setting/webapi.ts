@@ -20,3 +20,18 @@ export const editCustomAccountSetting = (params) => {
     })
   })
 }
+
+export function getMaxNumberConfig() {
+  return Fetch<TResult>('/order/config/getMaxSkuTypeAndGoodsNumberConfig', {
+    method: 'GET'
+  })
+}
+
+export function saveMaxNumberConfig(param) {
+  return Fetch<TResult>('/order/config/updateMaxNumberSku', {
+    method: 'POST',
+    body: JSON.stringify({
+      requestList: param
+    })
+  })
+}

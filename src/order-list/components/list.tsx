@@ -1,13 +1,27 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Link } from 'react-router-dom';
-import { Checkbox, Spin, Pagination, Modal, Form, Input, Tooltip, Radio, Row, Col } from 'antd';
+import {
+  Checkbox,
+  Spin,
+  Pagination,
+  Modal,
+  Form,
+  Input,
+  Tooltip,
+  Radio,
+  Row,
+  Col,
+  message
+} from 'antd';
 import { List, fromJS } from 'immutable';
-import { noop, Const, AuthWrapper, cache, getOrderStatusValue, RCi18n, util } from 'qmkit';
+import { noop, Const, AuthWrapper, cache, getOrderStatusValue, util, RCi18n } from 'qmkit';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Moment from 'moment';
 import { allCheckedQL } from '../ql';
 import FormItem from 'antd/lib/form/FormItem';
+import { cancelOrderForJp } from '../webapi';
+
 const defaultImg = require('../../goods-list/img/none.png');
 
 type TList = List<any>;
@@ -18,7 +32,6 @@ class RejectForm extends React.Component<any, any> {
   };
   render() {
     const { getFieldDecorator } = this.props.form;
-
     return (
       <Form>
         <FormItem>
@@ -32,26 +45,17 @@ class RejectForm extends React.Component<any, any> {
                 max: 100,
                 message: <FormattedMessage id="Order.100charactersLimitTip" />
               }
-              // { validator: this.checkComment }
             ]
-          })(<Input.TextArea placeholder={(window as any).RCi18n({ id: 'Order.rejectionReasonTip' })} autosize={{ minRows: 4, maxRows: 4 }} />)}
+          })(
+            <Input.TextArea
+              placeholder={(window as any).RCi18n({ id: 'Order.rejectionReasonTip' })}
+              autosize={{ minRows: 4, maxRows: 4 }}
+            />
+          )}
         </FormItem>
       </Form>
     );
   }
-
-  // checkComment = (_rule, value, callback) => {
-  //   if (!value) {
-  //     callback();
-  //     return;
-  //   }
-
-  //   if (value.length > 100) {
-  //     callback(new Error('Please input less than 100 characters'));
-  //     return;
-  //   }
-  //   callback();
-  // };
 }
 
 const WrappedRejectForm = Form.create({})(injectIntl(RejectForm));
@@ -62,11 +66,13 @@ class ListView extends React.Component<any, any> {
 
   constructor(props) {
     super(props);
-    this.state =  {
+    this.state = {
       selectedOrderId: null,
       orderAduit: null,
-      curOrderAuditType:null,//当前选中的订单的审核类型 ManualReview:人工审核  DownstreamAudit:下游审核库存
-      orderAuditModalVisible:false,//是否显示订单审核弹框
+      curOrderAuditType: null, //当前选中的订单的审核类型 ManualReview:人工审核  DownstreamAudit:下游审核库存
+      orderAuditModalVisible: false, //是否显示订单审核弹框
+      cancelOrderModalVisible: false,
+      cancelOrderLoading: false
     };
   }
 
@@ -80,7 +86,6 @@ class ListView extends React.Component<any, any> {
       pageSize: number;
       currentPage: number;
       dataList: TList;
-
       onChecked: Function;
       onCheckedAll: Function;
       allChecked: boolean;
@@ -103,11 +108,9 @@ class ListView extends React.Component<any, any> {
     total: 'total',
     //当前的分页条数
     pageSize: 'pageSize',
-
     currentPage: 'currentPage',
     //当前的客户列表
     dataList: 'dataList',
-
     onChecked: noop,
     onCheckedAll: noop,
     allChecked: allCheckedQL,
@@ -120,12 +123,23 @@ class ListView extends React.Component<any, any> {
     verify: noop,
     orderRejectModalVisible: 'orderRejectModalVisible',
     hideRejectModal: noop,
-    showRejectModal: noop,
+    showRejectModal: noop
   };
 
   render() {
-    const { loading, btnLoading, total, pageSize, dataList, onCheckedAll, allChecked, init, currentPage, orderRejectModalVisible } = this.props.relaxProps;
-    const {orderAuditModalVisible,curOrderAuditType}=this.state;
+    const {
+      loading,
+      btnLoading,
+      total,
+      pageSize,
+      dataList,
+      onCheckedAll,
+      allChecked,
+      init,
+      currentPage,
+      orderRejectModalVisible
+    } = this.props.relaxProps;
+    const { orderAuditModalVisible, curOrderAuditType } = this.state;
 
     return (
       <div>
@@ -169,7 +183,9 @@ class ListView extends React.Component<any, any> {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(dataList)}</tbody>
+                  <tbody className="ant-table-tbody">
+                    {loading ? this._renderLoading() : this._renderContent(dataList)}
+                  </tbody>
                 </table>
               </div>
               {!loading && total == 0 ? (
@@ -193,7 +209,14 @@ class ListView extends React.Component<any, any> {
             />
           ) : null}
 
-          <Modal maskClosable={false} title={<FormattedMessage id="Order.rejectionReasonTip" />} visible={orderRejectModalVisible} okText={<FormattedMessage id="Order.save" />} onOk={() => this._handleOK()} onCancel={() => this._handleCancel()}>
+          <Modal
+            maskClosable={false}
+            title={<FormattedMessage id="Order.rejectionReasonTip" />}
+            visible={orderRejectModalVisible}
+            okText={<FormattedMessage id="Order.save" />}
+            onOk={() => this._handleOK()}
+            onCancel={() => this._handleCancel()}
+          >
             <WrappedRejectForm
               ref={(form) => {
                 this._rejectForm = form;
@@ -214,8 +237,11 @@ class ListView extends React.Component<any, any> {
                 <strong>{<FormattedMessage id="Order.confirmThisOrder" />}</strong>
               </h3>
               <p className="ant-form-item-required" style={{ margin: '20px 0' }}>
-                {' '}
-                <span></span> {curOrderAuditType==='ManualReview'?<FormattedMessage id="Order.pendingAuditBasis" />:<FormattedMessage id="Order.auditBasis" />}
+                {curOrderAuditType === 'ManualReview' ? (
+                  <FormattedMessage id="Order.pendingAuditBasis" />
+                ) : (
+                  <FormattedMessage id="Order.auditBasis" />
+                )}
               </p>
               <Row>
                 <Col span={6}>{<FormattedMessage id="Order.selectType" />}</Col>
@@ -236,15 +262,33 @@ class ListView extends React.Component<any, any> {
               </Row>
             </Modal>
           ) : null}
+          {this.state.cancelOrderModalVisible ? (
+            <Modal
+              maskClosable={false}
+              title={<FormattedMessage id="Order.cancelOrderModalTitle" />}
+              visible={this.state.cancelOrderModalVisible}
+              cancelText={<FormattedMessage id="Order.noCancelOrder" />}
+              okText={<FormattedMessage id="Order.sureCancelOrder" />}
+              onOk={() => this._handleCancelOrder()}
+              okButtonProps={{ loading: this.state.cancelOrderLoading }}
+              onCancel={() => {
+                this.setState({ cancelOrderModalVisible: false, cancelOrderLoading: false });
+              }}
+            >
+              <p style={{ margin: '10px 0' }}>
+                <FormattedMessage id="Order.cancelOrderContent" />
+              </p>
+            </Modal>
+          ) : null}
         </div>
       </div>
     );
   }
 
   //判断价格显示位数，针对Individualization类型小数位数特殊处理
-  judgePriceNum(price,subscriberType){
+  judgePriceNum(price, subscriberType) {
     // return price&&price.toFixed(subscriberType==='Individualization'?2:2)
-    return price&&price.toFixed(2)
+    return price && price.toFixed(2);
   }
 
   _renderLoading() {
@@ -258,14 +302,11 @@ class ListView extends React.Component<any, any> {
   }
 
   _renderContent(dataList) {
-    const { onChecked, onAudit, verify, onValidateAudit } = this.props.relaxProps;
-    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
-
+    const { onChecked, onAudit } = this.props.relaxProps;
     return (
       dataList &&
       dataList.map((v, index) => {
         const id = v.get('id');
-        // const toExternalOrderId = v.get('toExternalOrderId');
         const tradePrice = v.getIn(['tradePrice', 'totalPrice']) || 0;
         const tradePriceObject = v.get('tradePrice') ? (v.get('tradePrice').toJS() as any) : {};
         const installmentPrice = tradePriceObject.installmentPrice;
@@ -279,10 +320,6 @@ class ListView extends React.Component<any, any> {
               a = a + b;
               return a;
             }, 0) || 0;
-        const buyerId = v.getIn(['buyer', 'id']);
-        const flowState=v.getIn(['tradeState', 'flowState'])//订单状态
-        const isAutoAudit=v.get('isAuditOpen')//订单审核方式 true:手动审核  false:自动审核
-        const auditState=v.getIn(['tradeState', 'auditState'])//订单审核状态
         return (
           <tr className="ant-table-row  ant-table-row-level-0" key={id}>
             <td colSpan={9} style={{ padding: 0 }}>
@@ -290,13 +327,7 @@ class ListView extends React.Component<any, any> {
                 <thead>
                   <tr>
                     <td colSpan={9} style={{ padding: 0, color: '#999' }}>
-                      <div
-                        style={{
-                          marginTop: 12,
-                          borderBottom: '1px solid #F5F5F5',
-                          height: 40
-                        }}
-                      >
+                      <div className="order-list-checkbox">
                         <span style={{ marginLeft: '1%' }}>
                           <Checkbox
                             checked={v.get('checked')}
@@ -308,15 +339,7 @@ class ListView extends React.Component<any, any> {
                         </span>
 
                         <div style={{ width: 600, display: 'inline-block' }}>
-                          <span
-                            style={{
-                              marginLeft: 20,
-                              color: '#000',
-                              display: 'inline-block',
-                              position: 'relative',
-                              width: 600
-                            }}
-                          >
+                          <span className="order-list-order-number-label">
                             {id}{' '}
                             {v.get('platform') != 'CUSTOMER' && (
                               <span style={styles.platform}>
@@ -329,12 +352,18 @@ class ListView extends React.Component<any, any> {
                               </span>
                             )}
                             {v.get('goodWillFlag') === 1 && (
-                              <span style={styles.goodwillColor} className="order_list_goodwill_flag">
+                              <span
+                                style={styles.goodwillColor}
+                                className="order_list_goodwill_flag goodwill-color"
+                              >
                                 <FormattedMessage id="Order.goodwillOrder" />
                               </span>
                             )}
                             {v.get('isAutoSub') && (
-                              <span style={styles.platform} className="order_list_subscription_flag">
+                              <span
+                                style={styles.platform}
+                                className="order_list_subscription_flag"
+                              >
                                 <FormattedMessage id="Order.subscription" />
                               </span>
                             )}
@@ -352,7 +381,14 @@ class ListView extends React.Component<any, any> {
                                     overflowY: 'auto'
                                   }}
                                   placement="bottomLeft"
-                                  title={<div> {v.get('subIdList') ? v.get('subIdList').toJS().join(',') : ''}</div>}
+                                  title={
+                                    <div>
+                                      {' '}
+                                      {v.get('subIdList')
+                                        ? v.get('subIdList').toJS().join(',')
+                                        : ''}
+                                    </div>
+                                  }
                                 >
                                   <p className="overFlowtext" style={{ width: 600 }}>
                                     {v.get('subIdList') ? v.get('subIdList').toJS().join(',') : ''}
@@ -374,27 +410,8 @@ class ListView extends React.Component<any, any> {
                             : ''}
                         </span>
                         <span style={{ marginRight: 0, float: 'right' }}>
-                          {/*只有未审核状态才显示修改*/}
-                          {(v.getIn(['tradeState', 'flowState']) === 'INIT' || v.getIn(['tradeState', 'flowState']) === 'AUDIT') &&
-                            v.getIn(['tradeState', 'payState']) === 'NOT_PAID' &&
-                            v.get('tradeItems') &&
-                            !v.get('tradeItems').get(0).get('isFlashSaleGoods') &&
-                            // <AuthWrapper functionName="edit_order_f_001">
-                            //   <Tooltip placement="top" title="Edit">
-                            //     <a
-                            //       style={{ marginLeft: 20 }}
-                            //       onClick={() => {
-                            //         verify(id, buyerId);
-                            //       }}
-                            //       className="iconfont iconEdit"
-                            //     >
-                            //       {/*<FormattedMessage id="edit" />*/}
-                            //     </a>
-                            //   </Tooltip>
-                            // </AuthWrapper>
-                            null}
                           {/*审核按钮显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
+                          {v.get('showAuditBtn') && (
                             <AuthWrapper functionName="fOrderList002">
                               <a
                                 onClick={() => {
@@ -408,43 +425,56 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
                           {/*驳回按钮显示*/}
-                          {v.getIn(['tradeState', 'flowState']) === 'INIT' && v.getIn(['tradeState', 'auditState']) === 'NON_CHECKED' && v.getIn(['tradeState', 'payState']) === 'PAID' && this.isPrescriber() && (
+                          {v.get('showRejectBtn') && (
                             <AuthWrapper functionName="fOrderList002">
-                              <a onClick={() => this._showRejectedConfirm(id)} href="javascript:void(0)" style={{ marginLeft: 20 }}>
+                              <a
+                                onClick={() => this._showRejectedConfirm(id)}
+                                href="javascript:void(0)"
+                                style={{ marginLeft: 20 }}
+                              >
                                 <FormattedMessage id="Order.turnDown" />
                               </a>
                             </AuthWrapper>
                           )}
 
                           {/*待发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' && (auditState==='INSIDE_CHECKED'||auditState==='CHECKED') && v.getIn(['tradeState', 'flowState']) === 'AUDIT' &&
-                            v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED' &&
-                            // !(v.get('paymentOrder') == 'PAY_FIRST' && v.getIn(['tradeState', 'payState']) != 'PAID')
-                            v.getIn(['tradeState', 'payState']) === 'PAID' && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                  <a onClick={() => this._toDeliveryForm(id)} style={{ marginLeft: 20 }} className="iconfont iconbtn-shipping">
-                                    {/*<FormattedMessage id="order.ship" />*/}
-                                  </a>
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showToBeDeliverStatus') && (
+                            <AuthWrapper functionName="fOrderDetail002">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                <a
+                                  onClick={() => this._toDeliveryForm(id)}
+                                  className="iconfont iconbtn-shipping ml-20"
+                                />
+                              </Tooltip>
+                            </AuthWrapper>
+                          )}
                           {/*部分发货状态显示*/}
-                          {Const.SITE_NAME !== 'MYVETRECO' && (v.getIn(['tradeState', 'flowState']) === 'TO_BE_DELIVERED' || v.getIn(['tradeState', 'flowState']) === 'PARTIALLY_SHIPPED') &&
-                            (v.getIn(['tradeState', 'deliverStatus']) === 'PART_SHIPPED' || v.getIn(['tradeState', 'deliverStatus']) === 'NOT_YET_SHIPPED') &&
-                            (v.getIn(['tradeState', 'payState']) === 'PAID' || v.getIn(['tradeState', 'payState']) === 'AUTHORIZED') && (
-                              <AuthWrapper functionName="fOrderDetail002">
-                                <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
-                                  <a onClick={() => this._toDeliveryForm(id)} className="iconfont iconbtn-shipping"/>
-                                </Tooltip>
-                              </AuthWrapper>
-                            )}
+                          {v.get('showPartShippedStatus') && (
+                            <AuthWrapper functionName="fOrderDetail002">
+                              <Tooltip placement="top" title={<FormattedMessage id="Order.ship" />}>
+                                <a
+                                  onClick={() => this._toDeliveryForm(id)}
+                                  className="iconfont iconbtn-shipping"
+                                />
+                              </Tooltip>
+                            </AuthWrapper>
+                          )}
+                          {/*deliverd状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'SHIPPED' && (
                             <AuthWrapper functionName="fOrderList003">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.Delivered" />}>
+                              <Tooltip
+                                placement="top"
+                                title={<FormattedMessage id="Order.Delivered" />}
+                              >
                                 <a
                                   onClick={() => {
-                                    this._showConfirm(id, (window as any).RCi18n({ id: 'Order.Delivered' }), (window as any).RCi18n({ id: 'Order.ConfirmthatallproductsDeliverd' }));
+                                    this._showConfirm(
+                                      id,
+                                      (window as any).RCi18n({ id: 'Order.Delivered' }),
+                                      (window as any).RCi18n({
+                                        id: 'Order.ConfirmthatallproductsDeliverd'
+                                      })
+                                    );
                                   }}
                                   href="javascript:void(0)"
                                 >
@@ -456,10 +486,17 @@ class ListView extends React.Component<any, any> {
                           {/*待收货状态显示*/}
                           {v.getIn(['tradeState', 'flowState']) === 'DELIVERED' && (
                             <AuthWrapper functionName="fOrderList003">
-                              <Tooltip placement="top" title={<FormattedMessage id="Order.confirmReceipt" />}>
+                              <Tooltip
+                                placement="top"
+                                title={<FormattedMessage id="Order.confirmReceipt" />}
+                              >
                                 <a
                                   onClick={() => {
-                                    this._showConfirm(id, (window as any).RCi18n({ id: 'Order.ConfirmReceipt' }), (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' }));
+                                    this._showConfirm(
+                                      id,
+                                      (window as any).RCi18n({ id: 'Order.ConfirmReceipt' }),
+                                      (window as any).RCi18n({ id: 'Order.ConfirmThatAllProducts' })
+                                    );
                                   }}
                                   href="javascript:void(0)"
                                 >
@@ -469,28 +506,59 @@ class ListView extends React.Component<any, any> {
                             </AuthWrapper>
                           )}
 
-                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED人工审核，人工审核条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
-                          {isAutoAudit&&(flowState === 'PENDING_REVIEW'||flowState === 'TO_BE_DELIVERED')&&auditState==='NON_CHECKED' ? (
+                          {/*人工审核按钮显示条件：1、订单需要手动审核  2、订单状态PENDING_REVIEW or TO_BE_DELIVERED 3、审核状态：未审核*/}
+                          {v.get('showManualReviewBtn') ? (
                             <AuthWrapper functionName="f_order_manual_audit">
-                            <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id,'ManualReview')} className="iconfont iconshenhe" style={{ marginLeft: 20 }}/>
-                            </Tooltip>
+                              <Tooltip placement="top" title="Audit">
+                                <a
+                                  onClick={() => this._showAuditConfirm(id, 'ManualReview')}
+                                  className="iconfont iconshenhe ml-20"
+                                />
+                              </Tooltip>
                             </AuthWrapper>
                           ) : null}
 
-                          {/*订单PENDING_REVIEW or TO_BE_DELIVERED下游审核库存，下游审核库存条件：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
-                          {/*||(flowState === 'TO_BE_DELIVERED'&&storeId==='123457911')*/}
-                          {(flowState === 'PENDING_REVIEW')&&auditState==='INSIDE_CHECKED' ? (
+                          {/*下游审核库存按钮显示：1、订单状态PENDING_REVIEW or TO_BE_DELIVERED 2、审核状态：已人工审核*/}
+                          {v.get('showDownstreamReviewBtn') ? (
                             // <AuthWrapper functionName="f_order_manual_audit">
                             <Tooltip placement="top" title="Audit">
-                              <a onClick={() => this._showAuditConfirm(id,'DownstreamAudit')} className="iconfont iconaudit" style={{ marginLeft: 20 }}/>
+                              <a
+                                onClick={() => this._showAuditConfirm(id, 'DownstreamAudit')}
+                                className="iconfont iconaudit ml-20"
+                              />
                             </Tooltip>
-                            // </AuthWrapper>
+                          ) : // </AuthWrapper>
+                          null}
+
+                          {/*Japan Cancel all*/}
+                          {v.get('showJpCancelOrderBtn') ? (
+                            <AuthWrapper functionName="f_cancel_order_btn">
+                            <Tooltip
+                              placement="top"
+                              title={<FormattedMessage id="Order.cancelOrder" />}
+                            >
+                              <a
+                                onClick={() => {
+                                  this.setState({
+                                    cancelOrderModalVisible: true,
+                                    selectedOrderId: id
+                                  });
+                                }}
+                                className="iconfont iconbtn-cancelall ml-20"
+                              />
+                            </Tooltip>
+                             </AuthWrapper>
                           ) : null}
 
                           <AuthWrapper functionName="fOrderDetail001">
-                            <Tooltip placement="top" title={<FormattedMessage id="Order.seeDetails" />}>
-                              <Link style={{ marginLeft: 20, marginRight: 20 }} to={`/order-detail/${id}`} className="iconfont iconDetails order_list_detail"/>
+                            <Tooltip
+                              placement="top"
+                              title={<FormattedMessage id="Order.seeDetails" />}
+                            >
+                              <Link
+                                to={`/order-detail/${id}`}
+                                className="iconfont iconDetails order_list_detail ml-20 mr-20"
+                              />
                             </Tooltip>
                           </AuthWrapper>
                         </span>
@@ -501,35 +569,42 @@ class ListView extends React.Component<any, any> {
                 <tbody>
                   <tr>
                     <td style={{ width: '3%' }} />
-                    <td
-                      style={{
-                        textAlign: 'left',
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        flexWrap: 'wrap',
-                        padding: '16px 0',
-                        width: '200'
-                      }}
-                    >
+                    <td className="good-image-td">
                       {/*商品图片*/}
                       {v
                         .get('tradeItems')
                         .concat(gifts)
-                        .map((v, k) => (k < 4 ? <img src={v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg} title={v.get('skuName') ? v.get('skuName') : ''} className="img-item" style={styles.imgItem} key={k} /> : null))}
+                        .map((v, k) =>
+                          k < 4 ? (
+                            <img
+                              src={v.get('pic') ? util.optimizeImage(v.get('pic')) : defaultImg}
+                              title={v.get('skuName') ? v.get('skuName') : ''}
+                              className="img-item"
+                              key={k}
+                            />
+                          ) : null
+                        )}
 
                       {
                         /*最后一张特殊处理*/
                         //@ts-ignore
                         v.get('tradeItems').concat(gifts).size > 4 ? (
-                          <div style={styles.imgBg}>
+                          <div className="img-bg">
                             <img
                               //@ts-ignore
-                              src={v.get('tradeItems').concat(gifts).get(3).get('pic') ? util.optimizeImage(v.get('tradeItems').concat(gifts).get(3).get('pic')) : defaultImg}
-                              style={styles.imgFourth}
+                              src={
+                                v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                  ? util.optimizeImage(
+                                      v.get('tradeItems').concat(gifts).get(3).get('pic')
+                                    )
+                                  : defaultImg
+                              }
+                              className="img-fourth"
                             />
                             //@ts-ignore
-                            <div style={styles.imgNum}>
-                              <FormattedMessage id="Order.total" /> {v.get('tradeItems').concat(gifts).size}
+                            <div className="imgNum">
+                              <FormattedMessage id="Order.total" />{' '}
+                              {v.get('tradeItems').concat(gifts).size}
                               <FormattedMessage id="Order.Items" />
                             </div>
                           </div>
@@ -543,22 +618,30 @@ class ListView extends React.Component<any, any> {
                       </p>
                     </td>
                     <td style={{ width: '18%' }}>
-                      {/* Amount */}
-                      {/* {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)} {tradePrice.toFixed(2)}
-                      {installmentPrice && installmentPrice.additionalFee ? ' +(' + sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + installmentPrice.additionalFee.toFixed(2) + ')' : null} */}
                       {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                      {/* {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2) : tradePrice.toFixed(v.get('subscriptionType')==='Individualization'?2:2)} */}
-                      {installmentPrice && installmentPrice.totalPrice ? installmentPrice.totalPrice.toFixed(2) : tradePrice.toFixed(2)}
+                      {installmentPrice && installmentPrice.totalPrice
+                        ? installmentPrice.totalPrice.toFixed(2)
+                        : tradePrice.toFixed(2)}
                     </td>
                     {/* Quantity */}
                     <td style={{ width: '10%' }}>{num}</td>
                     {/*发货状态*/}
                     <td style={{ width: '14%' }}>
-                      <FormattedMessage id={getOrderStatusValue('ShippStatus', v.getIn(['tradeState', 'deliverStatus']))} />
+                      <FormattedMessage
+                        id={getOrderStatusValue(
+                          'ShippStatus',
+                          v.getIn(['tradeState', 'deliverStatus'])
+                        )}
+                      />
                     </td>
                     {/*支付状态*/}
                     <td style={{ width: '14%' }}>
-                      <FormattedMessage id={getOrderStatusValue('PaymentStatus', v.getIn(['tradeState', 'payState']))} />
+                      <FormattedMessage
+                        id={getOrderStatusValue(
+                          'PaymentStatus',
+                          v.getIn(['tradeState', 'payState'])
+                        )}
+                      />
                     </td>
                     {/*orderCreateBy*/}
                     <td style={{ width: '10%', paddingRight: 22 }} className="operation-td">
@@ -587,8 +670,13 @@ class ListView extends React.Component<any, any> {
    * 订单Pending/Pending Review状态审核弹框
    * @private
    */
-  _showAuditConfirm = (tdId: string,orderStatus:string) => {
-    this.setState({ selectedOrderId: tdId, orderAduit: 1 ,curOrderAuditType:orderStatus,orderAuditModalVisible:true});
+  _showAuditConfirm = (tdId: string, orderStatus: string) => {
+    this.setState({
+      selectedOrderId: tdId,
+      orderAduit: 1,
+      curOrderAuditType: orderStatus,
+      orderAuditModalVisible: true
+    });
   };
 
   /**
@@ -625,13 +713,13 @@ class ListView extends React.Component<any, any> {
    * @param tdId
    * @private
    */
-  _showConfirm = (tdId: string, title: string, content:string) => {
+  _showConfirm = (tdId: string, title: string, content: string) => {
     const { onConfirm } = this.props.relaxProps;
 
     const confirm = Modal.confirm;
     confirm({
       title: title,
-      content:  content,
+      content: content,
       onOk() {
         onConfirm(tdId);
       },
@@ -654,9 +742,28 @@ class ListView extends React.Component<any, any> {
   };
 
   _handleAuditOK = () => {
-    this.setState({orderAuditModalVisible:false})
+    this.setState({ orderAuditModalVisible: false });
     const { onValidateAudit } = this.props.relaxProps;
-    onValidateAudit(this.state.selectedOrderId, this.state.orderAduit,this.state.curOrderAuditType);
+    onValidateAudit(
+      this.state.selectedOrderId,
+      this.state.orderAduit,
+      this.state.curOrderAuditType
+    );
+  };
+
+  _handleCancelOrder = async () => {
+    try {
+      this.setState({ cancelOrderLoading: true });
+      const res = await cancelOrderForJp(this.state.selectedOrderId);
+      if (res?.res?.code === Const.SUCCESS_CODE) {
+        this.setState({ cancelOrderModalVisible: false });
+        message.success(RCi18n({ id: 'Order.cancelOrderSuccessfully' }));
+        const { init, pageSize, currentPage } = this.props.relaxProps;
+        init({ pageNum: currentPage - 1, pageSize });
+      }
+    } finally {
+      this.setState({ cancelOrderLoading: false });
+    }
   };
 
   /**
@@ -668,7 +775,7 @@ class ListView extends React.Component<any, any> {
     this._rejectForm.setFieldsValue({ comment: '' });
   };
   _handleAuditCancel = () => {
-    this.setState({orderAuditModalVisible:false})
+    this.setState({ orderAuditModalVisible: false });
   };
   isPrescriber = () => {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
@@ -686,48 +793,6 @@ const styles = {
     textAlign: 'center',
     height: 300
   },
-  imgItem: {
-    width: 60,
-    height: 60,
-    padding: 5,
-    border: '1px solid #ddd',
-    float: 'left',
-    marginRight: 10,
-    background: '#fff',
-    borderRadius: 3
-  },
-  imgFourth: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: 60,
-    height: 60,
-    borderRadius: 3
-  },
-  imgBg: {
-    position: 'relative',
-    width: 60,
-    height: 60,
-    padding: 5,
-    border: '1px solid #ddd',
-    float: 'left',
-    marginRight: 10,
-    borderRadius: 3
-  },
-  imgNum: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 60,
-    height: 60,
-    background: 'rgba(0,0,0,0.6)',
-    borderRadius: 3,
-    fontSize: 9,
-    color: '#fff'
-  },
   platform: {
     fontSize: 12,
     padding: '1px 3px',
@@ -735,15 +800,6 @@ const styles = {
     marginLeft: 5,
     border: ' 1px solid var(--primary-color)',
     color: 'var(--primary-color)',
-    borderRadius: 5
-  },
-  goodwillColor: {
-    fontSize: 12,
-    padding: '1px 3px',
-    display: 'inline-block',
-    marginLeft: 5,
-    border: ' 1px solid #2faf2b',
-    color: '#2faf2b',
     borderRadius: 5
   }
 } as any;

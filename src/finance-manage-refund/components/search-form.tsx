@@ -90,7 +90,7 @@ export default class SearchForm extends React.Component<any, any> {
             </FormItem>*/}
 
             <FormItem>
-              <Input addonBefore="Order number" onChange={(e) => changeTradeNo(e.target.value)} />
+              <Input addonBefore={<FormattedMessage id="Order.number"/>} onChange={(e) => changeTradeNo(e.target.value)} />
             </FormItem>
 
             <AuthWrapper functionName="f_finance_export">

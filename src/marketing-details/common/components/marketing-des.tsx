@@ -37,6 +37,8 @@ const SUB_TYPE = {
   5: 'Full quantity gift',
   10: 'Order reach',
   11: 'Order reach',
+  15: 'Full amount leaflet',
+  14: 'Full quantity leaflet'
 };
 const PROMOTION_TYPE = {
   0:  RCi18n({

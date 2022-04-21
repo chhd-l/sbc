@@ -2,7 +2,8 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { Form, Input, Select, Button, Tree } from 'antd';
-import { TreeSelectGroup, SelectGroup } from 'qmkit';
+import { TreeSelectGroup, SelectGroup, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 import * as webapi from './webapi';
 
@@ -79,7 +80,7 @@ export default class SearchForm extends React.Component<any, any> {
           </FormItem>
 
           <FormItem>
-            <Input addonBefore="Product Name" value={searchParams.goodsName} onChange={(e) => this.paramsOnChange('goodsName', e.target.value)} />
+            <Input addonBefore={RCi18n({id:'Product.Productname'})} value={searchParams.goodsName} onChange={(e) => this.paramsOnChange('goodsName', e.target.value)} />
           </FormItem>
 
           {/* <FormItem>
@@ -115,7 +116,7 @@ export default class SearchForm extends React.Component<any, any> {
                 this.searchBackFun();
               }}
             >
-              Search
+              <FormattedMessage id="Product.Search"/>
             </Button>
           </FormItem>
         </Form>
@@ -159,7 +160,7 @@ export default class SearchForm extends React.Component<any, any> {
       getPopupContainer={() => document.getElementById('modal-head')}
     >
       {/* <Option value={LIKE_TYPE.LIKE_GOODS_NO}>SPU Code</Option> */}
-      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO}>SKU</Option>
+      <Option value={LIKE_TYPE.LIKE_GOODS_INFO_NO} title={RCi18n({id:'Product.SKU'})}>{RCi18n({id:'Product.SKU'})}</Option>
     </Select>
   );
 }

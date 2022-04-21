@@ -54,7 +54,7 @@ export default class AuthorityAllocating extends React.Component<any, any> {
         </div>
         <AuthWrapper functionName="updateBossMenus">
           <div className="bar-button">
-            <Button type="primary" onClick={() => this.store.onSave()}>
+            <Button type="primary" loading={this.store.state().get('loading')} onClick={() => this.store.onSave()}>
               Save
             </Button>
           </div>

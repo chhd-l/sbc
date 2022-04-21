@@ -336,7 +336,7 @@ export default class ClinicList extends Component<any, any> {
         dataIndex: 'recipient',
         key: 'recipient',
         width: '10%',
-        render: (text, record) => <span>{record.detailsResponse.email}</span>
+        render: (text, record) => <span>{record.detailsResponse?.email ?? ''}</span>
       },
       {
         title: <FormattedMessage id="Marketing.Status" />,
@@ -492,7 +492,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.EmailTaskID'})} defaultValue={RCi18n({id:'Marketing.EmailTaskID'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -509,7 +509,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.ObjectType'})} defaultValue={RCi18n({id:'Marketing.ObjectType'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -538,7 +538,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.ObjectNo'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.ObjectNo'})} defaultValue={RCi18n({id:'Marketing.ObjectNo'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {
@@ -555,7 +555,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.EmailTemplate'})} defaultValue={RCi18n({id:'Marketing.EmailTemplate'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -584,7 +584,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Category'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.Category'})} defaultValue={RCi18n({id:'Marketing.Category'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -613,7 +613,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Status'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.Status'})} defaultValue={RCi18n({id:'Marketing.Status'})} />
                     <Select
                       style={styles.wrapper}
                       getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -642,7 +642,7 @@ export default class ClinicList extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <InputGroup compact style={styles.formItemStyle}>
-                    <Input style={styles.label} disabled defaultValue={RCi18n({id:'Marketing.Recipient'})} />
+                    <Input style={styles.label} disabled title={RCi18n({id:'Marketing.Recipient'})} defaultValue={RCi18n({id:'Marketing.Recipient'})} />
                     <Input
                       style={styles.wrapper}
                       onChange={(e) => {

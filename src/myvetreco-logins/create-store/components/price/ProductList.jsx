@@ -3,6 +3,8 @@ import {Row, Col, List, Checkbox} from 'antd';
 import CheckboxItem from "./checkboxItem";
 import { FormContext } from '../Step4';
 
+import { FormattedMessage } from 'react-intl';
+
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import VList from 'react-virtualized/dist/es/List';
 
@@ -60,11 +62,11 @@ import VList from 'react-virtualized/dist/es/List';
         <>
             <Row className="hpadding-level-1" gutter={8}  style={{marginBottom:'10px',fontWeight:500}}>
                 <Col span={2}></Col>
-                <Col span={6}>Product</Col>
-                <Col span={2}>Cost</Col>
-                <Col span={5}>Market price(excl.VAT)</Col>
-                <Col span={4}>Market price(incl.VAT)</Col>
-                <Col span={5}>Subscription price(incl.VAT)</Col>
+                <Col span={6}><FormattedMessage id="product.product" /></Col>
+                <Col span={2}><FormattedMessage id="Product.Cost" /></Col>
+                <Col span={5}><FormattedMessage id="Product.marketpriceexcl" /></Col>
+                <Col span={4}><FormattedMessage id="Product.marketpriceincl" /></Col>
+                <Col span={5}><FormattedMessage id="Product.subscriptionpriceincl" /></Col>
             </Row>
             {/* <List
                className="store-p-list"

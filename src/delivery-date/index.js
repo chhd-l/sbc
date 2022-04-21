@@ -2,17 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { Headline, BreadCrumb, Const } from 'qmkit';
 import * as webapi from './webapi';
 import { editDeliveryOption } from '../shipping-fee-setting/webapi';
-import { Select, Row, Col, Button, Switch, Radio, TimePicker, Spin, message } from 'antd';
-import { FormattedMessage } from 'react-intl';
+import {
+  Select,
+  Row,
+  Col,
+  Button,
+  Switch,
+  Radio,
+  TimePicker,
+  Spin,
+  message,
+  InputNumber
+} from 'antd';
+import { FormattedMessage, useIntl } from 'react-intl';
 import './style.less';
 import OpenTable from './openTable';
 import CloseTable from './closeTable';
 import moment from 'moment';
+import { cache } from '../../web_modules/qmkit';
+import { e } from 'mathjs';
 
 const format = 'HH:mm';
 const Option = Select.Option;
 
 const index = () => {
+  const intl = useIntl();
+  const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
+  const isJapan = String(storeId) === '123457919';
+
   const [loading, setLoading] = useState(false);
   const [deliveryForm, setDeliveryFrom] = useState({
     deliveryOption: 1,
@@ -46,6 +63,9 @@ const index = () => {
   const [deliverDateStatus, setDeliverDateStatus] = useState(0);
   const [deliverDateId, setDeliverDateId] = useState(0);
 
+  const [datePeriod, setDatePeriod] = useState(1);
+  const [deliveryInterval, setDeliveryInterval] = useState(0);
+
   useEffect(() => {
     setLoading(true);
     webapi
@@ -58,6 +78,11 @@ const index = () => {
               res.context.closeDate = [];
             }
             setDeliveryFrom(res.context);
+          }
+          // 日本需要设置 availableDates 和 deliveryInterval
+          if (isJapan) {
+            setDatePeriod(res?.context?.availableDates ?? 1);
+            setDeliveryInterval(res?.context?.deliveryInterval ?? 0);
           }
           // deliveryDate 状态
           if (res?.context?.systemConfigVO) {
@@ -93,7 +118,7 @@ const index = () => {
   }, [dateSwitch]);
 
   useEffect(() => {
-    let newSelectWeeks =  deliveryForm.openDate.map((item) =>(item.weeks));
+    let newSelectWeeks = deliveryForm.openDate.map((item) => item.weeks);
     setAllSelectWeeks(newSelectWeeks);
   }, [deliveryForm.openDate]);
 
@@ -103,7 +128,12 @@ const index = () => {
   }, [deliveryForm.closeDate]);
 
   useEffect(() => {
-    setCityOk(deliveryForm.city && deliveryForm.city.length > 0);
+    // 日本不要城市信息
+    if (JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId == '123457919') {
+      setCityOk(true);
+    } else {
+      setCityOk(deliveryForm.city && deliveryForm.city.length > 0);
+    }
   }, [deliveryForm.city]);
 
   useEffect(() => {
@@ -176,7 +206,7 @@ const index = () => {
     //   });
     // change code
 
-    newOpenDate= deliveryForm.openDate
+    newOpenDate = deliveryForm.openDate
       .sort((a, b) => a.sort - b.sort)
       .filter((item) => item.sort !== sort);
     handleChange('openDate', newOpenDate);
@@ -194,11 +224,11 @@ const index = () => {
 
     // change code
 
-    newOpenDate=deliveryForm.openDate.map((item) => {
+    newOpenDate = deliveryForm.openDate.map((item) => {
       if (item.sort === openTableItem.sort) {
         // newOpenDate.push(openTableItem);
         return openTableItem;
-      } 
+      }
       return item;
     });
 
@@ -230,11 +260,11 @@ const index = () => {
     //     }
     //   });
 
-// change code Nathan
+    // change code Nathan
 
-newCloseDate=deliveryForm.closeDate
+    newCloseDate = deliveryForm.closeDate
       .sort((a, b) => a.sort - b.sort)
-      .filter((item) => (item.sort !== sort));
+      .filter((item) => item.sort !== sort);
 
     handleChange('closeDate', newCloseDate);
   }
@@ -250,12 +280,11 @@ newCloseDate=deliveryForm.closeDate
     // });
 
     //change code Nathan
-    newCloseDate=deliveryForm.closeDate.map((item) => {
+    newCloseDate = deliveryForm.closeDate.map((item) => {
       if (item.sort === closeTableItem.sort) {
         return closeTableItem;
-      } 
-        return item;
-      
+      }
+      return item;
     });
 
     handleChange('closeDate', newCloseDate);
@@ -270,9 +299,23 @@ newCloseDate=deliveryForm.closeDate
       message.info(window.RCi18n({ id: 'Setting.mustSelectOneOpenDay' }));
       return;
     }
+
+    /**
+     *  日本 新增 availableDates，deliveryInterval 2个字段
+     **/
+    let params = deliveryForm;
+    if (isJapan) {
+      params = {
+        ...deliveryForm,
+        availableDates: parseInt(datePeriod) ?? 1,
+        deliveryInterval: parseInt(deliveryInterval) ?? 0
+      };
+    }
+    console.log('params', params);
+
     setLoading(true);
     webapi
-      .SaveDeliveryDate(deliveryForm)
+      .SaveDeliveryDate(params)
       .then((data) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
@@ -304,7 +347,7 @@ newCloseDate=deliveryForm.closeDate
       .catch((err) => {
         message.error(err || 'Update Failed');
       });
-  };
+  }
 
   return (
     <div>
@@ -312,9 +355,7 @@ newCloseDate=deliveryForm.closeDate
       <div className="container-search">
         <Headline title={<FormattedMessage id="Setting.orderDeliveryDateSettings" />} />
       </div>
-      <Spin
-        spinning={loading}
-      >
+      <Spin spinning={loading}>
         <div
           className="container setting_delivery_date"
           id="deliveryDateSettings"
@@ -327,7 +368,10 @@ newCloseDate=deliveryForm.closeDate
               </p>
             </Col>
             <Col span={4}>
-              <Switch checked={deliverDateStatus == 1 ? true : false} onChange={(checked) => onChangeField(checked)} />
+              <Switch
+                checked={deliverDateStatus == 1 ? true : false}
+                onChange={(checked) => onChangeField(checked)}
+              />
             </Col>
           </Row>
 
@@ -342,7 +386,9 @@ newCloseDate=deliveryForm.closeDate
                 <Col span={20}>
                   <Radio.Group
                     value={
-                      deliveryOptions && deliveryOptions.length > 0 ? deliveryOptions[0].valueEn : null
+                      deliveryOptions && deliveryOptions.length > 0
+                        ? deliveryOptions[0].valueEn
+                        : null
                     }
                     onChange={(e) => handleChange('deliveryOption', e.target.value)}
                   >
@@ -354,6 +400,23 @@ newCloseDate=deliveryForm.closeDate
                   </Radio.Group>
                 </Col>
               </Row>
+              {isJapan ? (
+                <Row>
+                  <Col span={4}>
+                    <p className="center">
+                      {intl.formatMessage({ id: 'Setting.availableDatePeriod' })}:
+                    </p>
+                  </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      min={1}
+                      max={14}
+                      value={datePeriod}
+                      onChange={(value) => (value ? setDatePeriod(value) : setDatePeriod(1))}
+                    />
+                  </Col>
+                </Row>
+              ) : null}
               <Row>
                 <Col span={4}>
                   <p className="center">
@@ -362,6 +425,7 @@ newCloseDate=deliveryForm.closeDate
                 </Col>
                 <Col span={6}>
                   <Select
+                    disabled={isJapan}
                     loading={cityLoading}
                     onDropdownVisibleChange={(isOpen) => getAllCities(isOpen)}
                     mode="multiple"
@@ -431,6 +495,24 @@ newCloseDate=deliveryForm.closeDate
                   </p>
                 </Col>
               </Row>
+              {isJapan ? (
+                <Row>
+                  <Col span={4}>
+                    <p className="center">
+                      {intl.formatMessage({ id: 'Setting.deliveryInterval' })}:
+                    </p>
+                  </Col>
+                  <Col span={6}>
+                    <InputNumber
+                      min={0}
+                      value={deliveryInterval}
+                      onChange={(value) =>
+                        value ? setDeliveryInterval(value) : setDeliveryInterval(0)
+                      }
+                    />
+                  </Col>
+                </Row>
+              ) : null}
               <Row style={{ marginBottom: 0 }}>
                 <Col span={3}>
                   <p className="center">
@@ -492,7 +574,6 @@ newCloseDate=deliveryForm.closeDate
               </Row>
             </>
           ) : null}
-
         </div>
       </Spin>
     </div>

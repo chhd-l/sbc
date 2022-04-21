@@ -1,7 +1,7 @@
 import React from 'react';
 import { Relax } from 'plume2';
 import { Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup } from 'qmkit';
+import { noop, RCi18n, SelectGroup, TreeSelectGroup } from 'qmkit';
 import { IList } from 'typings/globalType';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -166,7 +166,7 @@ class SearchForm extends React.Component<any, any> {
               })(
                 <Input
                   addonBefore={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Product.ProductName'})}>
                       <FormattedMessage id="Product.ProductName" />
                     </p>
                   }
@@ -188,7 +188,7 @@ class SearchForm extends React.Component<any, any> {
                 initialValue: likeGoodsNo
               })(
                 <Input
-                  addonBefore={<p style={styles.label}>{this.props.sku ? <FormattedMessage id="Product.SKU" /> : <FormattedMessage id="Product.SPU" />}</p>}
+                  addonBefore={<p style={styles.label} title={this.props.sku ? RCi18n({id:'Product.SKU'}) : RCi18n({id:'Product.SPU'})}>{this.props.sku ? <FormattedMessage id="Product.SKU" /> : <FormattedMessage id="Product.SPU" />}</p>}
                   // value={likeGoodsNo}
                   style={{ width: 300 }}
                   onChange={(e: any) => {
@@ -208,7 +208,7 @@ class SearchForm extends React.Component<any, any> {
                   allowClear
                   getPopupContainer={() => document.getElementById('page-content')}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Product.ProductCategory'})}>
                       <FormattedMessage id="Product.ProductCategory" />
                     </p>
                   }
@@ -233,7 +233,7 @@ class SearchForm extends React.Component<any, any> {
                   className="tree-group"
                   getPopupContainer={() => document.getElementById('page-content')}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Product.SalesCategory'})}>
                       <FormattedMessage id="Product.SalesCategory" />
                     </p>
                   }
@@ -259,7 +259,7 @@ class SearchForm extends React.Component<any, any> {
                   getPopupContainer={() => document.getElementById('page-content')}
                   style={styles.wrapper}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Product.brand'})}>
                       <FormattedMessage id="Product.brand" />
                     </p>
                   }

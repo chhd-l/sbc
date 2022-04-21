@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Headline, SelectGroup, BreadCrumb, util, Const, cache } from 'qmkit';
-import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col, Upload } from 'antd';
+import { Form, Select, Input, Button, Table, Divider, message, Modal, Tooltip, Row, Col, Upload, Popconfirm } from 'antd';
 import * as webapi from './webapi';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
@@ -238,124 +238,101 @@ export default class ClinicList extends Component<any, any> {
     const { cityArr, typeArr, searchForm } = this.state;
     const columns = [
       {
-        title: <FormattedMessage id="Prescriber.PrescriberID" />,
+        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicId" : "Prescriber.PrescriberID"} />,
         dataIndex: 'prescriberId',
         key: 'prescriberID',
-        width: '10%'
       },
       {
-        title: <FormattedMessage id="Prescriber.PrescriberName" />,
+        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicName" : "Prescriber.PrescriberName"} />,
         dataIndex: 'prescriberName',
         key: 'prescriberName',
-        width: '15%',
         ellipsis: true
       },
       {
-        title: <FormattedMessage id="Prescriber.PrescriberPhone" />,
+        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicPhone" : "Prescriber.PrescriberPhone"} />,
         dataIndex: 'phone',
         key: 'prescriberPhone',
-        width: '10%'
       },
       {
-        title: <FormattedMessage id="Prescriber.PrescriberCity" />,
+        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicCity" : "Prescriber.PrescriberCity"} />,
         dataIndex: 'primaryCity',
         key: 'prescriberCity',
-        width: '10%'
       },
-      // {
-      //   title: 'Prescriber Zip',
-      //   dataIndex: 'primaryZip',
-      //   key: 'prescriberZip',
-      //   width: 140
-      // },
-      // {
-      //   title: 'Latitude',
-      //   dataIndex: 'latitude',
-      //   key: 'latitude',
-      //   width: 120
-      // },
-      // {
-      //   title: 'Longitude',
-      //   dataIndex: 'longitude',
-      //   key: 'longitude',
-      //   width: 120
-      // },
-
       {
-        title: <FormattedMessage id="Prescriber.PrescriberType" />,
+        title: <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.ClinicType" : "Prescriber.PrescriberType"} />,
         dataIndex: 'prescriberType',
         key: 'prescriberType',
-        width: '10%'
-      },
-      // {
-      //   title: 'Audit Status',
-      //   dataIndex: 'auditStatus',
-      //   key: 'auditStatus',
-      //   width: '10%',
-      //   render: (text, record) => (
-      //     <p>{record.auditStatus === '1' ? 'Online' : 'Offline'}</p> //1 线上 0 线下
-      //   )
-      // },
-
-      {
+        render: (text, record) => <span>{text}</span>
+      }
+    ];
+    if (Const.SITE_NAME === 'MYVETRECO') {
+      columns.push({
+        title: <FormattedMessage id="Prescriber.Action" />,
+        dataIndex: 'id',
+        key: 'action',
+        render: (text, record) => (
+          <div>
+            <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
+              <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
+            </Tooltip>
+            {record.defaultFlag != '1' ? <>
+              <Divider type="vertical" />
+              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.Areyousuretodelete" />} onConfirm={() => this.delClinic(record.id)} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
+                <Tooltip placement="top" title={RCi18n({id:"Prescriber.Delete"})}>
+                  <a type="link" className="iconfont iconDelete"></a>
+                </Tooltip>
+              </Popconfirm>
+            </> : null}
+          </div>
+        )
+      });
+    } else {
+      columns.push({
         title: <FormattedMessage id="Prescriber.RecommendationCode" />,
         dataIndex: 'prescriberCode',
         key: 'prescriberCode',
-        width: '10%',
         render: (text, record) => <p>{this.state.isMapMode ? '--' : text}</p>
-      },
-      {
+      });
+      columns.push({
         title: <FormattedMessage id="Prescriber.PrescriberStatus" />,
         dataIndex: 'enabled',
         key: 'enabled',
-        width: '10%',
         render: (text, record) => <p>{record.enabled ? RCi18n({id:'Prescriber.Enabled'}) :RCi18n({id:'Disabled'})}</p>
-      },
-      // {
-      //   title: <FormattedMessage id="Prescriber.AuditAuthority" />,
-      //   dataIndex: 'auditAuthority',
-      //   key: 'auditAuthority',
-      //   width: '10%',
-      //   render: (text, record) => <p>{record.auditAuthority ? 'Y' : 'N'}</p>
-      // },
-      {
+      });
+      columns.push({
         title: <FormattedMessage id="Prescriber.Action" />,
+        dataIndex: 'id',
         key: 'action',
-        width: '10%',
-        render: (text, record) => (
+        render: (text, record) => record.prescriberName && record.prescriberType ? (
           <div>
             <Tooltip placement="top" title={<FormattedMessage id="Prescriber.Details" />}>
               <Link to={'/prescriber-edit/' + record.id} className="iconfont iconDetails"></Link>
             </Tooltip>
             <Divider type="vertical" />
             <Tooltip placement="top" title={record.enabled ? RCi18n({id:'Disable'}) : RCi18n({id:'Enable'})}>
-              <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable">
-                {/*{record.enabled ? 'Disable' : 'Enable'}*/}
-              </a>
+              <a onClick={() => this.enableAndDisable(record.id)} className="iconfont iconbtn-disable"></a>
             </Tooltip>
-            {/* <Divider type="vertical" />
-            <a onClick={() => this.showConfirm(record.prescriberId)}>Delete</a> */}
           </div>
-        )
-      }
-    ];
+        ) : null
+      });
+    }
     return (
       <div>
         <BreadCrumb />
         {/*导航面包屑*/}
         <div id="inputs" className="container-search">
-          <Headline title={<FormattedMessage id="Prescriber.PrescriberList" />} />
+          <Headline title={<FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ? "Menu.Clinic list" : "Prescriber.PrescriberList"} />} />
           {/*搜索条件*/}
           <Form layout="inline">
             <Row id="input-lable-wwidth">
               {/* <div className="space-around"> */}
               {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
-              <Col span="8">
+              <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="Prescriber.prescriberId" />
+                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ? 'Clinic.ClinicId' : 'Prescriber.prescriberId'})}>
+                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ? "Clinic.ClinicId":"Prescriber.prescriberId"} />
                       </p>
                     }
                     onChange={(e) => {
@@ -368,13 +345,13 @@ export default class ClinicList extends Component<any, any> {
                   />
                 </FormItem>
               </Col>
-              <Col span="8" id="select-group-width">
+              <Col span={8} id="select-group-width">
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="PrescriberCity">
-                        <FormattedMessage id="Prescriber.PrescriberCity" />
+                      <p className="PrescriberCity" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicCity':'Prescriber.PrescriberCity'})}>
+                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicCity":"Prescriber.PrescriberCity"} />
                       </p>
                     }
                     onChange={(e) => {
@@ -408,13 +385,13 @@ export default class ClinicList extends Component<any, any> {
                   </SelectGroup>*/}
                 </FormItem>
               </Col>
-              <Col span="8" id="select-group-width">
+              <Col span={8} id="select-group-width">
                 {/* <div style={{ flex: 1, lineHeight: 3.5 }}> */}
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue=""
                     getPopupContainer={() => document.getElementById('page-content')}
-                    label={<FormattedMessage id="Prescriber.PrescriberType" />}
+                    label={<FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicType":"Prescriber.PrescriberType"} />}
                     // style={{ width: 80 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;
@@ -436,12 +413,12 @@ export default class ClinicList extends Component<any, any> {
                   </SelectGroup>
                 </FormItem>
               </Col>
-              <Col span="8">
+              <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="Prescriber.prescriberName" />
+                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicName':'Prescriber.prescriberName'})}>
+                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicName":"Prescriber.prescriberName"} />
                       </p>
                     }
                     onChange={(e) => {
@@ -455,11 +432,11 @@ export default class ClinicList extends Component<any, any> {
                 </FormItem>
               </Col>
 
-              <Col span="8">
+              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.prescriberZip'})}>
                         <FormattedMessage id="Prescriber.prescriberZip" />
                       </p>
                     }
@@ -472,13 +449,13 @@ export default class ClinicList extends Component<any, any> {
                     }}
                   />
                 </FormItem>
-              </Col>
-              <Col span="8">
+              </Col>}
+              <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
-                        <FormattedMessage id="Prescriber.prescriberPhone" />
+                      <p className="prescriber-iput-lable" title={RCi18n({id:Const.SITE_NAME === "MYVETRECO" ?'Clinic.ClinicPhone':'Prescriber.prescriberPhone'})}>
+                        <FormattedMessage id={Const.SITE_NAME === "MYVETRECO" ?"Clinic.ClinicPhone":"Prescriber.prescriberPhone"} />
                       </p>
                     }
                     onChange={(e) => {
@@ -490,9 +467,8 @@ export default class ClinicList extends Component<any, any> {
                     }}
                   />
                 </FormItem>
-                {/* </div> */}
               </Col>
-              <Col span="8" id="select-group-width">
+              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8} id="select-group-width">
                 <FormItem style={styles.formItemStyle}>
                   <SelectGroup
                     defaultValue="true"
@@ -519,17 +495,12 @@ export default class ClinicList extends Component<any, any> {
                     </Option>
                   </SelectGroup>
                 </FormItem>
-                {/* </div> */}
-                {/* </div> */}
-                {/* <div */}
-                {/* style={{ width: '100%', margin: '0 auto', textAlign: 'center' }}
-            > */}
-              </Col>
-              <Col span="8">
+              </Col>}
+              {Const.SITE_NAME === "MYVETRECO" ? null : <Col span={8}>
                 <FormItem style={styles.formItemStyle}>
                   <Input
                     addonBefore={
-                      <p className="prescriber-iput-lable">
+                      <p className="prescriber-iput-lable" title={RCi18n({id:'Prescriber.RecommendationCode'})}>
                         <FormattedMessage id="Prescriber.RecommendationCode" />
                       </p>
                     }
@@ -542,10 +513,9 @@ export default class ClinicList extends Component<any, any> {
                     }}
                   />
                 </FormItem>
-                {/* </div> */}
-              </Col>
+              </Col>}
 
-              <Col span="24" style={{ textAlign: 'center' }}>
+              <Col span={24} style={{ textAlign: 'center' }}>
                 <FormItem>
                   <Button
                     type="primary"

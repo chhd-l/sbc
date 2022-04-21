@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {Upload, Form, Button, Row, Col, Input, Select, Radio, message, Icon} from 'antd';
 import {checkCompanyInfoExists, cityList, saveStoreDetail, getCountryList, checkCountryInfoExists} from "../webapi";
 import DebounceSelect from './debounceSelect'
-import { Const, cache } from 'qmkit';
+import { Const, cache, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { Dragger } = Upload;
 const FormItem = Form.Item;
@@ -91,7 +92,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
         });
 
         if (isRepeatCompanyInfoFlag) {
-          isRepeatCompanyInfoFlag === true && form.setFields({storeName:{value: values.storeName,errors:[new Error('Store name number is repeated')]}});
+          isRepeatCompanyInfoFlag === true && form.setFields({storeName:{value: values.storeName,errors:[new Error(RCi18n({id:"Store.storenamerepeated"}))]}});
           setLoading(false);
           return;
         }
@@ -105,7 +106,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
           })
 
           if (isRepeatCountryFlag) {
-            isRepeatCountryFlag === true && form.setFields({countryCode: { value: values.countryCode, errors: [new Error('Country is repeated')] }});
+            isRepeatCountryFlag === true && form.setFields({countryCode: { value: values.countryCode, errors: [new Error(RCi18n({id:"Store.countryrepeated"}))] }});
             setLoading(false);
             return;
           }
@@ -258,9 +259,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
     if (value === '') {
       callback();
     } else if (Const.SITE_NAME === 'MYVETRECO' && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
-      callback('Enter a valid postcode, example: 1234 AB');
+      callback(`${RCi18n({id:"PetOwner.theCorrectPostCode"})}: 1234 AB`);
     } else if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
-      callback('Please enter a valid postcode');
+      callback(RCi18n({id:"PetOwner.theCorrectPostCode"}));
     } else {
       callback();
     }
@@ -272,7 +273,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
   }
   return (
     <div>
-      <div className="vmargin-level-4 align-item-center word big">3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} Tell us more about your store</div>
+      <div className="vmargin-level-4 align-item-center word big">3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} <FormattedMessage id="Store.tellusmore"/></div>
 
       <div style={{width:800,margin:'0 auto'}}>
         <Row gutter={[24,12]}>
@@ -290,8 +291,8 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                           <Icon type="cloud-upload" className="word primary size24"/>
                         </p>
                         <p className="ant-upload-hint">
-                          Upload the Shop logo<br/>
-                          (recommended size 48px * 48px)
+                          <FormattedMessage id="Store.upshoplogo"/><br/>
+                          ({RCi18n({id:"Store.recomsize"})} 48px * 48px)
                         </p>
                       </>
                   )
@@ -312,7 +313,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                       <p className="ant-upload-drag-icon">
                         <Icon type="cloud-upload" className="word primary size24"/>
                       </p>
-                      <p className="ant-upload-hint">Upload the Shop favicon</p>
+                      <p className="ant-upload-hint"><FormattedMessage id="Store.upshopfav"/></p>
                     </>
                   )
                 }
@@ -327,9 +328,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
         <Form layout="vertical" onSubmit={toNext}>
           <Row gutter={[24,12]}>
             <Col span={12}>
-              <FormItem label="Store name" name="storeName">
+              <FormItem label={RCi18n({id:"storeName"})} name="storeName">
                 {getFieldDecorator('storeName', {
-                  rules: [{ required: true, message: 'Please input Store name!' }],
+                  rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                   initialValue: ''
                 })(
                   <Input size="large"
@@ -345,7 +346,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label="Store domain" name="domainName">
+              <FormItem label={RCi18n({id:"Store.storeDomain"})} name="domainName">
                 {getFieldDecorator('domainName', {
                   initialValue: ''
                 })(
@@ -354,9 +355,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="Sell to clinic" name="sellToClinic">
+              <FormItem label={RCi18n({id:"Store.selltoclinic"})} name="sellToClinic">
                 {getFieldDecorator('sellToClinic', {
-                  rules: [{ required: Const.SITE_NAME === 'MYVETRECO', message: 'Please input Sell to clinic!' }],
+                  rules: [{ required: Const.SITE_NAME === 'MYVETRECO', message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                   initialValue: ''
                 })(
                   <Input size="large" />
@@ -364,7 +365,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="Province" name="province">
+              <FormItem label={RCi18n({id:"Store.province"})} name="province">
                 {getFieldDecorator('province', {
                   initialValue: ''
                 })(
@@ -373,13 +374,13 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="City" name="cityId">
+              <FormItem label={RCi18n({id:"PetOwner.City"})} name="cityId">
                 {getFieldDecorator('cityId', {
                   initialValue: {key:'',label:''}
                 })(
                   <DebounceSelect
                     size="large"
-                    placeholder="Select users"
+                    placeholder=""
                     fetchOptions={fetchUserList}
                     defaultOptions={defaultOptions}
                     style={{
@@ -390,7 +391,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             {Const.SITE_NAME === 'MYVETRECO' ? <Col span={12}>
-              <FormItem label="Street name" name="addressDetail">
+              <FormItem label={RCi18n({id:"Store.street"})} name="addressDetail">
                 {getFieldDecorator('addressDetail', {
                   initialValue: ''
                 })(
@@ -398,7 +399,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
                 )}
               </FormItem>
             </Col> : <Col span={24}>
-              <FormItem label="Store address 1" name="addressDetail">
+              <FormItem label={RCi18n({id:"Store.address1"})} name="addressDetail">
                 {getFieldDecorator('addressDetail', {
                   initialValue: ''
                 })(
@@ -407,7 +408,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>}
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="House number" name="houseNumberOrName">
+              <FormItem label={RCi18n({id:"Store.housenumber"})} name="houseNumberOrName">
                 {getFieldDecorator('houseNumberOrName', {
                   initialValue: ''
                 })(
@@ -416,9 +417,9 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={12} style={{display:Const.SITE_NAME === 'MYVETRECO'?'none':'block'}}>
-              <FormItem label="Country" name="countryCode">
+              <FormItem label={RCi18n({id:"PetOwner.Country"})} name="countryCode">
                 {getFieldDecorator('countryCode', {
-                  rules: [{ required: Const.SITE_NAME !== 'MYVETRECO', message: 'Please select a country' }],
+                  rules: [{ required: Const.SITE_NAME !== 'MYVETRECO', message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                   initialValue: ''
                 })(
                   <Select showSearch size="large">
@@ -430,7 +431,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem> 
             </Col>
             <Col span={12}>
-              <FormItem label="Postcode" name="postcode">
+              <FormItem label={RCi18n({id:"Store.postcode"})} name="postcode">
                 {getFieldDecorator('postcode', {
                   rules: [{ validator: validatePostCode }],
                   initialValue: ''
@@ -440,7 +441,7 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
               </FormItem>
             </Col>
             <Col span={24} style={{display:Const.SITE_NAME === 'MYVETRECO'?'block':'none'}}>
-              <FormItem label="Introduction" name="introduction">
+              <FormItem label={RCi18n({id:"Store.intro"})} name="introduction">
                 {getFieldDecorator('introduction', {
                   initialValue: ''
                 })(<Input.TextArea size="large" />)}
@@ -449,16 +450,16 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
             <Col span={24} style={{display:'none'}}>
               <div className='flex'>
                 <span>
-                  <span className='form-require'>Order audit setting</span>
+                  <span className='form-require'><FormattedMessage id="Store.orderauditsetting"/></span>
                 </span>
                 <FormItem name="auditSetting" style={{marginBottom:0}}>
                   {getFieldDecorator('auditSetting', {
-                    rules: [{ required: true, message: 'Please choose Order audit setting!' }],
+                    rules: [{ required: true, message: RCi18n({id:"PetOwner.ThisFieldIsRequired"}) }],
                     initialValue: 1
                   })(
                     <Radio.Group className="hmargin-level-4">
-                      <Radio value={1}>Auto audit</Radio>
-                      <Radio value={0}>Manual audit</Radio>
+                      <Radio value={1}><FormattedMessage id="Order.AutoAudit"/></Radio>
+                      <Radio value={0}><FormattedMessage id="Order.ManualAudit"/></Radio>
                     </Radio.Group>
                   )}
                 </FormItem>
@@ -474,11 +475,11 @@ function Step3({ setStep,userInfo,store=null,form,sourceStoreId,sourceCompanyInf
           </Row>
           <Row gutter={[24,12]}>
             <Col span={12} className="align-item-right">
-              <Button size="large" onClick={() => setStep(1)}>Back</Button>
+              <Button size="large" onClick={() => setStep(1)}><FormattedMessage id="back"/></Button>
             </Col>
             <Col span={12}>
               <FormItem>
-                <Button loading={loading} size="large" type="primary" htmlType="submit">Next</Button>
+                <Button loading={loading} size="large" type="primary" htmlType="submit"><FormattedMessage id="Setting.Next"/></Button>
               </FormItem>
             </Col>
           </Row>

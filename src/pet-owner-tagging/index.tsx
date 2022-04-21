@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, Headline, Const, AuthWrapper } from 'qmkit';
+import { BreadCrumb, Headline, Const, AuthWrapper, RCi18n } from 'qmkit';
 import { Table, Tooltip, Button, Form, Input, Row, Col, message, Select, Spin, Popconfirm, Switch, Breadcrumb, Radio, Modal, Alert } from 'antd';
 import { FormattedMessage } from 'react-intl';
 
@@ -392,7 +392,7 @@ class PetOwnerTagging extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tagging name" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'PetOwner.TaggingName'})} defaultValue={RCi18n({id:'PetOwner.TaggingName'})} />
                         <Input
                           style={styles.wrapper}
                           value={searchForm.taggingName}
@@ -411,7 +411,7 @@ class PetOwnerTagging extends Component<any, any> {
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
-                        <Input style={styles.label} disabled defaultValue="Tagging type" />
+                        <Input style={styles.label} disabled title={RCi18n({id:'PetOwner.TaggingType'})} defaultValue={RCi18n({id:'PetOwner.TaggingType'})} />
                         <Select
                           style={styles.wrapper}
                           value={searchForm.taggingType}

@@ -354,7 +354,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerAccount' })}</p>}
+                      addonBefore={<p style={styles.label} title={RCi18n({ id: 'PetOwner.ConsumerAccount' })}>{RCi18n({ id: 'PetOwner.ConsumerAccount' })}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -368,7 +368,7 @@ export default class Customer extends React.Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <Input
-                      addonBefore={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerName' })}</p>}
+                      addonBefore={<p style={styles.label} title={RCi18n({ id: 'PetOwner.ConsumerName' })}>{RCi18n({ id: 'PetOwner.ConsumerName' })}</p>}
                       onChange={(e) => {
                         const value = (e.target as any).value;
                         this.onFormChange({
@@ -383,7 +383,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <SelectGroup
                       defaultValue=""
-                      label={<p style={styles.label}>{RCi18n({ id: 'PetOwner.ConsumerType' })}</p>}
+                      label={<p style={styles.label} title={RCi18n({ id: 'PetOwner.ConsumerType' })}>{RCi18n({ id: 'PetOwner.ConsumerType' })}</p>}
                       style={{ width: 177 }}
                       onChange={(value) => {
                         value = value === '' ? null : value;
@@ -406,7 +406,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'PetOwner.Email'})}>
                           <FormattedMessage id="PetOwner.Email" />
                         </p>
                       }
@@ -424,7 +424,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'PetOwner.PhoneNumber'})}>
                           <FormattedMessage id="PetOwner.PhoneNumber" />
                         </p>
                       }
@@ -444,7 +444,7 @@ export default class Customer extends React.Component<any, any> {
                     <TreeSelectGroup
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
-                      label={<p style={styles.label}>{RCi18n({ id: 'PetOwner.subscriptionType' })}</p>}
+                      label={<p style={styles.label} title={RCi18n({ id: 'PetOwner.subscriptionType' })}>{RCi18n({ id: 'PetOwner.subscriptionType' })}</p>}
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto', minWidth: 200 }}
                       treeDefaultExpandAll
                       onChange={(value) => {
@@ -466,7 +466,7 @@ export default class Customer extends React.Component<any, any> {
                   <FormItem>
                     <Input
                         addonBefore={
-                          <p style={styles.label}>
+                          <p style={styles.label} title={RCi18n({id:'PetOwner.City'})}>
                             <FormattedMessage id="PetOwner.City" />
                           </p>
                         }

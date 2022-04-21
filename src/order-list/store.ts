@@ -6,7 +6,7 @@ import FormActor from './actor/form-actor';
 import TabActor from './actor/tab-actor';
 import * as webapi from './webapi';
 import { fromJS } from 'immutable';
-import { Const, history, util } from 'qmkit';
+import { cache, Const, history, RCi18n, util } from 'qmkit';
 
 export default class AppStore extends Store {
   //btn加载
@@ -41,15 +41,96 @@ export default class AppStore extends Store {
 
     webapi.fetchOrderList({ ...form, pageNum, pageSize }).then(({ res }) => {
       if (res.code == Const.SUCCESS_CODE) {
+        res.context.content = this.handleOrderList(res.context.content, res.defaultLocalDateTime);
         this.transaction(() => {
           this.dispatch('loading:end');
           this.dispatch('list:init', res.context);
           this.dispatch('list:page', fromJS({ currentPage: pageNum + 1 }));
+          this.dispatch(
+            'list:defaultLocalDateTime',
+            fromJS({ defaultLocalDateTime: res.defaultLocalDateTime })
+          );
           this.btnLoading = false;
         });
       } else {
         this.dispatch('loading:end');
       }
+    });
+  };
+
+  handleOrderList = (orderList, defaultLocalDateTime) => {
+    return Array.from(orderList, (ele: any) => {
+      const tradeState = ele.tradeState;
+      if (ele.id == 'SITRCFJP000000822')
+        console.log(
+          1111111111111,
+          ele.paymentItem,
+          ele.paymentItem !== 'cod_japan' &&
+            ele.paymentItem !== 'adyen_convenience_store' &&
+            tradeState.payState === 'PAID',
+          new Date(defaultLocalDateTime).getTime() < new Date(ele.orderCancelTimeOut).getTime() &&
+            ((ele.paymentItem === 'cod_japan' && tradeState.flowState === 'PENDING_REVIEW') ||
+              (ele.paymentItem !== 'cod_japan' &&
+                ele.paymentItem !== 'adyen_convenience_store' &&
+                tradeState.payState === 'PAID'))
+        );
+      return Object.assign(ele, {
+        //只有未审核状态才显示修改
+        canEdit:
+          (tradeState.flowState === 'INIT' || tradeState.flowState === 'AUDIT') &&
+          tradeState.payState === 'NOT_PAID' &&
+          ele.tradeItems &&
+          !ele.tradeItems[0]?.isFlashSaleGoods,
+        //审核按钮显示
+        showAuditBtn:
+          tradeState.flowState === 'INIT' &&
+          tradeState.auditState === 'NON_CHECKED' &&
+          tradeState.payState === 'PAID' &&
+          JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))?.roleName?.indexOf(
+            'Prescriber'
+          ) !== -1,
+        //驳回按钮显示
+        showRejectBtn:
+          tradeState.flowState === 'INIT' &&
+          tradeState.auditState === 'NON_CHECKED' &&
+          tradeState.payState === 'PAID' &&
+          JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA))?.roleName?.indexOf(
+            'Prescriber'
+          ) !== -1,
+        //待发货状态显示
+        showToBeDeliverStatus:
+          Const.SITE_NAME !== 'MYVETRECO' &&
+          (tradeState.auditState === 'INSIDE_CHECKED' || tradeState.auditState === 'CHECKED') &&
+          tradeState.flowState === 'AUDIT' &&
+          tradeState.deliverStatus === 'NOT_YET_SHIPPED' &&
+          tradeState.payState === 'PAID',
+        //部分发货状态显示
+        showPartShippedStatus:
+          Const.SITE_NAME !== 'MYVETRECO' &&
+          (tradeState.flowState === 'TO_BE_DELIVERED' ||
+            tradeState.flowState === 'PARTIALLY_SHIPPED') &&
+          (tradeState.deliverStatus === 'PART_SHIPPED' ||
+            tradeState.deliverStatus === 'NOT_YET_SHIPPED') &&
+          (tradeState.payState === 'PAID' || tradeState.payState === 'AUTHORIZED'),
+        //人工审核按钮显示  isAuditOpen:订单审核方式 true:手动审核  false:自动审核
+        showManualReviewBtn:
+          ele.isAuditOpen &&
+          (tradeState.flowState === 'PENDING_REVIEW' ||
+            tradeState.flowState === 'TO_BE_DELIVERED') &&
+          tradeState.auditState === 'NON_CHECKED',
+        //下游审核按钮显示
+        showDownstreamReviewBtn:
+          tradeState.flowState === 'PENDING_REVIEW' && tradeState.auditState === 'INSIDE_CHECKED',
+        //日本取消订单按钮显示
+        showJpCancelOrderBtn:
+          JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457919 &&
+          new Date(defaultLocalDateTime).getTime() < new Date(ele.orderCancelTimeOut).getTime() &&
+          ((ele.paymentItem === 'cod_japan' && tradeState.flowState === 'PENDING_REVIEW') ||
+            (ele.paymentItem !== 'cod_japan' &&
+              ele.paymentItem !== 'adyen_convenience_store' &&
+              tradeState.payState === 'PAID' &&
+              tradeState.flowState !== 'VOID'))
+      });
     });
   };
 
@@ -105,7 +186,7 @@ export default class AppStore extends Store {
 
     const { res } = await webapi.batchAudit(checkedIds);
     if (res.code == Const.SUCCESS_CODE) {
-      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+      message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
       //refresh
       this.init();
     } else {
@@ -126,10 +207,10 @@ export default class AppStore extends Store {
       //set loading true
       // this.dispatch('detail-actor:setButtonLoading', true)
 
-      const { res } = await webapi.audit(tid, audit, reason);
+      const { res } = await webapi.audit(tid, audit);
       this.hideRejectModal();
       if (res.code == Const.SUCCESS_CODE) {
-        message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+        message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
         this.init();
       } else {
         message.error(res.message || (audit == 'CHECKED' ? '审核失败' : '驳回失败'));
@@ -140,28 +221,28 @@ export default class AppStore extends Store {
     }
   };
 
-  onValidateAudit = async (tid: string, audit,curOrderAuditType='')=> {
+  onValidateAudit = async (tid: string, audit, curOrderAuditType = '') => {
     this.dispatch('loading:start');
-    let result={code:''}
-    if(curOrderAuditType==='ManualReview'){
+    let result = { code: '' };
+    if (curOrderAuditType === 'ManualReview') {
       const { res } = await webapi.manualAudit(tid, audit);
-      result=res
-    }else{
+      result = res;
+    } else {
       const { res } = await webapi.audit(tid, audit);
-      result=res
+      result = res;
     }
     if (result.code == Const.SUCCESS_CODE) {
-      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+      message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
       this.init();
     }
     this.dispatch('loading:end');
-  }
+  };
 
   onRetrial = async (tid: string) => {
     const { res } = await webapi.retrial(tid);
     if (res.code == Const.SUCCESS_CODE) {
       this.init();
-      message.success(RCi18n({id:'Order.OperateSuccessfully'}));
+      message.success(RCi18n({ id: 'Order.OperateSuccessfully' }));
     }
   };
 
@@ -173,7 +254,7 @@ export default class AppStore extends Store {
     const { res } = await webapi.confirm(tid);
     if (res.code == Const.SUCCESS_CODE) {
       //成功
-      message.success(RCi18n({id:'Order.receipt'}));
+      message.success(RCi18n({ id: 'Order.receipt' }));
       //刷新
       this.init();
     } else if (res.code == 'K-000001') {
@@ -224,7 +305,7 @@ export default class AppStore extends Store {
       .toJS();
 
     if (selected.length === 0) {
-      message.error(RCi18n({id:'Order.exportedTip'}));
+      message.error(RCi18n({ id: 'Order.exportedTip' }));
       return new Promise((resolve) => {
         setTimeout(resolve, 1000);
       });
@@ -275,7 +356,7 @@ export default class AppStore extends Store {
           message.error('请登录');
         }
 
-        resolve();
+        resolve(() => {});
       }, 500);
     });
   };
@@ -287,7 +368,7 @@ export default class AppStore extends Store {
   verify = async (tid: string, buyerId: string) => {
     const { res } = await webapi.verifyBuyer(buyerId);
     if (res) {
-      message.error(RCi18n({id:'Order.modifiedErr'}));
+      message.error(RCi18n({ id: 'Order.modifiedErr' }));
       return;
     } else {
       history.push('/order-edit/' + tid);

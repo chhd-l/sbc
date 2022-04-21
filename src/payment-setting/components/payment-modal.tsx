@@ -6,7 +6,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
 import { SelectGroup, Const, noop, RCi18n } from 'qmkit';
-import List from "@/groupon-activity-list/component/list";
+import List from '@/groupon-activity-list/component/list';
 import { Relax } from 'plume2';
 const { TabPane } = Tabs;
 
@@ -30,7 +30,7 @@ class PaymentModal extends React.Component<any, any> {
       paymentForm: {
         isOpen: 1
       },
-      enabled: null,
+      enabled: null
     };
   }
   form;
@@ -61,7 +61,7 @@ class PaymentModal extends React.Component<any, any> {
     setCurrentTabKey: noop,
     onFormChange: noop,
     save: noop,
-    handelModelOpenOClose: noop,
+    handelModelOpenOClose: noop
   };
   onFormChange = (value) => {
     this.setState({
@@ -70,198 +70,322 @@ class PaymentModal extends React.Component<any, any> {
   };
 
   _handleClick = (value) => {
-    const { setCurrentTabKey } = this.props.relaxProps
-    setCurrentTabKey(Number(value))
+    const { setCurrentTabKey } = this.props.relaxProps;
+    setCurrentTabKey(Number(value));
   };
 
   afterClose = () => {
     // this.form.resetFields()
-  }
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { key, onFormChange, visible, saveLoading } = this.props.relaxProps
-    let paymentForm =  this.props.relaxProps.paymentForm.toJS()
-
+    const { key, onFormChange, visible, saveLoading } = this.props.relaxProps;
+    let paymentForm = this.props.relaxProps.paymentForm.toJS();
     return (
-      <Modal afterClose={this.afterClose} confirmLoading={saveLoading} maskClosable={false} title="Edit Payment Setting" visible={visible} onOk={this._next} onCancel={() => this.cancel()} okText="Submit">
+      <Modal
+        afterClose={this.afterClose}
+        confirmLoading={saveLoading}
+        maskClosable={false}
+        title="Edit Payment Setting"
+        visible={visible}
+        onOk={this._next}
+        onCancel={() => this.cancel()}
+        okText="Submit"
+      >
         <Tabs defaultActiveKey={key ? key.toString() : null} onChange={this._handleClick}>
-          {paymentForm&&paymentForm.payPspItemVOList&&paymentForm.payPspItemVOList.map((item, index)=>{
-            return(
-              item.name !== 'COD' ?
+          {paymentForm &&
+            paymentForm.payPspItemVOList &&
+            paymentForm.payPspItemVOList.map((item, index) => {
+              return !item.code.includes('cod') ? (
                 <TabPane tab={item.name} key={item.id}>
-                  <Form name={item.name+'_form'} ref={(form) => (this.form = form)}>
+                  <Form name={item.name + '_form'} ref={(form) => (this.form = form)}>
                     <Row>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="apiKey" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="apiKey" />}
+                        >
                           {getFieldDecorator(item.id + 'apiKey', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.apiKey,
-                            rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputApiKey'}) }]
-                          })(<Input onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'apiKey',
-                              value: e.target.value
-                            })
-                          }}/>)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.apiKey,
+                            rules: [
+                              {
+                                required: false,
+                                message: RCi18n({ id: 'Setting.PleaseinputApiKey' })
+                              }
+                            ]
+                          })(
+                            <Input
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'apiKey',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="merchantAccount" />}>
-                          {getFieldDecorator(item.id+'merchantAccount', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.merchantAccount,
-                            rules: [{ required: false, message:  RCi18n({id: 'Setting.PleaseinputAppID'}) }]
-                          })(<Input onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'merchantAccount',
-                              value: e.target.value
-                            })
-                          }} />)}
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="merchantAccount" />}
+                        >
+                          {getFieldDecorator(item.id + 'merchantAccount', {
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.merchantAccount,
+                            rules: [
+                              {
+                                required: false,
+                                message: RCi18n({ id: 'Setting.PleaseinputAppID' })
+                              }
+                            ]
+                          })(
+                            <Input
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'merchantAccount',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="privateKey" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="privateKey" />}
+                        >
                           {getFieldDecorator(item.id + 'privateKey', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.privateKey,
-                            rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPrivateKey'}) }]
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'privateKey',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.privateKey,
+                            rules: [
+                              {
+                                required: false,
+                                message: RCi18n({ id: 'Setting.PleaseinputPrivateKey' })
+                              }
+                            ]
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'privateKey',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="publicKey" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="publicKey" />}
+                        >
                           {getFieldDecorator(item.id + 'publicKey', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.publicKey,
-                            rules: [{ required: false, message: RCi18n({id: 'Setting.PleaseinputPublicKey'})}]
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'publicKey',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.publicKey,
+                            rules: [
+                              {
+                                required: false,
+                                message: RCi18n({ id: 'Setting.PleaseinputPublicKey' })
+                              }
+                            ]
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'publicKey',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="clientKey" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="clientKey" />}
+                        >
                           {getFieldDecorator(item.id + 'clientKey', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.clientKey
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'clientKey',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.clientKey
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'clientKey',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentAccount" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="paymentAccount" />}
+                        >
                           {getFieldDecorator(item.id + 'paymentAccount', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.paymentAccount
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'paymentAccount',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.paymentAccount
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'paymentAccount',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="environment" />}>
-                        {getFieldDecorator(item.id + 'environment', {
-                             initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.environment
-                            })(
-                              <Select  style={{ width: 120 }} onChange={(value) => {
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="environment" />}
+                        >
+                          {getFieldDecorator(item.id + 'environment', {
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.environment
+                          })(
+                            <Select
+                              style={{ width: 120 }}
+                              onChange={(value) => {
                                 onFormChange({
                                   id: key,
                                   field: 'environment',
                                   value: value
-                                })
-                              }}>
-                                <Option value="test"><FormattedMessage id="Setting.Test" /></Option>
-                                <Option value="live"><FormattedMessage id="Setting.Live" /></Option>
-                              </Select>
-                            )}
+                                });
+                              }}
+                            >
+                              <Option value="test">
+                                <FormattedMessage id="Setting.Test" />
+                              </Option>
+                              <Option value="live">
+                                <FormattedMessage id="Setting.Live" />
+                              </Option>
+                            </Select>
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="checkoutApiPrefix" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="checkoutApiPrefix" />}
+                        >
                           {getFieldDecorator(item.id + 'checkoutApiPrefix', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.checkoutApiPrefix
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'checkoutApiPrefix',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO && item.pspConfigSupplierVO.checkoutApiPrefix
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'checkoutApiPrefix',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="classicPaymentApiPrefix" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="classicPaymentApiPrefix" />}
+                        >
                           {getFieldDecorator(item.id + 'classicPaymentApiPrefix', {
-                            initialValue: item.pspConfigSupplierVO&&item.pspConfigSupplierVO.classicPaymentApiPrefix
-                          })(<Input.TextArea onChange={(e) => {
-                            onFormChange({
-                              id: key,
-                              field: 'classicPaymentApiPrefix',
-                              value: e.target.value
-                            })
-                          }} />)}
+                            initialValue:
+                              item.pspConfigSupplierVO &&
+                              item.pspConfigSupplierVO.classicPaymentApiPrefix
+                          })(
+                            <Input.TextArea
+                              onChange={(e) => {
+                                onFormChange({
+                                  id: key,
+                                  field: 'classicPaymentApiPrefix',
+                                  value: e.target.value
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
                       {/*新增*/}
                       <Col span={24}>
-                        <FormItem {...formItemLayout} required={false} label={<FormattedMessage id="paymentMethod" />}>
+                        <FormItem
+                          {...formItemLayout}
+                          required={false}
+                          label={<FormattedMessage id="paymentMethod" />}
+                        >
                           {getFieldDecorator(item.id + 'paymentMethod', {
-                            initialValue: item.payPspItemCardTypeVOList&&item.payPspItemCardTypeVOList.map((a)=>{
-                              return a.cardType
-                            }),
+                            initialValue:
+                              item.payPspItemCardTypeVOList &&
+                              item.payPspItemCardTypeVOList.map((a) => {
+                                return a.cardType;
+                              }),
                             rules: [
                               {
                                 required: false,
-                                message: RCi18n({id: 'Setting.PleaseselectPayment'})
+                                message: RCi18n({ id: 'Setting.PleaseselectPayment' })
                               }
                             ]
                           })(
-                            <Select mode="multiple" onChange={(values) => {
-                              let paymentMethodList = []
-                                paymentForm.payPspCardTypeVOList.map(item=>{
-                                  values.map(value => {
-                                    if(value === item.cardType) {
-                                      paymentMethodList.push(item)
+                            <Select
+                              mode="multiple"
+                              onChange={(values) => {
+                                let paymentMethodList = [];
+                                paymentForm.payPspCardTypeVOList.map((item) => {
+                                  values.map((value) => {
+                                    if (value === item.cardType) {
+                                      paymentMethodList.push(item);
                                     }
-                                  })
-                              })
-                              onFormChange({
-                                id: key,
-                                field: 'payPspItemCardTypeVOList',
-                                value: paymentMethodList
-                              })
-                            }}>
-                              {paymentForm.payPspCardTypeVOList&&paymentForm.payPspCardTypeVOList.map((b,i)=>{
-                                return (
-                                  <Option value={b.cardType} key={i} >
-                                    <img
-                                      src={b.imgUrl}
-                                      style={{
-                                        width: '30px',
-                                        height: '20px',
-                                        marginRight: '10px'
-                                      }}
-                                    />
-                                    {b.cardType}
-                                  </Option>
-                                )
-                              })}
+                                  });
+                                });
+                                onFormChange({
+                                  id: key,
+                                  field: 'payPspItemCardTypeVOList',
+                                  value: paymentMethodList
+                                });
+                              }}
+                            >
+                              {paymentForm.payPspCardTypeVOList &&
+                                paymentForm.payPspCardTypeVOList.map((b, i) => {
+                                  return (
+                                    <Option value={b.cardType} key={i}>
+                                      <img
+                                        src={b.imgUrl}
+                                        style={{
+                                          width: '30px',
+                                          height: '20px',
+                                          marginRight: '10px'
+                                        }}
+                                      />
+                                      {b.cardType}
+                                    </Option>
+                                  );
+                                })}
                             </Select>
                           )}
                         </FormItem>
@@ -270,100 +394,128 @@ class PaymentModal extends React.Component<any, any> {
                         <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
                             initialValue: item.isOpen == 1
-                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1} onChange={(value)=> {
-                            this.onFormChange(value)
-                            onFormChange({
-                              id: key,
-                              field: 'isOpen',
-                              value: value ? 1 : 0
-                            })
-                          }} />)}
+                          })(
+                            <Switch
+                              defaultChecked={item.isOpen == 1}
+                              checked={item.isOpen == 1}
+                              onChange={(value) => {
+                                this.onFormChange(value);
+                                onFormChange({
+                                  id: key,
+                                  field: 'isOpen',
+                                  value: value ? 1 : 0
+                                });
+                              }}
+                            />
+                          )}
                         </FormItem>
                       </Col>
-                      {
-                        item.isOpen == 1 &&
+                      {item.isOpen == 1 && (
                         <Col span={24}>
-                          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SupportSubscription" />}>
+                          <FormItem
+                            {...formItemLayout}
+                            label={<FormattedMessage id="Setting.SupportSubscription" />}
+                          >
                             {getFieldDecorator(item.id + 'supportSubscription', {
                               initialValue: item.supportSubscription
                             })(
-                              <Select  style={{ width: 120 }} onChange={(value) => {
-                                onFormChange({
-                                  id: key,
-                                  field: 'supportSubscription',
-                                  value: value
-                                })
-                              }}>
-                                <Option value={1}><FormattedMessage id="Setting.Yes" /></Option>
-                                <Option value={0}><FormattedMessage id="Setting.No" /></Option>
+                              <Select
+                                style={{ width: 120 }}
+                                onChange={(value) => {
+                                  onFormChange({
+                                    id: key,
+                                    field: 'supportSubscription',
+                                    value: value
+                                  });
+                                }}
+                              >
+                                <Option value={1}>
+                                  <FormattedMessage id="Setting.Yes" />
+                                </Option>
+                                <Option value={0}>
+                                  <FormattedMessage id="Setting.No" />
+                                </Option>
                               </Select>
                             )}
                           </FormItem>
                         </Col>
-                      }
+                      )}
+                      {item.maxAmount ? (
+                        <MaxAmountInput
+                          getFieldDecorator={getFieldDecorator}
+                          item={item}
+                          onFormChange={onFormChange}
+                          formKey={key}
+                        />
+                      ) : null}
                     </Row>
                   </Form>
-                </TabPane > :
+                </TabPane>
+              ) : (
                 <TabPane tab={item.name} key={item.id}>
                   <Form>
                     <Row>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.maxAmount" />}>
-                          {getFieldDecorator(item.id + 'maxAmount', {
-                            initialValue: item.maxAmount
-                          })(
-                            <Input  onChange={(e) => {
-                              onFormChange({
-                                id: key,
-                                field: 'maxAmount',
-                                value: e.target.value
-                              })
-                            }}/>
-                          )}
-                        </FormItem>
-                      </Col>
+                      <MaxAmountInput
+                        getFieldDecorator={getFieldDecorator}
+                        item={item}
+                        onFormChange={onFormChange}
+                        formKey={key}
+                      />
+
                       <Col span={24}>
                         <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
                             initialValue: item.isOpen == 1
-                          })(<Switch defaultChecked={item.isOpen == 1} checked={item.isOpen == 1}
-                                     onChange={(value)=> {
-                                       onFormChange({
-                                         id: key,
-                                         field: 'isOpen',
-                                         value: value ? 1 : 0
-                                       })
-                                     }}
-                          />)}
-                        </FormItem>
-                        {
-                        item.isOpen == 1 &&
-                        <Col span={24}>
-                          <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.SupportSubscription" />}>
-                            {getFieldDecorator(item.id + 'supportSubscription', {
-                              initialValue: item.supportSubscription
-                            })(
-                              <Select  style={{ width: 120 }} onChange={(value) => {
+                          })(
+                            <Switch
+                              defaultChecked={item.isOpen == 1}
+                              checked={item.isOpen == 1}
+                              onChange={(value) => {
                                 onFormChange({
                                   id: key,
-                                  field: 'supportSubscription',
-                                  value: value
-                                })
-                              }}>
-                                <Option value={1}><FormattedMessage id="Setting.Yes" /></Option>
-                                <Option value={0}><FormattedMessage id="Setting.No" /></Option>
-                              </Select>
-                            )}
-                          </FormItem>
-                        </Col>
-                      }
+                                  field: 'isOpen',
+                                  value: value ? 1 : 0
+                                });
+                              }}
+                            />
+                          )}
+                        </FormItem>
+                        {item.isOpen == 1 && (
+                          <Col span={24}>
+                            <FormItem
+                              {...formItemLayout}
+                              label={<FormattedMessage id="Setting.SupportSubscription" />}
+                            >
+                              {getFieldDecorator(item.id + 'supportSubscription', {
+                                initialValue: item.supportSubscription
+                              })(
+                                <Select
+                                  style={{ width: 120 }}
+                                  onChange={(value) => {
+                                    onFormChange({
+                                      id: key,
+                                      field: 'supportSubscription',
+                                      value: value
+                                    });
+                                  }}
+                                >
+                                  <Option value={1}>
+                                    <FormattedMessage id="Setting.Yes" />
+                                  </Option>
+                                  <Option value={0}>
+                                    <FormattedMessage id="Setting.No" />
+                                  </Option>
+                                </Select>
+                              )}
+                            </FormItem>
+                          </Col>
+                        )}
                       </Col>
                     </Row>
                   </Form>
-                </TabPane >
-            )
-          })}
-
+                </TabPane>
+              );
+            })}
         </Tabs>
       </Modal>
     );
@@ -381,27 +533,27 @@ class PaymentModal extends React.Component<any, any> {
   };
 
   cancel = () => {
-    const { handelModelOpenOClose, init } = this.props.relaxProps
+    const { handelModelOpenOClose, init } = this.props.relaxProps;
     this.props.form.resetFields();
-    handelModelOpenOClose(false)
-    init()
+    handelModelOpenOClose(false);
+    init();
   };
 
-  union = (arr1,arr2) =>{
-    return arr1.filter(item=>{
-      if (arr2.indexOf(item.cardType)>-1) {
-        arr2.splice(arr2.indexOf(item.cardType),1)
-        return item
+  union = (arr1, arr2) => {
+    return arr1.filter((item) => {
+      if (arr2.indexOf(item.cardType) > -1) {
+        arr2.splice(arr2.indexOf(item.cardType), 1);
+        return item;
       }
-    })
-  }
+    });
+  };
 
   onSave = async () => {
     this.props.form.validateFields(null, async (errs, values) => {
       //如果校验通过
-      const { key, save } = this.props.relaxProps
-      let paymentForm = this.props.relaxProps.paymentForm.toJS()
-      let payPspItemVOList = paymentForm.payPspItemVOList.find(item => item.id === key)
+      const { key, save } = this.props.relaxProps;
+      let paymentForm = this.props.relaxProps.paymentForm.toJS();
+      let payPspItemVOList = paymentForm.payPspItemVOList.find((item) => item.id === key);
       // let pspItemCardTypeSaveRequestList = []
       // let paymentMethodList = paymentForm.payPspCardTypeVOList.filter(item=>{
       //   if (values.paymentMethod.indexOf(item.cardType)>-1) {
@@ -418,13 +570,13 @@ class PaymentModal extends React.Component<any, any> {
       //     imgUrl: item.imgUrl,
       //   })
       // })
-      let  params = {}
-      if (payPspItemVOList.name !== 'COD') {
-        if(payPspItemVOList.pspConfigSupplierVO) {
+      let params = {};
+      if (!payPspItemVOList.code.includes('cod')) {
+        if (payPspItemVOList.pspConfigSupplierVO) {
           params = {
             pspConfigSaveRequest: Object.assign({
               id: payPspItemVOList.pspConfigSupplierVO.id,
-              pspId: payPspItemVOList.pspConfigSupplierVO.pspId ,
+              pspId: payPspItemVOList.pspConfigSupplierVO.pspId,
               pspItemId: payPspItemVOList.pspConfigSupplierVO.pspItemId,
               apiKey: payPspItemVOList.pspConfigSupplierVO.apiKey,
               secret: payPspItemVOList.pspConfigSupplierVO.secret,
@@ -435,30 +587,61 @@ class PaymentModal extends React.Component<any, any> {
               paymentAccount: payPspItemVOList.pspConfigSupplierVO.paymentAccount,
               environment: payPspItemVOList.pspConfigSupplierVO.environment,
               checkoutApiPrefix: payPspItemVOList.pspConfigSupplierVO.checkoutApiPrefix,
-              classicPaymentApiPrefix: payPspItemVOList.pspConfigSupplierVO.classicPaymentApiPrefix,
+              classicPaymentApiPrefix: payPspItemVOList.pspConfigSupplierVO.classicPaymentApiPrefix
             }),
             payPspItemSaveRequest: Object.assign({
-              id: payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId ? payPspItemVOList.pspConfigSupplierVO.pspItemId : payPspItemVOList.id,
+              id:
+                payPspItemVOList.pspConfigSupplierVO &&
+                payPspItemVOList.pspConfigSupplierVO.pspItemId
+                  ? payPspItemVOList.pspConfigSupplierVO.pspItemId
+                  : payPspItemVOList.id,
               isOpen: payPspItemVOList.isOpen,
+              maxAmount: payPspItemVOList.maxAmount,
               pspItemCardTypeSaveRequestList: payPspItemVOList.payPspItemCardTypeVOList,
-              supportSubscription: payPspItemVOList.supportSubscription,
+              supportSubscription: payPspItemVOList.supportSubscription
             })
-          }
+          };
         }
       } else {
         params = {
           payPspItemSaveRequest: Object.assign({
-            id: payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId ? payPspItemVOList.pspConfigSupplierVO.pspItemId : payPspItemVOList.id,
+            id:
+              payPspItemVOList.pspConfigSupplierVO && payPspItemVOList.pspConfigSupplierVO.pspItemId
+                ? payPspItemVOList.pspConfigSupplierVO.pspItemId
+                : payPspItemVOList.id,
             isOpen: payPspItemVOList.isOpen,
             maxAmount: payPspItemVOList.maxAmount,
             supportSubscription: payPspItemVOList.supportSubscription
           })
-        }
+        };
       }
       if (!errs) {
-        save(params)
+        save(params);
       }
     });
   };
 }
 export default Form.create()(PaymentModal);
+
+// {/* max amount input */}
+const MaxAmountInput = ({ getFieldDecorator, item, onFormChange, formKey }) => {
+  return (
+    <Col span={24}>
+      <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.maxAmount" />}>
+        {getFieldDecorator(item.id + 'maxAmount', {
+          initialValue: item.maxAmount
+        })(
+          <Input
+            onChange={(e) => {
+              onFormChange({
+                id: formKey,
+                field: 'maxAmount',
+                value: e.target.value
+              });
+            }}
+          />
+        )}
+      </FormItem>
+    </Col>
+  );
+};

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { fromJS, Set } from 'immutable';
 
-import { cache, Const, DataGrid, SelectGroup, RCi18n } from 'qmkit';
+import { cache, Const, DataGrid, SelectGroup, RCi18n, util } from 'qmkit';
+import defaultImg from '../../images/none.png';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
@@ -147,11 +148,12 @@ export default class GoodsGrid extends React.Component<any, any> {
             })
           }}
         >
+          {Const.SITE_NAME === 'MYVETRECO' ? <Column title={RCi18n({id:'Product.image'})} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (<img src={img ? util.optimizeImage(img) : defaultImg} style={styles.imgItem} />)} /> : null}
           <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
-          <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" />
-          <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" />
-          <Column title={RCi18n({id:'Order.Product category'})} dataIndex="goodsCateName" key="goodsCateName" />
-          <Column title={RCi18n({id:'Order.Sales category'})} dataIndex="storeCateName" key="storeCateName" />
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.Product category'})} dataIndex="goodsCateName" key="goodsCateName" /> : null}
+          {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.Sales category'})} dataIndex="storeCateName" key="storeCateName" /> : null}
           <Column
             title={RCi18n({id:'Order.Weight'})}
             dataIndex="goodsInfoWeight"
@@ -229,7 +231,8 @@ export default class GoodsGrid extends React.Component<any, any> {
       goodsName: params.likeGoodsName,
       goodsInfoNo: params.likeGoodsInfoNo,
       pageNum: params.pageNum,
-      pageSize: params.pageSize
+      pageSize: params.pageSize,
+      addedFlag: Const.SITE_NAME === 'MYVETRECO' ? '1' : undefined
     };
 
     webapi
@@ -280,3 +283,16 @@ export default class GoodsGrid extends React.Component<any, any> {
     this.init(searchParams);
   };
 }
+
+const styles = {
+  imgItem: {
+    width: 60,
+    height: 60,
+    padding: 5,
+    border: '1px solid #ddd',
+    float: 'left',
+    marginRight: 10,
+    background: '#fff',
+    borderRadius: 3
+  } as any
+} as any;

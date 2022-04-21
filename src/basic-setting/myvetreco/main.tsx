@@ -1,5 +1,6 @@
 import React from 'react';
-import { BreadCrumb, Headline, Const } from 'qmkit';
+import { BreadCrumb, Headline, Const, RCi18n } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 import { Tabs, Spin, Button, Row, Col, message, Modal } from 'antd';
 import { getStoreInfo, saveBasicInfo, saveRepresentative, saveBankInfo, submitForAudit } from '../webapi';
 import { BusinessBasicInformationForm, IndividualBasicInformationForm } from './basic';
@@ -27,7 +28,7 @@ export const SupportedDocumentUtil = {
 };
 
 export const SupportedDocumentFieldValidator = (rules, value, callback) => {
-  const errorMessage = 'Please upload all the supported documents completely';
+  const errorMessage = RCi18n({id:"Store.supportdoctip"});
   if (value.documentType === 'PASSPORT' && value['PASSPORT'].length === 0) {
     callback(errorMessage);
   } else if (value.documentType === 'ID_CARD' && (value['ID_CARD_FRONT'].length === 0 || value['ID_CARD_BACK'].length === 0)) {
@@ -181,7 +182,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
         this.setState({loading: true});
         saveBasicInfo(values, typeOfBusiness === 1).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
-            message.success('Operate successful');
+            message.success(RCi18n({id:"Setting.Operatesuccessfully"}));
           }
           this.setState({loading: false});
         });
@@ -197,7 +198,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
           signatories: values2
         }).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
-            message.success('Operate successful');
+            message.success(RCi18n({id:"Setting.Operatesuccessfully"}));
           }
           this.setState({loading: false});
         });
@@ -207,7 +208,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
         this.setState({loading: true});
         saveBankInfo(values).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
-            message.success('Operate successful');
+            message.success(RCi18n({id:"Setting.Operatesuccessfully"}));
           }
           this.setState({loading: false});
         });
@@ -233,7 +234,7 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
         bankRequest: values4
       }).then(data => {
         if (data.res.code === Const.SUCCESS_CODE) {
-          message.success('Operate successfull');
+          message.success(RCi18n({id:"Setting.Operatesuccessfully"}));
           this.setState({
             loading: false,
             storeInfo: Object.assign({}, storeInfo, { adyenAuditState: 0 })
@@ -251,14 +252,14 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
     let { storeInfo: { errorList } } = this.state;
     errorList = JSON.parse(JSON.parse(errorList));
     Modal.error({
-      title: 'Please check these fields',
+      title: RCi18n({id:"Store.plscheckfields"}),
       width: 600,
       content: <div style={{color:'red'}}>
         {errorList.map((err, idx) => <div key={idx}>
           {Object.keys(err).map((item, sidx) => <div key={sidx}>{MapKeyToDisplayName(item)}: {err[item]}</div>)}
         </div>)}
       </div>,
-      okText: 'OK'
+      okText: RCi18n({id:"Setting.OK"})
     });
   }
 
@@ -270,18 +271,18 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
         <div className="container-search">
           <Row>
             <Col span={12}>
-              <Headline title="Store information" />
+              <Headline title={RCi18n({id:"Store.storeInfo"})} />
             </Col>
             <Col span={12} style={{textAlign:'right',paddingRight:20}}>
-              {adyenAuditState === 0 ? <Button type="primary" disabled>Wait for auditing</Button> : adyenAuditState > 1 ? <Button type="primary" onClick={this.onAudit}>Submit for auditing</Button> : null}
-              {adyenAuditState === 2 && <Button type="link" onClick={this.showError}>Fail?</Button>}
-              {adyenAuditState > 1 && <div>You can submit Ayden account once fill all required fields</div>}
+              {adyenAuditState === 0 ? <Button type="primary" disabled><FormattedMessage id="Store.waitForAudit"/></Button> : adyenAuditState > 1 ? <Button type="primary" onClick={this.onAudit}><FormattedMessage id="Store.submitForAudit"/></Button> : null}
+              {adyenAuditState === 2 && <Button type="link" onClick={this.showError}>{RCi18n({id:"Store.fail"})}</Button>}
+              {adyenAuditState > 1 && <div><FormattedMessage id="Store.submittip"/></div>}
             </Col>
           </Row>
         </div>
         <div className="container">
           <Tabs activeKey={current} onChange={this.onTabChange}>
-            <Tabs.TabPane tab="Basic information" key="1" forceRender>
+            <Tabs.TabPane tab={RCi18n({id:"Store.basicInfo"})} key="1" forceRender>
               {typeOfBusiness === 1 ?
                <BusinessBasicInformationForm adyenAuditState={adyenAuditState} onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} /> :
                <IndividualBasicInformationForm adyenAuditState={adyenAuditState} onChangeName={this.onChangeName} wrappedComponentRef={formRef => this.basiForm = formRef} />
@@ -291,13 +292,13 @@ export default class MyvetrecoStoreSetting extends React.Component<any, any> {
               <ShareHolderForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.shodForm = formRef} />
               <SignatoriesForm adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.signForm = formRef} />
             </Tabs.TabPane> : null}
-            <Tabs.TabPane tab="Bank information" key="3" forceRender>
+            <Tabs.TabPane tab={RCi18n({id:"Store.bankInfo"})} key="3" forceRender>
               <BankInformation isBusiness={typeOfBusiness === 1} adyenAuditState={adyenAuditState} wrappedComponentRef={formRef => this.bankForm = formRef} />
             </Tabs.TabPane>
           </Tabs>
         </div>
         <div className="bar-button">
-          <Button type="primary" onClick={this.onSave}>Save</Button>
+          <Button type="primary" onClick={this.onSave}><FormattedMessage id="Setting.Save"/></Button>
         </div>
       </Spin>
     );

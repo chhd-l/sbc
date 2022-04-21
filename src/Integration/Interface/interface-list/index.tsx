@@ -219,7 +219,7 @@ class InterfaceList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.InterfaceName' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Interface.InterfaceName' })} defaultValue={RCi18n({ id: 'Interface.InterfaceName' })} />
                       <Input
                         style={styles.wrapper}
                         onChange={(e) => {
@@ -238,7 +238,7 @@ class InterfaceList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Provider' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Interface.Provider' })} defaultValue={RCi18n({ id: 'Interface.Provider' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -265,7 +265,7 @@ class InterfaceList extends Component<any, any> {
                 <Col span={8}>
                   <FormItem>
                     <InputGroup compact style={styles.formItemStyle}>
-                      <Input style={styles.label} disabled defaultValue={RCi18n({ id: 'Interface.Invoker' })} />
+                      <Input style={styles.label} disabled title={RCi18n({ id: 'Interface.Invoker' })} defaultValue={RCi18n({ id: 'Interface.Invoker' })} />
                       <Select
                         style={styles.wrapper}
                         getPopupContainer={(trigger: any) => trigger.parentNode}

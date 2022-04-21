@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, Button, Select, Tree, Row, Col, TreeSelect, message, Table } from 'antd';
-import { noop, SelectGroup, TreeSelectGroup, util, Const } from 'qmkit';
+import { noop, SelectGroup, TreeSelectGroup, util, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import * as webapi from './webapi';
 
@@ -232,7 +232,7 @@ export default class addTargetProduct extends Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={
-                      <p className="formLable">
+                      <p className="formLable" title={RCi18n({id:'Subscription.SKU'})}>
                         <FormattedMessage id="Subscription.SKU" />
                       </p>
                     }
@@ -247,7 +247,7 @@ export default class addTargetProduct extends Component<any, any> {
                 <FormItem>
                   <Input
                     addonBefore={
-                      <p className="formLable">
+                      <p className="formLable" title={RCi18n({id:'Subscription.productName'})}>
                         <FormattedMessage id="Subscription.productName" />
                       </p>
                     }
@@ -265,7 +265,7 @@ export default class addTargetProduct extends Component<any, any> {
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
                       label={
-                        <p className="formLable">
+                        <p className="formLable" title={RCi18n({id:'Subscription.brand'})}>
                           <FormattedMessage id="Subscription.brand" />
                         </p>
                       }
@@ -294,7 +294,7 @@ export default class addTargetProduct extends Component<any, any> {
                     <TreeSelectGroup
                       allowClear
                       getPopupContainer={() => document.getElementById('page-content')}
-                      label={<p className="formLable"><FormattedMessage id="Subscription.ProductCategory"/></p>}
+                      label={<p className="formLable" title={RCi18n({id:'Subscription.ProductCategory'})}><FormattedMessage id="Subscription.ProductCategory"/></p>}
                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                       treeDefaultExpandAll
                       onChange={(value) => {

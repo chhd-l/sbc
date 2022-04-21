@@ -1,6 +1,6 @@
 import { Button, Form, Icon, Input, message, Modal, Radio, Table, Tooltip, Select, Row, Col } from 'antd';
 import moment from 'moment';
-import { Const, SelectGroup } from 'qmkit';
+import { Const, SelectGroup, RCi18n } from 'qmkit';
 import React from 'react';
 import * as webapi from './../webapi';
 import { IList } from 'typings/globalType';
@@ -378,7 +378,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                       <FormItem>
                         <Input
                           addonBefore={
-                            <p style={styles.label}>
+                            <p style={styles.label} title={RCi18n({id:'Product.ProductName'})}>
                               <FormattedMessage id="Product.ProductName" />
                             </p>
                           }
@@ -396,7 +396,7 @@ export default class RelevancyProduct extends React.Component<any, any> {
                     <Col span={8}>
                       <FormItem>
                         <Input
-                          addonBefore={<p style={styles.label}>SPU</p>}
+                          addonBefore={<p style={styles.label} title={RCi18n({id:'Product.SPU'})}><FormattedMessage id="Product.SPU"/></p>}
                           value={searchForm.spu}
                           onChange={(e) => {
                             const value = (e.target as any).value;

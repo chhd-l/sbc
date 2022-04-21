@@ -1,7 +1,7 @@
 import React from 'react';
 import { IMap, Relax } from 'plume2';
 import { Form, Select, Input, Button, DatePicker, Row, Col } from 'antd';
-import { SelectGroup, noop, Const } from 'qmkit';
+import { SelectGroup, noop, Const, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
@@ -53,7 +53,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <Input
                 addonBefore={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.orderNumber'})}>
                     <FormattedMessage id="Product.orderNumber" />
                   </p>
                 }
@@ -87,7 +87,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <SelectGroup
                 label={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.anonymousStatus'})}>
                     <FormattedMessage id="Product.anonymousStatus" />
                   </p>
                 }
@@ -117,7 +117,7 @@ export default class SearchForm extends React.Component<any, any> {
             <FormItem>
               <SelectGroup
                 label={
-                  <p style={styles.label}>
+                  <p style={styles.label} title={RCi18n({id:'Product.productRatings'})}>
                     <FormattedMessage id="Product.productRatings" />
                   </p>
                 }
@@ -252,10 +252,10 @@ export default class SearchForm extends React.Component<any, any> {
         value={this.state.customerOptions}
         style={{ width: 160 }}
       >
-        <Option value="customerName">
+        <Option value="customerName" title={RCi18n({id:'Product.consumerName'})}>
           <FormattedMessage id="Product.consumerName" />
         </Option>
-        <Option value="customerAccount">
+        <Option value="customerAccount" title={RCi18n({id:'Product.consumerAccount'})}>
           <FormattedMessage id="Product.consumerAccount" />
         </Option>
       </Select>

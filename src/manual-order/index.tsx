@@ -20,8 +20,8 @@ class ManualOrder extends Component<any, any> {
       title: <FormattedMessage id="Order.valetOrder" />,
       current: 0,
       status: 1,
-      url:'',
-      context:null,
+      url: '',
+      context: null,
       customer: {
         customerId: '',
         customerName: '',
@@ -54,30 +54,33 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token, promocode) => {
-    let { customer,url } = this.state;
-    let spromocode = promocode ? `spromocode=${promocode}&` : ''
-    let winObj = window.open(`${url}cart?${spromocode}stoken=${token}`, 'newwindow', 'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no');
+    let { customer, url } = this.state;
+    let spromocode = promocode ? `spromocode=${promocode}&` : '';
+    let winObj = window.open(
+      `${url.replace(/\/$/gi, '')}/cart?${spromocode}stoken=${token}`,
+      'newwindow',
+      'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
+    );
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
         const { res } = await queryOrderStatus(customer.customerId, token);
-        if(res.code===Const.SUCCESS_CODE){
+        if (res.code === Const.SUCCESS_CODE) {
           let d = {
-            'string':1,
-            'boolean':2,
-            'object':3
-         }
-         let status = d[typeof res.context];
-         this.setState({
-           status,
-           context:status===3?res.context:null,
-         });
-        }else{
+            string: 1,
+            boolean: 2,
+            object: 3
+          };
+          let status = d[typeof res.context];
           this.setState({
-            status:2
+            status,
+            context: status === 3 ? res.context : null
+          });
+        } else {
+          this.setState({
+            status: 2
           });
         }
-       
       }
     }, 500);
   };
@@ -109,27 +112,25 @@ class ManualOrder extends Component<any, any> {
     this.setState({ current });
   }
 
-  componentWillMount() { 
-    let {customerId,customerName, customerAccount}=this.props?.location?.query??{};
-    if(customerId&&customerName&&customerAccount){
+  componentWillMount() {
+    let { customerId, customerName, customerAccount } = this.props?.location?.query ?? {};
+    if (customerId && customerName && customerAccount) {
       this.setState({
-        customer:{
+        customer: {
           customerId,
-          customerName, 
+          customerName,
           customerAccount
         }
-      })
+      });
     }
   }
 
-  componentDidMount(){
-
-    let url =sessionStorage.getItem(cache.DOMAINNAME);
+  componentDidMount() {
+    let url = sessionStorage.getItem(cache.DOMAINNAME);
     this.setState({
       url
-    })
+    });
   }
-
 
   getCustomer = (customer) => {
     this.setState({
@@ -143,25 +144,50 @@ class ManualOrder extends Component<any, any> {
     });
   };
   handleGoodwillChecked = (value) => {
-    console.log(value)
+    console.log(value);
     this.setState({
       goodwillChecked: value
-    })
-  }
+    });
+  };
   render() {
-    const { current, title, customer, storeId, status,url,context } = this.state;
+    const { current, title, customer, storeId, status, url, context } = this.state;
     const steps = [
       {
         title: 'Consumer information',
-        controller: <ConsumerInformation form={this.props.form} customer={customer} storeId={storeId} stepName={'Consumer information'} getCustomerId={this.getCustomer} />
+        controller: (
+          <ConsumerInformation
+            form={this.props.form}
+            customer={customer}
+            storeId={storeId}
+            stepName={'Consumer information'}
+            getCustomerId={this.getCustomer}
+          />
+        )
       },
       {
         title: 'Selected product',
-        controller: <SelectedProduct url={url} stepName={'Product list'} carts={this.getCartsList} storeId={storeId} customer={customer} onGoodwillChecked={this.handleGoodwillChecked} />
+        controller: (
+          <SelectedProduct
+            url={url}
+            stepName={'Product list'}
+            carts={this.getCartsList}
+            storeId={storeId}
+            customer={customer}
+            onGoodwillChecked={this.handleGoodwillChecked}
+          />
+        )
       },
       {
         title: 'Delivery & payment information',
-        controller: <PaymentInformation context={context} turnShowPage={this.getShopTokenJump} status={status} customer={customer} stepName={'Delivery & payment information'} />
+        controller: (
+          <PaymentInformation
+            context={context}
+            turnShowPage={this.getShopTokenJump}
+            status={status}
+            customer={customer}
+            stepName={'Delivery & payment information'}
+          />
+        )
       }
     ];
     // if (noLanguageSelect) {

@@ -124,6 +124,18 @@ class SearchHead extends Component<any, any> {
         { value: 'FGS', name: RCi18n({ id: 'Order.fgs' }) },
         { value: 'L_ATELIER_FELIN', name: RCi18n({ id: 'Order.felin' }) }
       ],
+      orderCreatedByTypeValue:'Created by',
+      orderCreateByType:'',
+      orderCreatedByList: [
+        { value: 'CC', name: RCi18n({ id: 'Order.customerCare' }) },
+        { value: 'PO', name: RCi18n({ id: 'Order.petOwner' }) }
+      ],
+      orderTagType:'Order Tag',
+      orderTagValue:'',
+      orderTagList:[
+        { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
+        { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
+      ],
       tradeState: {
         deliverStatus: '',
         payState: '',
@@ -149,7 +161,12 @@ class SearchHead extends Component<any, any> {
       orderTypeList,
       subscriptionTypeList,
       subscriptionPlanTypeList,
-      showAdvanceSearch
+      showAdvanceSearch,
+      orderCreateByType,
+      orderCreatedByList,
+      orderTagValue,
+      orderTagList,
+      orderTagType
     } = this.state;
     let hasMenu = false;
     if (
@@ -250,6 +267,46 @@ class SearchHead extends Component<any, any> {
               </Row>
               {showAdvanceSearch ? (
                 <Row>
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      <Select*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderTagType}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderTagType: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option value="Order Tag" title={RCi18n({ id: 'Order.orderTag' })}>*/}
+                  {/*          <FormattedMessage id="Order.orderTag"/>*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Select*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderTagValue}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderTagValue: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      >*/}
+                  {/*        {orderTagList &&*/}
+                  {/*        orderTagList.map((item, index) => (*/}
+                  {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                  {/*            {item.name}*/}
+                  {/*          </Option>*/}
+                  {/*        ))}*/}
+                  {/*      </Select>*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
+
                   <Col span={8}>
                     <FormItem>
                       <InputGroup compact style={styles.formItemStyle}>
@@ -368,6 +425,7 @@ class SearchHead extends Component<any, any> {
                         <Input
                           style={styles.leftLabel}
                           disabled
+                          title={RCi18n({ id: 'Order.subscriptionType' })}
                           defaultValue={RCi18n({ id: 'Order.subscriptionType' })}
                         />
                         <Select
@@ -597,6 +655,45 @@ class SearchHead extends Component<any, any> {
                     </FormItem>
                   </Col>
                   {/*</AuthWrapper>*/}
+
+                  {/*<Col span={8}>*/}
+                  {/*  <FormItem>*/}
+                  {/*    <InputGroup compact style={styles.formItemStyle}>*/}
+                  {/*      <Select*/}
+                  {/*        onChange={(val, a) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderCreatedByTypeValue: val*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        value={this.state.orderCreatedByTypeValue}*/}
+                  {/*        style={styles.label}*/}
+                  {/*      >*/}
+                  {/*        <Option title={RCi18n({ id: 'Order.createdBy' })} value="Created by">*/}
+                  {/*          <FormattedMessage id="Order.createdBy" />*/}
+                  {/*        </Option>*/}
+                  {/*      </Select>*/}
+                  {/*      <Select*/}
+                  {/*        style={styles.wrapper}*/}
+                  {/*        allowClear*/}
+                  {/*        value={orderCreateByType}*/}
+                  {/*        getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+                  {/*        onChange={(value) => {*/}
+                  {/*          this.setState({*/}
+                  {/*            orderCreateByType: value*/}
+                  {/*          });*/}
+                  {/*        }}*/}
+                  {/*      >*/}
+                  {/*        {orderCreatedByList &&*/}
+                  {/*        orderCreatedByList.map((item, index) => (*/}
+                  {/*          <Option value={item.value} title={item.name} key={index}>*/}
+                  {/*            {item.name}*/}
+                  {/*          </Option>*/}
+                  {/*        ))}*/}
+                  {/*      </Select>*/}
+                  {/*    </InputGroup>*/}
+                  {/*  </FormItem>*/}
+                  {/*</Col>*/}
                 </Row>
               ) : null}
 
@@ -936,7 +1033,9 @@ class SearchHead extends Component<any, any> {
       emailAddressType,
       emailAddressValue,
       citySearchType,
-      citySearchValue
+      citySearchValue,
+      orderCreateByType,
+      orderTagValue
     } = this.state;
 
     const ts = {} as any;
@@ -969,7 +1068,9 @@ class SearchHead extends Component<any, any> {
       subscriptionPlanType,
       [codeSelect]: codeSelectValue,
       [emailAddressType]: emailAddressValue,
-      [citySearchType]: citySearchValue
+      [citySearchType]: citySearchValue,
+      // orderCreateByType,
+      // goodWillFlag:orderTagValue?+orderTagValue:''
     };
     onSearch(params);
   };

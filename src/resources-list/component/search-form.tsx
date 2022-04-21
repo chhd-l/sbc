@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Row, Col, Input, Button, Select } from 'antd';
-import { SelectGroup } from 'qmkit';
+import { SelectGroup, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 
 const styles = {
@@ -77,7 +77,7 @@ export default class SearchForm extends React.Component<any, any>{
                   getFieldDecorator('email')(
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'Resources.email'})}>
                           <FormattedMessage id="Resources.email" />
                         </p>
                       }
@@ -93,7 +93,7 @@ export default class SearchForm extends React.Component<any, any>{
                   getFieldDecorator('name')(
                     <Input
                       addonBefore={
-                        <p style={styles.label}>
+                        <p style={styles.label} title={RCi18n({id:'Resources.name'})}>
                           <FormattedMessage id="Resources.name" />
                         </p>
                       }
@@ -111,7 +111,7 @@ export default class SearchForm extends React.Component<any, any>{
                   allowClear
                   getPopupContainer={() => document.getElementById('service-type')}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Resources.service_type'})}>
                       <FormattedMessage id="Resources.service_type" />
                     </p>
                   }
@@ -129,7 +129,7 @@ export default class SearchForm extends React.Component<any, any>{
                   id="appointment-type"
                   getPopupContainer={() => document.getElementById('appointment-type')}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Resources.appointment_type'})}>
                       <FormattedMessage id="Resources.appointment_type" />
                     </p>
                   }
@@ -147,14 +147,14 @@ export default class SearchForm extends React.Component<any, any>{
                   id="planned-status"
                   getPopupContainer={() => document.getElementById('planned-status')}
                   label={
-                    <p style={styles.label}>
+                    <p style={styles.label} title={RCi18n({id:'Resources.planned_status'})}>
                       <FormattedMessage id="Resources.planned_status" />
                     </p>
                   }
                   onChange={(value) =>this.handleSelectChange('arranged', value ) }
                 >
-                  <Option value={1}>Yes</Option>
-                  <Option value={0}>No</Option>
+                  <Option value={1}><FormattedMessage id="Product.yes"/></Option>
+                  <Option value={0}><FormattedMessage id="Product.No"/></Option>
                 </SelectGroup>
               </FormItem>
             </Col>

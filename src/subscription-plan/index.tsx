@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline } from 'qmkit';
+import { BreadCrumb, SelectGroup, Const, Headline, RCi18n } from 'qmkit';
 import { Form, Row, Col, Select, Input, Button, message, Tooltip, Table, Switch } from 'antd';
 import * as webapi from './webapi';
 import { getSubscriptionPlanTypes } from './../subscription-plan-update/webapi';
@@ -222,7 +222,7 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanName"/></p>}
+                    addonBefore={<p style={styles.label} title={RCi18n({id:'Subscription.SubscriptionPlanName'})}><FormattedMessage id="Subscription.SubscriptionPlanName"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -236,7 +236,7 @@ export default class SubscriptionPlan extends Component<any, any> {
               <Col span={8}>
                 <FormItem>
                   <Input
-                    addonBefore={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionPlanID"/></p>}
+                    addonBefore={<p style={styles.label} title={RCi18n({id:'Subscription.SubscriptionPlanID'})}><FormattedMessage id="Subscription.SubscriptionPlanID"/></p>}
                     onChange={(e) => {
                       const value = (e.target as any).value;
                       this.onFormChange({
@@ -251,7 +251,7 @@ export default class SubscriptionPlan extends Component<any, any> {
                 <FormItem>
                   <SelectGroup
                     defaultValue=""
-                    label={<p style={styles.label}><FormattedMessage id="Subscription.SubscriptionType"/></p>}
+                    label={<p style={styles.label} title={RCi18n({id:'Subscription.SubscriptionType'})}><FormattedMessage id="Subscription.SubscriptionType"/></p>}
                     style={{ width: 195 }}
                     onChange={(value) => {
                       value = value === '' ? null : value;

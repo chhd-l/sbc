@@ -2231,7 +2231,7 @@ export default class AppStore extends Store {
         !this._validInventoryFormsNew()
       ) {
         return;
-      } else if (nextKey === 'related') {
+      } else if (nextKey === 'related' && Const.SITE_NAME !== 'MYVETRECO') {
         this.saveAll();
       }
     } else if (nextKey === 'seo') {
@@ -2242,11 +2242,11 @@ export default class AppStore extends Store {
         !this.state().get('getGoodsId')
       ) {
         return;
-      } else {
+      } else if (Const.SITE_NAME !== 'MYVETRECO') {
         this.saveAll('seo');
       }
     }
-    if (nextKey !== 'related') {
+    if (nextKey !== 'related' || Const.SITE_NAME === 'MYVETRECO') {
       this.dispatch('goodsActor: tabChange', nextKey);
     }
   };

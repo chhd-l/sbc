@@ -500,7 +500,7 @@ class AttributeLibrary extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label="Tagging type">
+                <FormItem label={RCi18n({id:'Product.TaggingType'})}>
                   {getFieldDecorator('taggingType', {
                     initialValue: taggingForm.taggingType,
                     rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelectedTaggingType" /> }]
@@ -527,7 +527,7 @@ class AttributeLibrary extends Component<any, any> {
 
                 {taggingForm.taggingType === 'Text' ? (
                   <div>
-                    <FormItem label="Tagging font color">
+                    <FormItem label={RCi18n({id:'Product.Taggingfontcolor'})}>
                       {getFieldDecorator('taggingFontColor', {
                         rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFontColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFontColor) ? this.getColour(taggingForm.taggingFontColor).name : ''
@@ -550,7 +550,7 @@ class AttributeLibrary extends Component<any, any> {
                         </Select>
                       )}
                     </FormItem>
-                    <FormItem label="Tagging fill color">
+                    <FormItem label={RCi18n({id:'Product.Taggingfillcolor'})}>
                       {getFieldDecorator('taggingFillColor', {
                         rules: [{ required: true, message: <FormattedMessage id="Product.TaggingFillColor" /> }],
                         initialValue: this.getColour(taggingForm.taggingFillColor) ? this.getColour(taggingForm.taggingFillColor).name : ''
@@ -575,7 +575,7 @@ class AttributeLibrary extends Component<any, any> {
                     </FormItem>
                   </div>
                 ) : (
-                  <FormItem label="Tagging Image">
+                  <FormItem label={RCi18n({id:'Product.Taggingimage'})}>
                     {getFieldDecorator('taggingImgUrl', {
                       rules: [{ required: true, message: <FormattedMessage id="Product.TaggingImage" /> }]
                     })(<AssetManagement choosedImgCount={1} 
@@ -584,7 +584,7 @@ class AttributeLibrary extends Component<any, any> {
                       deleteImgFunction={this.deleteImg} />)}
                   </FormItem>
                 )}
-                <FormItem label="Display in shop">
+                <FormItem label={RCi18n({id:'Product.Displayinshop'})}>
                   {getFieldDecorator('displayStatus', {
                     initialValue: taggingForm.displayStatus ? true : false
                   })(
@@ -607,7 +607,7 @@ class AttributeLibrary extends Component<any, any> {
                   )}
                 </FormItem>
                 {taggingForm.displayStatus ? (
-                  <FormItem label="Shop page">
+                  <FormItem label={RCi18n({id:'Product.Shoppage'})}>
                     {getFieldDecorator('showPage', {
                       rules: [{ required: true, message: <FormattedMessage id="Product.PleaseSelecShopPage" /> }],
                       initialValue: taggingForm.showPage

@@ -22,6 +22,7 @@ import {
   getIndividualSubFrequency
 } from '../task-manage-all-subscription/module/querySysDictionary';
 import { fromJS } from 'immutable';
+import { debug } from 'console';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -89,6 +90,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       freeShippingFlag: false,
       freeShippingDiscountPrice: 0,
       subscriptionDiscountPrice: 0,
+      serviceFeePrice: 0,
       promotionVOList: [],
 
       isPromotionCodeValid: false,
@@ -119,6 +121,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       confirmPickupDisabled: true, // pickup地址确认按钮状态
       subscribeGoods: null, // 订阅商品数据，传给pickup组件
 
+      SelectDateStatus: 0, // 是否在Operation下选择时间 1选择 0未选择
       deliveryDate: undefined,
       timeSlot: undefined,
       deliveryDateList: [],
@@ -161,6 +164,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   getDeliveryDateStatus = () => {
     GetDelivery().then((data) => {
       const res = data.res;
+      console.log('GetDelivery', res);
+
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({
           deliverDateStatus: res?.context?.systemConfigVO?.status || 0
@@ -252,7 +257,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             periodTypeArr: periodTypeArr,
             nextDeliveryTime: subscriptionInfo.nextDeliveryTime,
             promotionCode: subscriptionDetail.promotionCode,
-            paymentMethod: subscriptionDetail.paymentMethod
+            paymentMethod: subscriptionDetail.paymentMethod,
+            deliveryDate: subscriptionDetail.consignee.deliveryDate,
+            timeSlot: subscriptionDetail.consignee.timeSlot
           };
           this.setState(
             {
@@ -274,7 +281,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               completedOrder: subscriptionDetail.completedTradeList,
               paymentMethod: subscriptionDetail.paymentMethod,
               deliveryDate: subscriptionDetail.consignee.deliveryDate,
-              timeSlot: subscriptionDetail.consignee.timeSlot
+              timeSlot: subscriptionDetail.consignee.timeSlot,
+              cityNo: subscriptionDetail.consignee.provinceIdStr,
+              serviceFeePrice: subscriptionDetail.serviceFeePrice
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -282,9 +291,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 this.getAddressList(customerId, 'DELIVERY');
                 this.getAddressList(customerId, 'BILLING');
                 this.applyPromotionCode(this.state.promotionCodeShow);
+                console.log('storeId', storeId);
+                // 日本的timeSlot需要显示
                 if (
                   subscriptionDetail.consignee.receiveType === 'HOME_DELIVERY' &&
-                  +storeId === 123457907
+                  (+storeId === 123457907 || +storeId === 123457919)
                 ) {
                   this.getTimeSlot({
                     cityNo: subscriptionDetail.consignee.provinceIdStr,
@@ -429,6 +440,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (periodTypeArr.join(',') !== originalParams.periodTypeArr.join(',')) {
       changeFieldArr.push('Frequency');
     }
+    if (
+      deliveryDate !== originalParams.deliveryDate &&
+      timeSlot !== originalParams.originalParams
+    ) {
+      console.log('timeSlot:', timeSlot, originalParams);
+      // timeSlot.join(',') !== originalParams.timeSlot.join(',')
+      changeFieldArr.push('changeTimeSlot');
+    }
     if (changeFieldArr.length > 0) {
       params.changeField = changeFieldArr.join(',');
     }
@@ -438,14 +457,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.setState({
-            saveLoading: false,
-            payPspItemEnum: ''
-          });
-          message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
-          setTimeout(() => {
-            this.getSubscriptionDetail();
-          }, 1000);
+          this.setState(
+            {
+              saveLoading: false,
+              payPspItemEnum: '',
+              SelectDateStatus: 0
+            },
+            () => {
+              message.success(RCi18n({ id: 'Subscription.OperateSuccessfully' }));
+              this.getSubscriptionDetail();
+            }
+          );
         }
       })
       .catch(() => {})
@@ -703,6 +725,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       //   return;
       // })
     }
+    // 如果是日本
+    if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
+      // 如果是HOME_DELIVERY 查询timeslot信息
+      if (deliveryAddressInfo.receiveType === 'HOME_DELIVERY') {
+        this.getTimeSlot({
+          cityNo: deliveryAddressInfo.provinceIdStr,
+          subscribeId: subscriptionInfo.subscriptionNumber
+        });
+        this.setState({
+          deliveryDate: undefined,
+          timeSlot: undefined
+        });
+      }
+    }
 
     // 俄罗斯地址验证是否完整 (暂时不判断pickup地址)
     if (
@@ -905,7 +941,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   updateNextDeliveryTime = (date) => {
-    const { currentOrder } = this.state;
+    const { currentOrder, SelectDateStatus, cityNo, subscriptionInfo } = this.state;
     let goodsItems = [];
     if (currentOrder && currentOrder.tradeItems) {
       for (let i = 0; i < currentOrder.tradeItems.length; i++) {
@@ -931,8 +967,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
-          this.getSubscriptionDetail();
-          message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+          this.setState(
+            {
+              SelectDateStatus: 1
+            },
+            () => {
+              this.getTimeSlot({
+                cityNo,
+                subscribeId: subscriptionInfo.subscriptionNumber
+              });
+              setTimeout(() => {
+                this.updateSubscription();
+                // message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
+              }, 1000);
+            }
+          );
         }
       })
       .catch(() => {})
@@ -1037,23 +1086,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
   getTimeSlot = (params: any) => {
     webapi.getTimeSlot(params).then((data) => {
-      const { deliveryDate, timeSlot } = this.state;
+      let { deliveryDate, timeSlot, timeSlotList, SelectDateStatus } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList = res.context.timeSlots;
-        this.setState({
-          deliveryDateList: deliveryDateList,
-          timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
-          deliveryDate: deliveryDate
-            ? deliveryDate
-            : deliveryDateList[0] && deliveryDateList[0].date,
-          timeSlot: timeSlot
-            ? timeSlot
-            : deliveryDateList[0] &&
+        let deliveryDateList: any[] = res.context.timeSlots;
+        if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
+          timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
+          this.setState({
+            deliveryDateList: deliveryDateList,
+            timeSlotList: timeSlotList || [],
+            deliveryDate: deliveryDate
+              ? deliveryDate
+              : deliveryDateList[0] && deliveryDateList[0].date,
+            timeSlot: timeSlot
+              ? timeSlot
+              : deliveryDateList[0] &&
+                deliveryDateList[0].dateTimeInfos[0].startTime +
+                  '-' +
+                  deliveryDateList[0].dateTimeInfos[0].endTime
+          });
+        } else {
+          this.setState({
+            deliveryDateList: deliveryDateList,
+            timeSlotList: deliveryDateList[0].dateTimeInfos || [],
+            deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
+            timeSlot:
+              deliveryDateList[0] &&
               deliveryDateList[0].dateTimeInfos[0].startTime +
                 '-' +
                 deliveryDateList[0].dateTimeInfos[0].endTime
-        });
+          });
+        }
       }
     });
   };
@@ -1064,12 +1127,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     this.setState({
       deliveryDate: value,
       timeSlotList: timeSlots,
-      timeSlot: deliveryDate === value ? timeSlot : undefined
+      timeSlot:
+        deliveryDate === value
+          ? timeSlot
+          : timeSlots[0] && timeSlots[0].startTime + '-' + timeSlots[0].endTime
     });
   };
 
   //timeslot
   timeSlotChange = (value: any) => {
+    console.log('value', value);
     this.setState({
       timeSlot: value
     });
@@ -1160,6 +1227,21 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     });
   };
 
+  _deleteProduct = async (item) => {
+    try {
+      console.log('item', item);
+      this.setState({ loading: true });
+      await webapi.deleteProduct({
+        subscribeGoodsId: item.subscribeGoodsId,
+        subscribeId: item.subscribeId
+      });
+      this.getSubscriptionDetail();
+    } catch (err) {
+    } finally {
+      // this.setState({ loading: false });
+    }
+  };
+
   titleContent = () => {
     let url = '#';
     switch (storeId) {
@@ -1233,6 +1315,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       // operationLog
     } = this.state;
 
+    /* 需要有多条产品数据，才能删除, 移到sp11上线 */
+    const canDeleteProduct = false && goodsInfo.length > 1;
+
     const columns = [
       {
         title: (
@@ -1243,25 +1328,37 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'Product',
         width: '30%',
         render: (text: any, record: any) => (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <img
-              src={util.optimizeImage(record.goodsPic)}
-              className="img-item"
-              style={styles.imgItem}
-              alt=""
-            />
-            <span style={{ margin: 'auto 10px' }}>
-              {record.goodsName === 'individualization'
-                ? record.petsName + "'s personalized subscription"
-                : record.goodsName}
-            </span>
-            {this.isShowSkuEdit ? (
-              <a
-                style={{ flex: 1, textAlign: 'center' }}
-                onClick={() => this.showProductModal()}
-                className="iconfont iconEdit "
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <img
+                src={util.optimizeImage(record.goodsPic)}
+                className="img-item"
+                style={styles.imgItem}
+                alt=""
               />
-            ) : null}
+              <span style={{ margin: 'auto 10px' }}>
+                {record.goodsName === 'individualization'
+                  ? record.petsName + "'s personalized subscription"
+                  : record.goodsName}
+              </span>
+            </div>
+            <span>
+              {this.isShowSkuEdit ? (
+                <a onClick={() => this.showProductModal()} className="iconfont iconEdit " />
+              ) : null}
+
+              {canDeleteProduct ? (
+                <Popconfirm
+                  placement="topLeft"
+                  title={<FormattedMessage id="Subscription.DeleteTip" />}
+                  onConfirm={() => this._deleteProduct(record)}
+                  okText={<FormattedMessage id="Subscription.Confirm" />}
+                  cancelText={<FormattedMessage id="Subscription.Cancel" />}
+                >
+                  <a className="iconfont iconDelete" />
+                </Popconfirm>
+              ) : null}
+            </span>
           </div>
         )
       },
@@ -1592,6 +1689,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               </Tooltip>
             </Popover>
             <Popconfirm
+              //避免确认框跟随滚动条滚动
+              getPopupContainer={(trigger: any) => trigger.parentNode}
               placement="topLeft"
               title={<FormattedMessage id="Subscription.skipThisItem" />}
               onConfirm={() => {
@@ -1961,6 +2060,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       </span>
                     </div>
                   ) : null}
+                  {this.state.serviceFeePrice > 0 && (
+                    <div className="flex-between">
+                      <span>
+                        <FormattedMessage id="Order.serviceFeePrice" />
+                      </span>
+                      <span style={styles.priceStyle}>
+                        {currencySymbol +
+                          this.getSubscriptionPrice(
+                            this.state.serviceFeePrice ? this.state.serviceFeePrice : 0
+                          )}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex-between">
                     <span>
                       <span>
@@ -1977,7 +2089,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             +this.state.discountsPrice +
                             +this.state.taxFeePrice +
                             +this.state.deliveryPrice -
-                            +this.state.freeShippingDiscountPrice
+                            +this.state.freeShippingDiscountPrice +
+                            +this.state.serviceFeePrice
                         )}
                     </span>
                   </div>
@@ -2006,84 +2119,149 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       />
                     </Col>
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Name" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo
-                          ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
-                          : ''}
-                      </p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.City" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo.city}</p>
-                    </Col>
-                    {deliveryAddressInfo.province ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.State" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo.province}</p>
-                      </Col>
-                    ) : null}
+                    {storeId === 123457919 ? (
+                      <>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="Subscription.Name" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.lastName + ' ' + deliveryAddressInfo.firstName
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="Subscription.Name katakana" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.lastNameKatakana +
+                                ' ' +
+                                deliveryAddressInfo.firstNameKatakana
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Postal code" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.postCode}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.State" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.province}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.City" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.city}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Region" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.area}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Address1" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.address1}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 210 }}>
+                            <FormattedMessage id="PetOwner.AddressForm.Phone number" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.consigneeNumber}</p>
+                        </Col>
+                      </>
+                    ) : (
+                      <>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Name" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo
+                              ? deliveryAddressInfo.firstName + ' ' + deliveryAddressInfo.lastName
+                              : ''}
+                          </p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.City" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo.city}</p>
+                        </Col>
+                        {deliveryAddressInfo.province ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.State" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo.province}</p>
+                          </Col>
+                        ) : null}
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Country" />:{' '}
-                      </p>
-                      <p>
-                        {deliveryAddressInfo.countryId
-                          ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
-                          : deliveryAddressInfo.country}
-                      </p>
-                    </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Country" />:{' '}
+                          </p>
+                          <p>
+                            {deliveryAddressInfo.countryId
+                              ? this.getDictValue(countryArr, deliveryAddressInfo.countryId)
+                              : deliveryAddressInfo.country}
+                          </p>
+                        </Col>
 
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address1" />:{' '}
-                      </p>
-                      <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
-                    </Col>
-                    <Col span={24}>
-                      <p style={{ width: 140 }}>
-                        <FormattedMessage id="Subscription.Address2" />:{' '}
-                      </p>
-                      <p className="delivery_edit_address2">
-                        {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
-                      </p>
-                    </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Address1" />:{' '}
+                          </p>
+                          <p>{deliveryAddressInfo ? deliveryAddressInfo.address1 : ''}</p>
+                        </Col>
+                        <Col span={24}>
+                          <p style={{ width: 140 }}>
+                            <FormattedMessage id="Subscription.Address2" />:{' '}
+                          </p>
+                          <p className="delivery_edit_address2">
+                            {deliveryAddressInfo ? deliveryAddressInfo.address2 : ''}
+                          </p>
+                        </Col>
 
-                    {deliveryAddressInfo?.county ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.County" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
-                      </Col>
-                    ) : null}
+                        {deliveryAddressInfo?.county ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.County" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo ? deliveryAddressInfo.county : ''}</p>
+                          </Col>
+                        ) : null}
 
-                    {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
-                      <Col span={24}>
-                        <p style={{ width: 140 }}>
-                          <FormattedMessage id="Subscription.WorkTime" />:{' '}
-                        </p>
-                        <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
-                      </Col>
-                    ) : null}
+                        {deliveryAddressInfo.receiveType === 'PICK_UP' ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.WorkTime" />:{' '}
+                            </p>
+                            <p>{deliveryAddressInfo ? deliveryAddressInfo.workTime : ''}</p>
+                          </Col>
+                        ) : null}
 
-                    <Col span={24}>
-                      {deliveryAddressInfo.receiveType === 'PICK_UP'
-                        ? null
-                        : deliveryAddressInfo.validFlag
-                        ? null
-                        : deliveryAddressInfo.alert && (
-                            <PostalCodeMsg text={deliveryAddressInfo.alert} />
-                          )}
-                    </Col>
+                        <Col span={24}>
+                          {deliveryAddressInfo.receiveType === 'PICK_UP'
+                            ? null
+                            : deliveryAddressInfo.validFlag
+                            ? null
+                            : deliveryAddressInfo.alert && (
+                                <PostalCodeMsg text={deliveryAddressInfo.alert} />
+                              )}
+                        </Col>
+                      </>
+                    )}
                   </Row>
                 </Col>
                 {/* 如果是俄罗斯 且 deliverDateStatus为1 如果是HOME_DELIVERY（并且timeslot可选） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
@@ -2091,7 +2269,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                 {/* timeSlot和pickup point status */}
                 <Col span={8} className="timeSlot subscription_edit_timeSlot">
-                  {storeId === 123457907 ? (
+                  {storeId === 123457907 || storeId === 123457919 ? (
                     <>
                       {deliverDateStatus === 1 ? (
                         <Row>
@@ -2275,7 +2453,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             changePaymentMethod={(paymentId, payPspItemEnum, selectCard) => {
                               this.setState({
                                 paymentId,
-                                payPspItemEnum,
+                                payPspItemEnum: selectCard?.paymentItem || payPspItemEnum,
                                 paymentInfo: selectCard,
                                 paymentMethod: payPspItemEnum
                               });
@@ -2293,21 +2471,27 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
                           </p>
                           <p>
-                            {paymentInfo && paymentInfo.paymentVendor
-                              ? paymentInfo.paymentVendor
-                              : ''}
+                            {paymentInfo && paymentInfo.paymentVendor ? (
+                              paymentInfo.paymentVendor
+                            ) : paymentInfo?.paymentItem?.toLowerCase() === 'adyen_paypal' ? (
+                              <FormattedMessage id="Subscription.Paypal" />
+                            ) : (
+                              ''
+                            )}
                           </p>
                         </Col>
-                        <Col span={24}>
-                          <p style={{ width: 140 }}>
-                            <FormattedMessage id="Subscription.CardNumber" />:{' '}
-                          </p>
-                          <p>
-                            {paymentInfo && paymentInfo.lastFourDigits
-                              ? '**** **** **** ' + paymentInfo.lastFourDigits
-                              : ''}
-                          </p>
-                        </Col>
+                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' ? (
+                          <Col span={24}>
+                            <p style={{ width: 140 }}>
+                              <FormattedMessage id="Subscription.CardNumber" />:{' '}
+                            </p>
+                            <p>
+                              {paymentInfo && paymentInfo.lastFourDigits
+                                ? '**** **** **** ' + paymentInfo.lastFourDigits
+                                : ''}
+                            </p>
+                          </Col>
+                        ) : null}
                       </>
                     ) : paymentMethod.indexOf('COD') !== -1 ? (
                       <Col span={24}>
@@ -2316,6 +2500,15 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         </p>
                         <p>
                           <FormattedMessage id="Subscription.CashOnDelivery" />
+                        </p>
+                      </Col>
+                    ) : paymentMethod.indexOf('ADYEN_PAYPAL') !== -1 ? (
+                      <Col span={24}>
+                        <p style={{ width: 140 }}>
+                          <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
+                        </p>
+                        <p>
+                          <FormattedMessage id="Subscription.Paypal" />
                         </p>
                       </Col>
                     ) : null}
@@ -2374,7 +2567,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
                   {/* billingAddress是否和deliveryAddress一样 */}
                   <Col>
-                    {storeId === 123457907 || storeId === 123457910 ? null : (
+                    {storeId === 123457907 ||
+                    storeId === 123457910 ||
+                    storeId === 123457919 ? null : (
                       <Checkbox
                         checked={this.state.sameFlag}
                         onChange={(e) => {
@@ -2478,18 +2673,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                               key={item.deliveryAddressId}
                             >
                               <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                <div style={{ display: 'inline-grid' }}>
-                                  <p>{item.firstName + '  ' + item.lastName}</p>
-                                  <p>{item.city}</p>
-                                  {item.province ? <p>{item.province}</p> : null}
+                                {storeId === 123457919 ? (
+                                  <div style={{ display: 'inline-grid' }}>
+                                    <p>{item.lastName + '  ' + item.firstName}</p>
+                                    <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
+                                    <p>{item.postCode}</p>
+                                    <p>
+                                      {item.city}, {item.area}, {item.address1}
+                                    </p>
+                                    <p>{item.consigneeNumber}</p>
+                                  </div>
+                                ) : (
+                                  <div style={{ display: 'inline-grid' }}>
+                                    <p>{item.firstName + '  ' + item.lastName}</p>
+                                    <p>{item.city}</p>
+                                    {item.province ? <p>{item.province}</p> : null}
 
-                                  <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                  <p>{item.address1}</p>
-                                  <p>{item.address2}</p>
-                                  {!item.validFlag
-                                    ? item.alert && <PostalCodeMsg text={item.alert} />
-                                    : null}
-                                </div>
+                                    <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                    <p>{item.address1}</p>
+                                    <p>{item.address2}</p>
+                                    {!item.validFlag
+                                      ? item.alert && <PostalCodeMsg text={item.alert} />
+                                      : null}
+                                  </div>
+                                )}
                               </Radio>
                               <div>
                                 <Button
@@ -2515,17 +2722,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 key={item.deliveryAddressId}
                               >
                                 <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                  <div style={{ display: 'inline-grid' }}>
-                                    <p>{item.firstName + '  ' + item.lastName}</p>
-                                    <p>{item.city}</p>
-                                    {item.province ? <p>{item.province}</p> : null}
-                                    <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                    <p>{item.address1}</p>
-                                    <p>{item.address2}</p>
-                                    {!item.validFlag
-                                      ? item.alert && <PostalCodeMsg text={item.alert} />
-                                      : null}
-                                  </div>
+                                  {storeId === 123457919 ? (
+                                    <div style={{ display: 'inline-grid' }}>
+                                      <p>{item.lastName + '  ' + item.firstName}</p>
+                                      <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
+                                      <p>{item.postCode}</p>
+                                      <p>
+                                        {item.city}, {item.area}, {item.address1}
+                                      </p>
+                                      <p>{item.consigneeNumber}</p>
+                                    </div>
+                                  ) : (
+                                    <div style={{ display: 'inline-grid' }}>
+                                      <p>{item.firstName + '  ' + item.lastName}</p>
+                                      <p>{item.city}</p>
+                                      {item.province ? <p>{item.province}</p> : null}
+                                      <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                      <p>{item.address1}</p>
+                                      <p>{item.address2}</p>
+                                      {!item.validFlag
+                                        ? item.alert && <PostalCodeMsg text={item.alert} />
+                                        : null}
+                                    </div>
+                                  )}
                                 </Radio>
                                 <div>
                                   <Button

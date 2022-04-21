@@ -111,7 +111,7 @@ class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="退单编号"
-                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.ReturnOrderNumber" /></p>}
+                    addonBefore={<p style={{ textAlign: "left" }} title={RCi18n({id:'Order.ReturnOrderNumber'})}><FormattedMessage id="Order.ReturnOrderNumber" /></p>}
                     onChange={(e) => {
                       this.setState({ rid: (e.target as any).value }, this._paramChanged);
                     }}
@@ -122,7 +122,7 @@ class SearchHead extends Component<any, any> {
                 <FormItem>
                   <Input
                     // addonBefore="订单编号"
-                    addonBefore={<p style={{ textAlign: "left" }}><FormattedMessage id="Order.Ordernumber" /></p>}
+                    addonBefore={<p style={{ textAlign: "left" }} title={RCi18n({id:'Order.Ordernumber'})}><FormattedMessage id="Order.Ordernumber" /></p>}
                     maxLength={300}
                     onChange={(e) => {
                       this.setState({ tid: (e.target as any).value }, this._paramChanged);
@@ -300,10 +300,10 @@ class SearchHead extends Component<any, any> {
           value={this.state.goodsOptions}
           style={{ width: '176px' }}
         >
-          <Option value="skuName">
+          <Option value="skuName" title={RCi18n({id:'Order.productName'})}>
             <FormattedMessage id="Order.productName" />
           </Option>
-          <Option value="skuNo">
+          <Option value="skuNo" title={RCi18n({id:'Order.skuCode'})}>
             <FormattedMessage id="Order.skuCode" />
           </Option>
         </Select>
@@ -382,10 +382,10 @@ class SearchHead extends Component<any, any> {
         value={this.state.consigneeOptions}
         style={{ width: '176px' }}
       >
-        <Option value="consigneeName">
+        <Option value="consigneeName" title={RCi18n({id:'Order.recipient'})}>
           <FormattedMessage id="Order.recipient" />
         </Option>
-        <Option value="consigneePhone">
+        <Option value="consigneePhone" title={RCi18n({id:'Order.recipientPhone'})}>
           <FormattedMessage id="Order.recipientPhone" />
         </Option>
       </Select>

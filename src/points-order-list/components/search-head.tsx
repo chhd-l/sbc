@@ -17,7 +17,8 @@ import {
   AuthWrapper,
   checkAuth,
   Headline,
-  SelectGroup
+  SelectGroup,
+  RCi18n
 } from 'qmkit';
 import { IList } from 'typings/globalType';
 
@@ -292,8 +293,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.buyerOptions}
         style={{ width: 100 }}
       >
-        <Option value="buyerName"><FormattedMessage id="Order.Clientname" /></Option>
-        <Option value="buyerAccount"><FormattedMessage id="Order.Clientaccounts" /></Option>
+        <Option value="buyerName" title={RCi18n({id:'Order.Clientname'})}><FormattedMessage id="Order.Clientname" /></Option>
+        <Option value="buyerAccount" title={RCi18n({id:'Order.Clientaccounts'})}><FormattedMessage id="Order.Clientaccounts" /></Option>
       </Select>
     );
   };
@@ -310,8 +311,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.goodsOptions}
         style={{ width: 100 }}
       >
-        <Option value="skuName"><FormattedMessage id="Order.Productname" /></Option>
-        <Option value="skuNo"><FormattedMessage id="Order.SKUcode" /></Option>
+        <Option value="skuName" title={RCi18n({id:'Order.Productname'})}><FormattedMessage id="Order.Productname" /></Option>
+        <Option value="skuNo" title={RCi18n({id:'Order.SKUcode'})}><FormattedMessage id="Order.SKUcode" /></Option>
       </Select>
     );
   };
@@ -328,8 +329,8 @@ export default class SearchHead extends Component<any, any> {
         value={this.state.receiverSelect}
         style={{ width: 110 }}
       >
-        <Option value="consigneeName"><FormattedMessage id="Order.recipient" /></Option>
-        <Option value="consigneePhone"><FormattedMessage id="Order.Recipientscell" /></Option>
+        <Option value="consigneeName" title={RCi18n({id:'Order.recipient'})}><FormattedMessage id="Order.recipient" /></Option>
+        <Option value="consigneePhone" title={RCi18n({id:'Order.Recipientscell'})}><FormattedMessage id="Order.Recipientscell" /></Option>
       </Select>
     );
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import {Relax} from 'plume2';
 import {Link} from 'react-router-dom';
 
-import {Spin} from 'antd';
+import {Spin, Row, Col} from 'antd';
 //import { fromJS } from 'immutable';
 
 import {AuthWrapper, cache, RCi18n, history, noop, util} from 'qmkit';
@@ -49,6 +49,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
       prescriberTradeAndItemTopView: '',
       prescriberTradeItemTopView: '',
       prescriberRecommentCodeUseView: '',
+      countByPrescriberIdView: [],
     };
   }
 
@@ -69,6 +70,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
       prescriberTradeAndItemTopView: any;
       prescriberTradeItemTopView: any;
       prescriberRecommentCodeUseView: any;
+      countByPrescriberIdView: any;
     };
   };
 
@@ -87,6 +89,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
     prescriberTradeAndItemTopView: 'prescriberTradeAndItemTopView',
     prescriberTradeItemTopView: 'prescriberTradeItemTopView',
     prescriberRecommentCodeUseView: 'prescriberRecommentCodeUseView',
+    countByPrescriberIdView: 'countByPrescriberIdView',
     cleanRedux: noop
   };
 
@@ -101,7 +104,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
   static getDerivedStateFromProps(nextProps, prevState) {
     const {
       tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView, conversionFunnelDashboardView,
-      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView
+      prescriberTradeTopView, prescriberTradeAndItemTopView, prescriberTradeItemTopView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView, countByPrescriberIdView
     } = nextProps.relaxProps;
     // 当传入的type发生变化的时候，更新state
     if (
@@ -117,7 +120,8 @@ class TodoItemsMyvet extends React.Component<any, any> {
       prescriberTradeTopView !== prevState.prescriberTradeTopView ||
       prescriberTradeAndItemTopView !== prevState.prescriberTradeAndItemTopView ||
       prescriberTradeItemTopView !== prevState.prescriberTradeItemTopView ||
-      prescriberRecommentCodeUseView !== prevState.prescriberRecommentCodeUseView
+      prescriberRecommentCodeUseView !== prevState.prescriberRecommentCodeUseView ||
+      countByPrescriberIdView !== prevState.countByPrescriberIdView
     ) {
       return {
         tradeCustomerView,
@@ -129,7 +133,8 @@ class TodoItemsMyvet extends React.Component<any, any> {
         trafficTrendDashboardView,
         conversionFunnelDashboardView,
         taskEmployeeStatisticsView,
-        prescriberRecommentCodeUseView
+        prescriberRecommentCodeUseView,
+        countByPrescriberIdView
       };
     }
 
@@ -150,7 +155,7 @@ class TodoItemsMyvet extends React.Component<any, any> {
   };
 
   render() {
-    const {loading, prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView} = this.props.relaxProps;
+    const {loading, prescriberTradeAndItemTopView, prescriberTradeTopView, prescriberTradeItemTopView, countByPrescriberIdView} = this.props.relaxProps;
     const {tradeCustomerView, goodsInfoTopView, prescriberTrendView, prescriberTopView, trafficDashboardView, transactionTrendView, trafficTrendDashboardView,
       conversionFunnelDashboardView, taskEmployeeStatisticsView, prescriberRecommentCodeUseView} = this.state;
     let loginInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
@@ -432,7 +437,30 @@ class TodoItemsMyvet extends React.Component<any, any> {
             </div>
           </div>
 
-          
+          <div className="item-btm space-between">
+            <div className="item-btm-m">
+              <div className="top-text space-between">
+                <span><FormattedMessage id="Home.recommendations"/></span>
+                <span></span>
+              </div>
+              {countByPrescriberIdView && countByPrescriberIdView.length > 0 ? (
+                <div className="seller">
+                  <Row gutter={[24, 20]}>
+                  {countByPrescriberIdView.map((item, key) => (
+                    <React.Fragment key={key}>
+                      <Col span={8}><div className="overFlowtext" title={item.prescriber}><FormattedMessage id="Home.sendby" values={{ val: item.prescriber }}/></div></Col>
+                      <Col span={4}><div style={{color:'#000',fontWeight:'bold'}}><CountUp end={item.reAmount} /></div></Col>
+                    </React.Fragment>
+                  ))}
+                  </Row>
+                </div>
+              ) : (
+                <div className="data-img">
+                  <img src={nodataImg} className="no-data-img"/>
+                </div>
+              )}
+            </div>
+          </div>
 
           
 

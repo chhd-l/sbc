@@ -104,8 +104,8 @@ function CreateAccount({ form, useOkta, onLogin }) {
               <Button loading={loading} type="primary" size="large" block onClick={handleLogin}>{RCi18n({id:'Login.log_in'})}</Button>
 
                <div className="text">
-                 Don&apos;t have an account?
-                 <span onClick={handleSignUp}>Get started here!</span>
+                 {RCi18n({id:"Login.donothaveaccount"})}
+                 <span onClick={handleSignUp}>{RCi18n({id:"Login.getstarted"})}</span>
                </div>
             
           </div>

@@ -1316,7 +1316,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } = this.state;
 
     /* 需要有多条产品数据，才能删除, 移到sp11上线 */
-    const canDeleteProduct = false && goodsInfo.length > 1;
+    const canDeleteProduct = goodsInfo.length > 1;
 
     const columns = [
       {
@@ -1342,7 +1342,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   : record.goodsName}
               </span>
             </div>
-            <span>
+            <span style={{ whiteSpace: 'nowrap' }}>
               {this.isShowSkuEdit ? (
                 <a onClick={() => this.showProductModal()} className="iconfont iconEdit " />
               ) : null}

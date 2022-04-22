@@ -444,7 +444,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDate !== originalParams.deliveryDate &&
       timeSlot !== originalParams.originalParams
     ) {
-      console.log('timeSlot:', timeSlot, originalParams);
+      // console.log('timeSlot:', timeSlot, originalParams);
       // timeSlot.join(',') !== originalParams.timeSlot.join(',')
       changeFieldArr.push('changeTimeSlot');
     }
@@ -1090,31 +1090,42 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList: any[] = res.context.timeSlots;
-        if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
-          timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
-          this.setState({
-            deliveryDateList: deliveryDateList,
-            timeSlotList: timeSlotList || [],
-            deliveryDate: deliveryDate
-              ? deliveryDate
-              : deliveryDateList[0] && deliveryDateList[0].date,
-            timeSlot: timeSlot
-              ? timeSlot
-              : deliveryDateList[0] &&
+        if (deliveryDateList.length > 0) {
+          if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
+            timeSlotList = deliveryDateList.find(
+              (item) => item.date == deliveryDate
+            )?.dateTimeInfos;
+            this.setState({
+              deliveryDateList: deliveryDateList,
+              timeSlotList: timeSlotList || [],
+              deliveryDate: deliveryDate
+                ? deliveryDate
+                : deliveryDateList[0] && deliveryDateList[0].date,
+              timeSlot: timeSlot
+                ? timeSlot
+                : deliveryDateList[0] &&
+                  deliveryDateList[0].dateTimeInfos[0].startTime +
+                    '-' +
+                    deliveryDateList[0].dateTimeInfos[0].endTime
+            });
+          } else {
+            this.setState({
+              deliveryDateList: deliveryDateList,
+              timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
+              deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
+              timeSlot:
+                deliveryDateList[0] &&
                 deliveryDateList[0].dateTimeInfos[0].startTime +
                   '-' +
                   deliveryDateList[0].dateTimeInfos[0].endTime
-          });
+            });
+          }
         } else {
           this.setState({
-            deliveryDateList: deliveryDateList,
-            timeSlotList: deliveryDateList[0].dateTimeInfos || [],
-            deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
-            timeSlot:
-              deliveryDateList[0] &&
-              deliveryDateList[0].dateTimeInfos[0].startTime +
-                '-' +
-                deliveryDateList[0].dateTimeInfos[0].endTime
+            deliveryDateList: [],
+            timeSlotList: [],
+            deliveryDate: null,
+            timeSlot: null
           });
         }
       }
@@ -1316,7 +1327,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     } = this.state;
 
     /* 需要有多条产品数据，才能删除, 移到sp11上线 */
-    const canDeleteProduct = false && goodsInfo.length > 1;
+    const canDeleteProduct = goodsInfo.length > 1;
 
     const columns = [
       {
@@ -1342,7 +1353,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   : record.goodsName}
               </span>
             </div>
-            <span>
+            <span style={{ whiteSpace: 'nowrap' }}>
               {this.isShowSkuEdit ? (
                 <a onClick={() => this.showProductModal()} className="iconfont iconEdit " />
               ) : null}

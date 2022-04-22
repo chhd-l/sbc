@@ -482,6 +482,7 @@ const index = () => {
                     format={format}
                     value={deliveryForm.cutOffTime ? moment(deliveryForm.cutOffTime, format) : null}
                     onChange={(time, timeString) => handleChange('cutOffTime', timeString)}
+                    getPopupContainer={(trigger) => trigger.parentNode}
                   ></TimePicker>
                   {!cutTimeOk ? (
                     <div className="error">

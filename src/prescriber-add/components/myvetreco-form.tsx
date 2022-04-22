@@ -340,7 +340,7 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
             </Form>
           </Spin>
         </Tabs.TabPane>
-        <Tabs.TabPane tab={RCi18n({id:"Prescriber.UserList"})} key="users">
+        <Tabs.TabPane tab={RCi18n({id:"Prescriber.UserList"})} key="users" disabled={!this.state.isEdit}>
           <UserList prescriberKeyId={this.props.prescriberId || this.state.clinic?.id} alreadyHasPrescriber={this.state.isEdit} />
         </Tabs.TabPane>
       </Tabs>

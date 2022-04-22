@@ -57,7 +57,7 @@ class UserList extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           let allRoles = res.context ? res.context.map((x) => x.roleName) : [];
           this.setState({
-            hasPrescriberRole: allRoles.includes('Prescriber')
+            hasPrescriberRole: Const.SITE_NAME === 'MYVETRECO' || allRoles.includes('Prescriber')
           });
         } else {
           message.error(res.message || (window as any).RCi18n({id:'Public.GetDataFailed'}));
@@ -308,7 +308,7 @@ class UserList extends Component<any, any> {
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-                {record.accountState === 0 ? (
+                {Const.SITE_NAME === 'MYVETRECO' ? null : record.accountState === 0 ? (
                   <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Disabled' })}>
                     <a onClick={() => this.disabledUser(record)} className="iconfont iconbtn-disable"></a>
                   </Tooltip>
@@ -337,11 +337,11 @@ class UserList extends Component<any, any> {
                   okText={RCi18n({ id: 'Prescriber.OK' })}
                   cancelText={RCi18n({ id: 'Prescriber.Cancel' })}
                 >
-                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Disabled' })}>
+                  <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Delete' })}>
                     <a className="iconfont iconDelete"></a>
                   </Tooltip>
                 </Popconfirm>
-                {record.accountState === 3 ? (
+                {Const.SITE_NAME === 'MYVETRECO' ? null : record.accountState === 3 ? (
                   <Tooltip placement="top" title={RCi18n({ id: 'Prescriber.Send' })}>
                     <a onClick={() => this.sendEmail(record)} className="iconfont iconemail"></a>
                   </Tooltip>
@@ -393,7 +393,7 @@ class UserList extends Component<any, any> {
                     style={{ width: 300 }}
                   />
                 </FormItem>
-                <FormItem>
+                {Const.SITE_NAME !== 'MYVETRECO' ? <FormItem>
                   <SelectGroup
                     defaultValue={RCi18n({id:"Prescriber.All"})}
                     label={RCi18n({ id: 'Prescriber.UserStatus' })}
@@ -422,7 +422,7 @@ class UserList extends Component<any, any> {
                       <FormattedMessage id="Prescriber.Disabled" />
                     </Option>
                   </SelectGroup>
-                </FormItem>
+                </FormItem> : null}
                 <Form.Item>
                   <Button
                     type="primary"

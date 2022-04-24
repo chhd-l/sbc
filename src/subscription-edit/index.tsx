@@ -23,6 +23,7 @@ import {
 } from '../task-manage-all-subscription/module/querySysDictionary';
 import { fromJS } from 'immutable';
 import { debug } from 'console';
+import { RadioChangeEvent } from 'antd/lib/radio';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -1177,7 +1178,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   // 选择配送类型
-  handleSelectDeliveryMethod = (e: any) => {
+  handleSelectDeliveryMethod = (e: RadioChangeEvent) => {
     const { deliveryList, pickupAddress } = this.state;
     this.setState({ tempolineApiError: '' });
     let value = e.target.value;

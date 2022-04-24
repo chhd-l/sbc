@@ -533,6 +533,9 @@ class OrderDetailTab extends React.Component<any, any> {
                 <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
               </p>
               <p>
+                <FormattedMessage id="PetOwner.PetOwnerName katakana" />: {detail.getIn(['buyer', 'firstNameKatakana'], '')} {detail.getIn(['buyer', 'lastNameKatakana'], '')}
+              </p>
+              <p>
                 <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
               <p>

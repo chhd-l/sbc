@@ -755,7 +755,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               style={{ display: 'flex', justifyContent: 'space-between' }}
               title={<FormattedMessage id="Subscription.detail" />}
             >
-              {sessionStorage.getItem('fromTaskToSubDetail') &&
+              {/* {sessionStorage.getItem('fromTaskToSubDetail') &&
               storeId === 123457907 &&
               sessionStorage.getItem('taskEventTriggerName') === '3DaysBeforeNextRefillOrder' ? (
                 <a
@@ -767,6 +767,18 @@ class SubscriptionDetail extends React.Component<any, any> {
                 >
                   <FormattedMessage id="task.editAllSubLink" />
                 </a>
+              ) : null} */}
+              {/* ru需要editAllSubscription */}
+              {subscriptionInfo.editAllSubscriptionFlag || storeId === 123457907 ? (
+                <Button
+                  style={{ textAlign: 'right' }}
+                  onClick={() => {
+                    sessionStorage.setItem('subscriptionNo', subscriptionId);
+                    history.push('/task/manage-all-subscription');
+                  }}
+                >
+                  <FormattedMessage id="task.editAllSubLink" />
+                </Button>
               ) : null}
             </Headline>
             <Row className="subscription-basic-info">
@@ -815,7 +827,9 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </p>
                 <p>
                   <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
-                  <span>{subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}</span>
+                  <span>
+                    {subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}
+                  </span>
                 </p>
                 <p>
                   <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}

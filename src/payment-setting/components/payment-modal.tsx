@@ -8,20 +8,22 @@ import * as webapi from '../webapi';
 import { SelectGroup, Const, noop, RCi18n } from 'qmkit';
 import List from '@/groupon-activity-list/component/list';
 import { Relax } from 'plume2';
+import { left } from '@antv/x6/lib/registry/port-layout/line';
 const { TabPane } = Tabs;
 
 const formItemLayout = {
   labelCol: {
-    span: 8
+    span: 8,
     // xs: { span: 24 },
     // sm: { span: 6 }
   },
   wrapperCol: {
-    span: 16
+    span: 16,
     // xs: { span: 24 },
     // sm: { span: 14 }
   }
 };
+
 @Relax
 class PaymentModal extends React.Component<any, any> {
   constructor(props) {
@@ -81,7 +83,9 @@ class PaymentModal extends React.Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     const { key, onFormChange, visible, saveLoading } = this.props.relaxProps;
+
     let paymentForm = this.props.relaxProps.paymentForm.toJS();
+
     return (
       <Modal
         afterClose={this.afterClose}
@@ -390,8 +394,8 @@ class PaymentModal extends React.Component<any, any> {
                           )}
                         </FormItem>
                       </Col>
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
+                      <Col span={24} className="newAddSwitch">
+                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabledPaymentmethod" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
                             initialValue: item.isOpen == 1
                           })(
@@ -410,6 +414,51 @@ class PaymentModal extends React.Component<any, any> {
                           )}
                         </FormItem>
                       </Col>
+                      {item.isOpen == 1 && (
+                        <Col span={24} className="newAddSwitch">
+                          <FormItem {...formItemLayout} label={<FormattedMessage id="displayCheckoutPage" />}>
+                            {getFieldDecorator(item.id + 'isDisplay', {
+                              initialValue: item.isDisplay == 1
+                            })(
+                              <Switch
+                                defaultChecked={item.isDisplay == 1}
+                                checked={item.isDisplay == 1}
+                                onChange={(value) => {
+                                  onFormChange({
+                                    id: key,
+                                    field: 'isDisplay',
+                                    value: value ? 1 : 0
+                                  });
+                                }}
+                              />
+                            )}
+                          </FormItem>
+                        </Col>
+                      )}
+                      {item.isOpen == 1 && item.code.includes('adyen_credit_card') && (
+                        <>
+                          <Col span={24} className="newAddSwitch capture">
+                            <FormItem {...formItemLayout} label={<FormattedMessage id="Capture payment after shipping" />}>
+                              {getFieldDecorator(item.id + 'isTwoStages', {
+                                initialValue: item.isTwoStages == 1
+                              })(
+                                <Switch
+                                  defaultChecked={item.isTwoStages == 1}
+                                  checked={item.isTwoStages == 1}
+                                  onChange={(value) => {
+                                    onFormChange({
+                                      id: key,
+                                      field: 'isTwoStages',
+                                      value: value ? 1 : 0
+                                    });
+                                  }}
+                                />
+                              )}
+                            </FormItem>
+                          </Col>
+                          <div className='newAddSwitchTips'>(<FormattedMessage id='We also need to enable "authorized" on Adyen portal' />)</div>
+                        </>
+                      )}
                       {item.isOpen == 1 && (
                         <Col span={24}>
                           <FormItem
@@ -462,8 +511,8 @@ class PaymentModal extends React.Component<any, any> {
                         formKey={key}
                       />
 
-                      <Col span={24}>
-                        <FormItem {...formItemLayout} label={<FormattedMessage id="enabled" />}>
+                      <Col span={24} className="newAddSwitch">
+                        <FormItem {...formItemLayout} label={<FormattedMessage id="Enabled this payment method" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
                             initialValue: item.isOpen == 1
                           })(
@@ -480,6 +529,27 @@ class PaymentModal extends React.Component<any, any> {
                             />
                           )}
                         </FormItem>
+                        {item.isOpen == 1 && (
+                          <Col span={24} className="newAddSwitch">
+                            <FormItem {...formItemLayout} label={<FormattedMessage id="Display on checkout page" />}>
+                              {getFieldDecorator(item.id + 'isDisplay', {
+                                initialValue: item.isDisplay == 1
+                              })(
+                                <Switch
+                                  defaultChecked={item.isDisplay == 1}
+                                  checked={item.isDisplay == 1}
+                                  onChange={(value) => {
+                                    onFormChange({
+                                      id: key,
+                                      field: 'isDisplay',
+                                      value: value ? 1 : 0
+                                    });
+                                  }}
+                                />
+                              )}
+                            </FormItem>
+                          </Col>
+                        )}
                         {item.isOpen == 1 && (
                           <Col span={24}>
                             <FormItem
@@ -592,10 +662,12 @@ class PaymentModal extends React.Component<any, any> {
             payPspItemSaveRequest: Object.assign({
               id:
                 payPspItemVOList.pspConfigSupplierVO &&
-                payPspItemVOList.pspConfigSupplierVO.pspItemId
+                  payPspItemVOList.pspConfigSupplierVO.pspItemId
                   ? payPspItemVOList.pspConfigSupplierVO.pspItemId
                   : payPspItemVOList.id,
               isOpen: payPspItemVOList.isOpen,
+              isDisplay: payPspItemVOList.isDisplay,
+              isTwoStages: payPspItemVOList.isTwoStages,
               maxAmount: payPspItemVOList.maxAmount,
               pspItemCardTypeSaveRequestList: payPspItemVOList.payPspItemCardTypeVOList,
               supportSubscription: payPspItemVOList.supportSubscription

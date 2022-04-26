@@ -2,9 +2,10 @@ import * as React from 'react';
 import { fromJS } from 'immutable';
 
 import { Form, Input, Select, Button, Tree } from 'antd';
-import { TreeSelectGroup, SelectGroup, RCi18n } from 'qmkit';
+import { TreeSelectGroup, SelectGroup, RCi18n, cache } from 'qmkit';
 
 import * as webapi from './webapi';
+import { FormattedMessage } from 'react-intl';
 
 const FormItem = Form.Item;
 const TreeNode = Tree.TreeNode;
@@ -25,7 +26,9 @@ export default class SearchForm extends React.Component<any, any> {
         brandId: 0,
         cateId: 0,
         likeValue: '',
-        likeGoodsName: ''
+        likeGoodsName: '',
+        promotions: 'club',
+        subscriptionStatus: 1
       },
       cateIdDisabled: false,
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
@@ -43,7 +46,9 @@ export default class SearchForm extends React.Component<any, any> {
           brandId: 0,
           cateId: 0,
           likeValue: '',
-          likeGoodsName: ''
+          likeGoodsName: '',
+          promotions: 'club',
+          subscriptionStatus: 1
         }
       });
     }
@@ -81,6 +86,7 @@ export default class SearchForm extends React.Component<any, any> {
   render() {
     const { searchParams } = this.state;
     const { cates, brands, cateIdDisabled } = this.state;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
       <div id="modal-head">
@@ -136,18 +142,43 @@ export default class SearchForm extends React.Component<any, any> {
               ))}
             </SelectGroup>
           </FormItem>
-          {/* <FormItem>
-            <SelectGroup getPopupContainer={() => document.getElementById('modal-head')} label={RCi18n({id:'Product.OrderType'})} dropdownStyle={{ zIndex: 1053 }} onChange={(val) => this.paramsOnChange('OrderType', val)} value={searchParams.brandId.toString()}>
-              <Option key="0" value="0">
-                All
-              </Option>
-              {brands.map((v) => (
-                <Option key={v.brandId} value={v.brandId + ''}>
-                  {v.brandName}
-                </Option>
-              ))}
-            </SelectGroup>
-          </FormItem> */}
+          {/* 法国、俄罗斯、土耳其需要subscriptionStatus和subscriptionType筛选条件 */}
+          {storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911 ? null : (
+            <>
+              <FormItem>
+                <SelectGroup
+                  getPopupContainer={() => document.getElementById('modal-head')}
+                  label={<FormattedMessage id="product.subscriptionStatus" />}
+                  dropdownStyle={{ zIndex: 1053 }}
+                  onChange={(val) => this.paramsOnChange('subscriptionStatus', val)}
+                  value={searchParams.subscriptionStatus}
+                >
+                  <Option value={1}>
+                    <FormattedMessage id="Product.Y" />
+                  </Option>
+                  <Option value={0}>
+                    <FormattedMessage id="Product.N" />
+                  </Option>
+                </SelectGroup>
+              </FormItem>
+              <FormItem>
+                <SelectGroup
+                  getPopupContainer={() => document.getElementById('modal-head')}
+                  label={RCi18n({ id: 'Product.subscriptionType' })}
+                  dropdownStyle={{ zIndex: 1053 }}
+                  onChange={(val) => this.paramsOnChange('promotions', val)}
+                  value={searchParams.promotions.toString()}
+                >
+                  <Option value="autoship">
+                    <FormattedMessage id="Product.Auto ship" />
+                  </Option>
+                  <Option value="club">
+                    <FormattedMessage id="Product.Club" />
+                  </Option>
+                </SelectGroup>
+              </FormItem>
+            </>
+          )}
 
           <FormItem>
             <Button

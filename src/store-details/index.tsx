@@ -342,10 +342,18 @@ class StoreDetail extends React.Component<any, any> {
                   <div style={{ height: '66px' }}> </div>
                 </Col>
                 <Col span={12}>
-                  <FormItem label={<FormattedMessage id="Setting.Tax" />}>
+                  <FormItem label={<FormattedMessage id="Setting.taxRate" />}>
                     {getFieldDecorator('taxRate', {
-                      initialValue: storeInfo.taxRate ?? ''
-                    })(<Input onChange={this.modifyChangedStatus} />)}
+                      initialValue: storeInfo.taxRate ?? 0,
+                      rules: [
+                        {
+                          pattern: /^[0-9]{0,}$/,
+                          message: 'Please input a number with %'
+                        }
+                      ]
+                    })(
+                      <Input type="number" addonAfter={'%'} onChange={this.modifyChangedStatus} />
+                    )}
                   </FormItem>
                 </Col>
               </Row>

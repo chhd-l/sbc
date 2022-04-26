@@ -1663,7 +1663,8 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                                 {/* 俄罗斯才有价格总记 */}
                                 {storeId === 123457907 ? (
                                   <span style={{ marginLeft: '50px' }}>
-                                    Total: {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''}{' '}
+                                    <FormattedMessage id="Subscription.Total" />
+                                    {':'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''}{' '}
                                     {this.TotalPrice}
                                   </span>
                                 ) : null}

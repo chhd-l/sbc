@@ -377,9 +377,15 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {subscriptionInfo.subscriptionType == 'Individualization' ? null : (
-              <p style={{ textDecoration: 'line-through' }}>
-                {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
-              </p>
+              <>
+                {storeId === 123457919 &&
+                this.getSubscriptionPrice(record.originalPrice) ===
+                  this.getSubscriptionPrice(+record.subscribePrice) ? null : (
+                  <p style={{ textDecoration: 'line-through' }}>
+                    {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
+                  </p>
+                )}
+              </>
             )}
             <p>
               {currencySymbol + ' '}

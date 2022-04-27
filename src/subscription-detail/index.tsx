@@ -873,21 +873,24 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </span>
                 </div>
 
-                <div className="flex-between">
-                  {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
-                  <span>
-                    <FormattedMessage id="Order.subscriptionDiscount" />
-                  </span>
-                  <span style={styles.priceStyle}>
-                    {currencySymbol +
-                      '  -' +
-                      this.getSubscriptionPrice(
-                        this.state.subscriptionDiscountPrice
-                          ? this.state.subscriptionDiscountPrice
-                          : 0
-                      )}
-                  </span>
-                </div>
+                {storeId === 123457919 &&
+                goodsInfo[0]?.originalPrice === goodsInfo[0]?.subscribePrice ? null : (
+                  <div className="flex-between">
+                    {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
+                    <span>
+                      <FormattedMessage id="Order.subscriptionDiscount" />
+                    </span>
+                    <span style={styles.priceStyle}>
+                      {currencySymbol +
+                        '-' +
+                        this.getSubscriptionPrice(
+                          this.state.subscriptionDiscountPrice
+                            ? this.state.subscriptionDiscountPrice
+                            : 0
+                        )}
+                    </span>
+                  </div>
+                )}
 
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">

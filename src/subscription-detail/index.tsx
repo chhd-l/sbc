@@ -775,7 +775,7 @@ class SubscriptionDetail extends React.Component<any, any> {
                 </a>
               ) : null} */}
               {/* ru需要editAllSubscription */}
-              {subscriptionInfo.editAllSubscriptionFlag || storeId === 123457907 ? (
+              {subscriptionInfo.editAllSubscriptionFlag && storeId === 123457907 ? (
                 <Button
                   style={{ textAlign: 'right' }}
                   onClick={() => {

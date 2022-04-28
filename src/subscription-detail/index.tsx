@@ -377,9 +377,15 @@ class SubscriptionDetail extends React.Component<any, any> {
         render: (text, record) => (
           <div>
             {subscriptionInfo.subscriptionType == 'Individualization' ? null : (
-              <p style={{ textDecoration: 'line-through' }}>
-                {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
-              </p>
+              <>
+                {storeId === 123457919 &&
+                this.getSubscriptionPrice(record.originalPrice) ===
+                  this.getSubscriptionPrice(+record.subscribePrice) ? null : (
+                  <p style={{ textDecoration: 'line-through' }}>
+                    {currencySymbol + this.getSubscriptionPrice(record.originalPrice)}
+                  </p>
+                )}
+              </>
             )}
             <p>
               {currencySymbol + ' '}
@@ -755,7 +761,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               style={{ display: 'flex', justifyContent: 'space-between' }}
               title={<FormattedMessage id="Subscription.detail" />}
             >
-              {sessionStorage.getItem('fromTaskToSubDetail') &&
+              {/* {sessionStorage.getItem('fromTaskToSubDetail') &&
               storeId === 123457907 &&
               sessionStorage.getItem('taskEventTriggerName') === '3DaysBeforeNextRefillOrder' ? (
                 <a
@@ -767,6 +773,18 @@ class SubscriptionDetail extends React.Component<any, any> {
                 >
                   <FormattedMessage id="task.editAllSubLink" />
                 </a>
+              ) : null} */}
+              {/* ru需要editAllSubscription */}
+              {subscriptionInfo.editAllSubscriptionFlag || storeId === 123457907 ? (
+                <Button
+                  style={{ textAlign: 'right' }}
+                  onClick={() => {
+                    sessionStorage.setItem('subscriptionNo', subscriptionId);
+                    history.push('/task/manage-all-subscription');
+                  }}
+                >
+                  <FormattedMessage id="task.editAllSubLink" />
+                </Button>
               ) : null}
             </Headline>
             <Row className="subscription-basic-info">
@@ -814,6 +832,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <span>{subscriptionInfo.customerName}</span>
                 </p>
                 <p>
+                  <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
+                  <span>
+                    {subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}
+                  </span>
+                </p>
+                <p>
                   <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
                   <span>{subscriptionInfo.customerAccount}</span>
                 </p>
@@ -849,21 +873,24 @@ class SubscriptionDetail extends React.Component<any, any> {
                   </span>
                 </div>
 
-                <div className="flex-between">
-                  {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
-                  <span>
-                    <FormattedMessage id="Order.subscriptionDiscount" />
-                  </span>
-                  <span style={styles.priceStyle}>
-                    {currencySymbol +
-                      '  -' +
-                      this.getSubscriptionPrice(
-                        this.state.subscriptionDiscountPrice
-                          ? this.state.subscriptionDiscountPrice
-                          : 0
-                      )}
-                  </span>
-                </div>
+                {storeId === 123457919 &&
+                goodsInfo[0]?.originalPrice === goodsInfo[0]?.subscribePrice ? null : (
+                  <div className="flex-between">
+                    {/* <span>{this.state.promotionDesc ? this.state.promotionDesc : 'Promotion'}</span> */}
+                    <span>
+                      <FormattedMessage id="Order.subscriptionDiscount" />
+                    </span>
+                    <span style={styles.priceStyle}>
+                      {currencySymbol +
+                        '-' +
+                        this.getSubscriptionPrice(
+                          this.state.subscriptionDiscountPrice
+                            ? this.state.subscriptionDiscountPrice
+                            : 0
+                        )}
+                    </span>
+                  </div>
+                )}
 
                 {this.state.promotionVOList.map((pvo, idx) => (
                   <div key={idx} className="flex-between">

@@ -23,6 +23,7 @@ import {
 } from '../task-manage-all-subscription/module/querySysDictionary';
 import { fromJS } from 'immutable';
 import { debug } from 'console';
+import { RadioChangeEvent } from 'antd/lib/radio';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -130,7 +131,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       tempolineApiError: '',
       productModalVisible: false,
       selectedSkuIds: [],
-      selectedRows: []
+      selectedRows: [],
+      errvisible: false
     };
   }
 
@@ -202,7 +204,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             consumerType: subscriptionDetail.customerType,
             phoneNumber: subscriptionDetail.customerPhone,
             nextDeliveryTime: subscriptionDetail.nextDeliveryTime,
-            customerId: subscriptionDetail.customerId
+            customerId: subscriptionDetail.customerId,
+            firstNameKatakana: subscriptionDetail.firstNameKatakana,
+            lastNameKatakana: subscriptionDetail.lastNameKatakana
           };
           const countryArr = await getCountrySubFrequency();
           const frequencyList =
@@ -444,7 +448,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryDate !== originalParams.deliveryDate &&
       timeSlot !== originalParams.originalParams
     ) {
-      console.log('timeSlot:', timeSlot, originalParams);
+      // console.log('timeSlot:', timeSlot, originalParams);
       // timeSlot.join(',') !== originalParams.timeSlot.join(',')
       changeFieldArr.push('changeTimeSlot');
     }
@@ -1090,31 +1094,42 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
         let deliveryDateList: any[] = res.context.timeSlots;
-        if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
-          timeSlotList = deliveryDateList.find((item) => item.date == deliveryDate)?.dateTimeInfos;
-          this.setState({
-            deliveryDateList: deliveryDateList,
-            timeSlotList: timeSlotList || [],
-            deliveryDate: deliveryDate
-              ? deliveryDate
-              : deliveryDateList[0] && deliveryDateList[0].date,
-            timeSlot: timeSlot
-              ? timeSlot
-              : deliveryDateList[0] &&
+        if (deliveryDateList.length > 0) {
+          if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
+            timeSlotList = deliveryDateList.find(
+              (item) => item.date == deliveryDate
+            )?.dateTimeInfos;
+            this.setState({
+              deliveryDateList: deliveryDateList,
+              timeSlotList: timeSlotList || [],
+              deliveryDate: deliveryDate
+                ? deliveryDate
+                : deliveryDateList[0] && deliveryDateList[0].date,
+              timeSlot: timeSlot
+                ? timeSlot
+                : deliveryDateList[0] &&
+                  deliveryDateList[0].dateTimeInfos[0].startTime +
+                    '-' +
+                    deliveryDateList[0].dateTimeInfos[0].endTime
+            });
+          } else {
+            this.setState({
+              deliveryDateList: deliveryDateList,
+              timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
+              deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
+              timeSlot:
+                deliveryDateList[0] &&
                 deliveryDateList[0].dateTimeInfos[0].startTime +
                   '-' +
                   deliveryDateList[0].dateTimeInfos[0].endTime
-          });
+            });
+          }
         } else {
           this.setState({
-            deliveryDateList: deliveryDateList,
-            timeSlotList: deliveryDateList[0].dateTimeInfos || [],
-            deliveryDate: deliveryDateList[0] && deliveryDateList[0].date,
-            timeSlot:
-              deliveryDateList[0] &&
-              deliveryDateList[0].dateTimeInfos[0].startTime +
-                '-' +
-                deliveryDateList[0].dateTimeInfos[0].endTime
+            deliveryDateList: [],
+            timeSlotList: [],
+            deliveryDate: null,
+            timeSlot: null
           });
         }
       }
@@ -1164,7 +1179,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   // 选择配送类型
-  handleSelectDeliveryMethod = (e: any) => {
+  handleSelectDeliveryMethod = (e: RadioChangeEvent) => {
     const { deliveryList, pickupAddress } = this.state;
     this.setState({ tempolineApiError: '' });
     let value = e.target.value;
@@ -1186,16 +1201,25 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
+    const { subscriptionId, goodsInfo, subscriptionType } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
+    // 法国、俄罗斯、土耳其需要选择错误提示
+    if (storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911) {
+      if (selectedRows?.toJS()[0].promotions?.toLowerCase() !== subscriptionType?.toLowerCase()) {
+        this.setState({
+          errvisible: true
+        });
+        return;
+      }
+    }
 
-    const { subscriptionId, goodsInfo } = this.state;
+    console.log('selectedRows?.toJS()', selectedRows?.toJS());
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows
     });
     this.setState({ loading: true });
-
     let params = {
       subscribeId: subscriptionId,
       deleteSkuId: goodsInfo[0]?.skuId,
@@ -1311,7 +1335,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
       productModalVisible,
       selectedSkuIds,
-      selectedRows
+      selectedRows,
+      errvisible
       // operationLog
     } = this.state;
 
@@ -1958,6 +1983,12 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   <p>
                     <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
                     <span>{subscriptionInfo.consumer}</span>
+                  </p>
+                  <p>
+                    <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
+                    <span>
+                      {subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}
+                    </span>
                   </p>
                   <p>
                     <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
@@ -3005,6 +3036,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           onOkBackFun={this.skuSelectedBackFun}
           onCancelBackFun={this.closeProductModal}
         />
+        <Modal
+          closable={false}
+          maskClosable={false}
+          mask={false}
+          width={455}
+          visible={errvisible}
+          footer={null}
+        >
+          <p style={{ fontSize: '18px' }}>This product cannot be used for Club Subscription.</p>
+          <br />
+          <p style={{ fontSize: '18px' }}>Please, choose another one.</p>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.setState({
+                  errvisible: false
+                });
+              }}
+            >
+              OK
+            </Button>
+          </div>
+        </Modal>
       </div>
     );
   }

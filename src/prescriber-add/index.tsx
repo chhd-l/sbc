@@ -35,16 +35,16 @@ export default class ClinicList extends Component<any, any> {
     // }
     return (
       <div>
-        {prescriberId ? null : this.props.match.params.id ? (
+        {prescriberId && Const.SITE_NAME !== 'MYVETRECO' ? null : this.props.match.params.id ? (
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>
-              <FormattedMessage id="Prescriber.EditPrescriber" />
+              <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.EditClinic" : "Prescriber.EditPrescriber"} />
             </Breadcrumb.Item>
           </BreadCrumb>
         ) : (
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>
-              <FormattedMessage id="Prescriber.NewPrescriber" />
+              <FormattedMessage id={Const.SITE_NAME === 'MYVETRECO' ? "Clinic.AddClinic" : "Prescriber.NewPrescriber"} />
             </Breadcrumb.Item>
           </BreadCrumb>
         )}

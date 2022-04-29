@@ -1007,6 +1007,10 @@ const routes = [
     asyncComponent: () => import('./product-sales-setting')
   },
   {
+    path: '/product-es-setting',
+    asyncComponent: () => import('./product-es-setting')
+  },
+  {
     path: '/product-finder-details/:id',
     asyncComponent: () => import('./product-finder-details')
   },

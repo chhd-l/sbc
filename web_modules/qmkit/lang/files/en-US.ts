@@ -3671,7 +3671,7 @@ export default {
   "product.productDetail": "Product detail",
   "Product.ProductFinderDetails": "Product Finder Details",
   "Product.ProductFinderList": "Product Finder List",
-  "Product.ProductFinderNO": "Product Finder NO",
+  "Product.ProductFinderNO": "Product Finder NO.",
   "Product.ProductFinderNumber": "Product Finder Number",
   "Product.Productimage": "Product image",
   "Product.productImage": "Product image",
@@ -5627,4 +5627,5 @@ export default {
   "Home.recommendations": "Recommendations",
   "Home.sendby": "Send by {val}",
   "Product.router": "Router",
+  "PetOwner.PetOwnerName katakana": "Pet owner name (Fariguna)",
 };

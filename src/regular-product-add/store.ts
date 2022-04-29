@@ -73,6 +73,8 @@ export default class AppStore extends Store {
     if (__DEV__) {
       window['_store'] = this;
     }
+    //初始化时修改缓存中的description, 避免其它product edit page使用
+    _tempGoodsDescriptionDetailList = {};
   }
 
   bindActor() {

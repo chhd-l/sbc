@@ -39,7 +39,7 @@ const antdMultiLang = {
   ru: ru,
   tr: tr,
   es: es,
-  sv:sv,
+  'sv-SE':sv,
   'bg-BG':bg,
   "hr-HR":hr,
   "cs-CZ":cz,

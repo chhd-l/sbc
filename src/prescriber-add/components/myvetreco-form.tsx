@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, Select, Spin, Row, Col, Button, message } from 'antd';
+import { Form, Input, Select, Spin, Row, Col, Button, message, Tabs } from 'antd';
 import { RCi18n, cache, Headline, Const, history } from 'qmkit';
 import FileItem from '@/basic-setting/myvetreco/fileitem';
 import DebounceSelect from '@/myvetreco-logins/create-store/components/debounceSelect';
+import UserList from './user-list';
 import * as webapi from '../webapi';
 import { FormattedMessage } from 'react-intl';
 
@@ -16,25 +17,26 @@ type TClinicType = {
 
 type TClinic = {
   id: string;
-  prescriberId: string;
-  prescriberName: string;
-  prescriberType: string;
-  primaryCity: string;
-  primaryRegion: string; //street name
-  primaryDistrict: string; //house number
-  primaryZip: string; //post code
-  email: string;
-  phone: string;
-  operatingPeriod: string;
-  prescriberIntroduction: string;
-  headImg: string;
+  prescriberId?: string;
+  prescriberName?: string;
+  prescriberType?: string;
+  primaryCity?: string;
+  primaryRegion?: string; //street name
+  primaryDistrict?: string; //house number
+  primaryZip?: string; //post code
+  email?: string;
+  phone?: string;
+  operatingPeriod?: string;
+  prescriberIntroduction?: string;
+  headImg?: string;
 };
 
 type IState = {
   clinicTypeList: TClinicType[];
   clinic?: TClinic;
   loading: boolean;
-  roleId?: number;
+  activeKey: string;
+  isEdit: boolean;
 };
 
 interface IProps extends FormComponentProps {
@@ -62,7 +64,8 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
       loading: false,
       clinicTypeList: [],
       clinic: null,
-      roleId: null
+      activeKey: 'basic',
+      isEdit: this.props.pageType === 'edit'
     }
   }
 
@@ -70,8 +73,6 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
     this.queryClinicsDictionary();
     if (this.props.pageType === 'edit') {
       this.getDetail(this.props.prescriberId);
-    } else {
-      this.getSystemRole();
     }
   }
 
@@ -85,13 +86,6 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
         });
       });
     }
-  };
-
-  getSystemRole = async () => {
-    const { res: { context: roleList } } = await webapi.getAllRoles();
-    this.setState({
-      roleId: ((roleList || []).find(x => x.roleName === 'Admin') ?? {})['roleInfoId'] ?? 0
-    });
   };
 
   queryClinicsDictionary = async () => {
@@ -142,7 +136,7 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
     this.props.form.validateFields(null, (err, values) => {
       if (!err) {
         this.setState({ loading: true });
-        const handler = this.props.pageType === 'edit' ? webapi.updateClinic : webapi.addClinic;
+        const handler = this.state.isEdit ? webapi.updateClinic : webapi.addClinic;
         handler({
           ...(this.state.clinic ?? {}),
           ...values,
@@ -150,24 +144,26 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
           headImg: values.logo[0]['url']
         }).then(data => {
           if (data.res.code === Const.SUCCESS_CODE) {
-            if (this.props.pageType === 'create' && this.state.roleId) {
-              webapi.addUser({
-                employeeName: values['prescriberName'],
-                email: values.email,
-                prescriberIds: [data.res.context.id],
-                roleIdList: [this.state.roleId],
-                accountState: 0
-              });
-            }
             message.success(RCi18n({id:'Prescriber.OperateSuccessfully'}));
-            history.push('/prescriber');
-          } else {
-            this.setState({ loading: false });
+            this.setState({
+              clinic: {
+                id: data.res.context.id
+              },
+              isEdit: true,
+              activeKey: 'users'
+            });
           }
+          this.setState({ loading: false });
         }).catch(() => {
           this.setState({ loading: false });
         });
       }
+    });
+  };
+
+  changeTab = (key: string) => {
+    this.setState({
+      activeKey: key
     });
   };
 
@@ -185,162 +181,169 @@ export default Form.create<IProps>()(class MyVetForm extends React.Component<IPr
     const clinicDomain = sessionStorage.getItem(cache.DOMAINNAME) || '';
 
     return (
-      <Spin spinning={this.state.loading}>
-        <Headline title={this.props.pageType === 'edit' ? <FormattedMessage id="Clinic.EditClinic"/> : <FormattedMessage id="Clinic.AddClinic"/>} />
-        <Form layout="horizontal">
-          <Row>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicId"/>} {...formItemLayout1}>
-                {getFieldDecorator('prescriberId', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(
-                  <Input />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicName"/>} {...formItemLayout1}>
-                {getFieldDecorator('prescriberName', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(
-                  <Input />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicType"/>} {...formItemLayout1}>
-                {getFieldDecorator('prescriberType', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(
-                  <Select>
-                    {this.state.clinicTypeList.map((item) => (
-                      <Option value={item.valueEn} key={item.id}>
-                        {item.name}
-                      </Option>
-                    ))}
-                  </Select>
-                )}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicDomain"/>} {...formItemLayout1} required>
-                <Input disabled value={clinicDomain} />
-              </FormItem>
-            </Col>
-          </Row>
-          <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicAddr"/>}</b></Col></Row>
-          <Row>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="PetOwner.City"/>} {...formItemLayout2}>
-                {getFieldDecorator('cityId', {
-                  rules: [
-                    {
-                      required: true,
-                      validator: (rule, value, callback) => {
-                        if (!value || !value.key) {
-                          callback(RCi18n({id:"PetOwner.ThisFieldIsRequired"}));
+      <Tabs activeKey={this.state.activeKey} onChange={this.changeTab}>
+        <Tabs.TabPane tab={RCi18n({id:"PetOwner.BasicInformation"})} key="basic">
+          <Spin spinning={this.state.loading}>
+            <Headline title={this.state.isEdit ? <FormattedMessage id="Clinic.EditClinic"/> : <FormattedMessage id="Clinic.AddClinic"/>} />
+            <Form layout="horizontal">
+              <Row>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicId"/>} {...formItemLayout1}>
+                    {getFieldDecorator('prescriberId', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(
+                      <Input />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicName"/>} {...formItemLayout1}>
+                    {getFieldDecorator('prescriberName', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(
+                      <Input />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicType"/>} {...formItemLayout1}>
+                    {getFieldDecorator('prescriberType', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(
+                      <Select>
+                        {this.state.clinicTypeList.map((item) => (
+                          <Option value={item.valueEn} key={item.id}>
+                            {item.name}
+                          </Option>
+                        ))}
+                      </Select>
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicDomain"/>} {...formItemLayout1} required>
+                    <Input disabled value={clinicDomain} />
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicAddr"/>}</b></Col></Row>
+              <Row>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="PetOwner.City"/>} {...formItemLayout2}>
+                    {getFieldDecorator('cityId', {
+                      rules: [
+                        {
+                          required: true,
+                          validator: (rule, value, callback) => {
+                            if (!value || !value.key) {
+                              callback(RCi18n({id:"PetOwner.ThisFieldIsRequired"}));
+                            }
+                            callback();
+                          }
                         }
-                        callback();
-                      }
-                    }
-                  ],
-                  initialValue: {key:'',value:'',label:''}
-                })(
-                  <DebounceSelect
-                    size="default"
-                    placeholder=""
-                    fetchOptions={fetchCityList}
-                    style={{
-                      width: '100%',
-                    }}
-                  />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="Store.street"/>} {...formItemLayout2}>
-                {getFieldDecorator('primaryRegion', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(
-                  <Input />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="Store.housenumber"/>} {...formItemLayout2}>
-                {getFieldDecorator('primaryDistrict', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(
-                  <Input />
-                )}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="Store.postcode"/>} {...formItemLayout2}>
-                {getFieldDecorator('primaryZip', {
-                  rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: `${RCi18n({id:"PetOwner.theCorrectPostCode"})}: 1234 AB` }],
-                })(
-                  <Input />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="PetOwner.Email"/>} {...formItemLayout2}>
-                {getFieldDecorator('email', {
-                  rules:[
-                    { required: true, type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={12}>
-              <FormItem label={<FormattedMessage id="PetOwner.Phone number"/>} {...formItemLayout2}>
-                {getFieldDecorator('phone', {
-                  rules:[
-                    { required: true, pattern: /^\+31[0-9]{9}$/, message: `${RCi18n({id:"inputPhoneNumberTip2"})} +31xxxxxxxxx` }
-                  ]
-                })(
-                  <Input maxLength={12} onChange={this.onChangePhoneNumber} />
-                )}
-              </FormItem>
-            </Col>
-          </Row>
-          <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicIntro"/>}</b></Col></Row>
-          <Row>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Setting.openingHours"/>} {...formItemLayout1} extra={<div style={{color:'#999'}}><FormattedMessage id="Clinic.OpenTip"/></div>}>
-                {getFieldDecorator('operatingPeriod', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicIntroduction"/>} {...formItemLayout1}>
-                {getFieldDecorator('prescriberIntroduction', {
-                  rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(<Input.TextArea />)}
-              </FormItem>
-            </Col>
-            <Col span={24}>
-              <FormItem label={<FormattedMessage id="Clinic.ClinicLogo"/>} {...formItemLayout1} extra={<div style={{color:'#999'}}>
-              <div>Allowed formats: JPEG, JPG, PNG, GIF</div>
-              <div>Maximum allowed size: 2 MB</div>
-            </div>}>
-                {getFieldDecorator('logo', {
-                  rules: [{ required: true, type: 'array', min: 1, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
-                })(<FileItem />)}
-              </FormItem>
-            </Col>
-            <Col span={18} offset={4}>
-              <Button type="primary" onClick={this.handleSave}>{<FormattedMessage id="Setting.Confirm"/>}</Button>
-            </Col>
-          </Row>
-        </Form>
-      </Spin>
+                      ],
+                      initialValue: {key:'',value:'',label:''}
+                    })(
+                      <DebounceSelect
+                        size="default"
+                        placeholder=""
+                        fetchOptions={fetchCityList}
+                        style={{
+                          width: '100%',
+                        }}
+                      />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="Store.street"/>} {...formItemLayout2}>
+                    {getFieldDecorator('primaryRegion', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(
+                      <Input />
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="Store.housenumber"/>} {...formItemLayout2}>
+                    {getFieldDecorator('primaryDistrict', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(
+                      <Input />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="Store.postcode"/>} {...formItemLayout2}>
+                    {getFieldDecorator('primaryZip', {
+                      rules: [{ required: true, pattern: /^[0-9]{4}\s[A-Za-z]{2}$/, message: `${RCi18n({id:"PetOwner.theCorrectPostCode"})}: 1234 AB` }],
+                    })(
+                      <Input />
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="PetOwner.Email"/>} {...formItemLayout2}>
+                    {getFieldDecorator('email', {
+                      rules:[
+                        { required: true, type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={12}>
+                  <FormItem label={<FormattedMessage id="PetOwner.Phone number"/>} {...formItemLayout2}>
+                    {getFieldDecorator('phone', {
+                      rules:[
+                        { required: true, pattern: /^\+31[0-9]{9}$/, message: `${RCi18n({id:"inputPhoneNumberTip2"})} +31xxxxxxxxx` }
+                      ]
+                    })(
+                      <Input maxLength={12} onChange={this.onChangePhoneNumber} />
+                    )}
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row><Col span={4} offset={2} style={{fontSize:16}}><b>{<FormattedMessage id="Clinic.ClinicIntro"/>}</b></Col></Row>
+              <Row>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Setting.openingHours"/>} {...formItemLayout1} extra={<div style={{color:'#999'}}><FormattedMessage id="Clinic.OpenTip"/></div>}>
+                    {getFieldDecorator('operatingPeriod', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicIntroduction"/>} {...formItemLayout1}>
+                    {getFieldDecorator('prescriberIntroduction', {
+                      rules: [{ required: true, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(<Input.TextArea />)}
+                  </FormItem>
+                </Col>
+                <Col span={24}>
+                  <FormItem label={<FormattedMessage id="Clinic.ClinicLogo"/>} {...formItemLayout1} extra={<div style={{color:'#999'}}>
+                  <div>Allowed formats: JPEG, JPG, PNG, GIF</div>
+                  <div>Maximum allowed size: 2 MB</div>
+                </div>}>
+                    {getFieldDecorator('logo', {
+                      rules: [{ required: true, type: 'array', min: 1, message: RCi18n({id:'PetOwner.ThisFieldIsRequired'}) }]
+                    })(<FileItem />)}
+                  </FormItem>
+                </Col>
+                <Col span={18} offset={4}>
+                  <Button type="primary" onClick={this.handleSave}>{<FormattedMessage id="Setting.Next"/>}</Button>
+                </Col>
+              </Row>
+            </Form>
+          </Spin>
+        </Tabs.TabPane>
+        <Tabs.TabPane tab={RCi18n({id:"Prescriber.UserList"})} key="users" disabled={!this.state.isEdit}>
+          <UserList prescriberKeyId={this.props.prescriberId || this.state.clinic?.id} alreadyHasPrescriber={this.state.isEdit} />
+        </Tabs.TabPane>
+      </Tabs>
     );
   }
 })

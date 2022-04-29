@@ -28,7 +28,7 @@ class UserModal extends Component<any, any> {
 
   getPrescriberRole = async () => {
     const { res } = await webapi.getAllRoles();
-    let prescriberRole = res.context.find((x) => x.roleName === 'Prescriber');
+    let prescriberRole = res.context.find((x) => x.roleName === (Const.SITE_NAME === 'MYVETRECO' ? 'Admin' : 'Prescriber'));
     this.setState({
       prescriberRoleId: prescriberRole.roleInfoId
     });
@@ -38,7 +38,7 @@ class UserModal extends Component<any, any> {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <Modal maskClosable={false} title={this.props.userForm.id ? 'Edit User' : 'Add User'} visible={this.props.visible} onOk={this.onSave} onCancel={() => this.cancel()}>
+      <Modal maskClosable={false} title={this.props.userForm.id ? <FormattedMessage id="Prescriber.Edit"/> : <FormattedMessage id="Prescriber.Add"/>} visible={this.props.visible} onOk={this.onSave} onCancel={() => this.cancel()}>
         <Form>
           <Row>
             <Col span={24}>
@@ -129,7 +129,7 @@ class UserModal extends Component<any, any> {
           email: values.email,
           prescriberIds: [this.props.prescriberKeyId],
           roleIdList: [this.state.prescriberRoleId.toString()],
-          accountState: 3
+          accountState: Const.SITE_NAME === 'MYVETRECO' ? 0 : 3
         });
         if (this.props.userForm.id) {
           const { res } = await webapi.updateUser(param);

@@ -128,6 +128,19 @@ export default class ManageAllSubscription extends React.Component<any, any> {
     });
   }
 
+  get TotalPrice() {
+    let total = 0;
+    this.state.checkedSubscriptionIdList.forEach((id) => {
+      const tempTotal = this.state.subscriptionList
+        .filter((item) => item.subscribeId === id)
+        .reduce((pre, next) => {
+          return pre + next.goodsResponse.subscribeNum * next.goodsResponse.subscribePrice - 0;
+        }, 0);
+      total = total + tempTotal - 0;
+    });
+    return total.toFixed(2);
+  }
+
   // 获取 deliveryState 状态
   getDeliveryDateStatus = () => {
     GetDelivery().then((data) => {
@@ -170,7 +183,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       .getTaskSubscriptionList({
         customerAccount: sessionStorage.getItem('taskCustomerAccount')
       })
-      .then(async(data) => {
+      .then(async (data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           let subscriptionList = this.handleSubscriptionGoods(
@@ -825,7 +838,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       const { deliveryDate, timeSlot } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList = res.context?.timeSlots||[];
+        let deliveryDateList = res.context?.timeSlots || [];
         this.setState({
           deliveryDateList: deliveryDateList,
           timeSlotList: (deliveryDateList[0] && deliveryDateList[0].dateTimeInfos) || [],
@@ -947,7 +960,7 @@ export default class ManageAllSubscription extends React.Component<any, any> {
       checkedSubscriptionIdList
     } = this.state;
 
-    const columns = [
+    let columns = [
       {
         title: <FormattedMessage id="task.AssociateSubscription" />,
         width: '7%',
@@ -1015,6 +1028,12 @@ export default class ManageAllSubscription extends React.Component<any, any> {
         width: '7%',
         key: 'externalSku',
         render: (text: any, record: any) => record.goodsResponse.externalSku
+      },
+      {
+        title: <FormattedMessage id="Product.Stock" />,
+        width: '5%',
+        key: 'stock',
+        render: (text: any, record: any) => record.goodsResponse.stock
       },
       {
         // title: <FormattedMessage id="task.statusOfSubscription" />,
@@ -1140,6 +1159,10 @@ export default class ManageAllSubscription extends React.Component<any, any> {
           ) : null
       }
     ];
+    // 目前只有ru要显示 stock cloum
+    if (storeId !== 123457907) {
+      columns = columns.filter((item) => item.key !== 'stock');
+    }
     const content = (
       <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4 }}>
         <Calendar
@@ -1320,6 +1343,26 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                     <FormattedMessage id="Subscription.PhoneNumber" /> :{' '}
                     <span>{petOwnerInfo.customerPhone}</span>
                   </p>
+                  {/* 俄罗斯需要选择全部订阅按钮 */}
+                  {storeId === 123457907 ? (
+                    <Button
+                      style={{ marginTop: '20px' }}
+                      onClick={(e) => {
+                        const IdArr = subscriptionList.map((item) => item.subscribeId);
+                        if (checkedSubscriptionIdList.length === IdArr.length) {
+                          this.setState({
+                            checkedSubscriptionIdList: []
+                          });
+                        } else {
+                          this.setState({
+                            checkedSubscriptionIdList: IdArr
+                          });
+                        }
+                      }}
+                    >
+                      <FormattedMessage id="Subscription.SelectAll" />
+                    </Button>
+                  ) : null}
                 </Col>
               </Row>
 
@@ -1612,10 +1655,20 @@ export default class ManageAllSubscription extends React.Component<any, any> {
                         <>
                           <Col span={12}>
                             {checkedSubscriptionIdList.length > 0 ? (
-                              <a
-                                onClick={() => this.setState({ paymentMethodVisible: true })}
-                                className="iconfont iconEdit pr-10"
-                              />
+                              <>
+                                <a
+                                  onClick={() => this.setState({ paymentMethodVisible: true })}
+                                  className="iconfont iconEdit pr-10"
+                                />
+                                {/* 俄罗斯才有价格总记 */}
+                                {storeId === 123457907 ? (
+                                  <span style={{ marginLeft: '50px' }}>
+                                    <FormattedMessage id="Subscription.Total" />
+                                    {':'} {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) || ''}{' '}
+                                    {this.TotalPrice}
+                                  </span>
+                                ) : null}
+                              </>
                             ) : null}
                           </Col>
                           <PaymentMethod

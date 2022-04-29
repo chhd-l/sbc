@@ -1,5 +1,5 @@
 import React from 'react';
-import { BreadCrumb, Headline, Const, history } from 'qmkit';
+import { BreadCrumb, Headline, Const, history, RCi18n } from 'qmkit';
 import { Button, Row, Col, Breadcrumb, message, Spin } from 'antd';
 import './index.less';
 import * as webapi from './webapi';
@@ -7,7 +7,6 @@ import { FormattedMessage } from 'react-intl';
 const img_productNo = require('./img/productNo.png');
 const img_question = require('./img/question.png');
 import moment from 'moment';
-import { Link } from 'react-router-dom';
 
 export default class ProductFinderDetails extends React.Component<any, any> {
   static propTypes = {};
@@ -17,7 +16,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: 'Product Finder Details',
+      title: RCi18n({id:"Product.ProductFinderDetails"}),
       loading: false,
       details: {},
       chartRecords: []
@@ -57,13 +56,13 @@ export default class ProductFinderDetails extends React.Component<any, any> {
             <div className="garyContainer">
               <Row>
                 <img className="productNo-Image" src={img_productNo} alt="Product No" />
-                <strong>Product Finder NO. {details.finderNumber}</strong>
+                <strong><FormattedMessage id="Product.ProductFinderNO"/> {details.finderNumber}</strong>
               </Row>
-              <Row>
+              <Row gutter={24}>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
-                      <p>Generated data</p>
+                      <p><FormattedMessage id="Product.GeneratedData"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{moment(details.createTime).format('YYYY-MM-DD')}</strong>
@@ -71,11 +70,11 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   </Row>
                 </Col>
               </Row>
-              <Row>
+              <Row gutter={24}>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
-                      <p>Pet owner type</p>
+                      <p><FormattedMessage id="PetOwner.ConsumerType"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerType === 0 ? 'Guest' : 'Member'}</strong>
@@ -83,10 +82,10 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   </Row>
                 </Col>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
                       {' '}
-                      <p>Pet type</p>
+                      <p><FormattedMessage id="Product.PetType"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petType}</strong>
@@ -94,22 +93,22 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   </Row>
                 </Col>
               </Row>
-              <Row>
+              <Row gutter={24}>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
-                      <p>Pet owner account</p>
+                      <p><FormattedMessage id="PetOwner.ConsumerAccount"/></p>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} style={{wordBreak:'break-all'}}>
                       <strong>{details.consumerAccount}</strong>
                     </Col>
                   </Row>
                 </Col>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
                       {' '}
-                      <p>Pet age</p>
+                      <p><FormattedMessage id="Product.PetAge"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petAge}</strong>
@@ -117,11 +116,11 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   </Row>
                 </Col>
               </Row>
-              <Row>
+              <Row gutter={24}>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
-                      <p>Pet owner name </p>
+                      <p><FormattedMessage id="PetOwner.ConsumerName"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.consumerName}</strong>
@@ -129,10 +128,10 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                   </Row>
                 </Col>
                 <Col span={8}>
-                  <Row>
+                  <Row gutter={24}>
                     <Col span={12}>
                       {' '}
-                      <p>Breed</p>
+                      <p><FormattedMessage id="Product.Breed"/></p>
                     </Col>
                     <Col span={12}>
                       <strong>{details.petBreed}</strong>
@@ -148,7 +147,7 @@ export default class ProductFinderDetails extends React.Component<any, any> {
                     </Col>
                     <Col span={20}>
                       <h4 style={{ marginBottom: '10px' }}>{details.productName}</h4>
-                      <p>Product SKU: {details.spuCode}</p>
+                      <p><FormattedMessage id="Product.ProductSKU"/>: {details.spuCode}</p>
                     </Col>
                   </Row>
                 </div>

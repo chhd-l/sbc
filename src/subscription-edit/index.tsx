@@ -56,6 +56,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       loading: false,
       orderInfo: {},
       subscriptionInfo: {},
+      subscriptionStatus: '',
       subscriptionType: '',
       recentOrderList: [],
       frequencyList: [],
@@ -269,6 +270,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {
               subscribeGoods: subscribeGoods,
               subscriptionType: subscriptionDetail.subscriptionType,
+              subscriptionStatus: subscriptionDetail.subscriptionStatus,
               subscriptionInfo: subscriptionInfo,
               orderInfo: orderInfo,
               recentOrderList: recentOrderList,
@@ -1201,12 +1203,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
-    const { subscriptionId, goodsInfo, subscriptionType } = this.state;
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
     // 法国、俄罗斯、土耳其需要选择错误提示
     if (storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911) {
-      if (selectedRows?.toJS()[0].promotions?.toLowerCase() !== subscriptionType?.toLowerCase()) {
+      // selectedRows?.toJS()[0].promotions?
+      if (
+        selectedRows?.toJS()[0].promotions?.toLowerCase() !== subscriptionType?.toLowerCase() &&
+        subscriptionStatus != selectedRows?.toJS()[0].subscriptionStatus
+      ) {
         this.setState({
           errvisible: true
         });

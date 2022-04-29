@@ -7,8 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import SearchForm from './search-form';
 import * as webapi from './webapi';
 import { Table } from 'antd';
-import 'index.less'
-
+import 'index.less';
 
 const Column = Table.Column;
 
@@ -20,15 +19,11 @@ export default class GoodsGrid extends React.Component<any, any> {
     super(props);
     this.state = {
       loading: true,
-      selectedRows: props.selectedRows
-        ? props.selectedRows
-        : fromJS([]),
-      selectedRowKeys: props.selectedSkuIds
-        ? props.selectedSkuIds
-        : [],
+      selectedRows: props.selectedRows ? props.selectedRows : fromJS([]),
+      selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
       total: 0,
       goodsInfoPage: {},
-      searchParams: props.searchParams? props.searchParams : {},
+      searchParams: props.searchParams ? props.searchParams : {},
       showValidGood: props.showValidGood
     };
   }
@@ -36,33 +31,32 @@ export default class GoodsGrid extends React.Component<any, any> {
   componentDidMount() {
     //如果有指定的product category传入，不执行立即搜索。等search form初始化完后触发指定的product category搜索
     if (!this.props.goodsCate) {
-      this.init(this.props.searchParams? this.props.searchParams : {});
+      this.init(
+        this.props.searchParams
+          ? this.props.searchParams
+          : {
+              promotions: 'club',
+              subscriptionStatus: 1
+            }
+      );
     }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!this.props.visible && nextProps.visible) {
       this.setState({
-        searchParams: nextProps.searchParams?nextProps.searchParams:{}
+        searchParams: nextProps.searchParams ? nextProps.searchParams : {}
       });
-      this.init(nextProps.searchParams?nextProps.searchParams:{});
+      this.init(nextProps.searchParams ? nextProps.searchParams : {});
     }
     this.setState({
-      selectedRows: nextProps.selectedRows
-        ? nextProps.selectedRows
-        : fromJS([]),
+      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
       selectedRowKeys: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
 
   render() {
-    const {
-      loading,
-      goodsInfoPage,
-      selectedRowKeys,
-      selectedRows,
-      showValidGood
-    } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
     const { rowChangeBackFun, visible, goodsCate } = this.props;
     return (
       <div className="content">
@@ -94,9 +88,7 @@ export default class GoodsGrid extends React.Component<any, any> {
                 .concat(fromJS(selectedTableRows).toSet())
                 .toList();
               rows = selectedRowKeys
-                .map((key) =>
-                  rows.filter((row) => row.get('goodsInfoId') == key).first()
-                )
+                .map((key) => rows.filter((row) => row.get('goodsInfoId') == key).first())
                 .filter((f) => f);
               this.setState({
                 selectedRows: rows,
@@ -111,21 +103,19 @@ export default class GoodsGrid extends React.Component<any, any> {
               // 以上两行注释是老的逻辑, 新的逻辑需要把状态为无货的商品给放开
               // goodsStatus 的状态为: 商品状态 0：正常 1：缺货 2：失效
               // 因此判断等于2的失效状态下禁用
-              disabled: showValidGood
-                ? !showValidGood
-                : record.goodsStatus === 2
+              disabled: showValidGood ? !showValidGood : record.goodsStatus === 2
             })
           }}
         >
           <Column
-            title={<FormattedMessage id="Product.SKUCode"/>}
+            title={<FormattedMessage id="Product.SKUCode" />}
             dataIndex="goodsInfoNo"
             key="goodsInfoNo"
             width="15%"
           />
 
           <Column
-            title={<FormattedMessage id="Product.ProductName"/>}
+            title={<FormattedMessage id="Product.ProductName" />}
             dataIndex="goodsInfoName"
             key="goodsInfoName"
             width="20%"
@@ -133,7 +123,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title={<FormattedMessage id="Product.Specification"/>}
+            title={<FormattedMessage id="Product.Specification" />}
             dataIndex="specText"
             key="specText"
             width="20%"
@@ -147,11 +137,15 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          <Column title={<FormattedMessage id="Product.Productcategory"/>} key="goodsCate" dataIndex="cateName"  width="15%"
+          <Column
+            title={<FormattedMessage id="Product.Productcategory" />}
+            key="goodsCate"
+            dataIndex="cateName"
+            width="15%"
           />
 
           <Column
-            title={<FormattedMessage id="Product.Brand"/>}
+            title={<FormattedMessage id="Product.Brand" />}
             key="goodsBrand"
             dataIndex="brandName"
             render={(value) => {
@@ -164,11 +158,13 @@ export default class GoodsGrid extends React.Component<any, any> {
           />
 
           <Column
-            title={<FormattedMessage id="Product.Price"/>}
+            title={<FormattedMessage id="Product.Price" />}
             key="marketPrice"
             dataIndex="marketPrice"
             render={(data) => {
-              return data ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)+ '0.00';
+              return data
+                ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + data
+                : sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + '0.00';
             }}
           />
         </DataGrid>
@@ -181,7 +177,7 @@ export default class GoodsGrid extends React.Component<any, any> {
     this.init({ ...params, pageNum, pageSize });
     this.setState({
       pageNum,
-      pageSize,
+      pageSize
     });
   };
 
@@ -192,8 +188,8 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!params.pageSize) {
       params.pageSize = 10;
     }
-    params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false
-    this.setState({loading: true});
+    params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
+    this.setState({ loading: true });
     let { res } = await webapi.fetchGoodsList({ ...params });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
@@ -209,9 +205,7 @@ export default class GoodsGrid extends React.Component<any, any> {
           .find((s) => s.get('goodsId') === goodInfo.goodsId)
           .get('brandId');
         const brand =
-          res['brands'] == null
-            ? ''
-            : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
+          res['brands'] == null ? '' : fromJS(res['brands']).find((s) => s.get('brandId') === bId);
         goodInfo['brandName'] = brand ? brand.get('brandName') : '';
 
         return goodInfo;
@@ -229,8 +223,8 @@ export default class GoodsGrid extends React.Component<any, any> {
    * @param searchParams
    */
   searchBackFun = (searchParams) => {
-    if (this.props.searchParams){
-      searchParams = {...searchParams, ...this.props.searchParams};
+    if (this.props.searchParams) {
+      searchParams = { ...searchParams, ...this.props.searchParams };
     }
     this.setState({ searchParams: searchParams });
     this.init(searchParams);

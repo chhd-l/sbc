@@ -293,7 +293,7 @@ export default class MyHeader extends React.Component {
     } else message.error(RCi18n({id:"PetOwner.Unsuccessful"}));
   };
 
-  languageChange = (value) => {
+  languageChange = (e) => {
     // 
     // if ((sessionStorage.getItem(cache.LANGUAGE) || 'en-US') === value) return;
     // sessionStorage.setItem(cache.LANGUAGE, value);
@@ -302,7 +302,8 @@ export default class MyHeader extends React.Component {
     // notification['info']({
     //   message: RCi18n({id:"Public.changeLanguageAlert"})
     // });
-   this.modifyLang(value)
+
+   this.modifyLang(e.key)
 
   };
 
@@ -562,6 +563,13 @@ export default class MyHeader extends React.Component {
         </Menu.Item>
       </Menu>
     );
+
+    const languageMenu = (
+      <Menu onClick={this.languageChange} selectedKeys={[sessionStorage.getItem(cache.LANGUAGE)]}>
+        {this.state.languageList.map(item => <Menu.Item key={item.lang}>{item.langCountry}</Menu.Item >)}
+      </Menu>
+    );
+
     let {
       storeList,
     } = this.state;
@@ -638,7 +646,7 @@ export default class MyHeader extends React.Component {
             </div>
 
             <div style={styles.headerRight}>
-              {Const.SITE_NAME !== 'MYVETRECO' && <div style={{ paddingTop: 8}}>
+              {Const.SITE_NAME !== 'MYVETRECO' && <div style={{ paddingTop: 8, marginRight: 25}}>
                 <AuthWrapper functionName="f_petowner_task">
                   <Badge count={this.state.reminderTasks.length}>
                     <Popover
@@ -665,13 +673,19 @@ export default class MyHeader extends React.Component {
                   </Badge>
                 </AuthWrapper>
               </div>}
-              <Icon type="global" style={styles.languageIcon} />
-              <Select
+              <div>
+              <Dropdown overlay={languageMenu} trigger={['click']} placement="bottomCenter">
+                <a onClick={e => e.preventDefault()}>
+                   <Icon type="global" style={styles.languageIcon} />
+                </a>
+              </Dropdown>
+              </div>
+              {/* <Select
                 defaultValue={sessionStorage.getItem(cache.LANGUAGE)}
                 onChange={this.languageChange}
                 style={{ width: 180 }}>
                 {this.state.languageList.map(item => <Option key={item.lang} value={item.lang}>{item.langCountry}</Option>)}
-              </Select>
+              </Select> */}
               {
                 Const.SITE_NAME !== 'MYVETRECO' ? (
                   <div className='headerRight-shop'>
@@ -791,7 +805,6 @@ const styles = {
     overflowY: "auto"
   },
   languageIcon: {
-    marginLeft:'25px',
     fontSize: '24px',
     transform: 'scale(.8)',
     color: '#7e7e7e'

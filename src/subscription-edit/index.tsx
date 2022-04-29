@@ -56,6 +56,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       loading: false,
       orderInfo: {},
       subscriptionInfo: {},
+      subscriptionStatus: '',
       subscriptionType: '',
       recentOrderList: [],
       frequencyList: [],
@@ -131,7 +132,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       tempolineApiError: '',
       productModalVisible: false,
       selectedSkuIds: [],
-      selectedRows: []
+      selectedRows: [],
+      errvisible: false
     };
   }
 
@@ -268,6 +270,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {
               subscribeGoods: subscribeGoods,
               subscriptionType: subscriptionDetail.subscriptionType,
+              subscriptionStatus: subscriptionDetail.subscriptionStatus,
               subscriptionInfo: subscriptionInfo,
               orderInfo: orderInfo,
               recentOrderList: recentOrderList,
@@ -1200,16 +1203,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
+    // 法国、俄罗斯、土耳其需要选择错误提示
+    if (storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911) {
+      // selectedRows?.toJS()[0].promotions?
+      if (
+        selectedRows?.toJS()[0].promotions?.toLowerCase() !== subscriptionType?.toLowerCase() &&
+        subscriptionStatus != selectedRows?.toJS()[0].subscriptionStatus
+      ) {
+        this.setState({
+          errvisible: true
+        });
+        return;
+      }
+    }
 
-    const { subscriptionId, goodsInfo } = this.state;
+    console.log('selectedRows?.toJS()', selectedRows?.toJS());
     this.setState({
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows
     });
     this.setState({ loading: true });
-
     let params = {
       subscribeId: subscriptionId,
       deleteSkuId: goodsInfo[0]?.skuId,
@@ -1325,7 +1341,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
 
       productModalVisible,
       selectedSkuIds,
-      selectedRows
+      selectedRows,
+      errvisible
       // operationLog
     } = this.state;
 
@@ -1975,7 +1992,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   </p>
                   <p>
                     <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
-                    <span>{subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}</span>
+                    <span>
+                      {subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}
+                    </span>
                   </p>
                   <p>
                     <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
@@ -3023,6 +3042,30 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           onOkBackFun={this.skuSelectedBackFun}
           onCancelBackFun={this.closeProductModal}
         />
+        <Modal
+          closable={false}
+          maskClosable={false}
+          mask={false}
+          width={455}
+          visible={errvisible}
+          footer={null}
+        >
+          <p style={{ fontSize: '18px' }}>This product cannot be used for Club Subscription.</p>
+          <br />
+          <p style={{ fontSize: '18px' }}>Please, choose another one.</p>
+          <div style={{ textAlign: 'right' }}>
+            <Button
+              type="primary"
+              onClick={() => {
+                this.setState({
+                  errvisible: false
+                });
+              }}
+            >
+              OK
+            </Button>
+          </div>
+        </Modal>
       </div>
     );
   }

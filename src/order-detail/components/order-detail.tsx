@@ -154,12 +154,13 @@ class OrderDetailTab extends React.Component<any, any> {
     //满赠赠品信息
     let gifts = detail.get('gifts') ? detail.get('gifts') : fromJS([]);
 
-
     gifts = gifts
-      .map((gift) =>{
-        return !gift.get('cateName')?.includes('Leaflet') ? gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName')):gift.set('skuName', gift.get('skuName'))
-      }).toJS();
-
+      .map((gift) => {
+        return !gift.get('cateName')?.includes('Leaflet')
+          ? gift.set('skuName', '[' + RCi18n({ id: 'Order.gift' }) + ']' + gift.get('skuName'))
+          : gift.set('skuName', gift.get('skuName'));
+      })
+      .toJS();
 
     const tradePrice = detail.get('tradePrice') ? (detail.get('tradePrice').toJS() as any) : {};
 
@@ -247,7 +248,6 @@ class OrderDetailTab extends React.Component<any, any> {
     const addressHour =
       deliverWay === 1 ? consignee.timeSlot : deliverWay === 2 ? consignee.workTime : '';
     const address1 = consignee.detailAddress1 + ' ' + (addressHour || '');
-
     const columns = [
       {
         title: <FormattedMessage id="Order.SKUcode" />,
@@ -316,21 +316,34 @@ class OrderDetailTab extends React.Component<any, any> {
           record.subscriptionPrice > 0 &&
           record.subscriptionStatus === 1 &&
           record.isSuperimposeSubscription === 1 ? (
-            <div>
-              <span>
-                {this._handlePriceFormat(
-                  record.subscriptionPrice,
-                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
-                )}
-              </span>
-              <br />
-              <span style={{ textDecoration: 'line-through' }}>
-                {this._handlePriceFormat(
-                  originalPrice,
-                  detail.get('subscriptionType') === 'Individualization' ? 4 : 2
-                )}
-              </span>
-            </div>
+            <>
+              {storeId === 123457919 && originalPrice === record.subscriptionPrice ? (
+                <div>
+                  <span>
+                    {this._handlePriceFormat(
+                      originalPrice,
+                      detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                    )}
+                  </span>
+                </div>
+              ) : (
+                <div>
+                  <span>
+                    {this._handlePriceFormat(
+                      record.subscriptionPrice,
+                      detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                    )}
+                  </span>
+                  <br />
+                  <span style={{ textDecoration: 'line-through' }}>
+                    {this._handlePriceFormat(
+                      originalPrice,
+                      detail.get('subscriptionType') === 'Individualization' ? 4 : 2
+                    )}
+                  </span>
+                </div>
+              )}
+            </>
           ) : (
             <span>
               {this._handlePriceFormat(
@@ -426,7 +439,6 @@ class OrderDetailTab extends React.Component<any, any> {
     }
 
     let orderDetailType = orderTypeList.find((x) => x.value === detail.get('orderType'));
-
 
     return (
       <div className="orderDetail">
@@ -533,14 +545,15 @@ class OrderDetailTab extends React.Component<any, any> {
                 <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
               </p>
               <p>
-                <FormattedMessage id="PetOwner.PetOwnerName katakana" />: {detail.getIn(['buyer', 'lastNameKatakana'], '')} {detail.getIn(['buyer', 'firstNameKatakana'], '')}
+                <FormattedMessage id="PetOwner.PetOwnerName katakana" />:{' '}
+                {detail.getIn(['buyer', 'lastNameKatakana'], '')}{' '}
+                {detail.getIn(['buyer', 'firstNameKatakana'], '')}
               </p>
               <p>
                 <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
               <p>
-                <FormattedMessage id="Order.Petowneraccount" />:{' '}
-                {detail.getIn(['buyer', 'email'])}
+                <FormattedMessage id="Order.Petowneraccount" />: {detail.getIn(['buyer', 'email'])}
               </p>
             </div>
           </Col>

@@ -1310,8 +1310,20 @@ const homeRoutes = [
     asyncComponent: () => import('./myvetreco-logins/check-mail')
   },
   {
-    path: '/reset-password',
-    asyncComponent: () => import('./myvetreco-logins/reset-password')
+    path: '/login-form',
+    asyncComponent: () => import('./login/components/login-form')
+  },
+  {
+    path: '/reset-step1',
+    asyncComponent: () => import('./login/components/login-forget')
+  },
+  {
+    path: '/reset-step2',
+    asyncComponent: () => import('./login/components/result')
+  },
+  {
+    path: '/reset-step3',
+    asyncComponent: () => import('./login/components/login-reset')
   },
   {
     path: '/reset-password',

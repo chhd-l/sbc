@@ -29,11 +29,14 @@ export default class NavigationHeader extends React.Component<any, any> {
   initData = () => {
     getShopConfig().then((data) => {
       if (data.res.code === Const.SUCCESS_CODE) {
-        const { hubConfigValue, baseConfigContext, baseHubConfigContext } = data.res.context;
+        const { hubConfigValue, baseConfigContext, baseHubConfigContext, phraseConfig } =
+          data.res.context;
         this.setState({
           hubConfigChecked: !!hubConfigValue, // 1 启用hub 0不启用hub
           baseConfigContext: baseConfigContext ? decryptAES(baseConfigContext) : '',
-          baseHubConfigContext: baseHubConfigContext ? decryptAES(baseHubConfigContext) : ''
+          baseHubConfigContext: baseHubConfigContext ? decryptAES(baseHubConfigContext) : '',
+          phraseEnabled: phraseConfig ? phraseConfig.phraseEnabled : false,
+          branchName: phraseConfig ? phraseConfig.branchName : ''
         });
       }
     });

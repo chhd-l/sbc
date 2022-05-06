@@ -375,6 +375,8 @@ class OrderDetailTab extends React.Component<any, any> {
               return <FormattedMessage id="Order.autoship" />;
             case 2:
               return <FormattedMessage id="Order.club" />;
+            case 3:
+              return <FormattedMessage id="Order.Individualization" />;
             case 4:
               return <FormattedMessage id="Order.peawee" />;
           }

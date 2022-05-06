@@ -158,7 +158,9 @@ export default class AppStore extends Store {
     if (res.code === Const.SUCCESS_CODE) {
       const tradeItems = this.state()
         .getIn(['detail', 'tradeItems'])
-        .concat(this.state().getIn(['detail', 'gifts']));
+        .concat(this.state().getIn(['detail', 'gifts'])
+        .concat(this.state().getIn(['detail', 'subscriptionPlanGiftList']))
+        );
 
       const shippingItemList = tradeItems
         .filter((v) => {
@@ -166,8 +168,9 @@ export default class AppStore extends Store {
         })
         .map((v) => {
           return {
-            skuId: v.get('skuId'),
-            itemNum: v.get('deliveringNum')
+            skuId: v.get('skuId') ,
+            itemNum: v.get('deliveringNum'),
+            goodsId:v.get('goodsId')
           };
         })
         .toJS();
@@ -179,8 +182,8 @@ export default class AppStore extends Store {
     }
   };
 
-  changeDeliverNum = (skuId, isGift, num) => {
-    this.dispatch('detail-actor:changeDeliverNum', { skuId, isGift, num });
+  changeDeliverNum = (skuId, isGift, num, productType) => {
+    this.dispatch('detail-actor:changeDeliverNum', { skuId, isGift, num, productType});
   };
 
   /**
@@ -237,6 +240,7 @@ export default class AppStore extends Store {
     let tradeDelivery = Map();
     tradeDelivery = tradeDelivery.set('shippingItemList', this.handleShippingItems(this.state().getIn(['detail', 'tradeItems'])));
     tradeDelivery = tradeDelivery.set('giftItemList', this.handleShippingItems(this.state().getIn(['detail', 'gifts'])));
+    tradeDelivery = tradeDelivery.set('subscriptionPlanGiftList', this.handleShippingItems(this.state().getIn(['detail', 'subscriptionPlanGiftList'])));
     tradeDelivery = tradeDelivery.set('deliverNo', param.deliverNo);
     tradeDelivery = tradeDelivery.set('deliverId', param.deliverId);
     tradeDelivery = tradeDelivery.set('deliverTime', param.deliverTime);
@@ -261,7 +265,9 @@ export default class AppStore extends Store {
         return {
           skuId: v.get('skuId'),
           skuNo: v.get('skuNo'),
-          itemNum: v.get('deliveringNum')
+          itemNum: v.get('deliveringNum'),
+          goodsId:v.get('goodsId'),
+          goodsNo:v.get('goodsNo')
         };
       })
       .toJS();

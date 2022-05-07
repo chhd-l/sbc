@@ -627,7 +627,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     }}
                     onClick={() => this._refreshRealtimeStock(tid)}
                   >
-                    Real-time stock
+                    <FormattedMessage id="Order.RealTimeStock" />
                   </div>
                 </AuthWrapper>
               </Col>

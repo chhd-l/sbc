@@ -24,12 +24,15 @@ export default class DetailActor extends Actor {
   }
 
   @Action('detail-actor:changeDeliverNum')
-  changeDeliverNum(state: IMap, { skuId, isGift, num }) {
+  changeDeliverNum(state: IMap, { skuId, isGift, num, productType }) {
     return state.update('detail', (detail) => {
-      if (isGift) {
-        return detail.setIn(['gifts', detail.get('gifts').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
-      } else {
-        return detail.setIn(['tradeItems', detail.get('tradeItems').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
+      switch (productType) {
+        case "1":   
+          return detail.setIn(['tradeItems', detail.get('tradeItems').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
+        case "2":
+          return detail.setIn(['gifts', detail.get('gifts').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
+        case "3":
+          return detail.setIn(['subscriptionPlanGiftList', detail.get('subscriptionPlanGiftList').findIndex((item) => skuId == item.get('skuId')), 'deliveringNum'], num);
       }
     });
   }

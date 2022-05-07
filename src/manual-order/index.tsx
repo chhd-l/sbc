@@ -29,16 +29,17 @@ class ManualOrder extends Component<any, any> {
       },
       storeId: storeId,
       list: [],
-      goodwillChecked: false
+      goodwillChecked: false,
+      guest:false
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
   }
   next(e) {
     e.preventDefault();
-    let { customer, current, list } = this.state;
+    let { customer, current, list,guest } = this.state;
     this.props.form.validateFields((err) => {
-      if (!err && customer.customerId) {
+      if (!err && (customer.customerId || guest)) {
         if (current === 1) {
           if (list.length > 0) {
             this.getShopTokenJump();
@@ -137,6 +138,14 @@ class ManualOrder extends Component<any, any> {
       customer
     });
   };
+
+  getPetOwnerType = (type) =>{
+    if(type =='guest') {
+      this.setState({
+        guest:true
+      })
+    }
+  }
   //获取购物车信息
   getCartsList = (list) => {
     this.setState({
@@ -150,7 +159,7 @@ class ManualOrder extends Component<any, any> {
     });
   };
   render() {
-    const { current, title, customer, storeId, status, url, context } = this.state;
+    const { current, title, customer, storeId, status, url, context,guest } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -161,6 +170,7 @@ class ManualOrder extends Component<any, any> {
             storeId={storeId}
             stepName={'Consumer information'}
             getCustomerId={this.getCustomer}
+            petOwnerType={this.getPetOwnerType}
           />
         )
       },
@@ -173,6 +183,7 @@ class ManualOrder extends Component<any, any> {
             carts={this.getCartsList}
             storeId={storeId}
             customer={customer}
+            guest={guest}
             onGoodwillChecked={this.handleGoodwillChecked}
           />
         )

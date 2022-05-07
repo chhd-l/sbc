@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Form, Input, Select, Spin } from 'antd';
+import { Row, Col, Form, Input, Select, Spin, Radio } from 'antd';
 import { getCustomerDetails } from '../webapi';
 import debounce from 'lodash/debounce';
 import { FormattedMessage } from 'react-intl';
@@ -12,7 +12,9 @@ class ConsumerInformation extends React.Component<any, any> {
       customerAccount: ''
     },
     customerList: [],
-    fetching: false
+    fetching: false,
+    showGuest:false,
+    showEmail:false,
   };
 
   constructor(props) {
@@ -47,6 +49,31 @@ class ConsumerInformation extends React.Component<any, any> {
     }
   };
 
+  userChange = (e) => {
+    if (e.target.value == 'felinStore') {
+      this.setState({
+        showGuest:true
+      })
+    }else {
+      this.setState({
+        showGuest:false
+      })
+    }
+  }
+
+  petOwnerTypeChange = (e) =>{
+    if (e.target.value == 'member') {
+      this.setState({
+        showEmail:true,
+      })
+    }else {
+      this.setState({
+        showEmail:false,
+      })
+      this.props.petOwnerType('guest')
+    }
+  }
+
   static getDerivedStateFromProps(props, state) {
     if (JSON.stringify(props.customer) !== JSON.stringify(state.customer)) {
       return {
@@ -58,12 +85,12 @@ class ConsumerInformation extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { fetching } = this.state;
+    const { fetching,showGuest,showEmail } = this.state;
     const { customerName, customerAccount } = this.state.customer;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 3 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -84,12 +111,41 @@ class ConsumerInformation extends React.Component<any, any> {
         </h4>
         <div className="selectLanguage">
           <Form {...formItemLayout}>
+            <Form.Item label={<FormattedMessage id="Order.userGroup" />}>
+              {getFieldDecorator('userGroup',{
+                  rules: [
+                    {
+                      required: true,
+                    }
+                  ]
+              })(
+                <Radio.Group onChange={this.userChange}>
+                  <Radio value='fgs'><FormattedMessage id={'Order.fgs'} /></Radio>
+                  <Radio value='felinStore'><FormattedMessage id={'Order.felinStore'} /></Radio>
+                </Radio.Group>
+              )}
+            </Form.Item>
+            <Form.Item label={<FormattedMessage id="Order.petOwnerType" />}>
+              {getFieldDecorator('petOwnerType',{
+                  rules: [
+                    {
+                      required: true,
+                    }
+                  ]
+              })(
+                <Radio.Group onChange={this.petOwnerTypeChange}>
+                  <Radio value='member'><FormattedMessage id={'PetOwner.Member'} /></Radio>
+                  {showGuest?<Radio value='guest'><FormattedMessage id={'PetOwner.Guest'} /></Radio>:null}
+                </Radio.Group>
+              )}
+            </Form.Item>
+            {showEmail?<>
             <Form.Item label={<FormattedMessage id="Order.PetOwnerAccount" />}>
               {getFieldDecorator('customerAccount', {
                 initialValue: customerAccount,
                 rules: [
                   {
-                    required: true,
+                    required: showEmail ,
                     message: <FormattedMessage id="Order.piypoa" />
                   }
                 ]
@@ -104,6 +160,7 @@ class ConsumerInformation extends React.Component<any, any> {
                 initialValue: customerName
               })(<Input disabled />)}
             </Form.Item>
+            </>:null}
           </Form>
         </div>
       </div>

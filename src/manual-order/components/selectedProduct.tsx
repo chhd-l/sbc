@@ -121,7 +121,8 @@ export default class SelectedProduct extends React.Component<any, any> {
    * 获取更新频率月｜ 周
    */
   async querySysDictionary() {
-    this.setState({ loading: true });
+    const {guest} = this.props;
+    !guest && this.setState({ loading: true });
     const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'Frequency_week_club' }), querySysDictionary({ type: 'Frequency_month_club' })]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
@@ -133,7 +134,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       options,
       clubOptions
     }, () => {
-      this.getGoodsInfoCartsList()
+      !guest && this.getGoodsInfoCartsList()
     });
   }
   /**
@@ -296,7 +297,7 @@ export default class SelectedProduct extends React.Component<any, any> {
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
-          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} guest={this.props.guest} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
         <AuthWrapper functionName='f_goodwill_order'>
           <Checkbox onChange={e => this.props.onGoodwillChecked(e.target.checked)}><FormattedMessage id="Order.goodwillDesc" /></Checkbox>

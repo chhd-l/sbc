@@ -4,7 +4,7 @@ import { i } from 'plume2';
 import { Const, util, RCi18n } from 'qmkit';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { getGoodsSKUS, addGoodsIntoCarts } from '../webapi';
+import { getGoodsSKUS, addGoodsIntoCarts, getValetGuestCarts } from '../webapi';
 const defaultImg = require('./img/none.png');
 const { SubMenu } = Menu;
 interface IParams {
@@ -41,6 +41,7 @@ export default class AddProductModal extends Component {
     goodsCount?: any
     searchCount?: Function
     url: string,
+    guest: boolean
   };
   onChange = (e, type) => {
     if (e && e.target) {
@@ -111,18 +112,34 @@ export default class AddProductModal extends Component {
       return;
     }
     this.setState({ loading: true });
-    const { res } = await addGoodsIntoCarts(this.props.storeId, {
-      customerId: this.props.customer.customerId,
+    let params ={
       goodsInfoId: row.goodsInfoId,
       goodsInfoFlag: 0,
       goodsNum: row.buyCount
-    });
-    if (res.code === Const.SUCCESS_CODE) {
-      message.success('Add successfully');
-      this.props.searchCount()
-      setTimeout(() => {
+    };
+    if(this.props.guest) {
+      const {res} = await getValetGuestCarts(this.props.storeId,params)
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Add successfully');
+        this.props.searchCount()
+        setTimeout(() => {
+          this.setState({ loading: false });
+        }, 2000);
+      }else {
         this.setState({ loading: false });
-      }, 2000);
+      }
+    } else {
+      const { res } = await addGoodsIntoCarts(this.props.storeId, {
+        customerId: this.props.customer.customerId,
+        ...params
+      });
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success('Add successfully');
+        this.props.searchCount()
+        setTimeout(() => {
+          this.setState({ loading: false });
+        }, 2000);
+      }
     }
   }
   //选择checkbox

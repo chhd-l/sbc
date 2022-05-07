@@ -768,7 +768,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 </label>
               ) : null}
 
-              {tradePrice.serviceFeePrice ? (
+              {tradePrice.serviceFeePrice!=='' ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.serviceFeePrice" />:

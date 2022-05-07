@@ -1207,11 +1207,13 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
     // 法国、俄罗斯、土耳其需要选择错误提示
-    if (storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911) {
+    if (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) {
       // selectedRows?.toJS()[0].promotions?
+      // subscriptionType?.toLowerCase()
+      // subscriptionStatus ==
       if (
-        selectedRows?.toJS()[0].promotions?.toLowerCase() !== subscriptionType?.toLowerCase() &&
-        subscriptionStatus != selectedRows?.toJS()[0].subscriptionStatus
+        selectedRows?.toJS()[0].promotions?.toLowerCase() !== 'club' ||
+        selectedRows?.toJS()[0].subscriptionStatus === 0
       ) {
         this.setState({
           errvisible: true
@@ -1246,9 +1248,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   closeProductModal = () => {
-    this.setState({
-      productModalVisible: false
-    });
+    this.setState(
+      {
+        productModalVisible: false
+      },
+      () => {
+        this.setState({
+          // selectedRows: [],
+          selectedSkuIds: []
+        });
+      }
+    );
   };
 
   showProductModal = () => {

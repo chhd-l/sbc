@@ -30,20 +30,14 @@ class GoodsModal extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      selectedSkuIds: props.selectedSkuIds
-        ? props.selectedSkuIds
-        : [],
-      selectedRows: props.selectedRows
-        ? props.selectedRows
-        : fromJS([])
+      selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
+      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
     };
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
-      selectedRows: nextProps.selectedRows
-        ? nextProps.selectedRows
-        : fromJS([]),
+      selectedRows: nextProps.selectedRows ? nextProps.selectedRows : fromJS([]),
       selectedSkuIds: nextProps.selectedSkuIds ? nextProps.selectedSkuIds : []
     });
   }
@@ -57,18 +51,21 @@ class GoodsModal extends React.Component<any, any> {
       showValidGood,
       searchParams,
       application,
-      titleContent=null,
+      titleContent = null,
       goodsCate
     } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     return (
-      <Modal  maskClosable={false}
+      <Modal
+        maskClosable={false}
+        destroyOnClose={true}
         title={
           <div>
-            <FormattedMessage id="Product.ChooseGoods"/>
+            <FormattedMessage id="Product.ChooseGoods" />
             &nbsp;
             <small>
-              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span> <FormattedMessage id="Product.itemsHaveBeenSelected"/>
+              <span style={{ color: 'red' }}>{selectedSkuIds.length}</span>{' '}
+              <FormattedMessage id="Product.itemsHaveBeenSelected" />
             </small>
           </div>
         }
@@ -90,9 +87,7 @@ class GoodsModal extends React.Component<any, any> {
         okText="Confirm"
         cancelText="Cancel"
       >
-        {
-          titleContent
-        }
+        {titleContent}
         {
           <GoodsGrid
             visible={visible}
@@ -118,4 +113,4 @@ class GoodsModal extends React.Component<any, any> {
   };
 }
 
-export default injectIntl(GoodsModal)
+export default injectIntl(GoodsModal);

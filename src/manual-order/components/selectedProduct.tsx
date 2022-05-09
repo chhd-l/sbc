@@ -1,7 +1,7 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, getValetGuestMiniCarts } from '../webapi';
 import { cache, AuthWrapper, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
@@ -26,13 +26,14 @@ export default class SelectedProduct extends React.Component<any, any> {
       visible: true
     });
   };
-  handleOk = () => {
+  handleOk = (guestKey?:string) => {
+    const {guest} = this.props;
     this.setState(
       {
         visible: false
       },
       () => {
-        this.getGoodsInfoCartsList();
+    ((guest && guestKey) || !guest) ? this.getGoodsInfoCartsList(guestKey) :null;
       }
     );
   };
@@ -86,8 +87,8 @@ export default class SelectedProduct extends React.Component<any, any> {
   }
 
   //获取购物车列表
-  getGoodsInfoCartsList = async () => {
-    const { res } = await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId)
+  getGoodsInfoCartsList = async (guestKey?:string) => {
+    const { res } = guestKey ? await getValetGuestMiniCarts(this.props.storeId, guestKey) : await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId);
     let goodsList = res.context?.goodsList ?? [];
     let goodsCount = {}, totalPrice = 0;
     goodsList.map(item => {
@@ -297,7 +298,7 @@ export default class SelectedProduct extends React.Component<any, any> {
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
-          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} guest={this.props.guest} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} guest={this.props.guest} searchCount={this.getGoodsInfoCartsList} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
         <AuthWrapper functionName='f_goodwill_order'>
           <Checkbox onChange={e => this.props.onGoodwillChecked(e.target.checked)}><FormattedMessage id="Order.goodwillDesc" /></Checkbox>

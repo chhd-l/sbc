@@ -30,7 +30,8 @@ export default class AddProductModal extends Component {
     selectedFilter: [],
     filterList: [],
     checkboxValue: [],
-    paramsList: []
+    paramsList: [],
+    guestKey:''
   };
   props: {
     customer: any;
@@ -120,8 +121,9 @@ export default class AddProductModal extends Component {
     if(this.props.guest) {
       const {res} = await getValetGuestCarts(this.props.storeId,params)
       if (res.code === Const.SUCCESS_CODE) {
+        this.setState({guestKey:res.context || ''})
         message.success('Add successfully');
-        this.props.searchCount()
+        this.props.searchCount(res.context || '')
         setTimeout(() => {
           this.setState({ loading: false });
         }, 2000);
@@ -256,7 +258,7 @@ export default class AddProductModal extends Component {
 
   );
   render() {
-    const { visible, handleOk, handleCancel, goodsCount, storeId, url } = this.props;
+    const { visible, goodsCount, storeId, url } = this.props;
     const { cateType, filterList, selectedFilter, paramsList, checkboxValue, likeGoodsInfoNo, likeGoodsName, goodsLists, total, pageSize, currentPage, loading } = this.state;
     const columns = [
       {
@@ -336,9 +338,10 @@ export default class AddProductModal extends Component {
     columns.forEach(obj => {
       (obj.title as any) = <FormattedMessage id={`Order.${obj.title}`} />
     });
-
+    // debugger
+// console.log(this.state.guestKey,'this.state.guestKey==')
     return (
-      <Modal title={<FormattedMessage id="Order.Choose product" />} visible={visible} onOk={handleOk} width="70%" onCancel={handleCancel}>
+      <Modal title={<FormattedMessage id="Order.Choose product" />} visible={visible} onOk={()=>this.props.handleOk(this.state.guestKey)} width="70%" onCancel={()=>this.props.handleCancel(this.state.guestKey)}>
         <Form className="filter-content" layout="inline">
           <Row>
             <Col span={20}>

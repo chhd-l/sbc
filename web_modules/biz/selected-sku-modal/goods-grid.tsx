@@ -226,6 +226,8 @@ export default class GoodsGrid extends React.Component<any, any> {
    * @param searchParams
    */
   searchBackFun = (searchParams) => {
+    // 点击搜索将之前勾选的置为空
+    this.props.rowChangeBackFun([], fromJS([]));
     if (this.props.searchParams) {
       searchParams = { ...this.props.searchParams, ...searchParams };
     }

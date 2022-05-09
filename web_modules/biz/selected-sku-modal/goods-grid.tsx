@@ -23,7 +23,9 @@ export default class GoodsGrid extends React.Component<any, any> {
       selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
       total: 0,
       goodsInfoPage: {},
-      searchParams: props.searchParams ? props.searchParams : {},
+      searchParams: props.searchParams
+        ? { promotions: 'club', subscriptionStatus: 1, ...this.props.searchParams }
+        : {},
       showValidGood: props.showValidGood
     };
   }
@@ -33,11 +35,8 @@ export default class GoodsGrid extends React.Component<any, any> {
     if (!this.props.goodsCate) {
       this.init(
         this.props.searchParams
-          ? this.props.searchParams
-          : {
-              promotions: 'club',
-              subscriptionStatus: 1
-            }
+          ? { promotions: 'club', subscriptionStatus: 1, ...this.props.searchParams }
+          : {}
       );
     }
   }
@@ -190,7 +189,11 @@ export default class GoodsGrid extends React.Component<any, any> {
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
     this.setState({ loading: true });
-    let { res } = await webapi.fetchGoodsList({ ...params });
+    let { res } = await webapi.fetchGoodsList({
+      promotions: 'club',
+      subscriptionStatus: 1,
+      ...params
+    });
 
     if ((res as any).code == Const.SUCCESS_CODE) {
       res = (res as any).context;
@@ -224,7 +227,7 @@ export default class GoodsGrid extends React.Component<any, any> {
    */
   searchBackFun = (searchParams) => {
     if (this.props.searchParams) {
-      searchParams = { ...searchParams, ...this.props.searchParams };
+      searchParams = { ...this.props.searchParams, ...searchParams };
     }
     this.setState({ searchParams: searchParams });
     this.init(searchParams);

@@ -103,14 +103,34 @@ class OrderDelivery extends React.Component<any, any> {
     const deliverStatus = detail.getIn(['tradeState', 'deliverStatus']);
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
+    // 产品类别productType 1-tradeItems 2-gifts 3-subscriptionPlanGiftList
+
+    //处理tradeItems
+    const tradeItems = (detail.get('tradeItems') ? detail.get('tradeItems') : fromJS([])).map((item) =>
+      item
+        .set('productType', "1")
+    );
+
     //处理赠品
     const gifts = (detail.get('gifts') ? detail.get('gifts') : fromJS([])).map((gift) =>
       gift
         .set('skuName', `【Giveaway】${gift.get('skuName')}`)
         .set('levelPrice', 0)
         .set('isGift', true)
+        .set('productType', "2")
     );
 
+    const subscriptionPlanGiftList = (detail.get('subscriptionPlanGiftList') ? 
+    detail.get('subscriptionPlanGiftList') : fromJS([])).map((planGift) =>
+    planGift
+      .set('skuName', `${planGift.get('goodsInfoName')}`)
+      .set('num', `${planGift.get('quantity')}`)
+      .set('Weight', `${planGift.get('goodsInfoWeight')}`)
+      .set('deliveredNum', `${planGift.get('sentAmount')}`)
+      .set('skuId',`${planGift.get('goodsInfoId')}`)
+      .set('skuNo',`${planGift.get('goodsInfoNo')}`)
+      .set('productType', "3")
+  );
     return (
       <div>
         <div
@@ -123,7 +143,7 @@ class OrderDelivery extends React.Component<any, any> {
           <Table
             rowKey={(_record, index) => index.toString()}
             columns={this._deliveryColumns()}
-            dataSource={detail.get('tradeItems').concat(gifts).toJS()}
+            dataSource={tradeItems.concat(gifts).concat(subscriptionPlanGiftList).toJS()}
             pagination={false}
             bordered
           />
@@ -165,7 +185,20 @@ class OrderDelivery extends React.Component<any, any> {
                     `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${gift.get('itemName')}`
                   )
                 );
-                return (
+                const subscriptionPlanGifts = (
+                  v.get('subscriptionPlanGiftItemList') ? v.get('subscriptionPlanGiftItemList') : fromJS([])
+                ).map((subPlanGift) =>
+                subPlanGift
+                  // .set('itemName',  `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${subPlanGift.get('itemName')}`  )
+                  .set('skuNo',`${subPlanGift.get('goodsInfoNo')}`)
+                  .set('skuName', `${subPlanGift.get('goodsInfoName')}`)
+                  .set('num', `${subPlanGift.get('quantity')}`)
+                  .set('Weight', `${subPlanGift.get('goodsInfoWeight')}`)
+                  .set('skuId',`${subPlanGift.get('goodsInfoId')}`)
+                  .set('itemName',`${subPlanGift.get('goodsInfoName')}${(window as any).RCi18n({ id: 'Order.Giveaway' })}`)
+                  
+                );
+                return (  
                   <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
                     <label style={styles.title}>
                       {<FormattedMessage id="Order.DeliveryRecord" />}
@@ -173,7 +206,8 @@ class OrderDelivery extends React.Component<any, any> {
                     <Table
                       rowKey={(_record, index) => index.toString()}
                       columns={this._deliveryRecordColumns()}
-                      dataSource={v.get('shippingItems').concat(deliversGifts).toJS()}
+                      // dataSource={tradeItems.concat(deliversGifts).concat(subscriptionPlanGifts).toJS()}
+                      dataSource={v.get('shippingItems').concat(deliversGifts).concat(subscriptionPlanGifts).toJS()}
                       pagination={false}
                       bordered
                     />
@@ -399,8 +433,8 @@ class OrderDelivery extends React.Component<any, any> {
       },
       {
         title: <FormattedMessage id="Order.SKUCode" />,
-        dataIndex: 'skuNo',
-        key: 'skuNo'
+        dataIndex: 'skuNo' || ' goodsInfoNo',
+        key: 'skuNo' || ' goodsInfoNo'
       },
       {
         title: <FormattedMessage id="Order.Productname" />,
@@ -434,14 +468,15 @@ class OrderDelivery extends React.Component<any, any> {
         key: 'deliveringNum',
         render: (_, row) => {
           return (
-            <InputNumber
+            <><InputNumber
               min={0}
               max={row.num - row.deliveredNum}
               value={row.deliveringNum ? row.deliveringNum : 0}
               onChange={(value) => {
-                changeDeliverNum(_.skuId, _.isGift, value);
+                changeDeliverNum(_.skuId, _.isGift, value, _.productType);
               }}
             />
+            </>
           );
         }
       }

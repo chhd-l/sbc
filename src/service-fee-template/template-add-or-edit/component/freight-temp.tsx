@@ -459,6 +459,9 @@ export default class FreightTemp extends React.Component<any, any> {
               dataSource={ruleTableList}
             />
           </FormItem>
+          <FormItem {...formItemLayout2}>
+            *Service fee will be 0 when the final amount that customer pay, which equals to product price(including tax)+shipping fee-total discount is 0
+          </FormItem>
 
           <div className="bar-button">
             <Button

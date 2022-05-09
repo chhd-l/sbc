@@ -627,7 +627,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     }}
                     onClick={() => this._refreshRealtimeStock(tid)}
                   >
-                    Real-time stock
+                    <FormattedMessage id="Order.RealTimeStock" />
                   </div>
                 </AuthWrapper>
               </Col>
@@ -768,7 +768,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 </label>
               ) : null}
 
-              {tradePrice.serviceFeePrice ? (
+              {tradePrice.serviceFeePrice!=='' ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.serviceFeePrice" />:

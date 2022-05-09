@@ -831,12 +831,12 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
                   <span>{subscriptionInfo.customerName}</span>
                 </p>
-                <p>
+                {storeId === 123457919 ? <p>
                   <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
                   <span>
-                    {subscriptionInfo.lastNameKatakana} {subscriptionInfo.firstNameKatakana}
+                    {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
                   </span>
-                </p>
+                </p> : null}
                 <p>
                   <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
                   <span>{subscriptionInfo.customerAccount}</span>

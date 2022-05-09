@@ -14,7 +14,7 @@ export default {
   // HOST: 'http://121.36.199.41:8390',
 
   /* stg */
-  HOST: 'https://storeuat.royalcanin.com/api',
+  HOST: 'https://storesit.royalcanin.com/api',
   PAYMENT_ENVIRONMENT: 'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',

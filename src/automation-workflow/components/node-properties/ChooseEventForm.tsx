@@ -137,7 +137,7 @@ export default class ChooseEventForm extends Component<any, any> {
         ]
       },
       {
-        title: 'Cart',
+        title: 'Email',
         value: '0-3',
         key: '0-3',
         selectable: false,
@@ -161,6 +161,11 @@ export default class ChooseEventForm extends Component<any, any> {
             title: 'Abandoned Cart SP More',
             value: 'AbandonedCartSPMore',
             key: '0-3-4'
+          },
+          {
+            title: 'Fails API Email',
+            value: 'FailsAPIEmail',
+            key: '0-3-5'
           }
         ]
       }

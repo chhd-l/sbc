@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
-import { Card, Button, Modal, Form, Input, Alert, Switch, Row, Col, Popconfirm, message, Spin, Radio, Select, AutoComplete } from 'antd';
+import {
+  Card,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Alert,
+  Switch,
+  Row,
+  Col,
+  Popconfirm,
+  message,
+  Spin,
+  Radio,
+  Select,
+  AutoComplete
+} from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';
 import settingForm from '@/distribution-setting/components/setting-form';
@@ -25,103 +41,113 @@ class MessageSetting extends Component<any, any> {
         //   isOpen: false
         // }
       ],
-      senderList:[],
-      settingForm:{
-        fromEmail:''
+      senderList: [],
+      settingForm: {
+        fromEmail: ''
       },
-      currentSend:'',
-      currentSettingForm: {
-      }
+      currentSend: '',
+      currentSettingForm: {}
     };
   }
   componentDidMount() {
-    this.getSettingList()
+    this.getSettingList();
   }
 
   getSettingList = () => {
     this.setState({
       loading: true
-    })
-    webapi.getApiSettingList().then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        console.log(res);
-        let settingList = res.context.list 
-        
-        this.setState({
-          loading: false,
-          emailApiList:settingList
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
+    });
+    webapi
+      .getApiSettingList()
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          console.log(res);
+          let settingList = res.context.list;
+
+          this.setState({
+            loading: false,
+            emailApiList: settingList
+          });
+        }
       })
-      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
-    })
-  }
-
-
-  saveSetting = () => {
-    const { settingForm } = this.state
-    let params = {
-      id: settingForm.id,
-      fromEmail:settingForm.fromEmail
-    }
-    webapi.saveApiSetting(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        message.success(res.message)
-        this.getSettingList()
-        this.setState({
-          visible: false,
-          senderList:[]
-        },()=>{
-          this.props.form.resetFields()
-        })
-        
-        
-      }else{
+      .catch((err) => {
         this.setState({
           loading: false
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
+        });
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+      });
+  };
+
+  saveSetting = () => {
+    const { settingForm } = this.state;
+    let params = {
+      id: settingForm.id,
+      fromEmail: settingForm.fromEmail,
+      reciverEmails: settingForm.reciverEmails,
+      ccReciverEmails: settingForm.ccReciverEmails
+    };
+    webapi
+      .saveApiSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message);
+          this.getSettingList();
+          this.setState(
+            {
+              visible: false,
+              senderList: []
+            },
+            () => {
+              this.props.form.resetFields();
+            }
+          );
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
       })
-      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
-    })
-  }
-  openEditModal=(item)=>{
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+      });
+  };
+  openEditModal = (item) => {
     this.setState({
       loading: true,
-      currentSend:item.emailTypeName
-    })
-    webapi.getApiSenderList(item.emailType).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        let senderList = res.context.list
-        // senderList 去重; 重复邮件名会引发UI 框架bug
-        let senderListTemp = []
-        senderList.forEach(item => {
-          senderListTemp.push(item.senderEmail)
-        });
-        senderList = [...new Set(senderListTemp)]
-        this.setState({
-          settingForm:item,
-          loading: false,
-          senderList,
-          visible:true
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
+      currentSend: item.emailTypeName
+    });
+    webapi
+      .getApiSenderList(item.emailType)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let senderList = res.context.list;
+          // senderList 去重; 重复邮件名会引发UI 框架bug
+          let senderListTemp = [];
+          senderList.forEach((item) => {
+            senderListTemp.push(item.senderEmail);
+          });
+          senderList = [...new Set(senderListTemp)];
+          this.setState({
+            settingForm: item,
+            loading: false,
+            senderList,
+            visible: true
+          });
+        }
       })
-      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
-    })
-  }
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+      });
+  };
 
   onFormChange = ({ field, value }) => {
     let data = this.state.settingForm;
@@ -133,47 +159,55 @@ class MessageSetting extends Component<any, any> {
   handleOk = () => {
     this.props.form.validateFields((err) => {
       if (!err) {
-        this.saveSetting()
+        this.saveSetting();
       }
     });
   };
 
   handleCancel = (e) => {
-    this.setState({
-      visible: false,
-      senderList:[]
-    },()=>{
-      this.props.form.resetFields()
-    });
+    this.setState(
+      {
+        visible: false,
+        senderList: []
+      },
+      () => {
+        this.props.form.resetFields();
+      }
+    );
   };
 
   changeSettingStatus = (id) => {
-    let params={
+    let params = {
       id: id,
-      status: 1,
-    }
-    webapi.updateApiSettingStatus(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        message.success(res.message)
-        this.getSettingList()
-      }else{
+      status: 1
+    };
+    webapi
+      .updateApiSettingStatus(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message);
+          this.getSettingList();
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
         this.setState({
           loading: false
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
-      })
-      message.error(err.toString() || RCi18n({id:'Setting.Operationfailure'}))
-    })
-  }
+        });
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+      });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { emailApiList, settingForm, loading,senderList,currentSend } = this.state;
+    const { emailApiList, settingForm, loading, senderList, currentSend } = this.state;
+    const emailRegExp =
+      /^(\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]{2,4}\s*?,?\s*?)+$/;
     return (
       <AuthWrapper functionName="f_message_setting">
         <div>
@@ -192,11 +226,7 @@ class MessageSetting extends Component<any, any> {
                       <Card
                         size="small"
                         extra={
-                          <a style={styles.btn}
-                            onClick={() =>
-                              this.openEditModal(item)
-                            }
-                          >
+                          <a style={styles.btn} onClick={() => this.openEditModal(item)}>
                             <FormattedMessage id="Marketing.Edit" />
                           </a>
                         }
@@ -210,22 +240,25 @@ class MessageSetting extends Component<any, any> {
 
                           <p style={{ fontWeight: 600 }}>{item.emailTypeName}</p>
                           <div style={styles.switchPositionStyle}>
-                            <Popconfirm title={RCi18n({ id: 'Marketing.Message.editTips' })}
+                            <Popconfirm
+                              title={RCi18n({ id: 'Marketing.Message.editTips' })}
                               disabled={+item.status === 1}
                               onConfirm={() => this.changeSettingStatus(item.id)}
                               okText={RCi18n({ id: 'Marketing.Yes' })}
-                              cancelText={RCi18n({ id: 'Marketing.No' })}>
-                              <Switch checked={+item.status === 1} disabled={+item.status === 1} size="small" />
+                              cancelText={RCi18n({ id: 'Marketing.No' })}
+                            >
+                              <Switch
+                                checked={+item.status === 1}
+                                disabled={+item.status === 1}
+                                size="small"
+                              />
                             </Popconfirm>
                           </div>
                         </div>
                       </Card>
-
                     </Col>
                   ))}
-
               </Row>
-
             </div>
             <Modal
               width="450px"
@@ -245,13 +278,27 @@ class MessageSetting extends Component<any, any> {
             >
               <Form layout="vertical">
                 <FormItem label={<FormattedMessage id="Marketing.Tips" />} style={styles.formItem}>
-                  <Alert message={currentSend ==='SendGrid' ? 
-                  RCi18n({ id: 'Marketing.Message.settingTips' })
-                  :RCi18n({ id: 'Marketing.sendsayTip' })} type="warning" />
+                  <Alert
+                    message={
+                      currentSend === 'SendGrid'
+                        ? RCi18n({ id: 'Marketing.Message.settingTips' })
+                        : RCi18n({ id: 'Marketing.sendsayTip' })
+                    }
+                    type="warning"
+                  />
                 </FormItem>
-                <FormItem label={<FormattedMessage id="Marketing.Sender" />} style={styles.formItem}>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.Sender" />}
+                  style={styles.formItem}
+                >
                   {getFieldDecorator('fromEmail', {
-                    rules: [{ required: true, type: 'email', message: <FormattedMessage id="Order.offline.consumerEmailRequired" /> }],
+                    rules: [
+                      {
+                        required: true,
+                        type: 'email',
+                        message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
+                      }
+                    ],
                     initialValue: settingForm.fromEmail
                   })(
                     <AutoComplete
@@ -265,7 +312,10 @@ class MessageSetting extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={<FormattedMessage id="Marketing.AccessKeyID" />} style={styles.formItem}>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.AccessKeyID" />}
+                  style={styles.formItem}
+                >
                   {getFieldDecorator('accessKeyId', {
                     initialValue: settingForm.apiKeyId
                   })(
@@ -281,7 +331,10 @@ class MessageSetting extends Component<any, any> {
                     />
                   )}
                 </FormItem>
-                <FormItem label={<FormattedMessage id="Marketing.AccessKeySecret" />} style={styles.formItem}>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.AccessKeySecret" />}
+                  style={styles.formItem}
+                >
                   {getFieldDecorator('apiKey', {
                     initialValue: settingForm.apiKey
                   })(
@@ -298,12 +351,60 @@ class MessageSetting extends Component<any, any> {
                     />
                   )}
                 </FormItem>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.reciverEmails" />}
+                  style={styles.formItem}
+                >
+                  {getFieldDecorator('reciverEmails', {
+                    rules: [
+                      {
+                        pattern: emailRegExp,
+                        message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
+                      }
+                    ],
+                    initialValue: settingForm.reciverEmails
+                  })(
+                    <Input.TextArea
+                      autoSize={{ minRows: 2, maxRows: 4 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'reciverEmails',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.ccReciverEmails" />}
+                  style={styles.formItem}
+                >
+                  {getFieldDecorator('ccReciverEmails', {
+                    rules: [
+                      {
+                        pattern: emailRegExp,
+                        message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
+                      }
+                    ],
+                    initialValue: settingForm.ccReciverEmails
+                  })(
+                    <Input.TextArea
+                      autoSize={{ minRows: 2, maxRows: 4 }}
+                      onChange={(e) => {
+                        const value = (e.target as any).value;
+                        this.onFormChange({
+                          field: 'ccReciverEmails',
+                          value
+                        });
+                      }}
+                    />
+                  )}
+                </FormItem>
               </Form>
             </Modal>
           </Spin>
         </div>
-
-
       </AuthWrapper>
     );
   }
@@ -315,15 +416,14 @@ const styles = {
     width: '200px',
     height: '100px',
     lineHeight: '100px',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   center: {
-    textAlign: 'center',
-
+    textAlign: 'center'
   },
   img: {
     width: 200,
-    verticalAlign: 'middle',
+    verticalAlign: 'middle'
   },
 
   btn: {
@@ -336,7 +436,7 @@ const styles = {
   switchPositionStyle: {
     position: 'absolute',
     right: '10px',
-    bottom: '10px',
+    bottom: '10px'
   }
 } as any;
 

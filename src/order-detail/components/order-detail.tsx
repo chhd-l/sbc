@@ -546,11 +546,11 @@ class OrderDetailTab extends React.Component<any, any> {
               <p>
                 <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
               </p>
-              <p>
+              {storeId === 123457919 ? <p>
                 <FormattedMessage id="PetOwner.PetOwnerName katakana" />:{' '}
-                {detail.getIn(['buyer', 'lastNameKatakana'], '')}{' '}
-                {detail.getIn(['buyer', 'firstNameKatakana'], '')}
-              </p>
+                {detail.getIn(['buyer', 'firstNameKatakana'], '')}{' '}
+                {detail.getIn(['buyer', 'lastNameKatakana'], '')}
+              </p> : null}
               <p>
                 <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
@@ -627,7 +627,7 @@ class OrderDetailTab extends React.Component<any, any> {
                     }}
                     onClick={() => this._refreshRealtimeStock(tid)}
                   >
-                    Real-time stock
+                    <FormattedMessage id="Order.RealTimeStock" />
                   </div>
                 </AuthWrapper>
               </Col>

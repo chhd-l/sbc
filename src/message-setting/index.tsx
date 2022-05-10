@@ -15,11 +15,16 @@ import {
   Spin,
   Radio,
   Select,
-  AutoComplete
+  AutoComplete,
+  Tag,
+  Tooltip,
+  Icon
 } from 'antd';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import * as webapi from './webapi';
 import settingForm from '@/distribution-setting/components/setting-form';
+
+import TextArea from 'antd/lib/input/TextArea';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class MessageSetting extends Component<any, any> {
@@ -46,7 +51,10 @@ class MessageSetting extends Component<any, any> {
         fromEmail: ''
       },
       currentSend: '',
-      currentSettingForm: {}
+      currentSettingForm: {},
+      tags: ['Unremovable', 'Tag 2', 'Tag 3'],
+      inputVisible: false,
+      inputValue: ''
     };
   }
   componentDidMount() {
@@ -63,7 +71,11 @@ class MessageSetting extends Component<any, any> {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           console.log(res);
-          let settingList = res.context.list;
+          let settingList = res.context.list.map((item) => {
+            item.reciverEmails = item.reciverEmails?.split(',');
+            item.ccReciverEmails = item.ccReciverEmails?.split(',');
+            return item;
+          });
 
           this.setState({
             loading: false,
@@ -84,8 +96,8 @@ class MessageSetting extends Component<any, any> {
     let params = {
       id: settingForm.id,
       fromEmail: settingForm.fromEmail,
-      reciverEmails: settingForm.reciverEmails,
-      ccReciverEmails: settingForm.ccReciverEmails
+      reciverEmails: settingForm?.reciverEmails?.join(','),
+      ccReciverEmails: settingForm?.ccReciverEmails?.join(',')
     };
     webapi
       .saveApiSetting(params)
@@ -150,8 +162,17 @@ class MessageSetting extends Component<any, any> {
   };
 
   onFormChange = ({ field, value }) => {
+    const emailRegExp = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
     let data = this.state.settingForm;
-    data[field] = value;
+    if (field === 'reciverEmails' || field === 'ccReciverEmails') {
+      if (emailRegExp.test(value)) {
+        data[field]?.push(value);
+        data[field] = [...new Set(data[field])];
+      }
+    } else {
+      data[field] = value;
+    }
+    this.props.form.setFieldsValue({ ...data, inputValue: '' });
     this.setState({
       searchForm: data
     });
@@ -202,12 +223,51 @@ class MessageSetting extends Component<any, any> {
       });
   };
 
+  handleClose = (removedTag) => {
+    const tags = this.state.tags.filter((tag) => tag !== removedTag);
+    console.log(tags);
+    this.setState({ tags });
+  };
+
+  showInput = () => {
+    this.setState({ inputVisible: true }, () => this.input.focus());
+  };
+
+  handleInputChange = (e) => {
+    let { settingForm } = this.state;
+    let reciverEmails = settingForm?.reciverEmails;
+    reciverEmails?.split(',').push(e.target.value);
+    reciverEmails = reciverEmails?.join(',');
+    this.setState({ inputValue: e.target.value, settingForm: { ...settingForm, reciverEmails } });
+  };
+
+  handleInputConfirm = () => {
+    const { inputValue } = this.state;
+    let { tags } = this.state;
+    if (inputValue && tags.indexOf(inputValue) === -1) {
+      tags = [...tags, inputValue];
+    }
+    console.log(tags);
+    this.setState({
+      tags,
+      inputVisible: false,
+      inputValue: ''
+    });
+  };
   render() {
     const { getFieldDecorator } = this.props.form;
 
-    const { emailApiList, settingForm, loading, senderList, currentSend } = this.state;
-    const emailRegExp =
-      /^(\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]{2,4}\s*?,?\s*?)+$/;
+    const {
+      emailApiList,
+      settingForm,
+      loading,
+      senderList,
+      currentSend,
+      inputVisible,
+      inputValue
+    } = this.state;
+    const emailRegExp = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+    // /^(\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]{2,4}\s*?,?\s*?)+$/;
     return (
       <AuthWrapper functionName="f_message_setting">
         <div>
@@ -355,26 +415,56 @@ class MessageSetting extends Component<any, any> {
                   label={<FormattedMessage id="Marketing.reciverEmails" />}
                   style={styles.formItem}
                 >
-                  {getFieldDecorator('reciverEmails', {
-                    rules: [
-                      {
-                        pattern: emailRegExp,
-                        message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
-                      }
-                    ],
-                    initialValue: settingForm.reciverEmails
-                  })(
-                    <Input.TextArea
-                      autoSize={{ minRows: 2, maxRows: 4 }}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'reciverEmails',
-                          value
-                        });
+                  <div
+                    style={{
+                      display: settingForm?.reciverEmails ? 'block' : 'none'
+                    }}
+                  >
+                    {this.props.form.getFieldDecorator(`reciverEmails`, {
+                      rules: [
+                        {
+                          pattern: emailRegExp,
+                          message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
+                        }
+                      ]
+                    })(<></>)}
+                    {this.props.form.getFieldValue('reciverEmails')?.map((item, index) => {
+                      const isLongTag = item.length > 20;
+                      const tagElem = (
+                        <Tag
+                          key={item}
+                          closable={index !== 0}
+                          onClose={() => this.handleClose(item)}
+                          style={{ marginTop: '8px' }}
+                        >
+                          {isLongTag ? `${item.slice(0, 20)}...` : item}
+                        </Tag>
+                      );
+                      return isLongTag ? (
+                        <Tooltip title={item} key={item}>
+                          {tagElem}
+                        </Tooltip>
+                      ) : (
+                        tagElem
+                      );
+                    })}
+                  </div>
+                  <>
+                    <Input
+                      type="text"
+                      onPressEnter={(e) => {
+                        console.log(this.props.form.getFieldValue('reciverEmails'), 2);
+                        let value;
+                        if ((e.target as any)?.value) {
+                          value = [
+                            ...(this.props.form.getFieldValue('reciverEmails') ?? []),
+                            (e.target as any)?.value
+                          ];
+                        }
+                        this.props.form.setFieldsValue({ reciverEmails: [...new Set(value)] });
                       }}
                     />
-                  )}
+                  </>
                 </FormItem>
                 <FormItem
                   label={<FormattedMessage id="Marketing.ccReciverEmails" />}

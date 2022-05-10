@@ -30,7 +30,9 @@ class ManualOrder extends Component<any, any> {
       storeId: storeId,
       list: [],
       goodwillChecked: false,
-      guest:false
+      guest:false,
+      felinStore:false,
+      guestId:'',
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -55,10 +57,12 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token, promocode) => {
-    let { customer, url } = this.state;
+    let { customer, url,guest,guestId } = this.state;
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
+    let guestParams = `${spromocode}guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
+    let params = guest ?guestParams:`${spromocode}stoken=${token}`
     let winObj = window.open(
-      `${url.replace(/\/$/gi, '')}/cart?${spromocode}stoken=${token}`,
+      `${url.replace(/\/$/gi, '')}/cart?${params}`,
       'newwindow',
       'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );
@@ -87,8 +91,12 @@ class ManualOrder extends Component<any, any> {
   };
 
   getShopTokenJump = async (other?: string) => {
-    let { customer, current, goodwillChecked } = this.state;
-    const { res } = await getShopToken(customer.customerId, {});
+    let { customer, current, goodwillChecked,guest } = this.state;
+    let shopToken = '';
+    if (!guest) {
+      const { res } = await getShopToken(customer.customerId, {});
+      shopToken = res.context || '';
+    }
 
     // 如果勾选了 This is a goodwill order 需要获取 promotion code 传给shop端
     let promocode = '';
@@ -99,7 +107,7 @@ class ManualOrder extends Component<any, any> {
       }
       promocode = res.context?.couponCode;
     }
-    this.turnShowPage(res.context, promocode);
+    this.turnShowPage(shopToken, promocode);
     if (other !== 'other') {
       current = current + 1;
       this.setState({
@@ -133,6 +141,11 @@ class ManualOrder extends Component<any, any> {
     });
   }
 
+  componentWillUnmount() {
+      sessionStorage.removeItem('user-group-value')
+      sessionStorage.removeItem('pet-owner-type')
+  }
+
   getCustomer = (customer) => {
     this.setState({
       customer
@@ -143,6 +156,18 @@ class ManualOrder extends Component<any, any> {
     if(type =='guest') {
       this.setState({
         guest:true
+      })
+    }
+  }
+
+  getUserGroupType = (type) =>{
+    if(type =='felinStore') {
+      this.setState({
+        felinStore:true
+      })
+    }else {
+      this.setState({
+        felinStore:false
       })
     }
   }
@@ -158,8 +183,13 @@ class ManualOrder extends Component<any, any> {
       goodwillChecked: value
     });
   };
+  getGuestId = (id) =>{
+    this.setState({
+      guestId:id
+    })
+  }
   render() {
-    const { current, title, customer, storeId, status, url, context,guest } = this.state;
+    const { current, title, customer, storeId, status, url, context,guest,felinStore } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -171,6 +201,7 @@ class ManualOrder extends Component<any, any> {
             stepName={'Consumer information'}
             getCustomerId={this.getCustomer}
             petOwnerType={this.getPetOwnerType}
+            userGroupType={this.getUserGroupType}
           />
         )
       },
@@ -184,7 +215,9 @@ class ManualOrder extends Component<any, any> {
             storeId={storeId}
             customer={customer}
             guest={guest}
+            felinStore={felinStore}
             onGoodwillChecked={this.handleGoodwillChecked}
+            guestId={this.getGuestId}
           />
         )
       },

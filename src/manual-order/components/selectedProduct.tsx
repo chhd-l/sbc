@@ -40,7 +40,6 @@ export default class SelectedProduct extends React.Component<any, any> {
 
   componentDidMount() {
     this.querySysDictionary();
-
   }
   /**
    * 
@@ -88,6 +87,7 @@ export default class SelectedProduct extends React.Component<any, any> {
 
   //获取购物车列表
   getGoodsInfoCartsList = async (guestKey?:string) => {
+    this.props.guestId(guestKey)
     const { res } = guestKey ? await getValetGuestMiniCarts(this.props.storeId, guestKey) : await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId);
     let goodsList = res.context?.goodsList ?? [];
     let goodsCount = {}, totalPrice = 0;
@@ -114,7 +114,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataSource: goodsList,
         loading: false,
         goodsCount: goodsCount,
-        totalPrice: totalPrice.toFixed(2)
+        totalPrice: totalPrice.toFixed(2),
       }
     );
   }
@@ -205,6 +205,7 @@ export default class SelectedProduct extends React.Component<any, any> {
               style={{ width: 100 }}
               value={[1, 2].includes(record.goodsInfoFlag) ? 1 : 0}
               getPopupContainer={(trigger: any) => trigger.parentNode}
+              disabled={this.props.felinStore}
               placeholder="Select a person" optionFilterProp="children"
               onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
               { record.subscriptionStatus === 1 && (<Option value={1}>Y</Option>)}

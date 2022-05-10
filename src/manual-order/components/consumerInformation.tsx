@@ -29,6 +29,7 @@ class ConsumerInformation extends React.Component<any, any> {
       this.setState({
         showGuest: true
       })
+      this.props.userGroupType('felinStore')
     } else {
       this.setState({
         showGuest: false
@@ -38,11 +39,11 @@ class ConsumerInformation extends React.Component<any, any> {
       this.setState({
         showEmail:true,
       })
-    }else {
+    }else if(petOwnerType == 'guest') {
       this.setState({
         showEmail:false,
       })
-      // this.props.petOwnerType('guest')
+      this.props.petOwnerType('guest')
     }
   }
   onChange = (customerId) => {
@@ -79,10 +80,12 @@ class ConsumerInformation extends React.Component<any, any> {
       this.setState({
         showGuest:true
       })
+      this.props.userGroupType('felinStore')
     }else {
       this.setState({
         showGuest:false
       })
+      this.props.userGroupType('fgs')
     }
   }
 

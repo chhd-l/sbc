@@ -780,6 +780,11 @@ class SubscriptionDetail extends React.Component<any, any> {
                   style={{ textAlign: 'right' }}
                   onClick={() => {
                     sessionStorage.setItem('subscriptionNo', subscriptionId);
+                    //subscriptionInfo.customerAccount
+                    sessionStorage.setItem(
+                      'taskCustomerAccount',
+                      subscriptionInfo?.customerAccount
+                    );
                     history.push('/task/manage-all-subscription');
                   }}
                 >
@@ -790,13 +795,13 @@ class SubscriptionDetail extends React.Component<any, any> {
             <Row className="subscription-basic-info">
               <Col span={24}>
                 <span style={{ fontSize: '16px', color: '#3DB014' }}>
-                  {subscriptionInfo.subscriptionStatus}
+                  {subscriptionInfo?.subscriptionStatus}
                 </span>
               </Col>
               <Col span={11} className="basic-info">
                 <p>
                   <FormattedMessage id="Subscription.SubscriptionNumber" /> :{' '}
-                  <span>{subscriptionInfo.subscribeId}</span>
+                  <span>{subscriptionInfo?.subscribeId}</span>
                   {subscriptionInfo?.subscribeSource === 'SUPPLIER' ? (
                     <span>
                       [<FormattedMessage id="Order.goodwillOrder" />]
@@ -831,12 +836,14 @@ class SubscriptionDetail extends React.Component<any, any> {
                   <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
                   <span>{subscriptionInfo.customerName}</span>
                 </p>
-                {storeId === 123457919 ? <p>
-                  <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
-                  <span>
-                    {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
-                  </span>
-                </p> : null}
+                {storeId === 123457919 ? (
+                  <p>
+                    <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
+                    <span>
+                      {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
+                    </span>
+                  </p>
+                ) : null}
                 <p>
                   <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
                   <span>{subscriptionInfo.customerAccount}</span>

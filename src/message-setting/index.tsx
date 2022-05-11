@@ -94,42 +94,42 @@ class MessageSetting extends Component<any, any> {
 
   saveSetting = () => {
     const { settingForm } = this.state;
-    console.log('settingForm', settingForm);
+    // 从form上取值
+    const formData = this.props.form.getFieldsValue();
     let params = {
       id: settingForm.id,
       fromEmail: settingForm.fromEmail,
-      reciverEmails: settingForm?.reciverEmails?.join(','),
-      ccReciverEmails: settingForm?.ccReciverEmails?.join(',')
+      reciverEmails: formData?.reciverEmails?.join(','),
+      ccReciverEmails: formData?.ccReciverEmails?.join(',')
     };
-    console.log('params', params);
-    // webapi
-    //   .saveApiSetting(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       message.success(res.message);
-    //       this.getSettingList();
-    //       this.setState(
-    //         {
-    //           visible: false,
-    //           senderList: []
-    //         },
-    //         () => {
-    //           this.props.form.resetFields();
-    //         }
-    //       );
-    //     } else {
-    //       this.setState({
-    //         loading: false
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     this.setState({
-    //       loading: false
-    //     });
-    //     message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
-    //   });
+    webapi
+      .saveApiSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          message.success(res.message);
+          this.getSettingList();
+          this.setState(
+            {
+              visible: false,
+              senderList: []
+            },
+            () => {
+              this.props.form.resetFields();
+            }
+          );
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+      });
   };
   openEditModal = (item) => {
     this.setState({
@@ -418,13 +418,17 @@ class MessageSetting extends Component<any, any> {
                   label={<FormattedMessage id="Marketing.reciverEmails" />}
                   style={styles.formItem}
                 >
-                  {getFieldDecorator(`reciverEmails`)(<EmailReciver />)}
+                  {getFieldDecorator(`reciverEmails`, {
+                    initialValue: settingForm.reciverEmails
+                  })(<EmailReciver />)}
                 </FormItem>
                 <FormItem
                   label={<FormattedMessage id="Marketing.ccReciverEmails" />}
                   style={styles.formItem}
                 >
-                  {getFieldDecorator(`ccReciverEmails`)(<EmailReciver />)}
+                  {getFieldDecorator(`ccReciverEmails`, {
+                    initialValue: settingForm.ccReciverEmails
+                  })(<EmailReciver />)}
 
                   {/* {getFieldDecorator('ccReciverEmails', {
                     rules: [

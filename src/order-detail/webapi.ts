@@ -259,3 +259,11 @@ export function deleteCommentById(id) {
     })
   });
 }
+
+/**
+ * 查询service fee基础配置
+ * @returns
+ */
+ export function fetchServiceFeeConf() {
+  return Fetch('/order/config/listByConfigKeyAndDelFlagForServiceFee');
+}

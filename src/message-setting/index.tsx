@@ -94,40 +94,42 @@ class MessageSetting extends Component<any, any> {
 
   saveSetting = () => {
     const { settingForm } = this.state;
+    console.log('settingForm', settingForm);
     let params = {
       id: settingForm.id,
       fromEmail: settingForm.fromEmail,
       reciverEmails: settingForm?.reciverEmails?.join(','),
       ccReciverEmails: settingForm?.ccReciverEmails?.join(',')
     };
-    webapi
-      .saveApiSetting(params)
-      .then((data) => {
-        const { res } = data;
-        if (res.code === Const.SUCCESS_CODE) {
-          message.success(res.message);
-          this.getSettingList();
-          this.setState(
-            {
-              visible: false,
-              senderList: []
-            },
-            () => {
-              this.props.form.resetFields();
-            }
-          );
-        } else {
-          this.setState({
-            loading: false
-          });
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false
-        });
-        message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
-      });
+    console.log('params', params);
+    // webapi
+    //   .saveApiSetting(params)
+    //   .then((data) => {
+    //     const { res } = data;
+    //     if (res.code === Const.SUCCESS_CODE) {
+    //       message.success(res.message);
+    //       this.getSettingList();
+    //       this.setState(
+    //         {
+    //           visible: false,
+    //           senderList: []
+    //         },
+    //         () => {
+    //           this.props.form.resetFields();
+    //         }
+    //       );
+    //     } else {
+    //       this.setState({
+    //         loading: false
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     this.setState({
+    //       loading: false
+    //     });
+    //     message.error(err.toString() || RCi18n({ id: 'Setting.Operationfailure' }));
+    //   });
   };
   openEditModal = (item) => {
     this.setState({
@@ -416,19 +418,15 @@ class MessageSetting extends Component<any, any> {
                   label={<FormattedMessage id="Marketing.reciverEmails" />}
                   style={styles.formItem}
                 >
-                  <div
-                  // style={{
-                  //   display: settingForm?.reciverEmails ? 'block' : 'none'
-                  // }}
-                  >
-                    {getFieldDecorator(`reciverEmails`)(<EmailReciver />)}
-                  </div>
+                  {getFieldDecorator(`reciverEmails`)(<EmailReciver />)}
                 </FormItem>
                 <FormItem
                   label={<FormattedMessage id="Marketing.ccReciverEmails" />}
                   style={styles.formItem}
                 >
-                  {getFieldDecorator('ccReciverEmails', {
+                  {getFieldDecorator(`ccReciverEmails`)(<EmailReciver />)}
+
+                  {/* {getFieldDecorator('ccReciverEmails', {
                     rules: [
                       {
                         pattern: emailRegExp,
@@ -447,7 +445,7 @@ class MessageSetting extends Component<any, any> {
                         });
                       }}
                     />
-                  )}
+                  )} */}
                 </FormItem>
               </Form>
             </Modal>

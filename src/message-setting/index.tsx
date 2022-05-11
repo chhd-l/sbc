@@ -53,7 +53,6 @@ class MessageSetting extends Component<any, any> {
       },
       currentSend: '',
       currentSettingForm: {},
-      tags: ['Unremovable', 'Tag 2', 'Tag 3'],
       inputVisible: false,
       inputValue: ''
     };
@@ -73,8 +72,8 @@ class MessageSetting extends Component<any, any> {
         if (res.code === Const.SUCCESS_CODE) {
           console.log(res);
           let settingList = res.context.list.map((item) => {
-            item.reciverEmails = item.reciverEmails?.split(',');
-            item.ccReciverEmails = item.ccReciverEmails?.split(',');
+            item.reciverEmails = item.reciverEmails ? item.reciverEmails.split(',') : [];
+            item.ccReciverEmails = item.ccReciverEmails ? item.ccReciverEmails.split(',') : [];
             return item;
           });
 

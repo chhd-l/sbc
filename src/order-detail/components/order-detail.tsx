@@ -20,6 +20,7 @@ import PetItem from '@/customer-details/component/pet-item';
 import OrderMoreFields from './order_more_field';
 import './style.less';
 import { Consignee, Invoice } from '@/order-detail/components/type';
+import * as webapi from '../webapi';
 
 const orderTypeList = [
   { value: 'SINGLE_PURCHASE', name: 'Single purchase' },
@@ -123,7 +124,9 @@ class OrderDetailTab extends React.Component<any, any> {
     moreData: [],
     visibleMoreFields: false,
     currentPet: {},
-    tableLoading: false
+    tableLoading: false,
+    switchSerficeFee: false,
+    switchSerficeFeeCalculation: false,
   };
 
   render() {
@@ -768,7 +771,7 @@ class OrderDetailTab extends React.Component<any, any> {
                 </label>
               ) : null}
 
-              {tradePrice.serviceFeePrice!=='' ? (
+              {this.state.switchSerficeFee && tradePrice.serviceFeePrice!=='' ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.serviceFeePrice" />:
@@ -1149,6 +1152,20 @@ class OrderDetailTab extends React.Component<any, any> {
         </Modal>
       </div>
     );
+  }
+
+  componentDidMount() {
+    webapi
+      .fetchServiceFeeConf()
+      .then((res) => {
+        const config = res?.res?.context || [];
+        this.setState({
+          switchSerficeFee: !!config.find((c) => c.configType === 'order_service_fee_all')?.status,
+          switchSerficeFeeCalculation: !!config.find(
+            (c) => c.configType === 'order_service_fee_fgs'
+          )?.status
+        });
+      })
   }
 
   _handlePriceFormat(price, num = 2) {

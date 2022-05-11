@@ -25,6 +25,7 @@ import * as webapi from './webapi';
 import settingForm from '@/distribution-setting/components/setting-form';
 
 import TextArea from 'antd/lib/input/TextArea';
+import EmailReciver from './components/EmailReciver';
 const FormItem = Form.Item;
 const Option = Select.Option;
 class MessageSetting extends Component<any, any> {
@@ -416,55 +417,12 @@ class MessageSetting extends Component<any, any> {
                   style={styles.formItem}
                 >
                   <div
-                    style={{
-                      display: settingForm?.reciverEmails ? 'block' : 'none'
-                    }}
+                  // style={{
+                  //   display: settingForm?.reciverEmails ? 'block' : 'none'
+                  // }}
                   >
-                    {this.props.form.getFieldDecorator(`reciverEmails`, {
-                      rules: [
-                        {
-                          pattern: emailRegExp,
-                          message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
-                        }
-                      ]
-                    })(<></>)}
-                    {this.props.form.getFieldValue('reciverEmails')?.map((item, index) => {
-                      const isLongTag = item.length > 20;
-                      const tagElem = (
-                        <Tag
-                          key={item}
-                          closable={index !== 0}
-                          onClose={() => this.handleClose(item)}
-                          style={{ marginTop: '8px' }}
-                        >
-                          {isLongTag ? `${item.slice(0, 20)}...` : item}
-                        </Tag>
-                      );
-                      return isLongTag ? (
-                        <Tooltip title={item} key={item}>
-                          {tagElem}
-                        </Tooltip>
-                      ) : (
-                        tagElem
-                      );
-                    })}
+                    {getFieldDecorator(`reciverEmails`)(<EmailReciver />)}
                   </div>
-                  <>
-                    <Input
-                      type="text"
-                      onPressEnter={(e) => {
-                        console.log(this.props.form.getFieldValue('reciverEmails'), 2);
-                        let value;
-                        if ((e.target as any)?.value) {
-                          value = [
-                            ...(this.props.form.getFieldValue('reciverEmails') ?? []),
-                            (e.target as any)?.value
-                          ];
-                        }
-                        this.props.form.setFieldsValue({ reciverEmails: [...new Set(value)] });
-                      }}
-                    />
-                  </>
                 </FormItem>
                 <FormItem
                   label={<FormattedMessage id="Marketing.ccReciverEmails" />}

@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 const FormItem = Form.Item;
 const Option = Select.Option;
 import * as webapi from '../webapi';
-import { SelectGroup, Const, noop, RCi18n } from 'qmkit';
+import { SelectGroup, Const, noop, RCi18n ,cache} from 'qmkit';
 import List from '@/groupon-activity-list/component/list';
 import { Relax } from 'plume2';
 import { left } from '@antv/x6/lib/registry/port-layout/line';
@@ -32,7 +32,8 @@ class PaymentModal extends React.Component<any, any> {
       paymentForm: {
         isOpen: 1
       },
-      enabled: null
+      enabled: null,
+      _country:'fr',
     };
   }
   form;
@@ -65,6 +66,14 @@ class PaymentModal extends React.Component<any, any> {
     save: noop,
     handelModelOpenOClose: noop
   };
+
+  componentDidMount() {
+    let _country = (window as any).countryEnum[JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || "{}")['storeId'] || '123457910']
+    this.setState({
+      _country
+    })
+  }
+
   onFormChange = (value) => {
     this.setState({
       isOpen: value ? 1 : 0
@@ -79,6 +88,14 @@ class PaymentModal extends React.Component<any, any> {
   afterClose = () => {
     // this.form.resetFields()
   };
+  
+  isDisplayValue = (code) =>{
+    // 线下店支付 开启的时候需要传2 目前有fr.
+    let checkoutCode = ["adyen_point_of_sale","CASH"].indexOf(code)>-1
+    let value =  this.state._country == 'fr' && checkoutCode ?2 : 1;
+    return value
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
 
@@ -105,6 +122,7 @@ class PaymentModal extends React.Component<any, any> {
                 <TabPane tab={item.name} key={item.id}>
                   <Form name={item.name + '_form'} ref={(form) => (this.form = form)}>
                     <Row>
+                     {this.state._country == 'fr' && item.code.includes('CASH') ?null:<>
                       <Col span={24}>
                         <FormItem
                           {...formItemLayout}
@@ -394,10 +412,11 @@ class PaymentModal extends React.Component<any, any> {
                           )}
                         </FormItem>
                       </Col>
+                      </>}
                       <Col span={24} className="newAddSwitch">
                         <FormItem {...formItemLayout} label={<FormattedMessage id="enabledPaymentmethod" />}>
                           {getFieldDecorator(item.id + 'isOpen', {
-                            initialValue: item.isOpen == 1
+                            initialValue: item.isOpen == 1 
                           })(
                             <Switch
                               defaultChecked={item.isOpen == 1}
@@ -418,16 +437,16 @@ class PaymentModal extends React.Component<any, any> {
                         <Col span={24} className="newAddSwitch">
                           <FormItem {...formItemLayout} label={<FormattedMessage id="displayCheckoutPage" />}>
                             {getFieldDecorator(item.id + 'isDisplay', {
-                              initialValue: item.isDisplay == 1
+                              initialValue: item.isDisplay == this.isDisplayValue(item.code)
                             })(
                               <Switch
-                                defaultChecked={item.isDisplay == 1}
-                                checked={item.isDisplay == 1}
+                                defaultChecked={item.isDisplay == this.isDisplayValue(item.code)}
+                                checked={item.isDisplay == this.isDisplayValue(item.code)}
                                 onChange={(value) => {
                                   onFormChange({
                                     id: key,
                                     field: 'isDisplay',
-                                    value: value ? 1 : 0
+                                    value: value ? this.isDisplayValue(item.code) : 0
                                   });
                                 }}
                               />
@@ -641,23 +660,24 @@ class PaymentModal extends React.Component<any, any> {
       //   })
       // })
       let params = {};
+      // CASH fr主要用于felinstore 游客代客下单，不填写cash的输入框数据
       if (!payPspItemVOList.code.includes('cod')) {
-        if (payPspItemVOList.pspConfigSupplierVO) {
+        if (payPspItemVOList.pspConfigSupplierVO || (payPspItemVOList.code.includes('CASH')&& this.state._country == 'fr')) {
           params = {
             pspConfigSaveRequest: Object.assign({
-              id: payPspItemVOList.pspConfigSupplierVO.id,
-              pspId: payPspItemVOList.pspConfigSupplierVO.pspId,
-              pspItemId: payPspItemVOList.pspConfigSupplierVO.pspItemId,
-              apiKey: payPspItemVOList.pspConfigSupplierVO.apiKey,
-              secret: payPspItemVOList.pspConfigSupplierVO.secret,
-              merchantAccount: payPspItemVOList.pspConfigSupplierVO.merchantAccount,
-              privateKey: payPspItemVOList.pspConfigSupplierVO.privateKey,
-              publicKey: payPspItemVOList.pspConfigSupplierVO.publicKey,
-              clientKey: payPspItemVOList.pspConfigSupplierVO.clientKey,
-              paymentAccount: payPspItemVOList.pspConfigSupplierVO.paymentAccount,
-              environment: payPspItemVOList.pspConfigSupplierVO.environment,
-              checkoutApiPrefix: payPspItemVOList.pspConfigSupplierVO.checkoutApiPrefix,
-              classicPaymentApiPrefix: payPspItemVOList.pspConfigSupplierVO.classicPaymentApiPrefix
+              id: payPspItemVOList?.pspConfigSupplierVO?.id || null,
+              pspId: payPspItemVOList?.pspConfigSupplierVO?.pspId|| null,
+              pspItemId: payPspItemVOList?.pspConfigSupplierVO?.pspItemId|| null,
+              apiKey: payPspItemVOList?.pspConfigSupplierVO?.apiKey || '',
+              secret: payPspItemVOList?.pspConfigSupplierVO?.secret || '',
+              merchantAccount: payPspItemVOList?.pspConfigSupplierVO?.merchantAccount || '',
+              privateKey: payPspItemVOList?.pspConfigSupplierVO?.privateKey || '',
+              publicKey: payPspItemVOList?.pspConfigSupplierVO?.publicKey || '',
+              clientKey: payPspItemVOList?.pspConfigSupplierVO?.clientKey || '',
+              paymentAccount: payPspItemVOList?.pspConfigSupplierVO?.paymentAccount || '',
+              environment: payPspItemVOList?.pspConfigSupplierVO?.environment || '',
+              checkoutApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.checkoutApiPrefix || '',
+              classicPaymentApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.classicPaymentApiPrefix || ''
             }),
             payPspItemSaveRequest: Object.assign({
               id:

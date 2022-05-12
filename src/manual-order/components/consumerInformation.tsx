@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Form, Input, Select, Spin } from 'antd';
+import { Row, Col, Form, Input, Select, Spin, Radio } from 'antd';
 import { getCustomerDetails } from '../webapi';
 import debounce from 'lodash/debounce';
+import { AuthWrapper } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const { Option } = Select;
 class ConsumerInformation extends React.Component<any, any> {
@@ -12,14 +13,39 @@ class ConsumerInformation extends React.Component<any, any> {
       customerAccount: ''
     },
     customerList: [],
-    fetching: false
+    fetching: false,
+    showGuest:false,
+    showEmail:false,
   };
 
   constructor(props) {
     super(props);
     this.onSearch = debounce(this.onSearch, 800);
   }
-  componentDidMount() {}
+  componentDidMount() {
+    let userGroupValue = sessionStorage.getItem('user-group-value');
+    let petOwnerType = sessionStorage.getItem('pet-owner-type');
+    if (userGroupValue == 'felinStore') {
+      this.setState({
+        showGuest: true
+      })
+      this.props.userGroupType('felinStore')
+    } else {
+      this.setState({
+        showGuest: false
+      })
+    }
+    if (petOwnerType == 'member') {
+      this.setState({
+        showEmail:true,
+      })
+    }else if(petOwnerType == 'guest') {
+      this.setState({
+        showEmail:false,
+      })
+      this.props.petOwnerType('guest')
+    }
+  }
   onChange = (customerId) => {
     let obj = this.state.customerList.find((item) => item.customerId === customerId);
     if (!obj) return;
@@ -47,6 +73,37 @@ class ConsumerInformation extends React.Component<any, any> {
     }
   };
 
+  userChange = (e) => {
+    let _value = e.target.value;
+    sessionStorage.setItem('user-group-value',_value)
+    if (_value == 'felinStore') {
+      this.setState({
+        showGuest:true
+      })
+      this.props.userGroupType('felinStore')
+    }else {
+      this.setState({
+        showGuest:false
+      })
+      this.props.userGroupType('fgs')
+    }
+  }
+
+  petOwnerTypeChange = (e) =>{
+    let _value = e.target.value;
+    sessionStorage.setItem('pet-owner-type',_value)
+    if (_value == 'member') {
+      this.setState({
+        showEmail:true,
+      })
+    }else {
+      this.setState({
+        showEmail:false,
+      })
+      this.props.petOwnerType('guest')
+    }
+  }
+
   static getDerivedStateFromProps(props, state) {
     if (JSON.stringify(props.customer) !== JSON.stringify(state.customer)) {
       return {
@@ -58,12 +115,12 @@ class ConsumerInformation extends React.Component<any, any> {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { fetching } = this.state;
+    const { fetching,showGuest,showEmail } = this.state;
     const { customerName, customerAccount } = this.state.customer;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 3 }
+        sm: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -79,17 +136,52 @@ class ConsumerInformation extends React.Component<any, any> {
       <div>
         <h3><FormattedMessage id="Order.Step1" /></h3>
         <h4>
-          <FormattedMessage id={`Order.${this.props.stepName}`} /> 
+          <FormattedMessage id={`Order.${this.props.stepName}`} />
           <span className="ant-form-item-required"></span>
         </h4>
         <div className="selectLanguage">
           <Form {...formItemLayout}>
+            <Form.Item label={<FormattedMessage id="Order.userGroup" />}>
+              {getFieldDecorator('userGroup', {
+                initialValue: sessionStorage.getItem('user-group-value'),
+                rules: [
+                  {
+                    required: true,
+                  }
+                ]
+              })(
+                <Radio.Group onChange={this.userChange}>
+                  <AuthWrapper functionName='f_userGroup_fgs_order'>
+                    <Radio value='fgs'><FormattedMessage id={'Order.fgs'} /></Radio>
+                  </AuthWrapper>
+                  <AuthWrapper functionName='f_userGroup_fenlinStore_order'>
+                    <Radio value='felinStore'><FormattedMessage id={'Order.felinStore'} /></Radio>
+                  </AuthWrapper>
+                </Radio.Group>
+              )}
+            </Form.Item>
+            <Form.Item label={<FormattedMessage id="Order.petOwnerType" />}>
+              {getFieldDecorator('petOwnerType',{
+                initialValue: sessionStorage.getItem('pet-owner-type'),
+                  rules: [
+                    {
+                      required: true,
+                    }
+                  ]
+              })(
+                <Radio.Group onChange={this.petOwnerTypeChange}>
+                  <Radio value='member'><FormattedMessage id={'PetOwner.Member'} /></Radio>
+                  {showGuest?<Radio value='guest'><FormattedMessage id={'PetOwner.Guest'} /></Radio>:null}
+                </Radio.Group>
+              )}
+            </Form.Item>
+            {showEmail?<>
             <Form.Item label={<FormattedMessage id="Order.PetOwnerAccount" />}>
               {getFieldDecorator('customerAccount', {
                 initialValue: customerAccount,
                 rules: [
                   {
-                    required: true,
+                    required: showEmail ,
                     message: <FormattedMessage id="Order.piypoa" />
                   }
                 ]
@@ -104,6 +196,7 @@ class ConsumerInformation extends React.Component<any, any> {
                 initialValue: customerName
               })(<Input disabled />)}
             </Form.Item>
+            </>:null}
           </Form>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, getValetGuestMiniCarts } from '../webapi';
 import { cache, AuthWrapper, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
@@ -26,20 +26,20 @@ export default class SelectedProduct extends React.Component<any, any> {
       visible: true
     });
   };
-  handleOk = () => {
+  handleOk = (guestKey?:string) => {
+    const {guest} = this.props;
     this.setState(
       {
         visible: false
       },
       () => {
-        this.getGoodsInfoCartsList();
+    ((guest && guestKey) || !guest) ? this.getGoodsInfoCartsList(guestKey) :null;
       }
     );
   };
 
   componentDidMount() {
     this.querySysDictionary();
-
   }
   /**
    * 
@@ -86,8 +86,9 @@ export default class SelectedProduct extends React.Component<any, any> {
   }
 
   //获取购物车列表
-  getGoodsInfoCartsList = async () => {
-    const { res } = await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId)
+  getGoodsInfoCartsList = async (guestKey?:string) => {
+    this.props.guestId(guestKey)
+    const { res } = guestKey ? await getValetGuestMiniCarts(this.props.storeId, guestKey) : await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId);
     let goodsList = res.context?.goodsList ?? [];
     let goodsCount = {}, totalPrice = 0;
     goodsList.map(item => {
@@ -113,7 +114,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         dataSource: goodsList,
         loading: false,
         goodsCount: goodsCount,
-        totalPrice: totalPrice.toFixed(2)
+        totalPrice: totalPrice.toFixed(2),
       }
     );
   }
@@ -121,7 +122,8 @@ export default class SelectedProduct extends React.Component<any, any> {
    * 获取更新频率月｜ 周
    */
   async querySysDictionary() {
-    this.setState({ loading: true });
+    const {guest} = this.props;
+    !guest && this.setState({ loading: true });
     const result = await Promise.all([querySysDictionary({ type: 'Frequency_week' }), querySysDictionary({ type: 'Frequency_month' }), querySysDictionary({ type: 'Frequency_week_club' }), querySysDictionary({ type: 'Frequency_month_club' })]);
     let weeks = result[0].res?.context?.sysDictionaryVOS ?? [];
     let months = result[1].res?.context?.sysDictionaryVOS ?? [];
@@ -133,7 +135,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       options,
       clubOptions
     }, () => {
-      this.getGoodsInfoCartsList()
+      !guest && this.getGoodsInfoCartsList()
     });
   }
   /**
@@ -203,6 +205,7 @@ export default class SelectedProduct extends React.Component<any, any> {
               style={{ width: 100 }}
               value={[1, 2].includes(record.goodsInfoFlag) ? 1 : 0}
               getPopupContainer={(trigger: any) => trigger.parentNode}
+              disabled={this.props.felinStore}
               placeholder="Select a person" optionFilterProp="children"
               onChange={(e) => this.onSelectChange(e, index, record, 'subscriptionStatus')}>
               { record.subscriptionStatus === 1 && (<Option value={1}>Y</Option>)}
@@ -296,7 +299,7 @@ export default class SelectedProduct extends React.Component<any, any> {
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
-          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} searchCount={(e) => this.getGoodsInfoCartsList()} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} guest={this.props.guest} searchCount={this.getGoodsInfoCartsList} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
         <AuthWrapper functionName='f_goodwill_order'>
           <Checkbox onChange={e => this.props.onGoodwillChecked(e.target.checked)}><FormattedMessage id="Order.goodwillDesc" /></Checkbox>

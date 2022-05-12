@@ -97,3 +97,24 @@ export function querySysDictionary(filterParams = {}) {
     })
   });
 }
+
+/**
+ * guest carts
+ */
+ export function getValetGuestCarts(store_id,filterParams) {
+  return Fetch<TResult>(`/store/${store_id}/valetGuestCarts`, {
+    method: 'POST',
+    body: JSON.stringify({
+      ...filterParams
+    })
+  });
+}
+
+/**
+ * guest mini carts
+ */
+export function getValetGuestMiniCarts(store_id, key_id) {
+  return Fetch<TResult>(`/store/${store_id}/${key_id}/valet-guest-mini-carts`, {
+    method: 'GET'
+  });
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AuthWrapper, BreadCrumb, Const, Headline, RCi18n } from 'qmkit';
+import { AuthWrapper, BreadCrumb, cache, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import { Breadcrumb, Button, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
 import Information from './components/Information';
@@ -7,15 +7,15 @@ import Tab from '@/Integration/components/tab';
 import Statistics from './components/Statistics';
 import '@/Integration/components/index.less';
 import { Link } from 'react-router-dom';
-import * as webapi from './webapi'
+import * as webapi from './webapi';
 import ReactJson from 'react-json-view';
 import JsonModal from '@/Integration/components/JsonModal';
+import Setting from './components/Setting';
 
 const { TabPane } = Tabs;
 const { Search } = Input;
-
+const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 export default class InterfaceView extends Component<any, any> {
-
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,138 +32,208 @@ export default class InterfaceView extends Component<any, any> {
       title: '',
       showJson: null,
       logList: [],
-      detailInfo: {
-      },
-    }
-  };
+      detailInfo: {},
+      settingparams: { retryFlag: 0, emailFlag: 0, retryNum: 0 }
+    };
+  }
   componentDidMount() {
-    this.init()
+    this.init();
   }
   init = () => {
-    const interfaceId = this.props.match.params.id
+    const interfaceId = this.props.match.params.id;
     this.setState({
       interfaceId: +interfaceId
-    })
-    this.getInterfaceDetail(+interfaceId)
+    });
+    this.getInterfaceDetail(+interfaceId);
     let params = {
       interfaceIds: [interfaceId],
       pageSize: 5,
-      pageNum: 0,
-    }
-    this.getLogList(params)
+      pageNum: 0
+    };
+    this.getLogList(params);
     if (this.props.location.query && this.props.location.query.type) {
       this.setState({
         detailsTabsKey: this.props.location.query.type
-      })
+      });
     }
-
-  }
+  };
   getInterfaceDetail = (interfaceId) => {
     this.setState({
       loading: true
-    })
+    });
     let params = {
       interfaceId: interfaceId
-    }
-    webapi.getInterfaceDetail(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        let detailInfo = res.context || {}
-        this.setState({
-          loading: false,
-          detailInfo
-        })
-      }
-      else {
+    };
+    webapi
+      .getInterfaceDetail(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          let detailInfo = res.context || {};
+          this.setState({
+            loading: false,
+            detailInfo
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
         this.setState({
           loading: false
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
-      })
-    })
-  }
-
+        });
+      });
+  };
 
   onDetailTabsChange = (key) => {
-    this.setState({ detailsTabsKey: key })
-  }
-
+    this.setState({ detailsTabsKey: key });
+  };
 
   getLogList = (params) => {
     this.setState({
       loading: true
-    })
-    webapi.fetchLogList(params).then(data => {
-      const { res } = data
-      if (res.code === Const.SUCCESS_CODE) {
-        const { pagination } = this.state
-        let logList = res.context.logList
+    });
+    webapi
+      .fetchLogList(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          const { pagination } = this.state;
+          let logList = res.context.logList;
 
-        pagination.total = res.context.total
-        pagination.current = res.context.currentPage + 1
-        this.setState({
-          logList,
-          loading: false,
-          pagination
-        })
-      } else {
+          pagination.total = res.context.total;
+          pagination.current = res.context.currentPage + 1;
+          this.setState({
+            logList,
+            loading: false,
+            pagination
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
         this.setState({
           loading: false
-        })
-      }
-    }).catch(err => {
-      this.setState({
-        loading: false
-      })
-    })
-  }
-
-
+        });
+      });
+  };
 
   searchRequest = (value) => {
-    const { tableTabsKey, interfaceId } = this.state
+    const { tableTabsKey, interfaceId } = this.state;
     this.setState({
       keywords: value
-    })
+    });
     let params = {
       interfaceIds: [interfaceId],
       businessKeys: value ? [value] : [],
       resultFlag: tableTabsKey === 'all' ? null : 2,
       pageSize: 5,
-      pageNum: 0,
-    }
-    this.getLogList(params)
-  }
+      pageNum: 0
+    };
+    this.getLogList(params);
+  };
   handlePageChange = (pagination) => {
-    const { keywords, tableTabsKey, interfaceId } = this.state
+    const { keywords, tableTabsKey, interfaceId } = this.state;
     this.setState({
       pagination
-    })
+    });
     let params = {
       businessKeys: keywords ? [keywords] : [],
       interfaceIds: [interfaceId],
       resultFlag: tableTabsKey === 'all' ? null : 2,
       pageSize: pagination.pageSize,
-      pageNum: pagination.pageNum,
-
-    }
-    this.getLogList(params)
-  }
+      pageNum: pagination.pageNum
+    };
+    this.getLogList(params);
+  };
+  // 查询setting配置
+  getSetting = (id) => {
+    this.setState({
+      loading: true
+    });
+    webapi
+      .getSetting(id)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          // 在这里设置settingId
+          this.setState({
+            loading: false
+            // settingparams
+          });
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
+  };
+  // 查询setting配置
+  saveSetting = () => {
+    const { interfaceId, settingparams } = this.state;
+    // this.setState({
+    //   loading: true
+    // });
+    const params = {
+      // id 从查询那里取
+      id: '',
+      intId: interfaceId,
+      ...settingparams
+    };
+    console.log('params', params);
+    // webapi
+    //   .saveSetting(params)
+    //   .then((data) => {
+    //     const { res } = data;
+    //     if (res.code === Const.SUCCESS_CODE) {
+    //       this.setState({
+    //         loading: false
+    //       });
+    //     } else {
+    //       this.setState({
+    //         loading: false
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     this.setState({
+    //       loading: false
+    //     });
+    //   });
+  };
+  paramsChange = ({ field, value }) => {
+    const { settingParams } = this.state;
+    const tempObj = { ...settingParams };
+    tempObj[field] = value;
+    this.setState({
+      settingParams: tempObj
+    });
+    console.log('field', field);
+    console.log('value', value);
+  };
   onTableTabsChange = (key) => {
-    const { keywords, interfaceId } = this.state
-    this.setState({ tableTabsKey: key })
+    const { keywords, interfaceId } = this.state;
+    this.setState({ tableTabsKey: key });
     let params = {
       businessKeys: keywords ? [keywords] : [],
       interfaceIds: [interfaceId],
       resultFlag: key === 'all' ? null : 2,
       pageSize: 5,
       pageNum: 0
-    }
-    this.getLogList(params)
-  }
+    };
+    // kye 为Setting的话就去查setting的配置
+    key == 'Setting' ? this.getSetting(interfaceId) : this.getLogList(params);
+  };
 
   openJsonPage = (title, showJson) => {
     this.setState({
@@ -171,37 +241,53 @@ export default class InterfaceView extends Component<any, any> {
       title,
       showJson,
       visible: true
-    })
-  }
-
-
+    });
+  };
 
   render() {
-    const { loading, detailsTabsKey, tableTabsKey, detailInfo, visible, title, showJson, pagination, logList, interfaceId } = this.state
+    const {
+      loading,
+      detailsTabsKey,
+      tableTabsKey,
+      detailInfo,
+      visible,
+      title,
+      showJson,
+      pagination,
+      logList,
+      interfaceId,
+      settingparams
+    } = this.state;
     const columns = [
       {
         title: RCi18n({ id: 'Log.RequestID' }),
         dataIndex: 'requestId',
-        key: 'requestId',
+        key: 'requestId'
       },
       {
         title: RCi18n({ id: 'Log.Time' }),
         dataIndex: 'invokeTime',
-        key: 'invokeTime',
+        key: 'invokeTime'
       },
       {
         title: RCi18n({ id: 'Log.InterfaceName' }),
         dataIndex: 'interfaceName',
-        key: 'interfaceName',
+        key: 'interfaceName'
       },
       {
         title: RCi18n({ id: 'Log.Header' }),
         key: 'header',
         render: (text, record) => (
-          <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'Log.Header' }),
-              record.param && record.param.header ? record.param.header : {})
-          }}>
+          <Button
+            type="link"
+            style={{ padding: 0 }}
+            onClick={() => {
+              this.openJsonPage(
+                RCi18n({ id: 'Log.Header' }),
+                record.param && record.param.header ? record.param.header : {}
+              );
+            }}
+          >
             {RCi18n({ id: 'Log.Header' })}
           </Button>
         )
@@ -210,48 +296,59 @@ export default class InterfaceView extends Component<any, any> {
         title: RCi18n({ id: 'Log.Payload' }),
         key: 'payload',
         render: (text, record) => (
-          <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'Log.Payload' }),
-              record.param && record.param.payload ?
-                JSON.parse(record.param.payload) : {})
-          }}>
-            {RCi18n({ id: 'Log.Payload' })}</Button>
+          <Button
+            type="link"
+            style={{ padding: 0 }}
+            onClick={() => {
+              this.openJsonPage(
+                RCi18n({ id: 'Log.Payload' }),
+                record.param && record.param.payload ? JSON.parse(record.param.payload) : {}
+              );
+            }}
+          >
+            {RCi18n({ id: 'Log.Payload' })}
+          </Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.Response' }),
         key: 'response',
         render: (text, record) => (
-          <Button type="link" style={{ padding: 0 }} onClick={() => {
-            this.openJsonPage(RCi18n({ id: 'Log.Response' }), record.result && record.result.content ?
-              JSON.parse(record.result.content) : {})
-          }}>
-            {RCi18n({ id: 'Log.Response' })}</Button>
+          <Button
+            type="link"
+            style={{ padding: 0 }}
+            onClick={() => {
+              this.openJsonPage(
+                RCi18n({ id: 'Log.Response' }),
+                record.result && record.result.content ? JSON.parse(record.result.content) : {}
+              );
+            }}
+          >
+            {RCi18n({ id: 'Log.Response' })}
+          </Button>
         )
       },
       {
         title: RCi18n({ id: 'Log.ClientName' }),
         dataIndex: 'clientName',
-        key: 'clientName',
+        key: 'clientName'
       },
       {
         title: '',
         dataIndex: 'detail',
         render: (text, record) => (
           <AuthWrapper functionName="f_log_details">
-            <Tooltip placement="top" title={RCi18n({ id: "Product.Details" })}>
+            <Tooltip placement="top" title={RCi18n({ id: 'Product.Details' })}>
               <Link to={`/log-detail/${record.requestId}`} className="iconfont iconDetails" />
             </Tooltip>
           </AuthWrapper>
         )
       }
-    ]
+    ];
 
     return (
       <AuthWrapper functionName="f_interface_details">
         <Spin spinning={loading}>
-
-
           <BreadCrumb thirdLevel={true}>
             <Breadcrumb.Item>{detailInfo.name}</Breadcrumb.Item>
           </BreadCrumb>
@@ -268,38 +365,55 @@ export default class InterfaceView extends Component<any, any> {
               </TabPane>
             </Tabs>
           </div>
-          {
-            detailsTabsKey === 'information' ? (
-              <div className="container">
-                <Tabs defaultActiveKey={tableTabsKey} onChange={(key) => this.onTableTabsChange(key)}>
-                  {/* All */}
-                  <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="all" />
-                  {/* Error */}
-                  <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
-                </Tabs>
-                {/* 表格 */}
-                <Search
-                  placeholder="keywords"
-                  onSearch={value => this.searchRequest(value)}
-                  style={{ width: 200, marginBottom: 20 }}
+          {detailsTabsKey === 'information' ? (
+            <div className="container">
+              <Tabs defaultActiveKey={tableTabsKey} onChange={(key) => this.onTableTabsChange(key)}>
+                {/* All */}
+                <TabPane tab={<FormattedMessage id="Interface.AllRequests" />} key="all" />
+                {/* Error */}
+                <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
+                {/* ru 添加了邮件定时发送setting */}
+                {storeId == '123457907' && (
+                  <TabPane tab={<FormattedMessage id="Interface.Setting" />} key="Setting" />
+                )}
+              </Tabs>
+              {tableTabsKey == 'Setting' && (
+                <Setting
+                  saveSetting={this.saveSetting}
+                  paramsChange={this.paramsChange}
+                  settingparams={settingparams}
                 />
-                <Tab
-                  rowKey="requestId"
-                  dataSource={logList}
-                  pagination={pagination}
-                  onChange={this.handlePageChange}
-                  columns={columns}
-                />
-                <JsonModal
-                  visible={visible}
-                  title={title}
-                  showJson={showJson}
-                  modalCancel={() => this.setState({
+              )}
+              {/* 表格 */}
+              {tableTabsKey != 'Setting' && (
+                <>
+                  <Search
+                    placeholder="keywords"
+                    onSearch={(value) => this.searchRequest(value)}
+                    style={{ width: 200, marginBottom: 20 }}
+                  />
+                  <Tab
+                    rowKey="requestId"
+                    dataSource={logList}
+                    pagination={pagination}
+                    onChange={this.handlePageChange}
+                    columns={columns}
+                  />
+                </>
+              )}
+
+              <JsonModal
+                visible={visible}
+                title={title}
+                showJson={showJson}
+                modalCancel={() =>
+                  this.setState({
                     visible: false
-                  })} />
-              </div>
-            ) : null
-          }
+                  })
+                }
+              />
+            </div>
+          ) : null}
         </Spin>
       </AuthWrapper>
     );

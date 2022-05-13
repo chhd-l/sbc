@@ -1,10 +1,10 @@
-import {Fetch} from 'qmkit'
+import { Fetch } from 'qmkit';
 
 type TResult = {
-  code:string,
-  message:string,
-  context:any
-}
+  code: string;
+  message: string;
+  context: any;
+};
 
 // 获取logList列表
 export function fetchLogList(filterParams = {}) {
@@ -65,7 +65,6 @@ export function getSucessfulRate(filterParams = {}) {
   });
 }
 
-
 //responseTime
 export function getResponseTime(filterParams = {}) {
   return Fetch<TResult>('/requestLogStatistical/responseTime', {
@@ -86,5 +85,31 @@ export function getResponseTimePercentile(filterParams = {}) {
   });
 }
 
+/**
+ * 获取setting详情
+ * @param intId (interfaceId)
+ * @returns
+ */
+export function getSetting(intId = '') {
+  return Fetch<TResult>(`/retrySetting/findByIntId/${intId}`, {
+    method: 'GET'
+  });
+}
 
-
+/**
+ * 保存setting配置信息
+ * @param retryFlag（0/1，重试配置，非空）
+   @param settingId（查询配置时返回，可为空）
+   @param intId（接口id，非空）
+   @param emailFlag（0/1，邮件配置非空）
+   @param retryNum（重试次数，非空）
+ * @returns 
+ */
+export function saveSetting(Params = {}) {
+  return Fetch<TResult>('/retrySetting/save', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...Params
+    })
+  });
+}

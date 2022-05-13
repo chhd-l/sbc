@@ -6,7 +6,7 @@ import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
 import { FormattedMessage } from 'react-intl';
-import { getShopToken, queryOrderStatus, getShopCouponCode } from './webapi';
+import { getShopToken, queryOrderStatus, getShopCouponCode,getGuestOrderResponse } from './webapi';
 
 const { Step } = Steps;
 class ManualOrder extends Component<any, any> {
@@ -50,14 +50,14 @@ class ManualOrder extends Component<any, any> {
           }
         } else {
           current++;
+          this.setState({ current });
         }
-        this.setState({ current });
       }
     });
   }
 
   turnShowPage = (token, promocode) => {
-    let { customer, url,guest,guestId } = this.state;
+    let { customer, url,guest,guestId,storeId} = this.state;
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
     let guestParams = `${spromocode}guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
     let params = guest ?guestParams:`${spromocode}stoken=${token}`
@@ -69,7 +69,7 @@ class ManualOrder extends Component<any, any> {
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
-        const { res } = await queryOrderStatus(customer.customerId, token);
+        const { res } = guest? await getGuestOrderResponse(storeId, guestId):await queryOrderStatus(customer.customerId, token);
         if (res.code === Const.SUCCESS_CODE) {
           let d = {
             string: 1,
@@ -156,6 +156,10 @@ class ManualOrder extends Component<any, any> {
     if(type =='guest') {
       this.setState({
         guest:true
+      })
+    }else {
+      this.setState({
+        guest:false
       })
     }
   }

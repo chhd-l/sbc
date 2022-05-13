@@ -118,3 +118,12 @@ export function getValetGuestMiniCarts(store_id, key_id) {
     method: 'GET'
   });
 }
+
+/**
+ * guest order payment response
+ */
+ export function getGuestOrderResponse(store_id, key_id) {
+  return Fetch<TResult>(`/store/${store_id}/${key_id}/valet-guest-order-payment-response`, {
+    method: 'GET'
+  });
+}

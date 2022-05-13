@@ -96,6 +96,7 @@ class ConsumerInformation extends React.Component<any, any> {
       this.setState({
         showEmail:true,
       })
+      this.props.petOwnerType('')
     }else {
       this.setState({
         showEmail:false,

@@ -665,19 +665,19 @@ class PaymentModal extends React.Component<any, any> {
         if (payPspItemVOList.pspConfigSupplierVO || (payPspItemVOList.code.includes('CASH')&& this.state._country == 'fr')) {
           params = {
             pspConfigSaveRequest: Object.assign({
-              id: payPspItemVOList?.pspConfigSupplierVO?.id || null,
-              pspId: payPspItemVOList?.pspConfigSupplierVO?.pspId|| null,
-              pspItemId: payPspItemVOList?.pspConfigSupplierVO?.pspItemId|| null,
-              apiKey: payPspItemVOList?.pspConfigSupplierVO?.apiKey || '',
-              secret: payPspItemVOList?.pspConfigSupplierVO?.secret || '',
-              merchantAccount: payPspItemVOList?.pspConfigSupplierVO?.merchantAccount || '',
-              privateKey: payPspItemVOList?.pspConfigSupplierVO?.privateKey || '',
-              publicKey: payPspItemVOList?.pspConfigSupplierVO?.publicKey || '',
-              clientKey: payPspItemVOList?.pspConfigSupplierVO?.clientKey || '',
-              paymentAccount: payPspItemVOList?.pspConfigSupplierVO?.paymentAccount || '',
-              environment: payPspItemVOList?.pspConfigSupplierVO?.environment || '',
-              checkoutApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.checkoutApiPrefix || '',
-              classicPaymentApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.classicPaymentApiPrefix || ''
+              id: payPspItemVOList?.pspConfigSupplierVO?.id ?? null,
+              pspId: payPspItemVOList?.pspConfigSupplierVO?.pspId?? null,
+              pspItemId: payPspItemVOList?.pspConfigSupplierVO?.pspItemId?? null,
+              apiKey: payPspItemVOList?.pspConfigSupplierVO?.apiKey ?? '',
+              secret: payPspItemVOList?.pspConfigSupplierVO?.secret ?? '',
+              merchantAccount: payPspItemVOList?.pspConfigSupplierVO?.merchantAccount ?? '',
+              privateKey: payPspItemVOList?.pspConfigSupplierVO?.privateKey ?? '',
+              publicKey: payPspItemVOList?.pspConfigSupplierVO?.publicKey ?? '',
+              clientKey: payPspItemVOList?.pspConfigSupplierVO?.clientKey ?? '',
+              paymentAccount: payPspItemVOList?.pspConfigSupplierVO?.paymentAccount ?? '',
+              environment: payPspItemVOList?.pspConfigSupplierVO?.environment ?? '',
+              checkoutApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.checkoutApiPrefix ?? '',
+              classicPaymentApiPrefix: payPspItemVOList?.pspConfigSupplierVO?.classicPaymentApiPrefix ?? ''
             }),
             payPspItemSaveRequest: Object.assign({
               id:

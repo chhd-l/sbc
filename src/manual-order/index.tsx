@@ -60,7 +60,7 @@ class ManualOrder extends Component<any, any> {
     let { customer, url,guest,guestId,storeId,felinStore} = this.state;
     let userGroup = felinStore ? `userGroup=felinStore&` : '';
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
-    let guestParams = `${spromocode}guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
+    let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
     let params = guest ?guestParams:`${userGroup}${spromocode}stoken=${token}`
     let winObj = window.open(
       `${url.replace(/\/$/gi, '')}/cart?${params}`,
@@ -194,7 +194,7 @@ class ManualOrder extends Component<any, any> {
     })
   }
   render() {
-    const { current, title, customer, storeId, status, url, context,guest,felinStore } = this.state;
+    const { current, title, customer, storeId, status, url, context,guest,felinStore,guestId } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -223,6 +223,7 @@ class ManualOrder extends Component<any, any> {
             felinStore={felinStore}
             onGoodwillChecked={this.handleGoodwillChecked}
             guestId={this.getGuestId}
+            guestKey={guestId}
           />
         )
       },

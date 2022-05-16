@@ -1,7 +1,7 @@
 import { Button, Icon, Popconfirm, Select, Table, Tooltip, Checkbox } from 'antd';
 import React from 'react';
 import AddProductModal from './addProductModal';
-import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, getValetGuestMiniCarts } from '../webapi';
+import { getGoodsInfoCarts, querySysDictionary, updateGoodsInfoCarts, deleteGoodsInfoCarts, getValetGuestMiniCarts,deleteGuestCartsData } from '../webapi';
 import { cache, AuthWrapper, util } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 const defaultImg = require('./img/none.png');
@@ -17,7 +17,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       clubOptions: [],
       loading: false,
       totalPrice: 0,
-      goodsCount: {}//商品数量 map id：0对应
+      goodsCount: {},//商品数量 map id：0对应
+      guestId:this.props.guestKey,
     };
   }
 
@@ -88,6 +89,9 @@ export default class SelectedProduct extends React.Component<any, any> {
   //获取购物车列表
   getGoodsInfoCartsList = async (guestKey?:string) => {
     this.props.guestId(guestKey)
+    this.setState({
+      guestId:guestKey
+    })
     const { res } = guestKey ? await getValetGuestMiniCarts(this.props.storeId, guestKey) : await getGoodsInfoCarts(this.props.storeId, this.props.customer.customerId);
     let goodsList = res.context?.goodsList ?? [];
     let goodsCount = {}, totalPrice = 0;
@@ -144,18 +148,27 @@ export default class SelectedProduct extends React.Component<any, any> {
    */
   async deleteCartsGood(row) {
     const { storeId, customer } = this.props;
+    const {guestId} = this.state;
     this.setState({
       loading: true
     });
-    await deleteGoodsInfoCarts(storeId, {
+    if(guestId) {
+      await deleteGuestCartsData({
+        goodsInfoIds: [row.goodsInfoId],
+      customerId: guestId
+      })
+    }else {
+       await deleteGoodsInfoCarts(storeId, {
       goodsInfoIds: [row.goodsInfoId],
       customerId: customer.customerId
     });
-    this.getGoodsInfoCartsList();
+    }
+   
+    this.getGoodsInfoCartsList(guestId);
   }
   render() {
     // const { getFieldDecorator } = this.props.form;
-    const { options, dataSource, loading, totalPrice, goodsCount, visible } = this.state;
+    const { options, dataSource, loading, totalPrice, goodsCount, visible, guestId } = this.state;
     const { storeId, customer, url } = this.props;
     const columns = [
       {
@@ -299,7 +312,7 @@ export default class SelectedProduct extends React.Component<any, any> {
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>
-          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} visible={visible} guest={this.props.guest} searchCount={this.getGoodsInfoCartsList} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
+          {visible && <AddProductModal url={url} storeId={storeId} customer={customer} goodsCount={goodsCount} guestId={guestId} visible={visible} guest={this.props.guest} searchCount={this.getGoodsInfoCartsList} handleCancel={this.handleOk} handleOk={this.handleOk}></AddProductModal>}
         </div>
         <AuthWrapper functionName='f_goodwill_order'>
           <Checkbox onChange={e => this.props.onGoodwillChecked(e.target.checked)}><FormattedMessage id="Order.goodwillDesc" /></Checkbox>

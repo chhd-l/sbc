@@ -42,7 +42,8 @@ export default class AddProductModal extends Component {
     goodsCount?: any
     searchCount?: Function
     url: string,
-    guest: boolean
+    guest: boolean,
+    guestId:string,
   };
   onChange = (e, type) => {
     if (e && e.target) {
@@ -119,7 +120,10 @@ export default class AddProductModal extends Component {
       goodsNum: row.buyCount
     };
     if(this.props.guest) {
-      const {res} = await getValetGuestCarts(this.props.storeId,params)
+      const {res} = await getValetGuestCarts(this.props.storeId,{
+        customerId:this.props.guestId,
+        ...params
+      })
       if (res.code === Const.SUCCESS_CODE) {
         this.setState({guestKey:res.context || ''})
         message.success('Add successfully');

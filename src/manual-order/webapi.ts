@@ -127,3 +127,11 @@ export function getValetGuestMiniCarts(store_id, key_id) {
     method: 'GET'
   });
 }
+
+// delete guest mini carts data
+export function deleteGuestCartsData(filterParams) {
+  return Fetch<TResult>('/store/guest/purchase', {
+    method: 'delete',
+    body: JSON.stringify({ ...filterParams })
+  });
+}

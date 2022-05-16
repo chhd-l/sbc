@@ -152,19 +152,25 @@ export default class InterfaceView extends Component<any, any> {
     this.getLogList(params);
   };
   // 查询setting配置
-  getSetting = (id) => {
+  getSetting = () => {
+    const { interfaceId } = this.state;
     this.setState({
       loading: true
     });
     webapi
-      .getSetting(id)
+      .getSetting(interfaceId)
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
           // 在这里设置settingId
           this.setState({
-            loading: false
-            // settingparams
+            loading: false,
+            settingparams: {
+              id: res.context?.retrySettingVO?.id,
+              retryFlag: res.context?.retrySettingVO?.retryFlag,
+              emailFlag: res.context?.retrySettingVO?.emailFlag,
+              retryNum: res.context?.retrySettingVO?.retryNum
+            }
           });
         } else {
           this.setState({
@@ -181,9 +187,9 @@ export default class InterfaceView extends Component<any, any> {
   // 查询setting配置
   saveSetting = () => {
     const { interfaceId, settingparams } = this.state;
-    // this.setState({
-    //   loading: true
-    // });
+    this.setState({
+      loading: true
+    });
     const params = {
       // id 从查询那里取
       id: '',
@@ -191,32 +197,30 @@ export default class InterfaceView extends Component<any, any> {
       ...settingparams
     };
     console.log('params', params);
-    // webapi
-    //   .saveSetting(params)
-    //   .then((data) => {
-    //     const { res } = data;
-    //     if (res.code === Const.SUCCESS_CODE) {
-    //       this.setState({
-    //         loading: false
-    //       });
-    //     } else {
-    //       this.setState({
-    //         loading: false
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     this.setState({
-    //       loading: false
-    //     });
-    //   });
+    webapi
+      .saveSetting(params)
+      .then((data) => {
+        const { res } = data;
+        if (res.code === Const.SUCCESS_CODE) {
+          this.getSetting();
+        } else {
+          this.setState({
+            loading: false
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false
+        });
+      });
   };
   paramsChange = ({ field, value }) => {
-    const { settingParams } = this.state;
-    const tempObj = { ...settingParams };
+    const { settingparams } = this.state;
+    const tempObj = { ...settingparams };
     tempObj[field] = value;
     this.setState({
-      settingParams: tempObj
+      settingparams: tempObj
     });
     console.log('field', field);
     console.log('value', value);
@@ -232,7 +236,7 @@ export default class InterfaceView extends Component<any, any> {
       pageNum: 0
     };
     // kye 为Setting的话就去查setting的配置
-    key == 'Setting' ? this.getSetting(interfaceId) : this.getLogList(params);
+    key == 'Setting' ? this.getSetting() : this.getLogList(params);
   };
 
   openJsonPage = (title, showJson) => {

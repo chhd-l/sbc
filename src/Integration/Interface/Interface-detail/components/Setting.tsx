@@ -17,7 +17,7 @@ const Setting = (props: any) => {
             <Switch
               checkedChildren={<FormattedMessage id="Subscription.On" />}
               unCheckedChildren={<FormattedMessage id="Subscription.Off" />}
-              checked={settingparams.retryFlag == 1 ? true : false}
+              checked={settingparams?.retryFlag == 1 ? true : false}
               onChange={(value) =>
                 paramsChange({
                   field: 'retryFlag',
@@ -32,7 +32,7 @@ const Setting = (props: any) => {
               min={0}
               max={20}
               style={{ width: '90%' }}
-              value={settingparams.retryNum}
+              value={settingparams?.retryNum}
               onChange={(value) =>
                 paramsChange({
                   field: 'retryNum',
@@ -49,7 +49,7 @@ const Setting = (props: any) => {
             <Switch
               checkedChildren={<FormattedMessage id="Subscription.On" />}
               unCheckedChildren={<FormattedMessage id="Subscription.Off" />}
-              checked={settingparams.emailFlag == 1 ? true : false}
+              checked={settingparams?.emailFlag == 1 ? true : false}
               onChange={(value) =>
                 paramsChange({
                   field: 'emailFlag',

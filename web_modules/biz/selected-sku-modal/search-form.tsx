@@ -26,9 +26,7 @@ export default class SearchForm extends React.Component<any, any> {
         brandId: 0,
         cateId: 0,
         likeValue: '',
-        likeGoodsName: '',
-        promotions: 'club',
-        subscriptionStatus: 1
+        likeGoodsName: ''
       },
       cateIdDisabled: false,
       likeType: LIKE_TYPE.LIKE_GOODS_INFO_NO
@@ -36,7 +34,15 @@ export default class SearchForm extends React.Component<any, any> {
   }
 
   componentDidMount() {
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const { searchParams } = this.state;
     this.init();
+    if (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) {
+      this.setState({
+        ...searchParams,
+        subscriptionStatus: 1
+      });
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: any) {
@@ -46,9 +52,9 @@ export default class SearchForm extends React.Component<any, any> {
           brandId: 0,
           cateId: 0,
           likeValue: '',
-          likeGoodsName: '',
-          promotions: 'club',
-          subscriptionStatus: 1
+          likeGoodsName: ''
+          // promotions: 'club',
+          // subscriptionStatus: 1
         }
       });
     }
@@ -151,7 +157,7 @@ export default class SearchForm extends React.Component<any, any> {
                   label={<FormattedMessage id="product.subscriptionStatus" />}
                   dropdownStyle={{ zIndex: 1053 }}
                   onChange={(val) => this.paramsOnChange('subscriptionStatus', val)}
-                  value={searchParams.subscriptionStatus}
+                  value={searchParams?.subscriptionStatus === 0 ? 0 : 1}
                 >
                   <Option value={1}>
                     <FormattedMessage id="Product.Y" />
@@ -167,7 +173,11 @@ export default class SearchForm extends React.Component<any, any> {
                   label={RCi18n({ id: 'Product.subscriptionType' })}
                   dropdownStyle={{ zIndex: 1053 }}
                   onChange={(val) => this.paramsOnChange('promotions', val)}
-                  value={searchParams.promotions.toString()}
+                  value={
+                    searchParams?.promotions?.toString()
+                      ? searchParams?.promotions?.toString()
+                      : 'club'
+                  }
                 >
                   <Option value="autoship">
                     <FormattedMessage id="Product.Auto ship" />

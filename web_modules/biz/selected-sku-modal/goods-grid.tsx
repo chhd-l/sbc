@@ -23,9 +23,7 @@ export default class GoodsGrid extends React.Component<any, any> {
       selectedRowKeys: props.selectedSkuIds ? props.selectedSkuIds : [],
       total: 0,
       goodsInfoPage: {},
-      searchParams: props.searchParams
-        ? { promotions: 'club', subscriptionStatus: 1, ...this.props.searchParams }
-        : {},
+      searchParams: this.props.searchParams ? { ...this.props.searchParams } : {},
       showValidGood: props.showValidGood
     };
   }
@@ -33,11 +31,7 @@ export default class GoodsGrid extends React.Component<any, any> {
   componentDidMount() {
     //如果有指定的product category传入，不执行立即搜索。等search form初始化完后触发指定的product category搜索
     if (!this.props.goodsCate) {
-      this.init(
-        this.props.searchParams
-          ? { promotions: 'club', subscriptionStatus: 1, ...this.props.searchParams }
-          : {}
-      );
+      this.init(this.props.searchParams ? this.props.searchParams : {});
     }
   }
 
@@ -188,10 +182,12 @@ export default class GoodsGrid extends React.Component<any, any> {
       params.pageSize = 10;
     }
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
+    const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
+    const isRuFrTr = storeId == 123457907 || storeId == 123457909 || storeId == 123457911;
+    const isRuFrTrParams = isRuFrTr ? { promotions: 'club', subscriptionStatus: 1 } : {};
     this.setState({ loading: true });
     let { res } = await webapi.fetchGoodsList({
-      promotions: 'club',
-      subscriptionStatus: 1,
+      ...isRuFrTrParams,
       ...params
     });
 

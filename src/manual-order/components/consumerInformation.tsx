@@ -85,6 +85,8 @@ class ConsumerInformation extends React.Component<any, any> {
       this.setState({
         showGuest:false
       })
+    sessionStorage.removeItem('pet-owner-type')
+    this.props.form.resetFields('petOwnerType')
       this.props.userGroupType('fgs')
     }
   }

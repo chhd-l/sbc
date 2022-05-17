@@ -33,6 +33,7 @@ class ManualOrder extends Component<any, any> {
       guest:false,
       felinStore:false,
       guestId:'',
+      notNext:false,
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -180,6 +181,11 @@ class ManualOrder extends Component<any, any> {
   getCartsList = (list) => {
     this.setState({
       list
+    },()=>{
+      const isSubscription =   list.some(item => [1,2].includes(item.goodsInfoFlag))
+      this.setState({
+        notNext:isSubscription
+      })
     });
   };
   handleGoodwillChecked = (value) => {
@@ -280,7 +286,7 @@ class ManualOrder extends Component<any, any> {
               </Button>
             )}
             {current < steps.length - 1 && (
-              <Button type="primary" onClick={(e) => this.next(e)}>
+              <Button disabled={this.state.notNext} type="primary" onClick={(e) => this.next(e)}>
                 <FormattedMessage id="Order.Next step" /> <Icon type="right" />
               </Button>
             )}

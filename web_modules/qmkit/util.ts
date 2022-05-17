@@ -1,5 +1,5 @@
 import { cache, Const, history } from 'qmkit';
-import CryptoJS from 'crypto-js'
+import CryptoJS from 'crypto-js';
 /**
  * 判断用户是否登陆
  * @returns {boolean}
@@ -58,10 +58,8 @@ export function desensitizeStr(str, beginNum = 4, n = 4) {
  * Base64加密
  */
 export function Base64() {
-  const _keyStr =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  const _keyStrUrl =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=';
+  const _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  const _keyStrUrl = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_=';
   this.encode = function (input) {
     return encodebase(input, _keyStr);
   };
@@ -174,9 +172,7 @@ export function Base64() {
       } else {
         c2 = utftext.charCodeAt(i + 1);
         c3 = utftext.charCodeAt(i + 2);
-        string += String.fromCharCode(
-          ((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)
-        );
+        string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
         i += 3;
       }
     }
@@ -222,7 +218,7 @@ export function devision(a, b) {
   if (b == 0) {
     return 0;
   } else {
-    return (parseInt(a) * 100 / parseInt(b)).toFixed(2) + '%';
+    return ((parseInt(a) * 100) / parseInt(b)).toFixed(2) + '%';
   }
 }
 
@@ -341,14 +337,14 @@ export function requireLocalSrc(srcPath) {
  */
 
 export function logout() {
-  const accountName = sessionStorage.getItem(cache.LOGIN_DATA) ? JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA))
-    .accountName : '';
-  window.token = null
+  const accountName = sessionStorage.getItem(cache.LOGIN_DATA)
+    ? JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).accountName
+    : '';
+  window.token = null;
   localStorage.removeItem(cache.LOGIN_DATA);
   localStorage.removeItem(cache.DATA_BOARD.concat(accountName));
-  sessionStorage.clear()
+  sessionStorage.clear();
 }
-
 
 /**
  * 邮箱验证
@@ -356,9 +352,22 @@ export function logout() {
 export function checkEmail(str) {
   let re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
   if (re.test(str)) {
-    return true
+    return true;
   } else {
-    return false
+    return false;
+  }
+}
+
+/**
+ * antd 邮箱验证
+ */
+export function checkEmailWithAntd(str) {
+  let re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+\.)+[a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]{2,}))$/;
+  if (re.test(str)) {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -386,7 +395,7 @@ export function cycleBuild(list, source) {
 export const isMobileApp = () => {
   const devices = navigator.userAgent.toLowerCase();
   return /iphone/.test(devices) || /android/.test(devices);
-}
+};
 //导出方法
 export const onExport = (params, downloadUrl) => {
   return new Promise<void>((resolve) => {
@@ -412,17 +421,17 @@ export const onExport = (params, downloadUrl) => {
  *
  */
 interface PropsLoadJS {
-  url: string,
-  callback?: () => void,
-  dataSets?: any,
-  code?: string,
-  className?: string,
-  type?: string,
-  id?: string
+  url: string;
+  callback?: () => void;
+  dataSets?: any;
+  code?: string;
+  className?: string;
+  type?: string;
+  id?: string;
 }
 export const loadJS = ({
   url,
-  callback = function () { },
+  callback = function () {},
   dataSets,
   code,
   className,
@@ -466,40 +475,32 @@ export const loadJS = ({
     script.src = url;
   }
   document.getElementsByTagName('head')[0].appendChild(script);
-}
+};
 
 /**
- * 
+ *
  * @param aseKey 密钥
  * @param message 内容
- * @returns 
+ * @returns
  */
-export function encryptAES(message , aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
-  var encrypt = CryptoJS.AES.encrypt(
-    message,
-    CryptoJS.enc.Utf8.parse(aseKey),
-    {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Pkcs7,
-    }
-  ).toString();
-  return encrypt
+export function encryptAES(message, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
+  var encrypt = CryptoJS.AES.encrypt(message, CryptoJS.enc.Utf8.parse(aseKey), {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7
+  }).toString();
+  return encrypt;
 }
 /**
- * 
+ *
  * @param aseKey 密钥
  * @param encrypt 加密字符串
- * @returns 
+ * @returns
  */
 export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62') {
-  var decrypt = CryptoJS.AES.decrypt(
-    encrypt,
-    CryptoJS.enc.Utf8.parse(aseKey),
-    {
-      mode: CryptoJS.mode.ECB,
-      padding: CryptoJS.pad.Pkcs7,
-    }
-  ).toString(CryptoJS.enc.Utf8);
+  var decrypt = CryptoJS.AES.decrypt(encrypt, CryptoJS.enc.Utf8.parse(aseKey), {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7
+  }).toString(CryptoJS.enc.Utf8);
   return decrypt;
 }
 
@@ -508,12 +509,19 @@ export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62')
  * @param originImageUrl 源图片url
  * @param width width 默认150
  * @param height height 默认等于width
- * @returns 
+ * @returns
  */
-export function optimizeImage(originImageUrl: string, width: number = 150, height?: number): string {
-  const CDN_PREFIX = sessionStorage.getItem(cache.PRODUCT_IMAGE_CDN) || 'https://d2c-cdn.royalcanin.com/cdn-cgi/image/';
-  return originImageUrl && originImageUrl.startsWith('http') && !originImageUrl.startsWith(CDN_PREFIX)
+export function optimizeImage(
+  originImageUrl: string,
+  width: number = 150,
+  height?: number
+): string {
+  const CDN_PREFIX =
+    sessionStorage.getItem(cache.PRODUCT_IMAGE_CDN) ||
+    'https://d2c-cdn.royalcanin.com/cdn-cgi/image/';
+  return originImageUrl &&
+    originImageUrl.startsWith('http') &&
+    !originImageUrl.startsWith(CDN_PREFIX)
     ? `${CDN_PREFIX}width=${width},h=${height ?? width}/${originImageUrl}`
     : originImageUrl;
 }
-

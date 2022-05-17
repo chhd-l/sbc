@@ -1095,7 +1095,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       let { deliveryDate, timeSlot, timeSlotList, SelectDateStatus } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList: any[] = res.context.timeSlots;
+        let deliveryDateList: any[] = res.context.timeSlots?.map((item) => {
+          item?.dateTimeInfos.unshift({ startTime: 'Unspecified', endTime: '', sort: 0 });
+          return item;
+        });
         if (deliveryDateList.length > 0) {
           if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
             timeSlotList = deliveryDateList.find(
@@ -1111,7 +1114,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 ? timeSlot
                 : deliveryDateList[0] &&
                   deliveryDateList[0].dateTimeInfos[0].startTime +
-                    '-' +
+                    `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
                     deliveryDateList[0].dateTimeInfos[0].endTime
             });
           } else {
@@ -1122,7 +1125,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               timeSlot:
                 deliveryDateList[0] &&
                 deliveryDateList[0].dateTimeInfos[0].startTime +
-                  '-' +
+                  `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
                   deliveryDateList[0].dateTimeInfos[0].endTime
             });
           }
@@ -1147,7 +1150,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       timeSlot:
         deliveryDate === value
           ? timeSlot
-          : timeSlots[0] && timeSlots[0].startTime + '-' + timeSlots[0].endTime
+          : timeSlots[0] &&
+            timeSlots[0].startTime + `${timeSlots[0].endTime ? '-' : ''}` + timeSlots[0].endTime
     });
   };
 
@@ -2000,12 +2004,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                     <FormattedMessage id="Subscription.PetOwnerName" /> :{' '}
                     <span>{subscriptionInfo.consumer}</span>
                   </p>
-                  {storeId === 123457919 ? <p>
-                    <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
-                    <span>
-                      {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
-                    </span>
-                  </p> : null}
+                  {storeId === 123457919 ? (
+                    <p>
+                      <FormattedMessage id="PetOwner.PetOwnerName katakana" /> :{' '}
+                      <span>
+                        {subscriptionInfo.firstNameKatakana} {subscriptionInfo.lastNameKatakana}
+                      </span>
+                    </p>
+                  ) : null}
                   <p>
                     <FormattedMessage id="Subscription.ConsumerAccount" /> :{' '}
                     <span>{subscriptionInfo.consumerAccount}</span>
@@ -2356,10 +2362,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                       {timeSlotList &&
                                         timeSlotList.map((item, index) => (
                                           <Option
-                                            value={item.startTime + '-' + item.endTime}
+                                            value={
+                                              item.startTime +
+                                              `${item.endTime ? '-' : ''}` +
+                                              item.endTime
+                                            }
                                             key={index}
                                           >
-                                            {item.startTime + '-' + item.endTime}
+                                            {item.startTime +
+                                              `${item.endTime ? '-' : ''}` +
+                                              item.endTime}
                                           </Option>
                                         ))}
                                     </Select>

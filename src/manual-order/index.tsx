@@ -184,7 +184,7 @@ class ManualOrder extends Component<any, any> {
     },()=>{
       const isSubscription =   list.some(item => [1,2].includes(item.goodsInfoFlag))
       this.setState({
-        notNext:isSubscription
+        notNext:isSubscription && this.state.felinStore
       })
     });
   };

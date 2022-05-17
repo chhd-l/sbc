@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, cache, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Breadcrumb, Button, Icon, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
+import { Breadcrumb, Button, Icon, Input, message, Modal, Spin, Tabs, Tooltip } from 'antd';
 import Information from './components/Information';
 import Tab from '@/Integration/components/tab';
 import Statistics from './components/Statistics';
@@ -169,6 +169,7 @@ export default class InterfaceView extends Component<any, any> {
             loading: false,
             settingparams: {
               id: res.context?.retrySettingVO?.id,
+              intId: interfaceId,
               retryFlag: res.context?.retrySettingVO?.retryFlag,
               emailFlag: res.context?.retrySettingVO?.emailFlag,
               retryNum: res.context?.retrySettingVO?.retryNum
@@ -204,6 +205,7 @@ export default class InterfaceView extends Component<any, any> {
       .then((data) => {
         const { res } = data;
         if (res.code === Const.SUCCESS_CODE) {
+          message.success('Operate successfully');
           this.getSetting();
         } else {
           this.setState({

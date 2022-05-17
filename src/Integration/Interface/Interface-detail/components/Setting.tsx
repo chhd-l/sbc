@@ -34,6 +34,7 @@ const Setting = (props: any) => {
               min={0}
               max={10}
               style={{ width: '90%' }}
+              defaultValue={0}
               value={settingparams?.retryNum}
               onChange={(value) =>
                 paramsChange({

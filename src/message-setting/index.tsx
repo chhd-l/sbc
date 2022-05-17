@@ -375,6 +375,22 @@ class MessageSetting extends Component<any, any> {
                   )}
                 </FormItem>
                 <FormItem
+                  label={<FormattedMessage id="Marketing.reciverEmails" />}
+                  style={styles.formItem}
+                >
+                  {getFieldDecorator(`reciverEmails`, {
+                    initialValue: settingForm.reciverEmails
+                  })(<EmailReciver />)}
+                </FormItem>
+                <FormItem
+                  label={<FormattedMessage id="Marketing.ccReciverEmails" />}
+                  style={styles.formItem}
+                >
+                  {getFieldDecorator(`ccReciverEmails`, {
+                    initialValue: settingForm.ccReciverEmails
+                  })(<EmailReciver />)}
+                </FormItem>
+                <FormItem
                   label={<FormattedMessage id="Marketing.AccessKeyID" />}
                   style={styles.formItem}
                 >
@@ -412,43 +428,6 @@ class MessageSetting extends Component<any, any> {
                       }}
                     />
                   )}
-                </FormItem>
-                <FormItem
-                  label={<FormattedMessage id="Marketing.reciverEmails" />}
-                  style={styles.formItem}
-                >
-                  {getFieldDecorator(`reciverEmails`, {
-                    initialValue: settingForm.reciverEmails
-                  })(<EmailReciver />)}
-                </FormItem>
-                <FormItem
-                  label={<FormattedMessage id="Marketing.ccReciverEmails" />}
-                  style={styles.formItem}
-                >
-                  {getFieldDecorator(`ccReciverEmails`, {
-                    initialValue: settingForm.ccReciverEmails
-                  })(<EmailReciver />)}
-
-                  {/* {getFieldDecorator('ccReciverEmails', {
-                    rules: [
-                      {
-                        pattern: emailRegExp,
-                        message: <FormattedMessage id="Order.offline.consumerEmailRequired" />
-                      }
-                    ],
-                    initialValue: settingForm.ccReciverEmails
-                  })(
-                    <Input.TextArea
-                      autoSize={{ minRows: 2, maxRows: 4 }}
-                      onChange={(e) => {
-                        const value = (e.target as any).value;
-                        this.onFormChange({
-                          field: 'ccReciverEmails',
-                          value
-                        });
-                      }}
-                    />
-                  )} */}
                 </FormItem>
               </Form>
             </Modal>

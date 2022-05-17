@@ -26,7 +26,7 @@ export default class PaymentInformation extends React.Component<any, any> {
     } else if (status === 2) {
       return <h2><FormattedMessage id="Order.failure" /> {customer.customerAccount}</h2>;
     } else {
-      return <h2><FormattedMessage id="Order.successfully" /> {customer.customerAccount}
+      return <h2>{['PAYING','PAID'].indexOf(context.trade.tradeState.payState)>-1?<FormattedMessage id="Order.successfully" />:<FormattedMessage id="Order.failure" /> } {customer.customerAccount}
         <p style={{marginTop:10}}><FormattedMessage id="Order.number" />: <a> {context?.tid??''}</a></p>
         {context?.subscribeId&&<p style={{marginTop:10}}><FormattedMessage id="Order.subscriptionNumber" />: <a>{context?.subscribeId??''}</a></p>}
       </h2>;

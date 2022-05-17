@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AuthWrapper, BreadCrumb, cache, Const, Headline, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
-import { Breadcrumb, Button, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
+import { Breadcrumb, Button, Icon, Input, Modal, Spin, Tabs, Tooltip } from 'antd';
 import Information from './components/Information';
 import Tab from '@/Integration/components/tab';
 import Statistics from './components/Statistics';
@@ -11,6 +11,7 @@ import * as webapi from './webapi';
 import ReactJson from 'react-json-view';
 import JsonModal from '@/Integration/components/JsonModal';
 import Setting from './components/Setting';
+import { left } from '@antv/x6/lib/registry/port-layout/main';
 
 const { TabPane } = Tabs;
 const { Search } = Input;
@@ -33,7 +34,8 @@ export default class InterfaceView extends Component<any, any> {
       showJson: null,
       logList: [],
       detailInfo: {},
-      settingparams: { retryFlag: 0, emailFlag: 0, retryNum: 0 }
+      settingparams: { retryFlag: 0, emailFlag: 0, retryNum: 0 },
+      InformationVisable: false
     };
   }
   componentDidMount() {
@@ -260,7 +262,8 @@ export default class InterfaceView extends Component<any, any> {
       pagination,
       logList,
       interfaceId,
-      settingparams
+      settingparams,
+      InformationVisable
     } = this.state;
     const columns = [
       {
@@ -349,6 +352,20 @@ export default class InterfaceView extends Component<any, any> {
         )
       }
     ];
+    const operations = (
+      <Button
+        onClick={() => {
+          let { InformationVisable } = this.state;
+          InformationVisable = !InformationVisable;
+          this.setState({
+            InformationVisable
+          });
+        }}
+      >
+        Fold
+        {InformationVisable ? <Icon type="down" /> : <Icon type="left" />}
+      </Button>
+    );
 
     return (
       <AuthWrapper functionName="f_interface_details">
@@ -358,15 +375,27 @@ export default class InterfaceView extends Component<any, any> {
           </BreadCrumb>
           <div className="container-info">
             <Headline title={detailInfo.name} />
-            <Tabs activeKey={detailsTabsKey} onChange={(key) => this.onDetailTabsChange(key)}>
+            <Tabs
+              activeKey={detailsTabsKey}
+              tabBarExtraContent={storeId == 123457907 && operations}
+              onChange={(key) => this.onDetailTabsChange(key)}
+            >
               {/* Information */}
               <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
-                <Information detailInfo={detailInfo} />
+                {storeId == 123457907 ? (
+                  <div style={{ display: InformationVisable ? 'block' : 'none' }}>
+                    <Information detailInfo={detailInfo} />
+                  </div>
+                ) : (
+                  <Information detailInfo={detailInfo} />
+                )}
               </TabPane>
               {/* Statistics */}
-              <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
-                <Statistics interfaceId={interfaceId} />
-              </TabPane>
+              {storeId !== 123457907 && (
+                <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
+                  <Statistics interfaceId={interfaceId} />
+                </TabPane>
+              )}
             </Tabs>
           </div>
           {detailsTabsKey === 'information' ? (

@@ -14,3 +14,12 @@ export function createStoreAccount(filterParams) {
     })
   });
 }
+
+export function createStoreAccountCheck(Params) {
+  return Fetch<TResult>('/store/create/account/check', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...Params
+    })
+  });
+}

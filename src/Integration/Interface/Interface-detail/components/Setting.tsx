@@ -1,10 +1,12 @@
-import { Button, Row, Form, Col, Switch, InputNumber } from 'antd';
+import { Button, Row, Form, Col, Switch, InputNumber, Icon } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import '../css/setting.less';
 
 const Setting = (props: any) => {
   const { saveSetting, settingparams, paramsChange } = props;
+  const [isShow, setIsShow] = useState(false);
   return (
     <div className="interfaceSetting">
       <div>
@@ -30,7 +32,7 @@ const Setting = (props: any) => {
             <InputNumber
               precision={0}
               min={0}
-              max={20}
+              max={10}
               style={{ width: '90%' }}
               value={settingparams?.retryNum}
               onChange={(value) =>
@@ -41,7 +43,42 @@ const Setting = (props: any) => {
               }
             />
           </Col>
-          <Col span={6}>Attempts during broken integration</Col>
+          <Col
+            span={4}
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          >
+            <span>Attempts during broken integration</span>
+            <i className="hovericon" style={{ position: 'relative' }}>
+              <Icon type="exclamation-circle" />
+              <p
+                style={{
+                  lineHeight: '18px',
+                  backgroundColor: '#f4f4f4',
+                  // marginTop: '30px',
+                  // marginLeft: '10px',
+                  padding: '4px',
+                  color: '#80868e',
+                  position: 'absolute',
+                  top: '33px',
+                  left: '18px',
+                  width: '500px',
+                  fontStyle: 'normal'
+                }}
+              >
+                Retry attempts happen regularly for up to 7 days, at increasing time intervals:{' '}
+                <br />
+                <strong>·</strong> 5 minutes <br />
+                <strong>·</strong> 10 minutes <br />
+                <strong>·</strong> 15 minutes <br />
+                <strong>·</strong> 30 minutes <br />
+                <strong>·</strong> 1 hour <br />
+                <strong>·</strong> 2 hours <br />
+                <strong>·</strong> 4 hours <br />
+                After that, retries happen every 8 hours for the following 7 days.
+              </p>
+            </i>
+          </Col>
+          <Col span={8} style={{ display: isShow ? 'block' : 'none' }}></Col>
         </Row>
         <Row style={{ height: '64px', lineHeight: '64px' }}>
           <Col span={5}>Send alert notification email automatically:</Col>

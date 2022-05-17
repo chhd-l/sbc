@@ -173,43 +173,51 @@ export default class SelectedProduct extends React.Component<any, any> {
     const columns = [
       {
         title: 'Image',
+        width: 100,
         dataIndex: 'goodsInfoImg',
         key: 'goodsInfoImg',
         render: (img) => (img ? <img src={util.optimizeImage(img)} style={styles.imgItem} /> : <img src={defaultImg} style={styles.imgItem} />)
       },
       {
         title: 'SKU',
+        width: 100,
         dataIndex: 'goodsInfoNo',
         key: 'goodsInfoNo'
       },
       {
         title: 'Product name',
         dataIndex: 'goodsInfoName',
+        width: 100,
         key: 'goodsInfoName'
       },
       {
         title: 'Weight',
+        width: 100,
         dataIndex: 'packSize',
         key: 'packSize'
       },
       {
         title: 'Stock availability',
         dataIndex: 'stock',
+        width: 100,
         key: 'stock'
       },
       {
         title: 'Marketing price',
         dataIndex: 'marketPrice',
+        width: 100,
         key: 'marketPrice'
       },
       {
         title: 'Subscription price',
+        width: 100,
         dataIndex: 'subscriptionPrice',
         key: 'subscriptionPrice'
       },
       {
         title: 'Selected Subscription',
         dataIndex: 'subscriptionStatus',
+        width: 100,
         key: 'subscriptionStatus',
 
         render: (text, record, index) => {
@@ -230,6 +238,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       {
         title: 'Frequency',
         dataIndex: 'periodTypeId',
+        width: 100,
         key: 'periodTypeId',
 
         render: (text, record, index) => {
@@ -255,6 +264,7 @@ export default class SelectedProduct extends React.Component<any, any> {
       {
         title: 'quantity',
         dataIndex: 'buyCount',
+        width: 100,
         key: 'buyCount'
       },
 
@@ -262,6 +272,7 @@ export default class SelectedProduct extends React.Component<any, any> {
         title: 'Total amount',
         dataIndex: 'itemTotalAmount',
         key: 'itemTotalAmount',
+        width: 100,
         return: (text, record) => {
           let price = {
             1: (record.subscriptionPrice * record.buyCount).toFixed(2),
@@ -274,6 +285,8 @@ export default class SelectedProduct extends React.Component<any, any> {
       {
         title: 'Operation',
         dataIndex: 'Operation',
+        width: 100,
+        fixed: 'right',
         key: 'Operation',
         render: (text, record) => {
           return (
@@ -306,9 +319,11 @@ export default class SelectedProduct extends React.Component<any, any> {
           <Table
             pagination={false}
             loading={loading}
+            className="goods-info-list"
             rowKey="goodsInfoId"
             dataSource={dataSource}
             columns={columns}
+            scroll={{ x: 1400 }}
           />
           <div style={{ textAlign: 'right', padding: '20px 0' }}>
             <FormattedMessage id="Order.Product amount" /> {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}:{totalPrice}</div>

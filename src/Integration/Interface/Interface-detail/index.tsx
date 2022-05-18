@@ -343,6 +343,11 @@ export default class InterfaceView extends Component<any, any> {
         key: 'clientName'
       },
       {
+        title: RCi18n({ id: 'Log.BusinessId' }),
+        dataIndex: 'businessId',
+        key: 'businessId'
+      },
+      {
         title: '',
         dataIndex: 'detail',
         render: (text, record) => (

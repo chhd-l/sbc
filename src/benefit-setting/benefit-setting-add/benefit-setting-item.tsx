@@ -11,6 +11,7 @@ import BenefitSettingAddFrom from './components/BenefitSettingAddFrom';
 import AppStore from './store';
 import './index.less';
 import { makeRandom, getMarketingInfo, getfullGiftState } from '../webapi';
+import { SpinIndicator } from 'antd/lib/spin';
 
 @StoreProvider(AppStore, { debug: __DEV__ })
 export default class BenefitSettingAdd extends Component<any, any> {
@@ -197,7 +198,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
   };
 
   render() {
-    let { loading, initData } = this.state;
+    let { loading, initData, editable } = this.state;
     return (
       <Spin spinning={loading}>
         <div className="BenefitSettingAdd-wrap">
@@ -213,7 +214,10 @@ export default class BenefitSettingAdd extends Component<any, any> {
             </Breadcrumb.Item>
           </BreadCrumb>
           <div className="container">
-            <Spin spinning={!this.state.editable}>
+            <Spin
+              spinning={!editable}
+              indicator={<div className="editable-spin-indicator">updating......</div>}
+            >
               <BenefitSettingAddHint benefitType={this.props.benefitType} />
               <BenefitSettingAddFrom
                 initData={initData}
@@ -225,7 +229,7 @@ export default class BenefitSettingAdd extends Component<any, any> {
             <div className="bar-button" style={{ marginLeft: '-20px' }}>
               <Button
                 onClick={this.onSubmit}
-                disabled={!this.state.editable}
+                disabled={!editable}
                 type="primary"
                 style={{ marginRight: 10 }}
               >

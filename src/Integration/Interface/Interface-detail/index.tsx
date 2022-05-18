@@ -384,25 +384,25 @@ export default class InterfaceView extends Component<any, any> {
             <Headline title={detailInfo.name} />
             <Tabs
               activeKey={detailsTabsKey}
-              tabBarExtraContent={storeId == 123457907 && operations}
+              tabBarExtraContent={operations}
               onChange={(key) => this.onDetailTabsChange(key)}
             >
               {/* Information */}
               <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
-                {storeId == 123457907 ? (
+                {/* {storeId == 123457907 ? ( */}
                   <div style={{ display: InformationVisable ? 'block' : 'none' }}>
                     <Information detailInfo={detailInfo} />
                   </div>
-                ) : (
+                {/* ) : (
                   <Information detailInfo={detailInfo} />
-                )}
+                )} */}
               </TabPane>
               {/* Statistics */}
-              {storeId !== 123457907 && (
+              {/* {storeId !== 123457907 && (
                 <TabPane tab={<FormattedMessage id="Interface.Statistics" />} key="statistics">
                   <Statistics interfaceId={interfaceId} />
                 </TabPane>
-              )}
+              )} */}
             </Tabs>
           </div>
           {detailsTabsKey === 'information' ? (
@@ -413,9 +413,9 @@ export default class InterfaceView extends Component<any, any> {
                 {/* Error */}
                 <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
                 {/* ru 添加了邮件定时发送setting */}
-                {storeId == '123457907' && (
+                {/* {storeId == '123457907' && ( */}
                   <TabPane tab={<FormattedMessage id="Interface.Setting" />} key="Setting" />
-                )}
+                {/* )} */}
               </Tabs>
               {tableTabsKey == 'Setting' && (
                 <Setting

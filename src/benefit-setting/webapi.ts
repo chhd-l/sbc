@@ -1,17 +1,16 @@
-
 /*获取Group*/
-import {Fetch} from 'qmkit';
+import { Fetch } from 'qmkit';
 type TResult = {
-    code: string;
-    message: string;
-    context: any;
+  code: string;
+  message: string;
+  context: any;
 };
 
 export const getAllGroups = (params) => {
-    return Fetch('/customer/segment/segment/query', {
-        method: 'POST',
-        body: JSON.stringify({ ...params })
-    });
+  return Fetch('/customer/segment/segment/query', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
 };
 
 /**
@@ -19,10 +18,10 @@ export const getAllGroups = (params) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const addFullGift = (giftBean) => {
-    return Fetch<TResult>('/marketing/fullGift', {
-        method: 'POST',
-        body: JSON.stringify(giftBean)
-    });
+  return Fetch<TResult>('/marketing/fullGift', {
+    method: 'POST',
+    body: JSON.stringify(giftBean)
+  });
 };
 
 /**
@@ -30,10 +29,10 @@ export const addFullGift = (giftBean) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const updateFullGift = (giftBean) => {
-    return Fetch<TResult>('/marketing/fullGift', {
-        method: 'PUT',
-        body: JSON.stringify(giftBean)
-    });
+  return Fetch<TResult>('/marketing/fullGift', {
+    method: 'PUT',
+    body: JSON.stringify(giftBean)
+  });
 };
 
 /**
@@ -41,7 +40,7 @@ export const updateFullGift = (giftBean) => {
  * @returns {string}
  */
 export const makeRandom = () => {
-    return 'key' + (Math.random() as any).toFixed(6) * 1000000;
+  return 'key' + (Math.random() as any).toFixed(6) * 1000000;
 };
 
 /**
@@ -49,9 +48,9 @@ export const makeRandom = () => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export const getMarketingInfo = (marketingId) => {
-    return Fetch<TResult>(`/marketing/${marketingId}`, {
-        method: 'GET'
-    });
+  return Fetch<TResult>(`/marketing/${marketingId}`, {
+    method: 'GET'
+  });
 };
 
 /**
@@ -59,10 +58,24 @@ export const getMarketingInfo = (marketingId) => {
  * @returns {Promise<IAsyncResult<T>>}
  */
 export function getGiftQuarterTypeList() {
-    return Fetch<TResult>('/sysdict/querySysDictionary', {
-        method: 'POST',
-        body: JSON.stringify({
-            type: 'Gift_quarter_type'
-        })
-    });
+  return Fetch<TResult>('/sysdict/querySysDictionary', {
+    method: 'POST',
+    body: JSON.stringify({
+      type: 'Gift_quarter_type'
+    })
+  });
+}
+
+/**
+ * 获取 fullGift/getState数据
+ * @returns {Promise<IAsyncResult<T>>}
+ */
+export function getfullGiftState(marketingId) {
+  return Fetch<TResult>(
+    `/marketing/fullGift/getState/${marketingId}`,
+    {
+      method: 'GET'
+    },
+    { isHandleResult: true, customerTip: true }
+  );
 }

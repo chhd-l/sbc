@@ -145,7 +145,7 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
-    const newDataList = treeNesting(getGoodsCate,'cateParentId','cateId')
+    const newDataList = treeNesting(getGoodsCate,'cateParentId','storeCateId')
     return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', getGoodsCate);
   }
 

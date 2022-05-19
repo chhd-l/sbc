@@ -40,6 +40,7 @@ export default class SearchForm extends React.Component<any, any> {
     if (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) {
       this.setState({
         ...searchParams,
+        promotions: 'club',
         subscriptionStatus: 1
       });
     }

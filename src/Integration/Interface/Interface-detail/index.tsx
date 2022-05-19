@@ -344,8 +344,8 @@ export default class InterfaceView extends Component<any, any> {
       },
       {
         title: RCi18n({ id: 'Log.BusinessId' }),
-        dataIndex: 'businessId',
-        key: 'businessId'
+        dataIndex: 'businessIds',
+        key: 'businessIds'
       },
       {
         title: '',
@@ -390,9 +390,9 @@ export default class InterfaceView extends Component<any, any> {
               {/* Information */}
               <TabPane tab={<FormattedMessage id="Interface.Information" />} key="information">
                 {/* {storeId == 123457907 ? ( */}
-                  <div style={{ display: InformationVisable ? 'block' : 'none' }}>
-                    <Information detailInfo={detailInfo} />
-                  </div>
+                <div style={{ display: InformationVisable ? 'block' : 'none' }}>
+                  <Information detailInfo={detailInfo} />
+                </div>
                 {/* ) : (
                   <Information detailInfo={detailInfo} />
                 )} */}
@@ -414,7 +414,7 @@ export default class InterfaceView extends Component<any, any> {
                 <TabPane tab={<FormattedMessage id="Interface.Error" />} key="error" />
                 {/* ru 添加了邮件定时发送setting */}
                 {/* {storeId == '123457907' && ( */}
-                  <TabPane tab={<FormattedMessage id="Interface.Setting" />} key="Setting" />
+                <TabPane tab={<FormattedMessage id="Interface.Setting" />} key="Setting" />
                 {/* )} */}
               </Tabs>
               {tableTabsKey == 'Setting' && (

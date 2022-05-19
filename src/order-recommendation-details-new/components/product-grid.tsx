@@ -3,10 +3,12 @@ import { fromJS, Set } from 'immutable';
 
 import { cache, Const, DataGrid, SelectGroup, RCi18n, util } from 'qmkit';
 import defaultImg from '../../images/none.png';
+import redLoading from '../../images/redLoading.gif';
+import blueLoading from '../../images/blueLoading.gif';
 
 //import SearchForm from './search-form';
 import * as webapi from '../webapi';
-import { message, Select, Table } from 'antd';
+import { message, Select, Table, Modal } from 'antd';
 
 const Column = Table.Column;
 let recommendationNumber = 1;
@@ -27,7 +29,9 @@ export default class GoodsGrid extends React.Component<any, any> {
       goodsInfoPage: {},
       searchParams: {},
       showValidGood: props.showValidGood,
-      content: []
+      content: [],
+      imgModalVisible:false,
+      bigImg:''
     };
   }
 
@@ -98,8 +102,23 @@ export default class GoodsGrid extends React.Component<any, any> {
   //   }
   // }
 
+  imgClick = (img) => {
+    const newImg = new Image();
+    const url = util.optimizeImage(img || defaultImg,300,'auto')
+    newImg.src = url
+    newImg.onload = () =>{
+      this.setState({
+      bigImg: url
+    }, () => {
+        this.setState({
+          imgModalVisible: true
+        })
+    })
+    }
+  }
+
   render() {
-    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
+    const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood,bigImg } = this.state;
     const { rowChangeBackFun, visible } = this.props;
     return (
       <div className="content">
@@ -148,7 +167,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             })
           }}
         >
-          {Const.SITE_NAME === 'MYVETRECO' ? <Column title={RCi18n({id:'Product.image'})} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (<img src={img ? util.optimizeImage(img) : defaultImg} style={styles.imgItem} />)} /> : null}
+          {Const.SITE_NAME === 'MYVETRECO' ? <Column title={RCi18n({id:'Product.image'})} dataIndex="goodsInfoImg" key="goodsInfoImg" render={(img) => (<img onClick={()=>{this.imgClick(img)}} src={img ? util.optimizeImage(img) : defaultImg} style={styles.imgItem} />)} /> : null}
           <Column title={RCi18n({id:'Order.Product Name'})} dataIndex="goodsInfoName" key="goodsInfoName" />
           {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SPU'})} dataIndex="goodsNo" key="goodsNo" /> : null}
           {Const.SITE_NAME !== 'MYVETRECO' ? <Column title={RCi18n({id:'Order.SKU'})} dataIndex="goodsInfoNo" key="goodsInfoNo" /> : null}
@@ -163,7 +182,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
           <Column title={RCi18n({id:'Order.Price'})} dataIndex="marketPrice" key="marketPrice" render={(marketPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + marketPrice}</span>} />
-
+          {Const.SITE_NAME === 'MYVETRECO' ?<Column title={RCi18n({id:'PetOwner.species'})} dataIndex="species" key="species" />:null}
           {/* <Column
             title="Quantity"
             key="recommendationNumber"
@@ -198,10 +217,17 @@ export default class GoodsGrid extends React.Component<any, any> {
                     <Option value={10}>10</Option>
                   </Select>
                 );
-              
             }}
           /> */}
         </DataGrid>
+        <Modal
+          visible={this.state.imgModalVisible}
+          onCancel={()=>{this.setState({imgModalVisible:false})}}
+          bodyStyle={{textAlign:'center'}}
+          footer={null}
+        >
+          <img  src={bigImg} style={styles.bigImgItem}/>
+        </Modal>
       </div>
     );
   }
@@ -293,6 +319,11 @@ const styles = {
     float: 'left',
     marginRight: 10,
     background: '#fff',
+    cursor: 'pointer',
     borderRadius: 3
-  } as any
+  } as any,
+  bigImgItem:{
+    width:'300px',
+    height:"auto"
+  }
 } as any;

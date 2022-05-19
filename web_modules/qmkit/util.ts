@@ -514,7 +514,7 @@ export function decryptAES(encrypt, aseKey = 'AYHRJqH1zrfgWuKL3mN5xQQhSs7Srd62')
 export function optimizeImage(
   originImageUrl: string,
   width: number = 150,
-  height?: number
+  height?: number | string
 ): string {
   const CDN_PREFIX =
     sessionStorage.getItem(cache.PRODUCT_IMAGE_CDN) ||

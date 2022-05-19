@@ -22,6 +22,7 @@ export default class InterfaceView extends Component<any, any> {
     this.state = {
       loading: false,
       interfaceId: null,
+      keywords: null,
       detailsTabsKey: 'information',
       tableTabsKey: 'all',
       pagination: {
@@ -46,11 +47,14 @@ export default class InterfaceView extends Component<any, any> {
     this.setState({
       interfaceId: +interfaceId
     });
+    const { keywords, tableTabsKey } = this.state;
     this.getInterfaceDetail(+interfaceId);
     let params = {
       interfaceIds: [interfaceId],
       pageSize: 5,
-      pageNum: 0
+      pageNum: 0,
+      businessKeys: keywords ? [keywords] : [],
+      resultFlag: tableTabsKey === 'all' ? null : 2
     };
     this.getLogList(params);
     if (this.props.location.query && this.props.location.query.type) {
@@ -155,7 +159,7 @@ export default class InterfaceView extends Component<any, any> {
   };
   // 查询setting配置
   getSetting = () => {
-    const { interfaceId } = this.state;
+    const { interfaceId, keywords } = this.state;
     this.setState({
       loading: true
     });
@@ -231,7 +235,7 @@ export default class InterfaceView extends Component<any, any> {
   };
   onTableTabsChange = (key) => {
     const { keywords, interfaceId } = this.state;
-    this.setState({ tableTabsKey: key });
+    this.setState({ tableTabsKey: key, keywords });
     let params = {
       businessKeys: keywords ? [keywords] : [],
       interfaceIds: [interfaceId],
@@ -265,7 +269,8 @@ export default class InterfaceView extends Component<any, any> {
       logList,
       interfaceId,
       settingparams,
-      InformationVisable
+      InformationVisable,
+      keywords
     } = this.state;
     const columns = [
       {
@@ -431,6 +436,12 @@ export default class InterfaceView extends Component<any, any> {
                     placeholder="keywords"
                     onSearch={(value) => this.searchRequest(value)}
                     style={{ width: 200, marginBottom: 20 }}
+                    value={keywords}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      this.setState({
+                        keywords: e.target.value
+                      });
+                    }}
                   />
                   <Tab
                     rowKey="requestId"

@@ -26,7 +26,7 @@ function CreateAccount({ form }) {
         res: {
           context: { oktaResult }
         }
-      } = await createStoreAccountCheck({ email });
+      } = await createStoreAccountCheck({ email: base64.urlEncode(email) });
       return oktaResult;
     },
     {

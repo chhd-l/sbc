@@ -91,7 +91,7 @@ export default class GoodsModal extends React.Component<any, any> {
             </small>
           </div>
         }
-        width={1100}
+        width={1200}
         visible={visible}
         onOk={() => {
           const params = {

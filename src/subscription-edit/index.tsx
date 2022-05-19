@@ -985,7 +985,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               setTimeout(() => {
                 this.updateSubscription();
                 // message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
-              }, 1000);
+              }, 1300);
             }
           );
         }
@@ -1095,10 +1095,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       let { deliveryDate, timeSlot, timeSlotList, SelectDateStatus } = this.state;
       const { res } = data;
       if (res.code === Const.SUCCESS_CODE) {
-        let deliveryDateList: any[] = res.context.timeSlots?.map((item) => {
-          item?.dateTimeInfos.unshift({ startTime: 'Unspecified', endTime: '', sort: 0 });
-          return item;
-        });
+        let deliveryDateList: any[];
+        if (storeId == 123457919) {
+          deliveryDateList = res.context.timeSlots?.map((item) => {
+            item?.dateTimeInfos.unshift({ startTime: 'Unspecified', endTime: '', sort: 0 });
+            return item;
+          });
+        } else {
+          deliveryDateList = res.context.timeSlots;
+        }
+
         if (deliveryDateList.length > 0) {
           if (deliveryDateList.some((item) => item.date == deliveryDate) && SelectDateStatus == 0) {
             timeSlotList = deliveryDateList.find(

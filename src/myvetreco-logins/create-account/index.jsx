@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Input, Icon } from 'antd';
+import { Form, Button, Input, Icon, Spin } from 'antd';
 import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
@@ -9,6 +9,7 @@ import './index.less';
 import logo from '../assets/images/logo-s.png';
 import fgsLogo from '../../login-admin/img/logo.png';
 import { util, RCi18n, history, login, Const } from 'qmkit';
+import { useRequest } from 'ahooks';
 
 const FormItem = Form.Item;
 const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
@@ -18,6 +19,20 @@ function CreateAccount({ form }) {
   const base64 = new util.Base64();
 
   const [loading, setLoading] = useState(false);
+  // 是否okta登录
+  const { data: oktaRegistered, run: accountCheck } = useRequest(
+    async (email) => {
+      const {
+        res: {
+          context: { oktaResult }
+        }
+      } = await createStoreAccountCheck({ email });
+      return oktaResult;
+    },
+    {
+      manual: true
+    }
+  );
 
   const handleLogin = () => {
     history.push('/login');
@@ -25,6 +40,10 @@ function CreateAccount({ form }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // 荷兰如果okta注册过 跳转到/login
+    if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
+      return handleLogin();
+    }
     form.validateFields((errs, values) => {
       if (!errs) {
         setLoading(true);
@@ -51,23 +70,15 @@ function CreateAccount({ form }) {
       }
     });
   };
-
-  const AccountCheck = (value) => {
-    console.log('value', value);
+  const handleEmailBlur = (e) => {
+    const email = e.target.value;
+    if (Const.SITE_NAME !== 'MYVETRECO') return;
     const emailRex = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
-    if (value && emailRex.test(value)) {
-      createStoreAccountCheck(value)
-        .then((res) => {
-          console.log('res', res);
-        })
-        .catch((err) => {
-          console.log('err', err);
-        });
+    if (emailRex.test(email)) {
+      accountCheck(email);
     }
   };
-
   const compareToFirstPassword = (rule, value, callback) => {
-    console.log(value);
     if (value && value !== form.getFieldValue('password')) {
       callback(RCi18n({ id: 'Login.confirm_password_vld1' }));
     } else {
@@ -76,7 +87,6 @@ function CreateAccount({ form }) {
   };
 
   const isMobile = isMobileApp();
-
   return (
     <div className={`${Const.SITE_NAME !== 'MYVETRECO' && 'fgsBgc'} login-container`}>
       <div className={`account-content ${isMobile ? 'bg-white' : ''}`}>
@@ -119,39 +129,47 @@ function CreateAccount({ form }) {
                       style={{ fontSize: 18, color: '#a0b0bb' }}
                     ></i>
                   }
-                  onBlur={(e) => AccountCheck(e.target.value)}
+                  onBlur={handleEmailBlur}
                 />
               )}
             </FormItem>
 
-            <FormItem name="password" className="password">
-              {getFieldDecorator('password', {
-                rules: [
-                  {
-                    required: true,
-                    pattern: /^(?=.*[a-z])(?=.*[A-Z])[^]{8,}$/,
-                    message: RCi18n({ id: 'Login.passwordcomplex' })
-                  }
-                ],
-                initialValue: ''
-              })(<Input.Password size="large" placeholder={RCi18n({ id: 'Login.password' })} />)}
-            </FormItem>
-
-            <FormItem name="confirmPassword" className="password">
-              {getFieldDecorator('confirmPassword', {
-                rules: [
-                  { required: true, message: RCi18n({ id: 'Login.confirm_password_vld' }) },
-                  { validator: compareToFirstPassword }
-                ],
-                initialValue: ''
-              })(
-                <Input.Password
-                  size="large"
-                  placeholder={RCi18n({ id: 'Login.confirm_password' })}
-                />
-              )}
-            </FormItem>
-
+            {!oktaRegistered && (
+              <FormItem name="password" className="password">
+                {getFieldDecorator('password', {
+                  rules: [
+                    {
+                      required: true,
+                      pattern: /^(?=.*[a-z])(?=.*[A-Z])[^]{8,}$/,
+                      message: RCi18n({ id: 'Login.passwordcomplex' })
+                    }
+                  ],
+                  initialValue: ''
+                })(<Input.Password size="large" placeholder={RCi18n({ id: 'Login.password' })} />)}
+              </FormItem>
+            )}
+            {!oktaRegistered && (
+              <FormItem name="confirmPassword" className="password">
+                {getFieldDecorator('confirmPassword', {
+                  rules: [
+                    { required: true, message: RCi18n({ id: 'Login.confirm_password_vld' }) },
+                    { validator: compareToFirstPassword }
+                  ],
+                  initialValue: ''
+                })(
+                  <Input.Password
+                    size="large"
+                    placeholder={RCi18n({ id: 'Login.confirm_password' })}
+                  />
+                )}
+              </FormItem>
+            )}
+            {oktaRegistered && (
+              <span className="oktaRegistered-tip">
+                This account has been registered in OKTA. Please log in after clicking ‘Create an
+                account’ to proceed.
+              </span>
+            )}
             {Const.SITE_NAME === 'MYVETRECO' && (
               <FormItem name="recommendationCode" className="password">
                 {getFieldDecorator('recommendationCode', {

@@ -15,11 +15,11 @@ export function createStoreAccount(filterParams) {
   });
 }
 
-export function createStoreAccountCheck(Params) {
+export function createStoreAccountCheck(params) {
   return Fetch<TResult>('/store/create/account/check', {
     method: 'POST',
     body: JSON.stringify({
-      ...Params
+      ...params
     })
   });
 }

@@ -3065,6 +3065,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           titleContent={titleContent}
           skuLimit={1}
           visible={productModalVisible}
+          isSubsrciptionEdit={true}
           selectedSkuIds={selectedSkuIds}
           selectedRows={selectedRows}
           onOkBackFun={this.skuSelectedBackFun}

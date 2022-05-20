@@ -25,6 +25,7 @@ class GoodsModal extends React.Component<any, any> {
     titleContent?: any;
     //英文的product category name
     goodsCate?: string;
+    isSubsrciptionEdit?: boolean;
   };
 
   constructor(props) {
@@ -52,7 +53,8 @@ class GoodsModal extends React.Component<any, any> {
       searchParams,
       application,
       titleContent = null,
-      goodsCate
+      goodsCate,
+      isSubsrciptionEdit = false
     } = this.props;
     const { selectedSkuIds, selectedRows } = this.state;
     return (
@@ -99,6 +101,7 @@ class GoodsModal extends React.Component<any, any> {
             rowChangeBackFun={this.rowChangeBackFun}
             searchParams={searchParams}
             goodsCate={goodsCate}
+            isSubsrciptionEdit={isSubsrciptionEdit}
           />
         }
       </Modal>

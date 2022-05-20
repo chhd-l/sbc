@@ -36,13 +36,24 @@ export default class SearchForm extends React.Component<any, any> {
   componentDidMount() {
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     const { searchParams } = this.state;
-    this.init();
-    if (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) {
-      this.setState({
-        ...searchParams,
-        promotions: 'club',
-        subscriptionStatus: 1
-      });
+    const { isSubsrciptionEdit } = this.props;
+
+    if (
+      (storeId === 123457909 || storeId === 123457907 || storeId === 123457911) &&
+      isSubsrciptionEdit
+    ) {
+      this.setState(
+        {
+          ...searchParams,
+          promotions: 'club',
+          subscriptionStatus: 1
+        },
+        () => {
+          this.init();
+        }
+      );
+    } else {
+      this.init();
     }
   }
 
@@ -93,6 +104,7 @@ export default class SearchForm extends React.Component<any, any> {
   render() {
     const { searchParams } = this.state;
     const { cates, brands, cateIdDisabled } = this.state;
+    const { isSubsrciptionEdit } = this.props;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
 
     return (
@@ -150,7 +162,8 @@ export default class SearchForm extends React.Component<any, any> {
             </SelectGroup>
           </FormItem>
           {/* 法国、俄罗斯、土耳其需要subscriptionStatus和subscriptionType筛选条件 */}
-          {storeId !== 123457909 && storeId !== 123457907 && storeId !== 123457911 ? null : (
+          {(storeId == 123457909 || storeId == 123457907 || storeId == 123457911) &&
+          isSubsrciptionEdit ? (
             <>
               <FormItem>
                 <SelectGroup
@@ -189,7 +202,7 @@ export default class SearchForm extends React.Component<any, any> {
                 </SelectGroup>
               </FormItem>
             </>
-          )}
+          ) : null}
 
           <FormItem>
             <Button

@@ -1161,6 +1161,7 @@ class SubscriptionDetail extends React.Component<any, any> {
               </Col>
               {/* 如果是俄罗斯or日本 如果是HOME_DELIVERY（并且timeslot存在） 显示 timeSlot 信息,如果是PICK_UP 显示pickup 状态
               如果是美国不显示内容 其他国家显示billingAddress */}
+              {/* deliverDateStatus要从 data.res?.context?.systemConfigVO?.status */}
               <Col span={8}>
                 {storeId === 123457907 || storeId === 123457919 ? (
                   <Row>

@@ -50,11 +50,16 @@ export default class GoodsGrid extends React.Component<any, any> {
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
-    const { rowChangeBackFun, visible, goodsCate } = this.props;
+    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit } = this.props;
     return (
       <div className="content">
         {/*search*/}
-        <SearchForm searchBackFun={this.searchBackFun} goodsCate={goodsCate} visible={visible} />
+        <SearchForm
+          searchBackFun={this.searchBackFun}
+          goodsCate={goodsCate}
+          visible={visible}
+          isSubsrciptionEdit={isSubsrciptionEdit}
+        />
 
         <DataGrid
           loading={loading}
@@ -184,7 +189,10 @@ export default class GoodsGrid extends React.Component<any, any> {
     params.subscriptionFlag = sessionStorage.getItem('PromotionTypeValue') == '1' ? true : false;
     const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId || '';
     const isRuFrTr = storeId == 123457907 || storeId == 123457909 || storeId == 123457911;
-    const isRuFrTrParams = isRuFrTr ? { promotions: 'club', subscriptionStatus: 1 } : {};
+    const isRuFrTrParams =
+      isRuFrTr && this.props?.isSubsrciptionEdit
+        ? { promotions: 'club', subscriptionStatus: 1 }
+        : {};
     this.setState({ loading: true });
     let { res } = await webapi.fetchGoodsList({
       ...isRuFrTrParams,

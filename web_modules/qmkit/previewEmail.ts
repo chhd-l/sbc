@@ -16,7 +16,6 @@ Handlebars.registerHelper('length', function (fn) {
 });
 
 export const getPreviewEmailTemp = (temp: string = '', data: object = {}) => {
-  console.log(temp, data);
 
   let template = null;
 
@@ -30,9 +29,15 @@ export const getPreviewEmailTemp = (temp: string = '', data: object = {}) => {
   ) {
     template = new SendSay(temp, { anketa: { params: { ...data } } }).getTemplate();
   } else {
-    // template = Handlebars.compile(temp)(data); 这种写法不知道为什么报错，这是第一种
-    //这是是第二种写法
-    template = Handlebars.compile(temp, data);
+    if((window as any).countryEnum[
+      JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId']
+    ] === 'mx'){
+      //这是是第一种写法 mx [de fr us tr se uk nl]
+      template = Handlebars.compile(temp, data);
+    }else{
+      // 这是第二种  jp [de fr us tr se uk nl]
+      template = Handlebars.compile(temp)(data);
+    }
   }
 
   return template;

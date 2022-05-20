@@ -182,7 +182,7 @@ export default class GoodsGrid extends React.Component<any, any> {
             }}
           />
           <Column title={RCi18n({id:'Order.Price'})} dataIndex="marketPrice" key="marketPrice" render={(marketPrice) => <span>{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) + marketPrice}</span>} />
-          {Const.SITE_NAME === 'MYVETRECO' ?<Column title={RCi18n({id:'PetOwner.species'})} dataIndex="species" key="species" />:null}
+          {Const.SITE_NAME === 'MYVETRECO' ?<Column title={RCi18n({id:'Order.Product category'})} dataIndex="productCategory" key="productCategory" />:null}
           {/* <Column
             title="Quantity"
             key="recommendationNumber"

@@ -190,12 +190,12 @@ class OrderDelivery extends React.Component<any, any> {
                 ).map((subPlanGift) =>
                 subPlanGift
                   // .set('itemName',  `${(window as any).RCi18n({ id: 'Order.Giveaway' })}${subPlanGift.get('itemName')}`  )
-                  .set('skuNo',`${subPlanGift.get('goodsInfoNo')}`)
-                  .set('skuName', `${subPlanGift.get('goodsInfoName')}`)
-                  .set('num', `${subPlanGift.get('quantity')}`)
-                  .set('Weight', `${subPlanGift.get('goodsInfoWeight')}`)
-                  .set('skuId',`${subPlanGift.get('goodsInfoId')}`)
-                  .set('itemName',`${subPlanGift.get('goodsInfoName')}${(window as any).RCi18n({ id: 'Order.Giveaway' })}`)
+                  // .set('skuNo',`${subPlanGift.get('goodsInfoNo')}`)
+                  // .set('skuName', `${subPlanGift.get('goodsInfoName')}`)
+                  // .set('num', `${subPlanGift.get('quantity')}`)
+                  // .set('Weight', `${subPlanGift.get('goodsInfoWeight')}`)
+                  // .set('skuId',`${subPlanGift.get('goodsInfoId')}`)
+                  // .set('itemName',`${subPlanGift.get('goodsInfoName')}${(window as any).RCi18n({ id: 'Order.Giveaway' })}`)
                   
                 );
                 return (  
@@ -226,7 +226,7 @@ class OrderDelivery extends React.Component<any, any> {
                       <div style={styles.stateBox}>
                         {logistic ? (
                           <div>
-                            <div style={styles.information} className="flex-start-align">
+                            <div style={styles.information} className="flex-start-align 11111">
                               【<FormattedMessage id="Product.logisticsInformation" />】
                               <FormattedMessage id="Order.deliveryDate" />：{deliverTime}
                               &nbsp;&nbsp;

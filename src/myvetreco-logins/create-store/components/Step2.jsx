@@ -123,7 +123,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                   <>
                     {RCi18n({ id: 'Store.companyname' })}
                     {/* 荷兰显示tooltip */}
-                    {Const.SITE_NAME === 'MYVETRECO' && (
+                    {isMYVETRECO && (
                       <Tooltip title={RCi18n({ id: 'Store.companyname.Tooltip' })}>
                         <Icon type="exclamation-circle" className="tooltip-icon" />
                       </Tooltip>

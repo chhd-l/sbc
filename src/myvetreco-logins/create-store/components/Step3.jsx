@@ -408,9 +408,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
               <FormItem
                 label={
                   <>
-                    {isMYVETRECO
-                      ? RCi18n({ id: 'Store.Sell to clinic number' })
-                      : RCi18n({ id: 'Store.selltoclinic' })}
+                    {RCi18n({ id: 'Store.Sell to clinic number' })}
                     <Tooltip title={RCi18n({ id: 'Store.selltoclinic.Tip' })}>
                       <Icon type="exclamation-circle" className="tooltip-icon" />
                     </Tooltip>

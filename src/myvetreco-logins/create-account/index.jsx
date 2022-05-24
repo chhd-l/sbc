@@ -4,11 +4,13 @@ import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
 import { createStoreAccount, createStoreAccountCheck } from './webapi';
+import { switchRouter } from '@/index';
 import './index.less';
 
 import logo from '../assets/images/logo-s.png';
 import fgsLogo from '../../login-admin/img/logo.png';
-import { util, RCi18n, history, login, Const } from 'qmkit';
+import { util, RCi18n, history, login, Const, cache } from 'qmkit';
+import { useOktaAuth } from '@okta/okta-react';
 import { useRequest } from 'ahooks';
 
 const FormItem = Form.Item;
@@ -17,7 +19,7 @@ const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
 function CreateAccount({ form }) {
   const { getFieldDecorator } = form;
   const base64 = new util.Base64();
-
+  let { authService } = useOktaAuth();
   const [loading, setLoading] = useState(false);
   // 是否okta登录
   const { data: oktaRegistered, run: accountCheck } = useRequest(
@@ -42,7 +44,9 @@ function CreateAccount({ form }) {
     e.preventDefault();
     // 荷兰如果okta注册过 跳转到/login
     if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
-      return handleLogin();
+      sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
+      authService.login('/login?type=prescriber');
+      return;
     }
     form.validateFields((errs, values) => {
       if (!errs) {

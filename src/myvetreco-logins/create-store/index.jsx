@@ -32,7 +32,7 @@ sessionStorage.setItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID, sourceCompanyInf
 
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')) || {};
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(4);
   const [submitData, setSubmitData] = useState({});
   useEffect(() => {
     getData();
@@ -70,6 +70,7 @@ function CreateStores() {
               {Const.SITE_NAME === 'MYVETRECO' && (
                 <Step title={RCi18n({ id: 'Login.create_store_step4' })} />
               )}
+
               {Const.SITE_NAME === 'MYVETRECO' && (
                 <Step title={RCi18n({ id: 'Login.create_store_step5' })} />
               )}

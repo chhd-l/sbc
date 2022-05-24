@@ -32,7 +32,7 @@ sessionStorage.setItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID, sourceCompanyInf
 
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')) || {};
-  const [current, setCurrent] = useState(4);
+  const [current, setCurrent] = useState(0);
   const [submitData, setSubmitData] = useState({});
   useEffect(() => {
     getData();

@@ -45,8 +45,8 @@ const Setting = (props: any) => {
             />
           </Col>
           <Col
-            span={4}
-            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+            span={5}
+            style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}
           >
             <span>Attempts during broken integration</span>
             <i className="hovericon" style={{ position: 'relative' }}>

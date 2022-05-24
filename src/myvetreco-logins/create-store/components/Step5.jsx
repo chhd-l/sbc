@@ -57,8 +57,11 @@ function Step5({ setStep, userInfo, paymentInfoRequest, form }) {
                   isMYVETRECO ? (
                     <>
                       Bank account number
-                      <Tooltip title="This number is an 18-digit number in the Netherlands. Also, the bank account should be under the legal entity name">
-                        <Icon type="exclamation-circle" className="tooltip-icon" />
+                      <Tooltip
+                        overlayClassName="store-tip-overlay"
+                        title="This number is an 18-digit number in the Netherlands. Also, the bank account should be under the legal entity name"
+                      >
+                        <Icon type="exclamation-circle" />
                       </Tooltip>
                     </>
                   ) : (

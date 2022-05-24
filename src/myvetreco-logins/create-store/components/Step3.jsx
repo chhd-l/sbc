@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
-
+const isMYVETRECO = Const.SITE_NAME === 'MYVETRECO';
 function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCompanyInfoId }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
@@ -151,7 +151,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
           if (err) {
             setLoading(false);
           } else {
-            setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5); //FGS去掉第4、5步
+            setStep(isMYVETRECO ? 3 : 5); //FGS去掉第4、5步
             setLoading(false);
           }
         });
@@ -283,7 +283,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
   const validatePostCode = (rules, value, callback) => {
     if (value === '') {
       callback();
-    } else if (Const.SITE_NAME === 'MYVETRECO' && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
+    } else if (isMYVETRECO && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
       callback(`${RCi18n({ id: 'PetOwner.theCorrectPostCode' })}: 1234 AB`);
     } else if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
       callback(RCi18n({ id: 'PetOwner.theCorrectPostCode' }));
@@ -298,7 +298,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
   return (
     <div>
       <div className="vmargin-level-4 align-item-center word big">
-        3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} <FormattedMessage id="Store.tellusmore" />
+        3 / {isMYVETRECO ? '5' : '3'} <FormattedMessage id="Store.tellusmore" />
       </div>
 
       <div style={{ width: 800, margin: '0 auto' }}>
@@ -320,7 +320,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   </>
                 )}
               </Dragger>
-              {Const.SITE_NAME === 'MYVETRECO' && (
+              {isMYVETRECO && (
                 <Tooltip title={RCi18n({ id: 'Store.recomsize.Tip' })}>
                   <Icon type="exclamation-circle" className="tooltip-icon" />
                 </Tooltip>
@@ -343,7 +343,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   </>
                 )}
               </Dragger>
-              {Const.SITE_NAME === 'MYVETRECO' && (
+              {isMYVETRECO && (
                 <Tooltip title={RCi18n({ id: 'Store.upshopfav.Tip' })}>
                   <Icon type="exclamation-circle" className="tooltip-icon" />
                 </Tooltip>
@@ -362,7 +362,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   <>
                     {RCi18n({ id: 'storeName' })}
                     {/* 荷兰显示tooltip */}
-                    {Const.SITE_NAME === 'MYVETRECO' && (
+                    {isMYVETRECO && (
                       <Tooltip title={RCi18n({ id: 'storeName.Tip' })}>
                         <Icon type="exclamation-circle" className="tooltip-icon" />
                       </Tooltip>
@@ -380,7 +380,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   <Input
                     size="large"
                     onChange={(e) => {
-                      if (Const.SITE_NAME === 'MYVETRECO') {
+                      if (isMYVETRECO) {
                         let value = e.target.value
                           .replace(/[^\w]/gi, '')
                           .substring(0, 50)
@@ -401,14 +401,16 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
               <FormItem label={RCi18n({ id: 'Store.storeDomain' })} name="domainName">
                 {getFieldDecorator('domainName', {
                   initialValue: ''
-                })(<Input size="large" disabled={Const.SITE_NAME === 'MYVETRECO'} />)}
+                })(<Input size="large" disabled={isMYVETRECO} />)}
               </FormItem>
             </Col>
-            <Col span={24} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={24} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
-                    {RCi18n({ id: 'Store.selltoclinic' })}
+                    {isMYVETRECO
+                      ? RCi18n({ id: 'Store.Sell to clinic number' })
+                      : RCi18n({ id: 'Store.selltoclinic' })}
                     <Tooltip title={RCi18n({ id: 'Store.selltoclinic.Tip' })}>
                       <Icon type="exclamation-circle" className="tooltip-icon" />
                     </Tooltip>
@@ -419,7 +421,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 {getFieldDecorator('sellToClinic', {
                   rules: [
                     {
-                      required: Const.SITE_NAME === 'MYVETRECO',
+                      required: isMYVETRECO,
                       message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' })
                     }
                   ],
@@ -427,7 +429,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
@@ -444,7 +446,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'PetOwner.City' })} name="cityId">
                 {getFieldDecorator('cityId', {
                   initialValue: { key: '', label: '' }
@@ -461,7 +463,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 )}
               </FormItem>
             </Col>
-            {Const.SITE_NAME === 'MYVETRECO' ? (
+            {isMYVETRECO ? (
               <Col span={12}>
                 <FormItem label={RCi18n({ id: 'Store.street' })} name="addressDetail">
                   {getFieldDecorator('addressDetail', {
@@ -478,14 +480,14 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 </FormItem>
               </Col>
             )}
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'Store.housenumber' })} name="houseNumberOrName">
                 {getFieldDecorator('houseNumberOrName', {
                   initialValue: ''
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'none' : 'block' }}>
               <FormItem label={RCi18n({ id: 'PetOwner.Country' })} name="countryCode">
                 {getFieldDecorator('countryCode', {
                   rules: [
@@ -514,7 +516,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={24} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={24} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>

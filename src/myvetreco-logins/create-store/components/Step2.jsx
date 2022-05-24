@@ -6,6 +6,7 @@ import { Const, cache, RCi18n } from 'qmkit';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const isMYVETRECO = Const.SITE_NAME === 'MYVETRECO';
 function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceCompanyInfoId }) {
   const [loading, setLoading] = useState(false);
   const { getFieldDecorator } = form;
@@ -101,7 +102,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
               </FormItem>
 
             </Col> */}
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'Store.typeofbusi' })}>
                 {getFieldDecorator('typeOfBusiness', {
                   rules: [
@@ -138,7 +139,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
@@ -152,7 +153,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                 {getFieldDecorator('commerceNumber', {
                   rules: [
                     {
-                      required: Const.SITE_NAME === 'MYVETRECO',
+                      required: isMYVETRECO,
                       message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' })
                     }
                   ],
@@ -161,7 +162,13 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label={RCi18n({ id: 'PetOwner.First name' })}>
+              <FormItem
+                label={
+                  isMYVETRECO
+                    ? RCi18n({ id: 'Store.First name of Clinic Manager' })
+                    : RCi18n({ id: 'PetOwner.First name' })
+                }
+              >
                 {getFieldDecorator('firstName', {
                   rules: [
                     { required: true, message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }) },
@@ -172,7 +179,13 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label={RCi18n({ id: 'PetOwner.Last name' })}>
+              <FormItem
+                label={
+                  isMYVETRECO
+                    ? RCi18n({ id: 'Store.Last name of Clinic Manager' })
+                    : RCi18n({ id: 'PetOwner.Last name' })
+                }
+              >
                 {getFieldDecorator('lastName', {
                   rules: [
                     { required: true, message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }) },

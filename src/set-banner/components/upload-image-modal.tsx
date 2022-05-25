@@ -4,7 +4,25 @@ import '../index.less';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { cache, Const, noop, SelectGroup, RCi18n } from 'qmkit';
 import * as webapi from '../webapi';
-import { Form, Select, Input, Button, Table, Divider, message, Checkbox, Pagination, Spin, Tooltip, Modal, Rate, TreeSelect, Icon, Upload, Tree } from 'antd';
+import {
+  Form,
+  Select,
+  Input,
+  Button,
+  Table,
+  Divider,
+  message,
+  Checkbox,
+  Pagination,
+  Spin,
+  Tooltip,
+  Modal,
+  Rate,
+  TreeSelect,
+  Icon,
+  Upload,
+  Tree
+} from 'antd';
 import { IMap } from 'plume2';
 import { List, fromJS, Map } from 'immutable';
 import { FunctionOrConstructorTypeNodeBase } from 'ts-morph';
@@ -41,6 +59,8 @@ class UploadImageModal extends Component<any, any> {
   state = {
     fileList: [], //pc fileList
     mFileList: [], //mobile fileList
+    pcResourceType: '',
+    mobileResourceType: '',
     pcUrl: '',
     mobileUrl: '',
     companyInfoId: 0,
@@ -50,7 +70,7 @@ class UploadImageModal extends Component<any, any> {
   };
   props: {
     form: any;
-    intl?:any;
+    intl?: any;
     relaxProps?: {
       modalVisible: boolean;
       tableDatas: TList;
@@ -106,7 +126,7 @@ class UploadImageModal extends Component<any, any> {
       okDisabled: true
     });
     if (tableDatas.size > 5) {
-      message.error(RCi18n({id:"Setting.addUpTo5banner"}));
+      message.error(RCi18n({ id: 'Setting.addUpTo5banner' }));
       // this._handleModelCancel();
       return;
     }
@@ -114,11 +134,11 @@ class UploadImageModal extends Component<any, any> {
       if (!err) {
         let imageObj = imageForm.toJS();
         if (imageObj.fileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error(RCi18n({id:"Setting.uploadPcResource"}));
+          message.error(RCi18n({ id: 'Setting.uploadPcResource' }));
           return;
         }
         if (imageObj.mFileList.filter((file) => file.status === 'done').length <= 0) {
-          message.error(RCi18n({id:"Setting.uploadMobileResource"}));
+          message.error(RCi18n({ id: 'Setting.uploadMobileResource' }));
           return;
         }
         if (imageObj.bannerId) {
@@ -176,10 +196,10 @@ class UploadImageModal extends Component<any, any> {
     const { getList, getStoreId, uploadBanner } = this.props.relaxProps;
     const ref = this;
     const res = await uploadBanner(params);
-    const title = RCi18n({id:'Setting.Tip'});
-    const content = RCi18n({id:'Setting.AddBanner'});
-    const ok = RCi18n({id:'Setting.OK'});
-    const cancel = RCi18n({id:'Setting.Cancel'});
+    const title = RCi18n({ id: 'Setting.Tip' });
+    const content = RCi18n({ id: 'Setting.AddBanner' });
+    const ok = RCi18n({ id: 'Setting.OK' });
+    const cancel = RCi18n({ id: 'Setting.Cancel' });
     if (res != -1) {
       confirm({
         title: title,
@@ -227,7 +247,8 @@ class UploadImageModal extends Component<any, any> {
   };
 
   render() {
-    const { modalVisible, tableDatas, imageForm, bannerNoList, onImageFormChange } = this.props.relaxProps;
+    const { modalVisible, tableDatas, imageForm, bannerNoList, onImageFormChange } =
+      this.props.relaxProps;
 
     if (!modalVisible) {
       return null;
@@ -255,43 +276,58 @@ class UploadImageModal extends Component<any, any> {
       multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
-      action: Const.HOST + `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+      action:
+        Const.HOST +
+        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=${this.state.pcResourceType}`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
-      beforeUpload(file) {
+      beforeUpload: (file) => {
         let fileName = file.name.toLowerCase();
         if (tableDatas.size > 5) {
-          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
+          message.error(RCi18n({ id: 'Setting.onlyAddUpTo5banner' }));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
+          message.error(RCi18n({ id: 'Setting.PleaseInputAFileName' }));
           return false;
         }
 
-        if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
+        if (
+          /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)
+        ) {
+          message.error(RCi18n({ id: 'Setting.theCorrectFormat' }));
           return false;
         }
         if (fileName.length > 40) {
-          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
+          message.error(RCi18n({ id: 'Setting.FileNameIsTooLong' }));
           return false;
         }
 
         if (list && list.length >= 1) {
-          message.error(RCi18n({id:"Setting.uploadOneResource"}));
+          message.error(RCi18n({ id: 'Setting.uploadOneResource' }));
           return false;
         }
+        if (fileName.endsWith('.mp4')) {
+          this.setState({ pcResourceType: 'VIDEO' });
+        } else {
+          this.setState({ pcResourceType: 'IMAGE' });
+        }
         // 支持的图片格式：jpg、jpeg、png、gif
-        if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.mp4')) {
+        if (
+          fileName.endsWith('.jpg') ||
+          fileName.endsWith('.jpeg') ||
+          fileName.endsWith('.png') ||
+          fileName.endsWith('.gif') ||
+          fileName.endsWith('.mp4')
+        ) {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
+            message.error(RCi18n({ id: 'Setting.FileSizeCannotExceed2M' }));
             return false;
           }
         } else {
-          message.error(RCi18n({id:"Setting.FileFormatError"}));
+          message.error(RCi18n({ id: 'Setting.FileFormatError' }));
           return false;
         }
       },
@@ -299,7 +335,11 @@ class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
-          if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
+          if (
+            info.file.response &&
+            info.file.response.code &&
+            info.file.response.code !== Const.SUCCESS_CODE
+          ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
             // ref.setState({
@@ -333,7 +373,12 @@ class UploadImageModal extends Component<any, any> {
           message.error(`${info.file.name} upload failed!`);
         }
         //仅展示上传中和上传成功的文件列表
-        fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
+        fileList = fileList.filter(
+          (f) =>
+            f.status == 'uploading' ||
+            (f.status == 'done' && !f.response) ||
+            (f.status == 'done' && f.response && !f.response.code)
+        );
         setFileList(fileList);
       }
     };
@@ -346,9 +391,11 @@ class UploadImageModal extends Component<any, any> {
       multiple: false,
       showUploadList: { showPreviewIcon: false, showRemoveIcon: true },
       //上传地址
-      action: Const.HOST + `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=IMAGE`,
+      action:
+        Const.HOST +
+        `/store/uploadStoreResource?storeId=${storeId}&companyInfoId=${companyInfoId}&resourceType=${this.state.mobileResourceType}`,
       accept: '.jpg,.jpeg,.png,.gif,.mp4',
-      beforeUpload(file) {
+      beforeUpload: (file) => {
         // if (!cateIdCurr) {
         //   message.error('Please select category first!');
         //   return false;
@@ -356,38 +403,51 @@ class UploadImageModal extends Component<any, any> {
         let fileName = file.name.toLowerCase();
 
         if (tableDatas.size > 5) {
-          message.error(RCi18n({id:"Setting.onlyAddUpTo5banner"}));
+          message.error(RCi18n({ id: 'Setting.onlyAddUpTo5banner' }));
           return false;
         }
 
         if (!fileName.trim()) {
-          message.error(RCi18n({id:"Setting.PleaseInputAFileName"}));
+          message.error(RCi18n({ id: 'Setting.PleaseInputAFileName' }));
           return false;
         }
 
-        if (/(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)) {
-          message.error(RCi18n({id:"Setting.theCorrectFormat"}));
+        if (
+          /(\ud83c[\udf00-\udfff])|(\ud83d[\udc00-\ude4f])|(\ud83d[\ude80-\udeff])/.test(fileName)
+        ) {
+          message.error(RCi18n({ id: 'Setting.theCorrectFormat' }));
           return false;
         }
 
         if (fileName.length > 40) {
-          message.error(RCi18n({id:"Setting.FileNameIsTooLong"}));
+          message.error(RCi18n({ id: 'Setting.FileNameIsTooLong' }));
           return false;
         }
         if (mList && mList.length >= 1) {
-          message.error(RCi18n({id:"Setting.uploadOneResource"}));
+          message.error(RCi18n({ id: 'Setting.uploadOneResource' }));
           return false;
         }
+        if (fileName.endsWith('.mp4')) {
+          this.setState({ pcResourceType: 'VIDEO' });
+        } else {
+          this.setState({ pcResourceType: 'IMAGE' });
+        }
         // 支持的图片格式：jpg、jpeg、png、gif
-        if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.mp4')) {
+        if (
+          fileName.endsWith('.jpg') ||
+          fileName.endsWith('.jpeg') ||
+          fileName.endsWith('.png') ||
+          fileName.endsWith('.gif') ||
+          fileName.endsWith('.mp4')
+        ) {
           if (file.size <= FILE_MAX_SIZE) {
             return true;
           } else {
-            message.error(RCi18n({id:"Setting.FileSizeCannotExceed2M"}));
+            message.error(RCi18n({ id: 'Setting.FileSizeCannotExceed2M' }));
             return false;
           }
         } else {
-          message.error(RCi18n({id:"Setting.FileFormatError"}));
+          message.error(RCi18n({ id: 'Setting.FileFormatError' }));
           return false;
         }
       },
@@ -395,7 +455,11 @@ class UploadImageModal extends Component<any, any> {
         const status = info.file.status;
         let fileList = info.fileList;
         if (status === 'done') {
-          if (info.file.response && info.file.response.code && info.file.response.code !== Const.SUCCESS_CODE) {
+          if (
+            info.file.response &&
+            info.file.response.code &&
+            info.file.response.code !== Const.SUCCESS_CODE
+          ) {
             message.error(`${info.file.name} upload failed!`);
           } else {
             // ref.setState({
@@ -430,14 +494,19 @@ class UploadImageModal extends Component<any, any> {
           message.error(`${info.file.name} upload failed!`);
         }
         //仅展示上传中和上传成功的文件列表
-        fileList = fileList.filter((f) => f.status == 'uploading' || (f.status == 'done' && !f.response) || (f.status == 'done' && f.response && !f.response.code));
+        fileList = fileList.filter(
+          (f) =>
+            f.status == 'uploading' ||
+            (f.status == 'done' && !f.response) ||
+            (f.status == 'done' && f.response && !f.response.code)
+        );
         setMFileList(fileList);
       }
     };
     return (
       <Modal
         maskClosable={false}
-        title={bannerId ? RCi18n({id:"Setting.Edit"}) : RCi18n({id:"Setting.Upload"})}
+        title={bannerId ? RCi18n({ id: 'Setting.Edit' }) : RCi18n({ id: 'Setting.Upload' })}
         visible={modalVisible}
         width={920}
         // confirmLoading={true}
@@ -450,7 +519,12 @@ class UploadImageModal extends Component<any, any> {
               <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.bannerNo" />}>
                 {getFieldDecorator('bannerNo', {
                   initialValue: bannerNo,
-                  rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseSelectBannerNo" /> }]
+                  rules: [
+                    {
+                      required: true,
+                      message: <FormattedMessage id="Setting.PleaseSelectBannerNo" />
+                    }
+                  ]
                 })(
                   <Select
                     style={{ width: 160 }}
@@ -472,7 +546,12 @@ class UploadImageModal extends Component<any, any> {
               <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.BannerName" />}>
                 {getFieldDecorator('bannerName', {
                   initialValue: bannerName,
-                  rules: [{ required: true, message: <FormattedMessage id="Setting.PleaseEnterBannerName" /> }]
+                  rules: [
+                    {
+                      required: true,
+                      message: <FormattedMessage id="Setting.PleaseEnterBannerName" />
+                    }
+                  ]
                 })(
                   <Input
                     onChange={(e) =>
@@ -514,7 +593,11 @@ class UploadImageModal extends Component<any, any> {
                   />
                 )}
               </FormItem>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.selectResource" values={{ type: 'pc' }} />} required={true}>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Setting.selectResource" values={{ type: 'pc' }} />}
+                required={true}
+              >
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...props} fileList={list}>
                     <p className="ant-upload-drag-icon">
@@ -533,7 +616,11 @@ class UploadImageModal extends Component<any, any> {
           </div>
           <div>
             <Form>
-              <FormItem {...formItemLayout} label={<FormattedMessage id="Setting.selectResource" values={{ type: 'mobile' }} />} required={true}>
+              <FormItem
+                {...formItemLayout}
+                label={<FormattedMessage id="Setting.selectResource" values={{ type: 'mobile' }} />}
+                required={true}
+              >
                 <div style={{ marginTop: 16 }}>
                   <Dragger {...mProps} fileList={mList}>
                     <p className="ant-upload-drag-icon">

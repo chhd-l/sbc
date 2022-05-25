@@ -323,6 +323,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 </Dragger>
                 {isMYVETRECO && (
                   <Tooltip
+                    getPopupContainer={() => document.getElementById('create-store-content')}
                     title={RCi18n({ id: 'Store.recomsize.Tip' })}
                     overlayClassName="store-tip-overlay"
                   >
@@ -350,6 +351,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 {isMYVETRECO && (
                   <Tooltip
                     title={RCi18n({ id: 'Store.upshopfav.Tip' })}
+                    getPopupContainer={() => document.getElementById('create-store-content')}
                     overlayClassName="store-tip-overlay"
                   >
                     <Icon type="exclamation-circle" />
@@ -372,6 +374,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                     {/* 荷兰显示tooltip */}
                     {isMYVETRECO && (
                       <Tooltip
+                        getPopupContainer={() => document.getElementById('create-store-content')}
                         title={RCi18n({ id: 'storeName.Tip' })}
                         overlayClassName="store-tip-overlay"
                       >
@@ -423,6 +426,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                     <Tooltip
                       title={RCi18n({ id: 'Store.selltoclinic.Tip' })}
                       overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
                     >
                       <Icon type="exclamation-circle" />
                     </Tooltip>
@@ -449,6 +453,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                     <Tooltip
                       title={RCi18n({ id: 'Store.province.Tip' })}
                       overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
                     >
                       <Icon type="exclamation-circle" />
                     </Tooltip>
@@ -457,14 +462,16 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 name="province"
               >
                 {getFieldDecorator('province', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: isMYVETRECO }]
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
             <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'PetOwner.City' })} name="cityId">
                 {getFieldDecorator('cityId', {
-                  initialValue: { key: '', label: '' }
+                  initialValue: { key: '', label: '' },
+                  rules: [{ required: isMYVETRECO }]
                 })(
                   <DebounceSelect
                     size="large"
@@ -482,7 +489,8 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
               <Col span={12}>
                 <FormItem label={RCi18n({ id: 'Store.street' })} name="addressDetail">
                   {getFieldDecorator('addressDetail', {
-                    initialValue: ''
+                    initialValue: '',
+                    rules: [{ required: true }]
                   })(<Input size="large" />)}
                 </FormItem>
               </Col>
@@ -499,7 +507,8 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
             <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'Store.housenumber' })} name="houseNumberOrName">
                 {getFieldDecorator('houseNumberOrName', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: true }]
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
@@ -527,7 +536,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
             <Col span={12}>
               <FormItem label={RCi18n({ id: 'Store.postcode' })} name="postcode">
                 {getFieldDecorator('postcode', {
-                  rules: [{ validator: validatePostCode }],
+                  rules: [{ validator: validatePostCode }, { required: isMYVETRECO }],
                   initialValue: ''
                 })(<Input size="large" />)}
               </FormItem>
@@ -540,6 +549,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                     <Tooltip
                       title={RCi18n({ id: 'Store.intro.Tip' })}
                       overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
                     >
                       <Icon type="exclamation-circle" />
                     </Tooltip>
@@ -548,7 +558,8 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 name="introduction"
               >
                 {getFieldDecorator('introduction', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: isMYVETRECO }]
                 })(<Input.TextArea size="large" />)}
               </FormItem>
             </Col>
@@ -631,6 +642,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                       <Tooltip
                         title={RCi18n({ id: 'Store.recomsize.Tip' })}
                         overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
                       >
                         <Icon type="exclamation-circle" />
                       </Tooltip>
@@ -655,6 +667,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                       <Tooltip
                         title={RCi18n({ id: 'Store.upshopfav.Tip' })}
                         overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
                       >
                         <Icon type="exclamation-circle" />
                       </Tooltip>

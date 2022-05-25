@@ -59,6 +59,7 @@ function Step5({ setStep, userInfo, paymentInfoRequest, form }) {
                       Bank account number
                       <Tooltip
                         overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
                         title="This number is an 18-digit number in the Netherlands. Also, the bank account should be under the legal entity name"
                       >
                         <Icon type="exclamation-circle" />

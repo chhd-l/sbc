@@ -127,6 +127,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                       <Tooltip
                         title="This is the legal business name or trading (doing business as) name of your company. It should match account holder name of your bank account used for payout."
                         overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
                       >
                         <Icon type="exclamation-circle" />
                       </Tooltip>
@@ -148,6 +149,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                   <>
                     {RCi18n({ id: 'Store.companynumber' })}
                     <Tooltip
+                      getPopupContainer={() => document.getElementById('create-store-content')}
                       title={RCi18n({ id: 'Store.companyname.Tooltip' })}
                       overlayClassName="store-tip-overlay"
                     >

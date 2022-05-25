@@ -32,7 +32,7 @@ sessionStorage.setItem(cache.CREATESTORE_SOURCE_COMPANYINFO_ID, sourceCompanyInf
 
 function CreateStores() {
   const userInfo = JSON.parse(sessionStorage.getItem('s2b-supplier@login')) || {};
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(2);
   const [submitData, setSubmitData] = useState({});
   useEffect(() => {
     getData();
@@ -76,7 +76,7 @@ function CreateStores() {
               )}
             </Steps>
           </div>
-          <div>
+          <div id="create-store-content">
             {/*{current === 0 && <Step1 setStep={setCurrent} />}*/}
             {/*{current === 1 && <Step2 setStep={setCurrent} />}*/}
             {/*{current === 2 && <Step3 setStep={setCurrent} />}*/}

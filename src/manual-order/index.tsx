@@ -120,7 +120,7 @@ class ManualOrder extends Component<any, any> {
 
   prev() {
     const current = this.state.current - 1;
-    this.setState({ current });
+    this.setState({ current,notNext:false });
   }
 
   componentWillMount() {

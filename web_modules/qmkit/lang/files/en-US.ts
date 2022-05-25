@@ -792,7 +792,7 @@ export default {
   'Login.create_store_step2': 'Legal Info',
   'Login.create_store_step3': 'Store Details',
   'Login.create_store_step4': 'Price Setting',
-  'Login.create_store_step5': 'Payment Info',
+  'Login.create_store_step5': 'Bank info',
   'Login.create_store_success': 'Success! You are ready to go',
   'Login.create_store_title': 'START BUILDING YOUR STORE QUICKLY',
   'Login.donothaveaccount': "Don't have an account?",

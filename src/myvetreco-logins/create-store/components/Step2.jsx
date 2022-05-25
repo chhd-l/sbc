@@ -123,9 +123,13 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                   <>
                     {RCi18n({ id: 'Store.companyname' })}
                     {/* 荷兰显示tooltip */}
-                    {Const.SITE_NAME === 'MYVETRECO' && (
-                      <Tooltip title={RCi18n({ id: 'Store.companyname.Tooltip' })}>
-                        <Icon type="exclamation-circle" className="tooltip-icon" />
+                    {isMYVETRECO && (
+                      <Tooltip
+                        title="This is the legal business name or trading (doing business as) name of your company. It should match account holder name of your bank account used for payout."
+                        overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
+                      >
+                        <Icon type="exclamation-circle" />
                       </Tooltip>
                     )}
                   </>
@@ -144,8 +148,12 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                 label={
                   <>
                     {RCi18n({ id: 'Store.companynumber' })}
-                    <Tooltip title={RCi18n({ id: 'Store.companyname.Tooltip' })}>
-                      <Icon type="exclamation-circle" className="tooltip-icon" />
+                    <Tooltip
+                      getPopupContainer={() => document.getElementById('create-store-content')}
+                      title={RCi18n({ id: 'Store.companyname.Tooltip' })}
+                      overlayClassName="store-tip-overlay"
+                    >
+                      <Icon type="exclamation-circle" />
                     </Tooltip>
                   </>
                 }
@@ -196,14 +204,14 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
               </FormItem>
             </Col>
             <Col span={12}>
-              <FormItem label={RCi18n({ id: 'PetOwner.Email' })}>
+              <FormItem label={isMYVETRECO ? 'Business email' : RCi18n({ id: 'PetOwner.Email' })}>
                 {getFieldDecorator('contactEmail', {
                   rules: [
                     { required: true, message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' }) },
                     { type: 'email', message: <FormattedMessage id="Login.email_address_vld1" /> }
                   ],
                   initialValue: legalInfo?.contactEmail ?? userInfo.accountName
-                })(<Input size="large" />)}
+                })(<Input size="large" disabled />)}
               </FormItem>
             </Col>
             <Col span={12}>

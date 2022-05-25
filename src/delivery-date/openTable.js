@@ -6,7 +6,7 @@ import { e } from 'mathjs';
 
 const format = 'HH:mm';
 const openTable = (props) => {
-  const [allWeeks] = useState([1, 2, 3, 4, 5, 6, 7]);
+  const [allWeeks] = useState([1, 2, 3, 4, 5, 6, 7,8]);
 
   function weekCheck(e, value) {
     let newWeeks = [];
@@ -93,7 +93,10 @@ const openTable = (props) => {
           <th style={{ width: '8%' }}>
             <FormattedMessage id="Setting.Sunday" />
           </th>
-          <th style={{ width: '35%' }}>
+          <th style={{ width: '8%' }}>
+            <FormattedMessage id="Unspecified" />
+          </th>
+          <th style={{ width: '27%' }}>
             <FormattedMessage id="Setting.timeSlot" />
           </th>
           <th style={{ width: '9%' }}>

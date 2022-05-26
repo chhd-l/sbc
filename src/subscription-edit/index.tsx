@@ -3062,6 +3062,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )}
 
         <GoodsModal
+          pageType='subscriptionEdit'
           titleContent={titleContent}
           skuLimit={1}
           visible={productModalVisible}

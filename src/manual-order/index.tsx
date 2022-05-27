@@ -59,7 +59,7 @@ class ManualOrder extends Component<any, any> {
 
   turnShowPage = (token, promocode) => {
     let { customer, url,guest,guestId,storeId,felinStore} = this.state;
-    let userGroup = felinStore ? `userGroup=felinStore&` : '';
+    let userGroup = felinStore ? `userGroup=felinStore&` : 'userGroup=fgs&';
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
     let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
     let params = guest ?guestParams:`${userGroup}${spromocode}stoken=${token}`

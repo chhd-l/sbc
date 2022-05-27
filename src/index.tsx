@@ -2,6 +2,7 @@
 // import 'react-app-polyfill/stable';
 // import 'babel-polyfill';
 import 'core-js';
+import { toRelativeUrl } from '@okta/okta-auth-js';
 import 'regenerator-runtime/runtime';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -28,9 +29,8 @@ import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/
 import enUSLang from '../web_modules/qmkit/lang/files/en-US';
 import configOkta from '../web_modules/qmkit/config-okta';
 
-let localeLang = localStorage.getItem(cache.LANGUAGE)||'en-US';
+let localeLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 (window as any).RCi18n = RCi18n;
-
 
 const lastLang = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || enUSLang;
 // 如果需要weebpicker展示设置和美国标准一致，则需要调用下面api设置
@@ -43,7 +43,7 @@ const lastLang = JSON.parse(window.localStorage.getItem('PHRASE_LANGUAGE')) || e
 
 const useDynamicLanguage = () => {
   const [loading, setLoading] = useState(false);
-  const [dynamicLanguage, setDynamicLanguage] = useState({...lastLang});
+  const [dynamicLanguage, setDynamicLanguage] = useState({ ...lastLang });
 
   useEffect(() => {
     async function getLanguage() {
@@ -57,7 +57,9 @@ const useDynamicLanguage = () => {
 
   return [loading, dynamicLanguage];
 };
-
+const restoreOriginalUri = async (_oktaAuth, originalUri) => {
+  history.replace(toRelativeUrl(originalUri, window.location.origin));
+};
 const PrescriberRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
 
@@ -67,7 +69,7 @@ const PrescriberRouter = () => {
         <ConfigProvider locale={antLanguage}>
           <Provider store={store}>
             <Router history={history}>
-              <Security {...configOkta.prescrberOidc}>
+              <Security oktaAuth={configOkta.prescrberOidc} restoreOriginalUri={restoreOriginalUri}>
                 <div className="father">
                   <Switch>
                     {routeWithSubRoutes(homeRoutes, noop)}
@@ -81,25 +83,34 @@ const PrescriberRouter = () => {
       </IntlProvider>
 
       {loading && (
-        <div style={{position: 'fixed', zIndex: 1234567890, inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#fff'}}>
+        <div
+          style={{
+            position: 'fixed',
+            zIndex: 1234567890,
+            inset: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: '#fff'
+          }}
+        >
           <Spin />
         </div>
       )}
     </>
-
   );
 };
 
 const RcRouter = () => {
   const [loading, dynamicLanguage] = useDynamicLanguage();
-  
+
   return (
     <>
       <IntlProvider locale={localeLang} messages={dynamicLanguage}>
         <ConfigProvider locale={antLanguage}>
           <Provider store={store}>
             <Router history={history}>
-              <Security {...configOkta.RcOidc}>
+              <Security oktaAuth={configOkta.RcOidc} restoreOriginalUri={restoreOriginalUri}>
                 <div className="father">
                   <Switch>
                     {routeWithSubRoutes(homeRoutes, noop)}
@@ -113,12 +124,22 @@ const RcRouter = () => {
       </IntlProvider>
 
       {loading && (
-        <div style={{position: 'fixed', zIndex: 1234567890, inset: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#fff'}}>
+        <div
+          style={{
+            position: 'fixed',
+            zIndex: 1234567890,
+            inset: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            background: '#fff'
+          }}
+        >
           <Spin />
         </div>
       )}
     </>
-  )
+  );
 };
 
 switchRouter();

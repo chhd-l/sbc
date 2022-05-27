@@ -1,14 +1,15 @@
 import { useOktaAuth } from '@okta/okta-react';
-import { util } from 'qmkit';
+import { util, history } from 'qmkit';
 
 import React, { useEffect } from 'react';
 import { accountCreate } from '../myvetreco-logins/create-account/webapi';
 
 const LoginCallback = () => {
-  const { authState } = useOktaAuth();
+  const { oktaAuth, authState } = useOktaAuth();
   const base64 = new util.Base64();
+  useEffect(() => oktaAuth.storeTokensFromRedirect(), [oktaAuth]);
   useEffect(() => {
-    if (authState.isAuthenticated) {
+    if (authState?.accessToken) {
       const apiCall = async () => {
         try {
           const email = base64.urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'));
@@ -21,12 +22,16 @@ const LoginCallback = () => {
             confirmPassword: '123456',
             recommendationCode
           });
+          history.push('/home');
         } catch (err) {
           // handle error as needed
         }
       };
-      // myvet okta登录成功后需要再调一个接口
-      if (Const.SITE_NAME === 'MYVETRECO') apiCall();
+      if (Const.SITE_NAME === 'MYVETRECO') {
+        apiCall();
+        return;
+      }
+      history.push('/home');
     }
   }, [authState]);
 

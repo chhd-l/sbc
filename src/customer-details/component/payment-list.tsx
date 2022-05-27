@@ -4,6 +4,7 @@ import { deleteCard, getPaymentMethods } from '../webapi';
 import { AuthWrapper, cache, RCi18n, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import { e } from 'mathjs';
 
 interface Iprop {
   customerId: string;
@@ -73,7 +74,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
   handleDetails = (record) => {
     if (!record) return;
     let { bindCardLogs, bindCardRecord } = record;
-
+    // console.log('bindCardLogs',bindCardLogs)
+    // console.log('bindCardRecord',bindCardRecord)
     this.setState({
       detailsList: !!bindCardLogs ? bindCardLogs : [],
       paymentInfo: !!bindCardRecord ? bindCardRecord : {}
@@ -158,14 +160,23 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({ id: 'PetOwner.CardNumber' }),
         dataIndex: 'lastFourDigits',
         key: 'cardno',
-        render: (text, record) => (
-          <div>
+        render: (text, record) => {
+          if(record.paymentItem?.toLowerCase() !== 'adyen_paypal'){
+            return <div>
             {'**** **** **** ' + text}{' '}
             {record.isDefault == 1 && (
               <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
             )}
           </div>
-        )
+          }else{
+            return  <div>
+            {text ? text.split('@')[0].substring(0, 4) + '***@' + text.split('@')[1] : ''}
+            {record.isDefault == 1 && (
+              <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+            )}
+          </div>
+          }
+        }
       },
       {
         title: RCi18n({ id: 'PetOwner.CardType' }),
@@ -207,11 +218,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
                         <a className="iconfont iconDelete" />
                       </Button>
                     </Tooltip>
-                    <Divider type="vertical" />
+                    {record.paymentVendor.toLowerCase() == 'visa'&& <Divider type="vertical" />}
                   </Popconfirm>
                 </AuthWrapper>
               )}
-              <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />
+             {record.paymentVendor.toLowerCase() == 'visa' && <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />}
             </span>
           );
         }
@@ -285,11 +296,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
           </AuthWrapper>
         )}
         {/*credit cards*/}
-        <p
+        {/* <p
           style={{ margin: '10px 0', fontSize: '18px', fontWeight: 500, color: 'rgba(0, 0, 0, 1)' }}
         >
           <FormattedMessage id="PetOwner.creditCards" />
-        </p>
+        </p> */}
         <Table
           rowKey="id"
           loading={loading}
@@ -298,7 +309,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
           pagination={false}
         />
         {/*paypal*/}
-        {JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457909 ? (
+        {/* {JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA)).storeId === 123457909 ? (
           <>
             <p
               style={{
@@ -318,7 +329,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
               pagination={false}
             />
           </>
-        ) : null}
+        ) : null} */}
 
         <Modal width="75%" onCancel={this.closeModal} visible={visible} footer={null}>
           <div style={{ minHeight: 300, width: '100%', paddingTop: 25 }}>

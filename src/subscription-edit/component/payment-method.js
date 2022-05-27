@@ -23,7 +23,11 @@ const PaymentMethod = (props) => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
       if (props.cardId) {
-        setPaymentType(cardCodEnum[storeId]||cardCodEnum['default']);
+        if(props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto"){
+          setPaymentType('ADYEN_MOTO');
+        }else{
+          setPaymentType(cardCodEnum[storeId]||cardCodEnum['default']);
+        }   
       } else {
         setPaymentType(codCodEnum[storeId]);
       }
@@ -34,7 +38,7 @@ const PaymentMethod = (props) => {
     if (!props.paymentMethodVisible) {
       return;
     }
-    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
+    if (paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) || paymentType === 'ADYEN_MOTO') {
       getCards();
       if (props.cardId) {
         setSelectCardId(props.cardId);
@@ -46,7 +50,7 @@ const PaymentMethod = (props) => {
   }, [paymentType, props.paymentMethodVisible]);
 
   useEffect(() => {
-    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])) {
+    if (paymentType === (cardCodEnum[storeId]||cardCodEnum['default'])|| paymentType === 'ADYEN_MOTO') {
       setDisabled(!selectCardId);
     } else {
       setDisabled(!deliveryPay);
@@ -67,6 +71,9 @@ const PaymentMethod = (props) => {
             setPaypalCard(paypalCard);
             card=card.filter((item)=>item.paymentItem?.toLowerCase() !== 'adyen_paypal');
           }
+          if(paymentType.toLowerCase() !=='adyen_moto'){
+            card=card.filter((item)=>item.paymentItem?.toLowerCase() !== 'adyen_moto');
+          }
           setCards(card);
         } else {
           message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
@@ -81,8 +88,12 @@ const PaymentMethod = (props) => {
 
   function changePaymentMethod() {
     let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
-    props.changePaymentMethod(selectCardId, paymentType, selectCard);
-    props.cancel();
+    if(props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto"){
+      props.changePaymentMethod(selectCardId, paymentType, selectCard);
+      props.cancel();
+    }else{
+      message.error(RCi18n({ id: 'Subscription.OperationFailure' }));
+    }   
   }
 
   function clear() {
@@ -155,6 +166,9 @@ const PaymentMethod = (props) => {
           </Radio>
         ) : // </AuthWrapper>
         null}
+       {props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto" &&( <Radio value={'ADYEN_MOTO'}>
+          <FormattedMessage id="Subscription.adyen_moto" />
+        </Radio>)}
       </Radio.Group>
       {paymentType === (cardCodEnum[storeId]||cardCodEnum['default']) ? (
         <Row className="paymentDoor">
@@ -257,7 +271,54 @@ const PaymentMethod = (props) => {
             </Spin>
           </Radio.Group>
         </Row>
-      ) : null}
+      ) : paymentType === 'ADYEN_MOTO'?(
+        <Row className="paymentDoor">
+          <Radio.Group>
+            <Spin spinning={loading}>
+              <>
+                
+                  <Row  className="payment-panel">
+                    <Radio>
+                      {/* <div className="cardInfo">
+                        <h4>{item.paymentVendor}</h4>
+                        <p>{item.cardType}</p>
+                        <p>{'**** **** **** ' + item.lastFourDigits}</p>
+                      </div> */}
+                      <img 
+                      src='https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008060240358083.png' 
+                      alt='moto'
+                      style={{
+                        width:'40%'
+                      }}
+                      />
+                    </Radio>
+                    <Row>
+                      <AuthWrapper functionName="f_delete_card">
+                        <Popconfirm
+                          placement="topLeft"
+                          title={`Are you sure to delete this card?`}
+                          // onConfirm={() => deleteCard(item.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <a>
+                            <FormattedMessage id="Subscription.Delete" />
+                          </a>
+                        </Popconfirm>
+                        {/* {item.showError ? (
+                          <div className="errorMessage">
+                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                          </div>
+                        ) : null} */}
+                      </AuthWrapper>
+                    </Row>
+                  </Row>
+              
+              </>
+            </Spin>
+          </Radio.Group>
+        </Row>
+      ):null}
     </Modal>
   );
 };

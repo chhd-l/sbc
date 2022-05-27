@@ -59,12 +59,12 @@ class ManualOrder extends Component<any, any> {
 
   turnShowPage = (token, promocode) => {
     let { customer, url,guest,guestId,storeId,felinStore} = this.state;
-    let userGroup = felinStore ? `userGroup=felinStore&` : '';
+    let userGroup = felinStore ? `userGroup=felinStore&` : 'userGroup=fgs&';
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
     let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
     let params = guest ?guestParams:`${userGroup}${spromocode}stoken=${token}`
     let winObj = window.open(
-      `${url.replace(/\/$/gi, '')}/cart?${params}`,
+      `${'http://localhost:3000/'.replace(/\/$/gi, '')}/cart?${params}`,
       'newwindow',
       'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );

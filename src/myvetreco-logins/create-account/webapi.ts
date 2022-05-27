@@ -23,3 +23,11 @@ export function createStoreAccountCheck(params) {
     })
   });
 }
+export function accountCreate(params) {
+  return Fetch<TResult>('/store/create/account/create', {
+    method: 'POST',
+    body: JSON.stringify({
+      ...params
+    })
+  });
+}

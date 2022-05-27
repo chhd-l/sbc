@@ -3,7 +3,7 @@ import { Form, Button, Input, Icon, Spin } from 'antd';
 import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
 import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
-import { createStoreAccount, createStoreAccountCheck } from './webapi';
+import { accountCreate, createStoreAccount, createStoreAccountCheck } from './webapi';
 import { switchRouter } from '@/index';
 import './index.less';
 
@@ -12,11 +12,14 @@ import fgsLogo from '../../login-admin/img/logo.png';
 import { util, RCi18n, history, login, Const, cache } from 'qmkit';
 import { useOktaAuth } from '@okta/okta-react';
 import { useRequest } from 'ahooks';
+import config from '../../../web_modules/qmkit/config';
 
 const FormItem = Form.Item;
 const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
 // const Logo = logo
 function CreateAccount({ form }) {
+  console.log(config, '222222');
+  console.log();
   const { getFieldDecorator } = form;
   const base64 = new util.Base64();
   let { authService } = useOktaAuth();
@@ -29,6 +32,7 @@ function CreateAccount({ form }) {
           context: { oktaResult }
         }
       } = await createStoreAccountCheck({ email: base64.urlEncode(email) });
+
       return oktaResult;
     },
     {
@@ -40,17 +44,25 @@ function CreateAccount({ form }) {
     history.push('/login');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 荷兰如果okta注册过 跳转到/login
-    if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
-      sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
-      authService.login('/login?type=prescriber');
-      return;
-    }
-    form.validateFields((errs, values) => {
+
+    form.validateFields(async (errs, values) => {
       if (!errs) {
-        setLoading(true);
+        // setLoading(true);
+        // 荷兰如果okta注册过 跳转到/login
+        if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
+          await accountCreate({
+            email: base64.urlEncode(values.email),
+            password: '123456',
+            confirmPassword: '123456',
+            recommendationCode:
+              values.recommendationCode && base64.urlEncode(values.recommendationCode)
+          });
+          sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
+          authService.login('/login?type=prescriber');
+          return;
+        }
         createStoreAccount({
           email: base64.urlEncode(values.email),
           password: base64.urlEncode(values.password),

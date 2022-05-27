@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Form, Button, Input, Icon, Spin } from 'antd';
-import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
+import { Form, Button, Input, Icon } from 'antd';
+import { RunBoyForDesktop } from '../components/runBoy';
 import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
-import { accountCreate, createStoreAccount, createStoreAccountCheck } from './webapi';
-import { switchRouter } from '@/index';
+import { createStoreAccount, createStoreAccountCheck } from './webapi';
 import './index.less';
 
 import logo from '../assets/images/logo-s.png';
@@ -51,14 +50,10 @@ function CreateAccount({ form }) {
       if (!errs) {
         // setLoading(true);
         // 荷兰如果okta注册过 跳转到/login
+
         if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
-          await accountCreate({
-            email: base64.urlEncode(values.email),
-            password: '123456',
-            confirmPassword: '123456',
-            recommendationCode:
-              values.recommendationCode && base64.urlEncode(values.recommendationCode)
-          });
+          sessionStorage.setItem('myvet-eamil-to-okta', values.email);
+          sessionStorage.setItem('myvet-recommendationCode-to-okta', values.recommendationCode);
           sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
           authService.login('/login?type=prescriber');
           return;

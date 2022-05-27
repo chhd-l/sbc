@@ -1,7 +1,7 @@
 import { useOktaAuth } from '@okta/okta-react';
 import { util } from 'qmkit';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { accountCreate } from '../myvetreco-logins/create-account/webapi';
 
 const LoginCallback = () => {

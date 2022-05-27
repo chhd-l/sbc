@@ -64,7 +64,7 @@ class ManualOrder extends Component<any, any> {
     let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
     let params = guest ?guestParams:`${userGroup}${spromocode}stoken=${token}`
     let winObj = window.open(
-      `${'http://localhost:3000/'.replace(/\/$/gi, '')}/cart?${params}`,
+      `${url.replace(/\/$/gi, '')}/cart?${params}`,
       'newwindow',
       'height=500, width=800, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );

@@ -27,7 +27,8 @@ const LoginCallback = () => {
   useMount(async () => {
     const authState = await storeTokensFromRedirect();
     if (authState.isAuthenticated) {
-      if (Const.SITE_NAME === 'MYVETRECO') {
+      // 荷兰环境并且如果是从okta跳转过来的去创建账号
+      if (Const.SITE_NAME === 'MYVETRECO' && sessionStorage.getItem('myvet-eamil-to-okta')) {
         const base64 = new util.Base64();
         const email = base64.urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'));
         const recommendationCode =
@@ -40,6 +41,8 @@ const LoginCallback = () => {
           confirmPassword: '123456',
           recommendationCode
         });
+        sessionStorage.removeItem('myvet-eamil-to-okta');
+        sessionStorage.removeItem('myvet-recommendationCode-to-okta');
         history.push('/create-store');
         return;
       }

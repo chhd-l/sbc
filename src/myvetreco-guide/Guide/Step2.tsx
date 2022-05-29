@@ -1,12 +1,13 @@
 import { Button } from 'antd';
 import React from 'react';
+import { history } from 'qmkit';
 type Step2Props = {
   onNext: () => void;
   onFold: () => void;
 };
 const Step2 = ({ onNext, onFold }: Step2Props) => {
   const handleContinueMyVerification = () => {
-    // history.push('/basic-setting')
+    history.push('/basic-setting');
     onFold();
   };
   return (

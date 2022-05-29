@@ -28,7 +28,6 @@ import { cache } from 'qmkit';
 import { language, antLanguage, getDynamicLanguage } from '../web_modules/qmkit/lang';
 import enUSLang from '../web_modules/qmkit/lang/files/en-US';
 import configOkta from '../web_modules/qmkit/config-okta';
-import MyvetrecoGuide from './myvetreco-guide';
 
 let localeLang = localStorage.getItem(cache.LANGUAGE) || 'en-US';
 (window as any).RCi18n = RCi18n;
@@ -64,7 +63,6 @@ const PrescriberRouter = () => {
 
   return (
     <>
-      <MyvetrecoGuide />
       <IntlProvider locale="es" messages={dynamicLanguage}>
         <ConfigProvider locale={antLanguage}>
           <Provider store={store}>

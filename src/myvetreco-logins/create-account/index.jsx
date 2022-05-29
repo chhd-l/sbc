@@ -17,8 +17,6 @@ const FormItem = Form.Item;
 const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
 // const Logo = logo
 function CreateAccount({ form }) {
-  console.log(config, '222222');
-  console.log();
   const { getFieldDecorator } = form;
   const base64 = new util.Base64();
   let { authService } = useOktaAuth();

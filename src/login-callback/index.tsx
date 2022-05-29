@@ -1,8 +1,8 @@
 // import { useOktaAuth } from '@okta/okta-react';
-import { useOktaAuth, okta } from '@okta/okta-react';
+import { useOktaAuth } from '@okta/okta-react';
 import { useMount } from 'ahooks';
 
-import { util, history } from 'qmkit';
+import { util, history, Const } from 'qmkit';
 
 import React from 'react';
 import { accountCreate } from '../myvetreco-logins/create-account/webapi';
@@ -33,13 +33,14 @@ const LoginCallback = () => {
         const recommendationCode =
           sessionStorage.getItem('myvet-recommendationCode-to-okta') &&
           base64.urlEncode(sessionStorage.getItem('myvet-recommendationCode-to-okta'));
+
         await accountCreate({
           email,
           password: '123456',
           confirmPassword: '123456',
           recommendationCode
         });
-        console.log(authState);
+        history.push('/create-store');
         return;
       }
       history.push('/');

@@ -12,7 +12,7 @@ function ProductList({ dataSource = [], title }) {
   //  const Context = useContext(FormContext);
   //  const {saveCheckAll,saveCheckStatus} = Context
 
-  const [isChecKedAll, setIsChecKedAll] = React.useState(false);
+  //   const [isChecKedAll, setIsChecKedAll] = React.useState(false);
 
   // const onCheckAllChange = (e)=>{
   //     setIsChecKedAll(e.target.checked)

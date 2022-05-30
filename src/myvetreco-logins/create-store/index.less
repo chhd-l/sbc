@@ -4,6 +4,11 @@
   height: 100vh;
   overflow: auto;
 
+  #create-store-content {
+    position: relative;
+  }
+
+
   .ant-btn {
     border-radius: 4px;
 
@@ -83,11 +88,17 @@
   }
 
 
-  .tooltip-icon {
-    line-height: 25px;
-    margin-left: 10px;
-    color: var(--primary-color);
-    font-size: 15px !important
+
+
+  .ant-form-item-label>label {
+    display: flex;
+    align-items: center;
+    font-size: 15px !important;
+
+    i {
+      color: var(--primary-color);
+      margin-left: 10px;
+    }
   }
 
   .dragger-container {
@@ -95,6 +106,11 @@
     width: 240px;
     margin: 20px auto;
     height: 140px;
+
+    i {
+      color: var(--primary-color);
+      margin-left: 10px;
+    }
 
     .anticon-exclamation-circle {
       position: absolute;
@@ -398,5 +414,36 @@
     font-family: SimSun, sans-serif;
     line-height: 1;
     content: "*";
+  }
+}
+
+.step4-myvet-top-content-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &>div {
+    margin: 5px 5px
+  }
+
+  >button {
+    margin-left: 5px;
+  }
+}
+
+.store-tip-overlay {
+  .ant-tooltip-inner {
+    color: #fff;
+    background-color: var(--primary-color);
+  }
+
+  .ant-tooltip-arrow::before {
+    background-color: var(--primary-color);
+  }
+
+  .ant-tooltip-placement-bottom .ant-tooltip-arrow,
+  .ant-tooltip-placement-bottomLeft .ant-tooltip-arrow,
+  .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
+    border-bottom-color: var(--primary-color);
   }
 }

@@ -16,7 +16,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 const FILE_MAX_SIZE = 2 * 1024 * 1024;
-
+const isMYVETRECO = Const.SITE_NAME === 'MYVETRECO';
 function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCompanyInfoId }) {
   const { getFieldDecorator } = form;
   const [loading, setLoading] = useState(false);
@@ -151,7 +151,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
           if (err) {
             setLoading(false);
           } else {
-            setStep(Const.SITE_NAME === 'MYVETRECO' ? 3 : 5); //FGS去掉第4、5步
+            setStep(isMYVETRECO ? 3 : 5); //FGS去掉第4、5步
             setLoading(false);
           }
         });
@@ -283,7 +283,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
   const validatePostCode = (rules, value, callback) => {
     if (value === '') {
       callback();
-    } else if (Const.SITE_NAME === 'MYVETRECO' && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
+    } else if (isMYVETRECO && !/^[0-9]{4}\s[A-Za-z]{2}$/.test(value)) {
       callback(`${RCi18n({ id: 'PetOwner.theCorrectPostCode' })}: 1234 AB`);
     } else if (!/^[0-9A-Za-z\s]{3,10}$/.test(value)) {
       callback(RCi18n({ id: 'PetOwner.theCorrectPostCode' }));
@@ -298,60 +298,70 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
   return (
     <div>
       <div className="vmargin-level-4 align-item-center word big">
-        3 / {Const.SITE_NAME === 'MYVETRECO' ? '5' : '3'} <FormattedMessage id="Store.tellusmore" />
+        3 / {isMYVETRECO ? '5' : '3'} <FormattedMessage id="Store.tellusmore" />
       </div>
 
-      <div style={{ width: 800, margin: '0 auto' }}>
-        <Row gutter={[24, 12]}>
-          <Col span={12}>
-            <div className="dragger-container">
-              <Dragger {...uploadProps}>
-                {imgUrl ? (
-                  <img src={imgUrl} width={90 + 'px'} height={90 + 'px'} />
-                ) : (
-                  <>
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="cloud-upload" className="word primary size24" />
-                    </p>
-                    <p className="ant-upload-hint">
-                      <FormattedMessage id="Store.upshoplogo" />
-                      <br />({RCi18n({ id: 'Store.recomsize' })} 48px * 48px)
-                    </p>
-                  </>
+      {!isMYVETRECO && (
+        <div style={{ width: 800, margin: '0 auto' }}>
+          <Row gutter={[24, 12]}>
+            <Col span={12}>
+              <div className="dragger-container">
+                <Dragger {...uploadProps}>
+                  {imgUrl ? (
+                    <img src={imgUrl} width={90 + 'px'} height={90 + 'px'} />
+                  ) : (
+                    <>
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="cloud-upload" className="word primary size24" />
+                      </p>
+                      <p className="ant-upload-hint">
+                        <FormattedMessage id="Store.upshoplogo" />
+                        <br />({RCi18n({ id: 'Store.recomsize' })} 48px * 48px)
+                      </p>
+                    </>
+                  )}
+                </Dragger>
+                {isMYVETRECO && (
+                  <Tooltip
+                    getPopupContainer={() => document.getElementById('create-store-content')}
+                    title={RCi18n({ id: 'Store.recomsize.Tip' })}
+                    overlayClassName="store-tip-overlay"
+                  >
+                    <Icon type="exclamation-circle" />
+                  </Tooltip>
                 )}
-              </Dragger>
-              {Const.SITE_NAME === 'MYVETRECO' && (
-                <Tooltip title={RCi18n({ id: 'Store.recomsize.Tip' })}>
-                  <Icon type="exclamation-circle" className="tooltip-icon" />
-                </Tooltip>
-              )}
-            </div>
-          </Col>
-          <Col span={12}>
-            <div className="dragger-container">
-              <Dragger {...uploadIconProps}>
-                {faviconUrl ? (
-                  <img src={faviconUrl} width={90} height={90} />
-                ) : (
-                  <>
-                    <p className="ant-upload-drag-icon">
-                      <Icon type="cloud-upload" className="word primary size24" />
-                    </p>
-                    <p className="ant-upload-hint">
-                      <FormattedMessage id="Store.upshopfav" />
-                    </p>
-                  </>
+              </div>
+            </Col>
+            <Col span={12}>
+              <div className="dragger-container">
+                <Dragger {...uploadIconProps}>
+                  {faviconUrl ? (
+                    <img src={faviconUrl} width={90} height={90} />
+                  ) : (
+                    <>
+                      <p className="ant-upload-drag-icon">
+                        <Icon type="cloud-upload" className="word primary size24" />
+                      </p>
+                      <p className="ant-upload-hint">
+                        <FormattedMessage id="Store.upshopfav" />
+                      </p>
+                    </>
+                  )}
+                </Dragger>
+                {isMYVETRECO && (
+                  <Tooltip
+                    title={RCi18n({ id: 'Store.upshopfav.Tip' })}
+                    getPopupContainer={() => document.getElementById('create-store-content')}
+                    overlayClassName="store-tip-overlay"
+                  >
+                    <Icon type="exclamation-circle" />
+                  </Tooltip>
                 )}
-              </Dragger>
-              {Const.SITE_NAME === 'MYVETRECO' && (
-                <Tooltip title={RCi18n({ id: 'Store.upshopfav.Tip' })}>
-                  <Icon type="exclamation-circle" className="tooltip-icon" />
-                </Tooltip>
-              )}
-            </div>
-          </Col>
-        </Row>
-      </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      )}
 
       <div style={{ width: 800, margin: '20px auto' }}>
         <Form layout="vertical" onSubmit={toNext}>
@@ -362,9 +372,13 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   <>
                     {RCi18n({ id: 'storeName' })}
                     {/* 荷兰显示tooltip */}
-                    {Const.SITE_NAME === 'MYVETRECO' && (
-                      <Tooltip title={RCi18n({ id: 'storeName.Tip' })}>
-                        <Icon type="exclamation-circle" className="tooltip-icon" />
+                    {isMYVETRECO && (
+                      <Tooltip
+                        getPopupContainer={() => document.getElementById('create-store-content')}
+                        title={RCi18n({ id: 'storeName.Tip' })}
+                        overlayClassName="store-tip-overlay"
+                      >
+                        <Icon type="exclamation-circle" />
                       </Tooltip>
                     )}
                   </>
@@ -380,7 +394,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                   <Input
                     size="large"
                     onChange={(e) => {
-                      if (Const.SITE_NAME === 'MYVETRECO') {
+                      if (isMYVETRECO) {
                         let value = e.target.value
                           .replace(/[^\w]/gi, '')
                           .substring(0, 50)
@@ -401,16 +415,20 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
               <FormItem label={RCi18n({ id: 'Store.storeDomain' })} name="domainName">
                 {getFieldDecorator('domainName', {
                   initialValue: ''
-                })(<Input size="large" disabled={Const.SITE_NAME === 'MYVETRECO'} />)}
+                })(<Input size="large" disabled={isMYVETRECO} />)}
               </FormItem>
             </Col>
-            <Col span={24} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={24} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
-                    {RCi18n({ id: 'Store.selltoclinic' })}
-                    <Tooltip title={RCi18n({ id: 'Store.selltoclinic.Tip' })}>
-                      <Icon type="exclamation-circle" className="tooltip-icon" />
+                    {RCi18n({ id: 'Store.Sell to clinic number' })}
+                    <Tooltip
+                      title={RCi18n({ id: 'Store.selltoclinic.Tip' })}
+                      overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
+                    >
+                      <Icon type="exclamation-circle" />
                     </Tooltip>
                   </>
                 }
@@ -419,7 +437,7 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 {getFieldDecorator('sellToClinic', {
                   rules: [
                     {
-                      required: Const.SITE_NAME === 'MYVETRECO',
+                      required: isMYVETRECO,
                       message: RCi18n({ id: 'PetOwner.ThisFieldIsRequired' })
                     }
                   ],
@@ -427,27 +445,33 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
                     {RCi18n({ id: 'Store.province' })}
-                    <Tooltip title={RCi18n({ id: 'Store.province.Tip' })}>
-                      <Icon type="exclamation-circle" className="tooltip-icon" />
+                    <Tooltip
+                      title={RCi18n({ id: 'Store.province.Tip' })}
+                      overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
+                    >
+                      <Icon type="exclamation-circle" />
                     </Tooltip>
                   </>
                 }
                 name="province"
               >
                 {getFieldDecorator('province', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: isMYVETRECO }]
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'PetOwner.City' })} name="cityId">
                 {getFieldDecorator('cityId', {
-                  initialValue: { key: '', label: '' }
+                  initialValue: { key: '', label: '' },
+                  rules: [{ required: isMYVETRECO }]
                 })(
                   <DebounceSelect
                     size="large"
@@ -461,15 +485,17 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 )}
               </FormItem>
             </Col>
-            {Const.SITE_NAME === 'MYVETRECO' ? (
+            {isMYVETRECO && (
               <Col span={12}>
                 <FormItem label={RCi18n({ id: 'Store.street' })} name="addressDetail">
                   {getFieldDecorator('addressDetail', {
-                    initialValue: ''
+                    initialValue: '',
+                    rules: [{ required: true }]
                   })(<Input size="large" />)}
                 </FormItem>
               </Col>
-            ) : (
+            )}
+            {!isMYVETRECO && (
               <Col span={24}>
                 <FormItem label={RCi18n({ id: 'Store.address1' })} name="addressDetail">
                   {getFieldDecorator('addressDetail', {
@@ -478,14 +504,15 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
                 </FormItem>
               </Col>
             )}
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem label={RCi18n({ id: 'Store.housenumber' })} name="houseNumberOrName">
                 {getFieldDecorator('houseNumberOrName', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: true }]
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={12} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'none' : 'block' }}>
+            <Col span={12} style={{ display: isMYVETRECO ? 'none' : 'block' }}>
               <FormItem label={RCi18n({ id: 'PetOwner.Country' })} name="countryCode">
                 {getFieldDecorator('countryCode', {
                   rules: [
@@ -509,25 +536,30 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
             <Col span={12}>
               <FormItem label={RCi18n({ id: 'Store.postcode' })} name="postcode">
                 {getFieldDecorator('postcode', {
-                  rules: [{ validator: validatePostCode }],
+                  rules: [{ validator: validatePostCode }, { required: isMYVETRECO }],
                   initialValue: ''
                 })(<Input size="large" />)}
               </FormItem>
             </Col>
-            <Col span={24} style={{ display: Const.SITE_NAME === 'MYVETRECO' ? 'block' : 'none' }}>
+            <Col span={24} style={{ display: isMYVETRECO ? 'block' : 'none' }}>
               <FormItem
                 label={
                   <>
                     {RCi18n({ id: 'Store.intro' })}
-                    <Tooltip title={RCi18n({ id: 'Store.intro.Tip' })}>
-                      <Icon type="exclamation-circle" className="tooltip-icon" />
+                    <Tooltip
+                      title={RCi18n({ id: 'Store.intro.Tip' })}
+                      overlayClassName="store-tip-overlay"
+                      getPopupContainer={() => document.getElementById('create-store-content')}
+                    >
+                      <Icon type="exclamation-circle" />
                     </Tooltip>
                   </>
                 }
                 name="introduction"
               >
                 {getFieldDecorator('introduction', {
-                  initialValue: ''
+                  initialValue: '',
+                  rules: [{ required: isMYVETRECO }]
                 })(<Input.TextArea size="large" />)}
               </FormItem>
             </Col>
@@ -570,20 +602,95 @@ function Step3({ setStep, userInfo, store = null, form, sourceStoreId, sourceCom
               </div>
             </Col>
           </Row>
-          <Row gutter={[24, 12]}>
-            <Col span={12} className="align-item-right">
-              <Button size="large" onClick={() => setStep(1)}>
-                <FormattedMessage id="back" />
-              </Button>
-            </Col>
-            <Col span={12}>
-              <FormItem>
-                <Button loading={loading} size="large" type="primary" htmlType="submit">
-                  <FormattedMessage id="Setting.Next" />
+          {!isMYVETRECO && (
+            <Row gutter={[24, 12]}>
+              <Col span={12} className="align-item-right">
+                <Button size="large" onClick={() => setStep(1)}>
+                  <FormattedMessage id="back" />
                 </Button>
-              </FormItem>
-            </Col>
-          </Row>
+              </Col>
+              <Col span={12}>
+                <FormItem>
+                  <Button loading={loading} size="large" type="primary" htmlType="submit">
+                    <FormattedMessage id="Setting.Next" />
+                  </Button>
+                </FormItem>
+              </Col>
+            </Row>
+          )}
+          {isMYVETRECO && (
+            <>
+              <div style={{ width: 800, margin: '0 auto' }}>
+                <Row gutter={[24, 12]}>
+                  <Col span={12}>
+                    <div className="dragger-container">
+                      <Dragger {...uploadProps}>
+                        {imgUrl ? (
+                          <img src={imgUrl} width={90 + 'px'} height={90 + 'px'} />
+                        ) : (
+                          <>
+                            <p className="ant-upload-drag-icon">
+                              <Icon type="cloud-upload" className="word primary size24" />
+                            </p>
+                            <p className="ant-upload-hint">
+                              <FormattedMessage id="Store.upshoplogo" />
+                              <br />({RCi18n({ id: 'Store.recomsize' })} 48px * 48px)
+                            </p>
+                          </>
+                        )}
+                      </Dragger>
+                      <Tooltip
+                        title={RCi18n({ id: 'Store.recomsize.Tip' })}
+                        overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
+                      >
+                        <Icon type="exclamation-circle" />
+                      </Tooltip>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div className="dragger-container">
+                      <Dragger {...uploadIconProps}>
+                        {faviconUrl ? (
+                          <img src={faviconUrl} width={90} height={90} />
+                        ) : (
+                          <>
+                            <p className="ant-upload-drag-icon">
+                              <Icon type="cloud-upload" className="word primary size24" />
+                            </p>
+                            <p className="ant-upload-hint">
+                              <FormattedMessage id="Store.upshopfav" />
+                            </p>
+                          </>
+                        )}
+                      </Dragger>
+                      <Tooltip
+                        title={RCi18n({ id: 'Store.upshopfav.Tip' })}
+                        overlayClassName="store-tip-overlay"
+                        getPopupContainer={() => document.getElementById('create-store-content')}
+                      >
+                        <Icon type="exclamation-circle" />
+                      </Tooltip>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+              <Row gutter={[24, 12]}>
+                <Col span={12} className="align-item-right">
+                  <Button size="large" onClick={() => setStep(1)}>
+                    <FormattedMessage id="back" />
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <FormItem>
+                    <Button loading={loading} size="large" type="primary" htmlType="submit">
+                      <FormattedMessage id="Setting.Next" />
+                    </Button>
+                  </FormItem>
+                </Col>
+              </Row>
+            </>
+          )}
         </Form>
       </div>
     </div>

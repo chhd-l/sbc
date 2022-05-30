@@ -2525,6 +2525,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             }}
                             paymentMethodVisible={this.state.paymentMethodVisible}
                             subscriptionType={this.state.subscriptionType}
+                            paymentInfo={paymentInfo}
                           />
                         </>
                       )}
@@ -3062,6 +3063,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )}
 
         <GoodsModal
+          pageType='subscriptionEdit'
           titleContent={titleContent}
           skuLimit={1}
           visible={productModalVisible}

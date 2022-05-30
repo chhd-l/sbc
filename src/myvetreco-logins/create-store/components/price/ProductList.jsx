@@ -9,27 +9,16 @@ import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
 import VList from 'react-virtualized/dist/es/List';
 
 function ProductList({ dataSource = [], title }) {
-  //  const Context = useContext(FormContext);
-  //  const {saveCheckAll,saveCheckStatus} = Context
+  const [isChecKedAll, setIsChecKedAll] = React.useState(false);
 
-  //   const [isChecKedAll, setIsChecKedAll] = React.useState(false);
-
-  // const onCheckAllChange = (e)=>{
-  //     setIsChecKedAll(e.target.checked)
-  //     saveCheckAll(e.target.checked,title)
-  //     if(!e.target.checked){
-  //       saveCheckStatus(title,'clear',[])
-  //     }
-  // }
-
-  //   const renderItem = ({ index, key, style }) => {
-  //     const item = dataSource[index];
-  //     return (
-  //       <div key={key} style={style}>
-  //         <CheckboxItem item={item} isChecKedAll={isChecKedAll} title={title} />
-  //       </div>
-  //     );
-  //   };
+  const renderItem = ({ index, key, style }) => {
+    const item = dataSource[index];
+    return (
+      <div key={key} style={style}>
+        <CheckboxItem item={item} isChecKedAll={isChecKedAll} title={title} />
+      </div>
+    );
+  };
 
   const vlist = ({ height, width }) => (
     <VList
@@ -39,7 +28,7 @@ function ProductList({ dataSource = [], title }) {
       rowHeight={({ index }) => {
         return dataSource[index].height;
       }}
-      //   rowRenderer={renderItem}
+      rowRenderer={renderItem}
       width={width}
     />
   );

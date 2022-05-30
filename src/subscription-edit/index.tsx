@@ -710,26 +710,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           deliveryAddressInfo['pickupPointState'] = res.context;
         }
       });
-      // await webapi.checkSubscriptionAddressPickPoint(
-      //   {
-      //     deliveryAddressId: deliveryAddressId,
-      //     goodsItems: goodsInfo.map((ele)=>{
-      //       return {
-      //         subscribeGoodsId: ele.subscribeGoodsId,
-      //         subscribeNum: ele.subscribeNum,
-      //         subscribeId: ele.subscribeId,
-      //         skuId: ele.skuId
-      //       }
-      //     }),
-      //     subscribeId: subscriptionInfo.subscriptionNumber,
-      //     paymentId: this.state.paymentInfo?.id,
-      //   }
-      // ).then((data)=>{
-      //   console.log(data)
-      // }).catch((err)=>{
-      //   this.setState({tempolineApiError:err.message})
-      //   return;
-      // })
+      await webapi.checkSubscriptionAddressPickPoint(
+        {
+          deliveryAddressId: deliveryAddressId,
+          goodsItems: goodsInfo.map((ele)=>{
+            return {
+              subscribeGoodsId: ele.subscribeGoodsId,
+              subscribeNum: ele.subscribeNum,
+              subscribeId: ele.subscribeId,
+              skuId: ele.skuId
+            }
+          }),
+          subscribeId: subscriptionInfo.subscriptionNumber,
+          paymentId: this.state.paymentInfo?.id,
+        }
+      ).then((data)=>{
+        console.log(data)
+      }).catch((err)=>{
+        this.setState({tempolineApiError:err.message})
+        return;
+      })
     }
     // 如果是日本
     if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {

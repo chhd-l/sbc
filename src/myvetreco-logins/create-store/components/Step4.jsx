@@ -262,7 +262,6 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
     <FormContext.Provider
       value={{
         changeFormData: changeFormData,
-        saveCheckAll: saveCheckAll,
         saveCheckStatus: saveCheckStatus,
         checkedObject: checkedObject,
         formData,

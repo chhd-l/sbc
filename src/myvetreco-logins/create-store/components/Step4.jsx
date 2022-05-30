@@ -18,7 +18,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   const [checkedObject, setCheckedObject] = useState({ Cat: {}, Dog: {} }); //选中状态{Cat:{},Dog:{}}
 
   const [allObj, setAllObj] = useState({}); //平铺所有sku选项结构{Cat:{},Dog:{}}
-  const [checkAllObj, setCheckAllObj] = useState({ Cat: false, Dog: false }); //cat或者dog是否全选
+  const [checkAllObj, setCheckAllObj] = useState({ Cat: true, Dog: true }); //cat或者dog是否全选
 
   const [dataSource, setDataSource] = useState({});
   const [loading, setLoading] = useState(false);
@@ -122,10 +122,10 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
     setFormData(formData);
   };
   // 保存全选/全不选的状态 （因为虚拟列表所有在此处对所有数据进行操作）
-  const saveCheckAll = (isChecked, type) => {
-    checkAllObj[type] = isChecked;
-    setCheckAllObj(checkAllObj);
-  };
+  // const saveCheckAll = (isChecked, type) => {
+  //   checkAllObj[type] = isChecked;
+  //   setCheckAllObj(checkAllObj);
+  // };
   /**
    * 保存选中状态（虚拟列表会重刷组件，导致状态丢失）
    * @param spu

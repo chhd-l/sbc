@@ -121,6 +121,11 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
     // console.log(formData)
     setFormData(formData);
   };
+  // 保存全选/全不选的状态 （因为虚拟列表所有在此处对所有数据进行操作）
+  // const saveCheckAll = (isChecked, type) => {
+  //   checkAllObj[type] = isChecked;
+  //   setCheckAllObj(checkAllObj);
+  // };
   /**
    * 保存选中状态（虚拟列表会重刷组件，导致状态丢失）
    * @param spu

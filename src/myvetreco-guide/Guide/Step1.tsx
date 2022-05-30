@@ -1,12 +1,22 @@
 import { Button } from 'antd';
 import React from 'react';
+import { util, cache } from 'qmkit';
 type Step1Props = {
   onNext: () => void;
 };
 
 const Step1 = ({ onNext }: Step1Props) => {
   const handleOpenInNewTab = () => {
-    window.open('https://shopsit.royalcanin.com/');
+    const shopDomain = sessionStorage.getItem(cache.DOMAINNAME);
+    let myvetreco_shop_domain_url = '';
+    if (shopDomain) {
+      myvetreco_shop_domain_url = shopDomain.endsWith('/')
+        ? shopDomain + 'admin'
+        : shopDomain + '/admin';
+      myvetreco_shop_domain_url =
+        myvetreco_shop_domain_url + '?authorize=' + util.encryptAES((window as any).token);
+    }
+    window.open(myvetreco_shop_domain_url);
     onNext();
   };
   return (

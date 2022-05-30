@@ -112,7 +112,6 @@ export const getPrescriberRecommentCodeUseView = (params) => {
   });
 };
 
-
 /* ================================================================================================================ */
 
 type TResult = {
@@ -126,5 +125,11 @@ export function getDeliveryOptions() {
     body: JSON.stringify({
       configKey: 'delivery_option'
     })
+  });
+}
+export function isFirstLogin(params) {
+  return Fetch<TResult>('/store/create/account/isFirstLogin', {
+    method: 'POST',
+    body: JSON.stringify(params)
   });
 }

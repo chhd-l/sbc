@@ -181,7 +181,14 @@ export default class PaymentList extends React.Component<Iprop, any> {
       {
         title: RCi18n({ id: 'PetOwner.CardType' }),
         dataIndex: 'paymentVendor',
-        key: 'type'
+        key: 'type',
+        render: (text, record)=>{
+          if(record?.paymentItem.toLowerCase() ==='adyen_credit_card'){
+            return text
+          }else{
+            return record?.paymentItem
+          }
+        }
       },
       {
         title: RCi18n({ id: 'PetOwner.CardHolder' }),

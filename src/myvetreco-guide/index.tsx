@@ -8,11 +8,17 @@ const MyvetrecoGuide = () => {
   // 荷兰第一次登录显示引导组件
   const { data: guideVisible, mutate } = useRequest(async () => {
     if (Const.SITE_NAME === 'MYVETRECO') {
-      // if (Const.SITE_NAME === 'MYVETRECO' && sessionStorage.getItem('myvet-eamil-to-okta')) {
-      // await isFirstLogin({
-      //   email: new util.Base64().urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'))
-      // });
-      return true;
+      const { accountName } = JSON.parse(sessionStorage.getItem('s2b-supplier@login'));
+      const {
+        res: {
+          context: { isFirstLoginTime }
+        }
+      } = await isFirstLogin({
+        email: new util.Base64().urlEncode(accountName)
+      });
+      if (isFirstLoginTime) {
+        return true;
+      }
     }
   });
   return <Guide visible={guideVisible} onClose={() => mutate(false)} />;

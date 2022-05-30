@@ -27,7 +27,9 @@ const LoginCallback = () => {
   useMount(async () => {
     const authState = await storeTokensFromRedirect();
     if (authState.isAuthenticated) {
-      // 荷兰环境并且如果是从新建账号跳转过来的去创建账号（myvet-eamil-to-okta标识从新建账号跳转过来）
+      // 荷兰环境并且如果是从新建账号跳转过来的去创建账号
+      // myvet-eamil-to-okta标识是okta已注册过跳转过来
+
       if (Const.SITE_NAME === 'MYVETRECO' && sessionStorage.getItem('myvet-eamil-to-okta')) {
         const base64 = new util.Base64();
         const email = base64.urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'));

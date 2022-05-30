@@ -98,17 +98,19 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   /**
    * 点apply对选中条目价格进行计算
    */
-  const applyPercentage = useCallback(() => {
-    if (salesPercentage < subscriptionPercentage) {
-      message.error(RCi18n({ id: 'Product.ProductPrice.priceprompt' }));
-      return;
-    }
+
+  const setAbovePrice = () => {
     setPercentageObj({
-      salesPercentage,
+      salesPercentage: salesPercentage + 100,
       subscriptionPercentage
     });
-  }, [salesPercentage, subscriptionPercentage]);
-
+  };
+  const setDiscountPrice = () => {
+    setPercentageObj({
+      salesPercentage,
+      subscriptionPercentage: 100 - subscriptionPercentage
+    });
+  };
   /**
    * 收集所有修改过的price,和选中的值
    * @param sku
@@ -286,7 +288,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
                 onChange={(value) => setSalesPercentage(value)}
               />
               %
-              <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>
+              <Button type="primary" onClick={setAbovePrice} style={{ marginRight: 6 }}>
                 <FormattedMessage id="payment.apply" />
               </Button>
             </div>
@@ -301,7 +303,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
                 onChange={(value) => setSubscriptionPercentage(value)}
               />
               %
-              <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>
+              <Button type="primary" onClick={setDiscountPrice} style={{ marginRight: 6 }}>
                 <FormattedMessage id="payment.apply" />
               </Button>
             </div>

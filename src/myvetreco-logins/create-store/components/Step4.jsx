@@ -111,6 +111,13 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
       subscriptionPercentage: 100 - subscriptionPercentage
     });
   };
+
+  const applyPercentage =useCallback(()=>{
+    setPercentageObj({
+      salesPercentage,
+      subscriptionPercentage
+    })
+  },[salesPercentage,subscriptionPercentage])
   /**
    * 收集所有修改过的price,和选中的值
    * @param sku
@@ -281,29 +288,30 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
               I would like to set market price (excl. VAT) above the cost with .
               <InputNumber
                 min={0}
-                value={salesPercentage}
+                value={salesPercentage - 100}
                 style={{ width: 180 }}
                 step={10}
                 precision={2}
-                onChange={(value) => setSalesPercentage(value)}
+                onChange={(value) => setSalesPercentage(value + 100)}
               />
               %
-              <Button type="primary" onClick={setAbovePrice} style={{ marginRight: 6 }}>
+              <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>
                 <FormattedMessage id="payment.apply" />
               </Button>
             </div>
             <div className="step4-myvet-top-content-item">
               I would like to offer subscription to pet owners with a default discount:
               <InputNumber
+                max={100}
                 min={0}
                 style={{ width: 180 }}
-                value={subscriptionPercentage}
+                value={100 - subscriptionPercentage}
                 step={10}
                 precision={2}
-                onChange={(value) => setSubscriptionPercentage(value)}
+                onChange={(value) => setSubscriptionPercentage(100 - value)}
               />
               %
-              <Button type="primary" onClick={setDiscountPrice} style={{ marginRight: 6 }}>
+              <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>
                 <FormattedMessage id="payment.apply" />
               </Button>
             </div>

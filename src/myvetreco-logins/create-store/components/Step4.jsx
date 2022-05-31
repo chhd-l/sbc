@@ -99,25 +99,26 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
    * 点apply对选中条目价格进行计算
    */
 
-  const setAbovePrice = () => {
-    setPercentageObj({
-      salesPercentage: salesPercentage + 100,
-      subscriptionPercentage
-    });
-  };
-  const setDiscountPrice = () => {
-    setPercentageObj({
-      salesPercentage,
-      subscriptionPercentage: 100 - subscriptionPercentage
-    });
-  };
+  // const setAbovePrice = () => {
+  //   setPercentageObj({
+  //     salesPercentage: salesPercentage + 100,
+  //     subscriptionPercentage
+  //   });
+  // };
+  // const setDiscountPrice = () => {
+  //   setPercentageObj({
+  //     salesPercentage,
+  //     subscriptionPercentage: 100 - subscriptionPercentage
+  //   });
+  // };
 
-  const applyPercentage =useCallback(()=>{
+  const applyPercentage = useCallback(() => {
+    console.log(salesPercentage, subscriptionPercentage, '222222222222');
     setPercentageObj({
       salesPercentage,
       subscriptionPercentage
-    })
-  },[salesPercentage,subscriptionPercentage])
+    });
+  }, [salesPercentage, subscriptionPercentage]);
   /**
    * 收集所有修改过的price,和选中的值
    * @param sku

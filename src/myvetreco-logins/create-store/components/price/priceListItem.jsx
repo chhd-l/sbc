@@ -62,7 +62,12 @@ function PriceListItem({ listItem, checkedList }) {
       multiply(
         bignumber(listItem.marketPrice),
         bignumber(
-          format(multiply(bignumber(percentageObj.subscriptionPercentage), bignumber(0.01)))
+          format(
+            multiply(
+              multiply(bignumber(percentageObj.salesPercentage), bignumber(0.01)),
+              multiply(bignumber(percentageObj.subscriptionPercentage), bignumber(0.01))
+            )
+          )
         )
       )
     );

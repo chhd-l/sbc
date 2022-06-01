@@ -2,7 +2,7 @@
 import { useOktaAuth } from '@okta/okta-react';
 import { useMount } from 'ahooks';
 
-import { util, history, Const } from 'qmkit';
+import { util, history, Const, login } from 'qmkit';
 
 import React from 'react';
 import { accountCreate } from '../myvetreco-logins/create-account/webapi';
@@ -27,7 +27,9 @@ const LoginCallback = () => {
   useMount(async () => {
     const authState = await storeTokensFromRedirect();
     if (authState.isAuthenticated) {
-      // 荷兰环境并且如果是从新建账号跳转过来的去创建账号（myvet-eamil-to-okta标识从新建账号跳转过来）
+      // 荷兰环境并且如果是从新建账号跳转过来的去创建账号
+      // myvet-eamil-to-okta标识是okta已注册过跳转过来
+
       if (Const.SITE_NAME === 'MYVETRECO' && sessionStorage.getItem('myvet-eamil-to-okta')) {
         const base64 = new util.Base64();
         const email = base64.urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'));
@@ -35,14 +37,15 @@ const LoginCallback = () => {
           sessionStorage.getItem('myvet-recommendationCode-to-okta') &&
           base64.urlEncode(sessionStorage.getItem('myvet-recommendationCode-to-okta'));
 
+        sessionStorage.removeItem('myvet-eamil-to-okta');
+        sessionStorage.removeItem('myvet-recommendationCode-to-okta');
         await accountCreate({
           email,
           password: '123456',
           confirmPassword: '123456',
           recommendationCode
         });
-        sessionStorage.removeItem('myvet-eamil-to-okta');
-        sessionStorage.removeItem('myvet-recommendationCode-to-okta');
+        await login('prescriber', authState.accessToken);
         history.push('/create-store');
         return;
       }

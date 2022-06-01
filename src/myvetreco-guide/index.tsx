@@ -7,11 +7,11 @@ import Guide from './Guide';
 const MyvetrecoGuide = () => {
   // 荷兰第一次登录显示引导组件
   const { data: guideVisible, mutate } = useRequest(async () => {
-    if (Const.SITE_NAME === 'MYVETRECO') {
-      // if (Const.SITE_NAME === 'MYVETRECO' && sessionStorage.getItem('myvet-eamil-to-okta')) {
-      // await isFirstLogin({
-      //   email: new util.Base64().urlEncode(sessionStorage.getItem('myvet-eamil-to-okta'))
-      // });
+    if (
+      Const.SITE_NAME === 'MYVETRECO' &&
+      JSON.parse(sessionStorage.getItem('myvet-isFirstLogin'))
+    ) {
+      sessionStorage.removeItem('myvet-isFirstLogin');
       return true;
     }
   });

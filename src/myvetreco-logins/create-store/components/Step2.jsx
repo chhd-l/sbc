@@ -110,7 +110,7 @@ function Step2({ setStep, userInfo, legalInfo = {}, form, sourceStoreId, sourceC
                   ],
                   initialValue: legalInfo?.typeOfBusiness ?? 1
                 })(
-                  <Select size="large">
+                  <Select size="large" disabled>
                     <Option value={1}>Business</Option>
                   </Select>
                 )}

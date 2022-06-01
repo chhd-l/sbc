@@ -74,6 +74,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
   handleDetails = (record) => {
     if (!record) return;
     let { bindCardLogs, bindCardRecord } = record;
+    console.log('record', record)
     // console.log('bindCardLogs',bindCardLogs)
     // console.log('bindCardRecord',bindCardRecord)
     this.setState({
@@ -161,20 +162,34 @@ export default class PaymentList extends React.Component<Iprop, any> {
         dataIndex: 'lastFourDigits',
         key: 'cardno',
         render: (text, record) => {
-          if(record.paymentItem?.toLowerCase() !== 'adyen_paypal'){
+
+          if (record.paymentItem?.toLowerCase() !== 'adyen_paypal') {
+            switch (record.paymentItem?.toLowerCase()) {
+              case 'adyen_ideal':
+                return <div>
+                  {record?.binNumber} {'BANK **** **** '} {record?.lastFourDigits}{' '}
+                  {record.isDefault == 1 && (
+                    <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+                  )}
+                </div>
+                break;
+              default:
+                return <div>
+                  {'**** **** **** ' + text}{' '}
+                  {record.isDefault == 1 && (
+                    <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+                  )}
+                </div>
+                break;
+            }
+
+          } else {
             return <div>
-            {'**** **** **** ' + text}{' '}
-            {record.isDefault == 1 && (
-              <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
-            )}
-          </div>
-          }else{
-            return  <div>
-            {text ? text.split('@')[0].substring(0, 4) + '***@' + text.split('@')[1] : ''}
-            {record.isDefault == 1 && (
-              <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
-            )}
-          </div>
+              {text ? text.split('@')[0].substring(0, 4) + '***@' + text.split('@')[1] : ''}
+              {record.isDefault == 1 && (
+                <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
+              )}
+            </div>
           }
         }
       },
@@ -182,11 +197,16 @@ export default class PaymentList extends React.Component<Iprop, any> {
         title: RCi18n({ id: 'PetOwner.CardType' }),
         dataIndex: 'paymentVendor',
         key: 'type',
-        render: (text, record)=>{
-          if(record?.paymentItem.toLowerCase() ==='adyen_credit_card'){
+        render: (text, record) => {
+          if (record?.paymentItem.toLowerCase() === 'adyen_credit_card') {
             return text
-          }else{
-            return record?.paymentItem
+          } else {
+            switch (record?.paymentItem) {
+              case 'ADYEN_IDEAL':
+                return record?.paymentItem.split('_')[1]
+              default:
+                return record?.paymentItem
+            }
           }
         }
       },
@@ -225,11 +245,11 @@ export default class PaymentList extends React.Component<Iprop, any> {
                         <a className="iconfont iconDelete" />
                       </Button>
                     </Tooltip>
-                    {record.paymentVendor.toLowerCase() == 'visa'&& <Divider type="vertical" />}
+                    {record.paymentVendor.toLowerCase() == 'visa' && <Divider type="vertical" />}
                   </Popconfirm>
                 </AuthWrapper>
               )}
-             {record.paymentVendor.toLowerCase() == 'visa' && <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />}
+              {record.paymentVendor.toLowerCase() == 'visa' && <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />}
             </span>
           );
         }

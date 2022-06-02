@@ -6,7 +6,7 @@ import ConsumerInformation from './components/consumerInformation';
 import SelectedProduct from './components/selectedProduct';
 import PaymentInformation from './components/paymentInformation';
 import { FormattedMessage } from 'react-intl';
-import { getShopToken, queryOrderStatus, getShopCouponCode,getGuestOrderResponse } from './webapi';
+import { getShopToken, queryOrderStatus, getShopCouponCode, getGuestOrderResponse } from './webapi';
 
 const { Step } = Steps;
 class ManualOrder extends Component<any, any> {
@@ -30,17 +30,17 @@ class ManualOrder extends Component<any, any> {
       storeId: storeId,
       list: [],
       goodwillChecked: false,
-      guest:false,
-      felinStore:false,
-      guestId:'',
-      notNext:false,
+      guest: false,
+      felinStore: false,
+      guestId: '',
+      notNext: false,
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
   }
   next(e) {
     e.preventDefault();
-    let { customer, current, list,guest } = this.state;
+    let { customer, current, list, guest } = this.state;
     this.props.form.validateFields((err) => {
       if (!err && (customer.customerId || guest)) {
         if (current === 1) {
@@ -58,11 +58,11 @@ class ManualOrder extends Component<any, any> {
   }
 
   turnShowPage = (token, promocode) => {
-    let { customer, url,guest,guestId,storeId,felinStore} = this.state;
+    let { customer, url, guest, guestId, storeId, felinStore } = this.state;
     let userGroup = felinStore ? `userGroup=felinStore&` : 'userGroup=fgs&';
     let spromocode = promocode ? `spromocode=${promocode}&` : '';
     let guestParams = `guestId=${guestId}&userGroup=felinStore&petOwnerType=guest`;
-    let params = guest ?guestParams:`${userGroup}${spromocode}stoken=${token}`
+    let params = guest ? guestParams : `${userGroup}${spromocode}stoken=${token}`
     let winObj = window.open(
       `${url.replace(/\/$/gi, '')}/cart?${params}`,
       'newwindow',
@@ -71,7 +71,7 @@ class ManualOrder extends Component<any, any> {
     let loop = setInterval(async () => {
       if (winObj.closed) {
         clearInterval(loop);
-        const { res } = guest? await getGuestOrderResponse(storeId, guestId):await queryOrderStatus(customer.customerId, token);
+        const { res } = guest ? await getGuestOrderResponse(storeId, guestId) : await queryOrderStatus(customer.customerId, token);
         if (res.code === Const.SUCCESS_CODE) {
           let d = {
             string: 1,
@@ -93,7 +93,7 @@ class ManualOrder extends Component<any, any> {
   };
 
   getShopTokenJump = async (other?: string) => {
-    let { customer, current, goodwillChecked,guest } = this.state;
+    let { customer, current, goodwillChecked, guest } = this.state;
     let shopToken = '';
     if (!guest) {
       const { res } = await getShopToken(customer.customerId, {});
@@ -120,7 +120,7 @@ class ManualOrder extends Component<any, any> {
 
   prev() {
     const current = this.state.current - 1;
-    this.setState({ current,notNext:false });
+    this.setState({ current, notNext: false });
   }
 
   componentWillMount() {
@@ -144,8 +144,8 @@ class ManualOrder extends Component<any, any> {
   }
 
   componentWillUnmount() {
-      sessionStorage.removeItem('user-group-value')
-      sessionStorage.removeItem('pet-owner-type')
+    sessionStorage.removeItem('user-group-value')
+    sessionStorage.removeItem('pet-owner-type')
   }
 
   getCustomer = (customer) => {
@@ -154,26 +154,26 @@ class ManualOrder extends Component<any, any> {
     });
   };
 
-  getPetOwnerType = (type) =>{
-    if(type =='guest') {
+  getPetOwnerType = (type) => {
+    if (type == 'guest') {
       this.setState({
-        guest:true
+        guest: true
       })
-    }else {
+    } else {
       this.setState({
-        guest:false
+        guest: false
       })
     }
   }
 
-  getUserGroupType = (type) =>{
-    if(type =='felinStore') {
+  getUserGroupType = (type) => {
+    if (type == 'felinStore') {
       this.setState({
-        felinStore:true
+        felinStore: true
       })
-    }else {
+    } else {
       this.setState({
-        felinStore:false
+        felinStore: false
       })
     }
   }
@@ -181,10 +181,10 @@ class ManualOrder extends Component<any, any> {
   getCartsList = (list) => {
     this.setState({
       list
-    },()=>{
-      const isSubscription =   list.some(item => [1,2].includes(item.goodsInfoFlag))
+    }, () => {
+      const isSubscription = list.some(item => [1, 2].includes(item.goodsInfoFlag))
       this.setState({
-        notNext:isSubscription && this.state.felinStore
+        notNext: isSubscription && this.state.felinStore
       })
     });
   };
@@ -194,13 +194,13 @@ class ManualOrder extends Component<any, any> {
       goodwillChecked: value
     });
   };
-  getGuestId = (id) =>{
+  getGuestId = (id) => {
     this.setState({
-      guestId:id
+      guestId: id
     })
   }
   render() {
-    const { current, title, customer, storeId, status, url, context,guest,felinStore,guestId } = this.state;
+    const { current, title, customer, storeId, status, url, context, guest, felinStore, guestId } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -242,6 +242,7 @@ class ManualOrder extends Component<any, any> {
             status={status}
             customer={customer}
             stepName={'Delivery & payment information'}
+            felinStore={felinStore}
           />
         )
       }

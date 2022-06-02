@@ -94,13 +94,13 @@ class TaskUpdate extends Component<any, any> {
         { name: <FormattedMessage id="task.Medium" />, value: 'Medium' },
         { name: <FormattedMessage id="task.High" />, value: 'High' }
       ],
-      deliveryMethodList:[
+      deliveryMethodList: [
         { name: <FormattedMessage id="task.homeDelivery" />, value: 'home delivery' },
-        { name: <FormattedMessage id="task.pickupPointDelivery" />, value: 'pickup point delivery' },
+        { name: <FormattedMessage id="task.pickupPointDelivery" />, value: 'pickup point delivery' }
       ],
-      deliveryStatusList:[
+      deliveryStatusList: [
         { name: <FormattedMessage id="task.active" />, value: 'active' },
-        { name: <FormattedMessage id="task.inactive" />, value: 'inactive' },
+        { name: <FormattedMessage id="task.inactive" />, value: 'inactive' }
       ],
       associatedPetOwners: [],
       associatedPetList: [],
@@ -146,7 +146,6 @@ class TaskUpdate extends Component<any, any> {
           this.setState({
             goldenMomentList: res.context.sysDictionaryVOS
           });
-
         } else {
           message.error(res.message || (window as any).RCi18n({ id: 'Public.GetDataFailed' }));
         }
@@ -171,14 +170,14 @@ class TaskUpdate extends Component<any, any> {
             this.setState({
               task: res.context.task,
               taskCompleted: taskStatus === 'Completed' || taskStatus === 'Cancelled',
-              loading: false,
+              loading: false
             });
             if (res.context.task.subscriptionNumber) {
               this.getSubscriptionTableBySubscriptionNumber(res.context.task.subscriptionNumber);
             }
             let customerAccount = res.context.task.customerAccount;
             if (customerAccount) {
-              sessionStorage.setItem('taskCustomerAccount',customerAccount)
+              sessionStorage.setItem('taskCustomerAccount', customerAccount);
               this.getPetOwnerPets(customerAccount);
               this.getPetOwnerOrders(customerAccount);
               this.getPetOwnerSubscriptions(customerAccount);
@@ -351,16 +350,21 @@ class TaskUpdate extends Component<any, any> {
 
   getSubscriptionTableBySubscriptionNumber(subscriptionNumber) {
     this.setState({ subscriptionLoading: true });
-    webapi.getSubscriptionBySubno(subscriptionNumber).then(data => {
-      if (data.res.code === Const.SUCCESS_CODE) {
-        this.setState({
-          subscriptionTable: data.res.context?.subscribeList ?? [],
-          subscriptionLoading: false
-        });
-      } else {
+    webapi
+      .getSubscriptionBySubno(subscriptionNumber)
+      .then((data) => {
+        if (data.res.code === Const.SUCCESS_CODE) {
+          this.setState({
+            subscriptionTable: data.res.context?.subscribeList ?? [],
+            subscriptionLoading: false
+          });
+        } else {
+          this.setState({ subscriptionLoading: false });
+        }
+      })
+      .catch(() => {
         this.setState({ subscriptionLoading: false });
-      }
-    }).catch(() => { this.setState({ subscriptionLoading: false }); });
+      });
   }
 
   onChange = ({ field, value }) => {
@@ -491,15 +495,18 @@ class TaskUpdate extends Component<any, any> {
         dataIndex: 'subscriptionNumber',
         key: 'subscriptionNumber',
         width: '17%',
-        render: text =>
+        render: (text) => (
           <a
-            onClick={()=>{sessionStorage.setItem('taskId',id);
-            sessionStorage.setItem('fromTaskToSubDetail','true');
-            sessionStorage.setItem('taskEventTriggerName',task.eventTriggerName)
-            history.push(`/subscription-detail/${text}`)}}
+            onClick={() => {
+              sessionStorage.setItem('taskId', id);
+              sessionStorage.setItem('fromTaskToSubDetail', 'true');
+              sessionStorage.setItem('taskEventTriggerName', task.eventTriggerName);
+              history.push(`/subscription-detail/${text}`);
+            }}
           >
             {text}
           </a>
+        )
       },
       {
         title: RCi18n({ id: 'Task.ProductName' }),
@@ -508,23 +515,29 @@ class TaskUpdate extends Component<any, any> {
         render: (text, record, index) => {
           // let html = text.replaceAll(",", "<br/>")
           // let productNames = text.split(',')
-          let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : []
-          return <div>
-            {
-              nameAndDateVOList && nameAndDateVOList.map(data => (
-                <Tooltip placement="topLeft" title={data.productName}>
-                  <p className="msg" style={{
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    cursor: 'pointer'
-                  }} >{data.productName} </p>
-                </Tooltip>
-              ))
-            }
-          </div>
+          let nameAndDateVOList = record.nameAndDateVOList ? record.nameAndDateVOList : [];
+          return (
+            <div>
+              {nameAndDateVOList &&
+                nameAndDateVOList.map((data) => (
+                  <Tooltip placement="topLeft" title={data.productName}>
+                    <p
+                      className="msg"
+                      style={{
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {data.productName}{' '}
+                    </p>
+                  </Tooltip>
+                ))}
+            </div>
+          );
         },
-        ellipsis: true,
+        ellipsis: true
       },
       {
         title: RCi18n({ id: 'Task.ShipmentDate' }),
@@ -534,15 +547,13 @@ class TaskUpdate extends Component<any, any> {
         render: (text, record, index) => {
           // let html = text.replaceAll(",", "<br/>")
           // let productNames = text.split(',')
-          let nameAndDateVOList = record.nameAndDateVOList
-          return <div>
-            {
-              nameAndDateVOList && nameAndDateVOList.map(data => (
-                <p>{data.shipmentDate} </p>
-              ))
-            }
-          </div>
-        },
+          let nameAndDateVOList = record.nameAndDateVOList;
+          return (
+            <div>
+              {nameAndDateVOList && nameAndDateVOList.map((data) => <p>{data.shipmentDate} </p>)}
+            </div>
+          );
+        }
       },
       {
         title: RCi18n({ id: 'Task.DeliveryMethod' }),
@@ -617,16 +628,19 @@ class TaskUpdate extends Component<any, any> {
             }}
           >
             <TabPane tab={<FormattedMessage id="task.BasicInformation" />} key="basic">
-              <Spin
-                spinning={this.state.loading}
-              >
+              <Spin spinning={this.state.loading}>
                 <Form>
                   <Row>
                     <Col span={12}>
                       <FormItem {...formItemLayout} label={<FormattedMessage id="task.TaskName" />}>
                         {getFieldDecorator('name', {
                           initialValue: task.name,
-                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseinputname" /> }]
+                          rules: [
+                            {
+                              required: true,
+                              message: <FormattedMessage id="task.Pleaseinputname" />
+                            }
+                          ]
                         })(
                           editable ? (
                             <Input
@@ -642,8 +656,8 @@ class TaskUpdate extends Component<any, any> {
                               }
                             />
                           ) : (
-                            <Tooltip placement="topLeft" title={task.name} >
-                              <p className="taskName" >{task.name}</p >
+                            <Tooltip placement="topLeft" title={task.name}>
+                              <p className="taskName">{task.name}</p>
                             </Tooltip>
                           )
                         )}
@@ -691,7 +705,7 @@ class TaskUpdate extends Component<any, any> {
                         {getFieldDecorator('assistantId', {
                           initialValue: task.assistantName
                             ? task.assistantName +
-                            (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                              (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
                             : ''
                         })(
                           editable ? (
@@ -729,7 +743,7 @@ class TaskUpdate extends Component<any, any> {
                             <span>
                               {task.assistantName
                                 ? task.assistantName +
-                                (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
+                                  (task.assistantEmail ? '(' + task.assistantEmail + ')' : '')
                                 : ''}
                             </span>
                           )
@@ -800,9 +814,7 @@ class TaskUpdate extends Component<any, any> {
                             />
                           ) : (
                             <span>
-                              {task.startTime
-                                ? moment(task.startTime).format('YYYY-MM-DD')
-                                : ''}
+                              {task.startTime ? moment(task.startTime).format('YYYY-MM-DD') : ''}
                             </span>
                           )
                         )}
@@ -836,9 +848,7 @@ class TaskUpdate extends Component<any, any> {
                             />
                           ) : (
                             <span>
-                              {task.dueTime
-                                ? moment(task.dueTime).format('YYYY-MM-DD')
-                                : ''}
+                              {task.dueTime ? moment(task.dueTime).format('YYYY-MM-DD') : ''}
                             </span>
                           )
                         )}
@@ -939,7 +949,14 @@ class TaskUpdate extends Component<any, any> {
                           initialValue: task.petOwner
                             ? task.petOwner + '(' + task.customerAccount + ')'
                             : '',
-                          rules: [{ required: true, message: <FormattedMessage id="task.Pleaseinputpetowneraccountorname" /> }]
+                          rules: [
+                            {
+                              required: true,
+                              message: (
+                                <FormattedMessage id="task.Pleaseinputpetowneraccountorname" />
+                              )
+                            }
+                          ]
                         })(
                           editable ? (
                             <Select
@@ -971,17 +988,23 @@ class TaskUpdate extends Component<any, any> {
                                 </Option>
                               ))}
                             </Select>
-                          ) : (<>
-                            <Link
-                              to={`/petowner-details/${task.contactId}/${task.customerAccount}`}
-                            >
-                              {task.petOwner
-                                ? task.petOwner + '(' + task.customerAccount + ')'
-                                : ''}
-                            </Link>
-                            {/* <span style={{margin:"0 5px"}}></span> */}
-                            {/* {task.commentNumber ? <Link to={`/pet-owner-activity/${task.contactId}`}>[{task.commentNumber} comments available]</Link> : null} */}
-                          </>)
+                          ) : (
+                            <>
+                              <Link
+                                to={`/petowner-details/${task.contactId}/${task.customerAccount}`}
+                              >
+                                {task.petOwner
+                                  ? task.petOwner + '(' + task.customerAccount + ')'
+                                  : ''}
+                              </Link>
+                              <span style={{ margin: '0 5px' }}></span>
+                              {task.commentNumber ? (
+                                <Link to={`/pet-owner-activity/${task.contactId}`}>
+                                  [{task.commentNumber} comments available]
+                                </Link>
+                              ) : null}
+                            </>
+                          )
                         )}
                       </FormItem>
                     </Col>
@@ -1091,10 +1114,9 @@ class TaskUpdate extends Component<any, any> {
 
                   {/******/}
 
-
                   <Row>
-                    {
-                      editable ? <Col span={12}>
+                    {editable ? (
+                      <Col span={12}>
                         <FormItem
                           {...formItemLayout}
                           label={<FormattedMessage id="task.AssociateSubscription" />}
@@ -1102,7 +1124,6 @@ class TaskUpdate extends Component<any, any> {
                           {getFieldDecorator('subscriptionNumber', {
                             initialValue: subscriptionNumbers
                           })(
-
                             <Select
                               mode="multiple"
                               allowClear
@@ -1122,30 +1143,44 @@ class TaskUpdate extends Component<any, any> {
                             </Select>
                           )}
                         </FormItem>
-                      </Col> :
-                        <Col span={22}>
-                          <FormItem
-                            {...formTableItemLayout}
-                            label={<FormattedMessage id="task.AssociateSubscription" />}
-                          >
-                            {/*&& task.eventTriggerName==='3DaysBeforeNextRefillOrder'*/}
-                            {this.state.subscriptionTable.length>0 && JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId===123457907&& task.eventTriggerName==='3DaysBeforeNextRefillOrder' ?(
-                                <Button
-                                  style={{ marginBottom: '20px' }}
-                                  type="primary"
-                                  onClick={() => {sessionStorage.setItem('taskId',id);history.push('/task/manage-all-subscription')}}
-                                >
-                                  <FormattedMessage id="task.manageAllSubBtn" />
-                                </Button>
-                            ):null}
-                            {getFieldDecorator('subscriptionNumber', {
-                              initialValue: subscriptionNumbers
-                            })(
-                              <Table bordered loading={subscriptionLoading} columns={columns} dataSource={this.state.subscriptionTable} pagination={false} rowKey={(record) => record.subscriptionNumber} />
-                            )}
-                          </FormItem>
-                        </Col>
-                    }
+                      </Col>
+                    ) : (
+                      <Col span={22}>
+                        <FormItem
+                          {...formTableItemLayout}
+                          label={<FormattedMessage id="task.AssociateSubscription" />}
+                        >
+                          {/*&& task.eventTriggerName==='3DaysBeforeNextRefillOrder'*/}
+                          {this.state.subscriptionTable.length > 0 &&
+                          JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ===
+                            123457907 &&
+                          task.eventTriggerName === '3DaysBeforeNextRefillOrder' ? (
+                            <Button
+                              style={{ marginBottom: '20px' }}
+                              type="primary"
+                              onClick={() => {
+                                sessionStorage.setItem('taskId', id);
+                                history.push('/task/manage-all-subscription');
+                              }}
+                            >
+                              <FormattedMessage id="task.manageAllSubBtn" />
+                            </Button>
+                          ) : null}
+                          {getFieldDecorator('subscriptionNumber', {
+                            initialValue: subscriptionNumbers
+                          })(
+                            <Table
+                              bordered
+                              loading={subscriptionLoading}
+                              columns={columns}
+                              dataSource={this.state.subscriptionTable}
+                              pagination={false}
+                              rowKey={(record) => record.subscriptionNumber}
+                            />
+                          )}
+                        </FormItem>
+                      </Col>
+                    )}
                     {/* <Col span={12}>
                       <FormItem
                         {...formItemLayout}
@@ -1204,7 +1239,7 @@ class TaskUpdate extends Component<any, any> {
                             height={200}
                             disabled={true}
                             content={task.description}
-                            onContentChange={(html) => { }}
+                            onContentChange={(html) => {}}
                           />
                         ) : task.description ? (
                           <ReactEditor

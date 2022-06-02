@@ -100,13 +100,23 @@ export default class CardView extends Component<any, any> {
               loading: false
             },
             () => {
-              let todoHeight = document.getElementById('todoView') ? document.getElementById('todoView').offsetHeight : 0;
-              let ongoingHeight = document.getElementById('ongoingView') ? document.getElementById('ongoingView').offsetHeight : 0;
-              let completeHeight = document.getElementById('completeView') ? document.getElementById('completeView').offsetHeight : 0;
-              let canceleight = document.getElementById('cancelView') ? document.getElementById('cancelView').offsetHeight : 0;
-              let maxHeight = [todoHeight, ongoingHeight, completeHeight, canceleight].sort(function (a, b) {
-                return b - a;
-              });
+              let todoHeight = document.getElementById('todoView')
+                ? document.getElementById('todoView').offsetHeight
+                : 0;
+              let ongoingHeight = document.getElementById('ongoingView')
+                ? document.getElementById('ongoingView').offsetHeight
+                : 0;
+              let completeHeight = document.getElementById('completeView')
+                ? document.getElementById('completeView').offsetHeight
+                : 0;
+              let canceleight = document.getElementById('cancelView')
+                ? document.getElementById('cancelView').offsetHeight
+                : 0;
+              let maxHeight = [todoHeight, ongoingHeight, completeHeight, canceleight].sort(
+                function (a, b) {
+                  return b - a;
+                }
+              );
               this.setState({
                 maxHeight: maxHeight[0]
               });
@@ -181,7 +191,15 @@ export default class CardView extends Component<any, any> {
     history.push(`/pet-owner-activity/${petOwnerId}`);
   };
   render() {
-    const { toDoList, onGoingList, completedList, cancelledList, taskCardLength, loading, maxHeight } = this.state;
+    const {
+      toDoList,
+      onGoingList,
+      completedList,
+      cancelledList,
+      taskCardLength,
+      loading,
+      maxHeight
+    } = this.state;
     return (
       <div className="cardViewList">
         <Row gutter={20} className="taskStatusList">
@@ -252,15 +270,31 @@ export default class CardView extends Component<any, any> {
         </Row>
         <Card loading={loading} bordered={false}>
           <Row className="taskCardViewClass" gutter={10}>
-            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'To Do')} onDragOver={(e) => e.preventDefault()}>
+            <Col
+              span={6}
+              style={{ height: maxHeight }}
+              onDrop={(e) => this.handleDrop(e, 'To Do')}
+              onDragOver={(e) => e.preventDefault()}
+            >
               <Row className="taskItem" id="todoView">
                 {toDoList.map((item) => (
                   <div className="taskCardItem" key={item.id}>
-                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                    <Card
+                      className="taskCard"
+                      draggable={true}
+                      onDragStart={(e) => this.handleDragStart(e, item)}
+                      hoverable
+                      onClick={() => this.redirectDetail(item.id)}
+                    >
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
                           <Row className="goldenMoment">
-                            <Col span={2} style={{ minWidth: 8 }}><span style={{ background: this.getBackground('todo') }} className="point" /></Col>
+                            <Col span={2} style={{ minWidth: 8 }}>
+                              <span
+                                style={{ background: this.getBackground('todo') }}
+                                className="point"
+                              />
+                            </Col>
                             <Col span={20}>
                               <Tooltip placement="bottomLeft" title={item.name}>
                                 <p className="taskCardTitle">{item.name}</p>
@@ -268,9 +302,15 @@ export default class CardView extends Component<any, any> {
                             </Col>
 
                             <Col span={2}>
-                              {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
-                              {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
-                              {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
+                              {item.priority === 'High' ? (
+                                <span className="icon iconfont iconIII warningIcon high" />
+                              ) : null}
+                              {item.priority === 'Medium' ? (
+                                <span className="icon iconfont iconII warningIcon medium" />
+                              ) : null}
+                              {item.priority === 'Low' ? (
+                                <span className="icon iconfont iconI warningIcon low" />
+                              ) : null}
                             </Col>
                           </Row>
                           <div className="contentInfo">
@@ -283,15 +323,24 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
+                            {item.dueTime
+                              ? moment(item.dueTime).format('YYYY-MM-DD')
+                              : 'No Due Time'}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontimezone" />
                             {item.timeZone}
                           </div>
-                          {/* <div className="contentInfo comment-number">
-                            {item.commentNumber ? <span className="comment-number-i" onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}>{item.commentNumber}</span> : null}
-                          </div> */}
+                          <div className="contentInfo comment-number">
+                            {2 > 0 && (
+                              <span
+                                className="comment-number-i"
+                                onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}
+                              >
+                                {2}
+                              </span>
+                            )}
+                          </div>
                         </Col>
                       </Row>
                     </Card>
@@ -299,19 +348,30 @@ export default class CardView extends Component<any, any> {
                 ))}
               </Row>
             </Col>
-            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'On-going')} onDragOver={(e) => e.preventDefault()}>
+            <Col
+              span={6}
+              style={{ height: maxHeight }}
+              onDrop={(e) => this.handleDrop(e, 'On-going')}
+              onDragOver={(e) => e.preventDefault()}
+            >
               <Row className="taskItem" id="ongoingView">
                 {onGoingList.map((item) => (
                   <div className="taskCardItem" key={item.id}>
-                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                    <Card
+                      className="taskCard"
+                      draggable={true}
+                      onDragStart={(e) => this.handleDragStart(e, item)}
+                      hoverable
+                      onClick={() => this.redirectDetail(item.id)}
+                    >
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
-
-
-
                           <Row className="goldenMoment">
                             <Col span={2} style={{ minWidth: 8 }}>
-                              <span style={{ background: this.getBackground('onGoing') }} className="point" />
+                              <span
+                                style={{ background: this.getBackground('onGoing') }}
+                                className="point"
+                              />
                             </Col>
                             <Col span={20}>
                               <Tooltip placement="bottomLeft" title={item.name}>
@@ -320,12 +380,17 @@ export default class CardView extends Component<any, any> {
                             </Col>
 
                             <Col span={2}>
-                              {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
-                              {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
-                              {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
+                              {item.priority === 'High' ? (
+                                <span className="icon iconfont iconIII warningIcon high" />
+                              ) : null}
+                              {item.priority === 'Medium' ? (
+                                <span className="icon iconfont iconII warningIcon medium" />
+                              ) : null}
+                              {item.priority === 'Low' ? (
+                                <span className="icon iconfont iconI warningIcon low" />
+                              ) : null}
                             </Col>
                           </Row>
-
 
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontaskName" />
@@ -337,7 +402,9 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div style={{ color: this.overDueStyle(item) }} className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
+                            {item.dueTime
+                              ? moment(item.dueTime).format('YYYY-MM-DD')
+                              : 'No Due Time'}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontimezone" />
@@ -353,18 +420,30 @@ export default class CardView extends Component<any, any> {
                 ))}
               </Row>
             </Col>
-            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Completed')} onDragOver={(e) => e.preventDefault()}>
+            <Col
+              span={6}
+              style={{ height: maxHeight }}
+              onDrop={(e) => this.handleDrop(e, 'Completed')}
+              onDragOver={(e) => e.preventDefault()}
+            >
               <Row className="taskItem" id="completeView">
                 {completedList.map((item) => (
                   <div className="taskCardItem" key={item.id}>
-                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                    <Card
+                      className="taskCard"
+                      draggable={true}
+                      onDragStart={(e) => this.handleDragStart(e, item)}
+                      hoverable
+                      onClick={() => this.redirectDetail(item.id)}
+                    >
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
-
-
                           <Row className="goldenMoment">
                             <Col span={2} style={{ minWidth: 8 }}>
-                              <span style={{ background: this.getBackground('completed') }} className="point" />
+                              <span
+                                style={{ background: this.getBackground('completed') }}
+                                className="point"
+                              />
                             </Col>
                             <Col span={20}>
                               <Tooltip placement="bottomLeft" title={item.name}>
@@ -373,9 +452,15 @@ export default class CardView extends Component<any, any> {
                             </Col>
 
                             <Col span={2}>
-                              {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
-                              {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
-                              {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
+                              {item.priority === 'High' ? (
+                                <span className="icon iconfont iconIII warningIcon high" />
+                              ) : null}
+                              {item.priority === 'Medium' ? (
+                                <span className="icon iconfont iconII warningIcon medium" />
+                              ) : null}
+                              {item.priority === 'Low' ? (
+                                <span className="icon iconfont iconI warningIcon low" />
+                              ) : null}
                             </Col>
                           </Row>
                           <div className="contentInfo">
@@ -388,7 +473,9 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
+                            {item.dueTime
+                              ? moment(item.dueTime).format('YYYY-MM-DD')
+                              : 'No Due Time'}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontimezone" />
@@ -404,17 +491,30 @@ export default class CardView extends Component<any, any> {
                 ))}
               </Row>
             </Col>
-            <Col span={6} style={{ height: maxHeight }} onDrop={(e) => this.handleDrop(e, 'Cancelled')} onDragOver={(e) => e.preventDefault()}>
+            <Col
+              span={6}
+              style={{ height: maxHeight }}
+              onDrop={(e) => this.handleDrop(e, 'Cancelled')}
+              onDragOver={(e) => e.preventDefault()}
+            >
               <Row className="taskItem" id="cancelView">
                 {cancelledList.map((item) => (
                   <div className="taskCardItem" key={item.id}>
-                    <Card className="taskCard" draggable={true} onDragStart={(e) => this.handleDragStart(e, item)} hoverable onClick={() => this.redirectDetail(item.id)}>
+                    <Card
+                      className="taskCard"
+                      draggable={true}
+                      onDragStart={(e) => this.handleDragStart(e, item)}
+                      hoverable
+                      onClick={() => this.redirectDetail(item.id)}
+                    >
                       <Row gutter={10}>
                         <Col span={24} className="contentPanel">
-
                           <Row className="goldenMoment">
                             <Col span={2} style={{ minWidth: 8 }}>
-                              <span style={{ background: this.getBackground('cancelled') }} className="point" />
+                              <span
+                                style={{ background: this.getBackground('cancelled') }}
+                                className="point"
+                              />
                             </Col>
                             <Col span={20}>
                               <Tooltip placement="bottomLeft" title={item.name}>
@@ -423,9 +523,15 @@ export default class CardView extends Component<any, any> {
                             </Col>
 
                             <Col span={2}>
-                              {item.priority === 'High' ? <span className="icon iconfont iconIII warningIcon high" /> : null}
-                              {item.priority === 'Medium' ? <span className="icon iconfont iconII warningIcon medium" /> : null}
-                              {item.priority === 'Low' ? <span className="icon iconfont iconI warningIcon low" /> : null}
+                              {item.priority === 'High' ? (
+                                <span className="icon iconfont iconIII warningIcon high" />
+                              ) : null}
+                              {item.priority === 'Medium' ? (
+                                <span className="icon iconfont iconII warningIcon medium" />
+                              ) : null}
+                              {item.priority === 'Low' ? (
+                                <span className="icon iconfont iconI warningIcon low" />
+                              ) : null}
                             </Col>
                           </Row>
 
@@ -439,7 +545,9 @@ export default class CardView extends Component<any, any> {
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon iconshizhong" />
-                            {item.dueTime ? moment(item.dueTime).format('YYYY-MM-DD') : 'No Due Time'}
+                            {item.dueTime
+                              ? moment(item.dueTime).format('YYYY-MM-DD')
+                              : 'No Due Time'}
                           </div>
                           <div className="contentInfo">
                             <span className="icon iconfont addTaskIcon icontimezone" />

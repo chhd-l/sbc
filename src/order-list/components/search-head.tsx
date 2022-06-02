@@ -124,15 +124,15 @@ class SearchHead extends Component<any, any> {
         { value: 'FGS', name: RCi18n({ id: 'Order.fgs' }) },
         { value: 'L_ATELIER_FELIN', name: RCi18n({ id: 'Order.felin' }) }
       ],
-      orderCreatedByTypeValue:'Created by',
-      orderCreateByType:'',
+      orderCreatedByTypeValue: 'Created by',
+      orderCreateByType: '',
       orderCreatedByList: [
         { value: 'CC', name: RCi18n({ id: 'Order.customerCare' }) },
         { value: 'PO', name: RCi18n({ id: 'Order.petOwner' }) }
       ],
-      orderTagType:'Order Tag',
-      orderTagValue:'',
-      orderTagList:[
+      orderTagType: 'Order Tag',
+      orderTagValue: '',
+      orderTagList: [
         { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
         { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
       ],
@@ -654,6 +654,36 @@ class SearchHead extends Component<any, any> {
                       </InputGroup>
                     </FormItem>
                   </Col>
+                  <Col span={8}>
+                    <FormItem>
+                      <InputGroup compact style={styles.formItemStyle}>
+                        <Input
+                          style={styles.leftLabel}
+                          title={RCi18n({ id: 'Order.createdBy' })}
+                          disabled
+                          defaultValue={RCi18n({ id: 'Order.customerCare' })}
+                        />
+                        <Select
+                          style={styles.wrapper}
+                          allowClear
+                          value={orderCreateByType}
+                          // disabled={orderType !== 'SUBSCRIPTION' && orderType !== 'MIXED_ORDER'}
+                          getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onChange={(value) => {
+                            this.setState({
+                              orderCreateByType: value
+                            });
+                          }}
+                        >
+                          {orderCreatedByList?.map((item, index) => (
+                            <Option value={item.value} title={item.name} key={index}>
+                              {item.name}
+                            </Option>
+                          ))}
+                        </Select>
+                      </InputGroup>
+                    </FormItem>
+                  </Col>
                   {/*</AuthWrapper>*/}
 
                   {/*<Col span={8}>*/}
@@ -1058,6 +1088,7 @@ class SearchHead extends Component<any, any> {
       subscriptionRefillType: refillNumber,
       [goodsOptions]: goodsOptionsValue,
       orderType,
+      orderCreateByType,
       orderSource,
       tradeState: ts,
       subscriptionTypeQuery: subscriptionType,
@@ -1068,7 +1099,7 @@ class SearchHead extends Component<any, any> {
       subscriptionPlanType,
       [codeSelect]: codeSelectValue,
       [emailAddressType]: emailAddressValue,
-      [citySearchType]: citySearchValue,
+      [citySearchType]: citySearchValue
       // orderCreateByType,
       // goodWillFlag:orderTagValue?+orderTagValue:''
     };

@@ -161,6 +161,16 @@ export const orderSeachField: fieldDataType[] = [
     key: 'beginTime',
     type: 'rangePicker'
   },
+  {
+    label: RCi18n({ id: 'Order.createdBy' }),
+    key: 'orderCreateByType',
+    options: {
+      orderCreateByType: [
+        { value: 'CC', name: RCi18n({ id: 'Order.customerCare' }) },
+        { value: 'PO', name: RCi18n({ id: 'Order.petOwner' }) }
+      ]
+    }
+  }
   // {
   //   label: RCi18n({ id: 'Order.createdBy' }),
   //   key: 'orderCreateByType',
@@ -268,7 +278,7 @@ export const subscriptionSeachField: fieldDataType[] = [
     label: '',
     key: 'subscribeDate',
     type: 'rangePicker'
-  },
+  }
   // {
   //   label: RCi18n({ id: 'Subscription.SubscriptionStatus' }),
   //   key: 'subscriptionStatus',

@@ -713,7 +713,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       await webapi.checkSubscriptionAddressPickPoint(
         {
           deliveryAddressId: deliveryAddressId,
-          goodsItems: goodsInfo.map((ele)=>{
+          goodsItems: goodsInfo.map((ele) => {
             return {
               subscribeGoodsId: ele.subscribeGoodsId,
               subscribeNum: ele.subscribeNum,
@@ -724,10 +724,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           subscribeId: subscriptionInfo.subscriptionNumber,
           paymentId: this.state.paymentInfo?.id,
         }
-      ).then((data)=>{
+      ).then((data) => {
         console.log(data)
-      }).catch((err)=>{
-        this.setState({tempolineApiError:err.message})
+      }).catch((err) => {
+        this.setState({ tempolineApiError: err.message })
         return;
       })
     }
@@ -2537,7 +2537,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
                           </p>
                           <p>
-                            {paymentInfo && paymentInfo.paymentVendor ? (
+                            {paymentInfo && paymentInfo.paymentVendor ? paymentInfo?.paymentItem?.toLowerCase() === 'adyen_moto' ? (
+                              <FormattedMessage id="Subscription.Moto" />
+                            ) : (
                               paymentInfo.paymentVendor
                             ) : paymentInfo?.paymentItem?.toLowerCase() === 'adyen_paypal' ? (
                               <FormattedMessage id="Subscription.Paypal" />
@@ -2548,7 +2550,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             )}
                           </p>
                         </Col>
-                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' ? (
+                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' && paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_moto' ? (
                           <Col span={24}>
                             <p style={{ width: 140 }}>
                               <FormattedMessage id="Subscription.CardNumber" />:{' '}

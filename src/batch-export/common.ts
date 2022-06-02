@@ -41,16 +41,16 @@ export const orderSeachField: fieldDataType[] = [
     ],
     key: 'consigneeName'
   },
-  // {
-  //   label: RCi18n({ id: 'Order.orderTag' }),
-  //   key: 'goodWillFlag',
-  //   options: {
-  //     goodWillFlag: [
-  //       { value: '0', name: RCi18n({ id: 'order.regularOrder' }) },
-  //       { value: '1', name: RCi18n({ id: 'Order.goodWillOrder' }) }
-  //     ]
-  //   }
-  // },
+  {
+    label: RCi18n({ id: 'Order.orderTag' }),
+    key: 'goodWillFlag',
+    options: {
+      goodWillFlag: [
+        { value: 0, name: RCi18n({ id: 'order.regularOrder' }) },
+        { value: 1, name: RCi18n({ id: 'Order.goodWillOrder' }) }
+      ]
+    }
+  },
   {
     label: [
       {

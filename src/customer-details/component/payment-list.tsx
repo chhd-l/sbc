@@ -185,7 +185,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
 
           } else {
             return <div>
-              {text ? text.split('@')[0].substring(0, 4) + '***@' + text.split('@')[1] : ''}
+              {record?.email ? record?.email.split('@')[0].substring(0, 4) + '***@' + record?.email.split('@')[1] : ''}
               {record.isDefault == 1 && (
                 <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
               )}
@@ -204,6 +204,8 @@ export default class PaymentList extends React.Component<Iprop, any> {
             switch (record?.paymentItem) {
               case 'ADYEN_IDEAL':
                 return record?.paymentItem.split('_')[1]
+              case 'ADYEN_PAYPAL':
+                return record?.paymentItem.split('_')[1].slice(0, 1).toUpperCase() + record?.paymentItem.split('_')[1].slice(1).toLowerCase();
               default:
                 return record?.paymentItem
             }
@@ -332,7 +334,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
           rowKey="id"
           loading={loading}
           columns={columns}
-          dataSource={list.filter((el) => el.paymentItem?.toLowerCase() !== 'adyen_paypal')}
+          dataSource={list}
           pagination={false}
         />
         {/*paypal*/}

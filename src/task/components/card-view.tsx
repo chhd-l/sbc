@@ -332,12 +332,12 @@ export default class CardView extends Component<any, any> {
                             {item.timeZone}
                           </div>
                           <div className="contentInfo comment-number">
-                            {2 > 0 && (
+                            {item.commentNumber > 0 && (
                               <span
                                 className="comment-number-i"
                                 onClick={(e) => this.handleCommentNumberClick(e, item.contactId)}
                               >
-                                {2}
+                                {item.commentNumber}
                               </span>
                             )}
                           </div>

@@ -273,7 +273,9 @@ class BatchExport extends Component<BatchExportProps, any> {
             } else if (key === 'payState') {
               obj['tradeState'][fieldKey[key]] = values[key] || '';
             } else if (key === 'goodWillFlag') {
-              obj[fieldKey[key]] = +values[key] || '';
+              if (values[key] !== null) {
+                obj[fieldKey[key]] = values[key];
+              }
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }

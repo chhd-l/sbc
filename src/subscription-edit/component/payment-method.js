@@ -174,7 +174,7 @@ const PaymentMethod = (props) => {
             </Radio>
           </AuthWrapper>
         ) : null}
-        {storeId === 123457909 && paypalCard.length > 0 ? (
+        {[123457909, 123457908].includes(storeId) && paypalCard.length > 0 ? (
           // <AuthWrapper functionName="f_paypal_payment">
           <Radio value={'ADYEN_PAYPAL'}>
             <FormattedMessage id="Subscription.Paypal" />

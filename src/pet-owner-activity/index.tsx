@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
-import { BreadCrumb, SelectGroup, Const, Headline, history, AuthWrapper, cache, RCi18n } from 'qmkit';
+import {
+  BreadCrumb,
+  SelectGroup,
+  Const,
+  Headline,
+  history,
+  AuthWrapper,
+  cache,
+  RCi18n
+} from 'qmkit';
 import { Row, Col, Tabs, Card, Breadcrumb, Button, message, Spin } from 'antd';
 import PetOwner from './components/petowner';
 import Pets from './components/pets';
 import Tasks from './components/tasks';
 import Emails from './components/emails';
 import Activities from './components/activities';
+import Comments from './components/comments';
 import Orders from './components/order';
 import Bookings from './components/subscriptions';
 import * as webapi from './webapi';
@@ -62,7 +72,9 @@ export default class PetOwnerActivity extends Component<any, any> {
   };
   render() {
     const { title, id, petOwner, loading, activityKey } = this.state;
-    const hasTaskRole = sessionStorage.getItem(cache.LOGIN_FUNCTIONS) && JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS)).includes('f_petowner_task');
+    const hasTaskRole =
+      sessionStorage.getItem(cache.LOGIN_FUNCTIONS) &&
+      JSON.parse(sessionStorage.getItem(cache.LOGIN_FUNCTIONS)).includes('f_petowner_task');
     return (
       <div>
         <BreadCrumb thirdLevel={true}>
@@ -87,7 +99,19 @@ export default class PetOwnerActivity extends Component<any, any> {
               </Button> */}
               <AuthWrapper functionName="f_petowner_create_order_button">
                 {petOwner.customerName && Const.SITE_NAME !== 'MYVETRECO' ? (
-                  <Button type="primary" onClick={() => history.push({ pathname: '/order-add', query: { customerId: id, customerName: petOwner.customerName, customerAccount: petOwner.customerAccount } })}>
+                  <Button
+                    type="primary"
+                    onClick={() =>
+                      history.push({
+                        pathname: '/order-add',
+                        query: {
+                          customerId: id,
+                          customerName: petOwner.customerName,
+                          customerAccount: petOwner.customerAccount
+                        }
+                      })
+                    }
+                  >
                     {RCi18n({ id: 'PetOwner.createOrder' })}
                   </Button>
                 ) : null}
@@ -123,7 +147,12 @@ export default class PetOwnerActivity extends Component<any, any> {
                     <Emails petOwnerId={id} petOwner={petOwner} />
                   </TabPane>
                   <TabPane tab={RCi18n({ id: 'PetOwner.Activities' })} key="3">
-                    {activityKey === '3' ? <Activities petOwnerId={id} petOwner={petOwner} /> : null}
+                    {activityKey === '3' ? (
+                      <Activities petOwnerId={id} petOwner={petOwner} />
+                    ) : null}
+                  </TabPane>
+                  <TabPane tab={RCi18n({ id: 'PetOwner.Comments' })} key="4">
+                    <Comments petOwnerId={id} petOwner={petOwner} />
                   </TabPane>
                 </Tabs>
               </Card>

@@ -168,6 +168,19 @@ export default class ChooseEventForm extends Component<any, any> {
             key: '0-3-5'
           }
         ]
+      },
+      {
+        title: 'Pet',
+        value: '0-4',
+        key: '0-4',
+        selectable: false,
+        children: [
+          {
+            title: 'New Po Notification',
+            value: 'NewPoNotification',
+            key: '0-4-1'
+          },
+        ]
       }
     ];
     return (

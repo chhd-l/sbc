@@ -81,10 +81,13 @@ const PaymentMethod = (props) => {
               card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_credit_card');
               break;
             case 'adyen_moto':
-              // card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_moto');
-              break
+              card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_moto');
+              break;
+            case 'payu_russia_autoship2':
+              card = card.filter((item) => ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase()));
+              break;
             default:
-              card = card.filter((item) => ['adyen_moto', 'adyen_ideal', 'adyen_credit_card'].every((it) => it !== item?.paymentItem?.toLowerCase()));
+              card = card.filter((item) => ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase()));
               break;
           }
 

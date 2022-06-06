@@ -16,6 +16,7 @@ const PaymentMethod = (props) => {
   const [cards, setCards] = useState([]);
   const [paypalCard, setPaypalCard] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
+  const [adyenMotoErr, setAdyenMotoErr] = useState(false)
 
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 
@@ -70,24 +71,24 @@ const PaymentMethod = (props) => {
             const paypalCard = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_paypal')
             setPaypalCard(paypalCard);
             card = card.filter((item) => item.paymentItem?.toLowerCase() !== 'adyen_paypal');
-          } else {
-            console.log('paymentType.toLowerCase()', paymentType.toLowerCase())
-            switch (paymentType.toLowerCase()) {
-              case 'adyen_ideal':
-                card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_ideal');
-                break;
-              case 'adyen_credit_card':
-                card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_credit_card');
-                break
-              case 'adyen_moto':
-                // card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_moto');
-                break
-              default:
-                card = card.filter((item) => item.paymentItem?.toLowerCase() !== 'adyen_moto' && item.paymentItem?.toLowerCase() !== 'adyen_ideal');
-                break;
-            }
-
           }
+          console.log('paymentType.toLowerCase()', paymentType.toLowerCase())
+          switch (paymentType.toLowerCase()) {
+            case 'adyen_ideal':
+              card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_ideal');
+              break;
+            case 'adyen_credit_card':
+              card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_credit_card');
+              break;
+            case 'adyen_moto':
+              // card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_moto');
+              break
+            default:
+              card = card.filter((item) => ['adyen_moto', 'adyen_ideal', 'adyen_credit_card'].every((it) => it !== item?.paymentItem?.toLowerCase()));
+              break;
+          }
+
+
           console.log('card', card)
           setCards(card);
         } else {
@@ -102,13 +103,12 @@ const PaymentMethod = (props) => {
   }
 
   function changePaymentMethod() {
-    let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
-    // if (props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto") {
-    props.changePaymentMethod(selectCardId, paymentType, selectCard);
+    if (paymentType?.toLowerCase() !== 'adyen_moto') {
+      let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
+      props.changePaymentMethod(selectCardId, paymentType, selectCard);
+    }
     props.cancel();
-    // } else {
-    //   message.error(RCi18n({ id: 'Subscription.OperationFailure' }));
-    // }
+
   }
 
   function clear() {
@@ -160,7 +160,12 @@ const PaymentMethod = (props) => {
         clear();
       }}
     >
-      <Radio.Group onChange={(e) => setPaymentType(e.target.value)} value={paymentType}>
+      <Radio.Group
+        onChange={(e) => {
+          setPaymentType(e.target.value)
+          setAdyenMotoErr(false)
+        }}
+        value={paymentType}>
         <Radio value={cardCodEnum[storeId] || cardCodEnum['default']}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
@@ -315,7 +320,7 @@ const PaymentMethod = (props) => {
                       <Popconfirm
                         placement="topLeft"
                         title={`Are you sure to delete this card?`}
-                        // onConfirm={() => deleteCard(item.id)}
+                        onConfirm={() => setAdyenMotoErr(true)}
                         okText="Yes"
                         cancelText="No"
                       >
@@ -323,11 +328,11 @@ const PaymentMethod = (props) => {
                           <FormattedMessage id="Subscription.Delete" />
                         </a>
                       </Popconfirm>
-                      {/* {item.showError ? (
-                          <div className="errorMessage">
-                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
-                          </div>
-                        ) : null} */}
+                      {adyenMotoErr ? (
+                        <div className="errorMessage">
+                          <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                        </div>
+                      ) : null}
                     </AuthWrapper>
                   </Row>
                 </Row>

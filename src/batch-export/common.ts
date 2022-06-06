@@ -278,23 +278,23 @@ export const subscriptionSeachField: fieldDataType[] = [
     label: '',
     key: 'subscribeDate',
     type: 'rangePicker'
+  },
+  {
+    label: RCi18n({ id: 'Subscription.SubscriptionStatus' }),
+    key: 'subscriptionStatus',
+    options: {
+      subscriptionStatus: [
+        { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
+        { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
+        { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
+        { value: '', name: RCi18n({ id: 'Subscription.all' }) }
+      ]
+    },
+    valueLink: 'subscriptionStatus'
+  },
+  {
+    label: '',
+    key: 'nextRefillDate',
+    type: 'rangePicker'
   }
-  // {
-  //   label: RCi18n({ id: 'Subscription.SubscriptionStatus' }),
-  //   key: 'subscriptionStatus',
-  //   options: {
-  //     subscriptionStatus: [
-  //       { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
-  //       { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
-  //       { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
-  //       { value: '', name: RCi18n({ id: 'Subscription.all' }) },
-  //     ]
-  //   },
-  //   valueLink: 'subscriptionStatus'
-  // },
-  // {
-  //   label: '',
-  //   key: 'nextRefillDate',
-  //   type: 'rangePicker'
-  // }
 ];

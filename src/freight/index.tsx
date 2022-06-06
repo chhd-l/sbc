@@ -87,9 +87,9 @@ export default class FreightTemplate extends React.Component<any, any> {
                 <Radio value={0} key="0">
                   <FormattedMessage id="Setting.storeShipping"></FormattedMessage>
                 </Radio>
-                <Radio value={1} key="1">
+                {/* <Radio value={1} key="1">
                   <FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>
-                </Radio>
+                </Radio> */}
               </RadioGroup>
               <Button type="primary" onClick={() => this._save()}>
                 <FormattedMessage id="Setting.SaveSettings" />
@@ -105,11 +105,11 @@ export default class FreightTemplate extends React.Component<any, any> {
                   <StoreSetting />
                 </Tabs.TabPane>
               )}
-              {checkAuth('f_goods_temp_list') && (
+              {/* {checkAuth('f_goods_temp_list') && (
                 <Tabs.TabPane tab={<FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>} key="1">
                   <GoodsSetting />
                 </Tabs.TabPane>
-              )}
+              )} */}
             </Tabs>
           )}
         </div>

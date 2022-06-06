@@ -217,8 +217,9 @@ export default class PickupDelivery extends React.Component {
         let ckg = await webapi.dimensionsByPackage({
           goodsInfoDetails: this.props.subscribeGoods
         });
-        if (ckg.context?.dimensions) {
-          let ckgobj = ckg.context;
+   
+        if (ckg?.res?.context?.dimensions) {
+          let ckgobj = ckg.res.context;
           data['dimensions'] = ckgobj?.dimensions;
           data['weight'] = ckgobj?.weight;
         }

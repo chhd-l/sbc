@@ -31,10 +31,10 @@ export default class PaymentInformation extends React.Component<any, any> {
         <div>
           <Row>
             <Col span={12}>
-              <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.number" />{context?.trade?.supplier.storeId === 123457909 && <>/<FormattedMessage id="Order.PaymentReference" /></>}：</p>
+              <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.number" />{context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && <>/<FormattedMessage id="Order.PaymentReference" /></>}：</p>
               {/* 法国代客下单moto支付 */}
-              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && <>
-                <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.Currency" />/<FormattedMessage id="Order.Amount" />：</p>
+              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && <>
+                <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.Currency" /><>/<FormattedMessage id="Order.Amount" /></>：</p>
                 <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.ShopReference" />：</p>
                 <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.CountryCode" />：</p>
               </>}
@@ -42,14 +42,14 @@ export default class PaymentInformation extends React.Component<any, any> {
             <Col span={12}>
               <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.tid ?? ''}</a></p>
               {/* 法国代客下单moto支付 */}
-              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && <>
+              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && <>
                 <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.supplier?.currency ?? ''}{'/'}{context?.trade?.tradePrice?.totalPrice ?? ''}</a></p>
                 <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.buyer?.id ?? ''}</a></p>
                 <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.consignee?.country ?? ''}</a></p>
               </>}
             </Col>
           </Row>
-          <p style={{ marginTop: 10 }}><FormattedMessage id="Order.transactions" /></p>
+          {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && <p style={{ marginTop: 10 }}><FormattedMessage id="Order.transactions" /></p>}
           {context?.subscribeId && <p style={{ marginTop: 10 }}><FormattedMessage id="Order.subscriptionNumber" />: <a>{context?.subscribeId ?? ''}</a></p>}
         </div>
         <input id='copytextarea' value={this.state.copyText} style={{ position: 'absolute', opacity: '0' }} />

@@ -108,14 +108,14 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             }}
           />
 
-          {/* {customProductsType === 0 && <Column
+          {customProductsType === 0 && <Column
             title={<FormattedMessage id="Marketing.Inventory"/>}
             key="stock"
             dataIndex="stock"
             width="10%"
-          />} */}
+          />}
 
-          {/* {customProductsType === 0 && <Column
+          {customProductsType === 0 && <Column
             title={<FormattedMessage id="Marketing.GiveTheNumber"/>}
             key="productNumber"
             dataIndex="productNumber"
@@ -123,7 +123,7 @@ export default class SelectedGoodsGrid extends React.Component<any, any> {
             render={(data, record: any) => (
               <InputNumber defaultValue={1} value={data} min={1} step={1} onChange={(val) => changeNumber(record.goodsInfoId, val)} />
             )}
-          />} */}
+          />}
 
           <Column
             title={<FormattedMessage id="Marketing.Operation"/>}

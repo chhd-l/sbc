@@ -72,7 +72,7 @@ export default class PaymentInformation extends React.Component<any, any> {
     e.preventDefault();
     console.log('打开了adyen支付平台窗口');
     let winObj = window.open(
-      `https://callcenter-test.adyen.com/callcenter/action/login.shtml`,
+      `https://callcenter-test.adyen.com/callcenter/action/login.shtml?shopperLocale=fr`,
       'newwindow',
       'height=800, width=1200, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );

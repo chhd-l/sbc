@@ -53,6 +53,7 @@ export default function index({ ...props }) {
       scopeType: 0,
       storeCateIds: [],
       customProductsType: 0,
+      customProductsIncludeType:0,
       skuIds: [], //custom product id集合
       selectedRows: [] //custom product 所有数据集合
     },
@@ -284,6 +285,7 @@ export default function index({ ...props }) {
           emailSuffixList: detail.emailSuffixList || [],
           scopeType: detail.scopeType,
           customProductsType: detail.customProductsType || 0,
+          customProductsIncludeType: detail.customProductsIncludeType || 0,
           storeCateIds: ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds: ReStoreCateIds(detail.attributeValueIds || []),
           skuIds: customIds, //custom product id集合
@@ -386,6 +388,7 @@ export default function index({ ...props }) {
           emailSuffixList: detail.emailSuffixList || [],
           scopeType: switchScopeType(detail.scopeType),
           customProductsType: detail.customProductsType || 0,
+          customProductsIncludeType: detail.customProductsIncludeType || 0,
           storeCateIds: ReStoreCateIds(detail.storeCateIds || []),
           attributeValueIds: ReStoreCateIds(detail.attributeValueIds || []),
           skuIds: detail.scopeIds,

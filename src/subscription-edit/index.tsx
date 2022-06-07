@@ -2550,7 +2550,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             )}
                           </p>
                         </Col>
-                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' && paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_moto' ? (
+                        {!['adyen_moto', 'adyen_ideal', 'adyen_paypal'].includes(paymentInfo?.paymentItem?.toLowerCase()) ? (
                           <Col span={24}>
                             <p style={{ width: 140 }}>
                               <FormattedMessage id="Subscription.CardNumber" />:{' '}

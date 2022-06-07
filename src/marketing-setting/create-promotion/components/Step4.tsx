@@ -15,50 +15,51 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const TreeNode = Tree.TreeNode;
 const RadioGroup = Radio.Group;
-const WrapperCol = {offset: 5,span: 19}
-function Step4({form}){
-  const { match,formData,changeFormData,setStep,formItemLayout } = useContext<any>(FormContext);
-  const {getFieldDecorator,validateFields,setFields} = form
+const WrapperCol = { offset: 5, span: 19 }
+function Step4({ form }) {
+  const { match, formData, changeFormData, setStep, formItemLayout } = useContext<any>(FormContext);
+  const { getFieldDecorator, validateFields, setFields } = form
 
-  const [purchaseType,setPurchaseType] = useState<number>(0)
-  const [isSuperimposeSubscription,setIsSuperimposeSubscription] = useState<boolean>(false)
+  const [purchaseType, setPurchaseType] = useState<number>(0)
+  const [isSuperimposeSubscription, setIsSuperimposeSubscription] = useState<boolean>(false)
 
 
-  const [customerType,setCustomerType] = useState<number>(0)
-  const [scopeType,setScopeType] = useState<number>(0)
-  const [customProductsType,setCustomProductsType] = useState<number>(0)
-  const [storeCateList,setStoreCateList] = useState<any>([])
-  const [attributeList,setAttributeList] = useState<any>([])
-  const [allGroups,setAllGroups] = useState<any>([])
-  const [goodsModal,setGoodsModal] = useState({
+  const [customerType, setCustomerType] = useState<number>(0)
+  const [scopeType, setScopeType] = useState<number>(0)
+  const [customProductsType, setCustomProductsType] = useState<number>(0)
+  const [customProductsIncludeType,setCustomProductsIncludeType] = useState<number>(0)
+  const [storeCateList, setStoreCateList] = useState<any>([])
+  const [attributeList, setAttributeList] = useState<any>([])
+  const [allGroups, setAllGroups] = useState<any>([])
+  const [goodsModal, setGoodsModal] = useState({
     _modalVisible: false,
     _selectedSkuIds: [],
     _selectedRows: []
   })
-  const [selectedSkuIds,setSelectedSkuIds] = useState<any>([])
-  const [selectedRows,setSelectedRows] = useState<any>(fromJS([]))
+  const [selectedSkuIds, setSelectedSkuIds] = useState<any>([])
+  const [selectedRows, setSelectedRows] = useState<any>(fromJS([]))
 
 
-  const [cartLimits,setCartLimits] = useState<number>(0)
+  const [cartLimits, setCartLimits] = useState<number>(0)
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     getGroupsList()
     getGoodsCateList()
     getAllAttribute()
-    if(match.params.id){
+    if (match.params.id) {
       editInit()
     }
-  },[])
+  }, [])
 
-  const toNext =() =>{
+  const toNext = () => {
     validateFields((err, values) => {
-      if(scopeType === 1 && selectedSkuIds.length === 0){
+      if (scopeType === 1 && selectedSkuIds.length === 0) {
         setFields({
-          goods:{
-            value:null,
-            errors:[
+          goods: {
+            value: null,
+            errors: [
               new Error((window as any).RCi18n({
                 id: 'Marketing.PleaseAddProducts'
               }))
@@ -68,10 +69,10 @@ function Step4({form}){
         return
       }
       if (!err) {
-        changeFormData(enumConst.stepEnum[3],{
+        changeFormData(enumConst.stepEnum[3], {
           ...values,
-          isSuperimposeSubscription:isSuperimposeSubscription ? 0 : 1,//判断是有选中isSuperimposeSubscription
-          scopeIds:selectedSkuIds,
+          isSuperimposeSubscription: isSuperimposeSubscription ? 0 : 1,//判断是有选中isSuperimposeSubscription
+          scopeIds: selectedSkuIds,
           scopeNumber: selectedRows.toJS().reduce((prev, curr) => { prev[curr.goodsInfoId] = customProductsType === 0 ? curr.productNumber : 1; return prev; }, {}), //includes products传具体数字，exclude直接传1
         })
         setStep(4)
@@ -82,7 +83,7 @@ function Step4({form}){
   /**
    * 当时编辑进入时初始化所有的值
    */
-  const editInit = async ()=>{
+  const editInit = async () => {
     setPurchaseType(formData.Conditions.promotionType)
     setIsSuperimposeSubscription(formData.Conditions.isSuperimposeSubscription === 0 ? true : false)
     setCartLimits(formData.Conditions.CartLimit)
@@ -97,7 +98,7 @@ function Step4({form}){
    * 后添加进入方法
    */
   const getGroupsList = async () => {
-    const { res }:any = await webapi.getAllGroups({
+    const { res }: any = await webapi.getAllGroups({
       pageNum: 0,
       pageSize: 1000000,
       segmentType: 0,
@@ -106,8 +107,8 @@ function Step4({form}){
     setAllGroups(res.context.segmentList)
   }
   const getGoodsCateList = async () => {
-    const { res }:any = await webapi.getGoodsCate();
-    let list = treeNesting(res.context,'cateParentId','storeCateId')
+    const { res }: any = await webapi.getGoodsCate();
+    let list = treeNesting(res.context, 'cateParentId', 'storeCateId')
     setStoreCateList(list)
   }
   const getAllAttribute = async () => {
@@ -119,7 +120,7 @@ function Step4({form}){
       pageSize: 10000,
       pageNum: 0
     };
-    const { res }:any = await webapi.getAllAttribute(params);
+    const { res }: any = await webapi.getAllAttribute(params);
 
     if (res.code == Const.SUCCESS_CODE) {
       res.context.attributesList.forEach((item) => {
@@ -138,7 +139,7 @@ function Step4({form}){
    * 关闭货品选择modal
    */
   const closeGoodsModal = () => {
-    setGoodsModal({...goodsModal,_modalVisible: false})
+    setGoodsModal({ ...goodsModal, _modalVisible: false })
   };
   /**
    * 货品选择方法的回调事件
@@ -149,22 +150,22 @@ function Step4({form}){
     form.resetFields('goods');
     setSelectedSkuIds(selectedSkuIds);
     setSelectedRows(selectedRows.map(item => item.set('productNumber', 1)));
-    if(selectedSkuIds.length === 0){
+    if (selectedSkuIds.length === 0) {
       setFields({
-        goods:{
-          value:null,
-          errors:[
+        goods: {
+          value: null,
+          errors: [
             new Error((window as any).RCi18n({
               id: 'Marketing.PleaseAddProducts'
             }))
           ]
         }
       })
-    }else {
-      setFields({ goods:{ value:null }})
+    } else {
+      setFields({ goods: { value: null } })
     }
     // changeFormData(enumConst.stepEnum[3],{scopeIds: selectedSkuIds})//保存到公共formData中
-    setGoodsModal({...goodsModal,_modalVisible: false});
+    setGoodsModal({ ...goodsModal, _modalVisible: false });
   };
   /**
    * 已选商品的删除方法
@@ -247,7 +248,7 @@ function Step4({form}){
               },
             ],
           })(
-            <Radio.Group onChange={(e:RadioChangeEvent)=>setPurchaseType(e.target.value)}>
+            <Radio.Group onChange={(e: RadioChangeEvent) => setPurchaseType(e.target.value)}>
               <Radio value={0}><FormattedMessage id="Marketing.All" /></Radio>
               <Radio value={1}><FormattedMessage id="Marketing.Autoship" /></Radio>
               {Const.SITE_NAME !== 'MYVETRECO' ? <Radio value={2}><FormattedMessage id="Marketing.Club" /></Radio> : null}
@@ -255,9 +256,9 @@ function Step4({form}){
             </Radio.Group>
           )}
           {
-            purchaseType !== 3 &&  (
+            purchaseType !== 3 && (
               <div>
-                <Checkbox checked={isSuperimposeSubscription} onChange={(e=>{
+                <Checkbox checked={isSuperimposeSubscription} onChange={(e => {
                   setIsSuperimposeSubscription(e.target.checked)
                 })}>
                   <FormattedMessage id="Marketing.Idontwanttocumulate" />
@@ -281,7 +282,7 @@ function Step4({form}){
               },
             ],
           })(
-            <Radio.Group onChange={(e)=>setCustomerType(e.target.value)}>
+            <Radio.Group onChange={(e) => setCustomerType(e.target.value)}>
               <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
               <Radio value={-3}><FormattedMessage id="Marketing.Group" /></Radio>
               <Radio value={-4}><FormattedMessage id="Marketing.Byemail" /></Radio>
@@ -364,7 +365,7 @@ function Step4({form}){
                 },
               ],
             })(
-              <Radio.Group onChange={(e:RadioChangeEvent)=>setScopeType(e.target.value)}>
+              <Radio.Group onChange={(e: RadioChangeEvent) => setScopeType(e.target.value)}>
                 <Radio value={0}><FormattedMessage id="Marketing.all" /></Radio>
                 <Radio value={2}><FormattedMessage id="Marketing.Category" /></Radio>
                 <Radio value={1}><FormattedMessage id="Marketing.Custom" /></Radio>
@@ -380,7 +381,7 @@ function Step4({form}){
                     {getFieldDecorator('customProductsType', {
                       initialValue: formData.Conditions.customProductsType || 0,
                       // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
-                    })(<RadioGroup onChange={(e:RadioChangeEvent)=>setCustomProductsType(e.target.value)}>
+                    })(<RadioGroup onChange={(e: RadioChangeEvent) => setCustomProductsType(e.target.value)}>
                       <Radio value={0}>
                         <FormattedMessage id="Marketing.Includeproduct" />
                       </Radio>
@@ -389,6 +390,25 @@ function Step4({form}){
                       </Radio>
                     </RadioGroup>)}
                   </Form.Item>
+                  {customProductsType === 0 && (
+                    <>
+                      {console.log(888,formData.Conditions)}
+                      <Form.Item wrapperCol={WrapperCol} required={true}>
+                        {getFieldDecorator('allOrAtLeast', {
+                          initialValue: formData.Conditions.customProductsIncludeType || 0,
+                          // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
+                        })(<RadioGroup onChange={(e: RadioChangeEvent) => setCustomProductsIncludeType(e.target.value)}>
+                          <Radio value={0}>
+                            <FormattedMessage id="Marketing.AllProducts" />
+                          </Radio>
+                          <div style={{height: '10px'}}></div>
+                          <Radio value={1}>
+                            <FormattedMessage id="Marketing.AtLeastOne" />
+                          </Radio>
+                        </RadioGroup>)}
+                      </Form.Item>
+                    </>
+                  )}
                   <Form.Item wrapperCol={WrapperCol} required={true}>
                     {getFieldDecorator(
                       'goods',
@@ -396,7 +416,7 @@ function Step4({form}){
                     )(
                       <div>
                         <Button type="primary" icon="plus"
-                                onClick={()=>{setGoodsModal({_selectedSkuIds:selectedSkuIds,_selectedRows:selectedRows,_modalVisible:true})}}
+                          onClick={() => { setGoodsModal({ _selectedSkuIds: selectedSkuIds, _selectedRows: selectedRows, _modalVisible: true }) }}
                         >
                           <FormattedMessage id="Marketing.AddProducts" />
                         </Button>
@@ -530,7 +550,7 @@ function Step4({form}){
               },
             ],
           })(
-            <Radio.Group onChange={(e)=>{
+            <Radio.Group onChange={(e) => {
               setCartLimits(e.target.value)
             }}>
               <Radio value={0}><FormattedMessage id="Order.none" /></Radio>
@@ -572,7 +592,7 @@ function Step4({form}){
                 })(
                   <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({
                     id: 'Marketing.1-9999',
-                  })}/>,
+                  })} />,
                 )}
                 <span>&nbsp;<FormattedMessage id="Marketing.items" /></span>
               </Form.Item>
@@ -610,7 +630,7 @@ function Step4({form}){
                     }
                   ],
                 })(
-                  <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })}/>,
+                  <Input style={{ width: 300 }} placeholder={(window as any).RCi18n({ id: 'Marketing.0.01-99999999.99' })} />,
                 )}
                 <span>&nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}</span>
               </Form.Item>

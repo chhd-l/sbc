@@ -87,9 +87,12 @@ export default class FreightTemplate extends React.Component<any, any> {
                 <Radio value={0} key="0">
                   <FormattedMessage id="Setting.storeShipping"></FormattedMessage>
                 </Radio>
-                <Radio value={1} key="1">
-                  <FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>
-                </Radio>
+                <AuthWrapper functionName="f_single_product_shipping">
+                  <Radio value={1} key="1">
+                    <FormattedMessage id="Setting.singleProductShipping"></FormattedMessage>
+                  </Radio>
+                </AuthWrapper>
+
               </RadioGroup>
               <Button type="primary" onClick={() => this._save()}>
                 <FormattedMessage id="Setting.SaveSettings" />

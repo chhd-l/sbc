@@ -66,15 +66,25 @@ class PickupMap extends Component<any, any> {
   // 打开地图
   openKaktusWidget = (city: string) => {
     console.log('666 >>> 打开地图: ', city);
+    let homeDeliveryAndPickup = JSON.parse(sessionStorage.getItem('rc-portal-homeDeliveryAndPickup'));
+    let { dimensions, weight } = homeDeliveryAndPickup.cityData;
+    // console.log(dimensions,weight)
+    // debugger
     (window as any).kaktusMap.openWidget({
       city_from: 'Москва',
       city_to: city,
+      // dimensions: {
+      //   height: 10,
+      //   width: 10,
+      //   depth: 10
+      // },
+      // weight: 600
       dimensions: {
-        height: 10,
-        width: 10,
-        depth: 10
+        height: dimensions?.height || 10,
+        width: dimensions?.width || 10,
+        depth: dimensions?.depth || 10
       },
-      weight: 600
+      weight: weight || 600
     });
   };
 

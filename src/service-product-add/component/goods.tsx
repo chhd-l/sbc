@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Relax } from 'plume2';
-import { Alert, Col, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
+import { Alert, Col,Checkbox, Form, Input, message, Modal, Radio, Row, Select, Tree, TreeSelect } from 'antd';
 import { IList, IMap } from 'typings/globalType';
 import { noop, QMMethod, Tips, ValidConst, SelectGroup } from 'qmkit';
 import { fromJS, Map } from 'immutable';
@@ -828,6 +828,31 @@ class GoodsForm extends React.Component<any, any> {
                   <Radio value={0}><FormattedMessage id="Product.No" /></Radio>
                 </RadioGroup>
               )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={16}>
+            {/* productSubtitle */}
+            <FormItem
+              // {...formItemLayout}
+              labelCol={{
+                span: 2,
+                xs: { span: 24 },
+                sm: { span: 6 }
+              }}
+              wrapperCol={{
+                span: 24,
+                xs: { span: 24 },
+                sm: { span: 18 }
+              }}
+              label={<FormattedMessage id="Product.PlacefirstonPLP" />}
+            >
+              {getFieldDecorator('isTopPlp', {
+                valuePropName: 'checked',
+                onChange: (e) => this._editGoods('isTopPlp', e.target.checked),
+                initialValue: Boolean(goods.get('isTopPlp'))
+              })(<Checkbox />)}
             </FormItem>
           </Col>
         </Row>

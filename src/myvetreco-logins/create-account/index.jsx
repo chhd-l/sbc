@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Form, Button, Input, Icon, Spin } from 'antd';
-import { RunBoyForMobile, RunBoyForDesktop } from '../components/runBoy';
+import { Form, Button, Input, Icon } from 'antd';
+import { RunBoyForDesktop } from '../components/runBoy';
 import MobileHeader from '../components/MobileHeader';
 import { isMobileApp } from '../components/tools';
 import { createStoreAccount, createStoreAccountCheck } from './webapi';
-import { switchRouter } from '@/index';
 import './index.less';
 
 import logo from '../assets/images/logo-s.png';
@@ -12,6 +11,7 @@ import fgsLogo from '../../login-admin/img/logo.png';
 import { util, RCi18n, history, login, Const, cache } from 'qmkit';
 import { useOktaAuth } from '@okta/okta-react';
 import { useRequest } from 'ahooks';
+import config from '../../../web_modules/qmkit/config';
 
 const FormItem = Form.Item;
 const Logo = Const.SITE_NAME === 'MYVETRECO' ? logo : fgsLogo;
@@ -29,6 +29,7 @@ function CreateAccount({ form }) {
           context: { oktaResult }
         }
       } = await createStoreAccountCheck({ email: base64.urlEncode(email) });
+
       return oktaResult;
     },
     {
@@ -40,17 +41,21 @@ function CreateAccount({ form }) {
     history.push('/login');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // 荷兰如果okta注册过 跳转到/login
-    if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
-      sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
-      authService.login('/login?type=prescriber');
-      return;
-    }
-    form.validateFields((errs, values) => {
+
+    form.validateFields(async (errs, values) => {
       if (!errs) {
-        setLoading(true);
+        // setLoading(true);
+        // 荷兰如果okta注册过 跳转到/login
+
+        if (Const.SITE_NAME === 'MYVETRECO' && oktaRegistered) {
+          sessionStorage.setItem('myvet-eamil-to-okta', values.email);
+          sessionStorage.setItem('myvet-recommendationCode-to-okta', values.recommendationCode);
+          sessionStorage.setItem(cache.OKTA_ROUTER_TYPE, 'prescriber');
+          authService.login('/login?type=prescriber');
+          return;
+        }
         createStoreAccount({
           email: base64.urlEncode(values.email),
           password: base64.urlEncode(values.password),

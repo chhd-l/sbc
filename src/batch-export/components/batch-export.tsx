@@ -16,7 +16,7 @@ interface BatchExportProps {
   history: any;
   title: string;
   exportType: number;
-  isServiceOrder:boolean
+  isServiceOrder: boolean;
 }
 
 class BatchExport extends Component<BatchExportProps, any> {
@@ -37,12 +37,12 @@ class BatchExport extends Component<BatchExportProps, any> {
     // 典型用法（不要忘记比较 props）：
     if (this.props.title !== prevProps.title) {
       let fieldKey = {};
-      this.props.fieldData.forEach(item => {
+      this.props.fieldData.forEach((item) => {
         fieldKey[item.key] = item.key;
       });
       this.setState({
         fieldKey
-      })
+      });
     }
   }
 
@@ -61,24 +61,30 @@ class BatchExport extends Component<BatchExportProps, any> {
           style={styles.leftLabel}
           defaultValue={label[0].value}
         >
-          {label.map(item => {
+          {label.map((item) => {
             let name = item.langKey ? RCi18n({ id: item.langKey }) : item.name;
             return (
               <Option key={item.value} title={name} value={item.value}>
                 {name}
               </Option>
-            )
+            );
           })}
-        </Select>)
+        </Select>
+      );
     } else {
-      return <Input style={styles.leftLabel} title={label || ''} disabled defaultValue={label || ''} />
+      return (
+        <Input style={styles.leftLabel} title={label || ''} disabled defaultValue={label || ''} />
+      );
     }
   }
 
   getFields() {
     const { fieldKey, exportField, pickErrorInfo, pickOpen } = this.state;
-    const { fieldData, form: { getFieldDecorator, getFieldValue } } = this.props;
-    const children = fieldData.map(item => {
+    const {
+      fieldData,
+      form: { getFieldDecorator, getFieldValue }
+    } = this.props;
+    const children = fieldData.map((item) => {
       let content = <Input style={styles.wrapper} disabled={exportField === 'all'} />;
       if (item.options) {
         let opts = item.options[fieldKey[item.key]] || [];
@@ -88,9 +94,11 @@ class BatchExport extends Component<BatchExportProps, any> {
           if (linkVal === 'ContractProduct') {
             opts = opts.filter((item) => item.value === 'SmartFeeder');
           } else if (linkVal.indexOf('Club') > -1) {
-            opts = opts.filter((item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat');
+            opts = opts.filter(
+              (item) => item.value === 'Cat_Dog' || item.value === 'Dog' || item.value === 'Cat'
+            );
           } else {
-            opts = []
+            opts = [];
           }
         }
         content = (
@@ -105,56 +113,70 @@ class BatchExport extends Component<BatchExportProps, any> {
               }
             }}
           >
-            {
-              opts.map(opt => {
-                let name = opt.langKey ? RCi18n({ id: opt.langKey }) : opt.name;
-                return (
-                  <Option value={opt.value} title={name} key={opt.value}>
-                    {name}
-                  </Option>
-                )
-              })
-            }
+            {opts.map((opt) => {
+              let name = opt.langKey ? RCi18n({ id: opt.langKey }) : opt.name;
+              return (
+                <Option value={opt.value} title={name} key={opt.value}>
+                  {name}
+                </Option>
+              );
+            })}
           </Select>
-        )
+        );
       }
 
-      const component = item.type === 'rangePicker' ? (
-        <Col span={8} key={item.key}>
-          <FormItem>
-            {getFieldDecorator(item.key, {
-              rules: [
-                {
-                  validator: (rule, value, callback) => {
-                    let startTime = value[0];
-                    let endTime = value[1];
-                    let endTimeClone: any = endTime && endTime.clone();
-                    if (startTime && endTimeClone && startTime.valueOf() < endTimeClone.subtract(6, 'months').valueOf()) {
-                      callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })));
+      const component =
+        item.type === 'rangePicker' ? (
+          <Col span={8} key={item.key}>
+            <FormItem>
+              {getFieldDecorator(item.key, {
+                rules: [
+                  {
+                    validator: (rule, value, callback) => {
+                      let startTime = value[0];
+                      let endTime = value[1];
+                      let endTimeClone: any = endTime && endTime.clone();
+                      if (
+                        startTime &&
+                        endTimeClone &&
+                        startTime.valueOf() < endTimeClone.subtract(6, 'months').valueOf()
+                      ) {
+                        callback(new Error(RCi18n({ id: 'Public.timeErrorTip' })));
+                      }
+                      callback();
                     }
-                    callback();
                   }
-                },
-              ],
-              initialValue: [null, null]
-            })(<RangePicker
-              disabledDate={current => item.key!=='nextRefillDate'&&current && current > moment().endOf('day')}
-              disabled={exportField === 'all'}
-              placeholder={item.key==='nextRefillDate'?['Next refill date: Start date','End date']:item.key==='subscribeDate'?['Subscription date: Start date','End date']:['Start date','End date']}
-              className="rang-picker-width"
-              style={styles.formItemStyle}
-            />)}
-          </FormItem>
-        </Col>
-      ) : (
-        <Col span={8} key={item.key} >
-          <Form.Item>
-            <Input.Group compact style={styles.formItemStyle}>
-              {this.getLabel(item.label, item.key)}
-              {getFieldDecorator(item.key)(content)}
-            </Input.Group>
-          </Form.Item>
-        </Col>)
+                ],
+                initialValue: [null, null]
+              })(
+                <RangePicker
+                  disabledDate={(current) =>
+                    item.key !== 'nextRefillDate' && current && current > moment().endOf('day')
+                  }
+                  disabled={exportField === 'all'}
+                  placeholder={
+                    item.key === 'nextRefillDate'
+                      ? ['Next refill date: Start date', 'End date']
+                      : item.key === 'subscribeDate'
+                      ? ['Subscription date: Start date', 'End date']
+                      : ['Start date', 'End date']
+                  }
+                  className="rang-picker-width"
+                  style={styles.formItemStyle}
+                />
+              )}
+            </FormItem>
+          </Col>
+        ) : (
+          <Col span={8} key={item.key}>
+            <Form.Item>
+              <Input.Group compact style={styles.formItemStyle}>
+                {this.getLabel(item.label, item.key)}
+                {getFieldDecorator(item.key)(content)}
+              </Input.Group>
+            </Form.Item>
+          </Col>
+        );
       return component;
     });
     return (
@@ -169,15 +191,21 @@ class BatchExport extends Component<BatchExportProps, any> {
     const { selectKey } = this.state;
     return (
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {selectData.map(item => {
+        {selectData.map((item) => {
           return (
-            <span key={item.value} onClick={() => this.btnSelect(item.value)} className={['select_style', selectKey.indexOf(item.value) > -1 ? 'active' : ''].join(' ')}>
+            <span
+              key={item.value}
+              onClick={() => this.btnSelect(item.value)}
+              className={['select_style', selectKey.indexOf(item.value) > -1 ? 'active' : ''].join(
+                ' '
+              )}
+            >
               {item.name}
             </span>
-          )
+          );
         })}
       </div>
-    )
+    );
   }
 
   btnSelect(key) {
@@ -188,7 +216,7 @@ class BatchExport extends Component<BatchExportProps, any> {
     } else {
       selectKey.push(key);
     }
-    this.setState({ selectKey })
+    this.setState({ selectKey });
   }
 
   onExport() {
@@ -198,9 +226,9 @@ class BatchExport extends Component<BatchExportProps, any> {
     let { fieldKey, selectKey, exportField } = this.state;
     let { exportType, form, isServiceOrder } = this.props;
     let params = {
-      'module': exportType,
-      'pickColums': selectKey,
-      'tradeExportRequest': {}
+      module: exportType,
+      pickColums: selectKey,
+      tradeExportRequest: {}
     };
     let bChecked = true;
     if (exportField === 'search') {
@@ -233,25 +261,28 @@ class BatchExport extends Component<BatchExportProps, any> {
           }
           delete fieldKey['cycleTypeId_autoship'];
 
-          if(fieldKey['clinicsName'] === 'clinicsIds') {
+          if (fieldKey['clinicsName'] === 'clinicsIds') {
             obj['clinicsIds'] = [values['clinicsName']];
             delete fieldKey['clinicsName'];
           }
 
           for (let key in fieldKey) {
-            if (key === 'orderType') {// orderType要默认赋值
+            if (key === 'orderType') {
+              // orderType要默认赋值
               obj[fieldKey[key]] = values[key] || 'ALL_ORDER';
-            } else if(key === 'payState') {
+            } else if (key === 'payState') {
               obj['tradeState'][fieldKey[key]] = values[key] || '';
-            }else if (key === 'goodWillFlag') {
-              obj[fieldKey[key]] = +values[key] || '';
+            } else if (key === 'goodWillFlag') {
+              if (values[key] !== null) {
+                obj[fieldKey[key]] = values[key];
+              }
             } else {
               obj[fieldKey[key]] = values[key] || '';
             }
           }
-          if(isServiceOrder){
+          if (isServiceOrder) {
             obj['orderType'] = 'SINGLE_PURCHASE';
-            obj['orderSource'] ='L_ATELIER_FELIN';
+            obj['orderSource'] = 'L_ATELIER_FELIN';
           }
 
           params.tradeExportRequest = obj;
@@ -261,7 +292,7 @@ class BatchExport extends Component<BatchExportProps, any> {
       });
     }
 
-    if(!bChecked) {
+    if (!bChecked) {
       this.setState({
         loading: false
       });
@@ -290,16 +321,21 @@ class BatchExport extends Component<BatchExportProps, any> {
         });
       }
     });
-
   }
 
   render() {
     const { selectData, title } = this.props;
     return (
-      <Card title={<span style={{ color: '#ff1f4e' }}>{RCi18n({ id: 'Public.exportTip' })}</span>} bordered={false}>
+      <Card
+        title={<span style={{ color: '#ff1f4e' }}>{RCi18n({ id: 'Public.exportTip' })}</span>}
+        bordered={false}
+      >
         <div style={contentStyle}>
           <div style={{ fontSize: 16, fontWeight: 'bold' }}>{RCi18n({ id: 'Public.Export' })}</div>
-          <Radio.Group defaultValue="search" onChange={e => this.setState({ exportField: e.target.value })}>
+          <Radio.Group
+            defaultValue="search"
+            onChange={(e) => this.setState({ exportField: e.target.value })}
+          >
             <Radio style={radioStyle} value="all">
               {RCi18n({ id: 'Order.all' })} {title} ({RCi18n({ id: 'Public.maximumTip' })})
             </Radio>
@@ -311,7 +347,9 @@ class BatchExport extends Component<BatchExportProps, any> {
         </div>
         {!!selectData?.length && (
           <div style={contentStyle}>
-            <div style={{ fontSize: 16, fontWeight: 'bold' }}>{RCi18n({ id: 'Public.Objects' })}</div>
+            <div style={{ fontSize: 16, fontWeight: 'bold' }}>
+              {RCi18n({ id: 'Public.Objects' })}
+            </div>
             <Radio style={radioStyle} defaultChecked>
               {RCi18n({ id: 'Menu.Order' })} ({RCi18n({ id: 'Public.ordelineTip' })})
             </Radio>
@@ -319,12 +357,15 @@ class BatchExport extends Component<BatchExportProps, any> {
           </div>
         )}
         <div>
-          <Button onClick={() => this.props.history.goBack()} style={{ marginRight: 30 }}>{RCi18n({ id: 'Public.Cancel' })}</Button>
-          <Button type="primary" onClick={() => this.onExport()} loading={this.state.loading}>{RCi18n({ id: 'Public.Export' })}</Button>
+          <Button onClick={() => this.props.history.goBack()} style={{ marginRight: 30 }}>
+            {RCi18n({ id: 'Public.Cancel' })}
+          </Button>
+          <Button type="primary" onClick={() => this.onExport()} loading={this.state.loading}>
+            {RCi18n({ id: 'Public.Export' })}
+          </Button>
         </div>
-
       </Card>
-    )
+    );
   }
 }
 
@@ -334,18 +375,18 @@ const fieldStyle = {
   // width: '80%',
   padding: 10,
   paddingBottom: 40
-}
+};
 
 const radioStyle = {
   display: 'block',
   height: '40px',
-  lineHeight: '40px',
+  lineHeight: '40px'
 };
 
 const contentStyle = {
   borderBottom: '1px solid #eee',
   marginBottom: 10
-}
+};
 
 const styles = {
   formItemStyle: {

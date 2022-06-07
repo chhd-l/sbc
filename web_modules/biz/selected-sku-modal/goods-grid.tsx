@@ -50,7 +50,7 @@ export default class GoodsGrid extends React.Component<any, any> {
 
   render() {
     const { loading, goodsInfoPage, selectedRowKeys, selectedRows, showValidGood } = this.state;
-    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit } = this.props;
+    const { rowChangeBackFun, visible, goodsCate, isSubsrciptionEdit,pageType } = this.props;
     return (
       <div className="content">
         {/*search*/}
@@ -231,7 +231,9 @@ export default class GoodsGrid extends React.Component<any, any> {
    */
   searchBackFun = (searchParams) => {
     // 点击搜索将之前勾选的置为空
-    this.props.rowChangeBackFun([], fromJS([]));
+    if(this.props.pageType ==='subscriptionEdit'){
+      this.props.rowChangeBackFun([], fromJS([]));
+    }
     if (this.props.searchParams) {
       searchParams = { ...this.props.searchParams, ...searchParams };
     }

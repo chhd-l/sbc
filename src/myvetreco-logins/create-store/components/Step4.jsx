@@ -18,7 +18,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   const [checkedObject, setCheckedObject] = useState({ Cat: {}, Dog: {} }); //选中状态{Cat:{},Dog:{}}
 
   const [allObj, setAllObj] = useState({}); //平铺所有sku选项结构{Cat:{},Dog:{}}
-  const [checkAllObj, setCheckAllObj] = useState({ Cat: false, Dog: false }); //cat或者dog是否全选
+  const [checkAllObj, setCheckAllObj] = useState({ Cat: true, Dog: true }); //cat或者dog是否全选
 
   const [dataSource, setDataSource] = useState({});
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,7 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   useEffect(() => {
     if (step === 3) getCateGory();
   }, [step]);
+
   const getCateGory = () => {
     setLoading(true);
     listCategory().then(({ res }) => {
@@ -88,7 +89,6 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
           };
           allObj[enumType[index]] = skuList;
         });
-        console.log(allObj);
         setAllObj(Object.assign({}, { ...allObj }));
         setDataSource({ ...dataSource });
         setLoading(false);
@@ -98,17 +98,27 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   /**
    * 点apply对选中条目价格进行计算
    */
+
+  // const setAbovePrice = () => {
+  //   setPercentageObj({
+  //     salesPercentage: salesPercentage + 100,
+  //     subscriptionPercentage
+  //   });
+  // };
+  // const setDiscountPrice = () => {
+  //   setPercentageObj({
+  //     salesPercentage,
+  //     subscriptionPercentage: 100 - subscriptionPercentage
+  //   });
+  // };
+
   const applyPercentage = useCallback(() => {
-    if (salesPercentage < subscriptionPercentage) {
-      message.error(RCi18n({ id: 'Product.ProductPrice.priceprompt' }));
-      return;
-    }
+    console.log(salesPercentage, subscriptionPercentage, '222222222222');
     setPercentageObj({
       salesPercentage,
       subscriptionPercentage
     });
   }, [salesPercentage, subscriptionPercentage]);
-
   /**
    * 收集所有修改过的price,和选中的值
    * @param sku
@@ -259,8 +269,8 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
   return (
     <FormContext.Provider
       value={{
+        saveCheckAll,
         changeFormData: changeFormData,
-        saveCheckAll: saveCheckAll,
         saveCheckStatus: saveCheckStatus,
         checkedObject: checkedObject,
         formData,
@@ -279,11 +289,11 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
               I would like to set market price (excl. VAT) above the cost with .
               <InputNumber
                 min={0}
-                value={salesPercentage}
+                value={salesPercentage - 100}
                 style={{ width: 180 }}
                 step={10}
                 precision={2}
-                onChange={(value) => setSalesPercentage(value)}
+                onChange={(value) => setSalesPercentage(value + 100)}
               />
               %
               <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>
@@ -293,12 +303,13 @@ export default function Step4({ setStep, userInfo, step, sourceStoreId }) {
             <div className="step4-myvet-top-content-item">
               I would like to offer subscription to pet owners with a default discount:
               <InputNumber
+                max={100}
                 min={0}
                 style={{ width: 180 }}
-                value={subscriptionPercentage}
+                value={100 - subscriptionPercentage}
                 step={10}
                 precision={2}
-                onChange={(value) => setSubscriptionPercentage(value)}
+                onChange={(value) => setSubscriptionPercentage(100 - value)}
               />
               %
               <Button type="primary" onClick={applyPercentage} style={{ marginRight: 6 }}>

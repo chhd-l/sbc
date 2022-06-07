@@ -194,8 +194,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               subscriptionDetail.subscribeStatus === '0'
                 ? RCi18n({ id: 'Subscription.Active' })
                 : subscriptionDetail.subscribeStatus === '1'
-                ? RCi18n({ id: 'Subscription.Pause' })
-                : RCi18n({ id: 'Subscription.Inactive' }),
+                  ? RCi18n({ id: 'Subscription.Pause' })
+                  : RCi18n({ id: 'Subscription.Inactive' }),
             subscriptionNumber: subscriptionDetail.subscribeId,
             subscriptionTime: subscriptionDetail.createTime,
             presciberID: subscriptionDetail.prescriberId,
@@ -214,8 +214,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             subscriptionDetail.subscriptionType == 'Individual'
               ? await getIndividualSubFrequency()
               : subscriptionDetail.subscriptionType == 'Club'
-              ? await getClubSubFrequency()
-              : await getAutoSubFrequency();
+                ? await getClubSubFrequency()
+                : await getAutoSubFrequency();
           this.setState({
             countryArr: countryArr,
             frequencyList: frequencyList
@@ -313,7 +313,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         this.setState({
           loading: false
@@ -329,7 +329,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           petsInfo: data?.res?.context?.context || {}
         });
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   onSubscriptionChange = ({ field, value }) => {
@@ -476,7 +476,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         this.setState({
           saveLoading: false
@@ -710,26 +710,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           deliveryAddressInfo['pickupPointState'] = res.context;
         }
       });
-      // await webapi.checkSubscriptionAddressPickPoint(
-      //   {
-      //     deliveryAddressId: deliveryAddressId,
-      //     goodsItems: goodsInfo.map((ele)=>{
-      //       return {
-      //         subscribeGoodsId: ele.subscribeGoodsId,
-      //         subscribeNum: ele.subscribeNum,
-      //         subscribeId: ele.subscribeId,
-      //         skuId: ele.skuId
-      //       }
-      //     }),
-      //     subscribeId: subscriptionInfo.subscriptionNumber,
-      //     paymentId: this.state.paymentInfo?.id,
-      //   }
-      // ).then((data)=>{
-      //   console.log(data)
-      // }).catch((err)=>{
-      //   this.setState({tempolineApiError:err.message})
-      //   return;
-      // })
+      await webapi.checkSubscriptionAddressPickPoint(
+        {
+          deliveryAddressId: deliveryAddressId,
+          goodsItems: goodsInfo.map((ele) => {
+            return {
+              subscribeGoodsId: ele.subscribeGoodsId,
+              subscribeNum: ele.subscribeNum,
+              subscribeId: ele.subscribeId,
+              skuId: ele.skuId
+            }
+          }),
+          subscribeId: subscriptionInfo.subscriptionNumber,
+          paymentId: this.state.paymentInfo?.id,
+        }
+      ).then((data) => {
+        console.log(data)
+      }).catch((err) => {
+        this.setState({ tempolineApiError: err.message })
+        return;
+      })
     }
     // 如果是日本
     if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
@@ -750,7 +750,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     if (
       deliveryAddressInfo.receiveType !== 'PICK_UP' &&
       (window as any).countryEnum[
-        JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
+      JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId ?? 0
       ] === 'ru'
     ) {
       if (
@@ -762,10 +762,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         const errMsg = !deliveryAddressInfo.street
           ? RCi18n({ id: 'PetOwner.AddressStreetTip' })
           : !deliveryAddressInfo.postCode
-          ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
-          : !deliveryAddressInfo.house
-          ? RCi18n({ id: 'PetOwner.AddressHouseTip' })
-          : RCi18n({ id: 'PetOwner.AddressCityTip' });
+            ? RCi18n({ id: 'PetOwner.AddressPostCodeTip' })
+            : !deliveryAddressInfo.house
+              ? RCi18n({ id: 'PetOwner.AddressHouseTip' })
+              : RCi18n({ id: 'PetOwner.AddressCityTip' });
         message.error(errMsg);
         return;
       }
@@ -912,7 +912,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           });
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         this.setState({
           loading: false
@@ -920,7 +920,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       });
   };
 
-  tabChange = () => {};
+  tabChange = () => { };
 
   cancelNextSubscription = (row) => {
     this.setState({
@@ -938,7 +938,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           message.success(RCi18n({ id: 'Subscription.OperationSuccessful' }));
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         this.setState({
           loading: false
@@ -990,7 +990,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           );
         }
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         this.setState({
           loading: false
@@ -1119,9 +1119,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               timeSlot: timeSlot
                 ? timeSlot
                 : deliveryDateList[0] &&
-                  deliveryDateList[0].dateTimeInfos[0].startTime +
-                    `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
-                    deliveryDateList[0].dateTimeInfos[0].endTime
+                deliveryDateList[0].dateTimeInfos[0].startTime +
+                `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
+                deliveryDateList[0].dateTimeInfos[0].endTime
             });
           } else {
             this.setState({
@@ -1131,8 +1131,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               timeSlot:
                 deliveryDateList[0] &&
                 deliveryDateList[0].dateTimeInfos[0].startTime +
-                  `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
-                  deliveryDateList[0].dateTimeInfos[0].endTime
+                `${deliveryDateList[0].dateTimeInfos[0].endTime ? '-' : ''}` +
+                deliveryDateList[0].dateTimeInfos[0].endTime
             });
           }
         } else {
@@ -1157,7 +1157,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         deliveryDate === value
           ? timeSlot
           : timeSlots[0] &&
-            timeSlots[0].startTime + `${timeSlots[0].endTime ? '-' : ''}` + timeSlots[0].endTime
+          timeSlots[0].startTime + `${timeSlots[0].endTime ? '-' : ''}` + timeSlots[0].endTime
     });
   };
 
@@ -1469,16 +1469,16 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       },
       subscriptionInfo.subscribeStatus === '0' || subscriptionInfo.subscribeStatus === '1'
         ? {
-            title: (
-              <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
-                <FormattedMessage id="subscription.realtimeStock" />
-              </span>
-            ),
-            dataIndex: 'stock',
-            key: 'realtime',
-            width: '10%',
-            render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
-          }
+          title: (
+            <span style={{ color: '#8E8E8E', fontWeight: 500 }}>
+              <FormattedMessage id="subscription.realtimeStock" />
+            </span>
+          ),
+          dataIndex: 'stock',
+          key: 'realtime',
+          width: '10%',
+          render: (text, record) => <span>{record?.goodsInfoVO?.stock}</span>
+        }
         : { title: '', width: '0%' },
       {
         title: (
@@ -1606,9 +1606,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           disabledDate={this.disabledStartDate}
           defaultValue={
             currentOrder &&
-            currentOrder.tradeItems &&
-            currentOrder.tradeItems[0] &&
-            currentOrder.tradeItems[0].nextDeliveryTime
+              currentOrder.tradeItems &&
+              currentOrder.tradeItems[0] &&
+              currentOrder.tradeItems[0].nextDeliveryTime
               ? moment(currentOrder.tradeItems[0].nextDeliveryTime)
               : moment()
           }
@@ -1663,11 +1663,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {subscriptionType == 'Individualization'
               ? 1
               : record.tradeItems &&
-                record.tradeItems.map((item: any, index: any) => (
-                  <div style={{ height: 80 }} key={index}>
-                    <p style={{ paddingTop: 30 }}>X {item.num}</p>
-                  </div>
-                ))}
+              record.tradeItems.map((item: any, index: any) => (
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
+                </div>
+              ))}
           </div>
         )
       },
@@ -1683,9 +1683,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           <div style={{ color: '#e2001a' }}>
             {record.tradePrice && record.tradePrice.discountsPrice
               ? currencySymbol +
-                ' ' +
-                '-' +
-                this.getSubscriptionPrice(record.tradePrice.discountsPrice)
+              ' ' +
+              '-' +
+              this.getSubscriptionPrice(record.tradePrice.discountsPrice)
               : '-'}
           </div>
         )
@@ -1804,11 +1804,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             {subscriptionType == 'Individualization'
               ? 1
               : record.tradeItems &&
-                record.tradeItems.map((item: any, index: any) => (
-                  <div style={{ height: 80 }} key={index}>
-                    <p style={{ paddingTop: 30 }}>X {item.num}</p>
-                  </div>
-                ))}
+              record.tradeItems.map((item: any, index: any) => (
+                <div style={{ height: 80 }} key={index}>
+                  <p style={{ paddingTop: 30 }}>X {item.num}</p>
+                </div>
+              ))}
           </div>
         )
       },
@@ -2145,11 +2145,11 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                         ' ' +
                         this.getSubscriptionPrice(
                           this.subTotal() -
-                            +this.state.discountsPrice +
-                            +this.state.taxFeePrice +
-                            +this.state.deliveryPrice -
-                            +this.state.freeShippingDiscountPrice +
-                            +this.state.serviceFeePrice
+                          +this.state.discountsPrice +
+                          +this.state.taxFeePrice +
+                          +this.state.deliveryPrice -
+                          +this.state.freeShippingDiscountPrice +
+                          +this.state.serviceFeePrice
                         )}
                     </span>
                   </div>
@@ -2197,8 +2197,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           <p>
                             {deliveryAddressInfo
                               ? deliveryAddressInfo.lastNameKatakana +
-                                ' ' +
-                                deliveryAddressInfo.firstNameKatakana
+                              ' ' +
+                              deliveryAddressInfo.firstNameKatakana
                               : ''}
                           </p>
                         </Col>
@@ -2314,8 +2314,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                           {deliveryAddressInfo.receiveType === 'PICK_UP'
                             ? null
                             : deliveryAddressInfo.validFlag
-                            ? null
-                            : deliveryAddressInfo.alert && (
+                              ? null
+                              : deliveryAddressInfo.alert && (
                                 <PostalCodeMsg text={deliveryAddressInfo.alert} />
                               )}
                         </Col>
@@ -2525,6 +2525,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             }}
                             paymentMethodVisible={this.state.paymentMethodVisible}
                             subscriptionType={this.state.subscriptionType}
+                            paymentInfo={paymentInfo}
                           />
                         </>
                       )}
@@ -2536,16 +2537,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             <FormattedMessage id="Subscription.PaymentMethod" />:{' '}
                           </p>
                           <p>
-                            {paymentInfo && paymentInfo.paymentVendor ? (
+                            {paymentInfo && paymentInfo.paymentVendor ? paymentInfo?.paymentItem?.toLowerCase() === 'adyen_moto' ? (
+                              <FormattedMessage id="Subscription.Moto" />
+                            ) : (
                               paymentInfo.paymentVendor
                             ) : paymentInfo?.paymentItem?.toLowerCase() === 'adyen_paypal' ? (
                               <FormattedMessage id="Subscription.Paypal" />
+                            ) : paymentInfo?.paymentItem?.toLowerCase() === 'adyen_ideal' ? (
+                              <FormattedMessage id="Subscription.Ideal" />
                             ) : (
                               ''
                             )}
                           </p>
                         </Col>
-                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' ? (
+                        {paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_paypal' && paymentInfo?.paymentItem?.toLowerCase() !== 'adyen_moto' ? (
                           <Col span={24}>
                             <p style={{ width: 140 }}>
                               <FormattedMessage id="Subscription.CardNumber" />:{' '}
@@ -2633,8 +2638,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                   {/* billingAddress是否和deliveryAddress一样 */}
                   <Col>
                     {storeId === 123457907 ||
-                    storeId === 123457910 ||
-                    storeId === 123457919 ? null : (
+                      storeId === 123457910 ||
+                      storeId === 123457919 ? null : (
                       <Checkbox
                         checked={this.state.sameFlag}
                         onChange={(e) => {
@@ -2732,6 +2737,55 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                       {/* homeDelivery地址列表 */}
                       {this.state.isUnfoldedDelivery
                         ? deliveryList.map((item: any) => (
+                          <Card
+                            style={{ width: 602, marginBottom: 10 }}
+                            bodyStyle={{ padding: 10 }}
+                            key={item.deliveryAddressId}
+                          >
+                            <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
+                              {storeId === 123457919 ? (
+                                <div style={{ display: 'inline-grid' }}>
+                                  <p>{item.lastName + '  ' + item.firstName}</p>
+                                  <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
+                                  <p>{item.postCode}</p>
+                                  <p>
+                                    {item.city}, {item.area}, {item.address1}
+                                  </p>
+                                  <p>{item.consigneeNumber}</p>
+                                </div>
+                              ) : (
+                                <div style={{ display: 'inline-grid' }}>
+                                  <p>{item.firstName + '  ' + item.lastName}</p>
+                                  <p>{item.city}</p>
+                                  {item.province ? <p>{item.province}</p> : null}
+
+                                  <p>{this.getDictValue(countryArr, item.countryId)}</p>
+                                  <p>{item.address1}</p>
+                                  <p>{item.address2}</p>
+                                  {!item.validFlag
+                                    ? item.alert && <PostalCodeMsg text={item.alert} />
+                                    : null}
+                                </div>
+                              )}
+                            </Radio>
+                            <div>
+                              <Button
+                                type="link"
+                                size="small"
+                                onClick={() =>
+                                  this.onOpenAddressForm(
+                                    { ...NEW_ADDRESS_TEMPLATE, ...item },
+                                    'delivery'
+                                  )
+                                }
+                              >
+                                <FormattedMessage id="Subscription.Edit" />
+                              </Button>
+                            </div>
+                          </Card>
+                        ))
+                        : deliveryList.map((item: any, index: any) =>
+                          index < 2 ? (
                             <Card
                               style={{ width: 602, marginBottom: 10 }}
                               bodyStyle={{ padding: 10 }}
@@ -2753,7 +2807,6 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                     <p>{item.firstName + '  ' + item.lastName}</p>
                                     <p>{item.city}</p>
                                     {item.province ? <p>{item.province}</p> : null}
-
                                     <p>{this.getDictValue(countryArr, item.countryId)}</p>
                                     <p>{item.address1}</p>
                                     <p>{item.address2}</p>
@@ -2778,56 +2831,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                                 </Button>
                               </div>
                             </Card>
-                          ))
-                        : deliveryList.map((item: any, index: any) =>
-                            index < 2 ? (
-                              <Card
-                                style={{ width: 602, marginBottom: 10 }}
-                                bodyStyle={{ padding: 10 }}
-                                key={item.deliveryAddressId}
-                              >
-                                <Radio disabled={!item.validFlag} value={item.deliveryAddressId}>
-                                  {storeId === 123457919 ? (
-                                    <div style={{ display: 'inline-grid' }}>
-                                      <p>{item.lastName + '  ' + item.firstName}</p>
-                                      <p>{item.lastNameKatakana + '  ' + item.firstNameKatakana}</p>
-                                      <p>{item.postCode}</p>
-                                      <p>
-                                        {item.city}, {item.area}, {item.address1}
-                                      </p>
-                                      <p>{item.consigneeNumber}</p>
-                                    </div>
-                                  ) : (
-                                    <div style={{ display: 'inline-grid' }}>
-                                      <p>{item.firstName + '  ' + item.lastName}</p>
-                                      <p>{item.city}</p>
-                                      {item.province ? <p>{item.province}</p> : null}
-                                      <p>{this.getDictValue(countryArr, item.countryId)}</p>
-                                      <p>{item.address1}</p>
-                                      <p>{item.address2}</p>
-                                      {!item.validFlag
-                                        ? item.alert && <PostalCodeMsg text={item.alert} />
-                                        : null}
-                                    </div>
-                                  )}
-                                </Radio>
-                                <div>
-                                  <Button
-                                    type="link"
-                                    size="small"
-                                    onClick={() =>
-                                      this.onOpenAddressForm(
-                                        { ...NEW_ADDRESS_TEMPLATE, ...item },
-                                        'delivery'
-                                      )
-                                    }
-                                  >
-                                    <FormattedMessage id="Subscription.Edit" />
-                                  </Button>
-                                </div>
-                              </Card>
-                            ) : null
-                          )}
+                          ) : null
+                        )}
                     </>
                   )}
                 </Radio.Group>
@@ -2933,6 +2938,41 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 >
                   {this.state.isUnfoldedBilling
                     ? billingList.map((item) => (
+                      <Card
+                        style={{ width: 602, marginBottom: 10 }}
+                        bodyStyle={{ padding: 10 }}
+                        key={item.deliveryAddressId}
+                      >
+                        <Radio value={item.deliveryAddressId}>
+                          <div style={{ display: 'inline-grid' }}>
+                            <p>{item.firstName + '  ' + item.lastName}</p>
+                            <p>
+                              {this.getDictValue(countryArr, item.countryId) +
+                                ',' +
+                                this.getCityName(item)}
+                            </p>
+                            <p>{item.address1}</p>
+                            <p>{item.address2}</p>
+                          </div>
+                        </Radio>
+                        <div>
+                          <Button
+                            type="link"
+                            size="small"
+                            onClick={() =>
+                              this.onOpenAddressForm(
+                                { ...NEW_ADDRESS_TEMPLATE, ...item },
+                                'billing'
+                              )
+                            }
+                          >
+                            <FormattedMessage id="Subscription.Edit" />
+                          </Button>
+                        </div>
+                      </Card>
+                    ))
+                    : billingList.map((item, index) =>
+                      index < 2 ? (
                         <Card
                           style={{ width: 602, marginBottom: 10 }}
                           bodyStyle={{ padding: 10 }}
@@ -2965,43 +3005,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                             </Button>
                           </div>
                         </Card>
-                      ))
-                    : billingList.map((item, index) =>
-                        index < 2 ? (
-                          <Card
-                            style={{ width: 602, marginBottom: 10 }}
-                            bodyStyle={{ padding: 10 }}
-                            key={item.deliveryAddressId}
-                          >
-                            <Radio value={item.deliveryAddressId}>
-                              <div style={{ display: 'inline-grid' }}>
-                                <p>{item.firstName + '  ' + item.lastName}</p>
-                                <p>
-                                  {this.getDictValue(countryArr, item.countryId) +
-                                    ',' +
-                                    this.getCityName(item)}
-                                </p>
-                                <p>{item.address1}</p>
-                                <p>{item.address2}</p>
-                              </div>
-                            </Radio>
-                            <div>
-                              <Button
-                                type="link"
-                                size="small"
-                                onClick={() =>
-                                  this.onOpenAddressForm(
-                                    { ...NEW_ADDRESS_TEMPLATE, ...item },
-                                    'billing'
-                                  )
-                                }
-                              >
-                                <FormattedMessage id="Subscription.Edit" />
-                              </Button>
-                            </div>
-                          </Card>
-                        ) : null
-                      )}
+                      ) : null
+                    )}
                 </Radio.Group>
                 {this.state.isUnfoldedBilling || billingList.length <= 2 ? null : (
                   <Button
@@ -3062,6 +3067,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         )}
 
         <GoodsModal
+          pageType='subscriptionEdit'
           titleContent={titleContent}
           skuLimit={1}
           visible={productModalVisible}

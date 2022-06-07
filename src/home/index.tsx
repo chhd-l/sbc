@@ -30,7 +30,10 @@ export default class HelloApp extends React.Component<any, any> {
 
   componentDidMount() {
     let employee = JSON.parse(sessionStorage.getItem(cache.EMPLOYEE_DATA));
-    const prescriberId = employee && employee.prescribers && employee.prescribers.length > 0 ? employee.prescribers[0].id : null;
+    const prescriberId =
+      employee && employee.prescribers && employee.prescribers.length > 0
+        ? employee.prescribers[0].id
+        : null;
     let id = '';
     if (JSON.parse(sessionStorage.getItem('PrescriberSelect'))) {
       id = JSON.parse(sessionStorage.getItem('PrescriberSelect')).id;
@@ -69,12 +72,13 @@ export default class HelloApp extends React.Component<any, any> {
           let pickupIsOpen = false;
           doptions.map((e: any) => {
             if (e.configType === 'pick_up_delivery') {
-              e.status === 1 ? pickupIsOpen = true : pickupIsOpen = false;
+              e.status === 1 ? (pickupIsOpen = true) : (pickupIsOpen = false);
             }
           });
           sessionStorage.setItem('portal-pickup-isopen', JSON.stringify(pickupIsOpen));
         }
-      }).catch(() => { });
+      })
+      .catch(() => {});
   }
   changePage(res) {
     this.setState(
@@ -108,7 +112,13 @@ export default class HelloApp extends React.Component<any, any> {
       return !this.state.prescriberId || Const.SITE_NAME === 'MYVETRECO' ? (
         <div style={styles.container}>
           <Header changePage={(mode) => this.changePage(mode)} />
-          {Const.SITE_NAME === 'MYVETRECO' ? <TodoItemsMyvet /> : this.state.changeMode == false ? <TodoItems /> : <Prescriber prescriberId={this.state.getPrescriberId} />}
+          {Const.SITE_NAME === 'MYVETRECO' ? (
+            <TodoItemsMyvet />
+          ) : this.state.changeMode == false ? (
+            <TodoItems />
+          ) : (
+            <Prescriber prescriberId={this.state.getPrescriberId} />
+          )}
 
           {/*<StatisticalReport />
           <Ranking /> */}

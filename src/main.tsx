@@ -1,6 +1,18 @@
 import React from 'react';
-import {Layout, message, Spin, Icon} from 'antd';
-import { routeWithSubRoutes, MyHeader, MyLeftLevel1, MyLeftMenu, Fetch, util, history, Const, cache, LoadingForRC, LoadingForMyvetreco } from 'qmkit';
+import { Layout, message, Spin, Icon } from 'antd';
+import {
+  routeWithSubRoutes,
+  MyHeader,
+  MyLeftLevel1,
+  MyLeftMenu,
+  Fetch,
+  util,
+  history,
+  Const,
+  cache,
+  LoadingForRC,
+  LoadingForMyvetreco
+} from 'qmkit';
 import { routes, auditDidNotPass } from './router';
 import { LogoLoadingIcon } from 'biz';
 import ErrorBoundary from '../web_modules/qmkit/errorBoundary';
@@ -9,12 +21,15 @@ import { FormattedMessage } from 'react-intl';
 import moment from 'moment';
 
 import PosPrint from '../web_modules/qmkit/pos-print';
+import MyvetrecoGuide from './myvetreco-guide';
 
 const pcLogo = require('../public/images/login/logo1.png');
 
 const { Content } = Layout;
 
-Spin.setDefaultIndicator(Const.SITE_NAME === 'MYVETRECO' ? <LoadingForMyvetreco /> : <LoadingForRC />);
+Spin.setDefaultIndicator(
+  Const.SITE_NAME === 'MYVETRECO' ? <LoadingForMyvetreco /> : <LoadingForRC />
+);
 
 export default class Main extends React.Component<any, any> {
   _menu: any;
@@ -26,7 +41,7 @@ export default class Main extends React.Component<any, any> {
       matchedPath: '',
       hasError: false,
       uuid: '',
-      loading: false,
+      loading: false
     };
     (window as any).countryEnum = {
       123456858: 'mx',
@@ -59,7 +74,10 @@ export default class Main extends React.Component<any, any> {
         .then((resIco: any) => {
           if (resIco.res.code == Const.SUCCESS_CODE) {
             if ((resIco.res as any).defaultLocalDateTime) {
-              sessionStorage.setItem('defaultLocalDateTime', (resIco.res as any).defaultLocalDateTime);
+              sessionStorage.setItem(
+                'defaultLocalDateTime',
+                (resIco.res as any).defaultLocalDateTime
+              );
             }
             const configLog = JSON.parse(resIco.res.context?.pcLogo ?? '[{}]')[0]['url'] ?? pcLogo;
             sessionStorage.setItem(cache.SITE_LOGO, configLog);
@@ -84,20 +102,23 @@ export default class Main extends React.Component<any, any> {
   }
 
   handlePathMatched = (path) => {
-   let recommendation_params= JSON.parse(sessionStorage.getItem('recommendation_params')||'[]')
+    let recommendation_params = JSON.parse(sessionStorage.getItem('recommendation_params') || '[]');
 
-   if(recommendation_params.length===2){
-    recommendation_params.shift()
-   }
-   recommendation_params.push(path)
-   sessionStorage.setItem('recommendation_params',JSON.stringify(recommendation_params))
+    if (recommendation_params.length === 2) {
+      recommendation_params.shift();
+    }
+    recommendation_params.push(path);
+    sessionStorage.setItem('recommendation_params', JSON.stringify(recommendation_params));
     this.setState({
       matchedPath: path
     });
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.location !== this.props.location && this.props.location.pathname != '/implicit/callback') {
+    if (
+      nextProps.location !== this.props.location &&
+      this.props.location.pathname != '/implicit/callback'
+    ) {
       // navigated!
       this.setState({
         matchedPath: nextProps.location.pathname
@@ -115,14 +136,14 @@ export default class Main extends React.Component<any, any> {
   openMainLoading = () => {
     this.setState({
       loading: true
-    })
-  }
+    });
+  };
 
   closeMainLoading = () => {
     this.setState({
       loading: false
-    })
-  }
+    });
+  };
 
   render() {
     let { loading } = this.state;
@@ -130,18 +151,27 @@ export default class Main extends React.Component<any, any> {
     // this.props.text.d
     return (
       <div>
-        <Spin
-            spinning={loading}
-        >
+        <MyvetrecoGuide />
+        <Spin spinning={loading}>
           <Layout>
             {/*头部*/}
-            <MyHeader openMainLoading={this.openMainLoading} closeMainLoading={this.closeMainLoading} />
-            <div className="layout-header"/>
+            <MyHeader
+              openMainLoading={this.openMainLoading}
+              closeMainLoading={this.closeMainLoading}
+            />
+            <div className="layout-header" />
             <Layout className="ant-layout-has-sider">
               {/*左侧一级菜单*/}
-              <MyLeftLevel1 matchedPath={this.state.matchedPath} onFirstActiveChange={this._onFirstActiveChange} />
+              <MyLeftLevel1
+                matchedPath={this.state.matchedPath}
+                onFirstActiveChange={this._onFirstActiveChange}
+              />
               {/*左侧二三级菜单*/}
-              <MyLeftMenu matchedPath={this.state.matchedPath} onSecondActiveChange={this._onSecondActiveChange} ref={(menu) => (this._menu = menu)} />
+              <MyLeftMenu
+                matchedPath={this.state.matchedPath}
+                onSecondActiveChange={this._onSecondActiveChange}
+                ref={(menu) => (this._menu = menu)}
+              />
               {/*右侧主操作区域*/}
               <ErrorBoundary uuid={this.state.uuid}>
                 <Content>
@@ -149,13 +179,16 @@ export default class Main extends React.Component<any, any> {
                     {routeWithSubRoutes(routes, this.handlePathMatched)}
                     {routeWithSubRoutes(auditDidNotPass, this.handlePathMatched)}
                     <div style={styles.copyright}>
-                      &copy; {Const.SITE_NAME === 'MYVETRECO' ? 'MyVetReco' : `Royal Canin SAS ${moment().format('YYYY')}`}
+                      &copy;{' '}
+                      {Const.SITE_NAME === 'MYVETRECO'
+                        ? 'MyVetReco'
+                        : `Royal Canin SAS ${moment().format('YYYY')}`}
                     </div>
                   </div>
                 </Content>
               </ErrorBoundary>
             </Layout>
-            <PosPrint/>
+            <PosPrint />
           </Layout>
         </Spin>
       </div>

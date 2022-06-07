@@ -52,6 +52,7 @@ export default function Step6({ setLoading }) {
    *         13：WELCOME_BOX_GIFT
    */
   const createPromotion = async () => {
+    debugger;
     //当选择coupon type
     let detail = null;
     let subType = 0;

@@ -15,6 +15,7 @@ import NodeProperties from './components/node-properties/index';
 import { history, Headline } from 'qmkit';
 import * as webapi from './webapi';
 import { Const } from 'qmkit';
+import { FormattedMessage } from 'react-intl';
 
 const { TabPane } = Tabs;
 
@@ -48,7 +49,7 @@ export default withPropsAPI(
               });
             }
           } else {
-            message.error(res.message || <FormattedMessage id="Public.GetDataFailed"/>);
+            message.error(res.message || <FormattedMessage id="Public.GetDataFailed" />);
           }
         })
         .catch(() => {

@@ -26,6 +26,8 @@ const PaymentMethod = (props) => {
       if (props.cardId) {
         if (props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto") {
           setPaymentType('ADYEN_MOTO');
+        } else if (props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_paypal") {
+          setPaymentType('ADYEN_PAYPAL');
         } else {
           setPaymentType(cardCodEnum[storeId] || cardCodEnum['default']);
         }
@@ -39,7 +41,7 @@ const PaymentMethod = (props) => {
     if (!props.paymentMethodVisible) {
       return;
     }
-    if (paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) || ['ADYEN_MOTO', 'ADYEN_IDEAL'].includes(paymentType)) {
+    if (paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) || ['ADYEN_MOTO', 'ADYEN_IDEAL', 'ADYEN_PAYPAL'].includes(paymentType)) {
       getCards();
       if (props.cardId) {
         setSelectCardId(props.cardId);
@@ -165,6 +167,7 @@ const PaymentMethod = (props) => {
     >
       <Radio.Group
         onChange={(e) => {
+          console.log(e.target.value);
           setPaymentType(e.target.value)
           setAdyenMotoErr(false)
         }}
@@ -192,7 +195,8 @@ const PaymentMethod = (props) => {
         {props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto" && (<Radio value={'ADYEN_MOTO'}>
           <FormattedMessage id="Subscription.adyen_moto" />
         </Radio>)}
-        {props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_ideal" && (<Radio value={'ADYEN_IDEAL'}>
+        {/* nl */}
+        {[123457929].includes(storeId) && (<Radio value={'ADYEN_IDEAL'}>
           <FormattedMessage id="Subscription.Ideal" />
         </Radio>)}
       </Radio.Group>

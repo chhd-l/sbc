@@ -1804,6 +1804,7 @@ export default class AppStore extends Store {
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', detailsList);
+    param = param.set('isTopPlp', this.state().get('isTopPlp') ? 1 : 0);
 
     //添加参数，是否允许独立设价
     //param = param.set('allowAlonePrice', this.state().get('allowAlonePrice') ? 1 : 0)

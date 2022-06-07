@@ -392,9 +392,8 @@ function Step4({ form }) {
                   </Form.Item>
                   {customProductsType === 0 && (
                     <>
-                      {console.log(888,formData.Conditions)}
                       <Form.Item wrapperCol={WrapperCol} required={true}>
-                        {getFieldDecorator('allOrAtLeast', {
+                        {getFieldDecorator('customProductsIncludeType', {
                           initialValue: formData.Conditions.customProductsIncludeType || 0,
                           // onChange: (e) => this.onBeanChange({ customProductsType: e.target.value }),
                         })(<RadioGroup onChange={(e: RadioChangeEvent) => setCustomProductsIncludeType(e.target.value)}>

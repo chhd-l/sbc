@@ -999,7 +999,9 @@ class TaskUpdate extends Component<any, any> {
                               </Link>
                               <span style={{ margin: '0 5px' }}></span>
                               {task.commentNumber ? (
-                                <Link to={`/pet-owner-activity/${task.contactId}`}>
+                                <Link
+                                  to={`/pet-owner-activity/${task.contactId}/?tabName=comments`}
+                                >
                                   [{task.commentNumber} comments available]
                                 </Link>
                               ) : null}

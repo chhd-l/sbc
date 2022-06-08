@@ -188,7 +188,7 @@ export default class CardView extends Component<any, any> {
 
   handleCommentNumberClick = (e, petOwnerId) => {
     e.stopPropagation();
-    history.push(`/pet-owner-activity/${petOwnerId}`);
+    history.push(`/pet-owner-activity/${petOwnerId}/?tabName=comments`);
   };
   render() {
     const {

@@ -31,6 +31,80 @@ class Line extends React.Component {
             "count": 2
           },
           {
+            "day": "2022-03-04",
+            "count": 2
+          },
+          {
+            "day": "2022-03-05",
+            "count": 2
+          },
+          {
+            "day": "2022-03-06",
+            "count": 2
+          },
+          {
+            "day": "2022-03-07",
+            "count": 2
+          },
+          {
+            "day": "2022-03-08",
+            "count": 2
+          },
+          {
+            "day": "2022-03-09",
+            "count": 2
+          },
+          {
+            "day": "2022-03-10",
+            "count": 2
+          },
+          {
+            "day": "2022-03-11",
+            "count": 2
+          },
+          {
+            "day": "2022-03-12",
+            "count": 2
+          },
+          {
+            "day": "2022-03-13",
+            "count": 2
+          },
+          {
+            "day": "2022-03-14",
+            "count": 2
+          },
+
+          {
+            "day": "2022-03-15",
+            "count": 2
+          },
+          {
+            "day": "2022-03-16",
+            "count": 2
+          },
+          {
+            "day": "2022-03-17",
+            "count": 2
+          },
+          {
+            "day": "2022-03-18",
+            "count": 2
+          },
+          {
+            "day": "2022-03-19",
+            "count": 2
+          },
+          {
+            "day": "2022-03-20",
+            "count": 2
+          },
+          {
+            "day": "2022-03-21",
+            "count": 2
+          },
+
+          {
             "day": "2022-04-01",
             "count": 32
           },
@@ -105,17 +179,17 @@ class Line extends React.Component {
       case 'day':
         xdata = obj.dayCount.map(item => item.day);
         ydata = obj.dayCount.map(item => item.count);
-        max = obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count + obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count / 2;
+        max = (obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 1.5).toFixed(0);
         break;
       case 'month':
         xdata = obj.monthCount.map(item => item.month);
         ydata = obj.monthCount.map(item => item.count);
-        max = obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count + obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count / 2;
+        max = obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count + obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count * 0.4;
         break;
       case 'year':
         xdata = obj.yearCount.map(item => item.year);
         ydata = obj.yearCount.map(item => item.count);
-        max = obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count + obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count / 2;
+        max = obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count + obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count * 0.4;
         break;
     }
     let option = {
@@ -181,6 +255,7 @@ class Line extends React.Component {
             // formatter: (window as any).RCi18n({ id: 'Home.Week' }) + '-{value}'
             formatter: '{value}'
           },
+          boundaryGap: false,
           axisLine: {
             show: true,
             lineStyle: {

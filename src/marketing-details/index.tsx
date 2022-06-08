@@ -191,7 +191,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.PromotionValue" />:
               </div>
               <div className="step-summary-item-text">
-                {(1 - level?.discount) * 100 + '%'}
+                {Math.ceil((1 - level?.discount) * 100) + '%'}
               </div>
             </div>
             <div className="step-summary-item">
@@ -251,7 +251,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
               </div>
               <div className="step-summary-item-text">
-                {level.firstSubscriptionOrderDiscount + '%'}
+                {Math.ceil((1 - level.firstSubscriptionOrderDiscount) * 100) + '%'}
               </div>
             </div>
             {level.firstSubscriptionLimitAmount && (
@@ -275,7 +275,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
               </div>
               <div className="step-summary-item-text">
-                {level.firstSubscriptionOrderDiscount + '%'}
+                {Math.ceil((1 - level.firstSubscriptionOrderDiscount) * 100) + '%'}
               </div>
             </div>
             {level.firstSubscriptionLimitAmount && (
@@ -295,7 +295,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                   <FormattedMessage id="Marketing.RestSubscriptionOrderDiscount" />:
                 </div>
                 <div className="step-summary-item-text">
-                  {level.restSubscriptionOrderDiscount + '%'}
+                  {Math.ceil((1 - level.restSubscriptionOrderDiscount) * 100) + '%'}
                 </div>
               </div>
             )}

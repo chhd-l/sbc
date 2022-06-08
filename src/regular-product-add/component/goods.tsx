@@ -951,7 +951,7 @@ class GoodsForm extends React.Component<any, any> {
             >
               {getFieldDecorator('isTopPlp', {
                 onChange: this._editGoods.bind(this, 'isTopPlp'),
-                initialValue: goods.get('isTopPlp') === 0 ? [0] : [1]
+                initialValue: goods.get('isTopPlp') === 1 ? [1] : [0]
               })(
                 <Checkbox.Group>
                   <Checkbox value={1} />

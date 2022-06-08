@@ -281,16 +281,16 @@ export const subscriptionSeachField: fieldDataType[] = [
   },
   {
     label: RCi18n({ id: 'Subscription.SubscriptionStatus' }),
-    key: 'subscriptionStatus',
+    key: 'subscribeStatus',
     options: {
-      subscriptionStatus: [
+      subscribeStatus: [
         { value: '0', name: RCi18n({ id: 'Subscription.Active' }) },
         { value: '2', name: RCi18n({ id: 'Subscription.Inactive' }) },
         { value: '1', name: RCi18n({ id: 'Subscription.Paused' }) },
         { value: '', name: RCi18n({ id: 'Subscription.all' }) }
       ]
     },
-    valueLink: 'subscriptionStatus'
+    valueLink: 'subscribeStatus'
   },
   {
     label: '',

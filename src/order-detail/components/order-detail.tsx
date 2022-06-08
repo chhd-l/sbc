@@ -126,7 +126,7 @@ class OrderDetailTab extends React.Component<any, any> {
     currentPet: {},
     tableLoading: false,
     switchSerficeFee: false,
-    switchSerficeFeeCalculation: false,
+    switchSerficeFeeCalculation: false
   };
 
   render() {
@@ -320,7 +320,7 @@ class OrderDetailTab extends React.Component<any, any> {
           record.subscriptionStatus === 1 &&
           record.isSuperimposeSubscription === 1 ? (
             <>
-              {storeId === 123457919 && originalPrice === record.subscriptionPrice ? (
+              {originalPrice === record.subscriptionPrice ? (
                 <div>
                   <span>
                     {this._handlePriceFormat(
@@ -549,11 +549,13 @@ class OrderDetailTab extends React.Component<any, any> {
               <p>
                 <FormattedMessage id="Order.Petownername" />: {detail.getIn(['buyer', 'name'])}
               </p>
-              {storeId === 123457919 ? <p>
-                <FormattedMessage id="PetOwner.PetOwnerName katakana" />:{' '}
-                {detail.getIn(['buyer', 'firstNameKatakana'], '')}{' '}
-                {detail.getIn(['buyer', 'lastNameKatakana'], '')}
-              </p> : null}
+              {storeId === 123457919 ? (
+                <p>
+                  <FormattedMessage id="PetOwner.PetOwnerName katakana" />:{' '}
+                  {detail.getIn(['buyer', 'firstNameKatakana'], '')}{' '}
+                  {detail.getIn(['buyer', 'lastNameKatakana'], '')}
+                </p>
+              ) : null}
               <p>
                 <FormattedMessage id="Order.petOwnerType" />: {detail.getIn(['buyer', 'levelName'])}
               </p>
@@ -771,7 +773,9 @@ class OrderDetailTab extends React.Component<any, any> {
                 </label>
               ) : null}
 
-              {storeId === 123457919 && this.state.switchSerficeFee && tradePrice.serviceFeePrice!=='' ? (
+              {storeId === 123457919 &&
+              this.state.switchSerficeFee &&
+              tradePrice.serviceFeePrice !== '' ? (
                 <label style={styles.priceItem as any}>
                   <span style={styles.name}>
                     <FormattedMessage id="Order.serviceFeePrice" />:
@@ -1155,17 +1159,14 @@ class OrderDetailTab extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    webapi
-      .fetchServiceFeeConf()
-      .then((res) => {
-        const config = res?.res?.context || [];
-        this.setState({
-          switchSerficeFee: !!config.find((c) => c.configType === 'order_service_fee_all')?.status,
-          switchSerficeFeeCalculation: !!config.find(
-            (c) => c.configType === 'order_service_fee_fgs'
-          )?.status
-        });
-      })
+    webapi.fetchServiceFeeConf().then((res) => {
+      const config = res?.res?.context || [];
+      this.setState({
+        switchSerficeFee: !!config.find((c) => c.configType === 'order_service_fee_all')?.status,
+        switchSerficeFeeCalculation: !!config.find((c) => c.configType === 'order_service_fee_fgs')
+          ?.status
+      });
+    });
   }
 
   _handlePriceFormat(price, num = 2) {

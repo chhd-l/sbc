@@ -1473,7 +1473,6 @@ export default class AppStore extends Store {
 
     // -----商品信息-------
     let goods = data.get('goods');
-
     if (goods.get('cateId') === '-1') {
       message.error('请选择平台类目');
       return false;
@@ -1740,7 +1739,12 @@ export default class AppStore extends Store {
     goods = goods.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
-
+    let isTopPlp = 0;
+    const topPlP = goods.get('isTopPlp').toJS();
+    if (topPlP.length !== 0) {
+      isTopPlp = topPlP[0];
+    }
+    goods = goods.set('isTopPlp', isTopPlp);
     param = param.set('goods', goods);
 
     // -----商品等级价格列表-------

@@ -1809,7 +1809,11 @@ export default class AppStore extends Store {
     goods = goods.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
-    goods = goods.set('isTopPlp', data.get('isTopPlp') ? 1 : 0);
+    let isTopPlp = 0;
+    if (goods.get('isTopPlp').length !== 0) {
+      isTopPlp = goods.get('isTopPlp')[0];
+    }
+    goods = goods.set('isTopPlp', isTopPlp);
     param = param.set('goods', goods);
 
     // -----商品等级价格列表-------
@@ -1873,7 +1877,6 @@ export default class AppStore extends Store {
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', detailsList);
-    param = param.set('isTopPlp', this.state().get('isTopPlp') ? 1 : 0);
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价

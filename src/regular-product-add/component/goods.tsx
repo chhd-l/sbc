@@ -950,10 +950,13 @@ class GoodsForm extends React.Component<any, any> {
               label={<FormattedMessage id="Product.PlacefirstonPLP" />}
             >
               {getFieldDecorator('isTopPlp', {
-                valuePropName: 'checked',
-                onChange: (e) => this._editGoods('isTopPlp', e.target.checked),
-                initialValue: Boolean(goods.get('isTopPlp'))
-              })(<Checkbox />)}
+                onChange: this._editGoods.bind(this, 'isTopPlp'),
+                initialValue: goods.get('isTopPlp') === 0 ? [0] : [1]
+              })(
+                <Checkbox.Group>
+                  <Checkbox value={1} />
+                </Checkbox.Group>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -1237,6 +1240,7 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
+      console.log(fromJS(e), 0);
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }

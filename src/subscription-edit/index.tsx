@@ -358,7 +358,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   };
 
-  updateSubscription = () => {
+  updateSubscription = async () => {
     const {
       subscriptionInfo,
       goodsInfo,
@@ -710,7 +710,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           deliveryAddressInfo['pickupPointState'] = res.context;
         }
       });
-      await webapi.checkSubscriptionAddressPickPoint(
+      
+      this.setState({ addressLoading: true });
+      const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
         {
           deliveryAddressId: deliveryAddressId,
           goodsItems: goodsInfo.map((ele) => {
@@ -724,12 +726,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           subscribeId: subscriptionInfo.subscriptionNumber,
           paymentId: this.state.paymentInfo?.id,
         }
-      ).then((data) => {
-        console.log(data)
-      }).catch((err) => {
-        this.setState({ tempolineApiError: err.message })
-        return;
-      })
+      )
+      if (checkedRes.code !== Const.SUCCESS_CODE) {
+        this.setState({ 
+          tempolineApiError: checkedRes.message,
+          addressLoading: false
+        })
+        return false;
+      }
     }
     // 如果是日本
     if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {
@@ -1213,7 +1217,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   };
 
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
-    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus } = this.state;
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
     if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
     // 法国、俄罗斯、土耳其需要选择错误提示
@@ -1237,24 +1241,39 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       selectedSkuIds: selectedSkuIds,
       selectedRows: selectedRows
     });
-    this.setState({ loading: true });
-    let params = {
-      subscribeId: subscriptionId,
-      deleteSkuId: goodsInfo[0]?.skuId,
-      addSkuId: selectedSkuIds[0]
-    };
-
-    let { res } = await webapi.changeSubscriptionGoods(params);
-
-    if (res.code === Const.SUCCESS_CODE) {
-      message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
-      this.getSubscriptionDetail();
-    } else {
+    try {
+      this.setState({ loading: true });
+      let params = {
+        subscribeId: subscriptionId,
+        deleteSkuId: goodsInfo[0]?.skuId,
+        addSkuId: selectedSkuIds[0]
+      };
+      const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
+        Object.assign({}, params, { 
+          goodsItems: [{
+            subscribeNum: curChangeProductItem.subscribeNum,
+            skuId: selectedSkuIds[0]
+          }], 
+          paymentId: this.state.paymentInfo?.id,
+          deliveryAddressId
+        })
+      );
+      if (checkedRes.code !== Const.SUCCESS_CODE) {
+        throw new Error(checkedRes.message)
+      }
+      let { res } = await webapi.changeSubscriptionGoods(params);
+      if (res.code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+        this.getSubscriptionDetail();
+      } else {
+        throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+      }
+    } catch (err) {
       this.setState({ loading: false });
-      message.error(RCi18n({ id: 'PetOwner.Unsuccessful' }));
+      message.error(err.message);
+    } finally {
+      this.closeProductModal();
     }
-
-    this.closeProductModal();
   };
 
   closeProductModal = () => {
@@ -1271,9 +1290,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
     );
   };
 
-  showProductModal = () => {
+  showProductModal = (record) => {
     this.setState({
-      productModalVisible: true
+      productModalVisible: true,
+      curChangeProductItem: record
     });
   };
 
@@ -1395,7 +1415,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </div>
             <span style={{ whiteSpace: 'nowrap' }}>
               {this.isShowSkuEdit ? (
-                <a onClick={() => this.showProductModal()} className="iconfont iconEdit " />
+                <a onClick={() => this.showProductModal(record)} className="iconfont iconEdit " />
               ) : null}
 
               {canDeleteProduct ? (

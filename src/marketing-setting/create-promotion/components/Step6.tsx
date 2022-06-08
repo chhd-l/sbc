@@ -94,6 +94,7 @@ export default function Step6({ setLoading }) {
             : [], //改版用到的字段
         customProductsType:
           formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
+        customProductsIncludeType:formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsIncludeType : 0,
         attributeValueIds:
           formData.Conditions.scopeType === 3
             ? getAttributeValue(formData.Conditions.attributeValueIds)
@@ -125,6 +126,7 @@ export default function Step6({ setLoading }) {
         rangeDayType: 0,
         couponDesc: ''
       };
+
       if (match.params.id && match.params.type === 'coupon') {
         detail = await webapi.editCoupon({
           ...params,
@@ -169,10 +171,12 @@ export default function Step6({ setLoading }) {
           emailSuffixList:
             formData.Conditions.joinLevel === -4 ? [formData.Conditions.emailSuffixList] : [],
           customProductsType: formData.Conditions.customProductsType,
+          customProductsIncludeType: formData.Conditions.customProductsIncludeType,
           skuIds: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeIds : [],
           skuNumbers: formData.Conditions.scopeType === 1 ? formData.Conditions.scopeNumber : {}
         }
       };
+
 
       if (formData.Advantage.couponPromotionType === 0) {
         if (formData.Conditions.promotionType !== 1 && formData.Conditions.promotionType !== 2) {

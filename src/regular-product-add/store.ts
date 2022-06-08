@@ -1733,8 +1733,9 @@ export default class AppStore extends Store {
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
 
     let isTopPlp = 0;
-    if (goods.get('isTopPlp').length !== 0) {
-      isTopPlp = goods.get('isTopPlp')[0];
+    const topPlP = goods.get('isTopPlp').toJS();
+    if (topPlP.length !== 0) {
+      isTopPlp = topPlP[0];
     }
     goods = goods.set('isTopPlp', isTopPlp);
     param = param.set('goods', goods);

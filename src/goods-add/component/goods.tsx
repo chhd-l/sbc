@@ -885,7 +885,6 @@ class GoodsForm extends React.Component<any, any> {
         </Row>
 
         <Row>
-          {goods.get('isTopPlp')}
           <Col span={16}>
             {/* productSubtitle */}
             <FormItem

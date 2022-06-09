@@ -1263,7 +1263,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         })
       );
       if (checkedRes.code !== Const.SUCCESS_CODE) {
-        throw new Error(checkedRes.message)
+        // throw new Error(checkedRes.message)
+        return false;
       }
       let { res } = await webapi.changeSubscriptionGoods(params);
       if (res.code === Const.SUCCESS_CODE) {

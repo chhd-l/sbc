@@ -18,6 +18,7 @@ import Activities from './components/activities';
 import Comments from './components/comments';
 import Orders from './components/order';
 import Bookings from './components/subscriptions';
+import { parse } from 'querystring';
 import * as webapi from './webapi';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
@@ -29,7 +30,7 @@ export default class PetOwnerActivity extends Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
-      activityKey: '',
+      activityKey: '1',
       id: this.props.match.params.id ? this.props.match.params.id : '',
       title: RCi18n({ id: 'PetOwner.PetOwneractivity' }),
       petOwner: {},
@@ -38,6 +39,12 @@ export default class PetOwnerActivity extends Component<any, any> {
   }
 
   componentDidMount() {
+    const tabName = new URLSearchParams(this.props.location.search).get('tabName');
+    if (tabName === 'comments') {
+      this.setState({
+        activityKey: '4'
+      });
+    }
     this.setState({
       loading: true
     });
@@ -132,6 +139,7 @@ export default class PetOwnerActivity extends Component<any, any> {
               <Card>
                 <Tabs
                   defaultActiveKey={hasTaskRole ? '1' : '2'}
+                  activeKey={activityKey}
                   onChange={(key) =>
                     this.setState({
                       activityKey: key

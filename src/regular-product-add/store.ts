@@ -66,6 +66,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
+import { isNumber } from 'lodash';
 let _tempGoodsDescriptionDetailList: any = {};
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -1733,9 +1734,13 @@ export default class AppStore extends Store {
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
 
     let isTopPlp = 0;
-    const topPlP = goods.get('isTopPlp').toJS();
-    if (topPlP.length !== 0) {
-      isTopPlp = topPlP[0];
+    if (isNumber(goods.get('isTopPlp'))) {
+      isTopPlp = goods.get('isTopPlp');
+    } else {
+      const topPlp = goods.get('isTopPlp').toJS();
+      if (topPlp.length !== 0) {
+        isTopPlp = topPlp[0];
+      }
     }
     goods = goods.set('isTopPlp', isTopPlp);
     param = param.set('goods', goods);

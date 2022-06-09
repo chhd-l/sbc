@@ -67,7 +67,6 @@
     "immutability-helper": "^2.9.1",
     "json-loader": "^0.5.4",
     "lodash": "^4.17.10",
-    "logrocket": "^3.0.0",
     "m3u8-parser": "^4.7.0",
     "mathjs": "^9.4.4",
     "moment": "^2.24.0",

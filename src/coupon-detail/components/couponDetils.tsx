@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Breadcrumb, Col, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Col, Row, Spin } from 'antd';
 import { BreadCrumb, cache, RCi18n } from 'qmkit';
 import { useParams } from 'react-router-dom';
 import { useRequest } from 'ahooks';
@@ -25,6 +25,8 @@ const MAK_TYPE = {
   })}`
 };
 const CouponDetails = (props: MarketingDetailsProps) => {
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
   const { cid } = useParams();
   const { data } = useRequest(async () => {
     const {
@@ -32,6 +34,14 @@ const CouponDetails = (props: MarketingDetailsProps) => {
         context: { couponInfo }
       }
     } = await getAactivity({ couponId: cid, pageNum: 0, pageSize: 10 });
+    if (couponInfo) {
+      setLoading(false)
+    } else {
+      let ti = setTimeout(() => {
+        setLoading(false)
+        clearTimeout(ti)
+      }, 1000);
+    }
     return couponInfo;
   });
   const renderCartLimit = () => {
@@ -212,10 +222,9 @@ const CouponDetails = (props: MarketingDetailsProps) => {
 
 
   }
+
   return (
-    <>
-
-
+    <Spin spinning={loading}>
       <div className="container  coupon-details">
         {/* <div className="step-title">
           <FormattedMessage id="Marketing.CouponDetail" />
@@ -345,42 +354,48 @@ const CouponDetails = (props: MarketingDetailsProps) => {
                     <FormattedMessage id="Marketing.StartDate" />:
                   </div>
                   <div className="step-summary-item-text">
-                    Start date
+                    {data?.startTime.split(' ')[0]}
                   </div>
                 </div>
                 <div className="step-summary-item" style={{ marginRight: '4rem' }}>
                   <div style={{ fontWeight: 600, fontSize: '15px', marginRight: '1rem' }}>
                     <FormattedMessage id="Marketing.EndDate" />:
                   </div>
-                  <div className="step-summary-item-text">End date</div>
+                  <div className="step-summary-item-text">{data?.endTime.split(' ')[0]}</div>
                 </div>
                 <div className="step-summary-item" style={{ marginRight: '4rem' }}>
                   <div style={{ fontWeight: 600, fontSize: '15px', marginRight: '1rem' }}>
-                    <FormattedMessage id="Marketing.TotalPropmtionsCode" />:
+                    <FormattedMessage id="Marketing.TotalcouponCode" />:
                   </div>
-                  <div className="step-summary-item-text">Total order with Promotions code</div>
+                  <div className="step-summary-item-text">{total}</div>
                 </div>
               </div>
             </div>
             {/* 图表 */}
             <div style={{ width: '80%', height: '300px', position: 'relative', marginTop: '20px' }}>
               <div className='redline' style={{ position: 'absolute', top: '0px', left: '40px' }}>
-                <FormattedMessage id="Marketing.promotionsEchartsTitle" />
+                <FormattedMessage id="Marketing.couponEchartsTitle" />
               </div>
-              <BarLine
-                yName={{ y1: (window as any).RCi18n({ id: 'Home.Prescriberreward' }) }}
-                nameTextStyle={{ y1: [0, 0, 0, 42] }}
-                data={{
-                  x: [21, 22, 23, 24],
-                  y1: [2, 5, 8, 15],
-                }}
-              />
+              {data?.startTime && data?.endTime && (
+                <BarLine
+                  yName={{ y1: (window as any).RCi18n({ id: 'Home.Prescriberreward' }) }}
+                  nameTextStyle={{ y1: [0, 0, 0, 42] }}
+                  data={{
+                    x: [21, 22, 23, 24],
+                    y1: [2, 5, 8, 15],
+                  }}
+                  pageType={'coupon'}
+                  cid={cid}
+                  startDate={data?.startTime.split(' ')[0]}
+                  endDate={data?.endTime.split(' ')[0]}
+                  setTotal={setTotal}
+                />)}
             </div>
           </div>
 
         </div>
       </div>
-    </>
+    </Spin>
   );
 };
 export default CouponDetails;

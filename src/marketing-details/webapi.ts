@@ -80,3 +80,19 @@ export const getAllAttribute = (params) => {
     body: JSON.stringify({ ...params })
   });
 };
+
+// 获取promotion图表数据
+export const getusedcodepromotion = (params) => {
+  return Fetch('/marketing/used-code-count/promotion', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};
+
+// 获取coupon图表数据
+export const getusedcodecoupon = (params) => {
+  return Fetch('/marketing/used-code-count/coupon', {
+    method: 'POST',
+    body: JSON.stringify({ ...params })
+  });
+};

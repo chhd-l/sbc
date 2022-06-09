@@ -10,7 +10,8 @@ export const enumConst = {
   },
   typeOfPromotion: {
     0: <FormattedMessage id="Order.PromotionCode" />,
-    1: <FormattedMessage id="Order.CouponCode" />
+    1: <FormattedMessage id="Order.CouponCode" />,
+    2: <FormattedMessage id="Order.CouponCode" />
   },
   promotionType: {
     0: <FormattedMessage id="Marketing.All" />,
@@ -19,6 +20,7 @@ export const enumConst = {
     3: <FormattedMessage id="Marketing.Singlepurchase" />
   },
   joinLevel: {
+    '-1': <FormattedMessage id="Marketing.all" />,
     0: <FormattedMessage id="Marketing.all" />,
     '-3': <FormattedMessage id="Marketing.Group" />,
     '-4': <FormattedMessage id="Marketing.Byemail" />,
@@ -43,7 +45,7 @@ export const enumConst = {
     1: <FormattedMessage id="Marketing.Percentage" />,
     2: <FormattedMessage id="Marketing.Gifts" />,
     3: <FormattedMessage id="Marketing.Freeshipping" />,
-    4: <FormattedMessage id="Marketing.Gifts" />,
+    4: <FormattedMessage id="Marketing.leaflet" />,
     5: <FormattedMessage id="Marketing.leaflet" />,
   }
 }

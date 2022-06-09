@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 //下面是按需加载
 import echarts from 'echarts/lib/echarts';
 //导入饼图
@@ -12,186 +13,237 @@ import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RCi18n, Const } from 'qmkit'
 import { Select } from 'antd';
+import './style.less'
+import { useRequest } from 'ahooks';
+import { getusedcodecoupon, getusedcodepromotion } from '../webapi';
 const { Option } = Select;
+const oo = {
+  dayCount: [
+    {
+      "day": "2022-03-01",
+      "count": 2
+    },
+  ],
+  monthCount: [
+    {
+      "month": "2022-3",
+      "count": 22
+    },
+  ],
+  yearCount: [
+    {
+      "year": "2022",
+      "count": 22
+    },
+  ],
+  "total": 2
+}
 
-class Line extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: null,
-      SelectValue: 'day',
-      obj: {
-        dayCount: [
-          {
-            "day": "2022-03-01",
-            "count": 2
-          },
-          {
-            "day": "2022-03-03",
-            "count": 2
-          },
-          {
-            "day": "2022-03-04",
-            "count": 2
-          },
-          {
-            "day": "2022-03-05",
-            "count": 2
-          },
-          {
-            "day": "2022-03-06",
-            "count": 2
-          },
-          {
-            "day": "2022-03-07",
-            "count": 2
-          },
-          {
-            "day": "2022-03-08",
-            "count": 2
-          },
-          {
-            "day": "2022-03-09",
-            "count": 2
-          },
-          {
-            "day": "2022-03-10",
-            "count": 2
-          },
-          {
-            "day": "2022-03-11",
-            "count": 2
-          },
-          {
-            "day": "2022-03-12",
-            "count": 2
-          },
-          {
-            "day": "2022-03-13",
-            "count": 2
-          },
-          {
-            "day": "2022-03-14",
-            "count": 2
-          },
 
-          {
-            "day": "2022-03-15",
-            "count": 2
-          },
-          {
-            "day": "2022-03-16",
-            "count": 2
-          },
-          {
-            "day": "2022-03-17",
-            "count": 2
-          },
-          {
-            "day": "2022-03-18",
-            "count": 2
-          },
-          {
-            "day": "2022-03-19",
-            "count": 2
-          },
-          {
-            "day": "2022-03-20",
-            "count": 2
-          },
-          {
-            "day": "2022-03-21",
-            "count": 2
-          },
 
-          {
-            "day": "2022-04-01",
-            "count": 32
-          },
-          {
-            "day": "2022-05-01",
-            "count": 20
-          },
-          {
-            "day": "2022-06-01",
-            "count": 45
-          },
-          {
-            "day": "2022-07-01",
-            "count": 60
-          }
-        ],
-        monthCount: [
-          {
-            "month": "2022-3",
-            "count": 22
-          },
-          {
-            "month": "2022-4",
-            "count": 23
-          },
-          {
-            "month": "2022-5",
-            "count": 243
-          },
-          {
-            "month": "2022-6",
-            "count": 23
-          }, {
-            "month": "2022-7",
-            "count": 162
-          }
-        ],
-        yearCount: [
-          {
-            "year": "2022",
-            "count": 22
-          },
-          {
-            "year": "2023",
-            "count": 221
-          },
-          {
-            "year": "2024",
-            "count": 120
-          },
-          {
-            "year": "2025",
-            "count": 50
-          },
-          {
-            "year": "2026",
-            "count": 100
-          }
-        ],
-        "total": 2
+const Line = (props: any) => {
+  const [SelectValue, setSelectValue] = useState('day');
+  const [obj, setObj] = useState(oo);
+  // const [option, setOption] = useState(null)
+  const { cid, pageType, startDate, endDate, yName, nameTextStyle, setTotal } = props;
+  const chartRef = useRef<ReactEcharts>()
+
+  useEffect(() => {
+    mygetusedcodepromotion();
+
+  }, [])
+  useEffect(() => {
+    if (obj.dayCount.length > 0 && obj.monthCount.length > 0 && obj.yearCount.length > 0) {
+      getOption(obj)
+    }
+  }, [SelectValue])
+
+  let opt = {
+    backgroundColor: '',
+    tooltip: {
+      trigger: 'axis',
+      triggerOn: "mousemove",
+      //是否一直显示
+      // alwaysShowContent: true,
+      backgroundColor: 'rgba(255, 255, 255, 1)',
+      borderColor: 'rgba(0, 0, 0, 1)',
+      extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
+      textStyle: {
+        color: '#999',
+      },
+      axisPointer: {
+        // 去除鼠标移入竖线
+        type: 'none'
+      },
+      position: function (point, params, dom, rect, size) {
+        return [point[0] - size.contentSize[0] / 2, point[1] - size.contentSize[1] - 20];
+      },
+      formatter: function (params) {
+        // params[0].axisValue这里要根据下拉框选择的年月日进行判断 day month year
+        console.log('params', params)
+        let axisValue;
+        switch (SelectValue) {
+          case 'day':
+            axisValue = params[0].axisValue.split('-').reverse().join('/')
+            break;
+          case 'month':
+            axisValue = params[0].axisValue.split('-').reverse().join('/')
+            break;
+          case 'year':
+            axisValue = params[0].axisValue.split('-').reverse().join('/')
+            break;
+        }
+        let res = `<div class="echartsTooltip" style="text-align: center;">
+          <span style="color: #e2001a;font-weight: 600;">${params[0].value} orders</span>
+          </br>
+          ${axisValue}
+        </div>`;
+
+
+        return res
       }
-    };
+    },
+
+    grid: {
+      left: '1%',
+      right: '1%',
+      top: '13%',
+      bottom: '1%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        // boundaryGap: true,
+        axisLabel: {
+          show: true,
+          textStyle: {
+            color: '#999',
+            fontsize: '11'
+          },
+          //设置x轴区间名称
+          // formatter: (window as any).RCi18n({ id: 'Home.Week' }) + '-{value}'
+          formatter: '{value}'
+        },
+        boundaryGap: false,
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#999'
+          }
+        },
+        data: [],
+        show: true
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        // name: yName.y1,
+        nameTextStyle: {
+          color: '#C7C7C7',
+          fontSize: 12,
+          padding: nameTextStyle.y1,
+        },
+        min: 0,
+        max: 100,
+        // interval: 50,
+        splitNumber: 5,
+        splitLine: { show: true },
+        axisTick: { show: false },
+        axisLine: { show: false },
+        axisLabel: {
+          formatter: '{value}',
+          textStyle: {
+            color: '#999',
+            fontsize: '11'
+          }
+        },
+        color: '#C7C7C7'
+      },
+    ],
+    // legend: {
+    //   type: "plain",
+    //   show: true,
+    //   itemStyle: {
+    //     color: '#e2001a'
+    //   }
+    // },
+    series: [
+      {
+        name: yName.y1,
+        type: 'line',
+        symbol: 'circle',
+        yAxisIndex: 0,
+        barWidth: 25,
+        left: 0,
+        nameGap: 5,
+        nameLoaction: "left",
+        //去掉折线点，鼠标划入时也不会出现
+        // symbol:'none,
+        //去掉折线点，鼠标划入时可以出现
+        showSymbol: false,
+        itemStyle: {
+          normal: {
+            color: '#e2001a',
+            // 折线数据点上数值是否显示
+            label: {
+              show: false, //关闭显示
+              position: 'top', //在上方显示
+              textStyle: {
+                //数值样式
+                color: '#999',
+                fontSize: 12,
+              }
+            }
+          }
+        },
+        // y轴数据
+        data: [100]
+      },
+    ]
   }
 
-  getOption = () => {
-    const { obj, SelectValue } = this.state as any
-    const { yName, data, nameTextStyle } = this.props as any;
+  const sort = (arr) => {
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0; j < arr.length - i - 1; j++) {
+        const ad = new Date(arr[j]?.[SelectValue]);
+        const bd = new Date(arr[j + 1]?.[SelectValue]);
+        // 如果前一个比后一个大,则交换位置
+        if (ad > bd) {
+          let temp = arr[j]
+          arr[j] = arr[j + 1]
+          arr[j + 1] = temp
+        }
+      }
+    }
+    return arr
+  }
+
+  const getOption = (obj) => {
+    console.log('obj', obj)
+    const { yName, nameTextStyle } = props;
     let max;
     let xdata;
     let ydata;
     switch (SelectValue) {
       case 'day':
-        xdata = obj.dayCount.map(item => item.day);
-        ydata = obj.dayCount.map(item => item.count);
-        max = (obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 1.5).toFixed(0);
+        xdata = sort(obj?.dayCount).map(item => item.day).map(item => item.split('-').reverse().join('/'))
+        ydata = obj?.dayCount.map(item => item.count);
+        max = (obj?.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 1.5).toFixed(0);
         break;
       case 'month':
-        xdata = obj.monthCount.map(item => item.month);
-        ydata = obj.monthCount.map(item => item.count);
-        max = obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count + obj.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count * 0.4;
+        xdata = sort(obj?.monthCount).map(item => item.month).map(item => item.split('-').reverse().join('/'))
+        ydata = obj?.monthCount.map(item => item.count);
+        max = (obj?.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count * 1.5).toFixed(0);
         break;
       case 'year':
-        xdata = obj.yearCount.map(item => item.year);
-        ydata = obj.yearCount.map(item => item.count);
-        max = obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count + obj.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count * 0.4;
+        xdata = sort(obj?.yearCount).map(item => item.year)
+        ydata = obj?.yearCount.map(item => item.count);
+        max = (obj?.yearCount.sort((a, b) => a.count - b.count)[obj.yearCount.length - 1].count * 1.5).toFixed(0);
         break;
     }
+    // console.log('xdata', xdata)
     let option = {
       backgroundColor: '',
       tooltip: {
@@ -205,12 +257,16 @@ class Line extends React.Component {
         textStyle: {
           color: '#999',
         },
+        axisPointer: {
+          // 去除鼠标移入竖线
+          type: 'none'
+        },
         position: function (point, params, dom, rect, size) {
-          return [point[0] - size.contentSize[0] / 2, point[1] - size.contentSize[1] - 10];
+          return [point[0] - size.contentSize[0] / 2, point[1] - size.contentSize[1] - 20];
         },
         formatter: function (params) {
           // params[0].axisValue这里要根据下拉框选择的年月日进行判断 day month year
-          console.log('params', params)
+          // console.log('params', params)
           let axisValue;
           switch (SelectValue) {
             case 'day':
@@ -223,7 +279,7 @@ class Line extends React.Component {
               axisValue = params[0].axisValue.split('-').reverse().join('/')
               break;
           }
-          let res = `<div style="text-align: center;">
+          let res = `<div class="echartsTooltip" style="text-align: center;">
             <span style="color: #e2001a;font-weight: 600;">${params[0].value} orders</span>
             </br>
             ${axisValue}
@@ -309,11 +365,16 @@ class Line extends React.Component {
           left: 0,
           nameGap: 5,
           nameLoaction: "left",
+          //去掉折线点，鼠标划入时也不会出现
+          // symbol:'none,
+          //去掉折线点，鼠标划入时可以出现
+          showSymbol: false,
           itemStyle: {
             normal: {
               color: '#e2001a',
+              // 折线数据点上数值是否显示
               label: {
-                show: true, //开启显示
+                show: false, //关闭显示
                 position: 'top', //在上方显示
                 textStyle: {
                   //数值样式
@@ -327,29 +388,59 @@ class Line extends React.Component {
           data: ydata
         },
       ]
-    };
-    return option;
+    }
+    // setOption(option)
+    // console.log('chartRef.current', chartRef.current)
+    const echartInstance = chartRef.current.getEchartsInstance();
+    // then you can use any API of echarts.
+    // echartInstance.hideLoading();
+    echartInstance.setOption(option);
   };
-  handleChange = (value) => {
+  const handleChange = (value) => {
     console.log('value', value)
-    this.setState({
-      SelectValue: value
-    })
+    // if (obj.dayCount.length > 0 && obj.monthCount.length > 0 && obj.yearCount.length > 0) {
+    setSelectValue(value)
+    // }
+
   }
-  render() {
-    const { SelectValue } = this.state as any;
-    return (
-      <div style={{ height: '100%', width: '100%', position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '-11px', right: '20px', zIndex: 9999 }}>
-          <Select value={SelectValue} style={{ width: 120 }} onChange={this.handleChange}>
-            <Option value="day">day</Option>
-            <Option value="month">month</Option>
-            <Option value="year">year</Option>
-          </Select>
-        </div>
-        <ReactEcharts option={this.getOption()} style={{ height: '100%', width: '100%' }} />
+  const mygetusedcodepromotion = async () => {
+    let cont;
+    if (pageType === 'promotion') {
+      const { res: { context } } = await getusedcodepromotion({ id: cid, startDate: startDate || null, endDate: endDate || null });
+      cont = context
+    } else {
+      const { res: { context } } = await getusedcodecoupon({ id: cid, startDate: startDate || null, endDate: endDate || null })
+      cont = context
+    }
+
+    setObj(cont);
+    // const echartInstance = chartRef.current.getEchartsInstance();
+    // echartInstance.showLoading({
+    //   text: "loading",
+    //   color: '#c23531",textColor: "#fff',
+    //   maskColor: 'rgba(255,255,255,0.2)', zlevel: 0,
+    // });
+    if (cont) {
+      cont.total ? setTotal(cont.total) : setTotal(0)
+      getOption(cont)
+    }
+  }
+
+  return (
+    <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '-11px', right: '20px', zIndex: 9999 }}>
+        <Select value={SelectValue} style={{ width: 120 }} onChange={handleChange}>
+          <Option value="day">day</Option>
+          <Option value="month">month</Option>
+          <Option value="year">year</Option>
+        </Select>
       </div>
-    );
-  }
+
+      <ReactEcharts ref={(e) => chartRef.current = e} option={opt} style={{ height: '100%', width: '100%' }} />
+
+
+    </div>
+  );
 }
+
 export default injectIntl(Line)

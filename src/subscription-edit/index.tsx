@@ -276,6 +276,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               recentOrderList: recentOrderList,
               goodsInfo: goodsInfo,
               paymentInfo: paymentInfo,
+              paymentId: subscriptionDetail.paymentId,
               petsId: subscriptionDetail.petsId,
               deliveryAddressId: subscriptionDetail.deliveryAddressId,
               deliveryAddressInfo: subscriptionDetail.consignee,
@@ -474,6 +475,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               this.getSubscriptionDetail();
             }
           );
+        // 超重
+        } else if (res.code === 'K-050330') {
+          this.getSubscriptionDetail();
         }
       })
       .catch(() => { })
@@ -724,7 +728,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             }
           }),
           subscribeId: subscriptionInfo.subscriptionNumber,
-          paymentId: this.state.paymentInfo?.id,
+          paymentId: this.state.paymentId,
         }
       )
       if (checkedRes.code !== Const.SUCCESS_CODE) {
@@ -1254,7 +1258,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             subscribeNum: curChangeProductItem.subscribeNum,
             skuId: selectedSkuIds[0]
           }], 
-          paymentId: this.state.paymentInfo?.id,
+          paymentId: this.state.paymentId,
           deliveryAddressId
         })
       );

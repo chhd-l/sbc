@@ -24,10 +24,13 @@ export const enumConst = {
     '-4': <FormattedMessage id="Marketing.Byemail" />,
   },
   scopeType: {
-    0: <FormattedMessage id="Marketing.all" />,
+    0: <FormattedMessage id="Marketing.all" />, //0
+    1: <FormattedMessage id="Marketing.Custom" />,//4
+    4: <FormattedMessage id="Marketing.Custom" />,
     2: <FormattedMessage id="Marketing.Category" />,
-    1: <FormattedMessage id="Marketing.Custom" />,
-    3: <FormattedMessage id="Marketing.Attribute" />
+    5: <FormattedMessage id="Marketing.Category" />, //5
+    3: <FormattedMessage id="Marketing.Attribute" />, //6
+    6: <FormattedMessage id="Marketing.Attribute" />
   },
   CartLimit: {
     0: <FormattedMessage id="Order.none" />,

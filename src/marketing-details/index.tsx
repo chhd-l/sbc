@@ -191,7 +191,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.PromotionValue" />:
               </div>
               <div className="step-summary-item-text">
-                {Math.ceil((1 - level?.discount) * 100) + '%'}
+                {level?.discount ? ((1 - level?.discount) * 100).toFixed(0) + '%' : null}
               </div>
             </div>
             <div className="step-summary-item">
@@ -251,7 +251,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
               </div>
               <div className="step-summary-item-text">
-                {Math.ceil((1 - level.firstSubscriptionOrderDiscount) * 100) + '%'}
+                {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
               </div>
             </div>
             {level.firstSubscriptionLimitAmount && (
@@ -275,7 +275,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
               </div>
               <div className="step-summary-item-text">
-                {Math.ceil((1 - level.firstSubscriptionOrderDiscount) * 100) + '%'}
+                {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
               </div>
             </div>
             {level.firstSubscriptionLimitAmount && (
@@ -295,7 +295,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                   <FormattedMessage id="Marketing.RestSubscriptionOrderDiscount" />:
                 </div>
                 <div className="step-summary-item-text">
-                  {Math.ceil((1 - level.restSubscriptionOrderDiscount) * 100) + '%'}
+                  {level.restSubscriptionOrderDiscount ? ((1 - level.restSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
                 </div>
               </div>
             )}
@@ -398,7 +398,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                   <FormattedMessage id="Marketing.DoesItCummulate" />:
                 </div>
                 <div className="step-summary-item-text">
-                  {data?.isSuperimposeSubscription === 1 ? 'NO' : 'YES'}
+                  {data?.isSuperimposeSubscription === 0 ? 'NO' : 'YES'}
                 </div>
               </div>
 

@@ -52,7 +52,6 @@ export default function Step6({ setLoading }) {
    *         13：WELCOME_BOX_GIFT
    */
   const createPromotion = async () => {
-    debugger;
     //当选择coupon type
     let detail = null;
     let subType = 0;
@@ -94,7 +93,7 @@ export default function Step6({ setLoading }) {
             : [], //改版用到的字段
         customProductsType:
           formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsType : 0,
-        customProductsIncludeType:formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsIncludeType : 0,
+        customProductsIncludeType: formData.Conditions.scopeType === 1 ? formData.Conditions.customProductsIncludeType : 0,
         attributeValueIds:
           formData.Conditions.scopeType === 3
             ? getAttributeValue(formData.Conditions.attributeValueIds)
@@ -586,9 +585,9 @@ export default function Step6({ setLoading }) {
                 {enumConst.CartLimit[formData.Conditions.CartLimit]}
                 {formData.Conditions.CartLimit === 1 &&
                   '(' +
-                    formData.Conditions.fullMoney +
-                    sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
-                    ')'}
+                  formData.Conditions.fullMoney +
+                  sessionStorage.getItem(cache.SYSTEM_GET_CONFIG) +
+                  ')'}
                 {formData.Conditions.CartLimit === 2 &&
                   `(${formData.Conditions.fullItem}${(window as any).RCi18n({
                     id: 'Marketing.items'
@@ -660,7 +659,7 @@ export default function Step6({ setLoading }) {
             </div>
 
             {formData.PromotionType.typeOfPromotion === 0 &&
-            (formData.Conditions.promotionType === 1 || formData.Conditions.promotionType === 2) ? (
+              (formData.Conditions.promotionType === 1 || formData.Conditions.promotionType === 2) ? (
               <>
                 {formData.Advantage.couponPromotionType === 0 && (
                   <>
@@ -734,7 +733,7 @@ export default function Step6({ setLoading }) {
             ) : (
               <>
                 {formData.Advantage.couponPromotionType !== 4 &&
-                formData.Advantage.couponPromotionType !== 5 ? (
+                  formData.Advantage.couponPromotionType !== 5 ? (
                   <div className="step-summary-item">
                     <div className="step-summary-sub-title">
                       {formData.PromotionType.typeOfPromotion === 1 ? (
@@ -747,7 +746,7 @@ export default function Step6({ setLoading }) {
                     <div className="step-summary-item-text">
                       {formData.Advantage.couponPromotionType === 0 &&
                         formData.Advantage.denomination +
-                          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                       {formData.Advantage.couponPromotionType === 1 &&
                         formData.Advantage.couponDiscount + '%'}
                       {formData.Advantage.couponPromotionType === 3 &&
@@ -761,7 +760,7 @@ export default function Step6({ setLoading }) {
                       {formData.Advantage.couponPromotionType === 3 &&
                         formData.Conditions.fullMoney &&
                         formData.Conditions.fullMoney +
-                          sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                        sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
                     </div>
                   </div>
                 ) : null}
@@ -779,7 +778,7 @@ export default function Step6({ setLoading }) {
               </>
             )}
             {formData.Advantage.couponPromotionType === 4 ||
-            formData.Advantage.couponPromotionType === 5 ? (
+              formData.Advantage.couponPromotionType === 5 ? (
               <div className="step-summary-item">
                 <div className="step-summary-sub-title">
                   {formData.PromotionType.typeOfPromotion === 1 ? (

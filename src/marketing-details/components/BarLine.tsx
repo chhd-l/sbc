@@ -228,12 +228,12 @@ const Line = (props: any) => {
     let ydata;
     switch (SelectValue) {
       case 'day':
-        xdata = sort(obj?.dayCount).map(item => item.day)
+        xdata = sort(obj?.dayCount).map(item => item.day).map(item => item.split('-').reverse().join('/'))
         ydata = obj?.dayCount.map(item => item.count);
         max = (obj?.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 1.5).toFixed(0);
         break;
       case 'month':
-        xdata = sort(obj?.monthCount).map(item => item.month)
+        xdata = sort(obj?.monthCount).map(item => item.month).map(item => item.split('-').reverse().join('/'))
         ydata = obj?.monthCount.map(item => item.count);
         max = (obj?.monthCount.sort((a, b) => a.count - b.count)[obj.monthCount.length - 1].count * 1.5).toFixed(0);
         break;

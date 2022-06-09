@@ -529,14 +529,14 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                       <FormattedMessage id="Marketing.StartDate" />:
                     </div>
                     <div className="step-summary-item-text">
-                      {data?.beginTime.split(' ')[0]}
+                      {data?.beginTime.split(' ')[0].split('-').reverse().join('/')}
                     </div>
                   </div>
                   <div className="step-summary-item" style={{ marginRight: '4rem' }}>
                     <div style={{ fontWeight: 600, fontSize: '15px', marginRight: '1rem' }}>
                       <FormattedMessage id="Marketing.EndDate" />:
                     </div>
-                    <div className="step-summary-item-text">{data?.endTime.split(' ')[0]}</div>
+                    <div className="step-summary-item-text">{data?.endTime.split(' ')[0].split('-').reverse().join('/')}</div>
                   </div>
                   <div className="step-summary-item" style={{ marginRight: '4rem' }}>
                     <div style={{ fontWeight: 600, fontSize: '15px', marginRight: '1rem' }}>

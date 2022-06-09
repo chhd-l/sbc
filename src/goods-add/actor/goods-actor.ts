@@ -1,6 +1,6 @@
 import { Action, Actor } from 'plume2';
 import { IList, IMap } from 'typings/globalType';
-import { treeNesting } from '../../../web_modules/qmkit/utils/utils'
+import { treeNesting } from '../../../web_modules/qmkit/utils/utils';
 
 export default class GoodsActor extends Actor {
   defaultState() {
@@ -89,14 +89,14 @@ export default class GoodsActor extends Actor {
 
   /**
    * 存储sub-sku弹框里选择的行
-   * @param state 
-   * @param dataList 
-   * @returns 
+   * @param state
+   * @param dataList
+   * @returns
    */
-   @Action('goodsActor: setSubSkuSelectdRows')
-   setSubSkuSelectdRows(state, selectdRows: IList) {
-     return state.set('subSkuSelectdRows', selectdRows);
-   }
+  @Action('goodsActor: setSubSkuSelectdRows')
+  setSubSkuSelectdRows(state, selectdRows: IList) {
+    return state.set('subSkuSelectdRows', selectdRows);
+  }
 
   /**
    * 初始化分类
@@ -106,7 +106,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initCateList')
   initCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = treeNesting(dataList,'cateParentId','cateId')
+    const newDataList = treeNesting(dataList, 'cateParentId', 'cateId');
     return state.set('cateList', newDataList).set('sourceCateList', dataList);
   }
 
@@ -118,7 +118,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initStoreCateList')
   initStoreCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = treeNesting(dataList,'cateParentId','cateId')
+    const newDataList = treeNesting(dataList, 'cateParentId', 'cateId');
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
@@ -171,7 +171,9 @@ export default class GoodsActor extends Actor {
         const children = getGoodsCate
           .filter((item) => item.get('cateParentId') == data.get('storeCateId'))
           .map((childrenData) => {
-            const lastChildren = getGoodsCate.filter((item) => item.get('cateParentId') == childrenData.get('storeCateId'));
+            const lastChildren = getGoodsCate.filter(
+              (item) => item.get('cateParentId') == childrenData.get('storeCateId')
+            );
             if (!lastChildren.isEmpty()) {
               const sum = lastChildren.reduce(function (prev, cur) {
                 return cur.get('productNo') + prev;
@@ -231,8 +233,12 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:randomGoodsNo')
   randomGoodsNo(state, prefix) {
-    let number = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
-    return state.update('goods', (goods) => goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number));
+    let number =
+      new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) +
+      Math.random().toString().slice(2, 5);
+    return state.update('goods', (goods) =>
+      goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number)
+    );
   }
 
   /**

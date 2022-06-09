@@ -66,6 +66,7 @@ import {
 import config from '../../web_modules/qmkit/config';
 import * as webApi from '@/shop/webapi';
 import { getEditProductResource, getPreEditProductResource } from '@/goods-add/webapi';
+import { isNumber } from 'lodash';
 let _tempGoodsDescriptionDetailList: any = {};
 export default class AppStore extends Store {
   constructor(props: IOptions) {
@@ -1731,6 +1732,17 @@ export default class AppStore extends Store {
     goods = goods.set('customFlag', data.get('openUserPrice') ? 1 : 0);
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
+
+    let isTopPlp = 0;
+    if (isNumber(goods.get('isTopPlp'))) {
+      isTopPlp = goods.get('isTopPlp');
+    } else {
+      const topPlp = goods.get('isTopPlp').toJS();
+      if (topPlp.length !== 0) {
+        isTopPlp = topPlp[0];
+      }
+    }
+    goods = goods.set('isTopPlp', isTopPlp);
     param = param.set('goods', goods);
 
     // -----商品等级价格列表-------
@@ -1794,7 +1806,7 @@ export default class AppStore extends Store {
     param = param.set('goodsFilterRelList', this.state().get('productFilter'));
     param = param.set('weightValue', this.state().get('selectedBasePrice'));
     param = param.set('goodsDescriptionDetailList', detailsList);
-    param = param.set('isTopPlp', this.state().get('isTopPlp') ? 1 : 0);
+
     //console.log(this.state().get('productFilter'), 2222);
 
     //添加参数，是否允许独立设价

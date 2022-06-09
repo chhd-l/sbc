@@ -883,6 +883,7 @@ class GoodsForm extends React.Component<any, any> {
             </FormItem>
           </Col>
         </Row>
+
         <Row>
           <Col span={16}>
             {/* productSubtitle */}
@@ -901,10 +902,13 @@ class GoodsForm extends React.Component<any, any> {
               label={<FormattedMessage id="Product.PlacefirstonPLP" />}
             >
               {getFieldDecorator('isTopPlp', {
-                valuePropName: 'checked',
-                onChange: (e) => this._editGoods('isTopPlp', e.target.checked),
-                initialValue: Boolean(goods.get('isTopPlp'))
-              })(<Checkbox />)}
+                onChange: this._editGoods.bind(this, 'isTopPlp'),
+                initialValue: goods.get('isTopPlp') === 1 ? [1] : [0]
+              })(
+                <Checkbox.Group>
+                  <Checkbox value={1} />
+                </Checkbox.Group>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -995,6 +999,7 @@ class GoodsForm extends React.Component<any, any> {
    * 修改商品项
    */
   _editGoods = (key: string, e) => {
+    console.log(key, e, 9);
     const {
       editGoods,
       editGoodsItem,
@@ -1187,6 +1192,7 @@ class GoodsForm extends React.Component<any, any> {
       let goods = Map({
         [key]: fromJS(e)
       });
+
       updateGoodsForm(this.props.form);
       editGoods(goods);
     }

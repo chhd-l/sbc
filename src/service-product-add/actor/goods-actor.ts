@@ -95,7 +95,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initCateList')
   initCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = treeNesting(dataList,'cateParentId','cateId')
+    const newDataList = treeNesting(dataList, 'cateParentId', 'cateId');
     return state.set('cateList', newDataList).set('sourceCateList', dataList);
   }
 
@@ -107,7 +107,7 @@ export default class GoodsActor extends Actor {
   @Action('goodsActor: initStoreCateList')
   initStoreCateList(state, dataList: IList) {
     // 改变数据形态，变为层级结构
-    const newDataList = treeNesting(dataList,'cateParentId','cateId')
+    const newDataList = treeNesting(dataList, 'cateParentId', 'cateId');
     return state.set('storeCateList', newDataList).set('sourceStoreCateList', dataList);
   }
 
@@ -149,7 +149,7 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:getGoodsCate')
   getGoodsCate(state, getGoodsCate) {
-    const newDataList = treeNesting(getGoodsCate,'cateParentId','cateId')
+    const newDataList = treeNesting(getGoodsCate, 'cateParentId', 'cateId');
     return state.set('getGoodsCate', newDataList).set('sourceGoodCateList', getGoodsCate);
   }
 
@@ -191,8 +191,12 @@ export default class GoodsActor extends Actor {
 
   @Action('goodsActor:randomGoodsNo')
   randomGoodsNo(state, prefix) {
-    let number = new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) + Math.random().toString().slice(2, 5);
-    return state.update('goods', (goods) => goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number));
+    let number =
+      new Date(sessionStorage.getItem('defaultLocalDateTime')).getTime().toString().slice(4, 10) +
+      Math.random().toString().slice(2, 5);
+    return state.update('goods', (goods) =>
+      goods.set('goodsNo', 'P' + number).set('internalGoodsNo', prefix + '_P' + number)
+    );
   }
 
   /**

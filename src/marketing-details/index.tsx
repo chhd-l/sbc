@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Col, Row } from 'antd';
 import { BreadCrumb, cache, RCi18n } from 'qmkit';
 import { useParams } from 'react-router-dom';
 import { useRequest } from 'ahooks';
@@ -49,6 +49,9 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
       case 2:
         list = fullGiftLevelList;
         break;
+      case 4:
+        list = fullLeafletLevelList;
+        break;
       case 5:
         list = fullLeafletLevelList;
         break;
@@ -57,7 +60,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
     const level = list[0];
     const isAmount = Boolean(level.fullAmount) ? 1 : 2;
     return (
-      <div className="step-summary-item-text">
+      <Col className="step-summary-item-text">
         {enumConst.CartLimit[isAmount]}
         {isAmount === 1 &&
           '(' +
@@ -68,7 +71,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
           `(${level.fullCount}${(window as any).RCi18n({
             id: 'Marketing.items'
           })})`}
-      </div>
+      </Col>
     )
     // return (
     //   <div className="step-summary-item-text">
@@ -164,6 +167,9 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
       case 2:
         list = fullGiftLevelList;
         break;
+      case 4:
+        list = fullLeafletLevelList;
+        break;
       case 5:
         list = fullLeafletLevelList;
         break;
@@ -174,66 +180,76 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
     if ([0, 3].includes(TypeOfPurchase)) {
       switch (marketingType) {
         case 0:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.reduction}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            </div>
-          </div>
+            </Col>
+          </Row>
           break;
         //Percentage 显示value和discount两行
         case 1:
           return <>
-            <div className="step-summary-item">
-              <div className="step-summary-sub-title">
+            <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.PromotionValue" />:
-              </div>
-              <div className="step-summary-item-text">
+              </Col>
+              <Col className="step-summary-item-text">
                 {level?.discount ? ((1 - level?.discount) * 100).toFixed(0) + '%' : null}
-              </div>
-            </div>
-            <div className="step-summary-item">
-              <div className="step-summary-sub-title">
+              </Col>
+            </Row>
+            <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.DiscountLimit" />:
-              </div>
-              <div className="step-summary-item-text">
+              </Col>
+              <Col className="step-summary-item-text">
                 {level?.limitAmount}
                 {sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-              </div>
-            </div>
+              </Col>
+            </Row>
           </>
           break;
         case 3:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            </div>
-          </div>
+            </Col>
+          </Row>
           break;
         case 2:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
-            </div>
-          </div>
+            </Col>
+          </Row>
+          break;
+        case 4:
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
+              <FormattedMessage id="Marketing.PromotionValue" />:
+            </Col>
+            <Col className="step-summary-item-text">
+              {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
+            </Col>
+          </Row>
           break;
         case 5:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
-            </div>
-          </div>
+            </Col>
+          </Row>
           break;
           break;
       }
@@ -246,101 +262,111 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
       switch (marketingType) {
         case 0:
           return <>
-            <div className="step-summary-item">
-              <div className="step-summary-sub-title">
+            <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
-              </div>
-              <div className="step-summary-item-text">
+              </Col>
+              <Col className="step-summary-item-text">
                 {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
-              </div>
-            </div>
+              </Col>
+            </Row>
             {level.firstSubscriptionLimitAmount && (
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.FirstSubscriptionLimitAmount" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {level.firstSubscriptionLimitAmount +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                </div>
-              </div>
+                </Col>
+              </Row>
             )}
 
           </>
           break;
         case 1:
           return <>
-            <div className="step-summary-item">
-              <div className="step-summary-sub-title">
+            <Row className="step-summary-item">
+              <Col className="step-summary-sub-title">
                 <FormattedMessage id="Marketing.FirstSubscriptionOrderDiscount" />:
-              </div>
-              <div className="step-summary-item-text">
+              </Col>
+              <Col className="step-summary-item-text">
                 {level.firstSubscriptionOrderDiscount ? ((1 - level.firstSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
-              </div>
-            </div>
+              </Col>
+            </Row>
             {level.firstSubscriptionLimitAmount && (
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.FirstSubscriptionLimitAmount" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {level.firstSubscriptionLimitAmount +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                </div>
-              </div>
+                </Col>
+              </Row>
             )}
             {level.restSubscriptionOrderDiscount && (
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.RestSubscriptionOrderDiscount" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {level.restSubscriptionOrderDiscount ? ((1 - level.restSubscriptionOrderDiscount) * 100).toFixed(0) + '%' : null}
-                </div>
-              </div>
+                </Col>
+              </Row>
             )}
             {level.restSubscriptionLimitAmount && (
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.RestSubscriptionLimitAmount" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {level.restSubscriptionLimitAmount +
                     sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                </div>
-              </div>
+                </Col>
+              </Row>
             )}
           </>
           break;
         case 3:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            </div>
-          </div>
+            </Col>
+          </Row>
           break;
         case 2:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullGiftDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
-            </div>
-          </div>
+            </Col>
+          </Row>
+          break;
+        case 4:
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
+              <FormattedMessage id="Marketing.PromotionValue" />:
+            </Col>
+            <Col className="step-summary-item-text">
+              {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
+            </Col>
+          </Row>
           break;
         case 5:
-          return <div className="step-summary-item">
-            <div className="step-summary-sub-title">
+          return <Row className="step-summary-item">
+            <Col className="step-summary-sub-title">
               <FormattedMessage id="Marketing.PromotionValue" />:
-            </div>
-            <div className="step-summary-item-text">
+            </Col>
+            <Col className="step-summary-item-text">
               {level?.fullLeafletDetailList.map((item) => (item?.productName ? item?.productName + ' ' : null))}
-            </div>
-          </div>
+            </Col>
+          </Row>
           break;
       }
     }
@@ -358,107 +384,115 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
         <div className="step-title">
           <FormattedMessage id="Marketing.PromotionDetails" />
         </div>
-        <div className="step-summary">
+        <div style={{ display: 'flex', paddingLeft: '10%' }}>
           {/* 左边 */}
-          <div>
+          <div style={{ marginRight: '150px', flexShrink: 0 }}>
             <div>
               <div className="step-summary-title">
                 <FormattedMessage id="Marketing.BasicSetting" />
               </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.PromotionName" />:
-                </div>
-                <div className="step-summary-item-text">{data?.marketingName}</div>
-              </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+                </Col>
+                <Col className="step-summary-item-text">{data?.marketingName}</Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.StartAndEndTime" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {data?.beginTime.slice(0, data?.beginTime.indexOf('.'))} - {data?.endTime.slice(0, data?.endTime.indexOf('.'))}
-                </div>
-              </div>
+                </Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
+                  <FormattedMessage id="Marketing.CreateBy" />:
+                </Col>
+                <Col className="step-summary-item-text">
+                  {data?.createName}
+                </Col>
+              </Row>
             </div>
 
             <div>
               <div className="step-summary-title">
                 <FormattedMessage id="Marketing.Conditions" />
               </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.TypeOfPurchase" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {enumConst.promotionType[data?.promotionType]}
-                </div>
-              </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+                </Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.DoesItCummulate" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {data?.isSuperimposeSubscription === 0 ? 'NO' : 'YES'}
-                </div>
-              </div>
+                </Col>
+              </Row>
 
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.GroupOfCustomer" />:
-                </div>
-                <div className="step-summary-item-text">{enumConst.joinLevel[data?.joinLevel]}</div>
-              </div>
+                </Col>
+                <Col className="step-summary-item-text">{enumConst.joinLevel[data?.joinLevel]}</Col>
+              </Row>
 
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.ProductsInTheCart" />:
-                </div>
-                <div className="step-summary-item-text">{enumConst.scopeType[data?.scopeType]}</div>
-              </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+                </Col>
+                <Col className="step-summary-item-text">{enumConst.scopeType[data?.scopeType]}</Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.CartLimit" />:
-                </div>
+                </Col>
                 {renderCartLimit()}
-              </div>
+              </Row>
             </div>
           </div>
           {/* 右边 */}
-          <div>
+          <div style={{ flexGrow: 2 }}>
             <div>
               <div className="step-summary-title">
                 <FormattedMessage id="Marketing.PromotionType" />
               </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.TypeOfPromotion" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {/* 暂时写死 */}
                   <FormattedMessage id="Order.PromotionCode" />
                   {/* {enumConst.typeOfPromotion[data?.promotionType]} */}
-                </div>
-              </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+                </Col>
+              </Row>
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.CodesName" />:
-                </div>
-                <div className="step-summary-item-text">{data?.promotionCode}</div>
-              </div>
+                </Col>
+                <Col className="step-summary-item-text">{data?.promotionCode}</Col>
+              </Row>
             </div>
 
             <div>
               <div className="step-summary-title">
                 <FormattedMessage id="Marketing.Advantage" />
               </div>
-              <div className="step-summary-item">
-                <div className="step-summary-sub-title">
+              <Row className="step-summary-item">
+                <Col className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.AdvantageType" />:
-                </div>
-                <div className="step-summary-item-text">
+                </Col>
+                <Col className="step-summary-item-text">
                   {enumConst.couponPromotionType[data?.marketingType]}
-                </div>
-              </div>
+                </Col>
+              </Row>
               {/* <div className="step-summary-item">
                 <div className="step-summary-sub-title">
                   <FormattedMessage id="Marketing.PromotionValue" />:
@@ -472,7 +506,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
             </div>
           </div>
         </div>
-        <div style={{ paddingLeft: '19.5%' }}>
+        <div style={{ paddingLeft: '10%' }}>
           <div className='step-chrats'>
             <div>
               <div className="step-summary-title">

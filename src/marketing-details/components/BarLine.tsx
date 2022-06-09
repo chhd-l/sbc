@@ -12,6 +12,7 @@ import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RCi18n, Const } from 'qmkit'
 import { Select } from 'antd';
+import './style.less'
 const { Option } = Select;
 
 class Line extends React.Component {
@@ -179,7 +180,7 @@ class Line extends React.Component {
       case 'day':
         xdata = obj.dayCount.map(item => item.day);
         ydata = obj.dayCount.map(item => item.count);
-        max = (obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 1.5).toFixed(0);
+        max = (obj.dayCount.sort((a, b) => a.count - b.count)[obj.dayCount.length - 1].count * 2).toFixed(0);
         break;
       case 'month':
         xdata = obj.monthCount.map(item => item.month);
@@ -198,15 +199,19 @@ class Line extends React.Component {
         trigger: 'axis',
         triggerOn: "mousemove",
         //是否一直显示
-        // alwaysShowContent: true,
+        alwaysShowContent: true,
         backgroundColor: 'rgba(255, 255, 255, 1)',
         borderColor: 'rgba(0, 0, 0, 1)',
         extraCssText: 'box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);',
         textStyle: {
           color: '#999',
         },
+        axisPointer: {
+          // 去除鼠标移入竖线
+          type: 'none'
+        },
         position: function (point, params, dom, rect, size) {
-          return [point[0] - size.contentSize[0] / 2, point[1] - size.contentSize[1] - 10];
+          return [point[0] - size.contentSize[0] / 2, point[1] - size.contentSize[1] - 20];
         },
         formatter: function (params) {
           // params[0].axisValue这里要根据下拉框选择的年月日进行判断 day month year
@@ -223,7 +228,7 @@ class Line extends React.Component {
               axisValue = params[0].axisValue.split('-').reverse().join('/')
               break;
           }
-          let res = `<div style="text-align: center;">
+          let res = `<div class="echartsTooltip" style="text-align: center;">
             <span style="color: #e2001a;font-weight: 600;">${params[0].value} orders</span>
             </br>
             ${axisValue}
@@ -309,6 +314,10 @@ class Line extends React.Component {
           left: 0,
           nameGap: 5,
           nameLoaction: "left",
+          //去掉折线点，鼠标划入时也不会出现
+          // symbol:'none,
+          //去掉折线点，鼠标划入时可以出现
+          showSymbol: false,
           itemStyle: {
             normal: {
               color: '#e2001a',

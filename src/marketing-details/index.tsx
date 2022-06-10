@@ -222,14 +222,14 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
           </>
           break;
         case 3:
-          return <Row className="step-summary-item">
-            <Col className="step-summary-sub-title">
-              <FormattedMessage id="Marketing.PromotionValue" />:
-            </Col>
-            <Col className="step-summary-item-text">
-              {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            </Col>
-          </Row>
+          // return <Row className="step-summary-item">
+          //   <Col className="step-summary-sub-title">
+          //     <FormattedMessage id="Marketing.PromotionValue" />:
+          //   </Col>
+          //   <Col className="step-summary-item-text">
+          //     {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+          //   </Col>
+          // </Row>
           break;
         case 2:
           return <Row className="step-summary-item">
@@ -339,14 +339,14 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
           </>
           break;
         case 3:
-          return <Row className="step-summary-item">
-            <Col className="step-summary-sub-title">
-              <FormattedMessage id="Marketing.PromotionValue" />:
-            </Col>
-            <Col className="step-summary-item-text">
-              {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-            </Col>
-          </Row>
+          // return <Row className="step-summary-item">
+          //   <Col className="step-summary-sub-title">
+          //     <FormattedMessage id="Marketing.PromotionValue" />:
+          //   </Col>
+          //   <Col className="step-summary-item-text">
+          //     {level?.fullCount}{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+          //   </Col>
+          // </Row>
           break;
         case 2:
           return <Row className="step-summary-item">

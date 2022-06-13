@@ -12,11 +12,13 @@ import 'echarts/lib/component/markPoint';
 import ReactEcharts from 'echarts-for-react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { RCi18n, Const } from 'qmkit'
-import { Select } from 'antd';
+import { Select, DatePicker, Spin } from 'antd';
 import './style.less'
 import { useRequest } from 'ahooks';
 import { getusedcodecoupon, getusedcodepromotion } from '../webapi';
+import moment from 'moment';
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 const oo = {
   dayCount: [
     {
@@ -44,6 +46,8 @@ const oo = {
 const Line = (props: any) => {
   const [SelectValue, setSelectValue] = useState('day');
   const [obj, setObj] = useState(oo);
+  const [dateValue, setDateValue] = useState(null);
+  const [loading, setLoading] = useState(false);
   // const [option, setOption] = useState(null)
   const { cid, pageType, startDate, endDate, yName, nameTextStyle, setTotal } = props;
   const chartRef = useRef<ReactEcharts>()
@@ -292,7 +296,7 @@ const Line = (props: any) => {
 
       grid: {
         left: '1%',
-        right: '1%',
+        right: '5%',
         top: '13%',
         bottom: '1%',
         containLabel: true
@@ -403,14 +407,16 @@ const Line = (props: any) => {
     // }
 
   }
-  const mygetusedcodepromotion = async () => {
+  const mygetusedcodepromotion = async (start?: string, end?: string) => {
     let cont;
     if (pageType === 'promotion') {
-      const { res: { context } } = await getusedcodepromotion({ id: cid, startDate: startDate || null, endDate: endDate || null });
-      cont = context
+      const { res: { context } } = await getusedcodepromotion({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null });
+      cont = context;
+      setLoading(false)
     } else {
-      const { res: { context } } = await getusedcodecoupon({ id: cid, startDate: startDate || null, endDate: endDate || null })
-      cont = context
+      const { res: { context } } = await getusedcodecoupon({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null })
+      cont = context;
+      setLoading(false)
     }
 
     setObj(cont);
@@ -425,21 +431,50 @@ const Line = (props: any) => {
       getOption(cont)
     }
   }
+  const onOk = (date) => {
+    setLoading(true)
+    console.log('date', date)
+    const datearr = date.map((item) => {
+      return moment(item).format('YYYY-MM-DD');
+    });
+    console.log('datearr', datearr);
+    mygetusedcodepromotion(...datearr);
+  }
 
   return (
-    <div style={{ height: '100%', width: '100%', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: '-11px', right: '20px', zIndex: 9999 }}>
+
+    <div className='echarts-content' style={{ height: '100%', width: '100%', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: '-11px', right: '192px', zIndex: 9999 }}>
+        <RangePicker
+          size="large"
+          // value={dateValue}
+          showTime={true}
+          format={'DD/MM/YYYY'}
+          placeholder={[
+            (window as any).RCi18n({
+              id: 'Marketing.StartTime'
+            }), (window as any).RCi18n({
+              id: 'Marketing.EndTime'
+            })
+          ]}
+          getCalendarContainer={(trigger: any) => trigger.parentNode}
+          onOk={onOk}
+          disabledDate={(current) => current && current > moment(endDate).endOf('day') || current < moment(startDate).startOf('day')}
+        />
+      </div>
+      <div style={{ position: 'absolute', top: '-11px', right: '54px', zIndex: 9998 }}>
         <Select value={SelectValue} style={{ width: 120 }} onChange={handleChange}>
-          <Option value="day">day</Option>
-          <Option value="month">month</Option>
-          <Option value="year">year</Option>
+          <Option value="day"><FormattedMessage id="Marketing.echartsDay" /></Option>
+          <Option value="month"><FormattedMessage id="Marketing.echartsMonth" /></Option>
+          <Option value="year"><FormattedMessage id="Marketing.echartsYear" /></Option>
         </Select>
       </div>
-
-      <ReactEcharts ref={(e) => chartRef.current = e} option={opt} style={{ height: '100%', width: '100%' }} />
-
+      <Spin spinning={loading} style={{ height: '100%', width: '100%' }}>
+        <ReactEcharts ref={(e) => chartRef.current = e} option={opt} style={{ height: '100%', width: '100%' }} />
+      </Spin>
 
     </div>
+
   );
 }
 

@@ -1741,12 +1741,14 @@ export default class AppStore extends Store {
     // 是否叠加客户等级折扣
     goods = goods.set('levelDiscountFlag', data.get('levelDiscountFlag') ? 1 : 0);
     let isTopPlp = 0;
-    if (isNumber(goods.get('isTopPlp'))) {
-      isTopPlp = goods.get('isTopPlp');
-    } else {
-      const topPlp = goods.get('isTopPlp').toJS();
-      if (topPlp.length !== 0) {
-        isTopPlp = topPlp[0];
+    if (goods.get('isTopPlp')) {
+      if (isNumber(goods.get('isTopPlp'))) {
+        isTopPlp = goods.get('isTopPlp');
+      } else {
+        const topPlp = goods.get('isTopPlp').toJS();
+        if (topPlp.length !== 0) {
+          isTopPlp = topPlp[0];
+        }
       }
     }
     goods = goods.set('isTopPlp', isTopPlp);

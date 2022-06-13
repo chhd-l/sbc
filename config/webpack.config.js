@@ -245,7 +245,7 @@ module.exports = function (webpackEnv, envCode) {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 1000,
-                name: 'static/media/[name].[hash:8].[ext]',
+                name: 'static/media/[name].[hash:8].[ext]?[hash:8]',
               },
             },
             {

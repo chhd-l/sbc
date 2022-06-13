@@ -26,14 +26,15 @@ class GoodsModal extends React.Component<any, any> {
     //英文的product category name
     goodsCate?: string;
     isSubsrciptionEdit?: boolean;
-    pageType?:string
+    pageType?: string
   };
 
   constructor(props) {
     super(props);
     this.state = {
       selectedSkuIds: props.selectedSkuIds ? props.selectedSkuIds : [],
-      selectedRows: props.selectedRows ? props.selectedRows : fromJS([])
+      selectedRows: props.selectedRows ? props.selectedRows : fromJS([]),
+      timer: null,
     };
   }
 
@@ -76,13 +77,30 @@ class GoodsModal extends React.Component<any, any> {
         width={1100}
         visible={visible}
         onOk={() => {
+          let { timer } = this.state
           if (application === 'saleType') {
-            onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+            if (timer) {
+              clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+              onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+            }, 1000)
+            this.setState({
+              timer
+            })
           } else if (skuLimit && selectedSkuIds.length > skuLimit) {
             message.error(`Choose up to ${skuLimit} items`);
             // message.error('Choose up to 20 items');
           } else {
-            onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+            if (timer) {
+              clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+              onOkBackFun(this.state.selectedSkuIds, this.state.selectedRows);
+            }, 1000)
+            this.setState({
+              timer
+            })
           }
         }}
         onCancel={() => {

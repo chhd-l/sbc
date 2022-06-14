@@ -1,8 +1,9 @@
 import Common from './config-common';
 
 const host = window.location.host;
-const SITE_NAME = host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC';
+// const SITE_NAME = host.indexOf('myvetreco') > -1 ? 'MYVETRECO' : 'RC';
 
+const SITE_NAME ='MYVETRECO'
 //配置colors值方便js中读取
 const COLORS = {
   PRIMARY_COLOR: SITE_NAME === 'MYVETRECO' ? '#448bff' : '#e2001a',
@@ -11,10 +12,11 @@ const COLORS = {
 
 export default {
   /* dev */
-  HOST: 'http://121.36.199.41:8390',
+  // HOST: 'http://121.36.199.41:8390',
 
   /* stg */
   //HOST: 'https://storestg.royalcanin.com/api',
+  HOST: 'https:///store.myvetreco.co/api',
   PAYMENT_ENVIRONMENT:'test',
   /* product */
   //HOST: 'https://eurostore.royalcanin.com/api',

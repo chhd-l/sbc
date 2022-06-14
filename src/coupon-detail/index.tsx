@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StoreProvider } from 'plume2';
 
 import { Breadcrumb, Tabs } from 'antd';
-import { Headline, BreadCrumb } from 'qmkit';
+import { Headline, BreadCrumb, Const } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
 import Appstore from './store';
 import CouponBasicInfo from './components/coupon-basic-info';
@@ -34,7 +34,8 @@ export default class CouponInfo extends Component<any, any> {
         <div className="container">
           <Tabs defaultActiveKey={this.props.match.params.key}>
             <Tabs.TabPane tab={<FormattedMessage id="Marketing.CouponDetail" />} key="1">
-              <CouponDetils />
+              {Const.SITE_NAME === 'MYVETRECO' ? <CouponBasicInfo /> : <CouponDetils />}
+
             </Tabs.TabPane>
             <Tabs.TabPane tab={<FormattedMessage id="Marketing.ActivitiesInfo" />} key="2">
               <ActivitiesInfo couponId={this.props.match.params.cid} />

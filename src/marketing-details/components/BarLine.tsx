@@ -464,7 +464,7 @@ const Line = (props: any) => {
         />
       </div>
       <div style={{ position: 'absolute', top: '-11px', right: '54px', zIndex: 9998 }}>
-        <Select value={SelectValue} style={{ width: 120 }} onChange={handleChange}>
+        <Select value={SelectValue} style={{ width: '120px' }} onChange={handleChange}>
           <Option value="day"><FormattedMessage id="Marketing.echartsDay" /></Option>
           <Option value="month"><FormattedMessage id="Marketing.echartsMonth" /></Option>
           <Option value="year"><FormattedMessage id="Marketing.echartsYear" /></Option>

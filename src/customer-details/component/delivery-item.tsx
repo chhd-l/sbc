@@ -613,6 +613,24 @@ class DeliveryItem extends React.Component<Iprop, any> {
     }
   };
 
+  jpLastNameKatakanaValidator = (rule, value, callback) => {
+    this.jpKatakanaNameValidator(rule, value, callback)
+  }
+
+  jpFirstNameKatakanaValidator =(rule, value, callback) => {
+    this.jpKatakanaNameValidator(rule, value, callback)
+  }
+
+  jpKatakanaNameValidator = (rule,value,callback) =>{
+    const jpKatakanaNameReg = /^(?=.*?[\u30A1-\u30FC])[\u30A1-\u30FC\s]*$/;
+    const jpKatakanaNameValid = jpKatakanaNameReg.test(value);
+    if(!jpKatakanaNameValid){
+      callback(RCi18n({ id: 'PetOwner.KatakanaNameTip' }));
+    }else {
+      callback()
+    }
+  }
+
   render() {
     const { delivery, addressType } = this.props;
     const { fields, suggestionAddress, checkedAddress, validationSuccess, storeId } = this.state;
@@ -672,7 +690,17 @@ class DeliveryItem extends React.Component<Iprop, any> {
                               validator: field.fieldName === 'Address1' && field.inputSearchBoxFlag === 1
                                 ? this.ruAddress1Validator
                                 : (rule, value, callback) => callback()
-                            }
+                            },
+                            {
+                              validator:field.fieldName === 'Last name katakana'
+                                ? this.jpLastNameKatakanaValidator
+                                : (rule, value, callback) => callback()
+                            },
+                            {
+                              validator:field.fieldName === 'First name katakana'
+                                ? this.jpFirstNameKatakanaValidator
+                                : (rule, value, callback) => callback()
+                            },
                           ].filter((r) => !!r)
                         })(this.renderField(field))
                       }

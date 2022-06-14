@@ -42,7 +42,6 @@ const oo = {
 }
 
 
-
 const Line = (props: any) => {
   const [SelectValue, setSelectValue] = useState('day');
   const [obj, setObj] = useState(oo);
@@ -410,12 +409,12 @@ const Line = (props: any) => {
   const mygetusedcodepromotion = async (start?: string, end?: string) => {
     let cont;
     if (pageType === 'promotion') {
-      const { res: { context } } = await getusedcodepromotion({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null });
-      cont = context;
+      const { res } = await getusedcodepromotion({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null });
+      cont = (res as any).context;
       setLoading(false)
     } else {
-      const { res: { context } } = await getusedcodecoupon({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null })
-      cont = context;
+      const { res } = await getusedcodecoupon({ id: cid, startDate: start || startDate || null, endDate: end || endDate || null })
+      cont = (res as any).context;
       setLoading(false)
     }
 
@@ -457,6 +456,8 @@ const Line = (props: any) => {
               id: 'Marketing.EndTime'
             })
           ]}
+          // defaultPickerValue={[moment(startDate), moment(endDate)]}
+          defaultValue={[moment(startDate), moment(endDate)]}
           getCalendarContainer={(trigger: any) => trigger.parentNode}
           onOk={onOk}
           disabledDate={(current) => current && current > moment(endDate).endOf('day') || current < moment(startDate).startOf('day')}

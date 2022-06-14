@@ -1252,20 +1252,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         deleteSkuId: goodsInfo[0]?.skuId,
         addSkuId: selectedSkuIds[0]
       };
-      const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
-        Object.assign({}, params, { 
-          goodsItems: [{
-            subscribeNum: curChangeProductItem.subscribeNum,
-            skuId: selectedSkuIds[0]
-          }], 
-          paymentId: this.state.paymentId,
-          deliveryAddressId
-        })
-      );
-      if (checkedRes.code !== Const.SUCCESS_CODE) {
-        // throw new Error(checkedRes.message)
-        return false;
-      }
+      // const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
+      //   Object.assign({}, params, { 
+      //     goodsItems: [{
+      //       subscribeNum: curChangeProductItem.subscribeNum,
+      //       skuId: selectedSkuIds[0]
+      //     }], 
+      //     paymentId: this.state.paymentId,
+      //     deliveryAddressId
+      //   })
+      // );
+      // if (checkedRes.code !== Const.SUCCESS_CODE) {
+      //   // throw new Error(checkedRes.message)
+      //   return false;
+      // }
       let { res } = await webapi.changeSubscriptionGoods(params);
       if (res.code === Const.SUCCESS_CODE) {
         message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));

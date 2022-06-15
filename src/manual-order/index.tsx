@@ -34,6 +34,7 @@ class ManualOrder extends Component<any, any> {
       felinStore: false,
       guestId: '',
       notNext: false,
+      payinfotoken: '',
     };
     this.next = this.next.bind(this);
     this.prev = this.prev.bind(this);
@@ -110,6 +111,9 @@ class ManualOrder extends Component<any, any> {
       promocode = res.context?.couponCode;
     }
     this.turnShowPage(shopToken, promocode);
+    this.setState({
+      payinfotoken: shopToken
+    })
     if (other !== 'other') {
       current = current + 1;
       this.setState({
@@ -200,7 +204,7 @@ class ManualOrder extends Component<any, any> {
     })
   }
   render() {
-    const { current, title, customer, storeId, status, url, context, guest, felinStore, guestId } = this.state;
+    const { current, title, customer, storeId, status, url, context, guest, felinStore, guestId, payinfotoken } = this.state;
     const steps = [
       {
         title: 'Consumer information',
@@ -243,6 +247,7 @@ class ManualOrder extends Component<any, any> {
             customer={customer}
             stepName={'Delivery & payment information'}
             felinStore={felinStore}
+            payinfotoken={payinfotoken}
           />
         )
       }

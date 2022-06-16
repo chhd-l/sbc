@@ -715,29 +715,29 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         }
       });
       
-      this.setState({ addressLoading: true });
-      const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
-        {
-          deliveryAddressId: deliveryAddressId,
-          goodsItems: goodsInfo.map((ele) => {
-            return {
-              subscribeGoodsId: ele.subscribeGoodsId,
-              subscribeNum: ele.subscribeNum,
-              subscribeId: ele.subscribeId,
-              skuId: ele.skuId
-            }
-          }),
-          subscribeId: subscriptionInfo.subscriptionNumber,
-          paymentId: this.state.paymentId,
-        }
-      )
-      if (checkedRes.code !== Const.SUCCESS_CODE) {
-        this.setState({ 
-          tempolineApiError: checkedRes.message,
-          addressLoading: false
-        })
-        return false;
-      }
+      // this.setState({ addressLoading: true });
+      // const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
+      //   {
+      //     deliveryAddressId: deliveryAddressId,
+      //     goodsItems: goodsInfo.map((ele) => {
+      //       return {
+      //         subscribeGoodsId: ele.subscribeGoodsId,
+      //         subscribeNum: ele.subscribeNum,
+      //         subscribeId: ele.subscribeId,
+      //         skuId: ele.skuId
+      //       }
+      //     }),
+      //     subscribeId: subscriptionInfo.subscriptionNumber,
+      //     paymentId: this.state.paymentId,
+      //   }
+      // )
+      // if (checkedRes.code !== Const.SUCCESS_CODE) {
+      //   this.setState({ 
+      //     tempolineApiError: checkedRes.message,
+      //     addressLoading: false
+      //   })
+      //   return false;
+      // }
     }
     // 如果是日本
     if (sessionStorage.getItem(cache.LANGUAGE) === 'ja-JP') {

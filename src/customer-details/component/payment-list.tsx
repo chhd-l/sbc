@@ -280,7 +280,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
                   </Popconfirm>
                 </AuthWrapper>
               )}
-              {record.paymentVendor.toLowerCase() == 'visa' && <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />}
+              {!['adyen_moto'].includes(record.paymentItem.toLowerCase()) && <a className="iconfont iconDetails" onClick={() => this.handleDetails(record)} />}
             </span>
           );
         }

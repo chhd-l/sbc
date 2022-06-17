@@ -198,17 +198,46 @@ export default class PaymentList extends React.Component<Iprop, any> {
         dataIndex: 'paymentVendor',
         key: 'type',
         render: (text, record) => {
-          if (record?.paymentItem.toLowerCase() === 'adyen_credit_card') {
-            return text
-          } else {
-            switch (record?.paymentItem) {
-              case 'ADYEN_IDEAL':
-                return record?.paymentItem.split('_')[1]
-              case 'ADYEN_PAYPAL':
-                return record?.paymentItem.split('_')[1].slice(0, 1).toUpperCase() + record?.paymentItem.split('_')[1].slice(1).toLowerCase();
-              default:
-                return record?.paymentItem
-            }
+          // 123456858   墨西哥
+          // 	* 123457907   俄罗斯
+          // 	* 123457908   德国
+          // 	* 123457909   法国--0----
+          // 	* 123457910   美国
+          // 	* 123457911   土耳其
+          // 	* 123457915   瑞典
+          // 	* 123457916   英国
+          // * 123457919   日本
+          // 123457929 荷兰
+          const { storeId } = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')
+          switch (storeId) {
+            case 123457909:
+              switch (record?.paymentItem) {
+                case 'ADYEN_MOTO':
+                  return record?.paymentItem
+                default:
+                  return text
+              }
+              break;
+            case 123457929:
+              switch (record?.paymentItem) {
+                case 'ADYEN_IDEAL':
+                  return record?.paymentItem.split('_')[1]
+                default:
+                  return text
+              }
+              break;
+            case 123457908:
+              switch (record?.paymentItem) {
+                case 'ADYEN_PAYPAL':
+                  return record?.paymentItem.split('_')[1].slice(0, 1).toUpperCase() + record?.paymentItem.split('_')[1].slice(1).toLowerCase();
+                default:
+                  return text
+              }
+              break;
+
+            default:
+              return text
+              break;
           }
         }
       },

@@ -77,7 +77,7 @@ export default class PaymentInformation extends React.Component<any, any> {
     const { customer, payinfotoken } = this.props;
     // const{payStatus} = this.state;   
     let winObj = window.open(
-      `https://callcenter-test.adyen.com/callcenter/action/login.shtml?shopperLocale=fr`,
+      `https://callcenter-${Const.ISPRODUCT ? 'live' : 'test'}.adyen.com/callcenter/action/login.shtml?shopperLocale=fr`,
       'newwindow',
       'height=800, width=1200, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );

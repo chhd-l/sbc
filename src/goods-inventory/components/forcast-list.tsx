@@ -133,6 +133,11 @@ export default class ForcastList extends React.Component<any, any> {
           ...item,
           futureListArr: (item.futureList || []).map((ft) => Object.values(ft)[0])
         }));
+        if (dataList.length === 0) {
+          return this.setState({
+            loading: false
+          });
+        }
         let dymicColumns = dataList[0].futureList.map((item, index) => {
           return {
             title: Object.keys(item)[0],

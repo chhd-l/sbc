@@ -91,12 +91,22 @@ export default class SetBannerList extends Component<any, any> {
         const mobileImage = item.get('mobiUrl');
         let pcType = 'image';
         let mobileType = 'image';
-        if (pcImage.endsWith('.jpg') || pcImage.endsWith('.jpeg') || pcImage.endsWith('.png') || pcImage.endsWith('.gif')) {
+        if (
+          pcImage.endsWith('.jpg') ||
+          pcImage.endsWith('.jpeg') ||
+          pcImage.endsWith('.png') ||
+          pcImage.endsWith('.gif')
+        ) {
           pcType = 'image';
         } else {
           pcType = 'video';
         }
-        if (mobileImage.endsWith('.jpg') || mobileImage.endsWith('.jpeg') || mobileImage.endsWith('.png') || mobileImage.endsWith('.gif')) {
+        if (
+          mobileImage.endsWith('.jpg') ||
+          mobileImage.endsWith('.jpeg') ||
+          mobileImage.endsWith('.png') ||
+          mobileImage.endsWith('.gif')
+        ) {
           mobileType = 'image';
         } else {
           mobileType = 'video';
@@ -135,16 +145,22 @@ export default class SetBannerList extends Component<any, any> {
             <td style={{ wordBreak: 'break-all' }}>{mobiSkipUrl}</td>
             <td>
               <Tooltip placement="top" title={<FormattedMessage id="Setting.Edit" />}>
-                <span
+                <a
                   /*className="red mgl20"*/
-                  style={{ color: 'red', paddingRight: 10, cursor: 'pointer' }}
+                  style={{ paddingRight: 10, cursor: 'pointer' }}
                   onClick={() => this.editRow(item.toJS())}
                   className="iconfont iconEdit"
                 >
                   {/*<FormattedMessage id="edit" />*/}
-                </span>
+                </a>
               </Tooltip>
-              <Popconfirm placement="topLeft" title={<FormattedMessage id="Setting.deleteThisItem" />} onConfirm={() => this.deleteRow(item.toJS())} okText={<FormattedMessage id="Setting.Confirm" />} cancelText={<FormattedMessage id="Setting.Cancel" />}>
+              <Popconfirm
+                placement="topLeft"
+                title={<FormattedMessage id="Setting.deleteThisItem" />}
+                onConfirm={() => this.deleteRow(item.toJS())}
+                okText={<FormattedMessage id="Setting.Confirm" />}
+                cancelText={<FormattedMessage id="Setting.Cancel" />}
+              >
                 <Tooltip placement="top" title={<FormattedMessage id="Setting.Delete" />}>
                   <a type="link" className="iconfont iconDelete"></a>
                 </Tooltip>
@@ -198,7 +214,10 @@ export default class SetBannerList extends Component<any, any> {
                             <FormattedMessage id="Setting.resource" values={{ type: 'Pc' }} />
                           </th>
                           <th style={{ width: '10%' }}>
-                            <FormattedMessage id="Setting.resourceName" values={{ type: 'Mobile' }} />
+                            <FormattedMessage
+                              id="Setting.resourceName"
+                              values={{ type: 'Mobile' }}
+                            />
                           </th>
                           <th style={{ width: '25%' }}>
                             <FormattedMessage id="Setting.bannerUrl" values={{ type: 'Pc' }} />
@@ -211,7 +230,9 @@ export default class SetBannerList extends Component<any, any> {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="ant-table-tbody">{loading ? this._renderLoading() : this._renderContent(tableDatas)}</tbody>
+                      <tbody className="ant-table-tbody">
+                        {loading ? this._renderLoading() : this._renderContent(tableDatas)}
+                      </tbody>
                     </table>
                   </div>
                 </div>

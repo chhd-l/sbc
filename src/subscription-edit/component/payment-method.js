@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Radio, Row, Checkbox, Button, Popconfirm, Spin, message } from 'antd';
+import { Modal, Radio, Row, Checkbox, Button, Popconfirm, Spin, message, Typography } from 'antd';
 import * as webapi from '../webapi';
 import { Const, AuthWrapper, cache, history, RCi18n } from 'qmkit';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
+
+const { Text } = Typography;
 
 const codCodEnum = { 123457907: 'PAYU_RUSSIA_COD', 123457919: 'JAPAN_COD' };
 const cardCodEnum = { 123457909: 'ADYEN_CREDIT_CARD', default: 'PAYU_RUSSIA_AUTOSHIP2' };
@@ -16,7 +19,7 @@ const PaymentMethod = (props) => {
   const [cards, setCards] = useState([]);
   const [paypalCard, setPaypalCard] = useState([]);
   const [selectCardId, setSelectCardId] = useState();
-  const [adyenMotoErr, setAdyenMotoErr] = useState(false)
+  const [adyenMotoErr, setAdyenMotoErr] = useState(false);
 
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}').storeId || '';
 
@@ -24,9 +27,9 @@ const PaymentMethod = (props) => {
     setVisible(props.paymentMethodVisible);
     if (props.paymentMethodVisible) {
       if (props.cardId) {
-        if (props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto") {
+        if (props?.paymentInfo?.paymentItem?.toLowerCase() === 'adyen_moto') {
           setPaymentType('ADYEN_MOTO');
-        } else if (props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_paypal") {
+        } else if (props?.paymentInfo?.paymentItem?.toLowerCase() === 'adyen_paypal') {
           setPaymentType('ADYEN_PAYPAL');
         } else {
           setPaymentType(cardCodEnum[storeId] || cardCodEnum['default']);
@@ -41,7 +44,10 @@ const PaymentMethod = (props) => {
     if (!props.paymentMethodVisible) {
       return;
     }
-    if (paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) || ['ADYEN_MOTO', 'ADYEN_IDEAL', 'ADYEN_PAYPAL'].includes(paymentType)) {
+    if (
+      paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) ||
+      ['ADYEN_MOTO', 'ADYEN_IDEAL', 'ADYEN_PAYPAL'].includes(paymentType)
+    ) {
       getCards();
       if (props.cardId) {
         setSelectCardId(props.cardId);
@@ -53,7 +59,10 @@ const PaymentMethod = (props) => {
   }, [paymentType, props.paymentMethodVisible]);
 
   useEffect(() => {
-    if (paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) || ['ADYEN_MOTO', 'ADYEN_IDEAL'].includes(paymentType)) {
+    if (
+      paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) ||
+      ['ADYEN_MOTO', 'ADYEN_IDEAL'].includes(paymentType)
+    ) {
       setDisabled(!selectCardId);
     } else {
       setDisabled(!deliveryPay);
@@ -68,13 +77,17 @@ const PaymentMethod = (props) => {
         const res = data.res;
         if (res.code === Const.SUCCESS_CODE) {
           let card = res?.context || [];
-          const paypalCardIndex = card?.findIndex((item) => item.paymentItem?.toLowerCase() === 'adyen_paypal');
+          const paypalCardIndex = card?.findIndex(
+            (item) => item.paymentItem?.toLowerCase() === 'adyen_paypal'
+          );
           if (paypalCardIndex > -1) {
-            const paypalCard = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_paypal')
+            const paypalCard = card.filter(
+              (item) => item.paymentItem?.toLowerCase() === 'adyen_paypal'
+            );
             setPaypalCard(paypalCard);
             card = card.filter((item) => item.paymentItem?.toLowerCase() !== 'adyen_paypal');
           }
-          console.log('paymentType.toLowerCase()', paymentType.toLowerCase())
+          console.log('paymentType.toLowerCase()', paymentType.toLowerCase());
           switch (paymentType.toLowerCase()) {
             case 'adyen_ideal':
               card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_ideal');
@@ -86,34 +99,46 @@ const PaymentMethod = (props) => {
               card = card.filter((item) => item.paymentItem?.toLowerCase() === 'adyen_moto');
               break;
             case 'payu_russia_autoship2':
-              card = card.filter((item) => ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase()));
+              card = card.filter((item) =>
+                ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase())
+              );
               break;
             default:
-              card = card.filter((item) => ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase()));
+              card = card.filter((item) =>
+                ['adyen_moto', 'adyen_ideal'].every((it) => it !== item?.paymentItem?.toLowerCase())
+              );
               break;
           }
 
+          card = card.map((c) => {
+            if (c.expirationDate) {
+              c.expirationDateFormat = moment(c.expirationDate).format('MM/YY');
+            }
+            return c;
+          });
 
-          console.log('card', card)
+          console.log('card', card);
           setCards(card);
         } else {
           message.error(res.message || RCi18n({ id: 'Public.GetDataFailed' }));
         }
       })
-      .catch(() => {
-        message.error(RCi18n({ id: 'Public.GetDataFailed' }));
-      }).finally(() => {
-        setLoading(false)
+      .catch((err) => {
+        message.error(err.message || RCi18n({ id: 'Public.GetDataFailed' }));
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
   function changePaymentMethod() {
     if (paymentType?.toLowerCase() !== 'adyen_moto') {
-      let selectCard = selectCardId ? cards.concat(paypalCard).find((x) => x.id === selectCardId) : null;
+      let selectCard = selectCardId
+        ? cards.concat(paypalCard).find((x) => x.id === selectCardId)
+        : null;
       props.changePaymentMethod(selectCardId, paymentType, selectCard);
     }
     props.cancel();
-
   }
 
   function clear() {
@@ -135,7 +160,7 @@ const PaymentMethod = (props) => {
           setLoading(false);
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   }
 
   function showError(paymentId) {
@@ -152,7 +177,7 @@ const PaymentMethod = (props) => {
       }
       return item;
     });
-    setPaypalCard(newPaypalCard)
+    setPaypalCard(newPaypalCard);
   }
 
   return (
@@ -168,17 +193,18 @@ const PaymentMethod = (props) => {
       <Radio.Group
         onChange={(e) => {
           console.log(e.target.value);
-          setPaymentType(e.target.value)
-          setAdyenMotoErr(false)
+          setPaymentType(e.target.value);
+          setAdyenMotoErr(false);
         }}
-        value={paymentType}>
+        value={paymentType}
+      >
         <Radio value={cardCodEnum[storeId] || cardCodEnum['default']}>
           <FormattedMessage id="Subscription.DebitOrCreditCard" />
         </Radio>
 
         {props.subscriptionType === 'Peawee' || Const.SITE_NAME === 'MYVETRECO' ? null : codCodEnum[
-          storeId
-        ] ? (
+            storeId
+          ] ? (
           <AuthWrapper functionName="f_cod_payment">
             <Radio value={codCodEnum[storeId]}>
               <FormattedMessage id="Subscription.CashOnDelivery" />
@@ -191,14 +217,18 @@ const PaymentMethod = (props) => {
             <FormattedMessage id="Subscription.Paypal" />
           </Radio>
         ) : // </AuthWrapper>
-          null}
-        {props?.paymentInfo?.paymentItem?.toLowerCase() === "adyen_moto" && (<Radio value={'ADYEN_MOTO'}>
-          <FormattedMessage id="Subscription.adyen_moto" />
-        </Radio>)}
+        null}
+        {props?.paymentInfo?.paymentItem?.toLowerCase() === 'adyen_moto' && (
+          <Radio value={'ADYEN_MOTO'}>
+            <FormattedMessage id="Subscription.adyen_moto" />
+          </Radio>
+        )}
         {/* nl */}
-        {[123457929].includes(storeId) && (<Radio value={'ADYEN_IDEAL'}>
-          <FormattedMessage id="Subscription.Ideal" />
-        </Radio>)}
+        {[123457929].includes(storeId) && (
+          <Radio value={'ADYEN_IDEAL'}>
+            <FormattedMessage id="Subscription.Ideal" />
+          </Radio>
+        )}
       </Radio.Group>
       {paymentType === (cardCodEnum[storeId] || cardCodEnum['default']) ? (
         <Row className="paymentDoor">
@@ -212,6 +242,18 @@ const PaymentMethod = (props) => {
                         <h4>{item.paymentVendor}</h4>
                         <p>{item.cardType}</p>
                         <p>{'**** **** **** ' + item.lastFourDigits}</p>
+                        {item.expireStatusEnum === 'EXPIRED' ? (
+                          <Text type="danger">
+                            <i className="iconfont iconwarning1" /> {item.expirationDateFormat} -{' '}
+                            {RCi18n({ id: 'payment.expired' })}
+                          </Text>
+                        ) : null}
+                        {item.expireStatusEnum === 'WILL_EXPIRE' ? (
+                          <Text type="warning">
+                            <i className="iconfont iconwarning1" /> {item.expirationDateFormat} -{' '}
+                            {RCi18n({ id: 'payment.expiredSoon' })}
+                          </Text>
+                        ) : null}
                       </div>
                     </Radio>
                     <Row>
@@ -272,7 +314,13 @@ const PaymentMethod = (props) => {
                         <h4>
                           <FormattedMessage id="Subscription.Paypal" />
                         </h4>
-                        <p>{item.email ? item.email.split('@')[0].substring(0, 4) + '***@' + item.email.split('@')[1] : ''}</p>
+                        <p>
+                          {item.email
+                            ? item.email.split('@')[0].substring(0, 4) +
+                              '***@' +
+                              item.email.split('@')[1]
+                            : ''}
+                        </p>
                       </div>
                     </Radio>
                     <Row>
@@ -306,7 +354,6 @@ const PaymentMethod = (props) => {
           <Radio.Group>
             <Spin spinning={loading}>
               <>
-
                 <Row className="payment-panel">
                   <Radio>
                     {/* <div className="cardInfo">
@@ -315,8 +362,8 @@ const PaymentMethod = (props) => {
                         <p>{'**** **** **** ' + item.lastFourDigits}</p>
                       </div> */}
                     <img
-                      src='https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008060240358083.png'
-                      alt='moto'
+                      src="https://wanmi-b2b.oss-cn-shanghai.aliyuncs.com/202008060240358083.png"
+                      alt="moto"
                       style={{
                         width: '40%'
                       }}
@@ -343,48 +390,51 @@ const PaymentMethod = (props) => {
                     </AuthWrapper>
                   </Row>
                 </Row>
-
               </>
             </Spin>
           </Radio.Group>
         </Row>
-      ) : paymentType === 'ADYEN_IDEAL' ? <Row className="paymentDoor" style={{ padding: '15px' }}>
-        <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
-          <Spin spinning={loading}>
-            <>
-              {cards.map((item, index) => (
-                <Row key={index} className="payment-panel">
-                  <Radio value={item.id}>
-                    <div className="cardInfo">
-                      <p>{item.binNumber} BANK **** **** {item.lastFourDigits.substr(2)}</p>
-                    </div>
-                  </Radio>
-                  <Row style={{ marginTop: '40px' }}>
-                    <AuthWrapper functionName="f_delete_card">
-                      <Popconfirm
-                        placement="topLeft"
-                        title={`Are you sure to delete this card?`}
-                        onConfirm={() => deleteCard(item.id)}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <a >
-                          <FormattedMessage id="Subscription.Delete" />
-                        </a>
-                      </Popconfirm>
-                      {item.showError ? (
-                        <div className="errorMessage">
-                          <FormattedMessage id="Subscription.RemoveAssociationFirst" />
-                        </div>
-                      ) : null}
-                    </AuthWrapper>
+      ) : paymentType === 'ADYEN_IDEAL' ? (
+        <Row className="paymentDoor" style={{ padding: '15px' }}>
+          <Radio.Group onChange={(e) => setSelectCardId(e.target.value)} value={selectCardId}>
+            <Spin spinning={loading}>
+              <>
+                {cards.map((item, index) => (
+                  <Row key={index} className="payment-panel">
+                    <Radio value={item.id}>
+                      <div className="cardInfo">
+                        <p>
+                          {item.binNumber} BANK **** **** {item.lastFourDigits.substr(2)}
+                        </p>
+                      </div>
+                    </Radio>
+                    <Row style={{ marginTop: '40px' }}>
+                      <AuthWrapper functionName="f_delete_card">
+                        <Popconfirm
+                          placement="topLeft"
+                          title={`Are you sure to delete this card?`}
+                          onConfirm={() => deleteCard(item.id)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <a>
+                            <FormattedMessage id="Subscription.Delete" />
+                          </a>
+                        </Popconfirm>
+                        {item.showError ? (
+                          <div className="errorMessage">
+                            <FormattedMessage id="Subscription.RemoveAssociationFirst" />
+                          </div>
+                        ) : null}
+                      </AuthWrapper>
+                    </Row>
                   </Row>
-                </Row>
-              ))}
-            </>
-          </Spin>
-        </Radio.Group>
-      </Row> : null}
+                ))}
+              </>
+            </Spin>
+          </Radio.Group>
+        </Row>
+      ) : null}
     </Modal>
   );
 };

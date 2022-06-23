@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Col, Divider, message, Modal, Popconfirm, Row, Table, Tag, Tooltip } from 'antd';
+import { Button, Col, Divider, message, Modal, Popconfirm, Row, Table, Tag, Tooltip, Typography } from 'antd';
 import { deleteCard, getPaymentMethods } from '../webapi';
 import { AuthWrapper, cache, RCi18n, Const } from 'qmkit';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
-import { e } from 'mathjs';
+import moment from 'moment';
+
+const { Text } = Typography;
 
 interface Iprop {
   customerId: string;
@@ -162,11 +164,12 @@ export default class PaymentList extends React.Component<Iprop, any> {
         dataIndex: 'lastFourDigits',
         key: 'cardno',
         render: (text, record) => {
-
+          let ret = null;
+          let expiredValidRet = null;
           if (record.paymentItem?.toLowerCase() !== 'adyen_paypal') {
             switch (record.paymentItem?.toLowerCase()) {
               case 'adyen_ideal':
-                return <div>
+                ret = <div>
                   {record?.binNumber} {'BANK **** **** '} {record?.lastFourDigits}{' '}
                   {record.isDefault == 1 && (
                     <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
@@ -174,7 +177,7 @@ export default class PaymentList extends React.Component<Iprop, any> {
                 </div>
                 break;
               default:
-                return <div>
+                ret = <div>
                   {'**** **** **** ' + text}{' '}
                   {record.isDefault == 1 && (
                     <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
@@ -184,13 +187,33 @@ export default class PaymentList extends React.Component<Iprop, any> {
             }
 
           } else {
-            return <div>
+            ret = <div>
               {record?.email ? record?.email.split('@')[0].substring(0, 4) + '***@' + record?.email.split('@')[1] : ''}
               {record.isDefault == 1 && (
                 <Tag color={Const.SITE_NAME === 'MYVETRECO' ? 'blue' : 'red'}>default</Tag>
               )}
             </div>
           }
+          if (record.expirationDate) {
+            const expirationDateFormat = moment(record.expirationDate).format('MM/YY')
+            expiredValidRet = (
+              <>
+                {record.expireStatusEnum === 'EXPIRED' ? (
+                  <Text type="danger">
+                    <i className="iconfont iconwarning1" /> {expirationDateFormat} -{' '}
+                    {RCi18n({ id: 'payment.expired' })}
+                  </Text>
+                ) : null}
+                {record.expireStatusEnum === 'WILL_EXPIRE' ? (
+                  <Text type="warning">
+                    <i className="iconfont iconwarning1" /> {expirationDateFormat} -{' '}
+                    {RCi18n({ id: 'payment.expiredSoon' })}
+                  </Text>
+                ) : null}
+              </>
+            );
+          }
+          return <>{ret}{expiredValidRet}</>
         }
       },
       {

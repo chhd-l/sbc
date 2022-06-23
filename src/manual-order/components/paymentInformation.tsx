@@ -1,6 +1,7 @@
 import { Button, Col, Icon, Row } from 'antd';
 import { cache, Const, history } from 'qmkit';
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FormattedMessage } from 'react-intl';
 import { getShopToken, queryOrderStatus } from '../webapi';
 
@@ -8,55 +9,139 @@ export default class PaymentInformation extends React.Component<any, any> {
   state = {
     status: false,
     copyText: '',
-    payStatus: 0,
+    payStatus: 0
   };
   constructor(props) {
     super(props);
   }
 
   renderStatus(status, customer, context) {
-    const { payStatus } = this.state
+    const { payStatus } = this.state;
     if (status === 1) {
       return (
         <h2>
           <FormattedMessage id="Order.checkout" />
           <br />
-          <FormattedMessage id="Order.open" />&nbsp;
-          <span onClick={() => this.props.turnShowPage('other')} style={{ textDecoration: 'underline', color: '#f00', cursor: 'pointer' }}>
+          <FormattedMessage id="Order.open" />
+          &nbsp;
+          <span
+            onClick={() => this.props.turnShowPage('other')}
+            style={{ textDecoration: 'underline', color: '#f00', cursor: 'pointer' }}
+          >
             <FormattedMessage id="Order.here" />
           </span>
         </h2>
       );
     } else if (status === 2) {
-      return <h2><FormattedMessage id="Order.failure" /> {customer.customerAccount}</h2>;
+      return (
+        <h2>
+          <FormattedMessage id="Order.failure" /> {customer.customerAccount}
+        </h2>
+      );
     } else {
-      return <h2>{['PAYING', 'PAID'].indexOf(context?.trade?.tradeState?.payState) > -1 || context?.trade?.paymentItem.toLowerCase() === 'adyen_moto' || context?.trade?.paymentItem === 'ZEROPRICE' ? <FormattedMessage id="Order.successfully" /> : <FormattedMessage id="Order.failure" />} {customer.customerAccount}
-        <div>
-          <Row>
-            <Col span={12}>
-              <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.number" />{context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && payStatus !== 3 && <>/<FormattedMessage id="Order.PaymentReference" /></>}：</p>
-              {/* 法国代客下单moto支付 */}
-              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && payStatus !== 3 && <>
-                <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.Currency" /><>/<FormattedMessage id="Order.Amount" /></>：</p>
-                <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.ShopReference" />：</p>
-                <p style={{ marginTop: 10, textAlign: 'right' }}><FormattedMessage id="Order.CountryCode" />：</p>
-              </>}
-            </Col>
-            <Col span={12}>
-              <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.tid ?? ''}</a></p>
-              {/* 法国代客下单moto支付 */}
-              {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && payStatus !== 3 && <>
-                <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.supplier?.currency ?? ''}{'/'}{context?.trade?.tradePrice?.totalPrice ?? ''}</a></p>
-                <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.buyer?.id ?? ''}</a></p>
-                <p style={{ marginTop: 10, textAlign: 'left' }}><a>{context?.trade?.consignee?.country ?? ''}</a></p>
-              </>}
-            </Col>
-          </Row>
-          {context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && !this.props.felinStore && payStatus !== 3 && <p style={{ marginTop: 10 }}><FormattedMessage id="Order.transactions" /></p>}
-          {context?.subscribeId && <p style={{ marginTop: 10 }}><FormattedMessage id="Order.subscriptionNumber" />: <a>{context?.subscribeId ?? ''}</a></p>}
-        </div>
-        <input id='copytextarea' value={this.state.copyText} style={{ position: 'absolute', opacity: '0' }} />
-      </h2>;
+      return (
+        <h2>
+          {['PAYING', 'PAID'].indexOf(context?.trade?.tradeState?.payState) > -1 ||
+          context?.trade?.paymentItem.toLowerCase() === 'adyen_moto' ||
+          context?.trade?.paymentItem === 'ZEROPRICE' ? (
+            <FormattedMessage id="Order.successfully" />
+          ) : (
+            <FormattedMessage id="Order.failure" />
+          )}
+
+          <CopyToClipboard text={customer.customerAccount}>
+            <span>{customer.customerAccount}</span>
+          </CopyToClipboard>
+          <div>
+            <Row>
+              <Col span={12}>
+                <p style={{ marginTop: 10, textAlign: 'right' }}>
+                  <FormattedMessage id="Order.number" />
+                  {context?.trade?.supplier.storeId === 123457909 &&
+                    context?.trade?.paymentItem !== 'ZEROPRICE' &&
+                    !this.props.felinStore &&
+                    payStatus !== 3 && (
+                      <>
+                        /<FormattedMessage id="Order.PaymentReference" />
+                      </>
+                    )}
+                  ：
+                </p>
+                {/* 法国代客下单moto支付 */}
+                {context?.trade?.supplier.storeId === 123457909 &&
+                  context?.trade?.paymentItem !== 'ZEROPRICE' &&
+                  !this.props.felinStore &&
+                  payStatus !== 3 && (
+                    <>
+                      <p style={{ marginTop: 10, textAlign: 'right' }}>
+                        <FormattedMessage id="Order.Currency" />
+                        <>
+                          /<FormattedMessage id="Order.Amount" />
+                        </>
+                        ：
+                      </p>
+                      <p style={{ marginTop: 10, textAlign: 'right' }}>
+                        <FormattedMessage id="Order.ShopReference" />：
+                      </p>
+                      <p style={{ marginTop: 10, textAlign: 'right' }}>
+                        <FormattedMessage id="Order.CountryCode" />：
+                      </p>
+                    </>
+                  )}
+              </Col>
+              <Col span={12}>
+                <p style={{ marginTop: 10, textAlign: 'left' }}>
+                  <CopyToClipboard text={context?.tid ?? ''}>
+                    <a> {context?.tid ?? ''} </a>
+                  </CopyToClipboard>
+                </p>
+                {/* 法国代客下单moto支付 */}
+                {context?.trade?.supplier.storeId === 123457909 &&
+                  context?.trade?.paymentItem !== 'ZEROPRICE' &&
+                  !this.props.felinStore &&
+                  payStatus !== 3 && (
+                    <>
+                      <p style={{ marginTop: 10, textAlign: 'left' }}>
+                        <CopyToClipboard text={context?.trade?.tradePrice?.totalPrice ?? ''}>
+                          <a>{`${context?.trade?.supplier?.currency ?? ''}/${
+                            context?.trade?.tradePrice?.totalPrice ?? ''
+                          }`}</a>
+                        </CopyToClipboard>
+                      </p>
+                      <p style={{ marginTop: 10, textAlign: 'left' }}>
+                        <CopyToClipboard text={context?.trade?.buyer?.id ?? ''}>
+                          <a> {context?.trade?.buyer?.id ?? ''} </a>
+                        </CopyToClipboard>
+                      </p>
+                      <p style={{ marginTop: 10, textAlign: 'left' }}>
+                        <a>{context?.trade?.consignee?.country ?? ''}</a>
+                      </p>
+                    </>
+                  )}
+              </Col>
+            </Row>
+            {context?.trade?.supplier.storeId === 123457909 &&
+              context?.trade?.paymentItem !== 'ZEROPRICE' &&
+              !this.props.felinStore &&
+              payStatus !== 3 && (
+                <p style={{ marginTop: 10 }}>
+                  <FormattedMessage id="Order.transactions" />
+                </p>
+              )}
+            {context?.subscribeId && (
+              <p style={{ marginTop: 10 }}>
+                <FormattedMessage id="Order.subscriptionNumber" />:{' '}
+                <a>{context?.subscribeId ?? ''}</a>
+              </p>
+            )}
+          </div>
+          <input
+            id="copytextarea"
+            value={this.state.copyText}
+            style={{ position: 'absolute', opacity: '0' }}
+          />
+        </h2>
+      );
     }
   }
   // copyText(e){
@@ -75,9 +160,11 @@ export default class PaymentInformation extends React.Component<any, any> {
     e.preventDefault();
     console.log('打开了adyen支付平台窗口');
     const { customer, payinfotoken } = this.props;
-    // const{payStatus} = this.state;   
+    // const{payStatus} = this.state;
     let winObj = window.open(
-      `https://callcenter-${Const.ISPRODUCT ? 'live' : 'test'}.adyen.com/callcenter/action/login.shtml?shopperLocale=fr`,
+      `https://callcenter-${
+        Const.ISPRODUCT ? 'live' : 'test'
+      }.adyen.com/callcenter/action/login.shtml?shopperLocale=fr`,
       'newwindow',
       'height=800, width=1200, top=100, left=100, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no'
     );
@@ -108,7 +195,7 @@ export default class PaymentInformation extends React.Component<any, any> {
   }
 
   render() {
-    const { payStatus } = this.state
+    const { payStatus } = this.state;
     const { stepName, noLanguageSelect, status, customer, context } = this.props;
     const isFgs = sessionStorage.getItem('user-group-value')?.toLowerCase() == 'fgs';
     return (
@@ -124,9 +211,20 @@ export default class PaymentInformation extends React.Component<any, any> {
           <div>
             {this.renderStatus(status, customer, context)}
             {/* fgs下单时需要next按钮去到adyen支付平台，暂时用status来控制按钮，后面调试接口时根据参数替换掉 */}
-            {isFgs && status === 3 && context?.trade?.supplier.storeId === 123457909 && context?.trade?.paymentItem !== 'ZEROPRICE' && payStatus !== 3 && (<Button disabled={status !== 3} type="primary" onClick={(e) => this.next(e)} style={{ marginRight: 20 }}>
-              <FormattedMessage id="Order.Next step" /> <Icon type="right" />
-            </Button>)}
+            {isFgs &&
+              status === 3 &&
+              context?.trade?.supplier.storeId === 123457909 &&
+              context?.trade?.paymentItem !== 'ZEROPRICE' &&
+              payStatus !== 3 && (
+                <Button
+                  disabled={status !== 3}
+                  type="primary"
+                  onClick={(e) => this.next(e)}
+                  style={{ marginRight: 20 }}
+                >
+                  <FormattedMessage id="Order.Next step" /> <Icon type="right" />
+                </Button>
+              )}
             {/* 如果是fgs下单，back按钮是否出现 */}
             {status !== 1 && (
               <Button

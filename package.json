@@ -27,6 +27,17 @@
     "api": "node ./node_modules/moon-wanmi/lib/swagger-api/index.js",
     "tslint": "./node_modules/tslint/bin/tslint"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,css,vue,jsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "http://172.19.26.140/b2b/b2b-supplier.git"

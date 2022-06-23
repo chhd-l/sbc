@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "9459125",
+      "name": "warning",
+      "font_class": "warning1",
+      "unicode": "e6bc",
+      "unicode_decimal": 59068
+    },
+    {
       "icon_id": "11349732",
       "name": "medal-l",
       "font_class": "medal-l",

@@ -47,5 +47,12 @@ export const enumConst = {
     3: <FormattedMessage id="Marketing.Freeshipping" />,
     4: <FormattedMessage id="Marketing.leaflet" />,
     5: <FormattedMessage id="Marketing.leaflet" />,
+  },
+  create_couponPromotionType: {
+    0: <FormattedMessage id="Marketing.Amount" />,
+    1: <FormattedMessage id="Marketing.Percentage" />,
+    3: <FormattedMessage id="Marketing.Freeshipping" />,
+    4: <FormattedMessage id="Marketing.Gifts" />,
+    5: <FormattedMessage id="Marketing.leaflet" />,
   }
 }

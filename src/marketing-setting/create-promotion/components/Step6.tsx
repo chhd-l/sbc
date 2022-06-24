@@ -654,7 +654,7 @@ export default function Step6({ setLoading }) {
                 <FormattedMessage id="Marketing.AdvantageType" />:
               </div>
               <div className="step-summary-item-text">
-                {enumConst.couponPromotionType[formData.Advantage.couponPromotionType]}
+                {enumConst.create_couponPromotionType[formData.Advantage.couponPromotionType]}
               </div>
             </div>
 

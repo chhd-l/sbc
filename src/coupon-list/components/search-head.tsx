@@ -37,7 +37,7 @@ export default class SearchHead extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <FormItem>
           <Input
-            addonBefore={<FormattedMessage id="Marketing.CouponName"/>}
+            addonBefore={<FormattedMessage id="Marketing.CouponName" />}
             value={form.get('likeCouponName')}
             onChange={(e: any) => {
               onFormFieldChange('likeCouponName', e.target.value);
@@ -98,6 +98,15 @@ export default class SearchHead extends React.Component<any, any> {
         </FormItem>
         <FormItem>
           <DatePicker allowClear={true} disabledDate={this.disabledEndDate} format={Const.DAY_FORMAT} value={endValue} placeholder="End date" onChange={this.onEndChange} showToday={false} />
+        </FormItem>
+        <FormItem>
+          <Input
+            addonBefore={<FormattedMessage id="Marketing.createName" />}
+            value={form.get('createName')}
+            onChange={(e: any) => {
+              onFormFieldChange('createName', e.target.value);
+            }}
+          />
         </FormItem>
 
         <FormItem>

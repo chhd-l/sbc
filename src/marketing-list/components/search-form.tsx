@@ -190,6 +190,20 @@ class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </FormItem>
           </Col>
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="Marketing.createName" />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'createName',
+                    value
+                  });
+                }}
+              />
+            </FormItem>
+          </Col>
         </Row>
         <Row id="input-lable-wwidth">
           <Col span="24" style={{ textAlign: 'center' }}>

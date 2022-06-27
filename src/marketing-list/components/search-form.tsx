@@ -86,7 +86,7 @@ class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </FormItem>
           </Col>
-          // fgs need not
+          {/* fgs need not */}
           {Const.SITE_NAME === 'MYVETRECO' && (
             <Col span="8" id="select-group-width">
               <FormItem>

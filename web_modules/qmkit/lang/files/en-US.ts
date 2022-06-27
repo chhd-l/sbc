@@ -4020,7 +4020,7 @@ export default {
   'Product.subscriptionPrice': 'Please input subscription price',
   'product.subscriptionPrice': 'Subscription Price',
   'Product.Subscriptionpricecannotbezero': 'Subscription price cannot be zero',
-  'Product.subscriptionpriceincl': 'Subscription price(incl.VAT)',
+  'Product.subscriptionpriceIncl': 'Subscription price(Incl.VAT)',
   'Product.Subscriptionpricepercentage': 'Subscription price percentage',
   'Product.Subscriptiondiscountpercentage': 'Subscription discount percentage',
   'Product.Subscriptionstatus': 'Subscription status',

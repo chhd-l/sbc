@@ -340,7 +340,7 @@ class ProductPrice extends Component<any, any> {
         }
       },
       {
-        title: <FormattedMessage id="Product.subscriptionpriceincl" />,
+        title: <FormattedMessage id="Product.subscriptionpriceIncl" />,
         dataIndex: 'subscriptionPrice',
         key: 'subscriptionPrice',
         sorter: true,

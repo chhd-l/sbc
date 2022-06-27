@@ -46,6 +46,13 @@ const getOktaAppConfig = () => {
       REACT_APP_RC_CLIENT_ID: '0oadfnmb3ako9BaIh357',
       PAYMENT_ENVIRONMENT: 'live'
     });
+  } else if(host === 'store.royalcanin.jp' || host === 'apstore.royalcanin.com') {
+    return Object.assign({}, OKTA_APP_CONFIG, {
+      REACT_APP_PRESCRIBER_CLIENT_ID: '0oa6ac06a7I03dDyY416',
+      REACT_APP_PRESCRIBER_ISSUER: 'https://signin.royalcanin.com/oauth2/default',
+      REACT_APP_RC_CLIENT_ID: '0oajhi9s4alu99qIn357',
+      PAYMENT_ENVIRONMENT: 'live'
+    });
   } else {
     return OKTA_APP_CONFIG;
   }

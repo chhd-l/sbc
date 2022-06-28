@@ -865,12 +865,32 @@ class OrderDetailTab extends React.Component<any, any> {
                   <Col span={10}>
                     <FormattedMessage id="PetOwner.AddressForm.Selected delivery date" />:
                   </Col>
-                  <Col span={14}>{consignee.deliveryDate ? consignee.deliveryDate : <br />}</Col>                  
+                  <Col span={14}>
+                    {consignee.deliveryDate ? (
+                      consignee.deliveryDate === 'Unspecified' ? (
+                        RCi18n({ id: 'Unspecified' })
+                      ) : (
+                        consignee.deliveryDate
+                      )
+                    ) : (
+                      <br />
+                    )}
+                  </Col>
                   {/* Selected delivery time */}
                   <Col span={10}>
                     <FormattedMessage id="PetOwner.AddressForm.Selected delivery time" />:
                   </Col>
-                  <Col span={14}>{consignee.timeSlot ? consignee.timeSlot : <br />}</Col>
+                  <Col span={14}>
+                    {consignee.timeSlot ? (
+                      consignee.timeSlot === 'Unspecified' ? (
+                        RCi18n({ id: 'Unspecified' })
+                      ) : (
+                        consignee.timeSlot
+                      )
+                    ) : (
+                      <br />
+                    )}
+                  </Col>
                 </Row>
               ) : (
                 <Row>

@@ -809,7 +809,7 @@ class OrderDetailTab extends React.Component<any, any> {
         <Row gutter={30}>
           {/*deliveryAddress panel*/}
           <Col span={12}>
-            <div className="headBox order_detail_delivery_address" style={{ height: 250 }}>
+            <div className="headBox order_detail_delivery_address" style={{ height: 'auto' }}>
               <h4>
                 <FormattedMessage id="Order.deliveryAddress" />
               </h4>

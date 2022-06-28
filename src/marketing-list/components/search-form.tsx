@@ -86,33 +86,36 @@ class SearchForm extends React.Component<any, any> {
               </SelectGroup>
             </FormItem>
           </Col>
-          <Col span="8" id="select-group-width">
-            <FormItem>
-              <SelectGroup
-                getPopupContainer={() => document.getElementById('page-content')}
-                label="Campaign Type"
-                // style={{ width: 160 }}
-                defaultValue="All"
-                onChange={(value) => {
-                  value = value === '' ? null : value;
-                  onFormChange({
-                    field: 'subType',
-                    value
-                  });
-                }}
-              >
-                <Option value={null}><FormattedMessage id="Marketing.all" /></Option>
-                <Option value={0}><FormattedMessage id="Marketing.FullAmountReduction" /></Option>
-                <Option value={1}><FormattedMessage id="Marketing.FullQuantityReduction" /></Option>
-                <Option value={2}><FormattedMessage id="Marketing.FullAmountDiscount" /></Option>
-                <Option value={3}><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
-                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={4}><FormattedMessage id="Marketing.Fullamountgift" /></Option>}
-                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={5}><FormattedMessage id="Marketing.Fullquantitygift" /></Option>}
-                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={14}><FormattedMessage id="Marketing.Fullquantityleaflet" /></Option>}
-                {Const.SITE_NAME !== 'MYVETRECO' && <Option value={15}><FormattedMessage id="Marketing.Fullamountleaflet" /></Option>}
-              </SelectGroup>
-            </FormItem>
-          </Col>{' '}
+          {/* fgs need not */}
+          {Const.SITE_NAME === 'MYVETRECO' && (
+            <Col span="8" id="select-group-width">
+              <FormItem>
+                <SelectGroup
+                  getPopupContainer={() => document.getElementById('page-content')}
+                  label="Campaign Type"
+                  // style={{ width: 160 }}
+                  defaultValue="All"
+                  onChange={(value) => {
+                    value = value === '' ? null : value;
+                    onFormChange({
+                      field: 'subType',
+                      value
+                    });
+                  }}
+                >
+                  <Option value={null}><FormattedMessage id="Marketing.all" /></Option>
+                  <Option value={0}><FormattedMessage id="Marketing.FullAmountReduction" /></Option>
+                  <Option value={1}><FormattedMessage id="Marketing.FullQuantityReduction" /></Option>
+                  <Option value={2}><FormattedMessage id="Marketing.FullAmountDiscount" /></Option>
+                  <Option value={3}><FormattedMessage id="Marketing.FullQuantityDiscount" /></Option>
+                  {Const.SITE_NAME !== 'MYVETRECO' && <Option value={4}><FormattedMessage id="Marketing.Fullamountgift" /></Option>}
+                  {Const.SITE_NAME !== 'MYVETRECO' && <Option value={5}><FormattedMessage id="Marketing.Fullquantitygift" /></Option>}
+                  {Const.SITE_NAME !== 'MYVETRECO' && <Option value={14}><FormattedMessage id="Marketing.Fullquantityleaflet" /></Option>}
+                  {Const.SITE_NAME !== 'MYVETRECO' && <Option value={15}><FormattedMessage id="Marketing.Fullamountleaflet" /></Option>}
+                </SelectGroup>
+              </FormItem>
+            </Col>
+          )}
         </Row>
         <Row id="input-lable-wwidth">
           <Col span="8">
@@ -188,6 +191,20 @@ class SearchForm extends React.Component<any, any> {
                 <Option value="0"><FormattedMessage id="Marketing.private" /></Option>
                 <Option value="1"><FormattedMessage id="Marketing.public" /></Option>
               </SelectGroup>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem>
+              <Input
+                addonBefore={<FormattedMessage id="Marketing.createName" />}
+                onChange={(e) => {
+                  const value = (e.target as any).value;
+                  onFormChange({
+                    field: 'createName',
+                    value
+                  });
+                }}
+              />
             </FormItem>
           </Col>
         </Row>

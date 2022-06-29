@@ -5,8 +5,10 @@ import { SelectGroup, noop, Const, RCi18n, util } from 'qmkit';
 import { List } from 'immutable';
 // import locale from 'antd/es/date-picker/locale/lv_LV';
 import moment from 'moment';
-import 'moment/locale/en-au';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import './searchform.less';
+const { RangePicker } = DatePicker;
+const InputGroup = Input.Group;
 
 moment.locale('en-au');
 type TList = List<IMap>;
@@ -47,7 +49,10 @@ class SearchForm extends React.Component<any, any> {
       <Form className="filter-content" layout="inline">
         <Row id="input-lable-wwidth">
           <Col span="8">
-            <FormItem>
+            <FormItem
+              wrapperCol={{ span: 24, offset: 0 }}
+              style={{ width: '75%' }}
+            >
               <Input
                 addonBefore={<FormattedMessage id="Marketing.CampaignName" />}
                 onChange={(e) => {
@@ -61,12 +66,14 @@ class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span="8" id="select-group-width">
-            <FormItem>
+            <FormItem
+              style={{ width: '75%' }}
+            >
               <SelectGroup
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={<FormattedMessage id="Marketing.PromotionType" />}
                 // style={{ width: 170 }}
-                defaultValue=""
+                defaultValue="0"
                 onChange={(value) => {
                   value = value === '' ? null : value;
                   onFormChange({
@@ -75,21 +82,23 @@ class SearchForm extends React.Component<any, any> {
                   });
                 }}
               >
-                <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option>
+                {/* <Option value=""><FormattedMessage id="Marketing.Alltype" /></Option> */}
                 <Option value="0"><FormattedMessage id="Marketing.All" /></Option>
                 <Option value="1"><FormattedMessage id="Marketing.Autoship" /></Option>
                 {Const.SITE_NAME !== 'MYVETRECO' && <Option value="2"><FormattedMessage id="Marketing.Clubpromotion" /></Option>}
                 <Option value="3"><FormattedMessage id="Marketing.Singlepurchase" /></Option>
-                <Option value="4"><FormattedMessage id="Marketing.Individualization" /></Option>
+                {/* <Option value="4"><FormattedMessage id="Marketing.Individualization" /></Option> */}
                 {/* <Option value="4">满金额赠</Option>
             <Option value="5">满数量赠</Option> */}
               </SelectGroup>
             </FormItem>
           </Col>
           {/* fgs need not */}
-          {Const.SITE_NAME === 'MYVETRECO' && (
+          {/* {Const.SITE_NAME === 'MYVETRECO' && (
             <Col span="8" id="select-group-width">
-              <FormItem>
+              <FormItem
+                style={{ width: '75%' }}
+              >
                 <SelectGroup
                   getPopupContainer={() => document.getElementById('page-content')}
                   label="Campaign Type"
@@ -115,11 +124,12 @@ class SearchForm extends React.Component<any, any> {
                 </SelectGroup>
               </FormItem>
             </Col>
-          )}
-        </Row>
-        <Row id="input-lable-wwidth">
+          )} */}
+
           <Col span="8">
-            <FormItem>
+            <FormItem
+              style={{ width: '75%' }}
+            >
               <Input
                 addonBefore={<FormattedMessage id="Marketing.PromotionCode" />}
                 onChange={(e) => {
@@ -132,48 +142,38 @@ class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
-          <Col span="8">
-            <FormItem>
-              <DatePicker
-                allowClear={true}
-                disabledDate={this.disabledStartDate}
-                // defaultValue={moment(new Date('2015-01-01 00:00:00'), 'YYYY-MM-DD HH:mm:ss')}
-                showTime={{ format: 'HH:mm' }}
-                format={Const.DATE_FORMAT}
-                value={startValue}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.StartTime'
-                  })
-                }
-                onChange={this.onStartChange}
-                showToday={false}
-              />
-            </FormItem>
-          </Col>
-          <Col span="8">
-            <FormItem>
-              <DatePicker
-                allowClear={true}
-                disabledDate={this.disabledEndDate}
-                // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
-                showTime={{ format: 'HH:mm' }}
-                format={Const.DATE_FORMAT}
-                value={endValue}
-                placeholder={
-                  (window as any).RCi18n({
-                    id: 'Marketing.EndTime'
-                  })
-                }
-                onChange={this.onEndChange}
-                showToday={false}
-              />
-            </FormItem>
-          </Col>
         </Row>
         <Row id="input-lable-wwidth">
+
+          <Col span="8">
+            <FormItem
+              style={{ width: '75%' }}
+            >
+              <InputGroup compact>
+                {/* <Input className='hideTimeHover' style={{ width: '30%', textAlign: 'center' }} defaultValue='ssss' readOnly /> */}
+                <RangePicker
+                  // style={{ width: '70%' }}
+                  allowClear={true}
+                  getCalendarContainer={(trigger: any) => trigger.parentNode}
+                  showTime={{ format: 'HH:mm' }}
+                  format={Const.DATE_FORMAT}
+                  placeholder={[
+                    (window as any).RCi18n({
+                      id: 'Marketing.StartTime'
+                    }), (window as any).RCi18n({
+                      id: 'Marketing.EndTime'
+                    })
+                  ]}
+                  onChange={this.onDateChange}
+                  onOk={this.OK}
+                />
+              </InputGroup >
+            </FormItem>
+          </Col>
           <Col span="8" id="select-group-width">
-            <FormItem>
+            <FormItem
+              style={{ width: '75%' }}
+            >
               <SelectGroup
                 getPopupContainer={() => document.getElementById('page-content')}
                 label={<FormattedMessage id="Marketing.CodeType" />}
@@ -194,7 +194,9 @@ class SearchForm extends React.Component<any, any> {
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem>
+            <FormItem
+              style={{ width: '75%' }}
+            >
               <Input
                 addonBefore={<FormattedMessage id="Marketing.createName" />}
                 onChange={(e) => {
@@ -207,10 +209,34 @@ class SearchForm extends React.Component<any, any> {
               />
             </FormItem>
           </Col>
+          {/* <Col span="8">
+            <FormItem>
+              <DatePicker
+                allowClear={true}
+                disabledDate={this.disabledEndDate}
+                // defaultValue={moment(new Date(defaultLocalDateTime), 'YYYY-MM-DD')}
+                showTime={{ format: 'HH:mm' }}
+                format={Const.DATE_FORMAT}
+                value={endValue}
+                placeholder={
+                  (window as any).RCi18n({
+                    id: 'Marketing.EndTime'
+                  })
+                }
+                onChange={this.onEndChange}
+                showToday={false}
+              />
+            </FormItem>
+          </Col> */}
         </Row>
+        {/* <Row id="input-lable-wwidth">
+         
+        </Row> */}
         <Row id="input-lable-wwidth">
           <Col span="24" style={{ textAlign: 'center' }}>
-            <FormItem>
+            <FormItem
+              style={{ width: '75%' }}
+            >
               <Button
                 type="primary"
                 htmlType="submit"
@@ -229,7 +255,31 @@ class SearchForm extends React.Component<any, any> {
       </Form>
     );
   }
-
+  OK = (MomentTimeArr) => {
+    console.log('value', moment(MomentTimeArr[0]).format(Const.DATE_FORMAT) + ':00', moment(MomentTimeArr[1]).format(Const.DATE_FORMAT) + ':00');
+    const { onFormChange } = this.props.relaxProps;
+    onFormChange({ field: 'startTime', value: moment(MomentTimeArr[0]).format(Const.DATE_FORMAT) + ':00' });
+    this.onChange('startValue', MomentTimeArr[0]);
+    onFormChange({ field: 'endTime', value: moment(MomentTimeArr[1]).format(Const.DATE_FORMAT) + ':00' });
+    this.onChange('endValue', MomentTimeArr[1]);
+  };
+  onDateChange = (MomentTimeArr) => {
+    const { onFormChange } = this.props.relaxProps;
+    let startTime = null;
+    let endTime = null;
+    let startValue = null;
+    let endValue = null;
+    if (MomentTimeArr.length > 0) {
+      startTime = MomentTimeArr[0]?.format(Const.DAY_FORMAT) + ':00';
+      endTime = MomentTimeArr[1]?.format(Const.DAY_FORMAT) + ':00';
+      startValue = MomentTimeArr[0];
+      endValue = MomentTimeArr[1]
+    }
+    onFormChange({ field: 'startTime', value: startTime });
+    this.onChange('startValue', startValue);
+    onFormChange({ field: 'endTime', value: endTime });
+    this.onChange('endValue', endValue);
+  }
   disabledStartDate = (startValue) => {
     const endValue = this.state.endValue;
     if (!startValue || !endValue) {

@@ -12,6 +12,7 @@ function Step5({ form }) {
   const { changeFormData, formData, match, setStep, formItemLayout } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType, setCouponPromotionType] = useState(0);
+  const [promotionAppliesType, setPromotionAppliesType] = useState(0);
 
   const [selectedGiftRows, setSelectedGiftRows] = useState<any>(fromJS([]));
   const [fullGiftLevelList, setFullGiftLevelList] = useState<any>([]);
@@ -261,7 +262,7 @@ function Step5({ form }) {
         </Form.Item>
         {/*promotion 当选择 autoship和club时展示 首次订阅减免*/}
         {formData.PromotionType.typeOfPromotion === 0 &&
-        (formData.Conditions.promotionType === 1 || formData.Conditions.promotionType === 2) ? (
+          (formData.Conditions.promotionType === 1 || formData.Conditions.promotionType === 2) ? (
           <>
             {couponPromotionType === 0 && (
               <>
@@ -488,15 +489,15 @@ function Step5({ form }) {
                                 if (!rule.test(value)) {
                                   formData.Conditions.promotionType == 1
                                     ? callback(
-                                        (window as any).RCi18n({
-                                          id: 'Marketing.InputValuefrom1to99'
-                                        })
-                                      )
+                                      (window as any).RCi18n({
+                                        id: 'Marketing.InputValuefrom1to99'
+                                      })
+                                    )
                                     : callback(
-                                        (window as any).RCi18n({
-                                          id: 'Marketing.InputValuefrom1to100'
-                                        })
-                                      );
+                                      (window as any).RCi18n({
+                                        id: 'Marketing.InputValuefrom1to100'
+                                      })
+                                    );
                                 }
                               }
                               callback();
@@ -509,20 +510,20 @@ function Step5({ form }) {
                           title={
                             formData.Conditions.promotionType == 1
                               ? (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom1to99'
-                                })
+                                id: 'Marketing.InputValuefrom1to99'
+                              })
                               : (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom1to100'
-                                })
+                                id: 'Marketing.InputValuefrom1to100'
+                              })
                           }
                           placeholder={
                             formData.Conditions.promotionType == 1
                               ? (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom1to99'
-                                })
+                                id: 'Marketing.InputValuefrom1to99'
+                              })
                               : (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom1to100'
-                                })
+                                id: 'Marketing.InputValuefrom1to100'
+                              })
                           }
                         />
                       )}
@@ -579,6 +580,35 @@ function Step5({ form }) {
                     </Form.Item>
                   </div>
                 </Form.Item>
+                <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
+                  {getFieldDecorator('promotionAppliesType', {
+                    initialValue: promotionAppliesType,
+                    rules: [
+                      {
+                        required: true,
+                        message: (window as any).RCi18n({
+                          id: 'Marketing.PleaseSelectOne'
+                        })
+                      }
+                    ]
+                  })(
+                    <Radio.Group
+                      onChange={(e) => {
+                        setPromotionAppliesType(e.target.value);
+                      }}
+                    >
+                      <Radio value={0}>
+                        <FormattedMessage id="Marketing.All" />
+                      </Radio>
+                      <Radio value={1}>
+                        <FormattedMessage id="Marketing.MostExpensive" />
+                      </Radio>
+                      <Radio value={2}>
+                        <FormattedMessage id="Marketing.Cheapest" />
+                      </Radio>
+                    </Radio.Group>
+                  )}
+                </Form.Item>
               </>
             )}
           </>
@@ -634,85 +664,117 @@ function Step5({ form }) {
               </Form.Item>
             )}
             {couponPromotionType === 1 && (
-              <Form.Item
-                {...formItemLayout}
-                label={<FormattedMessage id="Marketing.PromotionValue" />}
-                required={true}
-              >
-                <div style={{ display: 'flex' }}>
-                  <Form.Item>
-                    {getFieldDecorator('couponDiscount', {
-                      // initialValue: 99,
-                      initialValue: formData.Advantage.couponDiscount,
-                      rules: [
-                        {
-                          required: true,
-                          message: (window as any).RCi18n({
-                            id: 'Marketing.Pleaseinputcoupondiscount'
-                          })
-                        },
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (value) {
-                              if (!/^(?:[1-9][0-9]?)$/.test(value)) {
-                                callback(
-                                  (window as any).RCi18n({
-                                    id: 'Marketing.InputValuefrom1to99'
-                                  })
-                                );
+              <>
+                <Form.Item
+                  {...formItemLayout}
+                  label={<FormattedMessage id="Marketing.PromotionValue" />}
+                  required={true}
+                  style={{ marginBottom: '0px' }}
+                >
+                  <div style={{ display: 'flex' }}>
+                    <Form.Item>
+                      {getFieldDecorator('couponDiscount', {
+                        // initialValue: 99,
+                        initialValue: formData.Advantage.couponDiscount,
+                        rules: [
+                          {
+                            required: true,
+                            message: (window as any).RCi18n({
+                              id: 'Marketing.Pleaseinputcoupondiscount'
+                            })
+                          },
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (!/^(?:[1-9][0-9]?)$/.test(value)) {
+                                  callback(
+                                    (window as any).RCi18n({
+                                      id: 'Marketing.InputValuefrom1to99'
+                                    })
+                                  );
+                                }
                               }
+                              callback();
                             }
-                            callback();
                           }
-                        }
-                      ]
-                    })(<Input placeholder="1-99" maxLength={3} style={{ width: 160 }} />)}{' '}
-                    %,
-                  </Form.Item>
-                  <Form.Item>
-                    <span>
-                      &nbsp;
-                      <FormattedMessage id="Marketing.discount" />{' '}
-                      <FormattedMessage id="Marketing.limit" />
-                      &nbsp;&nbsp;
-                    </span>
-                    {getFieldDecorator('limitAmount', {
-                      initialValue: formData.Advantage.limitAmount,
-                      rules: [
-                        {
-                          validator: (_rule, value, callback) => {
-                            if (value) {
-                              if (
-                                !ValidConst.noZeroNumber.test(value) ||
-                                !(value < 10000 && value > 0)
-                              ) {
-                                callback(
-                                  (window as any).RCi18n({
-                                    id: 'Marketing.1-9999'
-                                  })
-                                );
+                        ]
+                      })(<Input placeholder="1-99" maxLength={3} style={{ width: 160 }} />)}{' '}
+                      %,
+                    </Form.Item>
+                    <Form.Item>
+                      <span>
+                        &nbsp;
+                        <FormattedMessage id="Marketing.discount" />{' '}
+                        <FormattedMessage id="Marketing.limit" />
+                        &nbsp;&nbsp;
+                      </span>
+                      {getFieldDecorator('limitAmount', {
+                        initialValue: formData.Advantage.limitAmount,
+                        rules: [
+                          {
+                            validator: (_rule, value, callback) => {
+                              if (value) {
+                                if (
+                                  !ValidConst.noZeroNumber.test(value) ||
+                                  !(value < 10000 && value > 0)
+                                ) {
+                                  callback(
+                                    (window as any).RCi18n({
+                                      id: 'Marketing.1-9999'
+                                    })
+                                  );
+                                }
                               }
+                              callback();
                             }
-                            callback();
                           }
-                        }
-                      ]
-                    })(
-                      <Input
-                        className="input-width"
-                        title={(window as any).RCi18n({
-                          id: 'Marketing.1-9999'
-                        })}
-                        placeholder={(window as any).RCi18n({
-                          id: 'Marketing.1-9999'
-                        })}
-                        style={{ width: 160 }}
-                      />
-                    )}
-                    &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
-                  </Form.Item>
-                </div>
-              </Form.Item>
+                        ]
+                      })(
+                        <Input
+                          className="input-width"
+                          title={(window as any).RCi18n({
+                            id: 'Marketing.1-9999'
+                          })}
+                          placeholder={(window as any).RCi18n({
+                            id: 'Marketing.1-9999'
+                          })}
+                          style={{ width: 160 }}
+                        />
+                      )}
+                      &nbsp;{sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)}
+                    </Form.Item>
+                  </div>
+                </Form.Item>
+                <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
+                  {getFieldDecorator('promotionAppliesType', {
+                    initialValue: promotionAppliesType,
+                    rules: [
+                      {
+                        required: true,
+                        message: (window as any).RCi18n({
+                          id: 'Marketing.PleaseSelectOne'
+                        })
+                      }
+                    ]
+                  })(
+                    <Radio.Group
+                      onChange={(e) => {
+                        setPromotionAppliesType(e.target.value);
+                      }}
+                    >
+                      <Radio value={0}>
+                        <FormattedMessage id="Marketing.All" />
+                      </Radio>
+                      <Radio value={1}>
+                        <FormattedMessage id="Marketing.MostExpensive" />
+                      </Radio>
+                      <Radio value={2}>
+                        <FormattedMessage id="Marketing.Cheapest" />
+                      </Radio>
+                    </Radio.Group>
+                  )}
+                </Form.Item>
+              </>
             )}
           </>
         )}

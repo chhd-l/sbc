@@ -340,7 +340,7 @@ class ProductPrice extends Component<any, any> {
         }
       },
       {
-        title: <FormattedMessage id="Product.subscriptionpriceincl" />,
+        title: <FormattedMessage id="Product.subscriptionpriceIncl" />,
         dataIndex: 'subscriptionPrice',
         key: 'subscriptionPrice',
         sorter: true,
@@ -429,7 +429,7 @@ class ProductPrice extends Component<any, any> {
               <Form layout="inline" onSubmit={(e) => this.submitApply(e)}>
                 <Form.Item label={RCi18n({ id: 'Product.MarketpricepercentageIncl' })}>
                   {getFieldDecorator('marketPricePercentage', {
-                    initialValue: '',
+                    initialValue: 100,
                     onChange: (e) => this.checkFomeInput(e, 'marketPricePercentage')
                   })(<InputNumber min={0} precision={2} />)}
                 </Form.Item>

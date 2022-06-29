@@ -237,7 +237,7 @@ const PaymentMethod = (props) => {
               <>
                 {cards.map((item, index) => (
                   <Row key={index} className="payment-panel">
-                    <Radio value={item.id}>
+                    <Radio value={item.id} disabled={item.expireStatusEnum === 'EXPIRED'}>
                       <div className="cardInfo">
                         <h4>{item.paymentVendor}</h4>
                         <p>{item.cardType}</p>

@@ -5,8 +5,11 @@ import { DatePicker, Form, Input, Select, Button, Col } from 'antd';
 import { Const, noop, SelectGroup } from 'qmkit';
 import { IMap } from 'typings/globalType';
 import { FormattedMessage } from 'react-intl';
+import moment from 'moment';
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
+const InputGroup = Input.Group;
 
 @Relax
 export default class SearchHead extends React.Component<any, any> {
@@ -93,12 +96,32 @@ export default class SearchHead extends React.Component<any, any> {
             </Select.Option>
           </SelectGroup>
         </FormItem> */}
-        <FormItem>
+        <FormItem
+        >
+          <InputGroup compact>
+            <RangePicker
+              allowClear={true}
+              getCalendarContainer={(trigger: any) => trigger.parentNode}
+              showTime={{ format: Const.DAY_FORMAT }}
+              format={Const.DAY_FORMAT}
+              placeholder={[
+                (window as any).RCi18n({
+                  id: 'Marketing.StartTime'
+                }), (window as any).RCi18n({
+                  id: 'Marketing.EndTime'
+                })
+              ]}
+              onChange={this.onDateChange}
+              onOk={this.OK}
+            />
+          </InputGroup >
+        </FormItem>
+        {/* <FormItem>
           <DatePicker allowClear={true} disabledDate={this.disabledStartDate} format={Const.DAY_FORMAT} value={startValue} placeholder="Start date" onChange={this.onStartChange} showToday={false} />
         </FormItem>
         <FormItem>
           <DatePicker allowClear={true} disabledDate={this.disabledEndDate} format={Const.DAY_FORMAT} value={endValue} placeholder="End date" onChange={this.onEndChange} showToday={false} />
-        </FormItem>
+        </FormItem> */}
         <FormItem>
           <Input
             addonBefore={<FormattedMessage id="Marketing.createName" />}
@@ -148,7 +171,31 @@ export default class SearchHead extends React.Component<any, any> {
       [field]: value
     });
   };
-
+  OK = (MomentTimeArr) => {
+    console.log('value', moment(MomentTimeArr[0]).format(Const.DAY_FORMAT), moment(MomentTimeArr[1]).format(Const.DAY_FORMAT));
+    const { onFormFieldChange } = this.props.relaxProps;
+    onFormFieldChange('startTime', MomentTimeArr[0].format(Const.DAY_FORMAT) + ' 00:00:00');
+    this.onChange('startValue', MomentTimeArr[0]);
+    onFormFieldChange('endTime', MomentTimeArr[1].format(Const.DAY_FORMAT) + ' 23:59:59');
+    this.onChange('endValue', MomentTimeArr[1]);
+  };
+  onDateChange = (MomentTimeArr) => {
+    const { onFormFieldChange } = this.props.relaxProps;
+    let startTime = null;
+    let endTime = null;
+    let startValue = null;
+    let endValue = null;
+    if (MomentTimeArr.length > 0) {
+      startTime = MomentTimeArr[0]?.format(Const.DAY_FORMAT) + ' 00:00:00';
+      endTime = MomentTimeArr[1]?.format(Const.DAY_FORMAT) + ' 23:59:59';
+      startValue = MomentTimeArr[0];
+      endValue = MomentTimeArr[1]
+    }
+    onFormFieldChange('startTime', startTime);
+    this.onChange('startValue', startValue);
+    onFormFieldChange('endTime', endTime);
+    this.onChange('endValue', endValue);
+  }
   onStartChange = (value) => {
     let time = value;
     if (time != null) {

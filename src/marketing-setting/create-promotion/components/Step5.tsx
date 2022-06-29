@@ -583,14 +583,14 @@ function Step5({ form }) {
                 <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
                   {getFieldDecorator('promotionAppliesType', {
                     initialValue: promotionAppliesType,
-                    rules: [
-                      {
-                        required: true,
-                        message: (window as any).RCi18n({
-                          id: 'Marketing.PleaseSelectOne'
-                        })
-                      }
-                    ]
+                    // rules: [
+                    //   {
+                    //     required: true,
+                    //     message: (window as any).RCi18n({
+                    //       id: 'Marketing.PleaseSelectOne'
+                    //     })
+                    //   }
+                    // ]
                   })(
                     <Radio.Group
                       onChange={(e) => {
@@ -609,6 +609,44 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
+                <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                  {getFieldDecorator('subscriptionRefillLimit', {
+                    initialValue: formData.Advantage.subscriptionRefillLimit,
+                    rules: [
+                      {
+                        validator: (_rule, value, callback) => {
+                          let rule = /^(?:[1-5][0-9]?)$/;
+                          if (value) {
+                            if (!rule.test(value) || (value > 50 || value < 0)) {
+                              callback(
+                                (window as any).RCi18n({
+                                  id: 'Marketing.InputValuefrom1to50'
+                                })
+                              )
+
+                            }
+                          }
+                          callback();
+                        }
+                      }
+                    ]
+                  })(
+                    <Input
+                      style={{ width: 150 }}
+                      placeholder={
+                        (window as any).RCi18n({
+                          id: 'Marketing.InputValuefrom1to50'
+                        })
+                      }
+                    />
+                  )}
+                  <span>
+                    &nbsp;
+                    <FormattedMessage id="Marketing.refills" />
+                  </span>
+                </Form.Item>
+
+
               </>
             )}
           </>

@@ -404,7 +404,8 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 </div>
                 <Row className="step-summary-item">
                   <Col className="step-summary-sub-title">
-                    <FormattedMessage id="Marketing.PromotionName" />:
+                    {/* Marketing.PromotionName*/}
+                    <FormattedMessage id="Marketing.CampaignName" />:
                   </Col>
                   <Col className="step-summary-item-text">{data?.marketingName}</Col>
                 </Row>
@@ -418,7 +419,7 @@ const MarketingDetails = (props: MarketingDetailsProps) => {
                 </Row>
                 <Row className="step-summary-item">
                   <Col className="step-summary-sub-title">
-                    <FormattedMessage id="Marketing.CreateBy" />:
+                    <FormattedMessage id="Marketing.createName" />:
                   </Col>
                   <Col className="step-summary-item-text">
                     {data?.createName}

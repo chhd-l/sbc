@@ -53,7 +53,7 @@ export default function index({ ...props }) {
       scopeType: 0,
       storeCateIds: [],
       customProductsType: 0,
-      customProductsIncludeType:0,
+      customProductsIncludeType: 0,
       skuIds: [], //custom product id集合
       selectedRows: [] //custom product 所有数据集合
     },
@@ -71,7 +71,8 @@ export default function index({ ...props }) {
       firstSubscriptionOrderDiscount: '',
       firstSubscriptionLimitAmount: '',
       restSubscriptionOrderDiscount: '',
-      restSubscriptionLimitAmount: ''
+      restSubscriptionLimitAmount: '',
+      subscriptionRefillLimit: 50,
     }
   };
 
@@ -303,7 +304,7 @@ export default function index({ ...props }) {
           couponDiscount:
             detail.subType === 2 || detail.subType === 3
               ? detail.fullDiscountLevelList?.[0].discount &&
-                100 - detail.fullDiscountLevelList?.[0].discount * 100
+              100 - detail.fullDiscountLevelList?.[0].discount * 100
               : '',
           limitAmount:
             detail.subType === 2 || detail.subType === 3
@@ -412,14 +413,14 @@ export default function index({ ...props }) {
           fullGiftLevelList:
             detail.couponPromotionType === 2
               ? [
-                  {
-                    fullAmount: null,
-                    fullCount: null,
-                    fullGiftDetailList: detail.fullGiftDetailList,
-                    giftType: 1,
-                    key: makeRandom()
-                  }
-                ]
+                {
+                  fullAmount: null,
+                  fullCount: null,
+                  fullGiftDetailList: detail.fullGiftDetailList,
+                  giftType: 1,
+                  key: makeRandom()
+                }
+              ]
               : [],
           selectedGiftRows: goodsList?.goodsInfoPage?.content.filter((item) => {
             return giftIds.includes(item.goodsInfoId);

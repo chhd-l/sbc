@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React, { useContext } from 'react'
 import { Form, Input, DatePicker, Button } from 'antd';
 import ButtonLayer from '@/marketing-setting/create-promotion/components/ButtonLayer';
 import { Const, QMMethod } from 'qmkit';
@@ -8,15 +8,15 @@ import { enumConst } from '@/marketing-setting/create-promotion/enum';
 
 const { RangePicker } = DatePicker;
 
-function Step2({form}) {
+function Step2({ form }) {
   console.log('重绘了')
-  const Context:any = useContext(FormContext);
-  const { formData,changeFormData,setStep,formItemLayout } = Context
-  const {getFieldDecorator,validateFields,} = form
-  const toNext =() =>{
+  const Context: any = useContext(FormContext);
+  const { formData, changeFormData, setStep, formItemLayout } = Context
+  const { getFieldDecorator, validateFields, } = form
+  const toNext = () => {
     validateFields((err, values) => {
       if (!err) {
-        changeFormData(enumConst.stepEnum[1],values)
+        changeFormData(enumConst.stepEnum[1], values)
         setStep(2)
       }
     });
@@ -28,7 +28,8 @@ function Step2({form}) {
       </div>
 
       <Form {...formItemLayout} labelAlign="left" className="marketing-form-container">
-        <Form.Item label={<FormattedMessage id="Marketing.PromotionName" />}>
+        {/*  PromotionName */}
+        <Form.Item label={<FormattedMessage id="Marketing.CampaignName" />}>
           {getFieldDecorator('marketingName', {
             initialValue: formData.BasicSetting.marketingName,
             rules: [
@@ -50,7 +51,8 @@ function Step2({form}) {
                 validator: (rule, value, callback) => {
                   QMMethod.validatorEmoji(rule, value, callback,
                     (window as any).RCi18n({
-                      id: 'Marketing.PromotionName'
+                      //  PromotionName
+                      id: 'Marketing.CampaignName'
                     })
                   );
                 }
@@ -58,7 +60,7 @@ function Step2({form}) {
             ],
           })(
             <Input size="large" placeholder={(window as any).RCi18n({ id: 'Marketing.noMoreThan40Words' })}
-                   style={{width:350}}/>,
+              style={{ width: 350 }} />,
           )}
         </Form.Item>
         <Form.Item label={<FormattedMessage id="Marketing.StartAndEndTime" />}>
@@ -74,21 +76,21 @@ function Step2({form}) {
             ],
           })(
             <RangePicker size="large"
-                         showTime={{ format: 'HH:mm' }}
-                         format={Const.DATE_FORMAT}
-                         placeholder={[
-                           (window as any).RCi18n({
-                             id: 'Marketing.StartTime'
-                           }), (window as any).RCi18n({
-                             id: 'Marketing.EndTime'
-                           })
-                         ]}
+              showTime={{ format: 'HH:mm' }}
+              format={Const.DATE_FORMAT}
+              placeholder={[
+                (window as any).RCi18n({
+                  id: 'Marketing.StartTime'
+                }), (window as any).RCi18n({
+                  id: 'Marketing.EndTime'
+                })
+              ]}
             />,
           )}
         </Form.Item>
       </Form>
 
-      <ButtonLayer step={1} toNext={toNext}/>
+      <ButtonLayer step={1} toNext={toNext} />
     </div>
   );
 }

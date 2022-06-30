@@ -358,6 +358,8 @@ export default function Step6({ setLoading }) {
           restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
           restSubscriptionOrderDiscount: formData.Advantage.restSubscriptionOrderDiscount,
           subType: subType,
+          subscriptionRefillLimit: formData.Advantage.subscriptionRefillLimit,
+          appliesType: formData.Advantage.appliesType,
           isClub: false //未用到
         };
         if (match.params.id && match.params.type === 'promotion') {
@@ -521,7 +523,8 @@ export default function Step6({ setLoading }) {
             </div>
             <div className="step-summary-item">
               <div className="step-summary-sub-title">
-                <FormattedMessage id="Marketing.PromotionName" />:
+                {/*  PromotionName */}
+                <FormattedMessage id="Marketing.CampaignName" />:
               </div>
               <div className="step-summary-item-text">{formData.BasicSetting.marketingName}</div>
             </div>

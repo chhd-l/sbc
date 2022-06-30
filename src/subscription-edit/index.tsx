@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Tabs, Card, Row, Col, Button, Select, message, Table } from 'antd';
+import { Breadcrumb, Tabs, Card, Row, Col, Button, Select, message, Table, Icon } from 'antd';
 import { InputNumber, Modal, Radio, Checkbox, Spin, Tooltip } from 'antd';
 import { Popconfirm, Popover, Calendar } from 'antd';
 import FeedBack from '../subscription-detail/component/feedback';
@@ -24,6 +24,8 @@ import {
 import { fromJS } from 'immutable';
 import { debug } from 'console';
 import { RadioChangeEvent } from 'antd/lib/radio';
+import addDiscount from '../../web_modules/qmkit/images/icon/addDiscount.svg';
+import ChangeDisacount from './component/ChangeDisacount';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -133,7 +135,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       productModalVisible: false,
       selectedSkuIds: [],
       selectedRows: [],
-      errvisible: false
+      errvisible: false,
+      addDiscountVisible: false
     };
   }
 
@@ -475,7 +478,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               this.getSubscriptionDetail();
             }
           );
-        // 超重
+          // 超重
         } else if (res.code === 'K-050330') {
           this.getSubscriptionDetail();
         }
@@ -714,7 +717,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           deliveryAddressInfo['pickupPointState'] = res.context;
         }
       });
-      
+
       // this.setState({ addressLoading: true });
       // const { res: checkedRes } = await webapi.checkSubscriptionAddressPickPoint(
       //   {
@@ -1387,7 +1390,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       productModalVisible,
       selectedSkuIds,
       selectedRows,
-      errvisible
+      errvisible,
+      addDiscountVisible
       // operationLog
     } = this.state;
 
@@ -1754,6 +1758,17 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
+            <a style={styles.edit} onClick={() => {
+              console.log(111);
+
+              this.setState({
+                addDiscountVisible: true
+              })
+            }}>
+              <Icon component={addDiscount} className='logo' />
+            </a>
+
+            <a className="iconfont icontianjia" style={styles.edit} />
             <Popover
               content={content}
               trigger="click"
@@ -3126,6 +3141,14 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             </Button>
           </div>
         </Modal>
+        <ChangeDisacount
+          addDiscountVisible={addDiscountVisible}
+          onCancel={() => {
+            this.setState({
+              addDiscountVisible: false
+            });
+          }}
+        />
       </div>
     );
   }

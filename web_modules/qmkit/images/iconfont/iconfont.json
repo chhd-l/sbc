@@ -6,6 +6,13 @@
   "description": "导航",
   "glyphs": [
     {
+      "icon_id": "6852284",
+      "name": "添加",
+      "font_class": "tianjia",
+      "unicode": "e6de",
+      "unicode_decimal": 59102
+    },
+    {
       "icon_id": "9459125",
       "name": "warning",
       "font_class": "warning1",

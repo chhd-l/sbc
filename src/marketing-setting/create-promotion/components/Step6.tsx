@@ -358,6 +358,8 @@ export default function Step6({ setLoading }) {
           restSubscriptionLimitAmount: formData.Advantage.restSubscriptionLimitAmount,
           restSubscriptionOrderDiscount: formData.Advantage.restSubscriptionOrderDiscount,
           subType: subType,
+          subscriptionRefillLimit: formData.Advantage.subscriptionRefillLimit,
+          appliesType: formData.Advantage.appliesType,
           isClub: false //未用到
         };
         if (match.params.id && match.params.type === 'promotion') {

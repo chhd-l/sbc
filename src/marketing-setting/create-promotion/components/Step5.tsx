@@ -12,7 +12,7 @@ function Step5({ form }) {
   const { changeFormData, formData, match, setStep, formItemLayout } = useContext<any>(FormContext);
   const { getFieldDecorator, validateFields, setFieldsValue, setFields, getFieldsValue } = form;
   const [couponPromotionType, setCouponPromotionType] = useState(0);
-  const [promotionAppliesType, setPromotionAppliesType] = useState(0);
+  const [appliesType, setAppliesType] = useState(0);
 
   const [selectedGiftRows, setSelectedGiftRows] = useState<any>(fromJS([]));
   const [fullGiftLevelList, setFullGiftLevelList] = useState<any>([]);
@@ -581,8 +581,8 @@ function Step5({ form }) {
                   </div>
                 </Form.Item>
                 <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('promotionAppliesType', {
-                    initialValue: promotionAppliesType,
+                  {getFieldDecorator('appliesType', {
+                    initialValue: appliesType,
                     // rules: [
                     //   {
                     //     required: true,
@@ -594,7 +594,7 @@ function Step5({ form }) {
                   })(
                     <Radio.Group
                       onChange={(e) => {
-                        setPromotionAppliesType(e.target.value);
+                        setAppliesType(e.target.value);
                       }}
                     >
                       <Radio value={0}>

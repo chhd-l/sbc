@@ -609,42 +609,45 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
-                <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
-                  {getFieldDecorator('subscriptionRefillLimit', {
-                    initialValue: formData.Advantage.subscriptionRefillLimit,
-                    rules: [
-                      {
-                        validator: (_rule, value, callback) => {
-                          let rule = /^(?:[1-5][0-9]?)$/;
-                          if (value) {
-                            if (!rule.test(value) || (value > 50 || value < 0)) {
-                              callback(
-                                (window as any).RCi18n({
-                                  id: 'Marketing.InputValuefrom1to50'
-                                })
-                              )
+                {formData.Conditions.promotionType === 2 && (
+                  <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                    {getFieldDecorator('subscriptionRefillLimit', {
+                      initialValue: formData.Advantage.subscriptionRefillLimit,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            let rule = /^(?:[1-5][0-9]?)$/;
+                            if (value) {
+                              if (!rule.test(value) || (value > 50 || value < 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to50'
+                                  })
+                                )
 
+                              }
                             }
+                            callback();
                           }
-                          callback();
                         }
-                      }
-                    ]
-                  })(
-                    <Input
-                      style={{ width: 150 }}
-                      placeholder={
-                        (window as any).RCi18n({
-                          id: 'Marketing.InputValuefrom1to50'
-                        })
-                      }
-                    />
-                  )}
-                  <span>
-                    &nbsp;
-                    <FormattedMessage id="Marketing.refills" />
-                  </span>
-                </Form.Item>
+                      ]
+                    })(
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.InputValuefrom1to50'
+                          })
+                        }
+                      />
+                    )}
+                    <span>
+                      &nbsp;
+                      <FormattedMessage id="Marketing.refills" />
+                    </span>
+                  </Form.Item>
+                )}
+
 
 
               </>
@@ -784,8 +787,8 @@ function Step5({ form }) {
                   </div>
                 </Form.Item>
                 <Form.Item label={<FormattedMessage id="Marketing.promotionAppliesType" />}>
-                  {getFieldDecorator('promotionAppliesType', {
-                    initialValue: promotionAppliesType,
+                  {getFieldDecorator('appliesType', {
+                    initialValue: appliesType,
                     rules: [
                       {
                         required: true,
@@ -797,7 +800,7 @@ function Step5({ form }) {
                   })(
                     <Radio.Group
                       onChange={(e) => {
-                        setPromotionAppliesType(e.target.value);
+                        setAppliesType(e.target.value);
                       }}
                     >
                       <Radio value={0}>
@@ -812,6 +815,45 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
+                {formData.Conditions.promotionType === 2 && (
+                  <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
+                    {getFieldDecorator('subscriptionRefillLimit', {
+                      initialValue: formData.Advantage.subscriptionRefillLimit,
+                      rules: [
+                        {
+                          validator: (_rule, value, callback) => {
+                            let rule = /^(?:[1-5][0-9]?)$/;
+                            if (value) {
+                              if (!rule.test(value) || (value > 50 || value < 0)) {
+                                callback(
+                                  (window as any).RCi18n({
+                                    id: 'Marketing.InputValuefrom1to50'
+                                  })
+                                )
+
+                              }
+                            }
+                            callback();
+                          }
+                        }
+                      ]
+                    })(
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder={
+                          (window as any).RCi18n({
+                            id: 'Marketing.InputValuefrom1to50'
+                          })
+                        }
+                      />
+                    )}
+                    <span>
+                      &nbsp;
+                      <FormattedMessage id="Marketing.refills" />
+                    </span>
+                  </Form.Item>
+                )}
+
               </>
             )}
           </>

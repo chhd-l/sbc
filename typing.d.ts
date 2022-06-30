@@ -6,3 +6,4 @@ declare module 'wangeditor' {
   const wangeditor: any;
   export = wangeditor
 }
+declare module '*.svg'

@@ -136,13 +136,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       selectedSkuIds: [],
       selectedRows: [],
       errvisible: false,
-      addDiscountVisible: false
+      addDiscountVisible: false,
+      addProductVisible: false,
+      subscriptionNextRefillPromotion: null,
+      refillcode: [],
+      nextSubscriptionRefillDisacount: null
     };
   }
 
   componentDidMount() {
     this.getSubscriptionDetail();
     this.getDeliveryDateStatus();
+    this.getrefillcode()
     this.setState({
       currencySymbol: sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
         ? sessionStorage.getItem(cache.SYSTEM_GET_CONFIG)
@@ -179,6 +184,19 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       }
     });
   };
+  getrefillcode = () => {
+    webapi.getrefillcode().then((data) => {
+      const { res } = data;
+      console.log('res', res)
+      if (res.code === Const.SUCCESS_CODE) {
+        this.setState({
+          refillcode: res.context
+        })
+      }
+    }).catch((err) => {
+      console.log('err', err)
+    })
+  }
 
   getSubscriptionDetail = () => {
     this.setState({
@@ -269,6 +287,9 @@ export default class SubscriptionDetail extends React.Component<any, any> {
             deliveryDate: subscriptionDetail.consignee.deliveryDate,
             timeSlot: subscriptionDetail.consignee.timeSlot
           };
+          const isSubscriptionRefill = await webapi.refillgetProduct(subscriptionDetail.subscribeId);
+
+          console.log('isSubscriptionRefill', isSubscriptionRefill)
           this.setState(
             {
               subscribeGoods: subscribeGoods,
@@ -293,7 +314,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
               deliveryDate: subscriptionDetail.consignee.deliveryDate,
               timeSlot: subscriptionDetail.consignee.timeSlot,
               cityNo: subscriptionDetail.consignee.provinceIdStr,
-              serviceFeePrice: subscriptionDetail.serviceFeePrice
+              serviceFeePrice: subscriptionDetail.serviceFeePrice,
+              subscriptionNextRefillPromotion: isSubscriptionRefill?.res?.context?.subscriptionNextRefillPromotionVO
             },
             () => {
               if (this.state.deliveryAddressInfo && this.state.deliveryAddressInfo.customerId) {
@@ -1222,7 +1244,100 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       deliveryType: value
     });
   };
+  addProductskuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
+    const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem, subscriptionNextRefillPromotion } = this.state;
+    if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
+    if (selectedSkuIds.length === 0 || selectedRows?.toJS()?.length === 0) return;
 
+    console.log('selectedRows?.toJS()', selectedRows?.toJS());
+    this.setState({
+      selectedSkuIds: selectedSkuIds,
+      selectedRows: selectedRows
+    });
+    const goods = selectedRows?.toJS()[0];
+    try {
+      this.setState({ loading: true });
+      let params: any = {
+        productId: goods.goodsInfoId,
+        productName: goods.goodsInfoName,
+        // 数量默认1个
+        productNum: goods?.goodsMeasureNum ? goods?.goodsMeasureNum : 1,
+        subscribeId: subscriptionId,
+        type: 0
+      };
+      let resp;
+
+      if (subscriptionNextRefillPromotion?.productId && subscriptionNextRefillPromotion?.productName) {
+        params = {
+          ...params,
+          refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
+        };
+        let { res } = await webapi.refillModifyProduct(params);
+        resp = res
+      } else {
+        let { res } = await webapi.refillAddProduct(params);
+        resp = res
+      }
+      if (resp.code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+        this.getSubscriptionDetail();
+      } else {
+        throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+      }
+    } catch (err) {
+      this.setState({ loading: false });
+      message.error(err.message);
+    } finally {
+      this.closeProductModal();
+    }
+  }
+  DisacountChange = (index) => {
+    const { refillcode } = this.state;
+    console.log('index', index);
+    console.log(refillcode[index]);
+    this.setState({
+      nextSubscriptionRefillDisacount: refillcode[index]
+    })
+  }
+  DisacountChangeOk = async () => {
+    const { nextSubscriptionRefillDisacount, subscriptionNextRefillPromotion, subscriptionId } = this.state;
+    if (!nextSubscriptionRefillDisacount) return;
+    try {
+      this.setState({ loading: true });
+      let params: any = {
+        couponCode: nextSubscriptionRefillDisacount.couponCodeDTOList[0]?.couponCode,
+        discount: nextSubscriptionRefillDisacount?.couponDiscount,
+        subscribeId: subscriptionId,
+        type: 1
+      };
+      let resp;
+
+      if (subscriptionNextRefillPromotion?.couponCode && subscriptionNextRefillPromotion?.discount) {
+        params = {
+          ...params,
+          refillPromotionId: subscriptionNextRefillPromotion?.refillPromotionId,
+        };
+        let { res } = await webapi.refillModifyProduct(params);
+        resp = res
+      } else {
+        let { res } = await webapi.refillAddProduct(params);
+        resp = res
+      }
+      if (resp.code === Const.SUCCESS_CODE) {
+        message.success(RCi18n({ id: 'PetOwner.OperateSuccessfully' }));
+        this.getSubscriptionDetail();
+      } else {
+        throw new Error(RCi18n({ id: 'PetOwner.Unsuccessful' }))
+      }
+    } catch (err) {
+      this.setState({ loading: false });
+      message.error(err.message);
+    } finally {
+      this.setState({
+        addDiscountVisible: false
+      });
+    }
+  }
   skuSelectedBackFun = async (selectedSkuIds, selectedRows: any) => {
     const { subscriptionId, goodsInfo, subscriptionType, subscriptionStatus, deliveryAddressId, curChangeProductItem } = this.state;
     if (!Array.isArray(selectedSkuIds) || !Array.isArray(selectedRows?.toJS())) return;
@@ -1287,7 +1402,8 @@ export default class SubscriptionDetail extends React.Component<any, any> {
   closeProductModal = () => {
     this.setState(
       {
-        productModalVisible: false
+        productModalVisible: false,
+        addProductVisible: false
       },
       () => {
         this.setState({
@@ -1391,7 +1507,10 @@ export default class SubscriptionDetail extends React.Component<any, any> {
       selectedSkuIds,
       selectedRows,
       errvisible,
-      addDiscountVisible
+      addDiscountVisible,
+      addProductVisible,
+      refillcode,
+      subscriptionNextRefillPromotion
       // operationLog
     } = this.state;
 
@@ -1758,17 +1877,26 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         key: 'x',
         render: (text, record) => (
           <div>
-            <a style={styles.edit} onClick={() => {
-              console.log(111);
-
-              this.setState({
-                addDiscountVisible: true
-              })
-            }}>
+            <a
+              style={styles.edit}
+              onClick={() => {
+                this.setState({
+                  addProductVisible: true
+                })
+              }}
+            >
               <Icon component={addDiscount} className='logo' />
             </a>
 
-            <a className="iconfont icontianjia" style={styles.edit} />
+            <a
+              className="iconfont icontianjia"
+              style={styles.edit}
+              onClick={() => {
+                this.setState({
+                  addDiscountVisible: true
+                })
+              }}
+            />
             <Popover
               content={content}
               trigger="click"
@@ -3117,10 +3245,20 @@ export default class SubscriptionDetail extends React.Component<any, any> {
           onOkBackFun={this.skuSelectedBackFun}
           onCancelBackFun={this.closeProductModal}
         />
+        {addProductVisible && <GoodsModal
+          pageType='addProduct'
+          // titleContent={titleContent}
+          skuLimit={1}
+          visible={addProductVisible}
+          selectedSkuIds={selectedSkuIds || [`${subscriptionNextRefillPromotion.productId}`]}
+          selectedRows={selectedRows}
+          onOkBackFun={this.addProductskuSelectedBackFun}
+          onCancelBackFun={this.closeProductModal}
+        />}
         <Modal
           closable={false}
           maskClosable={false}
-          mask={false}
+          // mask={false}
           width={455}
           visible={errvisible}
           footer={null}
@@ -3143,12 +3281,18 @@ export default class SubscriptionDetail extends React.Component<any, any> {
         </Modal>
         <ChangeDisacount
           addDiscountVisible={addDiscountVisible}
+          refillcode={refillcode}
+          couponCode={subscriptionNextRefillPromotion?.couponCode}
+          subscriptionNextRefillPromotion={subscriptionNextRefillPromotion}
           onCancel={() => {
             this.setState({
               addDiscountVisible: false
             });
           }}
+          onOK={this.DisacountChangeOk}
+          onChange={this.DisacountChange}
         />
+
       </div>
     );
   }

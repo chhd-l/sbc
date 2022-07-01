@@ -1,43 +1,73 @@
-import { Button, Modal } from 'antd';
+import { Button, Modal, Form, Input, Select } from 'antd';
 import React, { useState, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl';
 import { Headline, Const, cache, AuthWrapper, getOrderStatusValue, RCi18n, util } from 'qmkit';
+import { e } from 'mathjs';
 
+const { Option } = Select
 
 function ChangeDisacount(props) {
   const [visible, setVisible] = useState(false);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     setVisible(props.addDiscountVisible);
-  }, [props.addDiscountVisible]);
-  return (
+    console.log(props.refillcode.map(item => item.couponCodeDTOList[0]?.couponCode).indexOf(props?.couponCode));
 
+    // 这里要从父组件那里拿，判断有没有添加过折扣，没有的默认位为数组第一个
+    if (props.refillcode.map(item => item.couponCodeDTOList[0]?.couponCode).indexOf(props?.couponCode) > -1) {
+      setValue(props.refillcode.map(item => item.couponCodeDTOList[0]?.couponCode).indexOf(props?.couponCode))
+      props.onChange(props.refillcode.map(item => item.couponCodeDTOList[0]?.couponCode).indexOf(props?.couponCode))
+    } else {
+      setValue(0);
+      props.onChange(0);
+    }
+
+  }, [props.addDiscountVisible]);
+
+  const renderSelect = () => {
+    return props.refillcode.map((item, index) => {
+      return <Option value={index} key={item.couponId}>{item.couponName}</Option>
+    })
+  }
+  // couponCode
+  return (
     <Modal
-      closable={false}
+      title={<FormattedMessage id={'Marketing.Promotion'} />}
+      // closable={false}
       maskClosable={false}
       // mask={false}
-      width={455}
+      width={800}
       visible={visible}
-      // footer={null}
+      onOk={props.onOK}
       onCancel={props.onCancel}
     >
-      <p style={{ fontSize: '18px' }}>This product cannot be used for Club Subscription.</p>
+      <p >
+        <FormattedMessage id={'Marketing.addDiscountTitle'} />
+      </p>
       <br />
-      <p style={{ fontSize: '18px' }}>Please, choose another one.</p>
-      <div style={{ textAlign: 'right' }}>
-        <Button
-          type="primary"
-          onClick={() => {
-            props.onCancel()
-            // setVisible(false)
-          }}
-        >
-          OK
-        </Button>
+      <div>
+        <Form layout={'inline'}>
+          <Form.Item
+            label={<FormattedMessage id="Marketing.PromotionOnNextRefill" />}
+            required={true}
+          >
+            <Select
+              value={value}
+              style={{ width: 200 }}
+              onChange={(index) => {
+                props.onChange(index);
+                setValue(index)
+              }
+              }>
+              {renderSelect()}
+            </Select>
+          </Form.Item>
+        </Form>
       </div>
     </Modal>
 
   )
 }
 
-export default ChangeDisacount
+export default ChangeDisacount;

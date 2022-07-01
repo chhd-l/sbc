@@ -1885,7 +1885,7 @@ export default class SubscriptionDetail extends React.Component<any, any> {
                 })
               }}
             >
-              <Icon component={addDiscount} className='logo' />
+              <Icon component={addDiscount} />
             </a>
 
             <a

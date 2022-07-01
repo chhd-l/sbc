@@ -730,6 +730,27 @@ export default function Step6({ setLoading }) {
                         </div>
                       </div>
                     )}
+
+                    {formData.Advantage.appliesType && (
+                      <div className="step-summary-item">
+                        <div className="step-summary-sub-title">
+                          <FormattedMessage id="Marketing.appliesType" />:
+                        </div>
+                        <div className="step-summary-item-text">
+                          {enumConst.appliesType[formData.Advantage.appliesType]}
+                        </div>
+                      </div>
+                    )}
+                    {formData.Advantage.subscriptionRefillLimit && (
+                      <div className="step-summary-item">
+                        <div className="step-summary-sub-title">
+                          <FormattedMessage id="Marketing.subscriptionRefillLimit" />:
+                        </div>
+                        <div className="step-summary-item-text">
+                          {formData.Advantage.subscriptionRefillLimit} <FormattedMessage id="Marketing.refills" />
+                        </div>
+                      </div>
+                    )}
                   </>
                 )}
               </>

@@ -855,7 +855,7 @@ function Step5({ form }) {
                     </Radio.Group>
                   )}
                 </Form.Item>
-                {formData.Conditions.promotionType === 2 && (
+                {/* {formData.Conditions.promotionType === 2 && (
                   <Form.Item label={<FormattedMessage id="Marketing.LimitThePromotionTo" />}>
                     {getFieldDecorator('subscriptionRefillLimit', {
                       initialValue: formData.Advantage.subscriptionRefillLimit,
@@ -892,7 +892,7 @@ function Step5({ form }) {
                       <FormattedMessage id="Marketing.refills" />
                     </span>
                   </Form.Item>
-                )}
+                )} */}
 
               </>
             )}

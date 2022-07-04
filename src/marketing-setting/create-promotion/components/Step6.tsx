@@ -111,6 +111,7 @@ export default function Step6({ setLoading }) {
           formData.Advantage.couponPromotionType === 1
             ? 1 - parseInt(formData.Advantage.couponDiscount) / 100
             : 0,
+        appliesType: formData.Advantage.couponPromotionType === 1 ? formData.Advantage.appliesType : null,
         limitAmount:
           formData.Advantage.couponPromotionType === 1 ? formData.Advantage.limitAmount : null,
         fullGiftDetailList:
@@ -731,7 +732,7 @@ export default function Step6({ setLoading }) {
                       </div>
                     )}
 
-                    {formData.Advantage.appliesType && (
+                    {formData.Advantage.appliesType !== null && formData.Advantage.appliesType !== undefined && (
                       <div className="step-summary-item">
                         <div className="step-summary-sub-title">
                           <FormattedMessage id="Marketing.appliesType" />:

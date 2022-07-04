@@ -18,7 +18,8 @@ export default class ChooseStartTimeForm extends Component<any, any> {
         specificTime: null, // yyyy-mm-dd
         endInfo: null
       },
-      nodeId: ''
+      nodeId: '',
+      DatePickerList: [{ sort: '0', specificTime: null }]
     };
     this.onChange = this.onChange.bind(this);
     this.onTimePickerChange = this.onTimePickerChange.bind(this);
@@ -115,8 +116,32 @@ export default class ChooseStartTimeForm extends Component<any, any> {
       () => this.updateParentValue()
     );
   }
+  DatePickerAdd(index) {
+    const { form, DatePickerList } = this.state;
+    const date = +new Date();
+    const obj = { sort: `${date}`, specificTime: null }
+    DatePickerList.push(obj)
+    this.setState({
+      DatePickerList: [...DatePickerList]
+    })
+  }
+
+  DatePickerDel(index) {
+    const { form, DatePickerList } = this.state;
+    DatePickerList.splice(index, 1);
+    this.setState({
+      DatePickerList: [...DatePickerList]
+    })
+  }
+  DatePickerChange(index, dateString) {
+    const { form, DatePickerList } = this.state;
+    DatePickerList[index].specificTime = dateString;
+    this.setState({
+      DatePickerList: [...DatePickerList]
+    })
+  }
   render() {
-    const { form } = this.state;
+    const { form, DatePickerList } = this.state;
     const { startCampaignTime } = this.props;
     let momentedSpecificTime = form && form.specificTime ? moment(form.specificTime) : null;
     let momentedPointTime = form && form.endInfo && form.endInfo.pointTime ? moment(form.endInfo.pointTime, 'HH:mm:ss') : null;
@@ -186,17 +211,36 @@ export default class ChooseStartTimeForm extends Component<any, any> {
                 <Radio value="specificTime">At a specific date/time</Radio>
               </Col>
               <Col span={24} push={1}>
-                <DatePicker
-                  showTime
-                  placeholder="Select Time"
-                  onChange={(value, dateString) => {
-                    this.onChange('specificTime', dateString);
-                    this.onChange('timeType', 'specificTime');
-                    this.onChange('recurrenceType', '');
-                    this.onChange('endInfo', null);
-                  }}
-                  value={momentedSpecificTime}
-                />
+                {DatePickerList && DatePickerList.map((item, index) => (
+                  <Row>
+                    {/* <DatePicker
+                      showTime
+                      placeholder="Select Time"
+                      onChange={(value, dateString) => {
+                        this.onChange('specificTime', dateString);
+                        this.onChange('timeType', 'specificTime');
+                        this.onChange('recurrenceType', '');
+                        this.onChange('endInfo', null);
+                      }}
+                      value={momentedSpecificTime}
+                    /> */}
+                    <DatePicker
+                      showTime
+                      placeholder="Select Time"
+                      onChange={(value, dateString) => {
+                        this.onChange('specificTime', dateString);
+                        this.onChange('timeType', 'specificTime');
+                        this.onChange('recurrenceType', '');
+                        this.onChange('endInfo', null);
+                        this.DatePickerChange(index, dateString);
+                      }}
+                      value={item.specificTime ? moment(item.specificTime) : null}
+                    />
+                    <a className='iconfont iconjia' style={{ marginLeft: '20px', fontSize: '20px' }} onClick={() => this.DatePickerAdd(index)}></a>
+                    <a className='iconfont iconjian2' style={{ marginLeft: '5px', fontSize: '20px', color: 'rgba(0, 0, 0, 0.65)' }} onClick={() => this.DatePickerDel(index)}></a>
+                  </Row>
+                ))}
+
               </Col>
             </Radio.Group>
           </Row>

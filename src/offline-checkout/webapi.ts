@@ -8,7 +8,7 @@ type TResult = {
 
 /**
  * 获取线下售卖产品列表
- * @returns
+ * @returns 
  */
 export function getProductList() {
   return Fetch<TResult>('/felinReco/products', {
@@ -30,8 +30,8 @@ export function getAllProductList(keywords = '') {
 
 /**
  * 扫描二维码显示member的推荐产品
- * @param apptNo
- * @returns
+ * @param apptNo 
+ * @returns 
  */
 export function findAppointmentByAppointmentNo(apptNo: string) {
   return Fetch<TResult>('/appt/findByNo', {
@@ -42,8 +42,8 @@ export function findAppointmentByAppointmentNo(apptNo: string) {
 
 /**
  * 发起下单和支付
- * @param params
- * @returns
+ * @param params 
+ * @returns 
  */
 export function checkout(params = {}) {
   const storeId = JSON.parse(sessionStorage.getItem(cache.LOGIN_DATA) || '{}')['storeId'] || '';
@@ -55,25 +55,21 @@ export function checkout(params = {}) {
 
 /**
  * 异步查询支付状态
- * @param params
- * @returns
+ * @param params 
+ * @returns 
  */
 export function queryStatus(params = {}) {
-  return Fetch<TResult>(
-    '/all/order/queryPosOrder',
-    {
-      method: 'POST',
-      body: JSON.stringify(params)
-    },
-    { isHandleResult: true, customerTip: true }
-  );
+  return Fetch<TResult>('/all/order/queryPosOrder', {
+    method: 'POST',
+    body: JSON.stringify(params)
+  }, { isHandleResult: true, customerTip: true });
 }
 
 /**
  * 设置订单复购意向参数
  * @param tid 订单号
  * @param repeat 是否同意复购
- * @returns
+ * @returns 
  */
 export function refillOrder(tid: string, repeat: true | false) {
   return Fetch<TResult>('/all/order/repeat', {
@@ -87,31 +83,23 @@ export function refillOrder(tid: string, repeat: true | false) {
 
 /**
  * 获取consent
- * @returns
+ * @returns 
  */
 export function getConsent() {
-  return Fetch<TResult>(
-    '/consent/group?consentGroup=offline-pay',
-    {
-      method: 'GET'
-    },
-    { isHandleResult: true, customerTip: true }
-  );
+  return Fetch<TResult>('/consent/group?consentGroup=offline-pay', {
+    method: 'GET'
+  }, { isHandleResult: true, customerTip: true });
 }
 
 /**
  * 设置consent
- * @param customerId
- * @param consent
- * @returns
+ * @param customerId 
+ * @param consent 
+ * @returns 
  */
 export function setConsent(customerId, consent = {}) {
-  return Fetch<TResult>(
-    `/consent/binds/customer-id=${customerId}`,
-    {
-      method: 'POST',
-      body: JSON.stringify(consent)
-    },
-    { isHandleResult: true, customerTip: true, useBackendOktaTokenFlag: true }
-  );
+  return Fetch<TResult>(`/consent/binds/customer-id=${customerId}`, {
+    method: 'POST',
+    body: JSON.stringify(consent)
+  }, { isHandleResult: true, customerTip: true });
 }
